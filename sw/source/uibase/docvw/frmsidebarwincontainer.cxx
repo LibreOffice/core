@@ -93,7 +93,7 @@ SwFrmSidebarWinContainer::~SwFrmSidebarWinContainer()
 }
 
 bool SwFrmSidebarWinContainer::insert( const SwFrm& rFrm,
-                                       const SwFmtFld& rFmtFld,
+                                       const SwFormatField& rFormatField,
                                        SwSidebarWin& rSidebarWin )
 {
     bool bInserted( false );
@@ -101,7 +101,7 @@ bool SwFrmSidebarWinContainer::insert( const SwFrm& rFrm,
     FrmKey aFrmKey( &rFrm );
     SidebarWinContainer& rSidebarWinContainer = (*mpFrmSidebarWinContainer)[ aFrmKey ];
 
-    SidebarWinKey aSidebarWinKey( rFmtFld.GetTxtFld()->GetStart() );
+    SidebarWinKey aSidebarWinKey( rFormatField.GetTextField()->GetStart() );
     if ( rSidebarWinContainer.empty() ||
          rSidebarWinContainer.find( aSidebarWinKey) == rSidebarWinContainer.end() )
     {

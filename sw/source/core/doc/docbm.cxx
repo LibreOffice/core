@@ -101,25 +101,25 @@ namespace
             pMark);
     }
 
-    static inline ::std::unique_ptr<SwPosition> lcl_PositionFromCntntNode(
-        SwCntntNode * const pCntntNode,
+    static inline ::std::unique_ptr<SwPosition> lcl_PositionFromContentNode(
+        SwContentNode * const pContentNode,
         const bool bAtEnd=false)
     {
-        ::std::unique_ptr<SwPosition> pResult(new SwPosition(*pCntntNode));
-        pResult->nContent.Assign(pCntntNode, bAtEnd ? pCntntNode->Len() : 0);
+        ::std::unique_ptr<SwPosition> pResult(new SwPosition(*pContentNode));
+        pResult->nContent.Assign(pContentNode, bAtEnd ? pContentNode->Len() : 0);
         return pResult;
     }
 
-    // return a position at the begin of rEnd, if it is a CntntNode
+    // return a position at the begin of rEnd, if it is a ContentNode
     // else set it to the begin of the Node after rEnd, if there is one
     // else set it to the end of the node before rStt
-    // else set it to the CntntNode of the Pos outside the Range
+    // else set it to the ContentNode of the Pos outside the Range
     static inline ::std::unique_ptr<SwPosition> lcl_FindExpelPosition(
         const SwNodeIndex& rStt,
         const SwNodeIndex& rEnd,
         const SwPosition& rOtherPosition)
     {
-        SwCntntNode * pNode = rEnd.GetNode().GetCntntNode();
+        SwContentNode * pNode = rEnd.GetNode().GetContentNode();
         bool bPosAtEndOfNode = false;
         if ( pNode == NULL)
         {
@@ -135,7 +135,7 @@ namespace
         }
         if ( pNode != NULL )
         {
-            return lcl_PositionFromCntntNode( pNode, bPosAtEndOfNode );
+            return lcl_PositionFromContentNode( pNode, bPosAtEndOfNode );
         }
 
         return ::std::unique_ptr<SwPosition>(new SwPosition(rOtherPosition));
@@ -333,11 +333,11 @@ OUString IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
 
 bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
 {
-    return rPaM.Start()->nNode.GetNode().IsTxtNode() &&
+    return rPaM.Start()->nNode.GetNode().IsTextNode() &&
            rPaM.Start()->nContent.GetIndex() == 0 &&
            ( !rPaM.HasMark() ||
              ( rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
-               rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTxtNode()->Len() ) );
+               rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTextNode()->Len() ) );
 }
 
 namespace sw { namespace mark
@@ -369,7 +369,7 @@ namespace sw { namespace mark
                 pPos2->nContent.GetIndex());
         }
 #endif
-        // see for example _SaveCntntIdx, Shells
+        // see for example _SaveContentIdx, Shells
         OSL_PRECOND(m_vAllMarks.size() < USHRT_MAX,
             "MarkManager::makeMark(..)"
             " - more than USHRT_MAX marks are not supported correctly");
@@ -494,12 +494,12 @@ namespace sw { namespace mark
         return pFieldMark;
     }
 
-    ::sw::mark::IMark* MarkManager::getMarkForTxtNode(
-        const SwTxtNode& rTxtNode,
+    ::sw::mark::IMark* MarkManager::getMarkForTextNode(
+        const SwTextNode& rTextNode,
         const IDocumentMarkAccess::MarkType eType )
     {
-        SwPosition aPos(rTxtNode);
-        aPos.nContent.Assign(&(const_cast<SwTxtNode&>(rTxtNode)), 0);
+        SwPosition aPos(rTextNode);
+        aPos.nContent.Assign(&(const_cast<SwTextNode&>(rTextNode)), 0);
         const iterator_t ppExistingMark = lcl_FindMarkAtPos(m_vBookmarks, aPos, eType);
         if(ppExistingMark != m_vBookmarks.end())
             return ppExistingMark->get();
@@ -1208,31 +1208,31 @@ SaveBookmark::SaveBookmark(
         }
     }
     m_nNode1 = rBkmk.GetMarkPos().nNode.GetIndex();
-    m_nCntnt1 = rBkmk.GetMarkPos().nContent.GetIndex();
+    m_nContent1 = rBkmk.GetMarkPos().nContent.GetIndex();
 
     if(m_bSavePos)
     {
         m_nNode1 -= rMvPos.GetIndex();
         if(pIdx && !m_nNode1)
-            m_nCntnt1 -= pIdx->GetIndex();
+            m_nContent1 -= pIdx->GetIndex();
     }
 
     if(rBkmk.IsExpanded())
     {
         m_nNode2 = rBkmk.GetOtherMarkPos().nNode.GetIndex();
-        m_nCntnt2 = rBkmk.GetOtherMarkPos().nContent.GetIndex();
+        m_nContent2 = rBkmk.GetOtherMarkPos().nContent.GetIndex();
 
         if(m_bSaveOtherPos)
         {
             m_nNode2 -= rMvPos.GetIndex();
             if(pIdx && !m_nNode2)
-                m_nCntnt2 -= pIdx->GetIndex();
+                m_nContent2 -= pIdx->GetIndex();
         }
     }
     else
     {
         m_nNode2 = ULONG_MAX;
-        m_nCntnt2 = -1;
+        m_nContent2 = -1;
     }
 }
 
@@ -1253,14 +1253,14 @@ void SaveBookmark::SetInDoc(
         {
             aPam.GetMark()->nNode += m_nNode2;
             if(pIdx && !m_nNode2)
-                aPam.GetMark()->nContent += m_nCntnt2;
+                aPam.GetMark()->nContent += m_nContent2;
             else
-                aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(false), m_nCntnt2);
+                aPam.GetMark()->nContent.Assign(aPam.GetContentNode(false), m_nContent2);
         }
         else
         {
             aPam.GetMark()->nNode = m_nNode2;
-            aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(false), m_nCntnt2);
+            aPam.GetMark()->nContent.Assign(aPam.GetContentNode(false), m_nContent2);
         }
     }
 
@@ -1269,14 +1269,14 @@ void SaveBookmark::SetInDoc(
         aPam.GetPoint()->nNode += m_nNode1;
 
         if(pIdx && !m_nNode1)
-            aPam.GetPoint()->nContent += m_nCntnt1;
+            aPam.GetPoint()->nContent += m_nContent1;
         else
-            aPam.GetPoint()->nContent.Assign(aPam.GetCntntNode(), m_nCntnt1);
+            aPam.GetPoint()->nContent.Assign(aPam.GetContentNode(), m_nContent1);
     }
     else
     {
         aPam.GetPoint()->nNode = m_nNode1;
-        aPam.GetPoint()->nContent.Assign(aPam.GetCntntNode(), m_nCntnt1);
+        aPam.GetPoint()->nContent.Assign(aPam.GetContentNode(), m_nContent1);
     }
 
     if(!aPam.HasMark()
@@ -1321,11 +1321,11 @@ void _DelBookmarks(
     // Copy all Redlines which are in the move area into an array
     // which holds all position information as offset.
     // Assignement happens after moving.
-    SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-    for(SwRedlineTbl::size_type nCnt = 0; nCnt < rTbl.size(); ++nCnt )
+    SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    for(SwRedlineTable::size_type nCnt = 0; nCnt < rTable.size(); ++nCnt )
     {
         // Is at position?
-        SwRangeRedline* pRedl = rTbl[ nCnt ];
+        SwRangeRedline* pRedl = rTable[ nCnt ];
 
         SwPosition *const pRStt = pRedl->Start();
         SwPosition *const pREnd = pRedl->End();
@@ -1338,7 +1338,7 @@ void _DelBookmarks(
             else
             {
                 bool bStt = true;
-                SwCntntNode* pCNd = pRStt->nNode.GetNode().GetCntntNode();
+                SwContentNode* pCNd = pRStt->nNode.GetNode().GetContentNode();
                 if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoNext( &pRStt->nNode )) )
                 {
                     bStt = false;
@@ -1346,7 +1346,7 @@ void _DelBookmarks(
                     if( 0 == ( pCNd = SwNodes::GoPrevious( &pRStt->nNode )) )
                     {
                         pRStt->nNode = pREnd->nNode;
-                        pCNd = pRStt->nNode.GetNode().GetCntntNode();
+                        pCNd = pRStt->nNode.GetNode().GetContentNode();
                     }
                 }
                 pRStt->nContent.Assign( pCNd, bStt ? 0 : pCNd->Len() );
@@ -1360,7 +1360,7 @@ void _DelBookmarks(
             else
             {
                 bool bStt = false;
-                SwCntntNode* pCNd = pREnd->nNode.GetNode().GetCntntNode();
+                SwContentNode* pCNd = pREnd->nNode.GetNode().GetContentNode();
                 if( !pCNd && 0 == ( pCNd = SwNodes::GoPrevious( &pREnd->nNode )) )
                 {
                     bStt = true;
@@ -1368,7 +1368,7 @@ void _DelBookmarks(
                     if( 0 == ( pCNd = pDoc->GetNodes().GoNext( &pREnd->nNode )) )
                     {
                         pREnd->nNode = pRStt->nNode;
-                        pCNd = pREnd->nNode.GetNode().GetCntntNode();
+                        pCNd = pREnd->nNode.GetNode().GetContentNode();
                     }
                 }
                 pREnd->nContent.Assign( pCNd, bStt ? 0 : pCNd->Len() );

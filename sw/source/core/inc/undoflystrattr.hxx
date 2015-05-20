@@ -22,12 +22,12 @@
 #include <undobj.hxx>
 #include <swundo.hxx>
 
-class SwFlyFrmFmt;
+class SwFlyFrameFormat;
 
 class SwUndoFlyStrAttr : public SwUndo
 {
     public:
-        SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
+        SwUndoFlyStrAttr( SwFlyFrameFormat& rFlyFrameFormat,
                           const SwUndoId eUndoId,
                           const OUString& sOldStr,
                           const OUString& sNewStr );
@@ -39,7 +39,7 @@ class SwUndoFlyStrAttr : public SwUndo
         virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     private:
-        SwFlyFrmFmt& mrFlyFrmFmt;
+        SwFlyFrameFormat& mrFlyFrameFormat;
         const OUString msOldStr;
         const OUString msNewStr;
 };

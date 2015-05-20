@@ -64,7 +64,7 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
 
     // Step 4: Insert all content into the new node
     rPam.Move(fnMoveBackward);
-    rDoc.SetTxtFmtColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false));
+    rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));
 
     SwDocShell* pDocShell(rDoc.GetDocShell());
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
@@ -105,26 +105,26 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
         // If we are in insert mode, join the split node that is in front
         // of the new content with the first new node. Or in other words:
         // Revert the first split node.
-        SwTxtNode* pTxtNode = pSttNdIdx->GetNode().GetTxtNode();
+        SwTextNode* pTextNode = pSttNdIdx->GetNode().GetTextNode();
         SwNodeIndex aNxtIdx(*pSttNdIdx);
-        if (pTxtNode && pTxtNode->CanJoinNext(&aNxtIdx) && pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex())
+        if (pTextNode && pTextNode->CanJoinNext(&aNxtIdx) && pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex())
         {
             // If the PaM points to the first new node, move the PaM to the
             // end of the previous node.
             if (aPam.GetPoint()->nNode == aNxtIdx)
             {
                 aPam.GetPoint()->nNode = *pSttNdIdx;
-                aPam.GetPoint()->nContent.Assign(pTxtNode, pTxtNode->GetTxt().getLength());
+                aPam.GetPoint()->nContent.Assign(pTextNode, pTextNode->GetText().getLength());
             }
             // If the first new node isn't empty, convert  the node's text
             // attributes into hints. Otherwise, set the new node's
             // paragraph style at the previous (empty) node.
-            SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
-            if (pTxtNode->GetTxt().getLength())
-                pDelNd->FmtToTxtAttr(pTxtNode);
+            SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
+            if (pTextNode->GetText().getLength())
+                pDelNd->FormatToTextAttr(pTextNode);
             else
-                pTxtNode->ChgFmtColl(pDelNd->GetTxtColl());
-            pTxtNode->JoinNext();
+                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+            pTextNode->JoinNext();
         }
     }
 
@@ -133,19 +133,19 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
         // If we are in insert mode, join the split node that is after
         // the new content with the last new node. Or in other words:
         // Revert the second split node.
-        SwTxtNode* pTxtNode = pSttNdIdx2->GetNode().GetTxtNode();
+        SwTextNode* pTextNode = pSttNdIdx2->GetNode().GetTextNode();
         SwNodeIndex aPrevIdx(*pSttNdIdx2);
-        if (pTxtNode && pTxtNode->CanJoinPrev(&aPrevIdx) && pSttNdIdx2->GetIndex() - 1 == aPrevIdx.GetIndex())
+        if (pTextNode && pTextNode->CanJoinPrev(&aPrevIdx) && pSttNdIdx2->GetIndex() - 1 == aPrevIdx.GetIndex())
         {
             // If the last new node isn't empty, convert  the node's text
             // attributes into hints. Otherwise, set the new node's
             // paragraph style at the next (empty) node.
-            SwTxtNode* pDelNd = aPrevIdx.GetNode().GetTxtNode();
-            if (pTxtNode->GetTxt().getLength())
-                pDelNd->FmtToTxtAttr(pTxtNode);
+            SwTextNode* pDelNd = aPrevIdx.GetNode().GetTextNode();
+            if (pTextNode->GetText().getLength())
+                pDelNd->FormatToTextAttr(pTextNode);
             else
-                pTxtNode->ChgFmtColl(pDelNd->GetTxtColl());
-            pTxtNode->JoinPrev();
+                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+            pTextNode->JoinPrev();
         }
     }
 

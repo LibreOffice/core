@@ -18,23 +18,23 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_WIDORP_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_WIDORP_HXX
-class SwTxtFrm;
+class SwTextFrm;
 
 #include "swtypes.hxx"
 #include "itrtxt.hxx"
 
-class SwTxtFrmBreak
+class SwTextFrmBreak
 {
 private:
     SwTwips  nRstHeight;
     SwTwips  nOrigin;
 protected:
-    SwTxtFrm *pFrm;
+    SwTextFrm *pFrm;
     bool     bBreak;
     bool     bKeep;
 public:
-    SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst = 0  );
-    bool IsBreakNow( SwTxtMargin &rLine );
+    SwTextFrmBreak( SwTextFrm *pFrm, const SwTwips nRst = 0  );
+    bool IsBreakNow( SwTextMargin &rLine );
 
     bool IsBroken() const     { return bBreak; }
     bool IsKeepAlways() const { return bKeep; }
@@ -44,38 +44,38 @@ public:
     inline bool GetKeep() const { return bKeep; }
     inline void SetKeep( const bool bNew ) { bKeep = bNew; }
 
-    bool IsInside( SwTxtMargin &rLine ) const;
+    bool IsInside( SwTextMargin &rLine ) const;
 
-    // In order to be able to handle special cases with Ftn.
-    // SetRstHeight sets the rest height for SwTxtFrmBreak. This is needed
+    // In order to be able to handle special cases with Footnote.
+    // SetRstHeight sets the rest height for SwTextFrmBreak. This is needed
     // to call TruncLines() without IsBreakNow() returning another value.
     // We assume that rLine is pointing to the last non-fitting line.
 
     // OD 2004-02-27 #106629# - no longer inline
-    void SetRstHeight( const SwTxtMargin &rLine );
+    void SetRstHeight( const SwTextMargin &rLine );
     SwTwips GetRstHeight() const { return nRstHeight; }
 };
 
-class WidowsAndOrphans : public SwTxtFrmBreak
+class WidowsAndOrphans : public SwTextFrmBreak
 {
 private:
     sal_uInt16   nWidLines, nOrphLines;
 
 public:
-    WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst = 0,
+    WidowsAndOrphans( SwTextFrm *pFrm, const SwTwips nRst = 0,
         bool bCheckKeep = true );
-    bool FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine );
+    bool FindWidows( SwTextFrm *pFrm, SwTextMargin &rLine );
     sal_uInt16 GetWidowsLines() const
     { return nWidLines; }
     sal_uInt16 GetOrphansLines() const
     { return nOrphLines; }
     void ClrOrphLines(){ nOrphLines = 0; }
 
-    bool FindBreak( SwTxtFrm *pFrm, SwTxtMargin &rLine, bool bHasToFit );
-    bool WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, bool bTest );
+    bool FindBreak( SwTextFrm *pFrm, SwTextMargin &rLine, bool bHasToFit );
+    bool WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTest );
     // OD 2004-02-25 #i16128# - rename method to avoid confusion with base class
-    // method <SwTxtFrmBreak::IsBreakNow>, which isn't virtual.
-    bool IsBreakNowWidAndOrp( SwTxtMargin &rLine )
+    // method <SwTextFrmBreak::IsBreakNow>, which isn't virtual.
+    bool IsBreakNowWidAndOrp( SwTextMargin &rLine )
     {
         return ( rLine.GetLineNr() > nOrphLines ) && IsBreakNow( rLine );
     }

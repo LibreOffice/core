@@ -93,13 +93,13 @@ using namespace ::com::sun::star::linguistic2;
 
 /** Create a list of clipboard formats that are supported both from the
     current clipboard content and the DrawViewShell.
-    The list is stored in a new instance of SvxClipboardFmtItem.
+    The list is stored in a new instance of SvxClipboardFormatItem.
 */
-::std::unique_ptr<SvxClipboardFmtItem> GetSupportedClipboardFormats (
+::std::unique_ptr<SvxClipboardFormatItem> GetSupportedClipboardFormats (
     TransferableDataHelper& rDataHelper)
 {
-    ::std::unique_ptr<SvxClipboardFmtItem> pResult (
-        new SvxClipboardFmtItem(SID_CLIPBOARD_FORMAT_ITEMS));
+    ::std::unique_ptr<SvxClipboardFormatItem> pResult (
+        new SvxClipboardFormatItem(SID_CLIPBOARD_FORMAT_ITEMS));
 
     sal_uInt32 nFormatCount (rDataHelper.GetFormatCount());
     for (sal_uInt32 i=0; i<nFormatCount; i++)
@@ -193,7 +193,7 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
         // exit immediately.
         TransferableDataHelper aDataHelper (
             TransferableDataHelper::CreateFromSystemClipboard(GetActiveWindow()));
-        ::std::unique_ptr<SvxClipboardFmtItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
+        ::std::unique_ptr<SvxClipboardFormatItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
         if (mpDrawView == NULL)
             return 0;
         mpCurrentClipboardFormats = std::move(pFormats);

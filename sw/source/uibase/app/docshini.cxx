@@ -213,8 +213,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             m_pDoc->SetDefault(*pFontItem);
             if( !bHTMLTemplSet )
             {
-                SwTxtFmtColl *pColl = m_pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-                pColl->ResetFmtAttr(nFontWhich);
+                SwTextFormatColl *pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+                pColl->ResetFormatAttr(nFontWhich);
             }
             pFontItem.reset();
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( FONT_STANDARD, i, eLanguage );
@@ -223,8 +223,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             m_pDoc->SetDefault(SvxFontHeightItem( nFontHeight, 100, aFontHeightWhich[i] ));
             if( !bHTMLTemplSet )
             {
-                SwTxtFmtColl *pColl = m_pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-                pColl->ResetFmtAttr(aFontHeightWhich[i]);
+                SwTextFormatColl *pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+                pColl->ResetFormatAttr(aFontHeightWhich[i]);
             }
 
         }
@@ -261,7 +261,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 nFontHeightWhich = RES_CHRATR_CTL_FONTSIZE;
                 eLanguage = static_cast<const SvxLanguageItem&>(m_pDoc->GetDefault( RES_CHRATR_CTL_LANGUAGE )).GetLanguage();
             }
-            SwTxtFmtColl *pColl = 0;
+            SwTextFormatColl *pColl = 0;
             if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
             {
                 sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
@@ -270,12 +270,12 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 if( pPrt )
                     aFont = pPrt->GetFontMetric( aFont );
 
-                pColl = m_pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
+                pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(aFontIdPoolId[nIdx + 1]);
                 if( !bHTMLTemplSet ||
                     SfxItemState::SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, false ) )
                 {
-                    pColl->SetFmtAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
                                                   aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
                 }
             }
@@ -283,12 +283,12 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             if(nFontHeight <= 0)
                 nFontHeight = SwStdFontConfig::GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
             if(!pColl)
-                pColl = m_pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
-            SvxFontHeightItem aFontHeight( static_cast<const SvxFontHeightItem&>(pColl->GetFmtAttr( nFontHeightWhich, true )));
+                pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(aFontIdPoolId[nIdx + 1]);
+            SvxFontHeightItem aFontHeight( static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr( nFontHeightWhich, true )));
             if(aFontHeight.GetHeight() != sal::static_int_cast<sal_uInt32, sal_Int32>(nFontHeight))
             {
                 aFontHeight.SetHeight(nFontHeight);
-                pColl->SetFmtAttr( aFontHeight );
+                pColl->SetFormatAttr( aFontHeight );
             }
         }
 

@@ -208,11 +208,11 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     aGridItem.SetGridVisible( aViewOpt.IsGridVisible());
 
     const Size& rSnapSize = aViewOpt.GetSnapSize();
-    aGridItem.SetFldDrawX( (sal_uInt16) (rSnapSize.Width() ));
-    aGridItem.SetFldDrawY( (sal_uInt16) (rSnapSize.Height()));
+    aGridItem.SetFieldDrawX( (sal_uInt16) (rSnapSize.Width() ));
+    aGridItem.SetFieldDrawY( (sal_uInt16) (rSnapSize.Height()));
 
-    aGridItem.SetFldDivisionX( aViewOpt.GetDivisionX());
-    aGridItem.SetFldDivisionY( aViewOpt.GetDivisionY());
+    aGridItem.SetFieldDivisionX( aViewOpt.GetDivisionX());
+    aGridItem.SetFieldDivisionY( aViewOpt.GetDivisionY());
 
     pRet->Put(aGridItem);
 
@@ -355,14 +355,14 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         aViewOpt.SetSynchronize(pGridItem->GetSynchronize());
         if( aViewOpt.IsGridVisible() != pGridItem->GetGridVisible() )
             aViewOpt.SetGridVisible( pGridItem->GetGridVisible());
-        Size aSize = Size( pGridItem->GetFldDrawX()  ,
-                            pGridItem->GetFldDrawY()  );
+        Size aSize = Size( pGridItem->GetFieldDrawX()  ,
+                            pGridItem->GetFieldDrawY()  );
         if( aViewOpt.GetSnapSize() != aSize )
             aViewOpt.SetSnapSize( aSize );
-        short nDiv = (short)pGridItem->GetFldDivisionX() ;
+        short nDiv = (short)pGridItem->GetFieldDivisionX() ;
         if( aViewOpt.GetDivisionX() != nDiv  )
             aViewOpt.SetDivisionX( nDiv );
-        nDiv = (short)pGridItem->GetFldDivisionY();
+        nDiv = (short)pGridItem->GetFieldDivisionY();
         if( aViewOpt.GetDivisionY() != nDiv  )
             aViewOpt.SetDivisionY( nDiv  );
 

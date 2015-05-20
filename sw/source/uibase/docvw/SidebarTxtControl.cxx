@@ -56,7 +56,7 @@
 
 namespace sw { namespace sidebarwindows {
 
-SidebarTxtControl::SidebarTxtControl( SwSidebarWin& rSidebarWin,
+SidebarTextControl::SidebarTextControl( SwSidebarWin& rSidebarWin,
                                       WinBits nBits,
                                       SwView& rDocView,
                                       SwPostItMgr& rPostItMgr )
@@ -68,23 +68,23 @@ SidebarTxtControl::SidebarTxtControl( SwSidebarWin& rSidebarWin,
     AddEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
 }
 
-SidebarTxtControl::~SidebarTxtControl()
+SidebarTextControl::~SidebarTextControl()
 {
     disposeOnce();
 }
 
-void SidebarTxtControl::dispose()
+void SidebarTextControl::dispose()
 {
     RemoveEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
     Control::dispose();
 }
 
-OutlinerView* SidebarTxtControl::GetTextView() const
+OutlinerView* SidebarTextControl::GetTextView() const
 {
     return mrSidebarWin.GetOutlinerView();
 }
 
-void SidebarTxtControl::GetFocus()
+void SidebarTextControl::GetFocus()
 {
     Window::GetFocus();
     if ( !mrSidebarWin.IsMouseOver() )
@@ -93,7 +93,7 @@ void SidebarTxtControl::GetFocus()
     }
 }
 
-void SidebarTxtControl::LoseFocus()
+void SidebarTextControl::LoseFocus()
 {
     // write the visible text back into the SwField
     mrSidebarWin.UpdateData();
@@ -105,7 +105,7 @@ void SidebarTxtControl::LoseFocus()
     }
 }
 
-void SidebarTxtControl::RequestHelp(const HelpEvent &rEvt)
+void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
 {
     sal_uInt16 nResId = 0;
     switch( mrSidebarWin.GetLayoutStatus() )
@@ -115,18 +115,18 @@ void SidebarTxtControl::RequestHelp(const HelpEvent &rEvt)
         default: nResId = 0;
     }
 
-    SwContentAtPos aCntntAtPos( SwContentAtPos::SW_REDLINE );
+    SwContentAtPos aContentAtPos( SwContentAtPos::SW_REDLINE );
     if ( nResId &&
-         mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin.GetAnchorPos(), aCntntAtPos ) )
+         mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin.GetAnchorPos(), aContentAtPos ) )
     {
-        OUString sTxt = SW_RESSTR( nResId ) + ": " +
-                        aCntntAtPos.aFnd.pRedl->GetAuthorString() + " - " +
-                        GetAppLangDateTimeString( aCntntAtPos.aFnd.pRedl->GetTimeStamp() );
-        Help::ShowQuickHelp( this,PixelToLogic(Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sTxt);
+        OUString sText = SW_RESSTR( nResId ) + ": " +
+                        aContentAtPos.aFnd.pRedl->GetAuthorString() + " - " +
+                        GetAppLangDateTimeString( aContentAtPos.aFnd.pRedl->GetTimeStamp() );
+        Help::ShowQuickHelp( this,PixelToLogic(Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sText);
     }
 }
 
-void SidebarTxtControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong)
+void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong)
 {
     //Take the control's height, but overwrite the scrollbar area if there was one
     Size aSize(PixelToLogic(GetSizePixel()));
@@ -151,7 +151,7 @@ void SidebarTxtControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& r
     }
 }
 
-void SidebarTxtControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if (!rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
     {
@@ -185,7 +185,7 @@ void SidebarTxtControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     }
 }
 
-void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
+void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 {
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     sal_uInt16 nKey = rKeyCode.GetCode();
@@ -247,7 +247,7 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
     mrDocView.GetViewFrame()->GetBindings().InvalidateAll(false);
 }
 
-void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
+void SidebarTextControl::MouseMove( const MouseEvent& rMEvt )
 {
     if ( GetTextView() )
     {
@@ -261,8 +261,8 @@ void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
         const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();
         if ( pItem )
         {
-            const SvxFieldData* pFld = pItem->GetField();
-            const SvxURLField* pURL = PTR_CAST( SvxURLField, pFld );
+            const SvxFieldData* pField = pItem->GetField();
+            const SvxURLField* pURL = PTR_CAST( SvxURLField, pField );
             if ( pURL )
             {
                 OUString sURL( pURL->GetURL() );
@@ -277,7 +277,7 @@ void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
+void SidebarTextControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( GetTextView() )
     {
@@ -290,8 +290,8 @@ void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
             const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();
             if ( pItem )
             {
-                const SvxFieldData* pFld = pItem->GetField();
-                const SvxURLField* pURL = PTR_CAST( SvxURLField, pFld );
+                const SvxFieldData* pField = pItem->GetField();
+                const SvxURLField* pURL = PTR_CAST( SvxURLField, pField );
                 if ( pURL )
                 {
                     GetTextView()->MouseButtonDown( rMEvt );
@@ -313,13 +313,13 @@ void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
     mrDocView.GetViewFrame()->GetBindings().InvalidateAll(false);
 }
 
-void SidebarTxtControl::MouseButtonUp( const MouseEvent& rMEvt )
+void SidebarTextControl::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( GetTextView() )
         GetTextView()->MouseButtonUp( rMEvt );
 }
 
-IMPL_LINK( SidebarTxtControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
+IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
 {
     if ( pInfo->nCommand == SpellCallbackCommand::STARTSPELLDLG )
     {
@@ -328,13 +328,13 @@ IMPL_LINK( SidebarTxtControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
     return 0;
 }
 
-IMPL_LINK( SidebarTxtControl, Select, Menu*, pSelMenu )
+IMPL_LINK( SidebarTextControl, Select, Menu*, pSelMenu )
 {
     mrSidebarWin.ExecuteCommand( pSelMenu->GetCurItemId() );
     return 0;
 }
 
-void SidebarTxtControl::Command( const CommandEvent& rCEvt )
+void SidebarTextControl::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
@@ -342,13 +342,13 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
              GetTextView() &&
              GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {
-            Link<> aLink = LINK(this, SidebarTxtControl, OnlineSpellCallback);
+            Link<> aLink = LINK(this, SidebarTextControl, OnlineSpellCallback);
             GetTextView()->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
         }
         else
         {
             boost::scoped_ptr<SfxPopupMenuManager> pMgr(SfxDispatcher::Popup(0, this,&rCEvt.GetMousePosPixel()));
-            static_cast<PopupMenu*>(pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTxtControl, Select) );
+            static_cast<PopupMenu*>(pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTextControl, Select) );
 
             {
                 OUString aText = static_cast<PopupMenu*>(pMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
@@ -402,14 +402,14 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
     }
 }
 
-OUString SidebarTxtControl::GetSurroundingText() const
+OUString SidebarTextControl::GetSurroundingText() const
 {
     if (GetTextView())
         return GetTextView()->GetSurroundingText();
     return OUString();
 }
 
-Selection SidebarTxtControl::GetSurroundingTextSelection() const
+Selection SidebarTextControl::GetSurroundingTextSelection() const
 {
     if( GetTextView() )
         return GetTextView()->GetSurroundingTextSelection();
@@ -417,10 +417,10 @@ Selection SidebarTxtControl::GetSurroundingTextSelection() const
         return Selection( 0, 0 );
 }
 
-css::uno::Reference< css::accessibility::XAccessible > SidebarTxtControl::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > SidebarTextControl::CreateAccessible()
 {
 
-    SidebarTxtControlAccessible* pAcc( new SidebarTxtControlAccessible( *this ) );
+    SidebarTextControlAccessible* pAcc( new SidebarTextControlAccessible( *this ) );
     css::uno::Reference< css::awt::XWindowPeer > xWinPeer( pAcc );
     SetWindowPeer( xWinPeer, pAcc );
 

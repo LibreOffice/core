@@ -158,7 +158,7 @@ const struct SvEventDescription aAutotextEvents[] =
 };
 
 sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
-                                      SvxMacroTableDtor& rMacroTbl,
+                                      SvxMacroTableDtor& rMacroTable,
                                       bool bFileAlreadyOpen )
 {
     // set current auto text
@@ -252,7 +252,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 
                     // and finally, copy macro into table
                     if (0 == nRet)
-                        pDescriptor->copyMacrosIntoTable(rMacroTbl);
+                        pDescriptor->copyMacrosIntoTable(rMacroTable);
                 }
                 else
                     nRet = ERR_SWG_READ_ERROR;
@@ -519,7 +519,7 @@ void SwXMLTextBlocks::WriteInfo()
 
 sal_uLong SwXMLTextBlocks::SetMacroTable(
     sal_uInt16 nIdx,
-    const SvxMacroTableDtor& rMacroTbl,
+    const SvxMacroTableDtor& rMacroTable,
     bool bFileAlreadyOpen )
 {
     // set current autotext
@@ -576,7 +576,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
 
             // construct events object
             uno::Reference<XNameAccess> xEvents =
-                new SvMacroTableEventDescriptor(rMacroTbl,aAutotextEvents);
+                new SvMacroTableEventDescriptor(rMacroTable,aAutotextEvents);
 
             // prepare arguments (prepend doc handler to given arguments)
             Sequence<Any> aParams(2);

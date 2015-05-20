@@ -524,7 +524,7 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
             case SID_CLIPBOARD_FORMAT_ITEMS:
                 if ( bPastePossible )
                 {
-                    SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                    SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                     TransferableDataHelper aDataHelper(
                             TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
@@ -913,8 +913,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             SfxItemSet aAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
             nId = EE_PARA_LRSPACE;
             SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
-                rItem.GetRight(), rItem.GetTxtLeft(),
-                rItem.GetTxtFirstLineOfst(), nId );
+                rItem.GetRight(), rItem.GetTextLeft(),
+                rItem.GetTextFirstLineOfst(), nId );
             aAttr.Put( aLRSpaceItem );
             pView->SetAttributes( aAttr );
         }

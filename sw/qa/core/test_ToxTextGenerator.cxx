@@ -86,7 +86,7 @@ void
 ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfNoTextMarkIsSet()
 {
     MockedSortTab sortTab;
-    sortTab.pTxtMark = NULL;
+    sortTab.pTextMark = NULL;
 
     OUString expected("");
     OUString actual = ToxTextGenerator::GetNumStringOfFirstNode(sortTab, false, 0);
@@ -97,7 +97,7 @@ void
 ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty()
 {
     MockedSortTab sortTab;
-    sortTab.pTxtMark = reinterpret_cast<SwTxtTOXMark*>(1);
+    sortTab.pTextMark = reinterpret_cast<SwTextTOXMark*>(1);
 
     OUString expected("");
     OUString actual = ToxTextGenerator::GetNumStringOfFirstNode(sortTab, false, 0);
@@ -107,7 +107,7 @@ ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty()
 class MockedToxTabStopTokenHandler : public ToxTabStopTokenHandler {
 public:
     virtual HandledTabStopToken
-    HandleTabStopToken(const SwFormToken& aToken, const SwTxtNode& targetNode,
+    HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
             const SwRootFrm *currentLayout) const SAL_OVERRIDE {
         (void)(aToken); (void)(targetNode); (void)(currentLayout); // avoid unused warnings.
         return HandledTabStopToken();
@@ -128,7 +128,7 @@ public:
 private:
     SwChapterField
     ObtainChapterField(SwChapterFieldType* chapterFieldType, const SwFormToken* chapterToken,
-            const SwCntntFrm* contentFrame, const SwCntntNode *contentNode) const SAL_OVERRIDE {
+            const SwContentFrm* contentFrame, const SwContentNode *contentNode) const SAL_OVERRIDE {
         // get rid of 'unused-parameters' warnings
         (void)(chapterFieldType);(void)(chapterToken);(void)(contentFrame);(void)(contentNode);
         return mChapterField;

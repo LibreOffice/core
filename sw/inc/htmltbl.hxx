@@ -30,7 +30,7 @@ class SwTableBox;
 class SwTable;
 class SwHTMLTableLayout;
 class SwDoc;
-class SwFrmFmt;
+class SwFrameFormat;
 
 #define HTMLTABLE_RESIZE_NOW (ULONG_MAX)
 
@@ -239,7 +239,7 @@ class SwHTMLTableLayout
     void SetBoxWidth( SwTableBox *pBox, sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
     const SwStartNode *GetAnyBoxStartNode() const;
-    SwFrmFmt *FindFlyFrmFmt() const;
+    SwFrameFormat *FindFlyFrameFormat() const;
     const SwDoc *GetDoc() const { return GetAnyBoxStartNode()->GetDoc(); }
 
     void ClearPass1Info() { nMin = nMax = 0; }
@@ -251,7 +251,7 @@ class SwHTMLTableLayout
     static sal_uInt16 GetBrowseWidthByVisArea( const SwDoc& rDoc );
 public:
 
-    SwHTMLTableLayout( const SwTable *pSwTbl,
+    SwHTMLTableLayout( const SwTable *pSwTable,
                        sal_uInt16 nRows, sal_uInt16 nCols, bool bColsOpt, bool ColTgs,
                        sal_uInt16 nWidth, bool bPrcWidth, sal_uInt16 nBorderOpt,
                        sal_uInt16 nCellPad, sal_uInt16 nCellSp, SvxAdjust eAdjust,

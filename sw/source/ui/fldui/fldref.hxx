@@ -30,33 +30,33 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
 #include <FldRefTreeListBox.hxx>
-class SwTxtNode;
+class SwTextNode;
 
-class SwFldRefPage : public SwFldPage
+class SwFieldRefPage : public SwFieldPage
 {
     VclPtr<ListBox>        m_pTypeLB;
     VclPtr<VclContainer>   m_pSelection;
     VclPtr<ListBox>        m_pSelectionLB;
     // #i83479#
-    VclPtr<SwFldRefTreeListBox> m_pSelectionToolTipLB;
+    VclPtr<SwFieldRefTreeListBox> m_pSelectionToolTipLB;
     VclPtr<VclContainer>   m_pFormat;
     VclPtr<ListBox>        m_pFormatLB;
     VclPtr<FixedText>      m_pNameFT;
     VclPtr<Edit>           m_pNameED;
     VclPtr<Edit>           m_pValueED;
-    OUString    sBookmarkTxt;
-    OUString    sFootnoteTxt;
-    OUString    sEndnoteTxt;
+    OUString    sBookmarkText;
+    OUString    sFootnoteText;
+    OUString    sEndnoteText;
     // #i83479#
-    OUString    sHeadingTxt;
-    OUString    sNumItemTxt;
+    OUString    sHeadingText;
+    OUString    sNumItemText;
 
     IDocumentOutlineNodes::tSortedOutlineNodeList maOutlineNodes;
     IDocumentListItems::tSortedNodeNumList maNumItems;
 
     // selected text node in the listbox for headings and numbered items
     // in order to restore selection after update of selection listbox
-    const SwTxtNode* mpSavedSelectedTxtNode;
+    const SwTextNode* mpSavedSelectedTextNode;
     // fallback, if previously selected text node doesn't exist anymore
     size_t mnSavedSelectedPos;
 
@@ -68,15 +68,15 @@ class SwFldRefPage : public SwFldPage
     sal_Int32               FillFormatLB(sal_uInt16 nTypeId);
 
     // #i83479#
-    void SaveSelectedTxtNode();
+    void SaveSelectedTextNode();
 
 protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldRefPage(vcl::Window* pParent, const SfxItemSet& rSet);
+                        SwFieldRefPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
-                        virtual ~SwFldRefPage();
+                        virtual ~SwFieldRefPage();
     virtual void        dispose() SAL_OVERRIDE;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

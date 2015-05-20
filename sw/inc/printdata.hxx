@@ -33,7 +33,7 @@
 
 class SwDoc;
 class SwDocShell;
-class _SetGetExpFlds;
+class _SetGetExpFields;
 class SwViewOption;
 class OutputDevice;
 class SwViewOptionAdjust_Impl;
@@ -233,8 +233,8 @@ class SwRenderData
 public:
 
     // PostIt relevant data
-    /// an array of "_SetGetExpFld *" sorted by page and line numbers
-    ::boost::scoped_ptr<_SetGetExpFlds> m_pPostItFields;
+    /// an array of "_SetGetExpField *" sorted by page and line numbers
+    ::boost::scoped_ptr<_SetGetExpFields> m_pPostItFields;
     /// this contains a SwDoc with the post-it content
     ::boost::scoped_ptr<SwViewShell>      m_pPostItShell;
 

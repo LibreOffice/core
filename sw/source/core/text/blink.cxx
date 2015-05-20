@@ -116,7 +116,7 @@ IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
 }
 
 void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
-                      const SwTxtFrm *pTxtFrm, sal_uInt16 nDir )
+                      const SwTextFrm *pTextFrm, sal_uInt16 nDir )
 {
     SwBlinkPortion *pBlinkPor = new SwBlinkPortion( pPor, nDir );
 
@@ -129,9 +129,9 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
     else
     {
         pBlinkPor->SetPos( rPoint );
-        pBlinkPor->SetRootFrm( pTxtFrm->getRootFrm() );
+        pBlinkPor->SetRootFrm( pTextFrm->getRootFrm() );
         aList.insert( pBlinkPor );
-        pTxtFrm->SetBlinkPor();
+        pTextFrm->SetBlinkPor();
         if( pPor->IsLayPortion() || pPor->IsParaPortion() )
             const_cast<SwLineLayout*>(static_cast<const SwLineLayout*>(pPor))->SetBlinking();
 

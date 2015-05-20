@@ -50,17 +50,17 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
     SwNumRule* pMyNumRule =
             new SwNumRule( m_pDoc->GetUniqueNumRuleName( &sPrefix ),
                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    m_pUsedNumTbl->push_back( pMyNumRule );
+    m_pUsedNumTable->push_back( pMyNumRule );
 
     for ( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
     {
-        const SwNumFmt& rSubRule = pRule->Get(i);
+        const SwNumFormat& rSubRule = pRule->Get(i);
         pMyNumRule->Set( i, rSubRule );
     }
 
-    SwNumFmt aNumFmt( pMyNumRule->Get( nLevel ) );
-    aNumFmt.SetStart( nVal );
-    pMyNumRule->Set( nLevel, aNumFmt );
+    SwNumFormat aNumFormat( pMyNumRule->Get( nLevel ) );
+    aNumFormat.SetStart( nVal );
+    pMyNumRule->Set( nLevel, aNumFormat );
 
     nNumId = GetId( *pMyNumRule );
 
@@ -72,19 +72,19 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
 
 sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
 {
-    if ( !m_pUsedNumTbl )
+    if ( !m_pUsedNumTable )
     {
-        m_pUsedNumTbl = new SwNumRuleTbl;
-        m_pUsedNumTbl->insert( m_pUsedNumTbl->begin(), m_pDoc->GetNumRuleTbl().begin(), m_pDoc->GetNumRuleTbl().end() );
-        // Check, if the outline rule is already inserted into <pUsedNumTbl>.
+        m_pUsedNumTable = new SwNumRuleTable;
+        m_pUsedNumTable->insert( m_pUsedNumTable->begin(), m_pDoc->GetNumRuleTable().begin(), m_pDoc->GetNumRuleTable().end() );
+        // Check, if the outline rule is already inserted into <pUsedNumTable>.
         // If yes, do not insert it again.
         bool bOutlineRuleAdded( false );
-        for ( sal_uInt16 n = m_pUsedNumTbl->size(); n; )
+        for ( sal_uInt16 n = m_pUsedNumTable->size(); n; )
         {
-            const SwNumRule& rRule = *(*m_pUsedNumTbl)[ --n ];
+            const SwNumRule& rRule = *(*m_pUsedNumTable)[ --n ];
             if ( !SwDoc::IsUsed( rRule ) )
             {
-                m_pUsedNumTbl->erase( m_pUsedNumTbl->begin() + n );
+                m_pUsedNumTable->erase( m_pUsedNumTable->begin() + n );
             }
             else if ( &rRule == m_pDoc->GetOutlineNumRule() )
             {
@@ -96,11 +96,11 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
         {
             // still need to paste the OutlineRule
             SwNumRule* pR = m_pDoc->GetOutlineNumRule();
-            m_pUsedNumTbl->push_back( pR );
+            m_pUsedNumTable->push_back( pR );
         }
     }
     SwNumRule* p = const_cast<SwNumRule*>(&rNumRule);
-    sal_uInt16 nRet = static_cast<sal_uInt16>(m_pUsedNumTbl->GetPos(p));
+    sal_uInt16 nRet = static_cast<sal_uInt16>(m_pUsedNumTable->GetPos(p));
 
     // Is this list now duplicated into a new list which we should use
     // #i77812# - perform 'deep' search in duplication map
@@ -118,27 +118,27 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
 
 // GetFirstLineOffset should problem never appear unadorned apart from
 // here in the ww export filter
-sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
+sal_Int16 GetWordFirstLineOffset(const SwNumFormat &rFormat)
 {
-    OSL_ENSURE( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+    OSL_ENSURE( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<GetWordFirstLineOffset> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
     short nFirstLineOffset;
-    if (rFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
-        nFirstLineOffset = -rFmt.GetCharTextDistance();
+    if (rFormat.GetNumAdjust() == SVX_ADJUST_RIGHT)
+        nFirstLineOffset = -rFormat.GetCharTextDistance();
     else
-        nFirstLineOffset = rFmt.GetFirstLineOffset();
+        nFirstLineOffset = rFormat.GetFirstLineOffset();
     return nFirstLineOffset;
 }
 
 void WW8Export::WriteNumbering()
 {
-    if ( !m_pUsedNumTbl )
+    if ( !m_pUsedNumTable )
         return; // no numbering is used
 
     // list formats - LSTF
     pFib->fcPlcfLst = pTableStrm->Tell();
-    SwWW8Writer::WriteShort( *pTableStrm, m_pUsedNumTbl->size() );
+    SwWW8Writer::WriteShort( *pTableStrm, m_pUsedNumTable->size() );
     NumberingDefinitions();
     // set len to FIB
     pFib->lcbPlcfLst = pTableStrm->Tell() - pFib->fcPlcfLst;
@@ -171,15 +171,15 @@ void WW8AttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &r
 
 void MSWordExportBase::NumberingDefinitions()
 {
-    if ( !m_pUsedNumTbl )
+    if ( !m_pUsedNumTable )
         return; // no numbering is used
 
-    sal_uInt16 nCount = m_pUsedNumTbl->size();
+    sal_uInt16 nCount = m_pUsedNumTable->size();
 
     // Write static data of SwNumRule - LSTF
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
-        const SwNumRule& rRule = *(*m_pUsedNumTbl)[ n ];
+        const SwNumRule& rRule = *(*m_pUsedNumTable)[ n ];
 
         AttrOutput().NumberingDefinition( n + 1, rRule );
     }
@@ -351,7 +351,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
 
 void MSWordExportBase::AbstractNumberingDefinitions()
 {
-    sal_uInt16 nCount = m_pUsedNumTbl->size();
+    sal_uInt16 nCount = m_pUsedNumTable->size();
     sal_uInt16 n;
 
     // prepare the NodeNum to generate the NumString
@@ -363,37 +363,37 @@ void MSWordExportBase::AbstractNumberingDefinitions()
     {
         AttrOutput().StartAbstractNumbering( n + 1 );
 
-        const SwNumRule& rRule = *(*m_pUsedNumTbl)[ n ];
+        const SwNumRule& rRule = *(*m_pUsedNumTable)[ n ];
         sal_uInt8 nLvl;
         sal_uInt8 nLevels = static_cast< sal_uInt8 >(rRule.IsContinusNum() ?
             WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
         for( nLvl = 0; nLvl < nLevels; ++nLvl )
         {
-            // write the static data of the SwNumFmt of this level
+            // write the static data of the SwNumFormat of this level
             sal_uInt8 aNumLvlPos[WW8ListManager::nMaxLevel] = { 0,0,0,0,0,0,0,0,0 };
 
-            const SwNumFmt& rFmt = rRule.Get( nLvl );
+            const SwNumFormat& rFormat = rRule.Get( nLvl );
 
             sal_uInt8 nFollow = 0;
             // #i86652#
-            if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 nFollow = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
             }
-            else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                switch ( rFmt.GetLabelFollowedBy() )
+                switch ( rFormat.GetLabelFollowedBy() )
                 {
                     case SvxNumberFormat::LISTTAB:
                     {
             // 0 (tab) unless there would be no content before the tab, in which case 2 (nothing)
-            nFollow = (SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType()) ? 0 : 2;
+            nFollow = (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType()) ? 0 : 2;
                     }
                     break;
                     case SvxNumberFormat::SPACE:
                     {
             // 1 (space) unless there would be no content before the space in which case 2 (nothing)
-            nFollow = (SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType()) ? 1 : 2;
+            nFollow = (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType()) ? 1 : 2;
                     }
                     break;
                     case SvxNumberFormat::NOTHING:
@@ -416,13 +416,13 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             const vcl::Font* pBulletFont=0;
             rtl_TextEncoding eChrSet=0;
             FontFamily eFamily=FAMILY_DECORATIVE;
-            if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() ||
-                SVX_NUM_BITMAP == rFmt.GetNumberingType() )
+            if( SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
+                SVX_NUM_BITMAP == rFormat.GetNumberingType() )
             {
-                sNumStr = OUString(rFmt.GetBulletChar());
+                sNumStr = OUString(rFormat.GetBulletChar());
                 bWriteBullet = true;
 
-                pBulletFont = rFmt.GetBulletFont();
+                pBulletFont = rFormat.GetBulletFont();
                 if (!pBulletFont)
                 {
                     pBulletFont = &numfunc::GetDefBulletFont();
@@ -436,19 +436,19 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     SubstituteBullet( sNumStr, eChrSet, sFontName );
 
                 // #i86652#
-                if ( rFmt.GetPositionAndSpaceMode() ==
+                if ( rFormat.GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     // <nFollow = 2>, if minimum label width equals 0 and
                     // minimum distance between label and text equals 0
-                    nFollow = ( rFmt.GetFirstLineOffset() == 0 &&
-                                rFmt.GetCharTextDistance() == 0 )
+                    nFollow = ( rFormat.GetFirstLineOffset() == 0 &&
+                                rFormat.GetCharTextDistance() == 0 )
                               ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
                 }
             }
             else
             {
-                if (SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType())
+                if (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType())
                 {
                     sal_uInt8* pLvlPos = aNumLvlPos;
                     // the numbering string has to be restrict
@@ -462,26 +462,26 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                         sal_Int32 nFnd = sNumStr.indexOf( sSrch );
                         if( -1 != nFnd )
                         {
-                            *pLvlPos = (sal_uInt8)(nFnd + rFmt.GetPrefix().getLength() + 1 );
+                            *pLvlPos = (sal_uInt8)(nFnd + rFormat.GetPrefix().getLength() + 1 );
                             ++pLvlPos;
                             sNumStr = sNumStr.replaceAt( nFnd, 1, OUString((char)i) );
                         }
                     }
                     // #i86652#
-                    if ( rFmt.GetPositionAndSpaceMode() ==
+                    if ( rFormat.GetPositionAndSpaceMode() ==
                                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                     {
                         // <nFollow = 2>, if minimum label width equals 0 and
                         // minimum distance between label and text equals 0
-                        nFollow = ( rFmt.GetFirstLineOffset() == 0 &&
-                                    rFmt.GetCharTextDistance() == 0 )
+                        nFollow = ( rFormat.GetFirstLineOffset() == 0 &&
+                                    rFormat.GetCharTextDistance() == 0 )
                                   ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
                     }
                 }
 
-                if( !rFmt.GetPrefix().isEmpty() )
-                    sNumStr = rFmt.GetPrefix() + sNumStr;
-                sNumStr += rFmt.GetSuffix();
+                if( !rFormat.GetPrefix().isEmpty() )
+                    sNumStr = rFormat.GetPrefix() + sNumStr;
+                sNumStr += rFormat.GetSuffix();
             }
 
             // Attributes of the numbering
@@ -491,14 +491,14 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             // cbGrpprlChpx
             SfxItemSet aSet( m_pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
                                                   RES_CHRATR_END );
-            if ( rFmt.GetCharFmt() || bWriteBullet )
+            if ( rFormat.GetCharFormat() || bWriteBullet )
             {
                 if ( bWriteBullet )
                 {
                     pOutSet = &aSet;
 
-                    if ( rFmt.GetCharFmt() )
-                        aSet.Put( rFmt.GetCharFmt()->GetAttrSet() );
+                    if ( rFormat.GetCharFormat() )
+                        aSet.Put( rFormat.GetCharFormat()->GetAttrSet() );
                     aSet.ClearItem( RES_CHRATR_CJK_FONT );
                     aSet.ClearItem( RES_CHRATR_FONT );
 
@@ -509,7 +509,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                         eFamily, eChrSet, SupportsUnicode() );
                 }
                 else
-                    pOutSet = &rFmt.GetCharFmt()->GetAttrSet();
+                    pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
             }
 
             sal_Int16 nIndentAt = 0;
@@ -517,29 +517,29 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             sal_Int16 nListTabPos = 0;
 
             // #i86652#
-            if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                nIndentAt = nListTabPos = rFmt.GetAbsLSpace();
-                nFirstLineIndex = GetWordFirstLineOffset(rFmt);
+                nIndentAt = nListTabPos = rFormat.GetAbsLSpace();
+                nFirstLineIndex = GetWordFirstLineOffset(rFormat);
             }
-            else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                nIndentAt = static_cast<sal_Int16>(rFmt.GetIndentAt());
-                nFirstLineIndex = static_cast<sal_Int16>(rFmt.GetFirstLineIndent());
-                nListTabPos = rFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB?
-                              static_cast<sal_Int16>( rFmt.GetListtabPos() ) : 0;
+                nIndentAt = static_cast<sal_Int16>(rFormat.GetIndentAt());
+                nFirstLineIndex = static_cast<sal_Int16>(rFormat.GetFirstLineIndent());
+                nListTabPos = rFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB?
+                              static_cast<sal_Int16>( rFormat.GetListtabPos() ) : 0;
             }
 
             AttrOutput().NumberingLevel( nLvl,
-                    rFmt.GetStart(),
-                    rFmt.GetNumberingType(),
-                    rFmt.GetNumAdjust(),
+                    rFormat.GetStart(),
+                    rFormat.GetNumberingType(),
+                    rFormat.GetNumAdjust(),
                     aNumLvlPos,
                     nFollow,
                     pPseudoFont, pOutSet,
                     nIndentAt, nFirstLineIndex, nListTabPos,
                     sNumStr,
-                    rFmt.GetNumberingType()==SVX_NUM_BITMAP ? rFmt.GetBrush():0);
+                    rFormat.GetNumberingType()==SVX_NUM_BITMAP ? rFormat.GetBrush():0);
 
             delete pPseudoFont;
         }
@@ -549,11 +549,11 @@ void MSWordExportBase::AbstractNumberingDefinitions()
 
 void WW8Export::OutOverrideListTab()
 {
-    if( !m_pUsedNumTbl )
+    if( !m_pUsedNumTable )
         return ;            // no numbering is used
 
     // write the "list format override" - LFO
-    sal_uInt16 nCount = m_pUsedNumTbl->size();
+    sal_uInt16 nCount = m_pUsedNumTable->size();
     sal_uInt16 n;
 
     pFib->fcPlfLfo = pTableStrm->Tell();
@@ -573,11 +573,11 @@ void WW8Export::OutOverrideListTab()
 
 void WW8Export::OutListNamesTab()
 {
-    if( !m_pUsedNumTbl )
+    if( !m_pUsedNumTable )
         return ;            // no numbering is used
 
     // write the "list format override" - LFO
-    sal_uInt16 nNms = 0, nCount = m_pUsedNumTbl->size();
+    sal_uInt16 nNms = 0, nCount = m_pUsedNumTable->size();
 
     pFib->fcSttbListNames = pTableStrm->Tell();
     SwWW8Writer::WriteShort( *pTableStrm, -1 );
@@ -585,7 +585,7 @@ void WW8Export::OutListNamesTab()
 
     for( ; nNms < nCount; ++nNms )
     {
-        const SwNumRule& rRule = *(*m_pUsedNumTbl)[ nNms ];
+        const SwNumRule& rRule = *(*m_pUsedNumTable)[ nNms ];
         OUString sNm;
         if( !rRule.IsAutoRule() )
             sNm = rRule.GetName();
@@ -625,10 +625,10 @@ void WW8Export::OutputOlst( const SwNumRule& rRule )
     {
         memcpy( &aOlst.rganlv[j], aAnlvBase, sizeof( WW8_ANLV ) );  // Defaults
 
-        const SwNumFmt* pFmt = rRule.GetNumFmt( j );
-        if( pFmt )
+        const SwNumFormat* pFormat = rRule.GetNumFormat( j );
+        if( pFormat )
             BuildAnlvBase( aOlst.rganlv[j], pChars, nCharLen, rRule,
-                            *pFmt, (sal_uInt8)j );
+                            *pFormat, (sal_uInt8)j );
     }
 
     pO->insert( pO->end(), reinterpret_cast<sal_uInt8*>(&aOlst), reinterpret_cast<sal_uInt8*>(&aOlst)+sizeof( aOlst ) );
@@ -647,12 +647,12 @@ void WW8Export::Out_SwNumLvl( sal_uInt8 nSwLevel )
 }
 
 void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
-    sal_uInt16& rCharLen, const SwNumFmt& rFmt)
+    sal_uInt16& rCharLen, const SwNumFormat& rFormat)
 {
     rAnlv.nfc = 11;
 
     sal_uInt8 nb = 0;                                // type of number
-    switch (rFmt.GetNumAdjust())
+    switch (rFormat.GetNumAdjust())
     {
         case SVX_ADJUST_RIGHT:
             nb = 2;
@@ -670,19 +670,19 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
     }
 
     // #i86652#
-    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        if (GetWordFirstLineOffset(rFmt) < 0)
+        if (GetWordFirstLineOffset(rFormat) < 0)
             nb |= 0x8;          // number will be displayed using a hanging indent
     }
     rAnlv.aBits1 = nb;
 
     if (1 < rCharLen)
     {
-        const vcl::Font& rFont = rFmt.GetBulletFont()
-                            ? *rFmt.GetBulletFont()
+        const vcl::Font& rFont = rFormat.GetBulletFont()
+                            ? *rFormat.GetBulletFont()
                             : numfunc::GetDefBulletFont();
-        OUString sNumStr = OUString(rFmt.GetBulletChar());
+        OUString sNumStr = OUString(rFormat.GetBulletChar());
         rtl_TextEncoding eChrSet = rFont.GetCharSet();
         OUString sFontName = rFont.GetName();
 
@@ -726,10 +726,10 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         rAnlv.cbTextBefore = 1;
     }
     // #i86652#
-    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
-        ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
+        ShortToSVBT16( -GetWordFirstLineOffset(rFormat), rAnlv.dxaIndent );
+        ShortToSVBT16( rFormat.GetCharTextDistance(), rAnlv.dxaSpace );
     }
     else
     {
@@ -773,16 +773,16 @@ static void SwWw8_InsertAnlText( const OUString& rStr, sal_uInt8*& rpCh,
 }
 
 void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
-    sal_uInt16& rCharLen, const SwNumRule& rRul, const SwNumFmt& rFmt,
+    sal_uInt16& rCharLen, const SwNumRule& rRul, const SwNumFormat& rFormat,
     sal_uInt8 nSwLevel)
 {
     const SfxItemSet *pOutSet = NULL;
-    if (rFmt.GetCharFmt())
-        pOutSet = &rFmt.GetCharFmt()->GetAttrSet();
-    rAnlv.nfc = GetLevelNFC(rFmt.GetNumberingType(),pOutSet );
+    if (rFormat.GetCharFormat())
+        pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
+    rAnlv.nfc = GetLevelNFC(rFormat.GetNumberingType(),pOutSet );
 
     sal_uInt8 nb = 0;
-    switch (rFmt.GetNumAdjust())
+    switch (rFormat.GetNumAdjust())
     {
         case SVX_ADJUST_RIGHT:
             nb = 2;
@@ -799,11 +799,11 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
             break;
     }
 
-    bool bInclUpper = rFmt.GetIncludeUpperLevels() > 0;
+    bool bInclUpper = rFormat.GetIncludeUpperLevels() > 0;
     if( bInclUpper )
         nb |= 0x4;          // include previous levels
 
-    if (GetWordFirstLineOffset(rFmt) < 0)
+    if (GetWordFirstLineOffset(rFormat) < 0)
         nb |= 0x8;          // number will be displayed using a hanging indent
     rAnlv.aBits1 = nb;
 
@@ -811,9 +811,9 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
     {
         if( (nSwLevel >= WW8ListManager::nMinLevel )
             && (nSwLevel<= WW8ListManager::nMaxLevel )
-            && (rFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE ) )  // UEberhaupt Nummerierung ?
+            && (rFormat.GetNumberingType() != SVX_NUM_NUMBER_NONE ) )  // UEberhaupt Nummerierung ?
         {                                               // -> suche, ob noch Zahlen davor
-            sal_uInt8 nUpper = rFmt.GetIncludeUpperLevels();
+            sal_uInt8 nUpper = rFormat.GetIncludeUpperLevels();
             if( (nUpper <= WW8ListManager::nMaxLevel) &&
                 (rRul.Get(nUpper).GetNumberingType() != SVX_NUM_NUMBER_NONE ) ) // Nummerierung drueber ?
             {
@@ -826,18 +826,18 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
     }
     else
     {
-        SwWw8_InsertAnlText( rFmt.GetPrefix(), rpCh, rCharLen,
+        SwWw8_InsertAnlText( rFormat.GetPrefix(), rpCh, rCharLen,
                              rAnlv.cbTextBefore );
-        SwWw8_InsertAnlText( rFmt.GetSuffix(), rpCh, rCharLen,
+        SwWw8_InsertAnlText( rFormat.GetSuffix(), rpCh, rCharLen,
                              rAnlv.cbTextAfter );
     }
 
-    ShortToSVBT16( rFmt.GetStart(), rAnlv.iStartAt );
+    ShortToSVBT16( rFormat.GetStart(), rAnlv.iStartAt );
     // #i86652#
-    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
-        ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
+        ShortToSVBT16( -GetWordFirstLineOffset(rFormat), rAnlv.dxaIndent );
+        ShortToSVBT16( rFormat.GetCharTextDistance(), rAnlv.dxaSpace );
     }
     else
     {
@@ -846,7 +846,7 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
     }
 }
 
-void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
+void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFormat& rFormat,
                                    sal_uInt8 nSwLevel )
 {
     static const sal_uInt8 aSprmAnldDefault[54] = {
@@ -864,16 +864,16 @@ void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
     sal_uInt16 nCharLen = 31;
 
     if( nSwLevel == 11 )
-        BuildAnlvBulletBase( pA->eAnlv, pChars, nCharLen, rFmt );
+        BuildAnlvBulletBase( pA->eAnlv, pChars, nCharLen, rFormat );
     else
-        BuildAnlvBase( pA->eAnlv, pChars, nCharLen, rRul, rFmt, nSwLevel );
+        BuildAnlvBase( pA->eAnlv, pChars, nCharLen, rRul, rFormat, nSwLevel );
 
     // ... spit it out
     OutSprmBytes( reinterpret_cast<sal_uInt8*>(&aSprmAnld), sizeof( aSprmAnld ) );
 }
 
 // Return: is it an outline?
-bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
+bool WW8Export::Out_SwNum(const SwTextNode* pNd)
 {
     int nLevel = pNd->GetActualListLevel();
 
@@ -892,22 +892,22 @@ bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
 
     bool bRet = true;
 
-    SwNumFmt aFmt(pRul->Get(nSwLevel));
+    SwNumFormat aFormat(pRul->Get(nSwLevel));
     // #i86652#
-    if ( aFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    if ( aFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
-        aFmt.SetAbsLSpace(writer_cast<short>(aFmt.GetAbsLSpace() + rLR.GetLeft()));
+        aFormat.SetAbsLSpace(writer_cast<short>(aFormat.GetAbsLSpace() + rLR.GetLeft()));
     }
 
     if (
-         aFmt.GetNumberingType() == SVX_NUM_NUMBER_NONE ||
-         aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL ||
-         aFmt.GetNumberingType() == SVX_NUM_BITMAP
+         aFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE ||
+         aFormat.GetNumberingType() == SVX_NUM_CHAR_SPECIAL ||
+         aFormat.GetNumberingType() == SVX_NUM_BITMAP
        )
     {
         Out_WwNumLvl(11);
-        Out_NumRuleAnld(*pRul, aFmt, 11);
+        Out_NumRuleAnld(*pRul, aFormat, 11);
         bRet = false;
     }
     else if (
@@ -916,13 +916,13 @@ bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
             )
     {
         Out_WwNumLvl(10);
-        Out_NumRuleAnld(*pRul, aFmt, 10);
+        Out_NumRuleAnld(*pRul, aFormat, 10);
         bRet = false;
     }
     else
     {
         Out_SwNumLvl(nSwLevel);
-        Out_NumRuleAnld(*pRul, aFmt, nSwLevel);
+        Out_NumRuleAnld(*pRul, aFormat, nSwLevel);
     }
     return bRet;
 }

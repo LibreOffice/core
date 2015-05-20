@@ -254,8 +254,8 @@ void  SwAttrSet::Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew )
 /** special treatment for some attributes
 
     Set the Modify pointer (old pDefinedIn) for the following attributes:
-     - SwFmtDropCaps
-     - SwFmtPageDesc
+     - SwFormatDropCaps
+     - SwFormatPageDesc
 
     (Is called at inserts into formats/nodes)
 */
@@ -265,32 +265,32 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == GetItemState( RES_PAGEDESC, false, &pItem ) &&
-        static_cast<const SwFmtPageDesc*>(pItem)->GetDefinedIn() != pModify  )
+        static_cast<const SwFormatPageDesc*>(pItem)->GetDefinedIn() != pModify  )
     {
-        const_cast<SwFmtPageDesc*>(static_cast<const SwFmtPageDesc*>(pItem))->ChgDefinedIn( pModify );
+        const_cast<SwFormatPageDesc*>(static_cast<const SwFormatPageDesc*>(pItem))->ChgDefinedIn( pModify );
         bSet = true;
     }
 
     if( SfxItemState::SET == GetItemState( RES_PARATR_DROP, false, &pItem ) &&
-        static_cast<const SwFmtDrop*>(pItem)->GetDefinedIn() != pModify )
+        static_cast<const SwFormatDrop*>(pItem)->GetDefinedIn() != pModify )
     {
         // If CharFormat is set and it is set in different attribute pools then
         // the CharFormat has to be copied.
-        SwCharFmt* pCharFmt;
-        if( 0 != ( pCharFmt = const_cast<SwFmtDrop*>(static_cast<const SwFmtDrop*>(pItem))->GetCharFmt() )
-            && GetPool() != pCharFmt->GetAttrSet().GetPool() )
+        SwCharFormat* pCharFormat;
+        if( 0 != ( pCharFormat = const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->GetCharFormat() )
+            && GetPool() != pCharFormat->GetAttrSet().GetPool() )
         {
-           pCharFmt = GetDoc()->CopyCharFmt( *pCharFmt );
-           const_cast<SwFmtDrop*>(static_cast<const SwFmtDrop*>(pItem))->SetCharFmt( pCharFmt );
+           pCharFormat = GetDoc()->CopyCharFormat( *pCharFormat );
+           const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->SetCharFormat( pCharFormat );
         }
-        const_cast<SwFmtDrop*>(static_cast<const SwFmtDrop*>(pItem))->ChgDefinedIn( pModify );
+        const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->ChgDefinedIn( pModify );
         bSet = true;
     }
 
     if( SfxItemState::SET == GetItemState( RES_BOXATR_FORMULA, false, &pItem ) &&
-        static_cast<const SwTblBoxFormula*>(pItem)->GetDefinedIn() != pModify )
+        static_cast<const SwTableBoxFormula*>(pItem)->GetDefinedIn() != pModify )
     {
-        const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem))->ChgDefinedIn( pModify );
+        const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->ChgDefinedIn( pModify );
         bSet = true;
     }
 
@@ -300,10 +300,10 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 void SwAttrSet::CopyToModify( SwModify& rMod ) const
 {
     // copy attributes across multiple documents if needed
-    SwCntntNode* pCNd = PTR_CAST( SwCntntNode, &rMod );
-    SwFmt* pFmt = PTR_CAST( SwFmt, &rMod );
+    SwContentNode* pCNd = PTR_CAST( SwContentNode, &rMod );
+    SwFormat* pFormat = PTR_CAST( SwFormat, &rMod );
 
-    if( pCNd || pFmt )
+    if( pCNd || pFormat )
     {
         if( Count() )
         {
@@ -312,7 +312,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 
             const SfxPoolItem* pItem;
             const SwDoc *pSrcDoc = GetDoc();
-            SwDoc *pDstDoc = pCNd ? pCNd->GetDoc() : pFmt->GetDoc();
+            SwDoc *pDstDoc = pCNd ? pCNd->GetDoc() : pFormat->GetDoc();
 
             // Does the NumRule has to be copied?
             if( pSrcDoc != pDstDoc &&
@@ -332,7 +332,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             // copy list and if needed also the corresponding list style
             // for text nodes
             if ( pSrcDoc != pDstDoc &&
-                 pCNd && pCNd->IsTxtNode() &&
+                 pCNd && pCNd->IsTextNode() &&
                  GetItemState( RES_PARATR_LIST_ID, false, &pItem ) == SfxItemState::SET )
             {
                 const OUString& sListId =
@@ -383,7 +383,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState(
                                             RES_PAGEDESC, false, &pItem ) &&
-                0 != ( pPgDesc = static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc()) )
+                0 != ( pPgDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()) )
             {
                 if( !tmpSet )
                     tmpSet.reset( new SfxItemSet( *this ));
@@ -394,13 +394,13 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     pDstPgDesc = pDstDoc->MakePageDesc(pPgDesc->GetName());
                     pDstDoc->CopyPageDesc( *pPgDesc, *pDstPgDesc );
                 }
-                SwFmtPageDesc aDesc( pDstPgDesc );
-                aDesc.SetNumOffset( static_cast<const SwFmtPageDesc*>(pItem)->GetNumOffset() );
+                SwFormatPageDesc aDesc( pDstPgDesc );
+                aDesc.SetNumOffset( static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset() );
                 tmpSet->Put( aDesc );
             }
 
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState( RES_ANCHOR, false, &pItem )
-                && static_cast< const SwFmtAnchor* >( pItem )->GetCntntAnchor() != NULL )
+                && static_cast< const SwFormatAnchor* >( pItem )->GetContentAnchor() != NULL )
             {
                 if( !tmpSet )
                     tmpSet.reset( new SfxItemSet( *this ));
@@ -422,7 +422,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
                 else
                 {
-                    pFmt->SetFmtAttr( *tmpSet );
+                    pFormat->SetFormatAttr( *tmpSet );
                 }
             }
             else if( pCNd )
@@ -441,7 +441,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             }
             else
             {
-                pFmt->SetFmtAttr( *this );
+                pFormat->SetFormatAttr( *this );
             }
 
             // #i92811#

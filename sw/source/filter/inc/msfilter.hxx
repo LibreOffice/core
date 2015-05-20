@@ -39,8 +39,8 @@ class SwDoc;
 class SwPaM;
 class SwTableNode;
 class SwNodeIndex;
-class SwNoTxtNode;
-class SwTxtNode;
+class SwNoTextNode;
+class SwTextNode;
 class WW8TabDesc;
 
 namespace myImplHelpers
@@ -48,10 +48,10 @@ namespace myImplHelpers
 template<class C> class StyleMapperImpl;
 }
 
-class SwTxtFmtColl;
-class SwCharFmt;
-typedef myImplHelpers::StyleMapperImpl<SwTxtFmtColl> ParaMapper;
-typedef myImplHelpers::StyleMapperImpl<SwCharFmt> CharMapper;
+class SwTextFormatColl;
+class SwCharFormat;
+typedef myImplHelpers::StyleMapperImpl<SwTextFormatColl> ParaMapper;
+typedef myImplHelpers::StyleMapperImpl<SwCharFormat> CharMapper;
 
 namespace sw
 {
@@ -129,7 +129,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        void SwapQuotesInField(OUString &rFmt);
+        void SwapQuotesInField(OUString &rFormat);
 
     }
 
@@ -191,7 +191,7 @@ namespace sw
                 StyleResult is a std::pair of a pointer to a style and a flag
                 which is true if the style existed previously in the document.
             */
-            typedef std::pair<SwTxtFmtColl*, bool> StyleResult;
+            typedef std::pair<SwTextFormatColl*, bool> StyleResult;
 
             /** Get the writer style which the word style should map to
 
@@ -251,7 +251,7 @@ namespace sw
                 StyleResult is a std::pair of a pointer to a style and a flag
                 which is true if the style existed previously in the document.
             */
-            typedef std::pair<SwCharFmt*, bool> StyleResult;
+            typedef std::pair<SwCharFormat*, bool> StyleResult;
 
             /** Get the writer style which the word style should map to
 
@@ -311,7 +311,7 @@ namespace sw
             their layout frms deleted and recalculated. This TableManager
             detects the necessity to do this, and all tables inserted into
             a document should be registered with this manager with
-            InsertTable, and before finialization DelAndMakeTblFrms should
+            InsertTable, and before finialization DelAndMakeTableFrms should
             be called.
 
             @author
@@ -322,14 +322,14 @@ namespace sw
         class InsertedTablesManager
         {
         public:
-            typedef std::map<InsertedTableClient *, SwNodeIndex *> TblMap;
-            typedef TblMap::iterator TblMapIter;
-            void DelAndMakeTblFrms();
+            typedef std::map<InsertedTableClient *, SwNodeIndex *> TableMap;
+            typedef TableMap::iterator TableMapIter;
+            void DelAndMakeTableFrms();
             void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);
             InsertedTablesManager(const SwDoc &rDoc);
         private:
             bool mbHasRoot;
-            TblMap maTables;
+            TableMap maTables;
         };
 
         /**
@@ -439,11 +439,11 @@ namespace sw
             So this function finds these ranges and returns a STL container
             of CharRuns
 
-            @param rTxtNd
+            @param rTextNd
                 The TextNode we want to ranges from
 
             @param nStart
-                The position in the TxtNode to start processing from
+                The position in the TextNode to start processing from
 
             @param bSplitOnCharSet
                 Set to true is we want to split on ranges of characters that
@@ -459,7 +459,7 @@ namespace sw
 
             @see #i22537# for example
         */
-        CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd,
+        CharRuns GetPseudoCharRuns(const SwTextNode& rTextNd,
             sal_Int32 nStart = 0, bool bSplitOnCharSet = false);
     }
 }

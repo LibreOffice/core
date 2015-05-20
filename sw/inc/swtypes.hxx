@@ -130,7 +130,7 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 #define INIT_SEQ_FLDTYPES   4
 
 // The former Rendevouz-IDs live on:
-// There are IDs for the anchors (SwFmtAnchor) and some others
+// There are IDs for the anchors (SwFormatAnchor) and some others
 // that are only of importance for interfaces (SwDoc).
 enum RndStdIds
 {
@@ -257,7 +257,7 @@ enum PrepareHint
                             // (Check for Fly-break). In void* of Prepare()
                             // a sal_Bool& is passed. If this is sal_True,
                             // it indicateds that a format has been executed.
-    PREP_UL_SPACE,          // UL-Space has changed, TxtFrms have to
+    PREP_UL_SPACE,          // UL-Space has changed, TextFrms have to
                             // re-calculate line space.
     PREP_MUST_FIT,          // Make frm fit (split) even if the attributes do
                             // not allow that (e.g. "keep together").
@@ -269,7 +269,7 @@ enum PrepareHint
                             // order to format the text into it.
     PREP_BOSS_CHGD,         // If a Frm changes its column/page this additional
                             // Prepare is sended to POS_CHGD in MoveFwd/Bwd
-                            // (join Ftn-numbers etc.)
+                            // (join Footnote-numbers etc.)
                             // Direction is communicated via pVoid:
                             //     MoveFwd: pVoid == 0
                             //     MoveBwd: pVoid == pOldPage
@@ -279,7 +279,7 @@ enum PrepareHint
     PREP_MOVEFTN,           // A footnote changes its page. Its contents receives at first a
                             // height of zero in order to avoid too much noise. At formatting
                             // it checks whether it fits and if necessary changes its page again.
-    PREP_ERGOSUM,           // Needed because of movement in FtnFrms. Check QuoVadis/ErgoSum.
+    PREP_ERGOSUM,           // Needed because of movement in FootnoteFrms. Check QuoVadis/ErgoSum.
     PREP_END                // END.
 };
 

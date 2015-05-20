@@ -761,7 +761,7 @@ DECLARE_OOXMLEXPORT_TEST(testHeaderBorder, "header-border.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTblpprShape, "tblppr-shape.docx")
+DECLARE_OOXMLEXPORT_TEST(testTablepprShape, "tblppr-shape.docx")
 {
     // Unhandled exception due to unexpected w:tblpPr resulted in not importing page size, either.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);

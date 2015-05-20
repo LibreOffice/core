@@ -24,7 +24,7 @@
 #include <vcl/fixed.hxx>
 #include <svx/stddlg.hxx>
 
-class SwMergeTblDlg : public SvxStandardDialog
+class SwMergeTableDlg : public SvxStandardDialog
 {
     VclPtr<RadioButton> m_pMergePrevRB;
 
@@ -33,8 +33,8 @@ protected:
     virtual void Apply() SAL_OVERRIDE;
 
 public:
-    SwMergeTblDlg( vcl::Window *pParent, bool& rWithPrev );
-    virtual ~SwMergeTblDlg();
+    SwMergeTableDlg( vcl::Window *pParent, bool& rWithPrev );
+    virtual ~SwMergeTableDlg();
     virtual void dispose() SAL_OVERRIDE;
 };
 

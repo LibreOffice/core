@@ -60,7 +60,7 @@ class SwExtraPainter
 {
     SwSaveClip aClip;
     SwRect aRect;
-    const SwTxtFrm* pTxtFrm;
+    const SwTextFrm* pTextFrm;
     SwViewShell *pSh;
     SwFont* pFnt;
     const SwLineNumberInfo &rLineInf;
@@ -72,7 +72,7 @@ class SwExtraPainter
     bool bLineNum;
     inline bool IsClipChg() { return aClip.IsChg(); }
 public:
-    SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
+    SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,
         sal_Int16 eHor, bool bLnNm );
     ~SwExtraPainter() { delete pFnt; }
@@ -86,12 +86,12 @@ public:
     void PaintRedline( SwTwips nY, long nMax );
 };
 
-SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
+SwExtraPainter::SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
                                 const SwLineNumberInfo &rLnInf, const SwRect &rRct,
                                 sal_Int16 eHor, bool bLnNm )
     : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 )
     , aRect( rRct )
-    , pTxtFrm( pFrm )
+    , pTextFrm( pFrm )
     , pSh( pVwSh )
     , pFnt( 0 )
     , rLineInf( rLnInf )
@@ -122,9 +122,9 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
         */
         nDivider = !rLineInf.GetDivider().isEmpty() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrm->Frm().Left();
-        SwCharFmt* pFmt = rLineInf.GetCharFmt( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
-        OSL_ENSURE( pFmt, "PaintExtraData without CharFmt" );
-        pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
+        SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
+        OSL_ENSURE( pFormat, "PaintExtraData without CharFormat" );
+        pFnt = new SwFont( &pFormat->GetAttrSet(), pFrm->GetTextNode()->getIDocumentSettingAccess() );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
         pFnt->SetVertical( 0, pFrm->IsVertical() );
@@ -195,7 +195,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     aDrawInf.SetSmartTags( NULL );
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
-    aDrawInf.SetFrm( pTxtFrm );
+    aDrawInf.SetFrm( pTextFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( false );
     aDrawInf.SetIgnoreFrmRTL( true );
@@ -220,7 +220,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     bool bPaint = true;
     if( !IsClipChg() )
     {
-        Size aSize = pTmpFnt->_GetTxtSize( aDrawInf );
+        Size aSize = pTmpFnt->_GetTextSize( aDrawInf );
         if( bGoLeft )
             aTmpPos.X() -= aSize.Width();
         // calculate rectangle containing the line number
@@ -232,11 +232,11 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
             if( aRct.Intersection( aRect ).IsEmpty() )
                 bPaint = false;
             else
-                aClip.ChgClip( aRect, pTxtFrm );
+                aClip.ChgClip( aRect, pTextFrm );
         }
     }
     else if( bGoLeft )
-        aTmpPos.X() -= pTmpFnt->_GetTxtSize( aDrawInf ).Width();
+        aTmpPos.X() -= pTmpFnt->_GetTextSize( aDrawInf ).Width();
     aDrawInf.SetPos( aTmpPos );
     if( bPaint )
         pTmpFnt->_DrawText( aDrawInf );
@@ -263,31 +263,31 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
         {
             if( aRct.Intersection( aRect ).IsEmpty() )
                 return;
-            aClip.ChgClip( aRect, pTxtFrm );
+            aClip.ChgClip( aRect, pTextFrm );
         }
     }
     const Color aOldCol( pSh->GetOut()->GetLineColor() );
     pSh->GetOut()->SetLineColor( SW_MOD()->GetRedlineMarkColor() );
 
-    if ( pTxtFrm->IsVertical() )
+    if ( pTextFrm->IsVertical() )
     {
-        pTxtFrm->SwitchHorizontalToVertical( aStart );
-        pTxtFrm->SwitchHorizontalToVertical( aEnd );
+        pTextFrm->SwitchHorizontalToVertical( aStart );
+        pTextFrm->SwitchHorizontalToVertical( aEnd );
     }
 
     pSh->GetOut()->DrawLine( aStart, aEnd );
     pSh->GetOut()->SetLineColor( aOldCol );
 }
 
-void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
+void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
 {
     if( Frm().Top() > rRect.Bottom() || Frm().Bottom() < rRect.Top() )
         return;
 
-    const SwTxtNode& rTxtNode = *GetTxtNode();
-    const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
-    const SwLineNumberInfo &rLineInf = rTxtNode.GetDoc()->GetLineNumberInfo();
-    const SwFmtLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
+    const SwTextNode& rTextNode = *GetTextNode();
+    const IDocumentRedlineAccess* pIDRA = rTextNode.getIDocumentRedlineAccess();
+    const SwLineNumberInfo &rLineInf = rTextNode.GetDoc()->GetLineNumberInfo();
+    const SwFormatLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
     sal_Int16 eHor = (sal_Int16)SW_MOD()->GetRedlineMarkPos();
@@ -316,23 +316,23 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
         if( HasPara() )
         {
-            TxtFrmLockGuard aLock(const_cast<SwTxtFrm*>(this));
+            TextFrmLockGuard aLock(const_cast<SwTextFrm*>(this));
 
-            SwTxtLineAccess aAccess( this );
+            SwTextLineAccess aAccess( this );
             aAccess.GetPara();
 
-            SwTxtPaintInfo aInf( const_cast<SwTxtFrm*>(this), rRect );
+            SwTextPaintInfo aInf( const_cast<SwTextFrm*>(this), rRect );
 
             aLayoutModeModifier.Modify( false );
 
-            SwTxtPainter  aLine( const_cast<SwTxtFrm*>(this), &aInf );
+            SwTextPainter  aLine( const_cast<SwTextFrm*>(this), &aInf );
             bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
             while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
             {
                 if( !aLine.GetCurr()->IsDummy() &&
                     ( rLineInf.IsCountBlankLines() ||
-                      aLine.GetCurr()->HasCntnt() ) )
+                      aLine.GetCurr()->HasContent() ) )
                     aExtra.IncLineNr();
                 if( !aLine.Next() )
                 {
@@ -349,7 +349,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             {
                 while ( aLine.Y() < GetMinPrtLine() )
                 {
-                    if( ( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasCntnt() )
+                    if( ( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
                         && !aLine.GetCurr()->IsDummy() )
                         aExtra.IncLineNr();
                     if( !aLine.Next() )
@@ -364,7 +364,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
                     if( bNoDummy || !aLine.GetCurr()->IsDummy() )
                     {
                         bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
-                        if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasCntnt() )
+                        if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
                         {
                             if( bLineNum &&
                                 ( aExtra.HasNumber() || aExtra.HasDivider() ) )
@@ -385,7 +385,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         }
         else
         {
-            if ( USHRT_MAX == pIDRA->GetRedlinePos(rTxtNode, USHRT_MAX) )
+            if ( USHRT_MAX == pIDRA->GetRedlinePos(rTextNode, USHRT_MAX) )
                 bRedLine = false;
 
             if( bLineNum && rLineInf.IsCountBlankLines() &&
@@ -403,7 +403,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     }
 }
 
-SwRect SwTxtFrm::Paint()
+SwRect SwTextFrm::Paint()
 {
 #if OSL_DEBUG_LEVEL > 1
     const SwTwips nDbgY = Frm().Top();
@@ -411,7 +411,7 @@ SwRect SwTxtFrm::Paint()
 #endif
 
     // finger layout
-    OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
+    OSL_ENSURE( GetValidPosFlag(), "+SwTextFrm::Paint: no Calc()" );
 
     SwRect aRet( Prt() );
     if ( IsEmpty() || !HasPara() )
@@ -454,42 +454,42 @@ SwRect SwTxtFrm::Paint()
     return aRet;
 }
 
-bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
+bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 {
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
     {
         bInitFont = false;
-        SwTxtFly aTxtFly( this );
-        aTxtFly.SetTopRule();
+        SwTextFly aTextFly( this );
+        aTextFly.SetTopRule();
         SwRect aRect;
-        if( bCheck && aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
+        if( bCheck && aTextFly.IsOn() && aTextFly.IsAnyObj( aRect ) )
             return false;
         else if( pSh->GetWin() )
         {
             SwFont *pFnt;
-            const SwTxtNode& rTxtNode = *GetTxtNode();
-            if ( rTxtNode.HasSwAttrSet() )
+            const SwTextNode& rTextNode = *GetTextNode();
+            if ( rTextNode.HasSwAttrSet() )
             {
-                const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
-                pFnt = new SwFont( pAttrSet, rTxtNode.getIDocumentSettingAccess() );
+                const SwAttrSet *pAttrSet = &( rTextNode.GetSwAttrSet() );
+                pFnt = new SwFont( pAttrSet, rTextNode.getIDocumentSettingAccess() );
             }
             else
             {
-                SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pSh );
+                SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), pSh );
                 pFnt = new SwFont( aFontAccess.Get()->GetFont() );
             }
 
-            const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
+            const IDocumentRedlineAccess* pIDRA = rTextNode.getIDocumentRedlineAccess();
             if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
             {
-                const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
+                const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTextNode, USHRT_MAX );
                 if( USHRT_MAX != nRedlPos )
                 {
                     SwAttrHandler aAttrHandler;
-                    aAttrHandler.Init(  rTxtNode.GetSwAttrSet(),
-                                       *rTxtNode.getIDocumentSettingAccess(), NULL );
-                    SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler, nRedlPos, true );
+                    aAttrHandler.Init(  rTextNode.GetSwAttrSet(),
+                                       *rTextNode.getIDocumentSettingAccess(), NULL );
+                    SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler, nRedlPos, true );
                 }
             }
 
@@ -513,10 +513,10 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 Point aPos = Frm().Pos() + Prt().Pos();
 
                 const SvxLRSpaceItem &rSpace =
-                    GetTxtNode()->GetSwAttrSet().GetLRSpace();
+                    GetTextNode()->GetSwAttrSet().GetLRSpace();
 
-                if ( rSpace.GetTxtFirstLineOfst() > 0 )
-                    aPos.X() += rSpace.GetTxtFirstLineOfst();
+                if ( rSpace.GetTextFirstLineOfst() > 0 )
+                    aPos.X() += rSpace.GetTextFirstLineOfst();
 
                 SwSaveClip *pClip;
                 if( IsUndersized() )
@@ -529,7 +529,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 
                 aPos.Y() += pFnt->GetAscent( pSh, *pSh->GetOut() );
 
-                if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
+                if ( GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
                      IsInDocBody() )
                 {
                     SwTextGridItem const*const pGrid(GetGridItem(FindPageFrm()));
@@ -575,7 +575,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
     return false;
 }
 
-void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
+void SwTextFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
@@ -601,11 +601,11 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         // It can happen that the IdleCollector withdrew my cached information
         if( !HasPara() )
         {
-            OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
+            OSL_ENSURE( GetValidPosFlag(), "+SwTextFrm::Paint: no Calc()" );
 
             // #i29062# pass info that we are currently
             // painting.
-            const_cast<SwTxtFrm*>(this)->GetFormatted( true );
+            const_cast<SwTextFrm*>(this)->GetFormatted( true );
             if( IsEmpty() )
             {
                 PaintEmpty( rRect, false );
@@ -613,22 +613,22 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
             if( !HasPara() )
             {
-                OSL_ENSURE( false, "+SwTxtFrm::Paint: missing format information" );
+                OSL_ENSURE( false, "+SwTextFrm::Paint: missing format information" );
                 return;
             }
         }
 
         // We don't want to be interrupted while painting.
         // Do that after thr Format()!
-        TxtFrmLockGuard aLock(const_cast<SwTxtFrm*>(this));
+        TextFrmLockGuard aLock(const_cast<SwTextFrm*>(this));
 
-        // We only paint the part of the TxtFrm which changed, is within the
+        // We only paint the part of the TextFrm which changed, is within the
         // range and was requested to paint.
         // One could think that the area rRect _needs_ to be painted, although
         // rRepaint is set. Indeed, we cannot avoid this problem from a formal
         // perspective. Luckily we can assume rRepaint to be empty when we need
         // paint the while Frm.
-        SwTxtLineAccess aAccess( this );
+        SwTextLineAccess aAccess( this );
         SwParaPortion *pPara = aAccess.GetPara();
 
         SwRepaint &rRepaint = pPara->GetRepaint();
@@ -656,16 +656,16 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if ( IsRightToLeft() )
             SwitchRTLtoLTR( (SwRect&)rRect );
 
-        SwTxtPaintInfo aInf( const_cast<SwTxtFrm*>(this), rRect );
-        aInf.SetWrongList( const_cast<SwTxtNode*>(GetTxtNode())->GetWrong() );
-        aInf.SetGrammarCheckList( const_cast<SwTxtNode*>(GetTxtNode())->GetGrammarCheck() );
-        aInf.SetSmartTags( const_cast<SwTxtNode*>(GetTxtNode())->GetSmartTags() );
-        aInf.GetTxtFly().SetTopRule();
+        SwTextPaintInfo aInf( const_cast<SwTextFrm*>(this), rRect );
+        aInf.SetWrongList( const_cast<SwTextNode*>(GetTextNode())->GetWrong() );
+        aInf.SetGrammarCheckList( const_cast<SwTextNode*>(GetTextNode())->GetGrammarCheck() );
+        aInf.SetSmartTags( const_cast<SwTextNode*>(GetTextNode())->GetSmartTags() );
+        aInf.GetTextFly().SetTopRule();
 
-        SwTxtPainter  aLine( const_cast<SwTxtFrm*>(this), &aInf );
+        SwTextPainter  aLine( const_cast<SwTextFrm*>(this), &aInf );
         // Optimization: if no free flying Frm overlaps into our line, the
-        // SwTxtFly just switches off
-        aInf.GetTxtFly().Relax();
+        // SwTextFly just switches off
+        aInf.GetTextFly().Relax();
 
         OutputDevice* pOut = aInf.GetOut();
         const bool bOnWin = pSh->GetWin() != 0;

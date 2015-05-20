@@ -38,7 +38,7 @@ DefaultToxTabStopTokenHandler::DefaultToxTabStopTokenHandler(sal_uInt32 indexOfS
 
 ToxTabStopTokenHandler::HandledTabStopToken
 DefaultToxTabStopTokenHandler::HandleTabStopToken(
-        const SwFormToken& aToken, const SwTxtNode& targetNode, const SwRootFrm *currentLayout) const
+        const SwFormToken& aToken, const SwTextNode& targetNode, const SwRootFrm *currentLayout) const
 {
     HandledTabStopToken result;
 
@@ -48,11 +48,11 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
 
     // check whether a tab adjustment has been specified.
     if (SVX_TAB_ADJUST_END > aToken.eTabAlign) {
-        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( targetNode.SwCntntNode::GetAttr(RES_LR_SPACE, true) );
+        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( targetNode.SwContentNode::GetAttr(RES_LR_SPACE, true) );
 
         long nTabPosition = aToken.nTabStopPosition;
-        if (!mTabPositionIsRelativeToParagraphIndent && rLR.GetTxtLeft()) {
-            nTabPosition -= rLR.GetTxtLeft();
+        if (!mTabPositionIsRelativeToParagraphIndent && rLR.GetTextLeft()) {
+            nTabPosition -= rLR.GetTextLeft();
         }
         result.tabStop = SvxTabStop(nTabPosition, aToken.eTabAlign, cDfltDecimalChar, aToken.cTabFillChar);
         return result;
@@ -71,9 +71,9 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
     //#i24363# tab stops relative to indent
     if (mTabStopReferencePolicy == TABSTOPS_RELATIVE_TO_INDENT) {
         // left margin of paragraph style
-        const SvxLRSpaceItem& rLRSpace = targetNode.GetTxtColl()->GetLRSpace();
+        const SvxLRSpaceItem& rLRSpace = targetNode.GetTextColl()->GetLRSpace();
         nRightMargin -= rLRSpace.GetLeft();
-        nRightMargin -= rLRSpace.GetTxtFirstLineOfst();
+        nRightMargin -= rLRSpace.GetTextFirstLineOfst();
     }
 
     result.tabStop = SvxTabStop(nRightMargin, SVX_TAB_ADJUST_RIGHT, cDfltDecimalChar, aToken.cTabFillChar);
@@ -81,7 +81,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
 }
 
 long
-DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTxtNode& targetNode) const
+DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTextNode& targetNode) const
 {
     size_t nPgDescNdIdx = targetNode.GetIndex() + 1;
     const SwPageDesc *pPageDesc = targetNode.FindPageDesc(false, &nPgDescNdIdx);
@@ -90,18 +90,18 @@ DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTx
         // table-of-content section.
         pPageDesc = &mDefaultPageDescription;
     }
-    const SwFrmFmt& rPgDscFmt = pPageDesc->GetMaster();
-    long result = rPgDscFmt.GetFrmSize().GetWidth() - rPgDscFmt.GetLRSpace().GetLeft()
-            - rPgDscFmt.GetLRSpace().GetRight();
+    const SwFrameFormat& rPgDscFormat = pPageDesc->GetMaster();
+    long result = rPgDscFormat.GetFrmSize().GetWidth() - rPgDscFormat.GetLRSpace().GetLeft()
+            - rPgDscFormat.GetLRSpace().GetRight();
     return result;
 }
 
 
 /*static*/ bool
-DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTxtNode& targetNode, const SwRootFrm *currentLayout)
+DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTextNode& targetNode, const SwRootFrm *currentLayout)
 {
     const SwPageDesc* pageDescription =
-            static_cast<const SwFmtPageDesc&>( targetNode.SwCntntNode::GetAttr(RES_PAGEDESC)).GetPageDesc();
+            static_cast<const SwFormatPageDesc&>( targetNode.SwContentNode::GetAttr(RES_PAGEDESC)).GetPageDesc();
 
     if (!pageDescription) {
         return false;

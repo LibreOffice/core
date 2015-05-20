@@ -21,25 +21,25 @@
 
 #include <svl/poolitem.hxx>
 
-class SwTxtRuby;
+class SwTextRuby;
 
-class SW_DLLPUBLIC SwFmtRuby : public SfxPoolItem
+class SW_DLLPUBLIC SwFormatRuby : public SfxPoolItem
 {
-    friend class SwTxtRuby;
+    friend class SwTextRuby;
 
-    OUString sRubyTxt;                      ///< The ruby txt.
-    OUString sCharFmtName;                  ///< Name of the charformat.
-    SwTxtRuby* pTxtAttr;                    ///< The TextAttribute.
-    sal_uInt16 nCharFmtId;                  ///< PoolId of the charformat.
+    OUString sRubyText;                      ///< The ruby txt.
+    OUString sCharFormatName;                  ///< Name of the charformat.
+    SwTextRuby* pTextAttr;                    ///< The TextAttribute.
+    sal_uInt16 nCharFormatId;                  ///< PoolId of the charformat.
     sal_uInt16 nPosition;                   ///< Position of the Ruby-character.
     sal_uInt16 nAdjustment;                 ///< Specific adjustment of the Ruby-ch.
 
 public:
-    SwFmtRuby( const OUString& rRubyTxt );
-    SwFmtRuby( const SwFmtRuby& rAttr );
-    virtual ~SwFmtRuby();
+    SwFormatRuby( const OUString& rRubyText );
+    SwFormatRuby( const SwFormatRuby& rAttr );
+    virtual ~SwFormatRuby();
 
-    SwFmtRuby& operator=( const SwFmtRuby& rAttr );
+    SwFormatRuby& operator=( const SwFormatRuby& rAttr );
 
     // "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -56,17 +56,17 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    const SwTxtRuby* GetTxtRuby() const         { return pTxtAttr; }
-    SwTxtRuby* GetTxtRuby()                     { return pTxtAttr; }
+    const SwTextRuby* GetTextRuby() const         { return pTextAttr; }
+    SwTextRuby* GetTextRuby()                     { return pTextAttr; }
 
-    OUString GetText() const                    { return sRubyTxt; }
-    void SetText( const OUString& rTxt )        { sRubyTxt = rTxt; }
+    OUString GetText() const                    { return sRubyText; }
+    void SetText( const OUString& rText )        { sRubyText = rText; }
 
-    OUString GetCharFmtName() const             { return sCharFmtName; }
-    void SetCharFmtName( const OUString& rNm )  { sCharFmtName = rNm; }
+    OUString GetCharFormatName() const             { return sCharFormatName; }
+    void SetCharFormatName( const OUString& rNm )  { sCharFormatName = rNm; }
 
-    sal_uInt16 GetCharFmtId() const                 { return nCharFmtId; }
-    void SetCharFmtId( sal_uInt16 nNew )            { nCharFmtId = nNew; }
+    sal_uInt16 GetCharFormatId() const                 { return nCharFormatId; }
+    void SetCharFormatId( sal_uInt16 nNew )            { nCharFormatId = nNew; }
 
     sal_uInt16 GetPosition() const                  { return nPosition; }
     void SetPosition( sal_uInt16 nNew )             { nPosition = nNew; }

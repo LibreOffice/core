@@ -31,7 +31,7 @@ class SvxTabStopItem;
 class SwWrtShell;
 class ListBox;
 class SwDocShell;
-class SwFrmFmt;
+class SwFrameFormat;
 class SwTabCols;
 class DateTime;
 class SfxViewFrame;
@@ -96,7 +96,7 @@ SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, boo
 SW_DLLPUBLIC sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset);
 
 // Get table width and alignement
-SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
+SwTwips GetTableWidth( SwFrameFormat* pFormat, SwTabCols& rCols, sal_uInt16 *pPercent,
         SwWrtShell* pSh );
 
 OUString GetAppLangDateTimeString( const DateTime& );

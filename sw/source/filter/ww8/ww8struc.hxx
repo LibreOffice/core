@@ -56,7 +56,7 @@ struct Word2CHPX
     sal_uInt16 fItalic:1;
     sal_uInt16 fRMarkDel:1;
     sal_uInt16 fOutline:1;
-    sal_uInt16 fFldVanish:1;
+    sal_uInt16 fFieldVanish:1;
     sal_uInt16 fSmallCaps:1;
     sal_uInt16 fCaps:1;
     sal_uInt16 fVanish:1;
@@ -101,7 +101,7 @@ struct Word2CHPX
         fItalic = 0;
         fRMarkDel = 0;
         fOutline = 0;
-        fFldVanish = 0;
+        fFieldVanish = 0;
         fSmallCaps = 0;
         fCaps = 0;
         fVanish = 0;

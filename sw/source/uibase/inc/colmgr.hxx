@@ -22,7 +22,7 @@
 #include "swdllapi.h"
 #include <fmtclds.hxx>
 
-SW_DLLPUBLIC void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth);
+SW_DLLPUBLIC void FitToActualSize(SwFormatCol& rCol, sal_uInt16 nWidth);
 
 class SW_DLLPUBLIC SwColMgr
 {
@@ -59,57 +59,57 @@ public:
     inline void         NoCols();
     void                Update();
 
-    const SwFmtCol&     GetColumns() const { return aFmtCol; }
+    const SwFormatCol&     GetColumns() const { return aFormatCol; }
 
     void                SetActualWidth(sal_uInt16 nW);
     sal_uInt16              GetActualSize() const { return nWidth; }
 
 private:
 
-    SwFmtCol            aFmtCol;
+    SwFormatCol            aFormatCol;
     sal_uInt16              nWidth;
 };
 
 inline  sal_uInt16 SwColMgr::GetCount() const
 {
-    return aFmtCol.GetNumCols();
+    return aFormatCol.GetNumCols();
 }
 
 inline ::editeng::SvxBorderStyle SwColMgr::GetLineStyle() const
 {
-    return aFmtCol.GetLineStyle();
+    return aFormatCol.GetLineStyle();
 }
 inline sal_uLong        SwColMgr::GetLineWidth() const
 {
-    return aFmtCol.GetLineWidth();
+    return aFormatCol.GetLineWidth();
 }
 
 inline const Color& SwColMgr::GetLineColor() const
 {
-    return aFmtCol.GetLineColor();
+    return aFormatCol.GetLineColor();
 }
 
 inline  SwColLineAdj SwColMgr::GetAdjust() const
 {
-    return aFmtCol.GetLineAdj();
+    return aFormatCol.GetLineAdj();
 }
 
 inline  void SwColMgr::SetAdjust(SwColLineAdj eAdj)
 {
-    aFmtCol.SetLineAdj(eAdj);
+    aFormatCol.SetLineAdj(eAdj);
 }
 inline bool SwColMgr::IsAutoWidth() const
 {
-    return aFmtCol.IsOrtho();
+    return aFormatCol.IsOrtho();
 }
 inline void SwColMgr::SetAutoWidth(bool bOn, sal_uInt16 nGutterWidth)
 {
-    aFmtCol.SetOrtho(bOn, nGutterWidth, nWidth);
+    aFormatCol.SetOrtho(bOn, nGutterWidth, nWidth);
 }
 
 inline void SwColMgr::NoCols()
 {
-    aFmtCol.GetColumns().clear();
+    aFormatCol.GetColumns().clear();
 }
 inline bool SwColMgr::HasLine() const
 {

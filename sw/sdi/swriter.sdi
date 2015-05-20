@@ -1846,7 +1846,7 @@ SfxVoidItem FormatColumns FN_FORMAT_COLUMN
     GroupId = GID_FORMAT;
 ]
 
-SwFmtDrop FormatDropcap FN_FORMAT_DROPCAPS
+SwFormatDrop FormatDropcap FN_FORMAT_DROPCAPS
 
 [
     /* flags: */
@@ -8785,7 +8785,7 @@ SfxUInt16Item NumNewStartAt FN_NUMBER_NEWSTART_AT
     GroupId = GID_FORMAT;
 ]
 
-SwFmtLineNumber LineNumber FN_FORMAT_LINENUMBER
+SwFormatLineNumber LineNumber FN_FORMAT_LINENUMBER
 
 [
     /* flags: */
@@ -8887,7 +8887,7 @@ SfxVoidItem JumpToFootnoteArea FN_TO_FOOTNOTE_AREA
     GroupId = GID_NAVIGATOR;
 ]
 
-SwFmtINetFmt HyperlinkAttributes FN_TXTATR_INET
+SwFormatINetFormat HyperlinkAttributes FN_TXTATR_INET
 
 [
     /* flags: */

@@ -175,8 +175,8 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 
     rItem.eAlign          = (SwEnvAlign) (nOrient);
     rItem.bPrintFromAbove = m_pTopButton->IsChecked();
-    rItem.lShiftRight     = static_cast< sal_Int32 >(GetFldVal(*m_pRightField));
-    rItem.lShiftDown      = static_cast< sal_Int32 >(GetFldVal(*m_pDownField ));
+    rItem.lShiftRight     = static_cast< sal_Int32 >(GetFieldVal(*m_pRightField));
+    rItem.lShiftDown      = static_cast< sal_Int32 >(GetFieldVal(*m_pDownField ));
 }
 
 bool SwEnvPrtPage::FillItemSet(SfxItemSet* rSet)
@@ -197,8 +197,8 @@ void SwEnvPrtPage::Reset(const SfxItemSet* rSet)
     else
         m_pBottomButton->Check();
 
-    SetFldVal(*m_pRightField, rItem.lShiftRight);
-    SetFldVal(*m_pDownField , rItem.lShiftDown );
+    SetFieldVal(*m_pRightField, rItem.lShiftRight);
+    SetFieldVal(*m_pDownField , rItem.lShiftDown );
 
     ActivatePage(*rSet);
     ClickHdl(m_pTopButton);

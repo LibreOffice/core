@@ -28,27 +28,27 @@ class SwTableSortBoxes;
 class SwSelBoxes;
 class SwCalc;
 class SwTableBox;
-class SwTableFmlUpdate;
+class SwTableFormulaUpdate;
 class SwDoc;
 
-class SwTblCalcPara
+class SwTableCalcPara
 {
-    const SwTableBox* pLastTblBox;
+    const SwTableBox* pLastTableBox;
     sal_uInt16 nStackCnt, nMaxSize;
 
 public:
     SwTableSortBoxes *pBoxStk;  ///< stack for recognizing recursion
     SwCalc& rCalc;              ///< current Calculator
-    const SwTable* pTbl;        ///< current table
+    const SwTable* pTable;        ///< current table
 
-    SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable );
-    ~SwTblCalcPara();
+    SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable );
+    ~SwTableCalcPara();
 
     bool CalcWithStackOverflow();
     bool IsStackOverflow() const        { return nMaxSize == nStackCnt; }
     bool IncStackCnt()                  { return nMaxSize == ++nStackCnt; }
     void DecStackCnt()                  { if( nStackCnt ) --nStackCnt; }
-    void SetLastTblBox( const SwTableBox* pBox )    { pLastTblBox = pBox; }
+    void SetLastTableBox( const SwTableBox* pBox )    { pLastTableBox = pBox; }
 };
 
 class SwTableFormula
@@ -68,7 +68,7 @@ typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
                         void* pPara = 0 ) const;
     void _MakeFormula( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void _GetFmlBoxes( const SwTable&, OUString&, OUString&, OUString* = 0,
+    void _GetFormulaBoxes( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
     void _HasValidBoxes( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
@@ -77,7 +77,7 @@ typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
 
     static void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,
                     SwSelBoxes& rBoxes );
-    OUString ScanString( FnScanFormula fnFormula, const SwTable& rTbl,
+    OUString ScanString( FnScanFormula fnFormula, const SwTable& rTable,
                         void* = 0 ) const;
 
     static const SwTable* FindTable( SwDoc& rDoc, const OUString& rNm );
@@ -97,13 +97,13 @@ protected:
 
     SwTableFormula( const OUString& rFormula );
 
-    OUString MakeFormula( SwTblCalcPara& rCalcPara ) const
+    OUString MakeFormula( SwTableCalcPara& rCalcPara ) const
     {
         return ScanString( &SwTableFormula::_MakeFormula,
-                            *rCalcPara.pTbl, &rCalcPara );
+                            *rCalcPara.pTable, &rCalcPara );
     }
 
-    static sal_uInt16 GetLnPosInTbl( const SwTable& rTbl, const SwTableBox* pBox );
+    static sal_uInt16 GetLnPosInTable( const SwTable& rTable, const SwTableBox* pBox );
 
 public:
 
@@ -118,13 +118,13 @@ public:
     }
 
     /// create from the internal formula (for CORE) the external formula (for UI)
-    void PtrToBoxNm( const SwTable* pTbl );
+    void PtrToBoxNm( const SwTable* pTable );
     /// create from the external formula the internal
-    void BoxNmToPtr( const SwTable* pTbl );
+    void BoxNmToPtr( const SwTable* pTable );
     /// create from the external/internal formula the relative formula
-    void ToRelBoxNm( const SwTable* pTbl );
+    void ToRelBoxNm( const SwTable* pTable );
     /// gets called before/after merging/splitting of tables
-    void ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd );
+    void ToSplitMergeBoxNm( SwTableFormulaUpdate& rTableUpd );
 
     bool IsIntrnlName() const               { return m_eNmType == INTRNL_NAME; }
     NameType GetNameType() const            { return m_eNmType; }
@@ -140,7 +140,7 @@ public:
         m_bValidValue = false;
     }
 
-    void GetBoxesOfFormula(const SwTable& rTbl, SwSelBoxes& rBoxes);
+    void GetBoxesOfFormula(const SwTable& rTable, SwSelBoxes& rBoxes);
     // are all boxes valid which this formula relies on?
     bool HasValidBoxes() const;
 };

@@ -116,7 +116,7 @@ class WW8TabDesc: private boost::noncopyable
 
     SwPosition* pTmpPos;
 
-    SwTableNode* pTblNd;            // table node
+    SwTableNode* pTableNd;            // table node
     const SwTableLines* pTabLines;  // row array of node
     SwTableLine* pTabLine;          // current row
     SwTableBoxes* pTabBoxes;        // boxes array in current row
@@ -137,7 +137,7 @@ class WW8TabDesc: private boost::noncopyable
     short nOrgDxaLeft;
 
     bool bOk;
-    bool bClaimLineFmt;
+    bool bClaimLineFormat;
     sal_Int16 eOri;
     bool bIsBiDi;
                                 // 2. common admin info
@@ -172,7 +172,7 @@ class WW8TabDesc: private boost::noncopyable
 public:
     const SwTable* pTable;          // table
     SwPosition* pParentPos;
-    SwFlyFrmFmt* pFlyFmt;
+    SwFlyFrameFormat* pFlyFormat;
     SfxItemSet aItemSet;
     bool IsValidCell(short nCol) const;
     bool InFirstParaInCell() const;
@@ -181,7 +181,7 @@ public:
     bool Ok() const { return bOk; }
     void CreateSwTable(SvxULSpaceItem* pULSpaceItem = 0);
     void UseSwTable();
-    void SetSizePosition(SwFrmFmt* pFrmFmt);
+    void SetSizePosition(SwFrameFormat* pFrameFormat);
     void TableCellEnd();
     void MoveOutsideTable();
     void ParkPaM();
@@ -267,7 +267,7 @@ sal_uInt32 wwSectionManager::GetWWPageTopMargin() const
     return !maSegments.empty() ? maSegments.back().maSep.dyaTop : 0;
 }
 
-sal_uInt16 SwWW8ImplReader::End_Ftn()
+sal_uInt16 SwWW8ImplReader::End_Footnote()
 {
     /*
     Ignoring Footnote outside of the normal Text. People will put footnotes
@@ -279,30 +279,30 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         return 0;
     }
 
-    OSL_ENSURE(!m_aFtnStack.empty(), "footnote end without start");
-    if (m_aFtnStack.empty())
+    OSL_ENSURE(!m_aFootnoteStack.empty(), "footnote end without start");
+    if (m_aFootnoteStack.empty())
         return 0;
 
     bool bFtEdOk = false;
-    const FtnDescriptor &rDesc = m_aFtnStack.back();
+    const FootnoteDescriptor &rDesc = m_aFootnoteStack.back();
 
     //Get the footnote character and remove it from the txtnode. We'll
     //replace it with the footnote
-    SwTxtNode* pTxt = m_pPaM->GetNode().GetTxtNode();
+    SwTextNode* pText = m_pPaM->GetNode().GetTextNode();
     sal_Int32 nPos = m_pPaM->GetPoint()->nContent.GetIndex();
 
     OUString sChar;
-    SwTxtAttr* pFN = 0;
+    SwTextAttr* pFN = 0;
     //There should have been a footnote char, we will replace this.
-    if (pTxt && nPos)
+    if (pText && nPos)
     {
-        sChar += OUString(pTxt->GetTxt()[--nPos]);
+        sChar += OUString(pText->GetText()[--nPos]);
         m_pPaM->SetMark();
         --m_pPaM->GetMark()->nContent;
         m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
         m_pPaM->DeleteMark();
-        SwFmtFtn aFtn(rDesc.meType == MAN_EDN);
-        pFN = pTxt->InsertItem(aFtn, nPos, nPos);
+        SwFormatFootnote aFootnote(rDesc.meType == MAN_EDN);
+        pFN = pText->InsertItem(aFootnote, nPos, nPos);
     }
     OSL_ENSURE(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
     if (pFN)
@@ -313,18 +313,18 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         m_pPlcxMan->SaveAllPLCFx( aSave );
         WW8PLCFMan* pOldPlcxMan = m_pPlcxMan;
 
-        const SwNodeIndex* pSttIdx = static_cast<SwTxtFtn*>(pFN)->GetStartNode();
+        const SwNodeIndex* pSttIdx = static_cast<SwTextFootnote*>(pFN)->GetStartNode();
         OSL_ENSURE(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
 
-        static_cast<SwTxtFtn*>(pFN)->SetSeqNo( m_rDoc.GetFtnIdxs().size() );
+        static_cast<SwTextFootnote*>(pFN)->SetSeqNo( m_rDoc.GetFootnoteIdxs().size() );
 
-        bool bOld = m_bFtnEdn;
-        m_bFtnEdn = true;
+        bool bOld = m_bFootnoteEdn;
+        m_bFootnoteEdn = true;
 
         // read content of Ft-/End-Note
-        Read_HdFtFtnText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
+        Read_HdFtFootnoteText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
         bFtEdOk = true;
-        m_bFtnEdn = bOld;
+        m_bFootnoteEdn = bOld;
 
         OSL_ENSURE(sChar.getLength()==1 && ((rDesc.mbAutoNum == (sChar[0] == 2))),
          "footnote autonumbering must be 0x02, and everything else must not be");
@@ -332,7 +332,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         // If no automatic numbering use the following char from the main text
         // as the footnote number
         if (!rDesc.mbAutoNum)
-            static_cast<SwTxtFtn*>(pFN)->SetNumber(0, sChar);
+            static_cast<SwTextFootnote*>(pFN)->SetNumber(0, sChar);
 
         /*
             Delete the footnote char from the footnote if its at the beginning
@@ -341,16 +341,16 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         */
         SwNodeIndex& rNIdx = m_pPaM->GetPoint()->nNode;
         rNIdx = pSttIdx->GetIndex() + 1;
-        SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
-        if (pTNd && !pTNd->GetTxt().isEmpty() && !sChar.isEmpty())
+        SwTextNode* pTNd = rNIdx.GetNode().GetTextNode();
+        if (pTNd && !pTNd->GetText().isEmpty() && !sChar.isEmpty())
         {
-            const OUString &rTxt = pTNd->GetTxt();
-            if (rTxt[0] == sChar[0])
+            const OUString &rText = pTNd->GetText();
+            if (rText[0] == sChar[0])
             {
                 m_pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 m_pPaM->SetMark();
                 // Strip out tabs we may have inserted on export #i24762#
-                if (rTxt.getLength() > 1 && rTxt[1] == 0x09)
+                if (rText.getLength() > 1 && rText[1] == 0x09)
                     ++m_pPaM->GetMark()->nContent;
                 ++m_pPaM->GetMark()->nContent;
                 m_pReffingStck->Delete(*m_pPaM);
@@ -368,11 +368,11 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
     if (bFtEdOk)
         m_aSectionManager.SetCurrentSectionHasFootnote();
 
-    m_aFtnStack.pop_back();
+    m_aFootnoteStack.pop_back();
     return 0;
 }
 
-long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
+long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
 {
     /*
     Ignoring Footnote outside of the normal Text. People will put footnotes
@@ -384,7 +384,7 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
         return 0;
     }
 
-    FtnDescriptor aDesc;
+    FootnoteDescriptor aDesc;
     aDesc.mbAutoNum = true;
     if (eEDN == pRes->nSprmId)
     {
@@ -395,14 +395,14 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
     else
     {
         aDesc.meType = MAN_FTN;
-        if (m_pPlcxMan->GetFtn())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_pPlcxMan->GetFtn()->GetData());
+        if (m_pPlcxMan->GetFootnote())
+            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_pPlcxMan->GetFootnote()->GetData());
     }
 
     aDesc.mnStartCp = pRes->nCp2OrIdx;
     aDesc.mnLen = pRes->nMemLen;
 
-    m_aFtnStack.push_back(aDesc);
+    m_aFootnoteStack.push_back(aDesc);
 
     return 0;
 }
@@ -556,7 +556,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 
 // helper methods for outline, numbering and bullets
 
-static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLevel )
+static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLevel )
 {
     static const SvxExtNumType eNumA[8] = { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
         SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC,
@@ -623,8 +623,8 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLevel 
     }
 }
 
-void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV const &rAV,
-    const sal_uInt8* pTxt, bool bOutline)
+void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
+    const sal_uInt8* pText, bool bOutline)
 {
     bool bInsert = false;                       // Default
     rtl_TextEncoding eCharSet = m_eStructCharSet;
@@ -632,16 +632,16 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV const &rAV,
     const WW8_FFN* pF = m_pFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
     bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
 
-    OUString sTxt;
+    OUString sText;
     if (m_bVer67)
     {
-        sTxt = OUString(reinterpret_cast<char const *>(pTxt), rAV.cbTextBefore + rAV.cbTextAfter, eCharSet);
+        sText = OUString(reinterpret_cast<char const *>(pText), rAV.cbTextBefore + rAV.cbTextAfter, eCharSet);
     }
     else
     {
-        for(sal_Int32 i = 0; i < rAV.cbTextBefore + rAV.cbTextAfter; ++i, pTxt += 2)
+        for(sal_Int32 i = 0; i < rAV.cbTextBefore + rAV.cbTextAfter; ++i, pText += 2)
         {
-            sTxt += OUString(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pTxt)));
+            sText += OUString(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pText)));
         }
     }
 
@@ -660,7 +660,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV const &rAV,
                 OUStringBuffer aBuf;
                 comphelper::string::padToLength(aBuf, rAV.cbTextBefore
                     + rAV.cbTextAfter, cBulletChar);
-                sTxt = aBuf.makeStringAndClear();
+                sText = aBuf.makeStringAndClear();
             }
         }
     }
@@ -687,7 +687,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV const &rAV,
 
                 // take only the very first character
                 if (rAV.cbTextBefore || rAV.cbTextAfter)
-                    rNum.SetBulletChar( sTxt[ 0 ] );
+                    rNum.SetBulletChar( sText[ 0 ] );
                 else
                     rNum.SetBulletChar( 0x2190 );
             }
@@ -697,13 +697,13 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV const &rAV,
     {
         if (rAV.cbTextBefore)
         {
-            OUString sP( sTxt.copy( 0, rAV.cbTextBefore ) );
+            OUString sP( sText.copy( 0, rAV.cbTextBefore ) );
             rNum.SetPrefix( sP );
         }
         if( rAV.cbTextAfter )
         {
             OUString sP( rNum.GetSuffix() );
-            sP += sTxt.copy( rAV.cbTextBefore, rAV.cbTextAfter);
+            sP += sText.copy( rAV.cbTextBefore, rAV.cbTextAfter);
             rNum.SetSuffix( sP );
         }
 // The characters before and after multipe digits do not apply because
@@ -718,7 +718,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV const &rAV,
 void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 nSwLevel,
     bool bOutLine)
 {
-    SwNumFmt aNF;
+    SwNumFormat aNF;
     if (pAD)
     {                                                       // there is a Anld-Sprm
         m_bAktAND_fNumberAcross = 0 != pAD->fNumberAcross;
@@ -745,7 +745,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     // #i86652#
     sal_uInt16 nRul = m_rDoc.MakeNumRule( aName, 0, false,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
-    m_pStyles->pStyRule = m_rDoc.GetNumRuleTbl()[nRul];
+    m_pStyles->pStyRule = m_rDoc.GetNumRuleTable()[nRul];
     // Auto == false-> Nummerierungsvorlage
     m_pStyles->pStyRule->SetAutoRule(false);
 
@@ -763,7 +763,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
     // StyleDef ?
     if( m_pAktColl )
     {
-        // only for SwTxtFmtColl, not CharFmt
+        // only for SwTextFormatColl, not CharFormat
         // WW: 0 = no Numbering
         SwWW8StyInf * pColl = GetStyle(m_nAktColl);
         if (pColl != NULL && pColl->bColl && *pData)
@@ -774,7 +774,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
             {
                 m_nSwNumLevel = *pData - 1;
                 if (!m_bNoAttrImport)
-                    static_cast<SwTxtFmtColl*>(m_pAktColl)->AssignToListLevelOfOutlineStyle( m_nSwNumLevel );
+                    static_cast<SwTextFormatColl*>(m_pAktColl)->AssignToListLevelOfOutlineStyle( m_nSwNumLevel );
                     // For WW-NoNumbering also NO_NUMBERING could be used.
                     // ( For normal numberierung NO_NUM has to be used:
                     //   NO_NUM : pauses numbering,
@@ -801,7 +801,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
 {
     SwWW8StyInf * pStyInf = GetStyle(m_nAktColl);
     if( !m_pAktColl || nLen <= 0                       // only for Styledef
-        || (pStyInf && !pStyInf->bColl)              // ignore  CharFmt ->
+        || (pStyInf && !pStyInf->bColl)              // ignore  CharFormat ->
         || ( m_nIniFlags & WW8FL_NO_OUTLINE ) )
     {
         m_nSwNumLevel = 0xff;
@@ -812,7 +812,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         && m_nSwNumLevel <= 9 ){          // No Bullets or Numbering
 
         // If NumRuleItems were set, either directly or through inheritance, disable them now
-        m_pAktColl->SetFmtAttr( SwNumRuleItem() );
+        m_pAktColl->SetFormatAttr( SwNumRuleItem() );
 
         const OUString aName("Outline");
         SwNumRule aNR( m_rDoc.GetUniqueNumRuleName( &aName ),
@@ -827,7 +827,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
     }else if( m_pStyles->nWwNumLevel == 10 || m_pStyles->nWwNumLevel == 11 ){
         SwNumRule* pNR = GetStyRule();
         SetAnld(pNR, reinterpret_cast<WW8_ANLD const *>(pData), 0, false);
-        m_pAktColl->SetFmtAttr( SwNumRuleItem( pNR->GetName() ) );
+        m_pAktColl->SetFormatAttr( SwNumRuleItem( pNR->GetName() ) );
 
         pStyInf = GetStyle(m_nAktColl);
         if (pStyInf != NULL)
@@ -837,24 +837,24 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
 
 // Numbering / Bullets
 
-// SetNumOlst() carries the Numrules for this cell to SwNumFmt.
+// SetNumOlst() carries the Numrules for this cell to SwNumFormat.
 // For this the info is fetched from OLST and not from ANLD ( see later )
 // ( only for outline inside text; Bullets / numbering use ANLDs )
 void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLevel)
 {
-    SwNumFmt aNF;
+    SwNumFormat aNF;
     WW8_ANLV &rAV = pO->rganlv[nSwLevel];
     SetBaseAnlv(aNF, rAV, nSwLevel);
                                             // ... and then the Strings
-    int nTxtOfs = 0;
+    int nTextOfs = 0;
     sal_uInt8 i;
     WW8_ANLV* pAV1;                 // search String-Positions
     for (i = 0, pAV1 = pO->rganlv; i < nSwLevel; ++i, ++pAV1)
-        nTxtOfs += pAV1->cbTextBefore + pAV1->cbTextAfter;
+        nTextOfs += pAV1->cbTextBefore + pAV1->cbTextAfter;
 
     if (!m_bVer67)
-        nTxtOfs *= 2;
-    SetAnlvStrings(aNF, rAV, pO->rgch + nTxtOfs, true); // and apply
+        nTextOfs *= 2;
+    SetAnlvStrings(aNF, rAV, pO->rgch + nTextOfs, true); // and apply
     pNumR->Set(nSwLevel, aNF);
 }
 
@@ -941,7 +941,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     SwWW8StyInf * pStyInf = GetStyle(m_nAktColl);
     if (sNumRule.isEmpty() && pStyInf != NULL &&  pStyInf->bHasStyNumRule)
     {
-        sNumRule = pStyInf->pFmt->GetNumRule().GetValue();
+        sNumRule = pStyInf->pFormat->GetNumRule().GetValue();
         pNumRule = m_rDoc.FindNumRulePtr(sNumRule);
         if (!pNumRule)
             sNumRule.clear();
@@ -952,7 +952,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         if (!pNumRule)
         {
             // #i86652#
-            pNumRule = m_rDoc.GetNumRuleTbl()[
+            pNumRule = m_rDoc.GetNumRuleTable()[
                             m_rDoc.MakeNumRule( sNumRule, 0, false,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
         }
@@ -991,7 +991,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     if (*pSprm13 == 10 || *pSprm13 == 11)
     {
         m_nSwNumLevel = 0;
-        if (!pNumRule->GetNumFmt(m_nSwNumLevel))
+        if (!pNumRule->GetNumFormat(m_nSwNumLevel))
         {
             // not defined yet
             // sprmAnld o. 0
@@ -1003,14 +1003,14 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     {
         m_nSwNumLevel = *pSprm13 - 1;             // outline
         // undefined
-        if (!pNumRule->GetNumFmt(m_nSwNumLevel))
+        if (!pNumRule->GetNumFormat(m_nSwNumLevel))
         {
             if (m_pNumOlst)                       // there was a OLST
             {
                 //Assure upper levels are set, #i9556#
                 for (sal_uInt8 nI = 0; nI < m_nSwNumLevel; ++nI)
                 {
-                    if (!pNumRule->GetNumFmt(nI))
+                    if (!pNumRule->GetNumFormat(nI))
                         SetNumOlst(pNumRule, m_pNumOlst, nI);
                 }
 
@@ -1027,7 +1027,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     else
         m_nSwNumLevel = 0xff;                 // no number
 
-    SwTxtNode* pNd = m_pPaM->GetNode().GetTxtNode();
+    SwTextNode* pNd = m_pPaM->GetNode().GetTextNode();
     if (m_nSwNumLevel < MAXLEVEL)
         pNd->SetAttrListLevel( m_nSwNumLevel );
     else
@@ -1049,7 +1049,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
     if (bGoBack)
     {
         SwPosition aTmpPos(*m_pPaM->GetPoint());
-        m_pPaM->Move(fnMoveBackward, fnGoCntnt);
+        m_pPaM->Move(fnMoveBackward, fnGoContent);
         m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
         *m_pPaM->GetPoint() = aTmpPos;
     }
@@ -1706,7 +1706,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     pFirstBand(0),
     pActBand(0),
     pTmpPos(0),
-    pTblNd(0),
+    pTableNd(0),
     pTabLines(0),
     pTabLine(0),
     pTabBoxes(0),
@@ -1722,7 +1722,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     nPreferredWidth(0),
     nOrgDxaLeft(0),
     bOk(true),
-    bClaimLineFmt(false),
+    bClaimLineFormat(false),
     eOri(text::HoriOrientation::NONE),
     bIsBiDi(false),
     nAktRow(0),
@@ -1731,7 +1731,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     nRowsToRepeat(0),
     pTable(0),
     pParentPos(0),
-    pFlyFmt(0),
+    pFlyFormat(0),
     aItemSet(pIo->m_rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
     pIo->m_bAktAND_fNumberAcross = false;
@@ -1804,7 +1804,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         break;
                     case sprmTFCantSplit:
                         pNewBand->bCantSplit = *pParams;
-                        bClaimLineFmt = true;
+                        bClaimLineFormat = true;
                         break;
                     case sprmTTableBorders:
                         pTableBorders = pParams; // process at end
@@ -1832,7 +1832,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         break;
                     case sprmTDyaRowHeight:
                         pNewBand->nLineHeight = (sal_Int16)SVBT16ToShort( pParams );
-                        bClaimLineFmt = true;
+                        bClaimLineFormat = true;
                         break;
                     case sprmTDefTable:
                         pNewBand->ReadDef(bOldVer, pParams);
@@ -2282,20 +2282,20 @@ void WW8TabDesc::CalcDefaults()
     OSL_ENSURE( pActBand, "pActBand ist 0" );
 }
 
-void WW8TabDesc::SetSizePosition(SwFrmFmt* pFrmFmt)
+void WW8TabDesc::SetSizePosition(SwFrameFormat* pFrameFormat)
 {
-    SwFrmFmt* pApply = pFrmFmt;
+    SwFrameFormat* pApply = pFrameFormat;
     if (!pApply )
-        pApply = pTable->GetFrmFmt();
+        pApply = pTable->GetFrameFormat();
     OSL_ENSURE(pApply,"No frame");
-    pApply->SetFmtAttr(aItemSet);
-    if (pFrmFmt)
+    pApply->SetFormatAttr(aItemSet);
+    if (pFrameFormat)
     {
-        SwFmtFrmSize aSize = pFrmFmt->GetFrmSize();
+        SwFormatFrmSize aSize = pFrameFormat->GetFrmSize();
         aSize.SetHeightSizeType(ATT_MIN_SIZE);
         aSize.SetHeight(MINLAY);
-        pFrmFmt->SetFmtAttr(aSize);
-        pTable->GetFrmFmt()->SetFmtAttr(SwFmtHoriOrient(0,text::HoriOrientation::FULL));
+        pFrameFormat->SetFormatAttr(aSize);
+        pTable->GetFrameFormat()->SetFormatAttr(SwFormatHoriOrient(0,text::HoriOrientation::FULL));
     }
 }
 
@@ -2323,18 +2323,18 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
      Set fly anchor to its anchor pos, so that if a table starts immediately
      at this position a new node will be inserted before inserting the table.
     */
-    if (!bInsNode && pIo->m_pFmtOfJustInsertedApo)
+    if (!bInsNode && pIo->m_pFormatOfJustInsertedApo)
     {
         const SwPosition* pAPos =
-            pIo->m_pFmtOfJustInsertedApo->GetAnchor().GetCntntAnchor();
+            pIo->m_pFormatOfJustInsertedApo->GetAnchor().GetContentAnchor();
         if (pAPos && &pAPos->nNode.GetNode() == &pPoint->nNode.GetNode())
         {
             bInsNode = true;
             bSetMinHeight = true;
 
-            SwFmtSurround aSur(pIo->m_pFmtOfJustInsertedApo->GetSurround());
+            SwFormatSurround aSur(pIo->m_pFormatOfJustInsertedApo->GetSurround());
             aSur.SetAnchorOnly(true);
-            pIo->m_pFmtOfJustInsertedApo->SetFmtAttr(aSur);
+            pIo->m_pFormatOfJustInsertedApo->SetFormatAttr(aSur);
         }
     }
 
@@ -2348,7 +2348,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     }
 
     if (bInsNode)
-        pIo->AppendTxtNode(*pPoint);
+        pIo->AppendTextNode(*pPoint);
 
     pTmpPos = new SwPosition( *pIo->m_pPaM->GetPoint() );
 
@@ -2360,8 +2360,8 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
             *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, false, true );
 
-    OSL_ENSURE(pTable && pTable->GetFrmFmt(), "insert table failed");
-    if (!pTable || !pTable->GetFrmFmt())
+    OSL_ENSURE(pTable && pTable->GetFrameFormat(), "insert table failed");
+    if (!pTable || !pTable->GetFrameFormat())
         return;
 
     if (pULSpaceItem && pULSpaceItem->GetUpper() != 0)
@@ -2379,7 +2379,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     // contains a Pagedesc. If so that Pagedesc would be moved to the
     // row after the table, whats wrong. So delete and
     // set later to the table format.
-    if (SwTxtNode *const pNd = pTmpPos->nNode.GetNode().GetTxtNode())
+    if (SwTextNode *const pNd = pTmpPos->nNode.GetNode().GetTextNode())
     {
         if (const SfxItemSet* pSet = pNd->GetpSwAttrSet())
         {
@@ -2387,7 +2387,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
             const SfxPoolItem* pItem;
             if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
             {
-                pSetAttr = new SvxFmtBreakItem( *static_cast<const SvxFmtBreakItem*>(pItem) );
+                pSetAttr = new SvxFormatBreakItem( *static_cast<const SvxFormatBreakItem*>(pItem) );
                 pNd->ResetAttr( RES_BREAK );
             }
 
@@ -2403,23 +2403,23 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     // total width of table
     if( nMaxRight - nMinLeft > MINLAY * nDefaultSwCols )
     {
-        pTable->GetFrmFmt()->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, nSwWidth));
-        aItemSet.Put(SwFmtFrmSize(ATT_FIX_SIZE, nSwWidth));
+        pTable->GetFrameFormat()->SetFormatAttr(SwFormatFrmSize(ATT_FIX_SIZE, nSwWidth));
+        aItemSet.Put(SwFormatFrmSize(ATT_FIX_SIZE, nSwWidth));
     }
 
     SvxFrameDirectionItem aDirection(
         bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
-    pTable->GetFrmFmt()->SetFmtAttr(aDirection);
+    pTable->GetFrameFormat()->SetFormatAttr(aDirection);
 
     if (text::HoriOrientation::LEFT_AND_WIDTH == eOri)
     {
-        if (!pIo->m_nInTable && pIo->InLocalApo() && pIo->m_pSFlyPara->pFlyFmt &&
+        if (!pIo->m_nInTable && pIo->InLocalApo() && pIo->m_pSFlyPara->pFlyFormat &&
             GetMinLeft())
         {
             //If we are inside a frame and we have a border, the frames
             //placement does not consider the tables border, which word
             //displays outside the frame, so adjust here.
-            SwFmtHoriOrient aHori(pIo->m_pSFlyPara->pFlyFmt->GetHoriOrient());
+            SwFormatHoriOrient aHori(pIo->m_pSFlyPara->pFlyFormat->GetHoriOrient());
             sal_Int16 eHori = aHori.GetHoriOrient();
             if ((eHori == text::HoriOrientation::NONE) || (eHori == text::HoriOrientation::LEFT) ||
                 (eHori == text::HoriOrientation::LEFT_AND_WIDTH))
@@ -2428,7 +2428,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
                 //the maximum is what word does ?
                 aHori.SetPos(pIo->m_pSFlyPara->nXPos + GetMinLeft());
                 aHori.SetHoriOrient(text::HoriOrientation::NONE);
-                pIo->m_pSFlyPara->pFlyFmt->SetFmtAttr(aHori);
+                pIo->m_pSFlyPara->pFlyFormat->SetFormatAttr(aHori);
             }
         }
         else
@@ -2471,15 +2471,15 @@ void WW8TabDesc::UseSwTable()
     pTabLines = &pTable->GetTabLines();
     nAktRow = nAktCol = nAktBandRow = 0;
 
-    pTblNd  = const_cast<SwTableNode*>((*pTabLines)[0]->GetTabBoxes()[0]->
+    pTableNd  = const_cast<SwTableNode*>((*pTabLines)[0]->GetTabBoxes()[0]->
         GetSttNd()->FindTableNode());
-    OSL_ENSURE( pTblNd, "wo ist mein TabellenNode" );
+    OSL_ENSURE( pTableNd, "wo ist mein TabellenNode" );
 
     // #i69519# - Restrict rows to repeat to a decent value
     if ( nRowsToRepeat == static_cast<sal_uInt16>(nRows) )
         nRowsToRepeat = 1;
 
-    pTblNd->GetTable().SetRowsToRepeat( nRowsToRepeat );
+    pTableNd->GetTable().SetRowsToRepeat( nRowsToRepeat );
     // insert extra cells if needed and something like this
     AdjustNewBand();
 
@@ -2644,8 +2644,8 @@ void WW8TabDesc::ParkPaM()
         }
         while (pIo->m_pPaM->GetNode().GetNodeType() != ND_TEXTNODE && ++nSttNd < nEndNd);
 
-        pIo->m_pPaM->GetPoint()->nContent.Assign(pIo->m_pPaM->GetCntntNode(), 0);
-        pIo->m_rDoc.SetTxtFmtColl(*pIo->m_pPaM, const_cast<SwTxtFmtColl*>(pIo->m_pDfltTxtFmtColl));
+        pIo->m_pPaM->GetPoint()->nContent.Assign(pIo->m_pPaM->GetContentNode(), 0);
+        pIo->m_rDoc.SetTextFormatColl(*pIo->m_pPaM, const_cast<SwTextFormatColl*>(pIo->m_pDfltTextFormatColl));
     }
 }
 
@@ -2674,7 +2674,7 @@ void WW8TabDesc::FinishSwTable()
     pIo->m_bWasTabRowEnd = false;
     pIo->m_bWasTabCellEnd = false;
 
-    pIo->m_aInsertedTables.InsertTable(*pTblNd, *pIo->m_pPaM);
+    pIo->m_aInsertedTables.InsertTable(*pTableNd, *pIo->m_pPaM);
 
     MergeCells();
 
@@ -2702,7 +2702,7 @@ void WW8TabDesc::FinishSwTable()
                 }
             }
         }
-        pIo->m_pFmtOfJustInsertedApo = 0;
+        pIo->m_pFormatOfJustInsertedApo = 0;
         aMergeGroups.clear();
     }
 }
@@ -2884,18 +2884,18 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
                 pIo->m_pPaM->GetPoint()->nNode = nSttNd;
             }
             while (pIo->m_pPaM->GetNode().GetNodeType() != ND_TEXTNODE && ++nSttNd < nEndNd);
-            pIo->m_pPaM->GetPoint()->nContent.Assign(pIo->m_pPaM->GetCntntNode(), 0);
+            pIo->m_pPaM->GetPoint()->nContent.Assign(pIo->m_pPaM->GetContentNode(), 0);
             // Precautionally set now, otherwise the style is not set for cells
             // that are inserted for margin balancing.
-            pIo->m_rDoc.SetTxtFmtColl(*pIo->m_pPaM, const_cast<SwTxtFmtColl*>(pIo->m_pDfltTxtFmtColl));
+            pIo->m_rDoc.SetTextFormatColl(*pIo->m_pPaM, const_cast<SwTextFormatColl*>(pIo->m_pDfltTextFormatColl));
             // because this cells are invisible helper constructions only to simulate
-            // the frayed view of WW-tables we do NOT need SetTxtFmtCollAndListLevel()
+            // the frayed view of WW-tables we do NOT need SetTextFormatCollAndListLevel()
         }
 
         // Better to turn Snap to Grid off for all paragraphs in tables
-        if(SwTxtNode *pNd = pIo->m_pPaM->GetNode().GetTxtNode())
+        if(SwTextNode *pNd = pIo->m_pPaM->GetNode().GetTextNode())
         {
-            const SfxPoolItem &rItm = pNd->SwCntntNode::GetAttr(RES_PARATR_SNAPTOGRID);
+            const SfxPoolItem &rItm = pNd->SwContentNode::GetAttr(RES_PARATR_SNAPTOGRID);
             const SvxParaGridItem &rSnapToGrid = static_cast<const SvxParaGridItem&>(rItm);
 
             if(rSnapToGrid.GetValue())
@@ -2906,9 +2906,9 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
                 SwPosition* pGridPos = pIo->m_pPaM->GetPoint();
 
                 const sal_Int32 nEnd = pGridPos->nContent.GetIndex();
-                pGridPos->nContent.Assign(pIo->m_pPaM->GetCntntNode(), 0);
+                pGridPos->nContent.Assign(pIo->m_pPaM->GetContentNode(), 0);
                 pIo->m_pCtrlStck->NewAttr(*pGridPos, aGridItem);
-                pGridPos->nContent.Assign(pIo->m_pPaM->GetCntntNode(), nEnd);
+                pGridPos->nContent.Assign(pIo->m_pPaM->GetContentNode(), nEnd);
                 pIo->m_pCtrlStck->SetAttr(*pGridPos, RES_PARATR_SNAPTOGRID);
             }
         }
@@ -2924,10 +2924,10 @@ void WW8TabDesc::InsertCells( short nIns )
     pTabBoxes = &pTabLine->GetTabBoxes();
     pTabBox = (*pTabBoxes)[0];
 
-    pIo->m_rDoc.GetNodes().InsBoxen( pTblNd, pTabLine, static_cast<SwTableBoxFmt*>(pTabBox->GetFrmFmt()),
-                            const_cast<SwTxtFmtColl*>(pIo->m_pDfltTxtFmtColl), 0, pTabBoxes->size(), nIns );
-    // The third parameter contains the FrmFmt of the boxes.
-    // Here it is possible to optimize to save (reduce) FrmFmts.
+    pIo->m_rDoc.GetNodes().InsBoxen( pTableNd, pTabLine, static_cast<SwTableBoxFormat*>(pTabBox->GetFrameFormat()),
+                            const_cast<SwTextFormatColl*>(pIo->m_pDfltTextFormatColl), 0, pTabBoxes->size(), nIns );
+    // The third parameter contains the FrameFormat of the boxes.
+    // Here it is possible to optimize to save (reduce) FrameFormats.
 }
 
 void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
@@ -2935,30 +2935,30 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
     if( nWwIdx < 0 || nWwIdx >= pActBand->nWwCols )
         return;                 // faked cells -> no border
 
-    SvxBoxItem aFmtBox( RES_BOX );
+    SvxBoxItem aFormatBox( RES_BOX );
     if (pActBand->pTCs)     // neither Cell Border nor Default Border defined ?
     {
         WW8_TCell* pT = &pActBand->pTCs[nWwIdx];
         if (SwWW8ImplReader::IsBorder(pT->rgbrc))
-            SwWW8ImplReader::SetBorder(aFmtBox, pT->rgbrc);
+            SwWW8ImplReader::SetBorder(aFormatBox, pT->rgbrc);
     }
 
     if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwTOP))
     {
-        aFmtBox.SetDistance(
+        aFormatBox.SetDistance(
             pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwTOP],
             SvxBoxItemLine::TOP);
     }
     else
-        aFmtBox.SetDistance(pActBand->mnDefaultTop, SvxBoxItemLine::TOP);
+        aFormatBox.SetDistance(pActBand->mnDefaultTop, SvxBoxItemLine::TOP);
     if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwBOTTOM))
     {
-        aFmtBox.SetDistance(
+        aFormatBox.SetDistance(
             pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwBOTTOM],
             SvxBoxItemLine::BOTTOM);
     }
     else
-        aFmtBox.SetDistance(pActBand->mnDefaultBottom,SvxBoxItemLine::BOTTOM);
+        aFormatBox.SetDistance(pActBand->mnDefaultBottom,SvxBoxItemLine::BOTTOM);
 
     // nGapHalf for WW is a *horizontal* gap between table cell and content.
     short nLeftDist =
@@ -2967,22 +2967,22 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
         pActBand->mbHasSpacing ? pActBand->mnDefaultRight : pActBand->nGapHalf;
     if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwLEFT))
     {
-        aFmtBox.SetDistance(
+        aFormatBox.SetDistance(
             pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwLEFT],
             SvxBoxItemLine::LEFT);
     }
     else
-        aFmtBox.SetDistance(nLeftDist, SvxBoxItemLine::LEFT);
+        aFormatBox.SetDistance(nLeftDist, SvxBoxItemLine::LEFT);
     if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwRIGHT))
     {
-        aFmtBox.SetDistance(
+        aFormatBox.SetDistance(
             pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwRIGHT],
             SvxBoxItemLine::RIGHT);
     }
     else
-        aFmtBox.SetDistance(nRightDist,SvxBoxItemLine::RIGHT);
+        aFormatBox.SetDistance(nRightDist,SvxBoxItemLine::RIGHT);
 
-    pBox->GetFrmFmt()->SetFmtAttr(aFmtBox);
+    pBox->GetFrameFormat()->SetFormatAttr(aFormatBox);
 }
 
 void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
@@ -2994,7 +2994,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
     if (pActBand->pNewSHDs && pActBand->pNewSHDs[nWwIdx] != COL_AUTO)
     {
         Color aColor(pActBand->pNewSHDs[nWwIdx]);
-        pBox->GetFrmFmt()->SetFmtAttr(SvxBrushItem(aColor, RES_BACKGROUND));
+        pBox->GetFrameFormat()->SetFormatAttr(SvxBrushItem(aColor, RES_BACKGROUND));
         bFound = true;
     }
 
@@ -3006,7 +3006,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
             return;
 
         SwWW8Shade aSh( pIo->m_bVer67, rSHD );
-        pBox->GetFrmFmt()->SetFmtAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));
+        pBox->GetFrameFormat()->SetFormatAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));
     }
 }
 
@@ -3043,7 +3043,7 @@ void WW8TabDesc::SetTabDirection(SwTableBox* pBox, short nWwIdx)
     if (nWwIdx < 0 || nWwIdx >= pActBand->nWwCols)
         return;
     SvxFrameDirectionItem aItem(MakeDirection(pActBand->maDirections[nWwIdx], bIsBiDi), RES_FRAMEDIR);
-    pBox->GetFrmFmt()->SetFmtAttr(aItem);
+    pBox->GetFrameFormat()->SetFormatAttr(aItem);
 }
 
 void WW8TabDesc::SetTabVertAlign( SwTableBox* pBox, short nWwIdx )
@@ -3071,7 +3071,7 @@ void WW8TabDesc::SetTabVertAlign( SwTableBox* pBox, short nWwIdx )
         }
     }
 
-    pBox->GetFrmFmt()->SetFmtAttr( SwFmtVertOrient(0,eVertOri) );
+    pBox->GetFrameFormat()->SetFormatAttr( SwFormatVertOrient(0,eVertOri) );
 }
 
 void WW8TabDesc::AdjustNewBand()
@@ -3083,10 +3083,10 @@ void WW8TabDesc::AdjustNewBand()
     OSL_ENSURE( pTabBoxes && pTabBoxes->size() == (sal_uInt16)pActBand->nSwCols,
         "Falsche Spaltenzahl in Tabelle" );
 
-    if( bClaimLineFmt )
+    if( bClaimLineFormat )
     {
-        pTabLine->ClaimFrmFmt();            // necessary because of cell height
-        SwFmtFrmSize aF( ATT_MIN_SIZE, 0, 0 );  // default
+        pTabLine->ClaimFrameFormat();            // necessary because of cell height
+        SwFormatFrmSize aF( ATT_MIN_SIZE, 0, 0 );  // default
 
         if (pActBand->nLineHeight == 0)    // 0 = Auto
             aF.SetHeightSizeType( ATT_VAR_SIZE );
@@ -3102,18 +3102,18 @@ void WW8TabDesc::AdjustNewBand()
 
             aF.SetHeight(pActBand->nLineHeight);// set min/exact height
         }
-        pTabLine->GetFrmFmt()->SetFmtAttr(aF);
+        pTabLine->GetFrameFormat()->SetFormatAttr(aF);
     }
 
     //Word stores 1 for bCantSplit if the row cannot be split, we set true if
     //we can split the row
     bool bSetCantSplit = pActBand->bCantSplit;
-    pTabLine->GetFrmFmt()->SetFmtAttr(SwFmtRowSplit(!bSetCantSplit));
+    pTabLine->GetFrameFormat()->SetFormatAttr(SwFormatRowSplit(!bSetCantSplit));
 
     short i;    // SW-Index
     short j;    // WW-Index
     short nW;   // Width
-    SwFmtFrmSize aFS( ATT_FIX_SIZE );
+    SwFormatFrmSize aFS( ATT_FIX_SIZE );
     j = pActBand->bLEmptyCol ? -1 : 0;
 
     for( i = 0; i < pActBand->nSwCols; i++ )
@@ -3135,15 +3135,15 @@ void WW8TabDesc::AdjustNewBand()
         }
 
         SwTableBox* pBox = (*pTabBoxes)[i];
-        // could be reduced further by intelligent moving of FrmFmts
-        pBox->ClaimFrmFmt();
+        // could be reduced further by intelligent moving of FrameFormats
+        pBox->ClaimFrameFormat();
 
         SetTabBorders(pBox, j);
 
         // #i18128# word has only one line between adjoining vertical cells
         // we have to mimick this in the filter by picking the larger of the
         // sides and using that one on one side of the line (right)
-        SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrmFmt()), RES_BOX));
+        SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrameFormat()), RES_BOX));
         const ::editeng::SvxBorderLine *pLeftLine = aCurrentBox.GetLine(SvxBoxItemLine::LEFT);
         int nCurrentRightLineWidth = 0;
         if(pLeftLine)
@@ -3152,7 +3152,7 @@ void WW8TabDesc::AdjustNewBand()
         if (i != 0)
         {
             SwTableBox* pBox2 = (*pTabBoxes)[i-1];
-            SvxBoxItem aOldBox(sw::util::ItemGet<SvxBoxItem>(*(pBox2->GetFrmFmt()), RES_BOX));
+            SvxBoxItem aOldBox(sw::util::ItemGet<SvxBoxItem>(*(pBox2->GetFrameFormat()), RES_BOX));
             const ::editeng::SvxBorderLine *pRightLine = aOldBox.GetLine(SvxBoxItemLine::RIGHT);
             int nOldBoxRightLineWidth = 0;
             if(pRightLine)
@@ -3162,10 +3162,10 @@ void WW8TabDesc::AdjustNewBand()
                 aCurrentBox.SetLine(aOldBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::LEFT);
 
             aOldBox.SetLine(0, SvxBoxItemLine::RIGHT);
-            pBox2->GetFrmFmt()->SetFmtAttr(aOldBox);
+            pBox2->GetFrameFormat()->SetFormatAttr(aOldBox);
         }
 
-        pBox->GetFrmFmt()->SetFmtAttr(aCurrentBox);
+        pBox->GetFrameFormat()->SetFormatAttr(aCurrentBox);
 
         SetTabVertAlign(pBox, j);
         SetTabDirection(pBox, j);
@@ -3174,7 +3174,7 @@ void WW8TabDesc::AdjustNewBand()
         j++;
 
         aFS.SetWidth( nW );
-        pBox->GetFrmFmt()->SetFmtAttr( aFS );
+        pBox->GetFrameFormat()->SetFormatAttr( aFS );
 
         // skip non existing cells
         while( ( j < pActBand->nWwCols ) && !pActBand->bExist[j] )
@@ -3319,7 +3319,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
     m_bFirstPara = true;
     // keine rekursiven Tabellen Nicht bei EinfuegenDatei in Tabelle oder
     // Fussnote
-    if (m_bReadNoTbl)
+    if (m_bReadNoTable)
         return false;
 
     if (m_pTableDesc)
@@ -3380,39 +3380,39 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1);
             // #i33818# - anchor the Writer fly frame for the nested table at-character.
             // #i45301#
-            SwFmtAnchor aAnchor( eAnchor );
+            SwFormatAnchor aAnchor( eAnchor );
             aAnchor.SetAnchor( m_pTableDesc->pParentPos );
             aItemSet.Put( aAnchor );
-            m_pTableDesc->pFlyFmt = m_rDoc.MakeFlySection( eAnchor,
+            m_pTableDesc->pFlyFormat = m_rDoc.MakeFlySection( eAnchor,
                                                       m_pTableDesc->pParentPos, &aItemSet);
-            OSL_ENSURE( m_pTableDesc->pFlyFmt->GetAnchor().GetAnchorId() == eAnchor,
+            OSL_ENSURE( m_pTableDesc->pFlyFormat->GetAnchor().GetAnchorId() == eAnchor,
                    "Not the anchor type requested!" );
-            MoveInsideFly(m_pTableDesc->pFlyFmt);
+            MoveInsideFly(m_pTableDesc->pFlyFormat);
         }
         m_pTableDesc->CreateSwTable(pULSpaceItem);
-        if (m_pTableDesc->pFlyFmt)
+        if (m_pTableDesc->pFlyFormat)
         {
-            m_pTableDesc->SetSizePosition(m_pTableDesc->pFlyFmt);
+            m_pTableDesc->SetSizePosition(m_pTableDesc->pFlyFormat);
             // #i33818# - Use absolute position object attributes,
             // if existing, and apply them to the created Writer fly frame.
             if ( pTableWFlyPara && pTableSFlyPara )
             {
                 WW8FlySet aFlySet( *this, pTableWFlyPara, pTableSFlyPara, false );
-                SwFmtAnchor aAnchor( FLY_AT_CHAR );
+                SwFormatAnchor aAnchor( FLY_AT_CHAR );
                 aAnchor.SetAnchor( m_pTableDesc->pParentPos );
                 aFlySet.Put( aAnchor );
-                m_pTableDesc->pFlyFmt->SetFmtAttr( aFlySet );
+                m_pTableDesc->pFlyFormat->SetFormatAttr( aFlySet );
             }
             else
             {
-                SwFmtHoriOrient aHori =
-                            m_pTableDesc->pTable->GetFrmFmt()->GetHoriOrient();
-                m_pTableDesc->pFlyFmt->SetFmtAttr(aHori);
-                m_pTableDesc->pFlyFmt->SetFmtAttr( SwFmtSurround( SURROUND_NONE ) );
+                SwFormatHoriOrient aHori =
+                            m_pTableDesc->pTable->GetFrameFormat()->GetHoriOrient();
+                m_pTableDesc->pFlyFormat->SetFormatAttr(aHori);
+                m_pTableDesc->pFlyFormat->SetFormatAttr( SwFormatSurround( SURROUND_NONE ) );
             }
             // #i33818# - The nested table doesn't have to leave
             // the table cell. Thus, the Writer fly frame has to follow the text flow.
-            m_pTableDesc->pFlyFmt->SetFmtAttr( SwFmtFollowTextFlow( true ) );
+            m_pTableDesc->pFlyFormat->SetFormatAttr( SwFormatFollowTextFlow( true ) );
         }
         else
             m_pTableDesc->SetSizePosition(0);
@@ -3452,9 +3452,9 @@ void SwWW8ImplReader::Read_TabRowEnd( sal_uInt16, const sal_uInt8* pData, short 
 
 void SwWW8ImplReader::PopTableDesc()
 {
-    if (m_pTableDesc && m_pTableDesc->pFlyFmt)
+    if (m_pTableDesc && m_pTableDesc->pFlyFormat)
     {
-        MoveOutsideFly(m_pTableDesc->pFlyFmt,*m_pTableDesc->pParentPos);
+        MoveOutsideFly(m_pTableDesc->pFlyFormat,*m_pTableDesc->pParentPos);
     }
 
     delete m_pTableDesc;
@@ -3520,16 +3520,16 @@ sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
     return nRes;
 }
 
-const SwFmt* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
+const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
 {
-    SwFmt* pRet = 0;
+    SwFormat* pRet = 0;
     if( !m_vColl.empty() )
     {
         for(sal_uInt16 nI = 0; nI < m_pStyles->GetCount(); nI++ )
             if(    m_vColl[ nI ].bValid
                 && (rName.equals( m_vColl[ nI ].GetOrgWWName())) )
             {
-                pRet = m_vColl[ nI ].pFmt;
+                pRet = m_vColl[ nI ].pFormat;
                 break;
             }
     }
@@ -3669,7 +3669,7 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
     , pParaSprms(0)
     , nSprmsLen(0)
     , nWwNumLevel(0)
-    , bTxtColChanged(false)
+    , bTextColChanged(false)
     , bFontChanged(false)
     , bCJKFontChanged(false)
     , bCTLFontChanged(false)
@@ -3696,16 +3696,16 @@ void WW8RStyle::Set1StyleDefaults()
     if( !pIo->m_bNoAttrImport )
     {
         // Style has no text color set, winword default is auto
-        if ( !bTxtColChanged )
-            pIo->m_pAktColl->SetFmtAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
+        if ( !bTextColChanged )
+            pIo->m_pAktColl->SetFormatAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
 
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
         if( !bFSizeChanged )
         {
             SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
-            pIo->m_pAktColl->SetFmtAttr(aAttr);
+            pIo->m_pAktColl->SetFormatAttr(aAttr);
             aAttr.SetWhich(RES_CHRATR_CJK_FONTSIZE);
-            pIo->m_pAktColl->SetFmtAttr(aAttr);
+            pIo->m_pAktColl->SetFormatAttr(aAttr);
         }
 
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
@@ -3713,20 +3713,20 @@ void WW8RStyle::Set1StyleDefaults()
         {
             SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
             aAttr.SetWhich(RES_CHRATR_CTL_FONTSIZE);
-            pIo->m_pAktColl->SetFmtAttr(aAttr);
+            pIo->m_pAktColl->SetFormatAttr(aAttr);
         }
 
         if( !bWidowsChanged )  // Widows ?
         {
-            pIo->m_pAktColl->SetFmtAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
-            pIo->m_pAktColl->SetFmtAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
+            pIo->m_pAktColl->SetFormatAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
+            pIo->m_pAktColl->SetFormatAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
         }
     }
 }
 
 bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisStyle, sal_uInt16 nNextStyle)
 {
-    SwFmt* pColl;
+    SwFormat* pColl;
     bool bStyExist;
 
     if (rSI.bColl)
@@ -3761,12 +3761,12 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     {
         if (bStyExist)
         {
-            pColl->ResetAllFmtAttr(); // #i73790# - method renamed
+            pColl->ResetAllFormatAttr(); // #i73790# - method renamed
         }
         pColl->SetAuto(false);          // suggested by JP
     }                                   // but changes the UI
     pIo->m_pAktColl = pColl;
-    rSI.pFmt = pColl;                  // remember translation WW->SW
+    rSI.pFormat = pColl;                  // remember translation WW->SW
     rSI.bImportSkipped = !bImport;
 
     // Set Based on style
@@ -3774,9 +3774,9 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     if (j != nThisStyle && j < cstd )
     {
         SwWW8StyInf* pj = &pIo->m_vColl[j];
-        if (rSI.pFmt && pj->pFmt && rSI.bColl == pj->bColl)
+        if (rSI.pFormat && pj->pFormat && rSI.bColl == pj->bColl)
         {
-            rSI.pFmt->SetDerivedFrom( pj->pFmt );  // ok, set Based on
+            rSI.pFormat->SetDerivedFrom( pj->pFormat );  // ok, set Based on
             rSI.eLTRFontSrcCharSet = pj->eLTRFontSrcCharSet;
             rSI.eRTLFontSrcCharSet = pj->eRTLFontSrcCharSet;
             rSI.eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
@@ -3794,12 +3794,12 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
         }
     }
     else if( pIo->m_bNewDoc && bStyExist )
-        rSI.pFmt->SetDerivedFrom(0);
+        rSI.pFormat->SetDerivedFrom(0);
 
     rSI.nFollow = nNextStyle;       // remember Follow
 
     pStyRule = 0;                   // recreate if necessary
-    bTxtColChanged = bFontChanged = bCJKFontChanged = bCTLFontChanged =
+    bTextColChanged = bFontChanged = bCJKFontChanged = bCTLFontChanged =
         bFSizeChanged = bFCTLSizeChanged = bWidowsChanged = false;
     pIo->SetNAktColl( nThisStyle );
     pIo->m_bStyNormal = nThisStyle == 0;
@@ -3811,7 +3811,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
     // Reset attribute flags, because there are no style-ends.
 
     pIo->m_bHasBorder = pIo->m_bSpec = pIo->m_bObj = pIo->m_bSymbol = false;
-    pIo->m_nCharFmt = -1;
+    pIo->m_nCharFormat = -1;
 
     // If Style basiert auf Nichts oder Basis ignoriert
     if ((rSI.nBase >= cstd || pIo->m_vColl[rSI.nBase].bImportSkipped) && rSI.bColl)
@@ -3898,7 +3898,7 @@ void WW8RStyle::RecursiveReg(sal_uInt16 nNr)
     if( rSI.nBase < cstd && !pIo->m_vColl[rSI.nBase].bImported )
         RecursiveReg(rSI.nBase);
 
-    pIo->RegisterNumFmtOnStyle(nNr);
+    pIo->RegisterNumFormatOnStyle(nNr);
 
 }
 
@@ -4093,7 +4093,7 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
         aChpx.fItalic = (nFlags8 & 0x02) >> 1;
         aChpx.fRMarkDel = (nFlags8 & 0x04) >> 2;
         aChpx.fOutline = (nFlags8 & 0x08) >> 3;
-        aChpx.fFldVanish = (nFlags8 & 0x10) >> 4;
+        aChpx.fFieldVanish = (nFlags8 & 0x10) >> 4;
         aChpx.fSmallCaps = (nFlags8 & 0x20) >> 5;
         aChpx.fCaps = (nFlags8 & 0x40) >> 6;
         aChpx.fVanish = (nFlags8 & 0x80) >> 7;
@@ -4416,9 +4416,9 @@ void WW8RStyle::ImportStyles()
 
 void WW8RStyle::Import()
 {
-    pIo->m_pDfltTxtFmtColl  = pIo->m_rDoc.GetDfltTxtFmtColl();
-    pIo->m_pStandardFmtColl =
-        pIo->m_rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false);
+    pIo->m_pDfltTextFormatColl  = pIo->m_rDoc.GetDfltTextFormatColl();
+    pIo->m_pStandardFormatColl =
+        pIo->m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false);
 
     if( pIo->m_nIniFlags & WW8FL_NO_STYLES )
         return;
@@ -4434,12 +4434,12 @@ void WW8RStyle::Import()
         {
             SwWW8StyInf* pj = &pIo->m_vColl[j];
             if ( j != i                             // rational Index ?
-                 && pi->pFmt                        // Format ok ?
-                 && pj->pFmt                        // Derived-Format ok ?
+                 && pi->pFormat                        // Format ok ?
+                 && pj->pFormat                        // Derived-Format ok ?
                  && pi->bColl                       // only possible for paragraph templates (WW)
                  && pj->bColl ){                    // identical Typ ?
-                    static_cast<SwTxtFmtColl*>(pi->pFmt)->SetNextTxtFmtColl(
-                     *static_cast<SwTxtFmtColl*>(pj->pFmt) );    // ok, register
+                    static_cast<SwTextFormatColl*>(pi->pFormat)->SetNextTextFormatColl(
+                     *static_cast<SwTextFormatColl*>(pj->pFormat) );    // ok, register
             }
         }
     }
@@ -4449,21 +4449,21 @@ void WW8RStyle::Import()
     // That is empty by default ( WW6 dt and US ) and not changeable
     // via WW-UI so this does not matter.
     // This could be done by:
-    //  if( bNew ) rDoc.SetDefault( pDefCharFmt->GetAttrSet() );
+    //  if( bNew ) rDoc.SetDefault( pDefCharFormat->GetAttrSet() );
 
     // for e.g. tables an always valid Std-Style is necessary
 
     if( pIo->StyleExists(0) && !pIo->m_vColl.empty() &&
-        pIo->m_vColl[0].pFmt && pIo->m_vColl[0].bColl && pIo->m_vColl[0].bValid )
-        pIo->m_pDfltTxtFmtColl = static_cast<SwTxtFmtColl*>(pIo->m_vColl[0].pFmt);
+        pIo->m_vColl[0].pFormat && pIo->m_vColl[0].bColl && pIo->m_vColl[0].bValid )
+        pIo->m_pDfltTextFormatColl = static_cast<SwTextFormatColl*>(pIo->m_vColl[0].pFormat);
     else
-        pIo->m_pDfltTxtFmtColl = pIo->m_rDoc.GetDfltTxtFmtColl();
+        pIo->m_pDfltTextFormatColl = pIo->m_rDoc.GetDfltTextFormatColl();
 
     // set Hyphenation flag on BASIC para-style
-    if (pIo->m_bNewDoc && pIo->m_pStandardFmtColl)
+    if (pIo->m_bNewDoc && pIo->m_pStandardFormatColl)
     {
         if (pIo->m_pWDop->fAutoHyphen
-            && SfxItemState::SET != pIo->m_pStandardFmtColl->GetItemState(
+            && SfxItemState::SET != pIo->m_pStandardFormatColl->GetItemState(
                                             RES_PARATR_HYPHENZONE, false) )
         {
             SvxHyphenZoneItem aAttr(true, RES_PARATR_HYPHENZONE);
@@ -4471,7 +4471,7 @@ void WW8RStyle::Import()
             aAttr.GetMinTrail()   = 2;
             aAttr.GetMaxHyphens() = 0;
 
-            pIo->m_pStandardFmtColl->SetFmtAttr( aAttr );
+            pIo->m_pStandardFormatColl->SetFormatAttr( aAttr );
         }
 
         /*
@@ -4479,10 +4479,10 @@ void WW8RStyle::Import()
         the page/sections rtl setting the standard style lack of rtl still
         means ltr
         */
-        if (SfxItemState::SET != pIo->m_pStandardFmtColl->GetItemState(RES_FRAMEDIR,
+        if (SfxItemState::SET != pIo->m_pStandardFormatColl->GetItemState(RES_FRAMEDIR,
             false))
         {
-           pIo->m_pStandardFmtColl->SetFmtAttr(
+           pIo->m_pStandardFormatColl->SetFormatAttr(
                 SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
         }
     }
@@ -4493,14 +4493,14 @@ void WW8RStyle::Import()
 
 rtl_TextEncoding SwWW8StyInf::GetCharSet() const
 {
-    if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+    if ((pFormat) && (pFormat->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return eRTLFontSrcCharSet;
     return eLTRFontSrcCharSet;
 }
 
 rtl_TextEncoding SwWW8StyInf::GetCJKCharSet() const
 {
-    if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+    if ((pFormat) && (pFormat->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return eRTLFontSrcCharSet;
     return eCJKFontSrcCharSet;
 }

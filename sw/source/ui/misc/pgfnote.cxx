@@ -159,22 +159,22 @@ VclPtr<SfxTabPage> SwFootNotePage::Create(vcl::Window *pParent, const SfxItemSet
 void SwFootNotePage::Reset(const SfxItemSet *rSet)
 {
     // if no example exists, otherwise Init here in Activate
-    boost::scoped_ptr<SwPageFtnInfo> pDefFtnInfo;
-    const SwPageFtnInfo* pFtnInfo;
+    boost::scoped_ptr<SwPageFootnoteInfo> pDefFootnoteInfo;
+    const SwPageFootnoteInfo* pFootnoteInfo;
     const SfxPoolItem* pItem = SfxTabPage::GetItem(*rSet, FN_PARAM_FTN_INFO);
     if( pItem )
     {
-        pFtnInfo = &static_cast<const SwPageFtnInfoItem*>(pItem)->GetPageFtnInfo();
+        pFootnoteInfo = &static_cast<const SwPageFootnoteInfoItem*>(pItem)->GetPageFootnoteInfo();
     }
     else
     {
         // when "standard" is being activated the footnote item is deleted,
         // that's why a footnote structure has to be created here
-        pDefFtnInfo.reset(new SwPageFtnInfo());
-        pFtnInfo = pDefFtnInfo.get();
+        pDefFootnoteInfo.reset(new SwPageFootnoteInfo());
+        pFootnoteInfo = pDefFootnoteInfo.get();
     }
         // footnote area's height
-    SwTwips lHeight = pFtnInfo->GetHeight();
+    SwTwips lHeight = pFootnoteInfo->GetHeight();
     if(lHeight)
     {
         m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(lHeight),FUNIT_TWIP);
@@ -196,7 +196,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     m_pLineWidthEdit->SetModifyHdl( LINK( this, SwFootNotePage, LineWidthChanged_Impl ) );
 
     sal_Int64 nWidthPt = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
-            sal_Int64( pFtnInfo->GetLineWidth() ), m_pLineWidthEdit->GetDecimalDigits(),
+            sal_Int64( pFootnoteInfo->GetLineWidth() ), m_pLineWidthEdit->GetDecimalDigits(),
             MAP_TWIP, m_pLineWidthEdit->GetUnit( ) ));
     m_pLineWidthEdit->SetValue( nWidthPt );
 
@@ -213,8 +213,8 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     m_pLineTypeBox->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DASHED),
         table::BorderLineStyle::DASHED );
-    m_pLineTypeBox->SetWidth( pFtnInfo->GetLineWidth( ) );
-    m_pLineTypeBox->SelectEntry( pFtnInfo->GetLineStyle() );
+    m_pLineTypeBox->SetWidth( pFootnoteInfo->GetLineWidth( ) );
+    m_pLineTypeBox->SelectEntry( pFootnoteInfo->GetLineStyle() );
 
     // Separator Color
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
@@ -244,69 +244,69 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     }
 
     // select color in the list or add it as a user color
-    sal_Int32 nSelPos = m_pLineColorBox->GetEntryPos( pFtnInfo->GetLineColor() );
+    sal_Int32 nSelPos = m_pLineColorBox->GetEntryPos( pFootnoteInfo->GetLineColor() );
     if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
-        nSelPos = m_pLineColorBox->InsertEntry( pFtnInfo->GetLineColor(),
+        nSelPos = m_pLineColorBox->InsertEntry( pFootnoteInfo->GetLineColor(),
                 SVX_RESSTR(RID_SVXSTR_COLOR_USER) );
 
     m_pLineColorBox->SetSelectHdl( LINK( this, SwFootNotePage, LineColorSelected_Impl ) );
     m_pLineColorBox->SelectEntryPos( nSelPos );
-    m_pLineTypeBox->SetColor( pFtnInfo->GetLineColor() );
+    m_pLineTypeBox->SetColor( pFootnoteInfo->GetLineColor() );
 
     // position
-    m_pLinePosBox->SelectEntryPos( static_cast< sal_Int32 >(pFtnInfo->GetAdj()) );
+    m_pLinePosBox->SelectEntryPos( static_cast< sal_Int32 >(pFootnoteInfo->GetAdj()) );
 
         // width
     Fraction aTmp( 100, 1 );
-    aTmp *= pFtnInfo->GetWidth();
+    aTmp *= pFootnoteInfo->GetWidth();
     m_pLineLengthEdit->SetValue( static_cast<long>(aTmp) );
 
         // gap footnote area
-    m_pDistEdit->SetValue(m_pDistEdit->Normalize(pFtnInfo->GetTopDist()),FUNIT_TWIP);
+    m_pDistEdit->SetValue(m_pDistEdit->Normalize(pFootnoteInfo->GetTopDist()),FUNIT_TWIP);
     m_pLineDistEdit->SetValue(
-        m_pLineDistEdit->Normalize(pFtnInfo->GetBottomDist()), FUNIT_TWIP);
+        m_pLineDistEdit->Normalize(pFootnoteInfo->GetBottomDist()), FUNIT_TWIP);
     ActivatePage( *rSet );
 }
 
 // stuff attributes into the set, when OK
 bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 {
-    SwPageFtnInfoItem aItem(static_cast<const SwPageFtnInfoItem&>(GetItemSet().Get(FN_PARAM_FTN_INFO)));
+    SwPageFootnoteInfoItem aItem(static_cast<const SwPageFootnoteInfoItem&>(GetItemSet().Get(FN_PARAM_FTN_INFO)));
 
     // that's the original
-    SwPageFtnInfo &rFtnInfo = aItem.GetPageFtnInfo();
+    SwPageFootnoteInfo &rFootnoteInfo = aItem.GetPageFootnoteInfo();
 
         // footnote area's height
     if(m_pMaxHeightBtn->IsChecked())
-        rFtnInfo.SetHeight( static_cast< SwTwips >(
+        rFootnoteInfo.SetHeight( static_cast< SwTwips >(
                 m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP))));
     else
-        rFtnInfo.SetHeight(0);
+        rFootnoteInfo.SetHeight(0);
 
         // gap footnote area
-    rFtnInfo.SetTopDist(  static_cast< SwTwips >(
+    rFootnoteInfo.SetTopDist(  static_cast< SwTwips >(
             m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP))));
-    rFtnInfo.SetBottomDist(  static_cast< SwTwips >(
+    rFootnoteInfo.SetBottomDist(  static_cast< SwTwips >(
             m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP))));
 
     // Separator style
-    rFtnInfo.SetLineStyle( ::editeng::SvxBorderStyle( m_pLineTypeBox->GetSelectEntryStyle() ) );
+    rFootnoteInfo.SetLineStyle( ::editeng::SvxBorderStyle( m_pLineTypeBox->GetSelectEntryStyle() ) );
 
     // Separator width
     long nWidth = static_cast<long>(MetricField::ConvertDoubleValue(
                    m_pLineWidthEdit->GetValue( ),
                    m_pLineWidthEdit->GetDecimalDigits( ),
                    m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
-    rFtnInfo.SetLineWidth( nWidth );
+    rFootnoteInfo.SetLineWidth( nWidth );
 
     // Separator color
-    rFtnInfo.SetLineColor( m_pLineColorBox->GetSelectEntryColor() );
+    rFootnoteInfo.SetLineColor( m_pLineColorBox->GetSelectEntryColor() );
 
         // Position
-    rFtnInfo.SetAdj((SwFtnAdj)m_pLinePosBox->GetSelectEntryPos());
+    rFootnoteInfo.SetAdj((SwFootnoteAdj)m_pLinePosBox->GetSelectEntryPos());
 
         // Breite
-    rFtnInfo.SetWidth(Fraction( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));
+    rFootnoteInfo.SetWidth(Fraction( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));
 
     const SfxPoolItem* pOldItem;
     if(0 == (pOldItem = GetOldItem( *rSet, FN_PARAM_FTN_INFO )) ||

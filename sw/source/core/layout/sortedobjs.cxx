@@ -78,12 +78,12 @@ struct ObjAnchorOrder
                      const SwAnchoredObject* _pNewAnchoredObj )
     {
         // get attributes of listed object
-        const SwFrmFmt& rFmtListed = _pListedAnchoredObj->GetFrmFmt();
-        const SwFmtAnchor* pAnchorListed = &(rFmtListed.GetAnchor());
+        const SwFrameFormat& rFormatListed = _pListedAnchoredObj->GetFrameFormat();
+        const SwFormatAnchor* pAnchorListed = &(rFormatListed.GetAnchor());
 
         // get attributes of new object
-        const SwFrmFmt& rFmtNew = _pNewAnchoredObj->GetFrmFmt();
-        const SwFmtAnchor* pAnchorNew = &(rFmtNew.GetAnchor());
+        const SwFrameFormat& rFormatNew = _pNewAnchoredObj->GetFrameFormat();
+        const SwFormatAnchor* pAnchorNew = &(rFormatNew.GetAnchor());
 
         // check for to-page anchored objects
         if ((pAnchorListed->GetAnchorId() == FLY_AT_PAGE) &&
@@ -122,24 +122,24 @@ struct ObjAnchorOrder
 
         // Both objects aren't anchor to page or to fly
         // Thus, compare content anchor nodes, if existing.
-        const SwPosition* pCntntAnchorListed = pAnchorListed->GetCntntAnchor();
-        const SwPosition* pCntntAnchorNew = pAnchorNew->GetCntntAnchor();
-        if ( pCntntAnchorListed && pCntntAnchorNew &&
-             pCntntAnchorListed->nNode != pCntntAnchorNew->nNode )
+        const SwPosition* pContentAnchorListed = pAnchorListed->GetContentAnchor();
+        const SwPosition* pContentAnchorNew = pAnchorNew->GetContentAnchor();
+        if ( pContentAnchorListed && pContentAnchorNew &&
+             pContentAnchorListed->nNode != pContentAnchorNew->nNode )
         {
-            return pCntntAnchorListed->nNode < pCntntAnchorNew->nNode;
+            return pContentAnchorListed->nNode < pContentAnchorNew->nNode;
         }
 
         // objects anchored at the same content.
         // --> OD 2006-11-29 #???# - objects have to be ordered by anchor node position
         // Thus, compare content anchor node positions and anchor type,
         // if not anchored at-paragraph
-        if (pCntntAnchorListed && pCntntAnchorNew)
+        if (pContentAnchorListed && pContentAnchorNew)
         {
             sal_Int32 nListedIndex = pAnchorListed->GetAnchorId() != FLY_AT_PARA ?
-                pCntntAnchorListed->nContent.GetIndex() : 0;
+                pContentAnchorListed->nContent.GetIndex() : 0;
             sal_Int32 nNewIndex = pAnchorNew->GetAnchorId() != FLY_AT_PARA ?
-                pCntntAnchorNew->nContent.GetIndex() : 0;
+                pContentAnchorNew->nContent.GetIndex() : 0;
             if (nListedIndex != nNewIndex)
             {
                 return nListedIndex < nNewIndex;
@@ -156,15 +156,15 @@ struct ObjAnchorOrder
         // objects anchored at the same content and at the same content anchor
         // node position with the same anchor type
         // Thus, compare its wrapping style including its layer
-        const IDocumentDrawModelAccess* pIDDMA = rFmtListed.getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess* pIDDMA = rFormatListed.getIDocumentDrawModelAccess();
         const SdrLayerID nHellId = pIDDMA->GetHellId();
         const SdrLayerID nInvisibleHellId = pIDDMA->GetInvisibleHellId();
         const bool bWrapThroughOrHellListed =
-                    rFmtListed.GetSurround().GetSurround() == SURROUND_THROUGHT ||
+                    rFormatListed.GetSurround().GetSurround() == SURROUND_THROUGHT ||
                     _pListedAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||
                     _pListedAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
         const bool bWrapThroughOrHellNew =
-                    rFmtNew.GetSurround().GetSurround() == SURROUND_THROUGHT ||
+                    rFormatNew.GetSurround().GetSurround() == SURROUND_THROUGHT ||
                     _pNewAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||
                     _pNewAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
         if ( bWrapThroughOrHellListed != bWrapThroughOrHellNew )
@@ -181,10 +181,10 @@ struct ObjAnchorOrder
 
         // objects anchored at the same content with a set text wrapping
         // Thus, compare wrap influences on object position
-        const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosListed =
-                                        &(rFmtListed.GetWrapInfluenceOnObjPos());
-        const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosNew =
-                                        &(rFmtNew.GetWrapInfluenceOnObjPos());
+        const SwFormatWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosListed =
+                                        &(rFormatListed.GetWrapInfluenceOnObjPos());
+        const SwFormatWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosNew =
+                                        &(rFormatNew.GetWrapInfluenceOnObjPos());
         // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
         if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true ) !=
                 pWrapInfluenceOnObjPosNew->GetWrapInfluenceOnObjPos( true ) )

@@ -28,18 +28,18 @@
 
 namespace rtl { class OUString; }
 
-class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
+class SW_DLLPUBLIC SwTableBoxNumFormat : public SfxUInt32Item
 {
     bool bAuto;     ///< automatically given flag
 public:
-    SwTblBoxNumFormat( sal_uInt32 nFormat = css::util::NumberFormat::TEXT,
+    SwTableBoxNumFormat( sal_uInt32 nFormat = css::util::NumberFormat::TEXT,
                         bool bAuto = false );
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
-    inline SwTblBoxNumFormat& operator=( const SwTblBoxNumFormat& rAttr )
+    inline SwTableBoxNumFormat& operator=( const SwTableBoxNumFormat& rAttr )
     {
         SetValue( rAttr.GetValue() );
         SetAutoFlag( rAttr.GetAutoFlag() );
@@ -50,14 +50,14 @@ public:
     void SetAutoFlag( bool bFlag = true )       { bAuto = bFlag; }
 };
 
-class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
+class SwTableBoxFormula : public SfxPoolItem, public SwTableFormula
 {
     SwModify* pDefinedIn;   // Modify object where the formula is located
                             // can only be TableBoxFormat
 
 public:
-    SwTblBoxFormula( const OUString& rFormula );
-    virtual ~SwTblBoxFormula() {};
+    SwTableBoxFormula( const OUString& rFormula );
+    virtual ~SwTableBoxFormula() {};
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -71,24 +71,24 @@ public:
 
           SwTableBox* GetTableBox();
     const SwTableBox* GetTableBox() const
-        { return const_cast<SwTblBoxFormula*>(this)->GetTableBox(); }
+        { return const_cast<SwTableBoxFormula*>(this)->GetTableBox(); }
 
     void ChangeState( const SfxPoolItem* pItem );
-    void Calc( SwTblCalcPara& rCalcPara, double& rValue );
+    void Calc( SwTableCalcPara& rCalcPara, double& rValue );
 };
 
-class SW_DLLPUBLIC SwTblBoxValue : public SfxPoolItem
+class SW_DLLPUBLIC SwTableBoxValue : public SfxPoolItem
 {
     double nValue;
 public:
-    SwTblBoxValue();
-    SwTblBoxValue( const double aVal );
+    SwTableBoxValue();
+    SwTableBoxValue( const double aVal );
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
-    inline SwTblBoxValue& operator=( const SwTblBoxValue& rCmp )
+    inline SwTableBoxValue& operator=( const SwTableBoxValue& rCmp )
     {
         nValue = rCmp.nValue;
         return *this;
@@ -97,19 +97,19 @@ public:
     double GetValue() const                     { return nValue; }
 };
 
-inline const SwTblBoxNumFormat      &SwAttrSet::GetTblBoxNumFmt(bool bInP) const
-    {   return static_cast<const SwTblBoxNumFormat&>(Get( RES_BOXATR_FORMAT,bInP)); }
-inline const SwTblBoxFormula        &SwAttrSet::GetTblBoxFormula(bool bInP) const
-    {   return static_cast<const SwTblBoxFormula&>(Get( RES_BOXATR_FORMULA,bInP)); }
-inline const SwTblBoxValue          &SwAttrSet::GetTblBoxValue(bool bInP) const
-    {   return static_cast<const SwTblBoxValue&>(Get( RES_BOXATR_VALUE, bInP)); }
+inline const SwTableBoxNumFormat      &SwAttrSet::GetTableBoxNumFormat(bool bInP) const
+    {   return static_cast<const SwTableBoxNumFormat&>(Get( RES_BOXATR_FORMAT,bInP)); }
+inline const SwTableBoxFormula        &SwAttrSet::GetTableBoxFormula(bool bInP) const
+    {   return static_cast<const SwTableBoxFormula&>(Get( RES_BOXATR_FORMULA,bInP)); }
+inline const SwTableBoxValue          &SwAttrSet::GetTableBoxValue(bool bInP) const
+    {   return static_cast<const SwTableBoxValue&>(Get( RES_BOXATR_VALUE, bInP)); }
 
-inline const SwTblBoxNumFormat      &SwFmt::GetTblBoxNumFmt(bool bInP) const
-    {   return m_aSet.GetTblBoxNumFmt(bInP); }
-inline const SwTblBoxFormula        &SwFmt::GetTblBoxFormula(bool bInP) const
-    {   return m_aSet.GetTblBoxFormula(bInP); }
-inline const SwTblBoxValue          &SwFmt::GetTblBoxValue(bool bInP) const
-    {   return m_aSet.GetTblBoxValue(bInP); }
+inline const SwTableBoxNumFormat      &SwFormat::GetTableBoxNumFormat(bool bInP) const
+    {   return m_aSet.GetTableBoxNumFormat(bInP); }
+inline const SwTableBoxFormula        &SwFormat::GetTableBoxFormula(bool bInP) const
+    {   return m_aSet.GetTableBoxFormula(bInP); }
+inline const SwTableBoxValue          &SwFormat::GetTableBoxValue(bool bInP) const
+    {   return m_aSet.GetTableBoxValue(bInP); }
 
 #endif
 

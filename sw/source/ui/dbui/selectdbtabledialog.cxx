@@ -116,12 +116,12 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     Reference<XTablesSupplier> xTSupplier(m_xConnection, UNO_QUERY);
     if (xTSupplier.is())
     {
-        Reference<XNameAccess> xTbls = xTSupplier->getTables();
-        Sequence<OUString> aTbls = xTbls->getElementNames();
-        const OUString* pTbls = aTbls.getConstArray();
-        for(long i = 0; i < aTbls.getLength(); i++)
+        Reference<XNameAccess> xTables = xTSupplier->getTables();
+        Sequence<OUString> aTables = xTables->getElementNames();
+        const OUString* pTables = aTables.getConstArray();
+        for(long i = 0; i < aTables.getLength(); i++)
         {
-            OUString sEntry = pTbls[i];
+            OUString sEntry = pTables[i];
             sEntry += "\t";
             sEntry += m_sTable;
             SvTreeListEntry* pEntry = m_pTable->InsertEntry(sEntry);

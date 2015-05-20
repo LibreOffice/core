@@ -77,7 +77,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
 
         long nWidth = aRect.Width();
-        aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
+        aSet.Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth));
 
         // height=width for more consistent preview (analog to edit region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
@@ -109,7 +109,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         if(SfxItemState::SET == pSet->GetItemState(SID_ATTR_COLUMNS, false, &pItem)||
             SfxItemState::SET == pSet->GetItemState(FN_INSERT_REGION, false, &pItem))
         {
-            SwFmtCol aCol;
+            SwFormatCol aCol;
             SwRect aRect;
             rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
             long nWidth = aRect.Width();
@@ -188,7 +188,7 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         SwRect aRect;
         CalcBoundRect(aRect, FLY_AS_CHAR);
         long nWidth = aRect.Width();
-        aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
+        aSet.Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth));
         // height=width for more consistent preview (analog to edit region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

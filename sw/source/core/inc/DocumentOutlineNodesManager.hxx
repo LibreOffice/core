@@ -35,7 +35,7 @@ public:
 
     DocumentOutlineNodesManager( SwDoc& i_rSwdoc );
 
-    //typedef ::std::vector< const SwTxtNode* > tSortedOutlineNodeList;
+    //typedef ::std::vector< const SwTextNode* > tSortedOutlineNodeList;
 
     sal_Int32 getOutlineNodesCount() const SAL_OVERRIDE;
 
@@ -43,8 +43,8 @@ public:
     OUString getOutlineText( const sal_Int32 nIdx,
                                   const bool bWithNumber = true,
                                   const bool bWithSpacesForLevel = false,
-                                  const bool bWithFtn = true ) const SAL_OVERRIDE;
-    SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const SAL_OVERRIDE;
+                                  const bool bWithFootnote = true ) const SAL_OVERRIDE;
+    SwTextNode* getOutlineNode( const sal_Int32 nIdx ) const SAL_OVERRIDE;
     void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const SAL_OVERRIDE;
 
     virtual ~DocumentOutlineNodesManager();

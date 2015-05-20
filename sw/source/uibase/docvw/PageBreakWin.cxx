@@ -242,8 +242,8 @@ void SwPageBreakWin::Select( )
                         rSh.Push( );
                         rSh.ClearMark();
 
-                        SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
-                        SwCntntNode* pNd = pCnt->GetNode();
+                        SwContentFrm *pCnt = const_cast< SwContentFrm* >( pBodyFrm->ContainsContent() );
+                        SwContentNode* pNd = pCnt->GetNode();
                         rSh.SetSelection( *pNd );
 
                         SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
@@ -254,8 +254,8 @@ void SwPageBreakWin::Select( )
                     }
                     else
                     {
-                        SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
-                        SwCntntNode* pNd = pCnt->GetNode();
+                        SwContentFrm *pCnt = const_cast< SwContentFrm* >( pBodyFrm->ContainsContent() );
+                        SwContentNode* pNd = pCnt->GetNode();
 
                         SwPaM aPaM( *pNd );
                         SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
@@ -276,8 +276,8 @@ void SwPageBreakWin::Select( )
 
                 if ( pBodyFrm )
                 {
-                    SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
-                    SwCntntNode* pNd = pCnt->GetNode();
+                    SwContentFrm *pCnt = const_cast< SwContentFrm* >( pBodyFrm->ContainsContent() );
+                    SwContentNode* pNd = pCnt->GetNode();
 
                     pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
 
@@ -285,8 +285,8 @@ void SwPageBreakWin::Select( )
                             RES_PAGEDESC, RES_PAGEDESC,
                             RES_BREAK, RES_BREAK,
                             NULL );
-                    aSet.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
-                    aSet.Put( SwFmtPageDesc( NULL ) );
+                    aSet.Put( SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
+                    aSet.Put( SwFormatPageDesc( NULL ) );
 
                     SwPaM aPaM( *pNd );
                     pNd->GetDoc()->getIDocumentContentOperations().InsertItemSet( aPaM, aSet, SetAttrMode::DEFAULT );

@@ -30,7 +30,7 @@ namespace com { namespace star {
 } }
 
 class SwFlyFrm;
-class SwNoTxtNode;
+class SwNoTextNode;
 class SwAccessibleNoTextHyperlink;
 
 class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
@@ -47,7 +47,7 @@ class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
 protected:
     virtual ~SwAccessibleNoTextFrame();
 
-    const SwNoTxtNode *GetNoTxtNode() const;
+    const SwNoTextNode *GetNoTextNode() const;
 
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 

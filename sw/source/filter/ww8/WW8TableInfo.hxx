@@ -114,7 +114,7 @@ class CellInfo
 {
     SwRect m_aRect;
     WW8TableNodeInfo * m_pNodeInfo;
-    unsigned long m_nFmtFrmWidth;
+    unsigned long m_nFormatFrmWidth;
 
 public:
     CellInfo(const SwRect & aRect, WW8TableNodeInfo * pNodeInfo);
@@ -122,7 +122,7 @@ public:
     CellInfo(const CellInfo & aRectAndTableInfo)
         : m_aRect(aRectAndTableInfo.m_aRect),
           m_pNodeInfo(aRectAndTableInfo.m_pNodeInfo),
-          m_nFmtFrmWidth(aRectAndTableInfo.m_nFmtFrmWidth)
+          m_nFormatFrmWidth(aRectAndTableInfo.m_nFormatFrmWidth)
     {
     }
 
@@ -139,14 +139,14 @@ public:
     SwRect getRect() const { return m_aRect; }
     WW8TableNodeInfo * getTableNodeInfo() const
     { return m_pNodeInfo; }
-    unsigned long getFmtFrmWidth() const
+    unsigned long getFormatFrmWidth() const
     {
-        return m_nFmtFrmWidth;
+        return m_nFormatFrmWidth;
     }
 
-    void setFmtFrmWidth(unsigned long nFmtFrmWidth)
+    void setFormatFrmWidth(unsigned long nFormatFrmWidth)
     {
-        m_nFmtFrmWidth = nFmtFrmWidth;
+        m_nFormatFrmWidth = nFormatFrmWidth;
     }
 
 #ifdef DBG_UTIL
@@ -175,7 +175,7 @@ private:
 public:
     typedef boost::shared_ptr<WW8TableNodeInfo> Pointer_t;
 
-    WW8TableNodeInfo(WW8TableInfo * pParent, const SwNode * pTxtNode);
+    WW8TableNodeInfo(WW8TableInfo * pParent, const SwNode * pTextNode);
     virtual ~WW8TableNodeInfo();
 
     void setDepth(sal_uInt32 nDepth);
@@ -276,7 +276,7 @@ public:
     ~WW8TableCellGrid();
 
     void insert(const SwRect & rRect, WW8TableNodeInfo * pNodeInfo,
-                unsigned long * pFmtFrmWidth = NULL);
+                unsigned long * pFormatFrmWidth = NULL);
     void addShadowCells();
     WW8TableNodeInfo * connectCells();
 

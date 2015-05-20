@@ -24,10 +24,10 @@
 namespace vcl { class Window; }
 class SfxItemSet;
 
-class SwNumFmtDlg : public SfxSingleTabDialog
+class SwNumFormatDlg : public SfxSingleTabDialog
 {
 public:
-     SwNumFmtDlg(vcl::Window* pParent, const SfxItemSet& rSet);
+     SwNumFormatDlg(vcl::Window* pParent, const SfxItemSet& rSet);
 };
 
 #endif

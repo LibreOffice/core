@@ -38,7 +38,7 @@ class SwLayoutFrm;
 class SwPaM;
 class SwNode;
 class SwTable;
-class SwUndoTblMerge;
+class SwUndoTableMerge;
 class SwCellFrm;
 
 typedef ::std::deque< SwCellFrm* > SwCellFrms;
@@ -56,32 +56,32 @@ class SwSelBoxes : public o3tl::sorted_vector<SwTableBox*, CompareSwSelBoxes> {}
 // Selection gets extended in given direction according to enum-parameter.
 // Boxes are collected via the Layout; works correctly if tables are split.
 // (Cf. MakeSelUnions().)
-typedef sal_uInt16 SwTblSearchType;
-namespace nsSwTblSearchType
+typedef sal_uInt16 SwTableSearchType;
+namespace nsSwTableSearchType
 {
-    const SwTblSearchType TBLSEARCH_NONE = 0x1;       // No extension.
-    const SwTblSearchType TBLSEARCH_ROW  = 0x2;       // Extend to rows.
-    const SwTblSearchType TBLSEARCH_COL  = 0x3;       // Extend to columns.
+    const SwTableSearchType TBLSEARCH_NONE = 0x1;       // No extension.
+    const SwTableSearchType TBLSEARCH_ROW  = 0x2;       // Extend to rows.
+    const SwTableSearchType TBLSEARCH_COL  = 0x3;       // Extend to columns.
 
     // As flag to the other values!
-    const SwTblSearchType TBLSEARCH_PROTECT = 0x8;      // Collect protected boxes too.
-    const SwTblSearchType TBLSEARCH_NO_UNION_CORRECT = 0x10; // Do not correct collected Union.
+    const SwTableSearchType TBLSEARCH_PROTECT = 0x8;      // Collect protected boxes too.
+    const SwTableSearchType TBLSEARCH_NO_UNION_CORRECT = 0x10; // Do not correct collected Union.
 }
 
-SW_DLLPUBLIC void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
-                const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
+SW_DLLPUBLIC void GetTableSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
+                const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
-void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
-                const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
+void GetTableSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
+                const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
 // As before, but don't start from selection but from Start- EndFrms.
-void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
+void GetTableSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 SwSelBoxes& rBoxes, SwCellFrms* pCells,
-                const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
+                const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
 // As before but directly via PaMs.
-void GetTblSelCrs( const SwCrsrShell& rShell, SwSelBoxes& rBoxes );
-void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes );
+void GetTableSelCrs( const SwCrsrShell& rShell, SwSelBoxes& rBoxes );
+void GetTableSelCrs( const SwTableCursor& rTableCrsr, SwSelBoxes& rBoxes );
 
 // Collect boxes relevant for auto sum.
 bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
@@ -93,16 +93,16 @@ bool HasProtectedCells( const SwSelBoxes& rBoxes );
 bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd);
 
 // Check if cell is part of SSelection.
-// (Became a function, in order to make sure that GetTblSel() and MakeTblCrsr()
+// (Became a function, in order to make sure that GetTableSel() and MakeTableCrsr()
 // have always the same concept of the selection.
-bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell );
+bool IsFrmInTableSel( const SwRect& rUnion, const SwFrm* pCell );
 
 // Determine boxes to be merged.
 // In this process the rectangle gets "adapted" on the base of the layout,
 // i.e. boxes are added if some overlap at the sides.
 // Additionally a new box is created and filled with the relevant content.
 void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
-                  SwTableBox** ppMergeBox, SwUndoTblMerge* pUndo = 0 );
+                  SwTableBox** ppMergeBox, SwUndoTableMerge* pUndo = 0 );
 
 // Check if selected boxes allow for a valid merge.
 sal_uInt16 CheckMergeSel( const SwPaM& rPam );
@@ -112,9 +112,9 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 
 // Check if Split or InsertCol lead to a box becoming smaller than MINLAY.
 bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
-                        const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
+                        const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
-                        const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
+                        const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
 // For working on tab selection also for split tables.
 class SwSelUnion
@@ -138,11 +138,11 @@ typedef boost::ptr_vector<SwSelUnion> SwSelUnions;
 
 // Gets the tables involved in a table selection and the union-rectangles of the selections
 // - also for split tables.
-// If a parameter is passed that != nsSwTblSearchType::TBLSEARCH_NONE
+// If a parameter is passed that != nsSwTableSearchType::TBLSEARCH_NONE
 // the selection is extended in the given direction.
 void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
                     const SwLayoutFrm *pEnd,
-                    const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
+                    const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
 // These classes copy the current table selections (rBoxes) into a
 // separate structure while keeping the table structure.

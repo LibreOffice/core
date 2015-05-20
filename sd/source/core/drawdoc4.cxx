@@ -356,7 +356,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-    aLRSpaceItem.SetTxtFirstLineOfst(600);      // Indentation of first line: 6mm; right: 0
+    aLRSpaceItem.SetTextFirstLineOfst(600);      // Indentation of first line: 6mm; right: 0
     pISet->Put(aLRSpaceItem);
 
     // Title

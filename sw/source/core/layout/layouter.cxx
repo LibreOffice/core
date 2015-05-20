@@ -47,13 +47,13 @@ class SwEndnoter
 {
     SwLayouter* pMaster;
     SwSectionFrm* pSect;
-    SwFtnFrms*    pEndArr;
+    SwFootnoteFrms*    pEndArr;
 public:
     SwEndnoter( SwLayouter* pLay )
         : pMaster( pLay ), pSect( NULL ), pEndArr( NULL ) {}
     ~SwEndnoter() { delete pEndArr; }
     void CollectEndnotes( SwSectionFrm* pSct );
-    void CollectEndnote( SwFtnFrm* pFtn );
+    void CollectEndnote( SwFootnoteFrm* pFootnote );
     const SwSectionFrm* GetSect() const { return pSect; }
     void InsertEndnotes();
     bool HasEndnotes() const { return pEndArr && !pEndArr->empty(); }
@@ -69,15 +69,15 @@ void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
     pSect->CollectEndnotes( pMaster );
 }
 
-void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
+void SwEndnoter::CollectEndnote( SwFootnoteFrm* pFootnote )
 {
-    if( pEndArr && pEndArr->end() != std::find( pEndArr->begin(), pEndArr->end(), pFtn ) )
+    if( pEndArr && pEndArr->end() != std::find( pEndArr->begin(), pEndArr->end(), pFootnote ) )
         return;
 
-    if( pFtn->GetUpper() )
+    if( pFootnote->GetUpper() )
     {
-        // pFtn is the master, he incorporates its follows
-        SwFtnFrm *pNxt = pFtn->GetFollow();
+        // pFootnote is the master, he incorporates its follows
+        SwFootnoteFrm *pNxt = pFootnote->GetFollow();
         while ( pNxt )
         {
             SwFrm *pCnt = pNxt->ContainsAny();
@@ -86,7 +86,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
                 do
                 {   SwFrm *pNxtCnt = pCnt->GetNext();
                     pCnt->Cut();
-                    pCnt->Paste( pFtn );
+                    pCnt->Paste( pFootnote );
                     pCnt = pNxtCnt;
                 } while ( pCnt );
             }
@@ -96,27 +96,27 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
                 pNxt->Cut();
                 SwFrm::DestroyFrm(pNxt);
             }
-            pNxt = pFtn->GetFollow();
+            pNxt = pFootnote->GetFollow();
         }
-        if( pFtn->GetMaster() )
+        if( pFootnote->GetMaster() )
             return;
-        pFtn->Cut();
+        pFootnote->Cut();
     }
     else if( pEndArr )
     {
         for ( size_t i = 0; i < pEndArr->size(); ++i )
         {
-            SwFtnFrm *pEndFtn = (*pEndArr)[i];
-            if( pEndFtn->GetAttr() == pFtn->GetAttr() )
+            SwFootnoteFrm *pEndFootnote = (*pEndArr)[i];
+            if( pEndFootnote->GetAttr() == pFootnote->GetAttr() )
             {
-                SwFrm::DestroyFrm(pFtn);
+                SwFrm::DestroyFrm(pFootnote);
                 return;
             }
         }
     }
     if( !pEndArr )
-        pEndArr = new SwFtnFrms;  // deleted from the SwLayouter
-    pEndArr->push_back( pFtn );
+        pEndArr = new SwFootnoteFrms;  // deleted from the SwLayouter
+    pEndArr->push_back( pFootnote );
 }
 
 void SwEndnoter::InsertEndnotes()
@@ -128,12 +128,12 @@ void SwEndnoter::InsertEndnotes()
         pSect = NULL;
         return;
     }
-    OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFtnBossFrm(),
+    OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFootnoteBossFrm(),
             "InsertEndnotes: Where's my column?" );
-    SwFrm* pRef = pSect->FindLastCntnt( FINDMODE_MYLAST );
-    SwFtnBossFrm *pBoss = pRef ? pRef->FindFtnBossFrm()
-                               : static_cast<SwFtnBossFrm*>(pSect->Lower());
-    pBoss->_MoveFtns( *pEndArr );
+    SwFrm* pRef = pSect->FindLastContent( FINDMODE_MYLAST );
+    SwFootnoteBossFrm *pBoss = pRef ? pRef->FindFootnoteBossFrm()
+                               : static_cast<SwFootnoteBossFrm*>(pSect->Lower());
+    pBoss->_MoveFootnotes( *pEndArr );
     delete pEndArr;
     pEndArr = NULL;
     pSect = NULL;
@@ -236,9 +236,9 @@ bool SwLayouter::HasEndnotes() const
     return mpEndnoter->HasEndnotes();
 }
 
-void SwLayouter::CollectEndnote( SwFtnFrm* pFtn )
+void SwLayouter::CollectEndnote( SwFootnoteFrm* pFootnote )
 {
-    mpEndnoter->CollectEndnote( pFtn );
+    mpEndnoter->CollectEndnote( pFootnote );
 }
 
 void SwLayouter::InsertEndnotes( SwSectionFrm* pSect )
@@ -254,7 +254,7 @@ void SwLayouter::LoopControl( SwPageFrm* pPage, sal_uInt8 )
     mpLooping->Control( pPage );
 }
 
-void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
+void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTextFrm& rFrm )
 {
     if ( mpLooping && mpLooping->IsLoopingLouieLight() )
     {
@@ -287,7 +287,7 @@ void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
     pDoc->getIDocumentLayoutAccess().GetLayouter()->_CollectEndnotes( pSect );
 }
 
-bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
+bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFootnoteFrm* pFootnote )
 {
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
         return false;
@@ -296,8 +296,8 @@ bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
         ( pLayouter->mpEndnoter->GetSect()->IsAnFollow( pSect ) ||
           pSect->IsAnFollow( pLayouter->mpEndnoter->GetSect() ) ) )
     {
-        if( pFtn )
-            pLayouter->CollectEndnote( pFtn );
+        if( pFootnote )
+            pLayouter->CollectEndnote( pFootnote );
         return true;
     }
     return false;
@@ -325,7 +325,7 @@ void SwLayouter::ClearMovedFwdFrms( const SwDoc& _rDoc )
 }
 
 void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
-                                    const SwTxtFrm& _rMovedFwdFrmByObjPos,
+                                    const SwTextFrm& _rMovedFwdFrmByObjPos,
                                     const sal_uInt32 _nToPageNum )
 {
     if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
@@ -345,17 +345,17 @@ void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
 
 // #i40155#
 void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
-                                    const SwTxtFrm& _rTxtFrm )
+                                    const SwTextFrm& _rTextFrm )
 {
     sal_uInt32 nDummy;
-    if ( SwLayouter::FrmMovedFwdByObjPos( _rDoc, _rTxtFrm, nDummy ) )
+    if ( SwLayouter::FrmMovedFwdByObjPos( _rDoc, _rTextFrm, nDummy ) )
     {
-        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->Remove( _rTxtFrm );
+        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->Remove( _rTextFrm );
     }
 }
 
 bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
-                                      const SwTxtFrm& _rTxtFrm,
+                                      const SwTextFrm& _rTextFrm,
                                       sal_uInt32& _ornToPageNum )
 {
     if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
@@ -371,7 +371,7 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
     else
     {
         return _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->
-                                FrmMovedFwdByObjPos( _rTxtFrm, _ornToPageNum );
+                                FrmMovedFwdByObjPos( _rTextFrm, _ornToPageNum );
     }
 }
 
@@ -421,14 +421,14 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
     _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
 
-void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
+void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrm& rTextFrm )
 {
     if ( bCondition )
     {
-        const SwDoc& rDoc = *rTxtFrm.GetAttrSet()->GetDoc();
+        const SwDoc& rDoc = *rTextFrm.GetAttrSet()->GetDoc();
         if ( rDoc.getIDocumentLayoutAccess().GetLayouter() )
         {
-            const_cast<SwDoc&>(rDoc).getIDocumentLayoutAccess().GetLayouter()->LoopingLouieLight( rDoc, rTxtFrm );
+            const_cast<SwDoc&>(rDoc).getIDocumentLayoutAccess().GetLayouter()->LoopingLouieLight( rDoc, rTextFrm );
         }
     }
 }

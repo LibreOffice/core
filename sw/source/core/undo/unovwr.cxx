@@ -45,7 +45,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     : SwUndo(UNDO_OVERWRITE),
       pRedlSaveData( 0 ), bGroup( false )
 {
-    if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
+    if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
@@ -55,38 +55,38 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     }
 
     nSttNode = rPos.nNode.GetIndex();
-    nSttCntnt = rPos.nContent.GetIndex();
+    nSttContent = rPos.nContent.GetIndex();
 
-    SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    OSL_ENSURE( pTxtNd, "Overwrite not in a TextNode?" );
+    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    OSL_ENSURE( pTextNd, "Overwrite not in a TextNode?" );
 
     bInsChar = true;
-    sal_Int32 nTxtNdLen = pTxtNd->GetTxt().getLength();
-    if( nSttCntnt < nTxtNdLen )     // no pure insert?
+    sal_Int32 nTextNdLen = pTextNd->GetText().getLength();
+    if( nSttContent < nTextNdLen )     // no pure insert?
     {
-        aDelStr += OUString( pTxtNd->GetTxt()[nSttCntnt] );
+        aDelStr += OUString( pTextNd->GetText()[nSttContent] );
         if( !pHistory )
             pHistory = new SwHistory;
-        SwRegHistory aRHst( *pTxtNd, pHistory );
-        pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode, 0,
-                            nTxtNdLen, false );
+        SwRegHistory aRHst( *pTextNd, pHistory );
+        pHistory->CopyAttr( pTextNd->GetpSwpHints(), nSttNode, 0,
+                            nTextNdLen, false );
         ++rPos.nContent;
         bInsChar = false;
     }
 
-    bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-    pTxtNd->SetIgnoreDontExpand( true );
+    bool bOldExpFlg = pTextNd->IsIgnoreDontExpand();
+    pTextNd->SetIgnoreDontExpand( true );
 
-    pTxtNd->InsertText( OUString(cIns), rPos.nContent,
+    pTextNd->InsertText( OUString(cIns), rPos.nContent,
             SwInsertFlags::EMPTYEXPAND );
     aInsStr += OUString( cIns );
 
     if( !bInsChar )
     {
         const SwIndex aTmpIndex( rPos.nContent, -2 );
-        pTxtNd->EraseText( aTmpIndex, 1 );
+        pTextNd->EraseText( aTmpIndex, 1 );
     }
-    pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
+    pTextNd->SetIgnoreDontExpand( bOldExpFlg );
 
     bCacheComment = false;
 }
@@ -107,10 +107,10 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         return false;
 
     // Is the node a TextNode at all?
-    SwTxtNode * pDelTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    if( !pDelTxtNd ||
-        (pDelTxtNd->GetTxt().getLength() != rPos.nContent.GetIndex() &&
-            rPos.nContent.GetIndex() != ( nSttCntnt + aInsStr.getLength() )))
+    SwTextNode * pDelTextNd = rPos.nNode.GetNode().GetTextNode();
+    if( !pDelTextNd ||
+        (pDelTextNd->GetText().getLength() != rPos.nContent.GetIndex() &&
+            rPos.nContent.GetIndex() != ( nSttContent + aInsStr.getLength() )))
         return false;
 
     CharClass& rCC = GetAppCharClass();
@@ -131,7 +131,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         bool bOk = ( !pRedlSaveData && !bSaved ) ||
                    ( pRedlSaveData && bSaved &&
                         SwUndo::CanRedlineGroup( *pRedlSaveData, aTmpSav,
-                            nSttCntnt > rPos.nContent.GetIndex() ));
+                            nSttContent > rPos.nContent.GetIndex() ));
         // aTmpSav.DeleteAndDestroyAll();
         if( !bOk )
             return false;
@@ -142,19 +142,19 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     // both 'overwrites' can be combined so 'move' the corresponding character
     if( !bInsChar )
     {
-        if (rPos.nContent.GetIndex() < pDelTxtNd->GetTxt().getLength())
+        if (rPos.nContent.GetIndex() < pDelTextNd->GetText().getLength())
         {
-            aDelStr += OUString( pDelTxtNd->GetTxt()[rPos.nContent.GetIndex()] );
+            aDelStr += OUString( pDelTextNd->GetText()[rPos.nContent.GetIndex()] );
             ++rPos.nContent;
         }
         else
             bInsChar = true;
     }
 
-    bool bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
-    pDelTxtNd->SetIgnoreDontExpand( true );
+    bool bOldExpFlg = pDelTextNd->IsIgnoreDontExpand();
+    pDelTextNd->SetIgnoreDontExpand( true );
 
-    OUString const ins( pDelTxtNd->InsertText(OUString(cIns), rPos.nContent,
+    OUString const ins( pDelTextNd->InsertText(OUString(cIns), rPos.nContent,
             SwInsertFlags::EMPTYEXPAND) );
     assert(ins.getLength() == 1); // check in SwDoc::Overwrite => cannot fail
     (void) ins;
@@ -163,9 +163,9 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     if( !bInsChar )
     {
         const SwIndex aTmpIndex( rPos.nContent, -2 );
-        pDelTxtNd->EraseText( aTmpIndex, 1 );
+        pDelTextNd->EraseText( aTmpIndex, 1 );
     }
-    pDelTxtNd->SetIgnoreDontExpand( bOldExpFlg );
+    pDelTextNd->SetIgnoreDontExpand( bOldExpFlg );
 
     bGroup = true;
     return true;
@@ -178,10 +178,10 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
-    SwTxtNode* pTxtNd = pAktPam->GetNode().GetTxtNode();
-    OSL_ENSURE( pTxtNd, "Overwrite not in a TextNode?" );
+    SwTextNode* pTextNd = pAktPam->GetNode().GetTextNode();
+    OSL_ENSURE( pTextNd, "Overwrite not in a TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
-    rIdx.Assign( pTxtNd, nSttCntnt );
+    rIdx.Assign( pTextNd, nSttContent );
 
     SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
     if( pACEWord )
@@ -195,42 +195,42 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     if( aInsStr.getLength() > aDelStr.getLength() )
     {
         rIdx += aDelStr.getLength();
-        pTxtNd->EraseText( rIdx, aInsStr.getLength() - aDelStr.getLength() );
-        rIdx = nSttCntnt;
+        pTextNd->EraseText( rIdx, aInsStr.getLength() - aDelStr.getLength() );
+        rIdx = nSttContent;
     }
 
     if( !aDelStr.isEmpty() )
     {
-        bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-        pTxtNd->SetIgnoreDontExpand( true );
+        bool bOldExpFlg = pTextNd->IsIgnoreDontExpand();
+        pTextNd->SetIgnoreDontExpand( true );
 
         ++rIdx;
         for( sal_Int32 n = 0; n < aDelStr.getLength(); n++  )
         {
             // do it individually, to keep the attributes!
             OUString aTmpStr(aDelStr[n]);
-            OUString const ins( pTxtNd->InsertText(aTmpStr, rIdx) );
+            OUString const ins( pTextNd->InsertText(aTmpStr, rIdx) );
             assert(ins.getLength() == 1); // cannot fail
         (void) ins;
             rIdx -= 2;
-            pTxtNd->EraseText( rIdx, 1 );
+            pTextNd->EraseText( rIdx, 1 );
             rIdx += 2;
         }
-        pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
+        pTextNd->SetIgnoreDontExpand( bOldExpFlg );
         --rIdx;
     }
 
     if( pHistory )
     {
-        if( pTxtNd->GetpSwpHints() )
-            pTxtNd->ClearSwpHintsArr( false );
+        if( pTextNd->GetpSwpHints() )
+            pTextNd->ClearSwpHintsArr( false );
         pHistory->TmpRollback( pDoc, 0, false );
     }
 
-    if( pAktPam->GetMark()->nContent.GetIndex() != nSttCntnt )
+    if( pAktPam->GetMark()->nContent.GetIndex() != nSttContent )
     {
         pAktPam->SetMark();
-        pAktPam->GetMark()->nContent = nSttCntnt;
+        pAktPam->GetMark()->nContent = nSttContent;
     }
 
     if( pRedlSaveData )
@@ -260,47 +260,47 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
-    SwTxtNode* pTxtNd = pAktPam->GetNode().GetTxtNode();
-    OSL_ENSURE( pTxtNd, "Overwrite not in TextNode?" );
+    SwTextNode* pTextNd = pAktPam->GetNode().GetTextNode();
+    OSL_ENSURE( pTextNd, "Overwrite not in TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
 
     if( pRedlSaveData )
     {
-        rIdx.Assign( pTxtNd, nSttCntnt );
+        rIdx.Assign( pTextNd, nSttContent );
         pAktPam->SetMark();
         pAktPam->GetMark()->nContent += aInsStr.getLength();
         pDoc->getIDocumentRedlineAccess().DeleteRedline( *pAktPam, false, USHRT_MAX );
         pAktPam->DeleteMark();
     }
-    rIdx.Assign( pTxtNd, !aDelStr.isEmpty() ? nSttCntnt+1 : nSttCntnt );
+    rIdx.Assign( pTextNd, !aDelStr.isEmpty() ? nSttContent+1 : nSttContent );
 
-    bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-    pTxtNd->SetIgnoreDontExpand( true );
+    bool bOldExpFlg = pTextNd->IsIgnoreDontExpand();
+    pTextNd->SetIgnoreDontExpand( true );
 
     for( sal_Int32 n = 0; n < aInsStr.getLength(); n++  )
     {
         // do it individually, to keep the attributes!
         OUString const ins(
-                pTxtNd->InsertText( OUString(aInsStr[n]), rIdx,
+                pTextNd->InsertText( OUString(aInsStr[n]), rIdx,
                 SwInsertFlags::EMPTYEXPAND) );
         assert(ins.getLength() == 1); // cannot fail
         (void) ins;
         if( n < aDelStr.getLength() )
         {
             rIdx -= 2;
-            pTxtNd->EraseText( rIdx, 1 );
+            pTextNd->EraseText( rIdx, 1 );
             rIdx += n+1 < aDelStr.getLength() ? 2 : 1;
         }
     }
-    pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
+    pTextNd->SetIgnoreDontExpand( bOldExpFlg );
 
     // get back old start position from UndoNodes array
     if( pHistory )
         pHistory->SetTmpEnd( pHistory->Count() );
-    if( pAktPam->GetMark()->nContent.GetIndex() != nSttCntnt )
+    if( pAktPam->GetMark()->nContent.GetIndex() != nSttContent )
     {
         pAktPam->SetMark();
-        pAktPam->GetMark()->nContent = nSttCntnt;
+        pAktPam->GetMark()->nContent = nSttContent;
     }
 }
 
@@ -328,8 +328,8 @@ struct _UndoTransliterate_Data
     sal_uLong           nNdIdx;
     sal_Int32      nStart, nLen;
 
-    _UndoTransliterate_Data( sal_uLong nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rTxt )
-        : sText( rTxt ), pHistory( 0 ), pOffsets( 0 ),
+    _UndoTransliterate_Data( sal_uLong nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rText )
+        : sText( rText ), pHistory( 0 ), pOffsets( 0 ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
     ~_UndoTransliterate_Data() { delete pOffsets; delete pHistory; }
@@ -381,14 +381,14 @@ void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
     rDoc.getIDocumentContentOperations().TransliterateText( rPam, aTrans );
 }
 
-void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
+void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
                     sal_Int32 nStart, sal_Int32 nLen,
                     uno::Sequence <sal_Int32>& rOffsets )
 {
     long nOffsLen = rOffsets.getLength();
     _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data(
                         rTNd.GetIndex(), nStart, (sal_Int32)nOffsLen,
-                        rTNd.GetTxt().copy(nStart, nLen));
+                        rTNd.GetText().copy(nStart, nLen));
 
     aChanges.push_back( pNew );
 
@@ -442,7 +442,7 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
             pNew->pHistory = new SwHistory;
             SwRegHistory aRHst( rTNd, pNew->pHistory );
             pNew->pHistory->CopyAttr( rTNd.GetpSwpHints(),
-                    pNew->nNdIdx, 0, rTNd.GetTxt().getLength(), false );
+                    pNew->nNdIdx, 0, rTNd.GetText().getLength(), false );
         }
         break;
     }
@@ -450,7 +450,7 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
 
 void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
 {
-    SwTxtNode* pTNd = rDoc.GetNodes()[ nNdIdx ]->GetTxtNode();
+    SwTextNode* pTNd = rDoc.GetNodes()[ nNdIdx ]->GetTextNode();
     if( pTNd )
     {
         Sequence <sal_Int32> aOffsets( pOffsets ? pOffsets->getLength() : nLen );

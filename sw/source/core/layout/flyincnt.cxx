@@ -27,11 +27,11 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
-SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
-    SwFlyFrm( pFmt, pSib, pAnch )
+SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
+    SwFlyFrm( pFormat, pSib, pAnch )
 {
-    bInCnt = bInvalidLayout = bInvalidCntnt = true;
-    SwTwips nRel = pFmt->GetVertOrient().GetPos();
+    bInCnt = bInvalidLayout = bInvalidContent = true;
+    SwTwips nRel = pFormat->GetVertOrient().GetPos();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
     if( pAnch && pAnch->IsVertical() )
@@ -43,7 +43,7 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
 void SwFlyInCntFrm::DestroyImpl()
 {
-    if ( !GetFmt()->GetDoc()->IsInDtor() && GetAnchorFrm() )
+    if ( !GetFormat()->GetDoc()->IsInDtor() && GetAnchorFrm() )
     {
         SwRect aTmp( GetObjRectWithSpaces() );
         SwFlyInCntFrm::NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_LEAVE );
@@ -124,7 +124,7 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     }
 
     if ( bCallPrepare && GetAnchorFrm() )
-        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
+        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFormat() );
 }
 
 /// Here the content gets formatted initially.
@@ -133,10 +133,10 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
     if ( !Frm().Height() )
     {
         Lock(); //don't format the anchor on the crook.
-        SwCntntFrm *pCntnt = ContainsCntnt();
-        while ( pCntnt )
-        {   pCntnt->Calc();
-            pCntnt = pCntnt->GetNextCntntFrm();
+        SwContentFrm *pContent = ContainsContent();
+        while ( pContent )
+        {   pContent->Calc();
+            pContent = pContent->GetNextContentFrm();
         }
         Unlock();
     }
@@ -153,8 +153,8 @@ void SwFlyInCntFrm::MakeObjPos()
     if ( !mbValidPos )
     {
         mbValidPos = true;
-        SwFlyFrmFmt *pFmt = GetFmt();
-        const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
+        SwFlyFrameFormat *pFormat = GetFormat();
+        const SwFormatVertOrient &rVert = pFormat->GetVertOrient();
         //Update the current values in the format if needed, during this we of
         //course must not send any Modify.
         const bool bVert = GetAnchorFrm()->IsVertical();
@@ -165,11 +165,11 @@ void SwFlyInCntFrm::MakeObjPos()
             nAct = -nAct;
         if( nAct != nOld )
         {
-            SwFmtVertOrient aVert( rVert );
+            SwFormatVertOrient aVert( rVert );
             aVert.SetPos( nAct );
-            pFmt->LockModify();
-            pFmt->SetFmtAttr( aVert );
-            pFmt->UnlockModify();
+            pFormat->LockModify();
+            pFormat->SetFormatAttr( aVert );
+            pFormat->UnlockModify();
         }
     }
 }
@@ -178,7 +178,7 @@ void SwFlyInCntFrm::MakeObjPos()
 void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
-        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
+        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrameFormat() );
 }
 
 void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
@@ -207,7 +207,7 @@ void SwFlyInCntFrm::RegistFlys()
 void SwFlyInCntFrm::MakeAll()
 {
     // OD 2004-01-19 #110582#
-    if ( !GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
     }
@@ -253,7 +253,7 @@ void SwFlyInCntFrm::MakeAll()
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
         if ( mbValidPos && mbValidSize &&
-             GetFmt()->getIDocumentSettingAccess()->get( DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
+             GetFormat()->getIDocumentSettingAccess()->get( DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
         {
             SwFrm* pFrm = AnchorFrm();
             if ( Frm().Left() == (pFrm->Frm().Left()+pFrm->Prt().Left()) &&

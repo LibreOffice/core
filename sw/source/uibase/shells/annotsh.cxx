@@ -379,8 +379,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             if(pItem)
             {
                 const SvxHyperlinkItem& rHLinkItem = *static_cast<const SvxHyperlinkItem *>(pItem);
-                SvxURLField aFld(rHLinkItem.GetURL(), rHLinkItem.GetName(), SVXURLFORMAT_APPDEFAULT);
-                aFld.SetTargetFrame(rHLinkItem.GetTargetFrame());
+                SvxURLField aField(rHLinkItem.GetURL(), rHLinkItem.GetName(), SVXURLFORMAT_APPDEFAULT);
+                aField.SetTargetFrame(rHLinkItem.GetTargetFrame());
 
                 const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
 
@@ -392,7 +392,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                     pOLV->SetSelection(aSel);
                 }
                 if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
-                    pOLV->InsertField(SvxFieldItem(aFld, EE_FEATURE_FIELD));
+                    pOLV->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
             }
             break;
         }
@@ -524,8 +524,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aDlgAttr.Put(aEditAttr);
 
                 aDlgAttr.Put( SvxHyphenZoneItem( false, RES_PARATR_HYPHENZONE) );
-                aDlgAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
-                aDlgAttr.Put( SvxFmtSplitItem( true, RES_PARATR_SPLIT ) );
+                aDlgAttr.Put( SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
+                aDlgAttr.Put( SvxFormatSplitItem( true, RES_PARATR_SPLIT ) );
                 aDlgAttr.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
                 aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
 
@@ -983,7 +983,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                 {
                     if ( bPastePossible )
                     {
-                        SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                        SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         if ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) )
                             aFormats.AddClipbrdFormat( SotClipboardFormatId::RTF );
                         aFormats.AddClipbrdFormat( SotClipboardFormatId::STRING );

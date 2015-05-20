@@ -613,7 +613,7 @@ void SwView::Replace()
 
         m_pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter);
 
-        m_pWrtShell->SetTxtFmtColl( m_pWrtShell->GetParaStyle(
+        m_pWrtShell->SetTextFormatColl( m_pWrtShell->GetParaStyle(
                             m_pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
@@ -679,7 +679,7 @@ void SwView::Replace()
             if( bReplaced && m_pReplList && m_pReplList->Count() && m_pWrtShell->HasSelection() )
             {
                 SfxItemSet aReplSet( m_pWrtShell->GetAttrPool(),
-                                     aTxtFmtCollSetRange );
+                                     aTextFormatCollSetRange );
                 if( m_pReplList->Get( aReplSet ).Count() )
                 {
                     ::SfxToSwPageDescAttr( *m_pWrtShell, aReplSet );
@@ -831,16 +831,16 @@ void SwView::StateSearch(SfxItemSet &rSet)
                 {
                     m_pSrchItem = new SvxSearchItem( SID_SEARCH_ITEM );
                     m_pSrchItem->SetFamily(SFX_STYLE_FAMILY_PARA);
-                    m_pSrchItem->SetSearchString( m_pWrtShell->GetSelTxt() );
+                    m_pSrchItem->SetSearchString( m_pWrtShell->GetSelText() );
                 }
 
                 if( m_bJustOpened && m_pWrtShell->IsSelection() )
                 {
-                    OUString aTxt;
+                    OUString aText;
                     if( 1 == m_pWrtShell->GetCrsrCnt() &&
-                        !( aTxt = m_pWrtShell->SwCrsrShell::GetSelTxt() ).isEmpty() )
+                        !( aText = m_pWrtShell->SwCrsrShell::GetSelText() ).isEmpty() )
                     {
-                        m_pSrchItem->SetSearchString( aTxt );
+                        m_pSrchItem->SetSearchString( aText );
                         m_pSrchItem->SetSelection( false );
                     }
                     else

@@ -36,7 +36,7 @@ class DocxExportFilter;
 class SwNode;
 class SwEndNode;
 class SwTableNode;
-class SwTxtNode;
+class SwTextNode;
 class SwGrfNode;
 class SwOLENode;
 class DocxSdrExport;
@@ -132,13 +132,13 @@ public:
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) SAL_OVERRIDE;
 
-    virtual void AppendBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
+    virtual void AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
 
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) SAL_OVERRIDE;
 
-    virtual void AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
+    virtual void AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
 
-    virtual void ExportGrfBullet(const SwTxtNode&) SAL_OVERRIDE;
+    virtual void ExportGrfBullet(const SwTextNode&) SAL_OVERRIDE;
 
     /// Returns the relationd id
     OString AddRelation( const OUString& rType, const OUString& rTarget );
@@ -147,15 +147,15 @@ public:
     virtual void WriteChar( sal_Unicode ) SAL_OVERRIDE { /* FIXME */ fprintf( stderr, "HACK! WriteChar() has nothing to do for docx.\n" ); }
 
     /// Return value indicates if an inherited outline numbering is suppressed.
-    virtual bool DisallowInheritingOutlineNumbering( const SwFmt &rFmt ) SAL_OVERRIDE;
+    virtual bool DisallowInheritingOutlineNumbering( const SwFormat &rFormat ) SAL_OVERRIDE;
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 nBreakCode ) SAL_OVERRIDE;
+            const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode ) SAL_OVERRIDE;
 
     /// Write the field
-    virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const OUString& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) SAL_OVERRIDE;
+    virtual void OutputField( const SwField* pField, ww::eField eFieldType,
+            const OUString& rFieldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) SAL_OVERRIDE;
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) SAL_OVERRIDE;
@@ -167,7 +167,7 @@ public:
                     const OUString &rSelected,
                     com::sun::star::uno::Sequence<OUString> &rListItems) SAL_OVERRIDE;
 
-    virtual void DoFormText(const SwInputField * pFld) SAL_OVERRIDE;
+    virtual void DoFormText(const SwInputField * pField) SAL_OVERRIDE;
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) SAL_OVERRIDE;
 
@@ -196,14 +196,14 @@ protected:
 
     virtual void OutputLinkedOLE( const OUString& ) SAL_OVERRIDE;
 
-    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum ) SAL_OVERRIDE;
+    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum ) SAL_OVERRIDE;
 
-    virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) SAL_OVERRIDE {}
+    virtual void SectionBreaksAndFrames( const SwTextNode& /*rNode*/ ) SAL_OVERRIDE {}
 
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
-                                     const SwFmtPageDesc* pNewPgDescFmt = 0,
+                                     const SwFormatPageDesc* pNewPgDescFormat = 0,
                                      const SwPageDesc* pNewPgDesc = 0 ) SAL_OVERRIDE;
 
 private:
@@ -220,7 +220,7 @@ private:
     virtual void WriteNumbering() SAL_OVERRIDE;
 
     /// Write reference to a header/foorter + the actual xml containing the text.
-    void WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char* pType );
+    void WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const char* pType );
 
     /// Write word/fontTable.xml.
     void WriteFonts();

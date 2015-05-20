@@ -563,8 +563,8 @@ void SwAddressListDialog::DetectTablesAndQueries(
             uno::Reference<XTablesSupplier> xTSupplier(pUserData->xConnection, UNO_QUERY);
             if(xTSupplier.is())
             {
-                uno::Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                aTables = xTbls->getElementNames();
+                uno::Reference<XNameAccess> xTables = xTSupplier->getTables();
+                aTables = xTables->getElementNames();
                 nTables += aTables.getLength();
             }
             uno::Reference<XQueriesSupplier> xQSupplier(pUserData->xConnection, UNO_QUERY);

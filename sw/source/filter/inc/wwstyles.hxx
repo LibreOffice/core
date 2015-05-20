@@ -61,7 +61,7 @@ namespace ww
         stiTocFirst = stiToc1,
         stiTocLast = stiToc9,
         stiNormIndent = 28,             // 0x001C
-        stiFtnText = 29,                // 0x001D
+        stiFootnoteText = 29,                // 0x001D
         stiAtnText = 30,                // 0x001E
         stiHeader = 31,                 // 0x001F
         stiFooter = 32,                 // 0x0020
@@ -70,7 +70,7 @@ namespace ww
         stiToCaption = 35,              // 0x0023
         stiEnvAddr = 36,                // 0x0024
         stiEnvRet = 37,                 // 0x0025
-        stiFtnRef = 38,                 // 0x0026  char style
+        stiFootnoteRef = 38,                 // 0x0026  char style
         stiAtnRef = 39,                 // 0x0027  char style
         stiLnn = 40,                    // 0x0028  char style
         stiPgn = 41,                    // 0x0029  char style

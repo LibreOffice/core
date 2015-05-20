@@ -38,32 +38,32 @@ using namespace css;
 SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
                                   const SdrObject *pSdrObj,
                                   sal_uInt8 nOutMode ) :
-    pFrmFmt( &rPosFly.GetFmt() ),
+    pFrameFormat( &rPosFly.GetFormat() ),
     pSdrObject( pSdrObj ),
     pNdIdx( new SwNodeIndex( rPosFly.GetNdIndex() ) ),
     nOrdNum( rPosFly.GetOrdNum() ),
-    nCntntIdx( 0 ),
+    nContentIdx( 0 ),
     nOutputMode( nOutMode )
 {
-    const SwFmtAnchor& rAnchor = rPosFly.GetFmt().GetAnchor();
+    const SwFormatAnchor& rAnchor = rPosFly.GetFormat().GetAnchor();
     if ((FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
         HTML_POS_INSIDE == GetOutPos() )
     {
         // Auto-gebundene Rahmen werden ein Zeichen weiter hinten
         // ausgegeben, weil dann die Positionierung mit Netscape
         // uebereinstimmt.
-        OSL_ENSURE( rAnchor.GetCntntAnchor(), "Keine Anker-Position?" );
-        if( rAnchor.GetCntntAnchor() )
+        OSL_ENSURE( rAnchor.GetContentAnchor(), "Keine Anker-Position?" );
+        if( rAnchor.GetContentAnchor() )
         {
-            nCntntIdx = rAnchor.GetCntntAnchor()->nContent.GetIndex();
-            sal_Int16 eHoriRel = rPosFly.GetFmt().GetHoriOrient().
+            nContentIdx = rAnchor.GetContentAnchor()->nContent.GetIndex();
+            sal_Int16 eHoriRel = rPosFly.GetFormat().GetHoriOrient().
                                                 GetRelationOrient();
             if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
             {
-                const SwCntntNode *pCNd = pNdIdx->GetNode().GetCntntNode();
+                const SwContentNode *pCNd = pNdIdx->GetNode().GetContentNode();
                 OSL_ENSURE( pCNd, "Kein Content-Node an PaM-Position" );
-                if( pCNd && nCntntIdx < pCNd->Len() )
-                    nCntntIdx++;
+                if( pCNd && nContentIdx < pCNd->Len() )
+                    nContentIdx++;
             }
         }
     }
@@ -73,7 +73,7 @@ bool SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 {
     if( pNdIdx->GetIndex() == rFrm.pNdIdx->GetIndex() )
     {
-        if( nCntntIdx == rFrm.nCntntIdx )
+        if( nContentIdx == rFrm.nContentIdx )
         {
             if( GetOutPos() == rFrm.GetOutPos() )
                 return nOrdNum < rFrm.nOrdNum;
@@ -81,7 +81,7 @@ bool SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
                 return GetOutPos() < rFrm.GetOutPos();
         }
         else
-            return nCntntIdx < rFrm.nCntntIdx;
+            return nContentIdx < rFrm.nContentIdx;
     }
     else
         return pNdIdx->GetIndex() < rFrm.pNdIdx->GetIndex();

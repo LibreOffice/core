@@ -67,11 +67,11 @@ bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* co
     return bRet;
 }
 
-bool SwWrtShell::GotoField( const SwFmtFld& rFld )
+bool SwWrtShell::GotoField( const SwFormatField& rField )
 {
     (this->*m_fnKillSel)( 0, false );
 
-    bool bRet = SwCrsrShell::GotoFld( rFld );
+    bool bRet = SwCrsrShell::GotoFormatField( rField );
     if( bRet && IsSelFrmMode() )
     {
         UnSelectFrm();

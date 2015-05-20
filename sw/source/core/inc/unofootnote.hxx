@@ -33,7 +33,7 @@
 
 class SwDoc;
 class SwModify;
-class SwFmtFtn;
+class SwFormatFootnote;
 
 typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XUnoTunnel
@@ -66,13 +66,13 @@ protected:
 
     virtual ~SwXFootnote();
 
-    SwXFootnote(SwDoc & rDoc, SwFmtFtn & rFmt);
+    SwXFootnote(SwDoc & rDoc, SwFormatFootnote & rFormat);
     SwXFootnote(const bool bEndnote);
 
 public:
 
     static css::uno::Reference<css::text::XFootnote>
-        CreateXFootnote(SwDoc & rDoc, SwFmtFtn * pFootnoteFmt,
+        CreateXFootnote(SwDoc & rDoc, SwFormatFootnote * pFootnoteFormat,
                 bool isEndnote = false);
 
     // XInterface

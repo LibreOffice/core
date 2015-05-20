@@ -25,16 +25,16 @@
 #include <IDocumentListItems.hxx>
 #include <doc.hxx>
 
-SwNodeNum::SwNodeNum( SwTxtNode* pTxtNode )
+SwNodeNum::SwNodeNum( SwTextNode* pTextNode )
     : SwNumberTreeNode(),
-      mpTxtNode( pTxtNode ),
+      mpTextNode( pTextNode ),
       mpNumRule( 0 )
 {
 }
 
 SwNodeNum::SwNodeNum( SwNumRule* pNumRule )
     : SwNumberTreeNode(),
-      mpTxtNode( 0 ),
+      mpTextNode( 0 ),
       mpNumRule( pNumRule )
 {
 }
@@ -47,26 +47,26 @@ SwNodeNum::~SwNodeNum()
 
 void SwNodeNum::ChangeNumRule( SwNumRule& rNumRule )
 {
-    OSL_ENSURE( GetNumRule() && GetTxtNode(),
+    OSL_ENSURE( GetNumRule() && GetTextNode(),
             "<SwNodeNum::ChangeNumRule(..)> - missing list style and/or text node. Serious defect -> please informm OD." );
-    if ( GetNumRule() && GetTxtNode() )
+    if ( GetNumRule() && GetTextNode() )
     {
-        GetNumRule()->RemoveTxtNode( *(GetTxtNode()) );
+        GetNumRule()->RemoveTextNode( *(GetTextNode()) );
     }
 
     mpNumRule = &rNumRule;
 
-    if ( GetNumRule() && GetTxtNode() )
+    if ( GetNumRule() && GetTextNode() )
     {
-        GetNumRule()->AddTxtNode( *(GetTxtNode()) );
+        GetNumRule()->AddTextNode( *(GetTextNode()) );
     }
 }
 
 SwPosition SwNodeNum::GetPosition() const
 {
-    OSL_ENSURE( GetTxtNode(),
+    OSL_ENSURE( GetTextNode(),
             "<SwNodeNum::GetPosition()> - no text node set at <SwNodeNum> instance" );
-    return SwPosition(*mpTxtNode);
+    return SwPosition(*mpTextNode);
 }
 
 SwNumberTreeNode * SwNodeNum::Create() const
@@ -78,45 +78,45 @@ SwNumberTreeNode * SwNodeNum::Create() const
 
 void SwNodeNum::PreAdd()
 {
-    OSL_ENSURE( GetTxtNode(),
+    OSL_ENSURE( GetTextNode(),
             "<SwNodeNum::PreAdd()> - no text node set at <SwNodeNum> instance" );
-    if ( !GetNumRule() && GetTxtNode() )
+    if ( !GetNumRule() && GetTextNode() )
     {
-        mpNumRule = GetTxtNode()->GetNumRule();
+        mpNumRule = GetTextNode()->GetNumRule();
     }
     OSL_ENSURE( GetNumRule(),
             "<SwNodeNum::PreAdd()> - no list style set at <SwNodeNum> instance" );
-    if ( GetNumRule() && GetTxtNode() )
+    if ( GetNumRule() && GetTextNode() )
     {
-        GetNumRule()->AddTxtNode( *(GetTxtNode()) );
+        GetNumRule()->AddTextNode( *(GetTextNode()) );
     }
 
     {
-        if ( GetTxtNode() &&
-             GetTxtNode()->GetNodes().IsDocNodes() )
+        if ( GetTextNode() &&
+             GetTextNode()->GetNodes().IsDocNodes() )
         {
-            GetTxtNode()->getIDocumentListItems().addListItem( *this );
+            GetTextNode()->getIDocumentListItems().addListItem( *this );
         }
     }
 }
 
 void SwNodeNum::PostRemove()
 {
-    OSL_ENSURE( GetTxtNode(),
+    OSL_ENSURE( GetTextNode(),
             "<SwNodeNum::PostRemove()> - no text node set at <SwNodeNum> instance" );
     OSL_ENSURE( GetNumRule(),
             "<SwNodeNum::PostRemove()> - no list style set at <SwNodeNum> instance" );
 
-    if ( GetTxtNode() )
+    if ( GetTextNode() )
     {
-        GetTxtNode()->getIDocumentListItems().removeListItem( *this );
+        GetTextNode()->getIDocumentListItems().removeListItem( *this );
     }
 
     if ( GetNumRule() )
     {
-        if ( GetTxtNode() )
+        if ( GetTextNode() )
         {
-            GetNumRule()->RemoveTxtNode( *(GetTxtNode()) );
+            GetNumRule()->RemoveTextNode( *(GetTextNode()) );
         }
         mpNumRule = 0;
     }
@@ -126,8 +126,8 @@ bool SwNodeNum::IsNotifiable() const
 {
     bool aResult = true;
 
-    if ( GetTxtNode() )
-        aResult = GetTxtNode()->IsNotifiable();
+    if ( GetTextNode() )
+        aResult = GetTextNode()->IsNotifiable();
 
     return aResult;
 }
@@ -136,8 +136,8 @@ bool SwNodeNum::IsNotificationEnabled() const
 {
     bool aResult = true;
 
-    if ( GetTxtNode() )
-        aResult = GetTxtNode()->IsNotificationEnabled();
+    if ( GetTextNode() )
+        aResult = GetTextNode()->IsNotificationEnabled();
 
     return aResult;
 }
@@ -167,11 +167,11 @@ bool SwNodeNum::IsCounted() const
 {
     bool aResult = false;
 
-    if ( GetTxtNode() )
+    if ( GetTextNode() )
     {
         // #i59559#
-        // <SwTxtNode::IsCounted()> determines, if a text node is counted for numbering
-        aResult = GetTxtNode()->IsCountedInList();
+        // <SwTextNode::IsCounted()> determines, if a text node is counted for numbering
+        aResult = GetTextNode()->IsCountedInList();
     }
     else
         aResult = SwNumberTreeNode::IsCounted();
@@ -208,18 +208,18 @@ bool SwNodeNum::IsCountedForNumbering() const
 {
     return IsCounted() &&
            ( IsPhantom() ||                 // phantoms
-             !GetTxtNode() ||               // root node
-             GetTxtNode()->HasNumber() ||   // text node
-             GetTxtNode()->HasBullet() );   // text node
+             !GetTextNode() ||               // root node
+             GetTextNode()->HasNumber() ||   // text node
+             GetTextNode()->HasBullet() );   // text node
 }
 
 void SwNodeNum::NotifyNode()
 {
     ValidateMe();
 
-    if (mpTxtNode)
+    if (mpTextNode)
     {
-        mpTxtNode->NumRuleChgd();
+        mpTextNode->NumRuleChgd();
     }
 }
 
@@ -228,13 +228,13 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
     bool bResult = false;
     const SwNodeNum & rTmpNode = static_cast<const SwNodeNum &>(rNode);
 
-    if (mpTxtNode == NULL && rTmpNode.mpTxtNode != NULL)
+    if (mpTextNode == NULL && rTmpNode.mpTextNode != NULL)
         bResult = true;
-    else if (mpTxtNode != NULL && rTmpNode.mpTxtNode != NULL)
+    else if (mpTextNode != NULL && rTmpNode.mpTextNode != NULL)
     {
         // #i83479# - refactoring
         // simplify comparison by comparing the indexes of the text nodes
-        bResult = ( mpTxtNode->GetIndex() < rTmpNode.mpTxtNode->GetIndex() );
+        bResult = ( mpTextNode->GetIndex() < rTmpNode.mpTextNode->GetIndex() );
     }
 
     return bResult;
@@ -244,9 +244,9 @@ bool SwNodeNum::IsRestart() const
 {
     bool bIsRestart = false;
 
-    if ( GetTxtNode() )
+    if ( GetTextNode() )
     {
-        bIsRestart = GetTxtNode()->IsListRestart();
+        bIsRestart = GetTextNode()->IsListRestart();
     }
 
     return bIsRestart;
@@ -273,9 +273,9 @@ SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
 {
     SwNumberTree::tSwNumTreeNumber aResult = 1;
 
-    if ( IsRestart() && GetTxtNode() )
+    if ( IsRestart() && GetTextNode() )
     {
-        aResult = GetTxtNode()->GetActualListStartValue();
+        aResult = GetTextNode()->GetActualListStartValue();
     }
     else
     {
@@ -287,10 +287,10 @@ SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
 
             if (nLevel >= 0 && nLevel < MAXLEVEL)
             {
-                const SwNumFmt * pFmt = pRule->GetNumFmt( static_cast<sal_uInt16>(nLevel));
+                const SwNumFormat * pFormat = pRule->GetNumFormat( static_cast<sal_uInt16>(nLevel));
 
-                if (pFmt)
-                    aResult = pFmt->GetStart();
+                if (pFormat)
+                    aResult = pFormat->GetStart();
             }
         }
     }
@@ -343,10 +343,10 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
 
     if ( !bIsPhantom )
     {
-        SwTxtNode* pTxtNode( rNodeNum.GetTxtNode() );
-        if ( pTxtNode )
+        SwTextNode* pTextNode( rNodeNum.GetTextNode() );
+        if ( pTextNode )
         {
-            pTxtNode->RemoveFromList();
+            pTextNode->RemoveFromList();
             // --> clear all list attributes and the list style
             std::set<sal_uInt16> aResetAttrsArray;
             aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ID );
@@ -355,8 +355,8 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
             aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_RESTARTVALUE );
             aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISCOUNTED );
             aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_NUMRULE );
-            SwPaM aPam( *pTxtNode );
-            pTxtNode->GetDoc()->ResetAttrs( aPam, false,
+            SwPaM aPam( *pTextNode );
+            pTextNode->GetDoc()->ResetAttrs( aPam, false,
                                             aResetAttrsArray,
                                             false );
         }
@@ -364,17 +364,17 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
 }
 
 // #i81002#
-const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) const
+const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTextNode& rTextNode ) const
 {
     const SwNodeNum* pPrecedingNodeNum( 0 );
 
     // #i83479#
-    SwNodeNum aNodeNumForTxtNode( const_cast<SwTxtNode*>(&rTxtNode) );
+    SwNodeNum aNodeNumForTextNode( const_cast<SwTextNode*>(&rTextNode) );
 
     pPrecedingNodeNum = dynamic_cast<const SwNodeNum*>(
                             GetRoot()
-                            ? GetRoot()->GetPrecedingNodeOf( aNodeNumForTxtNode )
-                            : GetPrecedingNodeOf( aNodeNumForTxtNode ) );
+                            ? GetRoot()->GetPrecedingNodeOf( aNodeNumForTextNode )
+                            : GetPrecedingNodeOf( aNodeNumForTextNode ) );
 
     return pPrecedingNodeNum;
 }

@@ -23,16 +23,16 @@
 #include <filter/msfilter/escherex.hxx>
 
 const sal_uInt32 nInlineHack = 0x00010001;
-class SwFrmFmt;
+class SwFrameFormat;
 // #i30669#
-class SwFmtHoriOrient;
-class SwFmtVertOrient;
+class SwFormatHoriOrient;
+class SwFormatVertOrient;
 
 class WinwordAnchoring : public EscherExClientRecord_Base
 {
 public:
     void WriteData(EscherEx& rEx) const SAL_OVERRIDE;
-    void SetAnchoring(const SwFrmFmt& rFmt);
+    void SetAnchoring(const SwFrameFormat& rFormat);
 
     /** method to perform conversion of positioning attributes with the help
         of corresponding layout information
@@ -55,14 +55,14 @@ public:
         input/output parameter - containing the current vertical position
         attributes, which are converted by this method.
 
-        @param _rFrmFmt
+        @param _rFrameFormat
         input parameter - frame format of the anchored object
 
         @return boolean, indicating, if a conversion has been performed.
     */
-    static bool ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
-                                 SwFmtVertOrient& _iorVertOri,
-                                 const SwFrmFmt& _rFrmFmt );
+    static bool ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
+                                 SwFormatVertOrient& _iorVertOri,
+                                 const SwFrameFormat& _rFrameFormat );
 
 private:
     bool mbInline;
@@ -96,14 +96,14 @@ protected:
     SvStream* pEscherStrm;
     long mnEmuMul, mnEmuDiv;
 
-    virtual sal_Int32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+    virtual sal_Int32 WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt);
     void WriteBrushAttr(const SvxBrushItem &rBrush,
         EscherPropertyContainer& rPropOpt);
     void WriteOLEPicture(EscherPropertyContainer &rPropOpt,
         sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
         sal_uInt32 nShapeId, const com::sun::star::awt::Rectangle* pVisArea );
-    static void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
+    static void WriteGrfAttr(const SwNoTextNode& rNd,EscherPropertyContainer& rPropOpt);
 
     sal_Int32 DrawModelToEmu(sal_Int32 nVal) const
         { return BigMulDiv(nVal, mnEmuMul, mnEmuDiv); }
@@ -115,20 +115,20 @@ protected:
 
 public:
     SwBasicEscherEx(SvStream* pStrm, WW8Export& rWrt);
-    sal_Int32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
+    sal_Int32 WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uInt32 nShapeId);
     //For i120928,to export graphic of bullet
     sal_Int32 WriteGrfBullet(const Graphic&);
-    sal_Int32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
-    void WriteEmptyFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
-    virtual void WriteFrmExtraData(const SwFrmFmt&);
+    sal_Int32 WriteOLEFlyFrame(const SwFrameFormat& rFormat, sal_uInt32 nShapeId);
+    void WriteEmptyFlyFrame(const SwFrameFormat& rFormat, sal_uInt32 nShapeId);
+    virtual void WriteFrmExtraData(const SwFrameFormat&);
     virtual void WritePictures();
     virtual ~SwBasicEscherEx();
     //i120927,this function is added to export hyperlink info,such as graphic/frame/OLE
     bool IsRelUrl();
     OUString GetBasePath();
     OUString BuildFileName(sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl);
-    void WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFmtURL* pINetFmtArg);
-    void PreWriteHyperlinkWithinFly(const SwFrmFmt& rFmt,EscherPropertyContainer& rPropOpt);
+    void WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFormatURL* pINetFormatArg);
+    void PreWriteHyperlinkWithinFly(const SwFrameFormat& rFormat,EscherPropertyContainer& rPropOpt);
 
 private:
     SwBasicEscherEx(const SwBasicEscherEx&) SAL_DELETED_FUNCTION;
@@ -141,19 +141,19 @@ private:
     std::vector<sal_uLong> aFollowShpIds;
     EscherExHostAppData aHostData;
     WinwordAnchoring aWinwordAnchoring;
-    WW8_WrPlcTxtBoxes *pTxtBxs;
+    WW8_WrPlcTextBoxes *pTextBxs;
 
-    sal_uInt32 GetFlyShapeId(const SwFrmFmt& rFmt,
+    sal_uInt32 GetFlyShapeId(const SwFrameFormat& rFormat,
         unsigned int nHdFtIndex, DrawObjPointerVector &rPVec);
     void MakeZOrderArrAndFollowIds(std::vector<DrawObj>& rSrcArr,
         DrawObjPointerVector& rDstArr);
 
     sal_Int32 WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
         DrawObjPointerVector &rPVec);
-    sal_Int32 WriteTxtFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId,
-        sal_uInt32 nTxtBox, DrawObjPointerVector &rPVec);
-    void WriteOCXControl(const SwFrmFmt& rFmt,sal_uInt32 nShapeId);
-    virtual sal_Int32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+    sal_Int32 WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId,
+        sal_uInt32 nTextBox, DrawObjPointerVector &rPVec);
+    void WriteOCXControl(const SwFrameFormat& rFormat,sal_uInt32 nShapeId);
+    virtual sal_Int32 WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt) SAL_OVERRIDE;
 
     virtual sal_uInt32 QueryTextID(
@@ -167,7 +167,7 @@ public:
     void FinishEscher();
     virtual void WritePictures() SAL_OVERRIDE;
 
-    virtual void WriteFrmExtraData(const SwFrmFmt& rFmt) SAL_OVERRIDE;
+    virtual void WriteFrmExtraData(const SwFrameFormat& rFormat) SAL_OVERRIDE;
 
     EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > &, const Rectangle*) SAL_OVERRIDE {return &aHostData;}

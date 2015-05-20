@@ -174,7 +174,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
 
                             // remember cursor position data for later restoration of the cursor
                             const SwPosition *pPoint = m_pWrtShell->GetCrsr()->GetPoint();
-                            bool bRestoreCursor = pPoint->nNode.GetNode().IsTxtNode();
+                            bool bRestoreCursor = pPoint->nNode.GetNode().IsTextNode();
                             const SwNodeIndex aPointNodeIndex( pPoint->nNode );
                             sal_Int32 nPointIndex = pPoint->nContent.GetIndex();
 
@@ -188,14 +188,14 @@ void SwView::ExecLingu(SfxRequest &rReq)
 
                             if (bRestoreCursor)
                             {
-                                SwTxtNode *pTxtNode = aPointNodeIndex.GetNode().GetTxtNode();
+                                SwTextNode *pTextNode = aPointNodeIndex.GetNode().GetTextNode();
                                 // check for unexpected error case
-                                OSL_ENSURE(pTxtNode && pTxtNode->GetTxt().getLength() >= nPointIndex,
+                                OSL_ENSURE(pTextNode && pTextNode->GetText().getLength() >= nPointIndex,
                                     "text missing: corrupted node?" );
-                                if (!pTxtNode || pTxtNode->GetTxt().getLength() < nPointIndex)
+                                if (!pTextNode || pTextNode->GetText().getLength() < nPointIndex)
                                     nPointIndex = 0;
                                 // restore cursor to its original position
-                                m_pWrtShell->GetCrsr()->GetPoint()->nContent.Assign( pTxtNode, nPointIndex );
+                                m_pWrtShell->GetCrsr()->GetPoint()->nContent.Assign( pTextNode, nPointIndex );
                             }
 
                             // enable all, restore view and cursor position
@@ -494,7 +494,7 @@ bool SwView::IsValidSelectionForThesaurus() const
 
 OUString SwView::GetThesaurusLookUpText( bool bSelection ) const
 {
-    return bSelection ? OUString(m_pWrtShell->GetSelTxt()) : m_pWrtShell->GetCurWord();
+    return bSelection ? OUString(m_pWrtShell->GetSelText()) : m_pWrtShell->GetCurWord();
 }
 
 void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString &rLookUpText, bool bSelection )
@@ -633,7 +633,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
         !m_pWrtShell->IsSelection())
     {
         if (m_pWrtShell->GetSelectionType() & nsSelectionType::SEL_DRW_TXT)
-            bRet = ExecDrwTxtSpellPopup(rPt);
+            bRet = ExecDrwTextSpellPopup(rPt);
         else if (!m_pWrtShell->IsSelFrmMode())
         {
             const bool bOldViewLock = m_pWrtShell->IsViewLocked();
@@ -670,10 +670,10 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 // get paragraph text
                 OUString aParaText;
                 SwPosition aPoint( *m_pWrtShell->GetCrsr()->GetPoint() );
-                const SwTxtNode *pNode = dynamic_cast< const SwTxtNode * >(
+                const SwTextNode *pNode = dynamic_cast< const SwTextNode * >(
                                             &aPoint.nNode.GetNode() );
                 if (pNode)
-                    aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
+                    aParaText = pNode->GetText();    // this may include hidden text but that should be Ok
                 else
                 {
                     OSL_FAIL("text node expected but not found" );

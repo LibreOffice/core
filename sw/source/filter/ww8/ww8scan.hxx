@@ -581,7 +581,7 @@ protected:
     WW8PLCFx_PCDAttrs* pPCDAttrs;
 
 public:
-    WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
+    WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
         const WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL );
     virtual ~WW8PLCFx_Fc_FKP();
     virtual sal_uInt32 GetIdx() const SAL_OVERRIDE;
@@ -612,7 +612,7 @@ private:
     WW8PLCFx_Cp_FKP& operator=(const WW8PLCFx_Cp_FKP&) SAL_DELETED_FUNCTION;
 
 public:
-    WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
+    WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
         const WW8ScannerBase& rBase,  ePLCFT ePl );
     virtual ~WW8PLCFx_Cp_FKP();
     void ResetAttrStartEnd();
@@ -644,7 +644,7 @@ private:
     WW8PLCFx_SEPX& operator=(const WW8PLCFx_SEPX&) SAL_DELETED_FUNCTION;
 
 public:
-    WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblxySt, const WW8Fib& rFib,
+    WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTablexySt, const WW8Fib& rFib,
         WW8_CP nStartCp );
     virtual ~WW8PLCFx_SEPX();
     virtual sal_uInt32 GetIdx() const SAL_OVERRIDE;
@@ -667,14 +667,14 @@ class WW8PLCFx_SubDoc : public WW8PLCFx
 {
 private:
     WW8PLCF* pRef;
-    WW8PLCF* pTxt;
+    WW8PLCF* pText;
 
     WW8PLCFx_SubDoc(const WW8PLCFx_SubDoc&) SAL_DELETED_FUNCTION;
     WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&) SAL_DELETED_FUNCTION;
 
 public:
     WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
-    long nFcRef, long nLenRef, long nFcTxt, long nLenTxt, long nStruc = 0);
+    long nFcRef, long nLenRef, long nFcText, long nLenText, long nStruc = 0);
     virtual ~WW8PLCFx_SubDoc();
     virtual sal_uInt32 GetIdx() const SAL_OVERRIDE;
     virtual void SetIdx( sal_uLong nIdx ) SAL_OVERRIDE;
@@ -734,7 +734,7 @@ private:
     WW8PLCFx_Book& operator=(const WW8PLCFx_Book&) SAL_DELETED_FUNCTION;
 
 public:
-    WW8PLCFx_Book(SvStream* pTblSt,const WW8Fib& rFib);
+    WW8PLCFx_Book(SvStream* pTableSt,const WW8Fib& rFib);
     virtual ~WW8PLCFx_Book();
     long GetIMax() const { return nIMax; }
     virtual sal_uInt32 GetIdx() const SAL_OVERRIDE;
@@ -772,7 +772,7 @@ private:
     WW8PLCFx_AtnBook& operator=(const WW8PLCFx_AtnBook&) SAL_DELETED_FUNCTION;
 
 public:
-    WW8PLCFx_AtnBook(SvStream* pTblSt,const WW8Fib& rFib);
+    WW8PLCFx_AtnBook(SvStream* pTableSt,const WW8Fib& rFib);
     virtual ~WW8PLCFx_AtnBook();
     virtual sal_uInt32 GetIdx() const SAL_OVERRIDE;
     virtual void SetIdx( sal_uLong nI ) SAL_OVERRIDE;
@@ -892,7 +892,7 @@ private:
                                     //drawboxes we want the true offsets
 
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
-    WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFtn, *pEdn, *pBkm, *pPcd,
+    WW8PLCFxDesc *pChp, *pPap, *pSep, *pField, *pFootnote, *pEdn, *pBkm, *pPcd,
         *pPcdA, *pAnd, *pAtnBkm;
     WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables, *pSubdocs;
     sal_uInt8* pExtendedAtrds;
@@ -925,9 +925,9 @@ public:
     bool Get(WW8PLCFManResult* pResult) const;
     void advance();
     sal_uInt16 GetColl() const; // index of actual Style
-    WW8PLCFx_FLD* GetFld() const;
+    WW8PLCFx_FLD* GetField() const;
     WW8PLCFx_SubDoc* GetEdn() const { return static_cast<WW8PLCFx_SubDoc*>(pEdn->pPLCFx); }
-    WW8PLCFx_SubDoc* GetFtn() const { return static_cast<WW8PLCFx_SubDoc*>(pFtn->pPLCFx); }
+    WW8PLCFx_SubDoc* GetFootnote() const { return static_cast<WW8PLCFx_SubDoc*>(pFootnote->pPLCFx); }
     WW8PLCFx_SubDoc* GetAtn() const { return static_cast<WW8PLCFx_SubDoc*>(pAnd->pPLCFx); }
     WW8PLCFx_Book* GetBook() const { return static_cast<WW8PLCFx_Book*>(pBkm->pPLCFx); }
     WW8PLCFx_AtnBook* GetAtnBook() const { return static_cast<WW8PLCFx_AtnBook*>(pAtnBkm->pPLCFx); }
@@ -989,16 +989,16 @@ private:
     WW8PLCFx_Cp_FKP*  pChpPLCF;         // Character-Attrs
     WW8PLCFx_Cp_FKP*  pPapPLCF;         // Para-Attrs
     WW8PLCFx_SEPX*    pSepPLCF;         // Section-Attrs
-    WW8PLCFx_SubDoc*  pFtnPLCF;         // Footnotes
+    WW8PLCFx_SubDoc*  pFootnotePLCF;         // Footnotes
     WW8PLCFx_SubDoc*  pEdnPLCF;         // EndNotes
     WW8PLCFx_SubDoc*  pAndPLCF;         // Anmerkungen
-    WW8PLCFx_FLD*     pFldPLCF;         // Fields in Main Text
-    WW8PLCFx_FLD*     pFldHdFtPLCF;     // Fields in Header / Footer
-    WW8PLCFx_FLD*     pFldTxbxPLCF;     // Fields in Textboxes in Main Text
-    WW8PLCFx_FLD*     pFldTxbxHdFtPLCF; // Fields in Textboxes in Header / Footer
-    WW8PLCFx_FLD*     pFldFtnPLCF;      // Fields in Footnotes
-    WW8PLCFx_FLD*     pFldEdnPLCF;      // Fields in Endnotes
-    WW8PLCFx_FLD*     pFldAndPLCF;      // Fields in Anmerkungen
+    WW8PLCFx_FLD*     pFieldPLCF;         // Fields in Main Text
+    WW8PLCFx_FLD*     pFieldHdFtPLCF;     // Fields in Header / Footer
+    WW8PLCFx_FLD*     pFieldTxbxPLCF;     // Fields in Textboxes in Main Text
+    WW8PLCFx_FLD*     pFieldTxbxHdFtPLCF; // Fields in Textboxes in Header / Footer
+    WW8PLCFx_FLD*     pFieldFootnotePLCF;      // Fields in Footnotes
+    WW8PLCFx_FLD*     pFieldEdnPLCF;      // Fields in Endnotes
+    WW8PLCFx_FLD*     pFieldAndPLCF;      // Fields in Anmerkungen
     WW8PLCFspecial*   pMainFdoa;        // Graphic Primitives in Main Text
     WW8PLCFspecial*   pHdFtFdoa;        // Graphic Primitives in Header / Footer
     WW8PLCFspecial*   pMainTxbx;        // Textboxen in Main Text
@@ -1022,10 +1022,10 @@ private:
     void DeletePieceTable();
 
 public:
-    WW8ScannerBase( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
+    WW8ScannerBase( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
         WW8Fib* pWwF );
     ~WW8ScannerBase();
-    bool AreThereFootnotes() const { return pFtnPLCF->Count() > 0; };
+    bool AreThereFootnotes() const { return pFootnotePLCF->Count() > 0; };
     bool AreThereEndnotes()  const { return pEdnPLCF->Count() > 0; };
 
     //If you use WW8Fc2Cp you are almost certainly doing the wrong thing
@@ -1096,7 +1096,7 @@ public:
     bool fHasPic :1;  // 0008 file contains 1 or more pictures
     sal_uInt16 cQuickSaves :4; // 00F0 count of times file was quicksaved
     bool fEncrypted :1; //0100 1 if file is encrypted, 0 if not
-    bool fWhichTblStm :1; //0200 When 0, this fib refers to the table stream
+    bool fWhichTableStm :1; //0200 When 0, this fib refers to the table stream
     bool fReadOnlyRecommended :1;
     bool fWriteReservation :1;
                                                     // named "0Table", when 1, this fib refers to the
@@ -1153,7 +1153,7 @@ public:
 
     // WW8_FC u4[4];        // 0x24
     WW8_CP ccpText;         // 0x34 length of main document text stream
-    WW8_CP ccpFtn;          // 0x38 length of footnote subdocument text stream
+    WW8_CP ccpFootnote;          // 0x38 length of footnote subdocument text stream
     WW8_CP ccpHdr;          // 0x3c length of header subdocument text stream
     WW8_CP ccpMcr;          // 0x40 length of macro subdocument text stream
     WW8_CP ccpAtn;          // 0x44 length of annotation subdocument text stream
@@ -1197,15 +1197,15 @@ public:
     sal_Int32 lcbPlcffndRef;    // 0x6c count of bytes of footnote reference PLCF
                         //      == 0 if no footnotes defined in document.
 
-    WW8_FC fcPlcffndTxt;    // 0x70 file offset of footnote text PLCF.
-    sal_Int32 lcbPlcffndTxt;    // 0x74 count of bytes of footnote text PLCF.
+    WW8_FC fcPlcffndText;    // 0x70 file offset of footnote text PLCF.
+    sal_Int32 lcbPlcffndText;    // 0x74 count of bytes of footnote text PLCF.
                         //      == 0 if no footnotes defined in document
 
     WW8_FC fcPlcfandRef;    // 0x78 file offset of annotation reference PLCF.
     sal_Int32 lcbPlcfandRef;    // 0x7c count of bytes of annotation reference PLCF.
 
-    WW8_FC fcPlcfandTxt;    // 0x80 file offset of annotation text PLCF.
-    sal_Int32 lcbPlcfandTxt;    // 0x84 count of bytes of the annotation text PLCF
+    WW8_FC fcPlcfandText;    // 0x80 file offset of annotation text PLCF.
+    sal_Int32 lcbPlcfandText;    // 0x84 count of bytes of the annotation text PLCF
 
     WW8_FC fcPlcfsed;       // 8x88 file offset of section descriptor PLCF.
     sal_Int32 lcbPlcfsed;   // 0x8c count of bytes of section descriptor PLCF.
@@ -1251,8 +1251,8 @@ public:
     WW8_FC fcPlcffldHdr;    // 0xe0 offset in doc stream to the PLCF of field positions in the header subdocument.
     sal_Int32 lcbPlcffldHdr;    // 0xe4
 
-    WW8_FC fcPlcffldFtn;    // 0xe8 offset in doc stream to the PLCF of field positions in the footnote subdocument.
-    sal_Int32 lcbPlcffldFtn;    // 0xec
+    WW8_FC fcPlcffldFootnote;    // 0xe8 offset in doc stream to the PLCF of field positions in the footnote subdocument.
+    sal_Int32 lcbPlcffldFootnote;    // 0xec
 
     WW8_FC fcPlcffldAtn;    // 0xf0 offset in doc stream to the PLCF of field positions in the annotation subdocument.
     sal_Int32 lcbPlcffldAtn;    // 0xf4
@@ -1300,8 +1300,8 @@ public:
     WW8_FC fcClx;           // 0x160 file  offset of beginning of information for complex files.
     sal_Int32 lcbClx;       // 0x164 count of bytes of complex file information. 0 if file is non-complex.
 
-    WW8_FC fcPlcfpgdFtn;    // 0x168 file offset of page descriptor PLCF for footnote subdocument.
-    sal_Int32 lcbPlcfpgdFtn;    // 0x16C count of bytes of page descriptor PLCF for footnote subdocument.
+    WW8_FC fcPlcfpgdFootnote;    // 0x168 file offset of page descriptor PLCF for footnote subdocument.
+    sal_Int32 lcbPlcfpgdFootnote;    // 0x16C count of bytes of page descriptor PLCF for footnote subdocument.
                         //  ==0 if document has not been paginated. The length of the PGD is 8 bytes.
 
     WW8_FC fcAutosaveSource;    // 0x170 file offset of the name of the original file.
@@ -1346,15 +1346,15 @@ public:
     WW8_FC fcPms;       // 0x1C2 file offset of PMS (Print Merge State) information block
     sal_Int32 lcbPMS;       // 0x1C6 length in bytes of PMS
 
-    WW8_FC fcFormFldSttbf;  // 0x1CA file offset of form field Sttbf which contains strings used in form field dropdown controls
-    sal_Int32 lcbFormFldSttbf;  // 0x1CE length in bytes of form field Sttbf
+    WW8_FC fcFormFieldSttbf;  // 0x1CA file offset of form field Sttbf which contains strings used in form field dropdown controls
+    sal_Int32 lcbFormFieldSttbf;  // 0x1CE length in bytes of form field Sttbf
 
     WW8_FC fcPlcfendRef;    // 0x1D2 file offset of PLCFendRef which points to endnote references in the main document stream
     sal_Int32 lcbPlcfendRef;    // 0x1D6
 
-    WW8_FC fcPlcfendTxt;    // 0x1DA file offset of PLCFendRef which points to endnote text  in the endnote document
+    WW8_FC fcPlcfendText;    // 0x1DA file offset of PLCFendRef which points to endnote text  in the endnote document
                         //       stream which corresponds with the PLCFendRef
-    sal_Int32 lcbPlcfendTxt;    // 0x1DE
+    sal_Int32 lcbPlcfendText;    // 0x1DE
 
     WW8_FC fcPlcffldEdn;    // 0x1E2 offset to PLCF of field positions in the endnote subdoc
     sal_Int32 lcbPlcffldEdn;    // 0x1E6
@@ -1383,12 +1383,12 @@ public:
                                                         // war in Ver67 nur leere Reserve
     sal_Int32 lcbPlcfspl;                   // war in Ver67 nur leere Reserve
 
-    WW8_FC fcPlcftxbxTxt;   // 0x222 ...PLCF of beginning CP in the text box subdoc
-    sal_Int32 lcbPlcftxbxTxt;   // 0x226
+    WW8_FC fcPlcftxbxText;   // 0x222 ...PLCF of beginning CP in the text box subdoc
+    sal_Int32 lcbPlcftxbxText;   // 0x226
     WW8_FC fcPlcffldTxbx;   // 0x22a ...PLCF of field boundaries recorded in the textbox subdoc.
     sal_Int32 lcbPlcffldTxbx;   // 0x22e
-    WW8_FC fcPlcfHdrtxbxTxt;// 0x232 ...PLCF of beginning CP in the header text box subdoc
-    sal_Int32 lcbPlcfHdrtxbxTxt;// 0x236
+    WW8_FC fcPlcfHdrtxbxText;// 0x232 ...PLCF of beginning CP in the header text box subdoc
+    sal_Int32 lcbPlcfHdrtxbxText;// 0x236
     WW8_FC fcPlcffldHdrTxbx;// 0x23a ...PLCF of field boundaries recorded in the header textbox subdoc.
     sal_Int32 lcbPlcffldHdrTxbx;// 0x23e
     WW8_FC fcStwUser;
@@ -1541,8 +1541,8 @@ public:
 
     sal_uInt16  grpfIhdt : 8;           // 0 specification of document headers and footers. See explanation under Headers and Footers topic.
 
-    sal_uInt16  rncFtn : 2;         // 0 restart index for footnotes, 0 don't restart note numbering, 1 section, 2 page
-    sal_uInt16  nFtn : 14;          // 1 initial footnote number for document
+    sal_uInt16  rncFootnote : 2;         // 0 restart index for footnotes, 0 don't restart note numbering, 1 section, 2 page
+    sal_uInt16  nFootnote : 14;          // 1 initial footnote number for document
     bool        fOutlineDirtySave : 1; // when 1, indicates that information in the hPLCFpad should be refreshed since outline has been dirtied
     sal_uInt16  : 7;                //   reserved
     bool        fOnlyMacPics : 1;   //   when 1, Word believes all pictures recorded in the document were created on a Macintosh
@@ -1563,7 +1563,7 @@ public:
     bool        fDfltTrueType : 1;  //   when 1, use TrueType fonts by default (flag obeyed only when doc was created by WinWord 2.x)
     bool        fPagSuppressTopSpacing : 1;//when 1, file created with SUPPRESSTOPSPACING=YES in win.ini. (flag obeyed only when doc was created by WinWord 2.x).
     bool        fProtEnabled : 1;   //   when 1, document is protected from edit operations
-    bool        fDispFormFldSel : 1;//   when 1, restrict selections to occur only within form fields
+    bool        fDispFormFieldSel : 1;//   when 1, restrict selections to occur only within form fields
     bool        fRMView : 1;        //   when 1, show revision markings on screen
     bool        fRMPrint : 1;       //   when 1, print revision marks when document is printed
     bool        fWriteReservation : 1;
@@ -1606,13 +1606,13 @@ public:
     bool       fSaveFormData : 1;   //      only save document data that is inside of a form field.
     bool       fShadeFormData : 1;  //      shade form fields
     sal_uInt16 : 2;                 //      reserved
-    bool       fWCFtnEdn : 1;       //      when 1, include footnotes and endnotes in word count
+    bool       fWCFootnoteEdn : 1;       //      when 1, include footnotes and endnotes in word count
     sal_Int32   cLines;             //      count of lines tallied by last Word Count operation
-    sal_Int32   cWordsFtnEnd;       //      count of words in footnotes and endnotes tallied by last Word Count operation
-    sal_Int32   cChFtnEdn;          //      count of characters in footnotes and endnotes tallied by last Word Count operation
-    sal_Int16   cPgFtnEdn;          //      count of pages in footnotes and endnotes tallied by last Word Count operation
-    sal_Int32   cParasFtnEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
-    sal_Int32   cLinesFtnEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
+    sal_Int32   cWordsFootnoteEnd;       //      count of words in footnotes and endnotes tallied by last Word Count operation
+    sal_Int32   cChFootnoteEdn;          //      count of characters in footnotes and endnotes tallied by last Word Count operation
+    sal_Int16   cPgFootnoteEdn;          //      count of pages in footnotes and endnotes tallied by last Word Count operation
+    sal_Int32   cParasFootnoteEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
+    sal_Int32   cLinesFootnoteEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
     sal_Int32   lKeyProtDoc;        //      document protection password key, only valid if dop.fProtEnabled, dop.fLockAtn or dop.fLockRev are 1.
     sal_uInt16  wvkSaved : 3;       //      document view kind: 0 Normal view, 1 Outline view, 2 Page View
     sal_uInt16  wScaleSaved : 9;    ///< Specifies the zoom percentage that was in use when the document was saved.
@@ -1685,13 +1685,13 @@ public:
     sal_uInt16 : 14;                  // reserved
     // Skip 12 Bytes here: ASUMI
     sal_Int32 cChWS;
-    sal_Int32 cChWSFtnEdn;
+    sal_Int32 cChWSFootnoteEdn;
     sal_Int32 grfDocEvents;
     // Skip 4+30+8 Bytes here
     sal_Int32 cDBC;
-    sal_Int32 cDBCFtnEdn;
+    sal_Int32 cDBCFootnoteEdn;
     // Skip 4 Bytes here
-    sal_Int16 nfcFtnRef;
+    sal_Int16 nfcFootnoteRef;
     sal_Int16 nfcEdnRef;
     sal_Int16 hpsZoonFontPag;
     sal_Int16 dywDispPag;
@@ -1777,7 +1777,7 @@ public:
     void UpdateIndex( sal_uInt8 grpfIhdt );
 };
 
-void SwapQuotesInField(OUString &rFmt);
+void SwapQuotesInField(OUString &rFormat);
 
 Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize);
 std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);

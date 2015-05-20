@@ -23,21 +23,21 @@
 #include <editeng/editengdllapi.h>
 
 
-// class SvxFmtKeepItem ------------------------------------------------
+// class SvxFormatKeepItem ------------------------------------------------
 
 /*  [Description]
 
     This item describes a logical variable "keep paragraphs together?".
 */
 
-class EDITENG_DLLPUBLIC SvxFmtKeepItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxFormatKeepItem : public SfxBoolItem
 {
 public:
     TYPEINFO_OVERRIDE();
 
-    inline SvxFmtKeepItem( const bool bKeep /*= false*/,
+    inline SvxFormatKeepItem( const bool bKeep /*= false*/,
                            const sal_uInt16 _nWhich  );
-    inline SvxFmtKeepItem& operator=( const SvxFmtKeepItem& rSplit );
+    inline SvxFormatKeepItem& operator=( const SvxFormatKeepItem& rSplit );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -50,11 +50,11 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 };
 
-inline SvxFmtKeepItem::SvxFmtKeepItem( const bool bKeep, const sal_uInt16 _nWhich ) :
+inline SvxFormatKeepItem::SvxFormatKeepItem( const bool bKeep, const sal_uInt16 _nWhich ) :
     SfxBoolItem( _nWhich, bKeep )
 {}
 
-inline SvxFmtKeepItem& SvxFmtKeepItem::operator=( const SvxFmtKeepItem& rKeep )
+inline SvxFormatKeepItem& SvxFormatKeepItem::operator=( const SvxFormatKeepItem& rKeep )
 {
     SetValue( rKeep.GetValue() );
     return *this;

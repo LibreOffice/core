@@ -39,8 +39,8 @@ namespace com { namespace sun { namespace star {
 /**
  * The classes that make up a meta entity are:
  * <dl>
- *   <dt>SwTxtMeta</dt><dd>the text hint</dd>
- *   <dt>SwFmtMeta</dt><dd>the pool item</dd>
+ *   <dt>SwTextMeta</dt><dd>the text hint</dd>
+ *   <dt>SwFormatMeta</dt><dd>the pool item</dd>
  *   <dt>sw::Meta</dt><dd>the metadatable entity itself</dd>
  *   <dt>SwXMeta</dt><dd>the UNO wrapper object</dd>
  * </dl>
@@ -74,47 +74,47 @@ namespace com { namespace sun { namespace star {
  * </ol>
  */
 
-class SwTxtMeta;
+class SwTextMeta;
 class SwXMeta;
 class SwXMetaField;
-class SwTxtNode;
+class SwTextNode;
 namespace sw {
     class Meta;
     class MetaFieldManager;
 }
 
-class SwFmtMeta
+class SwFormatMeta
     : public SfxPoolItem
 {
 private:
-    friend class SwTxtMeta; ///< needs SetTxtAttr, DoCopy
-    friend class ::sw::Meta; ///< needs m_pTxtAttr
+    friend class SwTextMeta; ///< needs SetTextAttr, DoCopy
+    friend class ::sw::Meta; ///< needs m_pTextAttr
 
     ::boost::shared_ptr< ::sw::Meta > m_pMeta;
-    SwTxtMeta * m_pTxtAttr;
+    SwTextMeta * m_pTextAttr;
 
-    SwTxtMeta * GetTxtAttr() { return m_pTxtAttr; }
-    void SetTxtAttr(SwTxtMeta * const i_pTxtAttr);
+    SwTextMeta * GetTextAttr() { return m_pTextAttr; }
+    void SetTextAttr(SwTextMeta * const i_pTextAttr);
 
     /// this method <em>must</em> be called when the hint is actually copied
     void DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
-        SwTxtNode & i_rTargetTxtNode);
+        SwTextNode & i_rTargetTextNode);
 
-    explicit SwFmtMeta( const sal_uInt16 i_nWhich );
+    explicit SwFormatMeta( const sal_uInt16 i_nWhich );
 
 public:
     /// takes ownership
-    explicit SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
+    explicit SwFormatMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
                         const sal_uInt16 i_nWhich );
-    virtual ~SwFmtMeta();
+    virtual ~SwFormatMeta();
 
     /// SfxPoolItem
     virtual bool             operator==( const SfxPoolItem & ) const SAL_OVERRIDE;
     virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     /// notify clients registered at m_pMeta that this meta is being (re-)moved
-    void NotifyChangeTxtNode(SwTxtNode *const pTxtNode);
-    static SwFmtMeta * CreatePoolDefault( const sal_uInt16 i_nWhich );
+    void NotifyChangeTextNode(SwTextNode *const pTextNode);
+    static SwFormatMeta * CreatePoolDefault( const sal_uInt16 i_nWhich );
     ::sw::Meta * GetMeta() { return m_pMeta.get(); }
 };
 
@@ -125,23 +125,23 @@ class Meta
     , public SwModify
 {
 protected:
-    friend class ::SwFmtMeta; ///< SetFmtMeta, NotifyChangeTxtNode
-    friend class ::SwXMeta;   ///< GetTxtNode, GetTxtAttr, Get/SetXMeta
+    friend class ::SwFormatMeta; ///< SetFormatMeta, NotifyChangeTextNode
+    friend class ::SwXMeta;   ///< GetTextNode, GetTextAttr, Get/SetXMeta
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::rdf::XMetadatable> m_wXMeta;
 
-    SwFmtMeta * m_pFmt;
-    SwTxtNode * m_pTxtNode;
+    SwFormatMeta * m_pFormat;
+    SwTextNode * m_pTextNode;
 
-    SwTxtMeta * GetTxtAttr() const;
-    SwTxtNode * GetTxtNode() const { return m_pTxtNode;} ///< @return 0 if not in document (undo)
+    SwTextMeta * GetTextAttr() const;
+    SwTextNode * GetTextNode() const { return m_pTextNode;} ///< @return 0 if not in document (undo)
 
-    SwFmtMeta * GetFmtMeta() const { return m_pFmt; }
-    void SetFmtMeta( SwFmtMeta * const i_pFmt ) { m_pFmt = i_pFmt; };
+    SwFormatMeta * GetFormatMeta() const { return m_pFormat; }
+    void SetFormatMeta( SwFormatMeta * const i_pFormat ) { m_pFormat = i_pFormat; };
 
-    void NotifyChangeTxtNodeImpl();
-    void NotifyChangeTxtNode(SwTxtNode *const pTxtNode);
+    void NotifyChangeTextNodeImpl();
+    void NotifyChangeTextNode(SwTextNode *const pTextNode);
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::rdf::XMetadatable> const& GetXMeta() const
@@ -154,7 +154,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
 
 public:
-    explicit Meta(SwFmtMeta * const i_pFmt = 0);
+    explicit Meta(SwFormatMeta * const i_pFormat = 0);
     virtual ~Meta();
 
     /// sfx2::Metadatable
@@ -170,7 +170,7 @@ class MetaField
     : public Meta
 {
 private:
-    friend class ::SwFmtMeta;
+    friend class ::SwFormatMeta;
     friend class ::SwXMetaField;
     friend class ::sw::MetaFieldManager;
 
@@ -182,7 +182,7 @@ private:
     bool IsFixedLanguage() const    { return m_bIsFixedLanguage; }
     void SetIsFixedLanguage(bool b) { m_bIsFixedLanguage = b; }
 
-    explicit MetaField(SwFmtMeta * const i_pFmt = 0,
+    explicit MetaField(SwFormatMeta * const i_pFormat = 0,
             const sal_uInt32 nNumberFormat = SAL_MAX_UINT32,
             const bool bIsFixedLanguage = false );
 
@@ -203,7 +203,7 @@ private:
 public:
     MetaFieldManager();
     ::boost::shared_ptr<MetaField> makeMetaField(
-                SwFmtMeta * const i_pFmt = 0,
+                SwFormatMeta * const i_pFormat = 0,
                 const sal_uInt32 nNumberFormat = SAL_MAX_UINT32,
                 const bool bIsFixedLanguage = false );
     /// get all meta fields

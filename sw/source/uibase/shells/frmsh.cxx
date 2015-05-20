@@ -89,14 +89,14 @@ using namespace ::com::sun::star::uno;
 
 // Prototypes
 static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
-static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const OUString& rName)
+static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell& rSh, const OUString& rName)
 {
     const size_t nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
     for( size_t i = 0; i < nCount; ++i )
     {
-        const SwFrmFmt* pFmt = rSh.GetFlyNum(i, FLYCNTTYPE_FRM);
-        if(pFmt->GetName() == rName)
-            return pFmt;
+        const SwFrameFormat* pFormat = rSh.GetFlyNum(i, FLYCNTTYPE_FRM);
+        if(pFormat->GetName() == rName)
+            return pFormat;
     }
     return 0;
 }
@@ -167,7 +167,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 SfxItemSet aSet(GetPool(),RES_COL,RES_COL);
                 rSh.GetFlyFrmAttr( aSet );
-                SwFmtCol aCol(static_cast<const SwFmtCol&>(aSet.Get(RES_COL)));
+                SwFormatCol aCol(static_cast<const SwFormatCol&>(aSet.Get(RES_COL)));
                 // GutterWidth will not always passed, hence get firstly
                 // (see view2: Execute on this slot)
                 sal_uInt16 nGutterWidth = aCol.GetGutterWidth();
@@ -176,10 +176,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aCol.Init(nCols, nGutterWidth, aCol.GetWishWidth());
                 aSet.Put(aCol);
                 // Template AutoUpdate
-                SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
-                if(pFmt && pFmt->IsAutoUpdateFmt())
+                SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+                if(pFormat && pFormat->IsAutoUpdateFormat())
                 {
-                    rSh.AutoUpdateFrame(pFmt, aSet);
+                    rSh.AutoUpdateFrame(pFormat, aSet);
                 }
                 else
                 {
@@ -202,7 +202,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                 rSh.GetFlyFrmAttr( aSet );
-                SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
+                SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
 
                 OUString sOldName(rHLinkItem.GetName().toAsciiUpperCase());
                 OUString sFlyName(rSh.GetFlyName().toAsciiUpperCase());
@@ -232,7 +232,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_FRAME_UNCHAIN:
-            rSh.Unchain( (SwFrmFmt&)*rSh.GetFlyFrmFmt() );
+            rSh.Unchain( (SwFrameFormat&)*rSh.GetFlyFrameFormat() );
             GetView().GetViewFrame()->GetBindings().Invalidate(FN_FRAME_CHAIN);
             break;
         case FN_FORMAT_FOOTNOTE_DLG:
@@ -266,7 +266,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
     SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
     bool bUpdateMgr = true;
-    bool bCopyToFmt = false;
+    bool bCopyToFormat = false;
     switch ( nSlot )
     {
         case SID_OBJECT_ALIGN_MIDDLE:
@@ -329,7 +329,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if(pArgs)
             {
                 aMgr.SetAttrSet( *pArgs );
-                bCopyToFmt = true;
+                bCopyToFormat = true;
             }
         }
         break;
@@ -339,7 +339,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem))
             {
                 aMgr.SetAttrSet( *pArgs );
-                bCopyToFmt = true;
+                bCopyToFormat = true;
             }
         }
         break;
@@ -433,12 +433,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 }
 
                 const SwRect &rPg = rSh.GetAnyCurRect(RECT_PAGE);
-                SwFmtFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
+                SwFormatFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
                 aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
                 aSet.Put(aFrmSize);
 
                 const SwRect &rPr = rSh.GetAnyCurRect(RECT_PAGE_PRT);
-                SwFmtFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
+                SwFormatFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
                 aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
                 aSet.Put(aPrtSize);
 
@@ -446,7 +446,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
                 // On % values initialize size
-                SwFmtFrmSize& rSize = const_cast<SwFmtFrmSize&>(static_cast<const SwFmtFrmSize&>(aSet.Get(RES_FRM_SIZE)));
+                SwFormatFrmSize& rSize = const_cast<SwFormatFrmSize&>(static_cast<const SwFormatFrmSize&>(aSet.Get(RES_FRM_SIZE)));
                 if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff)
                     rSize.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
                 if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff)
@@ -502,10 +502,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             rSh.SetObjTitle(static_cast<const SfxStringItem*>(pItem)->GetValue());
                         }
                         // Template AutoUpdate
-                        SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
-                        if(pFmt && pFmt->IsAutoUpdateFmt())
+                        SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+                        if(pFormat && pFormat->IsAutoUpdateFormat())
                         {
-                            rSh.AutoUpdateFrame(pFmt, *pOutSet);
+                            rSh.AutoUpdateFrame(pFormat, *pOutSet);
                             // Anything which is not supported by the format must be set hard.
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
                                 rSh.SetFlyName(static_cast<const SfxStringItem*>(pItem)->GetValue());
@@ -522,7 +522,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         else
                             aMgr.SetAttrSet( *pOutSet );
 
-                        const SwFrmFmt* pCurrFlyFmt = rSh.GetFlyFrmFmt();
+                        const SwFrameFormat* pCurrFlyFormat = rSh.GetFlyFrameFormat();
                         if(SfxItemState::SET ==
                            pOutSet->GetItemState(FN_PARAM_CHAIN_PREVIOUS,
                                                  false, &pItem))
@@ -531,15 +531,15 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                             OUString sPrevName =
                                 static_cast<const SfxStringItem*>(pItem)->GetValue();
-                            const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
+                            const SwFormatChain &rChain = pCurrFlyFormat->GetChain();
                             //needs cast - no non-const method available
-                            SwFlyFrmFmt* pFlyFmt =
+                            SwFlyFrameFormat* pFlyFormat =
                                 rChain.GetPrev();
-                            if(pFlyFmt)
+                            if(pFlyFormat)
                             {
-                                if (pFlyFmt->GetName() != sPrevName)
+                                if (pFlyFormat->GetName() != sPrevName)
                                 {
-                                    rSh.Unchain(*pFlyFmt);
+                                    rSh.Unchain(*pFlyFormat);
                                 }
                                 else
                                     sPrevName.clear();
@@ -548,12 +548,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if (!sPrevName.isEmpty())
                             {
                                 //needs cast - no non-const method available
-                                SwFrmFmt* pPrevFmt = const_cast<SwFrmFmt*>(
-                                    lcl_GetFrmFmtByName(rSh, sPrevName));
-                                SAL_WARN_IF(!pPrevFmt, "sw.ui", "No frame found!");
-                                if(pPrevFmt)
+                                SwFrameFormat* pPrevFormat = const_cast<SwFrameFormat*>(
+                                    lcl_GetFrameFormatByName(rSh, sPrevName));
+                                SAL_WARN_IF(!pPrevFormat, "sw.ui", "No frame found!");
+                                if(pPrevFormat)
                                 {
-                                    rSh.Chain(*pPrevFmt, *pCurrFlyFmt);
+                                    rSh.Chain(*pPrevFormat, *pCurrFlyFormat);
                                 }
                             }
                             rSh.SetChainMarker();
@@ -565,15 +565,15 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             rSh.HideChainMarker();
                             OUString sNextName =
                                 static_cast<const SfxStringItem*>(pItem)->GetValue();
-                            const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
+                            const SwFormatChain &rChain = pCurrFlyFormat->GetChain();
                             //needs cast - no non-const method available
-                            SwFlyFrmFmt* pFlyFmt =
+                            SwFlyFrameFormat* pFlyFormat =
                                 rChain.GetNext();
-                            if(pFlyFmt)
+                            if(pFlyFormat)
                             {
-                                if (pFlyFmt->GetName() != sNextName)
+                                if (pFlyFormat->GetName() != sNextName)
                                 {
-                                    rSh.Unchain(*const_cast<SwFlyFrmFmt*>(static_cast<const SwFlyFrmFmt*>( pCurrFlyFmt)));
+                                    rSh.Unchain(*const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>( pCurrFlyFormat)));
                                 }
                                 else
                                     sNextName.clear();
@@ -582,13 +582,13 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if (!sNextName.isEmpty())
                             {
                                 //needs cast - no non-const method available
-                                SwFrmFmt* pNextFmt = const_cast<SwFrmFmt*>(
-                                    lcl_GetFrmFmtByName(rSh, sNextName));
-                                SAL_WARN_IF(!pNextFmt, "sw.ui", "No frame found!");
-                                if(pNextFmt)
+                                SwFrameFormat* pNextFormat = const_cast<SwFrameFormat*>(
+                                    lcl_GetFrameFormatByName(rSh, sNextName));
+                                SAL_WARN_IF(!pNextFormat, "sw.ui", "No frame found!");
+                                if(pNextFormat)
                                 {
-                                    rSh.Chain(*const_cast<SwFrmFmt*>(
-                                              pCurrFlyFmt), *pNextFmt);
+                                    rSh.Chain(*const_cast<SwFrameFormat*>(
+                                              pCurrFlyFormat), *pNextFormat);
                                 }
                             }
                             rSh.SetChainMarker();
@@ -602,13 +602,13 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         break;
         case FN_FRAME_MIRROR_ON_EVEN_PAGES:
         {
-            SwFmtHoriOrient aHori(aMgr.GetHoriOrient());
+            SwFormatHoriOrient aHori(aMgr.GetHoriOrient());
             bool bMirror = !aHori.IsPosToggle();
             aHori.SetPosToggle(bMirror);
             SfxItemSet aSet(GetPool(), RES_HORI_ORIENT, RES_HORI_ORIENT);
             aSet.Put(aHori);
             aMgr.SetAttrSet(aSet);
-            bCopyToFmt = true;
+            bCopyToFormat = true;
             rReq.SetReturnValue(SfxBoolItem(nSlot, bMirror));
         }
         break;
@@ -648,10 +648,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     }
     if ( bUpdateMgr )
     {
-        SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
-        if ( bCopyToFmt && pFmt && pFmt->IsAutoUpdateFmt() )
+        SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+        if ( bCopyToFormat && pFormat && pFormat->IsAutoUpdateFormat() )
         {
-            rSh.AutoUpdateFrame(pFmt, aMgr.GetAttrSet());
+            rSh.AutoUpdateFrame(pFormat, aMgr.GetAttrSet());
         }
         else
         {
@@ -691,7 +691,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
             {
                 case RES_FRM_SIZE:
                 {
-                    SwFmtFrmSize aSz(aMgr.GetFrmSize());
+                    SwFormatFrmSize aSz(aMgr.GetFrmSize());
                     rSet.Put(aSz);
                 }
                 break;
@@ -770,10 +770,10 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             {
                                 if (aMgr.GetAnchor() == FLY_AT_FLY)
                                 {
-                                    const SwFrmFmt* pFmt = rSh.IsFlyInFly();
-                                    if (pFmt)
+                                    const SwFrameFormat* pFormat = rSh.IsFlyInFly();
+                                    if (pFormat)
                                     {
-                                        const SwFmtFrmSize& rFrmSz = pFmt->GetFrmSize();
+                                        const SwFormatFrmSize& rFrmSz = pFormat->GetFrmSize();
                                         if (rFrmSz.GetHeightSizeType() != ATT_FIX_SIZE)
                                         {
                                             rSet.DisableItem( nWhich );
@@ -809,9 +809,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                     if(SfxItemState::SET == aURLSet.GetItemState(RES_URL, true, &pItem))
                     {
-                        const SwFmtURL* pFmtURL = static_cast<const SwFmtURL*>(pItem);
-                        aHLinkItem.SetURL(pFmtURL->GetURL());
-                        aHLinkItem.SetTargetFrame(pFmtURL->GetTargetFrameName());
+                        const SwFormatURL* pFormatURL = static_cast<const SwFormatURL*>(pItem);
+                        aHLinkItem.SetURL(pFormatURL->GetURL());
+                        aHLinkItem.SetTargetFrame(pFormatURL->GetTargetFrameName());
                         aHLinkItem.SetName(rSh.GetFlyName());
                     }
 
@@ -829,9 +829,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( FN_FRAME_CHAIN );
                     else
                     {
-                        const SwFrmFmt *pFmt = rSh.GetFlyFrmFmt();
+                        const SwFrameFormat *pFormat = rSh.GetFlyFrameFormat();
                         if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
-                             !pFmt || pFmt->GetChain().GetNext() )
+                             !pFormat || pFormat->GetChain().GetNext() )
                         {
                             rSet.DisableItem( FN_FRAME_CHAIN );
                         }
@@ -850,9 +850,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( FN_FRAME_UNCHAIN );
                     else
                     {
-                        const SwFrmFmt *pFmt = rSh.GetFlyFrmFmt();
+                        const SwFrameFormat *pFormat = rSh.GetFlyFrameFormat();
                         if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
-                             !pFmt || !pFmt->GetChain().GetNext() )
+                             !pFormat || !pFormat->GetChain().GetNext() )
                         {
                             rSet.DisableItem( FN_FRAME_UNCHAIN );
                         }
@@ -1115,10 +1115,10 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     }
     aFrameSet.Put( aBoxItem );
     // Template AutoUpdate
-    SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
-    if(pFmt && pFmt->IsAutoUpdateFmt())
+    SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+    if(pFormat && pFormat->IsAutoUpdateFormat())
     {
-        rSh.AutoUpdateFrame(pFmt, aFrameSet);
+        rSh.AutoUpdateFrame(pFormat, aFrameSet);
     }
     else
         rSh.SetFlyFrmAttr( aFrameSet );
@@ -1169,7 +1169,7 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     {
         rSet.DisableItem(FN_INSERT_FRAME);
     }
-    else if ( GetShell().CrsrInsideInputFld() )
+    else if ( GetShell().CrsrInsideInputField() )
     {
         rSet.DisableItem(FN_INSERT_FRAME);
     }

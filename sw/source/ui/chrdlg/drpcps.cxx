@@ -254,12 +254,12 @@ void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _
 {
     SfxItemSet aSet( _rPage.rSh.GetAttrPool(), _nWhich, _nWhich);
     _rPage.rSh.GetCurAttr(aSet);
-    SvxFontItem aFmtFont(static_cast<const SvxFontItem &>( aSet.Get(_nWhich)));
+    SvxFontItem aFormatFont(static_cast<const SvxFontItem &>( aSet.Get(_nWhich)));
 
-    _rFont.SetFamily (aFmtFont.GetFamily());
-    _rFont.SetName   (aFmtFont.GetFamilyName());
-    _rFont.SetPitch  (aFmtFont.GetPitch());
-    _rFont.SetCharSet(aFmtFont.GetCharSet());
+    _rFont.SetFamily (aFormatFont.GetFamily());
+    _rFont.SetName   (aFormatFont.GetFamilyName());
+    _rFont.SetPitch  (aFormatFont.GetPitch());
+    _rFont.SetCharSet(aFormatFont.GetCharSet());
 }
 
 void SwDropCapsPict::UpdatePaintSettings()
@@ -298,16 +298,16 @@ void SwDropCapsPict::UpdatePaintSettings()
         else
         {
             // query Font at character template
-            SwCharFmt *pFmt = mpPage->rSh.GetCharStyle(
+            SwCharFormat *pFormat = mpPage->rSh.GetCharStyle(
                                     mpPage->m_pTemplateBox->GetSelectEntry(),
                                     SwWrtShell::GETSTYLE_CREATEANY );
-            OSL_ENSURE(pFmt, "character style doesn't exist!");
-            const SvxFontItem &rFmtFont = pFmt->GetFont();
+            OSL_ENSURE(pFormat, "character style doesn't exist!");
+            const SvxFontItem &rFormatFont = pFormat->GetFont();
 
-            aFont.SetFamily (rFmtFont.GetFamily());
-            aFont.SetName   (rFmtFont.GetFamilyName());
-            aFont.SetPitch  (rFmtFont.GetPitch());
-            aFont.SetCharSet(rFmtFont.GetCharSet());
+            aFont.SetFamily (rFormatFont.GetFamily());
+            aFont.SetName   (rFormatFont.GetFamilyName());
+            aFont.SetPitch  (rFormatFont.GetPitch());
+            aFont.SetCharSet(rFormatFont.GetCharSet());
         }
     }
 
@@ -462,7 +462,7 @@ Size SwDropCapsPict::CalcTextSize()
     sal_Int32 nStart;
     sal_Int32 nEnd;
     GetFirstScriptSegment(nStart, nEnd, nScript);
-    long nTxtWidth = 0;
+    long nTextWidth = 0;
     long nCJKHeight = 0;
     long nCTLHeight = 0;
     long nHeight = 0;
@@ -477,11 +477,11 @@ Size SwDropCapsPict::CalcTextSize()
                                     ? maCTLFont
                                     : maFont);
 
-        sal_uLong nWidth = rFnt.GetTxtSize(mpPrinter, maText, nStart, nEnd-nStart ).Width();
+        sal_uLong nWidth = rFnt.GetTextSize(mpPrinter, maText, nStart, nEnd-nStart ).Width();
 
         if (nIdx < maScriptChanges.size())
             maScriptChanges[nIdx].textWidth = nWidth;
-        nTxtWidth += nWidth;
+        nTextWidth += nWidth;
         switch(nScript)
         {
             case css::i18n::ScriptType::ASIAN:
@@ -512,8 +512,8 @@ Size SwDropCapsPict::CalcTextSize()
         nAscent = nCTLAscent;
     nHeight += nAscent;
 
-    Size aTxtSize(nTxtWidth, nHeight);
-    return aTxtSize;
+    Size aTextSize(nTextWidth, nHeight);
+    return aTextSize;
 }
 
 void SwDropCapsPict::_InitPrinter()
@@ -634,13 +634,13 @@ bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)
 void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
 {
     // Characters, lines, gap and text
-    SwFmtDrop aFmtDrop(static_cast<const SwFmtDrop &>( rSet->Get(RES_PARATR_DROP)));
-    if (aFmtDrop.GetLines() > 1)
+    SwFormatDrop aFormatDrop(static_cast<const SwFormatDrop &>( rSet->Get(RES_PARATR_DROP)));
+    if (aFormatDrop.GetLines() > 1)
     {
-        m_pDropCapsField->SetValue(aFmtDrop.GetChars());
-        m_pLinesField->SetValue(aFmtDrop.GetLines());
-        m_pDistanceField->SetValue(m_pDistanceField->Normalize(aFmtDrop.GetDistance()), FUNIT_TWIP);
-        m_pWholeWordCB->Check(aFmtDrop.GetWholeWord());
+        m_pDropCapsField->SetValue(aFormatDrop.GetChars());
+        m_pLinesField->SetValue(aFormatDrop.GetLines());
+        m_pDistanceField->SetValue(m_pDistanceField->Normalize(aFormatDrop.GetDistance()), FUNIT_TWIP);
+        m_pWholeWordCB->Check(aFormatDrop.GetWholeWord());
     }
     else
     {
@@ -655,17 +655,17 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
 
     // Reset format
     m_pTemplateBox->SelectEntryPos(0);
-    if (aFmtDrop.GetCharFmt())
-        m_pTemplateBox->SelectEntry(aFmtDrop.GetCharFmt()->GetName());
+    if (aFormatDrop.GetCharFormat())
+        m_pTemplateBox->SelectEntry(aFormatDrop.GetCharFormat()->GetName());
 
     // Enable controls
-    m_pDropCapsBox->Check(aFmtDrop.GetLines() > 1);
+    m_pDropCapsBox->Check(aFormatDrop.GetLines() > 1);
     const sal_Int32 nVal = static_cast<sal_Int32>(m_pDropCapsField->GetValue());
     if (bFormat)
         m_pTextEdit->SetText(GetDefaultString(nVal));
     else
     {
-        m_pTextEdit->SetText(rSh.GetDropTxt(nVal));
+        m_pTextEdit->SetText(rSh.GetDropText(nVal));
         m_pTextEdit->Enable();
         m_pTextText->Enable();
     }
@@ -733,12 +733,12 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
             : 0;
         bool bSetText = false;
 
-        if (bFormat || rSh.GetDropTxt(1).isEmpty())
+        if (bFormat || rSh.GetDropText(1).isEmpty())
             sPreview = GetDefaultString(nVal);
         else
         {
             bSetText = true;
-            sPreview = rSh.GetDropTxt(nVal);
+            sPreview = rSh.GetDropText(nVal);
         }
 
         OUString sEdit(m_pTextEdit->GetText());
@@ -783,32 +783,32 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 {
     if(bModified)
     {
-        SwFmtDrop aFmt;
+        SwFormatDrop aFormat;
 
         bool bOn = m_pDropCapsBox->IsChecked();
         if(bOn)
         {
             // quantity, lines, gap
-            aFmt.GetChars()     = (sal_uInt8) m_pDropCapsField->GetValue();
-            aFmt.GetLines()     = (sal_uInt8) m_pLinesField->GetValue();
-            aFmt.GetDistance()  = (sal_uInt16) m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP));
-            aFmt.GetWholeWord() = m_pWholeWordCB->IsChecked();
+            aFormat.GetChars()     = (sal_uInt8) m_pDropCapsField->GetValue();
+            aFormat.GetLines()     = (sal_uInt8) m_pLinesField->GetValue();
+            aFormat.GetDistance()  = (sal_uInt16) m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP));
+            aFormat.GetWholeWord() = m_pWholeWordCB->IsChecked();
 
             // template
             if (m_pTemplateBox->GetSelectEntryPos())
-                aFmt.SetCharFmt(rSh.GetCharStyle(m_pTemplateBox->GetSelectEntry()));
+                aFormat.SetCharFormat(rSh.GetCharStyle(m_pTemplateBox->GetSelectEntry()));
         }
         else
         {
-            aFmt.GetChars()    = 1;
-            aFmt.GetLines()    = 1;
-            aFmt.GetDistance() = 0;
+            aFormat.GetChars()    = 1;
+            aFormat.GetLines()    = 1;
+            aFormat.GetDistance() = 0;
         }
 
         // set attributes
         const SfxPoolItem* pOldItem;
-        if (0 == (pOldItem = GetOldItem(rSet, FN_FORMAT_DROPCAPS)) || aFmt != *pOldItem)
-            rSet.Put(aFmt);
+        if (0 == (pOldItem = GetOldItem(rSet, FN_FORMAT_DROPCAPS)) || aFormat != *pOldItem)
+            rSet.Put(aFormat);
 
         // hard text formatting
         // Bug 24974: in designer/template catalog this doesn't make sense!!

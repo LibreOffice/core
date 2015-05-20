@@ -26,10 +26,10 @@
 #include <cstdio>
 #include <unordered_map>
 
-class SwCntntNode;
+class SwContentNode;
 class SwNode;
-class SwTxtAttr;
-class SwTxtNode;
+class SwTextAttr;
+class SwTextNode;
 class SwpHints;
 class SfxPoolItem;
 class SfxItemSet;
@@ -38,14 +38,14 @@ class SwPaM;
 class SwNodeNum;
 class SwUndo;
 class SwRect;
-class SwFrmFmt;
-class SwFrmFmts;
+class SwFrameFormat;
+class SwFrameFormats;
 class SwNodes;
 class SwRewriter;
-class SwNumRuleTbl;
+class SwNumRuleTable;
 class SwNumRule;
 class SwOutlineNodes;
-class SwTxtFmtColl;
+class SwTextFormatColl;
 class SwNodeRange;
 
 extern bool bDbgOutStdErr;
@@ -54,12 +54,12 @@ extern bool bDbgOutPrintAttrSet;
 SW_DLLPUBLIC const char * dbg_out(const void * pVoid);
 SW_DLLPUBLIC const char * dbg_out(const OUString & aStr);
 SW_DLLPUBLIC const char * dbg_out(const SwRect & rRect);
-SW_DLLPUBLIC const char * dbg_out(const SwFrmFmt & rFrmFmt);
+SW_DLLPUBLIC const char * dbg_out(const SwFrameFormat & rFrameFormat);
 SW_DLLPUBLIC const char * dbg_out(const SwNode & rNode);
 SW_DLLPUBLIC const char * dbg_out(const SwNode * pNode);
-SW_DLLPUBLIC const char * dbg_out(const SwCntntNode * pNode);
-SW_DLLPUBLIC const char * dbg_out(const SwTxtNode * pNode);
-SW_DLLPUBLIC const char * dbg_out(const SwTxtAttr & rAttr);
+SW_DLLPUBLIC const char * dbg_out(const SwContentNode * pNode);
+SW_DLLPUBLIC const char * dbg_out(const SwTextNode * pNode);
+SW_DLLPUBLIC const char * dbg_out(const SwTextAttr & rAttr);
 SW_DLLPUBLIC const char * dbg_out(const SwpHints &rHints);
 SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem & rItem);
 SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem * pItem);
@@ -72,9 +72,9 @@ SW_DLLPUBLIC const char * dbg_out(const SwUndo & rUndo);
 SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes);
 SW_DLLPUBLIC const char * dbg_out(const SwRewriter & rRewriter);
 SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule);
-SW_DLLPUBLIC const char * dbg_out(const SwTxtFmtColl & rFmt);
-SW_DLLPUBLIC const char * dbg_out(const SwFrmFmts & rFrmFmts);
-SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl);
+SW_DLLPUBLIC const char * dbg_out(const SwTextFormatColl & rFormat);
+SW_DLLPUBLIC const char * dbg_out(const SwFrameFormats & rFrameFormats);
+SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTable & rTable);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 
 template<typename tKey, typename tMember, typename fHashFunction>

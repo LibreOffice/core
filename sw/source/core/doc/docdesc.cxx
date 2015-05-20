@@ -62,18 +62,18 @@
 
 using namespace com::sun::star;
 
-static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
-                                SwFrmFmt &rFmt1,
-                                SwFrmFmt &rFmt2,
-                                SwFrmFmt &rFmt3,
-                                SwFrmFmt &rFmt4)
+static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
+                                SwFrameFormat &rFormat1,
+                                SwFrameFormat &rFormat2,
+                                SwFrameFormat &rFormat3,
+                                SwFrameFormat &rFormat4)
 {
     // --> #i41075# Printer on demand
     // This function does not require a printer anymore.
     // The default page size is obtained from the application
     //locale
 
-    SwFmtFrmSize aFrmSize( ATT_FIX_SIZE );
+    SwFormatFrmSize aFrmSize( ATT_FIX_SIZE );
     const Size aPhysSize = SvxPaperInfo::GetDefaultPaperSize();
     aFrmSize.SetSize( aPhysSize );
 
@@ -87,7 +87,7 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     // In the long term, this needs to be changed to always keep the
     // margins from the page desc.
     sal_Int32 nMinTop, nMinBottom, nMinLeft, nMinRight;
-    if( RES_POOLPAGE_HTML == nPoolFmtId )
+    if( RES_POOLPAGE_HTML == nPoolFormatId )
     {
         nMinRight = nMinTop = nMinBottom = GetMetricVal( CM_1 );
         nMinLeft = nMinRight * 2;
@@ -111,24 +111,24 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     aLR.SetRight( nMinRight );
     aLR.SetLeft( nMinLeft );
 
-    rFmt1.SetFmtAttr( aFrmSize );
-    rFmt1.SetFmtAttr( aLR );
-    rFmt1.SetFmtAttr( aUL );
+    rFormat1.SetFormatAttr( aFrmSize );
+    rFormat1.SetFormatAttr( aLR );
+    rFormat1.SetFormatAttr( aUL );
 
-    rFmt2.SetFmtAttr( aFrmSize );
-    rFmt2.SetFmtAttr( aLR );
-    rFmt2.SetFmtAttr( aUL );
+    rFormat2.SetFormatAttr( aFrmSize );
+    rFormat2.SetFormatAttr( aLR );
+    rFormat2.SetFormatAttr( aUL );
 
-    rFmt3.SetFmtAttr( aFrmSize );
-    rFmt3.SetFmtAttr( aLR );
-    rFmt3.SetFmtAttr( aUL );
+    rFormat3.SetFormatAttr( aFrmSize );
+    rFormat3.SetFormatAttr( aLR );
+    rFormat3.SetFormatAttr( aUL );
 
-    rFmt4.SetFmtAttr( aFrmSize );
-    rFmt4.SetFmtAttr( aLR );
-    rFmt4.SetFmtAttr( aUL );
+    rFormat4.SetFormatAttr( aFrmSize );
+    rFormat4.SetFormatAttr( aLR );
+    rFormat4.SetFormatAttr( aUL );
 }
 
-static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
+static void lcl_DescSetAttr( const SwFrameFormat &rSource, SwFrameFormat &rDest,
                          const bool bPage = true )
 {
     // We should actually use ItemSet's Intersect here, but that doesn't work
@@ -169,7 +169,7 @@ static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                     // All in aIdArr except from RES_HEADER_FOOTER_EAT_SPACING
                     case RES_HEADER_FOOTER_EAT_SPACING:
                     //UUUU take out SvxBrushItem; it's the result of the fallback
-                    // at SwFmt::GetItemState and not really in state SfxItemState::SET
+                    // at SwFormat::GetItemState and not really in state SfxItemState::SET
                     case RES_BACKGROUND:
                         bExecuteId = false;
                         break;
@@ -196,25 +196,25 @@ static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
             {
                 if (SfxItemState::SET == rSource.GetItemState(nId, false, &pItem))
                 {
-                    rDest.SetFmtAttr(*pItem);
+                    rDest.SetFormatAttr(*pItem);
                 }
                 else
                 {
-                    rDest.ResetFmtAttr(nId);
+                    rDest.ResetFormatAttr(nId);
                 }
             }
         }
     }
 
     // Transmit pool and help IDs too
-    rDest.SetPoolFmtId( rSource.GetPoolFmtId() );
+    rDest.SetPoolFormatId( rSource.GetPoolFormatId() );
     rDest.SetPoolHelpId( rSource.GetPoolHelpId() );
     rDest.SetPoolHlpFileId( rSource.GetPoolHlpFileId() );
 }
 
 namespace
 {
-    SwFrmFmt& getFrmFmt(SwPageDesc &rDesc, bool bLeft, bool bFirst)
+    SwFrameFormat& getFrameFormat(SwPageDesc &rDesc, bool bLeft, bool bFirst)
     {
         if (bFirst)
         {
@@ -225,20 +225,20 @@ namespace
         return rDesc.GetLeft();
     }
 
-    const SwFrmFmt& getConstFrmFmt(const SwPageDesc &rDesc, bool bLeft, bool bFirst)
+    const SwFrameFormat& getConstFrameFormat(const SwPageDesc &rDesc, bool bLeft, bool bFirst)
     {
-        return getFrmFmt(const_cast<SwPageDesc&>(rDesc), bLeft, bFirst);
+        return getFrameFormat(const_cast<SwPageDesc&>(rDesc), bLeft, bFirst);
     }
 }
 
-void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc &rDesc, bool bLeft, bool bFirst)
+void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHead, SwPageDesc &rDesc, bool bLeft, bool bFirst)
 {
     assert(bLeft || bFirst);
-    SwFrmFmt& rDescFrmFmt = getFrmFmt(rDesc, bLeft, bFirst);
+    SwFrameFormat& rDescFrameFormat = getFrameFormat(rDesc, bLeft, bFirst);
     if (bFirst && bLeft)
     {
         // special case: always shared with something
-        rDescFrmFmt.SetFmtAttr( rChged.IsFirstShared()
+        rDescFrameFormat.SetFormatAttr( rChged.IsFirstShared()
                 ? rDesc.GetLeft().GetHeader()
                 : rDesc.GetFirstMaster().GetHeader());
     }
@@ -246,72 +246,72 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
          || !rHead.IsActive())
     {
         // Left or first shares the header with the Master.
-        rDescFrmFmt.SetFmtAttr( rDesc.GetMaster().GetHeader() );
+        rDescFrameFormat.SetFormatAttr( rDesc.GetMaster().GetHeader() );
     }
     else if ( rHead.IsActive() )
     {   // Left or first gets its own header if the Format doesn't alrady have one.
         // If it already has one and it points to the same Section as the
         // Right one, it needs to get an own Header.
         // The content is evidently copied.
-        const SwFmtHeader &rFmtHead = rDescFrmFmt.GetHeader();
-        if ( !rFmtHead.IsActive() )
+        const SwFormatHeader &rFormatHead = rDescFrameFormat.GetHeader();
+        if ( !rFormatHead.IsActive() )
         {
-            SwFmtHeader aHead( getIDocumentLayoutAccess().MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
-            rDescFrmFmt.SetFmtAttr( aHead );
+            SwFormatHeader aHead( getIDocumentLayoutAccess().MakeLayoutFormat( RND_STD_HEADERL, 0 ) );
+            rDescFrameFormat.SetFormatAttr( aHead );
             // take over additional attributes (margins, borders ...)
-            ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), false);
+            ::lcl_DescSetAttr( *rHead.GetHeaderFormat(), *aHead.GetHeaderFormat(), false);
         }
         else
         {
-            const SwFrmFmt *pRight = rHead.GetHeaderFmt();
-            const SwFmtCntnt &aRCnt = pRight->GetCntnt();
-            const SwFmtCntnt &aCnt = rFmtHead.GetHeaderFmt()->GetCntnt();
+            const SwFrameFormat *pRight = rHead.GetHeaderFormat();
+            const SwFormatContent &aRCnt = pRight->GetContent();
+            const SwFormatContent &aCnt = rFormatHead.GetHeaderFormat()->GetContent();
 
-            if (!aCnt.GetCntntIdx())
+            if (!aCnt.GetContentIdx())
             {
-                const SwFrmFmt& rChgedFrmFmt = getConstFrmFmt(rChged, bLeft, bFirst);
-                rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetHeader() );
+                const SwFrameFormat& rChgedFrameFormat = getConstFrameFormat(rChged, bLeft, bFirst);
+                rDescFrameFormat.SetFormatAttr( rChgedFrameFormat.GetHeader() );
             }
-            else if ((*aRCnt.GetCntntIdx() == *aCnt.GetCntntIdx()) ||
-                // The CntntIdx is _always_ different when called from
+            else if ((*aRCnt.GetContentIdx() == *aCnt.GetContentIdx()) ||
+                // The ContentIdx is _always_ different when called from
                 // SwDocStyleSheet::SetItemSet, because it deep-copies the
                 // PageDesc.  So check if it was previously shared.
                  ((bFirst) ? rDesc.IsFirstShared() : rDesc.IsHeaderShared()))
             {
-                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(),
+                SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
                         (bFirst) ? "First header" : "Left header",
-                                                GetDfltFrmFmt() );
-                ::lcl_DescSetAttr( *pRight, *pFmt, false );
+                                                GetDfltFrameFormat() );
+                ::lcl_DescSetAttr( *pRight, *pFormat, false );
                 // The section which the right header attribute is pointing
                 // is copied, and the Index to the StartNode is set to
                 // the left or first header attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
                 SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwHeaderStartNode );
-                SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
-                            *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
+                SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), 0,
+                            *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, false );
                 aTmp = *pSttNd;
                 GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, 0, aTmp);
 
-                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
-                rDescFrmFmt.SetFmtAttr( SwFmtHeader( pFmt ) );
+                pFormat->SetFormatAttr( SwFormatContent( pSttNd ) );
+                rDescFrameFormat.SetFormatAttr( SwFormatHeader( pFormat ) );
             }
             else
                 ::lcl_DescSetAttr( *pRight,
-                               *const_cast<SwFrmFmt*>(rFmtHead.GetHeaderFmt()), false );
+                               *const_cast<SwFrameFormat*>(rFormatHead.GetHeaderFormat()), false );
         }
     }
 }
 
-void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc &rDesc, bool bLeft, bool bFirst)
+void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFoot, SwPageDesc &rDesc, bool bLeft, bool bFirst)
 {
     assert(bLeft || bFirst);
-    SwFrmFmt& rDescFrmFmt = getFrmFmt(rDesc, bLeft, bFirst);
+    SwFrameFormat& rDescFrameFormat = getFrameFormat(rDesc, bLeft, bFirst);
     if (bFirst && bLeft)
     {
         // special case: always shared with something
-        rDescFrmFmt.SetFmtAttr( rChged.IsFirstShared()
+        rDescFrameFormat.SetFormatAttr( rChged.IsFirstShared()
                 ? rDesc.GetLeft().GetFooter()
                 : rDesc.GetFirstMaster().GetFooter());
     }
@@ -319,59 +319,59 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
         || !rFoot.IsActive())
     {
         // Left or first shares the Header with the Master.
-        rDescFrmFmt.SetFmtAttr( rDesc.GetMaster().GetFooter() );
+        rDescFrameFormat.SetFormatAttr( rDesc.GetMaster().GetFooter() );
     }
     else if ( rFoot.IsActive() )
     {   // Left or first gets its own Footer if the Format does not already have one.
         // If the Format already has a Footer and it points to the same section as the Right one,
         // it needs to get an own one.
         // The content is evidently copied.
-        const SwFmtFooter &rFmtFoot = rDescFrmFmt.GetFooter();
-        if ( !rFmtFoot.IsActive() )
+        const SwFormatFooter &rFormatFoot = rDescFrameFormat.GetFooter();
+        if ( !rFormatFoot.IsActive() )
         {
-            SwFmtFooter aFoot( getIDocumentLayoutAccess().MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
-            rDescFrmFmt.SetFmtAttr( aFoot );
+            SwFormatFooter aFoot( getIDocumentLayoutAccess().MakeLayoutFormat( RND_STD_FOOTER, 0 ) );
+            rDescFrameFormat.SetFormatAttr( aFoot );
             // Take over additional attributes (margins, borders ...).
-            ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), false);
+            ::lcl_DescSetAttr( *rFoot.GetFooterFormat(), *aFoot.GetFooterFormat(), false);
         }
         else
         {
-            const SwFrmFmt *pRight = rFoot.GetFooterFmt();
-            const SwFmtCntnt &aRCnt = pRight->GetCntnt();
-            const SwFmtCntnt &aLCnt = rFmtFoot.GetFooterFmt()->GetCntnt();
-            if( !aLCnt.GetCntntIdx() )
+            const SwFrameFormat *pRight = rFoot.GetFooterFormat();
+            const SwFormatContent &aRCnt = pRight->GetContent();
+            const SwFormatContent &aLCnt = rFormatFoot.GetFooterFormat()->GetContent();
+            if( !aLCnt.GetContentIdx() )
             {
-                const SwFrmFmt& rChgedFrmFmt = getConstFrmFmt(rChged, bLeft, bFirst);
-                rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetFooter() );
+                const SwFrameFormat& rChgedFrameFormat = getConstFrameFormat(rChged, bLeft, bFirst);
+                rDescFrameFormat.SetFormatAttr( rChgedFrameFormat.GetFooter() );
             }
-            else if ((*aRCnt.GetCntntIdx() == *aLCnt.GetCntntIdx()) ||
-                // The CntntIdx is _always_ different when called from
+            else if ((*aRCnt.GetContentIdx() == *aLCnt.GetContentIdx()) ||
+                // The ContentIdx is _always_ different when called from
                 // SwDocStyleSheet::SetItemSet, because it deep-copies the
                 // PageDesc.  So check if it was previously shared.
                  ((bFirst) ? rDesc.IsFirstShared() : rDesc.IsFooterShared()))
             {
-                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(),
+                SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
                         (bFirst) ? "First footer" : "Left footer",
-                                                GetDfltFrmFmt() );
-                ::lcl_DescSetAttr( *pRight, *pFmt, false );
+                                                GetDfltFrameFormat() );
+                ::lcl_DescSetAttr( *pRight, *pFormat, false );
                 // The section to which the right footer attribute is pointing
                 // is copied, and the Index to the StartNode is set to
                 // the left footer attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
                 SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwFooterStartNode );
-                SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
-                            *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
+                SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), 0,
+                            *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, false );
                 aTmp = *pSttNd;
                 GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, 0, aTmp);
 
-                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
-                rDescFrmFmt.SetFmtAttr( SwFmtFooter( pFmt ) );
+                pFormat->SetFormatAttr( SwFormatContent( pSttNd ) );
+                rDescFrameFormat.SetFormatAttr( SwFormatFooter( pFormat ) );
             }
             else
                 ::lcl_DescSetAttr( *pRight,
-                               *const_cast<SwFrmFmt*>(rFmtFoot.GetFooterFmt()), false );
+                               *const_cast<SwFrameFormat*>(rFormatFoot.GetFooterFormat()), false );
         }
     }
 }
@@ -409,17 +409,17 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     {
         rDesc.SetNumType( rChged.GetNumType() );
         // Notify page number fields that NumFormat has changed
-        getIDocumentFieldsAccess().GetSysFldType( RES_PAGENUMBERFLD )->UpdateFlds();
-        getIDocumentFieldsAccess().GetSysFldType( RES_REFPAGEGETFLD )->UpdateFlds();
+        getIDocumentFieldsAccess().GetSysFieldType( RES_PAGENUMBERFLD )->UpdateFields();
+        getIDocumentFieldsAccess().GetSysFieldType( RES_REFPAGEGETFLD )->UpdateFields();
 
         // If the numbering scheme has changed we could have QuoVadis/ErgoSum texts
         // that refer to a changed page, so we invalidate foot notes.
-        SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-        for( SwFtnIdxs::size_type nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
+        SwFootnoteIdxs& rFootnoteIdxs = GetFootnoteIdxs();
+        for( SwFootnoteIdxs::size_type nPos = 0; nPos < rFootnoteIdxs.size(); ++nPos )
         {
-            SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
-            const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-            pTxtFtn->SetNumber(rFtn.GetNumber(), rFtn.GetNumStr());
+            SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
+            const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+            pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
         }
     }
 
@@ -430,35 +430,35 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     bool bHeaderFooterChanged = false;
 
     // Synch header.
-    const SwFmtHeader &rHead = rChged.GetMaster().GetHeader();
+    const SwFormatHeader &rHead = rChged.GetMaster().GetHeader();
     if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
         // Did something change in the nodes?
-        const SwFmtHeader &rOldHead = rDesc.GetMaster().GetHeader();
+        const SwFormatHeader &rOldHead = rDesc.GetMaster().GetHeader();
         bHeaderFooterChanged |=
             ( rHead.IsActive() != rOldHead.IsActive() ||
               rChged.IsHeaderShared() != rDesc.IsHeaderShared() ||
               rChged.IsFirstShared() != rDesc.IsFirstShared() );
     }
-    rDesc.GetMaster().SetFmtAttr( rHead );
+    rDesc.GetMaster().SetFormatAttr( rHead );
     CopyMasterHeader(rChged, rHead, rDesc, true, false); // Copy left header
     CopyMasterHeader(rChged, rHead, rDesc, false, true); // Copy first master
     CopyMasterHeader(rChged, rHead, rDesc, true, true);  // Copy first left
     rDesc.ChgHeaderShare( rChged.IsHeaderShared() );
 
     // Synch Footer.
-    const SwFmtFooter &rFoot = rChged.GetMaster().GetFooter();
+    const SwFormatFooter &rFoot = rChged.GetMaster().GetFooter();
     if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
         // Did something change in the Nodes?
-        const SwFmtFooter &rOldFoot = rDesc.GetMaster().GetFooter();
+        const SwFormatFooter &rOldFoot = rDesc.GetMaster().GetFooter();
         bHeaderFooterChanged |=
             ( rFoot.IsActive() != rOldFoot.IsActive() ||
               rChged.IsFooterShared() != rDesc.IsFooterShared() );
     }
-    rDesc.GetMaster().SetFmtAttr( rFoot );
+    rDesc.GetMaster().SetFormatAttr( rFoot );
     CopyMasterFooter(rChged, rFoot, rDesc, true, false); // Copy left footer
     CopyMasterFooter(rChged, rFoot, rDesc, false, true); // Copy first master
     CopyMasterFooter(rChged, rFoot, rDesc, true, true);  // Copy first left
@@ -470,7 +470,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         rDesc.SetName( rChged.GetName() );
 
     // A RegisterChange is triggered, if necessary
-    rDesc.SetRegisterFmtColl( rChged.GetRegisterFmtColl() );
+    rDesc.SetRegisterFormatColl( rChged.GetRegisterFormatColl() );
 
     // If UseOn or the Follow change, the paragraphs need to know about it.
     bool bUseOn  = false;
@@ -511,9 +511,9 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     ::lcl_DescSetAttr( rChged.GetFirstLeft(), rDesc.GetFirstLeft() );
 
     // If the FootnoteInfo changes, the pages are triggered.
-    if( !(rDesc.GetFtnInfo() == rChged.GetFtnInfo()) )
+    if( !(rDesc.GetFootnoteInfo() == rChged.GetFootnoteInfo()) )
     {
-        rDesc.SetFtnInfo( rChged.GetFtnInfo() );
+        rDesc.SetFootnoteInfo( rChged.GetFootnoteInfo() );
         sw::PageFootnoteHint aHint;
         rDesc.GetMaster().CallSwClientNotify(aHint);
         rDesc.GetLeft().CallSwClientNotify(aHint);
@@ -541,11 +541,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 
     //h/f of first-left page must not be unique but same as first master or left
     assert((rDesc.IsFirstShared())
-        ? rDesc.GetFirstLeft().GetHeader().GetHeaderFmt() == rDesc.GetLeft().GetHeader().GetHeaderFmt()
-        : rDesc.GetFirstLeft().GetHeader().GetHeaderFmt() == rDesc.GetFirstMaster().GetHeader().GetHeaderFmt());
+        ? rDesc.GetFirstLeft().GetHeader().GetHeaderFormat() == rDesc.GetLeft().GetHeader().GetHeaderFormat()
+        : rDesc.GetFirstLeft().GetHeader().GetHeaderFormat() == rDesc.GetFirstMaster().GetHeader().GetHeaderFormat());
     assert((rDesc.IsFirstShared())
-        ? rDesc.GetFirstLeft().GetFooter().GetFooterFmt() == rDesc.GetLeft().GetFooter().GetFooterFmt()
-        : rDesc.GetFirstLeft().GetFooter().GetFooterFmt() == rDesc.GetFirstMaster().GetFooter().GetFooterFmt());
+        ? rDesc.GetFirstLeft().GetFooter().GetFooterFormat() == rDesc.GetLeft().GetFooter().GetFooterFormat()
+        : rDesc.GetFirstLeft().GetFooter().GetFooterFormat() == rDesc.GetFirstMaster().GetFooter().GetFooterFormat());
 }
 
 /// All descriptors whose Follow point to the to-be-deleted have to be adapted.
@@ -560,13 +560,13 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
     pDel->CallSwClientNotify( aHint );
 
     bool bHasLayout = getIDocumentLayoutAccess().HasLayout();
-    if ( mpFtnInfo->DependsOn( pDel ) )
+    if ( mpFootnoteInfo->DependsOn( pDel ) )
     {
-        mpFtnInfo->ChgPageDesc( &maPageDescs[0] );
+        mpFootnoteInfo->ChgPageDesc( &maPageDescs[0] );
         if ( bHasLayout )
         {
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), false));
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFootnotePageDescs), false));
         }
     }
     else if ( mpEndNoteInfo->DependsOn( pDel ) )
@@ -575,7 +575,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         if ( bHasLayout )
         {
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), true));
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFootnotePageDescs), true));
         }
     }
 
@@ -646,25 +646,25 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
         pNew->SetName( rName );
         if( rName != pCpy->GetName() )
         {
-            pNew->SetPoolFmtId( USHRT_MAX );
+            pNew->SetPoolFormatId( USHRT_MAX );
             pNew->SetPoolHelpId( USHRT_MAX );
             pNew->SetPoolHlpFileId( UCHAR_MAX );
         }
     }
     else
     {
-        pNew = new SwPageDesc( rName, GetDfltFrmFmt(), this );
+        pNew = new SwPageDesc( rName, GetDfltFrameFormat(), this );
         // Set the default page format.
-        lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(), pNew->GetFirstMaster(), pNew->GetFirstLeft() );
+        lcl_DefaultPageFormat( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(), pNew->GetFirstMaster(), pNew->GetFirstLeft() );
 
         SvxFrameDirection aFrameDirection = bRegardLanguage ?
             GetDefaultFrameDirection(GetAppLanguage())
             : FRMDIR_HORI_LEFT_TOP;
 
-        pNew->GetMaster().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
-        pNew->GetLeft().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
-        pNew->GetFirstMaster().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
-        pNew->GetFirstLeft().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
+        pNew->GetMaster().SetFormatAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
+        pNew->GetLeft().SetFormatAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
+        pNew->GetFirstMaster().SetFormatAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
+        pNew->GetFirstLeft().SetFormatAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
     maPageDescs.push_back( pNew );
 
@@ -722,7 +722,7 @@ void SwDoc::PrtOLENotify( bool bAll )
 
         mbOLEPrtNotifyPending = mbAllOLENotify = false;
 
-        SwOLENodes *pNodes = SwCntntNode::CreateOLENodesArray( *GetDfltGrfFmtColl(), !bAll );
+        SwOLENodes *pNodes = SwContentNode::CreateOLENodesArray( *GetDfltGrfFormatColl(), !bAll );
         if ( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
@@ -779,7 +779,7 @@ IMPL_LINK_NOARG_TYPED( SwDoc, DoUpdateModifiedOLE, Idle *, void )
     {
         mbOLEPrtNotifyPending = mbAllOLENotify = false;
 
-        SwOLENodes *pNodes = SwCntntNode::CreateOLENodesArray( *GetDfltGrfFmtColl(), true );
+        SwOLENodes *pNodes = SwContentNode::CreateOLENodesArray( *GetDfltGrfFormatColl(), true );
         if( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
@@ -882,17 +882,17 @@ void SwDoc::ChgPageDesc( const OUString & rName, const SwPageDesc & rDesc)
  * know why. This function is meant to check the page descriptors for invalid
  * values.
  */
-void SwDoc::CheckDefaultPageFmt()
+void SwDoc::CheckDefaultPageFormat()
 {
     for ( size_t i = 0; i < GetPageDescCnt(); ++i )
     {
         SwPageDesc& rDesc = GetPageDesc( i );
 
-        SwFrmFmt& rMaster = rDesc.GetMaster();
-        SwFrmFmt& rLeft   = rDesc.GetLeft();
+        SwFrameFormat& rMaster = rDesc.GetMaster();
+        SwFrameFormat& rLeft   = rDesc.GetLeft();
 
-        const SwFmtFrmSize& rMasterSize  = rMaster.GetFrmSize();
-        const SwFmtFrmSize& rLeftSize    = rLeft.GetFrmSize();
+        const SwFormatFrmSize& rMasterSize  = rMaster.GetFrmSize();
+        const SwFormatFrmSize& rLeftSize    = rLeft.GetFrmSize();
 
         const bool bSetSize = LONG_MAX == rMasterSize.GetWidth() ||
                               LONG_MAX == rMasterSize.GetHeight() ||
@@ -900,7 +900,7 @@ void SwDoc::CheckDefaultPageFmt()
                               LONG_MAX == rLeftSize.GetHeight();
 
         if ( bSetSize )
-            lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(), rDesc.GetLeft(), rDesc.GetFirstMaster(), rDesc.GetFirstLeft() );
+            lcl_DefaultPageFormat( rDesc.GetPoolFormatId(), rDesc.GetMaster(), rDesc.GetLeft(), rDesc.GetFirstMaster(), rDesc.GetFirstLeft() );
     }
 }
 
@@ -920,13 +920,13 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
     {
         SwPageDesc& rDesc = GetPageDesc( i );
 
-        SwFrmFmt& rMaster = rDesc.GetMaster();
-        SwFrmFmt& rLeft = rDesc.GetLeft();
+        SwFrameFormat& rMaster = rDesc.GetMaster();
+        SwFrameFormat& rLeft = rDesc.GetLeft();
 
-        SwTextGridItem aGrid(static_cast<const SwTextGridItem&>(rMaster.GetFmtAttr(RES_TEXTGRID)));
+        SwTextGridItem aGrid(static_cast<const SwTextGridItem&>(rMaster.GetFormatAttr(RES_TEXTGRID)));
         aGrid.SwitchPaperMode( bSquaredPageMode );
-        rMaster.SetFmtAttr(aGrid);
-        rLeft.SetFmtAttr(aGrid);
+        rMaster.SetFormatAttr(aGrid);
+        rLeft.SetFormatAttr(aGrid);
     }
 }
 

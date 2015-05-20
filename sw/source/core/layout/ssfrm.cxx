@@ -214,19 +214,19 @@ void SwFrm::CheckDirChange()
                     };
 
                     SwTableLine* pLine = const_cast<SwTableLine*>(static_cast<SwCellFrm*>(this)->GetTabBox()->GetUpper());
-                    SwFrmFmt* pFrmFmt = pLine->GetFrmFmt();
-                    SwFmtFrmSize aNew( pFrmFmt->GetFrmSize() );
+                    SwFrameFormat* pFrameFormat = pLine->GetFrameFormat();
+                    SwFormatFrmSize aNew( pFrameFormat->GetFrmSize() );
                     if ( ATT_FIX_SIZE != aNew.GetHeightSizeType() )
                         aNew.SetHeightSizeType( ATT_MIN_SIZE );
                     if ( aNew.GetHeight() < MIN_VERT_CELL_HEIGHT )
                         aNew.SetHeight( MIN_VERT_CELL_HEIGHT );
-                    SwDoc* pDoc = pFrmFmt->GetDoc();
-                    pDoc->SetAttr( aNew, *pLine->ClaimFrmFmt() );
+                    SwDoc* pDoc = pFrameFormat->GetDoc();
+                    pDoc->SetAttr( aNew, *pLine->ClaimFrameFormat() );
                 }
             }
 
             SwFrm* pFrm = static_cast<SwLayoutFrm*>(this)->Lower();
-            const SwFmtCol* pCol = NULL;
+            const SwFormatCol* pCol = NULL;
             SwLayoutFrm* pBody = 0;
             if( pFrm )
             {
@@ -236,14 +236,14 @@ void SwFrm::CheckDirChange()
                     // we have to look for columns and rearrange them.
                     pBody = static_cast<SwPageFrm*>(this)->FindBodyCont();
                     if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm())
-                        pCol = &static_cast<SwPageFrm*>(this)->GetFmt()->GetCol();
+                        pCol = &static_cast<SwPageFrm*>(this)->GetFormat()->GetCol();
                 }
                 else if( pFrm->IsColumnFrm() )
                 {
                     pBody = static_cast<SwLayoutFrm*>(this);
-                    const SwFrmFmt *pFmt = pBody->GetFmt();
-                    if( pFmt )
-                        pCol = &pFmt->GetCol();
+                    const SwFrameFormat *pFormat = pBody->GetFormat();
+                    if( pFormat )
+                        pCol = &pFormat->GetCol();
                 }
             }
             while( pFrm )
@@ -254,8 +254,8 @@ void SwFrm::CheckDirChange()
             if( pCol )
                 pBody->AdjustColumns( pCol, true );
         }
-        else if( IsTxtFrm() )
-            static_cast<SwTxtFrm*>(this)->Prepare( PREP_CLEAR );
+        else if( IsTextFrm() )
+            static_cast<SwTextFrm*>(this)->Prepare( PREP_CLEAR );
 
         // #i31698# - notify anchored objects also for page frames.
         // Remove code above for special handling of page frames
@@ -296,10 +296,10 @@ Point SwFrm::GetFrmAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
     if ( ( IsVertical() && !IsVertLR() ) || IsRightToLeft() )
         aAnchor.X() += Frm().Width();
 
-    if ( IsTxtFrm() )
+    if ( IsTextFrm() )
     {
         SwTwips nBaseOfstForFly =
-            static_cast<const SwTxtFrm*>(this)->GetBaseOfstForFly( bIgnoreFlysAnchoredAtThisFrame );
+            static_cast<const SwTextFrm*>(this)->GetBaseOfstForFly( bIgnoreFlysAnchoredAtThisFrame );
         if ( IsVertical() )
             aAnchor.Y() += nBaseOfstForFly;
         else
@@ -308,9 +308,9 @@ Point SwFrm::GetFrmAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
         // OD 2004-03-10 #i11860# - if option 'Use former object positioning'
         // is OFF, consider the lower space and the line spacing of the
         // previous frame and the spacing considered for the page grid
-        const SwTxtFrm* pThisTxtFrm = static_cast<const SwTxtFrm*>(this);
+        const SwTextFrm* pThisTextFrm = static_cast<const SwTextFrm*>(this);
         const SwTwips nUpperSpaceAmountConsideredForPrevFrmAndPageGrid =
-                pThisTxtFrm->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+                pThisTextFrm->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
         if ( IsVertical() )
         {
             aAnchor.X() -= nUpperSpaceAmountConsideredForPrevFrmAndPageGrid;
@@ -391,37 +391,37 @@ void SwFrm::DestroyFrm(SwFrm *const pFrm)
     }
 }
 
-const SwFrmFmt * SwLayoutFrm::GetFmt() const
+const SwFrameFormat * SwLayoutFrm::GetFormat() const
 {
-    return static_cast< const SwFrmFmt * >( GetDep() );
+    return static_cast< const SwFrameFormat * >( GetDep() );
 }
 
-SwFrmFmt * SwLayoutFrm::GetFmt()
+SwFrameFormat * SwLayoutFrm::GetFormat()
 {
-    return static_cast< SwFrmFmt * >( GetDep() );
+    return static_cast< SwFrameFormat * >( GetDep() );
 }
 
-void SwLayoutFrm::SetFrmFmt( SwFrmFmt *pNew )
+void SwLayoutFrm::SetFrameFormat( SwFrameFormat *pNew )
 {
-    if ( pNew != GetFmt() )
+    if ( pNew != GetFormat() )
     {
-        SwFmtChg aOldFmt( GetFmt() );
+        SwFormatChg aOldFormat( GetFormat() );
         pNew->Add( this );
-        SwFmtChg aNewFmt( pNew );
-        ModifyNotification( &aOldFmt, &aNewFmt );
+        SwFormatChg aNewFormat( pNew );
+        ModifyNotification( &aOldFormat, &aNewFormat );
     }
 }
 
-SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt, SwFrm* pSib ) :
-    SwFrm( pCntnt, pSib ),
+SwContentFrm::SwContentFrm( SwContentNode * const pContent, SwFrm* pSib ) :
+    SwFrm( pContent, pSib ),
     SwFlowFrm( (SwFrm&)*this )
 {
 }
 
-void SwCntntFrm::DestroyImpl()
+void SwContentFrm::DestroyImpl()
 {
-    const SwCntntNode* pCNd;
-    if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
+    const SwContentNode* pCNd;
+    if( 0 != ( pCNd = PTR_CAST( SwContentNode, GetRegisteredIn() )) &&
         !pCNd->GetDoc()->IsInDtor() )
     {
         //Unregister from root if I'm still in turbo there.
@@ -436,11 +436,11 @@ void SwCntntFrm::DestroyImpl()
     SwFrm::DestroyImpl();
 }
 
-SwCntntFrm::~SwCntntFrm()
+SwContentFrm::~SwContentFrm()
 {
 }
 
-void SwCntntFrm::RegisterToNode( SwCntntNode& rNode )
+void SwContentFrm::RegisterToNode( SwContentNode& rNode )
 {
     rNode.Add( this );
 }
@@ -457,7 +457,7 @@ void SwLayoutFrm::DestroyImpl()
 
     SwFrm *pFrm = m_pLower;
 
-    if( GetFmt() && !GetFmt()->GetDoc()->IsInDtor() )
+    if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
     {
         while ( pFrm )
         {
@@ -683,9 +683,9 @@ const SwRect SwFrm::UnionFrm( bool bBorder ) const
             nAdd += rShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT );
         }
     }
-    if( IsTxtFrm() && static_cast<const SwTxtFrm*>(this)->HasPara() )
+    if( IsTextFrm() && static_cast<const SwTextFrm*>(this)->HasPara() )
     {
-        long nTmp = static_cast<const SwTxtFrm*>(this)->HangingMargin();
+        long nTmp = static_cast<const SwTextFrm*>(this)->HangingMargin();
         if( nTmp > nAdd )
             nAdd = nTmp;
     }

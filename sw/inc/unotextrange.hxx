@@ -37,7 +37,7 @@
 
 class SwDoc;
 class SwUnoCrsr;
-class SwFrmFmt;
+class SwFrameFormat;
 
 class SW_DLLPUBLIC SwUnoInternalPaM
     : public SwPaM
@@ -114,7 +114,7 @@ public:
                 ::com::sun::star::text::XText > & xParent,
             const enum RangePosition eRange = RANGE_IN_TEXT);
     // only for RANGE_IS_TABLE
-    SwXTextRange(SwFrmFmt& rTblFmt);
+    SwXTextRange(SwFrameFormat& rTableFormat);
 
     const SwDoc* GetDoc() const;
           SwDoc* GetDoc();

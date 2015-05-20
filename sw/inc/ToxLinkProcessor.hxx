@@ -15,7 +15,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class SwTxtNode;
+class SwTextNode;
 
 class ToxLinkProcessorTest;
 
@@ -41,7 +41,7 @@ public:
 
     /** Insert the found links as attributes to a text node */
     void
-    InsertLinkAttributes(SwTxtNode& node);
+    InsertLinkAttributes(SwTextNode& node);
 
 private:
     /** Obtain the pool id which belongs to a character style.
@@ -66,9 +66,9 @@ private:
      */
     struct ClosedLink {
         ClosedLink(const OUString& url, sal_Int32 startPosition, sal_Int32 endPosition) :
-                mINetFmt(url, OUString()), mStartTextPos(endPosition), mEndTextPos(startPosition) {
+                mINetFormat(url, OUString()), mStartTextPos(endPosition), mEndTextPos(startPosition) {
         }
-        SwFmtINetFmt mINetFmt;
+        SwFormatINetFormat mINetFormat;
         sal_Int32 mStartTextPos;
         sal_Int32 mEndTextPos;
     };

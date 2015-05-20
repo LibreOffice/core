@@ -81,10 +81,10 @@ static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 }
 
 // determine lines and columns for table selection
-static bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
+static bool lcl_GetSelTable( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
-    const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
-    if( !pTblNd )
+    const SwTableNode* pTableNd = rSh.IsCrsrInTable();
+    if( !pTableNd )
         return false;
 
     _FndBox aFndBox( 0, 0 );
@@ -92,10 +92,10 @@ static bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
     // look for all boxes / lines
     {
         SwSelBoxes aSelBoxes;
-        ::GetTblSel( rSh, aSelBoxes );
+        ::GetTableSel( rSh, aSelBoxes );
         _FndPara aPara( aSelBoxes, &aFndBox );
-        const SwTable& rTbl = pTblNd->GetTable();
-        ForEach_FndLineCopyCol( (SwTableLines&)rTbl.GetTabLines(), &aPara );
+        const SwTable& rTable = pTableNd->GetTable();
+        ForEach_FndLineCopyCol( (SwTableLines&)rTable.GetTabLines(), &aPara );
     }
     rX = aFndBox.GetLines().size();
     if( !rX )
@@ -108,9 +108,9 @@ static bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 // init list
 SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     : SvxStandardDialog(pParent, "SortDialog", "modules/swriter/ui/sortdialog.ui")
-    , aColTxt(SW_RES(STR_COL))
-    , aRowTxt(SW_RES(STR_ROW))
-    , aNumericTxt(SW_RES(STR_NUMERIC))
+    , aColText(SW_RES(STR_COL))
+    , aRowText(SW_RES(STR_ROW))
+    , aNumericText(SW_RES(STR_NUMERIC))
     , rSh(rShell)
     , pColRes(0)
     , nX(99)
@@ -166,7 +166,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
             (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
     {
         m_pColumnRB->Check(bCol);
-        m_pColLbl->SetText(bCol ? aRowTxt : aColTxt);
+        m_pColLbl->SetText(bCol ? aRowText : aColText);
         m_pRowRB->Check(!bCol);
         m_pDelimTabRB->Enable(false);
         m_pDelimFreeRB->Enable(false);
@@ -176,7 +176,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     {
         m_pColumnRB->Enable(false);
         m_pRowRB->Check(true);
-        m_pColLbl->SetText(aColTxt);
+        m_pColLbl->SetText(aColText);
     }
 
     // initialise
@@ -230,7 +230,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     else
         DelimHdl(m_pDelimTabRB);
 
-    if( ::lcl_GetSelTbl( rSh, nX, nY) )
+    if( ::lcl_GetSelTable( rSh, nX, nY) )
     {
         sal_uInt16 nMax = m_pRowRB->IsChecked()? nY : nX;
         m_pColEdt1->SetMax(nMax);
@@ -330,7 +330,7 @@ void SwSortDlg::Apply()
     if( bCheck1 )
     {
         OUString sEntry( m_pTypDLB1->GetSelectEntry() );
-        if( sEntry == aNumericTxt )
+        if( sEntry == aNumericText )
             sEntry.clear();
         else if( 0 != (pUserData = m_pTypDLB1->GetSelectEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
@@ -343,7 +343,7 @@ void SwSortDlg::Apply()
     if( bCheck2 )
     {
         OUString sEntry( m_pTypDLB2->GetSelectEntry() );
-        if( sEntry == aNumericTxt )
+        if( sEntry == aNumericText )
             sEntry.clear();
         else if( 0 != (pUserData = m_pTypDLB2->GetSelectEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
@@ -356,7 +356,7 @@ void SwSortDlg::Apply()
     if( bCheck3 )
     {
         OUString sEntry( m_pTypDLB3->GetSelectEntry() );
-        if( sEntry == aNumericTxt )
+        if( sEntry == aNumericText )
             sEntry.clear();
         else if( 0 != (pUserData = m_pTypDLB3->GetSelectEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
@@ -416,25 +416,25 @@ IMPL_LINK( SwSortDlg, CheckHdl, void *, pControl )
 {
     if( pControl == m_pRowRB.get())
     {
-        m_pColLbl->SetText(aColTxt);
+        m_pColLbl->SetText(aColText);
         m_pColEdt1->SetMax(nY);
         m_pColEdt2->SetMax(nY);
         m_pColEdt3->SetMax(nY);
 
-        m_pColEdt1->SetAccessibleName(aColTxt);
-        m_pColEdt2->SetAccessibleName(aColTxt);
-        m_pColEdt3->SetAccessibleName(aColTxt);
+        m_pColEdt1->SetAccessibleName(aColText);
+        m_pColEdt2->SetAccessibleName(aColText);
+        m_pColEdt3->SetAccessibleName(aColText);
     }
     else if( pControl == m_pColumnRB.get())
     {
-        m_pColLbl->SetText(aRowTxt);
+        m_pColLbl->SetText(aRowText);
         m_pColEdt1->SetMax(nX);
         m_pColEdt2->SetMax(nX);
         m_pColEdt3->SetMax(nX);
 
-        m_pColEdt1->SetAccessibleName(aRowTxt);
-        m_pColEdt2->SetAccessibleName(aRowTxt);
-        m_pColEdt3->SetAccessibleName(aRowTxt);
+        m_pColEdt1->SetAccessibleName(aRowText);
+        m_pColEdt2->SetAccessibleName(aRowText);
+        m_pColEdt3->SetAccessibleName(aRowText);
     }
     else if(!m_pKeyCB1->IsChecked() &&
                 !m_pKeyCB2->IsChecked() &&
@@ -472,7 +472,7 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
         if( nCnt < nEnd )
             sUINm = pColRes->GetTranslation( sAlg = aSeq[ nCnt ] );
         else
-            sUINm = sAlg = aNumericTxt;
+            sUINm = sAlg = aNumericText;
 
         for( int n = 0; n < nLstBoxCnt; ++n )
         {

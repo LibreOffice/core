@@ -801,7 +801,7 @@ void ScEditShell::GetClipState( SfxItemSet& rSet )
             case SID_CLIPBOARD_FORMAT_ITEMS:
                 if( bPastePossible )
                 {
-                    SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                    SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                     TransferableDataHelper aDataHelper(
                             TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 

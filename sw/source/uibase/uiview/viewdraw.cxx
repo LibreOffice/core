@@ -464,8 +464,8 @@ static bool lcl_isTextBox(SdrObject* pObject)
 {
     if (SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pObject->GetUserCall()))
     {
-        if (SwFrmFmt* pFmt = pDrawContact->GetFmt())
-            return SwTextBoxHelper::findTextBox(pFmt);
+        if (SwFrameFormat* pFormat = pDrawContact->GetFormat())
+            return SwTextBoxHelper::findTextBox(pFormat);
     }
     return false;
 }
@@ -733,7 +733,7 @@ IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     return 0;
 }
 
-bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
+bool SwView::ExecDrwTextSpellPopup(const Point& rPt)
 {
     bool bRet = false;
     SdrView *pSdrView = m_pWrtShell->GetDrawView();

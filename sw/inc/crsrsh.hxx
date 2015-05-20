@@ -41,30 +41,30 @@
 
 class SfxItemSet;
 class SfxPoolItem;
-class SwCntntFrm;
+class SwContentFrm;
 class SwCrsrShell;
 class SwCursor;
 class SwField;
 class SwFieldType;
-class SwFmt;
-class SwFmtFld;
+class SwFormat;
+class SwFormatField;
 class SwNodeIndex;
 class SwPaM;
 class SwShellCrsr;
 class SwShellTableCrsr;
 class SwTableNode;
-class SwTxtFmtColl;
+class SwTextFormatColl;
 class SwVisCrsr;
-class SwTxtINetFmt;
-class SwFmtINetFmt;
-class SwTxtAttr;
+class SwTextINetFormat;
+class SwFormatINetFormat;
+class SwTextAttr;
 class SwTableBox;
 class SwTOXMark;
 class SwRangeRedline;
 class IBlockCursor;
-class SwCntntNode;
+class SwContentNode;
 class SwPostItField;
-class SwTxtFld;
+class SwTextField;
 struct SwPosition;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -103,26 +103,26 @@ struct SwContentAtPos
         ,SW_CURR_ATTRS      = 0x4000        ///< only for debugging
         ,SW_TABLEBOXVALUE   = 0x8000        ///< only for debugging
 #endif
-    } eCntntAtPos;
+    } eContentAtPos;
 
     union {
-        const SwField* pFld;
+        const SwField* pField;
         const SfxPoolItem* pAttr;
         const SwRangeRedline* pRedl;
-        SwCntntNode * pNode;
-        const sw::mark::IFieldmark* pFldmark;
+        SwContentNode * pNode;
+        const sw::mark::IFieldmark* pFieldmark;
     } aFnd;
 
     int nDist;
 
     OUString sStr;
-    const SwTxtAttr* pFndTxtAttr;
+    const SwTextAttr* pFndTextAttr;
 
     SwContentAtPos( int eGetAtPos = 0xffff )
-        : eCntntAtPos( (IsAttrAtPos)eGetAtPos )
+        : eContentAtPos( (IsAttrAtPos)eGetAtPos )
     {
-        aFnd.pFld = 0;
-        pFndTxtAttr = 0;
+        aFnd.pField = 0;
+        pFndTextAttr = 0;
         nDist = 0; // #i23726#
     }
 
@@ -179,7 +179,7 @@ private:
 
     IBlockCursor *m_pBlockCrsr;   ///< interface of cursor for block (=rectangular) selection
 
-    SwShellTableCrsr* m_pTblCrsr; /**< table Crsr; only in tables when the
+    SwShellTableCrsr* m_pTableCrsr; /**< table Crsr; only in tables when the
                                    selection lays over 2 columns */
 
     SwNodeIndex* m_pBoxIdx;       ///< for recognizing of the changed
@@ -189,7 +189,7 @@ private:
                                    in the same column */
     long m_nLeftFrmPos;
     sal_uLong m_nAktNode;             // save CursorPos at Start-Action
-    sal_Int32 m_nAktCntnt;
+    sal_Int32 m_nAktContent;
     sal_uInt16 m_nAktNdTyp;
     bool m_bAktSelection;
 
@@ -222,7 +222,7 @@ private:
     bool m_bGCAttr : 1;           // true -> non expanded attributes exist.
     bool m_bIgnoreReadonly : 1;   // true -> make the cursor visible on next
                                 // EndAction in spite of Readonly
-    bool m_bSelTblCells : 1;      // true -> select cells over the InputWin
+    bool m_bSelTableCells : 1;      // true -> select cells over the InputWin
     bool m_bAutoUpdateCells : 1;  // true -> autoformat cells
     bool m_bBasicHideCrsr : 1;    // true -> HideCrsr from Basic
     bool m_bSetCrsrInReadOnly : 1;// true -> Cursor is allowed in ReadOnly-Areas
@@ -260,7 +260,7 @@ private:
 
     SAL_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
 
-    SAL_DLLPRIVATE bool isInHiddenTxtFrm(SwShellCrsr* pShellCrsr);
+    SAL_DLLPRIVATE bool isInHiddenTextFrm(SwShellCrsr* pShellCrsr);
 
 typedef bool (SwCursor:: *FNCrsr)();
     SAL_DLLPRIVATE bool CallCrsrFN( FNCrsr );
@@ -290,7 +290,7 @@ protected:
     void PaMCorrAbs(const SwNodeIndex &rOldNode, const SwPosition &rNewPos,
                     const sal_Int32 nOffset = 0 );
 
-    bool _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
+    bool _SelTableRowOrCol( bool bRow, bool bRowSimple = false );
 
     bool SetInFrontOfLabel( bool bNew );
 
@@ -318,7 +318,7 @@ public:
     ///< delete the current cursor and make the following into the current
     bool DestroyCrsr();
     ///< transform TableCursor to normal cursor, nullify Tablemode
-    void TblCrsrToCursor();
+    void TableCrsrToCursor();
     ///< enter block mode, change normal cursor into block cursor
     void CrsrToBlockCrsr();
     ///< leave block mode, change block cursor into normal cursor
@@ -333,8 +333,8 @@ public:
     /// If document body starts with a table.
     bool StartsWithTable();
 
-    SwPaM* GetCrsr( bool bMakeTblCrsr = true ) const;
-    inline SwCursor* GetSwCrsr( bool bMakeTblCrsr = true ) const;
+    SwPaM* GetCrsr( bool bMakeTableCrsr = true ) const;
+    inline SwCursor* GetSwCrsr( bool bMakeTableCrsr = true ) const;
     // return only the current cursor
           SwShellCrsr* _GetCrsr()                       { return m_pCurCrsr; }
     const SwShellCrsr* _GetCrsr() const                 { return m_pCurCrsr; }
@@ -380,10 +380,10 @@ public:
                 bool& bCancel,
                 FindRanges eRng, bool bReplace = false );
 
-    sal_uLong Find( const SwTxtFmtColl& rFmtColl,
+    sal_uLong Find( const SwTextFormatColl& rFormatColl,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
-                FindRanges eRng, const SwTxtFmtColl* pReplFmt = 0 );
+                FindRanges eRng, const SwTextFormatColl* pReplFormat = 0 );
 
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnd,
@@ -470,7 +470,7 @@ public:
     void SetOverwriteCrsr( bool bFlag ) { m_bOverwriteCrsr = bFlag; }
 
     // Return current frame in which the cursor is placed.
-    SwCntntFrm *GetCurrFrm( const bool bCalcFrm = true ) const;
+    SwContentFrm *GetCurrFrm( const bool bCalcFrm = true ) const;
 
     //true if cursor is hidden because of readonly.
     //false if it is working despite readonly.
@@ -574,21 +574,21 @@ public:
 
     // get the selected text at the current cursor. it will be filled with
     // fields etc.
-    OUString GetSelTxt() const;
+    OUString GetSelText() const;
     // return only the text starting from the current cursor position (to the
     // end of the node)
     OUString GetText() const;
 
     // Check of SPoint or Mark of current cursor are placed within a table.
-    inline const SwTableNode* IsCrsrInTbl( bool bIsPtInTbl = true ) const;
+    inline const SwTableNode* IsCrsrInTable( bool bIsPtInTable = true ) const;
 
     inline Point& GetCrsrDocPos( bool bPoint = true ) const;
     inline bool IsCrsrPtAtEnd() const;
 
-    inline const  SwPaM* GetTblCrs() const;
-    inline        SwPaM* GetTblCrs();
+    inline const  SwPaM* GetTableCrs() const;
+    inline        SwPaM* GetTableCrs();
 
-    bool IsTblComplexForChart();
+    bool IsTableComplexForChart();
     // get current table selection as text
     OUString GetBoxNms() const;
 
@@ -599,11 +599,11 @@ public:
     bool GotoTable( const OUString& rName );
 
     // select a table row, column or box (based on the current cursor)
-    bool SelTblRow() { return _SelTblRowOrCol( true  ); }
-    bool SelTblCol() { return _SelTblRowOrCol( false ); }
-    bool SelTblBox();
+    bool SelTableRow() { return _SelTableRowOrCol( true  ); }
+    bool SelTableCol() { return _SelTableRowOrCol( false ); }
+    bool SelTableBox();
 
-    bool SelTbl();
+    bool SelTable();
 
     bool GotoNextNum();
     bool GotoPrevNum();
@@ -624,14 +624,14 @@ public:
     /** Delivers the current shell cursor
 
         Some operations have to run on the current cursor ring,
-        some on the m_pTblCrsr (if exist) or the current cursor ring and
-        some on the m_pTblCrsr or m_pBlockCrsr or the current cursor ring.
+        some on the m_pTableCrsr (if exist) or the current cursor ring and
+        some on the m_pTableCrsr or m_pBlockCrsr or the current cursor ring.
         This small function checks the existence and delivers the wished cursor.
 
         @param bBlock [bool]
         if the block cursor is of interest or not
 
-        @return m_pTblCrsr if exist,
+        @return m_pTableCrsr if exist,
         m_pBlockCrsr if exist and of interest (param bBlock)
         otherwise m_pCurCrsr
     */
@@ -644,20 +644,20 @@ public:
     IBlockCursor* GetBlockCrsr() { return m_pBlockCrsr; }
 
     // is the Crsr in a table and is the selection over 2 columns
-    bool IsTableMode() const { return 0 != m_pTblCrsr; }
+    bool IsTableMode() const { return 0 != m_pTableCrsr; }
 
-    const SwShellTableCrsr* GetTableCrsr() const { return m_pTblCrsr; }
-    SwShellTableCrsr* GetTableCrsr() { return m_pTblCrsr; }
-    size_t UpdateTblSelBoxes();
+    const SwShellTableCrsr* GetTableCrsr() const { return m_pTableCrsr; }
+    SwShellTableCrsr* GetTableCrsr() { return m_pTableCrsr; }
+    size_t UpdateTableSelBoxes();
 
-    bool GotoFtnTxt();      ///< jump from content to footnote
-    bool GotoFtnAnchor();   ///< jump from footnote to anchor
-    bool GotoPrevFtnAnchor();
-    bool GotoNextFtnAnchor();
+    bool GotoFootnoteText();      ///< jump from content to footnote
+    bool GotoFootnoteAnchor();   ///< jump from footnote to anchor
+    bool GotoPrevFootnoteAnchor();
+    bool GotoNextFootnoteAnchor();
 
     bool GotoFlyAnchor();       ///< jump from the frame to the anchor
-    bool GotoHeaderTxt();       ///< jump from the content to the header
-    bool GotoFooterTxt();       ///< jump from the content to the footer
+    bool GotoHeaderText();       ///< jump from the content to the header
+    bool GotoFooterText();       ///< jump from the content to the footer
     // jump to the header/footer of the given or current PageDesc
     bool SetCrsrInHdFt( size_t nDescNo = SIZE_MAX,
                         bool bInHeader = true );
@@ -675,7 +675,7 @@ public:
 
     // jump to the next or previous table formula
     // optionally only to broken formulas
-    bool GotoNxtPrvTblFormula( bool bNext = true,
+    bool GotoNxtPrvTableFormula( bool bNext = true,
                                bool bOnlyErrors = false );
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
@@ -695,26 +695,26 @@ public:
     inline void UnSetVisCrsr();
 
     // jump to the next or previous field of the corresponding type
-    bool MoveFldType(
-        const SwFieldType* pFldType,
+    bool MoveFieldType(
+        const SwFieldType* pFieldType,
         const bool bNext,
         const sal_uInt16 nResType = USHRT_MAX,
-        const bool bAddSetExpressionFldsToInputFlds = true );
+        const bool bAddSetExpressionFieldsToInputFields = true );
 
-    bool GotoFld( const SwFmtFld& rFld );
+    bool GotoFormatField( const SwFormatField& rField );
 
-    static SwTxtFld* GetTxtFldAtPos(
+    static SwTextField* GetTextFieldAtPos(
         const SwPosition* pPos,
-        const bool bIncludeInputFldAtStart );
+        const bool bIncludeInputFieldAtStart );
     static SwField* GetFieldAtCrsr(
         const SwPaM* pCrsr,
-        const bool bIncludeInputFldAtStart );
-    SwField* GetCurFld( const bool bIncludeInputFldAtStart = false ) const;
-    bool CrsrInsideInputFld() const;
-    static bool PosInsideInputFld( const SwPosition& rPos );
-    bool DocPtInsideInputFld( const Point& rDocPt ) const;
-    static sal_Int32 StartOfInputFldAtPos( const SwPosition& rPos );
-    static sal_Int32 EndOfInputFldAtPos( const SwPosition& rPos );
+        const bool bIncludeInputFieldAtStart );
+    SwField* GetCurField( const bool bIncludeInputFieldAtStart = false ) const;
+    bool CrsrInsideInputField() const;
+    static bool PosInsideInputField( const SwPosition& rPos );
+    bool DocPtInsideInputField( const Point& rDocPt ) const;
+    static sal_Int32 StartOfInputFieldAtPos( const SwPosition& rPos );
+    static sal_Int32 EndOfInputFieldAtPos( const SwPosition& rPos );
 
     // Return number of cursors in ring (The flag indicates whether
     // only cursors containing selections are requested).
@@ -750,7 +750,7 @@ public:
     // its TextNode (or StartNode?)
     // They all get created on the next ::GetCrsr again
     // Used for Drag&Drop/Clipboard-Paste in tables
-    bool ParkTblCrsr();
+    bool ParkTableCrsr();
 
     // Non expanded attributes?
     bool IsGCAttr() const { return m_bGCAttr; }
@@ -768,12 +768,12 @@ public:
     virtual void MakeSelVisible();
 
     // set the cursor to a NOT protected/hidden node
-    bool FindValidCntntNode( bool bOnlyText = false );
+    bool FindValidContentNode( bool bOnlyText = false );
 
     bool GetContentAtPos( const Point& rPt,
-                          SwContentAtPos& rCntntAtPos,
+                          SwContentAtPos& rContentAtPos,
                           bool bSetCrsr = false,
-                          SwRect* pFldRect = 0 );
+                          SwRect* pFieldRect = 0 );
 
     const SwPostItField* GetPostItFieldAtCursor() const;
 
@@ -791,20 +791,20 @@ public:
 
     bool IsPageAtPos( const Point &rPt ) const;
 
-    bool SelectTxtAttr( sal_uInt16 nWhich, bool bExpand, const SwTxtAttr* pAttr = 0 );
-    bool GotoINetAttr( const SwTxtINetFmt& rAttr );
-    const SwFmtINetFmt* FindINetAttr( const OUString& rName ) const;
+    bool SelectTextAttr( sal_uInt16 nWhich, bool bExpand, const SwTextAttr* pAttr = 0 );
+    bool GotoINetAttr( const SwTextINetFormat& rAttr );
+    const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
 
-    bool SelectTxt( const sal_Int32 nStart,
+    bool SelectText( const sal_Int32 nStart,
                         const sal_Int32 nEnd );
 
-    bool CheckTblBoxCntnt( const SwPosition* pPos = 0 );
-    void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
-    void ClearTblBoxCntnt();
-    bool EndAllTblBoxEdit();
+    bool CheckTableBoxContent( const SwPosition* pPos = 0 );
+    void SaveTableBoxContent( const SwPosition* pPos = 0 );
+    void ClearTableBoxContent();
+    bool EndAllTableBoxEdit();
 
-    void SetSelTblCells( bool bFlag )           { m_bSelTblCells = bFlag; }
-    bool IsSelTblCells() const                  { return m_bSelTblCells; }
+    void SetSelTableCells( bool bFlag )           { m_bSelTableCells = bFlag; }
+    bool IsSelTableCells() const                  { return m_bSelTableCells; }
 
     bool IsAutoUpdateCells() const              { return m_bAutoUpdateCells; }
     void SetAutoUpdateCells( bool bFlag )       { m_bAutoUpdateCells = bFlag; }
@@ -861,9 +861,9 @@ inline SwMoveFnCollection* SwCrsrShell::MakeFindRange(
     return m_pCurCrsr->MakeFindRange( (SwDocPositions)nStt, (SwDocPositions)nEnd, pPam );
 }
 
-inline SwCursor* SwCrsrShell::GetSwCrsr( bool bMakeTblCrsr ) const
+inline SwCursor* SwCrsrShell::GetSwCrsr( bool bMakeTableCrsr ) const
 {
-    return static_cast<SwCursor*>(GetCrsr( bMakeTblCrsr ));
+    return static_cast<SwCursor*>(GetCrsr( bMakeTableCrsr ));
 }
 
 inline SwPaM* SwCrsrShell::GetStkCrsr() const { return m_pCrsrStk; }
@@ -888,9 +888,9 @@ inline bool SwCrsrShell::IsSelOnePara() const
            m_pCurCrsr->GetPoint()->nNode == m_pCurCrsr->GetMark()->nNode;
 }
 
-inline const SwTableNode* SwCrsrShell::IsCrsrInTbl( bool bIsPtInTbl ) const
+inline const SwTableNode* SwCrsrShell::IsCrsrInTable( bool bIsPtInTable ) const
 {
-    return m_pCurCrsr->GetNode( bIsPtInTbl ).FindTableNode();
+    return m_pCurCrsr->GetNode( bIsPtInTable ).FindTableNode();
 }
 
 inline bool SwCrsrShell::IsCrsrPtAtEnd() const
@@ -903,14 +903,14 @@ inline Point& SwCrsrShell::GetCrsrDocPos( bool bPoint ) const
     return bPoint ? m_pCurCrsr->GetPtPos() : m_pCurCrsr->GetMkPos();
 }
 
-inline const SwPaM* SwCrsrShell::GetTblCrs() const
+inline const SwPaM* SwCrsrShell::GetTableCrs() const
 {
-    return m_pTblCrsr;
+    return m_pTableCrsr;
 }
 
-inline SwPaM* SwCrsrShell::GetTblCrs()
+inline SwPaM* SwCrsrShell::GetTableCrs()
 {
-    return m_pTblCrsr;
+    return m_pTableCrsr;
 }
 
 inline void SwCrsrShell::UnSetVisCrsr()

@@ -26,7 +26,7 @@
 #include "swfont.hxx"
 #include <vector>
 
-class SwTxtNode;
+class SwTextNode;
 class SwDoc;
 class SfxItemSet;
 class SwAttrHandler;
@@ -57,7 +57,7 @@ public:
 
 class SwRedlineItr
 {
-    std::deque<SwTxtAttr *> m_Hints;
+    std::deque<SwTextAttr *> m_Hints;
     const SwDoc& rDoc;
     SwAttrHandler& rAttrHandler;
     SfxItemSet *pSet;
@@ -80,13 +80,13 @@ class SwRedlineItr
     sal_Int32 NextExtend( sal_Int32 nNext )
         { if( pExt ) return pExt->Next( nNext ); return nNext; }
 public:
-    SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt, SwAttrHandler& rAH,
+    SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt, SwAttrHandler& rAH,
         sal_Int32 nRedlPos, bool bShw, const std::vector<sal_uInt16> *pArr = 0,
         sal_Int32 nExtStart = COMPLETE_STRING );
     ~SwRedlineItr();
     inline bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }
     inline void Clear( SwFont* pFnt ) { if( bOn ) _Clear( pFnt ); }
-    void ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, bool bChg );
+    void ChangeTextAttr( SwFont* pFnt, SwTextAttr &rHt, bool bChg );
     inline short Seek( SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld )
         { if( bShow || pExt ) return _Seek( rFnt, nNew, nOld ); return 0; }
     inline void Reset() { if( nAct != nFirst ) nAct = COMPLETE_STRING;

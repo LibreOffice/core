@@ -155,17 +155,17 @@ SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
         ::InsertStringSorted(rPageDesc.GetName(), *m_pPageCollBox, 1 );
     }
 
-    OUString aFmtName;
+    OUString aFormatName;
     for(sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
     {
-        aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName );
-        if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos(aFmtName))
-            ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
+        aFormatName = SwStyleNameMapper::GetUIName( i, aFormatName );
+        if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos(aFormatName))
+            ::InsertStringSorted(aFormatName, *m_pPageCollBox, 1 );
     }
     //add landscape page
-    aFmtName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFmtName );
-    if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos(aFmtName))
-            ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
+    aFormatName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFormatName );
+    if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos(aFormatName))
+            ::InsertStringSorted(aFormatName, *m_pPageCollBox, 1 );
     CheckEnable();
     m_pPageNumEdit->SetText(OUString());
 }

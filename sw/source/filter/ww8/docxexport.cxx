@@ -133,7 +133,7 @@ bool DocxExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich
     return true;
 }
 
-void DocxExport::AppendBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
@@ -171,7 +171,7 @@ void DocxExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
-void DocxExport::AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+void DocxExport::AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
@@ -198,7 +198,7 @@ void DocxExport::AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPo
     m_pAttrOutput->WriteAnnotationMarks_Impl( aStarts, aEnds );
 }
 
-void DocxExport::ExportGrfBullet(const SwTxtNode&)
+void DocxExport::ExportGrfBullet(const SwTextNode&)
 {
     // Just collect the bullets for now, numbering.xml is not yet started.
     CollectGrfsOfBullets();
@@ -212,15 +212,15 @@ OString DocxExport::AddRelation( const OUString& rType, const OUString& rTarget 
     return sId.toUtf8();
 }
 
-bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
+bool DocxExport::DisallowInheritingOutlineNumbering( const SwFormat& rFormat )
 {
     bool bRet( false );
 
-    if (SfxItemState::SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
+    if (SfxItemState::SET != rFormat.GetItemState(RES_PARATR_NUMRULE, false))
     {
-        if (const SwFmt *pParent = rFmt.DerivedFrom())
+        if (const SwFormat *pParent = rFormat.DerivedFrom())
         {
-            if (static_cast<const SwTxtFmtColl*>(pParent)->IsAssignedToListLevelOfOutlineStyle())
+            if (static_cast<const SwTextFormatColl*>(pParent)->IsAssignedToListLevelOfOutlineStyle())
             {
                 ::sax_fastparser::FSHelperPtr pSerializer = m_pAttrOutput->GetSerializer( );
                 // Level 9 disables the outline
@@ -237,7 +237,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 }
 
 void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 /*nBreakCode*/ )
+        const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 /*nBreakCode*/ )
 {
     m_nHeadersFootersInSection = 1;
     // Turn ON flag for 'Writing Headers \ Footers'
@@ -245,23 +245,23 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
-        WriteHeaderFooter( rLeftFmt, true, "even" );
+        WriteHeaderFooter( rLeftFormat, true, "even" );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_ODD )
-        WriteHeaderFooter( rFmt, true, "default" );
+        WriteHeaderFooter( rFormat, true, "default" );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_FIRST )
-        WriteHeaderFooter( rFirstPageFmt, true, "first" );
+        WriteHeaderFooter( rFirstPageFormat, true, "first" );
 
     // footers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_EVEN )
-        WriteHeaderFooter( rLeftFmt, false, "even" );
+        WriteHeaderFooter( rLeftFormat, false, "even" );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_ODD )
-        WriteHeaderFooter( rFmt, false, "default" );
+        WriteHeaderFooter( rFormat, false, "default" );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
-        WriteHeaderFooter( rFirstPageFmt, false, "first" );
+        WriteHeaderFooter( rFirstPageFormat, false, "first" );
 
     if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
         m_aSettings.evenAndOddHeaders = true;
@@ -273,9 +273,9 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 #endif
 }
 
-void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const OUString& rFldCmd, sal_uInt8 nMode )
+void DocxExport::OutputField( const SwField* pField, ww::eField eFieldType, const OUString& rFieldCmd, sal_uInt8 nMode )
 {
-    m_pAttrOutput->WriteField_Impl( pFld, eFldType, rFldCmd, nMode );
+    m_pAttrOutput->WriteField_Impl( pField, eFieldType, rFieldCmd, nMode );
 }
 
 void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
@@ -345,7 +345,7 @@ void DocxExport::DoComboBox(const OUString& rName,
     m_pDocumentFS->endElementNS( XML_w, XML_ffData );
 }
 
-void DocxExport::DoFormText(const SwInputField* /*pFld*/)
+void DocxExport::DoFormText(const SwInputField* /*pField*/)
 {
     OSL_TRACE( "TODO DocxExport::ForFormText()" );
 }
@@ -457,17 +457,17 @@ void DocxExport::ExportDocument_Impl()
     delete m_pSections, m_pSections = NULL;
 }
 
-void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
+void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum )
 {
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
-    m_pSections->AppendSection( pPageDesc, pFmt, nLnNum, m_pAttrOutput->IsFirstParagraph() );
+    m_pSections->AppendSection( pPageDesc, pFormat, nLnNum, m_pAttrOutput->IsFirstParagraph() );
 }
 
 void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
 {
     MSWordExportBase::OutputEndNode( rEndNode );
 
-    if ( TXT_MAINTEXT == m_nTxtTyp && rEndNode.StartOfSectionNode()->IsSectionNode() )
+    if ( TXT_MAINTEXT == m_nTextTyp && rEndNode.StartOfSectionNode()->IsSectionNode() )
     {
         // this originally comes from WW8Export::WriteText(), and looks like it
         // could have some code common with SectionNode()...
@@ -484,18 +484,18 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
         bool isInTable = IsInTable();
         if ( !rNd.IsSectionNode() && isInTable ) // No sections in table
         {
-            const SwSectionFmt* pParentFmt = rSect.GetFmt()->GetParent();
-            if( !pParentFmt )
-                pParentFmt = reinterpret_cast<SwSectionFmt*>(sal_IntPtr(-1));
+            const SwSectionFormat* pParentFormat = rSect.GetFormat()->GetParent();
+            if( !pParentFormat )
+                pParentFormat = reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1));
 
             sal_uLong nRstLnNum;
-            if( rNd.IsCntntNode() )
-                nRstLnNum = rNd.GetCntntNode()->GetSwAttrSet().GetLineNumber().GetStartValue();
+            if( rNd.IsContentNode() )
+                nRstLnNum = rNd.GetContentNode()->GetSwAttrSet().GetLineNumber().GetStartValue();
             else
                 nRstLnNum = 0;
 
             AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo( ) );
-            m_pSections->AppendSection( m_pAktPageDesc, pParentFmt, nRstLnNum );
+            m_pSections->AppendSection( m_pAktPageDesc, pParentFormat, nRstLnNum );
         }
     }
 }
@@ -523,25 +523,25 @@ sal_uLong DocxExport::ReplaceCr( sal_uInt8 )
 }
 
 void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
-        const SwNode& rNd, const SwFmtPageDesc* pNewPgDescFmt,
+        const SwNode& rNd, const SwFormatPageDesc* pNewPgDescFormat,
         const SwPageDesc* pNewPgDesc )
 {
     // tell the attribute output that we are ready to write the section
     // break [has to be output inside paragraph properties]
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 
-    const SwSectionFmt* pFmt = GetSectionFormat( rNd );
+    const SwSectionFormat* pFormat = GetSectionFormat( rNd );
     const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
 
-    OSL_ENSURE( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
+    OSL_ENSURE( pNewPgDescFormat || pNewPgDesc, "Neither page desc format nor page desc provided." );
 
-    if ( pNewPgDescFmt )
+    if ( pNewPgDescFormat )
     {
-        m_pSections->AppendSection( *pNewPgDescFmt, rNd, pFmt, nLnNm );
+        m_pSections->AppendSection( *pNewPgDescFormat, rNd, pFormat, nLnNm );
     }
     else if ( pNewPgDesc )
     {
-        m_pSections->AppendSection( pNewPgDesc, rNd, pFmt, nLnNm );
+        m_pSections->AppendSection( pNewPgDesc, rNd, pFormat, nLnNm );
     }
 
 }
@@ -636,7 +636,7 @@ void DocxExport::WritePostitFields()
 
 void DocxExport::WriteNumbering()
 {
-    if ( !m_pUsedNumTbl )
+    if ( !m_pUsedNumTable )
         return; // no numbering is used
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
@@ -668,7 +668,7 @@ void DocxExport::WriteNumbering()
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
 }
 
-void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char* pType )
+void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const char* pType )
 {
     // setup the xml stream
     OUString aRelId;
@@ -711,7 +711,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     DocxTableExportContext aTableExportContext;
     m_pAttrOutput->pushToTableExportContext(aTableExportContext);
     // do the work
-    WriteHeaderFooterText( rFmt, bHeader );
+    WriteHeaderFooterText( rFormat, bHeader );
     m_pAttrOutput->popFromTableExportContext(aTableExportContext);
     m_pAttrOutput->EndParaSdtBlock();
 
@@ -843,7 +843,7 @@ void DocxExport::WriteSettings()
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Use the setting from the default style.
-    SwTxtFmtColl* pColl = m_pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    SwTextFormatColl* pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
     const SfxPoolItem* pItem;
     if (pColl && SfxItemState::SET == pColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem))
     {
@@ -858,7 +858,7 @@ void DocxExport::WriteSettings()
 
     // Has Footnotes
     if( m_pAttrOutput->HasFootnotes())
-        DocxAttributeOutput::WriteFootnoteEndnotePr( pFS, XML_footnotePr, m_pDoc->GetFtnInfo(), XML_footnote );
+        DocxAttributeOutput::WriteFootnoteEndnotePr( pFS, XML_footnotePr, m_pDoc->GetFootnoteInfo(), XML_footnote );
 
     // Has Endnotes
     if( m_pAttrOutput->HasEndnotes())
@@ -1296,9 +1296,9 @@ bool DocxExport::isMirroredMargin()
 boost::optional<SvxBrushItem> DocxExport::getBackground()
 {
     boost::optional<SvxBrushItem> oRet;
-    const SwFrmFmt &rFmt = m_pDoc->GetPageDesc(0).GetMaster();
+    const SwFrameFormat &rFormat = m_pDoc->GetPageDesc(0).GetMaster();
     SvxBrushItem aBrush(RES_BACKGROUND);
-    SfxItemState eState = rFmt.GetBackgroundState(aBrush);
+    SfxItemState eState = rFormat.GetBackgroundState(aBrush);
 
     if (SfxItemState::SET == eState)
     {
@@ -1390,8 +1390,8 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
-            bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
-            if( !bTxtAtr )
+            bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
+            if( !bTextAtr )
             {
                 if( nAktPos == 0 && nNextAttr - nAktPos == aStr.getLength())
                     AttrOutput().RunText( aStr, eChrSet );

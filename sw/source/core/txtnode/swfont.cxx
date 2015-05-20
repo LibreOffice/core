@@ -1062,7 +1062,7 @@ sal_uInt16 SwSubFont::GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
     return nHeight; // + nLeading;
 }
 
-Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
+Size SwSubFont::_GetTextSize( SwDrawTextInfo& rInf )
 {
     // Robust: Eigentlich sollte der Font bereits eingestellt sein, aber
     // sicher ist sicher ...
@@ -1072,20 +1072,20 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
-    Size aTxtSize;
+    Size aTextSize;
     sal_Int32 nLn = ( rInf.GetLen() == COMPLETE_STRING ? rInf.GetText().getLength()
                                                    : rInf.GetLen() );
     rInf.SetLen( nLn );
     if( IsCapital() && nLn )
-        aTxtSize = GetCapitalSize( rInf );
+        aTextSize = GetCapitalSize( rInf );
     else
     {
         SV_STAT( nGetTextSize );
         long nOldKern = rInf.GetKern();
-        const OUString oldTxt = rInf.GetText();
+        const OUString oldText = rInf.GetText();
         rInf.SetKern( CheckKerning() );
         if ( !IsCaseMap() )
-            aTxtSize = pLastFont->GetTextSize( rInf );
+            aTextSize = pLastFont->GetTextSize( rInf );
         else
         {
             OUString aTmp = CalcCaseMap( rInf.GetText() );
@@ -1107,7 +1107,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
                 rInf.SetIdx( 0 );
                 rInf.SetLen( aNewText.getLength() );
 
-                aTxtSize = pLastFont->GetTextSize( rInf );
+                aTextSize = pLastFont->GetTextSize( rInf );
 
                 rInf.SetIdx( nOldIdx );
                 rInf.SetLen( nOldLen );
@@ -1115,21 +1115,21 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
             else
             {
                 rInf.SetText( aTmp );
-                aTxtSize = pLastFont->GetTextSize( rInf );
+                aTextSize = pLastFont->GetTextSize( rInf );
             }
 
             rInf.SetText(oldStr);
         }
         rInf.SetKern( nOldKern );
-        rInf.SetText(oldTxt);
+        rInf.SetText(oldText);
         // 15142: Ein Wort laenger als eine Zeile, beim Zeilenumbruch
         //        hochgestellt, muss seine effektive Hoehe melden.
         if( GetEscapement() )
         {
             const sal_uInt16 nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
                                                              rInf.GetOut() );
-            aTxtSize.Height() =
-                (long)CalcEscHeight( (sal_uInt16)aTxtSize.Height(), nAscent);
+            aTextSize.Height() =
+                (long)CalcEscHeight( (sal_uInt16)aTextSize.Height(), nAscent);
         }
     }
 
@@ -1141,7 +1141,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         rInf.SetText( aNewText );
         rInf.SetIdx( 0 );
         rInf.SetLen( aNewText.getLength() );
-        aTxtSize = pLastFont->GetTextSize( rInf );
+        aTextSize = pLastFont->GetTextSize( rInf );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
     }
@@ -1153,12 +1153,12 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         rInf.SetText( aNewText );
         rInf.SetIdx( 0 );
         rInf.SetLen( aNewText.getLength() );
-        aTxtSize = pLastFont->GetTextSize( rInf );
+        aTextSize = pLastFont->GetTextSize( rInf );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
     }
 
-    return aTxtSize;
+    return aTextSize;
 }
 
 void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
@@ -1239,7 +1239,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
 
     if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
-        Size aFontSize = _GetTxtSize( rInf );
+        Size aFontSize = _GetTextSize( rInf );
         const OUString oldStr = rInf.GetText();
         OUString aStr("  ");
 
@@ -1390,7 +1390,7 @@ sal_Int32 SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
         nCrsr = GetCapitalCrsrOfst( rInf );
     else
     {
-        const OUString oldTxt = rInf.GetText();
+        const OUString oldText = rInf.GetText();
         long nOldKern = rInf.GetKern();
         rInf.SetKern( CheckKerning() );
         SV_STAT( nGetTextSize );
@@ -1403,7 +1403,7 @@ sal_Int32 SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
             nCrsr = pLastFont->GetCrsrOfst( rInf );
         }
         rInf.SetKern( nOldKern );
-        rInf.SetText(oldTxt);
+        rInf.SetText(oldText);
     }
     return nCrsr;
 }

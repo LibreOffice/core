@@ -42,7 +42,7 @@ class TransferableDataHelper;
 class TransferableClipboardListener;
 class AbstractSvxNameDialog;
 class SdrLayer;
-class SvxClipboardFmtItem;
+class SvxClipboardFormatItem;
 struct ESelection;
 
 namespace sd {
@@ -431,7 +431,7 @@ private:
         content that are supported both by that content and by the
         DrawViewShell.
     */
-    ::std::unique_ptr<SvxClipboardFmtItem> mpCurrentClipboardFormats;
+    ::std::unique_ptr<SvxClipboardFormatItem> mpCurrentClipboardFormats;
 
     /** On some occasions it is necessary to make SwitchPage calls
         asynchronously.

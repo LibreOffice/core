@@ -11,14 +11,14 @@
 
 RtfStringBufferValue::RtfStringBufferValue()
     : m_aBuffer(),
-      m_pFlyFrmFmt(0),
+      m_pFlyFrameFormat(0),
       m_pGrfNode(0)
 {
 }
 
-RtfStringBufferValue::RtfStringBufferValue(const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode* pGrfNode)
+RtfStringBufferValue::RtfStringBufferValue(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode)
     : m_aBuffer(),
-      m_pFlyFrmFmt(pFlyFrmFmt),
+      m_pFlyFrameFormat(pFlyFrameFormat),
       m_pGrfNode(pGrfNode)
 {
 }
@@ -28,7 +28,7 @@ void RtfStringBufferValue::makeStringAndClear(RtfAttributeOutput* pAttributeOutp
     if (!isGraphic())
         pAttributeOutput->m_rExport.Strm().WriteCharPtr(m_aBuffer.makeStringAndClear().getStr());
     else
-        pAttributeOutput->FlyFrameGraphic(m_pFlyFrmFmt, m_pGrfNode);
+        pAttributeOutput->FlyFrameGraphic(m_pFlyFrameFormat, m_pGrfNode);
 }
 
 OString RtfStringBufferValue::makeStringAndClear()
@@ -38,7 +38,7 @@ OString RtfStringBufferValue::makeStringAndClear()
 
 bool RtfStringBufferValue::isGraphic() const
 {
-    return m_pFlyFrmFmt != 0 && m_pGrfNode != 0;
+    return m_pFlyFrameFormat != 0 && m_pGrfNode != 0;
 }
 
 RtfStringBuffer::RtfStringBuffer()
@@ -87,9 +87,9 @@ void RtfStringBuffer::clear()
     m_aValues.clear();
 }
 
-void RtfStringBuffer::append(const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode* pGrfNode)
+void RtfStringBuffer::append(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode)
 {
-    m_aValues.push_back(RtfStringBufferValue(pFlyFrmFmt, pGrfNode));
+    m_aValues.push_back(RtfStringBufferValue(pFlyFrameFormat, pGrfNode));
 }
 
 void RtfStringBuffer::appendAndClear(RtfStringBuffer& rBuf)

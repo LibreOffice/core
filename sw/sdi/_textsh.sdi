@@ -55,7 +55,7 @@ interface BaseText
     SID_ATTR_BRUSH_CHAR // status()
     [
         ExecMethod = Execute ;
-        StateMethod = GetTxtCtrlState ;
+        StateMethod = GetTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -1180,26 +1180,26 @@ interface BaseText
     ]
     SID_ATTR_PARA_SPLIT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_PARA_KEEP // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_PARA_WIDOWS // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_PARA_ORPHANS // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_PARA_PAGEBREAK // status(final|play)
@@ -1271,49 +1271,49 @@ interface BaseText
     ]
     SID_ATTR_PARA_HYPHENZONE // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_RELIEF
     [
-        ExecMethod = ExecTxtCtrl ;
+        ExecMethod = ExecTextCtrl ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_FONT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl ;
-        StateMethod = GetTxtFontCtrlState ;
+        ExecMethod = ExecTextCtrl ;
+        StateMethod = GetTextFontCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_CJK_FONT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl ;
-        StateMethod = GetTxtFontCtrlState ;
+        ExecMethod = ExecTextCtrl ;
+        StateMethod = GetTextFontCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_CTL_FONT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl ;
-        StateMethod = GetTxtFontCtrlState ;
+        ExecMethod = ExecTextCtrl ;
+        StateMethod = GetTextFontCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_FONTHEIGHT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl ;
-        StateMethod = GetTxtFontCtrlState ;
+        ExecMethod = ExecTextCtrl ;
+        StateMethod = GetTextFontCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_CJK_FONTHEIGHT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl ;
-        StateMethod = GetTxtFontCtrlState ;
+        ExecMethod = ExecTextCtrl ;
+        StateMethod = GetTextFontCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_CTL_FONTHEIGHT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl ;
-        StateMethod = GetTxtFontCtrlState ;
+        ExecMethod = ExecTextCtrl ;
+        StateMethod = GetTextFontCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_COLOR_BACKGROUND // status()
@@ -1342,68 +1342,68 @@ interface BaseText
     ]
     SID_ATTR_CHAR_COLOR // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl ;
-        StateMethod = GetTxtCtrlState ;
+        ExecMethod = ExecTextCtrl ;
+        StateMethod = GetTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_WEIGHT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtFontCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_CJK_WEIGHT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtFontCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_CTL_WEIGHT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtFontCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_POSTURE // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtFontCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_CJK_POSTURE // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtFontCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_CTL_POSTURE // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtFontCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_UNDERLINE // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_OVERLINE // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_FLASH // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_STRIKEOUT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_UNDERLINE_DOUBLE // status(final|play)
@@ -1414,26 +1414,26 @@ interface BaseText
     ]
     SID_ATTR_CHAR_CONTOUR // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_SHADOWED // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_AUTOKERN // // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_ESCAPEMENT // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_SET_SUPER_SCRIPT
@@ -1450,20 +1450,20 @@ interface BaseText
     ]
     SID_ATTR_CHAR_CASEMAP // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_LANGUAGE // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;;
-        StateMethod = GetTxtFontCtrlState;
+        ExecMethod = ExecTextCtrl;;
+        StateMethod = GetTextFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_KERNING // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_CHAR_DLG // status(final|play)
@@ -1484,8 +1484,8 @@ interface BaseText
     ]
     SID_ATTR_CHAR_WORDLINEMODE // status(final|play)
     [
-        ExecMethod = ExecTxtCtrl;
-        StateMethod = GetTxtCtrlState ;
+        ExecMethod = ExecTextCtrl;
+        StateMethod = GetTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_GROW_FONT_SIZE // status(final|play)

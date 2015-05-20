@@ -190,16 +190,16 @@ SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* p
     }
 
     // query the text templates' outlining levels
-    const sal_uInt16 nCount = rWrtSh.GetTxtFmtCollCount();
+    const sal_uInt16 nCount = rWrtSh.GetTextFormatCollCount();
     for(i = 0; i < nCount; ++i )
     {
-        SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
-        if(!rTxtColl.IsDefault())
+        SwTextFormatColl &rTextColl = rWrtSh.GetTextFormatColl(i);
+        if(!rTextColl.IsDefault())
         {
-            if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
+            if(rTextColl.IsAssignedToListLevelOfOutlineStyle())
             {
-                int nOutLevel = rTxtColl.GetAssignedOutlineStyleLevel();
-                aCollNames[ nOutLevel ] = rTxtColl.GetName();
+                int nOutLevel = rTextColl.GetAssignedOutlineStyleLevel();
+                aCollNames[ nOutLevel ] = rTextColl.GetName();
             }
         }
     }
@@ -325,11 +325,11 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
     return 0;
 }
 
-sal_uInt16  SwOutlineTabDialog::GetLevel(const OUString &rFmtName) const
+sal_uInt16  SwOutlineTabDialog::GetLevel(const OUString &rFormatName) const
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
-        if(aCollNames[i] == rFmtName)
+        if(aCollNames[i] == rFormatName)
             return i;
     }
     return MAXLEVEL;
@@ -348,36 +348,36 @@ short SwOutlineTabDialog::Ok()
 
     const SwNumRule * pOutlineRule = rWrtSh.GetOutlineNumRule();
 
-    sal_uInt16 i, nCount = rWrtSh.GetTxtFmtCollCount();
+    sal_uInt16 i, nCount = rWrtSh.GetTextFormatCollCount();
     for( i = 0; i < nCount; ++i )
     {
-        SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
-        if( !rTxtColl.IsDefault() )
+        SwTextFormatColl &rTextColl = rWrtSh.GetTextFormatColl(i);
+        if( !rTextColl.IsDefault() )
         {
             const SfxPoolItem & rItem =
-                rTxtColl.GetFmtAttr(RES_PARATR_NUMRULE, false);
+                rTextColl.GetFormatAttr(RES_PARATR_NUMRULE, false);
 
-           if ((sal_uInt8)GetLevel(rTxtColl.GetName()) == MAXLEVEL)
+           if ((sal_uInt8)GetLevel(rTextColl.GetName()) == MAXLEVEL)
             {
-                if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
+                if(rTextColl.IsAssignedToListLevelOfOutlineStyle())
                 {
-                    rTxtColl.DeleteAssignmentToListLevelOfOutlineStyle();
+                    rTextColl.DeleteAssignmentToListLevelOfOutlineStyle();
                 }
                 if (static_cast<const SwNumRuleItem &>(rItem).GetValue() ==
                     pOutlineRule->GetName())
                 {
-                    rTxtColl.ResetFmtAttr(RES_PARATR_NUMRULE);
+                    rTextColl.ResetFormatAttr(RES_PARATR_NUMRULE);
                 }
             }
             else
             {
-                rTxtColl.AssignToListLevelOfOutlineStyle(GetLevel(rTxtColl.GetName()));
+                rTextColl.AssignToListLevelOfOutlineStyle(GetLevel(rTextColl.GetName()));
 
                 if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
                     pOutlineRule->GetName())
                 {
                     SwNumRuleItem aItem(pOutlineRule->GetName());
-                    rTxtColl.SetFmtAttr(aItem);
+                    rTextColl.SetFormatAttr(aItem);
                 }
             }
         }
@@ -388,25 +388,25 @@ short SwOutlineTabDialog::Ok()
         OUString sHeadline;
         ::SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                          sHeadline );
-        SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
+        SwTextFormatColl* pColl = rWrtSh.FindTextFormatCollByName( sHeadline );
         if( !pColl )
         {
             if(aCollNames[i] != sHeadline)
             {
-                SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
+                SwTextFormatColl* pTextColl = rWrtSh.GetTextCollFromPool(
                     static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i) );
-                pTxtColl->DeleteAssignmentToListLevelOfOutlineStyle();
-                pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
+                pTextColl->DeleteAssignmentToListLevelOfOutlineStyle();
+                pTextColl->ResetFormatAttr(RES_PARATR_NUMRULE);
 
                 if( !aCollNames[i].isEmpty() )
                 {
-                    pTxtColl = rWrtSh.GetParaStyle(
+                    pTextColl = rWrtSh.GetParaStyle(
                                 aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
-                    if(pTxtColl)
+                    if(pTextColl)
                     {
-                        pTxtColl->AssignToListLevelOfOutlineStyle(i);
+                        pTextColl->AssignToListLevelOfOutlineStyle(i);
                         SwNumRuleItem aItem(pOutlineRule->GetName());
-                        pTxtColl->SetFmtAttr(aItem);
+                        pTextColl->SetFormatAttr(aItem);
                     }
                 }
             }
@@ -425,7 +425,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(vcl::Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OutlineNumberingPage",
         "modules/swriter/ui/outlinenumberingpage.ui", &rSet)
-    , aNoFmtName(SW_RESSTR(SW_STR_NONE))
+    , aNoFormatName(SW_RESSTR(SW_STR_NONE))
     , pSh(NULL)
     , pNumRule(NULL)
     , pCollNames(NULL)
@@ -435,7 +435,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(vcl::Window* pParent,
     get(m_pCollBox, "style");
     m_pCollBox->SetStyle(m_pCollBox->GetStyle()|WB_SORT);
     get(m_pNumberBox, "numbering");
-    get(m_pCharFmtLB, "charstyle");
+    get(m_pCharFormatLB, "charstyle");
     get(m_pAllLevelFT, "sublevelsft");
     get(m_pAllLevelNF, "sublevelsnf");
     get(m_pPrefixED, "prefix");
@@ -445,7 +445,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(vcl::Window* pParent,
 
     SetExchangeSupport();
 
-    m_pCollBox->InsertEntry(aNoFmtName);
+    m_pCollBox->InsertEntry(aNoFormatName);
     m_pLevelLB->SetSelectHdl(LINK(this,    SwOutlineSettingsTabPage, LevelHdl));
     m_pAllLevelNF->SetModifyHdl(LINK(this, SwOutlineSettingsTabPage, ToggleComplete));
     m_pCollBox->SetSelectHdl(LINK(this,    SwOutlineSettingsTabPage, CollSelect));
@@ -454,7 +454,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(vcl::Window* pParent,
     m_pPrefixED->SetModifyHdl(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
     m_pSuffixED->SetModifyHdl(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
     m_pStartEdit->SetModifyHdl(LINK(this,  SwOutlineSettingsTabPage, StartModified));
-    m_pCharFmtLB->SetSelectHdl(LINK(this,  SwOutlineSettingsTabPage, CharFmtHdl));
+    m_pCharFormatLB->SetSelectHdl(LINK(this,  SwOutlineSettingsTabPage, CharFormatHdl));
 }
 
 void    SwOutlineSettingsTabPage::Update()
@@ -468,63 +468,63 @@ void    SwOutlineSettingsTabPage::Update()
         bool bSameType = true;
         bool bSameComplete = true;
         bool bSameStart = true;
-        bool bSameCharFmt = true;
+        bool bSameCharFormat = true;
 
-        const SwNumFmt* aNumFmtArr[MAXLEVEL];
-        const SwCharFmt* pFirstFmt = 0;
+        const SwNumFormat* aNumFormatArr[MAXLEVEL];
+        const SwCharFormat* pFirstFormat = 0;
 
         for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         {
 
-            aNumFmtArr[ i ] = &pNumRule->Get(i);
+            aNumFormatArr[ i ] = &pNumRule->Get(i);
             if(i == 0)
-                pFirstFmt = aNumFmtArr[i]->GetCharFmt();
+                pFirstFormat = aNumFormatArr[i]->GetCharFormat();
             else
             {
-                bSameType   &= aNumFmtArr[i]->GetNumberingType() == aNumFmtArr[0]->GetNumberingType();
-                bSameStart  &= aNumFmtArr[i]->GetStart() == aNumFmtArr[0]->GetStart();
-                bSamePrefix &= aNumFmtArr[i]->GetPrefix() == aNumFmtArr[0]->GetPrefix();
-                bSameSuffix &= aNumFmtArr[i]->GetSuffix() == aNumFmtArr[0]->GetSuffix();
-                bSameComplete &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[0]->GetIncludeUpperLevels();
-                const SwCharFmt* pFmt = aNumFmtArr[i]->GetCharFmt();
-                bSameCharFmt &=     (!pFirstFmt && !pFmt)
-                                    || (pFirstFmt && pFmt && pFmt->GetName() == pFirstFmt->GetName());
+                bSameType   &= aNumFormatArr[i]->GetNumberingType() == aNumFormatArr[0]->GetNumberingType();
+                bSameStart  &= aNumFormatArr[i]->GetStart() == aNumFormatArr[0]->GetStart();
+                bSamePrefix &= aNumFormatArr[i]->GetPrefix() == aNumFormatArr[0]->GetPrefix();
+                bSameSuffix &= aNumFormatArr[i]->GetSuffix() == aNumFormatArr[0]->GetSuffix();
+                bSameComplete &= aNumFormatArr[i]->GetIncludeUpperLevels() == aNumFormatArr[0]->GetIncludeUpperLevels();
+                const SwCharFormat* pFormat = aNumFormatArr[i]->GetCharFormat();
+                bSameCharFormat &=     (!pFirstFormat && !pFormat)
+                                    || (pFirstFormat && pFormat && pFormat->GetName() == pFirstFormat->GetName());
             }
         }
-        CheckForStartValue_Impl(aNumFmtArr[0]->GetNumberingType());
+        CheckForStartValue_Impl(aNumFormatArr[0]->GetNumberingType());
         if(bSameType)
-            m_pNumberBox->SelectNumberingType( aNumFmtArr[0]->GetNumberingType() );
+            m_pNumberBox->SelectNumberingType( aNumFormatArr[0]->GetNumberingType() );
         else
             m_pNumberBox->SetNoSelection();
         if(bSameStart)
-            m_pStartEdit->SetValue(aNumFmtArr[0]->GetStart());
+            m_pStartEdit->SetValue(aNumFormatArr[0]->GetStart());
         else
             m_pStartEdit->SetText(OUString());
         if(bSamePrefix)
-            m_pPrefixED->SetText(aNumFmtArr[0]->GetPrefix());
+            m_pPrefixED->SetText(aNumFormatArr[0]->GetPrefix());
         else
             m_pPrefixED->SetText(OUString());
         if(bSameSuffix)
-            m_pSuffixED->SetText(aNumFmtArr[0]->GetSuffix());
+            m_pSuffixED->SetText(aNumFormatArr[0]->GetSuffix());
         else
             m_pSuffixED->SetText(OUString());
 
-        if(bSameCharFmt)
+        if(bSameCharFormat)
         {
-            if(pFirstFmt)
-                m_pCharFmtLB->SelectEntry(pFirstFmt->GetName());
+            if(pFirstFormat)
+                m_pCharFormatLB->SelectEntry(pFirstFormat->GetName());
             else
-                m_pCharFmtLB->SelectEntry( SwViewShell::GetShellRes()->aStrNone );
+                m_pCharFormatLB->SelectEntry( SwViewShell::GetShellRes()->aStrNone );
         }
         else
-            m_pCharFmtLB->SetNoSelection();
+            m_pCharFormatLB->SetNoSelection();
 
         m_pAllLevelFT->Enable(true);
         m_pAllLevelNF->Enable(true);
         m_pAllLevelNF->SetMax(MAXLEVEL);
         if(bSameComplete)
         {
-            m_pAllLevelNF->SetValue(aNumFmtArr[0]->GetIncludeUpperLevels());
+            m_pAllLevelNF->SetValue(aNumFormatArr[0]->GetIncludeUpperLevels());
         }
         else
         {
@@ -538,24 +538,24 @@ void    SwOutlineSettingsTabPage::Update()
         if(!aColl.isEmpty())
             m_pCollBox->SelectEntry(aColl);
         else
-            m_pCollBox->SelectEntry(aNoFmtName);
-        const SwNumFmt &rFmt = pNumRule->Get(nTmpLevel);
+            m_pCollBox->SelectEntry(aNoFormatName);
+        const SwNumFormat &rFormat = pNumRule->Get(nTmpLevel);
 
-        m_pNumberBox->SelectNumberingType( rFmt.GetNumberingType() );
-        m_pPrefixED->SetText(rFmt.GetPrefix());
-        m_pSuffixED->SetText(rFmt.GetSuffix());
-        const SwCharFmt* pFmt = rFmt.GetCharFmt();
-        if(pFmt)
-            m_pCharFmtLB->SelectEntry(pFmt->GetName());
+        m_pNumberBox->SelectNumberingType( rFormat.GetNumberingType() );
+        m_pPrefixED->SetText(rFormat.GetPrefix());
+        m_pSuffixED->SetText(rFormat.GetSuffix());
+        const SwCharFormat* pFormat = rFormat.GetCharFormat();
+        if(pFormat)
+            m_pCharFormatLB->SelectEntry(pFormat->GetName());
         else
-            m_pCharFmtLB->SelectEntry( SwViewShell::GetShellRes()->aStrNone );
+            m_pCharFormatLB->SelectEntry( SwViewShell::GetShellRes()->aStrNone );
 
         if(nTmpLevel)
         {
             m_pAllLevelFT->Enable(true);
             m_pAllLevelNF->Enable(true);
             m_pAllLevelNF->SetMax(nTmpLevel + 1);
-            m_pAllLevelNF->SetValue(rFmt.GetIncludeUpperLevels());
+            m_pAllLevelNF->SetValue(rFormat.GetIncludeUpperLevels());
         }
         else
         {
@@ -563,8 +563,8 @@ void    SwOutlineSettingsTabPage::Update()
             m_pAllLevelNF->Enable(false);
             m_pAllLevelFT->Enable(false);
         }
-        CheckForStartValue_Impl(rFmt.GetNumberingType());
-        m_pStartEdit->SetValue( rFmt.GetStart() );
+        CheckForStartValue_Impl(rFormat.GetNumberingType());
+        m_pStartEdit->SetValue( rFormat.GetStart() );
     }
     SetModified();
 }
@@ -590,17 +590,17 @@ IMPL_LINK( SwOutlineSettingsTabPage, LevelHdl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pFld )
+IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pField )
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         if(nActLevel & nMask)
         {
-            SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetIncludeUpperLevels( std::min( (sal_uInt8)pFld->GetValue(),
+            SwNumFormat aNumFormat(pNumRule->Get(i));
+            aNumFormat.SetIncludeUpperLevels( std::min( (sal_uInt8)pField->GetValue(),
                                                 (sal_uInt8)(i + 1)) );
-            pNumRule->Set(i, aNumFmt);
+            pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
     }
@@ -620,7 +620,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     for( i = 0; i < MAXLEVEL; ++i)
         pCollNames[i] = aSaveCollNames[i];
 
-    if(aCollName == aNoFmtName)
+    if(aCollName == aNoFormatName)
         pCollNames[nTmpLevel].clear();
     else
     {
@@ -666,9 +666,9 @@ IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBo
     {
         if(nActLevel & nMask)
         {
-            SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetNumberingType(nNumberType);
-            pNumRule->Set(i, aNumFmt);
+            SwNumFormat aNumFormat(pNumRule->Get(i));
+            aNumFormat.SetNumberingType(nNumberType);
+            pNumRule->Set(i, aNumFormat);
             CheckForStartValue_Impl(nNumberType);
         }
         nMask <<= 1;
@@ -684,10 +684,10 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify)
     {
         if(nActLevel & nMask)
         {
-            SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetPrefix( m_pPrefixED->GetText() );
-            aNumFmt.SetSuffix( m_pSuffixED->GetText() );
-            pNumRule->Set(i, aNumFmt);
+            SwNumFormat aNumFormat(pNumRule->Get(i));
+            aNumFormat.SetPrefix( m_pPrefixED->GetText() );
+            aNumFormat.SetSuffix( m_pSuffixED->GetText() );
+            pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
     }
@@ -695,16 +695,16 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify)
     return 0;
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
+IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pField )
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         if(nActLevel & nMask)
         {
-            SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetStart( (sal_uInt16)pFld->GetValue() );
-            pNumRule->Set(i, aNumFmt);
+            SwNumFormat aNumFormat(pNumRule->Get(i));
+            aNumFormat.SetStart( (sal_uInt16)pField->GetValue() );
+            pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
     }
@@ -712,32 +712,32 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFormatHdl)
 {
-    OUString sEntry = m_pCharFmtLB->GetSelectEntry();
+    OUString sEntry = m_pCharFormatLB->GetSelectEntry();
     sal_uInt16 nMask = 1;
     bool bFormatNone = sEntry == SwViewShell::GetShellRes()->aStrNone;
-    SwCharFmt* pFmt = 0;
+    SwCharFormat* pFormat = 0;
     if(!bFormatNone)
     {
-        sal_uInt16 nChCount = pSh->GetCharFmtCount();
+        sal_uInt16 nChCount = pSh->GetCharFormatCount();
         for(sal_uInt16 i = 0; i < nChCount; i++)
         {
-            SwCharFmt& rChFmt = pSh->GetCharFmt(i);
-            if(rChFmt.GetName() == sEntry)
+            SwCharFormat& rChFormat = pSh->GetCharFormat(i);
+            if(rChFormat.GetName() == sEntry)
             {
-                pFmt = &rChFmt;
+                pFormat = &rChFormat;
                 break;
             }
         }
-        if(!pFmt)
+        if(!pFormat)
         {
             SfxStyleSheetBasePool* pPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
             SfxStyleSheetBase* pBase;
             pBase = pPool->Find(sEntry, SFX_STYLE_FAMILY_CHAR);
             if(!pBase)
                 pBase = &pPool->Make(sEntry, SFX_STYLE_FAMILY_PAGE);
-            pFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
+            pFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
 
         }
     }
@@ -746,12 +746,12 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
     {
         if(nActLevel & nMask)
         {
-            SwNumFmt aNumFmt(pNumRule->Get(i));
+            SwNumFormat aNumFormat(pNumRule->Get(i));
             if(bFormatNone)
-                aNumFmt.SetCharFmt(0);
+                aNumFormat.SetCharFormat(0);
             else
-                aNumFmt.SetCharFmt(pFmt);
-            pNumRule->Set(i, aNumFmt);
+                aNumFormat.SetCharFormat(pFormat);
+            pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
     }
@@ -768,7 +768,7 @@ void SwOutlineSettingsTabPage::dispose()
     m_pLevelLB.clear();
     m_pCollBox.clear();
     m_pNumberBox.clear();
-    m_pCharFmtLB.clear();
+    m_pCharFormatLB.clear();
     m_pAllLevelFT.clear();
     m_pAllLevelNF.clear();
     m_pPrefixED.clear();
@@ -790,8 +790,8 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     m_pPreviewWIN->SetOutlineNames(pCollNames);
     // set start value - nActLevel must be 1 here
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
-    const SwNumFmt& rNumFmt = pNumRule->Get( nTmpLevel );
-    m_pStartEdit->SetValue( rNumFmt.GetStart() );
+    const SwNumFormat& rNumFormat = pNumRule->Get( nTmpLevel );
+    m_pStartEdit->SetValue( rNumFormat.GetStart() );
 
     // create pool formats for headlines
     sal_uInt16 i;
@@ -806,19 +806,19 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     m_pLevelLB->InsertEntry( sStr );
 
     // query the texttemplates' outlining levels
-    const sal_uInt16 nCount = pSh->GetTxtFmtCollCount();
+    const sal_uInt16 nCount = pSh->GetTextFormatCollCount();
     for( i = 0; i < nCount; ++i )
     {
-        SwTxtFmtColl &rTxtColl = pSh->GetTxtFmtColl(i);
-        if(!rTxtColl.IsDefault())
+        SwTextFormatColl &rTextColl = pSh->GetTextFormatColl(i);
+        if(!rTextColl.IsDefault())
         {
-            sStr = rTxtColl.GetName();
+            sStr = rTextColl.GetName();
             if(LISTBOX_ENTRY_NOTFOUND == m_pCollBox->GetEntryPos( sStr ))
                 m_pCollBox->InsertEntry( sStr );
         }
     }
 
-    m_pNumberBox->SelectNumberingType(rNumFmt.GetNumberingType());
+    m_pNumberBox->SelectNumberingType(rNumFormat.GetNumberingType());
     sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
     sal_uInt16 nTmp = 0;
     if(nOutlinePos != USHRT_MAX)
@@ -828,11 +828,11 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     m_pLevelLB->SelectEntryPos(nTmp-1);
 
     // collect char styles
-    m_pCharFmtLB->Clear();
-    m_pCharFmtLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
+    m_pCharFormatLB->Clear();
+    m_pCharFormatLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
 
     // char styles
-    ::FillCharStyleListBox(*m_pCharFmtLB,
+    ::FillCharStyleListBox(*m_pCharFormatLB,
                         pSh->GetView().GetDocShell());
     Update();
 }
@@ -880,15 +880,15 @@ void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType
         m_pStartEdit->GetModifyHdl().Call(m_pStartEdit);
 }
 
-static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFmt& rFmt, long nXStart, long nYStart, const Size& rSize)
+static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat, long nXStart, long nYStart, const Size& rSize)
 {
     vcl::Font aTmpFont(pVDev->GetFont());
 
-    vcl::Font aFont(*rFmt.GetBulletFont());
+    vcl::Font aFont(*rFormat.GetBulletFont());
     aFont.SetSize(rSize);
     aFont.SetTransparent(true);
     pVDev->SetFont(aFont);
-    OUString aText(rFmt.GetBulletChar());
+    OUString aText(rFormat.GetBulletChar());
     pVDev->DrawText(Point(nXStart, nYStart), aText);
     const long nRet = pVDev->GetTextWidth(aText);
 
@@ -896,16 +896,16 @@ static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFmt& rFmt, long
     return nRet;
 }
 
-static long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFmt &rFmt, long nXStart, long nYStart, long nDivision)
+static long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat &rFormat, long nXStart, long nYStart, long nDivision)
 {
-    const SvxBrushItem* pBrushItem = rFmt.GetBrush();
+    const SvxBrushItem* pBrushItem = rFormat.GetBrush();
     long nRet = 0;
     if (pBrushItem)
     {
         const Graphic* pGraphic = pBrushItem->GetGraphic();
         if (pGraphic)
         {
-            Size aGSize( rFmt.GetGraphicSize());
+            Size aGSize( rFormat.GetGraphicSize());
             aGSize.Width() /= nDivision;
             nRet = aGSize.Width();
             aGSize.Height() /= nDivision;
@@ -972,39 +972,39 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
             sal_uInt8 nEnd = std::min(sal_uInt8(nStart + 3), MAXLEVEL);
             for (sal_uInt8 nLevel = nStart; nLevel < nEnd; ++nLevel)
             {
-                const SwNumFmt &rFmt = pActNum->Get(nLevel);
-                aNumVector.push_back(rFmt.GetStart());
+                const SwNumFormat &rFormat = pActNum->Get(nLevel);
+                aNumVector.push_back(rFormat.GetStart());
 
                 long nXStart( 0 );
                 long nTextOffset( 0 );
                 long nNumberXPos( 0 );
-                if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
+                if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
-                    nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
-                    nTextOffset = rFmt.GetCharTextDistance() / nWidthRelation;
+                    nXStart = rFormat.GetAbsLSpace() / nWidthRelation;
+                    nTextOffset = rFormat.GetCharTextDistance() / nWidthRelation;
                     nNumberXPos = nXStart;
-                    const long nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
+                    const long nFirstLineOffset = (-rFormat.GetFirstLineOffset()) / nWidthRelation;
 
                     if(nFirstLineOffset <= nNumberXPos)
                         nNumberXPos -= nFirstLineOffset;
                     else
                         nNumberXPos = 0;
                 }
-                else if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
+                else if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
                 {
-                    const long nTmpNumberXPos((rFmt.GetIndentAt() + rFmt.GetFirstLineIndent()) / nWidthRelation);
+                    const long nTmpNumberXPos((rFormat.GetIndentAt() + rFormat.GetFirstLineIndent()) / nWidthRelation);
                     nNumberXPos = (nTmpNumberXPos < 0) ? 0 : nTmpNumberXPos;
                 }
 
                 long nBulletWidth = 0;
-                if (SVX_NUM_BITMAP == rFmt.GetNumberingType())
+                if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
                 {
-                    nBulletWidth = lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos,
+                    nBulletWidth = lcl_DrawGraphic(pVDev.get(), rFormat, nNumberXPos,
                                                    nYStart, nWidthRelation);
                 }
-                else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
+                else if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType())
                 {
-                    nBulletWidth = lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos,
+                    nBulletWidth = lcl_DrawBullet(pVDev.get(), rFormat, nNumberXPos,
                                                   nYStart, aStdFont.GetSize());
                 }
                 else
@@ -1018,8 +1018,8 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
                     nBulletWidth = pVDev->GetTextWidth(aText);
                     nPreNum++;
                 }
-                if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
-                     rFmt.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
+                if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
+                     rFormat.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
                 {
                     pVDev->SetFont(aStdFont);
                     OUString aText(' ');
@@ -1028,7 +1028,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
                 }
 
                 long nTextXPos(0);
-                if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
+                if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
                     nTextXPos = nXStart;
                     if (nTextOffset < 0)
@@ -1036,13 +1036,13 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
                     if (nNumberXPos + nBulletWidth + nTextOffset > nTextXPos)
                         nTextXPos = nNumberXPos + nBulletWidth + nTextOffset;
                 }
-                else if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
+                else if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
                 {
-                    switch (rFmt.GetLabelFollowedBy())
+                    switch (rFormat.GetLabelFollowedBy())
                     {
                         case SvxNumberFormat::LISTTAB:
                         {
-                            nTextXPos = rFmt.GetListtabPos() / nWidthRelation;
+                            nTextXPos = rFormat.GetListtabPos() / nWidthRelation;
                             if (nTextXPos < nNumberXPos + nBulletWidth)
                             {
                                 nTextXPos = nNumberXPos + nBulletWidth;
@@ -1057,7 +1057,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
                         break;
                     }
 
-                    nXStart = rFmt.GetIndentAt() / nWidthRelation;
+                    nXStart = rFormat.GetIndentAt() / nWidthRelation;
                 }
 
                 Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
@@ -1075,29 +1075,29 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
             const long nLineHeight = nFontHeight * 3 / 2;
             for (sal_uInt8 nLevel = 0; nLevel < MAXLEVEL; ++nLevel, nYStart = nYStart + nYStep)
             {
-                const SwNumFmt &rFmt = pActNum->Get(nLevel);
-                aNumVector.push_back(rFmt.GetStart());
+                const SwNumFormat &rFormat = pActNum->Get(nLevel);
+                aNumVector.push_back(rFormat.GetStart());
                 long nXStart(0);
-                if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
+                if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
-                    nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
+                    nXStart = rFormat.GetAbsLSpace() / nWidthRelation;
                 }
-                else if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
+                else if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
                 {
-                    const long nTmpXStart((rFmt.GetIndentAt() + rFmt.GetFirstLineIndent() ) / nWidthRelation);
+                    const long nTmpXStart((rFormat.GetIndentAt() + rFormat.GetFirstLineIndent() ) / nWidthRelation);
                     nXStart = (nTmpXStart < 0) ? 0 : nTmpXStart;
                 }
                 nXStart /= 2;
                 nXStart += 2;
                 long nTextOffset;
-                if (SVX_NUM_BITMAP == rFmt.GetNumberingType())
+                if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
                 {
-                    lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYStart, nWidthRelation);
+                    lcl_DrawGraphic(pVDev.get(), rFormat, nXStart, nYStart, nWidthRelation);
                     nTextOffset = nLineHeight + nXStep;
                 }
-                else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
+                else if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType())
                 {
-                    nTextOffset =  lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetSize());
+                    nTextOffset =  lcl_DrawBullet(pVDev.get(), rFormat, nXStart, nYStart, aStdFont.GetSize());
                     nTextOffset += nXStep;
                 }
                 else

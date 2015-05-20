@@ -527,19 +527,19 @@ sal_uInt16 SwModule::GetRedlineMarkPos()
     return pModuleConfig->GetMarkAlignMode();
 }
 
-bool SwModule::IsInsTblFormatNum(bool bHTML) const
+bool SwModule::IsInsTableFormatNum(bool bHTML) const
 {
-    return pModuleConfig->IsInsTblFormatNum(bHTML);
+    return pModuleConfig->IsInsTableFormatNum(bHTML);
 }
 
-bool SwModule::IsInsTblChangeNumFormat(bool bHTML) const
+bool SwModule::IsInsTableChangeNumFormat(bool bHTML) const
 {
-    return pModuleConfig->IsInsTblChangeNumFormat(bHTML);
+    return pModuleConfig->IsInsTableChangeNumFormat(bHTML);
 }
 
-bool SwModule::IsInsTblAlignNum(bool bHTML) const
+bool SwModule::IsInsTableAlignNum(bool bHTML) const
 {
-    return pModuleConfig->IsInsTblAlignNum(bHTML);
+    return pModuleConfig->IsInsTableAlignNum(bHTML);
 }
 
 const Color &SwModule::GetRedlineMarkColor()
@@ -584,18 +584,18 @@ sal_uInt16 SwModule::GetLinkUpdMode( bool ) const
     return (sal_uInt16)pUsrPref->GetUpdateLinkMode();
 }
 
-SwFldUpdateFlags SwModule::GetFldUpdateFlags( bool ) const
+SwFieldUpdateFlags SwModule::GetFieldUpdateFlags( bool ) const
 {
     if(!pUsrPref)
         GetUsrPref(false);
-    return pUsrPref->GetFldUpdateFlags();
+    return pUsrPref->GetFieldUpdateFlags();
 }
 
-void SwModule::ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags)
+void SwModule::ApplyFieldUpdateFlags(SwFieldUpdateFlags eFieldFlags)
 {
     if(!pUsrPref)
         GetUsrPref(false);
-    pUsrPref->SetFldUpdateFlags(eFldFlags);
+    pUsrPref->SetFieldUpdateFlags(eFieldFlags);
 }
 
 void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)

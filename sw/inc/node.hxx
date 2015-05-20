@@ -32,19 +32,19 @@
 #include <memory>
 #include <vector>
 
-class SwCntntFrm;
-class SwCntntNode;
+class SwContentFrm;
+class SwContentNode;
 class SwDoc;
 class SwEndNode;
 class SwFrm;
-class SwFrmFmt;
+class SwFrameFormat;
 class SwGrfNode;
-class SwNoTxtNode;
+class SwNoTextNode;
 class SwNodeIndex;
 class SwOLENode;
 class SwRect;
 class SwSection;
-class SwSectionFmt;
+class SwSectionFormat;
 class SwTOXBase;
 class SwSectionNode;
 class SwStartNode;
@@ -53,7 +53,7 @@ class SwRootFrm;
 class SwTable;
 class SwTableNode;
 class SwTableBox;
-class SwTxtNode;
+class SwTextNode;
 class SwPageDesc;
 class SwViewShell;
 struct SwPosition;
@@ -85,7 +85,7 @@ class SW_DLLPUBLIC SwNode
     sal_uInt8 nNodeType;
 
     /// For text nodes: level of auto format. Was put here because we had still free bits.
-    sal_uInt8 nAFmtNumLvl : 3;
+    sal_uInt8 nAFormatNumLvl : 3;
     bool bSetNumLSpace : 1;         ///< For numbering: TRUE: set indent.
     bool bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
 
@@ -94,10 +94,10 @@ class SW_DLLPUBLIC SwNode
     long m_nSerial;
 #endif
 
-    /// all SwFrmFmt that are anchored at the node
-    /// invariant: SwFrmFmt is in the list iff
-    /// SwFrmFmt::GetAnchor().GetCntntAnchor() points to this node
-    std::unique_ptr<std::vector<SwFrmFmt*>> m_pAnchoredFlys;
+    /// all SwFrameFormat that are anchored at the node
+    /// invariant: SwFrameFormat is in the list iff
+    /// SwFrameFormat::GetAnchor().GetContentAnchor() points to this node
+    std::unique_ptr<std::vector<SwFrameFormat*>> m_pAnchoredFlys;
 
 protected:
     SwStartNode* pStartOfSection;
@@ -126,8 +126,8 @@ public:
     inline const SwEndNode* EndOfSectionNode() const;
     inline         SwEndNode* EndOfSectionNode();
 
-    inline sal_uInt8 GetAutoFmtLvl() const     { return nAFmtNumLvl; }
-    inline void SetAutoFmtLvl( sal_uInt8 nVal )      { nAFmtNumLvl = nVal; }
+    inline sal_uInt8 GetAutoFormatLvl() const     { return nAFormatNumLvl; }
+    inline void SetAutoFormatLvl( sal_uInt8 nVal )      { nAFormatNumLvl = nVal; }
 
     inline bool IsSetNumLSpace() const  { return bSetNumLSpace; }
     inline void SetNumLSpace( bool bFlag )        { bSetNumLSpace = bFlag; }
@@ -139,16 +139,16 @@ public:
 
     inline       SwStartNode *GetStartNode();
     inline const SwStartNode *GetStartNode() const;
-    inline       SwCntntNode *GetCntntNode();
-    inline const SwCntntNode *GetCntntNode() const;
+    inline       SwContentNode *GetContentNode();
+    inline const SwContentNode *GetContentNode() const;
     inline       SwEndNode   *GetEndNode();
     inline const SwEndNode   *GetEndNode() const;
-    inline       SwTxtNode   *GetTxtNode();
-    inline const SwTxtNode   *GetTxtNode() const;
+    inline       SwTextNode   *GetTextNode();
+    inline const SwTextNode   *GetTextNode() const;
     inline       SwOLENode   *GetOLENode();
     inline const SwOLENode   *GetOLENode() const;
-    inline       SwNoTxtNode *GetNoTxtNode();
-    inline const SwNoTxtNode *GetNoTxtNode() const;
+    inline       SwNoTextNode *GetNoTextNode();
+    inline const SwNoTextNode *GetNoTextNode() const;
     inline       SwGrfNode   *GetGrfNode();
     inline const SwGrfNode   *GetGrfNode() const;
     inline       SwTableNode *GetTableNode();
@@ -157,13 +157,13 @@ public:
     inline const SwSectionNode *GetSectionNode() const;
 
     inline bool IsStartNode() const;
-    inline bool IsCntntNode() const;
+    inline bool IsContentNode() const;
     inline bool IsEndNode() const;
-    inline bool IsTxtNode() const;
+    inline bool IsTextNode() const;
     inline bool IsTableNode() const;
     inline bool IsSectionNode() const;
     inline bool IsOLENode() const;
-    inline bool IsNoTxtNode() const;
+    inline bool IsNoTextNode() const;
     inline bool IsGrfNode() const;
 
     /**
@@ -271,20 +271,20 @@ public:
     const SwPageDesc* FindPageDesc( bool bCalcLay, size_t* pPgDescNdIdx = 0 ) const;
 
     /// If node is in a fly return the respective format.
-    SwFrmFmt* GetFlyFmt() const;
+    SwFrameFormat* GetFlyFormat() const;
 
     /// If node is in a table return the respective table box.
-    SwTableBox* GetTblBox() const;
+    SwTableBox* GetTableBox() const;
 
     inline sal_uLong GetIndex() const { return GetPos(); }
 
-    const SwTxtNode* FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const;
+    const SwTextNode* FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const;
 
     sal_uInt8 HasPrevNextLayNode() const;
 
-    std::vector<SwFrmFmt *> const* GetAnchoredFlys() const { return m_pAnchoredFlys.get(); }
-    void AddAnchoredFly(SwFrmFmt *);
-    void RemoveAnchoredFly(SwFrmFmt *);
+    std::vector<SwFrameFormat *> const* GetAnchoredFlys() const { return m_pAnchoredFlys.get(); }
+    void AddAnchoredFly(SwFrameFormat *);
+    void RemoveAnchoredFly(SwFrameFormat *);
 
     /**
      * Dumps the node structure to the given destination (file nodes.xml in the current directory by default)
@@ -349,9 +349,9 @@ private:
     SwEndNode & operator= ( const SwEndNode & rNode ) SAL_DELETED_FUNCTION;
 };
 
-// SwCntntNode
+// SwContentNode
 
-class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexReg
+class SW_DLLPUBLIC SwContentNode: public SwModify, public SwNode, public SwIndexReg
 {
 
 //FEATURE::CONDCOLL
@@ -360,14 +360,14 @@ class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexRe
     mutable bool mbSetModifyAtAttr;
 
 protected:
-    SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNodeType,
-                SwFmtColl *pFmtColl );
+    SwContentNode( const SwNodeIndex &rWhere, const sal_uInt8 nNodeType,
+                SwFormatColl *pFormatColl );
     /** the = 0 forces the class to be an abstract base class, but the dtor can be still called
        from subclasses */
-    virtual ~SwCntntNode() = 0;
+    virtual ~SwContentNode() = 0;
 
-    /**  Attribute-set for all auto attributes of a CntntNode.
-      (e.g. TxtNode or NoTxtNode). */
+    /**  Attribute-set for all auto attributes of a ContentNode.
+      (e.g. TextNode or NoTextNode). */
     std::shared_ptr<const SfxItemSet> mpAttrSet;
 
     /// Make respective nodes create the specific AttrSets.
@@ -384,12 +384,12 @@ public:
 
     /** MakeFrm will be called for a certain layout
        pSib is another SwFrm of the same layout (e.g. the SwRootFrm itself, a sibling, the parent) */
-    virtual SwCntntFrm *MakeFrm( SwFrm* pSib ) = 0;
+    virtual SwContentFrm *MakeFrm( SwFrm* pSib ) = 0;
 
-    virtual SwCntntNode *SplitCntntNode(const SwPosition & ) = 0;
+    virtual SwContentNode *SplitContentNode(const SwPosition & ) = 0;
 
-    virtual SwCntntNode *JoinNext();
-    virtual SwCntntNode *JoinPrev();
+    virtual SwContentNode *JoinNext();
+    virtual SwContentNode *JoinPrev();
     /** Is it possible to join two nodes?
        In pIdx the second position can be returned. */
     bool CanJoinNext( SwNodeIndex* pIdx =0 ) const;
@@ -402,7 +402,7 @@ public:
     bool GoPrevious(SwIndex *, sal_uInt16 nMode ) const;
 
     /// Replacement for good old GetFrm(..):
-    SwCntntFrm *getLayoutFrm( const SwRootFrm*,
+    SwContentFrm *getLayoutFrm( const SwRootFrm*,
                         const Point* pDocPos = 0,
                         const SwPosition *pPos = 0,
                         const bool bCalcFrm = true ) const;
@@ -417,7 +417,7 @@ public:
 
     /** Method creates all views of document for given node. The content
        frames that are created are put in the respective layout. */
-    void MakeFrms( SwCntntNode& rNode );
+    void MakeFrms( SwContentNode& rNode );
 
     /** Method deletes all views of document for the node. The content-
         frames are removed from the respective layout.
@@ -430,7 +430,7 @@ public:
        There are differences between text node and formula node. */
     virtual sal_Int32 Len() const;
 
-    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
+    virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
 
     /// Get information from Client.
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
@@ -456,13 +456,13 @@ public:
     inline const SwAttrSet *GetpSwAttrSet() const { return static_cast<const SwAttrSet*>(mpAttrSet.get()); }
     inline bool  HasSwAttrSet() const { return mpAttrSet != nullptr; }
 
-    virtual SwFmtColl* ChgFmtColl( SwFmtColl* );
-    SwFmtColl* GetFmtColl() const { return const_cast<SwFmtColl*>(static_cast<const SwFmtColl*>(GetRegisteredIn())); }
+    virtual SwFormatColl* ChgFormatColl( SwFormatColl* );
+    SwFormatColl* GetFormatColl() const { return const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn())); }
 
 //FEATURE::CONDCOLL
-    inline SwFmtColl& GetAnyFmtColl() const;
-    void SetCondFmtColl( SwFmtColl* );
-    inline SwFmtColl* GetCondFmtColl() const;
+    inline SwFormatColl& GetAnyFormatColl() const;
+    void SetCondFormatColl( SwFormatColl* );
+    inline SwFormatColl* GetCondFormatColl() const;
 
     bool IsAnyCondition( SwCollCondition& rTmp ) const;
     void ChkCondColl();
@@ -480,14 +480,14 @@ public:
     inline void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
     inline bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }
 
-    static SwOLENodes* CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize );
+    static SwOLENodes* CreateOLENodesArray( const SwFormatColl& rColl, bool bOnlyWithInvalidSize );
 
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 
 private:
-    SwCntntNode( const SwCntntNode & rNode ) SAL_DELETED_FUNCTION;
-    SwCntntNode & operator= ( const SwCntntNode & rNode ) SAL_DELETED_FUNCTION;
+    SwContentNode( const SwContentNode & rNode ) SAL_DELETED_FUNCTION;
+    SwContentNode & operator= ( const SwContentNode & rNode ) SAL_DELETED_FUNCTION;
 };
 
 // SwTableNode
@@ -544,7 +544,7 @@ protected:
 
 public:
     SwSectionNode(SwNodeIndex const&,
-        SwSectionFmt & rFmt, SwTOXBase const*const pTOXBase);
+        SwSectionFormat & rFormat, SwTOXBase const*const pTOXBase);
 
     const SwSection& GetSection() const { return *m_pSection; }
           SwSection& GetSection()       { return *m_pSection; }
@@ -572,7 +572,7 @@ public:
 
     /** Check for not hidden areas whether there is content that is not in
        a hidden sub-area. */
-    bool IsCntntHidden() const;
+    bool IsContentHidden() const;
 
 };
 
@@ -620,20 +620,20 @@ inline const SwSectionNode *SwNode::GetSectionNode() const
 {
      return ND_SECTIONNODE == nNodeType ? static_cast<const SwSectionNode*>(this) : 0;
 }
-inline       SwCntntNode *SwNode::GetCntntNode()
+inline       SwContentNode *SwNode::GetContentNode()
 {
-     return ND_CONTENTNODE & nNodeType ? static_cast<SwCntntNode*>(this) : 0;
+     return ND_CONTENTNODE & nNodeType ? static_cast<SwContentNode*>(this) : 0;
 }
-inline const SwCntntNode *SwNode::GetCntntNode() const
+inline const SwContentNode *SwNode::GetContentNode() const
 {
-     return ND_CONTENTNODE & nNodeType ? static_cast<const SwCntntNode*>(this) : 0;
+     return ND_CONTENTNODE & nNodeType ? static_cast<const SwContentNode*>(this) : 0;
 }
 
 inline bool SwNode::IsStartNode() const
 {
     return (ND_STARTNODE & nNodeType) != 0;
 }
-inline bool SwNode::IsCntntNode() const
+inline bool SwNode::IsContentNode() const
 {
     return (ND_CONTENTNODE & nNodeType) != 0;
 }
@@ -641,7 +641,7 @@ inline bool SwNode::IsEndNode() const
 {
     return ND_ENDNODE == nNodeType;
 }
-inline bool SwNode::IsTxtNode() const
+inline bool SwNode::IsTextNode() const
 {
     return ND_TEXTNODE == nNodeType;
 }
@@ -653,7 +653,7 @@ inline bool SwNode::IsSectionNode() const
 {
     return ND_SECTIONNODE == nNodeType;
 }
-inline bool SwNode::IsNoTxtNode() const
+inline bool SwNode::IsNoTextNode() const
 {
     return (ND_NOTXTNODE & nNodeType) != 0;
 }
@@ -716,26 +716,26 @@ inline const SwDoc* SwNode::GetDoc() const
     return GetNodes().GetDoc();
 }
 
-inline SwFmtColl* SwCntntNode::GetCondFmtColl() const
+inline SwFormatColl* SwContentNode::GetCondFormatColl() const
 {
-    return pCondColl ? static_cast<SwFmtColl*>(pCondColl->GetRegisteredIn()) : 0;
+    return pCondColl ? static_cast<SwFormatColl*>(pCondColl->GetRegisteredIn()) : 0;
 }
 
-inline SwFmtColl& SwCntntNode::GetAnyFmtColl() const
+inline SwFormatColl& SwContentNode::GetAnyFormatColl() const
 {
     return pCondColl && pCondColl->GetRegisteredIn()
-                ? *static_cast<SwFmtColl*>(pCondColl->GetRegisteredIn())
-                : *const_cast<SwFmtColl*>(static_cast<const SwFmtColl*>(GetRegisteredIn()));
+                ? *static_cast<SwFormatColl*>(pCondColl->GetRegisteredIn())
+                : *const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn()));
 }
 
-inline const SwAttrSet& SwCntntNode::GetSwAttrSet() const
+inline const SwAttrSet& SwContentNode::GetSwAttrSet() const
 {
-    return mpAttrSet ? *GetpSwAttrSet() : GetAnyFmtColl().GetAttrSet();
+    return mpAttrSet ? *GetpSwAttrSet() : GetAnyFormatColl().GetAttrSet();
 }
 
 //FEATURE::CONDCOLL
 
-inline const SfxPoolItem& SwCntntNode::GetAttr( sal_uInt16 nWhich,
+inline const SfxPoolItem& SwContentNode::GetAttr( sal_uInt16 nWhich,
                                                 bool bInParents ) const
 {
     return GetSwAttrSet().Get( nWhich, bInParents );

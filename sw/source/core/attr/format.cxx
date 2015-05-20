@@ -38,72 +38,72 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1( SwFmt, SwClient );
+TYPEINIT1( SwFormat, SwClient );
 
-SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-              const sal_uInt16* pWhichRanges, SwFmt *pDrvdFrm,
-              sal_uInt16 nFmtWhich )
+SwFormat::SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
+              const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrm,
+              sal_uInt16 nFormatWhich )
     : SwModify( pDrvdFrm ),
-    m_aFmtName( OUString::createFromAscii(pFmtNm) ),
+    m_aFormatName( OUString::createFromAscii(pFormatNm) ),
     m_aSet( rPool, pWhichRanges ),
-    m_nWhichId( nFmtWhich ),
-    m_nPoolFmtId( USHRT_MAX ),
+    m_nWhichId( nFormatWhich ),
+    m_nPoolFormatId( USHRT_MAX ),
     m_nPoolHelpId( USHRT_MAX ),
     m_nPoolHlpFileId( UCHAR_MAX )
 {
-    m_bAutoUpdateFmt = false; // LAYER_IMPL
-    m_bAutoFmt = true;
-    m_bWritten = m_bFmtInDTOR = m_bHidden = false;
+    m_bAutoUpdateFormat = false; // LAYER_IMPL
+    m_bAutoFormat = true;
+    m_bWritten = m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrm )
         m_aSet.SetParent( &pDrvdFrm->m_aSet );
 }
 
-SwFmt::SwFmt( SwAttrPool& rPool, const OUString& rFmtNm,
-              const sal_uInt16* pWhichRanges, SwFmt* pDrvdFrm,
-              sal_uInt16 nFmtWhich )
+SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
+              const sal_uInt16* pWhichRanges, SwFormat* pDrvdFrm,
+              sal_uInt16 nFormatWhich )
     : SwModify( pDrvdFrm ),
-    m_aFmtName( rFmtNm ),
+    m_aFormatName( rFormatNm ),
     m_aSet( rPool, pWhichRanges ),
-    m_nWhichId( nFmtWhich ),
-    m_nPoolFmtId( USHRT_MAX ),
+    m_nWhichId( nFormatWhich ),
+    m_nPoolFormatId( USHRT_MAX ),
     m_nPoolHelpId( USHRT_MAX ),
     m_nPoolHlpFileId( UCHAR_MAX )
 {
-    m_bAutoUpdateFmt = false; // LAYER_IMPL
-    m_bAutoFmt = true;
-    m_bWritten = m_bFmtInDTOR = m_bHidden = false;
+    m_bAutoUpdateFormat = false; // LAYER_IMPL
+    m_bAutoFormat = true;
+    m_bWritten = m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrm )
         m_aSet.SetParent( &pDrvdFrm->m_aSet );
 }
 
-SwFmt::SwFmt( const SwFmt& rFmt )
-    : SwModify( rFmt.DerivedFrom() ),
-    m_aFmtName( rFmt.m_aFmtName ),
-    m_aSet( rFmt.m_aSet ),
-    m_nWhichId( rFmt.m_nWhichId ),
-    m_nPoolFmtId( rFmt.GetPoolFmtId() ),
-    m_nPoolHelpId( rFmt.GetPoolHelpId() ),
-    m_nPoolHlpFileId( rFmt.GetPoolHlpFileId() )
+SwFormat::SwFormat( const SwFormat& rFormat )
+    : SwModify( rFormat.DerivedFrom() ),
+    m_aFormatName( rFormat.m_aFormatName ),
+    m_aSet( rFormat.m_aSet ),
+    m_nWhichId( rFormat.m_nWhichId ),
+    m_nPoolFormatId( rFormat.GetPoolFormatId() ),
+    m_nPoolHelpId( rFormat.GetPoolHelpId() ),
+    m_nPoolHlpFileId( rFormat.GetPoolHlpFileId() )
 {
-    m_bWritten = m_bFmtInDTOR = false; // LAYER_IMPL
-    m_bAutoFmt = rFmt.m_bAutoFmt;
-    m_bHidden = rFmt.m_bHidden;
-    m_bAutoUpdateFmt = rFmt.m_bAutoUpdateFmt;
+    m_bWritten = m_bFormatInDTOR = false; // LAYER_IMPL
+    m_bAutoFormat = rFormat.m_bAutoFormat;
+    m_bHidden = rFormat.m_bHidden;
+    m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;
 
-    if( rFmt.DerivedFrom() )
-        m_aSet.SetParent( &rFmt.DerivedFrom()->m_aSet );
+    if( rFormat.DerivedFrom() )
+        m_aSet.SetParent( &rFormat.DerivedFrom()->m_aSet );
     // a few special treatments for attributes
     m_aSet.SetModifyAtAttr( this );
 }
 
-SwFmt &SwFmt::operator=(const SwFmt& rFmt)
+SwFormat &SwFormat::operator=(const SwFormat& rFormat)
 {
-    m_nWhichId = rFmt.m_nWhichId;
-    m_nPoolFmtId = rFmt.GetPoolFmtId();
-    m_nPoolHelpId = rFmt.GetPoolHelpId();
-    m_nPoolHlpFileId = rFmt.GetPoolHlpFileId();
+    m_nWhichId = rFormat.m_nWhichId;
+    m_nPoolFormatId = rFormat.GetPoolFormatId();
+    m_nPoolHelpId = rFormat.GetPoolHelpId();
+    m_nPoolHlpFileId = rFormat.GetPoolHlpFileId();
 
     if ( IsInCache() )
     {
@@ -115,8 +115,8 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     // copy only array with attributes delta
     SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
               aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
-    m_aSet.Intersect_BC( rFmt.m_aSet, &aOld, &aNew );
-    (void)m_aSet.Put_BC( rFmt.m_aSet, &aOld, &aNew );
+    m_aSet.Intersect_BC( rFormat.m_aSet, &aOld, &aNew );
+    (void)m_aSet.Put_BC( rFormat.m_aSet, &aOld, &aNew );
 
     // a few special treatments for attributes
     m_aSet.SetModifyAtAttr( this );
@@ -129,39 +129,39 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
         ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
     }
 
-    if( GetRegisteredIn() != rFmt.GetRegisteredIn() )
+    if( GetRegisteredIn() != rFormat.GetRegisteredIn() )
     {
         if( GetRegisteredIn() )
             GetRegisteredInNonConst()->Remove(this);
-        if( rFmt.GetRegisteredIn() )
+        if( rFormat.GetRegisteredIn() )
         {
-            const_cast<SwFmt&>(rFmt).GetRegisteredInNonConst()->Add(this);
-            m_aSet.SetParent( &rFmt.m_aSet );
+            const_cast<SwFormat&>(rFormat).GetRegisteredInNonConst()->Add(this);
+            m_aSet.SetParent( &rFormat.m_aSet );
         }
         else
         {
             m_aSet.SetParent( 0 );
         }
     }
-    m_bAutoFmt = rFmt.m_bAutoFmt;
-    m_bHidden = rFmt.m_bHidden;
-    m_bAutoUpdateFmt = rFmt.m_bAutoUpdateFmt;
+    m_bAutoFormat = rFormat.m_bAutoFormat;
+    m_bHidden = rFormat.m_bHidden;
+    m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;
     return *this;
 }
 
-void SwFmt::SetName( const OUString& rNewName, bool bBroadcast )
+void SwFormat::SetName( const OUString& rNewName, bool bBroadcast )
 {
     OSL_ENSURE( !IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )
     {
-        SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFmtName );
+        SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
         SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
-        m_aFmtName = rNewName;
+        m_aFormatName = rNewName;
         ModifyNotification( &aOld, &aNew );
     }
     else
     {
-        m_aFmtName = rNewName;
+        m_aFormatName = rNewName;
     }
 }
 
@@ -176,7 +176,7 @@ void SwFmt::SetName( const OUString& rNewName, bool bBroadcast )
     in which <this> is defined. Currently this is important for DropCaps
     because that contains data that needs to be copied deeply.
 */
-void SwFmt::CopyAttrs( const SwFmt& rFmt, bool bReplace )
+void SwFormat::CopyAttrs( const SwFormat& rFormat, bool bReplace )
 {
     // copy only array with attributes delta
     if ( IsInCache() )
@@ -187,12 +187,12 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, bool bReplace )
     SetInSwFntCache( false );
 
     // special treatments for some attributes
-    SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFmt.m_aSet);
+    SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFormat.m_aSet);
 
     if( !bReplace )     // refresh only those that are not set?
     {
-        if( pChgSet == &rFmt.m_aSet )
-            pChgSet = new SwAttrSet( rFmt.m_aSet );
+        if( pChgSet == &rFormat.m_aSet )
+            pChgSet = new SwAttrSet( rFormat.m_aSet );
         pChgSet->Differentiate( m_aSet );
     }
 
@@ -215,42 +215,42 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, bool bReplace )
         }
     }
 
-    if( pChgSet != &rFmt.m_aSet ) // was a Set created?
+    if( pChgSet != &rFormat.m_aSet ) // was a Set created?
         delete pChgSet;
 }
 
-SwFmt::~SwFmt()
+SwFormat::~SwFormat()
 {
     // This happens at a ObjectDying message. Thus put all dependent
     // ones on DerivedFrom.
     if( HasWriterListeners() )
     {
-        OSL_ENSURE( DerivedFrom(), "SwFmt::~SwFmt: Def dependents!" );
+        OSL_ENSURE( DerivedFrom(), "SwFormat::~SwFormat: Def dependents!" );
 
-        m_bFmtInDTOR = true;
+        m_bFormatInDTOR = true;
 
-        SwFmt* pParentFmt = DerivedFrom();
-        if( !pParentFmt )
+        SwFormat* pParentFormat = DerivedFrom();
+        if( !pParentFormat )
         {
             SAL_WARN(
                 "sw.core",
-                "~SwFmt: parent format missing from: " << GetName() );
+                "~SwFormat: parent format missing from: " << GetName() );
         }
         else
         {
-            SwFmtChg aOldFmt( this );
-            SwFmtChg aNewFmt( pParentFmt );
-            SwIterator<SwClient,SwFmt> aIter(*this);
-            for(SwClient* pClient = aIter.First(); pClient && pParentFmt; pClient = aIter.Next())
+            SwFormatChg aOldFormat( this );
+            SwFormatChg aNewFormat( pParentFormat );
+            SwIterator<SwClient,SwFormat> aIter(*this);
+            for(SwClient* pClient = aIter.First(); pClient && pParentFormat; pClient = aIter.Next())
             {
-                pParentFmt->Add( pClient );
-                pClient->ModifyNotification( &aOldFmt, &aNewFmt );
+                pParentFormat->Add( pClient );
+                pClient->ModifyNotification( &aOldFormat, &aNewFormat );
             }
         }
     }
 }
 
-void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     bool bContinue = true; // true = pass on to dependent ones
 
@@ -265,15 +265,15 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         {
             // If the dying object is the parent format of this format so
             // attach this to the parent of the parent
-            SwFmt* pFmt = static_cast<SwFmt*>(static_cast<const SwPtrMsgPoolItem*>(pNewValue)->pObject);
+            SwFormat* pFormat = static_cast<SwFormat*>(static_cast<const SwPtrMsgPoolItem*>(pNewValue)->pObject);
 
             // do not move if this is the topmost format
-            if( GetRegisteredIn() && GetRegisteredIn() == pFmt )
+            if( GetRegisteredIn() && GetRegisteredIn() == pFormat )
             {
-                if( pFmt->GetRegisteredIn() )
+                if( pFormat->GetRegisteredIn() )
                 {
                     // if parent so register in new parent
-                    pFmt->DerivedFrom()->Add( this );
+                    pFormat->DerivedFrom()->Add( this );
                     m_aSet.SetParent( &DerivedFrom()->m_aSet );
                 }
                 else
@@ -306,8 +306,8 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 
         // skip my own Modify
         if ( pOldValue && pNewValue &&
-            static_cast<const SwFmtChg*>(pOldValue)->pChangedFmt != this &&
-            static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt == GetRegisteredIn() )
+            static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat != this &&
+            static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat == GetRegisteredIn() )
         {
             // attach Set to new parent
             m_aSet.SetParent( DerivedFrom() ? &DerivedFrom()->m_aSet : 0 );
@@ -322,7 +322,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
             // mba: move the code that ignores this event to the clients
 
             // pass Hint only to dependent formats (no Frames)
-            //ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFmt) );
+            //ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFormat) );
             //bContinue = false;
         }
         break;
@@ -345,17 +345,17 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
     }
 }
 
-bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
+bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
 {
     if ( pDerFrom )
     {
-        const SwFmt* pFmt = pDerFrom;
-        while ( pFmt != 0 )
+        const SwFormat* pFormat = pDerFrom;
+        while ( pFormat != 0 )
         {
-            if ( pFmt == this )
+            if ( pFormat == this )
                 return false;
 
-            pFmt=pFmt->DerivedFrom();
+            pFormat=pFormat->DerivedFrom();
         }
     }
     else
@@ -384,19 +384,19 @@ bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     pDerFrom->Add( this );
     m_aSet.SetParent( &pDerFrom->m_aSet );
 
-    SwFmtChg aOldFmt( this );
-    SwFmtChg aNewFmt( this );
-    ModifyNotification( &aOldFmt, &aNewFmt );
+    SwFormatChg aOldFormat( this );
+    SwFormatChg aNewFormat( this );
+    ModifyNotification( &aOldFormat, &aNewFormat );
 
     return true;
 }
 
-bool SwFmt::supportsFullDrawingLayerFillAttributeSet() const
+bool SwFormat::supportsFullDrawingLayerFillAttributeSet() const
 {
     return false;
 }
 
-const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
+const SfxPoolItem& SwFormat::GetFormatAttr( sal_uInt16 nWhich, bool bInParents ) const
 {
     if (RES_BACKGROUND == nWhich && supportsFullDrawingLayerFillAttributeSet())
     {
@@ -415,12 +415,12 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
     return m_aSet.Get( nWhich, bInParents );
 }
 
-SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
+SfxItemState SwFormat::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
 {
     if (RES_BACKGROUND == nWhich && supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or SwFmt::GetBackgroundStat (simple fallback is in place and used)");
+        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or SwFormat::GetBackgroundStat (simple fallback is in place and used)");
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
 
         // check if the new fill attributes are used
@@ -450,7 +450,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
     return m_aSet.GetItemState( nWhich, bSrchInParent, ppItem );
 }
 
-SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) const
+SfxItemState SwFormat::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {
@@ -478,7 +478,7 @@ SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) 
     return eRet;
 }
 
-bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
+bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
 {
     if ( IsInCache() || IsInSwFntCache() )
     {
@@ -529,19 +529,19 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     }
 
     // if Modify is locked then no modifications will be sent;
-    // but call Modify always for FrmFmts
-    const sal_uInt16 nFmtWhich = Which();
+    // but call Modify always for FrameFormats
+    const sal_uInt16 nFormatWhich = Which();
     if( IsModifyLocked() ||
         ( !HasWriterListeners() &&
-          (RES_GRFFMTCOLL == nFmtWhich  ||
-           RES_TXTFMTCOLL == nFmtWhich ) ) )
+          (RES_GRFFMTCOLL == nFormatWhich  ||
+           RES_TXTFMTCOLL == nFormatWhich ) ) )
     {
         if( ( bRet = (0 != m_aSet.Put( rAttr ))) )
             m_aSet.SetModifyAtAttr( this );
         // #i71574#
-        if ( nFmtWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
+        if ( nFormatWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
         {
-            TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
+            TextFormatCollFunc::CheckTextFormatCollForDeletionOfAssignmentToOutlineStyle( this );
         }
     }
     else
@@ -564,7 +564,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     return bRet;
 }
 
-bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
+bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
 {
     if( !rSet.Count() )
         return false;
@@ -634,19 +634,19 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     }
 
     // if Modify is locked then no modifications will be sent;
-    // but call Modify always for FrmFmts
-    const sal_uInt16 nFmtWhich = Which();
+    // but call Modify always for FrameFormats
+    const sal_uInt16 nFormatWhich = Which();
     if ( IsModifyLocked() ||
          ( !HasWriterListeners() &&
-           ( RES_GRFFMTCOLL == nFmtWhich ||
-             RES_TXTFMTCOLL == nFmtWhich ) ) )
+           ( RES_GRFFMTCOLL == nFormatWhich ||
+             RES_TXTFMTCOLL == nFormatWhich ) ) )
     {
         if( ( bRet = m_aSet.Put( aTempSet )) )
             m_aSet.SetModifyAtAttr( this );
         // #i71574#
-        if ( nFmtWhich == RES_TXTFMTCOLL )
+        if ( nFormatWhich == RES_TXTFMTCOLL )
         {
-            TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
+            TextFormatCollFunc::CheckTextFormatCollForDeletionOfAssignmentToOutlineStyle( this );
         }
     }
     else
@@ -667,7 +667,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 }
 
 // remove Hint using nWhich from array with delta
-bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+bool SwFormat::ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
     if( !m_aSet.Count() )
         return false;
@@ -700,7 +700,7 @@ bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 }
 
 // #i73790#
-sal_uInt16 SwFmt::ResetAllFmtAttr()
+sal_uInt16 SwFormat::ResetAllFormatAttr()
 {
     if( !m_aSet.Count() )
         return 0;
@@ -728,12 +728,12 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
     return aNew.Count();
 }
 
-bool SwFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwFormat::GetInfo( SfxPoolItem& rInfo ) const
 {
     return SwModify::GetInfo( rInfo );
 }
 
-void SwFmt::DelDiffs( const SfxItemSet& rSet )
+void SwFormat::DelDiffs( const SfxItemSet& rSet )
 {
     if( !m_aSet.Count() )
         return;
@@ -763,7 +763,7 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     }
 }
 
-/** SwFmt::IsBackgroundTransparent
+/** SwFormat::IsBackgroundTransparent
 
     Virtual method to determine, if background of format is transparent.
     Default implementation returns false. Thus, subclasses have to override
@@ -771,7 +771,7 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
 
     @return false, default implementation
 */
-bool SwFmt::IsBackgroundTransparent() const
+bool SwFormat::IsBackgroundTransparent() const
 {
     return false;
 }
@@ -779,16 +779,16 @@ bool SwFmt::IsBackgroundTransparent() const
 /*
  * Document Interface Access
  */
-const IDocumentSettingAccess* SwFmt::getIDocumentSettingAccess() const { return & GetDoc()->GetDocumentSettingManager(); }
-const IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
-IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() { return & GetDoc()->getIDocumentDrawModelAccess(); }
-const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return &GetDoc()->getIDocumentLayoutAccess(); }
-IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return &GetDoc()->getIDocumentLayoutAccess(); }
-IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return & GetDoc()->getIDocumentTimerAccess(); }
-IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return &GetDoc()->getIDocumentFieldsAccess(); }
-IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return & GetDoc()->getIDocumentChartDataProviderAccess(); }
+const IDocumentSettingAccess* SwFormat::getIDocumentSettingAccess() const { return & GetDoc()->GetDocumentSettingManager(); }
+const IDocumentDrawModelAccess* SwFormat::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
+IDocumentDrawModelAccess* SwFormat::getIDocumentDrawModelAccess() { return & GetDoc()->getIDocumentDrawModelAccess(); }
+const IDocumentLayoutAccess* SwFormat::getIDocumentLayoutAccess() const { return &GetDoc()->getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess* SwFormat::getIDocumentLayoutAccess() { return &GetDoc()->getIDocumentLayoutAccess(); }
+IDocumentTimerAccess* SwFormat::getIDocumentTimerAccess() { return & GetDoc()->getIDocumentTimerAccess(); }
+IDocumentFieldsAccess* SwFormat::getIDocumentFieldsAccess() { return &GetDoc()->getIDocumentFieldsAccess(); }
+IDocumentChartDataProviderAccess* SwFormat::getIDocumentChartDataProviderAccess() { return & GetDoc()->getIDocumentChartDataProviderAccess(); }
 
-void SwFmt::GetGrabBagItem(uno::Any& rVal) const
+void SwFormat::GetGrabBagItem(uno::Any& rVal) const
 {
     if (m_pGrabBagItem.get())
         m_pGrabBagItem->QueryValue(rVal);
@@ -799,7 +799,7 @@ void SwFmt::GetGrabBagItem(uno::Any& rVal) const
     }
 }
 
-void SwFmt::SetGrabBagItem(const uno::Any& rVal)
+void SwFormat::SetGrabBagItem(const uno::Any& rVal)
 {
     if (!m_pGrabBagItem.get())
         m_pGrabBagItem.reset(new SfxGrabBagItem);
@@ -808,7 +808,7 @@ void SwFmt::SetGrabBagItem(const uno::Any& rVal)
 }
 
 //UUUU
-SvxBrushItem SwFmt::makeBackgroundBrushItem(bool bInP) const
+SvxBrushItem SwFormat::makeBackgroundBrushItem(bool bInP) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {
@@ -825,7 +825,7 @@ SvxBrushItem SwFmt::makeBackgroundBrushItem(bool bInP) const
 }
 
 //UUUU
-drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFmt::getSdrAllFillAttributesHelper() const
+drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFormat::getSdrAllFillAttributesHelper() const
 {
     return drawinglayer::attribute::SdrAllFillAttributesHelperPtr();
 }

@@ -550,7 +550,7 @@ void SvParser::Continue( int )
 {
 }
 
-void SvParser::BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
+void SvParser::BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
                               sal_uInt16 *pWhichIds,
                               sal_uInt16 nWhichIds )
 {

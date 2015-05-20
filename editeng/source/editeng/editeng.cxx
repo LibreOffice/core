@@ -1922,11 +1922,11 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
         else
         {
             const SvxLRSpaceItem& rLRItem = pImpEditEngine->GetLRSpaceItem( pPPortion->GetNode() );
-// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst()) );
+// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst()) );
             sal_Int32 nSpaceBefore = 0;
             pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
-            short nX = (short)(rLRItem.GetTxtLeft()
-                            + rLRItem.GetTxtFirstLineOfst()
+            short nX = (short)(rLRItem.GetTextLeft()
+                            + rLRItem.GetTextFirstLineOfst()
                             + nSpaceBefore);
             aPoint.X() = pImpEditEngine->GetXValue( nX
                              );

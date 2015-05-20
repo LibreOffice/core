@@ -174,7 +174,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
     rSh.GetFlyFrmAttr( aSet );
-    const SwFmtURL &rURL = static_cast<const SwFmtURL&>(aSet.Get( RES_URL ));
+    const SwFormatURL &rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
     SvxIMapDlgChildWindow::UpdateIMapDlg(
             aGrf, rURL.GetMap(), pList.get(), pEditObj );
 }
@@ -298,8 +298,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
         case SID_CLIPBOARD_FORMAT_ITEMS:
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
-                const SfxPoolItem* pFmt;
-                if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pFmt ) )
+                const SfxPoolItem* pFormat;
+                if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pFormat ) )
                 {
                     TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
@@ -312,7 +312,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         SwView* pView = &rView;
 
                         SwTransferable::PasteFormat( rSh, aDataHelper,
-                                        static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pFmt)->GetValue()) );
+                                        static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pFormat)->GetValue()) );
 
                         //Done() has to be called before the shell has been removed
                         rReq.Done();
@@ -364,7 +364,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     TransferableDataHelper::CreateFromSystemClipboard( &rSh.GetView().GetEditWin()) );
                 if( aDataHelper.GetXTransferable().is()
                     && SwTransferable::IsPaste( rSh, aDataHelper )
-                    && !rSh.CrsrInsideInputFld() )
+                    && !rSh.CrsrInsideInputField() )
                 {
                     // Temporary variables, because the shell could already be
                     // destroyed after the paste.
@@ -436,7 +436,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 
         case SID_PASTE_SPECIAL:
             if( !GetView().IsPasteSpecialAllowed()
-                || rSh.CrsrInsideInputFld() )
+                || rSh.CrsrInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -455,9 +455,9 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                     TransferableDataHelper::CreateFromSystemClipboard(
                                             &rSh.GetView().GetEditWin()) );
 
-                SvxClipboardFmtItem aFmtItem( nWhich );
-                SwTransferable::FillClipFmtItem( rSh, aDataHelper, aFmtItem );
-                rSet.Put( aFmtItem );
+                SvxClipboardFormatItem aFormatItem( nWhich );
+                SwTransferable::FillClipFormatItem( rSh, aDataHelper, aFormatItem );
+                rSet.Put( aFormatItem );
             }
             break;
         }
@@ -600,15 +600,15 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_UPDATE_FIELDS:
             {
                 rSh.UpdateDocStat();
-                rSh.EndAllTblBoxEdit();
-                rSh.SwViewShell::UpdateFlds(true);
+                rSh.EndAllTableBoxEdit();
+                rSh.SwViewShell::UpdateFields(true);
 
-                if( rSh.IsCrsrInTbl() )
+                if( rSh.IsCrsrInTable() )
                 {
-                    if( !rSh.IsTblComplexForChart() )
+                    if( !rSh.IsTableComplexForChart() )
                         SwTableFUNC( &rSh, false).UpdateChart();
-                    rSh.ClearTblBoxCntnt();
-                    rSh.SaveTblBoxCntnt();
+                    rSh.ClearTableBoxContent();
+                    rSh.SaveTableBoxContent();
                 }
             }
             break;
@@ -638,7 +638,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_UPDATE_INPUTFIELDS:
-            rSh.UpdateInputFlds();
+            rSh.UpdateInputFields();
             break;
 
         case FN_PREV_BOOKMARK:
@@ -651,10 +651,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_GOTO_NEXT_MARK:
         case FN_GOTO_PREV_MARK:
         {
-            SwFldMgr aFldMgr;
-            SwFieldType* pFldType = aFldMgr.GetFldType(RES_JUMPEDITFLD);
+            SwFieldMgr aFieldMgr;
+            SwFieldType* pFieldType = aFieldMgr.GetFieldType(RES_JUMPEDITFLD);
 
-            if (pFldType)
+            if (pFieldType)
             {
                 if (rSh.IsSelFrmMode())
                 {
@@ -670,8 +670,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.ClearMark();
                     rSh.EndSelect();
                 }
-                bool bRet = rSh.MoveFldType( pFldType, nSlot == FN_GOTO_NEXT_MARK );
-                SwField* pCurField = bRet ? rSh.GetCurFld() : 0;
+                bool bRet = rSh.MoveFieldType( pFieldType, nSlot == FN_GOTO_NEXT_MARK );
+                SwField* pCurField = bRet ? rSh.GetCurField() : 0;
                 if (pCurField)
                     rSh.ClickToField(*pCurField);
                 rReq.SetReturnValue(SfxBoolItem( nSlot, bRet));
@@ -746,9 +746,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 const size_t nCurIdx = rSh.GetCurPageDesc();
                 SwPageDesc aPageDesc(rSh.GetPageDesc(nCurIdx));
 
-                SwFrmFmt &rFmt = aPageDesc.GetMaster();
+                SwFrameFormat &rFormat = aPageDesc.GetMaster();
 
-                SwFmtCol aFmtCol = rFmt.GetCol();
+                SwFormatCol aFormatCol = rFormat.GetCol();
 
                 sal_uInt16 nCount;
                 if(SfxItemState::SET == pArgs->GetItemState(nSlot))
@@ -757,11 +757,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     nCount = static_cast<const SfxUInt16Item &>(pArgs->Get(SID_ATTR_COLUMNS)).GetValue();
                 sal_uInt16 nGutterWidth = DEF_GUTTER_WIDTH;
 
-                aFmtCol.Init(nCount ? nCount : 1, nGutterWidth, USHRT_MAX);
-                aFmtCol.SetWishWidth(USHRT_MAX);
-                aFmtCol.SetGutterWidth(nGutterWidth, USHRT_MAX);
+                aFormatCol.Init(nCount ? nCount : 1, nGutterWidth, USHRT_MAX);
+                aFormatCol.SetWishWidth(USHRT_MAX);
+                aFormatCol.SetGutterWidth(nGutterWidth, USHRT_MAX);
 
-                rFmt.SetFmtAttr(aFmtCol);
+                rFormat.SetFormatAttr(aFormatCol);
 
                 rSh.ChgPageDesc(nCurIdx, aPageDesc);
             }
@@ -776,15 +776,15 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             sal_Unicode cDelim = 0;
             bool bToTable = false;
             if( nSlot == FN_CONVERT_TEXT_TO_TABLE ||
-                ( nSlot == FN_CONVERT_TEXT_TABLE && 0 == rSh.GetTableFmt() ))
+                ( nSlot == FN_CONVERT_TEXT_TABLE && 0 == rSh.GetTableFormat() ))
                 bToTable = true;
-            SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
-            SwTableAutoFmt const* pTAFmt = 0;
-            boost::scoped_ptr<SwTableAutoFmtTbl> pAutoFmtTbl;
+            SwInsertTableOptions aInsTableOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
+            SwTableAutoFormat const* pTAFormat = 0;
+            boost::scoped_ptr<SwTableAutoFormatTable> pAutoFormatTable;
             bool bDeleteFormat = true;
             if(pArgs && SfxItemState::SET == pArgs->GetItemState( FN_PARAM_1, true, &pItem))
             {
-                aInsTblOpts.mnInsMode = 0;
+                aInsTableOpts.mnInsMode = 0;
                 // Delimiter
                 OUString sDelim = static_cast< const SfxStringItem* >(pItem)->GetValue();
                 if(!sDelim.isEmpty())
@@ -792,17 +792,17 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 // AutoFormat
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_2, true, &pItem))
                 {
-                    OUString sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
+                    OUString sAutoFormat = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
-                    pAutoFmtTbl.reset(new SwTableAutoFmtTbl);
-                    pAutoFmtTbl->Load();
+                    pAutoFormatTable.reset(new SwTableAutoFormatTable);
+                    pAutoFormatTable->Load();
 
-                    for( sal_uInt16 i = 0, nCount = pAutoFmtTbl->size(); i < nCount; i++ )
+                    for( sal_uInt16 i = 0, nCount = pAutoFormatTable->size(); i < nCount; i++ )
                     {
-                        SwTableAutoFmt const*const pFmt = &(*pAutoFmtTbl)[ i ];
-                        if( pFmt->GetName() == sAutoFmt )
+                        SwTableAutoFormat const*const pFormat = &(*pAutoFormatTable)[ i ];
+                        if( pFormat->GetName() == sAutoFormat )
                         {
-                            pTAFmt = pFmt;
+                            pTAFormat = pFormat;
                             bDeleteFormat = false;
                             break;
                         }
@@ -811,19 +811,19 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 //WithHeader
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_3, true, &pItem) &&
                             static_cast< const SfxBoolItem* >(pItem)->GetValue())
-                    aInsTblOpts.mnInsMode |= tabopts::HEADLINE;
+                    aInsTableOpts.mnInsMode |= tabopts::HEADLINE;
                 // RepeatHeaderLines
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_4, true, &pItem))
-                   aInsTblOpts.mnRowsToRepeat =
+                   aInsTableOpts.mnRowsToRepeat =
                             (sal_uInt16)static_cast< const SfxInt16Item* >(pItem)->GetValue();
                 //WithBorder
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_5, true, &pItem) &&
                     static_cast< const SfxBoolItem* >(pItem)->GetValue())
-                    aInsTblOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
+                    aInsTableOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
                 //DontSplitTable
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_6, true, &pItem) &&
                     !static_cast< const SfxBoolItem* >(pItem)->GetValue() )
-                    aInsTblOpts.mnInsMode |= tabopts::SPLIT_LAYOUT;
+                    aInsTableOpts.mnInsMode |= tabopts::SPLIT_LAYOUT;
             }
             else
             {
@@ -834,7 +834,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
-                    pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
+                    pDlg->GetValues( cDelim, aInsTableOpts, pTAFormat );
 
                 }
             }
@@ -852,12 +852,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, OUString(cDelim) ));
                     if(bToTable)
                     {
-                        if(pTAFmt)
-                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFmt->GetName()));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, 0 != (aInsTblOpts.mnInsMode & tabopts::HEADLINE)));
-                        aReq.AppendItem( SfxInt16Item( FN_PARAM_4, (short)aInsTblOpts.mnRowsToRepeat ));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, 0 != (aInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) ));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_6, !(aInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT)));
+                        if(pTAFormat)
+                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFormat->GetName()));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, 0 != (aInsTableOpts.mnInsMode & tabopts::HEADLINE)));
+                        aReq.AppendItem( SfxInt16Item( FN_PARAM_4, (short)aInsTableOpts.mnRowsToRepeat ));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, 0 != (aInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER) ));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_6, !(aInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT)));
                     }
                     aReq.Done();
                 }
@@ -866,7 +866,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.TableToText( cDelim );
                 else
                 {
-                    bInserted = rSh.TextToTable( aInsTblOpts, cDelim, text::HoriOrientation::FULL, pTAFmt );
+                    bInserted = rSh.TextToTable( aInsTableOpts, cDelim, text::HoriOrientation::FULL, pTAFormat );
                 }
                 rSh.EnterStdMode();
 
@@ -874,7 +874,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSaveView.AutoCaption( TABLE_CAP );
             }
             if(bDeleteFormat)
-                delete pTAFmt;
+                delete pTAFormat;
         }
         break;
         case SID_STYLE_WATERCAN:
@@ -930,7 +930,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                     rSh.GetFlyFrmAttr( aSet );
-                    SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
+                    SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
                     aURL.SetMap( &pDlg->GetImageMap() );
                     aSet.Put( aURL );
                     rSh.SetFlyFrmAttr( aSet );
@@ -965,7 +965,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.StartAction();
                     SfxItemSet aSet( rSh.GetAttrPool(), RES_SURROUND, RES_SURROUND);
                     rSh.GetFlyFrmAttr( aSet );
-                    SwFmtSurround aSur( static_cast<const SwFmtSurround&>(aSet.Get( RES_SURROUND )) );
+                    SwFormatSurround aSur( static_cast<const SwFormatSurround&>(aSet.Get( RES_SURROUND )) );
                     if ( !aSur.IsContour() )
                     {
                         aSur.SetContour( true );
@@ -1016,7 +1016,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 // shall be changed in FEShell::SetFlyFrmAttr/SetFlyFrmAnchor,
                 // possibly as a result of the anchor change.
                 SfxItemSet aSet( GetPool(), RES_VERT_ORIENT, RES_ANCHOR );
-                SwFmtAnchor aAnc( eSet, rSh.GetPhyPageNum() );
+                SwFormatAnchor aAnc( eSet, rSh.GetPhyPageNum() );
                 aSet.Put( aAnc );
                 rSh.SetFlyFrmAttr(aSet);
             }
@@ -1034,9 +1034,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SfxItemSet aSet(GetPool(), RES_SURROUND, RES_HORI_ORIENT);
                 rSh.GetFlyFrmAttr(aSet);
 
-                const SwFmtSurround& rSurround = static_cast<const SwFmtSurround&>(aSet.Get(RES_SURROUND));
-                const SwFmtVertOrient& rVert = static_cast<const SwFmtVertOrient&>(aSet.Get(RES_VERT_ORIENT));
-                const SwFmtHoriOrient& rHori = static_cast<const SwFmtHoriOrient&>(aSet.Get(RES_HORI_ORIENT));
+                const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
+                const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT));
+                const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(aSet.Get(RES_HORI_ORIENT));
                 sal_Int16 eVOrient = rVert.GetVertOrient();
                 sal_Int16 eHOrient = rHori.GetHoriOrient();
                 SwSurround eSurround = rSurround.GetSurround();
@@ -1047,37 +1047,37 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 case FLY_AT_PAGE:
                     //Wrap through, left or from left, top, from top
                     if(eSurround != SURROUND_THROUGHT)
-                        aSet.Put(SwFmtSurround(SURROUND_THROUGHT));
+                        aSet.Put(SwFormatSurround(SURROUND_THROUGHT));
 
                     if( eVOrient != text::VertOrientation::TOP && eVOrient != text::VertOrientation::NONE)
-                        aSet.Put(SwFmtVertOrient(0, text::VertOrientation::TOP));
+                        aSet.Put(SwFormatVertOrient(0, text::VertOrientation::TOP));
 
                     if (eHOrient != text::HoriOrientation::NONE && eHOrient != text::HoriOrientation::LEFT)
-                        aSet.Put(SwFmtHoriOrient(0, text::HoriOrientation::LEFT));
+                        aSet.Put(SwFormatHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
                 case FLY_AT_PARA:
                     // left, from left, right, top, no wrap, wrap left and right
                     if(eSurround != SURROUND_LEFT || eSurround != SURROUND_RIGHT)
-                        aSet.Put(SwFmtSurround(SURROUND_LEFT));
+                        aSet.Put(SwFormatSurround(SURROUND_LEFT));
 
                     if( eVOrient != text::VertOrientation::TOP)
-                        aSet.Put(SwFmtVertOrient(0, text::VertOrientation::TOP));
+                        aSet.Put(SwFormatVertOrient(0, text::VertOrientation::TOP));
 
                     if (eHOrient != text::HoriOrientation::NONE && eHOrient != text::HoriOrientation::LEFT && eHOrient != text::HoriOrientation::RIGHT)
-                        aSet.Put(SwFmtHoriOrient(0, text::HoriOrientation::LEFT));
+                        aSet.Put(SwFormatHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
                 case FLY_AT_CHAR:
                     // left, from left, right, top, wrap through
                     if(eSurround != SURROUND_THROUGHT)
-                        aSet.Put(SwFmtSurround(SURROUND_THROUGHT));
+                        aSet.Put(SwFormatSurround(SURROUND_THROUGHT));
 
                     if( eVOrient != text::VertOrientation::TOP)
-                        aSet.Put(SwFmtVertOrient(0, text::VertOrientation::TOP));
+                        aSet.Put(SwFormatVertOrient(0, text::VertOrientation::TOP));
 
                     if (eHOrient != text::HoriOrientation::NONE && eHOrient != text::HoriOrientation::LEFT && eHOrient != text::HoriOrientation::RIGHT)
-                        aSet.Put(SwFmtHoriOrient(0, text::HoriOrientation::LEFT));
+                        aSet.Put(SwFormatHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
                 default:
@@ -1163,8 +1163,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             // Tabele cell(s) selected?
             if ( rSh.IsTableMode() )
             {
-                SwFrmFmt *pFmt = rSh.GetTableFmt();
-                pFmt->SetFmtAttr( *pItem );
+                SwFrameFormat *pFormat = rSh.GetTableFormat();
+                pFormat->SetFormatAttr( *pItem );
             }
             else if ( rSh.IsFrmSelected() )
             {
@@ -1281,7 +1281,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
                 {
                     SfxItemSet aSet(GetPool(), RES_SURROUND, RES_SURROUND);
                     rSh.GetFlyFrmAttr(aSet);
-                    const SwFmtSurround& rWrap = static_cast<const SwFmtSurround&>(aSet.Get(RES_SURROUND));
+                    const SwFormatSurround& rWrap = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
                     bSetState = true;
                     bState = rWrap.IsContour();
                 }
@@ -1344,7 +1344,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 break;
 
             case FN_INSERT_REGION:
-                if( rSh.CrsrInsideInputFld()
+                if( rSh.CrsrInsideInputField()
                     || rSh.IsSelFrmMode()
                     || !rSh.IsInsRegionAvailable() )
                 {
@@ -1356,7 +1356,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             {
                 FrmTypeFlags eFrmType = rSh.GetFrmType(0,true);
                 if( (eFrmType & FrmTypeFlags::FOOTNOTE) ||
-                    !rSh.GetTableFmt() )
+                    !rSh.GetTableFormat() )
                     rSet.DisableItem( nWhich );
             }
             break;
@@ -1372,7 +1372,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             {
                 FrmTypeFlags eFrmType = rSh.GetFrmType(0,true);
                 if( (eFrmType & FrmTypeFlags::FOOTNOTE) ||
-                    (!rSh.GetTableFmt() && !rSh.IsTextToTableAvailable() ) )
+                    (!rSh.GetTableFormat() && !rSh.IsTextToTableAvailable() ) )
                     rSet.DisableItem( nWhich );
             }
             break;
@@ -1384,8 +1384,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 // Table cell(s) selected?
                 if ( rSh.IsTableMode() )
                 {
-                    SwFrmFmt *pFmt = rSh.GetTableFmt();
-                    aSet.Put(pFmt->GetFmtAttr( nWhich, true ));
+                    SwFrameFormat *pFormat = rSh.GetTableFormat();
+                    aSet.Put(pFormat->GetFormatAttr( nWhich, true ));
                 }
                 else if( rSh.IsFrmSelected() )
                 {
@@ -1475,7 +1475,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
             case FN_BACKSPACE:
             case SID_DELETE:
-                if ( ( rSh.HasReadonlySel() && !rSh.CrsrInsideInputFld() )
+                if ( ( rSh.HasReadonlySel() && !rSh.CrsrInsideInputField() )
                      || rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0 )
                 {
                     rSet.DisableItem( nWhich );
@@ -1566,7 +1566,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         rSh.GetObjAttr(aSet);
                     else
                         rSh.GetFlyFrmAttr(aSet);
-                    RndStdIds eSet = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
+                    RndStdIds eSet = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
                     const bool bSet =
                            ((nWhich == FN_TOOL_ANCHOR_PAGE) &&
                             (eSet == FLY_AT_PAGE))
@@ -1641,9 +1641,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else
                     {
                         rSh.GetFlyFrmAttr(aSet);
-                        nAnchorType = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
+                        nAnchorType = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
                     }
-                    const SwFmtSurround& rWrap = static_cast<const SwFmtSurround&>(aSet.Get(RES_SURROUND));
+                    const SwFormatSurround& rWrap = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
 
                     const SvxOpaqueItem& rOpaque = static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE));
                     bool bOpaque = rOpaque.GetValue();
@@ -1812,7 +1812,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             rSh.GetObjAttr(aSet);
         else
             rSh.GetFlyFrmAttr(aSet);
-        SwFmtSurround aWrap( static_cast<const SwFmtSurround&>(aSet.Get(RES_SURROUND)) );
+        SwFormatSurround aWrap( static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND)) );
         SwSurround nOldSurround(aWrap.GetSurround());
         SwSurround nSurround = SURROUND_PARALLEL;
 
@@ -1932,7 +1932,7 @@ SwBaseShell::~SwBaseShell()
         rView.GetWrtShell().SetGrfArrivedLnk( Link<>() );
 }
 
-void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
+void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
 
@@ -2039,8 +2039,8 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
             if ( !isCHRATR(nWhich) ||
                  ( rSh.HasSelection() && rSh.IsSelFullPara() ) )
             {
-                SwTxtFmtColl * pColl = rSh.GetCurTxtFmtColl();
-                if ( pColl && pColl->IsAutoUpdateFmt() )
+                SwTextFormatColl * pColl = rSh.GetCurTextFormatColl();
+                if ( pColl && pColl->IsAutoUpdateFormat() )
                 {
                     rSh.AutoUpdatePara( pColl, *pArgs );
                     bAuto = true;
@@ -2058,13 +2058,13 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
     rReq.Done();
 }
 
-void SwBaseShell::GetTxtCtrlState( SfxItemSet& rSet )
+void SwBaseShell::GetTextCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
     rSh.GetCurAttr( rSet );
 }
 
-void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
+void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
     bool bFirst = true;
@@ -2160,7 +2160,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
         //UUUU Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
         SfxItemSet aCoreSet(GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
-        aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+        aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
         if(nSelType & nsSelectionType::SEL_GRF || nsSelectionType::SEL_FRM & nSelType)
         {
@@ -2219,7 +2219,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         //UUUU Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
         SfxItemSet aCoreSet(GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
-        aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+        aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
         if((nsSelectionType::SEL_FRM & nSelType) || (nsSelectionType::SEL_GRF & nSelType))
         {
@@ -2278,17 +2278,17 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         //UUUU Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
         SfxItemSet aCoreSet(GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
-        aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+        aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, aCoreSet);
 
         if((nsSelectionType::SEL_FRM & nSelType) || (nsSelectionType::SEL_GRF & nSelType))
         {
             // Template autoupdate
-            SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
+            SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
 
-            if(pFmt && pFmt->IsAutoUpdateFmt())
+            if(pFormat && pFormat->IsAutoUpdateFormat())
             {
-                rSh.AutoUpdateFrame(pFmt, aCoreSet);
+                rSh.AutoUpdateFrame(pFormat, aCoreSet);
             }
             else
             {
@@ -2297,9 +2297,9 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         }
         else
         {
-            SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
+            SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
 
-            if(pColl && pColl->IsAutoUpdateFmt())
+            if(pColl && pColl->IsAutoUpdateFormat())
             {
                 rSh.AutoUpdatePara(pColl, aCoreSet);
             }
@@ -2559,12 +2559,12 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             !rSh.IsTableMode() )
         {
             const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-            SwInsertTableOptions aInsTblOpts = pModOpt->GetInsTblFlags(bHTMLMode);
+            SwInsertTableOptions aInsTableOpts = pModOpt->GetInsTableFlags(bHTMLMode);
 
             rSh.StartUndo(UNDO_INSTABLE);
             bCallEndUndo = true;
 
-            bool bInserted = rSh.TextToTable( aInsTblOpts, '\t', text::HoriOrientation::FULL );
+            bool bInserted = rSh.TextToTable( aInsTableOpts, '\t', text::HoriOrientation::FULL );
             rSh.EnterStdMode();
             if (bInserted)
                 rTempView.AutoCaption(TABLE_CAP);
@@ -2574,10 +2574,10 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
         {
             sal_uInt16 nCols = 0;
             sal_uInt16 nRows = 0;
-            SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
+            SwInsertTableOptions aInsTableOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
             OUString aTableName;
             OUString aAutoName;
-            SwTableAutoFmt* pTAFmt = 0;
+            SwTableAutoFormat* pTAFormat = 0;
 
             if( pArgs && pArgs->Count() >= 2 )
             {
@@ -2598,13 +2598,13 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     aAutoName = pAuto->GetValue();
                     if ( !aAutoName.isEmpty() )
                     {
-                        SwTableAutoFmtTbl aTableTbl;
-                        aTableTbl.Load();
-                        for ( sal_uInt16 n=0; n<aTableTbl.size(); n++ )
+                        SwTableAutoFormatTable aTableTable;
+                        aTableTable.Load();
+                        for ( sal_uInt16 n=0; n<aTableTable.size(); n++ )
                         {
-                            if ( aTableTbl[n].GetName() == aAutoName )
+                            if ( aTableTable[n].GetName() == aAutoName )
                             {
-                                pTAFmt = new SwTableAutoFmt( aTableTbl[n] );
+                                pTAFormat = new SwTableAutoFormat( aTableTable[n] );
                                 break;
                             }
                         }
@@ -2612,11 +2612,11 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 }
 
                 if ( pFlags )
-                    aInsTblOpts.mnInsMode = (sal_uInt16) pFlags->GetValue();
+                    aInsTableOpts.mnInsMode = (sal_uInt16) pFlags->GetValue();
                 else
                 {
                     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-                    aInsTblOpts = pModOpt->GetInsTblFlags(bHTMLMode);
+                    aInsTableOpts = pModOpt->GetInsTableFlags(bHTMLMode);
                 }
             }
 
@@ -2628,7 +2628,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
-                    pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
+                    pDlg->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
                 }
                 else
                     _rRequest.Ignore();
@@ -2642,7 +2642,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     _rRequest.AppendItem( SfxStringItem( FN_PARAM_2, aAutoName ) );
                 _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nCols ) );
                 _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRows ) );
-                _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, (sal_Int32) aInsTblOpts.mnInsMode ) );
+                _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, (sal_Int32) aInsTableOpts.mnInsMode ) );
                 _rRequest.Done();
 
                 rSh.StartUndo(UNDO_INSTABLE);
@@ -2652,26 +2652,26 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 if( rSh.HasSelection() )
                     rSh.DelRight();
 
-                rSh.InsertTable( aInsTblOpts, nRows, nCols, text::HoriOrientation::FULL, pTAFmt );
+                rSh.InsertTable( aInsTableOpts, nRows, nCols, text::HoriOrientation::FULL, pTAFormat );
                 rSh.MoveTable( fnTablePrev, fnTableStart );
 
-                if( !aTableName.isEmpty() && !rSh.GetTblStyle( aTableName ) )
-                    rSh.GetTableFmt()->SetName( aTableName );
+                if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )
+                    rSh.GetTableFormat()->SetName( aTableName );
 
                 rSh.EndAllAction();
                 rTempView.AutoCaption(TABLE_CAP);
             }
-            delete pTAFmt;
+            delete pTAFormat;
         }
 
         if( bCallEndUndo )
         {
             SwRewriter aRewriter;
 
-            if (rSh.GetTableFmt())
+            if (rSh.GetTableFormat())
             {
                 aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_START_QUOTE));
-                aRewriter.AddRule(UndoArg2, rSh.GetTableFmt()->GetName());
+                aRewriter.AddRule(UndoArg2, rSh.GetTableFormat()->GetName());
                 aRewriter.AddRule(UndoArg3, SW_RESSTR(STR_END_QUOTE));
 
             }
@@ -2806,18 +2806,18 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
                 sal_uInt16 nDesc = rSh.GetCurPageDesc();
                 SwPageDesc aDesc( rSh.GetPageDesc( nDesc ) );
                 if ( nPos == nPagePos )
-                    aDesc.GetMaster().SetFmtAttr( aBrush );
+                    aDesc.GetMaster().SetFormatAttr( aBrush );
                 else if ( nPos == nHeaderPos )
                 {
-                    SwFmtHeader aHead( aDesc.GetMaster().GetHeader() );
-                    aHead.GetHeaderFmt()->SetFmtAttr( aBrush );
-                    aDesc.GetMaster().SetFmtAttr( aHead );
+                    SwFormatHeader aHead( aDesc.GetMaster().GetHeader() );
+                    aHead.GetHeaderFormat()->SetFormatAttr( aBrush );
+                    aDesc.GetMaster().SetFormatAttr( aHead );
                 }
                 else if ( nPos == nFooterPos )
                 {
-                    SwFmtFooter aFoot( aDesc.GetMaster().GetFooter() );
-                    aFoot.GetFooterFmt()->SetFmtAttr( aBrush );
-                    aDesc.GetMaster().SetFmtAttr( aFoot );
+                    SwFormatFooter aFoot( aDesc.GetMaster().GetFooter() );
+                    aFoot.GetFooterFormat()->SetFormatAttr( aBrush );
+                    aDesc.GetMaster().SetFormatAttr( aFoot );
                 }
                 rSh.ChgPageDesc( nDesc, aDesc );
             }

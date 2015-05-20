@@ -97,7 +97,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
     {
         // remove smart tag tab page if no extensions are installed
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-        SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+        SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
         if ( !pOpt || !pOpt->pSmartTagMgr || 0 == pOpt->pSmartTagMgr->NumberOfRecognizers() )
             RemoveTabPage("smarttags");
 
@@ -521,7 +521,7 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
 {
     bool bModified = false;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+    SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     long nFlags = pAutoCorrect->GetFlags();
 
     bool bCheck = m_pCheckLB->IsChecked(USE_REPLACE_TABLE, CBCOL_FIRST);
@@ -610,18 +610,18 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
                         m_pCheckLB->IsChecked(REPLACE_DASHES, CBCOL_SECOND));
 
     bCheck = m_pCheckLB->IsChecked(DEL_SPACES_AT_STT_END, CBCOL_FIRST);
-    bModified |= pOpt->bAFmtDelSpacesAtSttEnd != bCheck;
-    pOpt->bAFmtDelSpacesAtSttEnd = bCheck;
+    bModified |= pOpt->bAFormatDelSpacesAtSttEnd != bCheck;
+    pOpt->bAFormatDelSpacesAtSttEnd = bCheck;
     bCheck = m_pCheckLB->IsChecked(DEL_SPACES_AT_STT_END, CBCOL_SECOND);
-    bModified |= pOpt->bAFmtByInpDelSpacesAtSttEnd != bCheck;
-    pOpt->bAFmtByInpDelSpacesAtSttEnd = bCheck;
+    bModified |= pOpt->bAFormatByInpDelSpacesAtSttEnd != bCheck;
+    pOpt->bAFormatByInpDelSpacesAtSttEnd = bCheck;
 
     bCheck = m_pCheckLB->IsChecked(DEL_SPACES_BETWEEN_LINES, CBCOL_FIRST);
-    bModified |= pOpt->bAFmtDelSpacesBetweenLines != bCheck;
-    pOpt->bAFmtDelSpacesBetweenLines = bCheck;
+    bModified |= pOpt->bAFormatDelSpacesBetweenLines != bCheck;
+    pOpt->bAFormatDelSpacesBetweenLines = bCheck;
     bCheck = m_pCheckLB->IsChecked(DEL_SPACES_BETWEEN_LINES, CBCOL_SECOND);
-    bModified |= pOpt->bAFmtByInpDelSpacesBetweenLines != bCheck;
-    pOpt->bAFmtByInpDelSpacesBetweenLines = bCheck;
+    bModified |= pOpt->bAFormatByInpDelSpacesBetweenLines != bCheck;
+    pOpt->bAFormatByInpDelSpacesBetweenLines = bCheck;
 
     if(bModified || nFlags != pAutoCorrect->GetFlags())
     {
@@ -641,7 +641,7 @@ void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
 void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+    SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     const long nFlags = pAutoCorrect->GetFlags();
 
     m_pCheckLB->SetUpdateMode(false);
@@ -683,10 +683,10 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_pCheckLB->CheckEntryPos( DETECT_URL,         CBCOL_SECOND,   0 != (nFlags & SetINetAttr) );
     m_pCheckLB->CheckEntryPos( REPLACE_DASHES,     CBCOL_FIRST,    pOpt->bChgToEnEmDash );
     m_pCheckLB->CheckEntryPos( REPLACE_DASHES,     CBCOL_SECOND,   0 != (nFlags & ChgToEnEmDash) );
-    m_pCheckLB->CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_FIRST,    pOpt->bAFmtDelSpacesAtSttEnd );
-    m_pCheckLB->CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_SECOND,   pOpt->bAFmtByInpDelSpacesAtSttEnd );
-    m_pCheckLB->CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_FIRST,    pOpt->bAFmtDelSpacesBetweenLines );
-    m_pCheckLB->CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_SECOND,   pOpt->bAFmtByInpDelSpacesBetweenLines );
+    m_pCheckLB->CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_FIRST,    pOpt->bAFormatDelSpacesAtSttEnd );
+    m_pCheckLB->CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_SECOND,   pOpt->bAFormatByInpDelSpacesAtSttEnd );
+    m_pCheckLB->CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_FIRST,    pOpt->bAFormatDelSpacesBetweenLines );
+    m_pCheckLB->CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_SECOND,   pOpt->bAFormatByInpDelSpacesBetweenLines );
     m_pCheckLB->CheckEntryPos( DEL_EMPTY_NODE,     CBCOL_FIRST,    pOpt->bDelEmptyNode );
     m_pCheckLB->CheckEntryPos( REPLACE_USER_COLL,  CBCOL_FIRST,    pOpt->bChgUserColl );
     m_pCheckLB->CheckEntryPos( REPLACE_BULLETS,    CBCOL_FIRST,    pOpt->bChgEnumNum );
@@ -1926,7 +1926,7 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
     bool bModified = false;
     if (m_pSwCheckLB->IsVisible())
     {
-        SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+        SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
         bool bCheck = m_pSwCheckLB->IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
         bModified |= pOpt->bAddNonBrkSpace != bCheck;
@@ -1991,7 +1991,7 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
     // Initialize the Sw options
     if (m_pSwCheckLB->IsVisible())
     {
-        SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+        SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
         m_pSwCheckLB->SetUpdateMode( false );
         m_pSwCheckLB->Clear();
@@ -2254,7 +2254,7 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false, bCheck;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+    SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     sal_uInt16 nVal;
 
     bCheck = m_pCBActiv->IsChecked();
@@ -2306,7 +2306,7 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
 void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+    SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
     m_pCBActiv->Check( pOpt->bAutoCompleteWords );
     m_pCBCollect->Check( pOpt->bAutoCmpltCollectWords );
@@ -2640,7 +2640,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
 bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+    SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     SmartTagMgr* pSmartTagMgr = pOpt->pSmartTagMgr;
 
     // robust!
@@ -2683,7 +2683,7 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
 void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet*  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+    SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     const SmartTagMgr* pSmartTagMgr = pOpt->pSmartTagMgr;
 
     // robust, should not happen!

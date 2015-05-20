@@ -93,17 +93,17 @@ bool SwScriptIterator::Next()
     return bRet;
 }
 
-SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
+SwTextAttrIterator::SwTextAttrIterator( const SwTextNode& rTNd, sal_uInt16 nWhchId,
                                         sal_Int32 nStt,
                                         bool bUseGetWhichOfScript )
-    : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
+    : aSIter( rTNd.GetText(), nStt ), rTextNd( rTNd ),
     pParaItem( 0 ), nAttrPos( 0 ), nChgPos( nStt ), nWhichId( nWhchId ),
     bIsUseGetWhichOfScript( bUseGetWhichOfScript )
 {
     SearchNextChg();
 }
 
-bool SwTxtAttrIterator::Next()
+bool SwTextAttrIterator::Next()
 {
     bool bRet = false;
     if (nChgPos < aSIter.GetText().getLength())
@@ -112,7 +112,7 @@ bool SwTxtAttrIterator::Next()
         if( !aStack.empty() )
         {
             do {
-                const SwTxtAttr* pHt = aStack.front();
+                const SwTextAttr* pHt = aStack.front();
                 const sal_Int32 nEndPos = *pHt->End();
                 if( nChgPos >= nEndPos )
                     aStack.pop_front();
@@ -127,7 +127,7 @@ bool SwTxtAttrIterator::Next()
             SearchNextChg();
             if( !aStack.empty() )
             {
-                const SwTxtAttr* pHt = aStack.front();
+                const SwTextAttr* pHt = aStack.front();
                 const sal_Int32 nEndPos = *pHt->End();
                 if( nChgPos >= nEndPos )
                 {
@@ -139,7 +139,7 @@ bool SwTxtAttrIterator::Next()
                         const sal_uInt16 nWId = bIsUseGetWhichOfScript
                             ? GetWhichOfScript( nWhichId, aSIter.GetCurrScript() )
                             : nWhichId;
-                        pCurItem = &pHt->GetCharFmt().GetCharFmt()->GetFmtAttr(nWId);
+                        pCurItem = &pHt->GetCharFormat().GetCharFormat()->GetFormatAttr(nWId);
                     }
                     else
                         pCurItem = &pHt->GetAttr();
@@ -154,7 +154,7 @@ bool SwTxtAttrIterator::Next()
     return bRet;
 }
 
-void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
+void SwTextAttrIterator::AddToStack( const SwTextAttr& rAttr )
 {
     size_t nIns = 0;
     const sal_Int32 nEndPos = *rAttr.End();
@@ -165,7 +165,7 @@ void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
     aStack.insert( aStack.begin() + nIns, &rAttr );
 }
 
-void SwTxtAttrIterator::SearchNextChg()
+void SwTextAttrIterator::SearchNextChg()
 {
     sal_uInt16 nWh = 0;
     if( nChgPos == aSIter.GetScriptChgPos() )
@@ -182,14 +182,14 @@ void SwTxtAttrIterator::SearchNextChg()
         nWh = bIsUseGetWhichOfScript ?
                 GetWhichOfScript( nWhichId,
                                   aSIter.GetCurrScript() ) : nWhichId;
-        pParaItem = &rTxtNd.GetSwAttrSet().Get( nWh );
+        pParaItem = &rTextNd.GetSwAttrSet().Get( nWh );
     }
 
     sal_Int32 nStt = nChgPos;
     nChgPos = aSIter.GetScriptChgPos();
     pCurItem = pParaItem;
 
-    const SwpHints* pHts = rTxtNd.GetpSwpHints();
+    const SwpHints* pHts = rTextNd.GetpSwpHints();
     if( pHts )
     {
         if( !nWh )
@@ -202,7 +202,7 @@ void SwTxtAttrIterator::SearchNextChg()
         const SfxPoolItem* pItem = 0;
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
-            const SwTxtAttr* pHt = (*pHts)[ nAttrPos ];
+            const SwTextAttr* pHt = (*pHts)[ nAttrPos ];
             const sal_Int32* pEnd = pHt->End();
             const sal_Int32 nHtStt = pHt->GetStart();
             if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
@@ -211,7 +211,7 @@ void SwTxtAttrIterator::SearchNextChg()
             if( nHtStt >= nChgPos )
                 break;
 
-            pItem = CharFmt::GetItem( *pHt, nWh );
+            pItem = CharFormat::GetItem( *pHt, nWh );
             if ( pItem )
             {
                 if( nHtStt > nStt )

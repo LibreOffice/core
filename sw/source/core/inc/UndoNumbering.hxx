@@ -78,7 +78,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    void AddNode( const SwTxtNode& rNd, bool bResetLRSpace );
+    void AddNode( const SwTextNode& rNd, bool bResetLRSpace );
     SwHistory* GetHistory() { return pHistory; }
 };
 

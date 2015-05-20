@@ -26,9 +26,9 @@
 #include <SidebarWindowsTypes.hxx>
 
 class SwFlyFrm;
-class SwFlyFrmFmt;
+class SwFlyFrameFormat;
 class SwPageDesc;
-class SwCntntFrm;
+class SwContentFrm;
 struct SwPosition;
 struct SwCrsrMoveState;
 class SwAttrSetChg;
@@ -44,7 +44,7 @@ enum SwPageChg
 };
 
 /// A page of the document layout.
-class SwPageFrm: public SwFtnBossFrm
+class SwPageFrm: public SwFootnoteBossFrm
 {
     friend class SwFrm;
 
@@ -54,12 +54,12 @@ class SwPageFrm: public SwFtnBossFrm
 
     sal_uInt16  nPhyPageNum; // Physical page number
 
-    bool bInvalidCntnt        :1;
+    bool bInvalidContent        :1;
     bool bInvalidLayout       :1;
-    bool bInvalidFlyCntnt     :1;
+    bool bInvalidFlyContent     :1;
     bool bInvalidFlyLayout    :1;
     bool bInvalidFlyInCnt     :1;
-    bool bFtnPage             :1; // This Page is for document end footnotes
+    bool bFootnotePage             :1; // This Page is for document end footnotes
     bool bEmptyPage           :1; // This Page is an explicitly empty page
     bool bEndNotePage         :1; // 'Footnote page' for end notes
     bool bInvalidSpelling     :1; // We need online spelling
@@ -74,7 +74,7 @@ class SwPageFrm: public SwFtnBossFrm
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     /// Adapt the max. footnote height in each single column
-    void SetColMaxFtnHeight();
+    void SetColMaxFootnoteHeight();
 
     /** determine rectangle for horizontal page shadow
 
@@ -112,7 +112,7 @@ protected:
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
 
-    SwPageFrm( SwFrmFmt*, SwFrm*, SwPageDesc* );
+    SwPageFrm( SwFrameFormat*, SwFrm*, SwPageDesc* );
 
     /// Make this public, so that the SwViewShell can access it when switching from browse mode
     /// Add/remove header/footer
@@ -129,28 +129,28 @@ public:
     void RemoveFlyFromPage( SwFlyFrm *pToRemove );
     void MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest ); // Optimized Remove/Append
 
-    void  SetPageDesc( SwPageDesc *, SwFrmFmt * );
+    void  SetPageDesc( SwPageDesc *, SwFrameFormat * );
           SwPageDesc *GetPageDesc() { return pDesc; }
     const SwPageDesc *GetPageDesc() const { return pDesc; }
           SwPageDesc *FindPageDesc();
 
-                 SwCntntFrm  *FindLastBodyCntnt();
-    inline       SwCntntFrm  *FindFirstBodyCntnt();
-    inline const SwCntntFrm  *FindFirstBodyCntnt() const;
-    inline const SwCntntFrm  *FindLastBodyCntnt() const;
+                 SwContentFrm  *FindLastBodyContent();
+    inline       SwContentFrm  *FindFirstBodyContent();
+    inline const SwContentFrm  *FindFirstBodyContent() const;
+    inline const SwContentFrm  *FindLastBodyContent() const;
 
     SwRect GetBoundRect() const;
 
-    // Specialized GetCntntPos() for Field in Frames
-    void GetCntntPosition( const Point &rPt, SwPosition &rPos ) const;
+    // Specialized GetContentPos() for Field in Frames
+    void GetContentPosition( const Point &rPt, SwPosition &rPos ) const;
 
     bool IsEmptyPage() const { return bEmptyPage; } // Explicitly empty page
 
-    void    UpdateFtnNum();
+    void    UpdateFootnoteNum();
 
     /// Always call after Paste
     /// Creates the page-bound frames and formats the generic content
-    void PreparePage( bool bFtn );
+    void PreparePage( bool bFootnote );
 
     // Sends a Prepare() to all ContentFrames caused by a changed register template
     void PrepareRegisterChg();
@@ -158,10 +158,10 @@ public:
     // Appends a fly frame - the given one or a new one - at the page frame.
     // Needed for <Modify> and <MakeFrms>
     // - return value not needed any more
-    // - second parameter is of type <SwFlyFrmFmt*>
+    // - second parameter is of type <SwFlyFrameFormat*>
     // - third parameter only needed for assertion, but calling method assures
     //   this assertion. Thus, delete it.
-    void PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt );
+    void PlaceFly( SwFlyFrm* pFly, SwFlyFrameFormat* pFormat );
 
     virtual bool GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
@@ -186,9 +186,9 @@ public:
     void RefreshSubsidiary( const SwRect& ) const;
 
     /// Foot note interface
-    bool IsFtnPage() const                          { return bFtnPage; }
+    bool IsFootnotePage() const                          { return bFootnotePage; }
     bool IsEndNotePage() const                      { return bEndNotePage; }
-    void SetFtnPage( bool b )                       { bFtnPage = b; }
+    void SetFootnotePage( bool b )                       { bFootnotePage = b; }
     void SetEndNotePage( bool b )                   { bEndNotePage = b; }
 
     inline  sal_uInt16 GetPhyPageNum() const        { return nPhyPageNum;}
@@ -197,21 +197,21 @@ public:
     inline  void IncrPhyPageNum()               { ++nPhyPageNum;     }
 
     /// Validate, invalidate and query the Page status
-    /// Layout/Cntnt and Fly/non-Fly respectively are inspected separately
+    /// Layout/Content and Fly/non-Fly respectively are inspected separately
     inline void InvalidateFlyLayout() const;
-    inline void InvalidateFlyCntnt() const;
+    inline void InvalidateFlyContent() const;
     inline void InvalidateFlyInCnt() const;
     inline void InvalidateLayout() const;
-    inline void InvalidateCntnt() const;
+    inline void InvalidateContent() const;
     inline void InvalidateSpelling() const;
     inline void InvalidateSmartTags() const;
     inline void InvalidateAutoCompleteWords() const;
     inline void InvalidateWordCount() const;
     inline void ValidateFlyLayout() const;
-    inline void ValidateFlyCntnt() const;
+    inline void ValidateFlyContent() const;
     inline void ValidateFlyInCnt() const;
     inline void ValidateLayout() const;
-    inline void ValidateCntnt() const;
+    inline void ValidateContent() const;
     inline void ValidateSpelling()  const;
     inline void ValidateSmartTags() const;
     inline void ValidateAutoCompleteWords() const;
@@ -221,10 +221,10 @@ public:
     bool IsRightShadowNeeded() const;
     bool IsLeftShadowNeeded() const;
     bool IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
-    bool IsInvalidFlyCntnt() const { return bInvalidFlyCntnt; }
+    bool IsInvalidFlyContent() const { return bInvalidFlyContent; }
     bool IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
     bool IsInvalidLayout() const { return bInvalidLayout; }
-    bool IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
+    bool IsInvalidContent() const { return (bInvalidContent || bInvalidFlyInCnt); }
     bool IsInvalidSpelling() const { return bInvalidSpelling; }
     bool IsInvalidSmartTags() const { return bInvalidSmartTags; }
     bool IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
@@ -335,27 +335,27 @@ public:
     static SwTwips GetSidebarBorderWidth( const SwViewShell* );
 };
 
-inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()
+inline SwContentFrm *SwPageFrm::FindFirstBodyContent()
 {
     SwLayoutFrm *pBody = FindBodyCont();
-    return pBody ? pBody->ContainsCntnt() : 0;
+    return pBody ? pBody->ContainsContent() : 0;
 }
-inline const SwCntntFrm *SwPageFrm::FindFirstBodyCntnt() const
+inline const SwContentFrm *SwPageFrm::FindFirstBodyContent() const
 {
     const SwLayoutFrm *pBody = FindBodyCont();
-    return pBody ? pBody->ContainsCntnt() : 0;
+    return pBody ? pBody->ContainsContent() : 0;
 }
-inline const SwCntntFrm *SwPageFrm::FindLastBodyCntnt() const
+inline const SwContentFrm *SwPageFrm::FindLastBodyContent() const
 {
-    return const_cast<SwPageFrm*>(this)->FindLastBodyCntnt();
+    return const_cast<SwPageFrm*>(this)->FindLastBodyContent();
 }
 inline void SwPageFrm::InvalidateFlyLayout() const
 {
     const_cast<SwPageFrm*>(this)->bInvalidFlyLayout = true;
 }
-inline void SwPageFrm::InvalidateFlyCntnt() const
+inline void SwPageFrm::InvalidateFlyContent() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidFlyCntnt = true;
+    const_cast<SwPageFrm*>(this)->bInvalidFlyContent = true;
 }
 inline void SwPageFrm::InvalidateFlyInCnt() const
 {
@@ -365,9 +365,9 @@ inline void SwPageFrm::InvalidateLayout() const
 {
     const_cast<SwPageFrm*>(this)->bInvalidLayout = true;
 }
-inline void SwPageFrm::InvalidateCntnt() const
+inline void SwPageFrm::InvalidateContent() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidCntnt = true;
+    const_cast<SwPageFrm*>(this)->bInvalidContent = true;
 }
 inline void SwPageFrm::InvalidateSpelling() const
 {
@@ -390,9 +390,9 @@ inline void SwPageFrm::ValidateFlyLayout() const
 {
     const_cast<SwPageFrm*>(this)->bInvalidFlyLayout = false;
 }
-inline void SwPageFrm::ValidateFlyCntnt() const
+inline void SwPageFrm::ValidateFlyContent() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidFlyCntnt = false;
+    const_cast<SwPageFrm*>(this)->bInvalidFlyContent = false;
 }
 inline void SwPageFrm::ValidateFlyInCnt() const
 {
@@ -402,9 +402,9 @@ inline void SwPageFrm::ValidateLayout() const
 {
     const_cast<SwPageFrm*>(this)->bInvalidLayout = false;
 }
-inline void SwPageFrm::ValidateCntnt() const
+inline void SwPageFrm::ValidateContent() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidCntnt = false;
+    const_cast<SwPageFrm*>(this)->bInvalidContent = false;
 }
 inline void SwPageFrm::ValidateSpelling() const
 {
@@ -426,11 +426,11 @@ inline void SwPageFrm::ValidateWordCount() const
 
 inline bool SwPageFrm::IsInvalid() const
 {
-    return (bInvalidCntnt || bInvalidLayout || bInvalidFlyInCnt);
+    return (bInvalidContent || bInvalidLayout || bInvalidFlyInCnt);
 }
 inline bool SwPageFrm::IsInvalidFly() const
 {
-    return bInvalidFlyLayout || bInvalidFlyCntnt;
+    return bInvalidFlyLayout || bInvalidFlyContent;
 }
 
 

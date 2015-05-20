@@ -425,7 +425,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectan
     }
 }
 
-void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
+void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
 {
     m_aCols = rCol;
     sal_uInt16 nWishSum = m_aCols.GetWishWidth();

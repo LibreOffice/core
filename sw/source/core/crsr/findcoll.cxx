@@ -28,45 +28,45 @@
 #include <comcore.hrc>
 
 /// parameters for a search for FormatCollections
-struct SwFindParaFmtColl : public SwFindParas
+struct SwFindParaFormatColl : public SwFindParas
 {
-    const SwTxtFmtColl *pFmtColl, *pReplColl;
+    const SwTextFormatColl *pFormatColl, *pReplColl;
     SwCursor& rCursor;
-    SwFindParaFmtColl( const SwTxtFmtColl& rFmtColl,
-                        const SwTxtFmtColl* pRpColl, SwCursor& rCrsr )
-        : pFmtColl( &rFmtColl ), pReplColl( pRpColl ), rCursor( rCrsr )
+    SwFindParaFormatColl( const SwTextFormatColl& rFormatColl,
+                        const SwTextFormatColl* pRpColl, SwCursor& rCrsr )
+        : pFormatColl( &rFormatColl ), pReplColl( pRpColl ), rCursor( rCrsr )
     {}
-    virtual ~SwFindParaFmtColl() {}
+    virtual ~SwFindParaFormatColl() {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) SAL_OVERRIDE;
     virtual bool IsReplaceMode() const SAL_OVERRIDE;
 };
 
-int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
+int SwFindParaFormatColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                              bool bInReadOnly )
 {
     int nRet = FIND_FOUND;
     if( bInReadOnly && pReplColl )
         bInReadOnly = false;
 
-    if( !pCrsr->Find( *pFmtColl, fnMove, pRegion, bInReadOnly ) )
+    if( !pCrsr->Find( *pFormatColl, fnMove, pRegion, bInReadOnly ) )
         nRet = FIND_NOT_FOUND;
     else if( pReplColl )
     {
-        pCrsr->GetDoc()->SetTxtFmtColl( *pCrsr, const_cast<SwTxtFmtColl*>(pReplColl) );
+        pCrsr->GetDoc()->SetTextFormatColl( *pCrsr, const_cast<SwTextFormatColl*>(pReplColl) );
         nRet = FIND_NO_RING;
     }
     return nRet;
 }
 
-bool SwFindParaFmtColl::IsReplaceMode() const
+bool SwFindParaFormatColl::IsReplaceMode() const
 {
     return 0 != pReplColl;
 }
 
 /// search for Format-Collections
-sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
+sal_uLong SwCursor::Find( const SwTextFormatColl& rFormatColl, SwDocPositions nStart,
                           SwDocPositions nEnd, bool& bCancel,
-                          FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
+                          FindRanges eFndRngs, const SwTextFormatColl* pReplFormatColl )
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
@@ -74,24 +74,24 @@ sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
     pDoc->SetOle2Link( Link<>() );
 
     bool const bStartUndo =
-        pDoc->GetIDocumentUndoRedo().DoesUndo() && pReplFmtColl;
+        pDoc->GetIDocumentUndoRedo().DoesUndo() && pReplFormatColl;
     if (bStartUndo)
     {
         SwRewriter aRewriter;
-        aRewriter.AddRule(UndoArg1, rFmtColl.GetName());
+        aRewriter.AddRule(UndoArg1, rFormatColl.GetName());
         aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
-        aRewriter.AddRule(UndoArg3, pReplFmtColl->GetName());
+        aRewriter.AddRule(UndoArg3, pReplFormatColl->GetName());
 
         pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE_STYLE,
                 &aRewriter );
     }
 
-    SwFindParaFmtColl aSwFindParaFmtColl( rFmtColl, pReplFmtColl, *this );
+    SwFindParaFormatColl aSwFindParaFormatColl( rFormatColl, pReplFormatColl, *this );
 
-    sal_uLong nRet = FindAll( aSwFindParaFmtColl, nStart, nEnd, eFndRngs, bCancel );
+    sal_uLong nRet = FindAll( aSwFindParaFormatColl, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
 
-    if( nRet && pReplFmtColl )
+    if( nRet && pReplFormatColl )
         pDoc->getIDocumentState().SetModified();
 
     if (bStartUndo)

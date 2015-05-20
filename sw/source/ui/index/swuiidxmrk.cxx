@@ -306,16 +306,16 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
         OSL_ENSURE(pMark, "need current SwTOXMark");
         if(!pMark)
             return;
-        SwTxtTOXMark* pTxtTOXMark = pMark->GetTxtTOXMark();
-        OSL_ENSURE(pTxtTOXMark, "need current SwTxtTOXMark");
-        if(!pTxtTOXMark)
+        SwTextTOXMark* pTextTOXMark = pMark->GetTextTOXMark();
+        OSL_ENSURE(pTextTOXMark, "need current SwTextTOXMark");
+        if(!pTextTOXMark)
             return;
-        const SwTxtNode* pTxtNode = pTxtTOXMark->GetpTxtNd();
-        OSL_ENSURE(pTxtNode, "need current SwTxtNode");
-        if(!pTxtNode)
+        const SwTextNode* pTextNode = pTextTOXMark->GetpTextNd();
+        OSL_ENSURE(pTextNode, "need current SwTextNode");
+        if(!pTextNode)
             return;
-        sal_Int32 nTextIndex = pTxtTOXMark->GetStart();
-        nLangForPhoneticReading = pTxtNode->GetLang( nTextIndex );
+        sal_Int32 nTextIndex = pTextTOXMark->GetStart();
+        nLangForPhoneticReading = pTextNode->GetLang( nTextIndex );
     }
     else //if dialog is opened to create a new mark
     {
@@ -419,7 +419,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
     SearchOptions aSearchOpt(
                         SearchAlgorithms_ABSOLUTE,
                         ( bWordOnly ? SearchFlags::NORM_WORD_ONLY : 0 ),
-                        rSh.GetSelTxt(), OUString(),
+                        rSh.GetSelText(), OUString(),
                         GetAppLanguageTag().getLocale(),
                         0, 0, 0,
                         (bCaseSensitive
@@ -846,7 +846,7 @@ void SwIndexMarkPane::UpdateDialog()
     m_pKey1DCB->SetReadOnly( !bEnable );
     m_pKey2DCB->SetReadOnly( !bEnable );
 
-    pSh->SelectTxtAttr( RES_TXTATR_TOXMARK, pMark->GetTxtTOXMark() );
+    pSh->SelectTextAttr( RES_TXTATR_TOXMARK, pMark->GetTextTOXMark() );
     // we need the point at the start of the attribute
     pSh->SwapPam();
 
@@ -1167,7 +1167,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
         if(!sEntry.isEmpty())
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFldType(RES_AUTHORITY, OUString()));
+                                        pSh->GetFieldType(RES_AUTHORITY, OUString()));
             const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : 0;
             for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
@@ -1194,7 +1194,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
         OSL_ENSURE(!m_sFields[AUTH_FIELD_AUTHORITY_TYPE].isEmpty() , "No authority type is set!");
         //check if the entry already exists with different content
         const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFldType(RES_AUTHORITY, OUString()));
+                                        pSh->GetFieldType(RES_AUTHORITY, OUString()));
         const SwAuthEntry*  pEntry = pFType ?
                 pFType->GetEntryByIdentifier( m_sFields[AUTH_FIELD_IDENTIFIER])
                 : 0;
@@ -1210,7 +1210,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
             }
         }
 
-        SwFldMgr aMgr(pSh);
+        SwFieldMgr aMgr(pSh);
         OUString sFields;
         for(int i = 0; i < AUTH_FIELD_END; i++)
         {
@@ -1225,12 +1225,12 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                     aNewData.SetAuthorField((ToxAuthorityField)i, m_sFields[i]);
                 pSh->ChangeAuthorityData(&aNewData);
             }
-            SwInsertFld_Data aData(TYP_AUTHORITY, 0, sFields, OUString(), 0 );
-            aMgr.InsertFld( aData );
+            SwInsertField_Data aData(TYP_AUTHORITY, 0, sFields, OUString(), 0 );
+            aMgr.InsertField( aData );
         }
-        else if(aMgr.GetCurFld())
+        else if(aMgr.GetCurField())
         {
-            aMgr.UpdateCurFld(0, sFields, OUString());
+            aMgr.UpdateCurField(0, sFields, OUString());
         }
     }
     if(!bNewEntry)
@@ -1329,7 +1329,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
     else
     {
         const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                    pSh->GetFldType(RES_AUTHORITY, OUString()));
+                                    pSh->GetFieldType(RES_AUTHORITY, OUString()));
         if(pFType)
         {
             std::vector<OUString> aIds;
@@ -1370,7 +1370,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
         else if(bIsFromComponent)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFldType(RES_AUTHORITY, OUString()));
+                                        pSh->GetFieldType(RES_AUTHORITY, OUString()));
             bAllowed = !pFType || !pFType->GetEntryByIdentifier(sEntry);
         }
         else
@@ -1384,7 +1384,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
 void SwAuthorMarkPane::InitControls()
 {
     OSL_ENSURE(pSh, "no shell?");
-    SwField* pField = pSh->GetCurFld();
+    SwField* pField = pSh->GetCurField();
     OSL_ENSURE(bNewEntry || pField, "no current marker");
     if(bNewEntry)
     {
@@ -1474,7 +1474,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
 
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        rSh.GetFldType(RES_AUTHORITY, OUString()));
+                                        rSh.GetFieldType(RES_AUTHORITY, OUString()));
             if(pFType)
             {
                 std::vector<OUString> aIds;
@@ -1568,7 +1568,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
 {
     const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                rWrtSh.GetFldType(RES_AUTHORITY, OUString()));
+                                rWrtSh.GetFieldType(RES_AUTHORITY, OUString()));
     if(pFType)
     {
         const SwAuthEntry* pEntry = pFType->GetEntryByIdentifier(

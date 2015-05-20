@@ -338,8 +338,8 @@ uno::Any SwXTextView::getSelection()
             {
                 if(rSh.GetTableCrsr())
                 {
-                    OSL_ENSURE(rSh.GetTableFmt(), "not a table format?");
-                    uno::Reference< text::XTextTableCursor >  xCrsr = new SwXTextTableCursor(*rSh.GetTableFmt(),
+                    OSL_ENSURE(rSh.GetTableFormat(), "not a table format?");
+                    uno::Reference< text::XTextTableCursor >  xCrsr = new SwXTextTableCursor(*rSh.GetTableFormat(),
                                                     rSh.GetTableCrsr());
                     aRef = uno::Reference< uno::XInterface >  (xCrsr, uno::UNO_QUERY);
                     break;
@@ -358,31 +358,31 @@ uno::Any SwXTextView::getSelection()
             break;
             case SHELL_MODE_FRAME           :
             {
-                SwFrmFmt *const pFmt = rSh.GetFlyFrmFmt();
-                if (pFmt)
+                SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
+                if (pFormat)
                 {
                     aRef = SwXTextFrame::CreateXTextFrame(
-                            *pFmt->GetDoc(), pFmt);
+                            *pFormat->GetDoc(), pFormat);
                 }
             }
             break;
             case SHELL_MODE_GRAPHIC         :
             {
-                SwFrmFmt *const pFmt = rSh.GetFlyFrmFmt();
-                if (pFmt)
+                SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
+                if (pFormat)
                 {
                     aRef = SwXTextGraphicObject::CreateXTextGraphicObject(
-                            *pFmt->GetDoc(), pFmt);
+                            *pFormat->GetDoc(), pFormat);
                 }
             }
             break;
             case SHELL_MODE_OBJECT          :
             {
-                SwFrmFmt *const pFmt = rSh.GetFlyFrmFmt();
-                if (pFmt)
+                SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
+                if (pFormat)
                 {
                     aRef = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pFmt->GetDoc(), pFmt);
+                            *pFormat->GetDoc(), pFormat);
                 }
             }
             break;
@@ -550,7 +550,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         const SwRubyListEntry* pEntry = &aList[n];
 
         const OUString& rEntryText = pEntry->GetText();
-        const SwFmtRuby& rAttr = pEntry->GetRubyAttr();
+        const SwFormatRuby& rAttr = pEntry->GetRubyAttr();
 
         pRet[n].realloc(5);
         PropertyValue* pValues = pRet[n].getArray();
@@ -559,7 +559,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pValues[1].Name = UNO_NAME_RUBY_TEXT;
         pValues[1].Value <<= rAttr.GetText();
         pValues[2].Name = UNO_NAME_RUBY_CHAR_STYLE_NAME;
-        SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
+        SwStyleNameMapper::FillProgName(rAttr.GetCharFormatName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
         pValues[2].Value <<= aString;
         pValues[3].Name = UNO_NAME_RUBY_ADJUST;
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
@@ -616,8 +616,8 @@ void SAL_CALL SwXTextView::setRubyList(
                         : SwStyleNameMapper::GetPoolIdFromUIName(sName,
                                 nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
 
-                    pEntry->GetRubyAttr().SetCharFmtName( sName );
-                    pEntry->GetRubyAttr().SetCharFmtId( nPoolId );
+                    pEntry->GetRubyAttr().SetCharFormatName( sName );
+                    pEntry->GetRubyAttr().SetCharFormatId( nPoolId );
                 }
             }
             else if(pProperties[nProp].Name == UNO_NAME_RUBY_ADJUST)
@@ -916,7 +916,7 @@ awt::Point SwXTextViewCursor::getPosition() throw( uno::RuntimeException, std::e
         const SwWrtShell& rSh = m_pView->GetWrtShell();
         const SwRect aCharRect(rSh.GetCharRect());
 
-        const SwFrmFmt& rMaster = rSh.GetPageDesc( rSh.GetCurPageDesc() ).GetMaster();
+        const SwFrameFormat& rMaster = rSh.GetPageDesc( rSh.GetCurPageDesc() ).GetMaster();
 
         const SvxULSpaceItem& rUL = rMaster.GetULSpace();
         const long nY = aCharRect.Top() - (rUL.GetUpper() + DOCUMENTBORDER);
@@ -1113,9 +1113,9 @@ void SwXTextViewCursor::gotoRange(
                 pSrcNode = &aPam.GetNode();
             }
         }
-        else if (pPara && pPara->GetTxtNode())
+        else if (pPara && pPara->GetTextNode())
         {
-            pSrcNode = pPara->GetTxtNode();
+            pSrcNode = pPara->GetTextNode();
         }
         const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
@@ -1494,7 +1494,7 @@ void  SwXTextViewCursor::setPropertyValue( const OUString& rPropertyName, const 
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwNode& rNode = pShellCrsr->GetNode();
-        if (rNode.IsTxtNode())
+        if (rNode.IsTextNode())
         {
             SwUnoCursorHelper::SetPropertyValue(
                 *pShellCrsr, *m_pPropSet, rPropertyName, aValue );

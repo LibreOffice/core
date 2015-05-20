@@ -25,7 +25,7 @@
 #define HTML_NUMBUL_MARGINLEFT  (MM50*2 + MM50/2)
 #define HTML_NUMBUL_INDENT      (-MM50)
 
-class SwTxtNode;
+class SwTextNode;
 class SwNumRule;
 
 // TODO: Unicode: Are these characters the correct ones?
@@ -44,7 +44,7 @@ class SwHTMLNumRuleInfo
 public:
 
     inline void Set( const SwHTMLNumRuleInfo& rInf );
-    void Set( const SwTxtNode& rTxtNd );
+    void Set( const SwTextNode& rTextNd );
 
     SwHTMLNumRuleInfo() :
         pNumRule( 0 ), nDeep( 0 ),
@@ -60,7 +60,7 @@ public:
         memcpy( &aNumStarts, &rInf.aNumStarts, sizeof( aNumStarts ) );
     }
 
-    SwHTMLNumRuleInfo( const SwTxtNode& rTxtNd ) { Set( rTxtNd ); }
+    SwHTMLNumRuleInfo( const SwTextNode& rTextNd ) { Set( rTextNd ); }
     inline SwHTMLNumRuleInfo& operator=( const SwHTMLNumRuleInfo& rInf );
 
     inline void Clear();

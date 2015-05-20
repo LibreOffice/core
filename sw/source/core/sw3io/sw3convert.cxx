@@ -57,7 +57,7 @@ struct OldFormats
     sal_uInt16              nOldFormat;
 };
 
-static const OldFormats aOldDateFmt40[] =
+static const OldFormats aOldDateFormat40[] =
 {
     // Date fields
     { NF_DATE_SYSTEM_SHORT,         DFF_SSYS },     // Short system date
@@ -81,7 +81,7 @@ static const OldFormats aOldDateFmt40[] =
     { NF_NUMERIC_START,             0  }            // End of table
 };
 
-static const OldFormats aOldDateFmt30[] =
+static const OldFormats aOldDateFormat30[] =
 {
     // Date fields
     { NF_DATE_SYSTEM_SHORT,         DFF_SSYS },     // Short system date
@@ -105,7 +105,7 @@ static const OldFormats aOldDateFmt30[] =
     { NF_NUMERIC_START,             0  }            // End of table
 };
 
-static const OldFormats aOldTimeFmt[] =
+static const OldFormats aOldTimeFormat[] =
 {
     // Time fields
     { NF_TIME_HHMMSS,               TF_SYSTEM },    // System time
@@ -115,7 +115,7 @@ static const OldFormats aOldTimeFmt[] =
     { NF_NUMERIC_START,             0 }             // End of table
 };
 
-static const OldFormats aOldGetSetExpFmt40[] =
+static const OldFormats aOldGetSetExpFormat40[] =
 {
     { NF_TEXT,                      VVF_CMD },      // Show command
     { NF_TEXT,                      VVF_INVISIBLE },// Invisible
@@ -142,7 +142,7 @@ static const OldFormats aOldGetSetExpFmt40[] =
     { NF_NUMERIC_START,                 0  }        // End of table
 };
 
-static const OldFormats aOldGetSetExpFmt30[] =
+static const OldFormats aOldGetSetExpFormat30[] =
 {
     { NF_TEXT,                      VVF_CMD },      // Show command
     { NF_TEXT,                      VVF_INVISIBLE },// Invisible
@@ -170,10 +170,10 @@ static const OldFormats aOldGetSetExpFmt30[] =
 };
 
 void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
-                                sal_uInt16& rSubType, sal_uLong &rFmt,
+                                sal_uInt16& rSubType, sal_uLong &rFormat,
                                 sal_uInt16 nVersion )
 {
-    const OldFormats *pOldFmt = 0L;
+    const OldFormats *pOldFormat = 0L;
 
     switch( rWhich )
     {
@@ -185,8 +185,8 @@ void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
                 if( RES_FIXDATEFLD == rWhich )
                     rSubType |= FIXEDFLD;
                 rWhich = RES_DATETIMEFLD;
-                pOldFmt = nVersion<SWG_INETBROWSER ? aOldDateFmt30
-                                                   : aOldDateFmt40;
+                pOldFormat = nVersion<SWG_INETBROWSER ? aOldDateFormat30
+                                                   : aOldDateFormat40;
             }
             break;
 
@@ -198,7 +198,7 @@ void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
                 if( RES_FIXTIMEFLD == rWhich )
                     rSubType |= FIXEDFLD;
                 rWhich = RES_DATETIMEFLD;
-                pOldFmt = aOldTimeFmt;
+                pOldFormat = aOldTimeFormat;
             }
             break;
 
@@ -206,8 +206,8 @@ void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
             if( nVersion < SWG_NEWFIELDS )
             {
                 rSubType = nsSwExtendedSubType::SUB_OWN_FMT;
-                pOldFmt = nVersion<SWG_INETBROWSER ? aOldGetSetExpFmt30
-                                                    : aOldGetSetExpFmt40;
+                pOldFormat = nVersion<SWG_INETBROWSER ? aOldGetSetExpFormat30
+                                                    : aOldGetSetExpFormat40;
             }
             break;
 
@@ -217,15 +217,15 @@ void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
         case RES_USERFLD:
             if( nVersion < SWG_NEWFIELDS )
             {
-                if( rFmt == VVF_INVISIBLE )
+                if( rFormat == VVF_INVISIBLE )
                 {
                     rSubType = nsSwExtendedSubType::SUB_INVISIBLE;
-                    rFmt = 0;
+                    rFormat = 0;
                 }
-                else if( rFmt == VVF_CMD )
+                else if( rFormat == VVF_CMD )
                 {
                     rSubType = nsSwExtendedSubType::SUB_CMD;
-                    rFmt = 0;
+                    rFormat = 0;
                 }
                 else
                 {
@@ -234,42 +234,42 @@ void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
                     // in the subtype; if it's a valid format in the first
                     // place.
                     if( RES_SETEXPFLD==rWhich &&
-                        /*rFmt >= (sal_uInt16)SVX_NUM_CHARS_UPPER_LETTER && always true*/
-                        rFmt <= (sal_uInt16)SVX_NUM_BITMAP )
+                        /*rFormat >= (sal_uInt16)SVX_NUM_CHARS_UPPER_LETTER && always true*/
+                        rFormat <= (sal_uInt16)SVX_NUM_BITMAP )
                     {
-                        rSubType = (sal_uInt16)rFmt;
+                        rSubType = (sal_uInt16)rFormat;
                     }
-                    pOldFmt = nVersion<SWG_INETBROWSER ? aOldGetSetExpFmt30
-                                                       : aOldGetSetExpFmt40;
+                    pOldFormat = nVersion<SWG_INETBROWSER ? aOldGetSetExpFormat30
+                                                       : aOldGetSetExpFormat40;
                 }
             }
             break;
         case RES_DOCINFOFLD:
             if( nVersion < SWG_NEWFIELDS )
             {
-                switch( rFmt )
+                switch( rFormat )
                 {
                 case RF_AUTHOR: rSubType = DI_SUB_AUTHOR;   break;
                 case RF_TIME:   rSubType = DI_SUB_TIME; break;
                 case RF_DATE:   rSubType = DI_SUB_DATE; break;
                 case RF_ALL:    rSubType = DI_SUB_DATE; break;
                 }
-                rFmt = 0;
+                rFormat = 0;
             }
             break;
     }
 
-    if( pOldFmt )
+    if( pOldFormat )
     {
         SvNumberFormatter *pFormatter = rDoc.GetNumberFormatter();
         sal_uInt16 i = 0;
 
-        while( pOldFmt[i].eFormatIdx != NF_NUMERIC_START ||
-               pOldFmt[i].nOldFormat)
+        while( pOldFormat[i].eFormatIdx != NF_NUMERIC_START ||
+               pOldFormat[i].nOldFormat)
         {
-            if( rFmt == pOldFmt[i].nOldFormat )
+            if( rFormat == pOldFormat[i].nOldFormat )
             {
-                rFmt = pFormatter->GetFormatIndex(pOldFmt[i].eFormatIdx, LANGUAGE_SYSTEM);
+                rFormat = pFormatter->GetFormatIndex(pOldFormat[i].eFormatIdx, LANGUAGE_SYSTEM);
                 break;
             }
             i++;

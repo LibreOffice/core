@@ -25,7 +25,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <vector>
 
-class SwTxtNode;
+class SwTextNode;
 
 /** Some helpers for converting model strings to view strings.
 
@@ -36,7 +36,7 @@ class SwTxtNode;
     helper functions are provided to convert model positions to view positions
     and vice versa.
 
-           CH_TXTATR_BREAKWORD -> SwTxtNode will have field attributes associated with these
+           CH_TXTATR_BREAKWORD -> SwTextNode will have field attributes associated with these
                 .       .
                 .       .
                 .       .
@@ -125,7 +125,7 @@ public:
         ModelPosition() : mnPos(0), mnSubPos(0), mbIsField(false) {}
     };
 
-    ModelToViewHelper(const SwTxtNode &rNode,
+    ModelToViewHelper(const SwTextNode &rNode,
             // defaults are appropriate for spell/grammar checking
             ExpandMode eMode = ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     ModelToViewHelper() //pass through filter, view == model

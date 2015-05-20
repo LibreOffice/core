@@ -168,7 +168,7 @@ bool CommonStylePreviewRenderer::recalculate()
 
 Size CommonStylePreviewRenderer::getRenderSize()
 {
-    maPixelSize = maFont.GetTxtSize(&mrOutputDev, maStyleName);
+    maPixelSize = maFont.GetTextSize(&mrOutputDev, maStyleName);
     if (maPixelSize.Height() > mnMaxHeight)
         maPixelSize.Height() = mnMaxHeight;
     return maPixelSize;

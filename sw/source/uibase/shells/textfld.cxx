@@ -127,14 +127,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     {
         case FN_EDIT_FIELD:
         {
-            SwField* pFld = rSh.GetCurFld();
-            if( pFld )
+            SwField* pField = rSh.GetCurField();
+            if( pField )
             {
-                switch ( pFld->GetTypeId() )
+                switch ( pField->GetTypeId() )
                 {
                     case TYP_DDEFLD:
                     {
-                        ::sfx2::SvBaseLink& rLink = static_cast<SwDDEFieldType*>(pFld->GetTyp())->
+                        ::sfx2::SvBaseLink& rLink = static_cast<SwDDEFieldType*>(pField->GetTyp())->
                                                 GetBaseLink();
                         if(rLink.IsVisible())
                         {
@@ -152,7 +152,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         assert(pFact && "SwAbstractDialogFactory fail!");
 
-                        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG ));
+                        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwFieldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG ));
                         assert(pDlg && "Dialog creation failed!");
                         pDlg->Execute();
                     }
@@ -162,11 +162,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         }
         case FN_EXECUTE_MACROFIELD:
         {
-            SwField* pFld = rSh.GetCurFld();
-            if(pFld && pFld->GetTyp()->Which() == RES_MACROFLD)
+            SwField* pField = rSh.GetCurField();
+            if(pField && pField->GetTyp()->Which() == RES_MACROFLD)
             {
 
-                const OUString& rMacro = static_cast<SwMacroField*>(pFld)->GetMacro();
+                const OUString& rMacro = static_cast<SwMacroField*>(pField)->GetMacro();
                 sal_Int32 nPos = rMacro.indexOf('.');
                 if(nPos != -1)
                 {
@@ -181,26 +181,26 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         case FN_GOTO_PREV_INPUTFLD:
             {
                 bool bRet = false;
-                SwFieldType* pFld = rSh.GetFldType( 0, RES_INPUTFLD );
-                const bool bAddSetExpressionFlds = !( rSh.GetViewOptions()->IsReadonly() );
-                if ( pFld != NULL
-                     && rSh.MoveFldType(
-                            pFld,
+                SwFieldType* pField = rSh.GetFieldType( 0, RES_INPUTFLD );
+                const bool bAddSetExpressionFields = !( rSh.GetViewOptions()->IsReadonly() );
+                if ( pField != NULL
+                     && rSh.MoveFieldType(
+                            pField,
                             FN_GOTO_NEXT_INPUTFLD == nSlot,
                             USHRT_MAX,
-                            bAddSetExpressionFlds ) )
+                            bAddSetExpressionFields ) )
                 {
                     rSh.ClearMark();
-                    if ( dynamic_cast<SwInputField*>(rSh.GetCurFld( true )) != NULL )
+                    if ( dynamic_cast<SwInputField*>(rSh.GetCurField( true )) != NULL )
                     {
                         rSh.SttSelect();
-                        rSh.SelectTxt(
-                            SwCrsrShell::StartOfInputFldAtPos( *(rSh.GetCrsr()->Start()) ) + 1,
-                            SwCrsrShell::EndOfInputFldAtPos( *(rSh.GetCrsr()->Start()) ) - 1 );
+                        rSh.SelectText(
+                            SwCrsrShell::StartOfInputFieldAtPos( *(rSh.GetCrsr()->Start()) ) + 1,
+                            SwCrsrShell::EndOfInputFieldAtPos( *(rSh.GetCrsr()->Start()) ) - 1 );
                     }
                     else
                     {
-                        rSh.StartInputFldDlg( rSh.GetCurFld( true ), false );
+                        rSh.StartInputFieldDlg( rSh.GetCurField( true ), false );
                     }
                     bRet = true;
                 }
@@ -214,8 +214,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     }
     if(bMore)
     {
-        // Here come the slots with FldMgr.
-        SwFldMgr aFldMgr(GetShellPtr());
+        // Here come the slots with FieldMgr.
+        SwFieldMgr aFieldMgr(GetShellPtr());
         switch(nSlot)
         {
             case FN_INSERT_DBFIELD:
@@ -257,8 +257,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         nFormat = static_cast<const SfxUInt32Item *>(pItem)->GetValue();
                     OSL_FAIL("Command is not yet used");
                     sal_Unicode cSeparator = ' ';
-                    SwInsertFld_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
-                    bRes = aFldMgr.InsertFld(aData);
+                    SwInsertField_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
+                    bRes = aFieldMgr.InsertField(aData);
                 }
                 rReq.SetReturnValue(SfxBoolItem( nSlot, bRes ));
             }
@@ -295,8 +295,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         if(!sTmp.isEmpty())
                             cSeparator = sTmp[0];
                     }
-                    SwInsertFld_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
-                    bRes = aFldMgr.InsertFld( aData );
+                    SwInsertField_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
+                    bRes = aFieldMgr.InsertField( aData );
                 }
                 else
                         //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
@@ -319,9 +319,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if (!pVFrame->HasChildWindow(FN_INSERT_FIELD))
                     pVFrame->ToggleChildWindow(FN_INSERT_FIELD);    // Show dialog
 
-                // Switch Flddlg at a new TabPage
-                sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
-                SwFldDlgWrapper *pWrp = static_cast<SwFldDlgWrapper*>(pVFrame->GetChildWindow(nId));
+                // Switch Fielddlg at a new TabPage
+                sal_uInt16 nId = SwFieldDlgWrapper::GetChildWindowId();
+                SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(pVFrame->GetChildWindow(nId));
                 if (pWrp)
                     pWrp->ShowReferencePage();
                 rReq.Ignore();
@@ -372,7 +372,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
             case FN_POSTIT:
             {
-                SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(aFldMgr.GetCurFld());
+                SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(aFieldMgr.GetCurField());
                 bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
                 if (bNew || GetView().GetPostItMgr()->IsAnswer())
                 {
@@ -402,28 +402,28 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     // --> suggestion has to be removed before
                     GetView().GetEditWin().StopQuickHelp();
 
-                    SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, sText, 0);
-                    aFldMgr.InsertFld( aData );
+                    SwInsertField_Data aData(TYP_POSTITFLD, 0, sAuthor, sText, 0);
+                    aFieldMgr.InsertField( aData );
 
                     rSh.Push();
                     rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, false);
-                    pPostIt = static_cast<SwPostItField*>(aFldMgr.GetCurFld());
+                    pPostIt = static_cast<SwPostItField*>(aFieldMgr.GetCurField());
                     rSh.Pop(false); // Restore cursor position
                 }
 
                 if (pPostIt)
                 {
-                    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFldType(RES_POSTITFLD, OUString(), false);
-                    SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                    SwFmtFld* pSwFmtFld = aIter.First();
-                    while( pSwFmtFld )
+                    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_POSTITFLD, OUString(), false);
+                    SwIterator<SwFormatField,SwFieldType> aIter( *pType );
+                    SwFormatField* pSwFormatField = aIter.First();
+                    while( pSwFormatField )
                     {
-                        if ( pSwFmtFld->GetField() == pPostIt )
+                        if ( pSwFormatField->GetField() == pPostIt )
                         {
-                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SwFmtFldHintWhich::FOCUS, &GetView() ) );
+                            pSwFormatField->Broadcast( SwFormatFieldHint( 0, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
                             break;
                         }
-                        pSwFmtFld = aIter.Next();
+                        pSwFormatField = aIter.Next();
                     }
                 }
             }
@@ -539,7 +539,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 bool bIsUrl=false;
                 bool bNew=false;
                 bool bUpdate = false;
-                SwFldMgr aMgr;
+                SwFieldMgr aMgr;
                 if ( pItem )
                 {
                     aText = static_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -550,9 +550,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if ( pIsUrl )
                         bIsUrl = pIsUrl->GetValue();
 
-                    SwScriptField* pFld = static_cast<SwScriptField*>(aMgr.GetCurFld());
-                    bNew = !pFld || !(pFld->GetTyp()->Which() == RES_SCRIPTFLD);
-                    bUpdate = pFld && ( bIsUrl != (bool)pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
+                    SwScriptField* pField = static_cast<SwScriptField*>(aMgr.GetCurField());
+                    bNew = !pField || !(pField->GetTyp()->Which() == RES_SCRIPTFLD);
+                    bUpdate = pField && ( bIsUrl != (bool)pField->GetFormat() || pField->GetPar2() != aType || pField->GetPar1() != aText );
                 }
                 else
                 {
@@ -575,13 +575,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 if( bNew )
                 {
-                    SwInsertFld_Data aData(TYP_SCRIPTFLD, 0, aType, aText, bIsUrl ? 1 : 0);
-                    aMgr.InsertFld(aData);
+                    SwInsertField_Data aData(TYP_SCRIPTFLD, 0, aType, aText, bIsUrl ? 1 : 0);
+                    aMgr.InsertField(aData);
                     rReq.Done();
                 }
                 else if( bUpdate )
                 {
-                    aMgr.UpdateCurFld( bIsUrl ? 1 : 0, aType, aText );
+                    aMgr.UpdateCurField( bIsUrl ? 1 : 0, aType, aText );
                     rSh.SetUndoNoResetModified();
                     rReq.Done();
                 }
@@ -625,10 +625,10 @@ FIELD_INSERT:
             {
                 //format conversion should only be done for number formatter formats
                 if(!nInsertFormat)
-                    nInsertFormat = aFldMgr.GetDefaultFormat(nInsertType, bIsText, rSh.GetNumberFormatter());
-                SwInsertFld_Data aData(nInsertType, nInsertSubType,
+                    nInsertFormat = aFieldMgr.GetDefaultFormat(nInsertType, bIsText, rSh.GetNumberFormatter());
+                SwInsertField_Data aData(nInsertType, nInsertSubType,
                                     OUString(), OUString(), nInsertFormat);
-                aFldMgr.InsertFld(aData);
+                aFieldMgr.InsertField(aData);
                 rReq.Done();
             }
             break;
@@ -674,7 +674,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             {
                 if( !bGetField )
                 {
-                    pField = rSh.GetCurFld();
+                    pField = rSh.GetCurField();
                     bGetField = true;
                 }
 
@@ -697,7 +697,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             {
                 if(!bGetField)
                 {
-                    pField = rSh.GetCurFld();
+                    pField = rSh.GetCurField();
                     bGetField = true;
                 }
                 if(!pField || pField->GetTyp()->Which() != RES_MACROFLD)
@@ -707,7 +707,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
 
         case FN_INSERT_FIELD:
             {
-                if ( rSh.CrsrInsideInputFld() )
+                if ( rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -728,7 +728,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                 if ( !pVFrame->KnowsChildWindow(FN_INSERT_FIELD)
-                     || rSh.CrsrInsideInputFld() )
+                     || rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem(FN_INSERT_REF_FIELD);
                 }
@@ -736,7 +736,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             break;
 
         case FN_INSERT_FIELD_CTRL:
-                if ( rSh.CrsrInsideInputFld() )
+                if ( rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -755,7 +755,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_JAVAEDIT :
             {
                 bool bCurField = false;
-                pField = rSh.GetCurFld();
+                pField = rSh.GetCurField();
                 if(nWhich == FN_POSTIT)
                     bCurField = pField && pField->GetTyp()->Which() == RES_POSTITFLD;
                 else
@@ -765,7 +765,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 {
                     rSet.DisableItem(nWhich);
                 }
-                else if ( rSh.CrsrInsideInputFld() )
+                else if ( rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -781,7 +781,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_INSERT_FLD_TITLE:
         case FN_INSERT_FLD_TOPIC:
         case FN_INSERT_DBFIELD:
-            if ( rSh.CrsrInsideInputFld() )
+            if ( rSh.CrsrInsideInputField() )
             {
                 rSet.DisableItem(nWhich);
             }
@@ -799,7 +799,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     const OUString& rTarget = rHlnkItem.GetTargetFrame();
     sal_uInt16 nType =  (sal_uInt16)rHlnkItem.GetInsertMode();
     nType &= ~HLINK_HTMLMODE;
-    const SvxMacroTableDtor* pMacroTbl = rHlnkItem.GetMacroTbl();
+    const SvxMacroTableDtor* pMacroTable = rHlnkItem.GetMacroTable();
 
     SwWrtShell& rSh = GetShell();
 
@@ -813,29 +813,29 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
         {
             // Select links
-            rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT, false);
+            rSh.SwCrsrShell::SelectTextAttr(RES_TXTATR_INETFMT, false);
         }
         switch (nType)
         {
         case HLINK_DEFAULT:
         case HLINK_FIELD:
             {
-                SwFmtINetFmt aINetFmt( rURL, rTarget );
-                aINetFmt.SetName(rHlnkItem.GetIntName());
-                if(pMacroTbl)
+                SwFormatINetFormat aINetFormat( rURL, rTarget );
+                aINetFormat.SetName(rHlnkItem.GetIntName());
+                if(pMacroTable)
                 {
-                    const SvxMacro *pMacro = pMacroTbl->Get( SFX_EVENT_MOUSEOVER_OBJECT );
+                    const SvxMacro *pMacro = pMacroTable->Get( SFX_EVENT_MOUSEOVER_OBJECT );
                     if( pMacro )
-                        aINetFmt.SetMacro(SFX_EVENT_MOUSEOVER_OBJECT, *pMacro);
-                    pMacro = pMacroTbl->Get( SFX_EVENT_MOUSECLICK_OBJECT );
+                        aINetFormat.SetMacro(SFX_EVENT_MOUSEOVER_OBJECT, *pMacro);
+                    pMacro = pMacroTable->Get( SFX_EVENT_MOUSECLICK_OBJECT );
                     if( pMacro )
-                        aINetFmt.SetMacro(SFX_EVENT_MOUSECLICK_OBJECT, *pMacro);
-                    pMacro = pMacroTbl->Get( SFX_EVENT_MOUSEOUT_OBJECT );
+                        aINetFormat.SetMacro(SFX_EVENT_MOUSECLICK_OBJECT, *pMacro);
+                    pMacro = pMacroTable->Get( SFX_EVENT_MOUSEOUT_OBJECT );
                     if( pMacro )
-                        aINetFmt.SetMacro(SFX_EVENT_MOUSEOUT_OBJECT, *pMacro);
+                        aINetFormat.SetMacro(SFX_EVENT_MOUSEOUT_OBJECT, *pMacro);
                 }
                 rSh.SttSelect();
-                rSh.InsertURL( aINetFmt, rName, true );
+                rSh.InsertURL( aINetFormat, rName, true );
                 rSh.EndSelect();
             }
             break;

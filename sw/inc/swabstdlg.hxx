@@ -47,7 +47,7 @@ class SfxStyleSheetBase;
 class SwGlossaryHdl;
 class SwField;
 
-class SwLabFmtPage;
+class SwLabFormatPage;
 class SwLabRec;
 class SwAsciiOptions;
 class SwDocShell;
@@ -55,7 +55,7 @@ class SvStream;
 class SwWrtShell;
 class SfxRequest;
 class SwView;
-class SwTableAutoFmt;
+class SwTableAutoFormat;
 class SwTOXMgr;
 class SwForm;
 struct CurTOXType;
@@ -101,7 +101,7 @@ public:
     virtual OUString        GetCurrShortName() const = 0;
 };
 
-class AbstractFldInputDlg : public VclAbstractTerminatedDialog
+class AbstractFieldInputDlg : public VclAbstractTerminatedDialog
 {
 public:
     //from class SalFrame
@@ -125,8 +125,8 @@ class AbstractInsTableDlg : public VclAbstractDialog
 {
 public:
     virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblFlags, OUString& rTableAutoFmtName,
-                                SwTableAutoFmt *& prTAFmt ) = 0;
+                                SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
+                                SwTableAutoFormat *& prTAFormat ) = 0;
 };
 
 class AbstractJavaEditDialog : public VclAbstractDialog
@@ -225,8 +225,8 @@ class AbstractSwConvertTableDlg :  public VclAbstractDialog
 {
 public:
     virtual void GetValues( sal_Unicode& rDelim,
-                    SwInsertTableOptions& rInsTblFlags,
-                    SwTableAutoFmt const*& prTAFmt ) = 0;
+                    SwInsertTableOptions& rInsTableFlags,
+                    SwTableAutoFormat const*& prTAFormat ) = 0;
 };
 
 class AbstractSwInsertDBColAutoPilot :  public VclAbstractDialog
@@ -264,10 +264,10 @@ public:
 class AbstractSwAutoFormatDlg : public VclAbstractDialog
 {
 public:
-    virtual void FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const = 0;
+    virtual void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const = 0;
 };
 
-class AbstractSwFldDlg : public SfxAbstractTabDialog
+class AbstractSwFieldDlg : public SfxAbstractTabDialog
 {
 public:
     virtual void                Start( bool bShow = true ) = 0;  //this method from sfxtabdialog
@@ -339,7 +339,7 @@ public:
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(vcl::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclAbstractDialog   * CreateSwChangeDBDlg(SwView& rVw) = 0;
     virtual SfxAbstractTabDialog *  CreateSwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-        sal_uInt8 nDialogMode, const OUString* pFmtStr = 0) = 0;
+        sal_uInt8 nDialogMode, const OUString* pFormatStr = 0) = 0;
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable) = 0;
     virtual VclAbstractDialog * CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV,int nResId) = 0;
 
@@ -369,11 +369,11 @@ public:
     virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName) = 0;
 
     virtual VclAbstractDialog * CreateVclAbstractDialog ( vcl::Window * pParent, SwWrtShell &rSh, int nResId ) = 0;
-    virtual AbstractSplitTableDialog * CreateSplitTblDialog ( vcl::Window * pParent, SwWrtShell &rSh ) = 0;
+    virtual AbstractSplitTableDialog * CreateSplitTableDialog ( vcl::Window * pParent, SwWrtShell &rSh ) = 0;
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
-                                                            bool bSetAutoFmt = true,
-                                                            const SwTableAutoFmt* pSelFmt = 0 ) = 0;
+                                                            bool bSetAutoFormat = true,
+                                                            const SwTableAutoFormat* pSelFormat = 0 ) = 0;
     virtual SfxAbstractDialog * CreateSwBorderDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId ) = 0;
     virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) = 0;
 
@@ -381,21 +381,21 @@ public:
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg(vcl::Window* pParent, SfxItemPool& Pool,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) = 0;
 
-    virtual AbstractSwFldDlg * CreateSwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent) = 0;
-    virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ) = 0;
+    virtual AbstractSwFieldDlg * CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent) = 0;
+    virtual SfxAbstractDialog*   CreateSwFieldEditDlg ( SwView& rVw, int nResId ) = 0;
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg(vcl::Window* pParent,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess) = 0;
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(vcl::Window *pParent) = 0;
 
-    virtual VclAbstractDialog*          CreateTblMergeDialog( vcl::Window* pParent, bool& rWithPrev ) = 0;
+    virtual VclAbstractDialog*          CreateTableMergeDialog( vcl::Window* pParent, bool& rWithPrev ) = 0;
     virtual SfxAbstractTabDialog*       CreateFrmTabDialog(const OUString &rDialogType,
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrm = true,
-                                                bool bFmt = false,
+                                                bool bFormat = false,
                                                 const OString& sDefPage = OString(),
-                                                const OUString* pFmtStr = 0) = 0;
+                                                const OUString* pFormatStr = 0) = 0;
     /// @param nSlot
     /// Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
     /// Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
@@ -409,7 +409,7 @@ public:
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0;
-    virtual AbstractFldInputDlg*        CreateFldInputDlg(vcl::Window *pParent,
+    virtual AbstractFieldInputDlg*        CreateFieldInputDlg(vcl::Window *pParent,
         SwWrtShell &rSh, SwField* pField, bool bNextButton = false) = 0;
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(vcl::Window * pParent,
         SwWrtShell &rSh, bool bEd = false) = 0;
@@ -421,7 +421,7 @@ public:
     virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,
                                                 vcl::Window* pParent, SwWrtShell& rSh,
                                                  const OUString& rSourceName,
-                                                const OUString& rTblName,
+                                                const OUString& rTableName,
                                                 sal_Int32 nCommandType,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0 ) = 0;

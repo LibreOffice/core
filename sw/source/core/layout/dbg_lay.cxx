@@ -76,7 +76,7 @@
  *      In the [frmtype] section, the frame types which should be logged are
  *      listed; default is USHRT_MAX which means that all types are logged.
  *      It's possible to remove types from the list using '!' in front of a
- *      value. The value !0xC000 would for example exclude SwCntntFrms from
+ *      value. The value !0xC000 would for example exclude SwContentFrms from
  *      logging.
  *      In the [record] section the functions group which should be logged are
  *      listed; default is 0 which means that none are logged. It's also
@@ -113,8 +113,8 @@ static sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
     if( bFrameId )
         return pFrm->GetFrmId();
 #endif
-    if( pFrm && pFrm->IsTxtFrm() )
-        return static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetIndex();
+    if( pFrm && pFrm->IsTextFrm() )
+        return static_cast<const SwTextFrm*>(pFrm)->GetTextNode()->GetIndex();
     return 0;
 }
 
@@ -224,7 +224,7 @@ void SwProtocol::Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct,
 }
 
 // The following function gets called when pulling in the writer DLL through
-// TxtInit(..) and gives the possibility to release functions
+// TextInit(..) and gives the possibility to release functions
 // and/or FrmIds to the debugger
 
 void SwProtocol::Init()
@@ -449,8 +449,8 @@ static void lcl_Flags(OStringBuffer& rOut, const SwFrm* pFrm)
 /// output the type of the frame as plain text.
 static void lcl_FrameType( OStringBuffer& rOut, const SwFrm* pFrm )
 {
-    if( pFrm->IsTxtFrm() )
-        rOut.append("Txt ");
+    if( pFrm->IsTextFrm() )
+        rOut.append("Text ");
     else if( pFrm->IsLayoutFrm() )
     {
         if( pFrm->IsPageFrm() )
@@ -477,17 +477,17 @@ static void lcl_FrameType( OStringBuffer& rOut, const SwFrm* pFrm )
             rOut.append("Header ");
         else if( pFrm->IsFooterFrm() )
             rOut.append("Footer ");
-        else if( pFrm->IsFtnFrm() )
-            rOut.append("Ftn ");
-        else if( pFrm->IsFtnContFrm() )
-            rOut.append("FtnCont ");
+        else if( pFrm->IsFootnoteFrm() )
+            rOut.append("Footnote ");
+        else if( pFrm->IsFootnoteContFrm() )
+            rOut.append("FootnoteCont ");
         else if( pFrm->IsFlyFrm() )
             rOut.append("Fly ");
         else
             rOut.append("Layout ");
     }
-    else if( pFrm->IsNoTxtFrm() )
-        rOut.append("NoTxt ");
+    else if( pFrm->IsNoTextFrm() )
+        rOut.append("NoText ");
     else
         rOut.append("Not impl. ");
 }

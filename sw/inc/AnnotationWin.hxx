@@ -35,7 +35,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
                          SwPostItMgr& aMgr,
                          SwPostItBits aBits,
                          SwSidebarItem& rSidebarItem,
-                         SwFmtFld* aField );
+                         SwFormatField* aField );
         virtual ~SwAnnotationWin();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -62,8 +62,8 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         virtual SvxLanguageItem GetLanguage() SAL_OVERRIDE;
         sal_uInt32 CountFollowing();
 
-        SwFmtFld*       mpFmtFld;
-        SwPostItField*  mpFld;
+        SwFormatField*       mpFormatField;
+        SwPostItField*  mpField;
         PopupMenu*      mpButtonPopup;
 
 };

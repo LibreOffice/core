@@ -32,7 +32,7 @@
 #include <swlbox.hxx>
 #include <caption.hxx>
 
-class SwFldMgr;
+class SwFieldMgr;
 class SvTreeListEntry;
 class SwWrtShell;
 
@@ -150,7 +150,7 @@ private:
 
     OUString m_sNone;
 
-    SwFldMgr* pMgr;
+    SwFieldMgr* pMgr;
     bool bHTMLMode;
 
     DECL_LINK(SelectHdl, void *);

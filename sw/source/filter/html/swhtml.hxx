@@ -41,7 +41,7 @@ class SwDoc;
 class SwPaM;
 class SwViewShell;
 class SwStartNode;
-class SwFmtColl;
+class SwFormatColl;
 class SwField;
 class SwHTMLForm_Impl;
 class SwApplet_Impl;
@@ -74,7 +74,7 @@ class _HTMLAttr
     friend class _CellSaveStruct;
 
     SwNodeIndex nSttPara, nEndPara;
-    sal_Int32 nSttCntnt, nEndCntnt;
+    sal_Int32 nSttContent, nEndContent;
     bool bInsAtStart : 1;
     bool bLikePara : 1; // Attribut ueber dem gesamten Absatz setzen
     bool bValid : 1;    // ist das Attribut gueltig?
@@ -106,8 +106,8 @@ public:
     const SwNodeIndex& GetSttPara() const { return nSttPara; }
     const SwNodeIndex& GetEndPara() const { return nEndPara; }
 
-    sal_Int32 GetSttCnt() const { return nSttCntnt; }
-    sal_Int32 GetEndCnt() const { return nEndCntnt; }
+    sal_Int32 GetSttCnt() const { return nSttContent; }
+    sal_Int32 GetEndCnt() const { return nEndContent; }
 
     bool IsLikePara() const { return bLikePara; }
     void SetLikePara( bool bPara=true ) { bLikePara = bPara; }
@@ -154,8 +154,8 @@ struct _HTMLAttrTable
                 *pOrphans,
                 *pDirection,
 
-                *pCharFmts,     // Text-Attribute
-                *pINetFmt,
+                *pCharFormats,     // Text-Attribute
+                *pINetFormat,
 
                 *pBold,         // Zeichen-Attribute
                 *pBoldCJK,
@@ -205,7 +205,7 @@ class _HTMLAttrContext
 
     sal_uInt16  nToken;         // das Token, zu dem der Kontext gehoehrt
 
-    sal_uInt16  nTxtFmtColl;    // eine in dem Kontext begonnene Vorlage oder 0
+    sal_uInt16  nTextFormatColl;    // eine in dem Kontext begonnene Vorlage oder 0
 
     sal_uInt16  nLeftMargin;        // ein veraenderter linker Rand
     sal_uInt16  nRightMargin;       // ein veraenderter rechter Rand
@@ -218,7 +218,7 @@ class _HTMLAttrContext
 
     bool    bLRSpaceChanged : 1;// linker/rechtr Rand, Einzug veraendert?
     bool    bULSpaceChanged : 1;// oberer/unterer Rand veraendert?
-    bool    bDfltTxtFmtColl : 1;// nTxtFmtColl ist nur ein default
+    bool    bDfltTextFormatColl : 1;// nTextFormatColl ist nur ein default
     bool    bSpansSection : 1;  // Der Kontext spannt eine SwSection auf
     bool    bPopStack : 1;      // Oberhalb liegende Stack-Elemente entf.
     bool    bFinishPREListingXMP : 1;
@@ -235,7 +235,7 @@ public:
         pSaveDocContext( 0 ),
         pFrmItemSet( 0 ),
         nToken( nTokn ),
-        nTxtFmtColl( nPoolId ),
+        nTextFormatColl( nPoolId ),
         nLeftMargin( 0 ),
         nRightMargin( 0 ),
         nFirstLineIndent( 0 ),
@@ -244,7 +244,7 @@ public:
         eAppend( AM_NONE ),
         bLRSpaceChanged( false ),
         bULSpaceChanged( false ),
-        bDfltTxtFmtColl( bDfltColl ),
+        bDfltTextFormatColl( bDfltColl ),
         bSpansSection( false ),
         bPopStack( false ),
         bFinishPREListingXMP( false ),
@@ -257,7 +257,7 @@ public:
         pSaveDocContext( 0 ),
         pFrmItemSet( 0 ),
         nToken( nTokn ),
-        nTxtFmtColl( 0 ),
+        nTextFormatColl( 0 ),
         nLeftMargin( 0 ),
         nRightMargin( 0 ),
         nFirstLineIndent( 0 ),
@@ -266,7 +266,7 @@ public:
         eAppend( AM_NONE ),
         bLRSpaceChanged( false ),
         bULSpaceChanged( false ),
-        bDfltTxtFmtColl( false ),
+        bDfltTextFormatColl( false ),
         bSpansSection( false ),
         bPopStack( false ),
         bFinishPREListingXMP( false ),
@@ -279,8 +279,8 @@ public:
 
     sal_uInt16 GetToken() const { return nToken; }
 
-    sal_uInt16 GetTxtFmtColl() const { return bDfltTxtFmtColl ? 0 : nTxtFmtColl; }
-    sal_uInt16 GetDfltTxtFmtColl() const { return bDfltTxtFmtColl ? nTxtFmtColl : 0; }
+    sal_uInt16 GetTextFormatColl() const { return bDfltTextFormatColl ? 0 : nTextFormatColl; }
+    sal_uInt16 GetDfltTextFormatColl() const { return bDfltTextFormatColl ? nTextFormatColl : 0; }
 
     const OUString& GetClass() const { return aClass; }
 
@@ -333,7 +333,7 @@ class SwCSS1Parser;
 class SwHTMLNumRuleInfo;
 
 typedef boost::ptr_vector<ImageMap> ImageMaps;
-typedef std::vector<SwFrmFmt *> SwHTMLFrmFmts;
+typedef std::vector<SwFrameFormat *> SwHTMLFrameFormats;
 
 #define HTML_CNTXT_PROTECT_STACK    0x0001
 #define HTML_CNTXT_STRIP_PARA       0x0002
@@ -382,7 +382,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     _HTMLAttrs      aParaAttrs; // vorlauefige Absatz-Attribute
     _HTMLAttrTable  aAttrTab;   // "offene" Attribute
     _HTMLAttrContexts aContexts;// der aktuelle Attribut/Token-Kontext
-    SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, the anchor is moved
+    SwHTMLFrameFormats   aMoveFlyFrms;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> aMoveFlyCnts;// and the Content-Positions
 
     SwApplet_Impl *pAppletImpl; // das aktuelle Applet
@@ -502,7 +502,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     _HTMLAttr **GetAttrTabEntry( sal_uInt16 nWhich );
 
     // Einen neuen Textknoten an PaM-Position anlegen
-    bool AppendTxtNode( SwHTMLAppendMode eMode=AM_NORMAL, bool bUpdateNum=true );
+    bool AppendTextNode( SwHTMLAppendMode eMode=AM_NORMAL, bool bUpdateNum=true );
     void AddParSpace();
 
     // Ein Attribut beginnen/beenden
@@ -541,7 +541,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void EndContext( _HTMLAttrContext *pContext );
     void ClearContext( _HTMLAttrContext *pContext );
 
-    const SwFmtColl *GetCurrFmtColl() const;
+    const SwFormatColl *GetCurrFormatColl() const;
 
     SwTwips GetCurrentBrowseWidth();
 
@@ -552,7 +552,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // Verwalten von Absatz-Vorlagen
 
     // die Vorlagen auf dem Stack bzw. deren Attribute setzen
-    void SetTxtCollAttrs( _HTMLAttrContext *pContext = 0 );
+    void SetTextCollAttrs( _HTMLAttrContext *pContext = 0 );
 
     void InsertParaAttrs( const SfxItemSet& rItemSet );
 
@@ -574,7 +574,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
                                           short& nIndent ) const;
     void GetULSpaceFromContext( sal_uInt16 &rUpper, sal_uInt16 &rLower ) const;
 
-    void MovePageDescAttrs( SwNode *pSrcNd, sal_uLong nDestIdx, bool bFmtBreak );
+    void MovePageDescAttrs( SwNode *pSrcNd, sal_uLong nDestIdx, bool bFormatBreak );
 
     // Behandlung von Tags auf Absatz-Ebene
 
@@ -585,8 +585,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void EndHeading();
 
     // <ADDRESS>, <BLOCKQUOTE> und <PRE>
-    void NewTxtFmtColl( int nToken, sal_uInt16 nPoolId );
-    void EndTxtFmtColl( int nToken );
+    void NewTextFormatColl( int nToken, sal_uInt16 nPoolId );
+    void EndTextFormatColl( int nToken );
 
     // <DIV> und <CENTER>
     void NewDivision( int nToken );
@@ -646,7 +646,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void EndFontAttr( int nToken );
 
     // Tags, die durch Zeichenvorlagen realisiert werden
-    void NewCharFmt( int nToken );
+    void NewCharFormat( int nToken );
 
     // <SDFIELD>
 public:
@@ -680,11 +680,11 @@ private:
                                  const SvxCSS1PropertyInfo &rPropInfo,
                                  SfxItemSet &rFrmItemSet );
 
-    static void SetFrmFmtAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
+    static void SetFrameFormatAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
                          sal_uInt16 nFlags, SfxItemSet &rFrmItemSet );
 
     // Frames anlegen und Auto-gebundene Rahmen registrieren
-    void RegisterFlyFrm( SwFrmFmt *pFlyFrm );
+    void RegisterFlyFrm( SwFrameFormat *pFlyFrm );
 
     // Die Groesse des Fly-Frames an die Vorgaben und Gegebenheiten anpassen
     // (nicht fuer Grafiken, deshalb htmlplug.cxx)
@@ -784,9 +784,9 @@ private:
                         sal_Int16 eHoriOri,
                         SfxItemSet& rCSS1ItemSet,
                         SvxCSS1PropertyInfo& rCSS1PropInfo,
-                        const SvxMacroTableDtor& rMacroTbl,
-                        const std::vector<OUString>& rUnoMacroTbl,
-                        const std::vector<OUString>& rUnoMacroParamTbl,
+                        const SvxMacroTableDtor& rMacroTable,
+                        const std::vector<OUString>& rUnoMacroTable,
+                        const std::vector<OUString>& rUnoMacroParamTable,
                         bool bSetPropSet = true,
                         bool bHidden = false );
     void SetControlSize( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape, const Size& rTextSz,
@@ -928,9 +928,9 @@ struct SwPendingStack
 inline void _HTMLAttr::SetStart( const SwPosition& rPos )
 {
     nSttPara = rPos.nNode;
-    nSttCntnt = rPos.nContent.GetIndex();
+    nSttContent = rPos.nContent.GetIndex();
     nEndPara = nSttPara;
-    nEndCntnt = nSttCntnt;
+    nEndContent = nSttContent;
 }
 
 inline void _HTMLAttrContext::SetMargins( sal_uInt16 nLeft, sal_uInt16 nRight,

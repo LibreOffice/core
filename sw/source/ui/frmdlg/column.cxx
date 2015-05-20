@@ -115,11 +115,11 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     const sal_uInt16 nFullSectCnt = rWrtShell.GetFullSelectedSectionCount();
     if( pCurrSection && ( !rWrtShell.HasSelection() || 0 != nFullSectCnt ))
     {
-        nSelectionWidth = rSh.GetSectionWidth(*pCurrSection->GetFmt());
+        nSelectionWidth = rSh.GetSectionWidth(*pCurrSection->GetFormat());
         if ( !nSelectionWidth )
             nSelectionWidth = USHRT_MAX;
         pSectionSet = new SfxItemSet( rWrtShell.GetAttrPool(), aSectIds );
-        pSectionSet->Put( pCurrSection->GetFmt()->GetAttrSet() );
+        pSectionSet->Put( pCurrSection->GetFormat()->GetAttrSet() );
         pColPgSet = pSectionSet;
     }
 
@@ -131,12 +131,12 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
         pColPgSet = pSelectionSet;
     }
 
-    if( rWrtShell.GetFlyFrmFmt() )
+    if( rWrtShell.GetFlyFrameFormat() )
     {
-        const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt() ;
+        const SwFrameFormat* pFormat = rSh.GetFlyFrameFormat() ;
         pFrameSet = new SfxItemSet(rWrtShell.GetAttrPool(), aSectIds );
-        pFrameSet->Put(pFmt->GetFrmSize());
-        pFrameSet->Put(pFmt->GetCol());
+        pFrameSet->Put(pFormat->GetFrmSize());
+        pFrameSet->Put(pFormat->GetCol());
         pColPgSet = pFrameSet;
     }
 
@@ -149,15 +149,15 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
                                     RES_LR_SPACE, RES_LR_SPACE,
                                     0 );
 
-        const SwFrmFmt &rFmt = pPageDesc->GetMaster();
-        nPageWidth = rFmt.GetFrmSize().GetSize().Width();
+        const SwFrameFormat &rFormat = pPageDesc->GetMaster();
+        nPageWidth = rFormat.GetFrmSize().GetSize().Width();
 
-        const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rFmt.GetLRSpace();
-        const SvxBoxItem& rBox = (const SvxBoxItem&) rFmt.GetBox();
+        const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rFormat.GetLRSpace();
+        const SvxBoxItem& rBox = (const SvxBoxItem&) rFormat.GetBox();
         nPageWidth -= rLRSpace.GetLeft() + rLRSpace.GetRight() + rBox.GetDistance();
 
-        pPageSet->Put(rFmt.GetCol());
-        pPageSet->Put(rFmt.GetLRSpace());
+        pPageSet->Put(rFormat.GetCol());
+        pPageSet->Put(rFormat.GetLRSpace());
         pColPgSet = pPageSet;
     }
 
@@ -187,7 +187,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
             IsMarkInSameSection( rWrtShell, pCurrSection ) ))))
         m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>((sal_IntPtr)LISTBOX_SELECTION) ));
 
-    if (!rWrtShell.GetFlyFrmFmt())
+    if (!rWrtShell.GetFlyFrameFormat())
         m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(LISTBOX_FRAME) ));
 
     const sal_Int32 nPagePos = m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(LISTBOX_PAGE) );
@@ -266,17 +266,17 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
         case LISTBOX_SELECTION  :
             pSet = pSelectionSet;
             if( pSelectionSet )
-                pSet->Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
+                pSet->Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_SECTION    :
         case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
-            pSet->Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
+            pSet->Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_PAGE       :
             nWidth = nPageWidth;
             pSet = pPageSet;
-            pSet->Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
+            pSet->Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_FRAME:
             pSet = pFrameSet;
@@ -324,7 +324,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
     if(pSelectionSet && SfxItemState::SET == pSelectionSet->GetItemState(RES_COL))
     {
         //insert region with columns
-        const SwFmtCol& rColItem = static_cast<const SwFmtCol&>(pSelectionSet->Get(RES_COL));
+        const SwFormatCol& rColItem = static_cast<const SwFormatCol&>(pSelectionSet->Get(RES_COL));
         //only if there actually are columns!
         if(rColItem.GetNumCols() > 1)
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
@@ -334,8 +334,8 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
     if(pSectionSet && pSectionSet->Count() && bSectionChanged )
     {
         const SwSection* pCurrSection = rWrtShell.GetCurrSection();
-        const SwSectionFmt* pFmt = pCurrSection->GetFmt();
-        const size_t nNewPos = rWrtShell.GetSectionFmtPos( *pFmt );
+        const SwSectionFormat* pFormat = pCurrSection->GetFormat();
+        const size_t nNewPos = rWrtShell.GetSectionFormatPos( *pFormat );
         SwSectionData aData(*pCurrSection);
         rWrtShell.UpdateSection( nNewPos, aData, pSectionSet );
     }
@@ -350,8 +350,8 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
         // deterine current PageDescriptor and fill the Set with it
         const size_t nCurIdx = rWrtShell.GetCurPageDesc();
         SwPageDesc aPageDesc(rWrtShell.GetPageDesc(nCurIdx));
-        SwFrmFmt &rFmt = aPageDesc.GetMaster();
-        rFmt.SetFmtAttr(pPageSet->Get(RES_COL));
+        SwFrameFormat &rFormat = aPageDesc.GetMaster();
+        rFormat.SetFormatAttr(pPageSet->Get(RES_COL));
         rWrtShell.ChgPageDesc(nCurIdx, aPageDesc);
     }
     if(pFrameSet && SfxItemState::SET == pFrameSet->GetItemState(RES_COL) && bFrameChanged)
@@ -597,10 +597,10 @@ void SwColumnPage::SetPageWidth(long nPageWidth)
 
 void SwColumnPage::connectPercentField(PercentField &rWrap, const OString &rName)
 {
-    MetricField *pFld = get<MetricField>(rName);
-    assert(pFld);
-    rWrap.set(pFld);
-    m_aPercentFieldsMap[pFld] = &rWrap;
+    MetricField *pField = get<MetricField>(rName);
+    assert(pField);
+    rWrap.set(pField);
+    m_aPercentFieldsMap[pField] = &rWrap;
 }
 
 void SwColumnPage::Reset(const SfxItemSet *rSet)
@@ -631,7 +631,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
             pColMgr->SetActualWidth(FRAME_FORMAT_WIDTH);
         else
         {
-            const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(rSet->Get(RES_FRM_SIZE));
+            const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(rSet->Get(RES_FRM_SIZE));
             const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rSet->Get(RES_BOX));
             pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetDistance());
         }
@@ -640,7 +640,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     {
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == rSet->GetItemState( RES_COLUMNBALANCE, false, &pItem ))
-            m_pBalanceColsCB->Check(!static_cast<const SwFmtNoBalancedColumns*>(pItem)->GetValue());
+            m_pBalanceColsCB->Check(!static_cast<const SwFormatNoBalancedColumns*>(pItem)->GetValue());
         else
             m_pBalanceColsCB->Check( true );
     }
@@ -674,14 +674,14 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
     // the current settings are already present
 
     const SfxPoolItem* pOldItem;
-    const SwFmtCol& rCol = pColMgr->GetColumns();
+    const SwFormatCol& rCol = pColMgr->GetColumns();
     if(0 == (pOldItem = GetOldItem( *rSet, RES_COL )) ||
                 rCol != *pOldItem )
         rSet->Put(rCol);
 
     if(m_pBalanceColsCB->IsVisible() )
     {
-        rSet->Put(SwFmtNoBalancedColumns(!m_pBalanceColsCB->IsChecked() ));
+        rSet->Put(SwFormatNoBalancedColumns(!m_pBalanceColsCB->IsChecked() ));
     }
     if( m_pTextDirectionLB->IsVisible())
     {
@@ -998,13 +998,13 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
  * width the automatic calculation of the column width is overruled; only an
  * alteration of the column number leads back to that default.
  */
-IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
+IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricField )
 {
     if (nCols < 2)
         return 0;
-    PercentField *pFld = m_aPercentFieldsMap[pMetricFld];
-    assert(pFld);
-    long nActValue = static_cast< long >(pFld->DenormalizePercent(pFld->GetValue(FUNIT_TWIP)));
+    PercentField *pField = m_aPercentFieldsMap[pMetricField];
+    assert(pField);
+    long nActValue = static_cast< long >(pField->DenormalizePercent(pField->GetValue(FUNIT_TWIP)));
     if(m_pAutoWidthBox->IsChecked())
     {
         const long nMaxGap = static_cast< long >
@@ -1023,7 +1023,7 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
     }
     else
     {
-        const sal_uInt16 nVis = nFirstVis + ((pFld == &aDistEd2) ? 1 : 0);
+        const sal_uInt16 nVis = nFirstVis + ((pField == &aDistEd2) ? 1 : 0);
         long nDiff = nActValue - nColDist[nVis];
         if(nDiff)
         {
@@ -1061,13 +1061,13 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
         }
 
     }
-    Update(pMetricFld);
+    Update(pMetricField);
     return 0;
 }
 
-IMPL_LINK( SwColumnPage, EdModify, MetricField *, pMetricFld )
+IMPL_LINK( SwColumnPage, EdModify, MetricField *, pMetricField )
 {
-    PercentField *pField = m_aPercentFieldsMap[pMetricFld];
+    PercentField *pField = m_aPercentFieldsMap[pMetricField];
     assert(pField);
     pModifiedField = pField;
     Timeout();
@@ -1250,7 +1250,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         m_pFrmExampleWN->Show();
 
         // Size
-        const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(rSet.Get(RES_FRM_SIZE));
+        const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(rSet.Get(RES_FRM_SIZE));
         const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
 
         long nDistance = rBox.GetDistance();

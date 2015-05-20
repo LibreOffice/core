@@ -232,7 +232,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 
     OUString sShareAutoCorrFile, sUserAutoCorrFile;
 
-    SvxSwAutoFmtFlags aSwFlags;     // StarWriter AutoFormat Flags
+    SvxSwAutoFormatFlags aSwFlags;     // StarWriter AutoFormat Flags
 
     // all languages in a table
     boost::ptr_map<LanguageTag, SvxAutoCorrectLanguageLists>* pLangTable;
@@ -328,7 +328,7 @@ public:
 
     // Query/Set the current settings of AutoCorrect
     long GetFlags() const                       { return nFlags; }
-    inline SvxSwAutoFmtFlags&   GetSwFlags()    { return aSwFlags;}
+    inline SvxSwAutoFormatFlags&   GetSwFlags()    { return aSwFlags;}
     bool IsAutoCorrFlag( long nFlag ) const
                                 { return (nFlags & nFlag) != 0; }
     void SetAutoCorrFlag( long nFlag, bool bOn = true );

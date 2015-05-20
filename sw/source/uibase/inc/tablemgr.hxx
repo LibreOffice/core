@@ -23,10 +23,10 @@
 #include "swtypes.hxx"
 #include "tabcol.hxx"
 
-class SwFrmFmt;
+class SwFrameFormat;
 class SwWrtShell;
 namespace vcl { class Window; }
-class SwFlyFrmFmt;
+class SwFlyFrameFormat;
 
 namespace com { namespace sun { namespace star {
     namespace frame {
@@ -41,7 +41,7 @@ const char cParaDelim = 0x0a;
 
 class SW_DLLPUBLIC SwTableFUNC
 {
-    SwFrmFmt    *pFmt;
+    SwFrameFormat    *pFormat;
     SwWrtShell  *pSh;
     bool        bCopy;
     SwTabCols   aCols;
@@ -50,8 +50,8 @@ private:
     SAL_DLLPRIVATE int GetRightSeparator(int nNum) const;
 
 public:
-    inline SwTableFUNC(SwFrmFmt &);
-           SwTableFUNC(SwWrtShell *pShell, bool bCopyFmt = false);
+    inline SwTableFUNC(SwFrameFormat &);
+           SwTableFUNC(SwWrtShell *pShell, bool bCopyFormat = false);
            ~SwTableFUNC();
 
     void    InitTabCols();
@@ -62,9 +62,9 @@ public:
     sal_uInt16  GetColCount() const;
     sal_uInt16  GetCurColNum() const;
 
-    bool IsTableSelected() const { return pFmt != 0; }
+    bool IsTableSelected() const { return pFormat != 0; }
 
-    const SwFrmFmt *GetTableFmt() const { return pFmt; }
+    const SwFrameFormat *GetTableFormat() const { return pFormat; }
 
     SwWrtShell* GetShell() const { return pSh; }
 
@@ -73,11 +73,11 @@ public:
 
     /// @return the XModel of the newly inserted chart if successful
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-        InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, bool bFillWithData, const OUString &rCellRange, SwFlyFrmFmt** ppFlyFrmFmt = 0 );
+        InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, bool bFillWithData, const OUString &rCellRange, SwFlyFrameFormat** ppFlyFrameFormat = 0 );
 };
 
-inline SwTableFUNC::SwTableFUNC(SwFrmFmt &rFmt) :
-    pFmt(&rFmt),
+inline SwTableFUNC::SwTableFUNC(SwFrameFormat &rFormat) :
+    pFormat(&rFormat),
     pSh(0),
     bCopy(false)
 {

@@ -28,30 +28,30 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
-class SwTxtNode;
+class SwTextNode;
 class SwIndex;
 namespace vcl { class Font; }
 
 struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 {
-    SwTxtNode  *pStartNode;
+    SwTextNode  *pStartNode;
     SwIndex    *pStartIdx;
-    SwTxtNode  *pEndNode;
+    SwTextNode  *pEndNode;
     SwIndex    *pEndIdx;
 
     SwArgsBase(
-            SwTxtNode* pStart, SwIndex& rStart,
-            SwTxtNode* pEnd, SwIndex& rEnd )
+            SwTextNode* pStart, SwIndex& rStart,
+            SwTextNode* pEnd, SwIndex& rEnd )
         : pStartNode( pStart ), pStartIdx( &rStart ),
           pEndNode( pEnd ), pEndIdx( &rEnd )
         {}
 
-    void SetStart(SwTxtNode* pStart, SwIndex& rStart )
+    void SetStart(SwTextNode* pStart, SwIndex& rStart )
     {
         pStartNode = pStart;    pStartIdx = &rStart ;
     }
 
-    void SetEnd( SwTxtNode* pEnd, SwIndex& rEnd  )
+    void SetEnd( SwTextNode* pEnd, SwIndex& rEnd  )
     {
         pEndNode = pEnd;        pEndIdx = &rEnd ;
     }
@@ -71,8 +71,8 @@ struct SwConversionArgs : SwArgsBase
     bool            bAllowImplicitChangesForNotConvertibleText;
 
     SwConversionArgs( LanguageType nLang,
-            SwTxtNode* pStart, SwIndex& rStart,
-            SwTxtNode* pEnd, SwIndex& rEnd )
+            SwTextNode* pStart, SwIndex& rStart,
+            SwTextNode* pEnd, SwIndex& rEnd )
         : SwArgsBase( pStart, rStart, pEnd, rEnd ),
           nConvSrcLang( nLang ),
           nConvTextLang( LANGUAGE_NONE ),
@@ -94,8 +94,8 @@ struct SwSpellArgs : SwArgsBase
 
     SwSpellArgs(::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XSpellChecker1 > &rxSplChk,
-            SwTxtNode* pStart, SwIndex& rStart,
-            SwTxtNode* pEnd, SwIndex& rEnd,
+            SwTextNode* pStart, SwIndex& rStart,
+            SwTextNode* pEnd, SwIndex& rEnd,
             bool bGrammar )
         :   SwArgsBase( pStart, rStart, pEnd, rEnd ),
             xSpeller( rxSplChk ),
@@ -105,8 +105,8 @@ struct SwSpellArgs : SwArgsBase
 
 // Parameter-class for Hyphenate.
 // docedt.cxx:  SwDoc::Hyphenate()
-// txtedt.cxx:  SwTxtNode::Hyphenate()
-// txthyph.cxx: SwTxtFrm::Hyphenate()
+// txtedt.cxx:  SwTextNode::Hyphenate()
+// txthyph.cxx: SwTextFrm::Hyphenate()
 
 class SwInterHyphInfo
 {

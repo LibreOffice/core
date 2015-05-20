@@ -209,14 +209,14 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
     const SfxPoolItem* pItem;
     if ( SfxItemState::SET == rSet->GetItemState( RES_TXTATR_INETFMT, false, &pItem ) )
     {
-        const SwFmtINetFmt* pINetFmt = static_cast<const SwFmtINetFmt*>( pItem);
-        m_pURLED->SetText(INetURLObject::decode(pINetFmt->GetValue(),
+        const SwFormatINetFormat* pINetFormat = static_cast<const SwFormatINetFormat*>( pItem);
+        m_pURLED->SetText(INetURLObject::decode(pINetFormat->GetValue(),
             INetURLObject::DECODE_UNAMBIGUOUS,
             RTL_TEXTENCODING_UTF8));
         m_pURLED->SaveValue();
-        m_pURLED->SetText(pINetFmt->GetName());
+        m_pURLED->SetText(pINetFormat->GetName());
 
-        OUString sEntry = pINetFmt->GetVisitedFmt();
+        OUString sEntry = pINetFormat->GetVisitedFormat();
         if (sEntry.isEmpty())
         {
             OSL_ENSURE( false, "<SwCharURLPage::Reset(..)> - missing visited character format at hyperlink attribute" );
@@ -224,7 +224,7 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
         }
         m_pVisitedLB->SelectEntry( sEntry );
 
-        sEntry = pINetFmt->GetINetFmt();
+        sEntry = pINetFormat->GetINetFormat();
         if (sEntry.isEmpty())
         {
             OSL_ENSURE( false, "<SwCharURLPage::Reset(..)> - missing unvisited character format at hyperlink attribute" );
@@ -232,14 +232,14 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
         }
         m_pNotVisitedLB->SelectEntry(sEntry);
 
-        m_pTargetFrmLB->SetText(pINetFmt->GetTargetFrame());
+        m_pTargetFrmLB->SetText(pINetFormat->GetTargetFrame());
         m_pVisitedLB->   SaveValue();
         m_pNotVisitedLB->SaveValue();
         m_pTargetFrmLB-> SaveValue();
         pINetItem = new SvxMacroItem(FN_INET_FIELD_MACRO);
 
-        if( pINetFmt->GetMacroTbl() )
-            pINetItem->SetMacroTable( *pINetFmt->GetMacroTbl() );
+        if( pINetFormat->GetMacroTable() )
+            pINetItem->SetMacroTable( *pINetFormat->GetMacroTable() );
     }
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_SELECTION, false, &pItem))
     {
@@ -260,8 +260,8 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
             sURL = URIHelper::simpleNormalizedMakeRelative(OUString(), sURL);
     }
 
-    SwFmtINetFmt aINetFmt(sURL, m_pTargetFrmLB->GetText());
-    aINetFmt.SetName(m_pNameED->GetText());
+    SwFormatINetFormat aINetFormat(sURL, m_pTargetFrmLB->GetText());
+    aINetFormat.SetName(m_pNameED->GetText());
     bool bURLModified = m_pURLED->IsValueChangedFromSaved();
     bool bNameModified = m_pNameED->IsModified();
     bool bTargetModified = m_pTargetFrmLB->IsValueChangedFromSaved();
@@ -270,14 +270,14 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     // set valid settings first
     OUString sEntry = m_pVisitedLB->GetSelectEntry();
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
-    aINetFmt.SetVisitedFmtAndId( sEntry, nId );
+    aINetFormat.SetVisitedFormatAndId( sEntry, nId );
 
     sEntry = m_pNotVisitedLB->GetSelectEntry();
     nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
-    aINetFmt.SetINetFmtAndId( sEntry, nId );
+    aINetFormat.SetINetFormatAndId( sEntry, nId );
 
     if( pINetItem && !pINetItem->GetMacroTable().empty() )
-        aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );
+        aINetFormat.SetMacroTable( &pINetItem->GetMacroTable() );
 
     if(m_pVisitedLB->IsValueChangedFromSaved())
         bModified = true;
@@ -291,7 +291,7 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
         rSet->Put(SfxStringItem(FN_PARAM_SELECTION, m_pTextED->GetText()));
     }
     if(bModified)
-        rSet->Put(aINetFmt);
+        rSet->Put(aINetFormat);
     return bModified;
 }
 
@@ -314,7 +314,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl)
 
 IMPL_LINK_NOARG(SwCharURLPage, EventHdl)
 {
-    bModified |= SwMacroAssignDlg::INetFmtDlg( this,
+    bModified |= SwMacroAssignDlg::INetFormatDlg( this,
                     ::GetActiveView()->GetWrtShell(), pINetItem );
     return 0;
 }

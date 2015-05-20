@@ -44,7 +44,7 @@ class Fraction;
 class SwPrintData;
 class SwPagePreviewLayout;
 struct PreviewPage;
-class SwTxtFrm;
+class SwTextFrm;
 // --> OD #i76669#
 namespace sdr { namespace contact {
         class ViewObjectContactRedirector;
@@ -106,18 +106,18 @@ private:
         implementation for wrapper method
         <SwViewShell::InvalidateAccessibleParaFlowRelation(..)>
 
-        @param _pFromTxtFrm
+        @param _pFromTextFrm
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
         has to be invalidated.
         If NULL, no CONTENT_FLOWS_FROM relation has to be invalidated
 
-        @param _pToTxtFrm
+        @param _pToTextFrm
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_TO
         has to be invalidated.
         If NULL, no CONTENT_FLOWS_TO relation has to be invalidated
     */
-    void _InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
-                                                const SwTxtFrm* _pToTxtFrm );
+    void _InvalidateAccessibleParaFlowRelation( const SwTextFrm* _pFromTextFrm,
+                                                const SwTextFrm* _pToTextFrm );
 
     /** invalidate text selection for paragraphs
 
@@ -133,7 +133,7 @@ private:
         implementation for wrapper method
         <SwViewShell::InvalidateAccessibleParaAttrs(..)>
     */
-    void _InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
+    void _InvalidateAccessibleParaAttrs( const SwTextFrm& rTextFrm );
 
 public:
     SwViewShellImp( SwViewShell * );
@@ -208,7 +208,7 @@ public:
      *
      * There we also set the Flag for ExpressionFields
      */
-    bool IsUpdateExpFlds();
+    bool IsUpdateExpFields();
 
     void    SetRestoreActions(sal_uInt16 nSet){nRestoreActions = nSet;}
     sal_uInt16  GetRestoreActions() const{return nRestoreActions;}

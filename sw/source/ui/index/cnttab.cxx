@@ -279,7 +279,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
             if(TOX_AUTHORITIES == eCurrentTOXType.eType)
             {
                 const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                                rSh.GetFldType(RES_AUTHORITY, aEmptyOUStr));
+                                                rSh.GetFieldType(RES_AUTHORITY, aEmptyOUStr));
                 if(pFType)
                 {
                     OUString sBrackets;
@@ -360,7 +360,7 @@ void SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if(nId == m_nColumnId)
     {
-        const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(GetInputSetImpl()->Get(RES_FRM_SIZE));
+        const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(GetInputSetImpl()->Get(RES_FRM_SIZE));
 
         static_cast<SwColumnPage&>(rPage).SetPageWidth(rSize.GetWidth());
     }
@@ -428,7 +428,7 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
         if(TOX_AUTHORITIES == eType.eType)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                            rSh.GetFldType(RES_AUTHORITY, aEmptyOUStr));
+                                            rSh.GetFieldType(RES_AUTHORITY, aEmptyOUStr));
             if(pFType)
             {
                 pDescArr[nIndex]->SetAuthBrackets(OUString(pFType->GetPrefix()) +
@@ -521,14 +521,14 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
 
 bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
 {
-    SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
+    SwTextFormatColl* pColl = rSh.GetParaStyle(rName);
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle())
         return true;
 
     const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
         rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
-        ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())
+        ! rSh.GetTextCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())
         return true;
 
     return false;
@@ -691,12 +691,12 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
     }
     // now the other styles
 
-    const SwTxtFmtColl *pColl   = 0;
-    const sal_uInt16 nSz = rWrtSh.GetTxtFmtCollCount();
+    const SwTextFormatColl *pColl   = 0;
+    const sal_uInt16 nSz = rWrtSh.GetTextFormatCollCount();
 
     for ( sal_uInt16 j = 0;j < nSz; ++j )
     {
-        pColl = &rWrtSh.GetTxtFmtColl(j);
+        pColl = &rWrtSh.GetTextFormatColl(j);
         if(pColl->IsDefault())
             continue;
 
@@ -1274,10 +1274,10 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet* )
     m_pFromFileCB->Check( !sAutoMarkURL.isEmpty() );
 
     m_pCaptionSequenceLB->Clear();
-    const sal_uInt16 nCount = rSh.GetFldTypeCount(RES_SETEXPFLD);
+    const sal_uInt16 nCount = rSh.GetFieldTypeCount(RES_SETEXPFLD);
     for (sal_uInt16 i = 0; i < nCount; i++)
     {
-        SwFieldType *pType = rSh.GetFldType( i, RES_SETEXPFLD );
+        SwFieldType *pType = rSh.GetFieldType( i, RES_SETEXPFLD );
         if( pType->Which() == RES_SETEXPFLD &&
             static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
             m_pCaptionSequenceLB->InsertEntry(pType->GetName());
@@ -2095,7 +2095,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         {
             SwWrtShell& rSh = pTOXDlg->GetWrtShell();
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                    rSh.GetFldType(RES_AUTHORITY, aEmptyOUStr));
+                                    rSh.GetFieldType(RES_AUTHORITY, aEmptyOUStr));
             if(pFType)
             {
                 if(pFType->IsSortByDocument())
@@ -2311,7 +2311,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     {
         if( TOX_CONTENT == m_pCurrentForm->GetTOXType() )
         {
-            sText = SwForm::GetFormEntryTxt();
+            sText = SwForm::GetFormEntryText();
             eTokenType = TOKEN_ENTRY_TEXT;
         }
         else
@@ -2832,7 +2832,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 switch( aToken.eTokenType )
                 {
                 case TOKEN_ENTRY_NO:     sForm = SwForm::GetFormEntryNum(); break;
-                case TOKEN_ENTRY_TEXT:   sForm = SwForm::GetFormEntryTxt(); break;
+                case TOKEN_ENTRY_TEXT:   sForm = SwForm::GetFormEntryText(); break;
                 case TOKEN_ENTRY:        sForm = SwForm::GetFormEntry(); break;
                 case TOKEN_TAB_STOP:     sForm = SwForm::GetFormTab(); break;
                 case TOKEN_PAGE_NUMS:    sForm = SwForm::GetFormPageNums(); break;
@@ -3722,11 +3722,11 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 
     // initialise templates
     SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
-    const sal_uInt16 nSz = rSh.GetTxtFmtCollCount();
+    const sal_uInt16 nSz = rSh.GetTextFormatCollCount();
 
     for( sal_uInt16 i = 0; i < nSz; ++i )
     {
-        const SwTxtFmtColl *pColl = &rSh.GetTxtFmtColl( i );
+        const SwTextFormatColl *pColl = &rSh.GetTextFormatColl( i );
         if( !pColl->IsDefault() )
             m_pParaLayLB->InsertEntry( pColl->GetName() );
     }
@@ -4065,19 +4065,19 @@ bool SwEntryBrowseBox::SaveModified()
 void SwEntryBrowseBox::InitController(
                 ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol)
 {
-    const OUString rTxt = GetCellText( nRow, nCol );
+    const OUString rText = GetCellText( nRow, nCol );
     if(nCol < ITEM_CASE)
     {
         rController = xController;
         ::svt::CellController* pController = xController;
-        static_cast< ::svt::EditCellController*>(pController)->GetEditImplementation()->SetText( rTxt );
+        static_cast< ::svt::EditCellController*>(pController)->GetEditImplementation()->SetText( rText );
     }
     else
     {
         rController = xCheckController;
         ::svt::CellController* pController = xCheckController;
         static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().Check(
-                                                            rTxt == sYes );
+                                                            rText == sYes );
      }
 }
 

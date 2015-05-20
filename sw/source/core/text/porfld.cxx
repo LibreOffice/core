@@ -45,10 +45,10 @@
 
 using namespace ::com::sun::star;
 
-SwLinePortion *SwFldPortion::Compress()
+SwLinePortion *SwFieldPortion::Compress()
 { return (GetLen() || !aExpand.isEmpty() || SwLinePortion::Compress()) ? this : 0; }
 
-SwFldPortion *SwFldPortion::Clone( const OUString &rExpand ) const
+SwFieldPortion *SwFieldPortion::Clone( const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
@@ -56,75 +56,75 @@ SwFldPortion *SwFldPortion::Clone( const OUString &rExpand ) const
         pNewFnt = new SwFont( *pFnt );
     }
     // #i107143#
-    // pass placeholder property to created <SwFldPortion> instance.
-    SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt, bPlaceHolder );
+    // pass placeholder property to created <SwFieldPortion> instance.
+    SwFieldPortion* pClone = new SwFieldPortion( rExpand, pNewFnt, bPlaceHolder );
     pClone->SetNextOffset( nNextOffset );
     pClone->m_bNoLength = this->m_bNoLength;
     return pClone;
 }
 
-void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
+void SwFieldPortion::TakeNextOffset( const SwFieldPortion* pField )
 {
-    OSL_ENSURE( pFld, "TakeNextOffset: Missing Source" );
-    nNextOffset = pFld->GetNextOffset();
+    OSL_ENSURE( pField, "TakeNextOffset: Missing Source" );
+    nNextOffset = pField->GetNextOffset();
     aExpand = aExpand.replaceAt( 0, nNextOffset, "" );
     bFollow = true;
 }
 
-SwFldPortion::SwFldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceHold )
+SwFieldPortion::SwFieldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceHold )
     : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(COMPLETE_STRING), nViewWidth(0)
     , bFollow( false ), bLeft( false), bHide( false)
     , bCenter (false), bHasFollow( false )
     , bAnimated( false), bNoPaint( false)
     , bReplace( false), bPlaceHolder( bPlaceHold )
     , m_bNoLength( false )
-    , m_nAttrFldType(0)
+    , m_nAttrFieldType(0)
 {
     SetWhichPor( POR_FLD );
 }
 
-SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
-    : SwExpandPortion( rFld )
-    , aExpand( rFld.GetExp() )
-    , nNextOffset( rFld.GetNextOffset() )
-    , nNextScriptChg( rFld.GetNextScriptChg() )
-    , nViewWidth( rFld.nViewWidth )
-    , bFollow( rFld.IsFollow() )
-    , bLeft( rFld.IsLeft() )
-    , bHide( rFld.IsHide() )
-    , bCenter( rFld.IsCenter() )
-    , bHasFollow( rFld.HasFollow() )
-    , bAnimated ( rFld.bAnimated )
-    , bNoPaint( rFld.bNoPaint)
-    , bReplace( rFld.bReplace )
-    , bPlaceHolder( rFld.bPlaceHolder )
-    , m_bNoLength( rFld.m_bNoLength )
-    , m_nAttrFldType( rFld.m_nAttrFldType)
+SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
+    : SwExpandPortion( rField )
+    , aExpand( rField.GetExp() )
+    , nNextOffset( rField.GetNextOffset() )
+    , nNextScriptChg( rField.GetNextScriptChg() )
+    , nViewWidth( rField.nViewWidth )
+    , bFollow( rField.IsFollow() )
+    , bLeft( rField.IsLeft() )
+    , bHide( rField.IsHide() )
+    , bCenter( rField.IsCenter() )
+    , bHasFollow( rField.HasFollow() )
+    , bAnimated ( rField.bAnimated )
+    , bNoPaint( rField.bNoPaint)
+    , bReplace( rField.bReplace )
+    , bPlaceHolder( rField.bPlaceHolder )
+    , m_bNoLength( rField.m_bNoLength )
+    , m_nAttrFieldType( rField.m_nAttrFieldType)
 {
-    if ( rFld.HasFont() )
-        pFnt = new SwFont( *rFld.GetFont() );
+    if ( rField.HasFont() )
+        pFnt = new SwFont( *rField.GetFont() );
     else
         pFnt = 0;
 
     SetWhichPor( POR_FLD );
 }
 
-SwFldPortion::~SwFldPortion()
+SwFieldPortion::~SwFieldPortion()
 {
     delete pFnt;
     if( pBlink )
         pBlink->Delete( this );
 }
 
-sal_uInt16 SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwFieldPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
 {
     // even though this is const, nViewWidth should be computed at the very end:
-    SwFldPortion* pThis = const_cast<SwFldPortion*>(this);
+    SwFieldPortion* pThis = const_cast<SwFieldPortion*>(this);
     if( !Width() && rInf.OnWin() && !rInf.GetOpt().IsPagePreview() &&
             !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() )
     {
         if( !nViewWidth )
-            pThis->nViewWidth = rInf.GetTxtSize(OUString(' ')).Width();
+            pThis->nViewWidth = rInf.GetTextSize(OUString(' ')).Width();
     }
     else
         pThis->nViewWidth = 0;
@@ -134,37 +134,37 @@ sal_uInt16 SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 /**
  * Never just use SetLen(0)
  */
-class SwFldSlot
+class SwFieldSlot
 {
     std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
-    const OUString *pOldTxt;
-    OUString aTxt;
+    const OUString *pOldText;
+    OUString aText;
     sal_Int32 nIdx;
     sal_Int32 nLen;
-    SwTxtFormatInfo *pInf;
+    SwTextFormatInfo *pInf;
     bool bOn;
 public:
-    SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor );
-    ~SwFldSlot();
+    SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pPor );
+    ~SwFieldSlot();
 };
 
-SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
-    : pOldTxt(NULL)
+SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pPor )
+    : pOldText(NULL)
     , nIdx(0)
     , nLen(0)
     , pInf(NULL)
 {
-    bOn = pPor->GetExpTxt( *pNew, aTxt );
+    bOn = pPor->GetExpText( *pNew, aText );
 
     // The text will be replaced ...
     if( bOn )
     {
-        pInf = const_cast<SwTxtFormatInfo*>(pNew);
+        pInf = const_cast<SwTextFormatInfo*>(pNew);
         nIdx = pInf->GetIdx();
         nLen = pInf->GetLen();
-        pOldTxt = &(pInf->GetTxt());
+        pOldText = &(pInf->GetText());
         m_pOldCachedVclData = pInf->GetCachedVclData();
-        pInf->SetLen( aTxt.getLength() );
+        pInf->SetLen( aText.getLength() );
         pInf->SetCachedVclData(nullptr);
         if( pPor->IsFollow() )
         {
@@ -173,45 +173,45 @@ SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
         }
         else
         {
-            aTxt = (*pOldTxt).replaceAt(nIdx, 1, aTxt);
+            aText = (*pOldText).replaceAt(nIdx, 1, aText);
         }
-        pInf->SetTxt( aTxt );
+        pInf->SetText( aText );
     }
 }
 
-SwFldSlot::~SwFldSlot()
+SwFieldSlot::~SwFieldSlot()
 {
     if( bOn )
     {
         pInf->SetCachedVclData(m_pOldCachedVclData);
-        pInf->SetTxt( *pOldTxt );
+        pInf->SetText( *pOldText );
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );
         pInf->SetFakeLineStart( false );
     }
 }
 
-void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
+void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
 {
-    OUString aTxt;
-    if( GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty() && g_pBreakIt->GetBreakIter().is() )
+    OUString aText;
+    if( GetExpText( rInf, aText ) && !aText.isEmpty() && g_pBreakIt->GetBreakIter().is() )
     {
         sal_uInt8 nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
-        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
+        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, 0 );
         sal_Int32 nChg = 0;
         if( i18n::ScriptType::WEAK == nScript )
         {
-            nChg = g_pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
-            if (nChg < aTxt.getLength() && nChg >= 0)
-                nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
+            nChg = g_pBreakIt->GetBreakIter()->endOfScript(aText,0,nScript);
+            if (nChg < aText.getLength() && nChg >= 0)
+                nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, nChg );
         }
 
-        // nNextScriptChg will be evaluated during SwFldPortion::Format()
+        // nNextScriptChg will be evaluated during SwFieldPortion::Format()
 
-        if (nChg < aTxt.getLength() && nChg >= 0)
-            nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
+        if (nChg < aText.getLength() && nChg >= 0)
+            nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aText, nChg, nScript );
         else
-            nNextScriptChg = aTxt.getLength();
+            nNextScriptChg = aText.getLength();
 
         sal_uInt8 nTmp;
         switch ( nScript ) {
@@ -224,16 +224,16 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         // #i16354# Change script type for RTL text to CTL.
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
         // #i98418#
-        const sal_uInt8 nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
+        const sal_uInt8 nFieldDir = ( IsNumberPortion() || IsFootnoteNumPortion() ) ?
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
 
-        bool bPerformUBA = UBIDI_LTR != nFldDir || i18n::ScriptType::COMPLEX == nScript;
+        bool bPerformUBA = UBIDI_LTR != nFieldDir || i18n::ScriptType::COMPLEX == nScript;
         if (bPerformUBA)
         {
             UErrorCode nError = U_ZERO_ERROR;
-            UBiDi* pBidi = ubidi_openSized( aTxt.getLength(), 0, &nError );
-            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aTxt.getStr()), aTxt.getLength(), nFldDir, NULL, &nError );
+            UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
+            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nFieldDir, NULL, &nError );
             int32_t nEnd;
             UBiDiLevel nCurrDir;
             ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
@@ -248,7 +248,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 nCurrDir = UBIDI_RTL;
                 for( sal_Int32 nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
                 {
-                    UCharDirection nCharDir = u_charDirection ( aTxt[ nCharIdx ]);
+                    UCharDirection nCharDir = u_charDirection ( aText[ nCharIdx ]);
                     if ( nCharDir == U_LEFT_TO_RIGHT ||
                          nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
                          nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
@@ -274,9 +274,9 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         // keep determined script type for footnote portions as preferred script type.
         // For footnote portions a font can not be created directly - see footnote
         // portion format method.
-        if ( IsFtnPortion() )
+        if ( IsFootnotePortion() )
         {
-            static_cast<SwFtnPortion*>(this)->SetPreferredScriptType( nTmp );
+            static_cast<SwFootnotePortion*>(this)->SetPreferredScriptType( nTmp );
         }
         else if ( nTmp != nActual )
         {
@@ -287,15 +287,15 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
     }
 }
 
-bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
+bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
 {
-    // Scope wegen aDiffTxt::DTOR!
+    // Scope wegen aDiffText::DTOR!
     sal_Int32 nRest;
     bool bFull = false;
     bool bEOL = false;
-    const sal_Int32 nTxtRest = rInf.GetTxt().getLength() - rInf.GetIdx();
+    const sal_Int32 nTextRest = rInf.GetText().getLength() - rInf.GetIdx();
     {
-        SwFldSlot aDiffTxt( &rInf, this );
+        SwFieldSlot aDiffText( &rInf, this );
         SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
         aLayoutModeModifier.SetAuto();
 
@@ -327,7 +327,7 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         const sal_Int32 nFollow = IsFollow() ? 0 : 1;
 
         // As odd is may seem: the query for GetLen() must return false due
-        // to the ExpandPortions _after_ aDiffTxt (see SoftHyphs), caused
+        // to the ExpandPortions _after_ aDiffText (see SoftHyphs), caused
         // by SetFull.
         if( !nFullLen )
         {
@@ -340,16 +340,16 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             sal_Int32 nOldLineStart = rInf.GetLineStart();
             if( IsFollow() )
                 rInf.SetLineStart( 0 );
-            rInf.SetNotEOL( nFullLen == nOldFullLen && nTxtRest > nFollow );
+            rInf.SetNotEOL( nFullLen == nOldFullLen && nTextRest > nFollow );
 
             // the height depending on the fields font is set,
-            // this is required for SwTxtGuess::Guess
-            Height( rInf.GetTxtHeight() + rInf.GetFont()->GetTopBorderSpace() +
+            // this is required for SwTextGuess::Guess
+            Height( rInf.GetTextHeight() + rInf.GetFont()->GetTopBorderSpace() +
                     rInf.GetFont()->GetBottomBorderSpace() );
             // If a kerning portion is inserted after our field portion,
             // the ascent and height must be known
             SetAscent( rInf.GetAscent() + rInf.GetFont()->GetTopBorderSpace() );
-            bFull = SwTxtPortion::Format( rInf );
+            bFull = SwTextPortion::Format( rInf );
             rInf.SetNotEOL( false );
             rInf.SetLineStart( nOldLineStart );
         }
@@ -368,7 +368,7 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             sal_Int32 nNextOfst = aExpand.getLength() - nRest;
 
             if ( IsQuoVadisPortion() )
-                nNextOfst = nNextOfst + static_cast<SwQuoVadisPortion*>(this)->GetContTxt().getLength();
+                nNextOfst = nNextOfst + static_cast<SwQuoVadisPortion*>(this)->GetContText().getLength();
 
             OUString aNew( aExpand.copy( nNextOfst ) );
             aExpand = aExpand.copy( 0, nNextOfst );
@@ -399,13 +399,13 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             // Even if there is no more text left for a follow field,
             // we have to build a follow field portion (without font),
             // otherwise the HookChar mechanism would not work.
-            SwFldPortion *pFld = Clone( aNew );
-            if( !aNew.isEmpty() && !pFld->GetFont() )
+            SwFieldPortion *pField = Clone( aNew );
+            if( !aNew.isEmpty() && !pField->GetFont() )
             {
                 SwFont *pNewFnt = new SwFont( *rInf.GetFont() );
-                pFld->SetFont( pNewFnt );
+                pField->SetFont( pNewFnt );
             }
-            pFld->SetFollow( true );
+            pField->SetFollow( true );
             SetHasFollow( true );
 
             // For a newly created field, nNextOffset contains the Offset
@@ -413,8 +413,8 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             // If a FollowField is created when formatting, this FollowField's
             // Offset is being held in nNextOffset
             nNextOffset = nNextOffset + nNextOfst;
-            pFld->SetNextOffset( nNextOffset );
-            rInf.SetRest( pFld );
+            pField->SetNextOffset( nNextOffset );
+            rInf.SetRest( pField );
         }
     }
 
@@ -423,11 +423,11 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     SwFontSave aSave( rInf, pFnt );
 
-    OSL_ENSURE( GetLen() <= 1, "SwFldPortion::Paint: rest-portion pollution?" );
+    OSL_ENSURE( GetLen() <= 1, "SwFieldPortion::Paint: rest-portion pollution?" );
     if( Width() && ( !bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
     {
         // A very liberal use of the background
@@ -436,18 +436,18 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
-    rTxt = aExpand;
-    if( rTxt.isEmpty() && rInf.OnWin() &&
+    rText = aExpand;
+    if( rText.isEmpty() && rInf.OnWin() &&
         !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() &&
             SwViewOption::IsFieldShadings() &&
             !HasFollow() )
-        rTxt = " ";
+        rText = " ";
     return true;
 }
 
-void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
+void SwFieldPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     sal_Int32 nH = 0;
     sal_Int32 nW = 0;
@@ -459,18 +459,18 @@ void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), aExpand, GetWhichPor(), nH, nW, pFnt );
     if( GetWhichPor() == POR_FLD )
     {
-        rPH.SetAttrFieldType(m_nAttrFldType);
+        rPH.SetAttrFieldType(m_nAttrFieldType);
     }
 }
 
-SwPosSize SwFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
+SwPosSize SwFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     SwFontSave aSave( rInf, pFnt );
-    SwPosSize aSize( SwExpandPortion::GetTxtSize( rInf ) );
+    SwPosSize aSize( SwExpandPortion::GetTextSize( rInf ) );
     return aSize;
 }
 
-SwFldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
+SwFieldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
@@ -478,7 +478,7 @@ SwFldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
     return new SwHiddenPortion( rExpand, pNewFnt );
 }
 
-void SwHiddenPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwHiddenPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
     {
@@ -488,10 +488,10 @@ void SwHiddenPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwHiddenPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
     // Do not query for IsHidden()!
-    return SwFldPortion::GetExpTxt( rInf, rTxt );
+    return SwFieldPortion::GetExpText( rInf, rText );
 }
 
 SwNumberPortion::SwNumberPortion( const OUString &rExpand,
@@ -500,7 +500,7 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   const bool bCntr,
                                   const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
-        : SwFldPortion( rExpand, pFont ),
+        : SwFieldPortion( rExpand, pFont ),
           nFixWidth(0),
           nMinDist( nMinDst ),
           mbLabelAlignmentPosAndSpaceModeActive( bLabelAlignmentPosAndSpaceModeActive )
@@ -516,7 +516,7 @@ sal_Int32 SwNumberPortion::GetCrsrOfst( const sal_uInt16 ) const
     return 0;
 }
 
-SwFldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
+SwFieldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
@@ -532,10 +532,10 @@ SwFldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
  * to cause the line to overflow
  * We need to keep the Fly's evasion tactics in mind
  */
-bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
+bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
 {
     SetHide( false );
-    const bool bFull = SwFldPortion::Format( rInf );
+    const bool bFull = SwFieldPortion::Format( rInf );
     SetLen( 0 );
     // a numbering portion can be contained in a rotated portion!!!
     nFixWidth = rInf.IsMulti() ? Height() : Width();
@@ -549,13 +549,13 @@ bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
 
         if ( !mbLabelAlignmentPosAndSpaceModeActive )
         {
-            if ( !rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
+            if ( !rInf.GetTextFrm()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
                  // #i32902#
-                 !IsFtnNumPortion() )
+                 !IsFootnoteNumPortion() )
             {
                 nDiff = rInf.Left()
-                    + rInf.GetTxtFrm()->GetTxtNode()->
-                    GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst()
+                    + rInf.GetTextFrm()->GetTextNode()->
+                    GetSwAttrSet().GetLRSpace().GetTextFirstLineOfst()
                     - rInf.First()
                     + rInf.ForcedLeftMargin();
             }
@@ -608,7 +608,7 @@ bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
  * the line anymore. In order for the Numbering to follow through,
  * we hide this NumberPortion
  */
-void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
+void SwNumberPortion::FormatEOL( SwTextFormatInfo& )
 {
 
     // This caused trouble with flys anchored as characters.
@@ -623,12 +623,12 @@ void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
  * A hidden NumberPortion is not displayed, unless there are TextPortions in
  * this line or there's just one line at all
  */
-void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
         SwLinePortion *pTmp = GetPortion();
-        while ( pTmp && !pTmp->InTxtGrp() )
+        while ( pTmp && !pTmp->InTextGrp() )
             pTmp = pTmp->GetPortion();
         if ( !pTmp )
             return;
@@ -687,12 +687,12 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             sal_uInt16 nSpaceOffs = nFixWidth;
             pThis->Width( nFixWidth );
 
-            if( ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
-                ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() ) )
+            if( ( IsLeft() && ! rInf.GetTextFrm()->IsRightToLeft() ) ||
+                ( ! IsLeft() && ! IsCenter() && rInf.GetTextFrm()->IsRightToLeft() ) )
                 SwExpandPortion::Paint( rInf );
             else
             {
-                SwTxtPaintInfo aInf( rInf );
+                SwTextPaintInfo aInf( rInf );
                 if( nOffset < nMinDist )
                     nOffset = 0;
                 else
@@ -715,7 +715,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             }
             if( bPaintSpace && nOldWidth > nSpaceOffs )
             {
-                SwTxtPaintInfo aInf( rInf );
+                SwTextPaintInfo aInf( rInf );
                 aInf.X( aInf.X() + nSpaceOffs );
 
                 // #i53199# Adjust position of underline:
@@ -727,7 +727,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
                 pThis->Width( nOldWidth - nSpaceOffs + 12 );
                 {
-                    SwTxtSlot aDiffTxt( &aInf, this, true, false, "  " );
+                    SwTextSlot aDiffText( &aInf, this, true, false, "  " );
                     aInf.DrawText( *this, aInf.GetLen(), true );
                 }
             }
@@ -756,7 +756,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         SwFrm*,
         const OUString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush,
-        const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
+        const SwFormatVertOrient* pGrfOrient, const Size& rGrfSize,
         const bool bLft, const bool bCntr, const sal_uInt16 nMinDst,
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
     SwNumberPortion( rGraphicFollowedBy, NULL, bLft, bCntr, nMinDst,
@@ -813,14 +813,14 @@ void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
     }
 }
 
-bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
+bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
 {
     SetHide( false );
 //    Width( nFixWidth );
     sal_uInt16 nFollowedByWidth( 0 );
     if ( mbLabelAlignmentPosAndSpaceModeActive )
     {
-        SwFldPortion::Format( rInf );
+        SwFieldPortion::Format( rInf );
         nFollowedByWidth = Width();
         SetLen( 0 );
     }
@@ -878,14 +878,14 @@ bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
  * A hidden NumberPortion is not displayed, unless there are TextPortions in
  * this line or there's only one line at all
  */
-void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( DontPaint() )
         return;
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
         SwLinePortion *pTmp = GetPortion();
-        while ( pTmp && !pTmp->InTxtGrp() )
+        while ( pTmp && !pTmp->InTextGrp() )
             pTmp = pTmp->GetPortion();
         if ( !pTmp )
             return;
@@ -895,8 +895,8 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
     const bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
-                              ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
-                              ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() );
+                              ( IsLeft() && ! rInf.GetTextFrm()->IsRightToLeft() ) ||
+                              ( ! IsLeft() && ! IsCenter() && rInf.GetTextFrm()->IsRightToLeft() );
 
     if( nFixWidth < Width() && !bTmpLeft )
     {
@@ -932,8 +932,8 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
         bDraw = !rInf.GetOpt().IsGraphic();
         if( !nId )
         {
-            SetId( sal_IntPtr( rInf.GetTxtFrm() ) );
-            rInf.GetTxtFrm()->SetAnimation();
+            SetId( sal_IntPtr( rInf.GetTextFrm() ) );
+            rInf.GetTextFrm()->SetAnimation();
         }
         if( aTmp.IsOver( rInf.GetPaintRect() ) && !bDraw )
         {
@@ -947,7 +947,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
                 if (pGraph)
                     pGraph->StopAnimation(0,nId);
-                rInf.GetTxtFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
+                rInf.GetTextFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
             }
 
             else if ( pViewShell &&
@@ -978,7 +978,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 
     SwRect aRepaint( rInf.GetPaintRect() );
-    const SwTxtFrm& rFrm = *rInf.GetTxtFrm();
+    const SwTextFrm& rFrm = *rInf.GetTextFrm();
     if( rFrm.IsVertical() )
     {
         rFrm.SwitchHorizontalToVertical( aTmp );
@@ -1034,9 +1034,9 @@ void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
     }
 }
 
-void SwTxtFrm::StopAnimation( OutputDevice* pOut )
+void SwTextFrm::StopAnimation( OutputDevice* pOut )
 {
-    OSL_ENSURE( HasAnimation(), "SwTxtFrm::StopAnimation: Which Animation?" );
+    OSL_ENSURE( HasAnimation(), "SwTextFrm::StopAnimation: Which Animation?" );
     if( HasPara() )
     {
         SwLineLayout *pLine = GetPara();
@@ -1060,8 +1060,8 @@ void SwTxtFrm::StopAnimation( OutputDevice* pOut )
 /**
  * Initializes the script array and clears the width array
  */
-SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
-    : SwFldPortion( rTxt )
+SwCombinedPortion::SwCombinedPortion( const OUString &rText )
+    : SwFieldPortion( rText )
     , nUpPos(0)
     , nLowPos(0)
     , nProportion(55)
@@ -1076,9 +1076,9 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
     if( g_pBreakIt->GetBreakIter().is() )
     {
         sal_uInt8 nScr = SW_SCRIPTS;
-        for( sal_Int32 i = 0; i < rTxt.getLength(); ++i )
+        for( sal_Int32 i = 0; i < rText.getLength(); ++i )
         {
-            switch ( g_pBreakIt->GetBreakIter()->getScriptType( rTxt, i ) ) {
+            switch ( g_pBreakIt->GetBreakIter()->getScriptType( rText, i ) ) {
                 case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
                 case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;
                 case i18n::ScriptType::COMPLEX : nScr = SW_CTL; break;
@@ -1094,9 +1094,9 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
     memset( &aWidth, 0, sizeof(aWidth) );
 }
 
-void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    OSL_ENSURE( GetLen() <= 1, "SwFldPortion::Paint: rest-portion pollution?" );
+    OSL_ENSURE( GetLen() <= 1, "SwFieldPortion::Paint: rest-portion pollution?" );
     if( Width() )
     {
         rInf.DrawBackBrush( *this );
@@ -1139,15 +1139,15 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
                     aTmpFont.SetSize( aTmpSz, nAct );
                 }
             }
-            const_cast<SwTxtPaintInfo&>(rInf).SetPos( aOutPos );
+            const_cast<SwTextPaintInfo&>(rInf).SetPos( aOutPos );
             rInf.DrawText( aExpand, *this, i, 1 );
         }
         // rInf is const, so we have to take back our manipulations
-        const_cast<SwTxtPaintInfo&>(rInf).SetPos( aOldPos );
+        const_cast<SwTextPaintInfo&>(rInf).SetPos( aOldPos );
     }
 }
 
-bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
+bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
 {
     const sal_Int32 nCount = aExpand.getLength();
     if( !nCount )
@@ -1178,7 +1178,7 @@ bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     }
 
     const sal_Int32 nTop = ( nCount + 1 ) / 2; // the first character of the second line
-    SwViewShell *pSh = rInf.GetTxtFrm()->getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = rInf.GetTextFrm()->getRootFrm()->GetCurrShell();
     SwFont aTmpFont( *rInf.GetFont() );
     SwFontSave aFontSave( rInf, &aTmpFont );
     nProportion = 55;
@@ -1217,7 +1217,7 @@ bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
             }
 
             SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), 0, aExpand, i, 1 );
-            Size aSize = aTmpFont._GetTxtSize( aDrawInf );
+            Size aSize = aTmpFont._GetTextSize( aDrawInf );
             const sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
             aPos[ i ] = (sal_uInt16)aSize.Width();
             if( i == nTop ) // enter the second line
@@ -1291,8 +1291,8 @@ bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     const bool bFull = rInf.Width() < rInf.X() + Width();
     if( bFull )
     {
-        if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFldGrp()
-            || !static_cast<SwFldPortion*>(rInf.GetLast())->IsFollow() ) )
+        if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFieldGrp()
+            || !static_cast<SwFieldPortion*>(rInf.GetLast())->IsFollow() ) )
             Width( (sal_uInt16)( rInf.Width() - rInf.X() ) );
         else
         {
@@ -1306,14 +1306,14 @@ bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-sal_uInt16 SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwCombinedPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
 {
     if( !GetLen() ) // for the dummy part at the end of the line, where
         return 0;   // the combined portion doesn't fit.
-    return SwFldPortion::GetViewWidth( rInf );
+    return SwFieldPortion::GetViewWidth( rInf );
 }
 
-SwFldPortion *SwFieldFormDropDownPortion::Clone(const OUString &rExpand) const
+SwFieldPortion *SwFieldFormDropDownPortion::Clone(const OUString &rExpand) const
 {
     return new SwFieldFormDropDownPortion(rExpand);
 }

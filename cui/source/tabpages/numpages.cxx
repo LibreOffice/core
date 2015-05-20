@@ -362,7 +362,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
                     aFmt.SetSuffix( aEmptyStr );
                 else
                     aFmt.SetSuffix(_pSet->sSuffix);
-                aFmt.SetCharFmtName(sNumCharFmtName);
+                aFmt.SetCharFormatName(sNumCharFmtName);
                 // #62069# // #92724#
                 aFmt.SetBulletRelSize(100);
                 pActNum->SetLevel(i, aFmt);
@@ -520,7 +520,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
                 aFmt.SetSuffix( OUString() );
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
-                aFmt.SetCharFmtName(sBulletCharFmtName);
+                aFmt.SetCharFormatName(sBulletCharFormatName);
                 // #62069# // #92724#
                 aFmt.SetBulletRelSize(45);
                 pActNum->SetLevel(i, aFmt);
@@ -548,7 +548,7 @@ void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
     SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,false);
 
     if (pBulletCharFmt)
-        SetCharFmtName( pBulletCharFmt->GetValue());
+        SetCharFormatName( pBulletCharFmt->GetValue());
 
 
 }
@@ -773,14 +773,14 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
                 aFmt.SetBulletChar( !pLevelSettings->sBulletChar.isEmpty()
                                         ? pLevelSettings->sBulletChar[0]
                                         : 0 );
-                aFmt.SetCharFmtName( sBulletCharFmtName );
+                aFmt.SetCharFormatName( sBulletCharFormatName );
                 // #62069# // #92724#
                 aFmt.SetBulletRelSize(45);
             }
             else
             {
                 aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 0));
-                aFmt.SetCharFmtName(sNumCharFmtName);
+                aFmt.SetCharFormatName(sNumCharFmtName);
                 // #62069# // #92724#
                 aFmt.SetBulletRelSize(100);
                 // #i93908#
@@ -808,7 +808,7 @@ void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
 
 
     if (pNumCharFmt &&pBulletCharFmt)
-        SetCharFmtNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
+        SetCharFormatNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
 }
 
 SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
@@ -986,7 +986,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
                 aFmt.SetNumberingType(nSetNumberingType);
                 aFmt.SetPrefix( aEmptyStr );
                 aFmt.SetSuffix( aEmptyStr );
-                aFmt.SetCharFmtName( sNumCharFmtName );
+                aFmt.SetCharFormatName( sNumCharFmtName );
 
                 Graphic aGraphic;
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nIdx, &aGraphic))
@@ -1611,7 +1611,7 @@ void SvxNumOptionsTabPage::InitControls()
             if(SAL_MAX_UINT16 == nLvl)
             {
                 nLvl = i;
-                sFirstCharFmt = aNumFmtArr[i]->GetCharFmtName();
+                sFirstCharFmt = aNumFmtArr[i]->GetCharFormatName();
                 eFirstOrient = aNumFmtArr[i]->GetVertOrient();
                 if(bShowBitmap)
                     aFirstSize = aNumFmtArr[i]->GetGraphicSize();
@@ -1624,7 +1624,7 @@ void SvxNumOptionsTabPage::InitControls()
                 bSamePrefix = aNumFmtArr[i]->GetPrefix() == aNumFmtArr[nLvl]->GetPrefix();
                 bSameSuffix = aNumFmtArr[i]->GetSuffix() == aNumFmtArr[nLvl]->GetSuffix();
                 bAllLevel &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[nLvl]->GetIncludeUpperLevels();
-                bSameCharFmt    &= sFirstCharFmt == aNumFmtArr[i]->GetCharFmtName();
+                bSameCharFmt    &= sFirstCharFmt == aNumFmtArr[i]->GetCharFormatName();
                 bSameVOrient    &= eFirstOrient == aNumFmtArr[i]->GetVertOrient();
                 if(bShowBitmap && bSameSize)
                     bSameSize &= aNumFmtArr[i]->GetGraphicSize() == aFirstSize;
@@ -1933,7 +1933,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
                 // allocation of the drawing pattern is automatic
                 if(bAutomaticCharStyles)
                 {
-                    sSelectStyle = m_sBulletCharFmtName;
+                    sSelectStyle = m_sBulletCharFormatName;
                 }
             }
             else
@@ -2118,7 +2118,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, v
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-                aNumFmt.SetCharFmtName(m_sNumCharFmtName);
+                aNumFmt.SetCharFormatName(m_sNumCharFmtName);
                 aNumFmt.SetGraphic(aGrfName);
 
                 // set size for a later comparison
@@ -2355,11 +2355,11 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             if( 0 == nEntryPos )
-                aNumFmt.SetCharFmtName(aEmptyStr);
+                aNumFmt.SetCharFormatName(aEmptyStr);
             else
             {
                 if(SVX_NUM_BITMAP != (aNumFmt.GetNumberingType()&(~LINK_TOKEN)))
-                    aNumFmt.SetCharFmtName(sEntry);
+                    aNumFmt.SetCharFormatName(sEntry);
             }
             pActNum->SetLevel(i, aNumFmt);
         }

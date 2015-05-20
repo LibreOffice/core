@@ -156,9 +156,9 @@ bool SwAccessibleChild::IsBoundAsChar() const
     }
     else if ( mpDrawObj )
     {
-        const SwFrmFmt* mpFrmFmt = ::FindFrmFmt( mpDrawObj );
-        bRet = mpFrmFmt
-               && (FLY_AS_CHAR == mpFrmFmt->GetAnchor().GetAnchorId());
+        const SwFrameFormat* mpFrameFormat = ::FindFrameFormat( mpDrawObj );
+        bRet = mpFrameFormat
+               && (FLY_AS_CHAR == mpFrameFormat->GetAnchor().GetAnchorId());
     }
     else if ( mpWindow )
     {
@@ -351,9 +351,9 @@ const SwFrm* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
         OSL_ENSURE( pContact, "sdr contact is missing" );
         if( pContact )
         {
-            const SwFrmFmt *pFrmFmt = pContact->GetFmt();
-            OSL_ENSURE( pFrmFmt, "frame format is missing" );
-            if( pFrmFmt && FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
+            const SwFrameFormat *pFrameFormat = pContact->GetFormat();
+            OSL_ENSURE( pFrameFormat, "frame format is missing" );
+            if( pFrameFormat && FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId() )
             {
                 // For FLY_AS_CHAR the parent is the anchor
                 pParent = pContact->GetAnchorFrm();

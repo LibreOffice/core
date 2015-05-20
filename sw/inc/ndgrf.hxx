@@ -27,13 +27,13 @@
 #include <boost/weak_ptr.hpp>
 class SwAsyncRetrieveInputStreamThreadConsumer;
 
-class SwGrfFmtColl;
+class SwGrfFormatColl;
 class SwDoc;
 class GraphicAttr;
 class SotStorage;
 
 // SwGrfNode
-class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
+class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
 {
     friend class SwNodes;
 
@@ -57,16 +57,16 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     SwGrfNode( const SwNodeIndex& rWhere,
                const OUString& rGrfName, const OUString& rFltName,
                const Graphic* pGraphic,
-               SwGrfFmtColl* pGrfColl,
+               SwGrfFormatColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
     ///< Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
                const OUString& rGrfName, const OUString& rFltName,
-               SwGrfFmtColl* pGrfColl,
+               SwGrfFormatColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
     SwGrfNode( const SwNodeIndex& rWhere,
                const GraphicObject& rGrfObj,
-               SwGrfFmtColl* pGrfColl,
+               SwGrfFormatColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
@@ -125,7 +125,7 @@ public:
     const Graphic&          GetGrf(bool bWait = false) const;
     const GraphicObject&    GetGrfObj(bool bWait = false) const;
     const GraphicObject* GetReplacementGrfObj() const;
-    virtual SwCntntNode *SplitCntntNode( const SwPosition & ) SAL_OVERRIDE;
+    virtual SwContentNode *SplitContentNode( const SwPosition & ) SAL_OVERRIDE;
 
     /// isolated only way to set GraphicObject to allow more actions when doing so
     void SetGraphic(const Graphic& rGraphic, const OUString& rLink);
@@ -157,7 +157,7 @@ public:
     void SetScaleImageMap( bool b )      { bScaleImageMap = b; }
 
     /// in ndcopy.cxx
-    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const SAL_OVERRIDE;
+    virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const SAL_OVERRIDE;
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
@@ -206,7 +206,7 @@ public:
     bool IsAsyncRetrieveInputStreamPossible() const;
 };
 
-// Inline methods from Node.hxx - it is only now that we know TxtNode!!
+// Inline methods from Node.hxx - it is only now that we know TextNode!!
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {
      return ND_GRFNODE == nNodeType ? static_cast<SwGrfNode*>(this) : 0;

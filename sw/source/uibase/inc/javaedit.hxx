@@ -25,7 +25,7 @@
 #include <vcl/button.hxx>
 
 class SwWrtShell;
-class SwFldMgr;
+class SwFieldMgr;
 class SwScriptField;
 
 namespace sfx2 { class FileDialogHelper; }
@@ -50,8 +50,8 @@ private:
     bool                bNew;
     bool                bIsUrl;
 
-    SwScriptField*          pFld;
-    SwFldMgr*               pMgr;
+    SwScriptField*          pField;
+    SwFieldMgr*               pMgr;
     SwWrtShell*             pSh;
     sfx2::FileDialogHelper* pFileDlg;
     VclPtr<vcl::Window>     pOldDefDlgParent;
@@ -66,7 +66,7 @@ private:
     virtual void    Apply() SAL_OVERRIDE;
 
     void            CheckTravel();
-    void            SetFld();
+    void            SetField();
 
 public:
     SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh);

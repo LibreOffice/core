@@ -40,12 +40,12 @@ class SwAttrHandler
 {
 private:
 
-    /// Container for SwTxtAttr Objects
+    /// Container for SwTextAttr Objects
     class SwAttrStack
     {
     private:
-        SwTxtAttr* pInitialArray[ INITIAL_NUM_ATTR ];
-        SwTxtAttr** pArray;
+        SwTextAttr* pInitialArray[ INITIAL_NUM_ATTR ];
+        SwTextAttr** pArray;
         sal_uInt16 nCount; // number of elements on stack
         sal_uInt16 nSize;  // number of positions in Array
 
@@ -59,23 +59,23 @@ private:
         inline void Reset() { nCount = 0; };
 
         // insert on top
-        inline void Push( const SwTxtAttr& rAttr ) { Insert( rAttr, nCount ); };
+        inline void Push( const SwTextAttr& rAttr ) { Insert( rAttr, nCount ); };
         // insert at specified position, take care for not inserting behind
         // the value returned by Count()
-        void Insert( const SwTxtAttr& rAttr, const sal_uInt16 nPos );
+        void Insert( const SwTextAttr& rAttr, const sal_uInt16 nPos );
 
         // remove specified attribute
-        void Remove( const SwTxtAttr& rAttr );
+        void Remove( const SwTextAttr& rAttr );
 
         // get attribute from top if exists, otherwise 0
-        const SwTxtAttr* Top() const;
+        const SwTextAttr* Top() const;
 
         // number of elements on stack
         inline sal_uInt16 Count() const { return nCount; };
 
         // returns position of rAttr on Stack if found, otherwise USHRT_MAX
         // can be used for Remove of an attribute
-        sal_uInt16 Pos( const SwTxtAttr& rAttr ) const;
+        sal_uInt16 Pos( const SwTextAttr& rAttr ) const;
     };
 
     SwAttrStack aAttrStack[ NUM_ATTRIBUTE_STACKS ]; // stack collection
@@ -95,7 +95,7 @@ private:
     // push attribute to specified stack, returns true, if attribute has
     // been pushed on top of stack (important for stacks containing different
     // attributes with different priority and redlining)
-    bool Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem );
+    bool Push( const SwTextAttr& rAttr, const SfxPoolItem& rItem );
 
     // apply top attribute on stack to font
     void ActivateTop( SwFont& rFnt, sal_uInt16 nStackPos );
@@ -118,11 +118,11 @@ public:
     void Reset( );
 
     // insert specified attribute and change font
-    void PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt );
+    void PushAndChg( const SwTextAttr& rAttr, SwFont& rFnt );
 
     // remove specified attribute and reset font
-    void PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt );
-    void Pop( const SwTxtAttr& rAttr );
+    void PopAndChg( const SwTextAttr& rAttr, SwFont& rFnt );
+    void Pop( const SwTextAttr& rAttr );
 
     // apply script dependent attributes
     // void ChangeScript( SwFont& rFnt, const sal_uInt8 nScr );

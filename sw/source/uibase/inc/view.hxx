@@ -39,10 +39,10 @@
 
 class Button;
 class ImageButton;
-class SwTxtFmtColl;
+class SwTextFormatColl;
 class SwPageDesc;
-class SwFrmFmt;
-class SwCharFmt;
+class SwFrameFormat;
+class SwCharFormat;
 class SwNumRule;
 class SwGlossaryHdl;
 class SwDrawBase;
@@ -71,7 +71,7 @@ class SvGlobalName;
 class SvtAccessibilityOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
-class SwTxtNode; // #i23726#
+class SwTextNode; // #i23726#
 class SwFormatClipboard;
 struct SwConversionArgs;
 class Graphic;
@@ -122,10 +122,10 @@ struct SwApplyTemplate
 {
     union
     {
-        SwTxtFmtColl* pTxtColl;
+        SwTextFormatColl* pTextColl;
         SwPageDesc*   pPageDesc;
-        SwFrmFmt*     pFrmFmt;
-        SwCharFmt*    pCharFmt;
+        SwFrameFormat*     pFrameFormat;
+        SwCharFormat*    pCharFormat;
         SwNumRule*    pNumRule;
     } aColl;
 
@@ -140,7 +140,7 @@ struct SwApplyTemplate
         m_pFormatClipboard(0),
         bUndo(false)
     {
-        aColl.pTxtColl = 0;
+        aColl.pTextColl = 0;
     }
 };
 
@@ -182,7 +182,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     OUString            m_sOldSectionName;
 
     Point               m_aTabColFromDocPos;  // moving table colmns out of the document
-    SwTxtNode           * m_pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
+    SwTextNode           * m_pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
 
     Size                m_aDocSz;         // current document size
     Rectangle           m_aVisArea;       // visible region
@@ -214,7 +214,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwGlossaryHdl       *m_pGlosHdl;          // handle text block
     SwDrawBase          *m_pDrawActual;
 
-    const SwFrmFmt      *m_pLastTableFormat;
+    const SwFrameFormat      *m_pLastTableFormat;
 
     SwFormatClipboard   *m_pFormatClipboard; //holds data for format paintbrush
 
@@ -328,7 +328,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = 0 );
 
     SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
-    SAL_DLLPRIVATE bool          CheckSpecialCntnt();
+    SAL_DLLPRIVATE bool          CheckSpecialContent();
     SAL_DLLPRIVATE void          SpellKontext(bool bOn = true)
                                  { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
 
@@ -377,8 +377,8 @@ protected:
 
     void            SetImageButtonColor(Color& rColor);
 
-    const SwFrmFmt* GetLastTblFrmFmt() const {return m_pLastTableFormat;}
-    void            SetLastTblFrmFmt(const SwFrmFmt* pSet) {m_pLastTableFormat = pSet;}
+    const SwFrameFormat* GetLastTableFrameFormat() const {return m_pLastTableFormat;}
+    void            SetLastTableFrameFormat(const SwFrameFormat* pSet) {m_pLastTableFormat = pSet;}
 
     // form letter execution
     void    GenerateFormLetter(bool bUseCurrentDocument);
@@ -454,7 +454,7 @@ public:
     bool            ExecSmartTagPopup( const Point& rPt );
 
     DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
-    bool            ExecDrwTxtSpellPopup(const Point& rPt);
+    bool            ExecDrwTextSpellPopup(const Point& rPt);
 
     void            SetTabColFromDocPos( const Point &rPt ) { m_aTabColFromDocPos = rPt; }
     void            SetTabColFromDoc( bool b ) { m_bTabColFromDoc = b; }
@@ -463,7 +463,7 @@ public:
     bool            IsTabRowFromDoc() const    { return m_bTabRowFromDoc; }
 
     // -> #i23726#
-    void            SetNumRuleNodeFromDoc( SwTxtNode * pNumRuleNode )
+    void            SetNumRuleNodeFromDoc( SwTextNode * pNumRuleNode )
                     { m_pNumRuleNodeFromDoc = pNumRuleNode; }
     void            SetNumIndentFromDoc(bool b) { m_bNumIndentFromDoc = b; }
     bool            IsNumIndentFromDoc() const { return NULL != m_pNumRuleNodeFromDoc; }

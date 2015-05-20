@@ -25,7 +25,7 @@
 class SwDoc;
 
 SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
-                                sal_uInt16& rSubType, sal_uLong &rFmt,
+                                sal_uInt16& rSubType, sal_uLong &rFormat,
                                 sal_uInt16 nVersion );
 
 #endif

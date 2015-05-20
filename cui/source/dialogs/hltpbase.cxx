@@ -313,7 +313,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
     if ( pHyperlinkItem->GetMacroEvents() )
     {
         // get macros from itemset
-        const SvxMacroTableDtor* pMacroTbl = pHyperlinkItem->GetMacroTbl();
+        const SvxMacroTableDtor* pMacroTbl = pHyperlinkItem->GetMacroTable();
         SvxMacroItem aItem ( GetWhich(SID_ATTR_MACROITEM) );
         if( pMacroTbl )
             aItem.SetMacroTable( *pMacroTbl );
@@ -381,7 +381,7 @@ SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
     const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK));
 
-    return const_cast<SvxMacroTableDtor*>(pHyperlinkItem->GetMacroTbl());
+    return const_cast<SvxMacroTableDtor*>(pHyperlinkItem->GetMacroTable());
 }
 
 // try to detect the current protocol that is used in rStrURL

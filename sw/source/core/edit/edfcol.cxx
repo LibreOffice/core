@@ -32,26 +32,26 @@
 #include <swundo.hxx>
 #include <docary.hxx>
 
-SwTxtFmtColl& SwEditShell::GetDfltTxtFmtColl() const
+SwTextFormatColl& SwEditShell::GetDfltTextFormatColl() const
 {
-    return *static_cast<SwTxtFmtColl*>( (GetDoc()->GetDfltTxtFmtColl()));
+    return *static_cast<SwTextFormatColl*>( (GetDoc()->GetDfltTextFormatColl()));
 }
 
-sal_uInt16 SwEditShell::GetTxtFmtCollCount() const
+sal_uInt16 SwEditShell::GetTextFormatCollCount() const
 {
-    return GetDoc()->GetTxtFmtColls()->size();
+    return GetDoc()->GetTextFormatColls()->size();
 }
 
-SwTxtFmtColl& SwEditShell::GetTxtFmtColl( sal_uInt16 nFmtColl) const
+SwTextFormatColl& SwEditShell::GetTextFormatColl( sal_uInt16 nFormatColl) const
 {
-    return *((*(GetDoc()->GetTxtFmtColls()))[nFmtColl]);
+    return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
 // #i62675#
-void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt,
+void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                                 const bool bResetListAttrs)
 {
-    SwTxtFmtColl *pLocal = pFmt? pFmt: (*GetDoc()->GetTxtFmtColls())[0];
+    SwTextFormatColl *pLocal = pFormat? pFormat: (*GetDoc()->GetTextFormatColls())[0];
     StartAllAction();
 
     SwRewriter aRewriter;
@@ -64,16 +64,16 @@ void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt,
         if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
         {
             // Change the paragraph style to pLocal and remove all direct paragraph formatting.
-            GetDoc()->SetTxtFmtColl( rPaM, pLocal, true, bResetListAttrs );
+            GetDoc()->SetTextFormatColl( rPaM, pLocal, true, bResetListAttrs );
 
             // If there are hints on the nodes which cover the whole node, then remove those, too.
             SwPaM aPaM(*rPaM.Start(), *rPaM.End());
-            if (SwTxtNode* pEndTxtNode = aPaM.End()->nNode.GetNode().GetTxtNode())
+            if (SwTextNode* pEndTextNode = aPaM.End()->nNode.GetNode().GetTextNode())
             {
                 aPaM.Start()->nContent = 0;
-                aPaM.End()->nContent = pEndTxtNode->GetTxt().getLength();
+                aPaM.End()->nContent = pEndTextNode->GetText().getLength();
             }
-            GetDoc()->RstTxtAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true);
+            GetDoc()->RstTextAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true);
         }
 
     }
@@ -81,29 +81,29 @@ void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt,
     EndAllAction();
 }
 
-SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const OUString& rFmtCollName,
-        SwTxtFmtColl* pParent)
+SwTextFormatColl* SwEditShell::MakeTextFormatColl(const OUString& rFormatCollName,
+        SwTextFormatColl* pParent)
 {
-    SwTxtFmtColl *pColl;
+    SwTextFormatColl *pColl;
     if ( pParent == 0 )
-        pParent = &GetTxtFmtColl(0);
-    if (  (pColl=GetDoc()->MakeTxtFmtColl(rFmtCollName, pParent)) == 0 )
+        pParent = &GetTextFormatColl(0);
+    if (  (pColl=GetDoc()->MakeTextFormatColl(rFormatCollName, pParent)) == 0 )
     {
-        OSL_FAIL( "MakeTxtFmtColl failed" );
+        OSL_FAIL( "MakeTextFormatColl failed" );
     }
     return pColl;
 
 }
 
-void SwEditShell::FillByEx(SwTxtFmtColl* pColl, bool bReset)
+void SwEditShell::FillByEx(SwTextFormatColl* pColl, bool bReset)
 {
     if( bReset )
     {
-        pColl->ResetAllFmtAttr();
+        pColl->ResetAllFormatAttr();
     }
 
     SwPaM * pCrsr = GetCrsr();
-    SwCntntNode * pCnt = pCrsr->GetCntntNode();
+    SwContentNode * pCnt = pCrsr->GetContentNode();
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
     if( pSet )
     {
@@ -133,10 +133,10 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, bool bReset)
                 aSet.ClearItem( RES_PARATR_NUMRULE );
 
             if( aSet.Count() )
-                GetDoc()->ChgFmt(*pColl, aSet );
+                GetDoc()->ChgFormat(*pColl, aSet );
         }
         else
-            GetDoc()->ChgFmt(*pColl, *pSet );
+            GetDoc()->ChgFormat(*pColl, *pSet );
     }
 }
 

@@ -101,10 +101,10 @@ bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
 
-TblChgMode GetTblChgDefaultMode()
+TableChgMode GetTableChgDefaultMode()
 {
     SwModuleOptions* pOpt = SW_MOD()->GetModuleConfig();
-    return pOpt ? pOpt->GetTblMode() : TBLVAR_CHGABS;
+    return pOpt ? pOpt->GetTableMode() : TBLVAR_CHGABS;
 }
 
 void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect )

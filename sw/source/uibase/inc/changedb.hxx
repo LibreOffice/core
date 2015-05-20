@@ -27,7 +27,7 @@
 #include <svx/stddlg.hxx>
 #include "dbtree.hxx"
 
-class SwFldMgr;
+class SwFieldMgr;
 class SwView;
 class SwWrtShell;
 struct SwDBData;
@@ -44,14 +44,14 @@ class SwChangeDBDlg: public SvxStandardDialog
     ImageList       aImageList;
 
     SwWrtShell      *pSh;
-    SwFldMgr        *pMgr;
+    SwFieldMgr        *pMgr;
 
     DECL_LINK(TreeSelectHdl, void * = 0);
     DECL_LINK(ButtonHdl, void *);
     DECL_LINK(AddDBHdl, void *);
 
     virtual void    Apply() SAL_OVERRIDE;
-    void            UpdateFlds();
+    void            UpdateFields();
     void            FillDBPopup();
     SvTreeListEntry*    Insert(const OUString& rDBName);
     void            ShowDBName(const SwDBData& rDBData);

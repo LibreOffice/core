@@ -107,7 +107,7 @@ void  SwDocStatPage::Reset(const SfxItemSet *)
 void SwDocStatPage::SetData(const SwDocStat &rStat)
 {
     const LocaleDataWrapper& rLocaleData = GetSettings().GetUILocaleDataWrapper();
-    m_pTableNo->SetText(rLocaleData.getNum(rStat.nTbl, 0));
+    m_pTableNo->SetText(rLocaleData.getNum(rStat.nTable, 0));
     m_pGrfNo->SetText(rLocaleData.getNum(rStat.nGrf, 0));
     m_pOLENo->SetText(rLocaleData.getNum(rStat.nOLE, 0));
     m_pPageNo->SetText(rLocaleData.getNum(rStat.nPage, 0));

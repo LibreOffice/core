@@ -146,11 +146,11 @@ public:
     }
 };
 
-class CompareFrmFmtText : public CompareData
+class CompareFrameFormatText : public CompareData
 {
     const SwNodeIndex &m_rIndex;
 public:
-    CompareFrmFmtText(SwDoc &rD, const SwNodeIndex &rIndex, bool bRecordDiff=true)
+    CompareFrameFormatText(SwDoc &rD, const SwNodeIndex &rIndex, bool bRecordDiff=true)
         : CompareData(rD, bRecordDiff)
         , m_rIndex(rIndex)
     {
@@ -261,14 +261,14 @@ public:
 class WordArrayComparator : public ArrayComparator
 {
 private:
-    const SwTxtNode *pTxtNd1, *pTxtNd2;
+    const SwTextNode *pTextNd1, *pTextNd2;
     int *pPos1, *pPos2;
     int nCnt1, nCnt2;		// number of words
 
-    static void CalcPositions( int *pPos, const SwTxtNode *pTxtNd, int &nCnt );
+    static void CalcPositions( int *pPos, const SwTextNode *pTextNd, int &nCnt );
 
 public:
-    WordArrayComparator( const SwTxtNode *pNode1, const SwTxtNode *pNode2 );
+    WordArrayComparator( const SwTextNode *pNode1, const SwTextNode *pNode2 );
     virtual ~WordArrayComparator();
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
@@ -281,17 +281,17 @@ public:
 class CharArrayComparator : public ArrayComparator
 {
 private:
-    const SwTxtNode *pTxtNd1, *pTxtNd2;
+    const SwTextNode *pTextNd1, *pTextNd2;
 
 public:
-    CharArrayComparator( const SwTxtNode *pNode1, const SwTxtNode *pNode2 )
-        : pTxtNd1( pNode1 ), pTxtNd2( pNode2 )
+    CharArrayComparator( const SwTextNode *pNode1, const SwTextNode *pNode2 )
+        : pTextNd1( pNode1 ), pTextNd2( pNode2 )
     {
     }
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
-    virtual int GetLen1() const SAL_OVERRIDE { return pTxtNd1->GetTxt().getLength(); }
-    virtual int GetLen2() const SAL_OVERRIDE { return pTxtNd2->GetTxt().getLength(); }
+    virtual int GetLen1() const SAL_OVERRIDE { return pTextNd1->GetText().getLength(); }
+    virtual int GetLen2() const SAL_OVERRIDE { return pTextNd2->GetText().getLength(); }
 };
 
 /// Options set in Tools->Options->Writer->Comparison
@@ -999,10 +999,10 @@ public:
     virtual sal_uLong GetHashValue() const SAL_OVERRIDE;
     virtual bool Compare( const CompareLine& rLine ) const SAL_OVERRIDE;
 
-    static sal_uLong GetTxtNodeHashValue( const SwTxtNode& rNd, sal_uLong nVal );
+    static sal_uLong GetTextNodeHashValue( const SwTextNode& rNd, sal_uLong nVal );
     static bool CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd );
-    static bool CompareTxtNd( const SwTxtNode& rDstNd,
-                              const SwTxtNode& rSrcNd );
+    static bool CompareTextNd( const SwTextNode& rDstNd,
+                              const SwTextNode& rSrcNd );
 
     bool ChangesInLine( const SwCompareLine& rLine,
                             SwPaM *& rpInsRing, SwPaM*& rpDelRing ) const;
@@ -1030,7 +1030,7 @@ sal_uLong SwCompareLine::GetHashValue() const
     switch( rNode.GetNodeType() )
     {
     case ND_TEXTNODE:
-        nRet = GetTxtNodeHashValue( *rNode.GetTxtNode(), nRet );
+        nRet = GetTextNodeHashValue( *rNode.GetTextNode(), nRet );
         break;
 
     case ND_TABLENODE:
@@ -1039,8 +1039,8 @@ sal_uLong SwCompareLine::GetHashValue() const
             SwNodeIndex aIdx( rNode );
             while( &aIdx.GetNode() != pEndNd )
             {
-                if( aIdx.GetNode().IsTxtNode() )
-                    nRet = GetTxtNodeHashValue( *aIdx.GetNode().GetTxtNode(), nRet );
+                if( aIdx.GetNode().IsTextNode() )
+                    nRet = GetTextNodeHashValue( *aIdx.GetNode().GetTextNode(), nRet );
                 ++aIdx;
             }
         }
@@ -1097,13 +1097,13 @@ namespace
         SwNodeIndex aIdx( rNode );
         while (&aIdx.GetNode() != pEndNd)
         {
-            if (aIdx.GetNode().IsTxtNode())
+            if (aIdx.GetNode().IsTextNode())
             {
                 if (sRet.getLength())
                 {
                     sRet.append( '\n' );
                 }
-                sRet.append( aIdx.GetNode().GetTxtNode()->GetExpandTxt() );
+                sRet.append( aIdx.GetNode().GetTextNode()->GetExpandText() );
             }
             ++aIdx;
         }
@@ -1121,8 +1121,8 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
     switch( rDstNd.GetNodeType() )
     {
     case ND_TEXTNODE:
-        bRet = CompareTxtNd( *rDstNd.GetTxtNode(), *rSrcNd.GetTxtNode() )
-            && ( !CmpOptions.bUseRsid || rDstNd.GetTxtNode()->CompareParRsid( *rSrcNd.GetTxtNode() ) );
+        bRet = CompareTextNd( *rDstNd.GetTextNode(), *rSrcNd.GetTextNode() )
+            && ( !CmpOptions.bUseRsid || rDstNd.GetTextNode()->CompareParRsid( *rSrcNd.GetTextNode() ) );
         break;
 
     case ND_TABLENODE:
@@ -1210,7 +1210,7 @@ OUString SwCompareLine::GetText() const
     switch( rNode.GetNodeType() )
     {
     case ND_TEXTNODE:
-        sRet = rNode.GetTxtNode()->GetExpandTxt();
+        sRet = rNode.GetTextNode()->GetExpandText();
         break;
 
     case ND_TABLENODE:
@@ -1261,20 +1261,20 @@ OUString SwCompareLine::GetText() const
     return sRet;
 }
 
-sal_uLong SwCompareLine::GetTxtNodeHashValue( const SwTxtNode& rNd, sal_uLong nVal )
+sal_uLong SwCompareLine::GetTextNodeHashValue( const SwTextNode& rNd, sal_uLong nVal )
 {
-    OUString sStr( rNd.GetExpandTxt() );
+    OUString sStr( rNd.GetExpandText() );
     for( sal_Int32 n = 0; n < sStr.getLength(); ++n )
         ( nVal <<= 1 ) += sStr[ n ];
     return nVal;
 }
 
-bool SwCompareLine::CompareTxtNd( const SwTxtNode& rDstNd,
-                                  const SwTxtNode& rSrcNd )
+bool SwCompareLine::CompareTextNd( const SwTextNode& rDstNd,
+                                  const SwTextNode& rSrcNd )
 {
     bool bRet = false;
     // Very simple at first
-    if( rDstNd.GetTxt() == rSrcNd.GetTxt() )
+    if( rDstNd.GetText() == rSrcNd.GetText() )
     {
         // The text is the same, but are the "special attributes" (0xFF) also the same?
         bRet = true;
@@ -1291,14 +1291,14 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     if( ND_TEXTNODE == rNode.GetNodeType() &&
         ND_TEXTNODE == rLine.GetNode().GetNodeType() )
     {
-        SwTxtNode& rDstNd = *const_cast<SwTxtNode*>(rNode.GetTxtNode());
-        const SwTxtNode& rSrcNd = *rLine.GetNode().GetTxtNode();
+        SwTextNode& rDstNd = *const_cast<SwTextNode*>(rNode.GetTextNode());
+        const SwTextNode& rSrcNd = *rLine.GetNode().GetTextNode();
         SwDoc* pDstDoc = rDstNd.GetDoc();
 
         int nLcsLen = 0;
 
-        int nDstLen = rDstNd.GetTxt().getLength();
-        int nSrcLen = rSrcNd.GetTxt().getLength();
+        int nDstLen = rDstNd.GetText().getLength();
+        int nSrcLen = rSrcNd.GetText().getLength();
 
         int nMinLen = std::min( nDstLen , nSrcLen );
         int nAvgLen = ( nDstLen + nSrcLen )/2;
@@ -1669,7 +1669,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             if( pTmp->GetPoint()->nContent == 0 )
             {
                 ++pTmp->GetPoint()->nNode;
-                pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
+                pTmp->GetPoint()->nContent.Assign( pTmp->GetContentNode(), 0 );
             }
             // #i101009#
             // prevent redlines that end on structural end node
@@ -1677,7 +1677,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 & pTmp->GetPoint()->nNode.GetNode())
             {
                 --pTmp->GetPoint()->nNode;
-                SwCntntNode *const pContentNode( pTmp->GetCntntNode() );
+                SwContentNode *const pContentNode( pTmp->GetContentNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );
             }
@@ -1701,7 +1701,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             if( pTmp->GetPoint()->nContent == 0 )
             {
                 ++pTmp->GetPoint()->nNode;
-                pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
+                pTmp->GetPoint()->nContent.Assign( pTmp->GetContentNode(), 0 );
             }
             // #i101009#
             // prevent redlines that end on structural end node
@@ -1709,7 +1709,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 & pTmp->GetPoint()->nNode.GetNode())
             {
                 --pTmp->GetPoint()->nNode;
-                SwCntntNode *const pContentNode( pTmp->GetCntntNode() );
+                SwContentNode *const pContentNode( pTmp->GetContentNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );
             }
@@ -1720,14 +1720,14 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         // combine consecutive
         if( pTmp->GetNext() != pInsRing )
         {
-            const SwCntntNode* pCNd;
+            const SwContentNode* pCNd;
             do {
                 SwPosition& rSttEnd = *pTmp->End(),
                           & rEndStt = *(pTmp->GetNext())->Start();
                 if( rSttEnd == rEndStt ||
                     (!rEndStt.nContent.GetIndex() &&
                     rEndStt.nNode.GetIndex() - 1 == rSttEnd.nNode.GetIndex() &&
-                    0 != ( pCNd = rSttEnd.nNode.GetNode().GetCntntNode() ) &&
+                    0 != ( pCNd = rSttEnd.nNode.GetNode().GetContentNode() ) &&
                     rSttEnd.nContent.GetIndex() == pCNd->Len()))
                 {
                     if( pTmp->GetNext() == pInsRing )
@@ -1774,16 +1774,16 @@ namespace
                                                   CompareDataPtr(new CompareMainText(rDestDoc))));
 
         //if we have the same number of frames then try to compare within them
-        const SwFrmFmts *pSrcFrmFmts = rSrcDoc.GetSpzFrmFmts();
-        const SwFrmFmts *pDestFrmFmts = rDestDoc.GetSpzFrmFmts();
-        if (pSrcFrmFmts->size() == pDestFrmFmts->size())
+        const SwFrameFormats *pSrcFrameFormats = rSrcDoc.GetSpzFrameFormats();
+        const SwFrameFormats *pDestFrameFormats = rDestDoc.GetSpzFrameFormats();
+        if (pSrcFrameFormats->size() == pDestFrameFormats->size())
         {
-            for (size_t i = 0; i < pSrcFrmFmts->size(); ++i)
+            for (size_t i = 0; i < pSrcFrameFormats->size(); ++i)
             {
-                const SwFrmFmt& rSrcFmt = *(*pSrcFrmFmts)[i];
-                const SwFrmFmt& rDestFmt = *(*pDestFrmFmts)[i];
-                const SwNodeIndex* pSrcIdx = rSrcFmt.GetCntnt().GetCntntIdx();
-                const SwNodeIndex* pDestIdx = rDestFmt.GetCntnt().GetCntntIdx();
+                const SwFrameFormat& rSrcFormat = *(*pSrcFrameFormats)[i];
+                const SwFrameFormat& rDestFormat = *(*pDestFrameFormats)[i];
+                const SwNodeIndex* pSrcIdx = rSrcFormat.GetContent().GetContentIdx();
+                const SwNodeIndex* pDestIdx = rDestFormat.GetContent().GetContentIdx();
                 if (!pSrcIdx && !pDestIdx)
                     continue;
                 if (!pSrcIdx || !pDestIdx)
@@ -1794,8 +1794,8 @@ namespace
                     continue;
                 if (!pSrcNode || !pDestNode)
                     break;
-                aComparisons.push_back(CompareDataPtrPair(CompareDataPtr(new CompareFrmFmtText(rSrcDoc, *pSrcIdx)),
-                                                          CompareDataPtr(new CompareFrmFmtText(rDestDoc, *pDestIdx))));
+                aComparisons.push_back(CompareDataPtrPair(CompareDataPtr(new CompareFrameFormatText(rSrcDoc, *pSrcIdx)),
+                                                          CompareDataPtr(new CompareFrameFormatText(rDestDoc, *pDestIdx))));
             }
         }
         return aComparisons;
@@ -1894,8 +1894,8 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
     SwPosition aPos( rDstNd );
 
     const SwPosition* pStt = rSrcRedl.Start();
-    if( rDstNd.IsCntntNode() )
-        aPos.nContent.Assign( const_cast<SwCntntNode*>(static_cast<const SwCntntNode*>(&rDstNd)), pStt->nContent.GetIndex() );
+    if( rDstNd.IsContentNode() )
+        aPos.nContent.Assign( const_cast<SwContentNode*>(static_cast<const SwContentNode*>(&rDstNd)), pStt->nContent.GetIndex() );
     pDestRedl = new SwRangeRedline( rSrcRedl.GetRedlineData(), aPos );
 
     if( nsRedlineType_t::REDLINE_DELETE == pDestRedl->GetType() )
@@ -1908,7 +1908,7 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
         pDestRedl->SetMark();
         pDestRedl->GetPoint()->nNode += pEnd->nNode.GetIndex() -
                                         pStt->nNode.GetIndex();
-        pDestRedl->GetPoint()->nContent.Assign( pDestRedl->GetCntntNode(),
+        pDestRedl->GetPoint()->nContent.Assign( pDestRedl->GetContentNode(),
                                                 pEnd->nContent.GetIndex() );
     }
 }
@@ -1938,7 +1938,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         pDestRedl->SetMark();
         ++aSaveNd;
         pDestRedl->GetMark()->nNode = aSaveNd;
-        pDestRedl->GetMark()->nContent.Assign( aSaveNd.GetNode().GetCntntNode(),
+        pDestRedl->GetMark()->nContent.Assign( aSaveNd.GetNode().GetContentNode(),
                                                 nSaveCnt );
 
         if( pLastDestRedline && *pLastDestRedline->GetPoint() == *pDestRedl->GetPoint() )
@@ -1956,10 +1956,10 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         if( !pDoc->getIDocumentRedlineAccess().GetRedline( *pDStt, &n ) && n )
             --n;
 
-        const SwRedlineTbl& rRedlineTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-        for( ; n < rRedlineTbl.size(); ++n )
+        const SwRedlineTable& rRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+        for( ; n < rRedlineTable.size(); ++n )
         {
-            SwRangeRedline* pRedl = rRedlineTbl[ n ];
+            SwRangeRedline* pRedl = rRedlineTable[ n ];
             SwPosition* pRStt = pRedl->Start(),
                       * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
                                                            : pRedl->GetPoint();
@@ -1980,7 +1980,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 
                 case POS_COLLIDE_END:
                 case POS_BEFORE:
-                    n = rRedlineTbl.size();
+                    n = rRedlineTable.size();
                     break;
 
                 case POS_OUTSIDE:
@@ -2073,12 +2073,12 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
         // look for all insert redlines from the SourceDoc and determine their position in the DestDoc
         std::list<SaveMergeRedline> vRedlines;
-        const SwRedlineTbl& rSrcRedlTbl = rSrcDoc.getIDocumentRedlineAccess().GetRedlineTbl();
+        const SwRedlineTable& rSrcRedlTable = rSrcDoc.getIDocumentRedlineAccess().GetRedlineTable();
         sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
         sal_uLong nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
-        for( SwRedlineTbl::size_type n = 0; n < rSrcRedlTbl.size(); ++n )
+        for( SwRedlineTable::size_type n = 0; n < rSrcRedlTable.size(); ++n )
         {
-            const SwRangeRedline* pRedl = rSrcRedlTbl[ n ];
+            const SwRangeRedline* pRedl = rSrcRedlTable[ n ];
             sal_uLong nNd = pRedl->GetPoint()->nNode.GetIndex();
             RedlineType_t eType = pRedl->GetType();
             if( nEndOfExtra < nNd &&
@@ -2140,17 +2140,17 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
         return false;
     }
 
-    const SwTxtNode *pTxtNd1 = static_cast<const SwCompareLine*>( rData1.GetLine( nFirst1 + nIdx1 ) )->GetNode().GetTxtNode();
-    const SwTxtNode *pTxtNd2 = static_cast<const SwCompareLine*>( rData2.GetLine( nFirst2 + nIdx2 ) )->GetNode().GetTxtNode();
+    const SwTextNode *pTextNd1 = static_cast<const SwCompareLine*>( rData1.GetLine( nFirst1 + nIdx1 ) )->GetNode().GetTextNode();
+    const SwTextNode *pTextNd2 = static_cast<const SwCompareLine*>( rData2.GetLine( nFirst2 + nIdx2 ) )->GetNode().GetTextNode();
 
-    if( !pTxtNd1 || !pTxtNd2
-        || ( CmpOptions.bUseRsid && !pTxtNd1->CompareParRsid( *pTxtNd2 ) ) )
+    if( !pTextNd1 || !pTextNd2
+        || ( CmpOptions.bUseRsid && !pTextNd1->CompareParRsid( *pTextNd2 ) ) )
     {
         return false;
     }
 
-    const sal_Int32 nPar1Len = pTxtNd1->Len();
-    const sal_Int32 nPar2Len = pTxtNd2->Len();
+    const sal_Int32 nPar1Len = pTextNd1->Len();
+    const sal_Int32 nPar2Len = pTextNd2->Len();
 
     if( std::min( nPar1Len, nPar2Len ) * 3 < std::max( nPar1Len, nPar2Len ) )
     {
@@ -2176,13 +2176,13 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     }
     for( i = 0; i < nBorderLen; i++ )
     {
-        nHash = nHash*nMul + pTxtNd1->GetTxt()[i];
+        nHash = nHash*nMul + pTextNd1->GetText()[i];
     }
     aHashes.insert( nHash );
     for( ; i < nPar1Len; i++ )
     {
-        nHash = nHash - nPow*pTxtNd1->GetTxt()[ i - nBorderLen ];
-        nHash = nHash*nMul + pTxtNd1->GetTxt()[ i ];
+        nHash = nHash - nPow*pTextNd1->GetText()[ i - nBorderLen ];
+        nHash = nHash*nMul + pTextNd1->GetText()[ i ];
 
         aHashes.insert( nHash );
     }
@@ -2190,7 +2190,7 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     nHash = 0;
     for( i = 0; i < nBorderLen; i++ )
     {
-        nHash = nHash*nMul + pTxtNd2->GetTxt()[ i ];
+        nHash = nHash*nMul + pTextNd2->GetText()[ i ];
     }
 
     if( aHashes.find( nHash ) != aHashes.end() )
@@ -2200,8 +2200,8 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 
     for( ; i < nPar2Len; i++ )
     {
-        nHash = nHash - nPow*pTxtNd2->GetTxt()[ i - nBorderLen ];
-        nHash = nHash*nMul + pTxtNd2->GetTxt()[ i ];
+        nHash = nHash - nPow*pTextNd2->GetText()[ i - nBorderLen ];
+        nHash = nHash*nMul + pTextNd2->GetText()[ i ];
         if( aHashes.find( nHash ) != aHashes.end() )
         {
             return true;
@@ -2219,19 +2219,19 @@ bool CharArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     }
 
     return ( !CmpOptions.bUseRsid
-            || pTxtNd1->CompareRsid(  *pTxtNd2, nIdx1 + 1, nIdx2 + 1 ) )
-            && pTxtNd1->GetTxt()[ nIdx1 ] == pTxtNd2->GetTxt()[ nIdx2 ];
+            || pTextNd1->CompareRsid(  *pTextNd2, nIdx1 + 1, nIdx2 + 1 ) )
+            && pTextNd1->GetText()[ nIdx1 ] == pTextNd2->GetText()[ nIdx2 ];
 }
 
-WordArrayComparator::WordArrayComparator( const SwTxtNode *pNode1,
-                                            const SwTxtNode *pNode2 )
-    : pTxtNd1( pNode1 ), pTxtNd2( pNode2 )
+WordArrayComparator::WordArrayComparator( const SwTextNode *pNode1,
+                                            const SwTextNode *pNode2 )
+    : pTextNd1( pNode1 ), pTextNd2( pNode2 )
 {
-    pPos1 = new int[ pTxtNd1->GetTxt().getLength() + 1 ];
-    pPos2 = new int[ pTxtNd2->GetTxt().getLength() + 1 ];
+    pPos1 = new int[ pTextNd1->GetText().getLength() + 1 ];
+    pPos2 = new int[ pTextNd2->GetText().getLength() + 1 ];
 
-    CalcPositions( pPos1, pTxtNd1, nCnt1 );
-    CalcPositions( pPos2, pTxtNd2, nCnt2 );
+    CalcPositions( pPos1, pTextNd1, nCnt1 );
+    CalcPositions( pPos2, pTextNd2, nCnt2 );
 }
 
 WordArrayComparator::~WordArrayComparator()
@@ -2249,9 +2249,9 @@ bool WordArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     }
     for( int i = 0; i < nLen; i++)
     {
-        if( pTxtNd1->GetTxt()[ pPos1[ nIdx1 ] + i ]
-            != pTxtNd2->GetTxt()[ pPos2[ nIdx2 ] + i ]
-            || ( CmpOptions.bUseRsid && !pTxtNd1->CompareRsid( *pTxtNd2,
+        if( pTextNd1->GetText()[ pPos1[ nIdx1 ] + i ]
+            != pTextNd2->GetText()[ pPos2[ nIdx2 ] + i ]
+            || ( CmpOptions.bUseRsid && !pTextNd1->CompareRsid( *pTextNd2,
                                 pPos1[ nIdx1 ] + i, pPos2[ nIdx2 ] + i ) ) )
         {
             return false;
@@ -2277,8 +2277,8 @@ int WordArrayComparator::GetCharSequence( const int *pWordLcs1,
             pSubseq1[ nLen ] = pPos1[ pWordLcs1[i] ] + j;
             pSubseq2[ nLen ] = pPos2[ pWordLcs2[i] ] + j;
 
-            if( pTxtNd1->GetTxt()[ pPos1[ pWordLcs1[i] ] + j ]
-             != pTxtNd2->GetTxt()[ pPos2[ pWordLcs2[i] ] + j ] )
+            if( pTextNd1->GetText()[ pPos1[ pWordLcs1[i] ] + j ]
+             != pTextNd2->GetText()[ pPos2[ pWordLcs2[i] ] + j ] )
             {
                 nLen -= j;
                 break;
@@ -2290,15 +2290,15 @@ int WordArrayComparator::GetCharSequence( const int *pWordLcs1,
     return nLen;
 }
 
-void WordArrayComparator::CalcPositions( int *pPos, const SwTxtNode *pTxtNd,
+void WordArrayComparator::CalcPositions( int *pPos, const SwTextNode *pTextNd,
                                          int &nCnt )
 {
     nCnt = -1;
-    for (int i = 0; i <= pTxtNd->GetTxt().getLength(); ++i)
+    for (int i = 0; i <= pTextNd->GetText().getLength(); ++i)
     {
-        if (i == 0 || i == pTxtNd->GetTxt().getLength()
-                    || !isalnum( pTxtNd->GetTxt()[ i - 1 ])
-                    || !isalnum( pTxtNd->GetTxt()[ i ]))
+        if (i == 0 || i == pTextNd->GetText().getLength()
+                    || !isalnum( pTextNd->GetText()[ i - 1 ])
+                    || !isalnum( pTextNd->GetText()[ i ]))
         { // Begin new word
             nCnt++;
             pPos[ nCnt ] = i;

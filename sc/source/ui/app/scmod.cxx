@@ -2172,7 +2172,7 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
 
             svtools::ColorConfigEntry eEntry =
                 INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
-            pInfo->SetTxtColor( GetColorConfig().GetColorValue(eEntry).nColor );
+            pInfo->SetTextColor( GetColorConfig().GetColorValue(eEntry).nColor );
         }
         else
         {

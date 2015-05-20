@@ -182,20 +182,20 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 
                 if( pTmp ) // any content
                 {
-                    if( pTmp->IsTxtFrm() )
+                    if( pTmp->IsTextFrm() )
                     {
-                        sal_uLong nNdIdx = static_cast<SwTxtFrm*>(pTmp)->GetNode()->GetIndex();
+                        sal_uLong nNdIdx = static_cast<SwTextFrm*>(pTmp)->GetNode()->GetIndex();
                         if( nNdIdx > nStartOfContent )
                         {
                             /*  Open Paragraph Record */
                             aIo.OpenRec( SW_LAYCACHE_IO_REC_PARA );
-                            bool bFollow = static_cast<SwTxtFrm*>(pTmp)->IsFollow();
+                            bool bFollow = static_cast<SwTextFrm*>(pTmp)->IsFollow();
                             aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
                                             bFollow ? 8 : 4 );
                             nNdIdx -= nStartOfContent;
                             aIo.GetStream().WriteUInt32( nNdIdx );
                             if( bFollow )
-                                aIo.GetStream().WriteUInt32( static_cast<SwTxtFrm*>(pTmp)->GetOfst() );
+                                aIo.GetStream().WriteUInt32( static_cast<SwTextFrm*>(pTmp)->GetOfst() );
                             aIo.CloseFlagRec();
                             /*  Close Paragraph Record */
                             aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
@@ -340,17 +340,17 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                 pTmp = static_cast<const SwSectionFrm*>(pTmp)->ContainsAny();
             if( pTmp )
             {
-                if( pTmp->IsTxtFrm() )
+                if( pTmp->IsTextFrm() )
                 {
-                    sal_uLong nNdIdx = static_cast<const SwTxtFrm*>(pTmp)->GetNode()->GetIndex();
+                    sal_uLong nNdIdx = static_cast<const SwTextFrm*>(pTmp)->GetNode()->GetIndex();
                     if( nNdIdx > nStartOfContent )
                     {
-                        bool bFollow = static_cast<const SwTxtFrm*>(pTmp)->IsFollow();
+                        bool bFollow = static_cast<const SwTextFrm*>(pTmp)->IsFollow();
                         nNdIdx -= nStartOfContent;
                         if( pImpl->GetBreakIndex( nIndex ) != nNdIdx ||
                             SW_LAYCACHE_IO_REC_PARA !=
                             pImpl->GetBreakType( nIndex ) ||
-                            ( bFollow ? static_cast<const SwTxtFrm*>(pTmp)->GetOfst()
+                            ( bFollow ? static_cast<const SwTextFrm*>(pTmp)->GetOfst()
                               : COMPLETE_STRING ) != pImpl->GetBreakOfst( nIndex ) )
                         {
                             return false;
@@ -452,7 +452,7 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
 {
     if ( !pSectNode )
     {
-        const SwNodeIndex *pIndex = pSect->GetFmt()->GetCntnt().GetCntntIdx();
+        const SwNodeIndex *pIndex = pSect->GetFormat()->GetContent().GetContentIdx();
         pSectNode = pIndex->GetNode().FindSectionNode();
     }
 }
@@ -538,7 +538,7 @@ sal_uLong SwLayHelper::CalcPageCount()
             sal_uLong nTmp = pDoc->GetNodes().GetEndOfContent().GetIndex() -
                         pDoc->GetNodes().GetEndOfExtras().GetIndex();
             //Tables have a little overhead..
-            nTmp -= pDoc->GetTblFrmFmts()->size() * 25;
+            nTmp -= pDoc->GetTableFrameFormats()->size() * 25;
             //Fly frames, too ..
             nTmp -= (pDoc->GetNodes().GetEndOfAutotext().GetIndex() -
                        pDoc->GetNodes().GetEndOfInserts().GetIndex()) / 3 * 5;
@@ -582,8 +582,8 @@ bool SwLayHelper::CheckInsertPage()
 {
     bool bEnd = 0 == rpPage->GetNext();
     const SwAttrSet* pAttr = rpFrm->GetAttrSet();
-    const SvxFmtBreakItem& rBrk = pAttr->GetBreak();
-    const SwFmtPageDesc& rDesc = pAttr->GetPageDesc();
+    const SvxFormatBreakItem& rBrk = pAttr->GetBreak();
+    const SwFormatPageDesc& rDesc = pAttr->GetPageDesc();
     // #118195# Do not evaluate page description if frame
     // is a follow frame!
     const SwPageDesc* pDesc = rpFrm->IsFlowFrm() &&
@@ -605,7 +605,7 @@ bool SwLayHelper::CheckInsertPage()
         {
             pDesc = rpPage->GetPageDesc()->GetFollow();
 
-            SwFmtPageDesc aFollowDesc( pDesc );
+            SwFormatPageDesc aFollowDesc( pDesc );
             oPgNum = aFollowDesc.GetNumOffset();
             if ( oPgNum )
                 static_cast<SwRootFrm*>(rpPage->GetUpper())->SetVirtPageNum(true);
@@ -758,9 +758,9 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 {
                     bool bSplit = false;
                     sal_uInt16 nRepeat( 0 );
-                    if( !bLongTab && rpFrm->IsTxtFrm() &&
+                    if( !bLongTab && rpFrm->IsTextFrm() &&
                         SW_LAYCACHE_IO_REC_PARA == nType &&
-                        nOfst < static_cast<SwTxtFrm*>(rpFrm)->GetTxtNode()->GetTxt().getLength())
+                        nOfst < static_cast<SwTextFrm*>(rpFrm)->GetTextNode()->GetText().getLength())
                         bSplit = true;
                     else if( rpFrm->IsTabFrm() && nRowCount < nOfst &&
                              ( bLongTab || SW_LAYCACHE_IO_REC_TABLE == nType ) )
@@ -827,12 +827,12 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         }
                         else
                         {
-                            SwTxtFrm *const pNew = static_cast<SwTxtFrm*>(
-                                static_cast<SwTxtFrm*>(rpFrm)
-                                    ->GetTxtNode()->MakeFrm(rpFrm));
+                            SwTextFrm *const pNew = static_cast<SwTextFrm*>(
+                                static_cast<SwTextFrm*>(rpFrm)
+                                    ->GetTextNode()->MakeFrm(rpFrm));
                             pNew->ManipOfst( nOfst );
-                            pNew->SetFollow( static_cast<SwTxtFrm*>(rpFrm)->GetFollow() );
-                            static_cast<SwTxtFrm*>(rpFrm)->SetFollow( pNew );
+                            pNew->SetFollow( static_cast<SwTextFrm*>(rpFrm)->GetFollow() );
+                            static_cast<SwTextFrm*>(rpFrm)->SetFollow( pNew );
                             rpFrm = pNew;
                         }
                     }
@@ -843,7 +843,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
             if( CheckInsertPage() )
             {
                 _CheckFlyCache( pLastPage );
-                if( rpPrv && rpPrv->IsTxtFrm() && !rpPrv->GetValidSizeFlag() )
+                if( rpPrv && rpPrv->IsTextFrm() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
 
                 bRet = true;
@@ -856,7 +856,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     //directly put it somewhere else
                     SwSectionFrm *pSct;
                     bool bInit = false;
-                    if ( !rpActualSection->GetSectionFrm()->ContainsCntnt())
+                    if ( !rpActualSection->GetSectionFrm()->ContainsContent())
                     {
                         pSct = rpActualSection->GetSectionFrm();
                         pSct->RemoveFromLayout();

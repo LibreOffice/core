@@ -60,7 +60,7 @@ const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     return OUString();
 }
 
-const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFmtNm,
+const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFormatNm,
     const SfxFilterContainer* pCnt)
 {
     SfxFilterContainer aCntSw( OUString(sSWRITER) );
@@ -75,7 +75,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFmtNm,
             const SfxFilter* pFilter = aIter.First();
             while ( pFilter )
             {
-                if( pFilter->GetUserData().equals(rFmtNm) )
+                if( pFilter->GetUserData().equals(rFormatNm) )
                     return pFilter;
                 pFilter = aIter.Next();
             }
@@ -92,10 +92,10 @@ bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
     bool bRet = false;
     try
     {
-        SotClipboardFormatId nStgFmtId = SotStorage::GetFormatID( rStg );
+        SotClipboardFormatId nStgFormatId = SotStorage::GetFormatID( rStg );
         bRet = rStg->isStreamElement( OUString("content.xml") );
         if ( bRet )
-            bRet = ( nStgFmtId != SotClipboardFormatId::NONE && ( rFilter.GetFormat() == nStgFmtId ) );
+            bRet = ( nStgFormatId != SotClipboardFormatId::NONE && ( rFilter.GetFormat() == nStgFormatId ) );
     }
     catch (const com::sun::star::uno::Exception& )
     {
@@ -106,13 +106,13 @@ bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
 
 bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 {
-    SotClipboardFormatId nStgFmtId = rStg.GetFormat();
+    SotClipboardFormatId nStgFormatId = rStg.GetFormat();
     /*#i8409# We cannot trust the clipboard id anymore :-(*/
     if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
-        nStgFmtId = SotClipboardFormatId::NONE;
+        nStgFormatId = SotClipboardFormatId::NONE;
 
     bool bRet = SVSTREAM_OK == rStg.GetError() &&
-        ( nStgFmtId == SotClipboardFormatId::NONE || rFilter.GetFormat() == nStgFmtId ) &&
+        ( nStgFormatId == SotClipboardFormatId::NONE || rFilter.GetFormat() == nStgFormatId ) &&
         ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
     if( bRet )
     {

@@ -341,7 +341,7 @@ SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 sal_uInt32 SwFrm::mnLastFrmId=0;
 
 TYPEINIT1(SwFrm,SwClient);      //rtti for SwFrm
-TYPEINIT1(SwCntntFrm,SwFrm);    //rtti for SwCntntFrm
+TYPEINIT1(SwContentFrm,SwFrm);    //rtti for SwContentFrm
 
 void _FrmInit()
 {
@@ -446,13 +446,13 @@ void InitCurrShells( SwRootFrm *pRoot )
 }
 
 /*
-|*      The RootFrm requests an own FrmFmt from the document, which it is
-|*      going to delete again in the dtor. The own FrmFmt is derived from
-|*      the passed FrmFmt.
+|*      The RootFrm requests an own FrameFormat from the document, which it is
+|*      going to delete again in the dtor. The own FrameFormat is derived from
+|*      the passed FrameFormat.
 |*/
-SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, SwViewShell * pSh ) :
-    SwLayoutFrm( pFmt->GetDoc()->MakeFrmFmt(
-        OUString("Root"), pFmt ), 0 ),
+SwRootFrm::SwRootFrm( SwFrameFormat *pFormat, SwViewShell * pSh ) :
+    SwLayoutFrm( pFormat->GetDoc()->MakeFrameFormat(
+        OUString("Root"), pFormat ), 0 ),
     maPagesArea(),
     mnViewWidth( -1 ),
     mnColumns( 0 ),
@@ -483,20 +483,20 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, SwViewShell * pSh ) :
     setRootFrm( this );
 }
 
-void SwRootFrm::Init( SwFrmFmt* pFmt )
+void SwRootFrm::Init( SwFrameFormat* pFormat )
 {
     InitCurrShells( this );
 
-    IDocumentTimerAccess *pTimerAccess = pFmt->getIDocumentTimerAccess();
-    IDocumentLayoutAccess *pLayoutAccess = pFmt->getIDocumentLayoutAccess();
-    IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
-    const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
+    IDocumentTimerAccess *pTimerAccess = pFormat->getIDocumentTimerAccess();
+    IDocumentLayoutAccess *pLayoutAccess = pFormat->getIDocumentLayoutAccess();
+    IDocumentFieldsAccess *pFieldsAccess = pFormat->getIDocumentFieldsAccess();
+    const IDocumentSettingAccess *pSettingAccess = pFormat->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
     // For creating the Flys by MakeFrms()
     pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );
     mbCallbackActionEnabled = false; // needs to be set to true before leaving!
 
-    SwDrawModel* pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMd = pFormat->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )
     {
         // Disable "multiple layout"
@@ -505,23 +505,23 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         mpDrawPage->SetSize( Frm().SSize() );
     }
 
-    // Initialize the layout: create pages, link content with Cntnt etc.
+    // Initialize the layout: create pages, link content with Content etc.
     // First, initialize some stuff, then get hold of the first
     // node (which will be needed for the PageDesc).
 
-    SwDoc* pDoc = pFmt->GetDoc();
+    SwDoc* pDoc = pFormat->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-    SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, true, false );
+    SwContentNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, true, false );
     // #123067# pNode = 0 can really happen
-    SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
+    SwTableNode *pTableNd= pNode ? pNode->FindTableNode() : 0;
 
-    // Get hold of PageDesc (either via FrmFmt of the first node or the initial one).
+    // Get hold of PageDesc (either via FrameFormat of the first node or the initial one).
     SwPageDesc *pDesc = 0;
     ::boost::optional<sal_uInt16> oPgNum;
 
-    if ( pTblNd )
+    if ( pTableNd )
     {
-        const SwFmtPageDesc &rDesc = pTblNd->GetTable().GetFrmFmt()->GetPageDesc();
+        const SwFormatPageDesc &rDesc = pTableNd->GetTable().GetFrameFormat()->GetPageDesc();
         pDesc = const_cast<SwPageDesc*>(rDesc.GetPageDesc());
         //#19104# respect the page number offset!!
         oPgNum = rDesc.GetNumOffset();
@@ -530,7 +530,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     }
     else if ( pNode )
     {
-        const SwFmtPageDesc &rDesc = pNode->GetSwAttrSet().GetPageDesc();
+        const SwFormatPageDesc &rDesc = pNode->GetSwAttrSet().GetPageDesc();
         pDesc = const_cast<SwPageDesc*>(rDesc.GetPageDesc());
         //#19104# respect the page number offset!!
         oPgNum = rDesc.GetNumOffset();
@@ -557,12 +557,12 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     //Remove masters that haven't been replaced yet from the list.
     RemoveMasterObjs( mpDrawPage );
     if( pSettingAccess->get(DocumentSettingId::GLOBAL_DOCUMENT) )
-        pFieldsAccess->UpdateRefFlds( NULL );
+        pFieldsAccess->UpdateRefFields( NULL );
     //b6433357: Update page fields after loading
-    if ( !mpCurrShell || !mpCurrShell->Imp()->IsUpdateExpFlds() )
+    if ( !mpCurrShell || !mpCurrShell->Imp()->IsUpdateExpFields() )
     {
-        SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
-        pFieldsAccess->UpdatePageFlds( &aMsgHnt );
+        SwDocPosUpdate aMsgHint( pPage->Frm().Top() );
+        pFieldsAccess->UpdatePageFields( &aMsgHint );
     }
 
     pTimerAccess->StartIdling();
@@ -582,19 +582,19 @@ void SwRootFrm::DestroyImpl()
     // document/layout split SwDoc and SwRootFrm were essentially one object
     // and magically/uncleanly worked around their common destruction by call
     // to SwDoc::IsInDtor() -- even from the layout. As of now destuction of
-    // the layout proceeds forward through the frames. Since SwTxtFtn::DelFrms
+    // the layout proceeds forward through the frames. Since SwTextFootnote::DelFrms
     // also searches backwards to find the master of footnotes, they must be
     // considered to be owned by the SwRootFrm and also be destroyed here,
     // before tearing down the (now footnote free) rest of the layout.
-    RemoveFtns(0, false, true);
+    RemoveFootnotes(0, false, true);
 
     if(pBlink)
         pBlink->FrmDelete( this );
-    SwFrmFmt *pRegisteredInNonConst = static_cast<SwFrmFmt*>(GetRegisteredInNonConst());
+    SwFrameFormat *pRegisteredInNonConst = static_cast<SwFrameFormat*>(GetRegisteredInNonConst());
     if ( pRegisteredInNonConst )
     {
         SwDoc *pDoc = pRegisteredInNonConst->GetDoc();
-        pDoc->DelFrmFmt( pRegisteredInNonConst );
+        pDoc->DelFrameFormat( pRegisteredInNonConst );
         pDoc->GetDocumentLayoutManager().ClearSwLayouterEntries();
     }
     delete mpDestroy;
@@ -649,9 +649,9 @@ void SwRootFrm::AllAddPaintRect() const
     GetCurrShell()->AddPaintRect( this->Frm() );
 }
 
-void SwRootFrm::AllRemoveFtns()
+void SwRootFrm::AllRemoveFootnotes()
 {
-    RemoveFtns();
+    RemoveFootnotes();
 }
 
 void SwRootFrm::AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const

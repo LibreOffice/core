@@ -80,9 +80,9 @@ struct containsPos
     }
 };
 
-ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, ExpandMode eMode)
+ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
 {
-    const OUString& rNodeText = rNode.GetTxt();
+    const OUString& rNodeText = rNode.GetText();
     m_aRetText = rNodeText;
 
     if (eMode == ExpandMode::PassThrough)
@@ -130,7 +130,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, ExpandMode eMode)
         const SwpHints* pSwpHints2 = rNode.GetpSwpHints();
         for ( size_t i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
         {
-            const SwTxtAttr* pAttr = (*pSwpHints2)[i];
+            const SwTextAttr* pAttr = (*pSwpHints2)[i];
             if (pAttr->HasDummyChar())
             {
                 const sal_Int32 nDummyCharPos = pAttr->GetStart();
@@ -149,19 +149,19 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, ExpandMode eMode)
                             {
                                 aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP)
-                                    : static_txtattr_cast<SwTxtFld const*>(pAttr)->
-                                      GetFmtFld().GetField()->ExpandField(true);
+                                    : static_txtattr_cast<SwTextField const*>(pAttr)->
+                                      GetFormatField().GetField()->ExpandField(true);
                                 aFieldResult.m_eType = FieldResult::FIELD;
                             }
                             break;
                         case RES_TXTATR_FTN:
                             if (eMode & ExpandMode::ExpandFootnote)
                             {
-                                const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
+                                const SwFormatFootnote& rFootnote = static_cast<SwTextFootnote const*>(pAttr)->GetFootnote();
                                 const SwDoc *pDoc = rNode.GetDoc();
                                 aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP)
-                                    : rFtn.GetViewNumStr(*pDoc);
+                                    : rFootnote.GetViewNumStr(*pDoc);
                                 aFieldResult.m_eType = FieldResult::FOOTNOTE;
                             }
                             break;

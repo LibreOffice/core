@@ -220,13 +220,13 @@ void SwNumPositionTabPage::InitControls()
     bool bSameAlignAt = bLabelAlignmentPosAndSpaceModeActive;
     bool bSameIndentAt = bLabelAlignmentPosAndSpaceModeActive;
 
-    const SwNumFmt* aNumFmtArr[MAXLEVEL];
+    const SwNumFormat* aNumFormatArr[MAXLEVEL];
     sal_uInt16 nMask = 1;
     sal_uInt16 nLvl = USHRT_MAX;
     long nFirstBorderTextRelative = -1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
-        aNumFmtArr[i] = &pActNum->Get(i);
+        aNumFormatArr[i] = &pActNum->Get(i);
         if(nActNumLvl & nMask)
         {
             if(USHRT_MAX == nLvl)
@@ -236,14 +236,14 @@ void SwNumPositionTabPage::InitControls()
 
             if( i > nLvl)
             {
-                bSameAdjust &= aNumFmtArr[i]->GetNumAdjust() == aNumFmtArr[nLvl]->GetNumAdjust();
+                bSameAdjust &= aNumFormatArr[i]->GetNumAdjust() == aNumFormatArr[nLvl]->GetNumAdjust();
                 if ( !bLabelAlignmentPosAndSpaceModeActive )
                 {
                     if(bRelative)
                     {
                         const long nBorderTextRelative =
-                            aNumFmtArr[i]->GetAbsLSpace() + aNumFmtArr[i]->GetFirstLineOffset() -
-                            aNumFmtArr[i - 1]->GetAbsLSpace() + aNumFmtArr[i - 1]->GetFirstLineOffset();
+                            aNumFormatArr[i]->GetAbsLSpace() + aNumFormatArr[i]->GetFirstLineOffset() -
+                            aNumFormatArr[i - 1]->GetAbsLSpace() + aNumFormatArr[i - 1]->GetFirstLineOffset();
                         if (nFirstBorderTextRelative == -1)
                             nFirstBorderTextRelative = nBorderTextRelative;
                         else
@@ -252,24 +252,24 @@ void SwNumPositionTabPage::InitControls()
                     else
                     {
                         bSameDistBorderNum &=
-                        aNumFmtArr[i]->GetAbsLSpace() - aNumFmtArr[i]->GetFirstLineOffset() ==
-                        aNumFmtArr[i - 1]->GetAbsLSpace() - aNumFmtArr[i - 1]->GetFirstLineOffset();
+                        aNumFormatArr[i]->GetAbsLSpace() - aNumFormatArr[i]->GetFirstLineOffset() ==
+                        aNumFormatArr[i - 1]->GetAbsLSpace() - aNumFormatArr[i - 1]->GetFirstLineOffset();
                     }
 
-                    bSameDist       &= aNumFmtArr[i]->GetCharTextDistance() == aNumFmtArr[nLvl]->GetCharTextDistance();
-                    bSameIndent     &= aNumFmtArr[i]->GetFirstLineOffset() == aNumFmtArr[nLvl]->GetFirstLineOffset();
+                    bSameDist       &= aNumFormatArr[i]->GetCharTextDistance() == aNumFormatArr[nLvl]->GetCharTextDistance();
+                    bSameIndent     &= aNumFormatArr[i]->GetFirstLineOffset() == aNumFormatArr[nLvl]->GetFirstLineOffset();
                 }
                 else
                 {
                     bSameLabelFollowedBy &=
-                        aNumFmtArr[i]->GetLabelFollowedBy() == aNumFmtArr[nLvl]->GetLabelFollowedBy();
+                        aNumFormatArr[i]->GetLabelFollowedBy() == aNumFormatArr[nLvl]->GetLabelFollowedBy();
                     bSameListtab &=
-                        aNumFmtArr[i]->GetListtabPos() == aNumFmtArr[nLvl]->GetListtabPos();
+                        aNumFormatArr[i]->GetListtabPos() == aNumFormatArr[nLvl]->GetListtabPos();
                     bSameAlignAt &=
-                        ( ( aNumFmtArr[i]->GetIndentAt() + aNumFmtArr[i]->GetFirstLineIndent() )
-                            == ( aNumFmtArr[nLvl]->GetIndentAt() + aNumFmtArr[nLvl]->GetFirstLineIndent() ) );
+                        ( ( aNumFormatArr[i]->GetIndentAt() + aNumFormatArr[i]->GetFirstLineIndent() )
+                            == ( aNumFormatArr[nLvl]->GetIndentAt() + aNumFormatArr[nLvl]->GetFirstLineIndent() ) );
                     bSameIndentAt &=
-                        aNumFmtArr[i]->GetIndentAt() == aNumFmtArr[nLvl]->GetIndentAt();
+                        aNumFormatArr[i]->GetIndentAt() == aNumFormatArr[nLvl]->GetIndentAt();
                 }
             }
         }
@@ -286,13 +286,13 @@ void SwNumPositionTabPage::InitControls()
         long nDistBorderNum;
         if(bRelative)
         {
-            nDistBorderNum = (long)aNumFmtArr[nLvl]->GetAbsLSpace()+ aNumFmtArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = (long)aNumFormatArr[nLvl]->GetAbsLSpace()+ aNumFormatArr[nLvl]->GetFirstLineOffset();
             if(nLvl)
-                nDistBorderNum -= (long)aNumFmtArr[nLvl - 1]->GetAbsLSpace()+ aNumFmtArr[nLvl - 1]->GetFirstLineOffset();
+                nDistBorderNum -= (long)aNumFormatArr[nLvl - 1]->GetAbsLSpace()+ aNumFormatArr[nLvl - 1]->GetFirstLineOffset();
         }
         else
         {
-            nDistBorderNum = (long)aNumFmtArr[nLvl]->GetAbsLSpace()+ aNumFmtArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = (long)aNumFormatArr[nLvl]->GetAbsLSpace()+ aNumFormatArr[nLvl]->GetFirstLineOffset();
         }
         m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nDistBorderNum),FUNIT_TWIP);
     }
@@ -300,20 +300,20 @@ void SwNumPositionTabPage::InitControls()
         bSetDistEmpty = true;
 
     if(bSameDist)
-        m_pDistNumMF->SetValue(m_pDistNumMF->Normalize(aNumFmtArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
+        m_pDistNumMF->SetValue(m_pDistNumMF->Normalize(aNumFormatArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
     else
         m_pDistNumMF->SetText(aEmptyOUStr);
     if(bSameIndent)
-        m_pIndentMF->SetValue(m_pIndentMF->Normalize(-aNumFmtArr[nLvl]->GetFirstLineOffset()), FUNIT_TWIP);
+        m_pIndentMF->SetValue(m_pIndentMF->Normalize(-aNumFormatArr[nLvl]->GetFirstLineOffset()), FUNIT_TWIP);
     else
         m_pIndentMF->SetText(aEmptyOUStr);
 
     if(bSameAdjust)
     {
         sal_Int32 nPos = 1; // centered
-        if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_LEFT)
+        if(aNumFormatArr[nLvl]->GetNumAdjust() == SVX_ADJUST_LEFT)
             nPos = 0;
-        else if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_RIGHT)
+        else if(aNumFormatArr[nLvl]->GetNumAdjust() == SVX_ADJUST_RIGHT)
             nPos = 2;
         m_pAlignLB->SelectEntryPos(nPos);
         m_pAlign2LB->SelectEntryPos( nPos );
@@ -327,11 +327,11 @@ void SwNumPositionTabPage::InitControls()
     if ( bSameLabelFollowedBy )
     {
         sal_Int32 nPos = 0; // LISTTAB
-        if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::SPACE )
+        if ( aNumFormatArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::SPACE )
         {
             nPos = 1;
         }
-        else if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::NOTHING )
+        else if ( aNumFormatArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::NOTHING )
         {
             nPos = 2;
         }
@@ -342,13 +342,13 @@ void SwNumPositionTabPage::InitControls()
         m_pLabelFollowedByLB->SetNoSelection();
     }
 
-    if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
+    if ( aNumFormatArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
     {
         m_pListtabFT->Enable( true );
         m_pListtabMF->Enable( true );
         if ( bSameListtab )
         {
-            m_pListtabMF->SetValue(m_pListtabMF->Normalize(aNumFmtArr[nLvl]->GetListtabPos()),FUNIT_TWIP);
+            m_pListtabMF->SetValue(m_pListtabMF->Normalize(aNumFormatArr[nLvl]->GetListtabPos()),FUNIT_TWIP);
         }
         else
         {
@@ -365,8 +365,8 @@ void SwNumPositionTabPage::InitControls()
     if ( bSameAlignAt )
     {
         m_pAlignedAtMF->SetValue(
-            m_pAlignedAtMF->Normalize( aNumFmtArr[nLvl]->GetIndentAt() +
-                                    aNumFmtArr[nLvl]->GetFirstLineIndent()),
+            m_pAlignedAtMF->Normalize( aNumFormatArr[nLvl]->GetIndentAt() +
+                                    aNumFormatArr[nLvl]->GetFirstLineIndent()),
             FUNIT_TWIP );
     }
     else
@@ -377,7 +377,7 @@ void SwNumPositionTabPage::InitControls()
     if ( bSameIndentAt )
     {
         m_pIndentAtMF->SetValue(
-            m_pIndentAtMF->Normalize( aNumFmtArr[nLvl]->GetIndentAt()), FUNIT_TWIP );
+            m_pIndentAtMF->Normalize( aNumFormatArr[nLvl]->GetIndentAt()), FUNIT_TWIP );
     }
     else
     {
@@ -400,7 +400,7 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
     {
         bPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
-    bModified = (!pActNum->GetNumFmt( 0 ) || bPreset);
+    bModified = (!pActNum->GetNumFormat( 0 ) || bPreset);
     if(*pActNum != *pSaveNum ||
         nActNumLvl != nTmpNumLvl )
     {
@@ -504,8 +504,8 @@ void SwNumPositionTabPage::InitPosAndSpaceMode()
     {
         if(nActNumLvl & nMask)
         {
-            SvxNumberFormat aNumFmt( pActNum->Get(i) );
-            ePosAndSpaceMode = aNumFmt.GetPositionAndSpaceMode();
+            SvxNumberFormat aNumFormat( pActNum->Get(i) );
+            ePosAndSpaceMode = aNumFormat.GetPositionAndSpaceMode();
             if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 break;
@@ -595,7 +595,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl)
     {
         if(nActNumLvl & nMask)
         {
-            SwNumFmt aNumFmt(pActNum->Get(i));
+            SwNumFormat aNumFormat(pActNum->Get(i));
 
             const sal_Int32 nPos = m_pAlignLB->IsVisible()
                                 ? m_pAlignLB->GetSelectEntryPos()
@@ -605,8 +605,8 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl)
                 eAdjust = SVX_ADJUST_LEFT;
             else if(nPos == 2)
                 eAdjust = SVX_ADJUST_RIGHT;
-            aNumFmt.SetNumAdjust( eAdjust );
-            pActNum->Set(i, aNumFmt);
+            aNumFormat.SetNumAdjust( eAdjust );
+            pActNum->Set(i, aNumFormat);
         }
         nMask <<= 1;
     }
@@ -660,26 +660,26 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
+IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pField )
 {
     if(bInInintControl)
         return 0;
-    long nValue = static_cast< long >(pFld->Denormalize(pFld->GetValue(FUNIT_TWIP)));
+    long nValue = static_cast< long >(pField->Denormalize(pField->GetValue(FUNIT_TWIP)));
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         if(nActNumLvl & nMask)
         {
-            SwNumFmt aNumFmt( pActNum->Get( i ) );
-            if(pFld == m_pDistBorderMF)
+            SwNumFormat aNumFormat( pActNum->Get( i ) );
+            if(pField == m_pDistBorderMF)
             {
 
                 if(m_pRelativeCB->IsChecked() && m_pRelativeCB->IsEnabled())
                 {
                     if(0 == i)
                     {
-                        long nTmp = aNumFmt.GetFirstLineOffset();
-                        aNumFmt.SetAbsLSpace( nValue - nTmp );
+                        long nTmp = aNumFormat.GetFirstLineOffset();
+                        aNumFormat.SetAbsLSpace( nValue - nTmp );
                     }
                     else
                     {
@@ -687,28 +687,28 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
                                     pActNum->Get( i - 1 ).GetFirstLineOffset() -
                                     pActNum->Get( i ).GetFirstLineOffset();
 
-                        aNumFmt.SetAbsLSpace( nValue + nTmp );
+                        aNumFormat.SetAbsLSpace( nValue + nTmp );
                     }
                 }
                 else
                 {
-                    aNumFmt.SetAbsLSpace( (short)nValue - aNumFmt.GetFirstLineOffset());
+                    aNumFormat.SetAbsLSpace( (short)nValue - aNumFormat.GetFirstLineOffset());
                 }
             }
-            else if (pFld == m_pDistNumMF)
+            else if (pField == m_pDistNumMF)
             {
-                aNumFmt.SetCharTextDistance( nValue );
+                aNumFormat.SetCharTextDistance( nValue );
             }
-            else if (pFld == m_pIndentMF)
+            else if (pField == m_pIndentMF)
             {
                 // now AbsLSpace also has to be modified by FirstLineOffset
-                long nDiff = nValue + aNumFmt.GetFirstLineOffset();
-                long nAbsLSpace = aNumFmt.GetAbsLSpace();
-                aNumFmt.SetAbsLSpace( nAbsLSpace + nDiff );
-                aNumFmt.SetFirstLineOffset( -nValue );
+                long nDiff = nValue + aNumFormat.GetFirstLineOffset();
+                long nAbsLSpace = aNumFormat.GetAbsLSpace();
+                aNumFormat.SetAbsLSpace( nAbsLSpace + nDiff );
+                aNumFormat.SetFirstLineOffset( -nValue );
             }
 
-            pActNum->Set( i, aNumFmt );
+            pActNum->Set( i, aNumFormat );
         }
         nMask <<= 1;
     }
@@ -735,15 +735,15 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
         {
             if(nActNumLvl & nMask)
             {
-                const SwNumFmt &rNumFmt = pActNum->Get(i);
+                const SwNumFormat &rNumFormat = pActNum->Get(i);
                 if(bFirst)
                 {
-                    nValue = rNumFmt.GetAbsLSpace();
+                    nValue = rNumFormat.GetAbsLSpace();
                     if(bOn && i)
                         nValue -= pActNum->Get(i - 1).GetAbsLSpace();
                 }
                 else
-                    bSetValue = nValue == rNumFmt.GetAbsLSpace() - pActNum->Get(i - 1).GetAbsLSpace();
+                    bSetValue = nValue == rNumFormat.GetAbsLSpace() - pActNum->Get(i - 1).GetAbsLSpace();
                 bFirst = false;
             }
             nMask <<= 1;
@@ -783,9 +783,9 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
     {
         if ( nActNumLvl & nMask )
         {
-            SwNumFmt aNumFmt( pActNum->Get(i) );
-            aNumFmt.SetLabelFollowedBy( eLabelFollowedBy );
-            pActNum->Set( i, aNumFmt );
+            SwNumFormat aNumFormat( pActNum->Get(i) );
+            aNumFormat.SetLabelFollowedBy( eLabelFollowedBy );
+            pActNum->Set( i, aNumFormat );
 
             if ( nFirstLvl == USHRT_MAX )
             {
@@ -793,7 +793,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
             }
             else
             {
-                bSameListtabPos &= aNumFmt.GetListtabPos() ==
+                bSameListtabPos &= aNumFormat.GetListtabPos() ==
                         pActNum->Get( nFirstLvl ).GetListtabPos();
             }
         }
@@ -820,10 +820,10 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
     return 0;
 }
 
-IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pFld )
+IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pField )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(pFld->Denormalize(pFld->GetValue(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(pField->Denormalize(pField->GetValue(FUNIT_TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -831,9 +831,9 @@ IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pFld )
     {
         if ( nActNumLvl & nMask )
         {
-            SwNumFmt aNumFmt( pActNum->Get(i) );
-            aNumFmt.SetListtabPos( nValue );
-            pActNum->Set( i, aNumFmt );
+            SwNumFormat aNumFormat( pActNum->Get(i) );
+            aNumFormat.SetListtabPos( nValue );
+            pActNum->Set( i, aNumFormat );
         }
         nMask <<= 1;
     }
@@ -843,10 +843,10 @@ IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pFld )
     return 0;
 }
 
-IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pFld )
+IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pField )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(pFld->Denormalize(pFld->GetValue(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(pField->Denormalize(pField->GetValue(FUNIT_TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -854,10 +854,10 @@ IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pFld )
     {
         if ( nActNumLvl & nMask )
         {
-            SwNumFmt aNumFmt( pActNum->Get(i) );
-            const long nFirstLineIndent = nValue - aNumFmt.GetIndentAt();
-            aNumFmt.SetFirstLineIndent( nFirstLineIndent );
-            pActNum->Set( i, aNumFmt );
+            SwNumFormat aNumFormat( pActNum->Get(i) );
+            const long nFirstLineIndent = nValue - aNumFormat.GetIndentAt();
+            aNumFormat.SetFirstLineIndent( nFirstLineIndent );
+            pActNum->Set( i, aNumFormat );
         }
         nMask <<= 1;
     }
@@ -867,10 +867,10 @@ IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pFld )
     return 0;
 }
 
-IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
+IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pField )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(pFld->Denormalize(pFld->GetValue(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(pField->Denormalize(pField->GetValue(FUNIT_TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -878,13 +878,13 @@ IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
     {
         if ( nActNumLvl & nMask )
         {
-            SwNumFmt aNumFmt( pActNum->Get(i) );
-            const long nAlignedAt = aNumFmt.GetIndentAt() +
-                                    aNumFmt.GetFirstLineIndent();
-            aNumFmt.SetIndentAt( nValue );
+            SwNumFormat aNumFormat( pActNum->Get(i) );
+            const long nAlignedAt = aNumFormat.GetIndentAt() +
+                                    aNumFormat.GetFirstLineIndent();
+            aNumFormat.SetIndentAt( nValue );
             const long nNewFirstLineIndent = nAlignedAt - nValue;
-            aNumFmt.SetFirstLineIndent( nNewFirstLineIndent );
-            pActNum->Set( i, aNumFmt );
+            aNumFormat.SetFirstLineIndent( nNewFirstLineIndent );
+            pActNum->Set( i, aNumFormat );
         }
         nMask <<= 1;
     }
@@ -901,27 +901,27 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, StandardHdl)
     {
         if(nActNumLvl & nMask)
         {
-            SwNumFmt aNumFmt( pActNum->Get( i ) );
+            SwNumFormat aNumFormat( pActNum->Get( i ) );
             SwNumRule aTmpNumRule( pWrtSh->GetUniqueNumRuleName(),
-                                   aNumFmt.GetPositionAndSpaceMode(),
+                                   aNumFormat.GetPositionAndSpaceMode(),
                                    pOutlineDlg ? OUTLINE_RULE : NUM_RULE );
-            SwNumFmt aTempFmt(aTmpNumRule.Get( i ));
-            aNumFmt.SetPositionAndSpaceMode( aTempFmt.GetPositionAndSpaceMode() );
-            if ( aTempFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            SwNumFormat aTempFormat(aTmpNumRule.Get( i ));
+            aNumFormat.SetPositionAndSpaceMode( aTempFormat.GetPositionAndSpaceMode() );
+            if ( aTempFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                aNumFmt.SetAbsLSpace( aTempFmt.GetAbsLSpace());
-                aNumFmt.SetCharTextDistance( aTempFmt.GetCharTextDistance() );
-                aNumFmt.SetFirstLineOffset( aTempFmt.GetFirstLineOffset() );
+                aNumFormat.SetAbsLSpace( aTempFormat.GetAbsLSpace());
+                aNumFormat.SetCharTextDistance( aTempFormat.GetCharTextDistance() );
+                aNumFormat.SetFirstLineOffset( aTempFormat.GetFirstLineOffset() );
             }
-            else if ( aTempFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            else if ( aTempFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                aNumFmt.SetNumAdjust( aTempFmt.GetNumAdjust() );
-                aNumFmt.SetLabelFollowedBy( aTempFmt.GetLabelFollowedBy() );
-                aNumFmt.SetListtabPos( aTempFmt.GetListtabPos() );
-                aNumFmt.SetFirstLineIndent( aTempFmt.GetFirstLineIndent() );
-                aNumFmt.SetIndentAt( aTempFmt.GetIndentAt() );
+                aNumFormat.SetNumAdjust( aTempFormat.GetNumAdjust() );
+                aNumFormat.SetLabelFollowedBy( aTempFormat.GetLabelFollowedBy() );
+                aNumFormat.SetListtabPos( aTempFormat.GetListtabPos() );
+                aNumFormat.SetFirstLineIndent( aTempFormat.GetFirstLineIndent() );
+                aNumFormat.SetIndentAt( aTempFormat.GetIndentAt() );
             }
-            pActNum->Set( i, aNumFmt );
+            pActNum->Set( i, aNumFormat );
         }
         nMask <<= 1;
     }
@@ -967,38 +967,38 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
 {
     // set styles' names and metric
-    OUString sNumCharFmt, sBulletCharFmt;
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
+    OUString sNumCharFormat, sBulletCharFormat;
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat );
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFormat );
 
     if (nPageId == m_nSingleNumPageId)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         rPage.PageCreated(aSet);
     }
     else if (nPageId == m_nBulletPageId)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         rPage.PageCreated(aSet);
     }
     else if (nPageId == m_nOptionsPageId)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         // collect char styles
-        ScopedVclPtrInstance< ListBox > rCharFmtLB(this);
-        rCharFmtLB->Clear();
-        rCharFmtLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
+        ScopedVclPtrInstance< ListBox > rCharFormatLB(this);
+        rCharFormatLB->Clear();
+        rCharFormatLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
         SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
-        ::FillCharStyleListBox(*rCharFmtLB.get(),  pDocShell);
+        ::FillCharStyleListBox(*rCharFormatLB.get(),  pDocShell);
 
         std::vector<OUString> aList;
-        for(sal_Int32 j = 0; j < rCharFmtLB->GetEntryCount(); j++)
-             aList.push_back( rCharFmtLB->GetEntry(j) );
+        for(sal_Int32 j = 0; j < rCharFormatLB->GetEntryCount(); j++)
+             aList.push_back( rCharFormatLB->GetEntry(j) );
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
 

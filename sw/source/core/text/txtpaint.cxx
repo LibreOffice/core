@@ -39,7 +39,7 @@ void SwSaveClip::Reset()
     }
 }
 
-void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
+void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTextFrm* pFrm,
                            bool bEnlargeRect )
 {
     SwRect aOldRect( rRect );

@@ -41,43 +41,43 @@
 
 using namespace ::com::sun::star;
 
-SwFldPage::SwFldPage(vcl::Window *pParent, const OString& rID,
+SwFieldPage::SwFieldPage(vcl::Window *pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
-    , m_pCurFld(0)
+    , m_pCurField(0)
     , m_pWrtShell(0)
     , m_nTypeSel(LISTBOX_ENTRY_NOTFOUND)
     , m_nSelectionSel(LISTBOX_ENTRY_NOTFOUND)
-    , m_bFldEdit(false)
+    , m_bFieldEdit(false)
     , m_bInsert(true)
-    , m_bFldDlgHtmlMode(false)
+    , m_bFieldDlgHtmlMode(false)
     , m_bRefresh(false)
     , m_bFirstHTMLInit(true)
 {
 }
 
-SwFldPage::~SwFldPage()
+SwFieldPage::~SwFieldPage()
 {
 }
 
 // initialise TabPage
-void SwFldPage::Init()
+void SwFieldPage::Init()
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     bool bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
 
-    m_bFldEdit = 0 == GetTabDialog();
+    m_bFieldEdit = 0 == GetTabDialog();
 
     // newly initialise FieldManager. important for
     // Dok-Switch (fldtdlg:ReInitTabPage)
-    m_pCurFld = m_aMgr.GetCurFld();
+    m_pCurField = m_aMgr.GetCurField();
 
-    if( bNewMode != m_bFldDlgHtmlMode )
+    if( bNewMode != m_bFieldDlgHtmlMode )
     {
-        m_bFldDlgHtmlMode = bNewMode;
+        m_bFieldDlgHtmlMode = bNewMode;
 
         // initialise Rangelistbox
-        if( m_bFldDlgHtmlMode && m_bFirstHTMLInit )
+        if( m_bFieldDlgHtmlMode && m_bFirstHTMLInit )
         {
             m_bFirstHTMLInit = false;
             SwWrtShell *pSh = m_pWrtShell;
@@ -86,9 +86,9 @@ void SwFldPage::Init()
             if(pSh)
             {
                 SwDoc* pDoc = pSh->GetDoc();
-                pSh->InsertFldType( SwSetExpFieldType( pDoc,
+                pSh->InsertFieldType( SwSetExpFieldType( pDoc,
                                     OUString("HTML_ON"), 1));
-                pSh->InsertFldType( SwSetExpFieldType(pDoc,
+                pSh->InsertFieldType( SwSetExpFieldType(pDoc,
                                     OUString("HTML_OFF"), 1));
             }
         }
@@ -96,13 +96,13 @@ void SwFldPage::Init()
 }
 
 // newly initialise page
-void SwFldPage::ActivatePage()
+void SwFieldPage::ActivatePage()
 {
     EnableInsert(m_bInsert);
 }
 
 // complete reset; edit new field
-void SwFldPage::EditNewField( bool bOnlyActivate )
+void SwFieldPage::EditNewField( bool bOnlyActivate )
 {
     if( !bOnlyActivate )
     {
@@ -115,7 +115,7 @@ void SwFldPage::EditNewField( bool bOnlyActivate )
 }
 
 // insert field
-bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
+bool SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
                             const OUString& rPar2, sal_uLong nFormatId,
                             sal_Unicode cSeparator, bool bIsAutomaticLanguage)
 {
@@ -123,12 +123,12 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
     SwView* pView = GetActiveView();
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
 
-    if (!IsFldEdit())   // insert new field
+    if (!IsFieldEdit())   // insert new field
     {
-        SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
-        //#i26566# provide parent for SwWrtShell::StartInputFldDlg
+        SwInsertField_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
+        //#i26566# provide parent for SwWrtShell::StartInputFieldDlg
         aData.m_pParent = &GetTabDialog()->GetOKButton();
-        bRet = m_aMgr.InsertFld( aData );
+        bRet = m_aMgr.InsertField( aData );
 
         uno::Reference< frame::XDispatchRecorder > xRecorder =
                 pView->GetViewFrame()->GetBindings().GetRecorder();
@@ -169,7 +169,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
     }
     else    // change field
     {
-        SwField *const pTmpFld = m_pCurFld->CopyField();
+        SwField *const pTmpField = m_pCurField->CopyField();
 
         OUString sPar1(rPar1);
         OUString sPar2(rPar2);
@@ -194,7 +194,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
                 aData.nCommandType = rPar1.getToken(0, DB_DELIM, nPos).toInt32();
                 sPar1 = rPar1.copy(nPos);
 
-                static_cast<SwDBNameInfField*>(pTmpFld)->SetDBData(aData);
+                static_cast<SwDBNameInfField*>(pTmpField)->SetDBData(aData);
             }
             break;
 
@@ -206,18 +206,18 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
                 aData.nCommandType = rPar1.getToken(2, DB_DELIM).toInt32();
                 OUString sColumn = rPar1.getToken(3, DB_DELIM);
 
-                SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pTmpFld->GetTyp());
-                SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(pSh->InsertFldType(
+                SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pTmpField->GetTyp());
+                SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(pSh->InsertFieldType(
                         SwDBFieldType(pSh->GetDoc(), sColumn, aData)));
 
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pOldTyp );
+                SwIterator<SwFormatField,SwFieldType> aIter( *pOldTyp );
 
-                for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+                for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
                 {
-                    if( pFmtFld->GetField() == m_pCurFld)
+                    if( pFormatField->GetField() == m_pCurField)
                     {
-                        pFmtFld->RegisterToFieldType(*pTyp);
-                        pTmpFld->ChgTyp(pTyp);
+                        pFormatField->RegisterToFieldType(*pTyp);
+                        pTmpField->ChgTyp(pTyp);
                         break;
                     }
                 }
@@ -226,7 +226,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
 
         case TYP_SEQFLD:
             {
-                SwSetExpFieldType* pTyp = static_cast<SwSetExpFieldType*>(pTmpFld->GetTyp());
+                SwSetExpFieldType* pTyp = static_cast<SwSetExpFieldType*>(pTmpField->GetTyp());
                 pTyp->SetOutlineLvl( static_cast< sal_uInt8 >(nSubType & 0xff));
                 pTyp->SetDelimiter(OUString(cSeparator));
 
@@ -237,12 +237,12 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
         case TYP_INPUTFLD:
             {
                 // User- or SetField ?
-                if (m_aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
-                !(pTmpFld->GetSubType() & INP_TXT)) // SETEXPFLD
+                if (m_aMgr.GetFieldType(RES_USERFLD, sPar1) == 0 &&
+                !(pTmpField->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
-                    SwSetExpField* pFld = static_cast<SwSetExpField*>(pTmpFld);
-                    pFld->SetPromptText(sPar2);
-                    sPar2 = pFld->GetPar2();
+                    SwSetExpField* pField = static_cast<SwSetExpField*>(pTmpField);
+                    pField->SetPromptText(sPar2);
+                    sPar2 = pField->GetPar2();
                 }
             }
             break;
@@ -250,7 +250,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
             {
                 if( nSubType == nsSwDocInfoSubType::DI_CUSTOM )
                 {
-                    SwDocInfoField* pDocInfo = static_cast<SwDocInfoField*>( pTmpFld );
+                    SwDocInfoField* pDocInfo = static_cast<SwDocInfoField*>( pTmpField );
                     pDocInfo->SetName( rPar1 );
                 }
             }
@@ -259,18 +259,18 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
 
         pSh->StartAllAction();
 
-        pTmpFld->SetSubType(nSubType);
-        pTmpFld->SetAutomaticLanguage(bIsAutomaticLanguage);
+        pTmpField->SetSubType(nSubType);
+        pTmpField->SetAutomaticLanguage(bIsAutomaticLanguage);
 
-        m_aMgr.UpdateCurFld( nFormatId, sPar1, sPar2, pTmpFld );
+        m_aMgr.UpdateCurField( nFormatId, sPar1, sPar2, pTmpField );
 
-        m_pCurFld = m_aMgr.GetCurFld();
+        m_pCurField = m_aMgr.GetCurField();
 
         switch (nTypeId)
         {
             case TYP_HIDDENTXTFLD:
             case TYP_HIDDENPARAFLD:
-                m_aMgr.EvalExpFlds(pSh);
+                m_aMgr.EvalExpFields(pSh);
                 break;
         }
 
@@ -281,7 +281,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
     return bRet;
 }
 
-void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
+void SwFieldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
                          const ListBox* pLst3 )
 {
     const ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
@@ -294,7 +294,7 @@ void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
             m_aLstStrArr[ i ].clear();
 }
 
-void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
+void SwFieldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 {
     sal_Int32 nPos = 0;
     ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
@@ -307,9 +307,9 @@ void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 }
 
 // Insert new fields
-IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
+IMPL_LINK( SwFieldPage, InsertHdl, Button *, pBtn )
 {
-    SwFldDlg *pDlg = static_cast<SwFldDlg*>(GetTabDialog());
+    SwFieldDlg *pDlg = static_cast<SwFieldDlg*>(GetTabDialog());
     if (pDlg)
     {
         pDlg->InsertHdl();
@@ -319,7 +319,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
     }
     else
     {
-        SwFldEditDlg *pEditDlg = static_cast<SwFldEditDlg *>(GetParentDialog());
+        SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg *>(GetParentDialog());
         pEditDlg->InsertHdl();
     }
 
@@ -327,9 +327,9 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
 }
 
 // enable/disable "Insert"-Button
-void SwFldPage::EnableInsert(bool bEnable)
+void SwFieldPage::EnableInsert(bool bEnable)
 {
-    SwFldDlg *pDlg = static_cast<SwFldDlg*>(GetTabDialog());
+    SwFieldDlg *pDlg = static_cast<SwFieldDlg*>(GetTabDialog());
     if (pDlg)
     {
         if (pDlg->GetCurTabPage() == this)
@@ -337,21 +337,21 @@ void SwFldPage::EnableInsert(bool bEnable)
     }
     else
     {
-        SwFldEditDlg *pEditDlg = static_cast<SwFldEditDlg *>(GetParentDialog());
+        SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg *>(GetParentDialog());
         pEditDlg->EnableInsert(bEnable);
     }
 
     m_bInsert = bEnable;
 }
 
-IMPL_LINK_NOARG(SwFldPage, NumFormatHdl)
+IMPL_LINK_NOARG(SwFieldPage, NumFormatHdl)
 {
     InsertHdl();
 
     return 0;
 }
 
-void SwFldPage::SetWrtShell( SwWrtShell* pShell )
+void SwFieldPage::SetWrtShell( SwWrtShell* pShell )
 {
     m_pWrtShell = pShell;
     m_aMgr.SetWrtShell( pShell );

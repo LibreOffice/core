@@ -27,13 +27,13 @@
 class SdrObject;
 class SwFrm;
 class SwLayoutFrm;
-class SwTxtFrm;
+class SwTextFrm;
 
 class SwPageFrm;
 class SwObjPositioningInProgress;
 
-class SwFrmFmt;
-class SwFmtAnchor;
+class SwFrameFormat;
+class SwFormatAnchor;
 
 /** wrapper class for the positioning of Writer fly frames and drawing objects
 
@@ -143,8 +143,8 @@ class SW_DLLPUBLIC SwAnchoredObject
             input parameter - reference to the text frame containing the anchor
             character.
         */
-        void _CheckCharRect( const SwFmtAnchor& _rAnch,
-                             const SwTxtFrm& _rAnchorCharFrm );
+        void _CheckCharRect( const SwFormatAnchor& _rAnch,
+                             const SwTextFrm& _rAnchorCharFrm );
 
         /** check top of line
 
@@ -162,12 +162,12 @@ class SW_DLLPUBLIC SwAnchoredObject
             input parameter - reference to the text frame containing the anchor
             character.
         */
-        void _CheckTopOfLine( const SwFmtAnchor& _rAnch,
-                              const SwTxtFrm& _rAnchorCharFrm );
+        void _CheckTopOfLine( const SwFormatAnchor& _rAnch,
+                              const SwTextFrm& _rAnchorCharFrm );
 
         // method <sw_HideObj(..)> sets needed data structure values for the
         // object positioning
-        friend bool sw_HideObj( const SwTxtFrm& _rFrm,
+        friend bool sw_HideObj( const SwTextFrm& _rFrm,
                                  const RndStdIds _eAnchorType,
                                  const sal_Int32 _nObjAnchorPos,
                                  SwAnchoredObject* _pAnchoredObj );
@@ -260,11 +260,11 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @author OD
 
-            @return SwTxtFrm*
+            @return SwTextFrm*
             text frame containing the anchor character. It's NULL, if the object
             isn't anchored at-character resp. as-character.
         */
-        SwTxtFrm* FindAnchorCharFrm();
+        SwTextFrm* FindAnchorCharFrm();
 
         // accessors to data of position calculation:
         // frame vertical position is orient at
@@ -357,8 +357,8 @@ class SW_DLLPUBLIC SwAnchoredObject
         void SetCurrRelPos( Point _aRelPos );
 
         // accessors to the format
-        virtual SwFrmFmt& GetFrmFmt() = 0;
-        virtual const SwFrmFmt& GetFrmFmt() const = 0;
+        virtual SwFrameFormat& GetFrameFormat() = 0;
+        virtual const SwFrameFormat& GetFrameFormat() const = 0;
 
         // accessors to the object area and its position
         virtual const SwRect GetObjRect() const = 0;

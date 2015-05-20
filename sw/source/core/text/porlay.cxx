@@ -104,11 +104,11 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
     return bRet;
 }
 
-static  bool lcl_HasStrongLTR ( const OUString& rTxt, sal_Int32 nStart, sal_Int32 nEnd )
+static  bool lcl_HasStrongLTR ( const OUString& rText, sal_Int32 nStart, sal_Int32 nEnd )
  {
      for( sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {
-         const UCharDirection nCharDir = u_charDirection ( rTxt[ nCharIdx ] );
+         const UCharDirection nCharDir = u_charDirection ( rText[ nCharIdx ] );
          if ( nCharDir == U_LEFT_TO_RIGHT ||
               nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
               nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
@@ -139,7 +139,7 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
     {
         if( GetLen() )
         {
-            pPortion = SwTxtPortion::CopyLinePortion(*this);
+            pPortion = SwTextPortion::CopyLinePortion(*this);
             if( IsBlinking() && pBlink )
             {
                 SetBlinking( false );
@@ -161,19 +161,19 @@ SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
     // First attribute change: copy mass and length from *pIns into the first
     // text portion
     if( !pPortion )
-        pPortion = SwTxtPortion::CopyLinePortion(*this);
+        pPortion = SwTextPortion::CopyLinePortion(*this);
     // Call with scope or we'll end up with recursion!
     return pPortion->SwLinePortion::Append( pIns );
 }
 
 // For special treatment of empty lines
 
-bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
+bool SwLineLayout::Format( SwTextFormatInfo &rInf )
 {
     if( GetLen() )
-        return SwTxtPortion::Format( rInf );
+        return SwTextPortion::Format( rInf );
 
-    Height( rInf.GetTxtHeight() );
+    Height( rInf.GetTextHeight() );
     return true;
 }
 
@@ -184,7 +184,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     SwMarginPortion *pLeft = (GetPortion() && GetPortion()->IsMarginPortion()) ?
         static_cast<SwMarginPortion *>(GetPortion()) : 0;
     if( !GetPortion() )
-         SetPortion(SwTxtPortion::CopyLinePortion(*this));
+         SetPortion(SwTextPortion::CopyLinePortion(*this));
     if( !pLeft )
     {
         pLeft = new SwMarginPortion( 0 );
@@ -233,12 +233,12 @@ void SwLineLayout::CreateSpaceAdd( const long nInit )
 }
 
 // Returns true if there are only blanks in [nStt, nEnd[
-static bool lcl_HasOnlyBlanks( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nEnd )
+static bool lcl_HasOnlyBlanks( const OUString& rText, sal_Int32 nStt, sal_Int32 nEnd )
 {
     bool bBlankOnly = true;
     while ( nStt < nEnd )
     {
-        const sal_Unicode cChar = rTxt[ nStt++ ];
+        const sal_Unicode cChar = rText[ nStt++ ];
         if ( ' ' != cChar && 0x3000 != cChar )
         {
             bBlankOnly = false;
@@ -249,7 +249,7 @@ static bool lcl_HasOnlyBlanks( const OUString& rTxt, sal_Int32 nStt, sal_Int32 n
 }
 
 // Swapped out from FormatLine()
-void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
+void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 {
     const sal_uInt16 nLineWidth = rInf.RealWidth();
 
@@ -270,14 +270,14 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
     // #i3952#
     const bool bIgnoreBlanksAndTabsForLineHeightCalculation =
-            rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
+            rInf.GetTextFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
 
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true;
 
     if( pPortion )
     {
-        SetCntnt( false );
+        SetContent( false );
         if( pPortion->IsBreakPortion() )
         {
             SetLen( pPortion->GetLen() );
@@ -326,7 +326,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 {
                     if ( pPos->InTabGrp() || pPos->IsHolePortion() ||
                             ( pPos->IsTextPortion() &&
-                              lcl_HasOnlyBlanks( rInf.GetTxt(), nPorSttIdx, nPorSttIdx + pPos->GetLen() ) ) )
+                              lcl_HasOnlyBlanks( rInf.GetText(), nPorSttIdx, nPorSttIdx + pPos->GetLen() ) ) )
                     {
                         pLast = pPos;
                         pPos = pPos->GetPortion();
@@ -411,7 +411,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                                 Height(nPosHeight);
                         }
                         if( pPos->IsFlyCntPortion() || ( pPos->IsMultiPortion()
-                            && static_cast<SwMultiPortion*>(pPos)->HasFlyInCntnt() ) )
+                            && static_cast<SwMultiPortion*>(pPos)->HasFlyInContent() ) )
                             rLine.SetFlyInCntBase();
                         if( pPos->IsFlyCntPortion() &&
                             static_cast<SwFlyCntPortion*>(pPos)->GetAlign() )
@@ -432,20 +432,20 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 else if( pPos->GetLen() )
                     bTmpDummy = false;
 
-                if( !HasCntnt() && !pPos->InNumberGrp() )
+                if( !HasContent() && !pPos->InNumberGrp() )
                 {
                     if ( pPos->InExpGrp() )
                     {
-                        OUString aTxt;
-                        if( pPos->GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty() )
-                            SetCntnt();
+                        OUString aText;
+                        if( pPos->GetExpText( rInf, aText ) && !aText.isEmpty() )
+                            SetContent();
                     }
-                    else if( ( pPos->InTxtGrp() || pPos->IsMultiPortion() ) &&
+                    else if( ( pPos->InTextGrp() || pPos->IsMultiPortion() ) &&
                              pPos->GetLen() )
-                        SetCntnt();
+                        SetContent();
                 }
 
-                bTmpDummy &= !HasCntnt() && ( !pPos->Width() || pPos->IsFlyPortion() );
+                bTmpDummy &= !HasContent() && ( !pPos->Width() || pPos->IsFlyPortion() );
 
                 pLast = pPos;
                 pPos = pPos->GetPortion();
@@ -487,11 +487,11 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     }
     else
     {
-        SetCntnt( !bTmpDummy );
+        SetContent( !bTmpDummy );
 
         // #i3952#
         if ( bIgnoreBlanksAndTabsForLineHeightCalculation &&
-             lcl_HasOnlyBlanks( rInf.GetTxt(), rInf.GetLineStart(), rInf.GetLineStart() + GetLen() ) )
+             lcl_HasOnlyBlanks( rInf.GetText(), rInf.GetLineStart(), rInf.GetLineStart() + GetLen() ) )
         {
             bHasBlankPortion = true;
         }
@@ -599,12 +599,12 @@ SwScriptInfo::~SwScriptInfo()
 
 // Converts i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK) to
 // Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
-sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pTxt, const SwScriptInfo* pSI )
+sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pText, const SwScriptInfo* pSI )
 {
-    assert((pSI || pTxt) && "How should I determine the script type?");
+    assert((pSI || pText) && "How should I determine the script type?");
     const sal_uInt16 nScript = pSI
         ? pSI->ScriptType( nIdx )                         // use our SwScriptInfo if available
-        : g_pBreakIt->GetRealScriptOfText( *pTxt, nIdx ); // else  ask the break iterator
+        : g_pBreakIt->GetRealScriptOfText( *pText, nIdx ); // else  ask the break iterator
 
     switch ( nScript ) {
         case i18n::ScriptType::LATIN : return SW_LATIN;
@@ -616,22 +616,22 @@ sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pTxt, const S
     return SW_LATIN;
 }
 
-// searches for script changes in rTxt and stores them
-void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
+// searches for script changes in rText and stores them
+void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode )
 {
     InitScriptInfo( rNode, nDefaultDir == UBIDI_RTL );
 }
 
-void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
+void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 {
     if( !g_pBreakIt->GetBreakIter().is() )
         return;
 
-    const OUString& rTxt = rNode.GetTxt();
+    const OUString& rText = rNode.GetText();
 
     // HIDDEN TEXT INFORMATION
 
-    Range aRange( 0, !rTxt.isEmpty() ? rTxt.getLength() - 1 : 0 );
+    Range aRange( 0, !rText.isEmpty() ? rText.getLength() - 1 : 0 );
     MultiSelection aHiddenMulti( aRange );
     CalcHiddenRanges( rNode, aHiddenMulti );
 
@@ -722,13 +722,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     // we go back in our group until we reach the first character of
     // type nScript
     while ( nChg > nGrpStart &&
-            nScript != g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
+            nScript != g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ) )
         --nChg;
 
     // If we are at the start of a group, we do not trust nScript,
     // we better get nScript from the breakiterator:
     if ( nChg == nGrpStart )
-        nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
+        nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg );
 
     // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
 
@@ -765,17 +765,17 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
     // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
 
-    if( WEAK == g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
+    if( WEAK == g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ) )
     {
         // If the beginning of the current group is weak, this means that
         // all of the characters in this grounp are weak. We have to assign
         // the scripts to these characters depending on the fonts which are
         // set for these characters to display them.
         sal_Int32 nEnd =
-                g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
+                g_pBreakIt->GetBreakIter()->endOfScript( rText, nChg, WEAK );
 
-        if (nEnd > rTxt.getLength() || nEnd < 0)
-            nEnd = rTxt.getLength();
+        if (nEnd > rText.getLength() || nEnd < 0)
+            nEnd = rText.getLength();
 
         nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 
@@ -786,8 +786,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         nChg = nEnd;
 
         // Get next script type or set to weak in order to exit
-        sal_uInt8 nNextScript = ( nEnd < rTxt.getLength() ) ?
-           (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nEnd ) :
+        sal_uInt8 nNextScript = ( nEnd < rText.getLength() ) ?
+           (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rText, nEnd ) :
            (sal_uInt8)WEAK;
 
         if ( nScript != nNextScript )
@@ -800,41 +800,41 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
 
     // UPDATE THE SCRIPT INFO ARRAYS:
 
-    while ( nChg < rTxt.getLength() || ( aScriptChanges.empty() && rTxt.isEmpty() ) )
+    while ( nChg < rText.getLength() || ( aScriptChanges.empty() && rText.isEmpty() ) )
     {
         SAL_WARN_IF( i18n::ScriptType::WEAK == nScript,
                 "sw.core", "Inserting WEAK into SwScriptInfo structure" );
 
         sal_Int32 nSearchStt = nChg;
-        nChg = g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
+        nChg = g_pBreakIt->GetBreakIter()->endOfScript( rText, nSearchStt, nScript );
 
-        if (nChg > rTxt.getLength() || nChg < 0)
-            nChg = rTxt.getLength();
+        if (nChg > rText.getLength() || nChg < 0)
+            nChg = rText.getLength();
 
         // #i28203#
         // for 'complex' portions, we make sure that a portion does not contain more
         // than one script:
         if( i18n::ScriptType::COMPLEX == nScript )
         {
-            const short nScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nSearchStt );
+            const short nScriptType = ScriptTypeDetector::getCTLScriptType( rText, nSearchStt );
             sal_Int32 nNextCTLScriptStart = nSearchStt;
             short nCurrentScriptType = nScriptType;
             while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
-                nNextCTLScriptStart = ScriptTypeDetector::endOfCTLScriptType( rTxt, nNextCTLScriptStart );
-                if( nNextCTLScriptStart >= rTxt.getLength() || nNextCTLScriptStart >= nChg )
+                nNextCTLScriptStart = ScriptTypeDetector::endOfCTLScriptType( rText, nNextCTLScriptStart );
+                if( nNextCTLScriptStart >= rText.getLength() || nNextCTLScriptStart >= nChg )
                     break;
-                nCurrentScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nNextCTLScriptStart );
+                nCurrentScriptType = ScriptTypeDetector::getCTLScriptType( rText, nNextCTLScriptStart );
             }
             nChg = std::min( nChg, nNextCTLScriptStart );
         }
 
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
-        if (nChg < rTxt.getLength() && nChg > 0 && (i18n::ScriptType::WEAK ==
-            g_pBreakIt->GetBreakIter()->getScriptType(rTxt,nChg - 1)))
+        if (nChg < rText.getLength() && nChg > 0 && (i18n::ScriptType::WEAK ==
+            g_pBreakIt->GetBreakIter()->getScriptType(rText,nChg - 1)))
         {
-            int8_t nType = u_charType(rTxt[nChg] );
+            int8_t nType = u_charType(rText[nChg] );
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
@@ -862,7 +862,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
 
             while ( nLastCompression < nChg )
             {
-                sal_Unicode cChar = rTxt[ nLastCompression ];
+                sal_Unicode cChar = rText[ nLastCompression ];
 
                 // examine current character
                 switch ( cChar )
@@ -919,7 +919,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode, rNode.GetTxt(), 0, ModelToViewHelper(),
+            SwScanner aScanner( rNode, rNode.GetText(), 0, ModelToViewHelper(),
                                 i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 
@@ -1084,8 +1084,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
             } // end of kashida search
         }
 
-        if ( nChg < rTxt.getLength() )
-            nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
+        if ( nChg < rText.getLength() )
+            nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg );
 
         nLastCompression = nChg;
         nLastKashida = nChg;
@@ -1123,7 +1123,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     // do not call the unicode bidi algorithm if not required
     if ( bPerformUBA )
     {
-        UpdateBidiInfo( rTxt );
+        UpdateBidiInfo( rText );
 
         // #i16354# Change script type for RTL text to CTL:
         // 1. All text in RTL runs will use the CTL font
@@ -1138,7 +1138,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                 const sal_Int32 nEnd = GetDirChg( nDirIdx );
 
             if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
-                ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( rTxt, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
+                ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( rText, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
             {
                 // nScriptIdx points into the ScriptArrays:
                 size_t nScriptIdx = 0;
@@ -1195,7 +1195,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     }
 }
 
-void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
+void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
 {
     // remove invalid entries from direction information arrays
     aDirectionChanges.clear();
@@ -1203,10 +1203,10 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
     // Bidi functions from icu 2.0
 
     UErrorCode nError = U_ZERO_ERROR;
-    UBiDi* pBidi = ubidi_openSized( rTxt.getLength(), 0, &nError );
+    UBiDi* pBidi = ubidi_openSized( rText.getLength(), 0, &nError );
     nError = U_ZERO_ERROR;
 
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.getStr()), rTxt.getLength(),    // UChar != sal_Unicode in MinGW
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength(),    // UChar != sal_Unicode in MinGW
                    nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
     int nCount = ubidi_countRuns( pBidi, &nError );
@@ -1284,11 +1284,11 @@ sal_uInt8 SwScriptInfo::DirType(const sal_Int32 nPos) const
 }
 
 // Takes a string and replaced the hidden ranges with cChar.
-sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffer & rText,
+sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTextNode& rNode, OUStringBuffer & rText,
                                        const sal_Int32 nStt, const sal_Int32 nEnd,
                                        const sal_Unicode cChar )
 {
-    assert(rNode.GetTxt().getLength() == rText.getLength());
+    assert(rNode.GetText().getLength() == rText.getLength());
 
     PositionList aList;
     sal_Int32 nHiddenStart;
@@ -1319,8 +1319,8 @@ sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffer
     return nNumOfHiddenChars;
 }
 
-// Takes a SwTxtNode and deletes the hidden ranges from the node.
-void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
+// Takes a SwTextNode and deletes the hidden ranges from the node.
+void SwScriptInfo::DeleteHiddenRanges( SwTextNode& rNode )
 {
     PositionList aList;
     sal_Int32 nHiddenStart;
@@ -1338,7 +1338,7 @@ void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
     }
 }
 
-bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos,
+bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nPos,
                                            sal_Int32& rnStartPos, sal_Int32& rnEndPos,
                                            PositionList* pList )
 {
@@ -1361,11 +1361,11 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
             if ( pList )
             {
                 pList->push_back( 0 );
-                pList->push_back(rNode.GetTxt().getLength());
+                pList->push_back(rNode.GetText().getLength());
             }
 
             rnStartPos = 0;
-            rnEndPos = rNode.GetTxt().getLength();
+            rnEndPos = rNode.GetText().getLength();
             return true;
         }
     }
@@ -1378,7 +1378,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
 
         bNewContainsHiddenChars = pSI->GetBoundsOfHiddenRange( nPos, rnStartPos, rnEndPos, pList );
         const bool bNewHiddenCharsHidePara =
-            rnStartPos == 0 && rnEndPos >= rNode.GetTxt().getLength();
+            rnStartPos == 0 && rnEndPos >= rNode.GetText().getLength();
         rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
     }
     else
@@ -1386,8 +1386,8 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
 
         // No valid SwScriptInfo Object, we have to do it the hard way:
 
-        Range aRange(0, (!rNode.GetTxt().isEmpty())
-                            ? rNode.GetTxt().getLength() - 1
+        Range aRange(0, (!rNode.GetText().isEmpty())
+                            ? rNode.GetText().getLength() - 1
                             : 0);
         MultiSelection aHiddenMulti( aRange );
         SwScriptInfo::CalcHiddenRanges( rNode, aHiddenMulti );
@@ -1403,7 +1403,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
             {
                 rnStartPos = nHiddenStart;
                 rnEndPos   = std::min<sal_Int32>(nHiddenEnd,
-                                                 rNode.GetTxt().getLength());
+                                                 rNode.GetText().getLength());
                 break;
             }
         }
@@ -1458,7 +1458,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( sal_Int32 nPos, sal_Int32& rnStartPos
     return CountHiddenChg() > 0;
 }
 
-bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos )
+bool SwScriptInfo::IsInHiddenRange( const SwTextNode& rNode, sal_Int32 nPos )
 {
     sal_Int32 nStartPos;
     sal_Int32 nEndPos;
@@ -1704,8 +1704,8 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
 
 // Checks if the current text is 'Arabic' text. Note that only the first
 // character has to be checked because a ctl portion only contains one
-// script, see NewTxtPortion
-bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen )
+// script, see NewTextPortion
+bool SwScriptInfo::IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int32 nLen )
 {
     using namespace ::com::sun::star::i18n;
     static const ScriptTypeList typeList[] = {
@@ -1717,7 +1717,7 @@ bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32
     const CharClass& rCC = GetAppCharClass();
     sal_Int32 nIdx = nStt;
     const sal_Int32 nEnd = nStt + nLen;
-    while ( nIdx < nEnd && !rCC.isLetterNumeric( rTxt, nIdx ) )
+    while ( nIdx < nEnd && !rCC.isLetterNumeric( rText, nIdx ) )
     {
         ++nIdx;
     }
@@ -1726,7 +1726,7 @@ bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32
     {
         // no regular character found in this portion. Go backward:
         --nIdx;
-        while ( nIdx >= 0 && !rCC.isLetterNumeric( rTxt, nIdx ) )
+        while ( nIdx >= 0 && !rCC.isLetterNumeric( rText, nIdx ) )
         {
             --nIdx;
         }
@@ -1734,7 +1734,7 @@ bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32
 
     if( nIdx >= 0 )
     {
-        const sal_Unicode cCh = rTxt[nIdx];
+        const sal_Unicode cCh = rText[nIdx];
         const sal_Int16 type = unicode::getUnicodeScriptType( cCh, typeList, UnicodeScript_kScriptCount );
         return type == UnicodeScript_kArabic;
     }
@@ -1890,12 +1890,12 @@ bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32* pKashidaPositi
     return true;
 }
 
-sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, long* pKernArray,
+sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rText, long* pKernArray,
                                      long* pScrArray, sal_Int32 nStt,
                                      sal_Int32 nLen, sal_Int32 nNumberOfBlanks,
                                      long nSpaceAdd )
 {
-    SAL_WARN_IF( nStt + nLen > rTxt.getLength(), "sw.core", "String in ThaiJustify too small" );
+    SAL_WARN_IF( nStt + nLen > rText.getLength(), "sw.core", "String in ThaiJustify too small" );
 
     SwTwips nNumOfTwipsToDistribute = nSpaceAdd * nNumberOfBlanks /
                                       SPACING_PRECISION_FACTOR;
@@ -1905,7 +1905,7 @@ sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, long* pKernArray,
 
     for (sal_Int32 nI = 0; nI < nLen; ++nI)
     {
-        const sal_Unicode cCh = rTxt[nStt + nI];
+        const sal_Unicode cCh = rText[nStt + nI];
 
         // check if character is not above or below base
         if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&
@@ -1928,13 +1928,13 @@ sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, long* pKernArray,
     return nCnt;
 }
 
-SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
+SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
                                            bool bAllowInvalid )
 {
-    SwIterator<SwTxtFrm,SwTxtNode> aIter( rTNd );
+    SwIterator<SwTextFrm,SwTextNode> aIter( rTNd );
     SwScriptInfo* pScriptInfo = 0;
 
-    for( SwTxtFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+    for( SwTextFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
         pScriptInfo = const_cast<SwScriptInfo*>(pLast->GetScriptInfo());
         if ( pScriptInfo )
@@ -1958,7 +1958,7 @@ SwParaPortion::SwParaPortion()
     , bFlag16(false)
 {
     FormatReset();
-    bFlys = bFtnNum = bMargin = false;
+    bFlys = bFootnoteNum = bMargin = false;
     SetWhichPor( POR_PARA );
 }
 
@@ -2032,7 +2032,7 @@ SwTwips SwLineLayout::_GetHangingMargin() const
     return nDiff;
 }
 
-SwTwips SwTxtFrm::HangingMargin() const
+SwTwips SwTextFrm::HangingMargin() const
 {
     SAL_WARN_IF( !HasPara(), "sw.core", "Don't call me without a paraportion" );
     if( !GetPara()->IsMargin() )
@@ -2051,10 +2051,10 @@ SwTwips SwTxtFrm::HangingMargin() const
     return nRet;
 }
 
-void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelection &rHiddenMulti)
+void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode, MultiSelection &rHiddenMulti)
 {
-    assert((rNode.GetTxt().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
-        || (rNode.GetTxt().getLength() == rHiddenMulti.GetTotalRange().Len()));
+    assert((rNode.GetText().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
+        || (rNode.GetText().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
     const SfxPoolItem* pItem = 0;
     if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) &&
@@ -2069,13 +2069,13 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
     {
         for( size_t nTmp = 0; nTmp < pHints->GetStartCount(); ++nTmp )
         {
-            const SwTxtAttr* pTxtAttr = pHints->GetStart( nTmp );
+            const SwTextAttr* pTextAttr = pHints->GetStart( nTmp );
             const SvxCharHiddenItem* pHiddenItem =
-                static_cast<const SvxCharHiddenItem*>( CharFmt::GetItem( *pTxtAttr, RES_CHRATR_HIDDEN ) );
+                static_cast<const SvxCharHiddenItem*>( CharFormat::GetItem( *pTextAttr, RES_CHRATR_HIDDEN ) );
             if( pHiddenItem )
             {
-                const sal_Int32 nSt = pTxtAttr->GetStart();
-                const sal_Int32 nEnd = *pTxtAttr->End();
+                const sal_Int32 nSt = pTextAttr->GetStart();
+                const sal_Int32 nEnd = *pTextAttr->End();
                 if( nEnd > nSt )
                 {
                     Range aTmp( nSt, nEnd - 1 );
@@ -2086,19 +2086,19 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
     }
 }
 
-void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &rHiddenMulti, bool bSelect)
+void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection &rHiddenMulti, bool bSelect)
 {
-    assert((rNode.GetTxt().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
-        || (rNode.GetTxt().getLength() == rHiddenMulti.GetTotalRange().Len()));
+    assert((rNode.GetText().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
+        || (rNode.GetText().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
     const IDocumentRedlineAccess& rIDRA = *rNode.getIDocumentRedlineAccess();
     if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
     {
         sal_uInt16 nAct = rIDRA.GetRedlinePos( rNode, USHRT_MAX );
 
-        for ( ; nAct < rIDRA.GetRedlineTbl().size(); nAct++ )
+        for ( ; nAct < rIDRA.GetRedlineTable().size(); nAct++ )
         {
-            const SwRangeRedline* pRed = rIDRA.GetRedlineTbl()[ nAct ];
+            const SwRangeRedline* pRed = rIDRA.GetRedlineTable()[ nAct ];
 
             if (pRed->Start()->nNode > rNode.GetIndex())
                 break;
@@ -2110,7 +2110,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &
             sal_Int32 nRedlnEnd;
             pRed->CalcStartEnd( rNode.GetIndex(), nRedlStart, nRedlnEnd );
             //clip it if the redline extends past the end of the nodes text
-            nRedlnEnd = std::min<sal_Int32>(nRedlnEnd, rNode.GetTxt().getLength());
+            nRedlnEnd = std::min<sal_Int32>(nRedlnEnd, rNode.GetText().getLength());
             if ( nRedlnEnd > nRedlStart )
             {
                 Range aTmp( nRedlStart, nRedlnEnd - 1 );
@@ -2121,7 +2121,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &
 }
 
 // Returns a MultiSection indicating the hidden ranges.
-void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHiddenMulti )
+void SwScriptInfo::CalcHiddenRanges( const SwTextNode& rNode, MultiSelection& rHiddenMulti )
 {
     selectHiddenTextProperty(rNode, rHiddenMulti);
 
@@ -2139,7 +2139,7 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
         const sal_Int32 nHiddenStart = rRange.Min();
         const sal_Int32 nHiddenEnd = rRange.Max() + 1;
         bNewHiddenCharsHidePara =
-            (nHiddenStart == 0 && nHiddenEnd >= rNode.GetTxt().getLength());
+            (nHiddenStart == 0 && nHiddenEnd >= rNode.GetText().getLength());
     }
     rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
 }

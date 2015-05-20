@@ -183,8 +183,8 @@ public:
 
     [Items]
     <SvxHyphenZoneItem><SID_ATTR_PARA_HYPHENZONE>
-    <SvxFmtBreakItem><SID_ATTR_PARA_PAGEBREAK>
-    <SvxFmtSplitItem><SID_ATTR_PARA_SPLIT>
+    <SvxFormatBreakItem><SID_ATTR_PARA_PAGEBREAK>
+    <SvxFormatSplitItem><SID_ATTR_PARA_SPLIT>
     <SvxWidowsItem><SID_ATTR_PARA_WIDOWS>
     <SvxOrphansItem><SID_ATTR_PARA_ORPHANS>
 */

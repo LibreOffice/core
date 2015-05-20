@@ -144,7 +144,7 @@
                                                         CalcLayout */
 
 #define FN_REDLINE_ACCEPT            (FN_EDIT2 + 29) /* Redlining Accept/Reject */
-#define FN_ATTR_COLUMNS              (FN_EDIT2 + 31) /* SlotId for SwFmtCol */
+#define FN_ATTR_COLUMNS              (FN_EDIT2 + 31) /* SlotId for SwFormatCol */
 #define FN_EDIT_CURRENT_TOX          (FN_EDIT2 + 32) /* edit current index */
 #define FN_EDIT_AUTH_ENTRY_DLG       (FN_EDIT2 + 33) /* edit authorities entry*/
 #define FN_UPDATE_CHARTS             (FN_EDIT2 + 34) /* update all charts */

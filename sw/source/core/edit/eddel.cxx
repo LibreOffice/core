@@ -71,21 +71,21 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
             {
                 // then go to the end of the selection
                 aDelPam.GetPoint()->nNode = rEndNd;
-                aDelPam.Move( fnMoveBackward, fnGoCntnt );
+                aDelPam.Move( fnMoveBackward, fnGoContent );
             }
             // skip protected boxes
-            if( !rNd.IsCntntNode() ||
+            if( !rNd.IsContentNode() ||
                 !rNd.IsInProtectSect() )
             {
                 // delete everything
                 GetDoc()->getIDocumentContentOperations().DeleteAndJoin( aDelPam );
-                SaveTblBoxCntnt( aDelPam.GetPoint() );
+                SaveTableBoxContent( aDelPam.GetPoint() );
             }
 
             if( !pEndSelPos ) // at the end of a selection
                 break;
             aDelPam.DeleteMark();
-            aDelPam.Move( fnMoveForward, fnGoCntnt ); // next box
+            aDelPam.Move( fnMoveForward, fnGoContent ); // next box
         } while( pEndSelPos );
     }
     else
@@ -104,7 +104,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
         }
         // delete everything
         GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPam);
-        SaveTblBoxCntnt( pPam->GetPoint() );
+        SaveTableBoxContent( pPam->GetPoint() );
     }
 
     // Selection is not needed anymore
@@ -115,7 +115,7 @@ long SwEditShell::Delete()
 {
     SET_CURR_SHELL( this );
     long nRet = 0;
-    if ( !HasReadonlySel() || CrsrInsideInputFld() )
+    if ( !HasReadonlySel() || CrsrInsideInputField() )
     {
         StartAllAction();
 
@@ -260,7 +260,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
         SwPaM* pCrsr = pDestShell->GetCrsr();
         pCrsr->SetMark();
         pCrsr->GetPoint()->nNode = aSttNdIdx.GetIndex()+1;
-        pCrsr->GetPoint()->nContent.Assign( pCrsr->GetCntntNode(),nSttCntIdx);
+        pCrsr->GetPoint()->nContent.Assign( pCrsr->GetContentNode(),nSttCntIdx);
         pCrsr->Exchange();
     }
     else
@@ -275,9 +275,9 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     for(SwPaM& rCmp : pDestShell->GetCrsr()->GetRingContainer())
     {
         OSL_ENSURE( rCmp.GetPoint()->nContent.GetIdxReg()
-                    == rCmp.GetCntntNode(), "Point in wrong Node" );
+                    == rCmp.GetContentNode(), "Point in wrong Node" );
         OSL_ENSURE( rCmp.GetMark()->nContent.GetIdxReg()
-                    == rCmp.GetCntntNode(false), "Mark in wrong Node" );
+                    == rCmp.GetContentNode(false), "Mark in wrong Node" );
         bool bTst = *rCmp.GetPoint() == *rCmp.GetMark();
         (void) bTst;
     }
@@ -288,7 +288,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     pDestShell->EndAllAction();
 
-    pDestShell->SaveTblBoxCntnt( pDestShell->GetCrsr()->GetPoint() );
+    pDestShell->SaveTableBoxContent( pDestShell->GetCrsr()->GetPoint() );
 
     return bRet;
 }
@@ -316,7 +316,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
             {
                 bRet = GetDoc()->getIDocumentContentOperations().ReplaceRange( rPaM, rNewStr, bRegExpRplc )
                     || bRet;
-                SaveTblBoxCntnt( rPaM.GetPoint() );
+                SaveTableBoxContent( rPaM.GetPoint() );
             }
         }
 

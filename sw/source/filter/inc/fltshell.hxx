@@ -58,40 +58,40 @@ struct SW_DLLPUBLIC SwFltPosition
 {
 public:
     SwNodeIndex m_nNode;
-    sal_Int32 m_nCntnt;
+    sal_Int32 m_nContent;
 public:
     SwFltPosition(const SwFltPosition &rOther)
         : m_nNode(rOther.m_nNode)
-        , m_nCntnt(rOther.m_nCntnt)
+        , m_nContent(rOther.m_nContent)
     {
     }
     SwFltPosition &operator=(const SwFltPosition &rOther)
     {
         m_nNode = rOther.m_nNode;
-        m_nCntnt = rOther.m_nCntnt;
+        m_nContent = rOther.m_nContent;
         return *this;
     }
     bool operator==(const SwFltPosition &rOther) const
     {
-        return (m_nCntnt == rOther.m_nCntnt &&
+        return (m_nContent == rOther.m_nContent &&
                 m_nNode == rOther.m_nNode);
     }
     void SetPos(SwNodeIndex &rNode, sal_uInt16 nIdx)
     {
         m_nNode = rNode;
-        m_nCntnt = nIdx;
+        m_nContent = nIdx;
     }
     //operators with SwPosition, where the node is hacked to the previous one,
     //and the offset to content is de-dynamic-ified
     SwFltPosition(const SwPosition &rPos)
         : m_nNode(rPos.nNode, -1)
-        , m_nCntnt(rPos.nContent.GetIndex())
+        , m_nContent(rPos.nContent.GetIndex())
     {
     }
     void SetPos(const SwPosition &rPos)
     {
         m_nNode = rPos.nNode.GetIndex()-1;
-        m_nCntnt = rPos.nContent.GetIndex();
+        m_nContent = rPos.nContent.GetIndex();
     }
 };
 
@@ -184,7 +184,7 @@ public:
     void StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId = 0);
     void MarkAllAttrsOld();
     void KillUnlockedAttrs(const SwPosition& pPos);
-    SfxPoolItem* GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = 0);
+    SfxPoolItem* GetFormatStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = 0);
     const SfxPoolItem* GetOpenStackAttr(const SwPosition& rPos, sal_uInt16 nWhich);
     void Delete(const SwPaM &rPam);
 
@@ -199,20 +199,20 @@ class SwFltAnchorClient;
 
 class SW_DLLPUBLIC SwFltAnchor : public SfxPoolItem
 {
-    SwFrmFmt* pFrmFmt;
+    SwFrameFormat* pFrameFormat;
     SwFltAnchorClient * pClient;
 
 public:
-    SwFltAnchor(SwFrmFmt* pFlyFmt);
+    SwFltAnchor(SwFrameFormat* pFlyFormat);
     SwFltAnchor(const SwFltAnchor&);
     virtual ~SwFltAnchor();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
-    void SetFrmFmt(SwFrmFmt * _pFrmFmt);
-    const SwFrmFmt* GetFrmFmt() const { return pFrmFmt;}
-          SwFrmFmt* GetFrmFmt() { return pFrmFmt;}
+    void SetFrameFormat(SwFrameFormat * _pFrameFormat);
+    const SwFrameFormat* GetFrameFormat() const { return pFrameFormat;}
+          SwFrameFormat* GetFrameFormat() { return pFrameFormat;}
 };
 
 class SwFltAnchorClient : public SwClient

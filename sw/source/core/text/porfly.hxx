@@ -25,7 +25,7 @@
 
 class SwDrawContact;
 class SwFlyInCntFrm;
-class SwTxtFrm;
+class SwTextFrm;
 struct SwCrsrMoveState;
 
 class SwFlyPortion : public SwFixPortion
@@ -36,8 +36,8 @@ public:
         : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( POR_FLY ); }
     inline sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
 
@@ -53,12 +53,12 @@ class SwFlyCntPortion : public SwLinePortion
 
 public:
     // Use new datatype for parameter <nFlags>
-    SwFlyCntPortion( const SwTxtFrm& rFrm, SwFlyInCntFrm *pFly,
+    SwFlyCntPortion( const SwTextFrm& rFrm, SwFlyInCntFrm *pFly,
                      const Point &rBase,
                      long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
                      objectpositioning::AsCharFlags nFlags );
     // Use new datatype for parameter <nFlags>
-    SwFlyCntPortion( const SwTxtFrm& rFrm, SwDrawContact *pDrawContact,
+    SwFlyCntPortion( const SwTextFrm& rFrm, SwDrawContact *pDrawContact,
                      const Point &rBase,
                      long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
                      objectpositioning::AsCharFlags nFlags );
@@ -75,14 +75,14 @@ public:
     inline void SetAlign( sal_uInt8 nNew ) { nAlign = nNew; }
     inline void SetMax( bool bNew ) { bMax = bNew; }
     // Use new datatype for parameter <nFlags>
-    void SetBase( const SwTxtFrm& rFrm, const Point &rBase,
+    void SetBase( const SwTextFrm& rFrm, const Point &rBase,
                   long nLnAscent, long nLnDescent,
                   long nFlyAscent, long nFlyDescent,
                   objectpositioning::AsCharFlags nFlags );
     sal_Int32 GetFlyCrsrOfst( const sal_uInt16 nOfst, const Point &rPoint,
                         SwPosition *pPos, SwCrsrMoveState* pCMS ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
 

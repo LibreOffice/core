@@ -169,8 +169,8 @@ void SwVisitingCardPage::UpdateFields()
 
 void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, const SwLabItem& rItem)
 {
-    uno::Reference< text::XTextFieldsSupplier >  xFlds(xModel, uno::UNO_QUERY);
-    uno::Reference< container::XNameAccess >  xFldMasters = xFlds->getTextFieldMasters();
+    uno::Reference< text::XTextFieldsSupplier >  xFields(xModel, uno::UNO_QUERY);
+    uno::Reference< container::XNameAccess >  xFieldMasters = xFields->getTextFieldMasters();
 
     static const struct _SwLabItemMap {
         const char* pName;
@@ -215,17 +215,17 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
     {
         for( const _SwLabItemMap* p = aArr; p->pName; ++p )
         {
-            OUString uFldName(
+            OUString uFieldName(
                 "com.sun.star.text.FieldMaster.User."
                 + OUString::createFromAscii(p->pName));
-            if( xFldMasters->hasByName( uFldName ))
+            if( xFieldMasters->hasByName( uFieldName ))
             {
-                uno::Any aFirstName = xFldMasters->getByName( uFldName );
-                uno::Reference< beans::XPropertySet >  xFld;
-                aFirstName >>= xFld;
+                uno::Any aFirstName = xFieldMasters->getByName( uFieldName );
+                uno::Reference< beans::XPropertySet >  xField;
+                aFirstName >>= xField;
                 uno::Any aContent;
                 aContent <<= rItem.*p->pValue;
-                xFld->setPropertyValue( UNO_NAME_CONTENT, aContent );
+                xField->setPropertyValue( UNO_NAME_CONTENT, aContent );
             }
         }
     }
@@ -234,8 +234,8 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
 
     }
 
-    uno::Reference< container::XEnumerationAccess >  xFldAcc = xFlds->getTextFields();
-    uno::Reference< util::XRefreshable >  xRefresh(xFldAcc, uno::UNO_QUERY);
+    uno::Reference< container::XEnumerationAccess >  xFieldAcc = xFields->getTextFields();
+    uno::Reference< util::XRefreshable >  xRefresh(xFieldAcc, uno::UNO_QUERY);
     xRefresh->refresh();
 }
 

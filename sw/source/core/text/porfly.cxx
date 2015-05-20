@@ -46,11 +46,11 @@
  * class SwFlyPortion => we expect a frame-locale SwRect!
  */
 
-void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
+void SwFlyPortion::Paint( const SwTextPaintInfo& ) const
 {
 }
 
-bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
+bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
 {
     OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format" );
 
@@ -72,13 +72,13 @@ bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     rInf.GetParaPortion()->SetFly( true );
 
     // trailing blank:
-    if( rInf.GetIdx() < rInf.GetTxt().getLength() &&  1 < rInf.GetIdx()
+    if( rInf.GetIdx() < rInf.GetText().getLength() &&  1 < rInf.GetIdx()
         && !rInf.GetRest()
         && ' ' == rInf.GetChar( rInf.GetIdx() )
         && ' ' != rInf.GetChar( rInf.GetIdx() - 1 )
         && ( !rInf.GetLast() || !rInf.GetLast()->IsBreakPortion() ) )
     {
-        SetBlankWidth( rInf.GetTxtSize(OUString(' ')).Width() );
+        SetBlankWidth( rInf.GetTextSize(OUString(' ')).Width() );
         SetLen( 1 );
     }
 
@@ -96,7 +96,7 @@ bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     return false;
 }
 
-bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
+bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
 {
     bool bFull = rInf.Width() < rInf.X() + PrtWidth();
 
@@ -147,7 +147,7 @@ bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
  * @param nStart
  * @param nEnd
  */
-void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd )
+void SwTextFrm::MoveFlyInCnt( SwTextFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd )
 {
     SwSortedObjs *pObjs = 0L;
     if ( 0 != (pObjs = GetDrawObjs()) )
@@ -156,10 +156,10 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd )
         {
             // Consider changed type of <SwSortedList> entries
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-            const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
+            const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat().GetAnchor();
             if (rAnch.GetAnchorId() == FLY_AS_CHAR)
             {
-                const SwPosition* pPos = rAnch.GetCntntAnchor();
+                const SwPosition* pPos = rAnch.GetContentAnchor();
                 const sal_Int32 nIdx = pPos->nContent.GetIndex();
                 if ( nIdx >= nStart && nEnd > nIdx )
                 {
@@ -180,20 +180,20 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd )
     }
 }
 
-sal_Int32 SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
+sal_Int32 SwTextFrm::CalcFlyPos( SwFrameFormat* pSearch )
 {
-    SwpHints* pHints = GetTxtNode()->GetpSwpHints();
+    SwpHints* pHints = GetTextNode()->GetpSwpHints();
     OSL_ENSURE( pHints, "CalcFlyPos: Why me?" );
     if( !pHints )
         return COMPLETE_STRING;
-    SwTxtAttr* pFound = NULL;
+    SwTextAttr* pFound = NULL;
     for ( size_t i = 0; i < pHints->Count(); ++i )
     {
-        SwTxtAttr *pHt = pHints->GetTextHint( i );
+        SwTextAttr *pHt = pHints->GetTextHint( i );
         if( RES_TXTATR_FLYCNT == pHt->Which() )
         {
-            SwFrmFmt* pFrmFmt = pHt->GetFlyCnt().GetFrmFmt();
-            if( pFrmFmt == pSearch )
+            SwFrameFormat* pFrameFormat = pHt->GetFlyCnt().GetFrameFormat();
+            if( pFrameFormat == pSearch )
                 pFound = pHt;
         }
     }
@@ -203,7 +203,7 @@ sal_Int32 SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
     return pFound->GetStart();
 }
 
-void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwFlyCntPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( bDraw )
     {
@@ -220,11 +220,11 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
         // Re-paint everything at a CompletePaint call
         SwRect aRepaintRect( rInf.GetPaintRect() );
 
-        if ( rInf.GetTxtFrm()->IsRightToLeft() )
-            rInf.GetTxtFrm()->SwitchLTRtoRTL( aRepaintRect );
+        if ( rInf.GetTextFrm()->IsRightToLeft() )
+            rInf.GetTextFrm()->SwitchLTRtoRTL( aRepaintRect );
 
-        if ( rInf.GetTxtFrm()->IsVertical() )
-            rInf.GetTxtFrm()->SwitchHorizontalToVertical( aRepaintRect );
+        if ( rInf.GetTextFrm()->IsVertical() )
+            rInf.GetTextFrm()->SwitchHorizontalToVertical( aRepaintRect );
 
         if( (GetFlyFrm()->IsCompletePaint() ||
              GetFlyFrm()->Frm().IsOver( aRepaintRect )) &&
@@ -240,17 +240,17 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
                 GetFlyFrm()->Paint( aRect );
             }
-            ((SwTxtPaintInfo&)rInf).GetRefDev()->SetLayoutMode(
+            ((SwTextPaintInfo&)rInf).GetRefDev()->SetLayoutMode(
                     rInf.GetOut()->GetLayoutMode() );
 
             // As the OutputDevice might be anything, the font must be re-selected.
             // Being in const method should not be a problem.
-            ((SwTxtPaintInfo&)rInf).SelectFont();
+            ((SwTextPaintInfo&)rInf).SelectFont();
 
             OSL_ENSURE( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
                     "SwFlyCntPortion::Paint: Outdev has changed" );
             if( rInf.GetVsh() )
-                ((SwTxtPaintInfo&)rInf).SetOut( rInf.GetVsh()->GetOut() );
+                ((SwTextPaintInfo&)rInf).SetOut( rInf.GetVsh()->GetOut() );
         }
     }
 }
@@ -258,7 +258,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
 /**
  * Use the dimensions of pFly->OutRect()
  */
-SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
+SwFlyCntPortion::SwFlyCntPortion( const SwTextFrm& rFrm,
                                   SwFlyInCntFrm *pFly, const Point &rBase,
                                   long nLnAscent, long nLnDescent,
                                   long nFlyAsc, long nFlyDesc,
@@ -275,7 +275,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     SetWhichPor( POR_FLYCNT );
 }
 
-SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
+SwFlyCntPortion::SwFlyCntPortion( const SwTextFrm& rFrm,
                                   SwDrawContact *pDrawContact, const Point &rBase,
                                   long nLnAscent, long nLnDescent,
                                   long nFlyAsc, long nFlyDesc,
@@ -308,7 +308,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
  *
  * @param rBase CAUTION: needs to be an absolute value!
  */
-void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
+void SwFlyCntPortion::SetBase( const SwTextFrm& rFrm, const Point &rBase,
                                long nLnAscent, long nLnDescent,
                                long nFlyAsc, long nFlyDesc,
                                objectpositioning::AsCharFlags nFlags )
@@ -327,7 +327,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         }
 
         // Call <SwAnchoredDrawObject::MakeObjPos()> to assure that flag at
-        // the <DrawFrmFmt> and at the <SwAnchoredDrawObject> instance are
+        // the <DrawFrameFormat> and at the <SwAnchoredDrawObject> instance are
         // correctly set
         if ( pSdrObj )
         {
@@ -354,31 +354,31 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         aObjPositioning.CalcPosition();
     }
 
-    SwFrmFmt* pShape = FindFrmFmt(pSdrObj);
-    const SwFmtAnchor& rAnchor(pShape->GetAnchor());
+    SwFrameFormat* pShape = FindFrameFormat(pSdrObj);
+    const SwFormatAnchor& rAnchor(pShape->GetAnchor());
     if (rAnchor.GetAnchorId() == FLY_AS_CHAR)
     {
         // This is an inline draw shape, see if it has a textbox.
-        SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(pShape);
+        SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(pShape);
         if (pTextBox)
         {
             // It has, so look up its text rectangle, and adjust the position
             // of the textbox accordingly.
             Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
 
-            SwFmtHoriOrient aHori(pTextBox->GetHoriOrient());
+            SwFormatHoriOrient aHori(pTextBox->GetHoriOrient());
             aHori.SetHoriOrient(css::text::HoriOrientation::NONE);
             sal_Int32 nLeft = aTextRectangle.getX() - rFrm.Frm().Left();
             aHori.SetPos(nLeft);
 
-            SwFmtVertOrient aVert(pTextBox->GetVertOrient());
+            SwFormatVertOrient aVert(pTextBox->GetVertOrient());
             aVert.SetVertOrient(css::text::VertOrientation::NONE);
             sal_Int32 nTop = aTextRectangle.getY() - rFrm.Frm().Top() - nFlyAsc;
             aVert.SetPos(nTop);
 
             pTextBox->LockModify();
-            pTextBox->SetFmtAttr(aHori);
-            pTextBox->SetFmtAttr(aVert);
+            pTextBox->SetFormatAttr(aHori);
+            pTextBox->SetFormatAttr(aVert);
             pTextBox->UnlockModify();
         }
     }

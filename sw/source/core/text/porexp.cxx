@@ -25,10 +25,10 @@
 sal_Int32 SwExpandPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 { return SwLinePortion::GetCrsrOfst( nOfst ); }
 
-bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
+bool SwExpandPortion::GetExpText( const SwTextSizeInfo&, OUString &rText ) const
 {
-    rTxt.clear();
-    // Do not do: return 0 != rTxt.Len();
+    rText.clear();
+    // Do not do: return 0 != rText.Len();
     // Reason being: empty fields replace CH_TXTATR with an empty string
     return true;
 }
@@ -38,19 +38,19 @@ void SwExpandPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), OUString(), GetWhichPor() );
 }
 
-SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
+SwPosSize SwExpandPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
-    SwTxtSlot aDiffTxt( &rInf, this, false, false );
-    return rInf.GetTxtSize();
+    SwTextSlot aDiffText( &rInf, this, false, false );
+    return rInf.GetTextSize();
 }
 
-bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
+bool SwExpandPortion::Format( SwTextFormatInfo &rInf )
 {
-    SwTxtSlot aDiffTxt( &rInf, this, true, false );
+    SwTextSlot aDiffText( &rInf, this, true, false );
     const sal_Int32 nFullLen = rInf.GetLen();
 
     // As odd as it may seem: the query for GetLen() must return
-    // false due to the ExpandPortions _after_ the aDiffTxt (see SoftHyphs)
+    // false due to the ExpandPortions _after_ the aDiffText (see SoftHyphs)
     // caused by the SetFull ...
     if( !nFullLen )
     {
@@ -58,17 +58,17 @@ bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
         Width(0);
         return false;
     }
-    return SwTxtPortion::Format( rInf );
+    return SwTextPortion::Format( rInf );
 }
 
-void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    SwTxtSlot aDiffTxt( &rInf, this, true, true );
+    SwTextSlot aDiffText( &rInf, this, true, true );
     const SwFont aOldFont = *rInf.GetFont();
     if( GetJoinBorderWithPrev() )
-        const_cast<SwTxtPaintInfo&>(rInf).GetFont()->SetLeftBorder(0);
+        const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetLeftBorder(0);
     if( GetJoinBorderWithNext() )
-        const_cast<SwTxtPaintInfo&>(rInf).GetFont()->SetRightBorder(0);
+        const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetRightBorder(0);
 
     rInf.DrawBackBrush( *this );
     rInf.DrawBorder( *this );
@@ -91,7 +91,7 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
         rInf.DrawText( *this, rInf.GetLen(), false );
 
     if( GetJoinBorderWithPrev() || GetJoinBorderWithNext() )
-        *const_cast<SwTxtPaintInfo&>(rInf).GetFont() = aOldFont;
+        *const_cast<SwTextPaintInfo&>(rInf).GetFont() = aOldFont;
 }
 
 SwLinePortion *SwBlankPortion::Compress() { return this; }
@@ -101,7 +101,7 @@ SwLinePortion *SwBlankPortion::Compress() { return this; }
  * underflows!
  * Causes problems with Fly
  */
-sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
+sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
     sal_Int32 nIdx, bool bUnderflow )
 {
     if( rInf.StopUnderflow() )
@@ -116,9 +116,9 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
 
     // If a Blank is preceding us, we do not need to trigger underflow
     // If a Blank is succeeding us, we do not need to pass on the underflow
-    if (bUnderflow && nIdx + 1 < rInf.GetTxt().getLength() && CH_BLANK == rInf.GetTxt()[nIdx + 1])
+    if (bUnderflow && nIdx + 1 < rInf.GetText().getLength() && CH_BLANK == rInf.GetText()[nIdx + 1])
         return 0;
-    if( nIdx && !const_cast<SwTxtFormatInfo&>(rInf).GetFly() )
+    if( nIdx && !const_cast<SwTextFormatInfo&>(rInf).GetFly() )
     {
         while( pPos && !pPos->IsFlyPortion() )
             pPos = pPos->GetPortion();
@@ -151,7 +151,7 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
 /**
  * Format End of Line
  */
-void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
+void SwBlankPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
     sal_uInt16 nMay = MayUnderflow( rInf, rInf.GetIdx() - nLineLength, true );
     if( nMay )
@@ -173,7 +173,7 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
 /**
  * Pass on the underflows and trigger them ourselves!
  */
-bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
+bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
 {
     const bool bFull = rInf.IsUnderflow() || SwExpandPortion::Format( rInf );
     if( bFull && MayUnderflow( rInf, rInf.GetIdx(), rInf.IsUnderflow() ) )
@@ -186,16 +186,16 @@ bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( !bMulti ) // No gray background for multiportion brackets
         rInf.DrawViewOpt( *this, POR_BLANK );
     SwExpandPortion::Paint( rInf );
 }
 
-bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
+bool SwBlankPortion::GetExpText( const SwTextSizeInfo&, OUString &rText ) const
 {
-    rTxt = OUString(cChar);
+    rText = OUString(cChar);
     return true;
 }
 
@@ -211,19 +211,19 @@ SwPostItsPortion::SwPostItsPortion( bool bScrpt )
     SetWhichPor( POR_POSTITS );
 }
 
-void SwPostItsPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwPostItsPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && Width() )
         rInf.DrawPostIts( *this, IsScript() );
 }
 
-sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
 {
     // Unbelievable: PostIts are always visible
     return rInf.OnWin() ? SwViewOption::GetPostItsWidth( rInf.GetOut() ) : 0;
 }
 
-bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
+bool SwPostItsPortion::Format( SwTextFormatInfo &rInf )
 {
     const bool bRet = SwLinePortion::Format( rInf );
     // PostIts should not have an effect on line height etc.
@@ -232,12 +232,12 @@ bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
     return bRet;
 }
 
-bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwPostItsPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsPostIts() )
-        rTxt = " ";
+        rText = " ";
     else
-        rTxt.clear();
+        rText.clear();
     return true;
 }
 

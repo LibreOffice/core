@@ -20,35 +20,35 @@
 #define INCLUDED_SW_INC_TBLENUM_HXX
 
 // For changing table columns/rows widths/heights.
-typedef sal_uInt16 TblChgWidthHeightType;
+typedef sal_uInt16 TableChgWidthHeightType;
 
-namespace nsTblChgWidthHeightType
+namespace nsTableChgWidthHeightType
 {
-    const TblChgWidthHeightType WH_COL_LEFT = 0;
-    const TblChgWidthHeightType WH_COL_RIGHT = 1;
-    const TblChgWidthHeightType WH_ROW_TOP = 2;
-    const TblChgWidthHeightType WH_ROW_BOTTOM = 3;
-    const TblChgWidthHeightType WH_CELL_LEFT = 4;
-    const TblChgWidthHeightType WH_CELL_RIGHT = 5;
-    const TblChgWidthHeightType WH_CELL_TOP = 6;
-    const TblChgWidthHeightType WH_CELL_BOTTOM = 7;
+    const TableChgWidthHeightType WH_COL_LEFT = 0;
+    const TableChgWidthHeightType WH_COL_RIGHT = 1;
+    const TableChgWidthHeightType WH_ROW_TOP = 2;
+    const TableChgWidthHeightType WH_ROW_BOTTOM = 3;
+    const TableChgWidthHeightType WH_CELL_LEFT = 4;
+    const TableChgWidthHeightType WH_CELL_RIGHT = 5;
+    const TableChgWidthHeightType WH_CELL_TOP = 6;
+    const TableChgWidthHeightType WH_CELL_BOTTOM = 7;
 
     // The following can "or"ed into.
-    const TblChgWidthHeightType WH_FLAG_INSDEL  = 0x4000;           // Insert/Del-mode: the Bigger-Flag
+    const TableChgWidthHeightType WH_FLAG_INSDEL  = 0x4000;           // Insert/Del-mode: the Bigger-Flag
                                                                     // tells what happens:
                                                                     // bBigger -> box gets removed.
                                                                     // !bBigger-> box gets inserted.
-    const TblChgWidthHeightType WH_FLAG_BIGGER  = 0x8000;           // Box becomes larger -> else smaller.
+    const TableChgWidthHeightType WH_FLAG_BIGGER  = 0x8000;           // Box becomes larger -> else smaller.
 }
 
-enum TblChgMode
+enum TableChgMode
 {
     TBLFIX_CHGABS,          // Table fixed width, change neighbour.
     TBLFIX_CHGPROP,         // Table fixed width, change all neighbours.
     TBLVAR_CHGABS           // Table variable, change all neighbours.
 };
 
-enum SplitTbl_HeadlineOption
+enum SplitTable_HeadlineOption
 {
     HEADLINE_NONE = 0,          // Leave everything in place.
     HEADLINE_BORDERCOPY,        // Copy border of the previous line.

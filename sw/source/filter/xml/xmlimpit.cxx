@@ -283,7 +283,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         switch( nMemberId )
                         {
                             case MID_L_MARGIN:
-                                pLRSpace->SetTxtLeft( (sal_Int32)nAbs, (sal_uInt16)nProp );
+                                pLRSpace->SetTextLeft( (sal_Int32)nAbs, (sal_uInt16)nProp );
                                 break;
                             case MID_R_MARGIN:
                                 pLRSpace->SetRight( (sal_Int32)nAbs, (sal_uInt16)nProp );
@@ -304,7 +304,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
                                                              -0x7fff, 0x7fff );
 
-                    pLRSpace->SetTxtFirstLineOfst( (short)nAbs, (sal_uInt16)nProp );
+                    pLRSpace->SetTextFirstLineOfst( (short)nAbs, (sal_uInt16)nProp );
                 }
                 break;
 
@@ -589,8 +589,8 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_BREAK:
         {
-            SvxFmtBreakItem* pFmtBreak = PTR_CAST(SvxFmtBreakItem, &rItem);
-            OSL_ENSURE( pFmtBreak != NULL, "Wrong Which-ID" );
+            SvxFormatBreakItem* pFormatBreak = PTR_CAST(SvxFormatBreakItem, &rItem);
+            OSL_ENSURE( pFormatBreak != NULL, "Wrong Which-ID" );
 
             sal_uInt16 eEnum;
 
@@ -599,7 +599,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
             if( eEnum == 0 )
             {
-                pFmtBreak->SetValue( SVX_BREAK_NONE );
+                pFormatBreak->SetValue( SVX_BREAK_NONE );
                 bOk = true;
             }
             else
@@ -607,12 +607,12 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 switch( nMemberId )
                 {
                     case MID_BREAK_BEFORE:
-                        pFmtBreak->SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
+                        pFormatBreak->SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
                                              SVX_BREAK_COLUMN_BEFORE :
                                              SVX_BREAK_PAGE_BEFORE) );
                         break;
                     case MID_BREAK_AFTER:
-                        pFmtBreak->SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
+                        pFormatBreak->SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
                                              SVX_BREAK_COLUMN_AFTER :
                                              SVX_BREAK_PAGE_AFTER) );
                         break;
@@ -624,19 +624,19 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_KEEP:
         {
-            SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
-            OSL_ENSURE( pFmtKeep != NULL, "Wrong Which-ID" );
+            SvxFormatKeepItem* pFormatKeep = PTR_CAST(SvxFormatKeepItem, &rItem);
+            OSL_ENSURE( pFormatKeep != NULL, "Wrong Which-ID" );
 
             if( IsXMLToken( rValue, XML_ALWAYS ) ||
                  IsXMLToken( rValue, XML_TRUE ) )
             {
-                pFmtKeep->SetValue( true );
+                pFormatKeep->SetValue( true );
                 bOk = true;
             }
             else if( IsXMLToken( rValue, XML_AUTO ) ||
                      IsXMLToken( rValue, XML_FALSE ) )
             {
-                pFmtKeep->SetValue( false );
+                pFormatKeep->SetValue( false );
                 bOk = true;
             }
         }
@@ -787,7 +787,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_PAGEDESC:
         {
-            SwFmtPageDesc* pPageDesc = PTR_CAST(SwFmtPageDesc, &rItem);
+            SwFormatPageDesc* pPageDesc = PTR_CAST(SwFormatPageDesc, &rItem);
             OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
@@ -824,7 +824,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_HORI_ORIENT:
         {
-            SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
+            SwFormatHoriOrient* pHoriOrient = PTR_CAST(SwFormatHoriOrient, &rItem);
             OSL_ENSURE( pHoriOrient != NULL, "Wrong Which-ID" );
 
             sal_uInt16 nValue;
@@ -837,7 +837,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_VERT_ORIENT:
         {
-            SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
+            SwFormatVertOrient* pVertOrient = PTR_CAST(SwFormatVertOrient, &rItem);
             OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
 
             sal_uInt16 nValue;
@@ -856,7 +856,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_FRM_SIZE:
         {
-            SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
+            SwFormatFrmSize* pFrmSize = PTR_CAST(SwFormatFrmSize, &rItem);
             OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
             bool bSetHeight = false;

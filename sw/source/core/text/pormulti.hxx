@@ -22,12 +22,12 @@
 #include "porlay.hxx"
 #include "porexp.hxx"
 
-class SwTxtFormatInfo;
-class SwFldPortion;
-class SwTxtCursor;
+class SwTextFormatInfo;
+class SwFieldPortion;
+class SwTextCursor;
 class SwLineLayout;
-class SwTxtPaintInfo;
-class SwTxtAttr;
+class SwTextPaintInfo;
+class SwTextAttr;
 class SfxPoolItem;
 class SwFont;
 
@@ -43,7 +43,7 @@ class SwFont;
 
 struct SwMultiCreator
 {
-    const SwTxtAttr* pAttr;
+    const SwTextAttr* pAttr;
     const SfxPoolItem* pItem;
     sal_uInt8 nId;
     sal_uInt8 nLevel;
@@ -73,7 +73,7 @@ struct SwBracket
 class SwMultiPortion : public SwLinePortion
 {
     SwLineLayout aRoot;     // One or more lines
-    SwFldPortion *pFldRest; // Field rest from the previous line
+    SwFieldPortion *pFieldRest; // Field rest from the previous line
     bool bTab1      :1;     // First line tabulator
     bool bTab2      :1;     // Second line includes tabulator
     bool bDouble    :1;     // Double line
@@ -81,12 +81,12 @@ class SwMultiPortion : public SwLinePortion
     bool bBidi      :1;
     bool bTop       :1;     // Phonetic position
     bool bFormatted :1;     // Already formatted
-    bool bFollowFld :1;     // Field follow inside
-    bool bFlyInCntnt:1;     // Fly as character inside
+    bool bFollowField :1;     // Field follow inside
+    bool bFlyInContent:1;     // Fly as character inside
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
 protected:
     explicit SwMultiPortion(sal_Int32 nEnd)
-        : pFldRest(0)
+        : pFieldRest(0)
         , bTab1(false)
         , bTab2(false)
         , bDouble(false)
@@ -94,8 +94,8 @@ protected:
         , bBidi(false)
         , bTop(false)
         , bFormatted(false)
-        , bFollowFld(false)
-        , bFlyInCntnt(false)
+        , bFollowField(false)
+        , bFlyInContent(false)
         , nDirection(0)
     {
         SetWhichPor(POR_MULTI);
@@ -114,28 +114,28 @@ public:
     virtual ~SwMultiPortion();
     const SwLineLayout& GetRoot() const { return aRoot; }
     SwLineLayout& GetRoot() { return aRoot; }
-    SwFldPortion* GetFldRest() { return pFldRest; }
-    void SetFldRest( SwFldPortion* pNew ) { pFldRest = pNew; }
+    SwFieldPortion* GetFieldRest() { return pFieldRest; }
+    void SetFieldRest( SwFieldPortion* pNew ) { pFieldRest = pNew; }
 
     inline bool HasTabulator() const { return bTab1 || bTab2; }
     inline bool IsFormatted() const { return bFormatted; }
     inline void SetFormatted() { bFormatted = true; }
-    inline bool IsFollowFld() const { return bFollowFld; }
-    inline void SetFollowFld() { bFollowFld = true; }
-    inline bool HasFlyInCntnt() const { return bFlyInCntnt; }
-    inline void SetFlyInCntnt( bool bNew ) { bFlyInCntnt = bNew; }
+    inline bool IsFollowField() const { return bFollowField; }
+    inline void SetFollowField() { bFollowField = true; }
+    inline bool HasFlyInContent() const { return bFlyInContent; }
+    inline void SetFlyInContent( bool bNew ) { bFlyInContent = bNew; }
     inline bool IsDouble() const { return bDouble; }
     inline bool IsRuby() const { return bRuby; }
     inline bool IsBidi() const { return bBidi; }
     inline bool OnTop() const { return bTop; }
     void ActualizeTabulator();
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 
     // Summarize the internal lines to calculate the (external) size
-    void CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf );
+    void CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf );
 
     inline bool HasBrackets() const;
     inline bool HasRotation() const { return 0 != (1 & nDirection); }
@@ -163,15 +163,15 @@ public:
 
     inline SwBracket* GetBrackets() const { return pBracket; }
     void SetBrackets( const SwDoubleLinePortion& rDouble );
-    void PaintBracket( SwTxtPaintInfo& rInf, long nSpaceAdd, bool bOpen ) const;
-    void FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth );
+    void PaintBracket( SwTextPaintInfo& rInf, long nSpaceAdd, bool bOpen ) const;
+    void FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxWidth );
     inline sal_uInt16 PreWidth() const { return pBracket->nPreWidth; };
     inline sal_uInt16 PostWidth() const { return pBracket->nPostWidth; }
     inline void ClearBrackets()
         { pBracket->nPreWidth = pBracket->nPostWidth=0; Width( 0 ); }
     inline sal_uInt16 BracketWidth(){ return PreWidth() + PostWidth(); }
 
-    void CalcBlanks( SwTxtFormatInfo &rInf );
+    void CalcBlanks( SwTextFormatInfo &rInf );
     static void ResetSpaceAdd( SwLineLayout* pCurr );
     inline SwTwips GetLineDiff() const { return nLineDiff; }
     inline sal_Int32 GetSpaceCnt() const
@@ -181,7 +181,7 @@ public:
     inline sal_Int32 GetBlank1() const { return nBlank1; }
     inline sal_Int32 GetBlank2() const { return nBlank2; }
 
-    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const SAL_OVERRIDE;
 };
 
@@ -189,7 +189,7 @@ class SwRubyPortion : public SwMultiPortion
 {
     sal_Int32 nRubyOffset;
     sal_uInt16 nAdjustment;
-    void _Adjust( SwTxtFormatInfo &rInf);
+    void _Adjust( SwTextFormatInfo &rInf);
 public:
     SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd );
 
@@ -199,7 +199,7 @@ public:
                    const bool* pForceRubyPos );
 
     void CalcRubyOffset();
-    inline void Adjust( SwTxtFormatInfo &rInf )
+    inline void Adjust( SwTextFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }
     inline sal_uInt16 GetAdjustment() const { return nAdjustment; }
     inline sal_Int32 GetRubyOffset() const { return nRubyOffset; }
@@ -223,27 +223,27 @@ public:
 
     inline sal_uInt8 GetLevel() const { return nLevel; }
     // Get number of blanks for justified alignment
-    sal_Int32 GetSpaceCnt( const SwTxtSizeInfo &rInf ) const;
+    sal_Int32 GetSpaceCnt( const SwTextSizeInfo &rInf ) const;
     // Calculates extra spacing based on number of blanks
-    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
     // Manipulate the spacing array at pCurr
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const SAL_OVERRIDE;
 };
 
 // For cursor travelling in multiportions
 
-class SwTxtCursorSave
+class SwTextCursorSave
 {
-    SwTxtCursor* pTxtCrsr;
+    SwTextCursor* pTextCrsr;
     SwLineLayout* pCurr;
     sal_Int32 nStart;
     sal_uInt16 nWidth;
     sal_uInt8 nOldProp;
     bool bSpaceChg;
 public:
-    SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
+    SwTextCursorSave( SwTextCursor* pTextCursor, SwMultiPortion* pMulti,
         SwTwips nY, sal_uInt16& nX, sal_Int32 nCurrStart, long nSpaceAdd );
-    ~SwTxtCursorSave();
+    ~SwTextCursorSave();
 };
 
 inline bool SwMultiPortion::HasBrackets() const

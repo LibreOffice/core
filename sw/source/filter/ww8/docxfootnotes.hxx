@@ -22,11 +22,11 @@
 
 #include <vector>
 
-class SwFmtFtn;
+class SwFormatFootnote;
 
 namespace docx {
 
-typedef ::std::vector< const SwFmtFtn* > FootnotesVector;
+typedef ::std::vector< const SwFormatFootnote* > FootnotesVector;
 
 /** Remember footnotes/endnotes so that we can dump them in one go.
 
@@ -43,14 +43,14 @@ class FootnotesList {
 public:
     FootnotesList() : m_nCurrent( -1 ) {}
 
-    void add( const SwFmtFtn& rFootnote )
+    void add( const SwFormatFootnote& rFootnote )
     {
         m_aFootnotes.push_back( &rFootnote );
         m_nCurrent = m_aFootnotes.size() - 1;
     }
 
     /// Return the current footnote/endnote and clear the 'current' state.
-    const SwFmtFtn* getCurrent( sal_Int32& rId )
+    const SwFormatFootnote* getCurrent( sal_Int32& rId )
     {
         // anything to write at all?
         if ( m_nCurrent < 0 )
@@ -63,7 +63,7 @@ public:
         // continuationSeparator
         rId = m_nCurrent + 2;
 
-        const SwFmtFtn *pFootnote = m_aFootnotes[m_nCurrent];
+        const SwFormatFootnote *pFootnote = m_aFootnotes[m_nCurrent];
         m_nCurrent = -1;
 
         return pFootnote;

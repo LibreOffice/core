@@ -23,44 +23,44 @@
 #include <sal/types.h>
 #include <o3tl/sorted_vector.hxx>
 
-class SwTxtFtn;
+class SwTextFootnote;
 class SwNodeIndex;
 class SwSectionNode;
 
 // Everywhere where NodeIndex is used, the header files missing here
 // are already included. Therefore put here as defines only and
 // not as inline methods (saves compile time).
-#define _SwTxtFtn_GetIndex( pFIdx ) (pFIdx->GetTxtNode().GetIndex())
+#define _SwTextFootnote_GetIndex( pFIdx ) (pFIdx->GetTextNode().GetIndex())
 
-struct CompareSwFtnIdxs
+struct CompareSwFootnoteIdxs
 {
-    bool operator()(SwTxtFtn* const& lhs, SwTxtFtn* const& rhs) const;
+    bool operator()(SwTextFootnote* const& lhs, SwTextFootnote* const& rhs) const;
 };
 
-class SwFtnIdxs : public o3tl::sorted_vector<SwTxtFtn*, CompareSwFtnIdxs>
+class SwFootnoteIdxs : public o3tl::sorted_vector<SwTextFootnote*, CompareSwFootnoteIdxs>
 {
 public:
-    SwFtnIdxs() {}
+    SwFootnoteIdxs() {}
 
-    void UpdateFtn( const SwNodeIndex& rStt ); // Update all from pos.
-    void UpdateAllFtn();                       // Update all footnotes.
+    void UpdateFootnote( const SwNodeIndex& rStt ); // Update all from pos.
+    void UpdateAllFootnote();                       // Update all footnotes.
 
-    SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, size_t* pPos = 0 ) const;
+    SwTextFootnote* SeekEntry( const SwNodeIndex& rIdx, size_t* pPos = 0 ) const;
 };
 
-class SwUpdFtnEndNtAtEnd
+class SwUpdFootnoteEndNtAtEnd
 {
-    std::vector<const SwSectionNode*> aFtnSects, aEndSects;
-    std::vector<sal_uInt16> aFtnNums, aEndNums;
+    std::vector<const SwSectionNode*> aFootnoteSects, aEndSects;
+    std::vector<sal_uInt16> aFootnoteNums, aEndNums;
 
 public:
-    SwUpdFtnEndNtAtEnd() : aFtnSects(), aEndSects() {}
+    SwUpdFootnoteEndNtAtEnd() : aFootnoteSects(), aEndSects() {}
 
     static const SwSectionNode* FindSectNdWithEndAttr(
-                                            const SwTxtFtn& rTxtFtn );
+                                            const SwTextFootnote& rTextFootnote );
 
-    sal_uInt16 GetNumber( const SwTxtFtn& rTxtFtn, const SwSectionNode& rNd );
-    sal_uInt16 ChkNumber( const SwTxtFtn& rTxtFtn );
+    sal_uInt16 GetNumber( const SwTextFootnote& rTextFootnote, const SwSectionNode& rNd );
+    sal_uInt16 ChkNumber( const SwTextFootnote& rTextFootnote );
 };
 
 #endif // INCLUDED_SW_INC_FTNIDX_HXX

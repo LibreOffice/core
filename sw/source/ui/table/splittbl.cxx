@@ -22,32 +22,32 @@
 #include <table.hrc>
 #include <tblenum.hxx>
 
-SwSplitTblDlg::SwSplitTblDlg( vcl::Window *pParent, SwWrtShell &rSh )
+SwSplitTableDlg::SwSplitTableDlg( vcl::Window *pParent, SwWrtShell &rSh )
     : SvxStandardDialog( pParent, "SplitTableDialog", "modules/swriter/ui/splittable.ui" )
     , rShell(rSh)
     , m_nSplit(HEADLINE_CNTNTCOPY)
 {
-    get(mpCntntCopyRB, "copyheading");
+    get(mpContentCopyRB, "copyheading");
     get(mpBoxAttrCopyWithParaRB, "customheadingapplystyle");
     get(mpBoxAttrCopyNoParaRB, "customheading");
     get(mpBorderCopyRB, "noheading");
 }
 
-SwSplitTblDlg::~SwSplitTblDlg()
+SwSplitTableDlg::~SwSplitTableDlg()
 {
     disposeOnce();
 }
 
-void SwSplitTblDlg::dispose()
+void SwSplitTableDlg::dispose()
 {
-    mpCntntCopyRB.clear();
+    mpContentCopyRB.clear();
     mpBoxAttrCopyWithParaRB.clear();
     mpBoxAttrCopyNoParaRB.clear();
     mpBorderCopyRB.clear();
     SvxStandardDialog::dispose();
 }
 
-void SwSplitTblDlg::Apply()
+void SwSplitTableDlg::Apply()
 {
     m_nSplit = HEADLINE_CNTNTCOPY;
     if(mpBoxAttrCopyWithParaRB->IsChecked())

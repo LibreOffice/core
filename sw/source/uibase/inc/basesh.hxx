@@ -61,7 +61,7 @@ protected:
 
     DECL_LINK(          InsertDBTextHdl, DBTextStruct_Impl* );
 
-    void                InsertURLButton( const OUString& rURL, const OUString& rTarget, const OUString& rTxt );
+    void                InsertURLButton( const OUString& rURL, const OUString& rTarget, const OUString& rText );
     void                InsertTable( SfxRequest& _rRequest );
 
 public:
@@ -94,9 +94,9 @@ public:
     void        ExecDlg(SfxRequest &);
 
     void        StateStatusLine(SfxItemSet &rSet);
-    void        ExecTxtCtrl(SfxRequest& rReq);
-    void        GetTxtFontCtrlState(SfxItemSet& rSet);
-    void        GetTxtCtrlState(SfxItemSet& rSet);
+    void        ExecTextCtrl(SfxRequest& rReq);
+    void        GetTextFontCtrlState(SfxItemSet& rSet);
+    void        GetTextCtrlState(SfxItemSet& rSet);
     void        GetBorderState(SfxItemSet &rSet);
     void        GetBckColState(SfxItemSet &rSet);
 

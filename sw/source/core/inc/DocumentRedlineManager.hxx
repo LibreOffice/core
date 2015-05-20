@@ -44,11 +44,11 @@ public:
 
     virtual bool IsIgnoreRedline() const SAL_OVERRIDE;
 
-    virtual const SwRedlineTbl& GetRedlineTbl() const SAL_OVERRIDE;
-    virtual SwRedlineTbl& GetRedlineTbl() SAL_OVERRIDE;
-    virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const SAL_OVERRIDE;
-    virtual SwExtraRedlineTbl& GetExtraRedlineTbl() SAL_OVERRIDE;
-    virtual bool HasExtraRedlineTbl() const SAL_OVERRIDE;
+    virtual const SwRedlineTable& GetRedlineTable() const SAL_OVERRIDE;
+    virtual SwRedlineTable& GetRedlineTable() SAL_OVERRIDE;
+    virtual const SwExtraRedlineTable& GetExtraRedlineTable() const SAL_OVERRIDE;
+    virtual SwExtraRedlineTable& GetExtraRedlineTable() SAL_OVERRIDE;
+    virtual bool HasExtraRedlineTable() const SAL_OVERRIDE;
 
     virtual bool IsInRedlines(const SwNode& rNode) const SAL_OVERRIDE;
 
@@ -116,7 +116,7 @@ public:
     /** Set comment-text for Redline. It then comes in via AppendRedLine.
      Used by AutoFormat. 0-pointer resets mode.
      Sequence number is for conjoining of Redlines by the UI. */
-    void SetAutoFmtRedlineComment( const OUString* pTxt, sal_uInt16 nSeqNo = 0 );
+    void SetAutoFormatRedlineComment( const OUString* pText, sal_uInt16 nSeqNo = 0 );
 
     void checkRedlining(RedlineMode_t& _rReadlineMode);
 
@@ -127,13 +127,13 @@ private:
     SwDoc& m_rDoc;
 
     RedlineMode_t meRedlineMode;     //< Current Redline Mode.
-    SwRedlineTbl        *mpRedlineTbl;           //< List of all Ranged Redlines.
-    SwExtraRedlineTbl   *mpExtraRedlineTbl;      //< List of all Extra Redlines.
-    OUString            *mpAutoFmtRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
+    SwRedlineTable        *mpRedlineTable;           //< List of all Ranged Redlines.
+    SwExtraRedlineTable   *mpExtraRedlineTable;      //< List of all Extra Redlines.
+    OUString            *mpAutoFormatRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
     bool mbIsRedlineMove;    //< true: Redlines are moved into to / out of the section.
     bool mbReadlineChecked;    //< true: if the query was already shown
-    sal_uInt16 mnAutoFmtRedlnCommentNo;  /**< SeqNo for conjoining of AutoFmt-Redlines.
-                                         by the UI. Managed by SwAutoFmt! */
+    sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.
+                                         by the UI. Managed by SwAutoFormat! */
     ::com::sun::star::uno::Sequence <sal_Int8 > maRedlinePasswd;
 };
 

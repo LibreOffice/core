@@ -53,7 +53,7 @@ bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             else if( fnPosRegion == fnMoveForward )
             {
                 aIdx = *pNd;
-                SwCntntNode* pCNd = pNd->GetNodes().GoNextSection( &aIdx,
+                SwContentNode* pCNd = pNd->GetNodes().GoNextSection( &aIdx,
                                                 true, !bInReadOnly );
                 if( !pCNd )
                 {
@@ -65,7 +65,7 @@ bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             else
             {
                 aIdx = *pNd->EndOfSectionNode();
-                SwCntntNode* pCNd = SwNodes::GoPrevSection( &aIdx,
+                SwContentNode* pCNd = SwNodes::GoPrevSection( &aIdx,
                                                 true, !bInReadOnly );
                 if( !pCNd )
                 {
@@ -107,7 +107,7 @@ bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             else if( fnPosRegion == fnMoveForward )
             {
                 aIdx = *pNd;
-                SwCntntNode* pCNd = pNd->GetNodes().GoNextSection( &aIdx,
+                SwContentNode* pCNd = pNd->GetNodes().GoNextSection( &aIdx,
                                                 true, !bInReadOnly );
                 if( !pCNd )
                 {
@@ -119,7 +119,7 @@ bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             else
             {
                 aIdx = *pNd->EndOfSectionNode();
-                SwCntntNode* pCNd = SwNodes::GoPrevSection( &aIdx,
+                SwContentNode* pCNd = SwNodes::GoPrevSection( &aIdx,
                                                 true, !bInReadOnly );
                 if( !pCNd )
                 {
@@ -145,7 +145,7 @@ bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     SwPosition* pPos = rCurCrsr.GetPoint();
     bool bMoveBackward = fnPosRegion == fnMoveBackward;
 
-    SwCntntNode* pCNd;
+    SwContentNode* pCNd;
     if( bMoveBackward )
     {
         SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
@@ -178,7 +178,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     bool bMoveBackward = fnPosRegion == fnMoveBackward;
 
     do {
-        SwCntntNode* pCNd;
+        SwContentNode* pCNd;
         if( bMoveBackward ) // to the end of the section
         {
             SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
@@ -205,7 +205,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
         // try also the parent of this section
         SwSection* pParent = pNd->GetSection().GetParent();
-        pNd = pParent ? pParent->GetFmt()->GetSectionNode() : 0;
+        pNd = pParent ? pParent->GetFormat()->GetSectionNode() : 0;
     } while( pNd );
     return false;
 }
@@ -217,13 +217,13 @@ bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion 
             (*fnWhichRegion)( *this, fnPosRegion, IsReadOnlyAvailable()  ) &&
             !IsSelOvr() &&
             (GetPoint()->nNode.GetIndex() != m_pSavePos->nNode ||
-             GetPoint()->nContent.GetIndex() != m_pSavePos->nCntnt);
+             GetPoint()->nContent.GetIndex() != m_pSavePos->nContent);
 }
 
 bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
-    bool bRet = !m_pTblCrsr && m_pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
+    bool bRet = !m_pTableCrsr && m_pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
     if( bRet )
         UpdateCrsr();
     return bRet;
@@ -232,22 +232,22 @@ bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegi
 bool SwCursor::GotoRegion( const OUString& rName )
 {
     bool bRet = false;
-    const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( SwSectionFmts::size_type n = rFmts.size(); n; )
+    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    for( SwSectionFormats::size_type n = rFormats.size(); n; )
     {
-        const SwSectionFmt* pFmt = rFmts[ --n ];
+        const SwSectionFormat* pFormat = rFormats[ --n ];
         const SwNodeIndex* pIdx = 0;
         const SwSection* pSect;
-        if( 0 != ( pSect = pFmt->GetSection() ) &&
+        if( 0 != ( pSect = pFormat->GetSection() ) &&
             pSect->GetSectionName() == rName &&
-            0 != ( pIdx = pFmt->GetCntnt().GetCntntIdx() ) &&
+            0 != ( pIdx = pFormat->GetContent().GetContentIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             // area in normal nodes array
             SwCrsrSaveState aSaveState( *this );
 
             GetPoint()->nNode = *pIdx;
-            Move( fnMoveForward, fnGoCntnt );
+            Move( fnMoveForward, fnGoContent );
             bRet = !IsSelOvr();
         }
     }
@@ -257,7 +257,7 @@ bool SwCursor::GotoRegion( const OUString& rName )
 bool SwCrsrShell::GotoRegion( const OUString& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
-    bool bRet = !m_pTblCrsr && m_pCurCrsr->GotoRegion( rName );
+    bool bRet = !m_pTableCrsr && m_pCurCrsr->GotoRegion( rName );
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );

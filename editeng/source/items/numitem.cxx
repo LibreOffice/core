@@ -565,7 +565,7 @@ OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
     return sRet;
 }
 
-OUString SvxNumberFormat::GetCharFmtName()const
+OUString SvxNumberFormat::GetCharFormatName()const
 {
     return sCharStyleName;
 }

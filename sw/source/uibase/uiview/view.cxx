@@ -233,12 +233,12 @@ void SwView::SelectShell()
 
     // Decision if the UpdateTable has to be called
     bool bUpdateTable = false;
-    const SwFrmFmt* pCurTableFmt = m_pWrtShell->GetTableFmt();
-    if(pCurTableFmt && pCurTableFmt != m_pLastTableFormat)
+    const SwFrameFormat* pCurTableFormat = m_pWrtShell->GetTableFormat();
+    if(pCurTableFormat && pCurTableFormat != m_pLastTableFormat)
     {
         bUpdateTable = true; // can only be executed later
     }
-    m_pLastTableFormat = pCurTableFmt;
+    m_pLastTableFormat = pCurTableFormat;
 
     //SEL_TBL and SEL_TBL_CELLS can be ORed!
     int nNewSelectionType = (m_pWrtShell->GetSelectionType()
@@ -829,7 +829,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             m_pWrtShell->MoveTo(&rPreviewViewShell);
             // to update the field command et.al. if necessary
             const SwViewOption* pPreviewOpt = rPreviewViewShell.GetViewOptions();
-            if( pPreviewOpt->IsFldName() != aUsrPref.IsFldName() ||
+            if( pPreviewOpt->IsFieldName() != aUsrPref.IsFieldName() ||
                     pPreviewOpt->IsShowHiddenField() != aUsrPref.IsShowHiddenField() ||
                     pPreviewOpt->IsShowHiddenPara() != aUsrPref.IsShowHiddenPara() ||
                     pPreviewOpt->IsShowHiddenChar() != aUsrPref.IsShowHiddenChar() )
@@ -940,17 +940,17 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
     m_pWrtShell->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
-    if( m_pWrtShell->GetDoc()->getIDocumentState().IsUpdateExpFld() )
+    if( m_pWrtShell->GetDoc()->getIDocumentState().IsUpdateExpField() )
     {
         if (m_pWrtShell->GetDoc()->GetDocumentFieldsManager().containsUpdatableFields())
         {
             SET_CURR_SHELL( m_pWrtShell );
             m_pWrtShell->StartAction();
             m_pWrtShell->CalcLayout();
-            m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFlds(NULL, false);
+            m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(NULL, false);
             m_pWrtShell->EndAction();
         }
-        m_pWrtShell->GetDoc()->getIDocumentState().SetUpdateExpFldStat( false );
+        m_pWrtShell->GetDoc()->getIDocumentState().SetUpdateExpFieldStat( false );
     }
 
     // Update all tables if necessary:

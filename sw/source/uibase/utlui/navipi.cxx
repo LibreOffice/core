@@ -250,7 +250,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
                 if (rSh.EndPg())
                     nFuncId = FN_END_OF_PAGE;
             }
-            else if (rSh.GotoFooterTxt())
+            else if (rSh.GotoFooterText())
                 nFuncId = FN_TO_FOOTER;
             bFocusToDoc = true;
         }
@@ -264,7 +264,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
                 if (rSh.SttPg())
                     nFuncId = FN_START_OF_PAGE;
             }
-            else if (rSh.GotoHeaderTxt())
+            else if (rSh.GotoHeaderText())
                 nFuncId = FN_TO_HEADER;
             bFocusToDoc = true;
         }
@@ -276,7 +276,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
                 // Jump from the footnote to the anchor.
             if (eFrmType & FrmTypeFlags::FOOTNOTE)
             {
-                if (rSh.GotoFtnAnchor())
+                if (rSh.GotoFootnoteAnchor())
                     nFuncId = FN_FOOTNOTE_TO_ANCHOR;
             }
                 // Otherwise, jump to the first footnote text;
@@ -284,11 +284,11 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
                 // if this is also not possible got to the footnote before.
             else
             {
-                if (rSh.GotoFtnTxt())
+                if (rSh.GotoFootnoteText())
                     nFuncId = FN_FOOTNOTE_TO_ANCHOR;
-                else if (rSh.GotoNextFtnAnchor())
+                else if (rSh.GotoNextFootnoteAnchor())
                     nFuncId = FN_NEXT_FOOTNOTE;
-                else if (rSh.GotoPrevFtnAnchor())
+                else if (rSh.GotoPrevFootnoteAnchor())
                     nFuncId = FN_PREV_FOOTNOTE;
             }
             bFocusToDoc = true;
@@ -1103,27 +1103,27 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
 OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
 {
     OUString sFileName;
-    SotClipboardFormatId nFmt;
-    if( rData.HasFormat( nFmt = SotClipboardFormatId::FILE_LIST ))
+    SotClipboardFormatId nFormat;
+    if( rData.HasFormat( nFormat = SotClipboardFormatId::FILE_LIST ))
     {
         FileList aFileList;
-        rData.GetFileList( nFmt, aFileList );
+        rData.GetFileList( nFormat, aFileList );
         sFileName = aFileList.GetFile( 0 );
     }
-    else if( rData.HasFormat( nFmt = SotClipboardFormatId::STRING ) ||
-              rData.HasFormat( nFmt = SotClipboardFormatId::SIMPLE_FILE ) ||
-             rData.HasFormat( nFmt = SotClipboardFormatId::FILENAME ))
+    else if( rData.HasFormat( nFormat = SotClipboardFormatId::STRING ) ||
+              rData.HasFormat( nFormat = SotClipboardFormatId::SIMPLE_FILE ) ||
+             rData.HasFormat( nFormat = SotClipboardFormatId::FILENAME ))
     {
-        (void)rData.GetString(nFmt, sFileName);
+        (void)rData.GetString(nFormat, sFileName);
     }
-    else if( rData.HasFormat( nFmt = SotClipboardFormatId::SOLK ) ||
-                rData.HasFormat( nFmt = SotClipboardFormatId::NETSCAPE_BOOKMARK )||
-                rData.HasFormat( nFmt = SotClipboardFormatId::FILECONTENT ) ||
-                rData.HasFormat( nFmt = SotClipboardFormatId::FILEGRPDESCRIPTOR ) ||
-                rData.HasFormat( nFmt = SotClipboardFormatId::UNIFORMRESOURCELOCATOR ))
+    else if( rData.HasFormat( nFormat = SotClipboardFormatId::SOLK ) ||
+                rData.HasFormat( nFormat = SotClipboardFormatId::NETSCAPE_BOOKMARK )||
+                rData.HasFormat( nFormat = SotClipboardFormatId::FILECONTENT ) ||
+                rData.HasFormat( nFormat = SotClipboardFormatId::FILEGRPDESCRIPTOR ) ||
+                rData.HasFormat( nFormat = SotClipboardFormatId::UNIFORMRESOURCELOCATOR ))
     {
         INetBookmark aBkmk( aEmptyOUStr, aEmptyOUStr );
-        if (rData.GetINetBookmark(nFmt, aBkmk))
+        if (rData.GetINetBookmark(nFormat, aBkmk))
             sFileName = aBkmk.GetURL();
     }
     if( !sFileName.isEmpty() )

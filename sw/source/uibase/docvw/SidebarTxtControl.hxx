@@ -31,7 +31,7 @@ namespace sw { namespace sidebarwindows {
 
 class SwSidebarWin;
 
-class SidebarTxtControl : public Control
+class SidebarTextControl : public Control
 {
     private:
         SwSidebarWin& mrSidebarWin;
@@ -53,11 +53,11 @@ class SidebarTxtControl : public Control
         DECL_LINK( Select, Menu* );
 
     public:
-        SidebarTxtControl( SwSidebarWin& rSidebarWin,
+        SidebarTextControl( SwSidebarWin& rSidebarWin,
                            WinBits nBits,
                            SwView& rDocView,
                            SwPostItMgr& rPostItMgr );
-        virtual ~SidebarTxtControl();
+        virtual ~SidebarTextControl();
         virtual void dispose() SAL_OVERRIDE;
 
         virtual void GetFocus() SAL_OVERRIDE;

@@ -23,48 +23,48 @@
 
 #include "porlin.hxx"
 
-class SwTxtGuess;
+class SwTextGuess;
 
 /// This portion represents a part of the paragraph string.
-class SwTxtPortion : public SwLinePortion
+class SwTextPortion : public SwLinePortion
 {
-    void BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess );
-    void BreakUnderflow( SwTxtFormatInfo &rInf );
-    bool _Format( SwTxtFormatInfo &rInf );
+    void BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess );
+    void BreakUnderflow( SwTextFormatInfo &rInf );
+    bool _Format( SwTextFormatInfo &rInf );
 
 public:
-    inline SwTxtPortion(){ SetWhichPor( POR_TXT ); }
-    static SwTxtPortion * CopyLinePortion(const SwLinePortion &rPortion);
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    inline SwTextPortion(){ SetWhichPor( POR_TXT ); }
+    static SwTextPortion * CopyLinePortion(const SwLinePortion &rPortion);
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void FormatEOL( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
     virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
-    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const SAL_OVERRIDE;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
 
     // Counts the spaces for justified paragraph
-    sal_Int32 GetSpaceCnt( const SwTxtSizeInfo &rInf, sal_Int32& rCnt ) const;
+    sal_Int32 GetSpaceCnt( const SwTextSizeInfo &rInf, sal_Int32& rCnt ) const;
 
-    bool CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );
+    bool CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess &rGuess );
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
     OUTPUT_OPERATOR_OVERRIDE
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTxtPortion)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwTextPortion)
 };
 
-class SwTxtInputFldPortion : public SwTxtPortion
+class SwTextInputFieldPortion : public SwTextPortion
 {
 public:
-    SwTxtInputFldPortion();
+    SwTextInputFieldPortion();
 
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
+    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const SAL_OVERRIDE;
 
 private:
     bool mbContainsInputFieldStart;
@@ -76,12 +76,12 @@ class SwHolePortion : public SwLinePortion
 {
     sal_uInt16 nBlankWidth;
 public:
-            SwHolePortion( const SwTxtPortion &rPor );
+            SwHolePortion( const SwTextPortion &rPor );
     inline sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
@@ -90,23 +90,23 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwHolePortion)
 };
 
-class SwFieldMarkPortion : public SwTxtPortion
+class SwFieldMarkPortion : public SwTextPortion
 {
     public:
-        inline SwFieldMarkPortion() : SwTxtPortion()
+        inline SwFieldMarkPortion() : SwTextPortion()
             { }
-        virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-        virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+        virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+        virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
 };
 
-class SwFieldFormCheckboxPortion : public SwTxtPortion
+class SwFieldFormCheckboxPortion : public SwTextPortion
 {
 public:
-    SwFieldFormCheckboxPortion() : SwTxtPortion()
+    SwFieldFormCheckboxPortion() : SwTextPortion()
     {
     }
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
 };
 
 #endif

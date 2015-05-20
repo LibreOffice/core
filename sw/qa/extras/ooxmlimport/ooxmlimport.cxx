@@ -1366,7 +1366,7 @@ DECLARE_OOXMLIMPORT_TEST(testTableWidth, "table_width.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xFrames->getByIndex(0), "FrameWidthPercent"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testConditionalstylesTbllook, "conditionalstyles-tbllook.docx")
+DECLARE_OOXMLIMPORT_TEST(testConditionalstylesTablelook, "conditionalstyles-tbllook.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);

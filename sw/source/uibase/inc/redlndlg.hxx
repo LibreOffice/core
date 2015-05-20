@@ -79,7 +79,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     OUString                sDeleted;
     OUString                sFormated;
     OUString                sTableChgd;
-    OUString                sFmtCollSet;
+    OUString                sFormatCollSet;
     OUString                sFilterAction;
     OUString                sAutoFormat;
     VclPtr<SvxTPView>       pTPView;
@@ -88,7 +88,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     Link<>                  aOldDeselectHdl;
     bool                    bOnlyFormatedRedlines;
     bool                    bHasReadonlySel;
-    bool                    bRedlnAutoFmt;
+    bool                    bRedlnAutoFormat;
 
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
@@ -105,7 +105,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     DECL_DLLPRIVATE_LINK( CommandHdl,        void* );
 
     SAL_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, bool bChild);
-    SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFmt);
+    SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFormat);
     SAL_DLLPRIVATE void          InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd = USHRT_MAX);
     SAL_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
     SAL_DLLPRIVATE void          InitAuthors();
@@ -116,13 +116,13 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SAL_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
 public:
-    SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder, vcl::Window *pContentArea, bool bAutoFmt = false);
+    SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder, vcl::Window *pContentArea, bool bAutoFormat = false);
     virtual ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
 
     inline SvxAcceptChgCtr& GetChgCtrl()        { return *aTabPagesCTRL.get(); }
-    inline bool     HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
+    inline bool     HasRedlineAutoFormat() const   { return bRedlnAutoFormat; }
 
     void            Init(sal_uInt16 nStart = 0);
     void            CallAcceptReject( bool bSelect, bool bAccept );

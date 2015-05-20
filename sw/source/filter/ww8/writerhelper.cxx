@@ -74,12 +74,12 @@ namespace
     }
 
     // #i98791# - adjust sorting
-    // Utility to sort SwTxtFmtColl's by their assigned outline style list level
+    // Utility to sort SwTextFormatColl's by their assigned outline style list level
     class outlinecmp : public
-        std::binary_function<const SwTxtFmtColl*, const SwTxtFmtColl*, bool>
+        std::binary_function<const SwTextFormatColl*, const SwTextFormatColl*, bool>
     {
     public:
-        bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
+        bool operator()(const SwTextFormatColl *pA, const SwTextFormatColl *pB) const
         {
             // #i98791#
             bool bResult( false );
@@ -122,9 +122,9 @@ namespace
 
         for(SwPosFlyFrms::const_iterator aIter(rFlys.begin()); aIter != rFlys.end(); ++aIter)
         {
-            const SwFrmFmt &rEntry = (*aIter)->GetFmt();
+            const SwFrameFormat &rEntry = (*aIter)->GetFormat();
 
-            if (const SwPosition* pAnchor = rEntry.GetAnchor().GetCntntAnchor())
+            if (const SwPosition* pAnchor = rEntry.GetAnchor().GetContentAnchor())
             {
                 aRet.push_back(sw::Frame(rEntry, *pAnchor));
             }
@@ -132,9 +132,9 @@ namespace
             {
                 SwPosition aPos((*aIter)->GetNdIndex());
 
-                if (SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode())
+                if (SwTextNode* pTextNd = aPos.nNode.GetNode().GetTextNode())
                 {
-                    aPos.nContent.Assign(pTxtNd, 0);
+                    aPos.nContent.Assign(pTextNd, 0);
                 }
 
                 aRet.push_back(sw::Frame(rEntry, aPos));
@@ -185,35 +185,35 @@ namespace sw
         maLayoutSize = maSize;
     }
 
-    Frame::Frame(const SwFrmFmt &rFmt, const SwPosition &rPos)
-        : mpFlyFrm(&rFmt)
+    Frame::Frame(const SwFrameFormat &rFormat, const SwPosition &rPos)
+        : mpFlyFrm(&rFormat)
         , maPos(rPos)
         , maSize()
         , maLayoutSize() // #i43447#
-        , meWriterType(eTxtBox)
+        , meWriterType(eTextBox)
         , mpStartFrameContent(0)
         // #i43447# - move to initialization list
-        , mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
+        , mbIsInline( (rFormat.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
         // #i120928# - handle graphic of bullet within existing implementation
         , mbForBullet(false)
         , maGrf()
     {
-        switch (rFmt.Which())
+        switch (rFormat.Which())
         {
             case RES_FLYFRMFMT:
-                if (const SwNodeIndex* pIdx = rFmt.GetCntnt().GetCntntIdx())
+                if (const SwNodeIndex* pIdx = rFormat.GetContent().GetContentIdx())
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
                     const SwNode &rNd = aIdx.GetNode();
                     // #i43447# - determine layout size
                     {
-                        SwRect aLayRect( rFmt.FindLayoutRect() );
+                        SwRect aLayRect( rFormat.FindLayoutRect() );
                         Rectangle aRect( aLayRect.SVRect() );
                         // The Object is not rendered (e.g. something in unused
                         // header/footer) - thus, get the values from the format.
                         if ( aLayRect.IsEmpty() )
                         {
-                            aRect.SetSize( rFmt.GetFrmSize().GetSize() );
+                            aRect.SetSize( rFormat.GetFrmSize().GetSize() );
                         }
                         maLayoutSize = aRect.GetSize();
                     }
@@ -221,14 +221,14 @@ namespace sw
                     {
                         case ND_GRFNODE:
                             meWriterType = eGraphic;
-                            maSize = rNd.GetNoTxtNode()->GetTwipSize();
+                            maSize = rNd.GetNoTextNode()->GetTwipSize();
                             break;
                         case ND_OLENODE:
                             meWriterType = eOle;
-                            maSize = rNd.GetNoTxtNode()->GetTwipSize();
+                            maSize = rNd.GetNoTextNode()->GetTwipSize();
                             break;
                         default:
-                            meWriterType = eTxtBox;
+                            meWriterType = eTextBox;
                             // #i43447# - Size equals layout size for text boxes
                             maSize = maLayoutSize;
                             break;
@@ -238,11 +238,11 @@ namespace sw
                 else
                 {
                     OSL_ENSURE(false, "Impossible");
-                    meWriterType = eTxtBox;
+                    meWriterType = eTextBox;
                 }
                 break;
             default:
-                if (const SdrObject* pObj = rFmt.FindRealSdrObject())
+                if (const SdrObject* pObj = rFormat.FindRealSdrObject())
                 {
                     if (pObj->GetObjInventor() == FmFormInventor)
                         meWriterType = eFormControl;
@@ -448,13 +448,13 @@ namespace sw
             return 0;
         }
 
-        void ClearOverridesFromSet(const SwFmtCharFmt &rFmt, SfxItemSet &rSet)
+        void ClearOverridesFromSet(const SwFormatCharFormat &rFormat, SfxItemSet &rSet)
         {
-            if (const SwCharFmt* pCharFmt = rFmt.GetCharFmt())
+            if (const SwCharFormat* pCharFormat = rFormat.GetCharFormat())
             {
-                if (pCharFmt->GetAttrSet().Count())
+                if (pCharFormat->GetAttrSet().Count())
                 {
-                    SfxItemIter aIter(pCharFmt->GetAttrSet());
+                    SfxItemIter aIter(pCharFormat->GetAttrSet());
                     const SfxPoolItem *pItem = aIter.GetCurItem();
                     do
                         rSet.ClearItem(pItem->Which());
@@ -468,7 +468,7 @@ namespace sw
             ParaStyles aStyles;
             typedef ParaStyles::size_type mysizet;
 
-            const SwTxtFmtColls *pColls = rDoc.GetTxtFmtColls();
+            const SwTextFormatColls *pColls = rDoc.GetTextFormatColls();
             mysizet nCount = pColls ? pColls->size() : 0;
             aStyles.reserve(nCount);
             for (mysizet nI = 0; nI < nCount; ++nI)
@@ -476,33 +476,33 @@ namespace sw
             return aStyles;
         }
 
-        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const OUString& rName)
+        SwTextFormatColl* GetParaStyle(SwDoc &rDoc, const OUString& rName)
         {
             // Search first in the Doc-Styles
-            SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName(rName);
+            SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName(rName);
             if (!pColl)
             {
                 // Collection not found, try in Pool ?
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
                 if (n != SAL_MAX_UINT16)       // found or standard
-                    pColl = rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(n, false);
+                    pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(n, false);
             }
             return pColl;
         }
 
-        SwCharFmt* GetCharStyle(SwDoc &rDoc, const OUString& rName)
+        SwCharFormat* GetCharStyle(SwDoc &rDoc, const OUString& rName)
         {
-            SwCharFmt *pFmt = rDoc.FindCharFmtByName(rName);
-            if (!pFmt)
+            SwCharFormat *pFormat = rDoc.FindCharFormatByName(rName);
+            if (!pFormat)
             {
                 // Collection not found, try in Pool ?
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                 if (n != SAL_MAX_UINT16)       // found or standard
-                    pFmt = rDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool(n);
+                    pFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(n);
             }
-            return pFmt;
+            return pFormat;
         }
 
         // #i98791# - adjust sorting algorithm
@@ -517,7 +517,7 @@ namespace sw
            */
         Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)
         {
-            SwPosFlyFrms aFlys(rDoc.GetAllFlyFmts(pPaM, true));
+            SwPosFlyFrms aFlys(rDoc.GetAllFlyFormats(pPaM, true));
             sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
             return aRet;
         }
@@ -530,7 +530,7 @@ namespace sw
             return aRet;
         }
 
-        const SwNumFmt* GetNumFmtFromSwNumRuleLevel(const SwNumRule &rRule,
+        const SwNumFormat* GetNumFormatFromSwNumRuleLevel(const SwNumRule &rRule,
             int nLevel)
         {
             if (nLevel < 0 || nLevel >= MAXLEVEL)
@@ -541,46 +541,46 @@ namespace sw
             return &(rRule.Get( static_cast< sal_uInt16 >(nLevel) ));
         }
 
-        const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode)
+        const SwNumFormat* GetNumFormatFromTextNode(const SwTextNode &rTextNode)
         {
             const SwNumRule *pRule = 0;
             if (
-                rTxtNode.IsNumbered() && rTxtNode.IsCountedInList() &&
-                0 != (pRule = rTxtNode.GetNumRule())
+                rTextNode.IsNumbered() && rTextNode.IsCountedInList() &&
+                0 != (pRule = rTextNode.GetNumRule())
                 )
             {
-                return GetNumFmtFromSwNumRuleLevel(*pRule,
-                    rTxtNode.GetActualListLevel());
+                return GetNumFormatFromSwNumRuleLevel(*pRule,
+                    rTextNode.GetActualListLevel());
             }
 
-            OSL_ENSURE(rTxtNode.GetDoc(), "No document for node?, suspicious");
-            if (!rTxtNode.GetDoc())
+            OSL_ENSURE(rTextNode.GetDoc(), "No document for node?, suspicious");
+            if (!rTextNode.GetDoc())
                 return 0;
 
             if (
-                rTxtNode.IsNumbered() && rTxtNode.IsCountedInList() &&
-                0 != (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
+                rTextNode.IsNumbered() && rTextNode.IsCountedInList() &&
+                0 != (pRule = rTextNode.GetDoc()->GetOutlineNumRule())
                 )
             {
-                return GetNumFmtFromSwNumRuleLevel(*pRule,
-                    rTxtNode.GetActualListLevel());
+                return GetNumFormatFromSwNumRuleLevel(*pRule,
+                    rTextNode.GetActualListLevel());
             }
 
             return 0;
         }
 
-        const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
+        const SwNumRule* GetNumRuleFromTextNode(const SwTextNode &rTextNode)
         {
-            return GetNormalNumRuleFromTxtNode(rTxtNode);
+            return GetNormalNumRuleFromTextNode(rTextNode);
         }
 
-        const SwNumRule* GetNormalNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
+        const SwNumRule* GetNormalNumRuleFromTextNode(const SwTextNode &rTextNode)
         {
             const SwNumRule *pRule = 0;
 
             if (
-                rTxtNode.IsNumbered() && rTxtNode.IsCountedInList() &&
-                0 != (pRule = rTxtNode.GetNumRule())
+                rTextNode.IsNumbered() && rTextNode.IsCountedInList() &&
+                0 != (pRule = rTextNode.GetNumRule())
                )
             {
                 return pRule;
@@ -588,29 +588,29 @@ namespace sw
             return 0;
         }
 
-        SwNoTxtNode *GetNoTxtNodeFromSwFrmFmt(const SwFrmFmt &rFmt)
+        SwNoTextNode *GetNoTextNodeFromSwFrameFormat(const SwFrameFormat &rFormat)
         {
-            const SwNodeIndex *pIndex = rFmt.GetCntnt().GetCntntIdx();
-            OSL_ENSURE(pIndex, "No NodeIndex in SwFrmFmt ?, suspicious");
+            const SwNodeIndex *pIndex = rFormat.GetContent().GetContentIdx();
+            OSL_ENSURE(pIndex, "No NodeIndex in SwFrameFormat ?, suspicious");
             if (!pIndex)
                 return 0;
             SwNodeIndex aIdx(*pIndex, 1);
-            return aIdx.GetNode().GetNoTxtNode();
+            return aIdx.GetNode().GetNoTextNode();
         }
 
         bool HasPageBreak(const SwNode &rNd)
         {
-            const SvxFmtBreakItem *pBreak = 0;
+            const SvxFormatBreakItem *pBreak = 0;
             if (rNd.IsTableNode() && rNd.GetTableNode())
             {
                 const SwTable& rTable = rNd.GetTableNode()->GetTable();
-                const SwFrmFmt* pApply = rTable.GetFrmFmt();
+                const SwFrameFormat* pApply = rTable.GetFrameFormat();
                 OSL_ENSURE(pApply, "impossible");
                 if (pApply)
-                    pBreak = &(ItemGet<SvxFmtBreakItem>(*pApply, RES_BREAK));
+                    pBreak = &(ItemGet<SvxFormatBreakItem>(*pApply, RES_BREAK));
             }
-            else if (const SwCntntNode *pNd = rNd.GetCntntNode())
-                pBreak = &(ItemGet<SvxFmtBreakItem>(*pNd, RES_BREAK));
+            else if (const SwContentNode *pNd = rNd.GetContentNode())
+                pBreak = &(ItemGet<SvxFormatBreakItem>(*pNd, RES_BREAK));
 
             if (pBreak && pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE)
                 return true;
@@ -660,7 +660,7 @@ namespace sw
             }
         }
 
-        Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTxtNode* pNd)
+        Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd)
         {
             Polygon aPoly(PolygonFromPolyPolygon(rPolyPoly));
             const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
@@ -821,12 +821,12 @@ namespace sw
         {
         }
 
-        void InsertedTablesManager::DelAndMakeTblFrms()
+        void InsertedTablesManager::DelAndMakeTableFrms()
         {
             if (!mbHasRoot)
                 return;
-            TblMapIter aEnd = maTables.end();
-            for (TblMapIter aIter = maTables.begin(); aIter != aEnd; ++aIter)
+            TableMapIter aEnd = maTables.end();
+            for (TableMapIter aIter = maTables.begin(); aIter != aEnd; ++aIter)
             {
                 // exitiert schon ein Layout, dann muss an dieser Tabelle die BoxFrames
                 // neu erzeugt
@@ -834,9 +834,9 @@ namespace sw
                 OSL_ENSURE(pTable, "Why no expected table");
                 if (pTable)
                 {
-                    SwFrmFmt * pFrmFmt = pTable->GetTable().GetFrmFmt();
+                    SwFrameFormat * pFrameFormat = pTable->GetTable().GetFrameFormat();
 
-                    if (pFrmFmt != NULL)
+                    if (pFrameFormat != NULL)
                     {
                         SwNodeIndex *pIndex = aIter->second;
                         pTable->DelFrms();
@@ -855,7 +855,7 @@ namespace sw
 
             InsertedTableClient * pClient = new InsertedTableClient(rTableNode);
 
-            maTables.insert(TblMap::value_type(pClient, &(rPaM.GetPoint()->nNode)));
+            maTables.insert(TableMap::value_type(pClient, &(rPaM.GetPoint()->nNode)));
         }
     }
 

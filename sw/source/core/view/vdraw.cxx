@@ -223,7 +223,7 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
             const SwFrm *pAnchor = static_cast<const SwDrawContact*>(pCont)->GetAnchorFrm();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
-                 (FLY_AS_CHAR == pCont->GetFmt()->GetAnchor().GetAnchorId()) )
+                 (FLY_AS_CHAR == pCont->GetFormat()->GetAnchor().GetAnchorId()) )
             {
                 continue;
             }

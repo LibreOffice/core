@@ -280,11 +280,11 @@ const uno::Reference< drawing::XDrawPage >& SwHTMLForm_Impl::GetDrawPage()
 {
     if( !xDrawPage.is() && pDocSh )
     {
-        uno::Reference< drawing::XDrawPageSupplier > xTxtDoc( pDocSh->GetBaseModel(),
+        uno::Reference< drawing::XDrawPageSupplier > xTextDoc( pDocSh->GetBaseModel(),
                                                          UNO_QUERY );
-        OSL_ENSURE( xTxtDoc.is(),
+        OSL_ENSURE( xTextDoc.is(),
                 "drawing::XDrawPageSupplier nicht vom XModel erhalten" );
-        xDrawPage = xTxtDoc->getDrawPage();
+        xDrawPage = xTextDoc->getDrawPage();
         OSL_ENSURE( xDrawPage.is(), "drawing::XDrawPage nicht erhalten" );
     }
     return xDrawPage;
@@ -517,19 +517,19 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
         OSL_ENSURE( pSwShape, "Wo ist das SW-Shape?" );
         if( pSwShape )
         {
-            SwFrmFmt *pFrmFmt = pSwShape->GetFrmFmt();
+            SwFrameFormat *pFrameFormat = pSwShape->GetFrameFormat();
 
-            const SwDoc *pDoc = pFrmFmt->GetDoc();
-            const SwPosition* pAPos = pFrmFmt->GetAnchor().GetCntntAnchor();
+            const SwDoc *pDoc = pFrameFormat->GetDoc();
+            const SwPosition* pAPos = pFrameFormat->GetAnchor().GetContentAnchor();
             SwNode *pANd;
-            SwTableNode *pTblNd;
+            SwTableNode *pTableNd;
             if( pAPos &&
                 0 != (pANd = & pAPos->nNode.GetNode()) &&
-                0 != (pTblNd = pANd->FindTableNode()) )
+                0 != (pTableNd = pANd->FindTableNode()) )
             {
-                const bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
+                const bool bLastGrf = !pTableNd->GetTable().DecGrfsThatResize();
                 SwHTMLTableLayout *pLayout =
-                    pTblNd->GetTable().GetHTMLTableLayout();
+                    pTableNd->GetTable().GetHTMLTableLayout();
                 if( pLayout )
                 {
                     const sal_uInt16 nBrowseWidth =
@@ -678,11 +678,11 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     OSL_ENSURE( pSwShape, "Wo ist das SW-Shape?" );
 
     // es muss ein Draw-Format sein
-    SwFrmFmt *pFrmFmt = pSwShape ? pSwShape->GetFrmFmt() : NULL ;
-    OSL_ENSURE( pFrmFmt && RES_DRAWFRMFMT == pFrmFmt->Which(), "Kein DrawFrmFmt" );
+    SwFrameFormat *pFrameFormat = pSwShape ? pSwShape->GetFrameFormat() : NULL ;
+    OSL_ENSURE( pFrameFormat && RES_DRAWFRMFMT == pFrameFormat->Which(), "Kein DrawFrameFormat" );
 
     // Schauen, ob es ein SdrObject dafuer gibt
-    const SdrObject *pObj = pFrmFmt ? pFrmFmt->FindSdrObject() : NULL;
+    const SdrObject *pObj = pFrameFormat ? pFrameFormat->FindSdrObject() : NULL;
     OSL_ENSURE( pObj, "SdrObject nicht gefunden" );
     OSL_ENSURE( pObj && FmFormInventor == pObj->GetObjInventor(), "falscher Inventor" );
 
@@ -755,9 +755,9 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 
 static void lcl_html_setEvents(
         const uno::Reference< script::XEventAttacherManager > & rEvtMn,
-        sal_uInt32 nPos, const SvxMacroTableDtor& rMacroTbl,
-        const std::vector<OUString>& rUnoMacroTbl,
-        const std::vector<OUString>& rUnoMacroParamTbl,
+        sal_uInt32 nPos, const SvxMacroTableDtor& rMacroTable,
+        const std::vector<OUString>& rUnoMacroTable,
+        const std::vector<OUString>& rUnoMacroParamTable,
         const OUString& rType )
 {
     // Erstmal muss die Anzahl der Events ermittelt werden ...
@@ -766,15 +766,15 @@ static void lcl_html_setEvents(
 
     for( i = 0; HTML_ET_END != aEventTypeTable[i]; i++ )
     {
-        const SvxMacro *pMacro = rMacroTbl.Get( aEventTypeTable[i] );
+        const SvxMacro *pMacro = rMacroTable.Get( aEventTypeTable[i] );
         // Solange nicht alle Events implementiert sind, enthaelt die
         // Tabelle auch Leerstrings!
         if( pMacro && aEventListenerTable[i] )
             nEvents++;
     }
-    for( i=0; i< rUnoMacroTbl.size(); i++ )
+    for( i=0; i< rUnoMacroTable.size(); i++ )
     {
-        const OUString& rStr(rUnoMacroTbl[i]);
+        const OUString& rStr(rUnoMacroTable[i]);
         sal_Int32 nIndex = 0;
         if( rStr.getToken( 0, '-', nIndex ).isEmpty() || -1 == nIndex )
             continue;
@@ -793,7 +793,7 @@ static void lcl_html_setEvents(
 
     for( i=0; HTML_ET_END != aEventTypeTable[i]; i++ )
     {
-        const SvxMacro *pMacro = rMacroTbl.Get( aEventTypeTable[i] );
+        const SvxMacro *pMacro = rMacroTable.Get( aEventTypeTable[i] );
         if( pMacro && aEventListenerTable[i] )
         {
             script::ScriptEventDescriptor& rDesc = pDescs[nEvent++];
@@ -805,9 +805,9 @@ static void lcl_html_setEvents(
         }
     }
 
-    for( i=0; i< rUnoMacroTbl.size(); ++i )
+    for( i=0; i< rUnoMacroTable.size(); ++i )
     {
-        const OUString& rStr = rUnoMacroTbl[i];
+        const OUString& rStr = rUnoMacroTable[i];
         sal_Int32 nIndex = 0;
         OUString sListener( rStr.getToken( 0, '-', nIndex ) );
         if( sListener.isEmpty() || -1 == nIndex )
@@ -828,14 +828,14 @@ static void lcl_html_setEvents(
         rDesc.ScriptCode = sCode;
         rDesc.AddListenerParam.clear();
 
-        if(!rUnoMacroParamTbl.empty())
+        if(!rUnoMacroParamTable.empty())
         {
             OUString sSearch( sListener );
             sSearch += "-" +sMethod + "-";
             sal_Int32 nLen = sSearch.getLength();
-            for(size_t j = 0; j < rUnoMacroParamTbl.size(); ++j)
+            for(size_t j = 0; j < rUnoMacroParamTable.size(); ++j)
             {
-                const OUString& rParam = rUnoMacroParamTbl[j];
+                const OUString& rParam = rUnoMacroParamTable[j];
                 if( rParam.startsWith( sSearch ) && rParam.getLength() > nLen )
                 {
                     rDesc.AddListenerParam = rParam.copy(nLen);
@@ -848,20 +848,20 @@ static void lcl_html_setEvents(
 }
 
 static void lcl_html_getEvents( const OUString& rOption, const OUString& rValue,
-                                std::vector<OUString>& rUnoMacroTbl,
-                                std::vector<OUString>& rUnoMacroParamTbl )
+                                std::vector<OUString>& rUnoMacroTable,
+                                std::vector<OUString>& rUnoMacroParamTable )
 {
     if( rOption.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_sdevent ) )
     {
         OUString aEvent( rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdevent ) ) );
         aEvent += "-" + rValue;
-        rUnoMacroTbl.push_back(aEvent);
+        rUnoMacroTable.push_back(aEvent);
     }
     else if( rOption.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) )
     {
         OUString aParam( rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) ) );
         aParam += "-" + rValue;
-        rUnoMacroParamTbl.push_back(aParam);
+        rUnoMacroParamTable.push_back(aParam);
     }
 }
 
@@ -870,8 +870,8 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         const uno::Reference< beans::XPropertySet > & rFCompPropSet,
         const Size& rSize, sal_Int16 eVertOri, sal_Int16 eHoriOri,
         SfxItemSet& rCSS1ItemSet, SvxCSS1PropertyInfo& rCSS1PropInfo,
-        const SvxMacroTableDtor& rMacroTbl, const std::vector<OUString>& rUnoMacroTbl,
-        const std::vector<OUString>& rUnoMacroParamTbl, bool bSetFCompPropSet,
+        const SvxMacroTableDtor& rMacroTable, const std::vector<OUString>& rUnoMacroTable,
+        const std::vector<OUString>& rUnoMacroParamTable, bool bSetFCompPropSet,
         bool bHidden )
 {
     uno::Reference< drawing::XShape >  xShape;
@@ -916,7 +916,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             // Ggf. den Erstzeilen-Einzug noch plaetten
             const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
             SvxLRSpaceItem aLRItem( *pLRItem );
-            aLRItem.SetTxtFirstLineOfst( 0 );
+            aLRItem.SetTextFirstLineOfst( 0 );
             if( rCSS1PropInfo.bLeftMargin )
             {
                 nLeftSpace = static_cast< sal_uInt16 >(convertTwipToMm100( aLRItem.GetLeft() ));
@@ -1081,7 +1081,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        uno::Reference< text::XTextRange >  xTxtRg;
+        uno::Reference< text::XTextRange >  xTextRg;
         sal_Int16 nAnchorType = text::TextContentAnchorType_AS_CHARACTER;
         bool bSetPos = false, bSetSurround = false;
         sal_Int32 nXPos = 0, nYPos = 0;
@@ -1098,8 +1098,8 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                 nAnchorType = text::TextContentAnchorType_AT_FRAME;
                 SwPaM aPaM( *pFlySttNd );
 
-                uno::Reference< text::XText >  xDummyTxtRef; // unsauber, aber laut OS geht das ...
-                xTxtRg = new SwXTextRange( aPaM, xDummyTxtRef );
+                uno::Reference< text::XText >  xDummyTextRef; // unsauber, aber laut OS geht das ...
+                xTextRg = new SwXTextRange( aPaM, xDummyTextRef );
             }
             else
             {
@@ -1173,13 +1173,13 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         }
         else
         {
-            if( !xTxtRg.is() )
+            if( !xTextRg.is() )
             {
-                uno::Reference< text::XText >  xDummyTxtRef; // unsauber, aber laut OS geht das ...
-                xTxtRg = new SwXTextRange( *pPam, xDummyTxtRef );
+                uno::Reference< text::XText >  xDummyTextRef; // unsauber, aber laut OS geht das ...
+                xTextRg = new SwXTextRange( *pPam, xDummyTextRef );
             }
 
-            aTmp.setValue( &xTxtRg,
+            aTmp.setValue( &xTextRg,
                            cppu::UnoType<text::XTextRange>::get());
             xShapePropSet->setPropertyValue("TextRange", aTmp );
         }
@@ -1214,11 +1214,11 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
     // auch schon Fokus-Events verschickt. Damit die nicht evtl. schon
     // vorhendene JavaSCript-Eents rufen, werden die Events nachtraeglich
     // gesetzt.
-    if( !rMacroTbl.empty() || !rUnoMacroTbl.empty() )
+    if( !rMacroTable.empty() || !rUnoMacroTable.empty() )
     {
         lcl_html_setEvents( pFormImpl->GetControlEventManager(),
                             rFormComps->getCount() - 1,
-                            rMacroTbl, rUnoMacroTbl, rUnoMacroParamTbl,
+                            rMacroTable, rUnoMacroTable, rUnoMacroParamTable,
                             GetScriptTypeString(pFormImpl->GetHeaderAttrs()) );
     }
 
@@ -1239,7 +1239,7 @@ void SwHTMLParser::NewForm( bool bAppend )
     if( bAppend )
     {
         if( pPam->GetPoint()->nContent.GetIndex() )
-            AppendTxtNode( AM_SPACE );
+            AppendTextNode( AM_SPACE );
         else
             AddParSpace();
     }
@@ -1251,9 +1251,9 @@ void SwHTMLParser::NewForm( bool bAppend )
     OUString sName, sTarget;
     sal_uInt16 nEncType = FormSubmitEncoding_URL;
     sal_uInt16 nMethod = FormSubmitMethod_GET;
-    SvxMacroTableDtor aMacroTbl;
-    std::vector<OUString> aUnoMacroTbl;
-    std::vector<OUString> aUnoMacroParamTbl;
+    SvxMacroTableDtor aMacroTable;
+    std::vector<OUString> aUnoMacroTable;
+    std::vector<OUString> aUnoMacroParamTable;
     SvKeyValueIterator *pHeaderAttrs = pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
     const OUString& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
@@ -1303,7 +1303,7 @@ void SwHTMLParser::NewForm( bool bAppend )
         default:
             lcl_html_getEvents( rOption.GetTokenString(),
                                 rOption.GetString(),
-                                aUnoMacroTbl, aUnoMacroParamTbl );
+                                aUnoMacroTable, aUnoMacroParamTable );
             break;
         }
 
@@ -1316,7 +1316,7 @@ void SwHTMLParser::NewForm( bool bAppend )
                 OUString aScriptType2;
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType2 = rDfltScriptType;
-                aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType2, eScriptType2 ) );
+                aMacroTable.Insert( nEvent, SvxMacro( sEvent, aScriptType2, eScriptType2 ) );
             }
         }
     }
@@ -1376,10 +1376,10 @@ void SwHTMLParser::NewForm( bool bAppend )
         pFormImpl->GetForms();
     Any aAny( &xForm, cppu::UnoType<XForm>::get());
     rForms->insertByIndex( rForms->getCount(), aAny );
-    if( !aMacroTbl.empty() )
+    if( !aMacroTable.empty() )
         lcl_html_setEvents( pFormImpl->GetFormEventManager(),
                             rForms->getCount() - 1,
-                            aMacroTbl, aUnoMacroTbl, aUnoMacroParamTbl,
+                            aMacroTable, aUnoMacroTable, aUnoMacroParamTable,
                             rDfltScriptType );
 }
 
@@ -1390,7 +1390,7 @@ void SwHTMLParser::EndForm( bool bAppend )
         if( bAppend )
         {
             if( pPam->GetPoint()->nContent.GetIndex() )
-                AppendTxtNode( AM_SPACE );
+                AppendTextNode( AM_SPACE );
             else
                 AddParSpace();
         }
@@ -1408,9 +1408,9 @@ void SwHTMLParser::InsertInput()
 
     OUString sImgSrc, aId, aClass, aStyle, sName;
     OUString sText;
-    SvxMacroTableDtor aMacroTbl;
-    std::vector<OUString> aUnoMacroTbl;
-    std::vector<OUString> aUnoMacroParamTbl;
+    SvxMacroTableDtor aMacroTable;
+    std::vector<OUString> aUnoMacroTable;
+    std::vector<OUString> aUnoMacroParamTable;
     sal_uInt16 nSize = 0;
     sal_Int16 nMaxLen = 0;
     sal_Int16 nChecked = TRISTATE_FALSE;
@@ -1533,7 +1533,7 @@ void SwHTMLParser::InsertInput()
         default:
             lcl_html_getEvents( rOption.GetTokenString(),
                                 rOption.GetString(),
-                                aUnoMacroTbl, aUnoMacroParamTbl );
+                                aUnoMacroTable, aUnoMacroParamTable );
             break;
         }
 
@@ -1546,7 +1546,7 @@ void SwHTMLParser::InsertInput()
                 OUString aScriptType2;
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType2 = rDfltScriptType;
-                aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType2, eScriptType2 ) );
+                aMacroTable.Insert( nEvent, SvxMacro( sEvent, aScriptType2, eScriptType2 ) );
             }
         }
     }
@@ -1680,11 +1680,11 @@ void SwHTMLParser::InsertInput()
                 xPropSet->setPropertyValue("DefaultState", aTmp );
             }
 
-            const SvxMacro* pMacro = aMacroTbl.Get( HTML_ET_ONCLICK );
+            const SvxMacro* pMacro = aMacroTable.Get( HTML_ET_ONCLICK );
             if( pMacro )
             {
-                aMacroTbl.Insert( HTML_ET_ONCLICK_ITEM, *pMacro );
-                aMacroTbl.Erase( HTML_ET_ONCLICK );
+                aMacroTable.Insert( HTML_ET_ONCLICK_ITEM, *pMacro );
+                aMacroTable.Erase( HTML_ET_ONCLICK );
             }
             // SIZE auszuwerten duerfte hier keinen Sinn machen???
             bMinWidth = bMinHeight = true;
@@ -1846,8 +1846,8 @@ void SwHTMLParser::InsertInput()
                                              xFComp, xPropSet, aSz,
                                              eVertOri, eHoriOri,
                                              aCSS1ItemSet, aCSS1PropInfo,
-                                             aMacroTbl, aUnoMacroTbl,
-                                             aUnoMacroParamTbl, false,
+                                             aMacroTable, aUnoMacroTable,
+                                             aUnoMacroParamTable, false,
                                              bHidden );
     if( aTextSz.Width() || aTextSz.Height() || bMinWidth || bMinHeight )
     {
@@ -1898,9 +1898,9 @@ void SwHTMLParser::NewTextArea()
     OUString aId, aClass, aStyle;
     OUString sName;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
-    SvxMacroTableDtor aMacroTbl;
-    std::vector<OUString> aUnoMacroTbl;
-    std::vector<OUString> aUnoMacroParamTbl;
+    SvxMacroTableDtor aMacroTable;
+    std::vector<OUString> aUnoMacroTable;
+    std::vector<OUString> aUnoMacroParamTable;
     sal_uInt16 nRows = 0, nCols = 0;
     sal_uInt16 nWrap = HTML_WM_OFF;
     bool bDisabled = false;
@@ -1990,7 +1990,7 @@ void SwHTMLParser::NewTextArea()
         default:
             lcl_html_getEvents( rOption.GetTokenString(),
                                 rOption.GetString(),
-                                aUnoMacroTbl, aUnoMacroParamTbl );
+                                aUnoMacroTable, aUnoMacroParamTable );
             break;
         }
 
@@ -2002,7 +2002,7 @@ void SwHTMLParser::NewTextArea()
                 sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType = rDfltScriptType;
-                aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType, eScriptType2 ) );
+                aMacroTable.Insert( nEvent, SvxMacro( sEvent, aScriptType, eScriptType2 ) );
             }
         }
     }
@@ -2089,8 +2089,8 @@ void SwHTMLParser::NewTextArea()
     uno::Reference< drawing::XShape > xShape = InsertControl( xFComp, xPropSet, aSz,
                                       text::VertOrientation::TOP, text::HoriOrientation::NONE,
                                       aCSS1ItemSet, aCSS1PropInfo,
-                                      aMacroTbl, aUnoMacroTbl,
-                                      aUnoMacroParamTbl );
+                                      aMacroTable, aUnoMacroTable,
+                                      aUnoMacroParamTable );
     if( aTextSz.Width() || aTextSz.Height() )
         SetControlSize( xShape, aTextSz, false, false );
 
@@ -2177,9 +2177,9 @@ void SwHTMLParser::NewSelect()
     OUString aId, aClass, aStyle;
     OUString sName;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
-    SvxMacroTableDtor aMacroTbl;
-    std::vector<OUString> aUnoMacroTbl;
-    std::vector<OUString> aUnoMacroParamTbl;
+    SvxMacroTableDtor aMacroTable;
+    std::vector<OUString> aUnoMacroTable;
+    std::vector<OUString> aUnoMacroParamTable;
     bool bMultiple = false;
     bool bDisabled = false;
     nSelectEntryCnt = 1;
@@ -2258,7 +2258,7 @@ void SwHTMLParser::NewSelect()
         default:
             lcl_html_getEvents( rOption.GetTokenString(),
                                 rOption.GetString(),
-                                aUnoMacroTbl, aUnoMacroParamTbl );
+                                aUnoMacroTable, aUnoMacroParamTable );
             break;
         }
 
@@ -2270,7 +2270,7 @@ void SwHTMLParser::NewSelect()
                 sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType = rDfltScriptType;
-                aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType, eScriptType2 ) );
+                aMacroTable.Insert( nEvent, SvxMacro( sEvent, aScriptType, eScriptType2 ) );
             }
         }
     }
@@ -2360,8 +2360,8 @@ void SwHTMLParser::NewSelect()
     uno::Reference< drawing::XShape >  xShape = InsertControl( xFComp, xPropSet, aSz,
                                       text::VertOrientation::TOP, text::HoriOrientation::NONE,
                                       aCSS1ItemSet, aCSS1PropInfo,
-                                      aMacroTbl, aUnoMacroTbl,
-                                      aUnoMacroParamTbl );
+                                      aMacroTable, aUnoMacroTable,
+                                      aUnoMacroParamTable );
     if( bFixSelectWidth )
         pFormImpl->SetShape( xShape );
     if( aTextSz.Height() || bMinWidth || bMinHeight )

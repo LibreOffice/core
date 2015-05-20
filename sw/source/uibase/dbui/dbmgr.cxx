@@ -466,7 +466,7 @@ bool SwDBManager::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
 
-    pSh->SwViewShell::UpdateFlds(true);
+    pSh->SwViewShell::UpdateFields(true);
     pSh->SetModified();
 
     pSh->EndAllAction();
@@ -545,8 +545,8 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
         uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
         uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
         OUString sFormatStr;
-        sal_uInt16 nFmtLen = sFormatStr.getLength();
-        if( nFmtLen )
+        sal_uInt16 nFormatLen = sFormatStr.getLength();
+        if( nFormatLen )
         {
             const char cSpace = ' ';
             const char cTab = '\t';
@@ -628,12 +628,12 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
         uno::Reference<XTablesSupplier> xTSupplier = uno::Reference<XTablesSupplier>(xConnection, UNO_QUERY);
         if(xTSupplier.is())
         {
-            uno::Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            Sequence<OUString> aTbls = xTbls->getElementNames();
-            const OUString* pTbls = aTbls.getConstArray();
-            for(long i = 0; i < aTbls.getLength(); i++)
+            uno::Reference<XNameAccess> xTables = xTSupplier->getTables();
+            Sequence<OUString> aTables = xTables->getElementNames();
+            const OUString* pTables = aTables.getConstArray();
+            for(long i = 0; i < aTables.getLength(); i++)
             {
-                sal_uInt16 nEntry = pListBox->InsertEntry(pTbls[i]);
+                sal_uInt16 nEntry = pListBox->InsertEntry(pTables[i]);
                 pListBox->SetEntryData(nEntry, (void*)0);
             }
         }
@@ -781,10 +781,10 @@ static void lcl_CopyFollowPageDesc(
 static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
 {
     //reset all links of the sections of synchronized labels
-    size_t nSections = rWorkShell.GetSectionFmtCount();
+    size_t nSections = rWorkShell.GetSectionFormatCount();
     for (size_t nSection = 0; nSection < nSections; ++nSection)
     {
-        SwSectionData aSectionData( *rWorkShell.GetSectionFmt( nSection ).GetSection() );
+        SwSectionData aSectionData( *rWorkShell.GetSectionFormat( nSection ).GetSection() );
         if( aSectionData.GetType() == FILE_LINK_SECTION )
         {
             aSectionData.SetType( CONTENT_SECTION );
@@ -820,7 +820,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                  vcl::Window* pParent)
 {
     //check if the doc is synchronized and contains at least one linked section
-    bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
+    bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFormatCount() > 1;
     bool bNoError = true;
     const bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_EMAIL;
     const bool bMergeShell = rMergeDescriptor.nMergeType == DBMGR_MERGE_SHELL;
@@ -878,15 +878,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
     uno::Reference< XPropertySet > xColumnProp;
     {
-        bool bColumnName = !sEMailAddrFld.isEmpty();
+        bool bColumnName = !sEMailAddrField.isEmpty();
 
         if (bColumnName)
         {
             uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
             uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
-            if(!xCols->hasByName(sEMailAddrFld))
+            if(!xCols->hasByName(sEMailAddrField))
                 return false;
-            Any aCol = xCols->getByName(sEMailAddrFld);
+            Any aCol = xCols->getByName(sEMailAddrField);
             aCol >>= xColumnProp;
         }
 
@@ -997,7 +997,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                 // #i72517#
                 const SwPageDesc* pSourcePageDesc = pSourceShell->FindPageDescByName( sStartingPageDesc );
-                const SwFrmFmt& rMaster = pSourcePageDesc->GetMaster();
+                const SwFrameFormat& rMaster = pSourcePageDesc->GetMaster();
                 bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive()  ||
                                                 rMaster.GetFooter().IsActive();
 
@@ -1134,14 +1134,14 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
 
                         // #i69458# lock fields to prevent access to the result set while calculating layout
-                        rWorkShell.LockExpFlds();
+                        rWorkShell.LockExpFields();
                         rWorkShell.CalcLayout();
-                        rWorkShell.UnlockExpFlds();
+                        rWorkShell.UnlockExpFields();
                     }
 
                         SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
                         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
-                        rWorkShell.SwViewShell::UpdateFlds();
+                        rWorkShell.SwViewShell::UpdateFields();
                         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
                         // launch MailMergeEvent if required
@@ -1392,7 +1392,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             if (bCreateSingleFile)
             {
-                // sw::DocumentLayoutManager::CopyLayoutFmt() did not generate
+                // sw::DocumentLayoutManager::CopyLayoutFormat() did not generate
                 // unique fly names, do it here once.
                 pTargetDoc->SetInMailMerge(false);
                 pTargetDoc->SetAllUniqueFlyNames();
@@ -1522,14 +1522,14 @@ IMPL_LINK( SwDBManager, PrtCancelHdl, Button *, pButton )
 
 // determine the column's Numberformat and transfer to the forwarded Formatter,
 // if applicable.
-sal_uLong SwDBManager::GetColumnFmt( const OUString& rDBName,
+sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
                                 const OUString& rTableName,
                                 const OUString& rColNm,
-                                SvNumberFormatter* pNFmtr,
+                                SvNumberFormatter* pNFormatr,
                                 long nLanguage )
 {
     sal_uLong nRet = 0;
-    if(pNFmtr)
+    if(pNFormatr)
     {
         uno::Reference< XDataSource> xSource;
         uno::Reference< XConnection> xConnection;
@@ -1586,7 +1586,7 @@ sal_uLong SwDBManager::GetColumnFmt( const OUString& rDBName,
             Any aCol = xCols->getByName(rColNm);
             uno::Reference< XPropertySet > xColumn;
             aCol >>= xColumn;
-            nRet = GetColumnFmt(xSource, xConnection, xColumn, pNFmtr, nLanguage);
+            nRet = GetColumnFormat(xSource, xConnection, xColumn, pNFormatr, nLanguage);
             if(bDispose)
             {
                 ::comphelper::disposeComponent( xColsSupp );
@@ -1597,15 +1597,15 @@ sal_uLong SwDBManager::GetColumnFmt( const OUString& rDBName,
             }
         }
         else
-            nRet = pNFmtr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
+            nRet = pNFormatr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
     }
     return nRet;
 }
 
-sal_uLong SwDBManager::GetColumnFmt( uno::Reference< XDataSource> xSource,
+sal_uLong SwDBManager::GetColumnFormat( uno::Reference< XDataSource> xSource,
                         uno::Reference< XConnection> xConnection,
                         uno::Reference< XPropertySet> xColumn,
-                        SvNumberFormatter* pNFmtr,
+                        SvNumberFormatter* pNFormatr,
                         long nLanguage )
 {
     // set the NumberFormat in the doc if applicable
@@ -1617,11 +1617,11 @@ sal_uLong SwDBManager::GetColumnFmt( uno::Reference< XDataSource> xSource,
         if ( xChild.is() )
             xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     }
-    if(xSource.is() && xConnection.is() && xColumn.is() && pNFmtr)
+    if(xSource.is() && xConnection.is() && xColumn.is() && pNFormatr)
     {
-        SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj( pNFmtr );
-        uno::Reference< util::XNumberFormatsSupplier >  xDocNumFmtsSupplier = pNumFmt;
-        uno::Reference< XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
+        SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj( pNFormatr );
+        uno::Reference< util::XNumberFormatsSupplier >  xDocNumFormatsSupplier = pNumFormat;
+        uno::Reference< XNumberFormats > xDocNumberFormats = xDocNumFormatsSupplier->getNumberFormats();
         uno::Reference< XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
 
         com::sun::star::lang::Locale aLocale( LanguageTag( (LanguageType)nLanguage ).getLocale());
@@ -1648,23 +1648,23 @@ sal_uLong SwDBManager::GetColumnFmt( uno::Reference< XDataSource> xSource,
             Any aFormatKey = xColumn->getPropertyValue("FormatKey");
             if(aFormatKey.hasValue())
             {
-                sal_Int32 nFmt = 0;
-                aFormatKey >>= nFmt;
+                sal_Int32 nFormat = 0;
+                aFormatKey >>= nFormat;
                 if(xNumberFormats.is())
                 {
                     try
                     {
-                        uno::Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
+                        uno::Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFormat );
                         Any aFormatString = xNumProps->getPropertyValue("FormatString");
                         Any aLocaleVal = xNumProps->getPropertyValue("Locale");
                         OUString sFormat;
                         aFormatString >>= sFormat;
                         lang::Locale aLoc;
                         aLocaleVal >>= aLoc;
-                        nFmt = xDocNumberFormats->queryKey( sFormat, aLoc, sal_False );
-                        if(NUMBERFORMAT_ENTRY_NOT_FOUND == sal::static_int_cast< sal_uInt32, sal_Int32>(nFmt))
-                            nFmt = xDocNumberFormats->addNew( sFormat, aLoc );
-                        nRet = nFmt;
+                        nFormat = xDocNumberFormats->queryKey( sFormat, aLoc, sal_False );
+                        if(NUMBERFORMAT_ENTRY_NOT_FOUND == sal::static_int_cast< sal_uInt32, sal_Int32>(nFormat))
+                            nFormat = xDocNumberFormats->addNew( sFormat, aLoc );
+                        nRet = nFormat;
                         bUseDefault = false;
                     }
                     catch (const Exception& e)
@@ -1764,8 +1764,8 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
             Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
             if(xTSupplier.is())
             {
-                Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                eTableOrQuery = xTbls->hasByName(rTableOrQuery) ?
+                Reference<XNameAccess> xTables = xTSupplier->getTables();
+                eTableOrQuery = xTables->hasByName(rTableOrQuery) ?
                             SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY;
             }
         }
@@ -2019,12 +2019,12 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
 
             lcl_GetColumnCnt( pImpl->pMergeData, xColumnProps, nLanguage, aString, &aNumber );
 
-            sal_uInt32 nFmt = GetColumnFmt( pImpl->pMergeData->sDataSource,
+            sal_uInt32 nFormat = GetColumnFormat( pImpl->pMergeData->sDataSource,
                                             pImpl->pMergeData->sCommand,
                                             pColNames[nCol], pDocFormatter, nLanguage );
             // aNumber is overwritten by SwDBField::FormatValue, so store initial status
             bool colIsNumber = aNumber != DBL_MAX;
-            bool bValidValue = SwDBField::FormatValue( pDocFormatter, aString, nFmt,
+            bool bValidValue = SwDBField::FormatValue( pDocFormatter, aString, nFormat,
                                                        aNumber, nColumnType, NULL );
             if( colIsNumber )
             {

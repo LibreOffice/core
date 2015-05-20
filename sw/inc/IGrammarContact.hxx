@@ -21,11 +21,11 @@
 #define INCLUDED_SW_INC_IGRAMMARCONTACT_HXX
 
 struct SwPosition;
-class SwTxtNode;
+class SwTextNode;
 class SwGrammarMarkUp;
 class SwDoc;
 
-/** Organizer of the contact between SwTxtNodes and grammar checker
+/** Organizer of the contact between SwTextNodes and grammar checker
 */
 class IGrammarContact
 {
@@ -42,9 +42,9 @@ public:
     /** getGrammarCheck checks if the given text node is blocked by the current cursor
         if not, the normal markup list is returned
         if blocked, it will return a markup list "proxy"
-    @returns a markup list (grammar) for the given SwTxtNode
+    @returns a markup list (grammar) for the given SwTextNode
     */
-    virtual SwGrammarMarkUp* getGrammarCheck( SwTxtNode& rTxtNode, bool bCreate ) = 0;
+    virtual SwGrammarMarkUp* getGrammarCheck( SwTextNode& rTextNode, bool bCreate ) = 0;
 
     /** finishGrammarCheck() has to be called if a grammar checking has been completed
         for a text node. If this text node has not been hided by the current proxy list
@@ -52,7 +52,7 @@ public:
         repaint will be triggered by a timer
     @returns void
     */
-    virtual void finishGrammarCheck( SwTxtNode& rTxtNode ) = 0;
+    virtual void finishGrammarCheck( SwTextNode& rTextNode ) = 0;
 
 public:
     virtual ~IGrammarContact() {}
@@ -68,12 +68,12 @@ IGrammarContact* createGrammarContact();
 /** getGrammarContact() delivers the grammar contact of the document (for a given textnode)
 @returns grammar contact
 */
-IGrammarContact* getGrammarContact( const SwTxtNode& );
+IGrammarContact* getGrammarContact( const SwTextNode& );
 
 /** finishGrammarCheck() calls the same function of the grammar contact of the document (for a given textnode)
 @returns void
 */
-void finishGrammarCheck( SwTxtNode& );
+void finishGrammarCheck( SwTextNode& );
 
 #endif // INCLUDED_SW_INC_IGRAMMARCONTACT_HXX
 

@@ -556,7 +556,7 @@ void SwAccessibleEventList_Impl::MoveInvalidXAccToEnd()
 // There are two reason for this. First of all, a new accessible shape
 // for the XShape might be created soon. It's then cheaper if the XShape
 // still exists. The other reason are situations where an accessible shape
-// is destroyed within an SwFrmFmt::Modify. In this case, destroying
+// is destroyed within an SwFrameFormat::Modify. In this case, destroying
 // the XShape at the same time (indirectly by destroying the accessible
 // shape) leads to an assert, because a client of the Modify is destroyed
 // within a Modify call.
@@ -1162,14 +1162,14 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 bool bMarked = false;
                 SwAccessibleChild pFrm( (*aIter).first );
 
-                const SwFrmFmt *pFrmFmt = (*aIter).first ? ::FindFrmFmt( (*aIter).first ) : nullptr;
-                if( !pFrmFmt )
+                const SwFrameFormat *pFrameFormat = (*aIter).first ? ::FindFrameFormat( (*aIter).first ) : nullptr;
+                if( !pFrameFormat )
                 {
                     ++aIter;
                     continue;
                 }
-                const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
-                const SwPosition *pPos = pAnchor.GetCntntAnchor();
+                const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
+                const SwPosition *pPos = pAnchor.GetContentAnchor();
 
                 if(pAnchor.GetAnchorId() == FLY_AT_PAGE)
                 {
@@ -1186,12 +1186,12 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     ++aIter;
                     continue;
                 }
-                if( pPos->nNode.GetNode().GetTxtNode() )
+                if( pPos->nNode.GetNode().GetTextNode() )
                 {
                     int pIndex = pPos->nContent.GetIndex();
                     if( pCrsr != NULL )
                     {
-                        const SwTxtNode* pNode = pPos->nNode.GetNode().GetTxtNode();
+                        const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
                         sal_uLong nHere = pNode->GetIndex();
 
                         for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
@@ -1286,10 +1286,10 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     if (bFrmChanged)
                     {
                         const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( pFrm );
-                        const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-                        if (pFrmFmt)
+                        const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+                        if (pFrameFormat)
                         {
-                            const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
+                            const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
                             if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
                             {
                                 uno::Reference< XAccessible > xAccParent = pAccFrame->getAccessibleParent();
@@ -1335,16 +1335,16 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 while(nStartIndex <= nEndIndex)
                 {
                     SwFrm *pFrm = NULL;
-                    if(nStartIndex.GetNode().IsCntntNode())
+                    if(nStartIndex.GetNode().IsContentNode())
                     {
-                        SwCntntNode* pCNd = static_cast<SwCntntNode*>(&(nStartIndex.GetNode()));
-                        pFrm = SwIterator<SwFrm, SwCntntNode>(*pCNd).First();
+                        SwContentNode* pCNd = static_cast<SwContentNode*>(&(nStartIndex.GetNode()));
+                        pFrm = SwIterator<SwFrm, SwContentNode>(*pCNd).First();
                     }
                     else if( nStartIndex.GetNode().IsTableNode() )
                     {
                         SwTableNode * pTable = static_cast<SwTableNode *>(&(nStartIndex.GetNode()));
-                        SwTableFmt* pFmt = const_cast<SwTableFmt*>(pTable->GetTable().GetFrmFmt());
-                        pFrm = SwIterator<SwFrm, SwTableFmt>(*pFmt).First();
+                        SwTableFormat* pFormat = const_cast<SwTableFormat*>(pTable->GetTable().GetFrameFormat());
+                        pFrm = SwIterator<SwFrm, SwTableFormat>(*pFormat).First();
                     }
 
                     if( pFrm && mpFrmMap)
@@ -1557,10 +1557,10 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
             if (pAccShape)
             {
                 SdrObject *pObj = GetSdrObjectFromXShape(pAccShape->GetXShape());
-                SwFrmFmt *pFrmFmt = pObj ? FindFrmFmt( pObj ) : NULL;
-                if (pFrmFmt)
+                SwFrameFormat *pFrameFormat = pObj ? FindFrameFormat( pObj ) : NULL;
+                if (pFrameFormat)
                 {
-                    const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
+                    const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
                     if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
                     {
                         uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
@@ -1891,7 +1891,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                 case FRM_TXT:
                     mnPara++;
                     pAcc = new SwAccessibleParagraph( *this,
-                                    static_cast< const SwTxtFrm& >( *pFrm ) );
+                                    static_cast< const SwTextFrm& >( *pFrm ) );
                     break;
                 case FRM_HEADER:
                     pAcc = new SwAccessibleHeaderFooter( this,
@@ -1903,13 +1903,13 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                     break;
                 case FRM_FTN:
                     {
-                        const SwFtnFrm *pFtnFrm =
-                            static_cast < const SwFtnFrm * >( pFrm );
+                        const SwFootnoteFrm *pFootnoteFrm =
+                            static_cast < const SwFootnoteFrm * >( pFrm );
                         bool bIsEndnote =
-                            SwAccessibleFootnote::IsEndnote( pFtnFrm );
+                            SwAccessibleFootnote::IsEndnote( pFootnoteFrm );
                         pAcc = new SwAccessibleFootnote( this, bIsEndnote,
                                     /*(bIsEndnote ? mnEndnote++ : mnFootnote++),*/
-                                    pFtnFrm );
+                                    pFootnoteFrm );
                     }
                     break;
                 case FRM_FLY:
@@ -2318,7 +2318,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                 (xParentAccImpl.is() || xShapeAccImpl.is()) )
             {
                 // Keep a reference to the XShape to avoid that it
-                // is deleted with a SwFrmFmt::Modify.
+                // is deleted with a SwFrameFormat::Modify.
                 uno::Reference < drawing::XShape > xShape(
                     const_cast< SdrObject * >( pObj )->getUnoShape(),
                     uno::UNO_QUERY );
@@ -2469,7 +2469,7 @@ so the new graphic accessible 'parent is NULL,
 so run here: save the parent's SwFrm not the accessible object parent,
 */
             bool bIsValidFrm = false;
-            bool bIsTxtParent = false;
+            bool bIsTextParent = false;
             if (aFrmOrObj.GetSwFrm())
             {
                 int nType = pFrm->GetType();
@@ -2483,12 +2483,12 @@ so run here: save the parent's SwFrm not the accessible object parent,
                 int nType = pParent->GetType();
                 if (FRM_TXT == nType)
                 {
-                    bIsTxtParent =true;
+                    bIsTextParent =true;
                 }
             }
 //          bool bIsVisibleChildrenOnly =aFrmOrObj.IsVisibleChildrenOnly() ;
 //          bool bIsBoundAsChar =aFrmOrObj.IsBoundAsChar() ;//bIsVisibleChildrenOnly && bIsBoundAsChar &&
-            if((bIsValidFrm || bIsTxtParent) )
+            if((bIsValidFrm || bIsTextParent) )
             {
                 if( GetShell()->ActionPend() )
                 {
@@ -2544,9 +2544,9 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
     }
 }
 
-void SwAccessibleMap::InvalidateAttr( const SwTxtFrm& rTxtFrm )
+void SwAccessibleMap::InvalidateAttr( const SwTextFrm& rTextFrm )
 {
-    SwAccessibleChild aFrmOrObj( &rTxtFrm );
+    SwAccessibleChild aFrmOrObj( &rTextFrm );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         uno::Reference < XAccessible > xAcc;
@@ -2922,17 +2922,17 @@ void SwAccessibleMap::InvalidateRelationSet( const SwFrm* pMaster,
 }
 
 // invalidation of CONTENT_FLOW_FROM/_TO relation of a paragraph
-void SwAccessibleMap::InvalidateParaFlowRelation( const SwTxtFrm& _rTxtFrm,
+void SwAccessibleMap::InvalidateParaFlowRelation( const SwTextFrm& _rTextFrm,
                                                   const bool _bFrom )
 {
-    _InvalidateRelationSet( &_rTxtFrm, _bFrom );
+    _InvalidateRelationSet( &_rTextFrm, _bFrom );
 }
 
 // invalidation of text selection of a paragraph
-void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
+void SwAccessibleMap::InvalidateParaTextSelection( const SwTextFrm& _rTextFrm )
 {
     // first, see if this frame is accessible, and if so, get the respective
-    SwAccessibleChild aFrmOrObj( &_rTxtFrm );
+    SwAccessibleChild aFrmOrObj( &_rTextFrm );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         uno::Reference < XAccessible > xAcc;
@@ -2960,7 +2960,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::CARET_OR_STATES,
                     pAccImpl,
-                    SwAccessibleChild( &_rTxtFrm ),
+                    SwAccessibleChild( &_rTextFrm ),
                     AccessibleStates::TEXT_SELECTION_CHANGED );
                 AppendEvent( aEvent );
             }
@@ -3443,8 +3443,8 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
         // for a selection the cursor has to have a mark.
         // for safety reasons assure that point and mark are in text nodes
         if ( pCrsr->HasMark() &&
-             pCrsr->GetPoint()->nNode.GetNode().IsTxtNode() &&
-             pCrsr->GetMark()->nNode.GetNode().IsTxtNode() )
+             pCrsr->GetPoint()->nNode.GetNode().IsTextNode() &&
+             pCrsr->GetMark()->nNode.GetNode().IsTextNode() )
         {
             SwPosition* pStartPos = pCrsr->Start();
             SwPosition* pEndPos = pCrsr->End();
@@ -3452,24 +3452,24 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
             SwNodeIndex aIdx( pStartPos->nNode );
             for ( ; aIdx.GetIndex() <= pEndPos->nNode.GetIndex(); ++aIdx )
             {
-                SwTxtNode* pTxtNode( aIdx.GetNode().GetTxtNode() );
-                if ( pTxtNode )
+                SwTextNode* pTextNode( aIdx.GetNode().GetTextNode() );
+                if ( pTextNode )
                 {
                     // loop on all text frames registered at the text node.
-                    SwIterator<SwTxtFrm,SwTxtNode> aIter( *pTxtNode );
-                    for( SwTxtFrm* pTxtFrm = aIter.First(); pTxtFrm; pTxtFrm = aIter.Next() )
+                    SwIterator<SwTextFrm,SwTextNode> aIter( *pTextNode );
+                    for( SwTextFrm* pTextFrm = aIter.First(); pTextFrm; pTextFrm = aIter.Next() )
                         {
                             uno::WeakReference < XAccessible > xWeakAcc;
                             SwAccessibleContextMap_Impl::iterator aMapIter =
-                                                    mpFrmMap->find( pTxtFrm );
+                                                    mpFrmMap->find( pTextFrm );
                             if( aMapIter != mpFrmMap->end() )
                             {
                                 xWeakAcc = (*aMapIter).second;
                                 SwAccessibleParaSelection aDataEntry(
-                                    pTxtNode == &(pStartPos->nNode.GetNode())
+                                    pTextNode == &(pStartPos->nNode.GetNode())
                                                 ? pStartPos->nContent.GetIndex()
                                                 : 0,
-                                    pTxtNode == &(pEndPos->nNode.GetNode())
+                                    pTextNode == &(pEndPos->nNode.GetNode())
                                                 ? pEndPos->nContent.GetIndex()
                                                 : -1 );
                                 SwAccessibleSelectedParas_Impl::value_type
@@ -3552,13 +3552,13 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                                 static_cast<SwAccessibleContext*>( xAcc.get() ) );
                     if ( xAccImpl.is() && xAccImpl->GetFrm() )
                     {
-                        const SwTxtFrm* pTxtFrm(
-                            dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
-                        OSL_ENSURE( pTxtFrm,
+                        const SwTextFrm* pTextFrm(
+                            dynamic_cast<const SwTextFrm*>(xAccImpl->GetFrm()) );
+                        OSL_ENSURE( pTextFrm,
                                 "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexpected type of frame" );
-                        if ( pTxtFrm )
+                        if ( pTextFrm )
                         {
-                            InvalidateParaTextSelection( *pTxtFrm );
+                            InvalidateParaTextSelection( *pTextFrm );
                         }
                     }
                 }
@@ -3580,13 +3580,13 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                             static_cast<SwAccessibleContext*>( xAcc.get() ) );
                 if ( xAccImpl.is() && xAccImpl->GetFrm() )
                 {
-                    const SwTxtFrm* pTxtFrm(
-                            dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
-                    OSL_ENSURE( pTxtFrm,
+                    const SwTextFrm* pTextFrm(
+                            dynamic_cast<const SwTextFrm*>(xAccImpl->GetFrm()) );
+                    OSL_ENSURE( pTextFrm,
                             "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexpected type of frame" );
-                    if ( pTxtFrm )
+                    if ( pTextFrm )
                     {
-                        InvalidateParaTextSelection( *pTxtFrm );
+                        InvalidateParaTextSelection( *pTextFrm );
                     }
                 }
             }

@@ -78,7 +78,7 @@ enum RES_FIELDS
 };
 
  /// List of FieldTypes at UI.
-enum SwFldTypesEnum
+enum SwFieldTypesEnum
 {
     TYP_BEGIN,
     TYP_DATEFLD = TYP_BEGIN,    // 0
@@ -224,7 +224,7 @@ enum SwDateTimeSubType
 };
 
 /// General tools.
-OUString  GetResult(double nVal, sal_uInt32 nNumFmt, sal_uInt16 nLang = LANGUAGE_SYSTEM);
+OUString  GetResult(double nVal, sal_uInt32 nNumFormat, sal_uInt16 nLang = LANGUAGE_SYSTEM);
 void      SetErrorStr(const OUString& rStr);
 OUString  FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat);
 
@@ -240,9 +240,9 @@ class SW_DLLPUBLIC SwFieldType : public SwModify
     sal_uInt16 m_nWhich;
 
     friend void _FinitUI();     ///< In order to delete pointer!
-    static  std::vector<OUString>* s_pFldNames;
+    static  std::vector<OUString>* s_pFieldNames;
 
-    static void _GetFldName();  ///< Sets up FldNames; fldmgr.cxx!
+    static void _GetFieldName();  ///< Sets up FieldNames; fldmgr.cxx!
 
 protected:
     /// Single argument ctors shall be explicit.
@@ -267,10 +267,10 @@ public:
 
             sal_uInt16          Which() const { return m_nWhich; }
 
-    inline  void            UpdateFlds() const;
+    inline  void            UpdateFields() const;
 };
 
-inline void SwFieldType::UpdateFlds() const
+inline void SwFieldType::UpdateFields() const
 {
     const_cast<SwFieldType*>(this)->ModifyNotification( 0, 0 );
 }
@@ -297,7 +297,7 @@ protected:
     void                SetFormat(sal_uInt32 const nSet) { m_nFormat = nSet; }
 
     SwField( SwFieldType* pTyp,
-             sal_uInt32 nFmt = 0,
+             sal_uInt32 nFormat = 0,
              sal_uInt16 nLang = LANGUAGE_SYSTEM,
              bool m_bUseFieldValueCache = true );
 
@@ -314,7 +314,7 @@ public:
         @remark     most callers should use the cached field value.
                     this is because various fields need special handing
                     (ChangeExpansion()) to return correct values, and only
-                    SwTxtFormatter::NewFldPortion() sets things up properly.
+                    SwTextFormatter::NewFieldPortion() sets things up properly.
         @return     the generated text (suitable for display)
       */
     OUString            ExpandField(bool const bCached, ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
@@ -396,9 +396,9 @@ public:
     inline bool     UseFormat() const                   { return m_bUseFormat; }
     inline void     EnableFormat(bool bFormat = true)   { m_bUseFormat = bFormat; }
 
-    OUString        ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const;
+    OUString        ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng=0) const;
     OUString        DoubleToString(const double &rVal, LanguageType eLng) const;
-    OUString        DoubleToString(const double &rVal, sal_uInt32 nFmt) const;
+    OUString        DoubleToString(const double &rVal, sal_uInt32 nFormat) const;
 };
 
 class SW_DLLPUBLIC SwValueField : public SwField
@@ -407,8 +407,8 @@ private:
     double m_fValue;
 
 protected:
-    SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt = 0, sal_uInt16 nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
-    SwValueField( const SwValueField& rFld );
+    SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat = 0, sal_uInt16 nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
+    SwValueField( const SwValueField& rField );
 
 public:
     virtual                 ~SwValueField();
@@ -421,10 +421,10 @@ public:
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
-    inline OUString ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const
-        { return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFmt, nLng); }
+    inline OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng=0) const
+        { return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFormat, nLng); }
 
-    static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt);
+    static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFormat);
 };
 
 class SW_DLLPUBLIC SwFormulaField : public SwValueField
@@ -433,8 +433,8 @@ private:
     OUString m_sFormula;
 
 protected:
-    SwFormulaField( SwValueFieldType* pFldType, sal_uInt32 nFmt = 0, const double fVal = 0.0 );
-    SwFormulaField( const SwFormulaField& rFld );
+    SwFormulaField( SwValueFieldType* pFieldType, sal_uInt32 nFormat = 0, const double fVal = 0.0 );
+    SwFormulaField( const SwFormulaField& rField );
 
 public:
     virtual OUString        GetFormula() const SAL_OVERRIDE;

@@ -161,35 +161,35 @@ void SwTableFUNC::InitTabCols()
 {
     OSL_ENSURE(pSh, "no Shell");
 
-    if( pFmt && pSh)
+    if( pFormat && pSh)
         pSh->GetTabCols( aCols );
 }
 
-SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, bool bCopyFmt)
-    : pFmt(pShell->GetTableFmt()),
+SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, bool bCopyFormat)
+    : pFormat(pShell->GetTableFormat()),
       pSh(pShell),
-      bCopy(bCopyFmt)
+      bCopy(bCopyFormat)
 {
     // if applicable copy the format for edit
-    if( pFmt && bCopy )
-        pFmt = new SwFrmFmt( *pFmt );
+    if( pFormat && bCopy )
+        pFormat = new SwFrameFormat( *pFormat );
 }
 
 SwTableFUNC::~SwTableFUNC()
 {
     if(bCopy)
-        delete pFmt;
+        delete pFormat;
 }
 
 void SwTableFUNC::UpdateChart()
 {
     //Update of the fields triggered by the user, all Charts of
     //the table will be brought up to date
-    SwFrmFmt *pFmt2 = pSh->GetTableFmt();
-    if ( pFmt2 && pSh->HasOLEObj( pFmt2->GetName() ) )
+    SwFrameFormat *pFormat2 = pSh->GetTableFormat();
+    if ( pFormat2 && pSh->HasOLEObj( pFormat2->GetName() ) )
     {
         pSh->StartAllAction();
-        pSh->UpdateCharts( pFmt2->GetName() );
+        pSh->UpdateCharts( pFormat2->GetName() );
         pSh->EndAllAction();
     }
 }
@@ -198,22 +198,22 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         uno::Reference< chart2::data::XDataProvider > &rxDataProvider,
         bool bFillWithData,
         const OUString &rCellRange,
-        SwFlyFrmFmt** ppFlyFrmFmt )
+        SwFlyFrameFormat** ppFlyFrameFormat )
 {
     uno::Reference< frame::XModel > xChartModel;
     pSh->StartUndo( UNDO_UI_INSERT_CHART );
     pSh->StartAllAction();
 
     OUString aName;
-    if (pSh->IsCrsrInTbl())
+    if (pSh->IsCrsrInTable())
     {
-        aName = pSh->GetTableFmt()->GetName();
+        aName = pSh->GetTableFormat()->GetName();
         // insert node before table
         pSh->MoveTable( fnTableCurr, fnTableStart );
         pSh->Up( false, 1, false );
-        if ( pSh->IsCrsrInTbl() )
+        if ( pSh->IsCrsrInTable() )
         {
-            if ( aName != pSh->GetTableFmt()->GetName() )
+            if ( aName != pSh->GetTableFormat()->GetName() )
                 pSh->Down( false, 1, false ); // two adjacent tables
         }
         pSh->SplitNode();
@@ -229,10 +229,10 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     if ( xObj.is() )
     {
 
-        SwFlyFrmFmt* pTmp = 0;
+        SwFlyFrameFormat* pTmp = 0;
         pSh->InsertOleObject( aEmbObjRef, &pTmp );
-        if (ppFlyFrmFmt)
-            *ppFlyFrmFmt = pTmp;
+        if (ppFlyFrameFormat)
+            *ppFlyFrameFormat = pTmp;
 
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is())

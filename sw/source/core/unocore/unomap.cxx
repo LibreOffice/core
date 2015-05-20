@@ -1521,14 +1521,14 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             break;
             case PROPERTY_MAP_CNTIDX_MARK:
             {
-                static SfxItemPropertyMapEntry const aCntntMarkMap_Impl[] =
+                static SfxItemPropertyMapEntry const aContentMarkMap_Impl[] =
                 {
                     { OUString(UNO_NAME_ALTERNATIVE_TEXT), WID_ALT_TEXT,        cppu::UnoType<OUString>::get()  ,      PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_LEVEL), WID_LEVEL        ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,     0},
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aCntntMarkMap_Impl;
+                aMapEntriesArr[nPropertyId] = aContentMarkMap_Impl;
             }
             break;
             case PROPERTY_MAP_USER_MARK:
@@ -2156,7 +2156,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             break;
             case PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT      :
             {
-                static SfxItemPropertyMapEntry const aConditionedTxtFieldPropMap [] =
+                static SfxItemPropertyMapEntry const aConditionedTextFieldPropMap [] =
                 {
                     {OUString(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_FALSE_CONTENT),  FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
@@ -2166,12 +2166,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aConditionedTxtFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aConditionedTextFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_TEXT :
             {
-                static SfxItemPropertyMapEntry const aHiddenTxtFieldPropMap  [] =
+                static SfxItemPropertyMapEntry const aHiddenTextFieldPropMap  [] =
                 {
                     {OUString(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_CONTENT) ,       FIELD_PROP_PAR2, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
@@ -2180,7 +2180,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aHiddenTxtFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aHiddenTextFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_ANNOTATION            :

@@ -49,7 +49,7 @@ namespace sw { namespace overlay {
 
 namespace sw { namespace sidebarwindows {
 
-class SidebarTxtControl;
+class SidebarTextControl;
 class AnchorOverlayObject;
 class ShadowOverlayObject;
 
@@ -211,7 +211,7 @@ class SwSidebarWin : public vcl::Window
         OutlinerView*   mpOutlinerView;
         Outliner*       mpOutliner;
 
-        VclPtr<sw::sidebarwindows::SidebarTxtControl> mpSidebarTxtControl;
+        VclPtr<sw::sidebarwindows::SidebarTextControl> mpSidebarTextControl;
         VclPtr<ScrollBar>      mpVScrollbar;
         VclPtr<Edit>           mpMetadataAuthor;
         VclPtr<Edit>           mpMetadataDate;

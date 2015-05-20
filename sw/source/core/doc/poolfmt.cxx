@@ -118,14 +118,14 @@ bool SwDoc::IsUsed( const SwModify& rModify ) const
 {
     // Check if we have dependent ContentNodes in the Nodes array
     // (also indirect ones for derived Formats)
-    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
+    SwAutoFormatGetDocNode aGetHt( &GetNodes() );
     return !rModify.GetInfo( aGetHt );
 }
 
 // See if the NumRule is used
 bool SwDoc::IsUsed( const SwNumRule& rRule )
 {
-    bool bUsed = rRule.GetTxtNodeListSize() > 0 ||
+    bool bUsed = rRule.GetTextNodeListSize() > 0 ||
                      rRule.GetParagraphStyleListSize() > 0;
 
     return bUsed;
@@ -280,16 +280,16 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
     return nRet;
 }
 
-void SwDoc::RemoveAllFmtLanguageDependencies()
+void SwDoc::RemoveAllFormatLanguageDependencies()
 {
     /* Restore the language independ pool defaults and styles. */
     GetAttrPool().ResetPoolDefaultItem( RES_PARATR_ADJUST );
 
-    SwTxtFmtColl * pTxtFmtColl = getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+    SwTextFormatColl * pTextFormatColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD );
 
-    pTxtFmtColl->ResetFmtAttr( RES_PARATR_ADJUST );
+    pTextFormatColl->ResetFormatAttr( RES_PARATR_ADJUST );
     /* koreans do not like SvxScriptItem(TRUE) */
-    pTxtFmtColl->ResetFmtAttr( RES_PARATR_SCRIPTSPACE );
+    pTextFormatColl->ResetFormatAttr( RES_PARATR_SCRIPTSPACE );
 
     SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
@@ -297,8 +297,8 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
     for( size_t i=0; i<nCount; ++i )
     {
         SwPageDesc& rDesc = GetPageDesc( i );
-        rDesc.GetMaster().SetFmtAttr( aFrameDir );
-        rDesc.GetLeft().SetFmtAttr( aFrameDir );
+        rDesc.GetMaster().SetFormatAttr( aFrameDir );
+        rDesc.GetLeft().SetFormatAttr( aFrameDir );
     }
 
     //#i16874# AutoKerning as default for new documents

@@ -47,8 +47,8 @@ using namespace ::com::sun::star::beans;
 
 // Is the database field numeric?
 // remark: in case of error true is returned
-bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName,
-                            bool bIsTable, const OUString& rFldName)
+bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQryName,
+                            bool bIsTable, const OUString& rFieldName)
 {
     bool bNumeric = true;
 
@@ -68,11 +68,11 @@ bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName
         Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
         if(xTSupplier.is())
         {
-            Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            OSL_ENSURE(xTbls->hasByName(rTblQryName), "table not available anymore?");
+            Reference<XNameAccess> xTables = xTSupplier->getTables();
+            OSL_ENSURE(xTables->hasByName(rTableQryName), "table not available anymore?");
             try
             {
-                Any aTable = xTbls->getByName(rTblQryName);
+                Any aTable = xTables->getByName(rTableQryName);
                 Reference<XPropertySet> xPropSet;
                 aTable >>= xPropSet;
                 xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
@@ -88,10 +88,10 @@ bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName
         if(xQSupplier.is())
         {
             Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-            OSL_ENSURE(xQueries->hasByName(rTblQryName), "table not available anymore?");
+            OSL_ENSURE(xQueries->hasByName(rTableQryName), "table not available anymore?");
             try
             {
-                Any aQuery = xQueries->getByName(rTblQryName);
+                Any aQuery = xQueries->getByName(rTableQryName);
                 Reference<XPropertySet> xPropSet;
                 aQuery >>= xPropSet;
                 xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
@@ -113,9 +113,9 @@ bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName
         {
             OSL_FAIL("Exception in getColumns()");
         }
-        if(xCols.is() && xCols->hasByName(rFldName))
+        if(xCols.is() && xCols->hasByName(rFieldName))
         {
-            Any aCol = xCols->getByName(rFldName);
+            Any aCol = xCols->getByName(rFieldName);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
             Any aType = xCol->getPropertyValue("Type");

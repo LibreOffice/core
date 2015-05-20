@@ -39,8 +39,8 @@
 
 class SdrObject;
 class SwDoc;
-class SwFmt;
-class SwFlyFrmFmt;
+class SwFormat;
+class SwFlyFrameFormat;
 
 class BaseFrameProperties_Impl;
 class SwXFrame : public cppu::WeakImplHelper
@@ -80,12 +80,12 @@ protected:
     SwXFrame(FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet,
                 SwDoc *pDoc ); //Descriptor-If
-    SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
+    SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet);
 
     template<class Interface, class Impl>
     static css::uno::Reference<Interface>
-    CreateXFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt);
+    CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat);
 
 public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -139,13 +139,13 @@ public:
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
     void attach( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xTextRange ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
 
-    const SwFrmFmt* GetFrmFmt() const
+    const SwFrameFormat* GetFrameFormat() const
     {
-        return PTR_CAST ( SwFrmFmt, GetRegisteredIn() );
+        return PTR_CAST ( SwFrameFormat, GetRegisteredIn() );
     }
-    SwFrmFmt* GetFrmFmt()
+    SwFrameFormat* GetFrameFormat()
     {
-        return PTR_CAST ( SwFrmFmt, GetRegisteredIn() );
+        return PTR_CAST ( SwFrameFormat, GetRegisteredIn() );
     }
     FlyCntType      GetFlyCntType()const {return eType;}
 
@@ -153,7 +153,7 @@ public:
     void            ResetDescriptor();
     //copy text from a given source PaM
     void            SetSelection(SwPaM& rCopySource);
-    static SW_DLLPUBLIC SdrObject *GetOrCreateSdrObject(SwFlyFrmFmt &rFmt);
+    static SW_DLLPUBLIC SdrObject *GetOrCreateSdrObject(SwFlyFrameFormat &rFormat);
 };
 
 typedef cppu::WeakImplHelper
@@ -181,11 +181,11 @@ protected:
     virtual ~SwXTextFrame();
 
     SwXTextFrame(SwDoc *pDoc);
-    SwXTextFrame(SwFrmFmt& rFmt);
+    SwXTextFrame(SwFrameFormat& rFormat);
 
 public:
     static SW_DLLPUBLIC css::uno::Reference<css::text::XTextFrame>
-            CreateXTextFrame(SwDoc & rDoc, SwFrmFmt * pFrmFmt);
+            CreateXTextFrame(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
 
     // FIXME: EVIL HACK:  make available for SwXFrame::attachToRange
     void SetDoc(SwDoc *const pDoc) { SwXText::SetDoc(pDoc); };
@@ -254,12 +254,12 @@ protected:
     virtual ~SwXTextGraphicObject();
 
     SwXTextGraphicObject( SwDoc *pDoc );
-    SwXTextGraphicObject(SwFrmFmt& rFmt);
+    SwXTextGraphicObject(SwFrameFormat& rFormat);
 
 public:
 
     static css::uno::Reference<css::text::XTextContent>
-        CreateXTextGraphicObject(SwDoc & rDoc, SwFrmFmt * pFrmFmt);
+        CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire(  ) throw() SAL_OVERRIDE;
@@ -307,12 +307,12 @@ protected:
     virtual ~SwXTextEmbeddedObject();
 
     SwXTextEmbeddedObject( SwDoc *pDoc );
-    SwXTextEmbeddedObject(SwFrmFmt& rFmt);
+    SwXTextEmbeddedObject(SwFrameFormat& rFormat);
 
 public:
 
     static css::uno::Reference<css::text::XTextContent>
-        CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrmFmt * pFrmFmt);
+        CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire(  ) throw() SAL_OVERRIDE;
@@ -357,9 +357,9 @@ class SwXOLEListener : public cppu::WeakImplHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLEModel;
 
-    SwFmt*       GetFmt() const    {  return const_cast<SwFmt*>(static_cast<const SwFmt*>(GetRegisteredIn())); }
+    SwFormat*       GetFormat() const    {  return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
 public:
-    SwXOLEListener(SwFmt& rOLEFmt, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);
+    SwXOLEListener(SwFormat& rOLEFormat, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);
     virtual ~SwXOLEListener();
     TYPEINFO_OVERRIDE();
 

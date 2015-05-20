@@ -125,7 +125,7 @@ void SwTiledRenderingTest::testPostKeyEvent()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     // Did we manage to insert the character after the first one?
-    CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCrsr->GetPoint()->nNode.GetNode().GetTxtNode()->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCrsr->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
 
 void SwTiledRenderingTest::testPostMouseEvent()
@@ -155,19 +155,19 @@ void SwTiledRenderingTest::testSetTextSelection()
     pWrtShell->SelWrd();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
     // Did we indeed manage to select the second word?
-    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), pShellCrsr->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), pShellCrsr->GetText());
 
     // Now use setTextSelection() to move the start of the selection 1000 twips left.
     Point aStart = pShellCrsr->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_START, aStart.getX(), aStart.getY());
     // The new selection must include the first word, too -- but not the ending dot.
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb"), pShellCrsr->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb"), pShellCrsr->GetText());
 
     // Next: test that LOK_SETTEXTSELECTION_RESET + LOK_SETTEXTSELECTION_END can be used to create a selection.
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_RESET, aStart.getX(), aStart.getY());
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aStart.getX() + 1000, aStart.getY());
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaa b"), pShellCrsr->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa b"), pShellCrsr->GetText());
 }
 
 void SwTiledRenderingTest::testSetGraphicSelection()

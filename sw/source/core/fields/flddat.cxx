@@ -37,12 +37,12 @@ SwFieldType* SwDateTimeFieldType::Copy() const
     return pTmp;
 }
 
-SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFmt, sal_uInt16 nLng)
-    : SwValueField(pInitType, nFmt, nLng, 0.0),
+SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFormat, sal_uInt16 nLng)
+    : SwValueField(pInitType, nFormat, nLng, 0.0),
     nSubType(nSub),
     nOffset(0)
 {
-    if (!nFmt)
+    if (!nFormat)
     {
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
         if (nSubType & DATEFLD)

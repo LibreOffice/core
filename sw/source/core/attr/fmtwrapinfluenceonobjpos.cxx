@@ -25,45 +25,45 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-TYPEINIT1(SwFmtWrapInfluenceOnObjPos, SfxPoolItem);
+TYPEINIT1(SwFormatWrapInfluenceOnObjPos, SfxPoolItem);
 
-SwFmtWrapInfluenceOnObjPos::SwFmtWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
+SwFormatWrapInfluenceOnObjPos::SwFormatWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
     : SfxPoolItem( RES_WRAP_INFLUENCE_ON_OBJPOS ),
     mnWrapInfluenceOnPosition( _nWrapInfluenceOnPosition )
 {
 }
 
-SwFmtWrapInfluenceOnObjPos::SwFmtWrapInfluenceOnObjPos( const SwFmtWrapInfluenceOnObjPos& _rCpy )
+SwFormatWrapInfluenceOnObjPos::SwFormatWrapInfluenceOnObjPos( const SwFormatWrapInfluenceOnObjPos& _rCpy )
     : SfxPoolItem( RES_WRAP_INFLUENCE_ON_OBJPOS ),
     mnWrapInfluenceOnPosition( _rCpy.GetWrapInfluenceOnObjPos() )
 {
 }
 
-SwFmtWrapInfluenceOnObjPos::~SwFmtWrapInfluenceOnObjPos()
+SwFormatWrapInfluenceOnObjPos::~SwFormatWrapInfluenceOnObjPos()
 {
 }
 
-SwFmtWrapInfluenceOnObjPos& SwFmtWrapInfluenceOnObjPos::operator=( const SwFmtWrapInfluenceOnObjPos& _rSource )
+SwFormatWrapInfluenceOnObjPos& SwFormatWrapInfluenceOnObjPos::operator=( const SwFormatWrapInfluenceOnObjPos& _rSource )
 {
     mnWrapInfluenceOnPosition = _rSource.GetWrapInfluenceOnObjPos();
 
     return *this;
 }
 
-bool SwFmtWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
+bool SwFormatWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     return ( mnWrapInfluenceOnPosition ==
-                    static_cast<const SwFmtWrapInfluenceOnObjPos&>(rAttr).
+                    static_cast<const SwFormatWrapInfluenceOnObjPos&>(rAttr).
                                                 GetWrapInfluenceOnObjPos() );
 }
 
-SfxPoolItem* SwFmtWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
+SfxPoolItem* SwFormatWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
 {
-    return new SwFmtWrapInfluenceOnObjPos(*this);
+    return new SwFormatWrapInfluenceOnObjPos(*this);
 }
 
-bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
@@ -73,13 +73,13 @@ bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) co
     }
     else
     {
-        OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+        OSL_FAIL( "<SwFormatWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
         bRet = false;
     }
     return bRet;
 }
 
-bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;
@@ -98,17 +98,17 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId 
         }
         else
         {
-            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
+            OSL_FAIL( "<SwFormatWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
         }
     }
     else
     {
-        OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - unknown MemberId" );
+        OSL_FAIL( "<SwFormatWrapInfluenceOnObjPos::PutValue(..)> - unknown MemberId" );
     }
     return bRet;
 }
 
-void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
+void SwFormatWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
 {
     // #i35017# - constant names have changed and consider new value <ITERATIVE>
     if ( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
@@ -119,13 +119,13 @@ void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInflu
     }
     else
     {
-        OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
+        OSL_FAIL( "<SwFormatWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
     }
 }
 
 // #i35017# - add parameter <_bIterativeAsOnceConcurrent> to control, if
 // value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
-sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
+sal_Int16 SwFormatWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
                                 const bool _bIterativeAsOnceConcurrent ) const
 {
     sal_Int16 nWrapInfluenceOnPosition( mnWrapInfluenceOnPosition );
@@ -139,9 +139,9 @@ sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
     return nWrapInfluenceOnPosition;
 }
 
-void SwFmtWrapInfluenceOnObjPos::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwFormatWrapInfluenceOnObjPos::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtWrapInfluenceOnObjPos"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatWrapInfluenceOnObjPos"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWrapInfluenceOnPosition"), BAD_CAST(OString::number(mnWrapInfluenceOnPosition).getStr()));
     xmlTextWriterEndElement(pWriter);

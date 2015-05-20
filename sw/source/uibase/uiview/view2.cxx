@@ -313,19 +313,19 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     std::vector<OUString> aFormats;
     SwDoc* pDoc = pDocShell->GetDoc();
-    const size_t nArrLen = pDoc->GetFrmFmts()->size();
+    const size_t nArrLen = pDoc->GetFrameFormats()->size();
     for( size_t i = 0; i < nArrLen; ++i )
     {
-        const SwFrmFmt* pFmt = (*pDoc->GetFrmFmts())[ i ];
-        if(pFmt->IsDefault() || pFmt->IsAuto())
+        const SwFrameFormat* pFormat = (*pDoc->GetFrameFormats())[ i ];
+        if(pFormat->IsDefault() || pFormat->IsAuto())
             continue;
-        aFormats.push_back(pFmt->GetName());
+        aFormats.push_back(pFormat->GetName());
     }
 
     // pool formats
 
     const ::std::vector<OUString>& rFrmPoolArr(
-            SwStyleNameMapper::GetFrmFmtUINameArray());
+            SwStyleNameMapper::GetFrameFormatUINameArray());
     for( size_t i = 0; i < rFrmPoolArr.size(); ++i )
     {
         aFormats.push_back(rFrmPoolArr[i]);
@@ -467,12 +467,12 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         // else this would reset the current setting for the frame holding the graphic
         if ( !bReplaceMode && rSh.IsFrmSelected() )
         {
-            SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );
-            if(!pFmt)
-                pFmt = pDoc->MakeFrmFmt(sGraphicFormat,
-                                        pDocShell->GetDoc()->GetDfltFrmFmt(),
+            SwFrameFormat* pFormat = pDoc->FindFrameFormatByName( sGraphicFormat );
+            if(!pFormat)
+                pFormat = pDoc->MakeFrameFormat(sGraphicFormat,
+                                        pDocShell->GetDoc()->GetDfltFrameFormat(),
                                         true, false);
-            rSh.SetFrmFmt( pFmt );
+            rSh.SetFrameFormat( pFormat );
         }
 
         RESOURCE_TYPE nResId = 0;
@@ -849,10 +849,10 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 GetEditWin().SetChainMode( false );
             }
-            else if( m_pWrtShell->GetFlyFrmFmt() )
+            else if( m_pWrtShell->GetFlyFrameFormat() )
             {
-                const SwFrmFmt* pFmt = m_pWrtShell->GetFlyFrmFmt();
-                if(m_pWrtShell->GotoFly( pFmt->GetName(), FLYCNTTYPE_FRM ))
+                const SwFrameFormat* pFormat = m_pWrtShell->GetFlyFrameFormat();
+                if(m_pWrtShell->GotoFly( pFormat->GetName(), FLYCNTTYPE_FRM ))
                 {
                     m_pWrtShell->HideCrsr();
                     m_pWrtShell->EnterSelFrmMode();
@@ -975,8 +975,8 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 const size_t nCurIdx = m_pWrtShell->GetCurPageDesc();
                 SwPageDesc aDesc( m_pWrtShell->GetPageDesc( nCurIdx ));
-                SwFrmFmt& rMaster = aDesc.GetMaster();
-                rMaster.SetFmtAttr(*pItem);
+                SwFrameFormat& rMaster = aDesc.GetMaster();
+                rMaster.SetFormatAttr(*pItem);
                 m_pWrtShell->ChgPageDesc( nCurIdx, aDesc);
             }
         }
@@ -1499,10 +1499,10 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             else
             {
                 OUString sStr;
-                if( rShell.IsCrsrInTbl() )
+                if( rShell.IsCrsrInTable() )
                 {
                     // table name + cell coordinate
-                    sStr = rShell.GetTableFmt()->GetName();
+                    sStr = rShell.GetTableFormat()->GetName();
                     sStr += ":";
                     sStr += rShell.GetBoxNms();
                 }
@@ -1854,15 +1854,15 @@ void SwView::InsFrmMode(sal_uInt16 nCols)
     {
         SwFlyFrmAttrMgr aMgr( true, m_pWrtShell, FRMMGR_TYPE_TEXT );
 
-        const SwFrmFmt &rPageFmt =
+        const SwFrameFormat &rPageFormat =
                 m_pWrtShell->GetPageDesc(m_pWrtShell->GetCurPageDesc()).GetMaster();
-        SwTwips lWidth = rPageFmt.GetFrmSize().GetWidth();
-        const SvxLRSpaceItem &rLR = rPageFmt.GetLRSpace();
+        SwTwips lWidth = rPageFormat.GetFrmSize().GetWidth();
+        const SvxLRSpaceItem &rLR = rPageFormat.GetLRSpace();
         lWidth -= rLR.GetLeft() + rLR.GetRight();
         aMgr.SetSize(Size(lWidth, aMgr.GetSize().Height()));
         if(nCols > 1)
         {
-            SwFmtCol aCol;
+            SwFormatCol aCol;
             aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
             aMgr.SetCol( aCol );
         }
@@ -1899,7 +1899,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         if( !bHasShFocus )
             m_pWrtShell->ShGetFcs( false );
 
-        const SwFmtINetFmt* pINet;
+        const SwFormatINetFormat* pINet;
         OUString sCmp;
         OUString  sMark( INetURLObject::decode( rMark,
                                            INetURLObject::DECODE_WITH_CHARSET,
@@ -1977,7 +1977,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                 m_pWrtShell->GotoMark( ppMark->get(), false, true ), bRet = true;
             else if( 0 != ( pINet = m_pWrtShell->FindINetAttr( sMark ) )) {
                 m_pWrtShell->addCurrentPosition();
-                bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
+                bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTextINetFormat() );
             }
 
             // for all types of Flys
@@ -2000,7 +2000,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
             m_pWrtShell->GotoMark( ppMark->get(), false, true ), bRet = true;
         else if( 0 != ( pINet = m_pWrtShell->FindINetAttr( sMark ) ))
-            bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
+            bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTextINetFormat() );
 
         // make selection visible later
         if ( m_aVisArea.IsEmpty() )
@@ -2026,12 +2026,12 @@ static size_t lcl_PageDescWithHeader( const SwDoc& rDoc )
     for( size_t i = 0; i < nCnt; ++i )
     {
         const SwPageDesc& rPageDesc = rDoc.GetPageDesc( i );
-        const SwFrmFmt& rMaster = rPageDesc.GetMaster();
+        const SwFrameFormat& rMaster = rPageDesc.GetMaster();
         const SfxPoolItem* pItem;
         if( ( SfxItemState::SET == rMaster.GetAttrSet().GetItemState( RES_HEADER, false, &pItem ) &&
-              static_cast<const SwFmtHeader*>(pItem)->IsActive() ) ||
+              static_cast<const SwFormatHeader*>(pItem)->IsActive() ) ||
             ( SfxItemState::SET == rMaster.GetAttrSet().GetItemState( RES_FOOTER, false, &pItem )  &&
-              static_cast<const SwFmtFooter*>(pItem)->IsActive()) )
+              static_cast<const SwFormatFooter*>(pItem)->IsActive()) )
             ++nRet;
     }
     return nRet; // number of page styles with active header/footer

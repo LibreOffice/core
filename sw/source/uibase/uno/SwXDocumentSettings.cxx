@@ -342,7 +342,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_FIELD_AUTO_UPDATE:
         {
             bool bUpdateField = *static_cast<sal_Bool const *>(rValue.getValue());
-            SwFldUpdateFlags nFlag = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
+            SwFieldUpdateFlags nFlag = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
             mpDoc->getIDocumentSettingAccess().setFieldUpdateFlags( bUpdateField ?
                                         nFlag == AUTOUPD_FIELD_AND_CHARTS ?
                                         AUTOUPD_FIELD_AND_CHARTS :
@@ -353,7 +353,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_CHART_AUTO_UPDATE:
         {
             bool bUpdateChart = *static_cast<sal_Bool const *>(rValue.getValue());
-            SwFldUpdateFlags nFlag = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
+            SwFieldUpdateFlags nFlag = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
             mpDoc->getIDocumentSettingAccess().setFieldUpdateFlags( (nFlag == AUTOUPD_FIELD_ONLY || nFlag == AUTOUPD_FIELD_AND_CHARTS ) ?
                                         bUpdateChart ?
                                         AUTOUPD_FIELD_AND_CHARTS :
@@ -896,13 +896,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_FIELD_AUTO_UPDATE:
         {
-            SwFldUpdateFlags nFlags = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
+            SwFieldUpdateFlags nFlags = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
             rValue <<= nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS;
         }
         break;
         case HANDLE_CHART_AUTO_UPDATE:
         {
-            SwFldUpdateFlags nFlags = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
+            SwFieldUpdateFlags nFlags = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
             rValue <<= nFlags == AUTOUPD_FIELD_AND_CHARTS;
         }
         break;

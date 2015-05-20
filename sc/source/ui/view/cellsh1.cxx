@@ -1564,7 +1564,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
-                        SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                        SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         GetPossibleClipboardFormats( aFormats );
 
                         sal_uInt16 nFormatCount = aFormats.Count();

@@ -1317,16 +1317,16 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             aFileUrl.SetSmartURL( sFileName );
             OUString sSectionName(aFileUrl.GetLastName(
                 INetURLObject::DECODE_UNAMBIGUOUS).getToken(0, sfx2::cTokenSeparator));
-            sal_uInt16 nSectCount = rSh.GetSectionFmtCount();
+            sal_uInt16 nSectCount = rSh.GetSectionFormatCount();
             OUString sTempSectionName(sSectionName);
             sal_uInt16 nAddNumber = 0;
             sal_uInt16 nCount = 0;
             // if applicable: add index if the range name is already in use.
             while ( nCount < nSectCount )
             {
-                const SwSectionFmt& rFmt = rSh.GetSectionFmt(nCount);
-                if ((rFmt.GetSection()->GetSectionName() == sTempSectionName)
-                    && rFmt.IsInNodesArr())
+                const SwSectionFormat& rFormat = rSh.GetSectionFormat(nCount);
+                if ((rFormat.GetSection()->GetSectionName() == sTempSectionName)
+                    && rFormat.IsInNodesArr())
                 {
                     nCount = 0;
                     nAddNumber++;

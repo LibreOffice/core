@@ -226,8 +226,8 @@ SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
         // Broadcast, so that the FormShell can be connected to the DrawView
         if( m_rDoc.GetDocShell() )
         {
-            SfxSimpleHint aHnt( SW_BROADCAST_DRAWVIEWS_CREATED );
-            m_rDoc.GetDocShell()->Broadcast( aHnt );
+            SfxSimpleHint aHint( SW_BROADCAST_DRAWVIEWS_CREATED );
+            m_rDoc.GetDocShell()->Broadcast( aHint );
         }
     }
     return mpDrawModel;
@@ -372,19 +372,19 @@ SdrLayerID DocumentDrawModelManager::GetInvisibleLayerIdByVisibleOne( const SdrL
 
 bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem)
 {
-    SwPosFlyFrms aFrames = m_rDoc.GetAllFlyFmts(&rPaM, /*bDrawAlso=*/true);
+    SwPosFlyFrms aFrames = m_rDoc.GetAllFlyFormats(&rPaM, /*bDrawAlso=*/true);
 
     for (const SwPosFlyFrmPtr& pPosFlyFrm : aFrames)
     {
         // Filter for at-paragraph anchored draw frames.
-        const SwFrmFmt& rFrmFmt = pPosFlyFrm->GetFmt();
-        const SwFmtAnchor& rAnchor = rFrmFmt.GetAnchor();
-        if (rAnchor.GetAnchorId() != FLY_AT_PARA || rFrmFmt.Which() != RES_DRAWFRMFMT)
+        const SwFrameFormat& rFrameFormat = pPosFlyFrm->GetFormat();
+        const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
+        if (rAnchor.GetAnchorId() != FLY_AT_PARA || rFrameFormat.Which() != RES_DRAWFRMFMT)
             continue;
 
         // Does the shape have matching text?
         SdrOutliner& rOutliner = GetDrawModel()->GetDrawOutliner();
-        SdrObject* pObject = const_cast<SdrObject*>(rFrmFmt.FindSdrObject());
+        SdrObject* pObject = const_cast<SdrObject*>(rFrameFormat.FindSdrObject());
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
         if (!pTextObj)
             continue;

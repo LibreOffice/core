@@ -34,7 +34,7 @@ class SwDoc;
 class SwDocFac;
 class SwTextBlocks;
 class SwWrtShell;
-class SvxClipboardFmtItem;
+class SvxClipboardFormatItem;
 class SwFrameShell;
 class SwView_Impl;
 
@@ -89,9 +89,9 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
                                         SotClipboardFormatId nFormat, SotExchangeDest nDestination );
 
     static bool _PasteFileContent( TransferableDataHelper&,
-                                    SwWrtShell& rSh, SotClipboardFormatId nFmt, bool bMsg );
+                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg );
     static bool _PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
-                            SotClipboardFormatId nFmt, sal_uInt8 nActionFlags, bool bMsg );
+                            SotClipboardFormatId nFormat, sal_uInt8 nActionFlags, bool bMsg );
     static bool _PasteTargetURL( TransferableDataHelper& rData, SwWrtShell& rSh,
                         sal_uInt16 nAction, const Point* pPt, bool bInsertGRF );
 
@@ -103,21 +103,21 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
                                     const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste);
 
     static bool _PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
-                                SotClipboardFormatId nFmt, sal_uInt16 nAction, const Point* pPt,
+                                SotClipboardFormatId nFormat, sal_uInt16 nAction, const Point* pPt,
                                 sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste);
 
     static bool _PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh );
 
     static bool _PasteAsHyperlink( TransferableDataHelper& rData,
-                                        SwWrtShell& rSh, SotClipboardFormatId nFmt );
+                                        SwWrtShell& rSh, SotClipboardFormatId nFormat );
 
     static bool _PasteFileName( TransferableDataHelper& rData,
-                            SwWrtShell& rSh, SotClipboardFormatId nFmt, sal_uInt16 nAction,
+                            SwWrtShell& rSh, SotClipboardFormatId nFormat, sal_uInt16 nAction,
                             const Point* pPt, sal_uInt8 nActionFlags, bool bMsg, bool * graphicInserted );
 
     static bool _PasteDBData( TransferableDataHelper& rData, SwWrtShell& rSh,
-                            SotClipboardFormatId nFmt, bool bLink, const Point* pDragPt,
+                            SotClipboardFormatId nFormat, bool bLink, const Point* pDragPt,
                             bool bMsg );
 
     static bool _PasteFileList( TransferableDataHelper& rData,
@@ -170,7 +170,7 @@ public:
     static bool Paste( SwWrtShell&, TransferableDataHelper& );
     static bool PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt16 nAction, SotClipboardFormatId nFormat,
-                          SotExchangeDest nDestination, bool bIsPasteFmt,
+                          SotExchangeDest nDestination, bool bIsPasteFormat,
                           bool bIsDefault,
                           const Point* pDDPos = 0, sal_Int8 nDropAction = 0,
                           bool bPasteSelection = false );
@@ -182,9 +182,9 @@ public:
     static bool PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              SotClipboardFormatId nFormat );
 
-    static void FillClipFmtItem( const SwWrtShell& rSh,
+    static void FillClipFormatItem( const SwWrtShell& rSh,
                                 const TransferableDataHelper& rData,
-                                SvxClipboardFmtItem & rToFill );
+                                SvxClipboardFormatItem & rToFill );
 
     // Interfaces for Drag & Drop
     void StartDrag( vcl::Window* pWin, const Point& rPos );

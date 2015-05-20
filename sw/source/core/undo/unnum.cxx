@@ -52,9 +52,9 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
     sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
     // No selection!
-    nEndNode = 0, nEndCntnt = COMPLETE_STRING;
+    nEndNode = 0, nEndContent = COMPLETE_STRING;
     nSttNode = rPos.nNode.GetIndex();
-    nSttCntnt = rPos.nContent.GetIndex();
+    nSttContent = rPos.nContent.GetIndex();
 }
 
 SwUndoInsNum::~SwUndoInsNum()
@@ -76,13 +76,13 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     if( pOldNumRule )
-        rDoc.ChgNumRuleFmts( *pOldNumRule );
+        rDoc.ChgNumRuleFormats( *pOldNumRule );
 
     if( pHistory )
     {
-        SwTxtNode* pNd;
+        SwTextNode* pNd;
         if( ULONG_MAX != nSttSet &&
-            0 != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTxtNode() ))
+            0 != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTextNode() ))
                 pNd->SetListRestart( true );
         else
             pNd = 0;
@@ -108,7 +108,7 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     if ( pOldNumRule )
-        rDoc.ChgNumRuleFmts( aNumRule );
+        rDoc.ChgNumRuleFormats( aNumRule );
     else if ( pHistory )
     {
         SwPaM & rPam( AddUndoRedoPaM(rContext) );
@@ -143,7 +143,7 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
     }
     else
     {
-        rDoc.ChgNumRuleFmts( aNumRule );
+        rDoc.ChgNumRuleFormats( aNumRule );
     }
 }
 
@@ -181,11 +181,11 @@ void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)
 
     for( std::vector<NodeLevel>::const_iterator i = aNodes.begin(); i != aNodes.end(); ++i )
     {
-        SwTxtNode* pNd = rDoc.GetNodes()[ i->index ]->GetTxtNode();
+        SwTextNode* pNd = rDoc.GetNodes()[ i->index ]->GetTextNode();
         OSL_ENSURE( pNd, "Where has the TextNode gone?" );
         pNd->SetAttrListLevel( i->level );
 
-        if( pNd->GetCondFmtColl() )
+        if( pNd->GetCondFormatColl() )
             pNd->ChkCondColl();
     }
 
@@ -203,7 +203,7 @@ void SwUndoDelNum::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().DelNumRules(rContext.GetRepeatPaM());
 }
 
-void SwUndoDelNum::AddNode( const SwTxtNode& rNd, bool )
+void SwUndoDelNum::AddNode( const SwTextNode& rNd, bool )
 {
     if( rNd.GetNumRule() )
     {
@@ -224,7 +224,7 @@ void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     sal_uLong nTmpStt = nSttNode, nTmpEnd = nEndNode;
 
-    if (nEndNode || nEndCntnt != COMPLETE_STRING)        // section?
+    if (nEndNode || nEndContent != COMPLETE_STRING)        // section?
     {
         if( nNewStt < nSttNode )        // moved forwards
             nEndNode = nEndNode - ( nSttNode - nNewStt );
@@ -297,11 +297,11 @@ SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, bool bOldNum,
 void SwUndoNumOrNoNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwNodeIndex aIdx( rContext.GetDoc().GetNodes(), nIdx );
-    SwTxtNode * pTxtNd = aIdx.GetNode().GetTxtNode();
+    SwTextNode * pTextNd = aIdx.GetNode().GetTextNode();
 
-    if (NULL != pTxtNd)
+    if (NULL != pTextNd)
     {
-        pTxtNd->SetCountedInList(mbOldNum);
+        pTextNd->SetCountedInList(mbOldNum);
     }
 }
 
@@ -309,11 +309,11 @@ void SwUndoNumOrNoNum::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoNumOrNoNum::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwNodeIndex aIdx( rContext.GetDoc().GetNodes(), nIdx );
-    SwTxtNode * pTxtNd = aIdx.GetNode().GetTxtNode();
+    SwTextNode * pTextNd = aIdx.GetNode().GetTextNode();
 
-    if (NULL != pTxtNd)
+    if (NULL != pTextNd)
     {
-        pTxtNd->SetCountedInList(mbNewNum);
+        pTextNd->SetCountedInList(mbNewNum);
     }
 }
 
@@ -346,12 +346,12 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt 
     , bSetSttValue(true)
     , bFlag(false)
 {
-    SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    if ( pTxtNd )
+    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    if ( pTextNd )
     {
-        if ( pTxtNd->HasAttrListRestartValue() )
+        if ( pTextNd->HasAttrListRestartValue() )
         {
-            nOldStt = static_cast<sal_uInt16>(pTxtNd->GetAttrListRestartValue());
+            nOldStt = static_cast<sal_uInt16>(pTextNd->GetAttrListRestartValue());
         }
         else
         {

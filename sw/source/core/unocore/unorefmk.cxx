@@ -53,15 +53,15 @@ public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     bool                        m_bIsDescriptor;
     SwDoc *                     m_pDoc;
-    const SwFmtRefMark *        m_pMarkFmt;
+    const SwFormatRefMark *        m_pMarkFormat;
     OUString             m_sMarkName;
 
-    Impl(   SwDoc *const pDoc, SwFmtRefMark *const pRefMark)
+    Impl(   SwDoc *const pDoc, SwFormatRefMark *const pRefMark)
         : SwClient(pRefMark)
         , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(0 == pRefMark)
         , m_pDoc(pDoc)
-        , m_pMarkFmt(pRefMark)
+        , m_pMarkFormat(pRefMark)
     {
         if (pRefMark)
         {
@@ -85,7 +85,7 @@ void SwXReferenceMark::Impl::Invalidate()
         const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
     }
     m_pDoc = 0;
-    m_pMarkFmt = 0;
+    m_pMarkFormat = 0;
     uno::Reference<uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
@@ -106,7 +106,7 @@ void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem 
 }
 
 SwXReferenceMark::SwXReferenceMark(
-        SwDoc *const pDoc, SwFmtRefMark *const pRefMark)
+        SwDoc *const pDoc, SwFormatRefMark *const pRefMark)
     : m_pImpl( new SwXReferenceMark::Impl(pDoc, pRefMark) )
 {
 }
@@ -117,21 +117,21 @@ SwXReferenceMark::~SwXReferenceMark()
 
 uno::Reference<text::XTextContent>
 SwXReferenceMark::CreateXReferenceMark(
-        SwDoc & rDoc, SwFmtRefMark *const pMarkFmt)
+        SwDoc & rDoc, SwFormatRefMark *const pMarkFormat)
 {
     // i#105557: do not iterate over the registered clients: race condition
     uno::Reference<text::XTextContent> xMark;
-    if (pMarkFmt)
+    if (pMarkFormat)
     {
-        xMark = pMarkFmt->GetXRefMark();
+        xMark = pMarkFormat->GetXRefMark();
     }
     if (!xMark.is())
     {
-        SwXReferenceMark *const pMark(new SwXReferenceMark(&rDoc, pMarkFmt));
+        SwXReferenceMark *const pMark(new SwXReferenceMark(&rDoc, pMarkFormat));
         xMark.set(pMark);
-        if (pMarkFmt)
+        if (pMarkFormat)
         {
-            pMarkFmt->SetXRefMark(xMark);
+            pMarkFormat->SetXRefMark(xMark);
         }
         // need a permanent Reference to initialize m_wThis
         pMark->m_pImpl->m_wThis = xMark;
@@ -206,7 +206,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     SwDoc *pDoc2 = rPam.GetDoc();
 
     UnoActionContext aCont(pDoc2);
-    SwFmtRefMark aRefMark(m_sMarkName);
+    SwFormatRefMark aRefMark(m_sMarkName);
     bool bMark = *rPam.GetPoint() != *rPam.GetMark();
 
     const bool bForceExpandHints( !bMark && pCursor && pCursor->IsAtEndOfMeta() );
@@ -215,10 +215,10 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
             | SetAttrMode::DONTEXPAND)
         : SetAttrMode::DONTEXPAND;
 
-    ::std::vector<SwTxtAttr *> oldMarks;
+    ::std::vector<SwTextAttr *> oldMarks;
     if (bMark)
     {
-        oldMarks = rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
+        oldMarks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
     }
 
@@ -230,40 +230,40 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     }
 
     // aRefMark was copied into the document pool; now retrieve real format...
-    SwTxtAttr * pTxtAttr(0);
+    SwTextAttr * pTextAttr(0);
     if (bMark)
     {
         // #i107672#
         // ensure that we do not retrieve a different mark at the same position
-        ::std::vector<SwTxtAttr *> const newMarks(
-            rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
+        ::std::vector<SwTextAttr *> const newMarks(
+            rPam.GetNode().GetTextNode()->GetTextAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
-        ::std::vector<SwTxtAttr *>::const_iterator const iter(
+        ::std::vector<SwTextAttr *>::const_iterator const iter(
             ::std::find_if(newMarks.begin(), newMarks.end(),
-                NotContainedIn<SwTxtAttr *>(oldMarks)));
+                NotContainedIn<SwTextAttr *>(oldMarks)));
         OSL_ASSERT(newMarks.end() != iter);
         if (newMarks.end() != iter)
         {
-            pTxtAttr = *iter;
+            pTextAttr = *iter;
         }
     }
     else
     {
-        SwTxtNode *pTxtNd = rPam.GetNode().GetTxtNode();
-        OSL_ASSERT(pTxtNd);
-        pTxtAttr = pTxtNd ? rPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
+        SwTextNode *pTextNd = rPam.GetNode().GetTextNode();
+        OSL_ASSERT(pTextNd);
+        pTextAttr = pTextNd ? rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
                 rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK) : NULL;
     }
 
-    if (!pTxtAttr)
+    if (!pTextAttr)
     {
         throw uno::RuntimeException(
             "SwXReferenceMark::InsertRefMark(): cannot insert attribute", 0);
     }
 
-    m_pMarkFmt = &pTxtAttr->GetRefMark();
+    m_pMarkFormat = &pTextAttr->GetRefMark();
 
-    const_cast<SwFmtRefMark*>(m_pMarkFmt)->Add(this);
+    const_cast<SwFormatRefMark*>(m_pMarkFormat)->Add(this);
 }
 
 void SAL_CALL
@@ -307,21 +307,21 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException, std::exception)
 
     if (m_pImpl->IsValid())
     {
-        SwFmtRefMark const*const pNewMark =
+        SwFormatRefMark const*const pNewMark =
             m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName);
-        if (pNewMark && (pNewMark == m_pImpl->m_pMarkFmt))
+        if (pNewMark && (pNewMark == m_pImpl->m_pMarkFormat))
         {
-            SwTxtRefMark const*const pTxtMark =
-                m_pImpl->m_pMarkFmt->GetTxtRefMark();
-            if (pTxtMark &&
-                (&pTxtMark->GetTxtNode().GetNodes() ==
+            SwTextRefMark const*const pTextMark =
+                m_pImpl->m_pMarkFormat->GetTextRefMark();
+            if (pTextMark &&
+                (&pTextMark->GetTextNode().GetNodes() ==
                     &m_pImpl->m_pDoc->GetNodes()))
             {
-                SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                const ::std::unique_ptr<SwPaM> pPam( (pTxtMark->End())
-                    ?   new SwPaM( rTxtNode, *pTxtMark->End(),
-                                   rTxtNode, pTxtMark->GetStart())
-                    :   new SwPaM( rTxtNode, pTxtMark->GetStart()) );
+                SwTextNode const& rTextNode = pTextMark->GetTextNode();
+                const ::std::unique_ptr<SwPaM> pPam( (pTextMark->End())
+                    ?   new SwPaM( rTextNode, *pTextMark->End(),
+                                   rTextNode, pTextMark->GetStart())
+                    :   new SwPaM( rTextNode, pTextMark->GetStart()) );
 
                 return SwXTextRange::CreateXTextRange(
                             *m_pImpl->m_pDoc, *pPam->Start(), pPam->End());
@@ -336,23 +336,23 @@ void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException, std::exc
     SolarMutexGuard aGuard;
     if (m_pImpl->IsValid())
     {
-        SwFmtRefMark const*const pNewMark =
+        SwFormatRefMark const*const pNewMark =
             m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName);
-        if (pNewMark && (pNewMark == m_pImpl->m_pMarkFmt))
+        if (pNewMark && (pNewMark == m_pImpl->m_pMarkFormat))
         {
-            SwTxtRefMark const*const pTxtMark =
-                m_pImpl->m_pMarkFmt->GetTxtRefMark();
-            if (pTxtMark &&
-                (&pTxtMark->GetTxtNode().GetNodes() ==
+            SwTextRefMark const*const pTextMark =
+                m_pImpl->m_pMarkFormat->GetTextRefMark();
+            if (pTextMark &&
+                (&pTextMark->GetTextNode().GetNodes() ==
                     &m_pImpl->m_pDoc->GetNodes()))
             {
-                SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                const sal_Int32 nStt = pTxtMark->GetStart();
-                const sal_Int32 nEnd = pTxtMark->End()
-                                  ? *pTxtMark->End()
+                SwTextNode const& rTextNode = pTextMark->GetTextNode();
+                const sal_Int32 nStt = pTextMark->GetStart();
+                const sal_Int32 nEnd = pTextMark->End()
+                                  ? *pTextMark->End()
                                   : nStt + 1;
 
-                SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
+                SwPaM aPam( rTextNode, nStt, rTextNode, nEnd );
                 m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
             }
         }
@@ -407,25 +407,25 @@ throw (uno::RuntimeException, std::exception)
         {
             throw uno::RuntimeException();
         }
-        SwFmtRefMark const*const pCurMark =
+        SwFormatRefMark const*const pCurMark =
             m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName);
         if ((rName != m_pImpl->m_sMarkName)
-            && pCurMark && (pCurMark == m_pImpl->m_pMarkFmt))
+            && pCurMark && (pCurMark == m_pImpl->m_pMarkFormat))
         {
             const UnoActionContext aCont(m_pImpl->m_pDoc);
-            SwTxtRefMark const*const pTxtMark =
-                m_pImpl->m_pMarkFmt->GetTxtRefMark();
-            if (pTxtMark &&
-                (&pTxtMark->GetTxtNode().GetNodes() ==
+            SwTextRefMark const*const pTextMark =
+                m_pImpl->m_pMarkFormat->GetTextRefMark();
+            if (pTextMark &&
+                (&pTextMark->GetTextNode().GetNodes() ==
                      &m_pImpl->m_pDoc->GetNodes()))
             {
-                SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                const sal_Int32 nStt = pTxtMark->GetStart();
-                const sal_Int32 nEnd = pTxtMark->End()
-                                        ? *pTxtMark->End()
+                SwTextNode const& rTextNode = pTextMark->GetTextNode();
+                const sal_Int32 nStt = pTextMark->GetStart();
+                const sal_Int32 nEnd = pTextMark->End()
+                                        ? *pTextMark->End()
                                         : nStt + 1;
 
-                SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
+                SwPaM aPam( rTextNode, nStt, rTextNode, nEnd );
                 // deletes the m_pImpl->m_pDoc member in the SwXReferenceMark!
                 m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
                 // The aPam will keep the correct and functional doc though
@@ -594,14 +594,14 @@ throw (uno::RuntimeException)
     uno::Reference< text::XTextCursor > xRet;
     if (IsValid())
     {
-        SwTxtNode * pTxtNode;
+        SwTextNode * pTextNode;
         sal_Int32 nMetaStart;
         sal_Int32 nMetaEnd;
         const bool bSuccess(
-                m_rMeta.SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
+                m_rMeta.SetContentRange(pTextNode, nMetaStart, nMetaEnd) );
         if (bSuccess)
         {
-            SwPosition aPos(*pTxtNode, nMetaStart);
+            SwPosition aPos(*pTextNode, nMetaStart);
             xRet = static_cast<text::XWordCursor*>(
                     new SwXTextCursor(*GetDoc(), &m_rMeta, CURSOR_META, aPos));
         }
@@ -634,7 +634,7 @@ SwXMetaText::createTextCursorByRange(
 
 // the Meta has a cached list of text portions for its contents
 // this list is created by SwXTextPortionEnumeration
-// the Meta listens at the SwTxtNode and throws away the cache when it changes
+// the Meta listens at the SwTextNode and throws away the cache when it changes
 class SwXMeta::Impl
     : public SwClient
 {
@@ -682,7 +682,7 @@ inline const ::sw::Meta * SwXMeta::Impl::GetMeta() const
 // SwModify
 void SwXMeta::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    m_pTextPortions.reset(); // throw away cache (SwTxtNode changed)
+    m_pTextPortions.reset(); // throw away cache (SwTextNode changed)
 
     ClientModify(this, pOld, pNew);
 
@@ -766,23 +766,23 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     }
 
     // create new SwXMeta
-    SwTxtNode * const pTxtNode( rMeta.GetTxtNode() );
-    SAL_WARN_IF(!pTxtNode, "sw.uno", "CreateXMeta: no text node?");
-    if (!pTxtNode) { return 0; }
+    SwTextNode * const pTextNode( rMeta.GetTextNode() );
+    SAL_WARN_IF(!pTextNode, "sw.uno", "CreateXMeta: no text node?");
+    if (!pTextNode) { return 0; }
     uno::Reference<text::XText> xParentText(i_xParent);
     if (!xParentText.is())
     {
-        SwTxtMeta * const pTxtAttr( rMeta.GetTxtAttr() );
-        SAL_WARN_IF(!pTxtAttr, "sw.uno", "CreateXMeta: no text attr?");
-        if (!pTxtAttr) { return 0; }
-        const SwPosition aPos(*pTxtNode, pTxtAttr->GetStart());
-        xParentText.set( ::sw::CreateParentXText(*pTxtNode->GetDoc(), aPos) );
+        SwTextMeta * const pTextAttr( rMeta.GetTextAttr() );
+        SAL_WARN_IF(!pTextAttr, "sw.uno", "CreateXMeta: no text attr?");
+        if (!pTextAttr) { return 0; }
+        const SwPosition aPos(*pTextNode, pTextAttr->GetStart());
+        xParentText.set( ::sw::CreateParentXText(*pTextNode->GetDoc(), aPos) );
     }
     if (!xParentText.is()) { return 0; }
-    SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFmtMeta()->Which())
-        ? new SwXMeta     (pTxtNode->GetDoc(), &rMeta, xParentText,
+    SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFormatMeta()->Which())
+        ? new SwXMeta     (pTextNode->GetDoc(), &rMeta, xParentText,
                             pPortions.release()) // temporarily un-unique_ptr :-(
-        : new SwXMetaField(pTxtNode->GetDoc(), &rMeta, xParentText,
+        : new SwXMetaField(pTextNode->GetDoc(), &rMeta, xParentText,
                             pPortions.release()));
     // this is why the constructor is private: need to acquire pXMeta here
     xMeta.set(pXMeta);
@@ -794,20 +794,20 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
 }
 
 bool SwXMeta::SetContentRange(
-        SwTxtNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd ) const
+        SwTextNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd ) const
 {
     ::sw::Meta const * const pMeta( m_pImpl->GetMeta() );
     if (pMeta)
     {
-        SwTxtMeta const * const pTxtAttr( pMeta->GetTxtAttr() );
-        if (pTxtAttr)
+        SwTextMeta const * const pTextAttr( pMeta->GetTextAttr() );
+        if (pTextAttr)
         {
-            rpNode = pMeta->GetTxtNode();
+            rpNode = pMeta->GetTextNode();
             if (rpNode)
             {
                 // rStart points at the first position _within_ the meta!
-                rStart = pTxtAttr->GetStart() + 1;
-                rEnd = *pTxtAttr->End();
+                rStart = pTextAttr->GetStart() + 1;
+                rEnd = *pTextAttr->End();
                 return true;
             }
         }
@@ -818,16 +818,16 @@ bool SwXMeta::SetContentRange(
 bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    SwTxtNode * pTxtNode;
+    SwTextNode * pTextNode;
     sal_Int32 nMetaStart;
     sal_Int32 nMetaEnd;
-    const bool bSuccess( SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
+    const bool bSuccess( SetContentRange(pTextNode, nMetaStart, nMetaEnd) );
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
         throw lang::DisposedException();
 
     SwPosition const * const pStartPos( rPam.Start() );
-    if (&pStartPos->nNode.GetNode() != pTxtNode)
+    if (&pStartPos->nNode.GetNode() != pTextNode)
     {
         throw lang::IllegalArgumentException(
             "trying to insert into a nesting text content, but start "
@@ -852,7 +852,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     if (rPam.HasMark() && bAbsorb)
     {
         SwPosition const * const pEndPos( rPam.End() );
-        if (&pEndPos->nNode.GetNode() != pTxtNode)
+        if (&pEndPos->nNode.GetNode() != pTextNode)
         {
             throw lang::IllegalArgumentException(
                 "trying to insert into a nesting text content, but end "
@@ -958,16 +958,16 @@ SwXMeta::dispose() throw (uno::RuntimeException, std::exception)
     }
     else if (!m_pImpl->m_bIsDisposed)
     {
-        SwTxtNode * pTxtNode;
+        SwTextNode * pTextNode;
         sal_Int32 nMetaStart;
         sal_Int32 nMetaEnd;
-        const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
+        const bool bSuccess(SetContentRange(pTextNode, nMetaStart, nMetaEnd));
         OSL_ENSURE(bSuccess, "no pam?");
         if (bSuccess)
         {
             // -1 because of CH_TXTATR
-            SwPaM aPam( *pTxtNode, nMetaStart - 1, *pTxtNode, nMetaEnd );
-            SwDoc * const pDoc( pTxtNode->GetDoc() );
+            SwPaM aPam( *pTextNode, nMetaStart - 1, *pTextNode, nMetaEnd );
+            SwDoc * const pDoc( pTextNode->GetDoc() );
             pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
 
             // removal should call Modify and do the dispose
@@ -1038,16 +1038,16 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         ? ::boost::shared_ptr< ::sw::Meta>( new ::sw::Meta() )
         : ::boost::shared_ptr< ::sw::Meta>(
             pDoc->GetMetaFieldManager().makeMetaField()) );
-    SwFmtMeta meta(pMeta, i_nWhich); // this is cloned by Insert!
+    SwFormatMeta meta(pMeta, i_nWhich); // this is cloned by Insert!
     const bool bSuccess( pDoc->getIDocumentContentOperations().InsertPoolItem( aPam, meta, nInsertFlags ) );
-    SwTxtAttr * const pTxtAttr( pMeta->GetTxtAttr() );
+    SwTextAttr * const pTextAttr( pMeta->GetTextAttr() );
     if (!bSuccess)
     {
         throw lang::IllegalArgumentException(
             "SwXMeta::attach(): cannot create meta: range invalid?",
             static_cast< ::cppu::OWeakObject* >(this), 1);
     }
-    if (!pTxtAttr)
+    if (!pTextAttr)
     {
         OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
@@ -1087,10 +1087,10 @@ SwXMeta::getAnchor() throw (uno::RuntimeException, std::exception)
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
-    SwTxtNode * pTxtNode;
+    SwTextNode * pTextNode;
     sal_Int32 nMetaStart;
     sal_Int32 nMetaEnd;
-    const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
+    const bool bSuccess(SetContentRange(pTextNode, nMetaStart, nMetaEnd));
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
     {
@@ -1099,9 +1099,9 @@ SwXMeta::getAnchor() throw (uno::RuntimeException, std::exception)
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
-    const SwPosition start(*pTxtNode, nMetaStart - 1); // -1 due to CH_TXTATR
-    const SwPosition end(*pTxtNode, nMetaEnd);
-    return SwXTextRange::CreateXTextRange(*pTxtNode->GetDoc(), start, &end);
+    const SwPosition start(*pTextNode, nMetaStart - 1); // -1 due to CH_TXTATR
+    const SwPosition end(*pTextNode, nMetaEnd);
+    return SwXTextRange::CreateXTextRange(*pTextNode->GetDoc(), start, &end);
 }
 
 // XTextRange
@@ -1200,17 +1200,17 @@ uno::Reference< uno::XInterface > SAL_CALL
 SwXMeta::getParent() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    SwTxtNode * pTxtNode;
+    SwTextNode * pTextNode;
     sal_Int32 nMetaStart;
     sal_Int32 nMetaEnd;
-    bool const bSuccess( SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
+    bool const bSuccess( SetContentRange(pTextNode, nMetaStart, nMetaEnd) );
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess) { throw lang::DisposedException(); }
     // in order to prevent getting this meta, subtract 1 from nMetaStart;
     // so we get the index of the dummy character, and we exclude it
-    // by calling GetTxtAttrAt(_, _, PARENT) in GetNestedTextContent
+    // by calling GetTextAttrAt(_, _, PARENT) in GetNestedTextContent
     uno::Reference<text::XTextContent> const xRet(
-        SwUnoCursorHelper::GetNestedTextContent(*pTxtNode, nMetaStart - 1,
+        SwUnoCursorHelper::GetNestedTextContent(*pTextNode, nMetaStart - 1,
             true) );
     return xRet;
 }
@@ -1254,15 +1254,15 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException, std::exception)
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
-    SwTxtNode * pTxtNode;
+    SwTextNode * pTextNode;
     sal_Int32 nMetaStart;
     sal_Int32 nMetaEnd;
-    const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
+    const bool bSuccess(SetContentRange(pTextNode, nMetaStart, nMetaEnd));
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
         throw lang::DisposedException();
 
-    SwPaM aPam(*pTxtNode, nMetaStart);
+    SwPaM aPam(*pTextNode, nMetaStart);
 
     if (!m_pImpl->m_pTextPortions.get())
     {
@@ -1286,10 +1286,10 @@ uno::Reference<frame::XModel> SwXMeta::GetModel()
     ::sw::Meta const * const pMeta( m_pImpl->GetMeta() );
     if (pMeta)
     {
-        SwTxtNode const * const pTxtNode( pMeta->GetTxtNode() );
-        if (pTxtNode)
+        SwTextNode const * const pTextNode( pMeta->GetTextNode() );
+        if (pTextNode)
         {
-            SwDocShell const * const pShell(pTxtNode->GetDoc()->GetDocShell());
+            SwDocShell const * const pShell(pTextNode->GetDoc()->GetDocShell());
             return (pShell) ? pShell->GetModel() : 0;
         }
     }

@@ -334,11 +334,11 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             svtools::ColorConfig aConfig;
             svtools::ColorConfigEntry eEntry =
                 INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
-            pInfo->SetTxtColor( aConfig.GetColorValue(eEntry).nColor );
+            pInfo->SetTextColor( aConfig.GetColorValue(eEntry).nColor );
         }
         else if ( dynamic_cast< const SdrMeasureField* >(pField))
         {
-            pInfo->ClearFldColor();
+            pInfo->ClearFieldColor();
         }
         else
         {

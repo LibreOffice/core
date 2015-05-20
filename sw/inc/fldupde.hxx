@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_FLDUPDE_HXX
 #define INCLUDED_SW_INC_FLDUPDE_HXX
 
-enum SwFldUpdateFlags
+enum SwFieldUpdateFlags
 {
     AUTOUPD_OFF,
     AUTOUPD_FIELD_ONLY,

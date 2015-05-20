@@ -101,7 +101,7 @@ SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
     , mnEventId(0)
     , mpOutlinerView(0)
     , mpOutliner(0)
-    , mpSidebarTxtControl(0)
+    , mpSidebarTextControl(0)
     , mpVScrollbar(0)
     , mpMetadataAuthor(0)
     , mpMetadataDate(0)
@@ -131,7 +131,7 @@ SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
     }
 
     mrMgr.ConnectSidebarWinToFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
-                                  mrSidebarItem.GetFmtFld(),
+                                  mrSidebarItem.GetFormatField(),
                                   *this );
 }
 
@@ -150,14 +150,14 @@ void SwSidebarWin::dispose()
 
     Disable();
 
-    if ( mpSidebarTxtControl )
+    if ( mpSidebarTextControl )
     {
         if ( mpOutlinerView )
         {
             mpOutlinerView->SetWindow( 0 );
         }
     }
-    mpSidebarTxtControl.disposeAndClear();
+    mpSidebarTextControl.disposeAndClear();
 
     if ( mpOutlinerView )
     {
@@ -267,7 +267,7 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
         mpMetadataDate->SetControlFont( aOrigFont );
     }
 
-    mpSidebarTxtControl->Draw(pDev, rPt, rSz, nInFlags);
+    mpSidebarTextControl->Draw(pDev, rPt, rSz, nInFlags);
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
@@ -352,10 +352,10 @@ void SwSidebarWin::InitControls()
     AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
     // actual window which holds the user text
-    mpSidebarTxtControl = VclPtr<SidebarTxtControl>::Create( *this,
+    mpSidebarTextControl = VclPtr<SidebarTextControl>::Create( *this,
                                                  WB_NODIALOGCONTROL,
                                                  mrView, mrMgr );
-    mpSidebarTxtControl->SetPointer(Pointer(POINTER_TEXT));
+    mpSidebarTextControl->SetPointer(Pointer(POINTER_TEXT));
 
     // window controls for author and date
     mpMetadataAuthor = VclPtr<Edit>::Create( this, 0 );
@@ -402,8 +402,8 @@ void SwSidebarWin::InitControls()
     mpOutliner->SetUpdateMode( true );
     Rescale();
 
-    mpSidebarTxtControl->EnableRTL( false );
-    mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTxtControl );
+    mpSidebarTextControl->EnableRTL( false );
+    mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTextControl );
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutliner->InsertView(mpOutlinerView );
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
@@ -446,7 +446,7 @@ void SwSidebarWin::InitControls()
     SetPostItText();
     Engine()->CompleteOnlineSpelling();
 
-    mpSidebarTxtControl->Show();
+    mpSidebarTextControl->Show();
     mpMetadataAuthor->Show();
     mpMetadataDate->Show();
     mpVScrollbar->Show();
@@ -504,7 +504,7 @@ void SwSidebarWin::Rescale()
     aMode.SetOrigin( Point() );
     mpOutliner->SetRefMapMode( aMode );
     SetMapMode( aMode );
-    mpSidebarTxtControl->SetMapMode( aMode );
+    mpSidebarTextControl->SetMapMode( aMode );
     if ( mpMetadataAuthor )
     {
         vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
@@ -647,23 +647,23 @@ void SwSidebarWin::SetPosAndSize()
     {
         std::vector< basegfx::B2DRange > aAnnotationTextRanges;
         {
-            const SwTxtAnnotationFld* pTxtAnnotationFld =
-                dynamic_cast< const SwTxtAnnotationFld* >( mrSidebarItem.GetFmtFld().GetTxtFld() );
-            if ( pTxtAnnotationFld != NULL
-                 && pTxtAnnotationFld->GetpTxtNode() != NULL )
+            const SwTextAnnotationField* pTextAnnotationField =
+                dynamic_cast< const SwTextAnnotationField* >( mrSidebarItem.GetFormatField().GetTextField() );
+            if ( pTextAnnotationField != NULL
+                 && pTextAnnotationField->GetpTextNode() != NULL )
             {
-                SwTxtNode* pTxtNode = pTxtAnnotationFld->GetpTxtNode();
-                SwNodes& rNds = pTxtNode->GetDoc()->GetNodes();
-                SwCntntNode* const pCntntNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetCntntNode();
-                SwPosition aStartPos( *pCntntNd, mrSidebarItem.maLayoutInfo.mnStartContent );
+                SwTextNode* pTextNode = pTextAnnotationField->GetpTextNode();
+                SwNodes& rNds = pTextNode->GetDoc()->GetNodes();
+                SwContentNode* const pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
+                SwPosition aStartPos( *pContentNd, mrSidebarItem.maLayoutInfo.mnStartContent );
                 SwShellCrsr* pTmpCrsr = NULL;
-                const bool bTableCrsrNeeded = pTxtNode->FindTableBoxStartNode() != pCntntNd->FindTableBoxStartNode();
+                const bool bTableCrsrNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
                 if ( bTableCrsrNeeded )
                 {
                     SwShellTableCrsr* pTableCrsr = new SwShellTableCrsr( DocView().GetWrtShell(), aStartPos );
                     pTableCrsr->SetMark();
-                    pTableCrsr->GetMark()->nNode = *pTxtNode;
-                    pTableCrsr->GetMark()->nContent.Assign( pTxtNode, pTxtAnnotationFld->GetStart()+1 );
+                    pTableCrsr->GetMark()->nNode = *pTextNode;
+                    pTableCrsr->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
                     pTableCrsr->NewTableSelection();
                     pTmpCrsr = pTableCrsr;
                 }
@@ -671,8 +671,8 @@ void SwSidebarWin::SetPosAndSize()
                 {
                     SwShellCrsr* pCrsr = new SwShellCrsr( DocView().GetWrtShell(), aStartPos );
                     pCrsr->SetMark();
-                    pCrsr->GetMark()->nNode = *pTxtNode;
-                    pCrsr->GetMark()->nContent.Assign( pTxtNode, pTxtAnnotationFld->GetStart()+1 );
+                    pCrsr->GetMark()->nNode = *pTextNode;
+                    pCrsr->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
                     pTmpCrsr = pCrsr;
                 }
                 ::boost::scoped_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange( pTmpCrsr );
@@ -729,7 +729,7 @@ void SwSidebarWin::DoResize()
     aHeight -= GetMetaHeight();
     mpMetadataAuthor->Show();
     mpMetadataDate->Show();
-    mpSidebarTxtControl->SetQuickHelpText(OUString());
+    mpSidebarTextControl->SetQuickHelpText(OUString());
 
     if ((aTextHeight > aHeight) && !IsPreview())
     {   // we need vertical scrollbars and have to reduce the width
@@ -763,12 +763,12 @@ void SwSidebarWin::DoResize()
 
     if (!AllSettings::GetLayoutRTL())
     {
-        mpSidebarTxtControl->setPosSizePixel(0, 0, aWidth, aHeight);
+        mpSidebarTextControl->setPosSizePixel(0, 0, aWidth, aHeight);
         mpVScrollbar->setPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight);
     }
     else
     {
-        mpSidebarTxtControl->setPosSizePixel( ( (aTextHeight > aHeight) && !IsPreview()
+        mpSidebarTextControl->setPosSizePixel( ( (aTextHeight > aHeight) && !IsPreview()
                                       ? GetScrollbarWidth() : 0 ) , 0,
                                       aWidth, aHeight);
         mpVScrollbar->setPosSizePixel( 0, 0, GetScrollbarWidth(), aHeight);
@@ -954,8 +954,8 @@ void SwSidebarWin::DataChanged( const DataChangedEvent& aEvent)
 
 void SwSidebarWin::GetFocus()
 {
-    if (mpSidebarTxtControl)
-        mpSidebarTxtControl->GrabFocus();
+    if (mpSidebarTextControl)
+        mpSidebarTextControl->GrabFocus();
 }
 
 void SwSidebarWin::LoseFocus()
@@ -1144,7 +1144,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
             }
         }
         else if ( pWinEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE &&
-                  pWinEvent->GetWindow() == mpSidebarTxtControl )
+                  pWinEvent->GetWindow() == mpSidebarTextControl )
         {
             const bool bLockView = mrView.GetWrtShell().IsViewLocked();
             mrView.GetWrtShell().LockView( true );
@@ -1402,7 +1402,7 @@ void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
     if ( bAnchorChanged )
     {
         mrMgr.ConnectSidebarWinToFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
-                                      mrSidebarItem.GetFmtFld(),
+                                      mrSidebarItem.GetFormatField(),
                                       *this );
     }
 }

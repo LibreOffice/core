@@ -49,15 +49,15 @@ public:
     virtual bool operator == ( const SwRedlineExtraData& ) const;
 };
 
-class SwRedlineExtraData_FmtColl : public SwRedlineExtraData
+class SwRedlineExtraData_FormatColl : public SwRedlineExtraData
 {
-    OUString sFmtNm;
+    OUString sFormatNm;
     SfxItemSet* pSet;
     sal_uInt16 nPoolId;
 public:
-    SwRedlineExtraData_FmtColl( const OUString& rColl, sal_uInt16 nPoolFmtId,
+    SwRedlineExtraData_FormatColl( const OUString& rColl, sal_uInt16 nPoolFormatId,
                                 const SfxItemSet* pSet = 0 );
-    virtual ~SwRedlineExtraData_FmtColl();
+    virtual ~SwRedlineExtraData_FormatColl();
     virtual SwRedlineExtraData* CreateNew() const SAL_OVERRIDE;
     virtual void Reject( SwPaM& rPam ) const SAL_OVERRIDE;
     virtual bool operator == ( const SwRedlineExtraData& ) const SAL_OVERRIDE;
@@ -149,7 +149,7 @@ public:
     void SetComment( const OUString& rS )     { sComment = rS; }
     void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }
 
-    void SetAutoFmtFlag()
+    void SetAutoFormatFlag()
   { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
     bool CanCombine( const SwRedlineData& rCmp ) const
         {
@@ -182,7 +182,7 @@ public:
 class SW_DLLPUBLIC SwRangeRedline : public SwPaM
 {
     SwRedlineData* pRedlineData;
-    SwNodeIndex* pCntntSect;
+    SwNodeIndex* pContentSect;
     bool bDelLastPara : 1;
     bool bIsLastParaDelete : 1;
     bool bIsVisible : 1;
@@ -199,13 +199,13 @@ public:
     // For sw3io: pData is taken over!
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos, bool bVsbl,
                bool bDelLP, bool bIsPD) :
-        SwPaM( rPos ), pRedlineData( pData ), pCntntSect( 0 ),
+        SwPaM( rPos ), pRedlineData( pData ), pContentSect( 0 ),
         bDelLastPara( bDelLP ), bIsLastParaDelete( bIsPD ), bIsVisible( bVsbl )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline();
 
-    SwNodeIndex* GetContentIdx() const { return pCntntSect; }
+    SwNodeIndex* GetContentIdx() const { return pContentSect; }
     // For Undo.
     void SetContentIdx( const SwNodeIndex* );
 
@@ -230,7 +230,7 @@ public:
         { return *pRedlineData == rCmp; }
     bool operator!=( const SwRedlineData& rCmp ) const
         { return *pRedlineData != rCmp; }
-    void SetAutoFmtFlag()               { pRedlineData->SetAutoFmtFlag(); }
+    void SetAutoFormatFlag()               { pRedlineData->SetAutoFormatFlag(); }
 
     sal_uInt16 GetStackCount() const;
     sal_uInt16 GetAuthor( sal_uInt16 nPos = 0) const;

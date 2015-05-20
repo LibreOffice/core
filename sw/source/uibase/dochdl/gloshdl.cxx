@@ -312,19 +312,19 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
     if(!pTmp)
         return false;
 
-    OUString sOnlyTxt;
-    OUString* pOnlyTxt = 0;
+    OUString sOnlyText;
+    OUString* pOnlyText = 0;
     if( bNoAttr )
     {
-        if( !pWrtShell->GetSelectedText( sOnlyTxt, GETSELTXT_PARABRK_TO_ONLYCR ))
+        if( !pWrtShell->GetSelectedText( sOnlyText, GETSELTXT_PARABRK_TO_ONLYCR ))
             return false;
-        pOnlyTxt = &sOnlyTxt;
+        pOnlyText = &sOnlyText;
     }
 
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
 
     const sal_uInt16 nSuccess = pWrtShell->MakeGlossary( *pTmp, rName, rShortName,
-                            rCfg.IsSaveRelFile(), pOnlyTxt );
+                            rCfg.IsSaveRelFile(), pOnlyText );
     if(nSuccess == (sal_uInt16) -1 )
     {
         MessageDialog(pWrtShell->GetView().GetWindow(), SW_RES(STR_ERR_INSERT_GLOS), VCL_MESSAGE_INFO).Execute();
@@ -370,7 +370,7 @@ bool SwGlossaryHdl::ExpandGlossary()
         // use this at text selection
     if(pWrtShell->SwCrsrShell::HasSelection() && !pWrtShell->IsBlockMode())
     {
-        aShortName = pWrtShell->GetSelTxt();
+        aShortName = pWrtShell->GetSelText();
     }
     else
     {
@@ -384,7 +384,7 @@ bool SwGlossaryHdl::ExpandGlossary()
         pWrtShell->SelNearestWrd();
             // ask for word
         if(pWrtShell->IsSelection())
-            aShortName = pWrtShell->GetSelTxt();
+            aShortName = pWrtShell->GetSelText();
     }
     return pGlossary && Expand( aShortName, &rStatGlossaries, pGlossary );
 }
@@ -509,7 +509,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         pWrtShell->StartAllAction();
 
         // cache all InputFields
-        SwInputFieldList aFldLst( pWrtShell, true );
+        SwInputFieldList aFieldLst( pWrtShell, true );
 
         pWrtShell->InsertGlossary(*pGlossary, aShortName);
         pWrtShell->EndAllAction();
@@ -520,8 +520,8 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         pWrtShell->EndUndo(UNDO_INSGLOSSARY);
 
         // demand input for all new InputFields
-        if( aFldLst.BuildSortLst() )
-            pWrtShell->UpdateInputFlds( &aFldLst );
+        if( aFieldLst.BuildSortLst() )
+            pWrtShell->UpdateInputFields( &aFieldLst );
     }
     delete pGlossary;
     return true;
@@ -553,7 +553,7 @@ bool SwGlossaryHdl::InsertGlossary(const OUString &rName)
     pWrtShell->StartAllAction();
 
     // cache all InputFields
-    SwInputFieldList aFldLst( pWrtShell, true );
+    SwInputFieldList aFieldLst( pWrtShell, true );
 
     pWrtShell->InsertGlossary(*pGlos, rName);
     pWrtShell->EndAllAction();
@@ -563,8 +563,8 @@ bool SwGlossaryHdl::InsertGlossary(const OUString &rName)
     }
 
     // demand input for all new InputFields
-    if( aFldLst.BuildSortLst() )
-        pWrtShell->UpdateInputFlds( &aFldLst );
+    if( aFieldLst.BuildSortLst() )
+        pWrtShell->UpdateInputFields( &aFieldLst );
 
     if(!pCurGrp)
         delete pGlos;
@@ -580,13 +580,13 @@ void SwGlossaryHdl::SetMacros(const OUString& rShortName,
     SwTextBlocks *pGlos = pGlossary ? pGlossary :
                                 pCurGrp ? pCurGrp
                                   : rStatGlossaries.GetGroupDoc( aCurGrp );
-    SvxMacroTableDtor aMacroTbl;
+    SvxMacroTableDtor aMacroTable;
     if( pStart )
-        aMacroTbl.Insert( SW_EVENT_START_INS_GLOSSARY, *pStart);
+        aMacroTable.Insert( SW_EVENT_START_INS_GLOSSARY, *pStart);
     if( pEnd )
-        aMacroTbl.Insert( SW_EVENT_END_INS_GLOSSARY, *pEnd);
+        aMacroTable.Insert( SW_EVENT_END_INS_GLOSSARY, *pEnd);
     sal_uInt16 nIdx = pGlos->GetIndex( rShortName );
-    if( !pGlos->SetMacroTable( nIdx, aMacroTbl ) && pGlos->GetError() )
+    if( !pGlos->SetMacroTable( nIdx, aMacroTable ) && pGlos->GetError() )
         ErrorHandler::HandleError( pGlos->GetError() );
 
     if(!pCurGrp && !pGlossary)
@@ -604,14 +604,14 @@ void SwGlossaryHdl::GetMacros( const OUString &rShortName,
     sal_uInt16 nIndex = pGlos->GetIndex( rShortName );
     if( nIndex != USHRT_MAX )
     {
-        SvxMacroTableDtor aMacroTbl;
-        if( pGlos->GetMacroTable( nIndex, aMacroTbl ) )
+        SvxMacroTableDtor aMacroTable;
+        if( pGlos->GetMacroTable( nIndex, aMacroTable ) )
         {
-            SvxMacro *pMacro = aMacroTbl.Get( SW_EVENT_START_INS_GLOSSARY );
+            SvxMacro *pMacro = aMacroTable.Get( SW_EVENT_START_INS_GLOSSARY );
             if( pMacro )
                 rStart = *pMacro;
 
-            pMacro = aMacroTbl.Get( SW_EVENT_END_INS_GLOSSARY );
+            pMacro = aMacroTable.Get( SW_EVENT_END_INS_GLOSSARY );
             if( pMacro )
                 rEnd = *pMacro;
         }

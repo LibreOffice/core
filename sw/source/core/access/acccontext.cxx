@@ -920,22 +920,22 @@ void SAL_CALL SwAccessibleContext::grabFocus()
     }
     else
     {
-        const SwCntntFrm *pCFrm = 0;
-        if( GetFrm()->IsCntntFrm() )
-            pCFrm = static_cast< const SwCntntFrm * >( GetFrm() );
+        const SwContentFrm *pCFrm = 0;
+        if( GetFrm()->IsContentFrm() )
+            pCFrm = static_cast< const SwContentFrm * >( GetFrm() );
         else if( GetFrm()->IsLayoutFrm() )
-            pCFrm = static_cast< const SwLayoutFrm * >( GetFrm() )->ContainsCntnt();
+            pCFrm = static_cast< const SwLayoutFrm * >( GetFrm() )->ContainsContent();
 
-        if( pCFrm && pCFrm->IsTxtFrm() )
+        if( pCFrm && pCFrm->IsTextFrm() )
         {
-            const SwTxtFrm *pTxtFrm = static_cast< const SwTxtFrm * >( pCFrm );
-            const SwTxtNode *pTxtNd = pTxtFrm->GetTxtNode();
-            if( pTxtNd )
+            const SwTextFrm *pTextFrm = static_cast< const SwTextFrm * >( pCFrm );
+            const SwTextNode *pTextNd = pTextFrm->GetTextNode();
+            if( pTextNd )
             {
                 // create pam for selection
-                SwIndex aIndex( const_cast< SwTxtNode * >( pTxtNd ),
-                                pTxtFrm->GetOfst() );
-                SwPosition aStartPos( *pTxtNd, aIndex );
+                SwIndex aIndex( const_cast< SwTextNode * >( pTextNd ),
+                                pTextFrm->GetOfst() );
+                SwPosition aStartPos( *pTextNd, aIndex );
                 SwPaM aPaM( aStartPos );
 
                 // set PaM at cursor shell
@@ -1425,7 +1425,7 @@ bool SwAccessibleContext::HasAdditionalAccessibleChildren()
 {
     bool bRet( false );
 
-    if ( GetFrm()->IsTxtFrm() )
+    if ( GetFrm()->IsTextFrm() )
     {
         SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
@@ -1442,7 +1442,7 @@ vcl::Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 
 {
     vcl::Window* pAdditionalAccessibleChild( 0 );
 
-    if ( GetFrm()->IsTxtFrm() )
+    if ( GetFrm()->IsTextFrm() )
     {
         SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
@@ -1458,7 +1458,7 @@ vcl::Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 
 /** #i88070# - get all additional accessible children */
 void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< vcl::Window* >* pChildren )
 {
-    if ( GetFrm()->IsTxtFrm() )
+    if ( GetFrm()->IsTextFrm() )
     {
         SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )

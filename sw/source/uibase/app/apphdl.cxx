@@ -198,7 +198,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             break;
             case FN_SET_MODOPT_TBLNUMFMT:
                 rSet.Put( SfxBoolItem( nWhich, pModuleConfig->
-                                            IsInsTblFormatNum( bWebView )));
+                                            IsInsTableFormatNum( bWebView )));
             break;
             default:
                 OSL_FAIL("::StateOther: default");
@@ -679,9 +679,9 @@ void SwModule::ExecOther(SfxRequest& rReq)
                         nWhich, false, &pItem ))
                     bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 else
-                    bSet = !pModuleConfig->IsInsTblFormatNum( bWebView );
+                    bSet = !pModuleConfig->IsInsTableFormatNum( bWebView );
 
-                pModuleConfig->SetInsTblFormatNum( bWebView, bSet );
+                pModuleConfig->SetInsTableFormatNum( bWebView, bSet );
             }
             break;
 #if HAVE_FEATURE_DBCONNECTIVITY
@@ -734,7 +734,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         bUpdateFields = false;
                     if(bUpdateFields)
                     {
-                        pWrtSh->UpdateInputFlds();
+                        pWrtSh->UpdateInputFields();
 
                         // Are database fields contained?
                         // Get all used databases for the first time

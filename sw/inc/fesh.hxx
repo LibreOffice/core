@@ -43,15 +43,15 @@ class SwFlyFrm;
 class SwTabCols;
 class SvxBrushItem;
 class SvxFrameDirectionItem;
-class SwTableAutoFmt;
+class SwTableAutoFormat;
 class SwFrm;
-class SwFmtFrmSize;
-class SwFmtRowSplit;
+class SwFormatFrmSize;
+class SwFormatRowSplit;
 class SdrObject;
 class Color;
 class Outliner;
 class SotDataObject;
-class SwFrmFmt;
+class SwFrameFormat;
 struct SwSortOptions;
 class SdrMarkList;
 
@@ -139,9 +139,9 @@ enum CurRectType
 
 struct SwGetCurColNumPara
 {
-    const SwFrmFmt* pFrmFmt;
+    const SwFrameFormat* pFrameFormat;
     const SwRect* pPrtRect, *pFrmRect;
-    SwGetCurColNumPara() : pFrmFmt( 0 ), pPrtRect( 0 ), pFrmRect( 0 ) {}
+    SwGetCurColNumPara() : pFrameFormat( 0 ), pPrtRect( 0 ), pFrmRect( 0 ) {}
 };
 
 #define SW_PASTESDR_INSERT      1
@@ -235,7 +235,7 @@ public:
     virtual ~SwFEShell();
 
     /// Copy and Paste methods for internal clipboard.
-    bool Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt = 0 );
+    bool Copy( SwDoc* pClpDoc, const OUString* pNewClpText = 0 );
     bool Paste( SwDoc* pClpDoc, bool bIncludingPageFrames = false);
 
     /// Paste some pages into another doc - used in mailmerge.
@@ -248,7 +248,7 @@ public:
     void SelectFlyFrm( SwFlyFrm& rFrm, bool bNew = false );
 
     /// Is selected frame within another frame?
-    const SwFrmFmt* IsFlyInFly();
+    const SwFrameFormat* IsFlyInFly();
 
     /** If an object as been given, exactly this object is selected
      (instead of searching over position). */
@@ -311,12 +311,12 @@ public:
                         const RndStdIds _nAnchorId,
                         const sal_Int16 _eHoriRelOrient = com::sun::star::text::RelOrientation::FRAME,
                         const sal_Int16 _eVertRelOrient = com::sun::star::text::RelOrientation::FRAME,
-                        const SwPosition* _pToCharCntntPos = NULL,
+                        const SwPosition* _pToCharContentPos = NULL,
                         const bool _bFollowTextFlow = false,
                         bool _bMirror = false,
                         Point* _opRef = NULL,
                         Size* _opPercent = NULL,
-                        const SwFmtFrmSize* pFmtFrmSize = 0 ) const;
+                        const SwFormatFrmSize* pFormatFrmSize = 0 ) const;
 
     /// Set size of draw objects.
     void SetObjRect( const SwRect& rRect );
@@ -332,18 +332,18 @@ public:
     Size  GetObjSize()       const;
 
     /// SS for envelopes: get all page-bound objects and set them to new page.
-    void GetPageObjs( std::vector<SwFrmFmt*>& rFillArr );
-    void SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffset = 1 );
+    void GetPageObjs( std::vector<SwFrameFormat*>& rFillArr );
+    void SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr, int nOffset = 1 );
 
     /// Show current selection (frame / draw object as required).
     virtual void MakeSelVisible() SAL_OVERRIDE;
 
-    /** @return FrmFmt of object that may be under Point.
+    /** @return FrameFormat of object that may be under Point.
      Object does not become selected! */
-    const SwFrmFmt* GetFmtFromObj( const Point& rPt, SwRect** pRectToFill = 0 ) const;
+    const SwFrameFormat* GetFormatFromObj( const Point& rPt, SwRect** pRectToFill = 0 ) const;
 
     /// @return a format too, if the point is over the text of any fly.
-    const SwFrmFmt* GetFmtFromAnyObj( const Point& rPt ) const;
+    const SwFrameFormat* GetFormatFromAnyObj( const Point& rPt ) const;
 
     /** Which Protection is set at selected object?
      returns several flags in sal_uInt8 */
@@ -363,8 +363,8 @@ public:
     bool GetFlyFrmAttr( SfxItemSet &rSet ) const;
     bool SetFlyFrmAttr( SfxItemSet &rSet );
     bool ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = 0 );
-    const SwFrmFmt *NewFlyFrm( const SfxItemSet &rSet, bool bAnchValid = false,
-                         SwFrmFmt *pParent = 0 );
+    const SwFrameFormat *NewFlyFrm( const SfxItemSet &rSet, bool bAnchValid = false,
+                         SwFrameFormat *pParent = 0 );
     void SetFlyPos( const Point &rAbsPos);
     Point FindAnchorPos( const Point &rAbsPos, bool bMoveIt = false );
 
@@ -373,12 +373,12 @@ public:
      - add output parameter <bVertL2R> */
     bool IsFrmVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
 
-    SwFrmFmt* GetCurFrmFmt() const; ///< If frame then frame style, else 0.
-    void SetFrmFmt( SwFrmFmt *pFmt, bool bKeepOrient = false, Point* pDocPos = 0 ); ///< If frame then set frame style.
+    SwFrameFormat* GetCurFrameFormat() const; ///< If frame then frame style, else 0.
+    void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point* pDocPos = 0 ); ///< If frame then set frame style.
     const SwFlyFrm *GetCurrFlyFrm() const { return FindFlyFrm(); }
 
     /// Find/delete fly containing the cursor.
-    SwFrmFmt* WizzardGetFly();
+    SwFrameFormat* WizzardGetFly();
 
     /// Independent selecting of flys.
     bool GotoNextFly( sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY )
@@ -388,14 +388,14 @@ public:
 
    /// Iterate over flys  - for Basic-collections.
     size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
-    const SwFrmFmt* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false) const;
+    const SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false) const;
 
-    /// If a fly is selected, it draws cursor into the first CntntFrm.
-    const SwFrmFmt* SelFlyGrabCrsr();
+    /// If a fly is selected, it draws cursor into the first ContentFrm.
+    const SwFrameFormat* SelFlyGrabCrsr();
 
     /// Get FlyFrameFormat; fuer UI Macro Anbindung an Flys
-    const SwFrmFmt* GetFlyFrmFmt() const;
-          SwFrmFmt* GetFlyFrmFmt();
+    const SwFrameFormat* GetFlyFrameFormat() const;
+          SwFrameFormat* GetFlyFrameFormat();
 
     /** OLE. Server requires new size. Desired values are adjusted as frame attributes.
      If the values are not allowed, the formatting clips and determines scaling.
@@ -413,7 +413,7 @@ public:
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
                                   const SwRect *pFlyFrmRect = 0,
-                                  const bool bNoTxtFrmPrtAreaChanged = false ) = 0;
+                                  const bool bNoTextFrmPrtAreaChanged = false ) = 0;
 
     /** Connect objects with ActivateWhenVisible at Paint.
      Called by notxtfrm::Paint, implemented in wrtsh. */
@@ -445,16 +445,16 @@ public:
                   bool bSelFrame = true );
 
     /// Position is a graphic with URL?
-    const SwFrmFmt* IsURLGrfAtPos( const Point& rPt, OUString* pURL = 0,
+    const SwFrameFormat* IsURLGrfAtPos( const Point& rPt, OUString* pURL = 0,
                                     OUString *pTargetFrameName = 0,
                                     OUString *pURLDescription = 0 ) const;
 
     /** For Chain always connect Fly specified by format with that hit by point.
      rRect contains rect of Fly (for its highlight). */
-    SwChainRet Chainable( SwRect &rRect, const SwFrmFmt &rSource, const Point &rPt ) const;
-    SwChainRet Chain( SwFrmFmt &rSource, const Point &rPt );
-    SwChainRet Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
-    void Unchain( SwFrmFmt &rFmt );
+    SwChainRet Chainable( SwRect &rRect, const SwFrameFormat &rSource, const Point &rPt ) const;
+    SwChainRet Chain( SwFrameFormat &rSource, const Point &rPt );
+    SwChainRet Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest );
+    void Unchain( SwFrameFormat &rFormat );
     void HideChainMarker();
     void SetChainMarker();
 
@@ -530,7 +530,7 @@ public:
 
     /** Get selected DrawObj as graphics (MetaFile/Bitmap).
      Return value indicates if it was converted. */
-    bool GetDrawObjGraphic( SotClipboardFormatId nFmt, Graphic& rGrf ) const;
+    bool GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf ) const;
 
     void Paste( SvStream& rStm, sal_uInt16 nAction, const Point* pPt = 0 );
     bool Paste( const Graphic &rGrf, const OUString& rURL );
@@ -544,7 +544,7 @@ public:
                 const Graphic* pGraphic = 0,
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
-                SwFrmFmt* = 0 );
+                SwFrameFormat* = 0 );
 
     /// Insertion of a drawing object which have to be already inserted in the DrawModel.
     void InsertDrawObj( SdrObject& rDrawObj,
@@ -562,7 +562,7 @@ public:
     void AlignAllFormulasToBaseline();
 
     /// Provide information about content situated closes to given Point.
-    Point GetCntntPos( const Point& rPoint, bool bNext ) const;
+    Point GetContentPos( const Point& rPoint, bool bNext ) const;
 
     /// Convert document position into position relative to the current page.
     Point GetRelativePagePosition(const Point& rDocPos);
@@ -595,14 +595,14 @@ public:
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;
     bool GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
-    SwFlyFrmFmt* InsertObject( const svt::EmbeddedObjectRef&,
+    SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
-                SwFrmFmt* = 0 );
+                SwFrameFormat* = 0 );
     bool    FinishOLEObj(); ///< Shutdown server.
 
-    void GetTblAttr( SfxItemSet & ) const;
-    void SetTblAttr( const SfxItemSet & );
+    void GetTableAttr( SfxItemSet & ) const;
+    void SetTableAttr( const SfxItemSet & );
 
     bool HasWholeTabSelection() const;
 
@@ -615,7 +615,7 @@ public:
     bool DeleteTable();
     bool DeleteRow(bool bCompleteTable = false);
 
-    bool DeleteTblSel();        ///< Current selection, may be whole table.
+    bool DeleteTableSel();        ///< Current selection, may be whole table.
 
     sal_uInt16 MergeTab();          /**< Merge selected parts of table.
                                       @return error via enum. */
@@ -624,13 +624,13 @@ public:
     bool SplitTab( bool nVert = true, sal_uInt16 nCnt = 1, bool bSameHeight = false );
     bool Sort(const SwSortOptions&);    //Sortieren.
 
-    void SetRowHeight( const SwFmtFrmSize &rSz );
+    void SetRowHeight( const SwFormatFrmSize &rSz );
 
     /// Pointer must be detroyed by caller != 0.
-    void GetRowHeight( SwFmtFrmSize *&rpSz ) const;
+    void GetRowHeight( SwFormatFrmSize *&rpSz ) const;
 
-    void SetRowSplit( const SwFmtRowSplit &rSz );
-    void GetRowSplit( SwFmtRowSplit *&rpSz ) const;
+    void SetRowSplit( const SwFormatRowSplit &rSz );
+    void GetRowSplit( SwFormatRowSplit *&rpSz ) const;
 
     void   SetBoxAlign( sal_uInt16 nOrient );
     sal_uInt16 GetBoxAlign() const;         ///< USHRT_MAX if ambiguous.
@@ -662,7 +662,7 @@ public:
                           const Point &rPt );
 
     /// pEnd will be used during MouseMove
-    bool SelTblRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
+    bool SelTableRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
 
     void GetTabRows( SwTabCols &rToFill ) const;
     void SetTabRows( const SwTabCols &rNew, bool bCurColOnly );
@@ -672,9 +672,9 @@ public:
     void ProtectCells();    /**< If a table selection exists it is destroyed in case
                              cursor is not allowed in readonly. */
     void UnProtectCells();  ///< Refers to table selection.
-    void UnProtectTbls();   ///< Unprotect all tables in selection.
-    bool HasTblAnyProtection( const OUString* pTblName = 0,
-                              bool* pFullTblProtection = 0 );
+    void UnProtectTables();   ///< Unprotect all tables in selection.
+    bool HasTableAnyProtection( const OUString* pTableName = 0,
+                              bool* pFullTableProtection = 0 );
     bool CanUnProtectCells() const;
 
     sal_uInt16 GetRowsToRepeat() const;
@@ -700,13 +700,13 @@ public:
     bool BalanceCellWidth( bool bTstOnly );
 
     /// AutoFormat for table/ table selection.
-    bool SetTableAutoFmt( const SwTableAutoFmt& rNew );
+    bool SetTableAutoFormat( const SwTableAutoFormat& rNew );
 
-    bool GetTableAutoFmt( SwTableAutoFmt& rGet );
+    bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 
     bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff = 283 );
 
-    bool GetAutoSum( OUString& rFml ) const;
+    bool GetAutoSum( OUString& rFormula ) const;
 
     /** Phy: real page count.
      Virt: consider offset that may have been set by user. */
@@ -716,7 +716,7 @@ public:
     void SetPageOffset( sal_uInt16 nOffset );   ///< Changes last page offset.
     sal_uInt16 GetPageOffset() const;           ///< @return last page offset.
 
-    void InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
+    void InsertLabel( const SwLabelType eType, const OUString &rText, const OUString& rSeparator,
                       const OUString& rNumberSeparator,
                       const bool bBefore, const sal_uInt16 nId,
                       const OUString& rCharacterStyle,
@@ -737,10 +737,10 @@ public:
     bool IsLastCellInRow() const;
 
     /// Width of current range for column-dialog.
-    long GetSectionWidth( SwFmt const & rFmt ) const;
+    long GetSectionWidth( SwFormat const & rFormat ) const;
 
-    void GetConnectableFrmFmts
-    (SwFrmFmt & rFmt, const OUString & rReference, bool bSuccessors,
+    void GetConnectableFrameFormats
+    (SwFrameFormat & rFormat, const OUString & rReference, bool bSuccessors,
      ::std::vector< OUString > & aPrevPageVec,
      ::std::vector< OUString > & aThisPageVec,
      ::std::vector< OUString > & aNextPageVec,
@@ -775,10 +775,10 @@ public:
 
     void ParkCursorInTab();
 
-    SwTxtNode * GetNumRuleNodeAtPos(const Point &rPot);
+    SwTextNode * GetNumRuleNodeAtPos(const Point &rPot);
     bool IsNumLabel( const Point &rPt, int nMaxOffset = -1 );
 
-    static bool IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
+    static bool IsVerticalModeAtNdAndPos( const SwTextNode& _rTextNode,
                                    const Point& _rDocPos );
 
     void ToggleHeaderFooterEdit( );

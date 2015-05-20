@@ -428,7 +428,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         case text::ControlCharacter::APPEND_PARAGRAPH:
         {
             m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->nNode);
-            m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPam.GetPoint());
+            m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPam.GetPoint());
 
             const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
                     xTextRange, uno::UNO_QUERY);
@@ -642,34 +642,34 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
-    SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
-    SwTxtNode * pTxtNode = 0;
-    if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
+    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : 0;
+    SwTextNode * pTextNode = 0;
+    if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
-        SwTable *const pTable = SwTable::FindTable( pTableFmt );
-        SwTableNode *const pTblNode = pTable->GetTableNode();
+        SwTable *const pTable = SwTable::FindTable( pTableFormat );
+        SwTableNode *const pTableNode = pTable->GetTableNode();
 
-        const SwNodeIndex aTblIdx( *pTblNode, -1 );
-        SwPosition aBefore(aTblIdx);
-        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aBefore );
-        pTxtNode = aBefore.nNode.GetNode().GetTxtNode();
+        const SwNodeIndex aTableIdx( *pTableNode, -1 );
+        SwPosition aBefore(aTableIdx);
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore );
+        pTextNode = aBefore.nNode.GetNode().GetTextNode();
     }
-    else if (pXSection && pXSection->GetFmt() &&
-            pXSection->GetFmt()->GetDoc() == GetDoc())
+    else if (pXSection && pXSection->GetFormat() &&
+            pXSection->GetFormat()->GetDoc() == GetDoc())
     {
-        SwSectionFmt *const pSectFmt = pXSection->GetFmt();
-        SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
+        SwSectionFormat *const pSectFormat = pXSection->GetFormat();
+        SwSectionNode *const pSectNode = pSectFormat->GetSectionNode();
 
         const SwNodeIndex aSectIdx( *pSectNode, -1 );
         SwPosition aBefore(aSectIdx);
-        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aBefore );
-        pTxtNode = aBefore.nNode.GetNode().GetTxtNode();
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore );
+        pTextNode = aBefore.nNode.GetNode().GetTextNode();
     }
-    if (!bRet || !pTxtNode)
+    if (!bRet || !pTextNode)
     {
         throw lang::IllegalArgumentException();
     }
-    pPara->attachToText(*this, *pTxtNode);
+    pPara->attachToText(*this, *pTextNode);
 }
 
 void SAL_CALL
@@ -700,34 +700,34 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
-    SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
+    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : 0;
     bool bRet = false;
-    SwTxtNode * pTxtNode = 0;
-    if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
+    SwTextNode * pTextNode = 0;
+    if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
-        SwTable *const pTable = SwTable::FindTable( pTableFmt );
-        SwTableNode *const pTblNode = pTable->GetTableNode();
+        SwTable *const pTable = SwTable::FindTable( pTableFormat );
+        SwTableNode *const pTableNode = pTable->GetTableNode();
 
-        SwEndNode *const pTableEnd = pTblNode->EndOfSectionNode();
+        SwEndNode *const pTableEnd = pTableNode->EndOfSectionNode();
         SwPosition aTableEnd(*pTableEnd);
-        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aTableEnd );
-        pTxtNode = aTableEnd.nNode.GetNode().GetTxtNode();
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aTableEnd );
+        pTextNode = aTableEnd.nNode.GetNode().GetTextNode();
     }
-    else if (pXSection && pXSection->GetFmt() &&
-            pXSection->GetFmt()->GetDoc() == GetDoc())
+    else if (pXSection && pXSection->GetFormat() &&
+            pXSection->GetFormat()->GetDoc() == GetDoc())
     {
-        SwSectionFmt *const pSectFmt = pXSection->GetFmt();
-        SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
+        SwSectionFormat *const pSectFormat = pXSection->GetFormat();
+        SwSectionNode *const pSectNode = pSectFormat->GetSectionNode();
         SwEndNode *const pEnd = pSectNode->EndOfSectionNode();
         SwPosition aEnd(*pEnd);
-        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aEnd );
-        pTxtNode = aEnd.nNode.GetNode().GetTxtNode();
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aEnd );
+        pTextNode = aEnd.nNode.GetNode().GetTextNode();
     }
-    if (!bRet || !pTxtNode)
+    if (!bRet || !pTextNode)
     {
         throw lang::IllegalArgumentException();
     }
-    pPara->attachToText(*this, *pTxtNode);
+    pPara->attachToText(*this, *pTextNode);
 }
 
 void SAL_CALL
@@ -751,27 +751,27 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
-    SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
-    if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
+    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : 0;
+    if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
-        SwTable *const pTable = SwTable::FindTable( pTableFmt );
-        SwTableNode *const pTblNode = pTable->GetTableNode();
+        SwTable *const pTable = SwTable::FindTable( pTableFormat );
+        SwTableNode *const pTableNode = pTable->GetTableNode();
 
-        const SwNodeIndex aTblIdx( *pTblNode, -1 );
-        if(aTblIdx.GetNode().IsTxtNode())
+        const SwNodeIndex aTableIdx( *pTableNode, -1 );
+        if(aTableIdx.GetNode().IsTextNode())
         {
-            SwPaM aBefore(aTblIdx);
+            SwPaM aBefore(aTableIdx);
             bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( aBefore );
         }
     }
-    else if (pXSection && pXSection->GetFmt() &&
-            pXSection->GetFmt()->GetDoc() == GetDoc())
+    else if (pXSection && pXSection->GetFormat() &&
+            pXSection->GetFormat()->GetDoc() == GetDoc())
     {
-        SwSectionFmt *const pSectFmt = pXSection->GetFmt();
-        SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
+        SwSectionFormat *const pSectFormat = pXSection->GetFormat();
+        SwSectionNode *const pSectNode = pSectFormat->GetSectionNode();
 
         const SwNodeIndex aSectIdx(  *pSectNode, -1 );
-        if(aSectIdx.GetNode().IsTxtNode())
+        if(aSectIdx.GetNode().IsTextNode())
         {
             SwPaM aBefore(aSectIdx);
             bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( aBefore );
@@ -804,28 +804,28 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
-    SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
-    if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
+    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : 0;
+    if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
-        SwTable *const pTable = SwTable::FindTable( pTableFmt );
-        SwTableNode *const pTblNode = pTable->GetTableNode();
-        SwEndNode *const pTableEnd = pTblNode->EndOfSectionNode();
+        SwTable *const pTable = SwTable::FindTable( pTableFormat );
+        SwTableNode *const pTableNode = pTable->GetTableNode();
+        SwEndNode *const pTableEnd = pTableNode->EndOfSectionNode();
 
-        const SwNodeIndex aTblIdx( *pTableEnd, 1 );
-        if(aTblIdx.GetNode().IsTxtNode())
+        const SwNodeIndex aTableIdx( *pTableEnd, 1 );
+        if(aTableIdx.GetNode().IsTextNode())
         {
-            SwPaM aPaM(aTblIdx);
+            SwPaM aPaM(aTableIdx);
             bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( aPaM );
         }
     }
-    else if (pXSection && pXSection->GetFmt() &&
-            pXSection->GetFmt()->GetDoc() == GetDoc())
+    else if (pXSection && pXSection->GetFormat() &&
+            pXSection->GetFormat()->GetDoc() == GetDoc())
     {
-        SwSectionFmt *const pSectFmt = pXSection->GetFmt();
-        SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
+        SwSectionFormat *const pSectFormat = pXSection->GetFormat();
+        SwSectionNode *const pSectNode = pSectFormat->GetSectionNode();
         SwEndNode *const pEnd = pSectNode->EndOfSectionNode();
         const SwNodeIndex aSectIdx(  *pEnd, 1 );
-        if(aSectIdx.GetNode().IsTxtNode())
+        if(aSectIdx.GetNode().IsTextNode())
         {
             SwPaM aAfter(aSectIdx);
             bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( aAfter );
@@ -956,10 +956,10 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException, std::e
         while(aStartIdx < aEndIdx);
         if(bInsertNodes)
         {
-            GetDoc()->getIDocumentContentOperations().AppendTxtNode( aStartPos );
+            GetDoc()->getIDocumentContentOperations().AppendTextNode( aStartPos );
             SwPosition aEndPos(aEndIdx.GetNode());
             SwPaM aPam(aEndPos);
-            GetDoc()->getIDocumentContentOperations().AppendTxtNode( *aPam.Start() );
+            GetDoc()->getIDocumentContentOperations().AppendTextNode( *aPam.Start() );
         }
     }
 
@@ -1150,15 +1150,15 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 //            break;
         case FN_UNO_REDLINE_NODE_END:
         {
-            const SwRedlineTbl& rRedTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
-            const size_t nRedTblCount = rRedTbl.size();
-            if (nRedTblCount > 0)
+            const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+            const size_t nRedTableCount = rRedTable.size();
+            if (nRedTableCount > 0)
             {
                 SwStartNode const*const pStartNode = GetStartNode();
                 const sal_uLong nOwnIndex = pStartNode->EndOfSectionIndex();
-                for (size_t nRed = 0; nRed < nRedTblCount; ++nRed)
+                for (size_t nRed = 0; nRed < nRedTableCount; ++nRed)
                 {
-                    SwRangeRedline const*const pRedline = rRedTbl[nRed];
+                    SwRangeRedline const*const pRedline = rRedTable[nRed];
                     SwPosition const*const pRedStart = pRedline->Start();
                     const SwNodeIndex nRedNode = pRedStart->nNode;
                     if (nOwnIndex == nRedNode.GetIndex())
@@ -1291,7 +1291,7 @@ SwXText::Impl::finishOrAppendParagraph(
         aPam = aStartPam;
         aPam.SetMark();
     }
-    m_pDoc->getIDocumentContentOperations().AppendTxtNode( *aPam.GetPoint() );
+    m_pDoc->getIDocumentContentOperations().AppendTextNode( *aPam.GetPoint() );
     // remove attributes from the previous paragraph
     m_pDoc->ResetAttrs(aPam);
     // in case of finishParagraph the PaM needs to be moved to the
@@ -1341,11 +1341,11 @@ SwXText::Impl::finishOrAppendParagraph(
             throw aEx;
         }
     }
-    SwTxtNode *const pTxtNode( aPam.Start()->nNode.GetNode().GetTxtNode() );
-    OSL_ENSURE(pTxtNode, "no SwTxtNode?");
-    if (pTxtNode)
+    SwTextNode *const pTextNode( aPam.Start()->nNode.GetNode().GetTextNode() );
+    OSL_ENSURE(pTextNode, "no SwTextNode?");
+    if (pTextNode)
     {
-        xRet.set(SwXParagraph::CreateXParagraph(*m_pDoc, pTxtNode, &m_rThis),
+        xRet.set(SwXParagraph::CreateXParagraph(*m_pDoc, pTextNode, &m_rThis),
                 uno::UNO_QUERY);
     }
 
@@ -1383,7 +1383,7 @@ SwXText::insertTextPortion(
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
     SwUnoCrsr *const pCursor = pTextCursor->GetCursor();
-    m_pImpl->m_pDoc->DontExpandFmt( *pCursor->Start() );
+    m_pImpl->m_pDoc->DontExpandFormat( *pCursor->Start() );
 
     if (!rText.isEmpty())
     {
@@ -1596,9 +1596,9 @@ SwXText::convertToTextFrame(
         }
         if (pStartTableNode)
         {
-            const SwNodeIndex aTblIdx(  *pStartTableNode, -1 );
-            SwPosition aBefore(aTblIdx);
-            bParaBeforeInserted = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aBefore );
+            const SwNodeIndex aTableIdx(  *pStartTableNode, -1 );
+            SwPosition aBefore(aTableIdx);
+            bParaBeforeInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore );
             aStartPam.DeleteMark();
             *aStartPam.GetPoint() = aBefore;
             pStartStartNode = aStartPam.GetNode().StartOfSectionNode();
@@ -1608,7 +1608,7 @@ SwXText::convertToTextFrame(
             SwTableNode *const pEndTableNode = pEndStartNode->FindTableNode();
             SwEndNode *const pTableEnd = pEndTableNode->EndOfSectionNode();
             SwPosition aTableEnd(*pTableEnd);
-            bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aTableEnd );
+            bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aTableEnd );
             pEndPam->DeleteMark();
             *pEndPam->GetPoint() = aTableEnd;
             pEndStartNode = pEndPam->GetNode().StartOfSectionNode();
@@ -1650,7 +1650,7 @@ SwXText::convertToTextFrame(
     && aStartPam.End()->nNode == pEndPam->End()->nNode )
     {
         SwPosition aEnd(*aStartPam.End());
-        bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aEnd );
+        bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aEnd );
         pEndPam->DeleteMark();
         *pEndPam->GetPoint() = aEnd;
     }
@@ -1662,18 +1662,18 @@ SwXText::convertToTextFrame(
     std::set<OUString> aAnchoredFrames;
     // for shapes, we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
     std::set<const SdrObject*> aAnchoredShapes;
-    for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
+    for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
-        const SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
-        const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
+        const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
+        const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         if ((FLY_AT_PARA == rAnchor.GetAnchorId() || FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
-                aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetCntntAnchor()->nNode.GetIndex() &&
-                aStartPam.End()->nNode.GetIndex() >= rAnchor.GetCntntAnchor()->nNode.GetIndex())
+                aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
+                aStartPam.End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
         {
-            if (pFrmFmt->Which() == RES_DRAWFRMFMT)
-                aAnchoredShapes.insert(pFrmFmt->FindSdrObject());
+            if (pFrameFormat->Which() == RES_DRAWFRMFMT)
+                aAnchoredShapes.insert(pFrameFormat->FindSdrObject());
             else
-                aAnchoredFrames.insert(pFrmFmt->GetName());
+                aAnchoredFrames.insert(pFrameFormat->GetName());
         }
     }
 
@@ -1699,31 +1699,31 @@ SwXText::convertToTextFrame(
             rNewFrame.setName(m_pImpl->m_pDoc->GetUniqueFrameName());
         }
 
-        SwTxtNode *const pTxtNode(aStartPam.GetNode().GetTxtNode());
-        OSL_ASSERT(pTxtNode);
-        if (!pTxtNode || !pTxtNode->Len()) // don't remove if it contains text!
+        SwTextNode *const pTextNode(aStartPam.GetNode().GetTextNode());
+        OSL_ASSERT(pTextNode);
+        if (!pTextNode || !pTextNode->Len()) // don't remove if it contains text!
         {
             {   // has to be in a block to remove the SwIndexes before
                 // DelFullPara is called
                 SwPaM aMovePam( aStartPam.GetNode() );
-                if (aMovePam.Move( fnMoveForward, fnGoCntnt ))
+                if (aMovePam.Move( fnMoveForward, fnGoContent ))
                 {
                     // move the anchor to the next paragraph
-                    SwFmtAnchor aNewAnchor(rNewFrame.GetFrmFmt()->GetAnchor());
+                    SwFormatAnchor aNewAnchor(rNewFrame.GetFrameFormat()->GetAnchor());
                     aNewAnchor.SetAnchor( aMovePam.Start() );
                     m_pImpl->m_pDoc->SetAttr(
-                        aNewAnchor, *rNewFrame.GetFrmFmt() );
+                        aNewAnchor, *rNewFrame.GetFrameFormat() );
 
                     // also move frames anchored to us
-                    for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
+                    for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
                     {
-                        SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
-                        if (aAnchoredFrames.find(pFrmFmt->GetName()) != aAnchoredFrames.end() || aAnchoredShapes.find(pFrmFmt->FindSdrObject()) != aAnchoredShapes.end())
+                        SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
+                        if (aAnchoredFrames.find(pFrameFormat->GetName()) != aAnchoredFrames.end() || aAnchoredShapes.find(pFrameFormat->FindSdrObject()) != aAnchoredShapes.end())
                         {
                             // copy the anchor to the next paragraph
-                            SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());
+                            SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
                             aAnchor.SetAnchor(aMovePam.Start());
-                            m_pImpl->m_pDoc->SetAttr(aAnchor, *pFrmFmt);
+                            m_pImpl->m_pDoc->SetAttr(aAnchor, *pFrameFormat);
                         }
                     }
                 }
@@ -1853,9 +1853,9 @@ void SwXText::Impl::ConvertCell(
         aStartCellPam = aNewStartPaM;
 
         sal_Int32 nEndLen = 0;
-        SwTxtNode * pTxtNode = pCorrectedRange->aEnd.GetNode().GetTxtNode();
-        if (pTxtNode != NULL)
-            nEndLen = pTxtNode->Len();
+        SwTextNode * pTextNode = pCorrectedRange->aEnd.GetNode().GetTextNode();
+        if (pTextNode != NULL)
+            nEndLen = pTextNode->Len();
 
         SwPaM aNewEndPaM(pCorrectedRange->aEnd, nEndLen);
         aEndCellPam = aNewEndPaM;
@@ -1957,7 +1957,7 @@ void SwXText::Impl::ConvertCell(
     }
     // now check if there's a need to insert another paragraph break
     if (aEndCellPam.End()->nContent.GetIndex() <
-            aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len())
+            aEndCellPam.End()->nNode.GetNode().GetTextNode()->Len())
     {
         m_pDoc->getIDocumentContentOperations().SplitNode(*aEndCellPam.End(), false);
         // take care that the new start/endcell is moved to the right position
@@ -1969,11 +1969,11 @@ void SwXText::Impl::ConvertCell(
         aEndCellPam.DeleteMark();
         aEndCellPam.Move(fnMoveBackward, fnGoNode);
         aEndCellPam.GetPoint()->nContent =
-            aEndCellPam.GetNode().GetTxtNode()->Len();
+            aEndCellPam.GetNode().GetTextNode()->Len();
     }
 
     assert(aStartCellPam.Start()->nContent.GetIndex() == 0);
-    assert(aEndCellPam.End()->nContent.GetIndex() == aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len());
+    assert(aEndCellPam.End()->nContent.GetIndex() == aEndCellPam.End()->nNode.GetNode().GetTextNode()->Len());
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
     rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!
@@ -2269,7 +2269,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         return uno::Reference< text::XTextTable >();
 
     uno::Reference<text::XTextTable> const xRet =
-        SwXTextTable::CreateXTextTable(pTable->GetFrmFmt());
+        SwXTextTable::CreateXTextTable(pTable->GetFrameFormat());
     uno::Reference<beans::XPropertySet> const xPrSet(xRet, uno::UNO_QUERY);
     // set properties to the table
     // catch lang::WrappedTargetException and lang::IndexOutOfBoundsException
@@ -2338,9 +2338,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
     }
 
-    assert(SwTable::FindTable(pTable->GetFrmFmt()) == pTable);
-    assert(pTable->GetFrmFmt() ==
-            dynamic_cast<SwXTextTable&>(*xRet.get()).GetFrmFmt());
+    assert(SwTable::FindTable(pTable->GetFrameFormat()) == pTable);
+    assert(pTable->GetFrameFormat() ==
+            dynamic_cast<SwXTextTable&>(*xRet.get()).GetFrameFormat());
     return xRet;
 }
 
@@ -2471,13 +2471,13 @@ SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
     aPam.Move( fnMoveBackward, fnGoDoc );
     if (!bIgnoreTables)
     {
-        SwTableNode * pTblNode = aPam.GetNode().FindTableNode();
-        SwCntntNode * pCont = 0;
-        while (pTblNode)
+        SwTableNode * pTableNode = aPam.GetNode().FindTableNode();
+        SwContentNode * pCont = 0;
+        while (pTableNode)
         {
-            aPam.GetPoint()->nNode = *pTblNode->EndOfSectionNode();
+            aPam.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
             pCont = GetDoc()->GetNodes().GoNext(&aPam.GetPoint()->nNode);
-            pTblNode = pCont->FindTableNode();
+            pTableNode = pCont->FindTableNode();
         }
         if (pCont)
         {
@@ -2521,7 +2521,7 @@ throw (uno::RuntimeException, std::exception)
     SwUnoInternalPaM aPam(*GetDoc());
     if (::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
-        if ( !aPam.GetNode().GetTxtNode() )
+        if ( !aPam.GetNode().GetTextNode() )
             throw uno::RuntimeException("Invalid text range" );
 
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
@@ -2602,23 +2602,23 @@ public:
     bool                        m_bIsHeader;
 
     Impl(   SwXHeadFootText & /*rThis*/,
-            SwFrmFmt & rHeadFootFmt, const bool bIsHeader)
-        : SwClient(& rHeadFootFmt)
+            SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
+        : SwClient(& rHeadFootFormat)
         , m_bIsHeader(bIsHeader)
     {
     }
 
-    SwFrmFmt * GetHeadFootFmt() const {
-        return static_cast<SwFrmFmt*>(
+    SwFrameFormat * GetHeadFootFormat() const {
+        return static_cast<SwFrameFormat*>(
                 const_cast<SwModify*>(GetRegisteredIn()));
     }
 
-    SwFrmFmt & GetHeadFootFmtOrThrow() {
-        SwFrmFmt *const pFmt( GetHeadFootFmt() );
-        if (!pFmt) {
+    SwFrameFormat & GetHeadFootFormatOrThrow() {
+        SwFrameFormat *const pFormat( GetHeadFootFormat() );
+        if (!pFormat) {
             throw uno::RuntimeException("SwXHeadFootText: disposed or invalid", 0);
         }
-        return *pFmt;
+        return *pFormat;
     }
 protected:
     // SwClient
@@ -2638,26 +2638,26 @@ bool SwXHeadFootText::IsXHeadFootText(SwClient *const pClient)
 
 uno::Reference< text::XText >
 SwXHeadFootText::CreateXHeadFootText(
-        SwFrmFmt & rHeadFootFmt, const bool bIsHeader)
+        SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
 {
     // re-use existing SwXHeadFootText
     // #i105557#: do not iterate over the registered clients: race condition
-    uno::Reference< text::XText > xText(rHeadFootFmt.GetXObject(),
+    uno::Reference< text::XText > xText(rHeadFootFormat.GetXObject(),
             uno::UNO_QUERY);
     if (!xText.is())
     {
         SwXHeadFootText *const pXHFT(
-                new SwXHeadFootText(rHeadFootFmt, bIsHeader));
+                new SwXHeadFootText(rHeadFootFormat, bIsHeader));
         xText.set(pXHFT);
-        rHeadFootFmt.SetXObject(xText);
+        rHeadFootFormat.SetXObject(xText);
     }
     return xText;
 }
 
-SwXHeadFootText::SwXHeadFootText(SwFrmFmt & rHeadFootFmt, const bool bIsHeader)
-    : SwXText(rHeadFootFmt.GetDoc(),
+SwXHeadFootText::SwXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
+    : SwXText(rHeadFootFormat.GetDoc(),
             (bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER)
-    , m_pImpl( new SwXHeadFootText::Impl(*this, rHeadFootFmt, bIsHeader) )
+    , m_pImpl( new SwXHeadFootText::Impl(*this, rHeadFootFormat, bIsHeader) )
 {
 }
 
@@ -2693,13 +2693,13 @@ SwXHeadFootText::getSupportedServiceNames() throw (uno::RuntimeException, std::e
 const SwStartNode *SwXHeadFootText::GetStartNode() const
 {
     const SwStartNode *pSttNd = 0;
-    SwFrmFmt *const pHeadFootFmt = m_pImpl->GetHeadFootFmt();
-    if(pHeadFootFmt)
+    SwFrameFormat *const pHeadFootFormat = m_pImpl->GetHeadFootFormat();
+    if(pHeadFootFormat)
     {
-        const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
-        if( rFlyCntnt.GetCntntIdx() )
+        const SwFormatContent& rFlyContent = pHeadFootFormat->GetContent();
+        if( rFlyContent.GetContentIdx() )
         {
-            pSttNd = rFlyCntnt.GetCntntIdx()->GetNode().GetStartNode();
+            pSttNd = rFlyContent.GetContentIdx()->GetNode().GetStartNode();
         }
     }
     return pSttNd;
@@ -2740,11 +2740,11 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException, std::exception
 {
     SolarMutexGuard aGuard;
 
-    SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
+    SwFrameFormat & rHeadFootFormat( m_pImpl->GetHeadFootFormatOrThrow() );
 
     uno::Reference< text::XTextCursor > xRet;
-    const SwFmtCntnt& rFlyCntnt = rHeadFootFmt.GetCntnt();
-    const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
+    const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
+    const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
     SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
             (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
@@ -2756,13 +2756,13 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException, std::exception
     SwStartNode const*const pOwnStartNode = rNode.FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     // is there a table here?
-    SwTableNode* pTblNode = pUnoCrsr->GetNode().FindTableNode();
-    SwCntntNode* pCont = 0;
-    while (pTblNode)
+    SwTableNode* pTableNode = pUnoCrsr->GetNode().FindTableNode();
+    SwContentNode* pCont = 0;
+    while (pTableNode)
     {
-        pUnoCrsr->GetPoint()->nNode = *pTblNode->EndOfSectionNode();
+        pUnoCrsr->GetPoint()->nNode = *pTableNode->EndOfSectionNode();
         pCont = GetDoc()->GetNodes().GoNext(&pUnoCrsr->GetPoint()->nNode);
-        pTblNode = pCont->FindTableNode();
+        pTableNode = pCont->FindTableNode();
     }
     if (pCont)
     {
@@ -2788,7 +2788,7 @@ throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
+    SwFrameFormat & rHeadFootFormat( m_pImpl->GetHeadFootFormatOrThrow() );
 
     SwUnoInternalPaM aPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
@@ -2799,7 +2799,7 @@ throw (uno::RuntimeException, std::exception)
     }
 
     uno::Reference< text::XTextCursor >  xRet;
-    SwNode& rNode = rHeadFootFmt.GetCntnt().GetCntntIdx()->GetNode();
+    SwNode& rNode = rHeadFootFormat.GetContent().GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
     SwPaM aHFPam(aPos);
     aHFPam.Move(fnMoveForward, fnGoNode);
@@ -2823,11 +2823,11 @@ throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
+    SwFrameFormat & rHeadFootFormat( m_pImpl->GetHeadFootFormatOrThrow() );
 
     uno::Reference< container::XEnumeration >  aRef;
-    const SwFmtCntnt& rFlyCntnt = rHeadFootFmt.GetCntnt();
-    const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
+    const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
+    const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
     ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
         GetDoc()->CreateUnoCrsr(aPos, false));

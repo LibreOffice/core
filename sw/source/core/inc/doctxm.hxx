@@ -26,8 +26,8 @@
 
 class  SwTOXInternational;
 class  SwPageDesc;
-class  SwTxtNode;
-class  SwTxtFmtColl;
+class  SwTextNode;
+class  SwTextFormatColl;
 struct SwPosition;
 struct SwTOXSortTabBase;
 
@@ -38,13 +38,13 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     SwTOXSortTabBases aSortArr;
 
     void UpdateMarks( const SwTOXInternational& rIntl,
-                      const SwTxtNode* pOwnChapterNode );
-    void UpdateOutline( const SwTxtNode* pOwnChapterNode );
-    void UpdateTemplate( const SwTxtNode* pOwnChapterNode );
-    void UpdateCntnt( SwTOXElement eType,
-                      const SwTxtNode* pOwnChapterNode );
-    void UpdateTable( const SwTxtNode* pOwnChapterNode );
-    void UpdateSequence( const SwTxtNode* pOwnChapterNode );
+                      const SwTextNode* pOwnChapterNode );
+    void UpdateOutline( const SwTextNode* pOwnChapterNode );
+    void UpdateTemplate( const SwTextNode* pOwnChapterNode );
+    void UpdateContent( SwTOXElement eType,
+                      const SwTextNode* pOwnChapterNode );
+    void UpdateTable( const SwTextNode* pOwnChapterNode );
+    void UpdateSequence( const SwTextNode* pOwnChapterNode );
     void UpdateAuthorities( const SwTOXInternational& rIntl );
     void UpdateAll();
 
@@ -61,7 +61,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
                        const SwPageDesc*  _pDefaultPageDesc );
 
     // replace page num placeholder with actual page number
-    void _UpdatePageNum( SwTxtNode* pNd,
+    void _UpdatePageNum( SwTextNode* pNd,
                          const std::vector<sal_uInt16>& rNums,
                          const std::vector<SwPageDesc*>& rDescs,
                          const std::vector<sal_uInt16>* pMainEntryNums,
@@ -73,10 +73,10 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
                        const Range& rRange );
 
     // return text collection via name/ from format pool
-    SwTxtFmtColl* GetTxtFmtColl( sal_uInt16 nLevel );
+    SwTextFormatColl* GetTextFormatColl( sal_uInt16 nLevel );
 
 public:
-    SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt);
+    SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFormat & rFormat);
     virtual ~SwTOXBaseSection();
 
     // <_bNewTOX> : distinguish between the creation of a new table-of-content
@@ -97,7 +97,7 @@ struct SwDefTOXBase_Impl
     SwTOXBase* pContBase;
     SwTOXBase* pIdxBase;
     SwTOXBase* pUserBase;
-    SwTOXBase* pTblBase;
+    SwTOXBase* pTableBase;
     SwTOXBase* pObjBase;
     SwTOXBase* pIllBase;
     SwTOXBase* pAuthBase;
@@ -107,7 +107,7 @@ struct SwDefTOXBase_Impl
     pContBase(0),
     pIdxBase(0),
     pUserBase(0),
-    pTblBase(0),
+    pTableBase(0),
     pObjBase(0),
     pIllBase(0),
     pAuthBase(0),
@@ -119,7 +119,7 @@ struct SwDefTOXBase_Impl
         delete pContBase;
         delete pIdxBase;
         delete pUserBase;
-        delete pTblBase;
+        delete pTableBase;
         delete pObjBase;
         delete pIllBase;
         delete pAuthBase;

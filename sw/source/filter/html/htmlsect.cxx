@@ -112,7 +112,7 @@ void SwHTMLParser::NewDivision( int nToken )
     bool bAppended = false;
     if( pPam->GetPoint()->nContent.GetIndex() )
     {
-        AppendTxtNode( bHeader||bFooter||!aId.isEmpty()|| !aHRef.isEmpty() ? AM_NORMAL
+        AppendTextNode( bHeader||bFooter||!aId.isEmpty()|| !aHRef.isEmpty() ? AM_NORMAL
                                                                 : AM_NOSPACE );
         bAppended = true;
     }
@@ -145,58 +145,58 @@ void SwHTMLParser::NewDivision( int nToken )
     if( !bPositioned && (bHeader || bFooter) && IsNewDoc() )
     {
         SwPageDesc *pPageDesc = pCSS1Parser->GetMasterPageDesc();
-        SwFrmFmt& rPageFmt = pPageDesc->GetMaster();
+        SwFrameFormat& rPageFormat = pPageDesc->GetMaster();
 
-        SwFrmFmt *pHdFtFmt;
+        SwFrameFormat *pHdFtFormat;
         bool bNew = false;
         sal_uInt16 nFlags = CONTEXT_FLAGS_HDRFTR;
         if( bHeader )
         {
-            pHdFtFmt = const_cast<SwFrmFmt*>(rPageFmt.GetHeader().GetHeaderFmt());
-            if( !pHdFtFmt )
+            pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat());
+            if( !pHdFtFormat )
             {
                 // noch keine Header, dann erzeuge einen.
-                rPageFmt.SetFmtAttr( SwFmtHeader( true ));
-                pHdFtFmt = const_cast<SwFrmFmt*>(rPageFmt.GetHeader().GetHeaderFmt());
+                rPageFormat.SetFormatAttr( SwFormatHeader( true ));
+                pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat());
                 bNew = true;
             }
             nFlags |= HTML_CNTXT_HEADER_DIST;
         }
         else
         {
-            pHdFtFmt = const_cast<SwFrmFmt*>(rPageFmt.GetFooter().GetFooterFmt());
-            if( !pHdFtFmt )
+            pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetFooter().GetFooterFormat());
+            if( !pHdFtFormat )
             {
                 // noch keine Footer, dann erzeuge einen.
-                rPageFmt.SetFmtAttr( SwFmtFooter( true ));
-                pHdFtFmt = const_cast<SwFrmFmt*>(rPageFmt.GetFooter().GetFooterFmt());
+                rPageFormat.SetFormatAttr( SwFormatFooter( true ));
+                pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetFooter().GetFooterFormat());
                 bNew = true;
             }
             nFlags |= HTML_CNTXT_FOOTER_DIST;
         }
 
-        const SwFmtCntnt& rFlyCntnt = pHdFtFmt->GetCntnt();
-        const SwNodeIndex& rCntntStIdx = *rFlyCntnt.GetCntntIdx();
-        SwCntntNode *pCNd;
+        const SwFormatContent& rFlyContent = pHdFtFormat->GetContent();
+        const SwNodeIndex& rContentStIdx = *rFlyContent.GetContentIdx();
+        SwContentNode *pCNd;
 
         if( bNew )
         {
-            pCNd = pDoc->GetNodes()[rCntntStIdx.GetIndex()+1]
-                       ->GetCntntNode();
+            pCNd = pDoc->GetNodes()[rContentStIdx.GetIndex()+1]
+                       ->GetContentNode();
         }
         else
         {
             // Einen neuen Node zu Beginn der Section anlegen
-            SwNodeIndex aSttIdx( rCntntStIdx, 1 );
-            pCNd = pDoc->GetNodes().MakeTxtNode( aSttIdx,
-                            pCSS1Parser->GetTxtCollFromPool(RES_POOLCOLL_TEXT));
+            SwNodeIndex aSttIdx( rContentStIdx, 1 );
+            pCNd = pDoc->GetNodes().MakeTextNode( aSttIdx,
+                            pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_TEXT));
 
             // Den bisherigen Inhalt der Section loeschen
             SwPaM aDelPam( aSttIdx );
             aDelPam.SetMark();
 
             const SwStartNode *pStNd =
-                static_cast<const SwStartNode *>( &rCntntStIdx.GetNode() );
+                static_cast<const SwStartNode *>( &rContentStIdx.GetNode() );
             aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
 
             pDoc->getIDocumentContentOperations().DelFullPara( aDelPam );
@@ -204,7 +204,7 @@ void SwHTMLParser::NewDivision( int nToken )
             // Die Seitenvorlage aktualisieren
             for( size_t i=0; i < pDoc->GetPageDescCnt(); i++ )
             {
-                if( RES_POOLPAGE_HTML == pDoc->GetPageDesc(i).GetPoolFmtId() )
+                if( RES_POOLPAGE_HTML == pDoc->GetPageDesc(i).GetPoolFormatId() )
                 {
                     pDoc->ChgPageDesc( i, *pPageDesc );
                     break;
@@ -212,7 +212,7 @@ void SwHTMLParser::NewDivision( int nToken )
             }
         }
 
-        SwPosition aNewPos( SwNodeIndex( rCntntStIdx, 1 ), SwIndex( pCNd, 0 ) );
+        SwPosition aNewPos( SwNodeIndex( rContentStIdx, 1 ), SwIndex( pCNd, 0 ) );
         SaveDocContext( pCntxt, nFlags, &aNewPos );
     }
     else if( !bPositioned && aId.getLength() > 9 &&
@@ -229,8 +229,8 @@ void SwHTMLParser::NewDivision( int nToken )
             SwNodeIndex *pStartNdIdx = GetFootEndNoteSection( aId );
             if( pStartNdIdx )
             {
-                SwCntntNode *pCNd =
-                    pDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetCntntNode();
+                SwContentNode *pCNd =
+                    pDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetContentNode();
                 SwNodeIndex aTmpSwNodeIndex = SwNodeIndex(*pCNd);
                 SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
                 SaveDocContext( pCntxt, CONTEXT_FLAGS_FTN, &aNewPos );
@@ -255,7 +255,7 @@ void SwHTMLParser::NewDivision( int nToken )
             SwNodeIndex aPrvNdIdx( pPam->GetPoint()->nNode, -1 );
             if (aPrvNdIdx.GetNode().IsSectionNode())
             {
-                AppendTxtNode();
+                AppendTextNode();
                 bAppended = true;
             }
         }
@@ -316,7 +316,7 @@ void SwHTMLParser::NewDivision( int nToken )
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
-            Reader::ResetFrmFmtAttrs(aFrmItemSet );
+            Reader::ResetFrameFormatAttrs(aFrmItemSet );
 
         const SfxPoolItem *pItem;
         if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
@@ -341,15 +341,15 @@ void SwHTMLParser::NewDivision( int nToken )
             eJumpTo = JUMPTO_NONE;
         }
 
-        SwTxtNode* pOldTxtNd =
-            (bAppended) ? 0 : pPam->GetPoint()->nNode.GetNode().GetTxtNode();
+        SwTextNode* pOldTextNd =
+            (bAppended) ? 0 : pPam->GetPoint()->nNode.GetNode().GetTextNode();
 
         pPam->Move( fnMoveBackward );
 
-        // PageDesc- und SwFmtBreak Attribute vom aktuellen Node in den
+        // PageDesc- und SwFormatBreak Attribute vom aktuellen Node in den
         // (ersten) Node des Bereich verschieben.
-        if( pOldTxtNd )
-            MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
+        if( pOldTextNd )
+            MovePageDescAttrs( pOldTextNd, pPam->GetPoint()->nNode.GetIndex(),
                                true  );
 
         if( pPostIts )
@@ -416,20 +416,20 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
                                             const SwPosition *pOldPos )
 {
     SwPageDesc *pPageDesc = pCSS1Parser->GetMasterPageDesc();
-    SwFrmFmt& rPageFmt = pPageDesc->GetMaster();
+    SwFrameFormat& rPageFormat = pPageDesc->GetMaster();
 
-    SwFrmFmt *pHdFtFmt =
-        bHeader ? const_cast<SwFrmFmt*>(rPageFmt.GetHeader().GetHeaderFmt())
-                : const_cast<SwFrmFmt*>(rPageFmt.GetFooter().GetFooterFmt());
-    OSL_ENSURE( pHdFtFmt, "Doch keine Kopf- oder Fusszeile" );
+    SwFrameFormat *pHdFtFormat =
+        bHeader ? const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat())
+                : const_cast<SwFrameFormat*>(rPageFormat.GetFooter().GetFooterFormat());
+    OSL_ENSURE( pHdFtFormat, "Doch keine Kopf- oder Fusszeile" );
 
-    const SwFmtCntnt& rFlyCntnt = pHdFtFmt->GetCntnt();
-    const SwNodeIndex& rCntntStIdx = *rFlyCntnt.GetCntntIdx();
+    const SwFormatContent& rFlyContent = pHdFtFormat->GetContent();
+    const SwNodeIndex& rContentStIdx = *rFlyContent.GetContentIdx();
 
     sal_uLong nPrvNxtIdx;
     if( bHeader )
     {
-        nPrvNxtIdx = rCntntStIdx.GetNode().EndOfSectionIndex()-1;
+        nPrvNxtIdx = rContentStIdx.GetNode().EndOfSectionIndex()-1;
     }
     else
     {
@@ -437,12 +437,12 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     }
 
     sal_uInt16 nSpace = 0;
-    SwTxtNode *pTxtNode = pDoc->GetNodes()[nPrvNxtIdx]->GetTxtNode();
-    if( pTxtNode )
+    SwTextNode *pTextNode = pDoc->GetNodes()[nPrvNxtIdx]->GetTextNode();
+    if( pTextNode )
     {
         const SvxULSpaceItem& rULSpace =
-            static_cast<const SvxULSpaceItem&>(pTxtNode
-                ->SwCntntNode::GetAttr( RES_UL_SPACE ));
+            static_cast<const SvxULSpaceItem&>(pTextNode
+                ->SwContentNode::GetAttr( RES_UL_SPACE ));
 
         // Der untere Absatz-Abstand wird zum Abstand zur
         // Kopf- oder Fusszeile
@@ -451,11 +451,11 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
         // und anschliessend auf einen vernuenftigen Wert
         // gesetzt
         const SvxULSpaceItem& rCollULSpace =
-            pTxtNode->GetAnyFmtColl().GetULSpace();
+            pTextNode->GetAnyFormatColl().GetULSpace();
         if( rCollULSpace.GetUpper() == rULSpace.GetUpper() )
-            pTxtNode->ResetAttr( RES_UL_SPACE );
+            pTextNode->ResetAttr( RES_UL_SPACE );
         else
-            pTxtNode->SetAttr(
+            pTextNode->SetAttr(
                 SvxULSpaceItem( rULSpace.GetUpper(),
                                 rCollULSpace.GetLower(), RES_UL_SPACE ) );
     }
@@ -466,16 +466,16 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     }
     else
     {
-        nPrvNxtIdx = rCntntStIdx.GetIndex() + 1;
+        nPrvNxtIdx = rContentStIdx.GetIndex() + 1;
     }
 
-    pTxtNode = pDoc->GetNodes()[nPrvNxtIdx]
-                    ->GetTxtNode();
-    if( pTxtNode )
+    pTextNode = pDoc->GetNodes()[nPrvNxtIdx]
+                    ->GetTextNode();
+    if( pTextNode )
     {
         const SvxULSpaceItem& rULSpace =
-            static_cast<const SvxULSpaceItem&>(pTxtNode
-                ->SwCntntNode::GetAttr( RES_UL_SPACE ));
+            static_cast<const SvxULSpaceItem&>(pTextNode
+                ->SwContentNode::GetAttr( RES_UL_SPACE ));
 
         // Der obere Absatz-Abstand wird zum Abstand zur
         // Kopf- oder Fusszeile, wenn er groesser ist als
@@ -485,11 +485,11 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
 
         // und anschliessend auf einen vernuenftigen Wert gesetzt
         const SvxULSpaceItem& rCollULSpace =
-            pTxtNode->GetAnyFmtColl().GetULSpace();
+            pTextNode->GetAnyFormatColl().GetULSpace();
         if( rCollULSpace.GetLower() == rULSpace.GetLower() )
-            pTxtNode->ResetAttr( RES_UL_SPACE );
+            pTextNode->ResetAttr( RES_UL_SPACE );
         else
-            pTxtNode->SetAttr(
+            pTextNode->SetAttr(
                 SvxULSpaceItem( rCollULSpace.GetUpper(),
                                 rULSpace.GetLower(), RES_UL_SPACE ) );
     }
@@ -500,7 +500,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     else
         aULSpace.SetUpper( nSpace );
 
-    pHdFtFmt->SetFmtAttr( aULSpace );
+    pHdFtFormat->SetFormatAttr( aULSpace );
 }
 
 bool SwHTMLParser::EndSection( bool bLFStripped )
@@ -621,7 +621,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
-            Reader::ResetFrmFmtAttrs(aFrmItemSet );
+            Reader::ResetFrameFormatAttrs(aFrmItemSet );
 
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, aItemSet, aPropInfo,
                                 aFrmItemSet );
@@ -635,7 +635,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         // Set some other frame attributes. If the background is set, its
         // it will be cleared here. That for, it won't be set at the section,
         // too.
-        SetFrmFmtAttrs( aItemSet, aPropInfo,
+        SetFrameFormatAttrs( aItemSet, aPropInfo,
                         HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_PADDING|HTML_FF_DIRECTION,
                         aFrmItemSet );
 
@@ -659,7 +659,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     {
         if( pPam->GetPoint()->nContent.GetIndex() )
         {
-            AppendTxtNode( AM_SPACE );
+            AppendTextNode( AM_SPACE );
             bAppended = true;
         }
         else
@@ -679,7 +679,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             SwNodeIndex aPrvNdIdx( pPam->GetPoint()->nNode, -1 );
             if (aPrvNdIdx.GetNode().IsSectionNode())
             {
-                AppendTxtNode();
+                AppendTextNode();
                 bAppended = true;
             }
         }
@@ -693,7 +693,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
-            Reader::ResetFrmFmtAttrs(aFrmItemSet );
+            Reader::ResetFrameFormatAttrs(aFrmItemSet );
 
         if( nGutter && Application::GetDefaultDevice() )
         {
@@ -702,11 +702,11 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
                                              MapMode(MAP_TWIP) ).Width();
         }
 
-        SwFmtCol aFmtCol;
+        SwFormatCol aFormatCol;
         nPrcWidth = 100;
 
-        aFmtCol.Init( nCols, nGutter, USHRT_MAX );
-        aFrmItemSet.Put( aFmtCol );
+        aFormatCol.Init( nCols, nGutter, USHRT_MAX );
+        aFrmItemSet.Put( aFormatCol );
 
         const SfxPoolItem *pItem;
         if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
@@ -730,15 +730,15 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             eJumpTo = JUMPTO_NONE;
         }
 
-        SwTxtNode* pOldTxtNd =
-            (bAppended) ? 0 : pPam->GetPoint()->nNode.GetNode().GetTxtNode();
+        SwTextNode* pOldTextNd =
+            (bAppended) ? 0 : pPam->GetPoint()->nNode.GetNode().GetTextNode();
 
         pPam->Move( fnMoveBackward );
 
-        // Move PageDesc and SwFmtBreak attributes of the current node
+        // Move PageDesc and SwFormatBreak attributes of the current node
         // to the section's first node.
-        if( pOldTxtNd )
-            MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
+        if( pOldTextNd )
+            MovePageDescAttrs( pOldTextNd, pPam->GetPoint()->nNode.GetIndex(),
                                true  );
 
         if( pPostIts )
@@ -769,21 +769,21 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    sal_uInt16 nFlags )
 {
     RndStdIds eAnchorId =
-        static_cast<const SwFmtAnchor&>(rItemSet.Get( RES_ANCHOR )).GetAnchorId();
+        static_cast<const SwFormatAnchor&>(rItemSet.Get( RES_ANCHOR )).GetAnchorId();
 
     // Den Rahmen anlegen
-    SwFlyFrmFmt* pFlyFmt = pDoc->MakeFlySection( eAnchorId, pPam->GetPoint(),
+    SwFlyFrameFormat* pFlyFormat = pDoc->MakeFlySection( eAnchorId, pPam->GetPoint(),
                                                     &rItemSet );
     // Ggf. den Namen setzen
     if( !rName.isEmpty() )
-        pFlyFmt->SetName( rName );
+        pFlyFormat->SetName( rName );
 
-    RegisterFlyFrm( pFlyFmt );
+    RegisterFlyFrm( pFlyFormat );
 
-    const SwFmtCntnt& rFlyCntnt = pFlyFmt->GetCntnt();
-    const SwNodeIndex& rFlyCntIdx = *rFlyCntnt.GetCntntIdx();
-    SwCntntNode *pCNd = pDoc->GetNodes()[rFlyCntIdx.GetIndex()+1]
-                            ->GetCntntNode();
+    const SwFormatContent& rFlyContent = pFlyFormat->GetContent();
+    const SwNodeIndex& rFlyCntIdx = *rFlyContent.GetContentIdx();
+    SwContentNode *pCNd = pDoc->GetNodes()[rFlyCntIdx.GetIndex()+1]
+                            ->GetContentNode();
 
     SwPosition aNewPos( SwNodeIndex( rFlyCntIdx, 1 ), SwIndex( pCNd, 0 ) );
     SaveDocContext( pCntxt, nFlags, &aNewPos );
@@ -791,36 +791,36 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
 
 void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
                                       sal_uLong nDestIdx,
-                                      bool bFmtBreak )
+                                      bool bFormatBreak )
 {
-    SwCntntNode* pDestCntntNd =
-        pDoc->GetNodes()[nDestIdx]->GetCntntNode();
+    SwContentNode* pDestContentNd =
+        pDoc->GetNodes()[nDestIdx]->GetContentNode();
 
-    OSL_ENSURE( pDestCntntNd, "Wieso ist das Ziel kein Content-Node?" );
+    OSL_ENSURE( pDestContentNd, "Wieso ist das Ziel kein Content-Node?" );
 
-    if( pSrcNd->IsCntntNode() )
+    if( pSrcNd->IsContentNode() )
     {
-        SwCntntNode* pSrcCntntNd = pSrcNd->GetCntntNode();
+        SwContentNode* pSrcContentNd = pSrcNd->GetContentNode();
 
         const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pSrcCntntNd->GetSwAttrSet()
+        if( SfxItemState::SET == pSrcContentNd->GetSwAttrSet()
                 .GetItemState( RES_PAGEDESC, false, &pItem ) &&
-            static_cast<const SwFmtPageDesc *>(pItem)->GetPageDesc() )
+            static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc() )
         {
-            pDestCntntNd->SetAttr( *pItem );
-            pSrcCntntNd->ResetAttr( RES_PAGEDESC );
+            pDestContentNd->SetAttr( *pItem );
+            pSrcContentNd->ResetAttr( RES_PAGEDESC );
         }
-        if( SfxItemState::SET == pSrcCntntNd->GetSwAttrSet()
+        if( SfxItemState::SET == pSrcContentNd->GetSwAttrSet()
                 .GetItemState( RES_BREAK, false, &pItem ) )
         {
-            switch( static_cast<const SvxFmtBreakItem *>(pItem)->GetBreak() )
+            switch( static_cast<const SvxFormatBreakItem *>(pItem)->GetBreak() )
             {
             case SVX_BREAK_PAGE_BEFORE:
             case SVX_BREAK_PAGE_AFTER:
             case SVX_BREAK_PAGE_BOTH:
-                if( bFmtBreak )
-                    pDestCntntNd->SetAttr( *pItem );
-                pSrcCntntNd->ResetAttr( RES_BREAK );
+                if( bFormatBreak )
+                    pDestContentNd->SetAttr( *pItem );
+                pSrcContentNd->ResetAttr( RES_BREAK );
             default:
                 ;
             }
@@ -828,14 +828,14 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
     }
     else if( pSrcNd->IsTableNode() )
     {
-        SwFrmFmt *pFrmFmt = pSrcNd->GetTableNode()->GetTable().GetFrmFmt();
+        SwFrameFormat *pFrameFormat = pSrcNd->GetTableNode()->GetTable().GetFrameFormat();
 
         const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pFrmFmt->GetAttrSet().
+        if( SfxItemState::SET == pFrameFormat->GetAttrSet().
                 GetItemState( RES_PAGEDESC, false, &pItem ) )
         {
-            pDestCntntNd->SetAttr( *pItem );
-            pFrmFmt->ResetFmtAttr( RES_PAGEDESC );
+            pDestContentNd->SetAttr( *pItem );
+            pFrameFormat->ResetFormatAttr( RES_PAGEDESC );
         }
     }
 }

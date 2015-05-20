@@ -319,10 +319,10 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                 static_cast<const SvxLRSpaceItem&>(GetItemSet().GetParent()->Get( nWhich ));
 
             if ( m_pLeftIndent->IsRelative() )
-                aMargin.SetTxtLeft( rOldItem.GetTxtLeft(),
+                aMargin.SetTextLeft( rOldItem.GetTextLeft(),
                                     (sal_uInt16)m_pLeftIndent->GetValue() );
             else
-                aMargin.SetTxtLeft( GetCoreValue( *m_pLeftIndent, eUnit ) );
+                aMargin.SetTextLeft( GetCoreValue( *m_pLeftIndent, eUnit ) );
 
             if ( m_pRightIndent->IsRelative() )
                 aMargin.SetRight( rOldItem.GetRight(),
@@ -331,21 +331,21 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                 aMargin.SetRight( GetCoreValue( *m_pRightIndent, eUnit ) );
 
             if ( m_pFLineIndent->IsRelative() )
-                aMargin.SetTxtFirstLineOfst( rOldItem.GetTxtFirstLineOfst(),
+                aMargin.SetTextFirstLineOfst( rOldItem.GetTextFirstLineOfst(),
                                              (sal_uInt16)m_pFLineIndent->GetValue() );
             else
-                aMargin.SetTxtFirstLineOfst(
+                aMargin.SetTextFirstLineOfst(
                     (sal_uInt16)GetCoreValue( *m_pFLineIndent, eUnit ) );
         }
         else
         {
-            aMargin.SetTxtLeft( GetCoreValue( *m_pLeftIndent, eUnit ) );
+            aMargin.SetTextLeft( GetCoreValue( *m_pLeftIndent, eUnit ) );
             aMargin.SetRight( GetCoreValue( *m_pRightIndent, eUnit ) );
-            aMargin.SetTxtFirstLineOfst(
+            aMargin.SetTextFirstLineOfst(
                 (sal_uInt16)GetCoreValue( *m_pFLineIndent, eUnit ) );
         }
         aMargin.SetAutoFirst(m_pAutoCB->IsChecked());
-        if ( aMargin.GetTxtFirstLineOfst() < 0 )
+        if ( aMargin.GetTextFirstLineOfst() < 0 )
             bNullTab = true;
         eState = GetItemSet().GetItemState( nWhich );
 
@@ -452,7 +452,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             {
                 m_pLeftIndent->SetRelative();
                 SetFieldUnit( *m_pLeftIndent, eFUnit );
-                SetMetricValue( *m_pLeftIndent, rOldItem.GetTxtLeft(), eUnit );
+                SetMetricValue( *m_pLeftIndent, rOldItem.GetTextLeft(), eUnit );
             }
 
             if ( rOldItem.GetPropRight() != 100 )
@@ -467,17 +467,17 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
                 SetMetricValue( *m_pRightIndent, rOldItem.GetRight(), eUnit );
             }
 
-            if ( rOldItem.GetPropTxtFirstLineOfst() != 100 )
+            if ( rOldItem.GetPropTextFirstLineOfst() != 100 )
             {
                 m_pFLineIndent->SetRelative( true );
-                m_pFLineIndent->SetValue( rOldItem.GetPropTxtFirstLineOfst() );
+                m_pFLineIndent->SetValue( rOldItem.GetPropTextFirstLineOfst() );
             }
             else
             {
                 m_pFLineIndent->SetRelative();
                 m_pFLineIndent->SetMin(-9999);
                 SetFieldUnit( *m_pFLineIndent, eFUnit );
-                SetMetricValue( *m_pFLineIndent, rOldItem.GetTxtFirstLineOfst(),
+                SetMetricValue( *m_pFLineIndent, rOldItem.GetTextFirstLineOfst(),
                                 eUnit );
             }
             m_pAutoCB->Check(rOldItem.IsAutoFirst());
@@ -487,9 +487,9 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             const SvxLRSpaceItem& rSpace =
                 static_cast<const SvxLRSpaceItem&>(rSet->Get( _nWhich ));
 
-            SetMetricValue( *m_pLeftIndent, rSpace.GetTxtLeft(), eUnit );
+            SetMetricValue( *m_pLeftIndent, rSpace.GetTextLeft(), eUnit );
             SetMetricValue( *m_pRightIndent, rSpace.GetRight(), eUnit );
-            SetMetricValue( *m_pFLineIndent, rSpace.GetTxtFirstLineOfst(), eUnit );
+            SetMetricValue( *m_pFLineIndent, rSpace.GetTextFirstLineOfst(), eUnit );
             m_pAutoCB->Check(rSpace.IsAutoFirst());
         }
         AutoHdl_Impl(m_pAutoCB);
@@ -1430,7 +1430,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     if ( bIsPageModel )
         // if PageModel is turned on, always turn off PageBreak
-        rOutSet->Put( SvxFmtBreakItem( SVX_BREAK_NONE, _nWhich ) );
+        rOutSet->Put( SvxFormatBreakItem( SVX_BREAK_NONE, _nWhich ) );
     else
     {
         eState = m_pPageBreakBox->GetState();
@@ -1441,9 +1441,9 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
              m_pBreakTypeLB->IsValueChangedFromSaved()   ||
              m_pBreakPositionLB->IsValueChangedFromSaved() )
         {
-            const SvxFmtBreakItem rOldBreak(
-                    static_cast<const SvxFmtBreakItem&>(GetItemSet().Get( _nWhich )));
-            SvxFmtBreakItem aBreak(rOldBreak.GetBreak(), rOldBreak.Which());
+            const SvxFormatBreakItem rOldBreak(
+                    static_cast<const SvxFormatBreakItem&>(GetItemSet().Get( _nWhich )));
+            SvxFormatBreakItem aBreak(rOldBreak.GetBreak(), rOldBreak.Which());
 
             switch ( eState )
             {
@@ -1476,7 +1476,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_PAGEBREAK );
 
             if ( eState != m_pPageBreakBox->GetSavedValue()                ||
-                    !pOld || !( *static_cast<const SvxFmtBreakItem*>(pOld) == aBreak ) )
+                    !pOld || !( *static_cast<const SvxFormatBreakItem*>(pOld) == aBreak ) )
             {
                 bModified = true;
                 rOutSet->Put( aBreak );
@@ -1492,10 +1492,10 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     {
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_SPLIT );
 
-        if ( !pOld || static_cast<const SvxFmtSplitItem*>(pOld)->GetValue() !=
+        if ( !pOld || static_cast<const SvxFormatSplitItem*>(pOld)->GetValue() !=
                       ( eState == TRISTATE_FALSE ) )
         {
-            rOutSet->Put( SvxFmtSplitItem( eState == TRISTATE_FALSE, _nWhich ) );
+            rOutSet->Put( SvxFormatSplitItem( eState == TRISTATE_FALSE, _nWhich ) );
             bModified = true;
         }
     }
@@ -1507,7 +1507,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     if ( m_pKeepParaBox->IsValueChangedFromSaved() )
     {
         // if the status has changed, putting is necessary
-        rOutSet->Put( SvxFmtKeepItem( eState == TRISTATE_TRUE, _nWhich ) );
+        rOutSet->Put( SvxFormatKeepItem( eState == TRISTATE_TRUE, _nWhich ) );
         bModified = true;
     }
 
@@ -1655,8 +1655,8 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
             if ( eItemState >= SfxItemState::DEFAULT )
             {
-                const SvxFmtBreakItem& rPageBreak =
-                    static_cast<const SvxFmtBreakItem&>(rSet->Get( _nWhich ));
+                const SvxFormatBreakItem& rPageBreak =
+                    static_cast<const SvxFormatBreakItem&>(rSet->Get( _nWhich ));
 
                 SvxBreak eBreak = (SvxBreak)rPageBreak.GetValue();
 
@@ -1727,8 +1727,8 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     if ( eItemState >= SfxItemState::DEFAULT )
     {
         m_pKeepParaBox->EnableTriState( false );
-        const SvxFmtKeepItem& rKeep =
-            static_cast<const SvxFmtKeepItem&>(rSet->Get( _nWhich ));
+        const SvxFormatKeepItem& rKeep =
+            static_cast<const SvxFormatKeepItem&>(rSet->Get( _nWhich ));
 
         if ( rKeep.GetValue() )
             m_pKeepParaBox->SetState( TRISTATE_TRUE );
@@ -1745,8 +1745,8 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     if ( eItemState >= SfxItemState::DEFAULT )
     {
-        const SvxFmtSplitItem& rSplit =
-            static_cast<const SvxFmtSplitItem&>(rSet->Get( _nWhich ));
+        const SvxFormatSplitItem& rSplit =
+            static_cast<const SvxFormatSplitItem&>(rSet->Get( _nWhich ));
         m_pKeepTogetherBox->EnableTriState( false );
 
         if ( !rSplit.GetValue() )

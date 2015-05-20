@@ -73,7 +73,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::std;
 
-typedef ::std::pair< TextRangeList_t * const, SwTxtAttr const * const > PortionList_t;
+typedef ::std::pair< TextRangeList_t * const, SwTextAttr const * const > PortionList_t;
 typedef ::std::stack< PortionList_t > PortionStack_t;
 
 static void lcl_CreatePortions(
@@ -163,7 +163,7 @@ namespace
             {
                 // Crossrefbookmarks only remember the start position but have to span the whole paragraph
                 pCrossRefEndPos = unique_ptr<SwPosition>(new SwPosition(rEndPos));
-                pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTxtNode()->Len();
+                pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTextNode()->Len();
                 pEndPos = pCrossRefEndPos.get();
             }
             if(pEndPos)
@@ -183,12 +183,12 @@ namespace
             return;
 
         const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
-        SwTxtNode* pTxtNode = nOwnNode.GetNode().GetTxtNode();
-        if (!pTxtNode)
+        SwTextNode* pTextNode = nOwnNode.GetNode().GetTextNode();
+        if (!pTextNode)
         {
             // no need to consider marks starting after aEndOfPara
             SwPosition aEndOfPara(*rUnoCrsr.GetPoint());
-            aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTxtNode()->Len();
+            aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTextNode()->Len();
             const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
                 pMarkAccess->getBookmarksBegin(),
                 pMarkAccess->getBookmarksEnd(),
@@ -208,7 +208,7 @@ namespace
         {
             // A text node already knows its marks via its SwIndexes.
             std::set<sw::mark::IMark*> aSeenMarks;
-            for (const SwIndex* pIndex = pTxtNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
+            for (const SwIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
             {
                 // Need a non-cost mark here, as we'll create an UNO wrapper around it.
                 sw::mark::IMark* pBkmk = const_cast<sw::mark::IMark*>(pIndex->GetMark());
@@ -274,7 +274,7 @@ namespace
 
         // no need to consider annotation marks starting after aEndOfPara
         SwPosition aEndOfPara(*rUnoCrsr.GetPoint());
-        aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTxtNode()->Len();
+        aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTextNode()->Len();
         const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
             pMarkAccess->getAnnotationMarksBegin(),
             pMarkAccess->getAnnotationMarksEnd(),
@@ -298,15 +298,15 @@ namespace
             const SwPosition& rStartPos = pAnnotationMark->GetMarkStart();
             if ( rStartPos.nNode == nOwnNode )
             {
-                const SwFmtFld* pAnnotationFmtFld = pAnnotationMark->GetAnnotationFmtFld();
-                OSL_ENSURE( pAnnotationFmtFld != NULL, "<lcl_FillAnnotationStartArray(..)> - annotation fmt fld instance missing!" );
-                if ( pAnnotationFmtFld != NULL )
+                const SwFormatField* pAnnotationFormatField = pAnnotationMark->GetAnnotationFormatField();
+                OSL_ENSURE( pAnnotationFormatField != NULL, "<lcl_FillAnnotationStartArray(..)> - annotation fmt fld instance missing!" );
+                if ( pAnnotationFormatField != NULL )
                 {
                     rAnnotationStartArr.insert(
                         SwAnnotationStartPortion_ImplSharedPtr(
                             new SwAnnotationStartPortion_Impl(
                                 SwXTextField::CreateXTextField(&rDoc,
-                                    pAnnotationFmtFld),
+                                    pAnnotationFormatField),
                                 rStartPos)));
                 }
             }
@@ -368,7 +368,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     pUnoCrsr->Add(this);
 
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
-        nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().getLength()),
+        nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTextNode()->GetText().getLength()),
             "start or end value invalid!");
 
     // find all frames, graphics and OLEs that are bound AT character in para
@@ -424,14 +424,14 @@ static void
 lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCrsr const & rUnoCrsr,
         const sal_Int32 i_nStartPos)
 {
-    const SwTxtNode * const pTxtNode =
-        rUnoCrsr.GetPoint()->nNode.GetNode().GetTxtNode();
-    if (!pTxtNode) return;
+    const SwTextNode * const pTextNode =
+        rUnoCrsr.GetPoint()->nNode.GetNode().GetTextNode();
+    if (!pTextNode) return;
 
     const sal_Unicode fld[] = {
         CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, CH_TXT_ATR_FORMELEMENT, 0 };
     sal_Int32 pos = ::std::max(static_cast<const sal_Int32>(0), i_nStartPos);
-    while ((pos = ::comphelper::string::indexOfAny(pTxtNode->GetTxt(), fld, pos)) != -1)
+    while ((pos = ::comphelper::string::indexOfAny(pTextNode->GetText(), fld, pos)) != -1)
     {
         rFieldMarks.push_back(pos);
         ++pos;
@@ -442,7 +442,7 @@ static uno::Reference<text::XTextRange>
 lcl_ExportFieldMark(
         uno::Reference< text::XText > const & i_xParentText,
         SwUnoCrsr * const pUnoCrsr,
-        const SwTxtNode * const pTxtNode )
+        const SwTextNode * const pTextNode )
 {
     uno::Reference<text::XTextRange> xRef;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
@@ -458,7 +458,7 @@ lcl_ExportFieldMark(
         return 0;
     }
 
-    const sal_Unicode Char = pTxtNode->GetTxt()[start];
+    const sal_Unicode Char = pTextNode->GetText()[start];
     if (CH_TXT_ATR_FIELDSTART == Char)
     {
         ::sw::mark::IFieldmark* pFieldmark = NULL;
@@ -520,11 +520,11 @@ static Reference<XTextRange>
 lcl_CreateRefMarkPortion(
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    const SwTxtAttr & rAttr, const bool bEnd)
+    const SwTextAttr & rAttr, const bool bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    SwFmtRefMark& rRefMark = const_cast<SwFmtRefMark&>(
-            static_cast<const SwFmtRefMark&>(rAttr.GetAttr()));
+    SwFormatRefMark& rRefMark = const_cast<SwFormatRefMark&>(
+            static_cast<const SwFormatRefMark&>(rAttr.GetAttr()));
     Reference<XTextContent> xContent;
     if (!xContent.is())
     {
@@ -551,10 +551,10 @@ lcl_InsertRubyPortion(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    const SwTxtAttr & rAttr, const bool bEnd)
+    const SwTextAttr & rAttr, const bool bEnd)
 {
     SwXTextPortion* pPortion = new SwXTextPortion(pUnoCrsr,
-            static_txtattr_cast<const SwTxtRuby&>(rAttr), xParent, bEnd);
+            static_txtattr_cast<const SwTextRuby&>(rAttr), xParent, bEnd);
     rPortions.push_back(pPortion);
     pPortion->SetCollapsed(rAttr.End() == nullptr);
 }
@@ -563,7 +563,7 @@ static Reference<XTextRange>
 lcl_CreateTOXMarkPortion(
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwTxtAttr & rAttr, const bool bEnd)
+    SwTextAttr & rAttr, const bool bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwTOXMark & rTOXMark = static_cast<SwTOXMark&>(rAttr.GetAttr());
@@ -591,10 +591,10 @@ static uno::Reference<text::XTextRange>
 lcl_CreateMetaPortion(
     uno::Reference<text::XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwTxtAttr & rAttr, ::std::unique_ptr<TextRangeList_t const> && pPortions)
+    SwTextAttr & rAttr, ::std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     const uno::Reference<rdf::XMetadatable> xMeta( SwXMeta::CreateXMeta(
-            *static_cast<SwFmtMeta &>(rAttr.GetAttr()).GetMeta(),
+            *static_cast<SwFormatMeta &>(rAttr.GetAttr()).GetMeta(),
             xParent, std::move(pPortions)));
     SwXTextPortion * pPortion(0);
     if (RES_TXTATR_META == rAttr.Which())
@@ -728,7 +728,7 @@ lcl_ExportHints(
     const bool bRightMoveForbidden,
     bool & o_rbCursorMoved,
     sal_Int32 & o_rNextAttrPosition,
-    std::set<const SwFrmFmt*>& rTextBoxes)
+    std::set<const SwFrameFormat*>& rTextBoxes)
 {
     // if the attribute has a dummy character, then xRef is set (except META)
     // otherwise, the portion for the attribute is inserted into rPortions!
@@ -743,7 +743,7 @@ lcl_ExportHints(
     {
         if(pHints->GetEnd(nEndIndex)->GetEnd())
         {
-            SwTxtAttr * const pAttr = pHints->GetEnd(nEndIndex);
+            SwTextAttr * const pAttr = pHints->GetEnd(nEndIndex);
             if (nNextEnd == nCurrentIndex)
             {
                 const sal_uInt16 nWhich( pAttr->Which() );
@@ -821,7 +821,7 @@ lcl_ExportHints(
     while(nStartIndex < pHints->GetStartCount() &&
         nCurrentIndex >= (nNextStart = pHints->GetStart(nStartIndex)->GetStart()))
     {
-        SwTxtAttr * const pAttr = pHints->GetStart(nStartIndex);
+        SwTextAttr * const pAttr = pHints->GetStart(nStartIndex);
         sal_uInt16 nAttrWhich = pAttr->Which();
         if (nNextStart == nCurrentIndex)
         {
@@ -839,7 +839,7 @@ lcl_ExportHints(
                                 pUnoCrsr, xParent, PORTION_FIELD);
                         Reference<XTextField> const xField =
                             SwXTextField::CreateXTextField(pDoc,
-                                    &pAttr->GetFmtFld());
+                                    &pAttr->GetFormatField());
                         pPortion->SetTextField(xField);
                     }
                     break;
@@ -851,8 +851,8 @@ lcl_ExportHints(
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break;
 
-                        const SwTxtAnnotationFld* pTxtAnnotationFld = dynamic_cast<const SwTxtAnnotationFld*>( pAttr );
-                        ::sw::mark::IMark* pAnnotationMark = pTxtAnnotationFld ? pTxtAnnotationFld->GetAnnotationMark() : NULL;
+                        const SwTextAnnotationField* pTextAnnotationField = dynamic_cast<const SwTextAnnotationField*>( pAttr );
+                        ::sw::mark::IMark* pAnnotationMark = pTextAnnotationField ? pTextAnnotationField->GetAnnotationMark() : NULL;
                         if ( pAnnotationMark != NULL )
                         {
                             SwXTextPortion* pPortion = new SwXTextPortion( pUnoCrsr, xParent, PORTION_ANNOTATION_END );
@@ -865,7 +865,7 @@ lcl_ExportHints(
                             SwXTextPortion* pPortion = new SwXTextPortion( pUnoCrsr, xParent, PORTION_ANNOTATION );
                             Reference<XTextField> xField =
                                 SwXTextField::CreateXTextField(pDoc,
-                                        &pAttr->GetFmtFld());
+                                        &pAttr->GetFormatField());
                             pPortion->SetTextField(xField);
                             xRef = pPortion;
                         }
@@ -877,7 +877,7 @@ lcl_ExportHints(
                     {
 
                         pUnoCrsr->Right(
-                            pAttr->GetFmtFld().GetField()->ExpandField( true ).getLength() + 2,
+                            pAttr->GetFormatField().GetField()->ExpandField( true ).getLength() + 2,
                             CRSR_SKIP_CHARS,
                             false,
                             false );
@@ -888,7 +888,7 @@ lcl_ExportHints(
                         xRef = pPortion;
                         Reference<XTextField> xField =
                             SwXTextField::CreateXTextField(pDoc,
-                                    &pAttr->GetFmtFld());
+                                    &pAttr->GetFormatField());
                         pPortion->SetTextField(xField);
                     }
                     break;
@@ -901,7 +901,7 @@ lcl_ExportHints(
                             break; // Robust #i81708 content in covered cells
 
                         // Do not expose inline anchored textboxes.
-                        if (rTextBoxes.find(pAttr->GetFlyCnt().GetFrmFmt()) != rTextBoxes.end())
+                        if (rTextBoxes.find(pAttr->GetFlyCnt().GetFrameFormat()) != rTextBoxes.end())
                             break;
 
                         pUnoCrsr->Exchange();
@@ -920,7 +920,7 @@ lcl_ExportHints(
                             xRef = pPortion = new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FOOTNOTE);
                             Reference<XFootnote> xContent =
-                                SwXFootnotes::GetObject(*pDoc, pAttr->GetFtn());
+                                SwXFootnotes::GetObject(*pDoc, pAttr->GetFootnote());
                             pPortion->SetFootnote(xContent);
                         }
                     }
@@ -1033,7 +1033,7 @@ static void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
     const sal_Int32 nNextMarkIndex,
     const sal_Int32 nEndPos )
 {
-    sal_Int32 nMovePos = pUnoCrsr->GetCntntNode()->Len();
+    sal_Int32 nMovePos = pUnoCrsr->GetContentNode()->Len();
 
     if ((nEndPos >= 0) && (nEndPos < nMovePos))
     {
@@ -1071,17 +1071,17 @@ static void lcl_FillRedlineArray(
     SwUnoCrsr const & rUnoCrsr,
     SwXRedlinePortion_ImplList& rRedArr )
 {
-    const SwRedlineTbl& rRedTbl = rDoc.getIDocumentRedlineAccess().GetRedlineTbl();
-    const size_t nRedTblCount = rRedTbl.size();
+    const SwRedlineTable& rRedTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+    const size_t nRedTableCount = rRedTable.size();
 
-    if ( nRedTblCount > 0 )
+    if ( nRedTableCount > 0 )
     {
         const SwPosition* pStart = rUnoCrsr.GetPoint();
         const SwNodeIndex nOwnNode = pStart->nNode;
 
-        for(size_t nRed = 0; nRed < nRedTblCount; ++nRed)
+        for(size_t nRed = 0; nRed < nRedTableCount; ++nRed)
         {
-            const SwRangeRedline* pRedline = rRedTbl[nRed];
+            const SwRangeRedline* pRedline = rRedTable[nRed];
             const SwPosition* pRedStart = pRedline->Start();
             const SwNodeIndex nRedNode = pRedStart->nNode;
             if ( nOwnNode == nRedNode )
@@ -1098,10 +1098,10 @@ static void lcl_FillSoftPageBreakArray(
     SwUnoCrsr const & rUnoCrsr,
     SwSoftPageBreakList& rBreakArr )
 {
-    const SwTxtNode *pTxtNode =
-        rUnoCrsr.GetPoint()->nNode.GetNode().GetTxtNode();
-    if( pTxtNode )
-        pTxtNode->fillSoftPageBreakList( rBreakArr );
+    const SwTextNode *pTextNode =
+        rUnoCrsr.GetPoint()->nNode.GetNode().GetTextNode();
+    if( pTextNode )
+        pTextNode->fillSoftPageBreakList( rBreakArr );
 }
 
 static void lcl_ExportRedline(
@@ -1208,7 +1208,7 @@ static sal_Int32 lcl_ExportFrames(
         if (pFrame) // Frame could be disposed
         {
             SwXTextPortion* pPortion = new SwXTextPortion(i_pUnoCrsr, i_xParent,
-                *static_cast<SwFrmFmt*>( const_cast<SwModify*>( pFrame ) ) );
+                *static_cast<SwFrameFormat*>( const_cast<SwModify*>( pFrame ) ) );
             rPortions.push_back(pPortion);
         }
         i_rFrames.pop_front();
@@ -1259,9 +1259,9 @@ static void lcl_CreatePortions(
         (pUnoCrsr->Start()->nContent.GetIndex() != i_nStartPos))
     {
         pUnoCrsr->DeleteMark();
-        OSL_ENSURE(pUnoCrsr->Start()->nNode.GetNode().GetTxtNode() &&
-            (i_nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->
-                        GetTxt().getLength()), "Incorrect start position" );
+        OSL_ENSURE(pUnoCrsr->Start()->nNode.GetNode().GetTextNode() &&
+            (i_nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTextNode()->
+                        GetText().getLength()), "Incorrect start position" );
         // ??? should this be i_nStartPos - current position ?
         pUnoCrsr->Right(static_cast<sal_Int32>(i_nStartPos),
                 CRSR_SKIP_CHARS, false, false);
@@ -1285,9 +1285,9 @@ static void lcl_CreatePortions(
     lcl_FillAnnotationStartArray( *pDoc, *pUnoCrsr, AnnotationStarts );
 
     PortionStack_t PortionStack;
-    PortionStack.push( PortionList_t(&i_rPortions, (const SwTxtAttr *)0) );
+    PortionStack.push( PortionList_t(&i_rPortions, (const SwTextAttr *)0) );
 
-    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pUnoCrsr->GetNode());
+    std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pUnoCrsr->GetNode());
 
     bool bAtEnd( false );
     while (!bAtEnd) // every iteration consumes at least current character!
@@ -1298,14 +1298,14 @@ static void lcl_CreatePortions(
             pUnoCrsr->DeleteMark();
         }
 
-        SwTxtNode * const pTxtNode = pUnoCrsr->GetNode().GetTxtNode();
-        if (!pTxtNode)
+        SwTextNode * const pTextNode = pUnoCrsr->GetNode().GetTextNode();
+        if (!pTextNode)
         {
             OSL_FAIL("lcl_CreatePortions: no TextNode - what now ?");
             return;
         }
 
-        SwpHints * const pHints = pTxtNode->GetpSwpHints();
+        SwpHints * const pHints = pTextNode->GetpSwpHints();
         const sal_Int32 nCurrentIndex =
             pUnoCrsr->GetPoint()->nContent.GetIndex();
         // this contains the portion which consumes the character in the
@@ -1333,7 +1333,7 @@ static void lcl_CreatePortions(
         // #111716# the cursor must not move right at the
         //          end position of a selection!
         bAtEnd = ((i_nEndPos >= 0) && (nCurrentIndex >= i_nEndPos))
-              || (nCurrentIndex >= pTxtNode->Len());
+              || (nCurrentIndex >= pTextNode->Len());
         if (pHints)
         {
             // N.B.: side-effects nNextAttrIndex, bCursorMoved; may move cursor
@@ -1353,7 +1353,7 @@ static void lcl_CreatePortions(
                 FieldMarks.size() && (FieldMarks.front() == nCurrentIndex))
             {
                 // moves cursor
-                xRef = lcl_ExportFieldMark(i_xParentText, pUnoCrsr, pTxtNode);
+                xRef = lcl_ExportFieldMark(i_xParentText, pUnoCrsr, pTextNode);
                 FieldMarks.pop_front();
             }
         }
@@ -1388,7 +1388,7 @@ static void lcl_CreatePortions(
 
             xRef = new SwXTextPortion(pUnoCrsr, i_xParentText, PORTION_TEXT);
         }
-        else if (bAtEnd && !xRef.is() && !pTxtNode->Len())
+        else if (bAtEnd && !xRef.is() && !pTextNode->Len())
         {
             // special case: for an empty paragraph, we better put out a
             // text portion because there may be a hyperlink attribute

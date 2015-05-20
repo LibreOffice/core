@@ -992,12 +992,12 @@ void SdOptionsGrid::SetDefaults()
 {
     const sal_uInt32 nVal = 1000;
 
-    SetFldDivisionX( nVal );
-    SetFldDivisionY( nVal );
-    SetFldDrawX( nVal );
-    SetFldDrawY( nVal );
-    SetFldSnapX( nVal );
-    SetFldSnapY( nVal );
+    SetFieldDivisionX( nVal );
+    SetFieldDivisionY( nVal );
+    SetFieldDrawX( nVal );
+    SetFieldDrawY( nVal );
+    SetFieldSnapX( nVal );
+    SetFieldSnapY( nVal );
     SetUseGridSnap( false );
     SetSynchronize( true );
     SetGridVisible( false );
@@ -1006,12 +1006,12 @@ void SdOptionsGrid::SetDefaults()
 
 bool SdOptionsGrid::operator==( const SdOptionsGrid& rOpt ) const
 {
-    return( GetFldDrawX() == rOpt.GetFldDrawX() &&
-            GetFldDivisionX() == rOpt.GetFldDivisionX() &&
-            GetFldDrawY() == rOpt.GetFldDrawY() &&
-            GetFldDivisionY() == rOpt.GetFldDivisionY() &&
-            GetFldSnapX() == rOpt.GetFldSnapX() &&
-            GetFldSnapY() == rOpt.GetFldSnapY() &&
+    return( GetFieldDrawX() == rOpt.GetFieldDrawX() &&
+            GetFieldDivisionX() == rOpt.GetFieldDivisionX() &&
+            GetFieldDrawY() == rOpt.GetFieldDrawY() &&
+            GetFieldDivisionY() == rOpt.GetFieldDivisionY() &&
+            GetFieldSnapX() == rOpt.GetFieldSnapX() &&
+            GetFieldSnapY() == rOpt.GetFieldSnapY() &&
             IsUseGridSnap() == rOpt.IsUseGridSnap() &&
             IsSynchronize() == rOpt.IsSynchronize() &&
             IsGridVisible() == rOpt.IsGridVisible() &&
@@ -1060,23 +1060,23 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
 bool SdOptionsGrid::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetFldDrawX( *static_cast<sal_Int32 const *>(pValues[ 0 ].getValue()) );
-    if( pValues[1].hasValue() ) SetFldDrawY( *static_cast<sal_Int32 const *>(pValues[ 1 ].getValue()) );
+    if( pValues[0].hasValue() ) SetFieldDrawX( *static_cast<sal_Int32 const *>(pValues[ 0 ].getValue()) );
+    if( pValues[1].hasValue() ) SetFieldDrawY( *static_cast<sal_Int32 const *>(pValues[ 1 ].getValue()) );
 
     if( pValues[2].hasValue() )
     {
         const sal_uInt32 nDivX = FRound( *static_cast<double const *>(pValues[ 2 ].getValue()) );
-        SetFldDivisionX( SvxOptionsGrid::GetFldDrawX() / ( nDivX + 1 ) );
+        SetFieldDivisionX( SvxOptionsGrid::GetFieldDrawX() / ( nDivX + 1 ) );
     }
 
     if( pValues[3].hasValue() )
     {
         const sal_uInt32 nDivY = FRound( *static_cast<double const *>(pValues[ 3 ].getValue()) );
-        SetFldDivisionY( SvxOptionsGrid::GetFldDrawY() / ( nDivY + 1 ) );
+        SetFieldDivisionY( SvxOptionsGrid::GetFieldDrawY() / ( nDivY + 1 ) );
     }
 
-    if( pValues[4].hasValue() ) SetFldSnapX( *static_cast<sal_Int32 const *>(pValues[ 4 ].getValue()) );
-    if( pValues[5].hasValue() ) SetFldSnapY( *static_cast<sal_Int32 const *>(pValues[ 5 ].getValue()) );
+    if( pValues[4].hasValue() ) SetFieldSnapX( *static_cast<sal_Int32 const *>(pValues[ 4 ].getValue()) );
+    if( pValues[5].hasValue() ) SetFieldSnapY( *static_cast<sal_Int32 const *>(pValues[ 5 ].getValue()) );
     if( pValues[6].hasValue() ) SetUseGridSnap( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
     if( pValues[7].hasValue() ) SetSynchronize( *static_cast<sal_Bool const *>(pValues[ 7 ].getValue()) );
     if( pValues[8].hasValue() ) SetGridVisible( *static_cast<sal_Bool const *>(pValues[ 8 ].getValue()) );
@@ -1087,12 +1087,12 @@ bool SdOptionsGrid::ReadData( const Any* pValues )
 
 bool SdOptionsGrid::WriteData( Any* pValues ) const
 {
-    pValues[ 0 ] <<= (sal_Int32) GetFldDrawX();
-    pValues[ 1 ] <<= (sal_Int32) GetFldDrawY();
-    pValues[ 2 ] <<= ( GetFldDivisionX() ? ( (double) GetFldDrawX() / GetFldDivisionX() - 1.0 ) : (double) 0 );
-    pValues[ 3 ] <<= ( GetFldDivisionY() ? ( (double) GetFldDrawY() / GetFldDivisionY() - 1.0 ) : (double) 0 );
-    pValues[ 4 ] <<= (sal_Int32) GetFldSnapX();
-    pValues[ 5 ] <<= (sal_Int32) GetFldSnapY();
+    pValues[ 0 ] <<= (sal_Int32) GetFieldDrawX();
+    pValues[ 1 ] <<= (sal_Int32) GetFieldDrawY();
+    pValues[ 2 ] <<= ( GetFieldDivisionX() ? ( (double) GetFieldDrawX() / GetFieldDivisionX() - 1.0 ) : (double) 0 );
+    pValues[ 3 ] <<= ( GetFieldDivisionY() ? ( (double) GetFieldDrawY() / GetFieldDivisionY() - 1.0 ) : (double) 0 );
+    pValues[ 4 ] <<= (sal_Int32) GetFieldSnapX();
+    pValues[ 5 ] <<= (sal_Int32) GetFieldSnapY();
     pValues[ 6 ] <<= IsUseGridSnap();
     pValues[ 7 ] <<= IsSynchronize();
     pValues[ 8 ] <<= IsGridVisible();
@@ -1115,23 +1115,23 @@ SdOptionsGridItem::SdOptionsGridItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
 
     if( pView )
     {
-        SetFldDrawX( pView->GetGridCoarse().Width() );
-        SetFldDrawY( pView->GetGridCoarse().Height() );
-        SetFldDivisionX( pView->GetGridFine().Width() ? ( GetFldDrawX() / pView->GetGridFine().Width() - 1 ) : 0 );
-        SetFldDivisionY( pView->GetGridFine().Height() ? ( GetFldDrawY() / pView->GetGridFine().Height() - 1 ) : 0 );
-        SetFldSnapX( long(pView->GetSnapGridWidthX()) );
-        SetFldSnapY( long(pView->GetSnapGridWidthY()) );
+        SetFieldDrawX( pView->GetGridCoarse().Width() );
+        SetFieldDrawY( pView->GetGridCoarse().Height() );
+        SetFieldDivisionX( pView->GetGridFine().Width() ? ( GetFieldDrawX() / pView->GetGridFine().Width() - 1 ) : 0 );
+        SetFieldDivisionY( pView->GetGridFine().Height() ? ( GetFieldDrawY() / pView->GetGridFine().Height() - 1 ) : 0 );
+        SetFieldSnapX( long(pView->GetSnapGridWidthX()) );
+        SetFieldSnapY( long(pView->GetSnapGridWidthY()) );
         SetUseGridSnap( pView->IsGridSnap() );
         SetGridVisible( pView->IsGridVisible() );
     }
     else
     {
-        SetFldDrawX( pOpts->GetFldDrawX() );
-        SetFldDrawY( pOpts->GetFldDrawY() );
-        SetFldDivisionX( pOpts->GetFldDivisionX() ? ( pOpts->GetFldDrawX() / pOpts->GetFldDivisionX() - 1 ) : 0 );
-        SetFldDivisionY( pOpts->GetFldDivisionY() ? ( pOpts->GetFldDrawY() / pOpts->GetFldDivisionY() - 1 ) : 0 );
-        SetFldSnapX( pOpts->GetFldSnapX() );
-        SetFldSnapY( pOpts->GetFldSnapY() );
+        SetFieldDrawX( pOpts->GetFieldDrawX() );
+        SetFieldDrawY( pOpts->GetFieldDrawY() );
+        SetFieldDivisionX( pOpts->GetFieldDivisionX() ? ( pOpts->GetFieldDrawX() / pOpts->GetFieldDivisionX() - 1 ) : 0 );
+        SetFieldDivisionY( pOpts->GetFieldDivisionY() ? ( pOpts->GetFieldDrawY() / pOpts->GetFieldDivisionY() - 1 ) : 0 );
+        SetFieldSnapX( pOpts->GetFieldSnapX() );
+        SetFieldSnapY( pOpts->GetFieldSnapY() );
         SetUseGridSnap( pOpts->IsUseGridSnap() );
         SetGridVisible( pOpts->IsGridVisible() );
     }
@@ -1139,12 +1139,12 @@ SdOptionsGridItem::SdOptionsGridItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
 
 void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
 {
-    pOpts->SetFldDrawX( GetFldDrawX() );
-    pOpts->SetFldDivisionX( GetFldDrawX() / ( GetFldDivisionX() + 1 ) );
-    pOpts->SetFldDrawY( GetFldDrawY() );
-    pOpts->SetFldDivisionY( GetFldDrawY() / ( GetFldDivisionY() + 1 ) );
-    pOpts->SetFldSnapX( GetFldSnapX() );
-    pOpts->SetFldSnapY( GetFldSnapY() );
+    pOpts->SetFieldDrawX( GetFieldDrawX() );
+    pOpts->SetFieldDivisionX( GetFieldDrawX() / ( GetFieldDivisionX() + 1 ) );
+    pOpts->SetFieldDrawY( GetFieldDrawY() );
+    pOpts->SetFieldDivisionY( GetFieldDrawY() / ( GetFieldDivisionY() + 1 ) );
+    pOpts->SetFieldSnapX( GetFieldSnapX() );
+    pOpts->SetFieldSnapY( GetFieldSnapY() );
     pOpts->SetUseGridSnap( GetUseGridSnap() );
     pOpts->SetSynchronize( GetSynchronize() );
     pOpts->SetGridVisible( GetGridVisible() );

@@ -38,7 +38,7 @@
 class SfxItemPool;
 class SvXMLAttrContainerItem;
 
-class SwTxtAttr : private boost::noncopyable
+class SwTextAttr : private boost::noncopyable
 {
 private:
     SfxPoolItem * const m_pAttr;
@@ -47,23 +47,23 @@ private:
     bool m_bLockExpandFlag      : 1;
 
     bool m_bDontMoveAttr        : 1;    // refmarks, toxmarks
-    bool m_bCharFmtAttr         : 1;    // charfmt, inet
+    bool m_bCharFormatAttr         : 1;    // charfmt, inet
     bool m_bOverlapAllowedAttr  : 1;    // refmarks, toxmarks
     bool m_bPriorityAttr        : 1;    // attribute has priority (redlining)
     bool m_bDontExpandStart     : 1;    // don't expand start at paragraph start (ruby)
-    bool m_bNesting             : 1;    // SwTxtAttrNesting
+    bool m_bNesting             : 1;    // SwTextAttrNesting
     bool m_bHasDummyChar        : 1;    // without end + meta
     bool m_bFormatIgnoreStart   : 1;    ///< text formatting should ignore start
     bool m_bFormatIgnoreEnd     : 1;    ///< text formatting should ignore end
     bool m_bHasContent          : 1;    // text attribute with content
 
 protected:
-    SwTxtAttr( SfxPoolItem& rAttr, sal_Int32 nStart );
-    virtual ~SwTxtAttr();
+    SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart );
+    virtual ~SwTextAttr();
 
     void SetLockExpandFlag( bool bFlag )    { m_bLockExpandFlag = bFlag; }
     void SetDontMoveAttr( bool bFlag )      { m_bDontMoveAttr = bFlag; }
-    void SetCharFmtAttr( bool bFlag )       { m_bCharFmtAttr = bFlag; }
+    void SetCharFormatAttr( bool bFlag )       { m_bCharFormatAttr = bFlag; }
     void SetOverlapAllowedAttr( bool bFlag ){ m_bOverlapAllowedAttr = bFlag; }
     void SetDontExpandStartAttr(bool bFlag) { m_bDontExpandStart = bFlag; }
     void SetNesting(const bool bFlag)       { m_bNesting = bFlag; }
@@ -73,7 +73,7 @@ protected:
 public:
 
     /// destroy instance
-    static void Destroy( SwTxtAttr * pToDestroy, SfxItemPool& rPool );
+    static void Destroy( SwTextAttr * pToDestroy, SfxItemPool& rPool );
 
     /// start position
                   sal_Int32& GetStart()        { return m_nStart; }
@@ -89,7 +89,7 @@ public:
     bool DontExpand() const                 { return m_bDontExpand; }
     bool IsLockExpandFlag() const           { return m_bLockExpandFlag; }
     bool IsDontMoveAttr() const             { return m_bDontMoveAttr; }
-    bool IsCharFmtAttr() const              { return m_bCharFmtAttr; }
+    bool IsCharFormatAttr() const              { return m_bCharFormatAttr; }
     bool IsOverlapAllowedAttr() const       { return m_bOverlapAllowedAttr; }
     bool IsPriorityAttr() const             { return m_bPriorityAttr; }
     void SetPriorityAttr( bool bFlag )      { m_bPriorityAttr = bFlag; }
@@ -106,66 +106,66 @@ public:
     inline       SfxPoolItem& GetAttr();
     inline sal_uInt16 Which() const { return GetAttr().Which(); }
 
-    bool operator==( const SwTxtAttr& ) const;
+    bool operator==( const SwTextAttr& ) const;
 
-    inline const SwFmtCharFmt           &GetCharFmt() const;
-    inline const SwFmtAutoFmt           &GetAutoFmt() const;
-    inline const SwFmtFld               &GetFmtFld() const;
-    inline const SwFmtFtn               &GetFtn() const;
-    inline const SwFmtFlyCnt            &GetFlyCnt() const;
+    inline const SwFormatCharFormat           &GetCharFormat() const;
+    inline const SwFormatAutoFormat           &GetAutoFormat() const;
+    inline const SwFormatField               &GetFormatField() const;
+    inline const SwFormatFootnote               &GetFootnote() const;
+    inline const SwFormatFlyCnt            &GetFlyCnt() const;
     inline const SwTOXMark              &GetTOXMark() const;
-    inline const SwFmtRefMark           &GetRefMark() const;
-    inline const SwFmtINetFmt           &GetINetFmt() const;
-    inline const SwFmtRuby              &GetRuby() const;
-    inline const SwFmtMeta              &GetMeta() const;
+    inline const SwFormatRefMark           &GetRefMark() const;
+    inline const SwFormatINetFormat           &GetINetFormat() const;
+    inline const SwFormatRuby              &GetRuby() const;
+    inline const SwFormatMeta              &GetMeta() const;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-class SwTxtAttrEnd : public virtual SwTxtAttr
+class SwTextAttrEnd : public virtual SwTextAttr
 {
 protected:
     sal_Int32 m_nEnd;
 
 public:
-    SwTxtAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    SwTextAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
 
     virtual sal_Int32* GetEnd() SAL_OVERRIDE;
 };
 
 // attribute that must not overlap others
-class SwTxtAttrNesting : public SwTxtAttrEnd
+class SwTextAttrNesting : public SwTextAttrEnd
 {
 protected:
-    SwTxtAttrNesting( SfxPoolItem & i_rAttr,
+    SwTextAttrNesting( SfxPoolItem & i_rAttr,
         const sal_Int32 i_nStart, const sal_Int32 i_nEnd );
-    virtual ~SwTxtAttrNesting();
+    virtual ~SwTextAttrNesting();
 };
 
-inline const sal_Int32* SwTxtAttr::End() const
+inline const sal_Int32* SwTextAttr::End() const
 {
-    return const_cast<SwTxtAttr * >(this)->GetEnd();
+    return const_cast<SwTextAttr * >(this)->GetEnd();
 }
 
-inline const sal_Int32* SwTxtAttr::GetAnyEnd() const
+inline const sal_Int32* SwTextAttr::GetAnyEnd() const
 {
     const sal_Int32* pEnd = End();
     return pEnd ? pEnd : &GetStart();
 }
 
-inline const SfxPoolItem& SwTxtAttr::GetAttr() const
+inline const SfxPoolItem& SwTextAttr::GetAttr() const
 {
     assert( m_pAttr );
     return *m_pAttr;
 }
 
-inline SfxPoolItem& SwTxtAttr::GetAttr()
+inline SfxPoolItem& SwTextAttr::GetAttr()
 {
     return const_cast<SfxPoolItem&>(
-            const_cast<const SwTxtAttr*>(this)->GetAttr());
+            const_cast<const SwTextAttr*>(this)->GetAttr());
 }
 
-inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
+inline void SwTextAttr::SetDontExpand( bool bDontExpand )
 {
     if ( !m_bLockExpandFlag )
     {
@@ -173,68 +173,68 @@ inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
     }
 }
 
-inline const SwFmtCharFmt& SwTxtAttr::GetCharFmt() const
+inline const SwFormatCharFormat& SwTextAttr::GetCharFormat() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_CHARFMT );
-    return static_cast<const SwFmtCharFmt&>(*m_pAttr);
+    return static_cast<const SwFormatCharFormat&>(*m_pAttr);
 }
 
-inline const SwFmtAutoFmt& SwTxtAttr::GetAutoFmt() const
+inline const SwFormatAutoFormat& SwTextAttr::GetAutoFormat() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_AUTOFMT );
-    return static_cast<const SwFmtAutoFmt&>(*m_pAttr);
+    return static_cast<const SwFormatAutoFormat&>(*m_pAttr);
 }
 
-inline const SwFmtFld& SwTxtAttr::GetFmtFld() const
+inline const SwFormatField& SwTextAttr::GetFormatField() const
 {
     assert( m_pAttr
             && ( m_pAttr->Which() == RES_TXTATR_FIELD
                  || m_pAttr->Which() == RES_TXTATR_ANNOTATION
                  || m_pAttr->Which() == RES_TXTATR_INPUTFIELD ));
-    return static_cast<const SwFmtFld&>(*m_pAttr);
+    return static_cast<const SwFormatField&>(*m_pAttr);
 }
 
-inline const SwFmtFtn& SwTxtAttr::GetFtn() const
+inline const SwFormatFootnote& SwTextAttr::GetFootnote() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FTN );
-    return static_cast<const SwFmtFtn&>(*m_pAttr);
+    return static_cast<const SwFormatFootnote&>(*m_pAttr);
 }
 
-inline const SwFmtFlyCnt& SwTxtAttr::GetFlyCnt() const
+inline const SwFormatFlyCnt& SwTextAttr::GetFlyCnt() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FLYCNT );
-    return static_cast<const SwFmtFlyCnt&>(*m_pAttr);
+    return static_cast<const SwFormatFlyCnt&>(*m_pAttr);
 }
 
-inline const SwTOXMark& SwTxtAttr::GetTOXMark() const
+inline const SwTOXMark& SwTextAttr::GetTOXMark() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_TOXMARK );
     return static_cast<const SwTOXMark&>(*m_pAttr);
 }
 
-inline const SwFmtRefMark& SwTxtAttr::GetRefMark() const
+inline const SwFormatRefMark& SwTextAttr::GetRefMark() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_REFMARK );
-    return static_cast<const SwFmtRefMark&>(*m_pAttr);
+    return static_cast<const SwFormatRefMark&>(*m_pAttr);
 }
 
-inline const SwFmtINetFmt& SwTxtAttr::GetINetFmt() const
+inline const SwFormatINetFormat& SwTextAttr::GetINetFormat() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_INETFMT );
-    return static_cast<const SwFmtINetFmt&>(*m_pAttr);
+    return static_cast<const SwFormatINetFormat&>(*m_pAttr);
 }
 
-inline const SwFmtRuby& SwTxtAttr::GetRuby() const
+inline const SwFormatRuby& SwTextAttr::GetRuby() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_CJK_RUBY );
-    return static_cast<const SwFmtRuby&>(*m_pAttr);
+    return static_cast<const SwFormatRuby&>(*m_pAttr);
 }
 
-inline const SwFmtMeta& SwTxtAttr::GetMeta() const
+inline const SwFormatMeta& SwTextAttr::GetMeta() const
 {
     assert( m_pAttr && (m_pAttr->Which() == RES_TXTATR_META ||
         m_pAttr->Which() == RES_TXTATR_METAFIELD) );
-    return static_cast<const SwFmtMeta&>(*m_pAttr);
+    return static_cast<const SwFormatMeta&>(*m_pAttr);
 }
 
 // these should be static_casts but with virtual inheritance it's not possible

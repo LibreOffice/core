@@ -24,41 +24,41 @@
 #include <svx/clipfmtitem.hxx>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 
-struct SvxClipboardFmtItem_Impl
+struct SvxClipboardFormatItem_Impl
 {
     std::vector<OUString> aFmtNms;
     std::vector<SotClipboardFormatId> aFmtIds;
 
-    SvxClipboardFmtItem_Impl() {}
-    SvxClipboardFmtItem_Impl( const SvxClipboardFmtItem_Impl& );
+    SvxClipboardFormatItem_Impl() {}
+    SvxClipboardFormatItem_Impl( const SvxClipboardFormatItem_Impl& );
 };
 
-TYPEINIT1_FACTORY( SvxClipboardFmtItem, SfxPoolItem , new  SvxClipboardFmtItem(0));
+TYPEINIT1_FACTORY( SvxClipboardFormatItem, SfxPoolItem , new  SvxClipboardFormatItem(0));
 
-SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
-                            const SvxClipboardFmtItem_Impl& rCpy )
+SvxClipboardFormatItem_Impl::SvxClipboardFormatItem_Impl(
+                            const SvxClipboardFormatItem_Impl& rCpy )
     : aFmtNms(rCpy.aFmtNms)
     , aFmtIds(rCpy.aFmtIds)
 {
 }
 
-SvxClipboardFmtItem::SvxClipboardFmtItem( sal_uInt16 nId )
-    : SfxPoolItem( nId ), pImpl( new SvxClipboardFmtItem_Impl )
+SvxClipboardFormatItem::SvxClipboardFormatItem( sal_uInt16 nId )
+    : SfxPoolItem( nId ), pImpl( new SvxClipboardFormatItem_Impl )
 {
 }
 
-SvxClipboardFmtItem::SvxClipboardFmtItem( const SvxClipboardFmtItem& rCpy )
+SvxClipboardFormatItem::SvxClipboardFormatItem( const SvxClipboardFormatItem& rCpy )
     : SfxPoolItem( rCpy.Which() ),
-    pImpl( new SvxClipboardFmtItem_Impl( *rCpy.pImpl ) )
+    pImpl( new SvxClipboardFormatItem_Impl( *rCpy.pImpl ) )
 {
 }
 
-SvxClipboardFmtItem::~SvxClipboardFmtItem()
+SvxClipboardFormatItem::~SvxClipboardFormatItem()
 {
     delete pImpl;
 }
 
-bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxClipboardFormatItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_uInt16 nCount = Count();
 
@@ -76,7 +76,7 @@ bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 
     return true;
 }
 
-bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxClipboardFormatItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
     if ( rVal >>= aClipFormats )
@@ -94,9 +94,9 @@ bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
     return false;
 }
 
-bool SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
+bool SvxClipboardFormatItem::operator==( const SfxPoolItem& rComp ) const
 {
-    const SvxClipboardFmtItem& rCmp = static_cast<const SvxClipboardFmtItem&>(rComp);
+    const SvxClipboardFormatItem& rCmp = static_cast<const SvxClipboardFormatItem&>(rComp);
     if(rCmp.pImpl->aFmtNms.size() != pImpl->aFmtNms.size())
         return false;
 
@@ -114,12 +114,12 @@ bool SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
     return nRet;
 }
 
-SfxPoolItem* SvxClipboardFmtItem::Clone( SfxItemPool * /*pPool*/ ) const
+SfxPoolItem* SvxClipboardFormatItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
-    return new SvxClipboardFmtItem( *this );
+    return new SvxClipboardFormatItem( *this );
 }
 
-void SvxClipboardFmtItem::AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16 nPos )
+void SvxClipboardFormatItem::AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16 nPos )
 {
     if( nPos > pImpl->aFmtNms.size() )
         nPos = pImpl->aFmtNms.size();
@@ -128,7 +128,7 @@ void SvxClipboardFmtItem::AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
-void SvxClipboardFmtItem::AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,
+void SvxClipboardFormatItem::AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,
                             sal_uInt16 nPos )
 {
     if( nPos > pImpl->aFmtNms.size() )
@@ -138,17 +138,17 @@ void SvxClipboardFmtItem::AddClipbrdFormat( SotClipboardFormatId nId, const OUSt
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
-sal_uInt16 SvxClipboardFmtItem::Count() const
+sal_uInt16 SvxClipboardFormatItem::Count() const
 {
     return pImpl->aFmtIds.size();
 }
 
-SotClipboardFormatId SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
+SotClipboardFormatId SvxClipboardFormatItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
 {
     return pImpl->aFmtIds[ nPos ];
 }
 
-const OUString SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
+const OUString SvxClipboardFormatItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
     return pImpl->aFmtNms[nPos];
 }

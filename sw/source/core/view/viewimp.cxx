@@ -159,11 +159,11 @@ bool SwViewShellImp::IsCalcLayoutProgress() const
     return pLayAct && pLayAct->IsCalcLayout();
 }
 
-bool SwViewShellImp::IsUpdateExpFlds()
+bool SwViewShellImp::IsUpdateExpFields()
 {
     if ( pLayAct && pLayAct->IsCalcLayout() )
     {
-        pLayAct->SetUpdateExpFlds();
+        pLayAct->SetUpdateExpFields();
         return true;
     }
     return false;
@@ -359,10 +359,10 @@ void SwViewShellImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
 }
 
 /// invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
-void SwViewShellImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
-                                                       const SwTxtFrm* _pToTxtFrm )
+void SwViewShellImp::_InvalidateAccessibleParaFlowRelation( const SwTextFrm* _pFromTextFrm,
+                                                       const SwTextFrm* _pToTextFrm )
 {
-    if ( !_pFromTxtFrm && !_pToTxtFrm )
+    if ( !_pFromTextFrm && !_pToTextFrm )
     {
         // No text frame provided. Thus, nothing to do.
         return;
@@ -372,15 +372,15 @@ void SwViewShellImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFr
     {
         if ( rTmp.Imp()->IsAccessible() )
         {
-            if ( _pFromTxtFrm )
+            if ( _pFromTextFrm )
             {
                 rTmp.Imp()->GetAccessibleMap().
-                            InvalidateParaFlowRelation( *_pFromTxtFrm, true );
+                            InvalidateParaFlowRelation( *_pFromTextFrm, true );
             }
-            if ( _pToTxtFrm )
+            if ( _pToTextFrm )
             {
                 rTmp.Imp()->GetAccessibleMap().
-                            InvalidateParaFlowRelation( *_pToTxtFrm, false );
+                            InvalidateParaFlowRelation( *_pToTextFrm, false );
             }
         }
     }
@@ -399,13 +399,13 @@ void SwViewShellImp::_InvalidateAccessibleParaTextSelection()
 }
 
 /// invalidate attributes for paragraphs
-void SwViewShellImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
+void SwViewShellImp::_InvalidateAccessibleParaAttrs( const SwTextFrm& rTextFrm )
 {
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if ( rTmp.Imp()->IsAccessible() )
         {
-            rTmp.Imp()->GetAccessibleMap().InvalidateAttr( rTxtFrm );
+            rTmp.Imp()->GetAccessibleMap().InvalidateAttr( rTextFrm );
         }
     }
 }

@@ -279,12 +279,12 @@ struct SvxFmtBreak
     BOOL        Auto        MID_AUTOBREAK;
     UINT16      Break       MID_BREAKxxx;
 }
-item SvxFmtBreak SvxFmtBreakItem;
+item SvxFmtBreak SvxFormatBreakItem;
 
 
 
-item BOOL SvxFmtKeepItem;
-item BOOL SvxFmtSplitItem;
+item BOOL SvxFormatKeepItem;
+item BOOL SvxFormatSplitItem;
 
 struct SvxFontHeight
 {

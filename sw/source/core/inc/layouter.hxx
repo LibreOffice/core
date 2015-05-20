@@ -25,12 +25,12 @@
 class SwEndnoter;
 class SwDoc;
 class SwSectionFrm;
-class SwFtnFrm;
+class SwFootnoteFrm;
 class SwPageFrm;
 class SwLooping;
 
 class SwMovedFwdFrmsByObjPos;
-class SwTxtFrm;
+class SwTextFrm;
 class SwRowFrm;
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
@@ -96,28 +96,28 @@ public:
     SwLayouter();
     ~SwLayouter();
     void InsertEndnotes( SwSectionFrm* pSect );
-    void CollectEndnote( SwFtnFrm* pFtn );
+    void CollectEndnote( SwFootnoteFrm* pFootnote );
     bool HasEndnotes() const;
 
     void LoopControl( SwPageFrm* pPage, sal_uInt8 nLoop );
     void EndLoopControl();
-    void LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm );
+    void LoopingLouieLight( const SwDoc& rDoc, const SwTextFrm& rFrm );
 
     static void CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect );
-    static bool Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
+    static bool Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFootnoteFrm* pFootnote );
     static bool StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
 
     // --> #i28701#
     static void ClearMovedFwdFrms( const SwDoc& _rDoc );
     static void InsertMovedFwdFrm( const SwDoc& _rDoc,
-                                   const SwTxtFrm& _rMovedFwdFrmByObjPos,
+                                   const SwTextFrm& _rMovedFwdFrmByObjPos,
                                    const sal_uInt32 _nToPageNum );
     static bool FrmMovedFwdByObjPos( const SwDoc& _rDoc,
-                                     const SwTxtFrm& _rTxtFrm,
+                                     const SwTextFrm& _rTextFrm,
                                      sal_uInt32& _ornToPageNum );
     // --> #i40155# - ummark given frame as to be moved forward.
     static void RemoveMovedFwdFrm( const SwDoc& _rDoc,
-                                   const SwTxtFrm& _rTxtFrm );
+                                   const SwTextFrm& _rTextFrm );
     // --> #i26945#
     static bool DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                            const SwRowFrm& _rRowFrm );
@@ -134,7 +134,7 @@ public:
     static void ClearMoveBwdLayoutInfo( const SwDoc& p_rDoc );
 };
 
-extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm );
+extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrm& rTextFrm );
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
 

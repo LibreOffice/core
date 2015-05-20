@@ -43,7 +43,7 @@ void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 }
 
 SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
-    eFldUpdateFlags(AUTOUPD_OFF),
+    eFieldUpdateFlags(AUTOUPD_OFF),
     nLinkUpdateMode(0),
     bIsHScrollMetricSet(false),
     bIsVScrollMetricSet(false),
@@ -142,7 +142,7 @@ void SwContentViewConfig::ImplCommit()
             case  0: bVal = rParent.IsGraphic();    break;// "Display/GraphicObject",
             case  1: bVal = rParent.IsTable();  break;// "Display/Table",
             case  2: bVal = rParent.IsDraw();       break;// "Display/DrawingControl",
-            case  3: bVal = rParent.IsFldName();    break;// "Display/FieldCode",
+            case  3: bVal = rParent.IsFieldName();    break;// "Display/FieldCode",
             case  4: bVal = rParent.IsPostIts();    break;// "Display/Note",
             case  5: bVal = rParent.IsShowContentTips(); break; // "Display/ShowContentTips"
             case  6: bVal = rParent.IsViewMetaChars(); break; //"NonprintingCharacter/MetaCharacters"
@@ -183,7 +183,7 @@ void SwContentViewConfig::Load()
                     case  0: rParent.SetGraphic(bSet);  break;// "Display/GraphicObject",
                     case  1: rParent.SetTable(bSet);    break;// "Display/Table",
                     case  2: rParent.SetDraw(bSet);     break;// "Display/DrawingControl",
-                    case  3: rParent.SetFldName(bSet);  break;// "Display/FieldCode",
+                    case  3: rParent.SetFieldName(bSet);  break;// "Display/FieldCode",
                     case  4: rParent.SetPostIts(bSet);  break;// "Display/Note",
                     case  5: rParent.SetShowContentTips(bSet);  break;// "Display/ShowContentTips",
                     case  6: rParent.SetViewMetaChars(bSet); break; //"NonprintingCharacter/MetaCharacters"
