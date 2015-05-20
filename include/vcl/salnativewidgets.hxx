@@ -361,32 +361,40 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
  */
 
 /* TABITEM constants are OR-ed together */
-#define TABITEM_LEFTALIGNED    0x001   // the tabitem is aligned with the left  border of the TabControl
-#define TABITEM_RIGHTALIGNED   0x002   // the tabitem is aligned with the right border of the TabControl
-#define TABITEM_FIRST_IN_GROUP 0x004   // the tabitem is the first in group of tabitems
-#define TABITEM_LAST_IN_GROUP  0x008   // the tabitem is the last in group of tabitems
+enum class TabitemFlags
+{
+    NONE           = 0x00,
+    LeftAligned    = 0x01,   // the tabitem is aligned with the left  border of the TabControl
+    RightAligned   = 0x02,   // the tabitem is aligned with the right border of the TabControl
+    FirstInGroup   = 0x04,   // the tabitem is the first in group of tabitems
+    LastInGroup    = 0x08,   // the tabitem is the last in group of tabitems
+};
+namespace o3tl
+{
+    template<> struct typed_flags<TabitemFlags> : is_typed_flags<TabitemFlags, 0x0f> {};
+}
 
 class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
 {
     public:
-        unsigned int    mnAlignment;
+        TabitemFlags    mnAlignment;
         Rectangle       maContentRect;
 
         TabitemValue(const Rectangle &rContentRect)
             : ImplControlValue( CTRL_TAB_ITEM, BUTTONVALUE_DONTKNOW, 0 )
-            , mnAlignment(0)
+            , mnAlignment(TabitemFlags::NONE)
             , maContentRect(rContentRect)
         {
         }
         virtual ~TabitemValue();
         virtual TabitemValue* clone() const SAL_OVERRIDE;
 
-        bool isLeftAligned() const  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
-        bool isRightAligned() const { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
+        bool isLeftAligned() const  { return bool(mnAlignment & TabitemFlags::LeftAligned); }
+        bool isRightAligned() const { return bool(mnAlignment & TabitemFlags::RightAligned); }
         bool isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
-        bool isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
-        bool isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
-        bool isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
+        bool isNotAligned() const   { return !(mnAlignment & (TabitemFlags::LeftAligned | TabitemFlags::RightAligned)); }
+        bool isFirst() const        { return bool(mnAlignment & TabitemFlags::FirstInGroup); }
+        bool isLast() const         { return bool(mnAlignment & TabitemFlags::LastInGroup); }
         const Rectangle& getContentRect() const { return maContentRect; }
 };
 
