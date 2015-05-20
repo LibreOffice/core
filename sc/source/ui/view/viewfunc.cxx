@@ -1461,9 +1461,9 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
             CellContentChanged();
             ResetAutoSpell();
 
-            if ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSCOLS_BEFORE )
+            if ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_INSCOLS_AFTER )
             {
-                OUString aOperation = ( eCmd == INS_INSROWS_BEFORE ) ?
+                OUString aOperation = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER ) ?
                     OUString("insert-rows"):
                     OUString("insert-columns");
                 HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
