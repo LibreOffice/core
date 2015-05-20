@@ -36,8 +36,7 @@ namespace sfx2 { namespace sidebar {
        background window.
     2. Create and handle tool bar controller for its items.
 */
-class SFX2_DLLPUBLIC SidebarToolBox
-    : public ToolBox
+class SFX2_DLLPUBLIC SidebarToolBox : public ToolBox
 {
 public:
     SidebarToolBox(vcl::Window* pParentWindow);
@@ -46,7 +45,7 @@ public:
 
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,
-            const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
+            const css::uno::Reference<css::frame::XFrame>& rFrame,
             ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
             const Size& rRequestedSize = Size(),
             sal_uInt16 nPos = TOOLBOX_APPEND) SAL_OVERRIDE;
@@ -55,18 +54,16 @@ public:
 
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
-    css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId (
-        const sal_uInt16 nItemId) const;
-    sal_uInt16 GetItemIdForSubToolbarName (
-        const ::rtl::OUString& rsCOmmandName) const;
+    css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const sal_uInt16 nItemId) const;
+    sal_uInt16 GetItemIdForSubToolbarName (const OUString& rsCOmmandName) const;
 
-    void SetController (
-        const sal_uInt16 nItemId,
-        const css::uno::Reference<css::frame::XToolbarController>& rxController,
-        const ::rtl::OUString& rsCommandName);
+    void SetController(const sal_uInt16 nItemId,
+                       const css::uno::Reference<css::frame::XToolbarController>& rxController,
+                       const OUString& rsCommandName);
 
 private:
     Image maItemSeparator;
+
     class ItemDescriptor
     {
     public:
@@ -74,7 +71,8 @@ private:
         css::util::URL maURL;
         rtl::OUString msCurrentCommand;
     };
-    typedef ::std::map<sal_uInt16, ItemDescriptor> ControllerContainer;
+
+    typedef std::map<sal_uInt16, ItemDescriptor> ControllerContainer;
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
 
@@ -85,10 +83,9 @@ private:
     DECL_STATIC_LINK_TYPED(SidebarToolBox, ActivateToolBox, ToolBox*, void);
     DECL_STATIC_LINK_TYPED(SidebarToolBox, DeactivateToolBox, ToolBox*, void);
 
-    void CreateController (
-        const sal_uInt16 nItemId,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const sal_Int32 nItemWidth = 0);
+    void CreateController(const sal_uInt16 nItemId,
+                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                          const sal_Int32 nItemWidth = 0);
     void RegisterHandlers();
 };
 

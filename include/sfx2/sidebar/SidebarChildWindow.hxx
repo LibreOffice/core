@@ -30,19 +30,15 @@ namespace sfx2 { namespace sidebar {
     RegisterChildWindow() method from the RegisterControllers() method
     of the applications DLL.
 */
-class SFX2_DLLPUBLIC SidebarChildWindow
-    : public SfxChildWindow
+class SFX2_DLLPUBLIC SidebarChildWindow : public SfxChildWindow
 {
 public:
-    SidebarChildWindow(
-        vcl::Window* pParent,
-        sal_uInt16 nId,
-        SfxBindings* pBindings,
-        SfxChildWinInfo* pInfo);
+    SidebarChildWindow(vcl::Window* pParent, sal_uInt16 nId,
+                       SfxBindings* pBindings, SfxChildWinInfo* pInfo);
 
     SFX_DECL_CHILDWINDOW_WITHID(SidebarChildWindow);
 
-    static sal_Int32 GetDefaultWidth (vcl::Window* pWindow);
+    static sal_Int32 GetDefaultWidth(vcl::Window* pWindow);
 };
 
 

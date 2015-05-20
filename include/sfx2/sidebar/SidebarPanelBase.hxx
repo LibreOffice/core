@@ -42,43 +42,39 @@ namespace sfx2 { namespace sidebar {
 
 namespace
 {
-    typedef ::cppu::WeakComponentImplHelper4 <
-        css::ui::XContextChangeEventListener,
-        css::ui::XUIElement,
-        css::ui::XToolPanel,
-        css::ui::XSidebarPanel
-        > SidebarPanelBaseInterfaceBase;
+
+typedef cppu::WeakComponentImplHelper4<css::ui::XContextChangeEventListener,
+                                       css::ui::XUIElement,
+                                       css::ui::XToolPanel,
+                                       css::ui::XSidebarPanel>
+            SidebarPanelBaseInterfaceBase;
 }
 
 /** Base class for sidebar panels that provides some convenience
     functionality.
 */
-class SFX2_DLLPUBLIC SidebarPanelBase
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
-      public SidebarPanelBaseInterfaceBase
+class SFX2_DLLPUBLIC SidebarPanelBase : private ::boost::noncopyable,
+                                        private ::cppu::BaseMutex,
+                                        public SidebarPanelBaseInterfaceBase
 {
 public:
-    static css::uno::Reference<css::ui::XUIElement> Create (
-        const ::rtl::OUString& rsResourceURL,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        vcl::Window* pControl,
-        const css::ui::LayoutSize& rLayoutSize);
+    static css::uno::Reference<css::ui::XUIElement> Create(const OUString& rsResourceURL,
+                                                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                                           vcl::Window* pControl,
+                                                           const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent (
-        const css::ui::ContextChangeEventObject& rEvent)
+    virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing (
-        const css::lang::EventObject& rEvent)
+    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUIElement
     virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::rtl::OUString SAL_CALL getResourceURL()
+    virtual OUString SAL_CALL getResourceURL()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int16 SAL_CALL getType()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -86,26 +82,23 @@ public:
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XToolPanel
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL createAccessible (
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible)
+    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL createAccessible(
+                const css::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSidebarPanel
-    virtual css::ui::LayoutSize SAL_CALL getHeightForWidth (sal_Int32 nWidth)
+    virtual css::ui::LayoutSize SAL_CALL getHeightForWidth(sal_Int32 nWidth)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getMinimalWidth ()
+    virtual sal_Int32 SAL_CALL getMinimalWidth()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
-    SidebarPanelBase (
-        const ::rtl::OUString& rsResourceURL,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        vcl::Window* pWindow,
-        const css::ui::LayoutSize& rLayoutSize);
+    SidebarPanelBase(const OUString& rsResourceURL, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                     vcl::Window* pWindow, const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase();
 
     virtual void SAL_CALL disposing()
@@ -113,7 +106,7 @@ protected:
 
 private:
     VclPtr<vcl::Window> mpControl;
-    const ::rtl::OUString msResourceURL;
+    const OUString msResourceURL;
     const css::ui::LayoutSize maLayoutSize;
 };
 

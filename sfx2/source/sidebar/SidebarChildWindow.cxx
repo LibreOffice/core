@@ -30,18 +30,14 @@ namespace sfx2 { namespace sidebar {
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(SidebarChildWindow, SID_SIDEBAR);
 
-SidebarChildWindow::SidebarChildWindow (
-    vcl::Window* pParentWindow,
-    sal_uInt16 nId,
-    SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo)
+SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 nId,
+                                        SfxBindings* pBindings, SfxChildWinInfo* pInfo)
     : SfxChildWindow(pParentWindow, nId)
 {
-    pWindow.reset(VclPtr<SidebarDockingWindow>::Create(
-        pBindings,
-        *this,
-        pParentWindow,
-        WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE));
+    pWindow.reset(VclPtr<SidebarDockingWindow>::Create(pBindings, *this, pParentWindow,
+                                                       WB_STDDOCKWIN | WB_OWNERDRAWDECORATION |
+                                                       WB_CLIPCHILDREN | WB_SIZEABLE |
+                                                       WB_3DLOOK | WB_ROLLABLE));
     eChildAlignment = SfxChildAlignment::RIGHT;
 
     pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
