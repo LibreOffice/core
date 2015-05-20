@@ -829,18 +829,18 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTabItemDrawInfo.position=kHIThemeTabPositionMiddle;
 
             TabitemValue const * pTabValue = static_cast<TabitemValue const *>(&aValue);
-            unsigned int nAlignment = pTabValue->mnAlignment;
-            //TABITEM_LEFTALIGNED (and TABITEM_RIGHTALIGNED) for the leftmost (or rightmost) tab
+            TabitemFlags nAlignment = pTabValue->mnAlignment;
+            //TabitemFlags::LeftAligned (and TabitemFlags::RightAligned) for the leftmost (or rightmost) tab
             //when there are several lines of tabs because there is only one first tab and one
-            //last tab and TABITEM_FIRST_IN_GROUP (and TABITEM_LAST_IN_GROUP) because when the
-            //line width is different from window width, there may not be TABITEM_RIGHTALIGNED
-            if( ( (nAlignment & TABITEM_LEFTALIGNED)&&(nAlignment & TABITEM_RIGHTALIGNED) ) ||
-                ( (nAlignment & TABITEM_FIRST_IN_GROUP)&&(nAlignment & TABITEM_LAST_IN_GROUP) )
+            //last tab and TabitemFlags::FirstInGroup (and TabitemFlags::LastInGroup) because when the
+            //line width is different from window width, there may not be TabitemFlags::RightAligned
+            if( ( (nAlignment & TabitemFlags::LeftAligned)&&(nAlignment & TabitemFlags::RightAligned) ) ||
+                ( (nAlignment & TabitemFlags::FirstInGroup)&&(nAlignment & TabitemFlags::LastInGroup) )
                ) //tab alone
                 aTabItemDrawInfo.position=kHIThemeTabPositionOnly;
-            else if((nAlignment & TABITEM_LEFTALIGNED)||(nAlignment & TABITEM_FIRST_IN_GROUP))
+            else if((nAlignment & TabitemFlags::LeftAligned)||(nAlignment & TabitemFlags::FirstInGroup))
                 aTabItemDrawInfo.position=kHIThemeTabPositionFirst;
-            else if((nAlignment & TABITEM_RIGHTALIGNED)||(nAlignment & TABITEM_LAST_IN_GROUP))
+            else if((nAlignment & TabitemFlags::RightAligned)||(nAlignment & TabitemFlags::LastInGroup))
                 aTabItemDrawInfo.position=kHIThemeTabPositionLast;
 
             //support for RTL

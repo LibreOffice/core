@@ -325,9 +325,9 @@ namespace svt
                                        i_rContentRect.Bottom() - TAB_TABOFFSET_Y));
 
         if ( i_nItemFlags & ITEM_POSITION_FIRST )
-            tiValue.mnAlignment |= TABITEM_FIRST_IN_GROUP;
+            tiValue.mnAlignment |= TabitemFlags::FirstInGroup;
         if ( i_nItemFlags & ITEM_POSITION_LAST )
-            tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
+            tiValue.mnAlignment |= TabitemFlags::LastInGroup;
 
 
         bool bNativeOK = getTargetDevice().DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, i_rContentRect, nState, tiValue, OUString() );

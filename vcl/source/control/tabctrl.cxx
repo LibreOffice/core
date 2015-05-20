@@ -851,13 +851,13 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
                                        pItem->maRect.Top() + TAB_TABOFFSET_Y,
                                        pItem->maRect.Bottom() - TAB_TABOFFSET_Y));
         if (pItem->maRect.Left() < 5)
-            tiValue.mnAlignment |= TABITEM_LEFTALIGNED;
+            tiValue.mnAlignment |= TabitemFlags::LeftAligned;
         if (pItem->maRect.Right() > mnLastWidth - 5)
-            tiValue.mnAlignment |= TABITEM_RIGHTALIGNED;
+            tiValue.mnAlignment |= TabitemFlags::RightAligned;
         if (bFirstInGroup)
-            tiValue.mnAlignment |= TABITEM_FIRST_IN_GROUP;
+            tiValue.mnAlignment |= TabitemFlags::FirstInGroup;
         if (bLastInGroup)
-            tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
+            tiValue.mnAlignment |= TabitemFlags::LastInGroup;
 
         Rectangle aCtrlRegion( pItem->maRect );
         bNativeOK = rRenderContext.DrawNativeControl(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL,
