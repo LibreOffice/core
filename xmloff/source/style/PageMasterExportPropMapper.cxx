@@ -22,7 +22,6 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <xmloff/PageMasterStyleMap.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/extract.hxx>
 
@@ -243,9 +242,10 @@ void XMLPageMasterExportPropMapper::handleElementItem(
         case CTF_PM_HEADERGRAPHICURL:
         case CTF_PM_FOOTERGRAPHICURL:
             {
-                DBG_ASSERT( pProperties && (nIdx >= 2), "property vector missing" );
-                sal_Int32 nPos;
-                sal_Int32 nFilter;
+                assert(pProperties);
+                assert(nIdx >= 2 && "horrible array ordering borked again");
+                sal_Int32 nPos(-1);
+                sal_Int32 nFilter(-1);
                 switch( nContextId  )
                 {
                 case CTF_PM_GRAPHICURL:
@@ -261,24 +261,22 @@ void XMLPageMasterExportPropMapper::handleElementItem(
                     nFilter = CTF_PM_FOOTERGRAPHICFILTER;
                     break;
                 default:
-                    nPos = 0;  // TODO What values should this be?
-                    nFilter = 0;
+                    assert(false);
                 }
                 const Any*  pPos    = NULL;
                 const Any*  pFilter = NULL;
-                if( pProperties && (nIdx >= 2) )
+                sal_uInt32 nIndex(nIdx - 1);
+                const XMLPropertyState& rFilter = (*pProperties)[nIndex];
+                if (getPropertySetMapper()->GetEntryContextId(rFilter.mnIndex) == nFilter)
                 {
-                    const XMLPropertyState& rPos = (*pProperties)[nIdx - 2];
-                    DBG_ASSERT( getPropertySetMapper()->GetEntryContextId( rPos.mnIndex ) == nPos,
-                                "invalid property map: pos expected" );
-                    if( getPropertySetMapper()->GetEntryContextId( rPos.mnIndex ) == nPos )
-                        pPos = &rPos.maValue;
-
-                    const XMLPropertyState& rFilter = (*pProperties)[nIdx - 1];
-                    DBG_ASSERT( getPropertySetMapper()->GetEntryContextId( rFilter.mnIndex ) == nFilter,
-                                "invalid property map: filter expected" );
-                    if( getPropertySetMapper()->GetEntryContextId( rFilter.mnIndex ) == nFilter )
-                        pFilter = &rFilter.maValue;
+                    pFilter = &rFilter.maValue;
+                    --nIndex;
+                }
+                const XMLPropertyState& rPos = (*pProperties)[nIndex];
+                if (getPropertySetMapper()->GetEntryContextId(rPos.mnIndex) == nPos)
+                {
+                    pPos = &rPos.maValue;
+                    --nIndex;
                 }
                 sal_uInt32 nPropIndex = rProperty.mnIndex;
                 pThis->aBackgroundImageExport.exportXML( rProperty.maValue, pPos, pFilter, NULL,
