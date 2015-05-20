@@ -77,6 +77,12 @@ Menu RID_POPUP_ROWHEADER
         };
         MenuItem
         {
+            Identifier = FID_INS_ROWS_AFTER ;
+            HelpId = CMD_FID_INS_ROWS_AFTER ;
+            Text [ en-US ] = "~Insert Rows Below" ;
+        };
+        MenuItem
+        {
             Identifier = SID_DEL_ROWS ;
             HelpId = CMD_SID_DEL_ROWS ;
             Text [ en-US ] = "~Delete Selected Rows" ;
@@ -143,6 +149,12 @@ Menu RID_POPUP_COLHEADER
             Identifier = FID_INS_COLUMNS_BEFORE ;
             HelpId = CMD_FID_INS_COLUMNS_BEFORE ;
             Text [ en-US ] = "~Insert Columns Left" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_INS_COLUMNS_AFTER ;
+            HelpId = CMD_FID_INS_COLUMNS_AFTER ;
+            Text [ en-US ] = "~Insert Columns Right" ;
         };
         MenuItem
         {

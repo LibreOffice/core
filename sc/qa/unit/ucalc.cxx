@@ -6578,7 +6578,7 @@ void Test::testUndoDataAnchor()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, MAXCOL, aOldStart.Row(), 0 ), &aMark, INS_INSROWS, true, true, false);
+    rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, MAXCOL, aOldStart.Row(), 0 ), &aMark, INS_INSROWS_BEFORE, true, true, false);
 
     pData = ScDrawLayer::GetObjData(pObj, false);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
