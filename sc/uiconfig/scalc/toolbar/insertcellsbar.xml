@@ -21,5 +21,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertCellsDown"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertCellsRight"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertRowsBefore"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRowsAfter"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertColumnsBefore"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumnsAfter"/>
 </toolbar:toolbar>

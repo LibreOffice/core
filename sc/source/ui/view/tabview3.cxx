@@ -409,6 +409,8 @@ void ScTabView::SelectionChanged()
 
     rBindings.Invalidate( FID_INS_ROWS_BEFORE );
     rBindings.Invalidate( FID_INS_COLUMNS_BEFORE );
+    rBindings.Invalidate( FID_INS_ROWS_AFTER );
+    rBindings.Invalidate( FID_INS_COLUMNS_AFTER );
     rBindings.Invalidate( FID_INS_CELL );
     rBindings.Invalidate( FID_INS_CELLSDOWN );
     rBindings.Invalidate( FID_INS_CELLSRIGHT );
