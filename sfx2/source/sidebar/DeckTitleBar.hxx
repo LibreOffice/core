@@ -21,8 +21,6 @@
 
 #include "TitleBar.hxx"
 
-#include <boost/function.hpp>
-
 namespace sfx2 { namespace sidebar {
 
 class DeckTitleBar : public TitleBar
@@ -30,7 +28,7 @@ class DeckTitleBar : public TitleBar
 public:
     DeckTitleBar(const OUString& rsTitle,
                  vcl::Window* pParentWindow,
-                 const boost::function<void()>& rCloserAction);
+                 const std::function<void()>& rCloserAction);
 
     void SetCloserVisible(const bool bIsCloserVisible);
 
@@ -46,7 +44,7 @@ protected:
 
 private:
     const sal_uInt16 mnCloserItemIndex;
-    const boost::function<void()> maCloserAction;
+    const std::function<void()> maCloserAction;
     bool mbIsCloserVisible;
 };
 

@@ -25,9 +25,6 @@
 #include <vcl/image.hxx>
 #include <com/sun/star/ui/LayoutSize.hpp>
 
-#include <boost/function.hpp>
-#include <boost/scoped_ptr.hpp>
-
 class ScrollBar;
 
 namespace sfx2 { namespace sidebar {
@@ -43,7 +40,7 @@ class Deck : public vcl::Window
 public:
     Deck(const DeckDescriptor& rDeckDescriptor,
          vcl::Window* pParentWindow,
-         const boost::function<void()>& rCloserAction);
+         const std::function<void()>& rCloserAction);
     virtual ~Deck();
     virtual void dispose() SAL_OVERRIDE;
 

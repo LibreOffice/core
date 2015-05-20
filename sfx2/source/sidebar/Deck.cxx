@@ -32,27 +32,23 @@
 #include <vcl/scrbar.hxx>
 #include <tools/svborder.hxx>
 
-#include <boost/bind.hpp>
-
 using namespace css;
 using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
-Deck::Deck (
-    const DeckDescriptor& rDeckDescriptor,
-    vcl::Window* pParentWindow,
-    const ::boost::function<void()>& rCloserAction)
-    : Window(pParentWindow, 0),
-      msId(rDeckDescriptor.msId),
-      maIcon(),
-      mnMinimalWidth(0),
-      maPanels(),
-      mpTitleBar(VclPtr<DeckTitleBar>::Create(rDeckDescriptor.msTitle, this, rCloserAction)),
-      mpScrollClipWindow(VclPtr<vcl::Window>::Create(this)),
-      mpScrollContainer(VclPtr<ScrollContainerWindow>::Create(mpScrollClipWindow.get())),
-      mpFiller(VclPtr<vcl::Window>::Create(this)),
-      mpVerticalScrollBar(VclPtr<ScrollBar>::Create(this))
+Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
+           const std::function<void()>& rCloserAction)
+    : Window(pParentWindow, 0)
+    , msId(rDeckDescriptor.msId)
+    , maIcon()
+    , mnMinimalWidth(0)
+    , maPanels()
+    , mpTitleBar(VclPtr<DeckTitleBar>::Create(rDeckDescriptor.msTitle, this, rCloserAction))
+    , mpScrollClipWindow(VclPtr<vcl::Window>::Create(this))
+    , mpScrollContainer(VclPtr<ScrollContainerWindow>::Create(mpScrollClipWindow.get()))
+    , mpFiller(VclPtr<vcl::Window>::Create(this))
+    , mpVerticalScrollBar(VclPtr<ScrollBar>::Create(this))
 {
     SetBackground(Wallpaper());
 

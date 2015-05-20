@@ -30,16 +30,19 @@
 
 namespace sfx2 { namespace sidebar {
 
+namespace
+{
 static const sal_Int32 gaLeftGripPadding (3);
 static const sal_Int32 gaRightGripPadding (3);
+}
 
 DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
                             vcl::Window* pParentWindow,
-                            const boost::function<void()>& rCloserAction)
-    : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
-      mnCloserItemIndex(1),
-      maCloserAction(rCloserAction),
-      mbIsCloserVisible(false)
+                            const std::function<void()>& rCloserAction)
+    : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint())
+    , mnCloserItemIndex(1)
+    , maCloserAction(rCloserAction)
+    , mbIsCloserVisible(false)
 {
     OSL_ASSERT(pParentWindow != NULL);
 
@@ -59,16 +62,13 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 
         if (mbIsCloserVisible)
         {
-            maToolBox->InsertItem(
-                mnCloserItemIndex,
-                Theme::GetImage(Theme::Image_Closer));
-            maToolBox->SetQuickHelpText(
-                mnCloserItemIndex,
-                SFX2_RESSTR(SFX_STR_SIDEBAR_CLOSE_DECK));
+            maToolBox->InsertItem(mnCloserItemIndex,
+                                  Theme::GetImage(Theme::Image_Closer));
+            maToolBox->SetQuickHelpText(mnCloserItemIndex,
+                                        SFX2_RESSTR(SFX_STR_SIDEBAR_CLOSE_DECK));
         }
         else
-            maToolBox->RemoveItem(
-                maToolBox->GetItemPos(mnCloserItemIndex));
+            maToolBox->RemoveItem(maToolBox->GetItemPos(mnCloserItemIndex));
     }
 }
 
@@ -98,9 +98,8 @@ Color DeckTitleBar::GetTextColor()
 
 void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
-    if (nItemIndex == mnCloserItemIndex)
-        if (maCloserAction)
-            maCloserAction();
+    if (nItemIndex == mnCloserItemIndex && maCloserAction)
+        maCloserAction();
 }
 
 css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible()
