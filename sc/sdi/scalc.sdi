@@ -4108,7 +4108,7 @@ SfxVoidItem InsertColumnBreak FID_INS_COLBRK
 ]
 
 
-SfxVoidItem InsertColumns FID_INS_COLUMN
+SfxVoidItem InsertColumnsBefore FID_INS_COLUMNS_BEFORE
 ()
 [
     /* flags: */
@@ -4410,7 +4410,7 @@ SfxVoidItem InsertRowBreak FID_INS_ROWBRK
 ]
 
 
-SfxVoidItem InsertRows FID_INS_ROW
+SfxVoidItem InsertRowsBefore FID_INS_ROWS_BEFORE
 ()
 [
     /* flags: */
