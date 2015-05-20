@@ -39,7 +39,7 @@
 
 #include "swuiccoll.hxx"
 
-const sal_uInt16 SwCondCollPage::aPageRg[] = {
+const sal_uInt16 SwCondCollPage::m_aPageRg[] = {
     FN_COND_COLL, FN_COND_COLL,
     0
 };
@@ -54,11 +54,11 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "ConditionPage",
         "modules/swriter/ui/conditionpage.ui", &rSet)
     ,
-    rSh(::GetActiveView()->GetWrtShell()),
-    pCmds( SwCondCollItem::GetCmds() ),
-    pFmt(0),
+    m_rSh(::GetActiveView()->GetWrtShell()),
+    m_pCmds( SwCondCollItem::GetCmds() ),
+    m_pFmt(0),
 
-    bNewTemplate(false)
+    m_bNewTemplate(false)
 {
     get(m_pConditionCB, "condstyle");
     get(m_pContextFT, "contextft");
@@ -174,21 +174,21 @@ bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)
 
 void SwCondCollPage::Reset(const SfxItemSet *)
 {
-    if(bNewTemplate)
+    if(m_bNewTemplate)
         m_pConditionCB->Enable();
-    if(RES_CONDTXTFMTCOLL == pFmt->Which())
+    if(RES_CONDTXTFMTCOLL == m_pFmt->Which())
         m_pConditionCB->Check();
     OnOffHdl(m_pConditionCB);
 
     m_pTbLinks->Clear();
 
-    SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
     pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
     m_pStyleLB->Clear();
     const SfxStyleSheetBase* pBase = pPool->First();
     while( pBase )
     {
-        if(!pFmt || pBase->GetName() != pFmt->GetName())
+        if(!m_pFmt || pBase->GetName() != m_pFmt->GetName())
             m_pStyleLB->InsertEntry(pBase->GetName());
         pBase = pPool->Next();
     }
@@ -199,9 +199,9 @@ void SwCondCollPage::Reset(const SfxItemSet *)
         OUString aEntry( m_aStrArr[n] + "\t" );
 
         const SwCollCondition* pCond = 0;
-        if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&
-            0 != ( pCond = static_cast<SwConditionTxtFmtColl*>(pFmt)->
-            HasCondition( SwCollCondition( 0, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
+        if( m_pFmt && RES_CONDTXTFMTCOLL == m_pFmt->Which() &&
+            0 != ( pCond = static_cast<SwConditionTxtFmtColl*>(m_pFmt)->
+            HasCondition( SwCollCondition( 0, m_pCmds[n].nCnd, m_pCmds[n].nSubCond ) ) )
             && pCond->GetTxtFmtColl() )
         {
             aEntry += pCond->GetTxtFmtColl()->GetName();
@@ -265,13 +265,13 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
         m_pStyleLB->Clear();
         const sal_Int32 nSelPos = pBox->GetSelectEntryPos();
         const sal_uInt16 nSearchFlags = *static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(nSelPos));
-        SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();
 
         while( pBase )
         {
-            if(!pFmt || pBase->GetName() != pFmt->GetName())
+            if(!m_pFmt || pBase->GetName() != m_pFmt->GetName())
                 m_pStyleLB->InsertEntry(pBase->GetName());
             pBase = pPool->Next();
         }
@@ -295,10 +295,10 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     return 0;
 }
 
-void SwCondCollPage::SetCollection(SwFmt* pNewFormat, bool bNew)
+void SwCondCollPage::SetCollection(SwFmt* pFormat, bool bNew)
 {
-    pFmt = pNewFormat;
-    bNewTemplate = bNew;
+    m_pFmt = pFormat;
+    m_bNewTemplate = bNew;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

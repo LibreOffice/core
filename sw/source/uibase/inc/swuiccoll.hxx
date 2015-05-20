@@ -41,11 +41,11 @@ class SwCondCollPage : public SfxTabPage
 
     std::vector<OUString> m_aStrArr;
 
-    SwWrtShell          &rSh;
-    const CommandStruct*pCmds;
-    SwFmt*              pFmt;
+    SwWrtShell          &m_rSh;
+    const CommandStruct*m_pCmds;
+    SwFmt*              m_pFmt;
 
-    bool                bNewTemplate;
+    bool                m_bNewTemplate;
 
     virtual ~SwCondCollPage();
     virtual void dispose() SAL_OVERRIDE;
@@ -59,13 +59,13 @@ class SwCondCollPage : public SfxTabPage
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    static const sal_uInt16 aPageRg[];
+    static const sal_uInt16 m_aPageRg[];
 
 public:
     SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet);
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
-    static const sal_uInt16* GetRanges() { return aPageRg; }
+    static const sal_uInt16* GetRanges() { return m_aPageRg; }
 
     virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset      (const SfxItemSet *rSet) SAL_OVERRIDE;
