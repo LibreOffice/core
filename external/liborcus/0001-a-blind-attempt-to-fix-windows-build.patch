@@ -1,0 +1,39 @@
+From 614e1eabb75ece267d7eb2b114e49d52469eb565 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 3 Jun 2015 15:07:23 +0200
+Subject: [PATCH] a blind attempt to fix windows build
+
+---
+ include/orcus/types.hpp | 2 +-
+ src/parser/types.cpp    | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/include/orcus/types.hpp b/include/orcus/types.hpp
+index b6e3f83..3d80c59 100644
+--- a/include/orcus/types.hpp
++++ b/include/orcus/types.hpp
+@@ -31,7 +31,7 @@ struct xml_name_t
+     xmlns_id_t ns;
+     pstring name;
+ 
+-    xml_name_t() : ns(XMLNS_UNKNOWN_ID), name() {}
++    xml_name_t();
+     xml_name_t(xmlns_id_t _ns, const pstring& _name) : ns(_ns), name(_name) {}
+     xml_name_t(const xml_name_t& r) : ns(r.ns), name(r.name) {}
+ };
+diff --git a/src/parser/types.cpp b/src/parser/types.cpp
+index be4e304..6c3c2f7 100644
+--- a/src/parser/types.cpp
++++ b/src/parser/types.cpp
+@@ -18,6 +18,8 @@ const xml_token_t XML_UNKNOWN_TOKEN = 0;
+ const size_t index_not_found = std::numeric_limits<size_t>::max();
+ const size_t unspecified = std::numeric_limits<size_t>::max()-1;
+ 
++xml_name_t::xml_name_t() : ns(XMLNS_UNKNOWN_ID), name() {}
++
+ xml_token_attr_t::xml_token_attr_t() :
+     ns(XMLNS_UNKNOWN_ID), name(XML_UNKNOWN_TOKEN) {}
+ 
+-- 
+2.4.1
+

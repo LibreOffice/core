@@ -43,6 +43,9 @@ public:
     ScOrcusGlobalSettings(ScDocumentImport& rDoc);
 
     virtual void set_origin_date(int year, int month, int day) SAL_OVERRIDE;
+
+    virtual void set_default_formula_grammar(orcus::spreadsheet::formula_grammar_t grammar) SAL_OVERRIDE;
+    virtual orcus::spreadsheet::formula_grammar_t get_default_formula_grammar() const SAL_OVERRIDE;
 };
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
@@ -120,9 +123,12 @@ public:
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, int year, int month, int day, int hour, int minute, double second) SAL_OVERRIDE;
 
     virtual void set_format(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t xf_index) SAL_OVERRIDE;
+    virtual void set_format(orcus::spreadsheet::row_t row_start, orcus::spreadsheet::col_t col_start,
+            orcus::spreadsheet::row_t row_end, orcus::spreadsheet::col_t col_end, size_t xf_index) SAL_OVERRIDE;
 
     virtual void set_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n) SAL_OVERRIDE;
     virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double val) SAL_OVERRIDE;
 
     virtual void set_shared_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
@@ -202,6 +208,10 @@ public:
 
     virtual void set_cell_xf_count(size_t n) SAL_OVERRIDE;
     virtual size_t commit_cell_xf() SAL_OVERRIDE;
+
+    // dxf
+    virtual void set_dxf_count(size_t count) SAL_OVERRIDE;
+    virtual size_t commit_dxf() SAL_OVERRIDE;
 
     // xf (cell format) - used both by cell xf and cell style xf.
 
