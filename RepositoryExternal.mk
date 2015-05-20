@@ -3209,14 +3209,19 @@ endef
 
 else # !SYSTEM_LIBORCUS
 
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	liborcus \
+))
+
 define gb_LinkTarget__use_orcus
 $(call gb_LinkTarget_use_external_project,$(1),liborcus)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,liborcus/include) \
 	$$(INCLUDE) \
 )
+
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs/liborcus-0.8$(gb_StaticLibrary_PLAINEXT) \
+	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs -lorcus-0.10 \
 )
 
 $(if $(SYSTEM_BOOST), \
@@ -3233,7 +3238,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs/liborcus-parser-0.8$(gb_StaticLibrary_PLAINEXT) \
+	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs -lorcus-parser-0.10 \
 )
 
 endef
