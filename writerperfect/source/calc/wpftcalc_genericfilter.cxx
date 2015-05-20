@@ -31,6 +31,7 @@
 
 #include "MSWorksCalcImportFilter.hxx"
 #include "MWAWCalcImportFilter.hxx"
+#include "NumbersImportFilter.hxx"
 
 namespace
 {
@@ -45,6 +46,11 @@ static cppu::ImplementationEntry const services[] =
     {
         &MWAWCalcImportFilter_createInstance, &MWAWCalcImportFilter_getImplementationName,
         &MWAWCalcImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &NumbersImportFilter_createInstance, &NumbersImportFilter_getImplementationName,
+        &NumbersImportFilter_getSupportedServiceNames,
         &cppu::createSingleComponentFactory, 0, 0
     },
     { 0, 0, 0, 0, 0, 0 }

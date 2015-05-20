@@ -518,6 +518,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	calc_Great_Works \
 	calc_Mac_Works \
 	calc_Mac_Wingz \
+	calc_AppleNumbers \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
@@ -558,6 +559,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	Great_Works_Calc \
 	Mac_Wingz_Calc \
 	Mac_Works_Calc \
+	AppleNumbers \
 ))
 
 # fcfg_draw
