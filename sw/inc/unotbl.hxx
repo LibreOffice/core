@@ -457,7 +457,7 @@ class SwXCellRange : public cppu::WeakImplHelper
     SwRangeDescriptor           aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;
 
-    SwUnoCrsr*                  pTableCrsr;
+    std::shared_ptr<SwUnoCrsr> m_pTableCrsr;
 
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
@@ -466,11 +466,10 @@ class SwXCellRange : public cppu::WeakImplHelper
     void setLabelDescriptions(const css::uno::Sequence<OUString>& rDesc, bool bRow);
 
 public:
-    SwXCellRange(SwUnoCrsr* pCrsr, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
+    SwXCellRange(std::shared_ptr<SwUnoCrsr> pCrsr, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
     std::vector< css::uno::Reference< css::table::XCell > > getCells();
-    virtual ~SwXCellRange();
 
     TYPEINFO_OVERRIDE();
 
@@ -536,7 +535,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 
     SwFrameFormat*   GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     sal_uInt16      getRowCount();

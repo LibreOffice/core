@@ -64,14 +64,11 @@ SwUnoCrsr::~SwUnoCrsr()
     }
 }
 
-SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
+std::shared_ptr<SwUnoCrsr> SwUnoTableCrsr::Clone() const
 {
-    assert(!m_bSaneOwnership);
-    SwUnoTableCrsr * pNewCrsr = dynamic_cast<SwUnoTableCrsr*>(
-        GetDoc()->CreateUnoCrsr(
-            *GetPoint(), true /* create SwUnoTableCrsr */ ) );
-    OSL_ENSURE(pNewCrsr, "Clone: cannot create SwUnoTableCrsr?");
-    if (pNewCrsr && HasMark())
+    assert(m_bSaneOwnership);
+    auto pNewCrsr(GetDoc()->CreateUnoCrsr2(*GetPoint(), true));
+    if(HasMark())
     {
         pNewCrsr->SetMark();
         *pNewCrsr->GetMark() = *GetMark();
