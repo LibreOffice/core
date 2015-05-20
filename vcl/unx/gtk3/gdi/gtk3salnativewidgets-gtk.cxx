@@ -35,7 +35,6 @@ GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpComboboxEntryStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpComboboxButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpListboxStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpListboxButtonStyle = NULL;
@@ -713,6 +712,10 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
 
         if( nPart == PART_ENTIRE_CONTROL )
         {
+            gtk_style_context_save(mpEntryStyle);
+            gtk_style_context_set_state(mpEntryStyle, flags);
+            gtk_style_context_set_junction_sides(mpEntryStyle, GTK_JUNCTION_RIGHT);
+
             gtk_render_background(mpComboboxStyle, cr,
                                   0, 0,
                                   areaRect.GetWidth(), areaRect.GetHeight());
@@ -720,12 +723,14 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                              0, 0,
                              areaRect.GetWidth(), areaRect.GetHeight());
 
-            gtk_render_background(mpComboboxEntryStyle, cr,
+            gtk_render_background(mpEntryStyle, cr,
                                   0, 0,
                                   aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
-            gtk_render_frame(mpComboboxEntryStyle, cr,
+            gtk_render_frame(mpEntryStyle, cr,
                              0, 0,
                              aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
+
+            gtk_style_context_restore(mpEntryStyle);
         }
 
         gtk_render_background(mpComboboxButtonStyle, cr,
@@ -2038,7 +2043,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_container_forall(GTK_CONTAINER(gComboBox),
                          get_combo_box_entry_inner_widgets,
                          NULL);
-    mpComboboxEntryStyle = gtk_widget_get_style_context(gComboBoxEntryWidget);
     mpComboboxButtonStyle = gtk_widget_get_style_context(gComboBoxButtonWidget);
 
     /* Listbox */
