@@ -1020,10 +1020,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         }
                         break;
                         case SC_CAT_INSERT_ROWS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, true, false );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS_BEFORE, true, false );
                         break;
                         case SC_CAT_INSERT_COLS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, true, false );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS_BEFORE, true, false );
                         break;
                         case SC_CAT_DELETE_TABS :
                             GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), true, false );
