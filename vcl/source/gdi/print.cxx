@@ -1074,7 +1074,7 @@ void Printer::dispose()
     OutputDevice::dispose();
 }
 
-sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
+sal_uLong Printer::GetCapabilities( PrinterCapType nType ) const
 {
     if ( IsDisplayPrinter() )
         return 0;
@@ -1090,23 +1090,23 @@ bool Printer::HasSupport( PrinterSupport eFeature ) const
     switch ( eFeature )
     {
         case SUPPORT_SET_ORIENTATION:
-            return GetCapabilities( PRINTER_CAPABILITIES_SETORIENTATION ) != 0;
+            return GetCapabilities( PrinterCapType::SetOrientation ) != 0;
         case SUPPORT_SET_PAPERBIN:
-            return GetCapabilities( PRINTER_CAPABILITIES_SETPAPERBIN ) != 0;
+            return GetCapabilities( PrinterCapType::SetPaperBin ) != 0;
         case SUPPORT_SET_PAPERSIZE:
-            return GetCapabilities( PRINTER_CAPABILITIES_SETPAPERSIZE ) != 0;
+            return GetCapabilities( PrinterCapType::SetPaperSize ) != 0;
         case SUPPORT_SET_PAPER:
-            return GetCapabilities( PRINTER_CAPABILITIES_SETPAPER ) != 0;
+            return GetCapabilities( PrinterCapType::SetPaper ) != 0;
         case SUPPORT_COPY:
-            return (GetCapabilities( PRINTER_CAPABILITIES_COPIES ) != 0);
+            return (GetCapabilities( PrinterCapType::Copies ) != 0);
         case SUPPORT_COLLATECOPY:
-            return (GetCapabilities( PRINTER_CAPABILITIES_COLLATECOPIES ) != 0);
+            return (GetCapabilities( PrinterCapType::CollateCopies ) != 0);
         case SUPPORT_SETUPDIALOG:
-            return GetCapabilities( PRINTER_CAPABILITIES_SUPPORTDIALOG ) != 0;
+            return GetCapabilities( PrinterCapType::SupportDialog ) != 0;
         case SUPPORT_FAX:
-            return GetCapabilities( PRINTER_CAPABILITIES_FAX ) != 0;
+            return GetCapabilities( PrinterCapType::Fax ) != 0;
         case SUPPORT_PDF:
-            return GetCapabilities( PRINTER_CAPABILITIES_PDF ) != 0;
+            return GetCapabilities( PrinterCapType::PDF ) != 0;
     }
 
     return true;

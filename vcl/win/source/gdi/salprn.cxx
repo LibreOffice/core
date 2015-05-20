@@ -1239,20 +1239,20 @@ OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal
     return aPaperBinName;
 }
 
-sal_uLong WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType )
+sal_uLong WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType )
 {
     DWORD nRet;
 
     switch ( nType )
     {
-        case PRINTER_CAPABILITIES_SUPPORTDIALOG:
+        case PrinterCapType::SupportDialog:
             return TRUE;
-        case PRINTER_CAPABILITIES_COPIES:
+        case PrinterCapType::Copies:
             nRet = ImplDeviceCaps( this, DC_COPIES, NULL, pSetupData );
             if ( nRet && (nRet != GDI_ERROR) )
                 return nRet;
             return 0;
-        case PRINTER_CAPABILITIES_COLLATECOPIES:
+        case PrinterCapType::CollateCopies:
             nRet = ImplDeviceCaps( this, DC_COLLATE, NULL, pSetupData );
             if ( nRet && (nRet != GDI_ERROR) )
             {
@@ -1262,20 +1262,20 @@ sal_uLong WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, sa
             }
             return 0;
 
-        case PRINTER_CAPABILITIES_SETORIENTATION:
+        case PrinterCapType::SetOrientation:
             nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
             if ( nRet && (nRet != GDI_ERROR) )
                 return TRUE;
             return FALSE;
 
-        case PRINTER_CAPABILITIES_SETPAPERBIN:
+        case PrinterCapType::SetPaperBin:
             nRet = ImplDeviceCaps( this, DC_BINS, NULL, pSetupData );
             if ( nRet && (nRet != GDI_ERROR) )
                 return TRUE;
             return FALSE;
 
-        case PRINTER_CAPABILITIES_SETPAPERSIZE:
-        case PRINTER_CAPABILITIES_SETPAPER:
+        case PrinterCapType::SetPaperSize:
+        case PrinterCapType::SetPaper:
             nRet = ImplDeviceCaps( this, DC_PAPERS, NULL, pSetupData );
             if ( nRet && (nRet != GDI_ERROR) )
                 return TRUE;
