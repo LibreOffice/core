@@ -1,0 +1,58 @@
+From 76ca0d1891efcae5128a5215128b891b97861bfb Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 3 Jun 2015 15:07:23 +0200
+Subject: [PATCH] a blind attempt to fix windows build
+
+---
+ include/orcus/types.hpp |  8 ++++----
+ src/parser/types.cpp    | 14 ++++++++++----
+ 2 files changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/include/orcus/types.hpp b/include/orcus/types.hpp
+index b6e3f83..1bf2dff 100644
+--- a/include/orcus/types.hpp
++++ b/include/orcus/types.hpp
+@@ -21,10 +21,10 @@ namespace orcus {
+ typedef size_t xml_token_t;
+ typedef const char* xmlns_id_t;
+ 
+-ORCUS_PSR_DLLPUBLIC extern const xmlns_id_t XMLNS_UNKNOWN_ID;
+-ORCUS_PSR_DLLPUBLIC extern const xml_token_t XML_UNKNOWN_TOKEN;
+-ORCUS_PSR_DLLPUBLIC extern const size_t index_not_found;
+-ORCUS_PSR_DLLPUBLIC extern const size_t unspecified;
++ORCUS_PSR_DLLPUBLIC extern const xmlns_id_t& XMLNS_UNKNOWN_ID;
++ORCUS_PSR_DLLPUBLIC extern const xml_token_t& XML_UNKNOWN_TOKEN;
++ORCUS_PSR_DLLPUBLIC extern const size_t& index_not_found;
++ORCUS_PSR_DLLPUBLIC extern const size_t& unspecified;
+ 
+ struct xml_name_t
+ {
+diff --git a/src/parser/types.cpp b/src/parser/types.cpp
+index be4e304..0588dbc 100644
+--- a/src/parser/types.cpp
++++ b/src/parser/types.cpp
+@@ -12,11 +12,17 @@
+ 
+ namespace orcus {
+ 
+-const xmlns_id_t XMLNS_UNKNOWN_ID = NULL;
+-const xml_token_t XML_UNKNOWN_TOKEN = 0;
++xmlns_id_t XMLNS_UNKNOWN_ID_IMPL = NULL;
++xml_token_t XML_UNKNOWN_TOKEN_IMPL = 0;
+ 
+-const size_t index_not_found = std::numeric_limits<size_t>::max();
+-const size_t unspecified = std::numeric_limits<size_t>::max()-1;
++const xmlns_id_t& XMLNS_UNKNOWN_ID = XMLNS_UNKNOWN_ID_IMPL;
++const xml_token_t& XML_UNKNOWN_TOKEN = XML_UNKNOWN_TOKEN_IMPL;
++
++size_t index_not_found_impl = std::numeric_limits<size_t>::max();
++size_t unspecified_impl = std::numeric_limits<size_t>::max()-1;
++
++const size_t& index_not_found = index_not_found_impl;
++const size_t& unspecified = unspecified_impl;
+ 
+ xml_token_attr_t::xml_token_attr_t() :
+     ns(XMLNS_UNKNOWN_ID), name(XML_UNKNOWN_TOKEN) {}
+-- 
+2.4.1
+
