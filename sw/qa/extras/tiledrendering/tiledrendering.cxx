@@ -237,6 +237,7 @@ void lcl_search()
 
 void SwTiledRenderingTest::testSearch()
 {
+#if !defined(WNT) && !defined(MACOSX)
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     size_t nNode = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
@@ -260,6 +261,7 @@ void SwTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
     nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 7, nActual);
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
