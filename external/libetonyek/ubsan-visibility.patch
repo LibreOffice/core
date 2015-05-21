@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -17443,7 +17443,7 @@
+         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for -fvisibility=hidden compiler flag" >&5
+ $as_echo_n "checking for -fvisibility=hidden compiler flag... " >&6; }
+         saved_CXXFLAGS="$CXXFLAGS"
+-        CXXFLAGS="$CXXFLAGS -fvisibility=hidden"
++        CXXFLAGS="$CXXFLAGS -fvisibility-ms-compat"
+         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 

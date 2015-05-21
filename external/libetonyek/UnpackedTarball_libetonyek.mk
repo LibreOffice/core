@@ -19,4 +19,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/win_build.patch.1 \
 ))
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,libetonyek, \
+    external/libetonyek/ubsan-visibility.patch \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
