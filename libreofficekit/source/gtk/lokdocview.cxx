@@ -31,7 +31,7 @@
 #endif
 
 // Cursor bitmaps from the Android app.
-#define CURSOR_HANDLE_DIR "android/experimental/LOAndroid3/res/drawable/"
+#define CURSOR_HANDLE_DIR "android/source/res/drawable/"
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
 

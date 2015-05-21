@@ -157,7 +157,7 @@ For instructions on how to build for Android, see README.cross.
 
 Attach your device, so 'adb devices' shows it. Then run:
 
-        cd android/experimental/LOAndroid3
+        cd android/source
         ant debug install
         adb logcat
 
@@ -206,7 +206,7 @@ that, you must set it to "org.libreoffice"), otherwise ndk-gdb will complain:
 
 When you have all this, install the .apk to the device, and:
 
-        cd android/experimental/LOAndroid3
+        cd android/source
         <android-ndk-r10d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb --start
 
 Pretty printers aren't loaded automatically due to the single shared

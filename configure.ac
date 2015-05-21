@@ -360,8 +360,8 @@ if test -n "$with_android_ndk"; then
     # Check if there is a 64-bit tool-chain. Google provides a NDK with 64-bit tool-chain binaries in
     # NDK r8e and later, and for earlier NDKs it was possible to build one yourself. Using a 64-bit
     # linker is required if you compile large parts of the code with -g. A 32-bit linker just won't
-    # manage to link the (app-specific) single huge .so that is built for the apps in
-    # android/experimental/* if there is debug information in a significant part of the object files.
+    # manage to link the (app-specific) single huge .so that is built for the app in
+    # android/source/ if there is debug information in a significant part of the object files.
     # (A 64-bit ld.gold grows to much over 10 gigabytes of virtual space when linking such a .so if
     # all objects have been built with debug information.)
     toolchain_system='*'
