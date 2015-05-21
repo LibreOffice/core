@@ -38,90 +38,6 @@ public:
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
 
-static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
-                                    const basebmp::BitmapDeviceSharedPtr& aDev,
-                                    const ARect &rSrcRect,
-                                    int nDestX, int nDestY)
-{
-    basebmp::RawMemorySharedArray aSrcData = aDev->getBuffer();
-    basegfx::B2IVector aDevSize = aDev->getSize();
-    sal_Int32 nStride = aDev->getScanlineStride();
-    unsigned char *pSrc = aSrcData.get();
-
-    // FIXME: do some cropping goodness on aSrcRect to ensure no overflows etc.
-    ARect aSrcRect = rSrcRect;
-
-    for (unsigned int y = 0; y < (unsigned int)(aSrcRect.bottom - aSrcRect.top); y++)
-    {
-        unsigned char *sp = ( pSrc + nStride * (aSrcRect.top + y) +
-                              aSrcRect.left * 4 /* src pixel size */ );
-
-        switch (pOutBuffer->format) {
-        case WINDOW_FORMAT_RGBA_8888:
-        case WINDOW_FORMAT_RGBX_8888:
-        {
-            unsigned char *dp = ( (unsigned char *)pOutBuffer->bits +
-                                  pOutBuffer->stride * 4 * (y + nDestY) +
-                                  nDestX * 4 /* dest pixel size */ );
-            for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
-            {
-                dp[x*4 + 0] = sp[x*4 + 0]; // R
-                dp[x*4 + 1] = sp[x*4 + 1]; // G
-                dp[x*4 + 2] = sp[x*4 + 2]; // B
-                dp[x*4 + 3] = 255; // A
-            }
-            break;
-        }
-        case WINDOW_FORMAT_RGB_565:
-        {
-            unsigned char *dp = ( (unsigned char *)pOutBuffer->bits +
-                                  pOutBuffer->stride * 2 * (y + nDestY) +
-                                  nDestX * 2 /* dest pixel size */ );
-            for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
-            {
-                unsigned char b = sp[x*3 + 0]; // B
-                unsigned char g = sp[x*3 + 1]; // G
-                unsigned char r = sp[x*3 + 2]; // R
-                dp[x*2 + 0] = (r & 0xf8) | (g >> 5);
-                dp[x*2 + 1] = ((g & 0x1c) << 5) | ((b & 0xf8) >> 3);
-            }
-            break;
-        }
-        default:
-            LOGI("unknown pixel format %d !", pOutBuffer->format);
-            break;
-        }
-    }
-}
-
-void AndroidSalInstance::BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
-                                           const basebmp::BitmapDeviceSharedPtr& aDev)
-{
-    basegfx::B2IVector aDevSize = aDev->getSize();
-    ARect aWhole = { 0, 0, aDevSize.getX(), aDevSize.getY() };
-    BlitFrameRegionToWindow(pOutBuffer, aDev, aWhole, 0, 0);
-}
-
-void AndroidSalInstance::RedrawWindows(ANativeWindow_Buffer *pBuffer)
-{
-    if (pBuffer->bits != NULL)
-    {
-        int i = 0;
-        std::list< SalFrame* >::const_iterator it;
-        for ( it = getFrames().begin(); it != getFrames().end(); i++, ++it )
-        {
-            SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
-
-            if (pFrame->IsVisible())
-            {
-                BlitFrameToWindow (pBuffer, pFrame->getDevice());
-            }
-        }
-    }
-    else
-        LOGI("no buffer for locked window");
-}
-
 void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
 {
     static bool beenHere = false;
@@ -146,29 +62,6 @@ void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
 {
     rRect = Rectangle( Point( 0, 0 ),
                        Size( viewWidth, viewHeight ) );
-}
-
-/*
- * Try too hard to get a frame, in the absence of anything better to do
- */
-SalFrame *AndroidSalInstance::getFocusFrame() const
-{
-    SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
-    if (!pFocus) {
-        LOGI("no focus frame, re-focusing first visible frame");
-        const std::list< SalFrame* >& rFrames( getFrames() );
-        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
-        {
-            SvpSalFrame *pFrame = const_cast<SvpSalFrame*>(static_cast<const SvpSalFrame*>(*it));
-            if( pFrame->IsVisible() )
-            {
-                pFrame->GetFocus();
-                pFocus = pFrame;
-                break;
-            }
-        }
-    }
-    return pFocus;
 }
 
 AndroidSalInstance *AndroidSalInstance::getInstance()

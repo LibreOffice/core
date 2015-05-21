@@ -42,9 +42,6 @@ public:
     // mainloop pieces
     virtual bool AnyInput( VclInputFlags nType );
 
-    void RedrawWindows(ANativeWindow_Buffer *pBuffer);
-    SalFrame *getFocusFrame() const;
-
     void      damaged(AndroidSalFrame *frame);
 };
 
