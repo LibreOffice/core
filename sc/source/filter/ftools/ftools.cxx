@@ -41,7 +41,6 @@
 #include "orcusfiltersimpl.hxx"
 #endif
 
-#include <stdio.h>
 
 // ScFilterTools::ReadLongDouble()
 

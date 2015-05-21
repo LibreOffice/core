@@ -30,7 +30,6 @@
 
 #if OSL_DEBUG_LEVEL > 1
 // the documentation thingy
-#include <stdio.h>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <rtl/strbuf.hxx>
 #include "compiler.hxx"
@@ -498,7 +497,7 @@ void ScParameterClassification::GenerateDocumentation()
         OpCode eOp = OpCode(i);
         if ( !xMap->getSymbol(eOp).isEmpty() )
         {
-            fprintf( stdout, "%s: ", aEnvVarName);
+            SAL_TRACE("sc.core", "GenerateDocumentation, env var name: " << aEnvVarName);
             OStringBuffer aStr(OUStringToOString(xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8));
             aStr.append('(');
             formula::FormulaByteToken aToken( eOp);
@@ -549,12 +548,10 @@ void ScParameterClassification::GenerateDocumentation()
             // NoPar, 1Par, ...) and override parameter count with
             // classification
             if ( nParams != aToken.GetByte() )
-                fprintf( stdout, "(parameter count differs, token Byte: %d  classification: %d) ",
-                        aToken.GetByte(), nParams);
+                SAL_WARN("sc.core", "(parameter count differs, token Byte: " << aToken.GetByte() << " classification: " << nParams << ") ");
             aToken.SetByte( nParams);
             if ( nParams != aToken.GetParamCount() )
-                fprintf( stdout, "(parameter count differs, token ParamCount: %d  classification: %d) ",
-                        aToken.GetParamCount(), nParams);
+                SAL_WARN("sc.core", "(parameter count differs, token ParamCount: " << aToken.GetParamCount() << " classification: " << nParams << ") ");
             for ( sal_uInt16 j=0; j < nParams; ++j )
             {
                 if ( j > 0 )
@@ -608,7 +605,7 @@ void ScParameterClassification::GenerateDocumentation()
                 break;
                 default:;
             }
-            fprintf( stdout, "%s\n", aStr.getStr());
+            SAL_TRACE( "sc.core", "" << aStr.getStr() << "\n");
         }
     }
     fflush( stdout);

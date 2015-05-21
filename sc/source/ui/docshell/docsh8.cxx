@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <stdio.h>
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1058,12 +1057,9 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
     catch ( const sdbc::SQLException& aException )
     {
         sal_Int32 nError = aException.ErrorCode;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "ScDocShell::DBaseExport: SQLException ErrorCode: %d, SQLState: %s, Message: %s\n",
-                (int)nError, OUStringToOString( aException.SQLState,
-                    RTL_TEXTENCODING_UTF8).getStr(), OUStringToOString(
-                        aException.Message, RTL_TEXTENCODING_UTF8).getStr());
-#endif
+        SAL_WARN("sc", "ScDocShell::DBaseExport: SQLException ErrorCode: " << nError << ", SQLState: " << aException.SQLState <<
+            ", Message: " << aException.Message << "\n");
+
         if (nError == 22018 || nError == 22001)
         {
             // SQL error 22018: Character not in target encoding.
@@ -1119,11 +1115,8 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                             bEncErr = true;
                         }
                         nLen = aOString.getLength();
-#if OSL_DEBUG_LEVEL > 1
                         if (!bTest)
-                            fprintf( stderr, "ScDocShell::DBaseExport encoding error, string with default replacements: ``%s''\n",
-                                    OUStringToOString( aOUString, eCharSet).getStr());
-#endif
+                            SAL_WARN("sc", "ScDocShell::DBaseExport encoding error, string with default replacements: ``" << aOUString << "''\n");
                     }
                     else
                         nLen = aString.getLength() * sizeof(sal_Unicode);
@@ -1132,10 +1125,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                             pColLengths[nCol] < nLen)
                     {
                         bTest = false;
-#if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "ScDocShell::DBaseExport: field width: %d, encoded length: %d\n",
-                                (int)pColLengths[nCol], (int)nLen);
-#endif
+                        SAL_INFO("sc", "ScDocShell::DBaseExport: field width: " << pColLengths[nCol] << ", encoded length: " << nLen << "\n");
                     }
                 }
                 else

@@ -40,7 +40,6 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
-#include <stdio.h>
 
 #include "inputwin.hxx"
 #include "scmod.hxx"

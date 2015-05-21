@@ -24,7 +24,6 @@
 
 #include <svl/sharedstringpool.hxx>
 
-#include <stdio.h>
 #include <string.h>
 
 const sal_uInt16    TokenPool::nScTokenOff = 8192;
@@ -932,7 +931,7 @@ ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
     if( n < nP_MatrixAkt )
         return ppP_Matrix[ n ];
     else
-        printf ("GETMATRIX %d >= %d\n", n, nP_MatrixAkt);
+        SAL_WARN("sc.filter", "GetMatrix: " << n << " >= " << nP_MatrixAkt << "\n");
     return NULL;
 }
 

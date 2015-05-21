@@ -25,7 +25,6 @@
 #include "document.hxx"
 #include "dpobject.hxx"
 
-#include <stdio.h>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <tools/date.hxx>

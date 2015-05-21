@@ -41,7 +41,6 @@
 #include "excelvbahelper.hxx"
 #include "vbapalette.hxx"
 #include <osl/file.hxx>
-#include <stdio.h>
 #include "vbanames.hxx"
 #include "nameuno.hxx"
 #include "docoptio.hxx"
