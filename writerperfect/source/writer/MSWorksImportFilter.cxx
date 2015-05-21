@@ -37,7 +37,7 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     libwps::WPSCreator creator;
-    bool needEncoding;
+    bool needEncoding = false;
     const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind, creator, needEncoding);
 
     std::string fileEncoding("");
