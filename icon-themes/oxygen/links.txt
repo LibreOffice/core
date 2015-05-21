@@ -4,3 +4,6 @@ cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
+
+cmd/sc_backcolor.png cmd/sc_charbackcolor.png
+cmd/lc_backcolor.png cmd/lc_charbackcolor.png

@@ -49,4 +49,5 @@
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharBackColor" toolbar:style="dropdown" toolbar:visible="false"/>
 </toolbar:toolbar>
