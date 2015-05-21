@@ -1752,76 +1752,74 @@ void CustomAnimationPane::onChange( bool bCreate )
         }
     }
 
-    VclPtrInstance< CustomAnimationCreateDialog > pDlg( this, this, aTargets, bHasText, sPresetId, fDuration );
-    if( pDlg->Execute() )
     {
-        addUndo();
-        fDuration = pDlg->getSelectedDuration();
-        CustomAnimationPresetPtr pDescriptor = pDlg->getSelectedPreset();
-        if( pDescriptor.get() )
+        ScopedVclPtrInstance< CustomAnimationCreateDialog > pDlg( this, this, aTargets, bHasText, sPresetId, fDuration );
+        if( pDlg->Execute() )
         {
-            if( bCreate )
+            addUndo();
+            fDuration = pDlg->getSelectedDuration();
+            CustomAnimationPresetPtr pDescriptor = pDlg->getSelectedPreset();
+            if( pDescriptor.get() )
             {
-                mpCustomAnimationList->SelectAll( false );
-
-                // gather shapes from the selection
-                std::vector< Any >::iterator aIter( aTargets.begin() );
-                const std::vector< Any >::iterator aEnd( aTargets.end() );
-                bool bFirst = true;
-                for( ; aIter != aEnd; ++aIter )
+                if( bCreate )
                 {
-                    CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
+                    mpCustomAnimationList->SelectAll( false );
 
-                    // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
-                    if( bHasText && (aTargets.size() == 1) )
+                    // gather shapes from the selection
+                    std::vector< Any >::iterator aIter( aTargets.begin() );
+                    const std::vector< Any >::iterator aEnd( aTargets.end() );
+                    bool bFirst = true;
+                    for( ; aIter != aEnd; ++aIter )
                     {
-                        Reference< XShape > xShape( (*aIter), UNO_QUERY );
-                        if( xShape.is() && !hasVisibleShape( xShape ) )
+                        CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
+
+                        // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
+                        if( bHasText && (aTargets.size() == 1) )
                         {
-                            mpMainSequence->createTextGroup( pCreated, 1, -1.0, false, false );
+                            Reference< XShape > xShape( (*aIter), UNO_QUERY );
+                            if( xShape.is() && !hasVisibleShape( xShape ) )
+                            {
+                                mpMainSequence->createTextGroup( pCreated, 1, -1.0, false, false );
+                            }
                         }
+
+                        if( bFirst )
+                            bFirst = false;
+                        else
+                            pCreated->setNodeType( EffectNodeType::WITH_PREVIOUS );
+
+                        if( pCreated.get() )
+                            mpCustomAnimationList->select( pCreated );
                     }
+                }
+                else
+                {
+                    MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-                    if( bFirst )
-                        bFirst = false;
-                    else
-                        pCreated->setNodeType( EffectNodeType::WITH_PREVIOUS );
-
-                    if( pCreated.get() )
+                    // get selected effect
+                    EffectSequence::iterator aIter( maListSelection.begin() );
+                    const EffectSequence::iterator aEnd( maListSelection.end() );
+                    while( aIter != aEnd )
                     {
-                        mpCustomAnimationList->select( pCreated );
+                        CustomAnimationEffectPtr pEffect = (*aIter++);
+
+                        EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
+                        if( !pEffectSequence )
+                            pEffectSequence = mpMainSequence.get();
+
+                        pEffectSequence->replace( pEffect, pDescriptor, fDuration );
                     }
                 }
             }
             else
             {
-                MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-                // get selected effect
-                EffectSequence::iterator aIter( maListSelection.begin() );
-                const EffectSequence::iterator aEnd( maListSelection.end() );
-                while( aIter != aEnd )
-                {
-                    CustomAnimationEffectPtr pEffect = (*aIter++);
-
-                    EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
-                    if( !pEffectSequence )
-                        pEffectSequence = mpMainSequence.get();
-
-                    pEffectSequence->replace( pEffect, pDescriptor, fDuration );
-                }
+                PathKind eKind = pDlg->getCreatePathKind();
+                if( eKind != PathKind::NONE )
+                    createPath( eKind, aTargets, fDuration );
             }
+            mrBase.GetDocShell()->SetModified();
         }
-        else
-        {
-            PathKind eKind = pDlg->getCreatePathKind();
-            if( eKind != PathKind::NONE )
-                createPath( eKind, aTargets, fDuration );
-        }
-        mrBase.GetDocShell()->SetModified();
-    }
-
-    pDlg.reset();
+    } // dispose pDlg
 
     updateControls();
 

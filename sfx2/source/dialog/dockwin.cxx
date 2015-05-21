@@ -1729,6 +1729,9 @@ Size SfxDockingWindow::GetMinOutputSizePixel() const
 
 bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
 {
+    if ( !pImp )
+        return DockingWindow::Notify( rEvt );
+
     if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         if (pMgr != NULL)
