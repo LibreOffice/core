@@ -111,8 +111,8 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     // now create the task pane on the right side :-)
     m_pTaskPane = VclPtr<OTaskWindow>::Create(this);
 
-    m_aSplitWin->InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE | SWIB_COLSET );
-    m_aSplitWin->InsertItem( REPORT_ID, m_aScrollWindow.get(), 100, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE);
+    m_aSplitWin->InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SplitWindowItemFlags::PercentSize | SplitWindowItemFlags::ColSet );
+    m_aSplitWin->InsertItem( REPORT_ID, m_aScrollWindow.get(), 100, SPLITWINDOW_APPEND, COLSET_ID, SplitWindowItemFlags::PercentSize);
 
     // Splitter einrichten
     m_aSplitWin->SetSplitHdl(LINK(this, ODesignView,SplitHdl));
@@ -454,7 +454,7 @@ void ODesignView::togglePropertyBrowser(bool _bToogleOn)
         m_pTaskPane->Invalidate();
 
         if ( bWillBeVisible )
-            m_aSplitWin->InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE);
+            m_aSplitWin->InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SplitWindowItemFlags::PercentSize);
         else
             m_aSplitWin->RemoveItem(TASKPANE_ID);
 

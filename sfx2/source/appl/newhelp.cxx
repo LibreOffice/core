@@ -2763,15 +2763,15 @@ void SfxHelpWindow_Impl::MakeLayout()
     if ( bIndex )
     {
         pIndexWin->Show();
-        InsertItem( COLSET_ID, 100, SPLITWINDOW_APPEND, SPLITSET_ID, SWIB_PERCENTSIZE | SWIB_COLSET );
-        InsertItem( INDEXWIN_ID, pIndexWin, nIndexSize, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE );
-        InsertItem( TEXTWIN_ID, pTextWin, nTextSize, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE );
+        InsertItem( COLSET_ID, 100, SPLITWINDOW_APPEND, SPLITSET_ID, SplitWindowItemFlags::PercentSize | SplitWindowItemFlags::ColSet );
+        InsertItem( INDEXWIN_ID, pIndexWin, nIndexSize, SPLITWINDOW_APPEND, COLSET_ID, SplitWindowItemFlags::PercentSize );
+        InsertItem( TEXTWIN_ID, pTextWin, nTextSize, SPLITWINDOW_APPEND, COLSET_ID, SplitWindowItemFlags::PercentSize );
     }
     else
     {
         pIndexWin->Hide();
-        InsertItem( COLSET_ID, 100, SPLITWINDOW_APPEND, SPLITSET_ID, SWIB_PERCENTSIZE | SWIB_COLSET );
-        InsertItem( TEXTWIN_ID, pTextWin, 100, SPLITWINDOW_APPEND, 1, SWIB_PERCENTSIZE );
+        InsertItem( COLSET_ID, 100, SPLITWINDOW_APPEND, SPLITSET_ID, SplitWindowItemFlags::PercentSize | SplitWindowItemFlags::ColSet );
+        InsertItem( TEXTWIN_ID, pTextWin, 100, SPLITWINDOW_APPEND, 1, SplitWindowItemFlags::PercentSize );
     }
 }
 

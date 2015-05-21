@@ -186,7 +186,7 @@ void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )
     pTopWin->Show();
     BibConfig* pConfig = BibModul::GetConfig();
     long nSize = pConfig->getBeamerSize();
-    InsertItem(TOP_WINDOW, pTopWin, nSize, 1, 0, SWIB_PERCENTSIZE  );
+    InsertItem(TOP_WINDOW, pTopWin, nSize, 1, 0, SplitWindowItemFlags::PercentSize  );
 
 }
 
@@ -204,7 +204,7 @@ void BibBookContainer::createBottomFrame( BibShortCutHandler* pWin )
 
     BibConfig* pConfig = BibModul::GetConfig();
     long nSize = pConfig->getViewSize();
-    InsertItem(BOTTOM_WINDOW, pBottomWin, nSize, 1, 0, SWIB_PERCENTSIZE  );
+    InsertItem(BOTTOM_WINDOW, pBottomWin, nSize, 1, 0, SplitWindowItemFlags::PercentSize  );
 
 }
 

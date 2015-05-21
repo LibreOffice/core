@@ -32,6 +32,7 @@
 
 class SfxSplitWindow;
 class SfxDockingWindow_Impl;
+enum class SplitWindowItemFlags;
 
 void SFX2_DLLPUBLIC SAL_CALL SfxDockingWindowFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
 bool SFX2_DLLPUBLIC SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
@@ -107,7 +108,7 @@ public:
     DECL_LINK_TYPED(TimerHdl, Idle *, void);
 
     SAL_DLLPRIVATE void Initialize_Impl();
-    SAL_DLLPRIVATE sal_uInt16 GetWinBits_Impl() const;
+    SAL_DLLPRIVATE SplitWindowItemFlags GetWinBits_Impl() const;
     SAL_DLLPRIVATE void SetItemSize_Impl( const Size& rSize );
     SAL_DLLPRIVATE void Disappear_Impl();
     SAL_DLLPRIVATE void Reappear_Impl();

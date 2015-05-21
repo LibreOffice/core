@@ -423,7 +423,7 @@ void SfxSplitWindow::Split()
         if ( rD.pWin )
         {
             const sal_uInt16 nId = rD.nType;
-            const long nSize    = GetItemSize( nId, SWIB_FIXED );
+            const long nSize    = GetItemSize( nId, SplitWindowItemFlags::Fixed );
             const long nSetSize = GetItemSize( GetSet( nId ) );
             Size aSize;
 
@@ -682,7 +682,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
 {
     SfxDockingWindow* pDockWin = pDock->pWin;
 
-    sal_uInt16 nItemBits = pDockWin->GetWinBits_Impl();
+    SplitWindowItemFlags nItemBits = pDockWin->GetWinBits_Impl();
 
     long nWinSize, nSetSize;
     if ( IsHorizontal() )
@@ -713,9 +713,9 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
         }
 
         // Create a new nLine:th line
-        sal_uInt16 nBits = nItemBits;
+        SplitWindowItemFlags nBits = nItemBits;
         if ( GetAlign() == WINDOWALIGN_TOP || GetAlign() == WINDOWALIGN_BOTTOM )
-            nBits |= SWIB_COLSET;
+            nBits |= SplitWindowItemFlags::ColSet;
         InsertItem( nId, nSetSize, nLine, 0, nBits );
     }
 
@@ -723,7 +723,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
     // "percentage" share since the SV then does the re-sizing as expected,
     // "pixel" actually only makes sense if also items with percentage or
     // relative sizes are present.
-    nItemBits |= SWIB_PERCENTSIZE;
+    nItemBits |= SplitWindowItemFlags::PercentSize;
     bLocked = true;
     sal_uInt16 nSet = GetItemId( nLine );
     InsertItem( pDockWin->GetType(), pDockWin, nWinSize, nPos, nSet, nItemBits );
@@ -786,7 +786,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             if ( rD.pWin )
             {
                 const sal_uInt16 nId = rD.nType;
-                const long nSize    = GetItemSize( nId, SWIB_FIXED );
+                const long nSize    = GetItemSize( nId, SplitWindowItemFlags::Fixed );
                 aNewOrgSizes.push_back( std::pair< sal_uInt16, long >( nId, nSize ) );
             }
         }
