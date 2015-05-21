@@ -17,13 +17,9 @@
 
 class DocbookExportTest : public SwModelTestBase
 {
-private:
-    FieldUnit m_eUnit;
-
 public:
     DocbookExportTest() :
-        SwModelTestBase("/sw/qa/extras/docbookexport/data/", "DocBook File"),
-        m_eUnit(FUNIT_NONE)
+        SwModelTestBase("/sw/qa/extras/docbookexport/data/", "DocBook File")
     {}
 };
 
