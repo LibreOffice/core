@@ -1764,10 +1764,9 @@ bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
 }
 
 
-sal_uInt16 SfxDockingWindow::GetWinBits_Impl() const
+SplitWindowItemFlags SfxDockingWindow::GetWinBits_Impl() const
 {
-    sal_uInt16 nBits = 0;
-    return nBits;
+    return SplitWindowItemFlags::NONE;
 }
 
 

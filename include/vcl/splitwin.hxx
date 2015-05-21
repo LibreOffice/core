@@ -22,17 +22,24 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class Wallpaper;
 class ImplSplitSet;
 
-typedef sal_uInt16 SplitWindowItemBits;
-
-#define SWIB_FIXED                  ((SplitWindowItemBits)0x0001)
-#define SWIB_RELATIVESIZE           ((SplitWindowItemBits)0x0002)
-#define SWIB_PERCENTSIZE            ((SplitWindowItemBits)0x0004)
-#define SWIB_COLSET                 ((SplitWindowItemBits)0x0008)
-#define SWIB_INVISIBLE              ((SplitWindowItemBits)0x0010)
+enum class SplitWindowItemFlags
+{
+    NONE           = 0x0000,
+    Fixed          = 0x0001,
+    RelativeSize   = 0x0002,
+    PercentSize    = 0x0004,
+    ColSet         = 0x0008,
+    Invisible      = 0x0010,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SplitWindowItemFlags> : is_typed_flags<SplitWindowItemFlags, 0x1f> {};
+}
 
 #define SPLITWINDOW_APPEND          ((sal_uInt16)0xFFFF)
 #define SPLITWINDOW_ITEM_NOTFOUND   ((sal_uInt16)0xFFFF)
@@ -146,10 +153,10 @@ public:
 
     void                InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
                                     sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nIntoSetId = 0,
-                                    SplitWindowItemBits nBits = 0 );
+                                    SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
     void                InsertItem( sal_uInt16 nId, long nSize,
                                     sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nIntoSetId = 0,
-                                    SplitWindowItemBits nBits = 0 );
+                                    SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
     void                RemoveItem( sal_uInt16 nId, bool bHide = true );
     void                Clear();
 
@@ -169,7 +176,7 @@ public:
     void                SetItemSizeRange (sal_uInt16 nId, const Range& rRange);
     /** Return the current size limits for the specified item.
     */
-    long                GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const;
+    long                GetItemSize( sal_uInt16 nId, SplitWindowItemFlags nBits ) const;
     sal_uInt16              GetSet( sal_uInt16 nId ) const;
     sal_uInt16              GetItemId( vcl::Window* pWindow ) const;
     sal_uInt16              GetItemId( const Point& rPos ) const;

@@ -226,7 +226,7 @@ namespace bib
     {
         pToolBar= VclPtr<BibToolBar>::Create(this, LINK( this, BibBeamer, RecalcLayout_Impl ));
         ::Size aSize=pToolBar->GetSizePixel();
-        InsertItem(ID_TOOLBAR, pToolBar, aSize.Height(), 0, 0, SWIB_FIXED );
+        InsertItem(ID_TOOLBAR, pToolBar, aSize.Height(), 0, 0, SplitWindowItemFlags::Fixed );
         if ( m_xController.is() )
             pToolBar->SetXController( m_xController );
     }
@@ -235,7 +235,7 @@ namespace bib
     {
         pGridWin = VclPtr<BibGridwin>::Create(this,0);
 
-        InsertItem(ID_GRIDWIN, pGridWin, 40, 1, 0, SWIB_RELATIVESIZE );
+        InsertItem(ID_GRIDWIN, pGridWin, 40, 1, 0, SplitWindowItemFlags::RelativeSize );
 
         pGridWin->createGridWin( pDatMan->updateGridModel() );
     }
