@@ -3507,6 +3507,22 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 
     }
 
+#ifdef DBG_UTIL
+
+    if (rKeyCode.IsMod1() && rKeyCode.IsShift() && rKeyCode.GetCode() == KEY_F12)
+    {
+        ScDocument* pDoc = pViewData->GetDocument();
+        for (SCCOL nCol = 0; nCol <= 20; ++nCol)
+        {
+            SCTAB nTab = pViewData->GetTabNo();
+            sal_uInt16 nWidth = pDoc->GetColWidth(nCol, nTab, true);
+            long nPixel = LogicToPixel(Point(nWidth, 0), MapMode(MAP_TWIP)).getX();
+            std::cout << "Column: " << nCol << ", Width: " << nPixel << "px" << std::endl;
+        }
+    }
+
+#endif
+
     Window::KeyInput(rKEvt);
 }
 
