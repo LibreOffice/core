@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_b8eb21b0",
+        "filename": "svx/source/engine3d/polygn3d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-05-21T10:01:21Z",
+      "side": 1,
+      "message": "you dropped the minus",
+      "revId": "913b9240ce4d611b48914bc7cea13cbd87994e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
