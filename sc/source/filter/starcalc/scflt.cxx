@@ -41,7 +41,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <cassert>
-#include <stdio.h>
 #include <math.h>
 #include <string.h>
 

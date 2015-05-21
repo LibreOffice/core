@@ -18,7 +18,6 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "document.hxx"
 #include "scerrors.hxx"

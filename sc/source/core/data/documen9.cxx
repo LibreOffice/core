@@ -57,7 +57,6 @@
 #include <documentlinkmgr.hxx>
 
 using namespace ::com::sun::star;
-#include <stdio.h>
 
 SfxBroadcaster* ScDocument::GetDrawBroadcaster()
 {

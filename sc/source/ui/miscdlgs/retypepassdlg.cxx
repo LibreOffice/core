@@ -23,8 +23,6 @@
 #include "document.hxx"
 #include "tabprotection.hxx"
 
-#include <stdio.h>
-
 #include <vcl/msgbox.hxx>
 
 ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :

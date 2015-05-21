@@ -20,7 +20,10 @@
 #include <rtl/math.hxx>
 #include <string.h>
 #include <math.h>
+
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
+#endif
 
 #include <unotools/bootstrap.hxx>
 #include <officecfg/Office/Common.hxx>

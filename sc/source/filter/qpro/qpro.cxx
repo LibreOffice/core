@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <stdio.h>
 #include <sfx2/docfile.hxx>
 
 #include "qproform.hxx"
@@ -44,9 +43,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     sal_uInt16 nStyle;
     bool bEndOfSheet = false;
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Read sheet (%d)\n", nTab );
-#endif
+    SAL_INFO("sc", "Read sheet " << nTab << "\n");
 
     while( eERR_OK == eRet && !bEndOfSheet && nextRecord() )
     {

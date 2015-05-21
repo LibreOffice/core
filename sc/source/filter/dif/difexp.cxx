@@ -19,8 +19,6 @@
 
 #include <rtl/math.hxx>
 
-#include <stdio.h>
-
 #include "dif.hxx"
 #include "filter.hxx"
 #include "document.hxx"
