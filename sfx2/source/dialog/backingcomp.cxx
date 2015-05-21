@@ -410,7 +410,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if (pParent && pParent->IsFullScreenMode())
     {
         pParent->ShowFullScreenMode(false);
-        pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
+        pParent->SetMenuBarMode(MenuBarMode::Normal);
     }
 
     // create the menu bar for the backing component

@@ -2913,7 +2913,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                             }
                         }
                         pWork->ShowFullScreenMode( bNewFullScreenMode );
-                        pWork->SetMenuBarMode( bNewFullScreenMode ? MENUBAR_MODE_HIDE : MENUBAR_MODE_NORMAL );
+                        pWork->SetMenuBarMode( bNewFullScreenMode ? MenuBarMode::Hide : MenuBarMode::Normal );
                         GetFrame().GetWorkWindow_Impl()->SetFullScreen_Impl( bNewFullScreenMode );
                         if ( !pItem )
                             rReq.AppendItem( SfxBoolItem( SID_WIN_FULLSCREEN, bNewFullScreenMode ) );
