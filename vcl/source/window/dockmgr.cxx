@@ -61,7 +61,7 @@ public:
 
     virtual void    Move() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
-    virtual void    TitleButtonClick( sal_uInt16 nButton ) SAL_OVERRIDE;
+    virtual void    TitleButtonClick( TitleButton nButton ) SAL_OVERRIDE;
     virtual void    Pin() SAL_OVERRIDE;
     virtual void    Roll() SAL_OVERRIDE;
     virtual void    PopupModeEnd() SAL_OVERRIDE;
@@ -257,7 +257,7 @@ void ImplDockFloatWin2::Resize()
     }
 }
 
-void ImplDockFloatWin2::TitleButtonClick( sal_uInt16 nButton )
+void ImplDockFloatWin2::TitleButtonClick( TitleButton nButton )
 {
     FloatingWindow::TitleButtonClick( nButton );
     mpDockWin->TitleButtonClick( nButton );
@@ -1061,9 +1061,9 @@ void ImplDockingWindowWrapper::ToggleFloatingMode()
     mbStartDockingEnabled = false;
 }
 
-void ImplDockingWindowWrapper::TitleButtonClick( sal_uInt16 nType )
+void ImplDockingWindowWrapper::TitleButtonClick( TitleButton nType )
 {
-    if( nType == TITLE_BUTTON_MENU )
+    if( nType == TitleButton::Menu )
     {
         ToolBox *pToolBox = dynamic_cast< ToolBox* >( GetWindow() );
         if( pToolBox )
@@ -1071,7 +1071,7 @@ void ImplDockingWindowWrapper::TitleButtonClick( sal_uInt16 nType )
             pToolBox->ExecuteCustomMenu();
         }
     }
-    if( nType == TITLE_BUTTON_DOCKING )
+    if( nType == TitleButton::Docking )
     {
         SetFloatingMode( !IsFloatingMode() );
     }
@@ -1085,15 +1085,15 @@ void ImplDockingWindowWrapper::Resizing( Size& rSize )
         pDockingWindow->Resizing( rSize );
 }
 
-void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
+void ImplDockingWindowWrapper::ShowTitleButton( TitleButton nButton, bool bVisible )
 {
     if ( mpFloatWin )
         mpFloatWin->ShowTitleButton( nButton, bVisible );
     else
     {
-        if ( nButton == TITLE_BUTTON_DOCKING )
+        if ( nButton == TitleButton::Docking )
             mbDockBtn = bVisible;
-        else // if ( nButton == TITLE_BUTTON_HIDE )
+        else // if ( nButton == TitleButton::Hide )
             mbHideBtn = bVisible;
     }
 }
@@ -1251,8 +1251,8 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 pWin->SetOutputSizePixel( GetWindow()->GetSizePixel() );
                 pWin->SetPosPixel( maFloatPos );
                 // pass on DockingData to FloatingWindow
-                pWin->ShowTitleButton( TITLE_BUTTON_DOCKING, mbDockBtn );
-                pWin->ShowTitleButton( TITLE_BUTTON_HIDE, mbHideBtn );
+                pWin->ShowTitleButton( TitleButton::Docking, mbDockBtn );
+                pWin->ShowTitleButton( TitleButton::Hide, mbHideBtn );
                 pWin->SetPin( mbPinned );
                 if ( mbRollUp )
                     pWin->RollUp();
@@ -1275,8 +1275,8 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
 
                 // store FloatingData in FloatingWindow
                 maFloatPos      = mpFloatWin->GetPosPixel();
-                mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_DOCKING );
-                mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_HIDE );
+                mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Docking );
+                mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Hide );
                 mbPinned         = mpFloatWin->IsPinned();
                 mbRollUp        = mpFloatWin->IsRollUp();
                 maRollUpOutSize = mpFloatWin->GetRollUpOutputSizePixel();

@@ -365,7 +365,7 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
                 if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                 {
                     SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
-                    pClientWindow->TitleButtonClick( TITLE_BUTTON_MENU );
+                    pClientWindow->TitleButtonClick( TitleButton::Menu );
                 }
             }
             else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_HIDE )
@@ -416,7 +416,7 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
                         {
                             SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                             if ( true /*pBorderWindow->mbDockBtn*/ )   // always perform docking on double click, no button required
-                                pClientWindow->TitleButtonClick( TITLE_BUTTON_DOCKING );
+                                pClientWindow->TitleButtonClick( TitleButton::Docking );
                             else if ( pBorderWindow->GetStyle() & WB_ROLLABLE )
                             {
                                 if ( pClientWindow->IsRollUp() )
@@ -511,7 +511,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                     {
                         SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
-                        pClientWindow->TitleButtonClick( TITLE_BUTTON_DOCKING );
+                        pClientWindow->TitleButtonClick( TitleButton::Docking );
                     }
                 }
             }
@@ -539,7 +539,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                     {
                         SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
-                        pClientWindow->TitleButtonClick( TITLE_BUTTON_HIDE );
+                        pClientWindow->TitleButtonClick( TitleButton::Hide );
                     }
                 }
             }

@@ -146,12 +146,12 @@ public:
     void            StartPopupMode( ToolBox* pParentToolBox, FloatWinPopupFlags nPopupModeFlags );
     bool            IsInPopupMode() const;
 
-    void            TitleButtonClick( sal_uInt16 nButton );
+    void            TitleButtonClick( TitleButton nButton );
     void            Resizing( Size& rSize );
     void            Tracking( const TrackingEvent& rTEvt );
     long            Notify( NotifyEvent& rNEvt );
 
-    void            ShowTitleButton( sal_uInt16 nButton, bool bVisible = true );
+    void            ShowTitleButton( TitleButton nButton, bool bVisible = true );
 
     void            SetMinOutputSizePixel( const Size& rSize );
 

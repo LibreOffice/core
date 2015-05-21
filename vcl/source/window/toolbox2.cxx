@@ -1743,7 +1743,7 @@ void ToolBox::SetMenuType( sal_uInt16 aType )
             // the menu button may have to be moved into the decoration which changes the layout
             ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
             if( pWrapper )
-                pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) != 0 );
+                pWrapper->ShowTitleButton( TitleButton::Menu, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) != 0 );
 
             mbFormat = true;
             ImplFormat();

@@ -118,9 +118,12 @@ public:
 #define MENUBAR_MODE_NORMAL         ((sal_uInt16)0)
 #define MENUBAR_MODE_HIDE           ((sal_uInt16)1)
 
-#define TITLE_BUTTON_DOCKING        ((sal_uInt16)1)
-#define TITLE_BUTTON_HIDE           ((sal_uInt16)2)
-#define TITLE_BUTTON_MENU           ((sal_uInt16)4)
+enum class TitleButton
+{
+    Docking        = 1,
+    Hide           = 2,
+    Menu           = 4,
+};
 
 // - SystemWindow -
 class VCL_DLLPUBLIC SystemWindow
@@ -179,7 +182,7 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     virtual bool    Close();
-    virtual void    TitleButtonClick( sal_uInt16 nButton );
+    virtual void    TitleButtonClick( TitleButton nButton );
     virtual void    Pin();
     virtual void    Roll();
     virtual void    Resizing( Size& rSize );
@@ -199,8 +202,8 @@ public:
     void            EnableSaveBackground( bool bSave = true );
     bool            IsSaveBackgroundEnabled() const;
 
-    void            ShowTitleButton( sal_uInt16 nButton, bool bVisible = true );
-    bool            IsTitleButtonVisible( sal_uInt16 nButton ) const;
+    void            ShowTitleButton( TitleButton nButton, bool bVisible = true );
+    bool            IsTitleButtonVisible( TitleButton nButton ) const;
 
     void            SetPin( bool bPin );
     bool            IsPinned() const { return mbPinned; }

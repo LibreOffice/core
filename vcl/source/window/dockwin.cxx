@@ -77,7 +77,7 @@ public:
 
     virtual void    Move() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
-    virtual void    TitleButtonClick( sal_uInt16 nButton ) SAL_OVERRIDE;
+    virtual void    TitleButtonClick( TitleButton nButton ) SAL_OVERRIDE;
     virtual void    Pin() SAL_OVERRIDE;
     virtual void    Roll() SAL_OVERRIDE;
     virtual void    PopupModeEnd() SAL_OVERRIDE;
@@ -219,7 +219,7 @@ void ImplDockFloatWin::Resize()
     mpDockWin->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_POSSIZE );
 }
 
-void ImplDockFloatWin::TitleButtonClick( sal_uInt16 nButton )
+void ImplDockFloatWin::TitleButtonClick( TitleButton nButton )
 {
     FloatingWindow::TitleButtonClick( nButton );
 }
@@ -829,8 +829,8 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 pWin->SetOutputSizePixel(aSize);
                 pWin->SetPosPixel( maFloatPos );
                 // pass on DockingData to FloatingWindow
-                pWin->ShowTitleButton( TITLE_BUTTON_DOCKING, mbDockBtn );
-                pWin->ShowTitleButton( TITLE_BUTTON_HIDE, mbHideBtn );
+                pWin->ShowTitleButton( TitleButton::Docking, mbDockBtn );
+                pWin->ShowTitleButton( TitleButton::Hide, mbHideBtn );
                 pWin->SetPin( mbPinned );
                 if ( mbRollUp )
                     pWin->RollUp();
@@ -858,8 +858,8 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
 
                 // store FloatingData in FloatingWindow
                 maFloatPos      = mpFloatWin->GetPosPixel();
-                mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_DOCKING );
-                mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_HIDE );
+                mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Docking );
+                mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Hide );
                 mbPinned        = mpFloatWin->IsPinned();
                 mbRollUp        = mpFloatWin->IsRollUp();
                 maRollUpOutSize = mpFloatWin->GetRollUpOutputSizePixel();
