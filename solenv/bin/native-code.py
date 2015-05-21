@@ -465,7 +465,7 @@ print ("""
 if options.java:
     print ("""
     extern void Java_org_libreoffice_kit_LibreOfficeKit_initializeNative();
-    p = (void *) Java_org_libreoffice_kit_LibreOfficeKit_initializeNative;
+    volatile void *p = (void *) Java_org_libreoffice_kit_LibreOfficeKit_initializeNative;
 
     extern void Java_org_libreoffice_kit_Office_getError();
     p = (void *) Java_org_libreoffice_kit_Office_getError;
