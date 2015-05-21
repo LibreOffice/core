@@ -63,7 +63,7 @@ FullScreenPane::FullScreenPane (
     // Create a new top-leve window that is displayed full screen.
     mpWorkWindow->ShowFullScreenMode(true, nScreenNumber);
     // For debugging (non-fullscreen) use mpWorkWindow->SetScreenNumber(nScreenNumber);
-    mpWorkWindow->SetMenuBarMode(MENUBAR_MODE_HIDE);
+    mpWorkWindow->SetMenuBarMode(MenuBarMode::Hide);
     mpWorkWindow->SetBorderStyle(WindowBorderStyle::REMOVEBORDER);
     mpWorkWindow->SetBackground(Wallpaper());
     // Don't show the window right now in order to allow the setting of an

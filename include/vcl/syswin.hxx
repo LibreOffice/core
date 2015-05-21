@@ -115,8 +115,10 @@ public:
 // - SystemWindow-Types -
 
 
-#define MENUBAR_MODE_NORMAL         ((sal_uInt16)0)
-#define MENUBAR_MODE_HIDE           ((sal_uInt16)1)
+enum class MenuBarMode
+{
+    Normal, Hide
+};
 
 #define TITLE_BUTTON_DOCKING        ((sal_uInt16)1)
 #define TITLE_BUTTON_HIDE           ((sal_uInt16)2)
@@ -143,7 +145,7 @@ private:
     bool            mbSysChild;
     bool            mbIsCalculatingInitialLayoutSize;
     bool            mbInitialLayoutDone;
-    sal_uInt16      mnMenuBarMode;
+    MenuBarMode     mnMenuBarMode;
     sal_uInt16      mnIcon;
     ImplData*       mpImplData;
     Idle            maLayoutIdle;
@@ -222,8 +224,8 @@ public:
 
     void            SetMenuBar(MenuBar* pMenuBar, const css::uno::Reference<css::frame::XFrame>& rFrame = css::uno::Reference<css::frame::XFrame>());
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
-    void            SetMenuBarMode( sal_uInt16 nMode );
-    sal_uInt16      GetMenuBarMode() const { return mnMenuBarMode; }
+    void            SetMenuBarMode( MenuBarMode nMode );
+    MenuBarMode     GetMenuBarMode() const { return mnMenuBarMode; }
 
     TaskPaneList*   GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;

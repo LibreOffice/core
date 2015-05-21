@@ -80,7 +80,7 @@ void SystemWindow::Init()
     mbSysChild          = false;
     mbIsCalculatingInitialLayoutSize = false;
     mbInitialLayoutDone = false;
-    mnMenuBarMode       = MENUBAR_MODE_NORMAL;
+    mnMenuBarMode       = MenuBarMode::Normal;
     mnIcon              = 0;
     mpDialogParent      = NULL;
 
@@ -955,14 +955,14 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar, const css::uno::Reference<css::
     }
 }
 
-void SystemWindow::SetMenuBarMode( sal_uInt16 nMode )
+void SystemWindow::SetMenuBarMode( MenuBarMode nMode )
 {
     if ( mnMenuBarMode != nMode )
     {
         mnMenuBarMode = nMode;
         if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
         {
-            if ( nMode == MENUBAR_MODE_HIDE )
+            if ( nMode == MenuBarMode::Hide )
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarMode( true );
             else
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarMode( false );
