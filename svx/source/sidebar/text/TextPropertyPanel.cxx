@@ -97,8 +97,8 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     get(mpToolBoxFont, "fonteffects");
     get(mpToolBoxIncDec, "fontadjust");
     get(mpToolBoxSpacing, "spacingbar");
-    get(mpToolBoxFontColorSw, "colorbar");
-    get(mpToolBoxFontColor, "colorsingle");
+    get(mpToolBoxFontColorSw, "colorbar_writer");
+    get(mpToolBoxFontColor, "colorbar_others");
 
     //toolbox
     SetupToolboxItems();

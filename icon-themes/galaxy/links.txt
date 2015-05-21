@@ -57,3 +57,5 @@ cmd/sc_formatselection.png sfx2/res/symphony/sidebar-property-small.png
 cmd/lc_view3d.png sfx2/res/symphony/sidebar-3d-large.png
 cmd/sc_view3d.png sfx2/res/symphony/sidebar-3d-small.png
 
+cmd/sc_charbackcolor.png cmd/sc_backcolor.png
+cmd/lc_charbackcolor.png cmd/lc_backcolor.png
