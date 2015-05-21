@@ -1821,8 +1821,6 @@ void CustomAnimationPane::onChange( bool bCreate )
         mrBase.GetDocShell()->SetModified();
     }
 
-    pDlg.reset();
-
     updateControls();
 
     // stop running preview from dialog
