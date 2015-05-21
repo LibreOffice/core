@@ -8,22 +8,22 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,android/loandroid3))
 
-loandroid3_DIR := $(call gb_CustomTarget_get_workdir,android/experimental/LOAndroid3)
+loandroid3_DIR := $(call gb_CustomTarget_get_workdir,android/source)
 
 $(call gb_CustomTarget_get_target,android/loandroid3) : \
 	$(loandroid3_DIR)/done
 
 $(loandroid3_DIR)/done : $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
-	cd $(SRCDIR)/android/experimental/LOAndroid3 && $(MAKE) all
+	cd $(SRCDIR)/android/source && $(MAKE) all
 # Copy to $(BUILDDIR)/instsetoo_native as that is where the tinderbox build script
 # still looks for the .apk, and we want fresh daily builds to be uploaded.
 # Us "foo" instead of the old INPATH
 	mkdir -p $(BUILDDIR)/instsetoo_native/foo/bin; \
-	cp $(SRCDIR)/android/experimental/LOAndroid3/bin/*-debug.apk $(BUILDDIR)/instsetoo_native/foo/bin
+	cp $(SRCDIR)/android/source/bin/*-debug.apk $(BUILDDIR)/instsetoo_native/foo/bin
 
 $(call gb_CustomTarget_get_clean_target,android/loandroid3) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),MAK,2)
-	cd $(SRCDIR)/android/experimental/LOAndroid3 && $(MAKE) clean
+	cd $(SRCDIR)/android/source && $(MAKE) clean
 
 # vim: set noet sw=4 ts=4:

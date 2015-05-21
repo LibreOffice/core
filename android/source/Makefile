@@ -12,7 +12,7 @@ all: build-ant
 APP_PACKAGE=org.libreoffice
 
 DISABLE_UI=TRUE
-BOOTSTRAPDIR=../../Bootstrap
+BOOTSTRAPDIR=../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
