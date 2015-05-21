@@ -62,22 +62,22 @@ class SwWrapTabPage: public SfxTabPage
     VclPtr<CheckBox>      m_pWrapOutlineCB;
     VclPtr<CheckBox>      m_pWrapOutsideCB;
 
-    sal_uInt16              nOldLeftMargin;
-    sal_uInt16              nOldRightMargin;
-    sal_uInt16              nOldUpperMargin;
-    sal_uInt16              nOldLowerMargin;
+    sal_uInt16              m_nOldLeftMargin;
+    sal_uInt16              m_nOldRightMargin;
+    sal_uInt16              m_nOldUpperMargin;
+    sal_uInt16              m_nOldLowerMargin;
 
-    RndStdIds           nAnchorId;
-    sal_uInt16              nHtmlMode;
+    RndStdIds           m_nAnchorId;
+    sal_uInt16              m_nHtmlMode;
 
-    Size aFrmSize;
-    SwWrtShell*         pWrtSh;
+    Size m_aFrmSize;
+    SwWrtShell*         m_pWrtSh;
 
-    bool bFormat;
-    bool bNew;
-    bool bHtmlMode;
-    bool bDrawMode;
-    bool bContourImage;
+    bool m_bFormat;
+    bool m_bNew;
+    bool m_bHtmlMode;
+    bool m_bDrawMode;
+    bool m_bContourImage;
 
     virtual ~SwWrapTabPage();
     virtual void dispose() SAL_OVERRIDE;
@@ -95,7 +95,7 @@ class SwWrapTabPage: public SfxTabPage
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    static const sal_uInt16 aWrapPageRg[];
+    static const sal_uInt16 m_aWrapPageRg[];
 
 public:
     SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet);
@@ -105,10 +105,10 @@ public:
     virtual bool    FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
-    static const sal_uInt16* GetRanges() { return aWrapPageRg; }
-    inline void     SetNewFrame(bool bNewFrame) { bNew = bNewFrame; }
-    inline void     SetFormatUsed(bool bFormatUsed, bool bDrw) { bFormat = bFormatUsed; bDrawMode = bDrw; }
-    inline void     SetShell(SwWrtShell* pSh) { pWrtSh = pSh; }
+    static const sal_uInt16* GetRanges() { return m_aWrapPageRg; }
+    inline void     SetNewFrame(bool bNewFrame) { m_bNew = bNewFrame; }
+    inline void     SetFormatUsed(bool bFormat, bool bDrawMode) { m_bFormat = bFormat; m_bDrawMode = bDrawMode; }
+    inline void     SetShell(SwWrtShell* pSh) { m_pWrtSh = pSh; }
 };
 
 #endif
