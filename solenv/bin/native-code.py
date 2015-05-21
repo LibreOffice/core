@@ -464,15 +464,6 @@ print ("""
 
 if options.java:
     print ("""
-    // Guard against possible function-level link-time pruning of
-    // "unused" code. We need to pull these in, too, as they aren't in
-    // any of the libs we link with -Wl,--whole-archive. Is this necessary?
-    extern void Java_org_libreoffice_android_AppSupport_runMain();
-    volatile void *p = (void *) Java_org_libreoffice_android_AppSupport_runMain;
-
-    extern void Java_org_libreoffice_android_AppSupport_renderVCL();
-    p = (void *) Java_org_libreoffice_android_AppSupport_renderVCL;
-
     extern void Java_org_libreoffice_kit_LibreOfficeKit_initializeNative();
     p = (void *) Java_org_libreoffice_kit_LibreOfficeKit_initializeNative;
 

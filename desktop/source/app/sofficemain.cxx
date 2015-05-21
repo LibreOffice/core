@@ -105,21 +105,6 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
 #if defined(ANDROID) || defined(IOS)
 
-#ifdef ANDROID
-extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_android_AppSupport_runMain(JNIEnv* /* env */,
-                                                jobject /* clazz */)
-{
-    int nRet;
-    do {
-        nRet = soffice_main();
-        LOGI("soffice_main returned %d", nRet);
-    } while (nRet == EXITHELPER_NORMAL_RESTART ||
-             nRet == EXITHELPER_CRASH_WITH_RESTART); // pretend to re-start.
-
-}
-#endif
-
 extern "C" void PtylTestEncryptionAndExport(const char *pathname)
 {
     OUString sUri(pathname, strlen(pathname), RTL_TEXTENCODING_UTF8);
