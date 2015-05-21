@@ -20,7 +20,6 @@
 #include <iostream>
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLFastContextHandler.hxx"
-#include "oox/token/tokens.hxx"
 #include "OOXMLFactory.hxx"
 
 namespace writerfilter {

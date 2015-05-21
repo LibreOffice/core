@@ -10,7 +10,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSDRIMPORT_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSDRIMPORT_HXX
 
-#include <stack>
 
 #include <com/sun/star/drawing/XShapes.hpp>
 

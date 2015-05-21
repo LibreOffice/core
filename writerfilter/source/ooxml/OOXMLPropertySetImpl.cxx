@@ -18,7 +18,6 @@
  */
 
 #include "OOXMLPropertySetImpl.hxx"
-#include <stdio.h>
 #include <iostream>
 #include <ooxml/QNameToString.hxx>
 #include <com/sun/star/drawing/XShape.hpp>

@@ -19,7 +19,6 @@
 
 #include "OOXMLStreamImpl.hxx"
 #include "oox/core/fasttokenhandler.hxx"
-#include <iostream>
 
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
