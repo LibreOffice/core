@@ -192,9 +192,9 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         // but we are in the middle of double-buffered paint, we might be
         // losing information
         if (m_pBuffer && !m_pWindow->SupportsDoubleBuffering())
-            SAL_WARN("vcl.doublebuffering", "non-double buffered window in the double-buffered hierarchy, painting directly: " << typeid(m_pWindow).name());
+            SAL_WARN("vcl.doublebuffering", "non-double buffered window in the double-buffered hierarchy, painting directly: " << typeid(*m_pWindow.get()).name());
 
-        if (m_pBuffer)
+        if (m_pBuffer && m_pWindow->SupportsDoubleBuffering())
         {
             // double-buffering
             m_pWindow->PushPaintHelper(this, *m_pWindow);
