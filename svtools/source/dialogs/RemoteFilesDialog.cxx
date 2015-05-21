@@ -11,6 +11,8 @@
 
 using namespace ::com::sun::star::uno;
 
+const OUString sLocalFilePrefix = "file://";
+
 RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     : ModalDialog(pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui")
     , m_context(comphelper::getProcessComponentContext())
@@ -47,15 +49,18 @@ void RemoteFilesDialog::fillServicesListbox()
     Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context));
     Sequence< OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context));
 
-    // TODO: filter - only online services
     if(placesUrlsList.getLength() > 0 && placesNamesList.getLength() > 0)
     {
         for(sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace)
         {
-            ServicePtr pService(new Place(placesNamesList[nPlace], placesUrlsList[nPlace], true));
-            m_aServices.push_back(pService);
+            // Add only remote services, not local bookmarks
+            if(placesUrlsList[nPlace].compareTo(sLocalFilePrefix, sLocalFilePrefix.getLength()) != 0)
+            {
+                ServicePtr pService(new Place(placesNamesList[nPlace], placesUrlsList[nPlace], true));
+                m_aServices.push_back(pService);
 
-            m_pServices_lb->InsertEntry(placesNamesList[nPlace]);
+                m_pServices_lb->InsertEntry(placesNamesList[nPlace]);
+            }
         }
 
         m_pServices_lb->SelectEntryPos(0);
@@ -80,18 +85,15 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
             m_pServices_lb->InsertEntry(newService->GetName());
             m_pServices_lb->SelectEntryPos(m_pServices_lb->GetEntryCount() - 1);
 
-            // save services
+            // load all places (with local bookmarks), add new service and save all
 
-            Sequence< OUString > placesUrlsList(m_aServices.size());
-            Sequence< OUString > placesNamesList(m_aServices.size());
+            Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context));
+            placesUrlsList.realloc(placesUrlsList.getLength() + 1);
+            Sequence< OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context));
+            placesNamesList.realloc(placesNamesList.getLength() + 1);
 
-            int i = 0;
-            for(std::vector<ServicePtr>::const_iterator it = m_aServices.begin(); it != m_aServices.end(); ++it)
-            {
-                placesUrlsList[i] = (*it)->GetUrl();
-                placesNamesList[i] = (*it)->GetName();
-                i++;
-            }
+            placesUrlsList[placesUrlsList.getLength() - 1] = newService->GetUrl();
+            placesNamesList[placesNamesList.getLength() - 1] = newService->GetName();
 
             std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
             officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(placesUrlsList, batch);
