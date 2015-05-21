@@ -36,6 +36,7 @@
  <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharBackColor" toolbar:style="dropdown" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:style="radio auto"/>

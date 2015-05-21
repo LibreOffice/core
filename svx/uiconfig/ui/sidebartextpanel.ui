@@ -215,7 +215,7 @@
             <property name="can_focus">False</property>
             <property name="spacing">12</property>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="colorbar">
+              <object class="sfxlo-SidebarToolBox" id="colorbar_writer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="show_arrow">False</property>
@@ -255,7 +255,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="colorsingle">
+              <object class="sfxlo-SidebarToolBox" id="colorbar_others">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -265,6 +265,20 @@
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
                     <property name="action_name">.uno:Color</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuToolButton" id="backgroundcolor">
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="is_important">True</property>
+                    <property name="action_name">.uno:CharBackColor</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>

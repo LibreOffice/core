@@ -85,3 +85,5 @@ cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/lc_datafilterautofilter.png cmd/lc_autofilter.png
 cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
 
+cmd/sc_charbackcolor.png cmd/sc_backcolor.png
+cmd/lc_charbackcolor.png cmd/lc_backcolor.png

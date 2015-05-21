@@ -34,3 +34,6 @@ cmd/lc_spellingandgrammardialog.png cmd/lc_spelldialog.png
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
+
+cmd/sc_charbackcolor.png cmd/sc_backcolor.png
+cmd/lc_charbackcolor.png cmd/lc_backcolor.png
