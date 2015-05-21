@@ -2726,90 +2726,98 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
 {
-#if !GTK_CHECK_VERSION(3,0,0)
     static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
+    if (pEnv && *pEnv)
+        return;
 
-    if( m_pWindow )
+    if (!m_pWindow)
+        return;
+
+    const int nMask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
+    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
+    if (bGrab)
+        gdk_device_grab(pPointer, widget_get_window(m_pWindow), GDK_OWNERSHIP_NONE, bOwnerEvents, (GdkEventMask) nMask, m_pCurrentCursor, GDK_CURRENT_TIME);
+    else
+        gdk_device_ungrab(pPointer, GDK_CURRENT_TIME);
+#else
+    if( bGrab )
     {
-        if( bGrab )
+        bool bUseGdkGrab = true;
+        const std::list< SalFrame* >& rFrames = getDisplay()->getFrames();
+        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
-            bool bUseGdkGrab = true;
-            const std::list< SalFrame* >& rFrames = getDisplay()->getFrames();
-            for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+            const GtkSalFrame* pFrame = static_cast< const GtkSalFrame* >(*it);
+            if( pFrame->m_bWindowIsGtkPlug )
             {
-                const GtkSalFrame* pFrame = static_cast< const GtkSalFrame* >(*it);
-                if( pFrame->m_bWindowIsGtkPlug )
-                {
-                    bUseGdkGrab = false;
-                    break;
-                }
+                bUseGdkGrab = false;
+                break;
             }
-            if( bUseGdkGrab )
-            {
-                const int nMask = ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
-
-                if( !pEnv || !*pEnv )
-                    gdk_pointer_grab( widget_get_window( m_pWindow ), bOwnerEvents,
-                                      (GdkEventMask) nMask, NULL, m_pCurrentCursor,
-                                      GDK_CURRENT_TIME );
-            }
-            else
-            {
-                // FIXME: for some unknown reason gdk_pointer_grab does not
-                // really produce owner events for GtkPlug windows
-                // the cause is yet unknown
-
-                // this is of course a bad hack, especially as we cannot
-                // set the right cursor this way
-                if( !pEnv || !*pEnv )
-                    XGrabPointer( getDisplay()->GetDisplay(),
-                                  widget_get_xid( m_pWindow ),
-                                  bOwnerEvents,
-                                  PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
-                                  GrabModeAsync,
-                                  GrabModeAsync,
-                                  None,
-                                  None,
-                                  CurrentTime
-                        );
-
-            }
+        }
+        if( bUseGdkGrab )
+        {
+            gdk_pointer_grab( widget_get_window( m_pWindow ), bOwnerEvents,
+                              (GdkEventMask) nMask, NULL, m_pCurrentCursor,
+                              GDK_CURRENT_TIME );
         }
         else
         {
-            // Two GdkDisplays may be open
-            if( !pEnv || !*pEnv )
-            {
-                gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
-            }
+            // FIXME: for some unknown reason gdk_pointer_grab does not
+            // really produce owner events for GtkPlug windows
+            // the cause is yet unknown
+
+            // this is of course a bad hack, especially as we cannot
+            // set the right cursor this way
+            XGrabPointer( getDisplay()->GetDisplay(),
+                          widget_get_xid( m_pWindow ),
+                          bOwnerEvents,
+                          PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+                          GrabModeAsync,
+                          GrabModeAsync,
+                          None,
+                          None,
+                          CurrentTime
+                );
         }
     }
-#else
-    (void) this; // loplugin:staticmethods
-    (void)bGrab; (void) bOwnerEvents;
-    //FIXME: No GrabPointer implementation for gtk3 ...
+    else
+    {
+        // Two GdkDisplays may be open
+        gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
+    }
 #endif
 }
 
 void GtkSalFrame::grabKeyboard( bool bGrab )
 {
-#if !GTK_CHECK_VERSION(3,0,0)
-    if( m_pWindow )
+    if (!m_pWindow)
+        return;
+
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
+    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
+    GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer);
+    if (bGrab)
     {
-        if( bGrab )
-        {
-            gdk_keyboard_grab(widget_get_window(m_pWindow), true,
-                              GDK_CURRENT_TIME);
-        }
-        else
-        {
-            gdk_keyboard_ungrab(GDK_CURRENT_TIME);
-        }
+        gdk_device_grab(pKeyboard, widget_get_window(m_pWindow), GDK_OWNERSHIP_NONE,
+                        FALSE, (GdkEventMask)(GDK_KEY_PRESS | GDK_KEY_RELEASE), NULL, GDK_CURRENT_TIME);
+    }
+    else
+    {
+        gdk_device_ungrab(pKeyboard, GDK_CURRENT_TIME);
     }
 #else
-    (void) this; // loplugin:staticmethods
-    (void)bGrab;
-    //FIXME: No GrabKeyboard implementation for gtk3 ...
+    if( bGrab )
+    {
+        gdk_keyboard_grab(widget_get_window(m_pWindow), true,
+                          GDK_CURRENT_TIME);
+    }
+    else
+    {
+        gdk_keyboard_ungrab(GDK_CURRENT_TIME);
+    }
 #endif
 }
 
