@@ -87,6 +87,7 @@ private:
     VclPtr<ToolBox> mpToolBoxSpacing;
     VclPtr<ToolBox> mpToolBoxFontColorSw;
     VclPtr<ToolBox> mpToolBoxFontColor;
+    VclPtr<ToolBox> mpToolBoxBackgroundColor;
 
     //control items
     ::sfx2::sidebar::ControllerItem maFontSizeControl;
