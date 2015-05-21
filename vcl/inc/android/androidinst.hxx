@@ -19,9 +19,6 @@
 class AndroidSalFrame;
 class AndroidSalInstance : public SvpSalInstance
 {
-    void BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
-                           const basebmp::BitmapDeviceSharedPtr& aDev);
-
     // This JNIEnv is valid only in the thread where this
     // AndroidSalInstance object is created, which is the "LO" thread
     // in which soffice_main() runs
