@@ -4055,7 +4055,7 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
 
 void ToolBox::InvalidateItem(sal_uInt16 nPosition)
 {
-    if (nPosition < mpData->m_aItems.size())
+    if (mpData && nPosition < mpData->m_aItems.size())
     {
         ImplToolItem* pItem = &mpData->m_aItems[nPosition];
         Invalidate(pItem->maRect);
