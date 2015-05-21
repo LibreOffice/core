@@ -137,7 +137,7 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
 
     if (HasFocus())
     {
-        vcl::Window* pBorderWindow = GetWindow(WINDOW_BORDER);
+        vcl::Window* pBorderWindow = GetWindow(GetWindowType::Border);
 
         bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
         Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
@@ -180,13 +180,13 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSiz
 void ImageControl::GetFocus()
 {
     FixedImage::GetFocus();
-    GetWindow( WINDOW_BORDER )->Invalidate();
+    GetWindow( GetWindowType::Border )->Invalidate();
 }
 
 void ImageControl::LoseFocus()
 {
     FixedImage::GetFocus();
-    GetWindow( WINDOW_BORDER )->Invalidate();
+    GetWindow( GetWindowType::Border )->Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

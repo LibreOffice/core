@@ -2975,7 +2975,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
     Rectangle aDesktopRect(pWin->GetDesktopRectPixel());
     if( Application::GetScreenCount() > 1 && Application::IsUnifiedDisplay() )
     {
-        vcl::Window* pDeskW = pWindow->GetWindow( WINDOW_REALPARENT );
+        vcl::Window* pDeskW = pWindow->GetWindow( GetWindowType::RealParent );
         if( ! pDeskW )
             pDeskW = pWindow;
         Point aDesktopTL( pDeskW->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) );

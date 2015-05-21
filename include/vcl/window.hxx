@@ -127,23 +127,26 @@ namespace o3tl
 
 
 // Type fuer GetWindow()
-#define WINDOW_PARENT                   ((sal_uInt16)0)
-#define WINDOW_FIRSTCHILD               ((sal_uInt16)1)
-#define WINDOW_LASTCHILD                ((sal_uInt16)2)
-#define WINDOW_PREV                     ((sal_uInt16)3)
-#define WINDOW_NEXT                     ((sal_uInt16)4)
-#define WINDOW_FIRSTOVERLAP             ((sal_uInt16)5)
-#define WINDOW_LASTOVERLAP              ((sal_uInt16)6)
-#define WINDOW_OVERLAP                  ((sal_uInt16)7)
-#define WINDOW_PARENTOVERLAP            ((sal_uInt16)8)
-#define WINDOW_CLIENT                   ((sal_uInt16)9)
-#define WINDOW_REALPARENT               ((sal_uInt16)10)
-#define WINDOW_FRAME                    ((sal_uInt16)11)
-#define WINDOW_BORDER                   ((sal_uInt16)12)
-#define WINDOW_FIRSTTOPWINDOWCHILD      ((sal_uInt16)13)
-#define WINDOW_LASTTOPWINDOWCHILD       ((sal_uInt16)14)
-#define WINDOW_PREVTOPWINDOWSIBLING     ((sal_uInt16)15)
-#define WINDOW_NEXTTOPWINDOWSIBLING     ((sal_uInt16)16)
+enum class GetWindowType
+{
+    Parent                   =  0,
+    FirstChild               =  1,
+    LastChild                =  2,
+    Prev                     =  3,
+    Next                     =  4,
+    FirstOverlap             =  5,
+    LastOverlap              =  6,
+    Overlap                  =  7,
+    ParentOverlap            =  8,
+    Client                   =  9,
+    RealParent               = 10,
+    Frame                    = 11,
+    Border                   = 12,
+    FirstTopWindowChild      = 13,
+    LastTopWindowChild       = 14,
+    PrevTopWindowSibling     = 15,
+    NextTopWindowSibling     = 16,
+};
 
 // Flags for setPosSizePixel()
 #define WINDOW_POSSIZE_X                ((sal_uInt16)0x0001)
@@ -1111,7 +1114,7 @@ public:
 
     sal_uInt16                          GetChildCount() const;
     vcl::Window*                        GetChild( sal_uInt16 nChild ) const;
-    vcl::Window*                        GetWindow( sal_uInt16 nType ) const;
+    vcl::Window*                        GetWindow( GetWindowType nType ) const;
     bool                                IsChild( const vcl::Window* pWindow, bool bSystemWindow = false ) const;
     bool                                IsWindowOrChild( const vcl::Window* pWindow, bool bSystemWindow = false  ) const;
 
@@ -1241,8 +1244,8 @@ private:
 
     SAL_DLLPRIVATE bool                 ImplIsAccessibleCandidate() const;
     SAL_DLLPRIVATE bool                 ImplIsAccessibleNativeFrame() const;
-    SAL_DLLPRIVATE sal_uInt16           ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const;
-    SAL_DLLPRIVATE vcl::Window*         ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel = true ) const;
+    SAL_DLLPRIVATE sal_uInt16           ImplGetAccessibleCandidateChildWindowCount( GetWindowType nFirstWindowType ) const;
+    SAL_DLLPRIVATE vcl::Window*         ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, GetWindowType nFirstWindowType, bool bTopLevel = true ) const;
     SAL_DLLPRIVATE bool                 ImplRegisterAccessibleNativeFrame();
     SAL_DLLPRIVATE void                 ImplRevokeAccessibleNativeFrame();
     ///@}

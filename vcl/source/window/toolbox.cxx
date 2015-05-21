@@ -4592,7 +4592,7 @@ void ToolBox::ToggleFloatingMode()
             mbHorz = false;
 
         // set focus back to document
-        ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
+        ImplGetFrameWindow()->GetWindow( GetWindowType::Client )->GrabFocus();
     }
 
     if( mbOldHorz != mbHorz )
@@ -5214,7 +5214,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 {
                     if( !pWin->GetParent() )
                     {
-                        pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
+                        pWin->ImplGetFrameWindow()->GetWindow( GetWindowType::Client )->GrabFocus();
                         break;
                     }
                     pWin = pWin->GetParent();

@@ -87,7 +87,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window* pW
         else
         {
             // paint the spinbox as a whole, use borderwindow to have proper clipping
-            vcl::Window* pBorder = pWin->GetWindow(WINDOW_BORDER);
+            vcl::Window* pBorder = pWin->GetWindow(GetWindowType::Border);
 
             // to not overwrite everything, set the button region as clipregion to the border window
             Rectangle aClipRect(rSpinbuttonValue.maLowerRect);
@@ -666,7 +666,7 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, Rect
             IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL))
         {
             vcl::Window *pWin = static_cast<vcl::Window*>(pDev);
-            vcl::Window *pBorder = pWin->GetWindow( WINDOW_BORDER );
+            vcl::Window *pBorder = pWin->GetWindow( GetWindowType::Border );
 
             // get the system's spin button size
             ImplControlValue aControlValue;
@@ -728,7 +728,7 @@ void SpinField::Resize()
             Rectangle aContent, aBound;
 
             // use the full extent of the control
-            vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
+            vcl::Window *pBorder = GetWindow( GetWindowType::Border );
             Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
             // adjust position and size of the edit field

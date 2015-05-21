@@ -507,7 +507,7 @@ void BackingWindow::Resize()
     maStartCentButtons = Rectangle( Point(0, 0), GetOutputSizePixel() );
 
     if (isLayoutEnabled(this))
-        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD),
+        VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild),
             maStartCentButtons.TopLeft(), maStartCentButtons.GetSize());
 
     if (!IsInPaint())
@@ -758,7 +758,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
 Size BackingWindow::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))
-        return VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+        return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 
     return Window::GetOptimalSize();
 }

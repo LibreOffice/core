@@ -1126,7 +1126,7 @@ WindowType Window::GetType() const
     if (mpWindowImpl)
         return mpWindowImpl->mnType;
     else
-        return WINDOW_PARENT;
+        return 0;
 }
 
 Dialog* Window::GetParentDialog() const

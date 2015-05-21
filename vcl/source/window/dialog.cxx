@@ -93,10 +93,10 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
         //until we can be sure we can remove it
         if ( pWindow->GetStyle() & (WB_INFO | WB_NOLABEL) )
             return false;
-        vcl::Window* pNextWindow = pWindow->GetWindow( WINDOW_NEXT );
+        vcl::Window* pNextWindow = pWindow->GetWindow( GetWindowType::Next );
         if ( !pNextWindow )
             return false;
-        pNextWindow = pNextWindow->GetWindow( WINDOW_CLIENT );
+        pNextWindow = pNextWindow->GetWindow( GetWindowType::Client );
         if ( !(pNextWindow->GetStyle() & WB_TABSTOP) ||
              (pNextWindow->GetType() == WINDOW_FIXEDTEXT) ||
              (pNextWindow->GetType() == WINDOW_GROUPBOX) ||
@@ -127,9 +127,9 @@ vcl::Window * nextLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChi
     vcl::Window *pLastChild = pChild;
 
     if (isContainerWindow(*pChild))
-        pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
+        pChild = pChild->GetWindow(GetWindowType::FirstChild);
     else
-        pChild = pChild->GetWindow(WINDOW_NEXT);
+        pChild = pChild->GetWindow(GetWindowType::Next);
 
     while (!pChild)
     {
@@ -139,7 +139,7 @@ vcl::Window * nextLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChi
         if (pParent == pTopLevel)
             return NULL;
         pLastChild = pParent;
-        pChild = pParent->GetWindow(WINDOW_NEXT);
+        pChild = pParent->GetWindow(GetWindowType::Next);
     }
 
     if (pChild && isContainerWindow(*pChild))
@@ -153,9 +153,9 @@ vcl::Window * prevLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChi
     vcl::Window *pLastChild = pChild;
 
     if (isContainerWindow(*pChild))
-        pChild = pChild->GetWindow(WINDOW_LASTCHILD);
+        pChild = pChild->GetWindow(GetWindowType::LastChild);
     else
-        pChild = pChild->GetWindow(WINDOW_PREV);
+        pChild = pChild->GetWindow(GetWindowType::Prev);
 
     while (!pChild)
     {
@@ -165,7 +165,7 @@ vcl::Window * prevLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChi
         if (pParent == pTopLevel)
             return NULL;
         pLastChild = pParent;
-        pChild = pParent->GetWindow(WINDOW_PREV);
+        pChild = pParent->GetWindow(GetWindowType::Prev);
     }
 
     if (pChild && isContainerWindow(*pChild))
@@ -178,7 +178,7 @@ vcl::Window * prevLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChi
 //if any intermediate layout widgets didn't exist
 vcl::Window * firstLogicalChildOfParent(vcl::Window *pTopLevel)
 {
-    vcl::Window *pChild = pTopLevel->GetWindow(WINDOW_FIRSTCHILD);
+    vcl::Window *pChild = pTopLevel->GetWindow(GetWindowType::FirstChild);
     if (pChild && isContainerWindow(*pChild))
         pChild = nextLogicalChildOfParent(pTopLevel, pChild);
     return pChild;
@@ -191,7 +191,7 @@ void ImplWindowAutoMnemonic( vcl::Window* pWindow )
     vcl::Window*                 pChild;
 
     // register the assigned mnemonics
-    pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+    pGetChild = pWindow->GetWindow( GetWindowType::FirstChild );
     while ( pGetChild )
     {
         pChild = pGetChild->ImplGetWindow();
@@ -208,7 +208,7 @@ void ImplWindowAutoMnemonic( vcl::Window* pWindow )
 
         if ( (pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
         {
-            pGetChild = pParent->GetWindow( WINDOW_FIRSTCHILD );
+            pGetChild = pParent->GetWindow( GetWindowType::FirstChild );
             while ( pGetChild )
             {
                 pChild = pGetChild->ImplGetWindow();
@@ -219,7 +219,7 @@ void ImplWindowAutoMnemonic( vcl::Window* pWindow )
     }
 
     // assign mnemonics to Controls which have none
-    pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+    pGetChild = pWindow->GetWindow( GetWindowType::FirstChild );
     while ( pGetChild )
     {
         pChild = pGetChild->ImplGetWindow();
@@ -240,14 +240,14 @@ static VclButtonBox* getActionArea(Dialog *pDialog)
     VclButtonBox *pButtonBox = NULL;
     if (pDialog->isLayoutEnabled())
     {
-        vcl::Window *pBox = pDialog->GetWindow(WINDOW_FIRSTCHILD);
-        vcl::Window *pChild = pBox->GetWindow(WINDOW_LASTCHILD);
+        vcl::Window *pBox = pDialog->GetWindow(GetWindowType::FirstChild);
+        vcl::Window *pChild = pBox->GetWindow(GetWindowType::LastChild);
         while (pChild)
         {
             pButtonBox = dynamic_cast<VclButtonBox*>(pChild);
             if (pButtonBox)
                 break;
-            pChild = pChild->GetWindow(WINDOW_PREV);
+            pChild = pChild->GetWindow(GetWindowType::Prev);
         }
     }
     return pButtonBox;
@@ -257,8 +257,8 @@ static vcl::Window* getActionAreaButtonList(Dialog *pDialog)
 {
     VclButtonBox* pButtonBox = getActionArea(pDialog);
     if (pButtonBox)
-        return pButtonBox->GetWindow(WINDOW_FIRSTCHILD);
-    return pDialog->GetWindow(WINDOW_FIRSTCHILD);
+        return pButtonBox->GetWindow(GetWindowType::FirstChild);
+    return pDialog->GetWindow(GetWindowType::FirstChild);
 }
 
 static PushButton* ImplGetDefaultButton( Dialog* pDialog )
@@ -273,7 +273,7 @@ static PushButton* ImplGetDefaultButton( Dialog* pDialog )
                 return pPushButton;
         }
 
-        pChild = pChild->GetWindow( WINDOW_NEXT );
+        pChild = pChild->GetWindow( GetWindowType::Next );
     }
 
     return NULL;
@@ -287,7 +287,7 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
         if ( pChild->GetType() == WINDOW_OKBUTTON )
             return static_cast<PushButton*>(pChild);
 
-        pChild = pChild->GetWindow( WINDOW_NEXT );
+        pChild = pChild->GetWindow( GetWindowType::Next );
     }
 
     return NULL;
@@ -302,7 +302,7 @@ static PushButton* ImplGetCancelButton( Dialog* pDialog )
         if ( pChild->GetType() == WINDOW_CANCELBUTTON )
             return static_cast<PushButton*>(pChild);
 
-        pChild = pChild->GetWindow( WINDOW_NEXT );
+        pChild = pChild->GetWindow( GetWindowType::Next );
     }
 
     return NULL;

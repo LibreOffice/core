@@ -633,7 +633,7 @@ void ListBox::Resize()
         long nBottom = aOutSz.Height();
 
         // Note: in case of no border, pBorder will actually be this
-        vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
+        vcl::Window *pBorder = GetWindow( GetWindowType::Border );
         ImplControlValue aControlValue;
         Point aPoint;
         Rectangle aContent, aBound;
@@ -793,7 +793,7 @@ void ListBox::StateChanged( StateChangedType nType )
             if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
                     && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
             {
-                GetWindow( WINDOW_BORDER )->Invalidate( INVALIDATE_NOERASE );
+                GetWindow( GetWindowType::Border )->Invalidate( INVALIDATE_NOERASE );
             }
             else
                 mpImplWin->Invalidate();

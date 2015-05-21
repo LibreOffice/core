@@ -2263,7 +2263,7 @@ static bool ImplHandleShowDialog( vcl::Window* pWindow, ShowDialogId nDialogId )
 
     if( pWindow->GetType() == WINDOW_BORDERWINDOW )
     {
-        vcl::Window* pWrkWin = pWindow->GetWindow( WINDOW_CLIENT );
+        vcl::Window* pWrkWin = pWindow->GetWindow( GetWindowType::Client );
         if( pWrkWin )
             pWindow = pWrkWin;
     }

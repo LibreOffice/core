@@ -2667,8 +2667,8 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
             if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
             {
-                GetParent()->GetWindow( WINDOW_BORDER )->Invalidate( INVALIDATE_NOERASE );
-                GetParent()->GetWindow( WINDOW_BORDER )->Update();
+                GetParent()->GetWindow( GetWindowType::Border )->Invalidate( INVALIDATE_NOERASE );
+                GetParent()->GetWindow( GetWindowType::Border )->Update();
             }
         }
     }
@@ -2710,9 +2710,9 @@ void ImplWin::ImplDraw( bool bLayout )
             bool bMouseOver = false;
             if( GetParent() )
             {
-                vcl::Window *pChild = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
+                vcl::Window *pChild = GetParent()->GetWindow( GetWindowType::FirstChild );
                 while( pChild && !(bMouseOver = pChild->IsMouseOver()) )
-                    pChild = pChild->GetWindow( WINDOW_NEXT );
+                    pChild = pChild->GetWindow( GetWindowType::Next );
             }
 
             if( bMouseOver )
@@ -2926,7 +2926,7 @@ void ImplWin::GetFocus()
         IsNativeWidgetEnabled() &&
         IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
     {
-        vcl::Window* pWin = GetParent()->GetWindow( WINDOW_BORDER );
+        vcl::Window* pWin = GetParent()->GetWindow( GetWindowType::Border );
         if( ! pWin )
             pWin = GetParent();
         pWin->Invalidate();
@@ -2943,7 +2943,7 @@ void ImplWin::LoseFocus()
         IsNativeWidgetEnabled() &&
         IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
     {
-        vcl::Window* pWin = GetParent()->GetWindow( WINDOW_BORDER );
+        vcl::Window* pWin = GetParent()->GetWindow( GetWindowType::Border );
         if( ! pWin )
             pWin = GetParent();
         pWin->Invalidate();

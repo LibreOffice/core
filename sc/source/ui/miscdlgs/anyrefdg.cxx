@@ -421,8 +421,8 @@ namespace
     void hideUnless(vcl::Window *pTop, const winset& rVisibleWidgets,
         std::vector<VclPtr<vcl::Window> > &rWasVisibleWidgets)
     {
-        for (vcl::Window* pChild = pTop->GetWindow(WINDOW_FIRSTCHILD); pChild;
-            pChild = pChild->GetWindow(WINDOW_NEXT))
+        for (vcl::Window* pChild = pTop->GetWindow(GetWindowType::FirstChild); pChild;
+            pChild = pChild->GetWindow(GetWindowType::Next))
         {
             if (!pChild->IsVisible())
                 continue;
@@ -489,10 +489,10 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
 
         if (!mbOldDlgLayoutEnabled)
         {
-            for (vcl::Window* pChild = m_pWindow->GetWindow(WINDOW_FIRSTCHILD); pChild;
-                pChild = pChild->GetWindow(WINDOW_NEXT))
+            for (vcl::Window* pChild = m_pWindow->GetWindow(GetWindowType::FirstChild); pChild;
+                pChild = pChild->GetWindow(GetWindowType::Next))
             {
-                vcl::Window *pWin = pChild->GetWindow(WINDOW_CLIENT);
+                vcl::Window *pWin = pChild->GetWindow(GetWindowType::Client);
                 if (pWin == (vcl::Window*)pRefEdit || pWin == (vcl::Window*)pRefBtn)
                     continue; // do nothing
                 else if (pWin->IsVisible())
@@ -512,7 +512,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             vcl::Window *pContentArea = pResizeDialog->get_content_area();
             for (vcl::Window *pCandidate = pRefEdit;
                 pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
-                pCandidate = pCandidate->GetWindow(WINDOW_REALPARENT))
+                pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
             {
                 m_aVisibleWidgets.insert(pCandidate);
             }
@@ -520,7 +520,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             //shared parent in the existing widgets
             for (vcl::Window *pCandidate = pRefBtn;
                 pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
-                pCandidate = pCandidate->GetWindow(WINDOW_REALPARENT))
+                pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
             {
                 if (m_aVisibleWidgets.insert(pCandidate).second)
                     break;

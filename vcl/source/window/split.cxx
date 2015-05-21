@@ -182,7 +182,7 @@ void Splitter::SetKeyboardStepSize( long nStepSize )
 Splitter* Splitter::ImplFindSibling()
 {
     // look for another splitter with the same parent but different orientation
-    vcl::Window *pWin = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
+    vcl::Window *pWin = GetParent()->GetWindow( GetWindowType::FirstChild );
     Splitter *pSplitter = NULL;
     while( pWin )
     {
@@ -192,7 +192,7 @@ Splitter* Splitter::ImplFindSibling()
             if( pSplitter != this && IsHorizontal() != pSplitter->IsHorizontal() )
                 return pSplitter;
         }
-        pWin = pWin->GetWindow( WINDOW_NEXT );
+        pWin = pWin->GetWindow( GetWindowType::Next );
     }
     return NULL;
 }

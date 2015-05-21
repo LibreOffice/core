@@ -180,7 +180,7 @@ bool Window::ImplIsAccessibleNativeFrame() const
         return false;
 }
 
-sal_uInt16 Window::ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const
+sal_uInt16 Window::ImplGetAccessibleCandidateChildWindowCount( GetWindowType nFirstWindowType ) const
 {
     sal_uInt16  nChildren = 0;
     vcl::Window* pChild = GetWindow( nFirstWindowType );
@@ -189,13 +189,13 @@ sal_uInt16 Window::ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirst
         if( pChild->ImplIsAccessibleCandidate() )
             nChildren++;
         else
-            nChildren = sal::static_int_cast<sal_uInt16>(nChildren + pChild->ImplGetAccessibleCandidateChildWindowCount( WINDOW_FIRSTCHILD ));
+            nChildren = sal::static_int_cast<sal_uInt16>(nChildren + pChild->ImplGetAccessibleCandidateChildWindowCount( GetWindowType::FirstChild ));
         pChild = pChild->mpWindowImpl->mpNext;
     }
     return nChildren;
 }
 
-vcl::Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel ) const
+vcl::Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, GetWindowType nFirstWindowType, bool bTopLevel ) const
 {
 
     if( bTopLevel )
@@ -207,7 +207,7 @@ vcl::Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uIn
         vcl::Window *pTmpChild = pChild;
 
         if( !pChild->ImplIsAccessibleCandidate() )
-            pTmpChild = pChild->ImplGetAccessibleCandidateChild( nChild, rChildCount, WINDOW_FIRSTCHILD, false );
+            pTmpChild = pChild->ImplGetAccessibleCandidateChild( nChild, rChildCount, GetWindowType::FirstChild, false );
 
         if ( nChild == rChildCount )
             return pTmpChild;

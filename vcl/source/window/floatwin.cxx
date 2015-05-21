@@ -478,7 +478,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
         // compute the floating window's size in absolute screen coordinates
 
         // use the border window to have the exact position
-        vcl::Window *pBorderWin = pWin->GetWindow( WINDOW_BORDER );
+        vcl::Window *pBorderWin = pWin->GetWindow( GetWindowType::Border );
 
         Point aPt;  // the top-left corner in output coordinates ie (0,0)
         Rectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( Rectangle( aPt, pBorderWin->GetSizePixel()) ) ) ;
