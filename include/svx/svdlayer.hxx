@@ -57,15 +57,15 @@ public:
     SdrLayerID    GetID() const                               { return nID; }
     void          SetModel(SdrModel* pNewModel)               { pModel=pNewModel; }
     SdrModel*     GetModel() const                            { return pModel; }
-    // Einem SdrLayer kann man sagen dass er ein (der) Standardlayer sein soll.
-    // Es wird dann laenderspeziefisch der passende Name gesetzt. SetName()
-    // setzt das Flag "StandardLayer" ggf. zurueck auf "Userdefined".
+    // A SdrLayer should be considered the standard Layer. It shall then set the
+    // appropriate country-specific name. SetName() sets the "StandardLayer" flag
+    // and if necessary returns "Userdefined".
     void          SetStandardLayer(bool bStd = true);
     bool          IsStandardLayer() const                     { return nType==1; }
 };
 
-// Beim Aendern von Layerdaten muss man derzeit
-// noch selbst das Modify-Flag am Model setzen.
+// When Changing the layer data you currently have to set the Modify-Flag
+// manually
 #define SDRLAYER_MAXCOUNT 255
 class SVX_DLLPUBLIC SdrLayerAdmin {
 friend class SdrView;
@@ -75,7 +75,7 @@ friend class SdrPage;
 protected:
     std::vector<SdrLayer*> aLayer;
     SdrLayerAdmin* pParent; // Der Admin der Seite kennt den Admin des Docs
-    SdrModel*      pModel; // zum Broadcasten
+    SdrModel*      pModel; // for broadcasting
     OUString       maControlLayerName;
 protected:
     // Eine noch nicht verwendete LayerID raussuchen. Sind bereits alle
@@ -111,9 +111,9 @@ public:
         Broadcast();
     }
     SdrLayer*            RemoveLayer(sal_uInt16 nPos);
-    // Alle Layer loeschen
+    // Delete the entire layer
     void               ClearLayer();
-    // Neuer Layer wird angelegt und eingefuegt
+    // New layer is created and inserted
     SdrLayer*          NewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
     void               DeleteLayer(SdrLayer* pLayer)
     {
@@ -124,10 +124,10 @@ public:
         delete pLayer;
         Broadcast();
     }
-    // Neuer Layer, Name wird aus der Resource geholt
+    // New layer, name is retrieved from the resource
     SdrLayer*          NewStandardLayer(sal_uInt16 nPos=0xFFFF);
 
-    // Iterieren ueber alle Layer
+    // Iterate over all layers
     sal_uInt16             GetLayerCount() const                                         { return sal_uInt16(aLayer.size()); }
     SdrLayer*          GetLayer(sal_uInt16 i)                                            { return aLayer[i]; }
     const SdrLayer*    GetLayer(sal_uInt16 i) const                                      { return aLayer[i]; }
