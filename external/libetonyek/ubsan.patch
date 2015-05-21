@@ -1,0 +1,11 @@
+--- src/lib/contexts/IWORKPropertyMapElement.cpp
++++ src/lib/contexts/IWORKPropertyMapElement.cpp
+@@ -264,7 +264,7 @@
+ 
+ void AlignmentElement::endOfElement()
+ {
+-  IWORKAlignment prop;
++  IWORKAlignment prop = IWORK_ALIGNMENT_LEFT;
+ 
+   if (m_value)
+   {

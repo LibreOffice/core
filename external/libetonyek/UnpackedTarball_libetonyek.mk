@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/assert.patch \
 	external/libetonyek/0001-missing-include.patch.1 \
 	external/libetonyek/win_build.patch.1 \
+	external/libetonyek/ubsan.patch \
 ))
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
