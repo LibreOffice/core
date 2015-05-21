@@ -43,7 +43,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
 		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/config_host/*.h.in \
-		$(SRCDIR)/android/experimental/LOAndroid3/AndroidManifest.xml.in \
+		$(SRCDIR)/android/source/AndroidManifest.xml.in \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
 		$(BUILDDIR)/autogen.sh \
@@ -172,7 +172,7 @@ distclean : clean compilerplugins-clean
 	rm -fr \
         $(BUILDDIR)/Makefile \
         $(BUILDDIR)/aclocal.m4 \
-        $(BUILDDIR)/android/experimental/LOAndroid3/AndroidManifest.xml \
+        $(BUILDDIR)/android/source/AndroidManifest.xml \
         $(BUILDDIR)/autom4te.cache \
         $(BUILDDIR)/config.log \
         $(BUILDDIR)/config.Build.log \

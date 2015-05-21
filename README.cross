@@ -353,7 +353,7 @@ And here is an (quite old) autogen.input for Android on X86:
 --with-distro=LibreOfficeAndroidX86
 
 A LibreOffice app for Android is being developed progress in the
-android/experimental/LOAndroid3 directory.
+android/source directory.
 
 To run the app, do "make install" followed by either "make run" or
 starting it from Android itself. You most likely want to have an "adb logcat"

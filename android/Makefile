@@ -12,7 +12,7 @@ include $(module_directory)/../solenv/gbuild/partial_build.mk
 
 .PHONY: sign
 
-SIGNED_APK := $(BUILDDIR)/android/experimental/LOAndroid3/bin/LibreOfficeViewer.apk
+SIGNED_APK := $(BUILDDIR)/android/source/bin/LibreOfficeViewer.apk
 RELEASE_APK_USAGE := echo; echo "Usage: make versionCode=<version_num+1> exampleDocument=</absolute/path/example.odt> key=<key_name> release-apk"
 
 release-apk: build
@@ -23,8 +23,8 @@ release-apk: build
 	rm -f $(SIGNED_APK)
 
 	# the actual signing
-	jarsigner --verbose -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/.keystore $(BUILDDIR)/android/experimental/LOAndroid3/bin/LibreOfficeViewer-release-unsigned.apk $(key)
-	$(ANDROID_SDK_HOME)/build-tools/*/zipalign -v 4 $(BUILDDIR)/android/experimental/LOAndroid3/bin/LibreOfficeViewer-release-unsigned.apk $(SIGNED_APK)
+	jarsigner --verbose -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/.keystore $(BUILDDIR)/android/source/bin/LibreOfficeViewer-release-unsigned.apk $(key)
+	$(ANDROID_SDK_HOME)/build-tools/*/zipalign -v 4 $(BUILDDIR)/android/source/bin/LibreOfficeViewer-release-unsigned.apk $(SIGNED_APK)
 
 	@echo
 	@echo "Resulting signed apk: $(SIGNED_APK)"
