@@ -314,6 +314,7 @@ namespace vcl {
 
 class VCL_DLLPUBLIC OutputDevice
 {
+    friend class PaintHelper;
     friend class Printer;
     friend class VirtualDevice;
     friend class vcl::Window;

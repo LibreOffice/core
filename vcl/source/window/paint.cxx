@@ -85,6 +85,9 @@ public:
     void DoPaint(const vcl::Region* pRegion);
 
     /// Create m_pBuffer, and set it up to have the same settings as m_pWindow.
+    void CreateBuffer();
+
+    /// Setup m_pBuffer according to the settings of the current m_pWindow.
     void SetupBuffer();
 
     /// Paint the content of the buffer to the current m_pWindow.
@@ -104,13 +107,29 @@ PaintHelper::PaintHelper(vcl::Window *pWindow, const VclPtr<VirtualDevice>& rBuf
 {
 }
 
-void PaintHelper::SetupBuffer()
+void PaintHelper::CreateBuffer()
 {
     assert(!m_pBuffer);
 
     m_pBuffer = VclPtrInstance<VirtualDevice>();
     m_bCreatedBuffer = true;
 
+    SetupBuffer();
+
+    // update the output size now, after all the settings were copied
+    m_pBuffer->SetOutputSize(m_pWindow->GetOutputSize());
+
+    // we need to remember the mnOutOffX / mnOutOffY, but actually really
+    // set it just temporarily for the subwidgets - so we are setting it here
+    // only to remember the value & to be able to pass it to the descendants
+    // FIXME: once everything's double-buffered, this is (hopefully) not
+    // necessary as the m_pBuffer is always created for the main window.
+    m_pBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
+    m_pBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
+}
+
+void PaintHelper::SetupBuffer()
+{
     // transfer various settings
     // FIXME: this must disappear as we move to RenderContext only,
     // the painting must become state-less, so that no actual
@@ -133,17 +152,17 @@ void PaintHelper::SetupBuffer()
     m_pBuffer->SetTextFillColor(m_pWindow->GetTextFillColor());
     m_pBuffer->SetTextAlign(m_pWindow->GetTextAlign());
     m_pBuffer->SetRasterOp(m_pWindow->GetRasterOp());
-    m_pBuffer->SetRefPoint(m_pWindow->GetRefPoint());
     m_pBuffer->SetLayoutMode(m_pWindow->GetLayoutMode());
     m_pBuffer->SetDigitLanguage(m_pWindow->GetDigitLanguage());
-
-    // update the output size now, after all the settings were copied
-    m_pBuffer->SetOutputSize(m_pWindow->GetOutputSize());
 }
 
 void PaintHelper::PaintBuffer()
 {
     assert(m_pBuffer);
+    assert(m_bCreatedBuffer);
+
+    m_pBuffer->mnOutOffX = 0;
+    m_pBuffer->mnOutOffY = 0;
 
     // copy the buffer content to the actual window
     // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
@@ -186,7 +205,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 
         // double-buffering: setup the buffer if it does not exist
         if (!m_pBuffer && m_pWindow->SupportsDoubleBuffering())
-            SetupBuffer();
+            CreateBuffer();
 
         // double-buffering: if this window does not support double-buffering,
         // but we are in the middle of double-buffered paint, we might be
@@ -197,9 +216,24 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         if (m_pBuffer && m_pWindow->SupportsDoubleBuffering())
         {
             // double-buffering
+            SetupBuffer();
+
+            // temporarily decrease the mnOutOffX/Y of the buffer for the
+            // subwidgets (because the m_pBuffer is our base here)
+            // FIXME: once everything's double-buffered, this is (hopefully) not
+            // necessary as the m_pBuffer is always created for the main window.
+            long nOutOffX = m_pBuffer->mnOutOffX;
+            long nOutOffY = m_pBuffer->mnOutOffY;
+            m_pBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel() - m_pBuffer->mnOutOffX;
+            m_pBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel() - m_pBuffer->mnOutOffY;
+
             m_pWindow->PushPaintHelper(this, *m_pWindow);
             m_pWindow->ApplySettings(*m_pBuffer.get());
             m_pWindow->Paint(*m_pBuffer.get(), m_aPaintRect);
+
+            // restore the mnOutOffX/Y value
+            m_pBuffer->mnOutOffX = nOutOffX;
+            m_pBuffer->mnOutOffY = nOutOffY;
         }
         else
         {
