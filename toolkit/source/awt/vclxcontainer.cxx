@@ -210,7 +210,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
             // Add WB_GROUP after the last group
             if ( n == ( nCount - 1 ) )
             {
-                vcl::Window* pBehindLast = pWin->GetWindow( WINDOW_NEXT );
+                vcl::Window* pBehindLast = pWin->GetWindow( GetWindowType::Next );
                 if ( pBehindLast )
                 {
                     WinBits nLastStyle = pBehindLast->GetStyle();

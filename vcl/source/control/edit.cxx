@@ -979,7 +979,7 @@ int Edit::ImplGetNativeControlType() const
             break;
 
         case WINDOW_MULTILINEEDIT:
-            if ( GetWindow( WINDOW_BORDER ) != this )
+            if ( GetWindow( GetWindowType::Border ) != this )
                 nCtrl = CTRL_MULTILINE_EDITBOX;
             else
                 nCtrl = CTRL_EDITBOX_NOBORDER;
@@ -998,7 +998,7 @@ int Edit::ImplGetNativeControlType() const
                 nCtrl = CTRL_SPINBOX;
             else
             {
-                if (GetWindow(WINDOW_BORDER) != this)
+                if (GetWindow(GetWindowType::Border) != this)
                     nCtrl = CTRL_EDITBOX;
                 else
                     nCtrl = CTRL_EDITBOX_NOBORDER;
@@ -1035,12 +1035,12 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
     if (ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent())
     {
         // draw the inner part by painting the whole control using its border window
-        vcl::Window* pBorder = GetWindow(WINDOW_BORDER);
+        vcl::Window* pBorder = GetWindow(GetWindowType::Border);
         if (pBorder == this)
         {
             // we have no border, use parent
             vcl::Window* pControl = mbIsSubEdit ? GetParent() : this;
-            pBorder = pControl->GetWindow(WINDOW_BORDER);
+            pBorder = pControl->GetWindow(GetWindowType::Border);
             if (pBorder == this)
                 pBorder = GetParent();
         }
@@ -1878,7 +1878,7 @@ void Edit::ImplInvalidateOutermostBorder( vcl::Window* pWin )
 {
     // allow control to show focused state
     vcl::Window *pInvalWin = pWin, *pBorder = pWin;
-    while( ( pBorder = pInvalWin->GetWindow( WINDOW_BORDER ) ) != pInvalWin && pBorder &&
+    while( ( pBorder = pInvalWin->GetWindow( GetWindowType::Border ) ) != pInvalWin && pBorder &&
            pInvalWin->ImplGetFrame() == pBorder->ImplGetFrame() )
     {
         pInvalWin = pBorder;

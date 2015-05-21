@@ -138,13 +138,13 @@ namespace dbaui
             vcl::Window* pControl = pThisSection;
             while ( ( pControl != pNextSection ) && pControl )
             {
-                vcl::Window* pRealWindow = pControl->GetWindow( WINDOW_CLIENT );
+                vcl::Window* pRealWindow = pControl->GetWindow( GetWindowType::Client );
             #if OSL_DEBUG_LEVEL > 0
                 OUString sWindowText( pRealWindow->GetText() );
                 (void)sWindowText;
             #endif
                 pRealWindow->Hide();
-                pControl = pControl->GetWindow( WINDOW_NEXT );
+                pControl = pControl->GetWindow( GetWindowType::Next );
             }
         }
 

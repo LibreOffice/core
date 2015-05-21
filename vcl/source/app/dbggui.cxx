@@ -477,7 +477,7 @@ void DbgDialogTest( vcl::Window* pWindow )
 {
     bool        aAccelBuf[65536] = {false};
     sal_uInt16      nChildCount = pWindow->GetChildCount();
-    vcl::Window*     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+    vcl::Window*     pGetChild = pWindow->GetWindow( GetWindowType::FirstChild );
     vcl::Window*     pChild;
     Point       aTabPos;
 
@@ -492,7 +492,7 @@ void DbgDialogTest( vcl::Window* pWindow )
         bool    bOKCancelButton = false;
         bool    bDefPushButton = false;
         bool    bButton = false;
-        pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        pGetChild = pWindow->GetWindow( GetWindowType::FirstChild );
         while ( pGetChild )
         {
             pChild = pGetChild->ImplGetWindow();
@@ -506,7 +506,7 @@ void DbgDialogTest( vcl::Window* pWindow )
                     bDefPushButton = true;
             }
 
-            pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
+            pGetChild = pGetChild->GetWindow( GetWindowType::Next );
         }
 
         if ( bButton )
@@ -521,7 +521,7 @@ void DbgDialogTest( vcl::Window* pWindow )
     }
 
     sal_uInt16 i = 0;
-    pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+    pGetChild = pWindow->GetWindow( GetWindowType::FirstChild );
     while ( pGetChild )
     {
         pChild = pGetChild->ImplGetWindow();
@@ -637,7 +637,7 @@ void DbgDialogTest( vcl::Window* pWindow )
 
                 if ( (i+1 < nChildCount) && !aText.isEmpty() )
                 {
-                    vcl::Window* pTempChild = pGetChild->GetWindow( WINDOW_NEXT )->ImplGetWindow();
+                    vcl::Window* pTempChild = pGetChild->GetWindow( GetWindowType::Next )->ImplGetWindow();
                     if ( (pTempChild->GetType() == WINDOW_EDIT) ||
                          (pTempChild->GetType() == WINDOW_MULTILINEEDIT) ||
                          (pTempChild->GetType() == WINDOW_SPINFIELD) ||
@@ -807,7 +807,7 @@ void DbgDialogTest( vcl::Window* pWindow )
             }
         }
 
-        pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
+        pGetChild = pGetChild->GetWindow( GetWindowType::Next );
         i++;
     }
 }

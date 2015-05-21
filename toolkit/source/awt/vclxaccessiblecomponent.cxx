@@ -447,11 +447,11 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
         }
 
-        VclPtr<vcl::Window> pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        VclPtr<vcl::Window> pChild = pWindow->GetWindow( GetWindowType::FirstChild );
 
         while( pWindow && pChild )
         {
-            VclPtr<vcl::Window> pWinTemp = pChild->GetWindow( WINDOW_FIRSTCHILD );
+            VclPtr<vcl::Window> pWinTemp = pChild->GetWindow( GetWindowType::FirstChild );
             if( pWinTemp && pWinTemp->GetType() == WINDOW_EDIT )
             {
                 if( !( pWinTemp->GetStyle() & WB_READONLY) ||
@@ -466,7 +466,7 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
                 break;
             }
-            pChild = pChild->GetWindow( WINDOW_NEXT );
+            pChild = pChild->GetWindow( GetWindowType::Next );
         }
     }
     else

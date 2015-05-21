@@ -565,7 +565,7 @@ void ComboBox::Resize()
         if( IsDropDownBox() )
         {
             ComboBoxBounds aBounds(calcComboBoxDropDownComponentBounds(aOutSz,
-                GetWindow(WINDOW_BORDER)->GetOutputSizePixel()));
+                GetWindow(GetWindowType::Border)->GetOutputSizePixel()));
             mpSubEdit->SetPosSizePixel(aBounds.aSubEditPos, aBounds.aSubEditSize);
             mpBtn->SetPosSizePixel(aBounds.aButtonPos, aBounds.aButtonSize);
         }
@@ -991,7 +991,7 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
 {
     long nButtonDownWidth = 0;
 
-    vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
+    vcl::Window *pBorder = GetWindow( GetWindowType::Border );
     ImplControlValue aControlValue;
     Point aPoint;
     Rectangle aContent, aBound;
@@ -1424,7 +1424,7 @@ ComboBox::ComboBoxBounds ComboBox::calcComboBoxDropDownComponentBounds(const Siz
     long    nTop = 0;
     long    nBottom = rOutSz.Height();
 
-    vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
+    vcl::Window *pBorder = GetWindow( GetWindowType::Border );
     ImplControlValue aControlValue;
     Point aPoint;
     Rectangle aContent, aBound;

@@ -40,7 +40,7 @@ void PanelLayout::dispose()
 Size PanelLayout::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))
-        return VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+        return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 
     return Control::GetOptimalSize();
 }
@@ -64,7 +64,7 @@ void PanelLayout::queue_resize(StateChangedType /*eReason*/)
 
 IMPL_LINK_NOARG_TYPED( PanelLayout, ImplHandlePanelLayoutTimerHdl, Idle*, void )
 {
-    vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
     assert(pChild);
     VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
 }
@@ -75,7 +75,7 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, s
     bool bCanHandleSmallerHeight = false;
 
     bool bIsLayoutEnabled = isLayoutEnabled(this);
-    vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
 
     if (bIsLayoutEnabled && pChild->GetType() == WINDOW_SCROLLWINDOW)
     {

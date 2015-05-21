@@ -41,7 +41,7 @@ void TabDialog::ImplPosControls()
     long        nOffY = 0;
     vcl::Window*     pTabControl = NULL;
 
-    vcl::Window* pChild = GetWindow( WINDOW_FIRSTCHILD );
+    vcl::Window* pChild = GetWindow( GetWindowType::FirstChild );
     while ( pChild )
     {
         if ( pChild->IsVisible() && (pChild != mpViewWindow) )
@@ -67,7 +67,7 @@ void TabDialog::ImplPosControls()
             }
         }
 
-        pChild = pChild->GetWindow( WINDOW_NEXT );
+        pChild = pChild->GetWindow( GetWindowType::Next );
     }
 
     // do we have a TabControl ?
@@ -155,7 +155,7 @@ void TabDialog::ImplPosControls()
         if ( nCtrlBarWidth <= (aTabSize.Width()+nBtnEx) )
             nX = (aTabSize.Width()+nBtnEx) - nCtrlBarWidth + IMPL_DIALOG_OFFSET;
 
-        vcl::Window* pChild2 = GetWindow( WINDOW_FIRSTCHILD );
+        vcl::Window* pChild2 = GetWindow( GetWindowType::FirstChild );
         while ( pChild2 )
         {
             if ( pChild2->IsVisible() && (pChild2 != mpViewWindow) )
@@ -185,7 +185,7 @@ void TabDialog::ImplPosControls()
                 }
             }
 
-            pChild2 = pChild2->GetWindow( WINDOW_NEXT );
+            pChild2 = pChild2->GetWindow( GetWindowType::Next );
         }
 
         aDlgSize.Height() += nLines * (aCtrlSize.Height()+IMPL_DIALOG_OFFSET);

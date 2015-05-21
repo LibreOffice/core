@@ -1016,7 +1016,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
         pWin = static_cast<vcl::Window*>(mpOutDev.get());
 
     if (pWin)
-        pCtrl = mpBorderWindow->GetWindow(WINDOW_CLIENT);
+        pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client);
 
     long nOrigLeftBorder = mnLeftBorder;
     long nOrigTopBorder = mnTopBorder;
@@ -1199,7 +1199,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, s
 
     ControlType aCtrlType = 0;
     ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
-    if (pWin && (pCtrl = mpBorderWindow->GetWindow(WINDOW_CLIENT)) != NULL)
+    if (pWin && (pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client)) != NULL)
     {
         switch (pCtrl->GetType())
         {
@@ -1282,10 +1282,10 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, s
         }
 
         bool bMouseOver = false;
-        vcl::Window *pCtrlChild = pCtrl->GetWindow(WINDOW_FIRSTCHILD);
+        vcl::Window *pCtrlChild = pCtrl->GetWindow(GetWindowType::FirstChild);
         while(pCtrlChild && !(bMouseOver = pCtrlChild->IsMouseOver()))
         {
-            pCtrlChild = pCtrlChild->GetWindow(WINDOW_NEXT);
+            pCtrlChild = pCtrlChild->GetWindow(GetWindowType::Next);
         }
 
         if (bMouseOver)
@@ -1577,7 +1577,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, sal
         // for popups, don't draw part of the frame
         if (pData->mnTitleType == BORDERWINDOW_TITLE_POPUP)
         {
-            FloatingWindow* pWin = dynamic_cast<FloatingWindow*>(pData->mpBorderWindow->GetWindow(WINDOW_CLIENT));
+            FloatingWindow* pWin = dynamic_cast<FloatingWindow*>(pData->mpBorderWindow->GetWindow(GetWindowType::Client));
             if (pWin)
             {
                 vcl::Region aClipRgn(aInRect);

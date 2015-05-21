@@ -102,7 +102,7 @@ static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, s
                     TabPage* pTempTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
                     if ( pTempTabPage )
                     {
-                        vcl::Window* pTempWindow = pTabControl->GetWindow( WINDOW_FIRSTCHILD );
+                        vcl::Window* pTempWindow = pTabControl->GetWindow( GetWindowType::FirstChild );
                         while ( pTempWindow )
                         {
                             if ( pTempWindow->ImplGetWindow() == pTempTabPage )

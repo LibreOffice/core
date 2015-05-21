@@ -636,7 +636,7 @@ namespace
 {
     vcl::Window* getPreviousSibling(vcl::Window *pParent)
     {
-        return pParent ? pParent->GetWindow(WINDOW_LASTCHILD) : NULL;
+        return pParent ? pParent->GetWindow(GetWindowType::LastChild) : NULL;
     }
 }
 
@@ -1427,7 +1427,7 @@ void PushButton::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::Style )
     {
-        SetStyle( ImplInitStyle( GetWindow( WINDOW_PREV ), GetStyle() ) );
+        SetStyle( ImplInitStyle( GetWindow( GetWindowType::Prev ), GetStyle() ) );
 
         bool bIsDefButton = ( GetStyle() & WB_DEFBUTTON ) != 0;
         bool bWasDefButton = ( GetPrevStyle() & WB_DEFBUTTON ) != 0;
@@ -1512,7 +1512,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
             if( bDropDown && GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) &&
                    !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )
             {
-                vcl::Window *pBorder = GetParent()->GetWindow( WINDOW_BORDER );
+                vcl::Window *pBorder = GetParent()->GetWindow( GetWindowType::Border );
                 if(aCtrlType == CTRL_COMBOBOX)
                 {
                     // only paint the button part to avoid flickering of the combobox text
@@ -2220,7 +2220,7 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
     vcl::Window* pFirst = const_cast<RadioButton*>(this);
     while( ( pFirst->GetStyle() & WB_GROUP ) == 0 )
     {
-        vcl::Window* pWindow = pFirst->GetWindow( WINDOW_PREV );
+        vcl::Window* pWindow = pFirst->GetWindow( GetWindowType::Prev );
         if( pWindow )
             pFirst = pWindow;
         else
@@ -2235,7 +2235,7 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
             if( pFirst != this || bIncludeThis )
                 aGroup.push_back( static_cast<RadioButton*>(pFirst) );
         }
-        pFirst = pFirst->GetWindow( WINDOW_NEXT );
+        pFirst = pFirst->GetWindow( GetWindowType::Next );
     } while( pFirst && ( ( pFirst->GetStyle() & WB_GROUP ) == 0 ) );
 
     return aGroup;
@@ -2564,7 +2564,7 @@ void RadioButton::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::Style )
     {
-        SetStyle( ImplInitStyle( GetWindow( WINDOW_PREV ), GetStyle() ) );
+        SetStyle( ImplInitStyle( GetWindow( GetWindowType::Prev ), GetStyle() ) );
 
         if ( (GetPrevStyle() & RADIOBUTTON_VIEW_STYLE) !=
              (GetStyle() & RADIOBUTTON_VIEW_STYLE) )
@@ -3519,7 +3519,7 @@ void CheckBox::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::Style )
     {
-        SetStyle( ImplInitStyle( GetWindow( WINDOW_PREV ), GetStyle() ) );
+        SetStyle( ImplInitStyle( GetWindow( GetWindowType::Prev ), GetStyle() ) );
 
         if ( (GetPrevStyle() & CHECKBOX_VIEW_STYLE) !=
              (GetStyle() & CHECKBOX_VIEW_STYLE) )

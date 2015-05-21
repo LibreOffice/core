@@ -323,7 +323,7 @@ namespace svt
 
     void OWizardMachine::implResetDefault(vcl::Window* _pWindow)
     {
-        vcl::Window* pChildLoop = _pWindow->GetWindow(WINDOW_FIRSTCHILD);
+        vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
         while (pChildLoop)
         {
             // does the window participate in the tabbing order?
@@ -346,7 +346,7 @@ namespace svt
             }
 
             // the next one ...
-            pChildLoop = pChildLoop->GetWindow(WINDOW_NEXT);
+            pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
         }
     }
 

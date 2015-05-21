@@ -91,7 +91,7 @@ init_from_window( AtkObject *accessible, vcl::Window *pWindow )
 
         default:
         {
-            vcl::Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
+            vcl::Window *pChild = pWindow->GetWindow(GetWindowType::FirstChild);
             if( pChild )
             {
                 if( WINDOW_HELPTEXTWINDOW == pChild->GetType() )

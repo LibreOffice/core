@@ -484,7 +484,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         VclExpander *pOne = *aI;
 
         vcl::Window *pChild = pOne->get_child();
-        vcl::Window* pLabel = pOne->GetWindow(WINDOW_LASTCHILD);
+        vcl::Window* pLabel = pOne->GetWindow(GetWindowType::LastChild);
         if (pLabel && pLabel != pChild && pLabel->GetType() == WINDOW_FIXEDTEXT)
         {
             FixedText *pLabelWidget = static_cast<FixedText*>(pLabel);
@@ -2110,8 +2110,8 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                         //To-Do make reorder a virtual in Window, move this foo
                         //there and see above
                         std::vector<vcl::Window*> aChilds;
-                        for (vcl::Window* pChild = pCurrentChild->GetWindow(WINDOW_FIRSTCHILD); pChild;
-                            pChild = pChild->GetWindow(WINDOW_NEXT))
+                        for (vcl::Window* pChild = pCurrentChild->GetWindow(GetWindowType::FirstChild); pChild;
+                            pChild = pChild->GetWindow(GetWindowType::Next))
                         {
                             aChilds.push_back(pChild);
                         }

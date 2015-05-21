@@ -370,7 +370,7 @@ void ScFilterFloatingWindow::dispose()
 vcl::Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
 {
     // redirect keyinput in the child window
-    return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD)->GetPreferredKeyInputWindow() : NULL;    // will be the FilterBox
+    return GetWindow(GetWindowType::FirstChild) ? GetWindow(GetWindowType::FirstChild)->GetPreferredKeyInputWindow() : NULL;    // will be the FilterBox
 }
 
 static bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )

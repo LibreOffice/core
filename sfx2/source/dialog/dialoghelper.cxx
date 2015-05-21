@@ -27,8 +27,8 @@ void setPreviewsToSamePlace(vcl::Window *pParent, VclBuilderContainer *pPage)
     std::vector<vcl::Window*> aGrids;
     aGrids.push_back(pOurGrid);
 
-    for (vcl::Window* pChild = pParent->GetWindow(WINDOW_FIRSTCHILD); pChild;
-        pChild = pChild->GetWindow(WINDOW_NEXT))
+    for (vcl::Window* pChild = pParent->GetWindow(GetWindowType::FirstChild); pChild;
+        pChild = pChild->GetWindow(GetWindowType::Next))
     {
         VclBuilderContainer *pPeer = dynamic_cast<VclBuilderContainer*>(pChild);
         if (!pPeer || pPeer == pPage || !pPeer->hasBuilder())

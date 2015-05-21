@@ -47,11 +47,11 @@ void Window::ImplAdjustNWFSizes()
     default:
         {
             // iterate over children
-            vcl::Window* pWin = GetWindow( WINDOW_FIRSTCHILD );
+            vcl::Window* pWin = GetWindow( GetWindowType::FirstChild );
             while( pWin )
             {
                 pWin->ImplAdjustNWFSizes();
-                pWin = pWin->GetWindow( WINDOW_NEXT );
+                pWin = pWin->GetWindow( GetWindowType::Next );
             }
         }
         break;

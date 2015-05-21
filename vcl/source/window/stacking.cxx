@@ -1054,67 +1054,67 @@ vcl::Window* Window::GetChild( sal_uInt16 nChild ) const
     return NULL;
 }
 
-vcl::Window* Window::GetWindow( sal_uInt16 nType ) const
+vcl::Window* Window::GetWindow( GetWindowType nType ) const
 {
     if (!mpWindowImpl)
         return 0;
 
     switch ( nType )
     {
-        case WINDOW_PARENT:
+        case GetWindowType::Parent:
             return mpWindowImpl->mpRealParent;
 
-        case WINDOW_FIRSTCHILD:
+        case GetWindowType::FirstChild:
             return mpWindowImpl->mpFirstChild;
 
-        case WINDOW_LASTCHILD:
+        case GetWindowType::LastChild:
             return mpWindowImpl->mpLastChild;
 
-        case WINDOW_PREV:
+        case GetWindowType::Prev:
             return mpWindowImpl->mpPrev;
 
-        case WINDOW_NEXT:
+        case GetWindowType::Next:
             return mpWindowImpl->mpNext;
 
-        case WINDOW_FIRSTOVERLAP:
+        case GetWindowType::FirstOverlap:
             return mpWindowImpl->mpFirstOverlap;
 
-        case WINDOW_LASTOVERLAP:
+        case GetWindowType::LastOverlap:
             return mpWindowImpl->mpLastOverlap;
 
-        case WINDOW_OVERLAP:
+        case GetWindowType::Overlap:
             if ( ImplIsOverlapWindow() )
                 return const_cast<vcl::Window*>(this);
             else
                 return mpWindowImpl->mpOverlapWindow;
 
-        case WINDOW_PARENTOVERLAP:
+        case GetWindowType::ParentOverlap:
             if ( ImplIsOverlapWindow() )
                 return mpWindowImpl->mpOverlapWindow;
             else
                 return mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpOverlapWindow;
 
-        case WINDOW_CLIENT:
+        case GetWindowType::Client:
             return const_cast<vcl::Window*>(this)->ImplGetWindow();
 
-        case WINDOW_REALPARENT:
+        case GetWindowType::RealParent:
             return ImplGetParent();
 
-        case WINDOW_FRAME:
+        case GetWindowType::Frame:
             return mpWindowImpl->mpFrameWindow;
 
-        case WINDOW_BORDER:
+        case GetWindowType::Border:
             if ( mpWindowImpl->mpBorderWindow )
-                return mpWindowImpl->mpBorderWindow->GetWindow( WINDOW_BORDER );
+                return mpWindowImpl->mpBorderWindow->GetWindow( GetWindowType::Border );
             return const_cast<vcl::Window*>(this);
 
-        case WINDOW_FIRSTTOPWINDOWCHILD:
+        case GetWindowType::FirstTopWindowChild:
             return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : (*ImplGetWinData()->maTopWindowChildren.begin()).get();
 
-        case WINDOW_LASTTOPWINDOWCHILD:
+        case GetWindowType::LastTopWindowChild:
             return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : (*ImplGetWinData()->maTopWindowChildren.rbegin()).get();
 
-        case WINDOW_PREVTOPWINDOWSIBLING:
+        case GetWindowType::PrevTopWindowSibling:
         {
             if ( !mpWindowImpl->mpRealParent )
                 return NULL;
@@ -1128,7 +1128,7 @@ vcl::Window* Window::GetWindow( sal_uInt16 nType ) const
             return *--myPos;
         }
 
-        case WINDOW_NEXTTOPWINDOWSIBLING:
+        case GetWindowType::NextTopWindowSibling:
         {
             if ( !mpWindowImpl->mpRealParent )
                 return NULL;

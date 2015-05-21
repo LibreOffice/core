@@ -940,7 +940,7 @@ void DockingWindow::setPosSizePixel( long nX, long nY,
         aSize.Height() -= 2 * nBorderWidth;
 
         Point aPos(nBorderWidth, nBorderWidth);
-        Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
+        Window *pBox = GetWindow(GetWindowType::FirstChild);
         assert(pBox);
         VclContainer::setLayoutAllocation(*pBox, aPos, aSize);
     }
@@ -1085,7 +1085,7 @@ void DockingWindow::setOptimalLayoutSize()
     maLayoutIdle.Stop();
 
     //resize DockingWindow to fit requisition on initial show
-    Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
+    Window *pBox = GetWindow(GetWindowType::FirstChild);
 
     Size aSize = get_preferred_size();
 
@@ -1115,7 +1115,7 @@ Size DockingWindow::GetOptimalSize() const
     if (!isLayoutEnabled())
         return Window::GetOptimalSize();
 
-    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 
     sal_Int32 nBorderWidth = get_border_width();
 
@@ -1145,7 +1145,7 @@ IMPL_LINK_NOARG_TYPED(DockingWindow, ImplHandleLayoutTimerHdl, Idle*, void)
         return;
     }
 
-    Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
+    Window *pBox = GetWindow(GetWindowType::FirstChild);
     assert(pBox);
     setPosSizeOnContainee(GetSizePixel(), *pBox);
 }

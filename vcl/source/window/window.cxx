@@ -117,7 +117,7 @@ namespace
         // skip border windows, they don't carry information which helps diagnosing the problem
         const vcl::Window* pWindow( &i_rWindow );
         while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) )
-            pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+            pWindow = pWindow->GetWindow( GetWindowType::FirstChild );
         if ( !pWindow )
             pWindow = &i_rWindow;
 

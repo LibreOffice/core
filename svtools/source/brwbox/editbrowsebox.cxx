@@ -580,9 +580,9 @@ namespace svt
             vcl::Window *pWin = &aController->GetWindow();
             if (!pWin->IsTracking())
             {
-                for (pWin = pWin->GetWindow(WINDOW_FIRSTCHILD);
+                for (pWin = pWin->GetWindow(GetWindowType::FirstChild);
                      pWin && !pWin->IsTracking();
-                     pWin = pWin->GetWindow(WINDOW_NEXT))
+                     pWin = pWin->GetWindow(GetWindowType::Next))
                 {
                 }
             }

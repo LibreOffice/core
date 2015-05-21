@@ -638,7 +638,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
     if( bFlatBorders && pWin && pWin->GetType() == WINDOW_BORDERWINDOW && (pWin != pWin->ImplGetFrameWindow()) )
     {
         // check for formcontrol, i.e., a control without NWF enabled
-        Control *const pControl = dynamic_cast< Control* >( pWin->GetWindow( WINDOW_CLIENT ) );
+        Control *const pControl = dynamic_cast< Control* >( pWin->GetWindow( GetWindowType::Client ) );
         if( !pControl || !pControl->IsNativeWidgetEnabled() )
             bFlatBorders = false;
     }

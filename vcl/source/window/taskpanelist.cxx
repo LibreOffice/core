@@ -78,8 +78,8 @@ static void ImplTaskPaneListGrabFocus( vcl::Window *pWindow, bool bForward )
 {
     // put focus in child of floating windows which is typically a toolbar
     // that can deal with the focus
-    if( pWindow->ImplIsFloatingWindow() && pWindow->GetWindow( WINDOW_FIRSTCHILD ) )
-        pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+    if( pWindow->ImplIsFloatingWindow() && pWindow->GetWindow( GetWindowType::FirstChild ) )
+        pWindow = pWindow->GetWindow( GetWindowType::FirstChild );
     pWindow->ImplGrabFocus( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
 }
 

@@ -2318,13 +2318,13 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException, s
     if ( GetWindow() )
     {
         VclPtr< Dialog > pDlg = GetAs< Dialog >();
-        vcl::Window* pParent = pDlg->GetWindow( WINDOW_PARENTOVERLAP );
+        vcl::Window* pParent = pDlg->GetWindow( GetWindowType::ParentOverlap );
         vcl::Window* pOldParent = NULL;
         vcl::Window* pSetParent = NULL;
         if ( pParent && !pParent->IsReallyVisible() )
         {
             pOldParent = pDlg->GetParent();
-            vcl::Window* pFrame = pDlg->GetWindow( WINDOW_FRAME );
+            vcl::Window* pFrame = pDlg->GetWindow( GetWindowType::Frame );
             if( pFrame != pDlg )
             {
                 pDlg->SetParent( pFrame );

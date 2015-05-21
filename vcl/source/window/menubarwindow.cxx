@@ -533,12 +533,12 @@ static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
     // note: dockingareas are direct children of the SystemWindow
     if( pWindow->ImplGetFrameWindow() )
     {
-        vcl::Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( WINDOW_FIRSTCHILD ); //mpWindowImpl->mpFirstChild;
+        vcl::Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( GetWindowType::FirstChild ); //mpWindowImpl->mpFirstChild;
         while( pWin )
         {
             if( pWin->IsSystemWindow() )
             {
-                vcl::Window *pChildWin = pWin->GetWindow( WINDOW_FIRSTCHILD ); //mpWindowImpl->mpFirstChild;
+                vcl::Window *pChildWin = pWin->GetWindow( GetWindowType::FirstChild ); //mpWindowImpl->mpFirstChild;
                 while( pChildWin )
                 {
                     DockingAreaWindow *pDockingArea = NULL;
@@ -551,12 +551,12 @@ static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
                         return pDockingArea->GetOutputSizePixel().Height();
                     }
 
-                    pChildWin = pChildWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
+                    pChildWin = pChildWin->GetWindow( GetWindowType::Next ); //mpWindowImpl->mpNext;
                 }
 
             }
 
-            pWin = pWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
+            pWin = pWin->GetWindow( GetWindowType::Next ); //mpWindowImpl->mpNext;
         }
     }
     return 0;
@@ -716,9 +716,9 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
 
     if( GetParent() )
     {
-        if( GetParent()->GetWindow( WINDOW_CLIENT )->IsSystemWindow() )
+        if( GetParent()->GetWindow( GetWindowType::Client )->IsSystemWindow() )
         {
-            SystemWindow *pSysWin = static_cast<SystemWindow*>(GetParent()->GetWindow( WINDOW_CLIENT ));
+            SystemWindow *pSysWin = static_cast<SystemWindow*>(GetParent()->GetWindow( GetWindowType::Client ));
             if( pSysWin->GetTaskPaneList() )
                 if( pSysWin->GetTaskPaneList()->HandleKeyEvent( rKEvent ) )
                     return true;

@@ -1028,7 +1028,7 @@ Size SystemWindow::GetOptimalSize() const
     if (!isLayoutEnabled())
         return Window::GetOptimalSize();
 
-    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 
     sal_Int32 nBorderWidth = get_border_width();
 
@@ -1059,7 +1059,7 @@ IMPL_LINK_NOARG_TYPED( SystemWindow, ImplHandleLayoutTimerHdl, Idle*, void )
         return;
     }
 
-    Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
+    Window *pBox = GetWindow(GetWindowType::FirstChild);
     assert(pBox);
     setPosSizeOnContainee(GetSizePixel(), *pBox);
 }
@@ -1085,7 +1085,7 @@ void SystemWindow::setOptimalLayoutSize()
     maLayoutIdle.Stop();
 
     //resize SystemWindow to fit requisition on initial show
-    Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
+    Window *pBox = GetWindow(GetWindowType::FirstChild);
 
     settingOptimalLayoutSize(pBox);
 

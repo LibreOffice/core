@@ -1046,7 +1046,7 @@ bool ToolBox::ImplHasExternalMenubutton()
     if( ImplIsFloatingMode() )
     {
         // custom menu is placed in the decoration
-        ImplBorderWindow *pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( WINDOW_BORDER ) );
+        ImplBorderWindow *pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( GetWindowType::Border ) );
         if( pBorderWin && !pBorderWin->GetMenuRect().IsEmpty() )
             bRet = true;
     }
@@ -1902,7 +1902,7 @@ void ToolBox::ImplExecuteCustomMenu()
         if( IsFloatingMode() )
         {
             // custom menu is placed in the decoration
-            ImplBorderWindow *pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( WINDOW_BORDER ) );
+            ImplBorderWindow *pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( GetWindowType::Border ) );
             if( pBorderWin && !pBorderWin->GetMenuRect().IsEmpty() )
             {
                 pWin = pBorderWin;

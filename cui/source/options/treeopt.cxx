@@ -1147,7 +1147,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     OString sHelpId(HID_OFADLG_TREELISTBOX);
     if (::isLayoutEnabled(pNewPage))
     {
-        vcl::Window *pFirstChild = pNewPage->GetWindow(WINDOW_FIRSTCHILD);
+        vcl::Window *pFirstChild = pNewPage->GetWindow(GetWindowType::FirstChild);
         assert(pFirstChild);
         sHelpId = pFirstChild->GetHelpId();
     }

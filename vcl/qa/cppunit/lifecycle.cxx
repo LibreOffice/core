@@ -76,7 +76,7 @@ void LifecycleTest::testMultiDispose()
     xWin->disposeOnce();
     xWin->disposeOnce();
     xWin->disposeOnce();
-    CPPUNIT_ASSERT(xWin->GetWindow(0) == NULL);
+    CPPUNIT_ASSERT(xWin->GetWindow(GetWindowType::Parent) == NULL);
     CPPUNIT_ASSERT(xWin->GetChild(0) == NULL);
     CPPUNIT_ASSERT(xWin->GetChildCount() == 0);
 }
@@ -143,7 +143,7 @@ void LifecycleTest::testPostDispose()
     CPPUNIT_ASSERT(!xWin->IsEnabled());
     CPPUNIT_ASSERT(!xWin->IsInputEnabled());
     CPPUNIT_ASSERT(!xWin->GetChild(0));
-    CPPUNIT_ASSERT(!xWin->GetWindow(0));
+    CPPUNIT_ASSERT(!xWin->GetWindow(GetWindowType::Parent));
 }
 
 class FocusCrashPostDispose : public TabControl

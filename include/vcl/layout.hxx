@@ -760,21 +760,21 @@ VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 
 //Get first window of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
-//i.e. acts like pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
+//i.e. acts like pChild = pChild->GetWindow(GetWindowType::FirstChild);
 //in a flat hierarchy where dialogs only have one layer
 //of children
 VCL_DLLPUBLIC vcl::Window* firstLogicalChildOfParent(vcl::Window *pTopLevel);
 
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
-//i.e. acts like pChild = pChild->GetWindow(WINDOW_NEXT);
+//i.e. acts like pChild = pChild->GetWindow(GetWindowType::Next);
 //in a flat hierarchy where dialogs only have one layer
 //of children
 VCL_DLLPUBLIC vcl::Window* nextLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild);
 
 //Get previous window before pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
-//i.e. acts like pChild = pChild->GetWindow(WINDOW_PREV);
+//i.e. acts like pChild = pChild->GetWindow(GetWindowType::Prev);
 //in a flat hierarchy where dialogs only have one layer
 //of children
 VCL_DLLPUBLIC vcl::Window* prevLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild);

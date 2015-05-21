@@ -78,7 +78,7 @@ void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect
 
 void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect)
 {
-    vcl::Window * pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
+    vcl::Window * pCandidate = rWindow.GetWindow( GetWindowType::FirstChild );
     while (pCandidate)
     {
         if (pCandidate->IsPaintTransparent())
@@ -93,7 +93,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle con
                 pCandidate->AddEventListener(LINK(this, CandidateMgr, WindowEventListener));
             }
         }
-        pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
+        pCandidate = pCandidate->GetWindow( GetWindowType::Next );
     }
 
     for (auto aI = m_aCandidates.begin(); aI != m_aCandidates.end(); ++aI)

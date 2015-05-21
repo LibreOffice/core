@@ -166,7 +166,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
         // we allow docking only when the window was moved
         // by dragging its caption
         // and ignore move request due to resizing
-        vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
+        vcl::Window *pBorder = GetWindow( GetWindowType::Border );
         if( pBorder != this )
         {
             Point aPt;
@@ -249,7 +249,7 @@ void ImplDockFloatWin2::Move()
 void ImplDockFloatWin2::Resize()
 {
     // forwarding of resize only required if we have no borderwindow ( GetWindow() then returns 'this' )
-    if( GetWindow( WINDOW_BORDER ) == this )
+    if( GetWindow( GetWindowType::Border ) == this )
     {
         FloatingWindow::Resize();
         Size aSize( GetSizePixel() );
@@ -761,7 +761,7 @@ void ImplPopupFloatWin::MouseButtonDown( const MouseEvent& rMEvt )
         PointerState aState = GetParent()->GetPointerState();
         if (HasMirroredGraphics() && IsRTLEnabled())
             ImplMirrorFramePos(aState.maPos);
-        maTearOffPosition = GetWindow( WINDOW_BORDER )->GetPosPixel();
+        maTearOffPosition = GetWindow( GetWindowType::Border )->GetPosPixel();
         maDelta = aState.maPos - maTearOffPosition;
         mbTrackingEnabled = true;
     }
@@ -788,7 +788,7 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
             if (pOutDev->HasMirroredGraphics() && IsRTLEnabled())
                 ImplMirrorFramePos(aState.maPos);
             maTearOffPosition = aState.maPos - maDelta;
-            GetWindow( WINDOW_BORDER )->SetPosPixel( maTearOffPosition );
+            GetWindow( GetWindowType::Border )->SetPosPixel( maTearOffPosition );
         }
     }
 }
@@ -1107,8 +1107,8 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
 
     // prepare reparenting
-    vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
-    mpOldBorderWin = GetWindow()->GetWindow( WINDOW_BORDER );
+    vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
+    mpOldBorderWin = GetWindow()->GetWindow( GetWindowType::Border );
     if( mpOldBorderWin.get() == GetWindow() )
         mpOldBorderWin = NULL;  // no border window found
 
@@ -1168,7 +1168,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     EndPopupModeData aData( pPopupFloatWin->GetTearOffPosition(), mpFloatWin->IsPopupModeTearOff() );
 
     // before deleting change parent back, so we can delete the floating window alone
-    vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
+    vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
     GetWindow()->mpWindowImpl->mpBorderWindow = NULL;
     if ( mpOldBorderWin )
     {
@@ -1216,8 +1216,8 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
 
                 maDockPos = GetWindow()->GetPosPixel();
 
-                vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
-                mpOldBorderWin = GetWindow()->GetWindow( WINDOW_BORDER );
+                vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
+                mpOldBorderWin = GetWindow()->GetWindow( GetWindowType::Border );
                 if( mpOldBorderWin == mpDockingWindow )
                     mpOldBorderWin = NULL;  // no border window found
 
@@ -1283,7 +1283,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
                 maMaxOutSize    = mpFloatWin->GetMaxOutputSizePixel();
 
-                vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT ); //mpWindowImpl->mpRealParent;
+                vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent ); //mpWindowImpl->mpRealParent;
                 GetWindow()->mpWindowImpl->mpBorderWindow = NULL;
                 if ( mpOldBorderWin )
                 {

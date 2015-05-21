@@ -187,14 +187,14 @@ OString TabPage::GetConfigId() const
 {
     OString sId(GetHelpId());
     if (sId.isEmpty() && isLayoutEnabled(this))
-        sId = GetWindow(WINDOW_FIRSTCHILD)->GetHelpId();
+        sId = GetWindow(GetWindowType::FirstChild)->GetHelpId();
     return sId;
 }
 
 Size TabPage::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))
-        return VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+        return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
     return getLegacyBestSizeForChildren(*this);
 }
 
@@ -202,14 +202,14 @@ void TabPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
     Window::SetPosSizePixel(rAllocPos, rAllocation);
     if (isLayoutEnabled(this) && rAllocation.Width() && rAllocation.Height())
-        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
+        VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild), Point(0, 0), rAllocation);
 }
 
 void TabPage::SetSizePixel(const Size& rAllocation)
 {
     Window::SetSizePixel(rAllocation);
     if (isLayoutEnabled(this) && rAllocation.Width() && rAllocation.Height())
-        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
+        VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild), Point(0, 0), rAllocation);
 }
 
 void TabPage::SetPosPixel(const Point& rAllocPos)
@@ -218,7 +218,7 @@ void TabPage::SetPosPixel(const Point& rAllocPos)
     Size aAllocation(GetOutputSizePixel());
     if (isLayoutEnabled(this) && aAllocation.Width() && aAllocation.Height())
     {
-        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), aAllocation);
+        VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild), Point(0, 0), aAllocation);
     }
 }
 

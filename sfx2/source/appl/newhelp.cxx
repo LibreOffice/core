@@ -1643,7 +1643,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
 
 void SfxHelpIndexWindow_Impl::Resize()
 {
-    vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
     if (!pChild)
         return;
     VclContainer::setLayoutAllocation(*pChild, Point(0,0), GetSizePixel());
@@ -1651,7 +1651,7 @@ void SfxHelpIndexWindow_Impl::Resize()
 
 Size SfxHelpIndexWindow_Impl::GetOptimalSize() const
 {
-    const vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    const vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
     if (!pChild)
         return Window::GetOptimalSize();
     return VclContainer::getLayoutRequisition(*pChild);
