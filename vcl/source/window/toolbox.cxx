@@ -2979,7 +2979,6 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
 
 void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint, bool bLayout)
 {
-
     if (nPos >= mpData->m_aItems.size())
         return;
 
@@ -3044,7 +3043,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
          nPos > 0
          )
     {
-        ImplDrawSeparator(*this, nPos, aButtonRect); // FIXME
+        ImplDrawSeparator(rRenderContext, nPos, aButtonRect);
     }
 
     // do nothing if item is no button or will be displayed as window
