@@ -233,7 +233,7 @@ bool SystemWindow::Close()
     return true;
 }
 
-void SystemWindow::TitleButtonClick( sal_uInt16 )
+void SystemWindow::TitleButtonClick( TitleButton )
 {
 }
 
@@ -309,9 +309,9 @@ bool SystemWindow::IsSaveBackgroundEnabled() const
         return false;
 }
 
-void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
+void SystemWindow::ShowTitleButton( TitleButton nButton, bool bVisible )
 {
-    if ( nButton == TITLE_BUTTON_DOCKING )
+    if ( nButton == TitleButton::Docking )
     {
         if ( mbDockBtn != bVisible )
         {
@@ -320,7 +320,7 @@ void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetDockButton( bVisible );
         }
     }
-    else if ( nButton == TITLE_BUTTON_HIDE )
+    else if ( nButton == TitleButton::Hide )
     {
         if ( mbHideBtn != bVisible )
         {
@@ -329,7 +329,7 @@ void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetHideButton( bVisible );
         }
     }
-    else if ( nButton == TITLE_BUTTON_MENU )
+    else if ( nButton == TitleButton::Menu )
     {
         if ( mpWindowImpl->mpBorderWindow )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuButton( bVisible );
@@ -338,11 +338,11 @@ void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
         return;
 }
 
-bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
+bool SystemWindow::IsTitleButtonVisible( TitleButton nButton ) const
 {
-    if ( nButton == TITLE_BUTTON_DOCKING )
+    if ( nButton == TitleButton::Docking )
         return mbDockBtn;
-    else /* if ( nButton == TITLE_BUTTON_HIDE ) */
+    else /* if ( nButton == TitleButton::Hide ) */
         return mbHideBtn;
 }
 
