@@ -943,7 +943,7 @@ AC_ARG_ENABLE(lockdown,
 
 AC_ARG_ENABLE(pch,
     AS_HELP_STRING([--enable-pch],
-        [Enables precompiled header support for C++.])
+        [Enables precompiled header support for C++. Forced default on Windows/VC build])
 )
 
 AC_ARG_ENABLE(win-mozab-driver,
@@ -1279,7 +1279,7 @@ AC_ARG_ENABLE(cups,
 AC_ARG_ENABLE(ccache,
     AS_HELP_STRING([--disable-ccache],
         [Do not try to use ccache automatically.
-         By default, we will try to detect if ccache is available; in that case if
+         By default, unless on Windows, we will try to detect if ccache is available; in that case if
          CC/CXX are not yet set, and --enable-icecream is not given, we
          attempt to use ccache. --disable-ccache disables ccache completely.
 ]),
@@ -2585,7 +2585,10 @@ AC_SUBST(WITH_GALLERY_BUILD)
 dnl ===================================================================
 dnl  Checks if ccache is available
 dnl ===================================================================
-if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+    # on windows/VC build do not use ccache
+    CCACHE=""
+elif test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
     case "%$CC%$CXX%" in
     # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some version number etc),
     # assume that's good then
@@ -4795,11 +4798,11 @@ dnl enable pch by default on windows
 dnl enable it explicitely otherwise
 AC_MSG_CHECKING([whether to enable pch feature])
 ENABLE_PCH=""
-if test "$enable_pch" != "no"; then
-    if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-        ENABLE_PCH="TRUE"
-        AC_MSG_RESULT([yes])
-    elif test -n "$enable_pch" && test "$GCC" = "yes"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+    ENABLE_PCH="TRUE"
+    AC_MSG_RESULT([yes])
+elif test "$enable_pch" != "no"; then
+    if test -n "$enable_pch" && test "$GCC" = "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
     elif test -n "$enable_pch"; then
@@ -5362,24 +5365,22 @@ AC_SUBST(BOOST_CXXFLAGS)
 #
 # prefx CXX with ccache if needed
 #
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-    if test "$CCACHE" != ""; then
-        AC_MSG_CHECKING([whether $CXX is already ccached])
-        AC_LANG_PUSH([C++])
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
-        dnl an empty program will do, we're checking the compiler flags
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
-                          [use_ccache=yes], [use_ccache=no])
-        if test $use_ccache = yes; then
-            AC_MSG_RESULT([yes])
-        else
-            CXX="$CCACHE $CXX"
-            AC_MSG_RESULT([no])
-        fi
-        CXXFLAGS=$save_CXXFLAGS
-        AC_LANG_POP([C++])
+if test "$CCACHE" != ""; then
+    AC_MSG_CHECKING([whether $CXX is already ccached])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+    dnl an empty program will do, we're checking the compiler flags
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                      [use_ccache=yes], [use_ccache=no])
+    if test $use_ccache = yes; then
+        AC_MSG_RESULT([yes])
+    else
+        CXX="$CCACHE $CXX"
+        AC_MSG_RESULT([no])
     fi
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
 fi
 
 dnl ===================================================================
