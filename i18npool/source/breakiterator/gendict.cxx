@@ -151,8 +151,8 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
 #endif
         }
     }
-    lenArray.push_back( lenArrayCurr ); // store last ending pointer
     charArray[current+1] = lenArray.size();
+    lenArray.push_back( lenArrayCurr ); // store last ending pointer
 #ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("\n};\n", source_fp);
 #endif
