@@ -542,3 +542,5 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 
+cmd/sc_charbackcolor.png cmd/sc_backcolor.png
+cmd/lc_charbackcolor.png cmd/lc_backcolor.png
