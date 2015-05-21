@@ -39,10 +39,6 @@ $(if $(ENABLE_VALGRIND),,$(call gb_Output_error,Running performance tests with e
 gb_CppunitTest_VALGRINDTOOL := valgrind --tool=callgrind --dump-instr=yes --instr-atstart=no
 endif
 
-ifneq ($(strip $(RR)),)
-gb_CppunitTest_RR := rr record
-endif
-
 # defined by platform
 #  gb_CppunitTest_get_filename
 gb_CppunitTest_RUNTIMEDEPS := $(call gb_Executable_get_runtime_dependencies,cppunittester)
@@ -103,8 +99,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 		$(if $(HEADLESS),,VCL_HIDE_WINDOWS=1) \
 		$(if $(strip $(PYTHON_URE)),\
 			PYTHONDONTWRITEBYTECODE=1) \
-		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
-			$(gb_CppunitTest_CPPTESTCOMMAND) \
+		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$*)) \
 		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),, \
