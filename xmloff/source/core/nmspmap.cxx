@@ -117,7 +117,7 @@ sal_uInt16 SvXMLNamespaceMap::AddIfKnown( const OUString& rPrefix, const OUStrin
 {
     sal_uInt16 nKey = GetKeyByName( rName );
 
-    assert(XML_NAMESPACE_NONE);
+    assert(nKey != XML_NAMESPACE_NONE);
 
     if( XML_NAMESPACE_NONE == nKey )
         return XML_NAMESPACE_UNKNOWN;
