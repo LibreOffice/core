@@ -48,6 +48,7 @@ static GtkComboBoxText* pPartSelector;
 #endif
 GtkWidget* pFindbar;
 GtkWidget* pFindbarEntry;
+GtkWidget* pFindbarLabel;
 
 static LibreOfficeKit* pOffice;
 
@@ -177,6 +178,7 @@ static void signalSearchPrev(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 /// Handles the key-press-event of the search entry widget.
 static gboolean signalFindbar(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pData*/)
 {
+    gtk_label_set_text(GTK_LABEL(pFindbarLabel), "");
     switch(pEvent->keyval)
     {
         case GDK_Return:
@@ -228,6 +230,12 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
             }
         }
     }
+}
+
+/// LOKDocView found no search matches -> set the search label accordingly.
+static void signalSearch(LOKDocView* /*pLOKDocView*/, char* /*pPayload*/, gpointer /*pData*/)
+{
+    gtk_label_set_text(GTK_LABEL(pFindbarLabel), "Search key not found");
 }
 
 /// User clicked on a cmmand button -> inform LOKDocView.
@@ -425,12 +433,18 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarPrev, -1);
     g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), NULL);
 
+    GtkToolItem* pFindbarLabelContainer = gtk_tool_item_new();
+    pFindbarLabel = gtk_label_new("");
+    gtk_container_add(GTK_CONTAINER(pFindbarLabelContainer), pFindbarLabel);
+    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarLabelContainer, -1);
+
     gtk_box_pack_end(GTK_BOX(pVBox), pFindbar, FALSE, FALSE, 0);
 
     // Docview
     pDocView = lok_docview_new( pOffice );
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
+    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
 
     // Input handling.
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);

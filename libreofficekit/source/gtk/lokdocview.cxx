@@ -190,6 +190,8 @@ struct LOKDocView_Impl
     void globalCallbackWorkerImpl(int nType, const char* pPayload);
     /// Command state (various buttons like bold are toggled or not) is changed.
     void commandChanged(const std::string& rPayload);
+    /// Search did not find any matches.
+    void searchNotFound(const std::string& rPayload);
 };
 
 namespace {
@@ -1001,6 +1003,9 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     }
     break;
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
+    {
+        searchNotFound(pCallback->m_aPayload);
+    }
     break;
     default:
         g_assert(false);
@@ -1045,6 +1050,7 @@ enum
 {
     EDIT_CHANGED,
     COMMAND_CHANGED,
+    SEARCH_NOT_FOUND,
     LAST_SIGNAL
 };
 
@@ -1053,6 +1059,11 @@ static guint docview_signals[LAST_SIGNAL] = { 0 };
 void LOKDocView_Impl::commandChanged(const std::string& rString)
 {
     g_signal_emit(m_pDocView, docview_signals[COMMAND_CHANGED], 0, rString.c_str());
+}
+
+void LOKDocView_Impl::searchNotFound(const std::string& rString)
+{
+    g_signal_emit(m_pDocView, docview_signals[SEARCH_NOT_FOUND], 0, rString.c_str());
 }
 
 static void lok_docview_class_init( gpointer ptr )
@@ -1075,6 +1086,16 @@ static void lok_docview_class_init( gpointer ptr )
                      G_TYPE_FROM_CLASS(gobject_class),
                      G_SIGNAL_RUN_FIRST,
                      G_STRUCT_OFFSET(LOKDocViewClass, command_changed),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__STRING,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+    pClass->search_not_found = 0;
+    docview_signals[SEARCH_NOT_FOUND] =
+        g_signal_new("search-not-found",
+                     G_TYPE_FROM_CLASS(gobject_class),
+                     G_SIGNAL_RUN_FIRST,
+                     G_STRUCT_OFFSET(LOKDocViewClass, search_not_found),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
