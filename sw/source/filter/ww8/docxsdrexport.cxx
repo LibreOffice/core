@@ -188,7 +188,7 @@ struct DocxSdrExport::Impl
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
-    : m_pImpl(std::make_shared<Impl>(*this, rExport, pSerializer, pDrawingML))
+    : m_pImpl(o3tl::make_unique<Impl>(*this, rExport, pSerializer, pDrawingML))
 {
 }
 

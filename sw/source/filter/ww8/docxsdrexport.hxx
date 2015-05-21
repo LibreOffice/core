@@ -11,6 +11,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <rtl/strbuf.hxx>
@@ -52,7 +53,7 @@ public:
 class DocxSdrExport
 {
     struct Impl;
-    std::shared_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> m_pImpl;
 public:
     DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML);
     ~DocxSdrExport();
