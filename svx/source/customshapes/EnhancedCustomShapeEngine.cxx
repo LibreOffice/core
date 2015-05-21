@@ -273,7 +273,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     throw ( RuntimeException, std::exception )
 {
     Reference< drawing::XShape > xShape;
-    SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
+    SdrObject* pSdrObjCustomShape( PTR_CAST( SdrObjCustomShape, GetSdrObjectFromXShape( mxShape ) ) );
     if ( pSdrObjCustomShape )
     {
         // retrieving the TextPath property to check if feature is enabled
