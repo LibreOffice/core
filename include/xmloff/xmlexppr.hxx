@@ -38,10 +38,7 @@ enum class SvXmlExportFlags {
                            // even if its empty
     IGN_WS      = 0x0008
 };
-namespace o3tl
-{
-    template<> struct typed_flags<SvXmlExportFlags> : is_typed_flags<SvXmlExportFlags, 0xf> {};
-}
+DECLARE_TYPED_FLAGS(SvXmlExportFlags, 0x000f)
 
 class SvXMLUnitConverter;
 class SvXMLAttributeList;
