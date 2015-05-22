@@ -182,10 +182,18 @@ namespace o3tl
 }
 
 // Flags for SetZOrder()
-#define WINDOW_ZORDER_BEFOR             ((sal_uInt16)0x0001)
-#define WINDOW_ZORDER_BEHIND            ((sal_uInt16)0x0002)
-#define WINDOW_ZORDER_FIRST             ((sal_uInt16)0x0004)
-#define WINDOW_ZORDER_LAST              ((sal_uInt16)0x0008)
+enum class ZOrderFlags
+{
+    NONE              = 0x0000,
+    Before            = 0x0001,
+    Behind            = 0x0002,
+    First             = 0x0004,
+    Last              = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ZOrderFlags> : is_typed_flags<ZOrderFlags, 0x000f> {};
+}
 
 // Activate-Flags
 #define ACTIVATE_MODE_GRABFOCUS         ((sal_uInt16)0x0001)
@@ -1005,7 +1013,7 @@ public:
     sal_uInt16                          GetActivateMode() const;
 
     void                                ToTop( sal_uInt16 nFlags = 0 );
-    void                                SetZOrder( vcl::Window* pRefWindow, sal_uInt16 nFlags );
+    void                                SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags );
     void                                EnableAlwaysOnTop( bool bEnable = true );
     bool                                IsAlwaysOnTopEnabled() const;
 

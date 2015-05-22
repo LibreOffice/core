@@ -143,7 +143,7 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
             // Order windows before manipulating their style, because elements such as the
             // RadioButton considers the PREV-window in StateChanged.
             if ( pPrevWin )
-                pWin->SetZOrder( pPrevWin, WINDOW_ZORDER_BEHIND );
+                pWin->SetZOrder( pPrevWin, ZOrderFlags::Behind );
 
             WinBits nStyle = pWin->GetStyle();
             nStyle &= ~(WB_TABSTOP|WB_NOTABSTOP|WB_GROUP);
@@ -198,7 +198,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
 
             // Z-Order
             if ( pSortBehind )
-                pWin->SetZOrder( pSortBehind, WINDOW_ZORDER_BEHIND );
+                pWin->SetZOrder( pSortBehind, ZOrderFlags::Behind );
 
             WinBits nStyle = pWin->GetStyle();
             if ( n == 0 )

@@ -745,13 +745,13 @@ void OFieldDescControl::ArrangeAggregates()
             SetPosSize(adAggregates[i].pctrlInputControl, nCurrentControlPos, adAggregates[i].nPosSizeArgument);
 
             // Set the z-order in a way such that the Controls can be traversed in the same sequence in which they have been arranged here
-            adAggregates[i].pctrlTextControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? WINDOW_ZORDER_BEHIND : WINDOW_ZORDER_FIRST);
-            adAggregates[i].pctrlInputControl->SetZOrder(adAggregates[i].pctrlTextControl, WINDOW_ZORDER_BEHIND );
+            adAggregates[i].pctrlTextControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? ZOrderFlags::Behind : ZOrderFlags::First);
+            adAggregates[i].pctrlInputControl->SetZOrder(adAggregates[i].pctrlTextControl, ZOrderFlags::Behind );
             pZOrderPredecessor = adAggregates[i].pctrlInputControl;
 
             if (adAggregates[i].pctrlInputControl == pFormatSample)
             {
-                pFormat->SetZOrder(pZOrderPredecessor, WINDOW_ZORDER_BEHIND);
+                pFormat->SetZOrder(pZOrderPredecessor, ZOrderFlags::Behind);
                 pZOrderPredecessor = pFormat;
             }
 
@@ -768,8 +768,8 @@ void OFieldDescControl::ArrangeAggregates()
     }
 
     // Finally, put the ScrollBars at the top of the z-order
-    m_pVertScroll->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
-    m_pHorzScroll->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
+    m_pVertScroll->SetZOrder(NULL, ZOrderFlags::First);
+    m_pHorzScroll->SetZOrder(NULL, ZOrderFlags::First);
 }
 
 void OFieldDescControl::ActivateAggregate( EControlType eType )

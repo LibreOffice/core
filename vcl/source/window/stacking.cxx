@@ -443,7 +443,7 @@ void Window::ToTop( sal_uInt16 nFlags )
     ImplFocusToTop( nFlags, IsReallyVisible() );
 }
 
-void Window::SetZOrder( vcl::Window* pRefWindow, sal_uInt16 nFlags )
+void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -452,21 +452,21 @@ void Window::SetZOrder( vcl::Window* pRefWindow, sal_uInt16 nFlags )
         return;
     }
 
-    if ( nFlags & WINDOW_ZORDER_FIRST )
+    if ( nFlags & ZOrderFlags::First )
     {
         if ( ImplIsOverlapWindow() )
             pRefWindow = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
         else
             pRefWindow = mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild;
-        nFlags |= WINDOW_ZORDER_BEFOR;
+        nFlags |= ZOrderFlags::Before;
     }
-    else if ( nFlags & WINDOW_ZORDER_LAST )
+    else if ( nFlags & ZOrderFlags::Last )
     {
         if ( ImplIsOverlapWindow() )
             pRefWindow = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap;
         else
             pRefWindow = mpWindowImpl->mpParent->mpWindowImpl->mpLastChild;
-        nFlags |= WINDOW_ZORDER_BEHIND;
+        nFlags |= ZOrderFlags::Behind;
     }
 
     while ( pRefWindow && pRefWindow->mpWindowImpl->mpBorderWindow )
@@ -475,7 +475,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, sal_uInt16 nFlags )
         return;
 
     DBG_ASSERT( pRefWindow->mpWindowImpl->mpParent == mpWindowImpl->mpParent, "Window::SetZOrder() - pRefWindow has other parent" );
-    if ( nFlags & WINDOW_ZORDER_BEFOR )
+    if ( nFlags & ZOrderFlags::Before )
     {
         if ( pRefWindow->mpWindowImpl->mpPrev.get() == this )
             return;
@@ -513,7 +513,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, sal_uInt16 nFlags )
             mpWindowImpl->mpPrev->mpWindowImpl->mpNext = this;
         mpWindowImpl->mpNext->mpWindowImpl->mpPrev = this;
     }
-    else if ( nFlags & WINDOW_ZORDER_BEHIND )
+    else if ( nFlags & ZOrderFlags::Behind )
     {
         if ( pRefWindow->mpWindowImpl->mpNext.get() == this )
             return;

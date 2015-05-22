@@ -143,7 +143,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
 
     // Create the line control
     m_pLine = VclPtr<SwDashedLine>::Create(GetEditWin(), &SwViewOption::GetHeaderFooterMarkColor);
-    m_pLine->SetZOrder(this, WINDOW_ZORDER_BEFOR);
+    m_pLine->SetZOrder(this, ZOrderFlags::Before);
 
     // Create and set the PopupMenu
     m_pPopupMenu = new PopupMenu(SW_RES(MN_HEADERFOOTER_BUTTON));

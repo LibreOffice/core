@@ -96,7 +96,7 @@ namespace pcr
         bool            IsVisible();
 
         vcl::Window*             GetRefWindow();
-        void                SetTabOrder(vcl::Window* pRefWindow, sal_uInt16 nFlags );
+        void                SetTabOrder(vcl::Window* pRefWindow, ZOrderFlags nFlags );
 
         bool            GrabFocus();
         void                ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary );

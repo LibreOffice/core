@@ -156,12 +156,12 @@ namespace svt
         // proper Z-Order
         if ( i_nPosition == 0 )
         {
-            pDrawer->SetZOrder( NULL, WINDOW_ZORDER_FIRST );
+            pDrawer->SetZOrder( NULL, ZOrderFlags::First );
         }
         else
         {
             ToolPanelDrawer* pFirstDrawer( m_aDrawers[ i_nPosition - 1 ] );
-            pDrawer->SetZOrder( pFirstDrawer, WINDOW_ZORDER_BEHIND );
+            pDrawer->SetZOrder( pFirstDrawer, ZOrderFlags::Behind );
         }
 
         pDrawer->Show();

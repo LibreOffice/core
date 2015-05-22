@@ -1162,9 +1162,9 @@ namespace pcr
             rLine.pLine->IndentTitle( _rPropertyData.IndentLevel > 0 );
 
             if ( nPos > 0 )
-                rLine.pLine->SetTabOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
+                rLine.pLine->SetTabOrder( pRefWindow, ZOrderFlags::Behind );
             else
-                rLine.pLine->SetTabOrder( pRefWindow, WINDOW_ZORDER_FIRST );
+                rLine.pLine->SetTabOrder( pRefWindow, ZOrderFlags::First );
 
             m_aOutOfDateLines.insert( nPos );
             rLine.pLine->SetComponentHelpIds(

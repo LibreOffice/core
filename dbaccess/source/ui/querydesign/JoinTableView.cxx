@@ -622,7 +622,7 @@ void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMouseP
     SetPointer(Pointer(PointerStyle::Move));
     Point aMousePos = ScreenToOutputPixel( rMousePos );
     m_aDragOffset = aMousePos - pTabWin->GetPosPixel();
-    m_pDragWin->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
+    m_pDragWin->SetZOrder(NULL, ZOrderFlags::First);
     m_bTrackingInitiallyMoved = false;
     StartTracking();
 }
@@ -752,7 +752,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
 
             // position window
             EndTracking();
-            m_pDragWin->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
+            m_pDragWin->SetZOrder(NULL, ZOrderFlags::First);
             // check, if I really moved
             // (this prevents setting the modified-Flag, when there actually was no change0
             TTableWindowData::value_type pData = m_pDragWin->GetData();

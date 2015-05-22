@@ -240,7 +240,7 @@ void ButtonDialog::StateChanged( StateChangedType nType )
         for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
         {
             if ( it->mpPushButton && it->mbOwnButton )
-                it->mpPushButton->SetZOrder(0, WINDOW_ZORDER_LAST);
+                it->mpPushButton->SetZOrder(0, ZOrderFlags::Last);
         }
 
         // Set focus on default button.

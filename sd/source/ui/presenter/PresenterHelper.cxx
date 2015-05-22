@@ -183,7 +183,7 @@ void SAL_CALL PresenterHelper::toTop (
     if (pWindow != NULL)
     {
         pWindow->ToTop();
-        pWindow->SetZOrder(NULL, WINDOW_ZORDER_LAST);
+        pWindow->SetZOrder(NULL, ZOrderFlags::Last);
     }
 }
 

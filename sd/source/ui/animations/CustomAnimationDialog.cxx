@@ -2309,7 +2309,7 @@ void PropertyControl::setSubControl( PropertySubControl* pSubControl )
     if( pControl )
     {
         pControl->SetPosSizePixel( GetPosPixel(), GetSizePixel() );
-        pControl->SetZOrder( this, WINDOW_ZORDER_BEFOR );
+        pControl->SetZOrder( this, ZOrderFlags::Before );
         pControl->Show();
         Hide();
     }
