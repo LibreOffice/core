@@ -38,6 +38,10 @@
  <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
  <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToLower" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToUpper" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
