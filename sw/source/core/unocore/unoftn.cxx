@@ -431,7 +431,7 @@ SwXFootnote::createTextCursor() throw (uno::RuntimeException, std::exception)
     SwPosition aPos( *pTextFootnote->GetStartNode() );
     SwXTextCursor *const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE, aPos);
-    SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
+    auto pUnoCrsr(pXCursor->GetCursor());
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     const uno::Reference< text::XTextCursor > xRet =
         static_cast<text::XWordCursor*>(pXCursor);

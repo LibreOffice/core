@@ -711,7 +711,7 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
     return xRet;
 }
 
-SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
+std::shared_ptr<SwUnoCrsr> SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
 {
     getText();
     XText *const pText = xBodyText.get();
@@ -719,7 +719,7 @@ SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xC
     SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
     xCrsr.set( static_cast<text::XWordCursor*>(pXTextCursor) );
 
-    SwUnoCrsr *const pUnoCrsr = pXTextCursor->GetCursor();
+    auto pUnoCrsr(pXTextCursor->GetCursor());
     pUnoCrsr->SetRemainInSection(false);
     return pUnoCrsr;
 }
@@ -733,7 +733,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         throw RuntimeException();
 
     Reference< XTextCursor >  xCrsr;
-    SwUnoCrsr*  pUnoCrsr = CreateCursorForSearch(xCrsr);
+    auto pUnoCrsr(CreateCursorForSearch(xCrsr));
 
     const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
             xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
@@ -808,7 +808,7 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor()
 
 // Used for findAll/First/Next
 
-SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
+std::shared_ptr<SwUnoCrsr>  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
                                      Reference< XTextCursor > & xCrsr,
                                      bool bAll,
                                      sal_Int32& nResult,
@@ -818,7 +818,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
         return 0;
 
-    SwUnoCrsr*  pUnoCrsr = CreateCursorForSearch(xCrsr);
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr(CreateCursorForSearch(xCrsr));
     const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
         xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
 
@@ -938,7 +938,7 @@ Reference< XIndexAccess >
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
     Reference< XTextCursor >  xCrsr;
-    boost::scoped_ptr<SwUnoCrsr> pResultCrsr(FindAny(xDesc, xCrsr, true, nResult, xTmp));
+    auto pResultCrsr(FindAny(xDesc, xCrsr, true, nResult, xTmp));
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XIndexAccess >  xRet;
@@ -953,7 +953,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
     Reference< XTextCursor >  xCrsr;
-    SwUnoCrsr* pResultCrsr = FindAny(xDesc, xCrsr, false, nResult, xTmp);
+    auto pResultCrsr(FindAny(xDesc, xCrsr, false, nResult, xTmp));
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XInterface >  xRet;
@@ -963,7 +963,6 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
             ::sw::CreateParentXText(*pDocShell->GetDoc(),
                     *pResultCrsr->GetPoint());
         xRet = *new SwXTextCursor(xParent, *pResultCrsr);
-        delete pResultCrsr;
     }
     return xRet;
 }
@@ -978,7 +977,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     Reference< XTextCursor >  xCrsr;
     if(!xStartAt.is())
         throw RuntimeException();
-    SwUnoCrsr* pResultCrsr = FindAny(xDesc, xCrsr, false, nResult, xStartAt);
+    auto pResultCrsr(FindAny(xDesc, xCrsr, false, nResult, xStartAt));
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XInterface >  xRet;
@@ -989,7 +988,6 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
                     *pResultCrsr->GetPoint());
 
         xRet = *new SwXTextCursor(xParent, *pResultCrsr);
-        delete pResultCrsr;
     }
     return xRet;
 }

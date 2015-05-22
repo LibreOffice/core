@@ -1382,7 +1382,7 @@ SwXText::insertTextPortion(
     OUString sMessage;
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
-    SwUnoCrsr *const pCursor = pTextCursor->GetCursor();
+    auto pCursor(pTextCursor->GetCursor());
     m_pImpl->m_pDoc->DontExpandFormat( *pCursor->Start() );
 
     if (!rText.isEmpty())
@@ -2745,7 +2745,7 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException, std::exception
     SwPosition aPos(rNode);
     SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
             (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
-    SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
+    auto pUnoCrsr(pXCursor->GetCursor());
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
     // save current start node to be able to check if there is content

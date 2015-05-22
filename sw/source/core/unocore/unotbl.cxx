@@ -968,7 +968,7 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursor() throw( uno::Runtim
     SwPosition aPos(*pSttNd);
     SwXTextCursor* const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT, aPos);
-    SwUnoCrsr* const pUnoCrsr = pXCursor->GetCursor();
+    auto pUnoCrsr(pXCursor->GetCursor());
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     return static_cast<text::XWordCursor*>(pXCursor);
 }

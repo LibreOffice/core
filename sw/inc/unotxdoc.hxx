@@ -432,8 +432,8 @@ public:
 
     void                        InitNewDoc();
 
-    SwUnoCrsr*                  CreateCursorForSearch(css::uno::Reference< css::text::XTextCursor > & xCrsr);
-    SwUnoCrsr*                  FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
+    std::shared_ptr<SwUnoCrsr>  CreateCursorForSearch(css::uno::Reference< css::text::XTextCursor > & xCrsr);
+    std::shared_ptr<SwUnoCrsr>  FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
                                             css::uno::Reference< css::text::XTextCursor > & xCrsr, bool bAll,
                                             sal_Int32& nResult,
                                             css::uno::Reference< css::uno::XInterface >  xLastResult);
