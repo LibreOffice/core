@@ -476,7 +476,7 @@ void DockingWindow::dispose()
 {
     if ( IsFloatingMode() )
     {
-        Show( false, SHOW_NOFOCUSCHANGE );
+        Show( false, ShowFlags::NoFocusChange );
         SetFloatingMode( false );
     }
     delete mpImplData;
@@ -675,7 +675,7 @@ void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
         bool bShow = false;
         if ( bool(bFloatMode) != IsFloatingMode() )
         {
-            Show( false, SHOW_NOFOCUSCHANGE );
+            Show( false, ShowFlags::NoFocusChange );
             SetFloatingMode( bFloatMode );
             bShow = true;
             if ( bFloatMode && mpFloatWin )
@@ -711,7 +711,7 @@ bool DockingWindow::Close()
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
         return false;
 
-    Show( false, SHOW_NOFOCUSCHANGE );
+    Show( false, ShowFlags::NoFocusChange );
     return true;
 }
 
@@ -790,7 +790,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
 
             if ( bFloatMode )
             {
-                Show( false, SHOW_NOFOCUSCHANGE );
+                Show( false, ShowFlags::NoFocusChange );
 
                 sal_Int32 nBorderWidth = get_border_width();
 
@@ -852,7 +852,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
             }
             else
             {
-                Show( false, SHOW_NOFOCUSCHANGE );
+                Show( false, ShowFlags::NoFocusChange );
 
                 sal_Int32 nBorderWidth = get_border_width();
 

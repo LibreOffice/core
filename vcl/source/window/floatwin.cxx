@@ -709,7 +709,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
         // force key input even without focus (useful for menus)
         mbGrabFocus = true;
     }
-    Show( true, SHOW_NOACTIVATE );
+    Show( true, ShowFlags::NoActivate );
 }
 
 void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
@@ -780,7 +780,7 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, sal_uLong n
     if ( !(nFlags & FloatWinPopupEndFlags::TearOff) ||
          !(nPopupModeFlags & FloatWinPopupFlags::AllowTearOff) )
     {
-        Show( false, SHOW_NOFOCUSCHANGE );
+        Show( false, ShowFlags::NoFocusChange );
 
         // maybe pass focus on to a suitable FloatingWindow
         if ( nFocusId )

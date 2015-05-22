@@ -393,12 +393,12 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 
                     pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                     if ( pWindow )
-                        pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
+                        pWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate  );
 
                     pWindow = VCLUnoHelper::GetWindow( xTabControl );
                     if ( pWindow )
                     {
-                        pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
+                        pWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate  );
                         TabControl* pTabControl = static_cast<TabControl *>(pWindow);
                         pTabControl->SetActivatePageHdl( LINK( this, TabWindow, Activate ));
                         pTabControl->SetDeactivatePageHdl( LINK( this, TabWindow, Deactivate ));

@@ -2294,7 +2294,7 @@ vcl::Font Window::GetPointFont(vcl::RenderContext& rRenderContext) const
     return aFont;
 }
 
-void Window::Show(bool bVisible, sal_uInt16 nFlags)
+void Window::Show(bool bVisible, ShowFlags nFlags)
 {
     if ( IsDisposed() || mpWindowImpl->mbVisible == bVisible )
         return;
@@ -2354,7 +2354,7 @@ void Window::Show(bool bVisible, sal_uInt16 nFlags)
             if ( ImplIsOverlapWindow() && !mpWindowImpl->mbFrame )
             {
                 // convert focus
-                if ( !(nFlags & SHOW_NOFOCUSCHANGE) && HasChildPathFocus() )
+                if ( !(nFlags & ShowFlags::NoFocusChange) && HasChildPathFocus() )
                 {
                     if ( mpWindowImpl->mpOverlapWindow->IsEnabled() &&
                          mpWindowImpl->mpOverlapWindow->IsInputEnabled() &&
@@ -2383,7 +2383,7 @@ void Window::Show(bool bVisible, sal_uInt16 nFlags)
                     aBounds.Bottom()    += workaround_border;
                     aInvRegion = aBounds;
                 }
-                if ( !mpWindowImpl->mbNoParentUpdate && !(nFlags & SHOW_NOPARENTUPDATE) )
+                if ( !mpWindowImpl->mbNoParentUpdate && !(nFlags & ShowFlags::NoParentUpdate) )
                 {
                     if ( !aInvRegion.IsEmpty() )
                         ImplInvalidateParentFrameRegion( aInvRegion );
@@ -2427,9 +2427,9 @@ void Window::Show(bool bVisible, sal_uInt16 nFlags)
 
             // If it is a SystemWindow it automatically pops up on top of
             // all other windows if needed.
-            if ( ImplIsOverlapWindow() && !(nFlags & SHOW_NOACTIVATE) )
+            if ( ImplIsOverlapWindow() && !(nFlags & ShowFlags::NoActivate) )
             {
-                ImplStartToTop(( nFlags & SHOW_FOREGROUNDTASK ) ? TOTOP_FOREGROUNDTASK : 0 );
+                ImplStartToTop(( nFlags & ShowFlags::ForegroundTask ) ? TOTOP_FOREGROUNDTASK : 0 );
                 ImplFocusToTop( 0, false );
             }
 
@@ -2477,7 +2477,7 @@ void Window::Show(bool bVisible, sal_uInt16 nFlags)
             mpWindowImpl->mbPaintFrame = true;
             if (!Application::GetSettings().GetMiscSettings().GetPseudoHeadless())
             {
-                bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) != 0;
+                bool bNoActivate(nFlags & (ShowFlags::NoActivate|ShowFlags::NoFocusChange));
                 mpWindowImpl->mpFrame->Show( true, bNoActivate );
             }
             if( aDogTag.IsDead() )

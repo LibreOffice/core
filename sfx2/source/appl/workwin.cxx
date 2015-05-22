@@ -1065,7 +1065,7 @@ void SfxWorkWindow::ShowChildren_Impl()
 
             if ( SfxChildVisibility::VISIBLE == (pCli->nVisible & SfxChildVisibility::VISIBLE) && bVisible )
             {
-                sal_uInt16 nFlags = pCli->bSetFocus ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE;
+                ShowFlags nFlags = pCli->bSetFocus ? ShowFlags::NONE : ShowFlags::NoFocusChange | ShowFlags::NoActivate;
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
@@ -1672,7 +1672,7 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
             {
                 pChild->nVisible |= SfxChildVisibility::ACTIVE;
                 if ( SfxChildVisibility::VISIBLE == (pChild->nVisible & SfxChildVisibility::VISIBLE) )
-                    pCW->Show( SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pCW->Show( ShowFlags::NoFocusChange | ShowFlags::NoActivate );
             }
         }
     }
@@ -1741,7 +1741,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
             pWin = pSplitWin->GetSplitWindow();
             if ( pSplitWin->GetWindowCount() == 1 )
-                static_cast<SplitWindow*>(pWin)->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                static_cast<SplitWindow*>(pWin)->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
         }
     }
 
@@ -2265,7 +2265,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSe
                 {
                     pCW->pCli->bSetFocus = bSetFocus;
                     pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
-                    pChildWin->Show( bSetFocus && pChildWin->WantsFocus() ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pChildWin->Show( bSetFocus && pChildWin->WantsFocus() ? ShowFlags::NONE : ShowFlags::NoFocusChange | ShowFlags::NoActivate );
                 }
                 else
                     static_cast<SfxDockingWindow*>(pChildWin->GetWindow())->Reappear_Impl();

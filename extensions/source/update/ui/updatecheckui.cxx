@@ -112,7 +112,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     void            Resize() SAL_OVERRIDE;
-    void            Show( bool bVisible = true, sal_uInt16 nFlags = SHOW_NOACTIVATE );
+    void            Show( bool bVisible = true, ShowFlags nFlags = ShowFlags::NoActivate );
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
     void            SetTitleAndText( const OUString& rTitle, const OUString& rText,
                                      const Image& rImage );
@@ -862,7 +862,7 @@ void BubbleWindow::MouseButtonDown( const MouseEvent& )
 }
 
 
-void BubbleWindow::Show( bool bVisible, sal_uInt16 nFlags )
+void BubbleWindow::Show( bool bVisible, ShowFlags nFlags )
 {
     SolarMutexGuard aGuard;
 

@@ -25,7 +25,7 @@ various means such as DogTags to try to detect destruction of a window
 between calls:
 
 	ImplDelData aDogTag( this );	// 'orrible old code
-	Show( true, SHOW_NOACTIVATE );
+	Show( true, ShowFlags::NoActivate );
 	if( !aDogTag.IsDead() )         // did 'this' go invalid yet ?
 		Update();
 
