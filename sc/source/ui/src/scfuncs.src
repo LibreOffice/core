@@ -1027,7 +1027,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns the day of the week for the date value as an integer (1-7)." ;
+            Text [ en-US ] = "Returns the day of the week for the date value as an integer." ;
         };
         ExtraData =
         {
