@@ -438,6 +438,12 @@ protected:
     void ImpCreateOverlayObjects();
     void ImpDestroyOverlayObjects();
 
+private:
+
+#ifdef DBG_UTIL
+    void dumpInformation();
+#endif
+
 };
 
 #endif

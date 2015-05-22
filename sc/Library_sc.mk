@@ -664,6 +664,12 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/xmlsource/xmlsourcedlg \
 ))
 
+ifneq (,$(gb_ENABLE_DBGUTIL))
+$(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/ui/view/gridwin_dbgutil \
+))
+endif
+
 $(eval $(call gb_Helper_optional,OPENCL,\
 $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/formulagroupcl \
