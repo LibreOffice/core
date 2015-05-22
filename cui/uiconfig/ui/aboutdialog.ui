@@ -259,7 +259,7 @@
                   <object class="GtkLabel" id="link">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes">http://www.libreoffice.org/about-us/credits/</property>
+                    <property name="label" translatable="yes">https://www.libreoffice.org/about-us/credits/</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
