@@ -103,7 +103,7 @@ static sal_Int32 SAL_CALL getACell(const sal_Unicode *text, sal_Int32 pos, sal_I
 
 #define is_Thai(c)  (0x0e00 <= c && c <= 0x0e7f) // Unicode definition for Thai
 
-void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStartPos)
+void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const nStartPos)
     throw(RuntimeException)
 {
     if (Text != cachedText) {
@@ -123,18 +123,20 @@ void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStart
         return;
 
     const sal_Unicode* str = cachedText.getStr();
-    sal_Int32 len = cachedText.getLength(), startPos, endPos;
+    sal_Int32 const len = cachedText.getLength();
 
-    startPos = nStartPos;
+    sal_Int32 startPos = nStartPos;
     while (startPos > 0 && is_Thai(str[startPos-1])) startPos--;
-    endPos = nStartPos+1;
+    sal_Int32 endPos = std::min(len, nStartPos+1);
     while (endPos < len && is_Thai(str[endPos])) endPos++;
 
     sal_Int32 start, end, pos;
     pos = start = end = startPos;
 
+    assert(endPos <= cellIndexSize);
     while (pos < endPos) {
         end += getACell(str, start, endPos);
+        assert(end <= cellIndexSize);
         while (pos < end) {
             nextCellIndex[pos] = end;
             previousCellIndex[pos] = start;
