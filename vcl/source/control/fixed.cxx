@@ -84,7 +84,7 @@ void FixedText::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    ImplInitSettings( true, true, true );
+    ApplySettings(*this);
 }
 
 WinBits FixedText::ImplInitStyle( WinBits nStyle )
@@ -102,35 +102,6 @@ const vcl::Font& FixedText::GetCanonicalFont( const StyleSettings& _rStyle ) con
 const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return ( GetStyle() & WB_INFO ) ? _rStyle.GetInfoTextColor() : _rStyle.GetLabelTextColor();
-}
-
-void FixedText::ImplInitSettings( bool bFont,
-                                  bool bForeground, bool bBackground )
-{
-    Control::ImplInitSettings( bFont, bForeground );
-
-    if ( bBackground )
-    {
-        vcl::Window* pParent = GetParent();
-        if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
-        {
-            EnableChildTransparentMode( true );
-            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( true );
-            SetBackground();
-        }
-        else
-        {
-            EnableChildTransparentMode( false );
-            SetParentClipMode( 0 );
-            SetPaintTransparent( false );
-
-            if ( IsControlBackground() )
-                SetBackground( GetControlBackground() );
-            else
-                SetBackground( pParent->GetBackground() );
-        }
-    }
 }
 
 FixedText::FixedText( vcl::Window* pParent, WinBits nStyle )
@@ -232,6 +203,31 @@ void FixedText::ImplDraw(OutputDevice* pDev, sal_uLong nDrawFlags,
         bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL);
 }
 
+void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    Control::ApplySettings(rRenderContext);
+
+    vcl::Window* pParent = GetParent();
+    if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
+    {
+        EnableChildTransparentMode(true);
+        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetPaintTransparent(true);
+        rRenderContext.SetBackground();
+    }
+    else
+    {
+        EnableChildTransparentMode(false);
+        SetParentClipMode(0);
+        SetPaintTransparent(false);
+
+        if (IsControlBackground())
+            rRenderContext.SetBackground(GetControlBackground());
+        else
+            rRenderContext.SetBackground(pParent->GetBackground());
+    }
+}
+
 void FixedText::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
     ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
@@ -240,7 +236,7 @@ void FixedText::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                       sal_uLong nFlags )
 {
-    ImplInitSettings( true, true, true );
+    ApplySettings(*pDev);
 
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -298,24 +294,24 @@ void FixedText::StateChanged( StateChangedType nType )
         if ( (GetPrevStyle() & FIXEDTEXT_VIEW_STYLE) !=
              (GetStyle() & FIXEDTEXT_VIEW_STYLE) )
         {
-            ImplInitSettings( true, false, false );
+            ApplySettings(*this);
             Invalidate();
         }
     }
     else if ( (nType == StateChangedType::Zoom)  ||
               (nType == StateChangedType::ControlFont) )
     {
-        ImplInitSettings( true, false, false );
+        ApplySettings(*this);
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ApplySettings(*this);
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ApplySettings(*this);
         Invalidate();
     }
 }
@@ -329,7 +325,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ApplySettings(*this);
         Invalidate();
     }
 }
@@ -390,7 +386,7 @@ Size FixedText::GetOptimalSize() const
 void FixedText::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    ImplDraw( const_cast<FixedText*>(this), 0, Point(), GetOutputSizePixel(), true );
+    const_cast<FixedText*>(this)->Invalidate();
 }
 
 void FixedText::setMaxWidthChars(sal_Int32 nWidth)
@@ -476,9 +472,13 @@ SelectableFixedText::SelectableFixedText(vcl::Window* pParent, WinBits nStyle)
     // read-only
     SetReadOnly();
     // make it transparent
+    SetPaintTransparent(true);
     SetControlBackground();
-    SetBackground();
-    SetPaintTransparent( true );
+}
+
+void SelectableFixedText::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    rRenderContext.SetBackground();
 }
 
 void SelectableFixedText::LoseFocus()
@@ -492,7 +492,7 @@ void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    ImplInitSettings( true, true, true );
+    ApplySettings(*this);
 }
 
 WinBits FixedLine::ImplInitStyle( WinBits nStyle )
@@ -510,35 +510,6 @@ const vcl::Font& FixedLine::GetCanonicalFont( const StyleSettings& _rStyle ) con
 const Color& FixedLine::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupTextColor();
-}
-
-void FixedLine::ImplInitSettings( bool bFont,
-                                  bool bForeground, bool bBackground )
-{
-    Control::ImplInitSettings( bFont, bForeground );
-
-    if ( bBackground )
-    {
-        vcl::Window* pParent = GetParent();
-        if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
-        {
-            EnableChildTransparentMode( true );
-            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( true );
-            SetBackground();
-        }
-        else
-        {
-            EnableChildTransparentMode( false );
-            SetParentClipMode( 0 );
-            SetPaintTransparent( false );
-
-            if ( IsControlBackground() )
-                SetBackground( GetControlBackground() );
-            else
-                SetBackground( pParent->GetBackground() );
-        }
-    }
 }
 
 void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
@@ -633,10 +604,35 @@ FixedLine::FixedLine( vcl::Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-void  FixedLine::FillLayoutData() const
+void FixedLine::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<FixedLine*>(this)->Invalidate();
+}
+
+void FixedLine::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    Control::ApplySettings(rRenderContext);
+
+    vcl::Window* pParent = GetParent();
+    if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
+    {
+        EnableChildTransparentMode(true);
+        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetPaintTransparent(true);
+        rRenderContext.SetBackground();
+    }
+    else
+    {
+        EnableChildTransparentMode(false);
+        SetParentClipMode(0);
+        SetPaintTransparent(false);
+
+        if (IsControlBackground())
+            rRenderContext.SetBackground(GetControlBackground());
+        else
+            rRenderContext.SetBackground(pParent->GetBackground());
+    }
 }
 
 void FixedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
@@ -676,17 +672,17 @@ void FixedLine::StateChanged( StateChangedType nType )
               (nType == StateChangedType::Style) ||
               (nType == StateChangedType::ControlFont) )
     {
-        ImplInitSettings( true, false, false );
+        ApplySettings(*this);
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ApplySettings(*this);
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ApplySettings(*this);
         Invalidate();
     }
 }
@@ -700,7 +696,7 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ApplySettings(*this);
         Invalidate();
     }
 }
@@ -714,7 +710,7 @@ void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    ImplInitSettings();
+    ApplySettings(*this);
 }
 
 WinBits FixedBitmap::ImplInitStyle( WinBits nStyle )
@@ -722,29 +718,6 @@ WinBits FixedBitmap::ImplInitStyle( WinBits nStyle )
     if ( !(nStyle & WB_NOGROUP) )
         nStyle |= WB_GROUP;
     return nStyle;
-}
-
-void FixedBitmap::ImplInitSettings()
-{
-    vcl::Window* pParent = GetParent();
-    if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
-    {
-        EnableChildTransparentMode( true );
-        SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( true );
-        SetBackground();
-    }
-    else
-    {
-        EnableChildTransparentMode( false );
-        SetParentClipMode( 0 );
-        SetPaintTransparent( false );
-
-        if ( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( pParent->GetBackground() );
-    }
 }
 
 FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
@@ -768,6 +741,29 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
             Point aPos = ImplCalcPos( GetStyle(), rPos, pBitmap->GetSizePixel(), rSize );
             pDev->DrawBitmap( aPos, *pBitmap );
         }
+    }
+}
+
+void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    vcl::Window* pParent = GetParent();
+    if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
+    {
+        EnableChildTransparentMode(true);
+        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetPaintTransparent(true);
+        rRenderContext.SetBackground();
+    }
+    else
+    {
+        EnableChildTransparentMode(false);
+        SetParentClipMode(0);
+        SetPaintTransparent(false);
+
+        if (IsControlBackground())
+            rRenderContext.SetBackground(GetControlBackground());
+        else
+            rRenderContext.SetBackground(pParent->GetBackground());
     }
 }
 
@@ -823,7 +819,7 @@ void FixedBitmap::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings();
+        ApplySettings(*this);
         Invalidate();
     }
 }
@@ -835,7 +831,7 @@ void FixedBitmap::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitSettings();
+        ApplySettings(*this);
         Invalidate();
     }
 }
@@ -852,7 +848,7 @@ void FixedImage::ImplInit( vcl::Window* pParent, WinBits nStyle )
     nStyle = ImplInitStyle( nStyle );
     mbInUserDraw = false;
     Control::ImplInit( pParent, nStyle, NULL );
-    ImplInitSettings();
+    ApplySettings(*this);
 }
 
 WinBits FixedImage::ImplInitStyle( WinBits nStyle )
@@ -860,29 +856,6 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
     if ( !(nStyle & WB_NOGROUP) )
         nStyle |= WB_GROUP;
     return nStyle;
-}
-
-void FixedImage::ImplInitSettings()
-{
-    vcl::Window* pParent = GetParent();
-    if ( pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
-    {
-        EnableChildTransparentMode( true );
-        SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( true );
-        SetBackground();
-    }
-    else
-    {
-        EnableChildTransparentMode( false );
-        SetParentClipMode( 0 );
-        SetPaintTransparent( false );
-
-        if ( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else if ( pParent )
-            SetBackground( pParent->GetBackground() );
-    }
 }
 
 void FixedImage::ImplLoadRes( const ResId& rResId )
@@ -941,6 +914,30 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     }
 }
 
+void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    vcl::Window* pParent = GetParent();
+    if (pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
+    {
+        EnableChildTransparentMode(true);
+        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetPaintTransparent(true);
+        rRenderContext.SetBackground();
+    }
+    else
+    {
+        EnableChildTransparentMode(false);
+        SetParentClipMode(0);
+        SetPaintTransparent(false);
+
+        if (IsControlBackground())
+            rRenderContext.SetBackground(GetControlBackground());
+        else if (pParent)
+            rRenderContext.SetBackground(pParent->GetBackground());
+    }
+}
+
+
 void FixedImage::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
@@ -998,7 +995,7 @@ void FixedImage::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings();
+        ApplySettings(*this);
         Invalidate();
     }
 }
@@ -1010,7 +1007,7 @@ void FixedImage::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitSettings();
+        ApplySettings(*this);
         Invalidate();
     }
 }

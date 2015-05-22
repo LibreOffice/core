@@ -105,7 +105,6 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         nStyle |= WB_BORDER;
 
     Control::ImplInit( pParent, nStyle, NULL );
-    SetBackground();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener> xDrop = new DNDEventDispatcher(this);
 
@@ -367,6 +366,11 @@ void ListBox::ToggleDropDown()
             CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
         }
     }
+}
+
+void ListBox::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    rRenderContext.SetBackground();
 }
 
 void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
