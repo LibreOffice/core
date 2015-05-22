@@ -1216,7 +1216,7 @@ bool Window::IsAlwaysEnableInput() const
     return mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled;
 }
 
-sal_uInt16 Window::GetActivateMode() const
+ActivateModeFlags Window::GetActivateMode() const
 {
     return mpWindowImpl->mnActivateMode;
 

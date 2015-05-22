@@ -1889,7 +1889,7 @@ void ImplBorderWindow::Deactivate()
 {
     // remove active windows from the ruler, also ignore the Deactivate
     // if a menu becomes active
-    if ( GetActivateMode() && !ImplGetSVData()->maWinData.mbNoDeactivate )
+    if ( GetActivateMode() != ActivateModeFlags::NONE && !ImplGetSVData()->maWinData.mbNoDeactivate )
         SetDisplayActive( false );
     Window::Deactivate();
 }

@@ -119,7 +119,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
             mpWindowImpl->mpRealParent = pParent;
         }
     }
-    SetActivateMode( 0 );
+    SetActivateMode( ActivateModeFlags::NONE );
 
     mpNextFloat             = NULL;
     mpFirstPopupModeWin     = NULL;

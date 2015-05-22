@@ -64,7 +64,7 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentDat
         pSVData->maWinData.mpAppWin = this;
     }
 
-    SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
+    SetActivateMode( ActivateModeFlags::GrabFocus );
 }
 
 void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
