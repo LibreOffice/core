@@ -20,8 +20,8 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:TableDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertRows"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRowsAfter"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumnsAfter"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DeleteRows"/>
  <toolbar:toolbaritem xlink:href=".uno:DeleteColumns"/>
