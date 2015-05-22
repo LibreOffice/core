@@ -1218,8 +1218,8 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         }
     }
 #else
-    (void)pWindow; (void)bAccept; (void)bBeforeRealize;
-    //FIXME: No set_accept_focus impl
+    gtk_window_set_accept_focus(pWindow, bAccept);
+    (void)bBeforeRealize;
 #endif
 }
 
