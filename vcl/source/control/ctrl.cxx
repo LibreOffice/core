@@ -425,28 +425,9 @@ void Control::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetTextFillColor();
 }
 
-void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
+void Control::ImplInitSettings(const bool, const bool)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if (_bFont)
-    {
-        Font aFont(GetCanonicalFont(rStyleSettings));
-        if (IsControlFont())
-            aFont.Merge(GetControlFont());
-        SetZoomedPointFont(*this, aFont);
-    }
-
-    if (_bForeground || _bFont)
-    {
-        Color aColor;
-        if (IsControlForeground())
-            aColor = GetControlForeground();
-        else
-            aColor = GetCanonicalTextColor(rStyleSettings);
-        SetTextColor(aColor);
-        SetTextFillColor();
-    }
+    ApplySettings(*this);
 }
 
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const OUString& _rStr,

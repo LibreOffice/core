@@ -44,50 +44,12 @@ DockingAreaWindow::ImplData::~ImplData()
 {
 }
 
-static void ImplInitBackground( DockingAreaWindow* pThis )
-{
-    const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
-    const BitmapEx& rPersonaBitmap = pThis->GetAlign() == WINDOWALIGN_TOP ? rSetting.GetPersonaHeader() :rSetting.GetPersonaFooter();
-    if ( !rPersonaBitmap.IsEmpty() &&( pThis->GetAlign() == WINDOWALIGN_TOP|| pThis->GetAlign()==WINDOWALIGN_BOTTOM ) )
-    {
-        Wallpaper aWallpaper( rPersonaBitmap );
-        if(pThis->GetAlign()==WINDOWALIGN_TOP )
-            aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
-        else
-            aWallpaper.SetStyle( WALLPAPER_BOTTOMRIGHT );
-        aWallpaper.SetColor( rSetting.GetWorkspaceColor() );
-
-        // we need to shift the bitmap vertically so that it spans over the
-        // menubar conveniently
-        long nMenubarHeight = 0;
-        SystemWindow *pSysWin = pThis->GetSystemWindow();
-        if ( pSysWin && pSysWin->GetMenuBar() )
-        {
-            vcl::Window *pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
-            if ( pMenubarWin )
-                nMenubarHeight = pMenubarWin->GetOutputHeightPixel();
-        }
-        aWallpaper.SetRect( Rectangle( Point( 0, -nMenubarHeight ), Size( pThis->GetOutputWidthPixel(), pThis->GetOutputHeightPixel() + nMenubarHeight ) ) );
-
-        pThis->SetBackground( aWallpaper );
-    }
-    else if( !pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
-    {
-        Wallpaper aWallpaper;
-        aWallpaper.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
-        pThis->SetBackground( aWallpaper );
-    }
-    else
-        pThis->SetBackground( Wallpaper( pThis->GetSettings().GetStyleSettings().GetFaceColor() ) );
-}
-
 DockingAreaWindow::DockingAreaWindow( vcl::Window* pParent ) :
     Window( WINDOW_DOCKINGAREA )
 {
     ImplInit( pParent, WB_CLIPCHILDREN|WB_3DLOOK, NULL );
 
     mpImplData = new ImplData;
-    ImplInitBackground( this );
 }
 
 DockingAreaWindow::~DockingAreaWindow()
@@ -107,7 +69,6 @@ void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitBackground( this );
         Invalidate();
     }
 }
@@ -149,7 +110,6 @@ void DockingAreaWindow::SetAlign( WindowAlign eNewAlign )
     if( eNewAlign != mpImplData->meAlign )
     {
         mpImplData->meAlign = eNewAlign;
-        ImplInitBackground( this );
         Invalidate();
     }
 }
@@ -159,13 +119,56 @@ WindowAlign DockingAreaWindow::GetAlign() const
     return mpImplData->meAlign;
 }
 
+void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
+    const BitmapEx& rPersonaBitmap = (GetAlign() == WINDOWALIGN_TOP) ? rSetting.GetPersonaHeader() : rSetting.GetPersonaFooter();
+
+    if (!rPersonaBitmap.IsEmpty() && (GetAlign() == WINDOWALIGN_TOP || GetAlign()==WINDOWALIGN_BOTTOM))
+    {
+        Wallpaper aWallpaper(rPersonaBitmap);
+        if (GetAlign() == WINDOWALIGN_TOP)
+            aWallpaper.SetStyle(WALLPAPER_TOPRIGHT);
+        else
+            aWallpaper.SetStyle(WALLPAPER_BOTTOMRIGHT);
+        aWallpaper.SetColor(rSetting.GetWorkspaceColor());
+
+        // we need to shift the bitmap vertically so that it spans over the
+        // menubar conveniently
+        long nMenubarHeight = 0;
+        SystemWindow* pSysWin = GetSystemWindow();
+        if (pSysWin && pSysWin->GetMenuBar())
+        {
+            vcl::Window* pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
+            if (pMenubarWin)
+                nMenubarHeight = pMenubarWin->GetOutputHeightPixel();
+        }
+        aWallpaper.SetRect(Rectangle(Point(0, -nMenubarHeight),
+                           Size(rRenderContext.GetOutputWidthPixel(),
+                                rRenderContext.GetOutputHeightPixel() + nMenubarHeight)));
+
+        rRenderContext.SetBackground(aWallpaper);
+    }
+    else if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL))
+    {
+        Wallpaper aWallpaper;
+        aWallpaper.SetStyle(WALLPAPER_APPLICATIONGRADIENT);
+        rRenderContext.SetBackground(aWallpaper);
+    }
+    else
+        rRenderContext.SetBackground(Wallpaper(rSetting.GetFaceColor()));
+
+}
+
 void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
+
+    const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
+
     EnableNativeWidget(true); // only required because the toolkit currently switches this flag off
     if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL))
     {
         ToolbarValue aControlValue;
-        const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
 
         if (GetAlign() == WINDOWALIGN_TOP && ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG)
         {
@@ -256,7 +259,6 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
 void DockingAreaWindow::Resize()
 {
-    ImplInitBackground( this );
     ImplInvalidateMenubar( this );
     if (IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL))
         Invalidate();
