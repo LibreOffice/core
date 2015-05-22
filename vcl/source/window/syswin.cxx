@@ -69,7 +69,7 @@ void SystemWindow::Init()
 {
     mpImplData          = new ImplData;
     mpWindowImpl->mbSysWin            = true;
-    mpWindowImpl->mnActivateMode      = ACTIVATE_MODE_GRABFOCUS;
+    mpWindowImpl->mnActivateMode      = ActivateModeFlags::GrabFocus;
 
     mpMenuBar           = NULL;
     mbPinned            = false;

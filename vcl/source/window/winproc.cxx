@@ -1760,7 +1760,7 @@ static void ImplActivateFloatingWindows( vcl::Window* pWindow, bool bActive )
     vcl::Window* pTempWindow = pWindow->ImplGetWindowImpl()->mpFirstOverlap;
     while ( pTempWindow )
     {
-        if ( !pTempWindow->GetActivateMode() )
+        if ( pTempWindow->GetActivateMode() == ActivateModeFlags::NONE )
         {
             if ( (pTempWindow->GetType() == WINDOW_BORDERWINDOW) &&
                  (pTempWindow->ImplGetWindow()->GetType() == WINDOW_FLOATINGWINDOW) )

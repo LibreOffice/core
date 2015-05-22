@@ -655,7 +655,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnWaitCount                         = 0;                         // Wait-Count (>1 == Warte-MousePointer)
     mnPaintFlags                        = 0;                         // Flags for ImplCallPaint
     mnParentClipMode                    = 0;                         // Flags for Parent-ClipChildren-Mode
-    mnActivateMode                      = 0;                         // Will be converted in System/Overlap-Windows
+    mnActivateMode                      = ActivateModeFlags::NONE;   // Will be converted in System/Overlap-Windows
     mnDlgCtrlFlags                      = 0;                         // DialogControl-Flags
     mnLockCount                         = 0;                         // LockCount
     meAlwaysInputMode                   = AlwaysInputNone;           // neither AlwaysEnableInput nor AlwaysDisableInput called
@@ -2798,7 +2798,7 @@ void Window::AlwaysDisableInput( bool bAlways, bool bChild )
     }
 }
 
-void Window::SetActivateMode( sal_uInt16 nMode )
+void Window::SetActivateMode( ActivateModeFlags nMode )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -2809,7 +2809,7 @@ void Window::SetActivateMode( sal_uInt16 nMode )
         mpWindowImpl->mnActivateMode = nMode;
 
         // possibly trigger Decativate/Activate
-        if ( mpWindowImpl->mnActivateMode )
+        if ( mpWindowImpl->mnActivateMode != ActivateModeFlags::NONE )
         {
             if ( (mpWindowImpl->mbActive || (GetType() == WINDOW_BORDERWINDOW)) &&
                  !HasChildPathFocus( true ) )

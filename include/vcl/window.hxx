@@ -196,7 +196,15 @@ namespace o3tl
 }
 
 // Activate-Flags
-#define ACTIVATE_MODE_GRABFOCUS         ((sal_uInt16)0x0001)
+enum class ActivateModeFlags
+{
+    NONE        = 0,
+    GrabFocus   = 0x0001,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ActivateModeFlags> : is_typed_flags<ActivateModeFlags, 0x0001> {};
+}
 
 // ToTop-Flags
 #define TOTOP_RESTOREWHENMIN            ((sal_uInt16)0x0001)
@@ -1009,8 +1017,8 @@ public:
     */
     bool                                IsInModalMode() const;
 
-    void                                SetActivateMode( sal_uInt16 nMode );
-    sal_uInt16                          GetActivateMode() const;
+    void                                SetActivateMode( ActivateModeFlags nMode );
+    ActivateModeFlags                   GetActivateMode() const;
 
     void                                ToTop( sal_uInt16 nFlags = 0 );
     void                                SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags );

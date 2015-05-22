@@ -515,17 +515,17 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
     pOldRealWindow = pOldOverlapWindow->ImplGetWindow();
     pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
     if ( (pOldRealWindow->GetType() != WINDOW_FLOATINGWINDOW) ||
-         pOldRealWindow->GetActivateMode() )
+         pOldRealWindow->GetActivateMode() != ActivateModeFlags::NONE )
     {
         if ( (pNewRealWindow->GetType() == WINDOW_FLOATINGWINDOW) &&
-             !pNewRealWindow->GetActivateMode() )
+             pNewRealWindow->GetActivateMode() == ActivateModeFlags::NONE)
         {
             pSVData->maWinData.mpLastDeacWin = pOldOverlapWindow;
             bCallDeactivate = false;
         }
     }
     else if ( (pNewRealWindow->GetType() != WINDOW_FLOATINGWINDOW) ||
-              pNewRealWindow->GetActivateMode() )
+              pNewRealWindow->GetActivateMode() != ActivateModeFlags::NONE )
     {
         if ( pSVData->maWinData.mpLastDeacWin )
         {

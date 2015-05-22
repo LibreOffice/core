@@ -392,12 +392,12 @@ void Window::ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible )
             // should always find the belonging BorderWindow
             if ( !pFocusWindow->mpWindowImpl->mpBorderWindow )
             {
-                if ( pFocusWindow->mpWindowImpl->mnActivateMode & ACTIVATE_MODE_GRABFOCUS )
+                if ( pFocusWindow->mpWindowImpl->mnActivateMode & ActivateModeFlags::GrabFocus )
                     break;
             }
             pFocusWindow = pFocusWindow->ImplGetParent();
         }
-        if ( (pFocusWindow->mpWindowImpl->mnActivateMode & ACTIVATE_MODE_GRABFOCUS) &&
+        if ( (pFocusWindow->mpWindowImpl->mnActivateMode & ActivateModeFlags::GrabFocus) &&
              !pFocusWindow->HasChildPathFocus( true ) )
             pFocusWindow->GrabFocus();
     }

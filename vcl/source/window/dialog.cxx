@@ -427,7 +427,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
         mpWindowImpl->mpRealParent    = pParent;
     }
 
-    SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
+    SetActivateMode( ActivateModeFlags::GrabFocus );
 
     ImplInitSettings();
 }
