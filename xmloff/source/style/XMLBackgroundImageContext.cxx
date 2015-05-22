@@ -389,7 +389,8 @@ void XMLBackgroundImageContext::EndElement()
     else if( GraphicLocation_NONE == ePos )
         ePos = GraphicLocation_TILED;
 
-    aProp.maValue <<= sURL;
+    if (!sURL.isEmpty())
+        aProp.maValue <<= sURL;
     aPosProp.maValue <<= ePos;
     aFilterProp.maValue <<= sFilter;
     aTransparencyProp.maValue <<= nTransparency;

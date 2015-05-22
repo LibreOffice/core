@@ -259,6 +259,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     const bool bFillStyleUsed(pXFillStyleItem && pXFillStyleItem->hasValue() &&
         (pXFillStyleItem->get<drawing::FillStyle>() != drawing::FillStyle_SOLID
          || !pGrURL));
+    SAL_INFO_IF(pXFillStyleItem && pXFillStyleItem->hasValue() && !bFillStyleUsed,
+            "sw.uno", "FillBaseProperties: ignoring invalid FillStyle");
     const bool bXFillStyleItemUsed(
         bFillStyleUsed ||
         pXFillColorItem ||
