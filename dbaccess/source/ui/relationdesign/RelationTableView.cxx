@@ -288,7 +288,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
 
     if(aIter != GetTabWinMap().end())
     {
-        aIter->second->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
+        aIter->second->SetZOrder(NULL, ZOrderFlags::First);
         aIter->second->GrabFocus();
         EnsureVisible(aIter->second);
         // no new one

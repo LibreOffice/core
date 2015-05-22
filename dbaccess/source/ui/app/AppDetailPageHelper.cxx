@@ -582,7 +582,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
         );
 
         pTreeView->notifyHiContrastChanged();
-        m_aBorder->SetZOrder(pTreeView, WINDOW_ZORDER_BEHIND);
+        m_aBorder->SetZOrder(pTreeView, ZOrderFlags::Behind);
     }
     if ( !m_pLists[E_TABLE]->GetEntryCount() )
     {

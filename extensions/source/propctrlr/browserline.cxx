@@ -135,17 +135,17 @@ namespace pcr
     }
 
 
-    void OBrowserLine::SetTabOrder(vcl::Window* pRefWindow, sal_uInt16 nFlags )
+    void OBrowserLine::SetTabOrder(vcl::Window* pRefWindow, ZOrderFlags nFlags )
     {
         m_aFtTitle->SetZOrder(pRefWindow,nFlags);
         if ( m_pControlWindow )
-            m_pControlWindow->SetZOrder( m_aFtTitle.get(), WINDOW_ZORDER_BEHIND );
+            m_pControlWindow->SetZOrder( m_aFtTitle.get(), ZOrderFlags::Behind );
 
         if ( m_pBrowseButton && m_pControlWindow )
-            m_pBrowseButton->SetZOrder( m_pControlWindow, WINDOW_ZORDER_BEHIND );
+            m_pBrowseButton->SetZOrder( m_pControlWindow, ZOrderFlags::Behind );
 
         if ( m_pAdditionalBrowseButton && m_pBrowseButton )
-            m_pAdditionalBrowseButton->SetZOrder( m_pBrowseButton, WINDOW_ZORDER_BEHIND );
+            m_pAdditionalBrowseButton->SetZOrder( m_pBrowseButton, ZOrderFlags::Behind );
     }
 
 
