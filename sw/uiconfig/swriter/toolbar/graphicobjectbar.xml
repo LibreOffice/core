@@ -22,15 +22,17 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafMode" toolbar:helpid="10871"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ColorSettings" toolbar:helpid="11016"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:helpid="10869"/>
+ <toolbar:toolbaritem xlink:href=".uno:Crop" toolbar:helpid=""/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FlipVertical" toolbar:helpid="20426"/>
  <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal" toolbar:helpid="20425"/>
  <toolbar:toolbaritem xlink:href=".uno:RotateLeft" toolbar:helpid=""/>
  <toolbar:toolbaritem xlink:href=".uno:RotateRight" toolbar:helpid=""/>
- <toolbar:toolbaritem xlink:href=".uno:Crop" toolbar:helpid=""/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:helpid="10869"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorSettings" toolbar:helpid="11016"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:GraphicDialog" toolbar:visible="false"/>
 </toolbar:toolbar>

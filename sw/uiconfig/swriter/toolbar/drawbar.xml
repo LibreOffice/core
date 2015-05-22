@@ -21,32 +21,43 @@
  <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="10128"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle" toolbar:helpid="10104"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse" toolbar:helpid="10110"/>
- <toolbar:toolbaritem xlink:href=".uno:DrawCaption" toolbar:helpid="10254"/>
- <toolbar:toolbaritem xlink:href=".uno:VerticalCaption" toolbar:helpid="10906"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="10464"/>
+ <toolbar:toolbaritem xlink:href=".uno:Freeline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:helpid="10397"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierFill" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:helpid="10395"/>
- <toolbar:toolbaritem xlink:href=".uno:Arc" toolbar:visible="false" toolbar:helpid="10114"/>
- <toolbar:toolbaritem xlink:href=".uno:Pie" toolbar:visible="false" toolbar:helpid="10112"/>
- <toolbar:toolbaritem xlink:href=".uno:CircleCut" toolbar:visible="false" toolbar:helpid="10115"/>
- <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:helpid="10253" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:helpid="10905" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Text_Marquee" toolbar:visible="false" toolbar:helpid="10465"/>
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal_Unfilled" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="10104" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle" toolbar:helpid="10104"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.round-rectangle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.quadrat"/>
+ <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="10110" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse" toolbar:helpid="10110"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle"/>
+ <toolbar:toolbaritem xlink:href=".uno:Arc" toolbar:helpid="10114" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Pie" toolbar:helpid="10112" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CircleCut" toolbar:helpid="10115" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.isosceles-triangle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.right-triangle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="11003"/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="11004"/>
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="11005"/>
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="11006"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="11007"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="11006"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawCaption" toolbar:helpid="10254"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalCaption" toolbar:helpid="10906"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:helpid="10253"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:helpid="10905"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:helpid="10977"/>
+ <toolbar:toolbaritem xlink:href=".uno:Text_Marquee" toolbar:visible="false" toolbar:helpid="10465"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:helpid="10977"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
 </toolbar:toolbar>
