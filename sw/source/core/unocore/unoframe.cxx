@@ -392,7 +392,17 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
                     throw lang::IllegalArgumentException();
                 }
 
-                bRet &= SvxShape::SetFillAttribute(XATTR_FILLGRADIENT, aTempName, rToSet);
+                bool const bSuccess = SvxShape::SetFillAttribute(
+                                        XATTR_FILLGRADIENT, aTempName, rToSet);
+                if (aXFillStyleItem.GetValue() == drawing::FillStyle_GRADIENT)
+                {   // tdf#90946 ignore invalid gradient-name if SOLID
+                    bRet &= bSuccess;
+                }
+                else
+                {
+                    SAL_INFO_IF(!bSuccess, "sw.uno",
+                       "FillBaseProperties: ignoring invalid FillGradientName");
+                }
             }
         }
 
