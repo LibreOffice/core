@@ -1912,14 +1912,6 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
             pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     }
 
-    // here we always terminate the popupmode, also when NOFOCUSCLOSE
-    // is set, such that we do not show windows during the switch
-    if ( pSVData->maWinData.mpFirstFloat )
-    {
-        if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) )
-            pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
-    }
-
     pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = false;
 
     // execute Focus-Events after a delay, such that SystemChildWindows
