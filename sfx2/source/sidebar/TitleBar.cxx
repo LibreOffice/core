@@ -94,13 +94,13 @@ void TitleBar::DataChanged (const DataChangedEvent& /*rEvent*/)
     Invalidate();
 }
 
-void TitleBar::setPosSizePixel (long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
+void TitleBar::setPosSizePixel (long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
 {
     Window::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 
     // Place the toolbox.
     const sal_Int32 nToolBoxWidth (maToolBox->GetItemPosRect(0).GetWidth());
-    maToolBox->setPosSizePixel(nWidth - nToolBoxWidth,0, nToolBoxWidth, nHeight, WINDOW_POSSIZE_POSSIZE);
+    maToolBox->setPosSizePixel(nWidth - nToolBoxWidth,0, nToolBoxWidth, nHeight, PosSizeFlags::PosSize);
     maToolBox->Show();
 }
 

@@ -109,7 +109,7 @@ public:
 
     virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
 
-    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
+    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) SAL_OVERRIDE;
     void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE
                         { Edit::SetPosSizePixel( rNewPos, rNewSize ); }
 

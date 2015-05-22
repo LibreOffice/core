@@ -2222,7 +2222,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
         }
         long nLineWidth = aOutSize.Width()-(CALFIELD_BORDERLINE_X*2);
         mpFixedLine->setPosSizePixel( (aOutSize.Width()-nLineWidth)/2, aOutSize.Height()+((CALFIELD_BORDER_YTOP-2)/2),
-                                      nLineWidth, 2, WINDOW_POSSIZE_POSSIZE );
+                                      nLineWidth, 2, PosSizeFlags::PosSize );
         aOutSize.Height() += nBtnHeight + (CALFIELD_BORDER_Y*2) + CALFIELD_BORDER_YTOP;
         SetOutputSizePixel( aOutSize );
     }

@@ -24,6 +24,7 @@
 #include <com/sun/star/plugin/XPluginManager.hpp>
 #include <com/sun/star/plugin/PluginMode.hpp>
 #include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -60,7 +61,7 @@ void PluginWindow_Impl::Resize()
 {
     Size aSize( GetOutputSizePixel() );
     if ( xWindow.is() )
-        xWindow->setPosSize( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_SIZE );
+        xWindow->setPosSize( 0, 0, aSize.Width(), aSize.Height(), css::awt::PosSize::SIZE );
 }
 
 #define PROPERTY_UNBOUND 0

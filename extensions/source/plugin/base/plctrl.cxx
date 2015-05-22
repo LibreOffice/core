@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/XSpinListener.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
 #include <com/sun/star/awt/XVclContainerListener.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 
 #include <plugin/plctrl.hxx>
 #include <vcl/syschild.hxx>
@@ -43,7 +44,7 @@ PluginControl_Impl::PluginControl_Impl()
     , _nY( 0 )
     , _nWidth( 100 )
     , _nHeight( 100 )
-    , _nFlags( WINDOW_POSSIZE_ALL )
+    , _nFlags( css::awt::PosSize::POSSIZE )
     , _bVisible(false)
     , _bInDesignMode(false)
     , _bEnable(true)

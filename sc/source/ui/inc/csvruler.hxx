@@ -63,7 +63,7 @@ public:
     virtual void                setPosSizePixel(
                                     long nX, long nY,
                                     long nWidth, long nHeight,
-                                    sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
+                                    PosSizeFlags nFlags = PosSizeFlags::All ) SAL_OVERRIDE;
 
     /** Apply current layout data to the ruler. */
     void                        ApplyLayout( const ScCsvLayoutData& rOldData );

@@ -171,7 +171,7 @@ public:
 
     void            setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
-                                     sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
+                                     PosSizeFlags nFlags = PosSizeFlags::All );
     void            SetPosSizePixel( const Point& rNewPos,
                                      const Size& rNewSize )
                         { mpDockingWindow->SetPosSizePixel( rNewPos, rNewSize ); }
@@ -211,7 +211,7 @@ public:
     // be availbale from the toolkit
     void        SetPosSizePixel( vcl::Window *pWin, long nX, long nY,
                                 long nWidth, long nHeight,
-                                sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
+                                PosSizeFlags nFlags = PosSizeFlags::All );
     Rectangle   GetPosSizePixel( const vcl::Window *pWin );
 };
 
@@ -347,7 +347,7 @@ public:
 
     virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
-                                     sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
+                                     PosSizeFlags nFlags = PosSizeFlags::All ) SAL_OVERRIDE;
     void            SetPosSizePixel( const Point& rNewPos,
                                      const Size& rNewSize ) SAL_OVERRIDE
                         { Window::SetPosSizePixel( rNewPos, rNewSize ); }

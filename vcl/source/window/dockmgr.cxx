@@ -253,7 +253,7 @@ void ImplDockFloatWin2::Resize()
     {
         FloatingWindow::Resize();
         Size aSize( GetSizePixel() );
-        mpDockWin->GetWindow()->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_POSSIZE ); // TODO: is this needed ???
+        mpDockWin->GetWindow()->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), PosSizeFlags::PosSize ); // TODO: is this needed ???
     }
 }
 
@@ -429,7 +429,7 @@ void DockingManager::RemoveWindow( const vcl::Window *pWindow )
 
 void DockingManager::SetPosSizePixel( vcl::Window *pWindow, long nX, long nY,
                                     long nWidth, long nHeight,
-                                    sal_uInt16 nFlags )
+                                    PosSizeFlags nFlags )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
@@ -1318,7 +1318,7 @@ void ImplDockingWindowWrapper::SetFloatStyle( WinBits nStyle )
 
 void ImplDockingWindowWrapper::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
-                                     sal_uInt16 nFlags )
+                                     PosSizeFlags nFlags )
 {
     if ( mpFloatWin )
         mpFloatWin->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );

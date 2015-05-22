@@ -216,7 +216,7 @@ void ImplDockFloatWin::Resize()
 {
     FloatingWindow::Resize();
     Size aSize( GetSizePixel() );
-    mpDockWin->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_POSSIZE );
+    mpDockWin->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), PosSizeFlags::PosSize );
 }
 
 void ImplDockFloatWin::TitleButtonClick( TitleButton nButton )
@@ -916,7 +916,7 @@ WinBits DockingWindow::GetFloatStyle() const
 
 void DockingWindow::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
-                                     sal_uInt16 nFlags )
+                                     PosSizeFlags nFlags )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     if (pWrapper)
