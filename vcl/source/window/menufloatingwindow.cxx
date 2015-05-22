@@ -80,7 +80,7 @@ void MenuFloatingWindow::doShutdown()
             {
                 MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
                 if (pPWin)
-                    pPWin->Invalidate(); //pPWin->HighlightItem( i, false );
+                    pPWin->InvalidateItem(i);
             }
         }
 
@@ -136,6 +136,7 @@ void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetLineColor();
 }
 
+/// Get a negative pixel offset for an offset menu
 long MenuFloatingWindow::ImplGetStartY() const
 {
     long nY = 0;
@@ -183,14 +184,13 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
     if( ! pMenu )
         return;
 
-    long nY = nScrollerHeight + ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
+    long nY = GetInitialItemY();
     long nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();
     if ( ( nMouseY >= nY ) && ( nMouseY < ( aOutSz.Height() - nY ) ) )
     {
         bool bHighlighted = false;
         size_t nCount = pMenu->pItemList->size();
-        nY += ImplGetStartY();  // ggf. gescrollt.
         for ( size_t n = 0; !bHighlighted && ( n < nCount ); n++ )
         {
             if ( pMenu->ImplIsVisible( n ) )
@@ -681,7 +681,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
 
     if ( nHighlightedItem != ITEMPOS_INVALID )
     {
-        Invalidate(); //HighlightItem( nHighlightedItem, false );
+        InvalidateItem(nHighlightedItem);
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
     }
 
@@ -704,12 +704,12 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
                 MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
                 if( pPWin && pPWin->nHighlightedItem != i )
                 {
-                    pPWin->Invalidate(); //HighlightItem( i, true );
+                    pPWin->InvalidateItem(i);
                     pPWin->nHighlightedItem = i;
                 }
             }
         }
-        Invalidate(); //HighlightItem( nHighlightedItem, true );
+        InvalidateItem(nHighlightedItem);
         pMenu->ImplCallHighlight( nHighlightedItem );
     }
     else
@@ -728,15 +728,49 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
     }
 }
 
-void MenuFloatingWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight)
+/// Calculate the initial vertical pixel offset of the first item.
+/// May be negative for scrolled windows.
+long MenuFloatingWindow::GetInitialItemY(long *pStartY) const
+{
+    long nStartY = ImplGetStartY();
+    if (pStartY)
+        *pStartY = nStartY;
+    return nScrollerHeight + nStartY +
+        ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
+}
+
+/// Emit an Invalidate just for this item's area
+void MenuFloatingWindow::InvalidateItem(sal_uInt16 nPos)
+{
+    if (!pMenu)
+        return;
+
+    long nY = GetInitialItemY();
+    size_t nCount = pMenu->pItemList->size();
+    for (size_t n = 0; n < nCount; n++)
+    {
+        MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
+        long nHeight = pData->aSz.Height();
+        if (n == nPos)
+        {
+            Size aWidth( GetSizePixel() );
+            Rectangle aRect(Point(0, nY), Size(aWidth.Width(), nHeight));
+            Invalidate( aRect );
+        }
+        nY += nHeight;
+    }
+}
+
+void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight)
 {
     if (!pMenu)
         return;
 
     Size aSz = rRenderContext.GetOutputSizePixel();
-    long nStartY = ImplGetStartY();
-    long nY = nScrollerHeight + nStartY + ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
+
     long nX = 0;
+    long nStartY;
+    long nY = GetInitialItemY(&nStartY);
 
     if (pMenu->pLogo)
         nX = pMenu->pLogo->aBitmap.GetSizePixel().Width();
@@ -1097,10 +1131,13 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
     }
 }
 
-void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect)
 {
     if (!pMenu)
         return;
+
+    rRenderContext.Push( PushFlags::CLIPREGION );
+    rRenderContext.SetClipRegion(vcl::Region(rPaintRect));
 
     if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
@@ -1122,7 +1159,9 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
     pMenu->ImplPaint(rRenderContext, nScrollerHeight, ImplGetStartY());
     if (nHighlightedItem != ITEMPOS_INVALID)
-        HighlightItem(rRenderContext, nHighlightedItem, true);
+        RenderHighlightItem(rRenderContext, nHighlightedItem, true);
+
+    rRenderContext.Pop();
 }
 
 void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp)
