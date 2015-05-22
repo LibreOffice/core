@@ -96,7 +96,7 @@ TiledLibreOffice_setup:
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/registry' >> $$file; \
 	echo 'UNO_TYPES=file://$$APP_DATA_DIR/udkapi.rdb file://$$APP_DATA_DIR/offapi.rdb' >> $$file; \
 	echo 'UNO_SERVICES=file://$$APP_DATA_DIR/services.rdb file://$$APP_DATA_DIR/services/services.rdb' >> $$file; \
-	echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' >> $$file
+	echo 'TMPDIR=$$APP_DATA_DIR/cache' >> $$file
 
 	file=$(TiledLibreOffice_resource)/unorc; \
 	echo '[Bootstrap]' > $$file;

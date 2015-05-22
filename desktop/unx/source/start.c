@@ -38,9 +38,6 @@
 #include "pagein.h"
 #include "splashx.h"
 
-#define PIPEDEFAULTPATH      "/tmp"
-#define PIPEALTERNATEPATH    "/var/tmp"
-
 /* Easier conversions: rtl_uString to rtl_String */
 static rtl_String *
 ustr_to_str( rtl_uString *pStr )
@@ -291,13 +288,12 @@ get_pipe_path( rtl_uString *pAppPath )
     rtl_uString *pPath = NULL, *pTmp = NULL, *pUserInstallation = NULL;
     rtl_uString *pResult = NULL, *pBasePath = NULL, *pAbsUserInstallation = NULL;
     rtlBootstrapHandle handle;
-    rtl_uString *pMd5hash = NULL;
+    rtl_uString *pMd5hash = NULL, *pTmpDirURL = NULL;
     sal_Unicode pUnicode[RTL_USTR_MAX_VALUEOFINT32];
 
     /* setup bootstrap filename */
     rtl_uString_newFromAscii( &pPath, "file://" );
     rtl_uString_newConcat( &pPath, pPath, pAppPath );
-    rtl_uString_newConcat( &pPath, pPath, pTmp );
     rtl_uString_newFromAscii( &pTmp, SAL_CONFIGFILE( "bootstrap" ) );
     rtl_uString_newConcat( &pPath, pPath, pTmp );
 
@@ -322,10 +318,9 @@ get_pipe_path( rtl_uString *pAppPath )
     if ( !pMd5hash )
         rtl_uString_new( &pMd5hash );
 
-    if ( access( PIPEDEFAULTPATH, R_OK|W_OK ) == 0 )
-        rtl_uString_newFromAscii( &pResult, PIPEDEFAULTPATH );
-    else
-        rtl_uString_newFromAscii( &pResult, PIPEALTERNATEPATH );
+    osl_getTempDirURL( &pTmpDirURL );
+    osl_getSystemPathFromFileURL ( pTmpDirURL, &pResult );
+    rtl_uString_release ( pTmpDirURL );
 
     rtl_uString_newFromAscii( &pTmp, "/OSL_PIPE_" );
     rtl_uString_newConcat( &pResult, pResult, pTmp );

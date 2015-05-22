@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/interlck.h>
+#include <osl/file.h>
 #include <rtl/string.h>
 #include <rtl/ustring.h>
 #include <rtl/bootstrap.h>
@@ -31,13 +32,10 @@
 #include "sockimpl.hxx"
 #include "secimpl.hxx"
 
-#define PIPEDEFAULTPATH     "/tmp"
-#define PIPEALTERNATEPATH   "/var/tmp"
-
 #define PIPENAMEMASK    "OSL_PIPE_%s"
 #define SECPIPENAMEMASK "OSL_PIPE_%s_%s"
 
-oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
+oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipePath, const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
 static struct
 {
@@ -98,63 +96,48 @@ void __osl_destroyPipeImpl(oslPipe pImpl)
 oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security)
 {
     oslPipe pPipe=0;
-    rtl_String* strPipeName=0;
+    rtl_uString *ustrTmpDirURL=0, *ustrPipePath=0;
+    rtl_String *strPipePath=0, *strPipeName=0;
 
     if ( ustrPipeName != 0 )
     {
+        osl_getTempDirURL (&ustrTmpDirURL);
+        osl_getSystemPathFromFileURL (ustrTmpDirURL, &ustrPipePath);
+        rtl_uString_release (ustrTmpDirURL);
+
+        rtl_uString2String( &strPipePath,
+                            rtl_uString_getStr(ustrPipePath),
+                            rtl_uString_getLength(ustrPipePath),
+                            osl_getThreadTextEncoding(),
+                            OUSTRING_TO_OSTRING_CVTFLAGS );
         rtl_uString2String( &strPipeName,
                             rtl_uString_getStr(ustrPipeName),
                             rtl_uString_getLength(ustrPipeName),
                             osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
-        sal_Char* pszPipeName = rtl_string_getStr(strPipeName);
-        pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
 
+        if ( strPipePath != 0 && strPipeName != 0)
+        {
+            sal_Char* pszPipePath = rtl_string_getStr(strPipePath);
+            sal_Char* pszPipeName = rtl_string_getStr(strPipeName);
+            pPipe = osl_psz_createPipe(pszPipePath, pszPipeName, Options, Security);
+        }
+        if ( strPipePath != 0 )
+        {
+            rtl_string_release(strPipePath);
+        }
         if ( strPipeName != 0 )
         {
             rtl_string_release(strPipeName);
         }
+
     }
 
     return pPipe;
 
 }
 
-static bool
-cpyBootstrapSocketPath(sal_Char *name, size_t len)
-{
-    bool bRet = false;
-    rtl_uString *pName = 0, *pValue = 0;
-
-    rtl_uString_newFromAscii(&pName, "OSL_SOCKET_PATH");
-
-    if (rtl_bootstrap_get(pName, &pValue, NULL))
-    {
-        if (pValue && pValue->length > 0)
-        {
-            rtl_String *pStrValue = 0;
-
-            rtl_uString2String(&pStrValue, pValue->buffer,
-                               pValue->length, RTL_TEXTENCODING_UTF8,
-                               OUSTRING_TO_OSTRING_CVTFLAGS);
-            if (pStrValue)
-            {
-                if (pStrValue->length > 0)
-                {
-                    size_t nCopy = (len-1 < (size_t)pStrValue->length) ? len-1 : (size_t)pStrValue->length;
-                    strncpy (name, pStrValue->buffer, nCopy);
-                    name[nCopy] = '\0';
-                    bRet = (size_t)pStrValue->length < len;
-                }
-                rtl_string_release(pStrValue);
-            }
-        }
-        rtl_uString_release(pName);
-    }
-    return bRet;
-}
-
-oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options,
+oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipePath, const sal_Char *pszPipeName, oslPipeOptions Options,
                                     oslSecurity Security)
 {
     int    Flags;
@@ -162,23 +145,15 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     struct sockaddr_un addr;
 
     sal_Char     name[PATH_MAX + 1];
-    size_t nNameLength = 0;
+    size_t nPathLength = 0, nNameLength = 0, nPathCopy = 0;
     bool bNameTooLong = false;
     oslPipe  pPipe;
 
-    if (access(PIPEDEFAULTPATH, R_OK|W_OK) == 0)
-    {
-        strncpy(name, PIPEDEFAULTPATH, sizeof(name));
-    }
-    else if (access(PIPEALTERNATEPATH, R_OK|W_OK) == 0)
-    {
-        strncpy(name, PIPEALTERNATEPATH, sizeof(name));
-    }
-    else if (!cpyBootstrapSocketPath (name, sizeof (name)))
-    {
-        return NULL;
-    }
-    name[sizeof(name) - 1] = '\0';  // ensure the string is NULL-terminated
+    nPathLength = strlen(pszPipePath);
+    nPathCopy = (sizeof(name)-1 < nPathLength ? sizeof(name)-1 : nPathLength);
+    strncpy (name, pszPipePath, nPathCopy);
+    name[nPathCopy] = '\0';
+
     nNameLength = strlen(name);
     bNameTooLong = nNameLength > sizeof(name) - 2;
 
