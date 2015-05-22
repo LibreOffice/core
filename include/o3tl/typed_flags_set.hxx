@@ -324,6 +324,15 @@ inline typename o3tl::typed_flags<E>::Self operator ^=(
     return lhs;
 }
 
+/*
+ * Make the declaration sites a little less verbose
+ */
+#define DECLARE_TYPED_FLAGS(T,V) \
+    namespace o3tl \
+    { \
+        template<> struct typed_flags<T> : is_typed_flags<T,V> {}; \
+    } \
+
 #endif /* INCLUDED_O3TL_TYPED_FLAGS_SET_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

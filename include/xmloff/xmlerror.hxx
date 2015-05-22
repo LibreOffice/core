@@ -81,11 +81,7 @@ enum class SvXMLErrorFlags {
     ERROR_OCCURRED    = 0x0002,
     WARNING_OCCURRED  = 0x0004,
 };
-
-namespace o3tl
-{
-    template<> struct typed_flags<SvXMLErrorFlags> : is_typed_flags<SvXMLErrorFlags, 0x7> {};
-}
+DECLARE_TYPED_FLAGS(SvXMLErrorFlags, 0x0007)
 
 namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Sequence; }
