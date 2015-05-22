@@ -2802,7 +2802,7 @@ void GtkSalFrame::grabKeyboard( bool bGrab )
     if (bGrab)
     {
         gdk_device_grab(pKeyboard, widget_get_window(m_pWindow), GDK_OWNERSHIP_NONE,
-                        FALSE, (GdkEventMask)(GDK_KEY_PRESS | GDK_KEY_RELEASE), NULL, GDK_CURRENT_TIME);
+                        true, (GdkEventMask)(GDK_KEY_PRESS | GDK_KEY_RELEASE), NULL, GDK_CURRENT_TIME);
     }
     else
     {
