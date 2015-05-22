@@ -18,8 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:TableDialog" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertRows"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertColumns"/>
  <toolbar:toolbarseparator/>
@@ -51,4 +49,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoSum"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFormula"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:TableDialog" toolbar:visible="false"/>
 </toolbar:toolbar>
