@@ -736,6 +736,7 @@ void PrintDialog::dispose()
     mpOKButton.clear();
     mpCancelButton.clear();
     mpHelpButton.clear();
+    maPController.reset();
     ModalDialog::dispose();
 }
 
