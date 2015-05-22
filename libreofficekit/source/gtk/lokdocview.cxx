@@ -50,6 +50,8 @@ struct LOKDocView_Impl
 
     LibreOfficeKit* m_pOffice;
     LibreOfficeKitDocument* m_pDocument;
+    long m_nDocumentWidthTwips;
+    long m_nDocumentHeightTwips;
     /// View or edit mode.
     bool m_bEdit;
     /// Position and size of the visible cursor.
@@ -237,6 +239,8 @@ LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     m_fZoom(1),
     m_pOffice(0),
     m_pDocument(0),
+    m_nDocumentWidthTwips(0),
+    m_nDocumentHeightTwips(0),
     m_bEdit(false),
     m_aVisibleCursor({0, 0, 0, 0}),
     m_bCursorOverlayVisible(false),
@@ -743,11 +747,8 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
 {
     const int nTileSizePixels = 256;
 
-    // Get document size and find out how many rows / columns we need.
-    long nDocumentWidthTwips, nDocumentHeightTwips;
-    m_pDocument->pClass->getDocumentSize(m_pDocument, &nDocumentWidthTwips, &nDocumentHeightTwips);
-    long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips);
-    long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips);
+    long nDocumentWidthPixels = twipToPixel(m_nDocumentWidthTwips);
+    long nDocumentHeightPixels = twipToPixel(m_nDocumentHeightTwips);
     // Total number of rows / columns in this document.
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
@@ -1172,6 +1173,7 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     {
         pDocView->m_pImpl->m_pDocument->pClass->initializeForRendering(pDocView->m_pImpl->m_pDocument);
         pDocView->m_pImpl->m_pDocument->pClass->registerCallback(pDocView->m_pImpl->m_pDocument, &LOKDocView_Impl::callbackWorker, pDocView);
+        pDocView->m_pImpl->m_pDocument->pClass->getDocumentSize(pDocView->m_pImpl->m_pDocument, &pDocView->m_pImpl->m_nDocumentWidthTwips, &pDocView->m_pImpl->m_nDocumentHeightTwips);
         g_timeout_add(600, &LOKDocView_Impl::handleTimeout, pDocView);
         pDocView->m_pImpl->renderDocument(0);
     }
