@@ -569,6 +569,9 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
 void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
 {
+    if( !aVscrollSB )
+        return;
+
     if( nNewIndex < 0 )
     {
         // need to scroll see closest unicode
