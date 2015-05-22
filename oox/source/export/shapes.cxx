@@ -1032,6 +1032,9 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
                                                    UNO_QUERY_THROW );
                 sal_Int32 transposedIndexofCell = (nRow * nColumnCount) + nColumn;
 
+                //assume we will open a cell, set to false below if we won't
+                bool bCellOpened = true;
+
                 if(xCell->getColumnSpan() > 1 && xCell->getRowSpan() > 1)
                 {
                     // having both : horizontal and vertical merge
@@ -1144,14 +1147,20 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
                                                       FSEND );
                             }
                         }
+                        else
+                            bCellOpened = false;
                     }
                 }
-                WriteTextBox( xCell, XML_a );
 
-                Reference< XPropertySet > xCellPropSet(xCell, UNO_QUERY_THROW);
-                WriteTableCellProperties(xCellPropSet);
+                if (bCellOpened)
+                {
+                    WriteTextBox( xCell, XML_a );
 
-                mpFS->endElementNS( XML_a, XML_tc );
+                    Reference< XPropertySet > xCellPropSet(xCell, UNO_QUERY_THROW);
+                    WriteTableCellProperties(xCellPropSet);
+
+                    mpFS->endElementNS( XML_a, XML_tc );
+                }
             }
 
             mpFS->endElementNS( XML_a, XML_tr );
