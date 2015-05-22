@@ -166,7 +166,7 @@ copy-stuff:
 	echo 'NativeProgress=1' >> assets/unpack/program/sofficerc
 	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/unpack/program/sofficerc
 	echo 'HOME=$$APP_DATA_DIR/cache' >> assets/unpack/program/sofficerc
-	echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' >> assets/unpack/program/sofficerc
+	echo 'TMPDIR=$$APP_DATA_DIR/cache' >> assets/unpack/program/sofficerc
 #
 # Set up fundamentalrc
 	echo '[Bootstrap]' > assets/program/fundamentalrc

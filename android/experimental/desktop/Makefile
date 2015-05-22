@@ -42,7 +42,7 @@ copy-stuff-desktop:
 	echo "NativeProgress=1" >> assets/program/lofficerc
 	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/lofficerc
 	echo "HOME=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
-	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
+	echo "TMPDIR=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
 # - this looks useful but breaks more than it fixes ...
 #	echo "DISABLE_EXTENSION_SYNCHRONIZATION=1" >> assets/program/lofficerc
 
