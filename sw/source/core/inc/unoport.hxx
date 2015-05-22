@@ -114,6 +114,7 @@ private:
     ::std::unique_ptr< ::com::sun::star::uno::Any > m_pRubyStyle;
     ::std::unique_ptr< ::com::sun::star::uno::Any > m_pRubyAdjust;
     ::std::unique_ptr< ::com::sun::star::uno::Any > m_pRubyIsAbove;
+    std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
 
     const SwDepend              m_FrameDepend;
     SwFrameFormat *                  m_pFrameFormat;
@@ -150,6 +151,8 @@ protected:
 
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
+
 
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );

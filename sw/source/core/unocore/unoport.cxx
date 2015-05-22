@@ -63,14 +63,13 @@ public:
 
 void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
 {
-    SwUnoCrsr* pUnoCursor =
-        pPortionCursor->GetDoc()->CreateUnoCrsr(*pPortionCursor->GetPoint());
+    m_pUnoCursor = pPortionCursor->GetDoc()->CreateUnoCrsr2(*pPortionCursor->GetPoint());
     if (pPortionCursor->HasMark())
     {
-        pUnoCursor->SetMark();
-        *pUnoCursor->GetMark() = *pPortionCursor->GetMark();
+        m_pUnoCursor->SetMark();
+        *m_pUnoCursor->GetMark() = *pPortionCursor->GetMark();
     }
-    pUnoCursor->Add(this);
+    m_pUnoCursor->Add(this);
 }
 
 SwXTextPortion::SwXTextPortion(
@@ -138,12 +137,7 @@ SwXTextPortion::SwXTextPortion(
     }
 }
 
-SwXTextPortion::~SwXTextPortion()
-{
-    SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCursor();
-    delete pUnoCrsr;
-}
+SwXTextPortion::~SwXTextPortion() {};
 
 uno::Reference< text::XText >  SwXTextPortion::getText()
 throw( uno::RuntimeException, std::exception )
@@ -929,6 +923,17 @@ void SwXTextPortion::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     if (!m_FrameDepend.GetRegisteredIn())
     {
         m_pFrameFormat = 0;
+    }
+}
+
+void SwXTextPortion::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    SwClient::SwClientNotify(rModify, rHint);
+    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
+    {
+        assert(m_pUnoCursor->m_bSaneOwnership);
+        m_pUnoCursor->Remove(this);
+        m_pUnoCursor.reset();
     }
 }
 
