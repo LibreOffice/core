@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_131d7666",
+        "filename": "writerfilter/source/ooxml/OOXMLFastContextHandler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-05-22T09:57:15Z",
+      "side": 0,
+      "message": "You remove \u003cstring\u003e but the header do use std::string. Please don\u0027t remove it then, it breaks self-contained headers.",
+      "revId": "5b248f1348260f953686b20621255aece57358fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
