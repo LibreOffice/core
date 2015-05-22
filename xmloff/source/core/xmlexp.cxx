@@ -336,6 +336,7 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
 
+    bool bAddFieldNM = false;
     // namespaces for documents
     if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
@@ -363,6 +364,7 @@ void SvXMLExport::_InitCtor()
             mpNamespaceMap->Add(
                 GetXMLToken(XML_NP_LO_EXT), GetXMLToken(XML_N_LO_EXT),
                 XML_NAMESPACE_LO_EXT);
+            bAddFieldNM = true;
         }
     }
     if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
@@ -380,9 +382,13 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XFORMS_1_0), GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSD), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSI), GetXMLToken(XML_N_XSI), XML_NAMESPACE_XSI );
-        mpNamespaceMap->Add( GetXMLToken(XML_NP_FIELD), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_FORMX), GetXMLToken(XML_N_FORMX), XML_NAMESPACE_FORMX );
+        bAddFieldNM = true;
     }
+
+    if (bAddFieldNM)
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_FIELD), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
+
     // RDFa: needed for content and header/footer styles
     if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
