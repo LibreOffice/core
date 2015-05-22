@@ -9,5 +9,8 @@ There is a mode to dump some information in a dbgutil build.
 
 === CTRL+SHIFT+F12 ===
 
-Dumps the column width of the first 20 column in pixel and the
-pixel position and size of graphic objects.
+Dumps the column width of the first 20 columns.
+
+=== CTRL+SHIFT+F11 ===
+
+Dumps the graphic objects and their position and size in pixel.
