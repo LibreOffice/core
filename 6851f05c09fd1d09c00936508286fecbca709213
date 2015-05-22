@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_d34cbe78",
+        "filename": "include/cppuhelper/interfacecontainer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-05-22T10:24:28Z",
+      "side": 1,
+      "message": "this breaks backward compatibility; keep getElements returning a Sequence and instead introduce a new name (and @since tag) for the function returning a vector",
+      "revId": "6851f05c09fd1d09c00936508286fecbca709213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
