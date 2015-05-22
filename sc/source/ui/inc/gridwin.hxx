@@ -441,7 +441,8 @@ protected:
 private:
 
 #ifdef DBG_UTIL
-    void dumpInformation();
+    void dumpColumnInformation();
+    void dumpGraphicInformation();
 #endif
 
 };

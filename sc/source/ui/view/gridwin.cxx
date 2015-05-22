@@ -3509,9 +3509,16 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 
 #ifdef DBG_UTIL
 
-    if (rKeyCode.IsMod1() && rKeyCode.IsShift() && rKeyCode.GetCode() == KEY_F12)
+    if (rKeyCode.IsMod1() && rKeyCode.IsShift())
     {
-        dumpInformation();
+        if (rKeyCode.GetCode() == KEY_F12)
+        {
+            dumpColumnInformation();
+        }
+        else if (rKeyCode.GetCode() == KEY_F11)
+        {
+            dumpGraphicInformation();
+        }
     }
 
 #endif

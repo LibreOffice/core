@@ -22,7 +22,7 @@ std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
 
 }
 
-void ScGridWindow::dumpInformation()
+void ScGridWindow::dumpColumnInformation()
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
@@ -32,7 +32,11 @@ void ScGridWindow::dumpInformation()
         long nPixel = LogicToPixel(Point(nWidth, 0), MapMode(MAP_TWIP)).getX();
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "px" << std::endl;
     }
+}
 
+void ScGridWindow::dumpGraphicInformation()
+{
+    ScDocument* pDoc = pViewData->GetDocument();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     if (pDrawLayer)
     {
@@ -44,7 +48,7 @@ void ScGridWindow::dumpInformation()
             for (sal_uInt16 nObj = 0; nObj < nObjCount; ++nObj)
             {
                 SdrObject* pObj = pPage->GetObj(nObj);
-                std::cout << "Graphic Object";
+                std::cout << "Graphic Object" << std::endl;
                 ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
                 if (pObjData)
                     std::cout << "Start Position: " << pObjData->maStart << ", EndPosition: " << pObjData->maEnd << std::endl;
