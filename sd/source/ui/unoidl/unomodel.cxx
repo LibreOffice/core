@@ -2321,22 +2321,9 @@ void SdXImpressDocument::setPartMode( int nPartMode )
     PageKind aPageKind( PK_STANDARD );
     switch ( nPartMode )
     {
-    case LOK_PARTMODE_EMBEDDEDOBJ:
-        // This will probably be handled higher up, i.e.
-        // we probably shouldn't be handling this here.
-        // (However we don't offer embedded object-only
-        //  rendering anywhere yet, so this may be a
-        //  completely incorrect comment.)
-        assert( false );
-        // And let's fall through in a normal build.
-    case LOK_PARTMODE_DEFAULT:
-    case LOK_PARTMODE_SLIDE:
-        break;
-    case LOK_PARTMODE_SLIDENOTES:
-        aPageKind = PK_NOTES;
+    case LOK_PARTMODE_SLIDES:
         break;
     case LOK_PARTMODE_NOTES:
-        // TODO: this shows combined slides + notes
         aPageKind = PK_NOTES;
         break;
     }

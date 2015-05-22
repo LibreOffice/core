@@ -293,11 +293,8 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 
 static void populatePartModeSelector( GtkComboBoxText* pSelector )
 {
-    gtk_combo_box_text_append_text( pSelector, "Default" );
-    gtk_combo_box_text_append_text( pSelector, "Slide" );
+    gtk_combo_box_text_append_text( pSelector, "Standard" );
     gtk_combo_box_text_append_text( pSelector, "Notes" );
-    gtk_combo_box_text_append_text( pSelector, "Combined (SlideNotes)" );
-    gtk_combo_box_text_append_text( pSelector, "Embedded Objects" );
     gtk_combo_box_set_active( GTK_COMBO_BOX(pSelector), 0 );
 }
 
@@ -312,10 +309,6 @@ static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     {
         lok_docview_set_partmode( LOK_DOCVIEW(pDocView), ePartMode );
     }
-
-    // The number of items could change e.g. if we change from slide
-    // to embeddede obj mode -- hence we should update the part list.
-    populatePartSelector();
 }
 #endif
 
