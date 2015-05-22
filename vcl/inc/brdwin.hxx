@@ -228,7 +228,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const = 0;
     virtual long            CalcTitleWidth() const = 0;
-    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev = NULL, const Point* pOffset = NULL ) = 0;
+    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags, const Point* pOffset = NULL) = 0;
     virtual Rectangle       GetMenuRect() const;
 
     static void             ImplInitTitle( ImplBorderFrameData* pData );
@@ -249,7 +249,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const SAL_OVERRIDE;
     virtual long            CalcTitleWidth() const SAL_OVERRIDE;
-    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset ) SAL_OVERRIDE;
+    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags, const Point* pOffset) SAL_OVERRIDE;
 };
 
 class ImplSmallBorderWindowView : public ImplBorderWindowView
@@ -271,7 +271,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const SAL_OVERRIDE;
     virtual long            CalcTitleWidth() const SAL_OVERRIDE;
-    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset ) SAL_OVERRIDE;
+    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags, const Point* pOffset) SAL_OVERRIDE;
 };
 
 class ImplStdBorderWindowView : public ImplBorderWindowView
@@ -294,7 +294,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const SAL_OVERRIDE;
     virtual long            CalcTitleWidth() const SAL_OVERRIDE;
-    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset ) SAL_OVERRIDE;
+    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags, const Point* pOffset) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_BRDWIN_HXX
