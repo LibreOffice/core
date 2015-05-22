@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_f378da91",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-22T11:05:54Z",
+      "side": 1,
+      "message": "should be \u0027Rows ~Above\u0027",
+      "range": {
+        "startLine": 1067,
+        "startChar": 34,
+        "endLine": 1067,
+        "endChar": 39
+      },
+      "revId": "b25327735855481993b44b53cb84405931f8466c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_936de6ce",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-22T11:05:54Z",
+      "side": 1,
+      "message": "should be \u0027Columns ~Left\u0027",
+      "range": {
+        "startLine": 1078,
+        "startChar": 34,
+        "endLine": 1078,
+        "endChar": 42
+      },
+      "revId": "b25327735855481993b44b53cb84405931f8466c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
