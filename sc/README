@@ -7,7 +7,7 @@ There is a mode to dump some information in a dbgutil build.
 
 == Graphical information ==
 
-= CTRL+SHIFT+F12 =
+=== CTRL+SHIFT+F12 ===
 
 Dumps the column width of the first 20 column in pixel and the
 pixel position and size of graphic objects.
