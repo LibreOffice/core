@@ -236,8 +236,7 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const ::com:
 {
     SolarMutexGuard aGuard;
 
-    VclPtr< Button > pButton = GetAs< Button >();
-    if ( !pButton )
+    if ( !GetWindow() )
         return;
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
