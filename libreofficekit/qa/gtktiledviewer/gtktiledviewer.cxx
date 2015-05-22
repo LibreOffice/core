@@ -363,7 +363,6 @@ int main( int argc, char* argv[] )
     GtkWidget* pComboBox = gtk_combo_box_text_new();
     gtk_container_add( GTK_CONTAINER(pPartSelectorToolItem), pComboBox );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartSelectorToolItem, -1 );
-    g_signal_connect( G_OBJECT(pComboBox), "changed", G_CALLBACK(changePart), NULL );
 
     pPartSelector = GTK_COMBO_BOX_TEXT(pComboBox);
 
@@ -374,7 +373,6 @@ int main( int argc, char* argv[] )
     GtkWidget* pPartModeComboBox = gtk_combo_box_text_new();
     gtk_container_add( GTK_CONTAINER(pPartModeSelectorToolItem), pPartModeComboBox );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1 );
-    g_signal_connect( G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), NULL );
 #endif
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
@@ -458,7 +456,11 @@ int main( int argc, char* argv[] )
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
     populatePartSelector();
     populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
+    // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
+    g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
 #endif
+
+    g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
 
     gtk_main();
 
