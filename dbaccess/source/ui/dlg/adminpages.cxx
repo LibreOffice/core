@@ -277,7 +277,7 @@ namespace dbaui
                 0,
                 aMinSize.Width(),
                 0,
-                WINDOW_POSSIZE_X | WINDOW_POSSIZE_WIDTH
+                PosSizeFlags::X | PosSizeFlags::Width
             );
         }
     }

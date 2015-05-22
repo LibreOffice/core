@@ -536,7 +536,7 @@ public:
     void            StartFloat( bool bStartTracking );
 
     virtual void    setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
+                                     long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) SAL_OVERRIDE;
     void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE
                         { FloatingWindow::SetPosSizePixel( rNewPos, rNewSize ); }
 

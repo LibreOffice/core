@@ -3036,21 +3036,21 @@ bool ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
     return FloatingWindow::PreNotify( rNEvt );
 }
 
-void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags )
 {
     FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 
     // Fix #60890# ( MBA ): to be able to resize the Listbox even in its open state
     // after a call to Resize(), we adjust its position if necessary
-    if ( IsReallyVisible() && ( nFlags & WINDOW_POSSIZE_HEIGHT ) )
+    if ( IsReallyVisible() && ( nFlags & PosSizeFlags::Height ) )
     {
         Point aPos = GetParent()->GetPosPixel();
         aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
 
-        if ( nFlags & WINDOW_POSSIZE_X )
+        if ( nFlags & PosSizeFlags::X )
             aPos.X() = nX;
 
-        if ( nFlags & WINDOW_POSSIZE_Y )
+        if ( nFlags & PosSizeFlags::Y )
             aPos.Y() = nY;
 
         sal_uInt16 nIndex;

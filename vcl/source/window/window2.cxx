@@ -1411,20 +1411,20 @@ VCLXWindow* Window::GetWindowPeer() const
 
 void Window::SetPosPixel( const Point& rNewPos )
 {
-    setPosSizePixel( rNewPos.X(), rNewPos.Y(), 0, 0, WINDOW_POSSIZE_POS );
+    setPosSizePixel( rNewPos.X(), rNewPos.Y(), 0, 0, PosSizeFlags::Pos );
 }
 
 void Window::SetSizePixel( const Size& rNewSize )
 {
     setPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(),
-                     WINDOW_POSSIZE_SIZE );
+                     PosSizeFlags::Size );
 }
 
 void Window::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
     setPosSizePixel( rNewPos.X(), rNewPos.Y(),
                      rNewSize.Width(), rNewSize.Height(),
-                     WINDOW_POSSIZE_POSSIZE );
+                     PosSizeFlags::PosSize );
 }
 
 void Window::SetOutputSizePixel( const Size& rNewSize )

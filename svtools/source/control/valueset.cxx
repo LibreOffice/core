@@ -219,7 +219,7 @@ void ValueSet::ImplInitScrollBar()
         {
             // adapt the width because of the changed settings
             long nScrBarWidth = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
-            mxScrollBar->setPosSizePixel(0, 0, nScrBarWidth, 0, WINDOW_POSSIZE_WIDTH);
+            mxScrollBar->setPosSizePixel(0, 0, nScrBarWidth, 0, PosSizeFlags::Width);
         }
     }
 }

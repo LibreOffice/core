@@ -116,7 +116,6 @@ enum class TrackingEventFlags
     End            = 0x1000,
     DontCallHdl    = 0x8000,
 };
-
 namespace o3tl
 {
     template<> struct typed_flags<TrackingEventFlags> : is_typed_flags<TrackingEventFlags, 0x9107> {};
@@ -149,15 +148,24 @@ enum class GetWindowType
 };
 
 // Flags for setPosSizePixel()
-#define WINDOW_POSSIZE_X                ((sal_uInt16)0x0001)
-#define WINDOW_POSSIZE_Y                ((sal_uInt16)0x0002)
-#define WINDOW_POSSIZE_WIDTH            ((sal_uInt16)0x0004)
-#define WINDOW_POSSIZE_HEIGHT           ((sal_uInt16)0x0008)
-#define WINDOW_POSSIZE_POS              (WINDOW_POSSIZE_X | WINDOW_POSSIZE_Y)
-#define WINDOW_POSSIZE_SIZE             (WINDOW_POSSIZE_WIDTH | WINDOW_POSSIZE_HEIGHT)
-#define WINDOW_POSSIZE_POSSIZE          (WINDOW_POSSIZE_POS | WINDOW_POSSIZE_SIZE)
-#define WINDOW_POSSIZE_ALL              (WINDOW_POSSIZE_POSSIZE)
-#define WINDOW_POSSIZE_DROPDOWN         ((sal_uInt16)0x0010)
+// These must match the definitions in css::awt::PosSize
+enum class PosSizeFlags
+{
+    NONE             = 0x0000,
+    X                = 0x0001,
+    Y                = 0x0002,
+    Width            = 0x0004,
+    Height           = 0x0008,
+    Pos              = X | Y,
+    Size             = Width | Height,
+    PosSize          = Pos | Size,
+    All              = PosSize,
+    Dropdown         = 0x0010,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<PosSizeFlags> : is_typed_flags<PosSizeFlags, 0x001f> {};
+}
 
 // Flags for Show()
 #define SHOW_NOPARENTUPDATE             ((sal_uInt16)0x0001)
@@ -498,7 +506,7 @@ public:
 
     SAL_DLLPRIVATE void                 ImplMirrorFramePos( Point &pt ) const;
 
-    SAL_DLLPRIVATE void                 ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags );
 
     SAL_DLLPRIVATE void                 ImplAddDel( ImplDelData* pDel );
     SAL_DLLPRIVATE void                 ImplRemoveDel( ImplDelData* pDel );
@@ -992,7 +1000,7 @@ public:
 
     virtual void                        setPosSizePixel( long nX, long nY,
                                                          long nWidth, long nHeight,
-                                                         sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
+                                                         PosSizeFlags nFlags = PosSizeFlags::All );
     virtual void                        SetPosPixel( const Point& rNewPos );
     virtual Point                       GetPosPixel() const;
     virtual void                        SetSizePixel( const Size& rNewSize );

@@ -600,7 +600,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
             (aTbxCmd->GetPosPixel().Y() + aTbxCmd->GetSizePixel().Height()),
             (aEdRow->GetPosPixel().Y() + aEdRow->GetSizePixel().Height()) )
         + 4;
-    aLbEntries->setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y);
+    aLbEntries->setPosSizePixel( 0, nListboxYPos, 0, 0, PosSizeFlags::Y);
 
     nBorderOffset = aLbEntries->GetPosPixel().X();
 

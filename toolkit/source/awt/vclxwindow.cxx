@@ -970,9 +970,9 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
     if ( GetWindow() )
     {
         if( vcl::Window::GetDockingManager()->IsDockable( GetWindow() ) )
-            vcl::Window::GetDockingManager()->SetPosSizePixel( GetWindow() , X, Y, Width, Height, Flags );
+            vcl::Window::GetDockingManager()->SetPosSizePixel( GetWindow() , X, Y, Width, Height, static_cast<PosSizeFlags>(Flags) );
         else
-            GetWindow()->setPosSizePixel( X, Y, Width, Height, Flags );
+            GetWindow()->setPosSizePixel( X, Y, Width, Height, static_cast<PosSizeFlags>(Flags) );
     }
 }
 

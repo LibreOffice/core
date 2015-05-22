@@ -208,7 +208,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
 
 void MenuBarWindow::SetHeight(long nHeight)
 {
-    setPosSizePixel(0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT);
+    setPosSizePixel(0, 0, 0, nHeight, PosSizeFlags::Height);
 }
 
 void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
@@ -1013,7 +1013,7 @@ void MenuBarWindow::LayoutChanged()
     {
         nHeight = 0;
     }
-    setPosSizePixel(0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT);
+    setPosSizePixel(0, 0, 0, nHeight, PosSizeFlags::Height);
     GetParent()->Resize();
     Invalidate();
     Resize();

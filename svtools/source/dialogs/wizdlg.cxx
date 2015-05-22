@@ -195,13 +195,13 @@ void WizardDialog::ImplPosCtrls()
         long    nViewWidth = 0;
         long    nViewHeight = 0;
         long    nDlgHeight = nOffY;
-        sal_uInt16  nViewPosFlags = WINDOW_POSSIZE_POS;
+        PosSizeFlags nViewPosFlags = PosSizeFlags::Pos;
         if ( meViewAlign == WINDOWALIGN_TOP )
         {
             nViewOffX       = WIZARDDIALOG_VIEW_DLGOFFSET_X;
             nViewOffY       = WIZARDDIALOG_VIEW_DLGOFFSET_Y;
             nViewWidth      = aDlgSize.Width()-(WIZARDDIALOG_VIEW_DLGOFFSET_X*2);
-            nViewPosFlags  |= WINDOW_POSSIZE_WIDTH;
+            nViewPosFlags  |= PosSizeFlags::Width;
         }
         else if ( meViewAlign == WINDOWALIGN_LEFT )
         {
@@ -217,21 +217,21 @@ void WizardDialog::ImplPosCtrls()
                 nViewOffY       = WIZARDDIALOG_VIEW_DLGOFFSET_Y;
                 nViewHeight     = nDlgHeight-(WIZARDDIALOG_VIEW_DLGOFFSET_Y*2);
             }
-            nViewPosFlags  |= WINDOW_POSSIZE_HEIGHT;
+            nViewPosFlags  |= PosSizeFlags::Height;
         }
         else if ( meViewAlign == WINDOWALIGN_BOTTOM )
         {
             nViewOffX       = WIZARDDIALOG_VIEW_DLGOFFSET_X;
             nViewOffY       = nDlgHeight-mpViewWindow->GetSizePixel().Height()-WIZARDDIALOG_VIEW_DLGOFFSET_Y;
             nViewWidth      = aDlgSize.Width()-(WIZARDDIALOG_VIEW_DLGOFFSET_X*2);
-            nViewPosFlags  |= WINDOW_POSSIZE_WIDTH;
+            nViewPosFlags  |= PosSizeFlags::Width;
         }
         else if ( meViewAlign == WINDOWALIGN_RIGHT )
         {
             nViewOffX       = aDlgSize.Width()-mpViewWindow->GetSizePixel().Width()-WIZARDDIALOG_VIEW_DLGOFFSET_X;
             nViewOffY       = WIZARDDIALOG_VIEW_DLGOFFSET_Y;
             nViewHeight     = nDlgHeight-(WIZARDDIALOG_VIEW_DLGOFFSET_Y*2);
-            nViewPosFlags  |= WINDOW_POSSIZE_HEIGHT;
+            nViewPosFlags  |= PosSizeFlags::Height;
         }
         mpViewWindow->setPosSizePixel( nViewOffX, nViewOffY,
                                        nViewWidth, nViewHeight,

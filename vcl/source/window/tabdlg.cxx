@@ -95,14 +95,14 @@ void TabDialog::ImplPosControls()
             long    nViewOffY = 0;
             long    nViewWidth = 0;
             long    nViewHeight = 0;
-            sal_uInt16  nViewPosFlags = WINDOW_POSSIZE_POS;
+            PosSizeFlags nViewPosFlags = PosSizeFlags::Pos;
             Size    aViewSize = mpViewWindow->GetSizePixel();
             if (  meViewAlign == WINDOWALIGN_TOP )
             {
                 nViewOffX       = aTabOffset.X();
                 nViewOffY       = nOffY+IMPL_DIALOG_OFFSET;
                 nViewWidth      = aTabSize.Width();
-                nViewPosFlags  |= WINDOW_POSSIZE_WIDTH;
+                nViewPosFlags  |= PosSizeFlags::Width;
                 aTabOffset.Y() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
                 aDlgSize.Height() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
             }
@@ -111,7 +111,7 @@ void TabDialog::ImplPosControls()
                 nViewOffX       = aTabOffset.X();
                 nViewOffY       = aTabOffset.Y()+aTabSize.Height()+IMPL_DIALOG_OFFSET;
                 nViewWidth      = aTabSize.Width();
-                nViewPosFlags  |= WINDOW_POSSIZE_WIDTH;
+                nViewPosFlags  |= PosSizeFlags::Width;
                 aDlgSize.Height() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
             }
             else if (  meViewAlign == WINDOWALIGN_RIGHT )
@@ -119,7 +119,7 @@ void TabDialog::ImplPosControls()
                 nViewOffX       = aTabOffset.X()+aTabSize.Width()+IMPL_DIALOG_OFFSET;
                 nViewOffY       = aTabOffset.Y();
                 nViewHeight     = aTabSize.Height();
-                nViewPosFlags  |= WINDOW_POSSIZE_HEIGHT;
+                nViewPosFlags  |= PosSizeFlags::Height;
                 aDlgSize.Width() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
                 nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
             }
@@ -128,7 +128,7 @@ void TabDialog::ImplPosControls()
                 nViewOffX       = IMPL_DIALOG_OFFSET;
                 nViewOffY       = aTabOffset.Y();
                 nViewHeight     = aTabSize.Height();
-                nViewPosFlags  |= WINDOW_POSSIZE_HEIGHT;
+                nViewPosFlags  |= PosSizeFlags::Height;
                 aTabOffset.X() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
                 aDlgSize.Width() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
                 nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;

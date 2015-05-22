@@ -1159,7 +1159,7 @@ void PushButton::ImplSetDefButton( bool bSet )
         ImplGetButtonState() &= ~DrawButtonFlags::Default;
     }
     if( bSetPos )
-        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), PosSizeFlags::All );
 
     Invalidate();
 }
@@ -3463,7 +3463,7 @@ void CheckBox::GetFocus()
         aPos.Move(-1,-1);
         aSize.Height() += 2;
         aSize.Width() += 2;
-        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), PosSizeFlags::All );
         Invalidate();
     }
     else
@@ -3494,7 +3494,7 @@ void CheckBox::LoseFocus()
         aPos.Move(1,1);
         aSize.Height() -= 2;
         aSize.Width() -= 2;
-        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), PosSizeFlags::All );
         Invalidate();
     }
 }

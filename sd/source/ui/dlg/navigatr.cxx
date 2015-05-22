@@ -101,7 +101,7 @@ SdNavigatorWin::SdNavigatorWin(
     // TreeListBox
     // set position below toolbox
     long nListboxYPos = maToolbox->GetPosPixel().Y() + maToolbox->GetSizePixel().Height() + 4;
-    maTlbObjects->setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
+    maTlbObjects->setPosSizePixel( 0, nListboxYPos, 0, 0, PosSizeFlags::Y );
     maTlbObjects->SetDoubleClickHdl( LINK( this, SdNavigatorWin, ClickObjectHdl ) );
     maTlbObjects->SetSelectionMode( SINGLE_SELECTION );
     // set focus to listbox, otherwise it is in the toolbox which is only useful
@@ -113,14 +113,14 @@ SdNavigatorWin::SdNavigatorWin(
     maLbDocs->SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
     // set position below treelistbox
     nListboxYPos = maTlbObjects->GetPosPixel().Y() + maTlbObjects->GetSizePixel().Height() + 4;
-    maLbDocs->setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
+    maLbDocs->setPosSizePixel( 0, nListboxYPos, 0, 0, PosSizeFlags::Y );
 
     // assure that tool box is at least as wide as the tree list box
     {
         const Size aTlbSize( maTlbObjects->GetOutputSizePixel() );
         if ( aTlbSize.Width() > aTbxSize.Width() )
         {
-            maToolbox->setPosSizePixel( 0, 0, aTlbSize.Width(), 0, WINDOW_POSSIZE_WIDTH );
+            maToolbox->setPosSizePixel( 0, 0, aTlbSize.Width(), 0, PosSizeFlags::Width );
             aTbxSize = maToolbox->GetOutputSizePixel();
         }
     }

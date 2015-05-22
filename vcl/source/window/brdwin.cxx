@@ -854,10 +854,10 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                     // no move (only resize) if position did not change
                     if( aOldPos != aNewRect.TopLeft() )
                         pBorderWindow->setPosSizePixel( aNewRect.Left(), aNewRect.Top(),
-                                                    aNewRect.GetWidth(), aNewRect.GetHeight(), WINDOW_POSSIZE_POSSIZE );
+                                                    aNewRect.GetWidth(), aNewRect.GetHeight(), PosSizeFlags::PosSize );
                     else
                         pBorderWindow->setPosSizePixel( aNewRect.Left(), aNewRect.Top(),
-                                                    aNewRect.GetWidth(), aNewRect.GetHeight(), WINDOW_POSSIZE_SIZE );
+                                                    aNewRect.GetWidth(), aNewRect.GetHeight(), PosSizeFlags::Size );
 
                     pBorderWindow->ImplUpdateAll();
                     pBorderWindow->ImplGetFrameWindow()->ImplUpdateAll();
@@ -1959,8 +1959,8 @@ void ImplBorderWindow::Resize()
                                               nTopBorder,
                                               aSize.Width()-nLeftBorder-nRightBorder,
                                               nMenuHeight,
-                                              WINDOW_POSSIZE_POS |
-                                              WINDOW_POSSIZE_WIDTH | WINDOW_POSSIZE_HEIGHT );
+                                              PosSizeFlags::Pos |
+                                              PosSizeFlags::Width | PosSizeFlags::Height );
         }
 
         GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,
@@ -1969,8 +1969,8 @@ void ImplBorderWindow::Resize()
                                           pClientWindow->mpWindowImpl->mnTopBorder,
                                           aSize.Width()-pClientWindow->mpWindowImpl->mnLeftBorder-pClientWindow->mpWindowImpl->mnRightBorder,
                                           aSize.Height()-pClientWindow->mpWindowImpl->mnTopBorder-pClientWindow->mpWindowImpl->mnBottomBorder,
-                                          WINDOW_POSSIZE_X | WINDOW_POSSIZE_Y |
-                                          WINDOW_POSSIZE_WIDTH | WINDOW_POSSIZE_HEIGHT );
+                                          PosSizeFlags::X | PosSizeFlags::Y |
+                                          PosSizeFlags::Width | PosSizeFlags::Height );
     }
 
     // UpdateView

@@ -605,18 +605,18 @@ sal_uInt16 ListBox::GetDropDownLineCount() const
     return mnLineCount;
 }
 
-void ListBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void ListBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags )
 {
-    if( IsDropDownBox() && ( nFlags & WINDOW_POSSIZE_SIZE ) )
+    if( IsDropDownBox() && ( nFlags & PosSizeFlags::Size ) )
     {
         Size aPrefSz = mpFloatWin->GetPrefSize();
-        if ( ( nFlags & WINDOW_POSSIZE_HEIGHT ) && ( nHeight >= 2*mnDDHeight ) )
+        if ( ( nFlags & PosSizeFlags::Height ) && ( nHeight >= 2*mnDDHeight ) )
             aPrefSz.Height() = nHeight-mnDDHeight;
-        if ( nFlags & WINDOW_POSSIZE_WIDTH )
+        if ( nFlags & PosSizeFlags::Width )
             aPrefSz.Width() = nWidth;
         mpFloatWin->SetPrefSize( aPrefSz );
 
-        if ( IsAutoSizeEnabled() && ! (nFlags & WINDOW_POSSIZE_DROPDOWN) )
+        if ( IsAutoSizeEnabled() && ! (nFlags & PosSizeFlags::Dropdown) )
             nHeight = mnDDHeight;
     }
 

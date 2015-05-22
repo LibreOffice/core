@@ -748,15 +748,15 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
     }
     else
     {
-        sal_uInt16 nPosSize = 0;
+        PosSizeFlags nPosSize = PosSizeFlags::NONE;
         if ( nValidMask & WINDOWSTATE_MASK_X )
-            nPosSize |= WINDOW_POSSIZE_X;
+            nPosSize |= PosSizeFlags::X;
         if ( nValidMask & WINDOWSTATE_MASK_Y )
-            nPosSize |= WINDOW_POSSIZE_Y;
+            nPosSize |= PosSizeFlags::Y;
         if ( nValidMask & WINDOWSTATE_MASK_WIDTH )
-            nPosSize |= WINDOW_POSSIZE_WIDTH;
+            nPosSize |= PosSizeFlags::Width;
         if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
-            nPosSize |= WINDOW_POSSIZE_HEIGHT;
+            nPosSize |= PosSizeFlags::Height;
 
         if( IsRollUp() )
             RollDown();

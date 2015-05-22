@@ -1537,7 +1537,7 @@ void Window::ImplUpdateSysObjPos()
 }
 
 void Window::ImplPosSizeWindow( long nX, long nY,
-                                long nWidth, long nHeight, sal_uInt16 nFlags )
+                                long nWidth, long nHeight, PosSizeFlags nFlags )
 {
     bool    bNewPos         = false;
     bool    bNewSize        = false;
@@ -1567,12 +1567,12 @@ void Window::ImplPosSizeWindow( long nX, long nY,
     }
 
     bool bnXRecycled = false; // avoid duplicate mirroring in RTL case
-    if ( nFlags & WINDOW_POSSIZE_WIDTH )
+    if ( nFlags & PosSizeFlags::Width )
     {
-        if(!( nFlags & WINDOW_POSSIZE_X ))
+        if(!( nFlags & PosSizeFlags::X ))
         {
             nX = mpWindowImpl->mnX;
-            nFlags |= WINDOW_POSSIZE_X;
+            nFlags |= PosSizeFlags::X;
             bnXRecycled = true; // we're using a mnX which was already mirrored in RTL case
         }
 
@@ -1585,7 +1585,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             bCopyBits = false;
         }
     }
-    if ( nFlags & WINDOW_POSSIZE_HEIGHT )
+    if ( nFlags & PosSizeFlags::Height )
     {
         if ( nHeight < 0 )
             nHeight = 0;
@@ -1597,7 +1597,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         }
     }
 
-    if ( nFlags & WINDOW_POSSIZE_X )
+    if ( nFlags & PosSizeFlags::X )
     {
         long nOrgX = nX;
         // --- RTL ---  (compare the screen coordinates)
@@ -1652,7 +1652,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             bNewPos = true;
         }
     }
-    if ( nFlags & WINDOW_POSSIZE_Y )
+    if ( nFlags & PosSizeFlags::Y )
     {
         // check maPos as well, as it could have been changed for client windows (ImplCallMove())
         if ( nY != mpWindowImpl->mnY || nY != mpWindowImpl->maPos.Y() )
@@ -1686,8 +1686,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                                mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder,
                                                mnOutWidth-mpWindowImpl->mpClientWindow->mpWindowImpl->mnLeftBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnRightBorder,
                                                mnOutHeight-mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnBottomBorder,
-                                               WINDOW_POSSIZE_X | WINDOW_POSSIZE_Y |
-                                               WINDOW_POSSIZE_WIDTH | WINDOW_POSSIZE_HEIGHT );
+                                               PosSizeFlags::X | PosSizeFlags::Y |
+                                               PosSizeFlags::Width | PosSizeFlags::Height );
             // If we have a client window, then this is the position
             // of the Application's floating windows
             mpWindowImpl->mpClientWindow->mpWindowImpl->maPos = mpWindowImpl->maPos;
@@ -2831,14 +2831,14 @@ void Window::SetActivateMode( sal_uInt16 nMode )
 }
 
 void Window::setPosSizePixel( long nX, long nY,
-                              long nWidth, long nHeight, sal_uInt16 nFlags )
+                              long nWidth, long nHeight, PosSizeFlags nFlags )
 {
 
     bool bHasValidSize = !mpWindowImpl->mbDefSize;
 
-    if ( nFlags & WINDOW_POSSIZE_POS )
+    if ( nFlags & PosSizeFlags::Pos )
         mpWindowImpl->mbDefPos = false;
-    if ( nFlags & WINDOW_POSSIZE_SIZE )
+    if ( nFlags & PosSizeFlags::Size )
         mpWindowImpl->mbDefSize = false;
 
     // The top BorderWindow is the window which is to be positioned
@@ -2853,19 +2853,19 @@ void Window::setPosSizePixel( long nX, long nY,
         // as the position of the border ! (due to limitations of several UNIX window managers)
         long nOldWidth  = pWindow->mnOutWidth;
 
-        if ( !(nFlags & WINDOW_POSSIZE_WIDTH) )
+        if ( !(nFlags & PosSizeFlags::Width) )
             nWidth = pWindow->mnOutWidth;
-        if ( !(nFlags & WINDOW_POSSIZE_HEIGHT) )
+        if ( !(nFlags & PosSizeFlags::Height) )
             nHeight = pWindow->mnOutHeight;
 
         sal_uInt16 nSysFlags=0;
         vcl::Window *pParent = GetParent();
 
-        if( nFlags & WINDOW_POSSIZE_WIDTH )
+        if( nFlags & PosSizeFlags::Width )
             nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
-        if( nFlags & WINDOW_POSSIZE_HEIGHT )
+        if( nFlags & PosSizeFlags::Height )
             nSysFlags |= SAL_FRAME_POSSIZE_HEIGHT;
-        if( nFlags & WINDOW_POSSIZE_X )
+        if( nFlags & PosSizeFlags::X )
         {
             nSysFlags |= SAL_FRAME_POSSIZE_X;
             if( pParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
@@ -2881,7 +2881,7 @@ void Window::setPosSizePixel( long nX, long nY,
                 nX = aRect.Left();
             }
         }
-        if( !(nFlags & WINDOW_POSSIZE_X) && bHasValidSize && pWindow->mpWindowImpl->mpFrame->maGeometry.nWidth )
+        if( !(nFlags & PosSizeFlags::X) && bHasValidSize && pWindow->mpWindowImpl->mpFrame->maGeometry.nWidth )
         {
             // --- RTL ---  make sure the old right aligned position is not changed
             //              system windows will always grow to the right
@@ -2895,15 +2895,15 @@ void Window::setPosSizePixel( long nX, long nY,
                         myWidth = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth;
                     if( !myWidth )
                         myWidth = nWidth;
-                    nFlags |= WINDOW_POSSIZE_X;
+                    nFlags |= PosSizeFlags::X;
                     nSysFlags |= SAL_FRAME_POSSIZE_X;
                     nX = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX -
                         mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration;
                     nX = pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration +
                         pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX;
-                    if(!(nFlags & WINDOW_POSSIZE_Y))
+                    if(!(nFlags & PosSizeFlags::Y))
                     {
-                        nFlags |= WINDOW_POSSIZE_Y;
+                        nFlags |= PosSizeFlags::Y;
                         nSysFlags |= SAL_FRAME_POSSIZE_Y;
                         nY = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY - pWindow->GetParent()->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY -
                             mpWindowImpl->mpFrame->GetUnmirroredGeometry().nTopDecoration;
@@ -2911,7 +2911,7 @@ void Window::setPosSizePixel( long nX, long nY,
                 }
             }
         }
-        if( nFlags & WINDOW_POSSIZE_Y )
+        if( nFlags & PosSizeFlags::Y )
         {
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
             if( pParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )

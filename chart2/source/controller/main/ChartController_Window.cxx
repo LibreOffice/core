@@ -248,7 +248,7 @@ void SAL_CALL ChartController::setPosSize(
                     Fraction(nScaleXNumerator, nScaleXDenominator),
                     Fraction(nScaleYNumerator, nScaleYDenominator) );
         m_pChartWindow->SetMapMode(aNewMapMode);
-        m_pChartWindow->setPosSizePixel( X, Y, Width, Height, Flags );
+        m_pChartWindow->setPosSizePixel( X, Y, Width, Height, static_cast<PosSizeFlags>(Flags) );
 
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
         uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
