@@ -194,7 +194,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
     {
         case XML_NAMESPACE_UNKNOWN:
             // ...if it's a completely unknown namespace, assert and return the local name
-            assert(false);
+            SAL_WARN("xmloff.core", "unknown namespace, probable missing xmlns: declaration");
         case XML_NAMESPACE_NONE:
             // ...if there isn't one, return the local name
             return rLocalName;
