@@ -800,7 +800,7 @@ void SvxStyleBox_Impl::CalcOptimalExtraUserWidth()
         OUString sStyleName(GetEntry(i));
 
         Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
-        SetupEntry(i, Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), this, sStyleName, false);
+        SetupEntry(i, Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), this, sStyleName, true);
         Rectangle aTextRectForActualFont;
         GetTextBoundRect(aTextRectForActualFont, sStyleName);
         if (AdjustFontForItemHeight(this, aTextRectForActualFont, ITEM_HEIGHT))
