@@ -78,6 +78,9 @@ protected:
     void ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown );
     long ImplGetStartY() const;
     Rectangle ImplGetItemRect( sal_uInt16 nPos );
+    void RenderHighlightItem( vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight );
+    long GetInitialItemY( long *pOptStartY = NULL ) const;
+    void InvalidateItem( sal_uInt16 nPos );
 
 public:
     MenuFloatingWindow(Menu* pMenu, vcl::Window* pParent, WinBits nStyle);
@@ -112,7 +115,6 @@ public:
     PopupMenu* GetActivePopup() const  { return pActivePopup; }
     void KillActivePopup( PopupMenu* pThisOnly = NULL );
 
-    void  HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight);
     void ChangeHighlightItem(sal_uInt16 n, bool bStartPopupTimer);
     sal_uInt16 GetHighlightedItem() const { return nHighlightedItem; }
 
