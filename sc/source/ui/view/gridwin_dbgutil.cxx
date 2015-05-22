@@ -20,6 +20,17 @@ std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
     return rStrm;
 }
 
+void dumpScDrawObjData(ScGridWindow& rWindow, ScDrawObjData& rData, MapUnit eMapUnit)
+{
+    const Point& rStartOffset = rData.maStartOffset;
+    Point aStartOffsetPixel = rWindow.LogicToPixel(rStartOffset, MapMode(eMapUnit));
+    std::cout << "  Start: " << rData.maStart << ", Offset: " << aStartOffsetPixel << std::endl;
+
+    const Point& rEndOffset = rData.maEndOffset;
+    Point aEndOffsetPixel = rWindow.LogicToPixel(rEndOffset, MapMode(eMapUnit));
+    std::cout << "  End: : " << rData.maEnd << ", Offset: " << aEndOffsetPixel << std::endl;
+}
+
 }
 
 void ScGridWindow::dumpColumnInformation()
@@ -51,7 +62,7 @@ void ScGridWindow::dumpGraphicInformation()
                 std::cout << "Graphic Object" << std::endl;
                 ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
                 if (pObjData)
-                    std::cout << "Start Position: " << pObjData->maStart << ", EndPosition: " << pObjData->maEnd << std::endl;
+                    dumpScDrawObjData(*this, *pObjData, pDrawLayer->GetScaleUnit());
 
                 const Rectangle& rRect = pObj->GetSnapRect();
                 Rectangle aRect = LogicToPixel(rRect, MapMode(pDrawLayer->GetScaleUnit()));
