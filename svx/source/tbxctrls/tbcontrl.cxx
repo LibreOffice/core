@@ -608,7 +608,7 @@ void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, Outp
 {
     if (nItem == 0 || nItem == GetEntryCount() - 1)
     {
-        unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
+        unsigned int nId = (rRect.getY() / rRect.GetHeight());
         if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
             m_pButtons[nId]->Hide();
     }
@@ -735,19 +735,19 @@ void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, Outp
                 // handle the push-button
                 if (bIsNotSelected)
                 {
-                    unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
+                    unsigned int nId = (rRect.getY() / rRect.GetHeight());
                     if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
                         m_pButtons[nId]->Hide();
                 }
                 else
                 {
-                    unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
+                    unsigned int nId = (rRect.getY() / rRect.GetHeight());
                     if(nId < MAX_STYLES_ENTRIES)
                     {
                         if(m_pButtons[nId] == nullptr)
                         {
                             m_pButtons[nId] = VclPtr<MenuButton>::Create(static_cast<vcl::Window*>(pDevice), WB_FLATBUTTON | WB_NOPOINTERFOCUS);
-                            m_pButtons[nId]->SetSizePixel(Size(BUTTON_WIDTH, rRect.GetSize().Height()));
+                            m_pButtons[nId]->SetSizePixel(Size(BUTTON_WIDTH, rRect.GetHeight()));
                             m_pButtons[nId]->SetPopupMenu(&m_aMenu);
                         }
                         m_pButtons[nId]->SetPosPixel(Point(rRect.GetWidth() - BUTTON_WIDTH, rRect.getY()));
