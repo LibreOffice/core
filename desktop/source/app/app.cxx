@@ -1894,8 +1894,12 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
 
         CloseSplashScreen();
         CheckFirstRun( );
-        EnableOleAutomation();
-
+#ifdef WNT
+        // Registers a COM class factory of the service manager with the windows operating system.
+        Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
+        xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
+        xSMgr->createInstance("com.sun.star.comp.ole.EmbedServer");
+#endif
         const char *pExitPostStartup = getenv ("OOO_EXIT_POST_STARTUP");
         if (pExitPostStartup && *pExitPostStartup)
             new ExitTimer();
@@ -1913,16 +1917,6 @@ IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl)
     return 0;
 }
 
-
-// Registers a COM class factory of the service manager with the windows operating system.
-void Desktop::EnableOleAutomation()
-{
-#ifdef WNT
-    Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
-    xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
-    xSMgr->createInstance("com.sun.star.comp.ole.EmbedServer");
-#endif
-}
 
 void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 {

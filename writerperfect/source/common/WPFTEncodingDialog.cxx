@@ -30,7 +30,7 @@ struct EncodingImplementation
 
     static OUString const(s_encodings[]);
 
-    static int numEncodings();
+    static inline int numEncodings();
     static void insertEncodings(ListBox *box);
     static void selectEncoding(ListBox *box, const OUString &encoding);
     static OUString getEncoding(ListBox *box);
@@ -84,7 +84,7 @@ OUString const(EncodingImplementation::s_encodings[])=
     "CP1252", "Western Europe (Windows-1252/WinLatin 1)"
 };
 
-int EncodingImplementation::numEncodings()
+inline int EncodingImplementation::numEncodings()
 {
     return int(sizeof(s_encodings)/(2*sizeof(const OUString *)));
 }

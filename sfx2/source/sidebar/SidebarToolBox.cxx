@@ -214,8 +214,6 @@ void SidebarToolBox::RegisterHandlers()
         SetClickHdl(LINK(this, SidebarToolBox, ClickHandler));
         SetDoubleClickHdl(LINK(this, SidebarToolBox, DoubleClickHandler));
         SetSelectHdl(LINK(this, SidebarToolBox, SelectHandler));
-        SetActivateHdl(LINK(this, SidebarToolBox, ActivateToolBox));
-        SetDeactivateHdl(LINK(this, SidebarToolBox, DeactivateToolBox));
     }
 }
 
@@ -262,14 +260,6 @@ IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
     if (xController.is())
         xController->execute((sal_Int16)pToolBox->GetModifier());
 }
-
-IMPL_STATIC_LINK_NOARG_TYPED(
-    SidebarToolBox, ActivateToolBox, ToolBox*, void)
-{}
-
-IMPL_STATIC_LINK_NOARG_TYPED(
-    SidebarToolBox, DeactivateToolBox, ToolBox*, void)
-{}
 
 } } // end of namespace sfx2::sidebar
 

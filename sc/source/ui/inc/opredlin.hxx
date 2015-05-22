@@ -40,8 +40,7 @@ class ScRedlineOptionsTabPage : public SfxTabPage
     VclPtr<ColorListBox>       m_pRemoveColorLB;
     VclPtr<ColorListBox>       m_pInsertColorLB;
     VclPtr<ColorListBox>       m_pMoveColorLB;
-    OUString            aAuthorStr;
-    DECL_STATIC_LINK(ScRedlineOptionsTabPage, ColorHdl, void *);
+    OUString                   aAuthorStr;
 
 public:
 

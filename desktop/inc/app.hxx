@@ -152,7 +152,6 @@ class Desktop : public Application
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 
-        static void             EnableOleAutomation();
         DECL_STATIC_LINK( Desktop, ImplInitFilterHdl, ConvertData* );
         DECL_STATIC_LINK_TYPED( Desktop, AsyncInitFirstRun, Timer*, void );
         /** checks if the office is run the first time

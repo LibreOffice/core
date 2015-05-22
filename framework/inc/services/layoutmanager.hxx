@@ -256,7 +256,6 @@ namespace framework
             void    implts_notifyListeners(short nEvent, const css::uno::Any& rInfoParam);
 
             DECL_LINK( OptionsChanged, void* );
-            DECL_STATIC_LINK( LayoutManager, SettingsChanged, void* );
 
             //  OPropertySetHelper
 

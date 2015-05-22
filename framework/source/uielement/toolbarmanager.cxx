@@ -207,8 +207,6 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xURLTransformer = URLTransformer::create( m_xContext );
 
     m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );
-    m_pToolBar->SetActivateHdl( LINK( this, ToolBarManager, Activate) );
-    m_pToolBar->SetDeactivateHdl( LINK( this, ToolBarManager, Deactivate) );
     m_pToolBar->SetClickHdl( LINK( this, ToolBarManager, Click ) );
     m_pToolBar->SetDropdownClickHdl( LINK( this, ToolBarManager, DropdownClick ) );
     m_pToolBar->SetDoubleClickHdl( LINK( this, ToolBarManager, DoubleClick ) );
@@ -2023,12 +2021,6 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, Select, ToolBox *, void)
             xController->execute( nKeyModifier );
     }
 }
-
-IMPL_LINK_NOARG_TYPED(ToolBarManager, Activate, ToolBox *, void)
-{}
-
-IMPL_LINK_NOARG_TYPED(ToolBarManager, Deactivate, ToolBox *, void)
-{}
 
 IMPL_LINK_TYPED( ToolBarManager, StateChanged, StateChangedType const *, pStateChangedType, void )
 {

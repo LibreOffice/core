@@ -941,9 +941,11 @@ void Dialog::EndDialog( long nResult )
         if ( mpDialogImpl->mbStartedModal )
         {
             ImplEndExecuteModal();
-            mpDialogImpl->maEndDialogHdl.Call( this );
-
-            mpDialogImpl->maEndDialogHdl = Link<>();
+            if (mpDialogImpl->maEndDialogHdl.IsSet())
+            {
+                mpDialogImpl->maEndDialogHdl.Call( this );
+                mpDialogImpl->maEndDialogHdl = Link<>();
+            }
             mpDialogImpl->mbStartedModal = false;
             mpDialogImpl->mnResult = -1;
         }

@@ -1329,17 +1329,12 @@ void ScExternalRefLink::Closed()
 
 void ScExternalRefLink::Edit(vcl::Window* pParent, const Link<>& /*rEndEditHdl*/)
 {
-    SvBaseLink::Edit(pParent, LINK(this, ScExternalRefLink, ExternalRefEndEditHdl));
+    SvBaseLink::Edit(pParent, Link<>());
 }
 
 void ScExternalRefLink::SetDoReferesh(bool b)
 {
     mbDoRefresh = b;
-}
-
-IMPL_STATIC_LINK_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
-{
-    return 0;
 }
 
 static FormulaToken* convertToToken( ScDocument* pHostDoc, ScDocument* pSrcDoc, ScRefCellValue& rCell )

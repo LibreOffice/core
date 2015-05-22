@@ -144,7 +144,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
             return true;
         }
         // static with inline body will be optimised at compile-time to a constant anyway
-        if (pCXXMethodDecl->isStatic() && pCXXMethodDecl->hasInlineBody()) {
+        if (pCXXMethodDecl->isStatic() && (pCXXMethodDecl->hasInlineBody() || pCXXMethodDecl->isInlineSpecified())) {
             return true;
         }
         // this catches some stuff in templates
@@ -410,6 +410,11 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
         || aFunctionName == "GtkSalFrame::EnsureAppMenuWatch"
         || aFunctionName == "InitAtkBridge")
     {
+        return true;
+    }
+    // LINK callback which supplies a return value which means something
+    if (aFunctionName == "SfxVirtualMenu::Highlight" || aFunctionName == "framework::MenuManager::Highlight"
+        || aFunctionName == "framework::MenuBarManager::Highlight") {
         return true;
     }
 

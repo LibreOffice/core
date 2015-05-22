@@ -299,14 +299,13 @@ private:
 
     DECL_LINK(          PositionHdl_Impl, RadioButton* );
     DECL_LINK(          RotationHdl_Impl, RadioButton* );
-    DECL_LINK(FontModifyHdl_Impl, void *);
+    DECL_LINK(          FontModifyHdl_Impl, void *);
     DECL_LINK(          AutoPositionHdl_Impl, CheckBox* );
     DECL_LINK(          FitToLineHdl_Impl, CheckBox* );
-    DECL_LINK(KerningSelectHdl_Impl, void *);
-    DECL_LINK(KerningModifyHdl_Impl, void *);
-    DECL_STATIC_LINK(SvxCharPositionPage, PairKerningHdl_Impl, void *);
+    DECL_LINK(          KerningSelectHdl_Impl, void *);
+    DECL_LINK(          KerningModifyHdl_Impl, void *);
     DECL_LINK(          LoseFocusHdl_Impl, MetricField* );
-    DECL_LINK(ScaleWidthModifyHdl_Impl, void *);
+    DECL_LINK(          ScaleWidthModifyHdl_Impl, void *);
 
 public:
     virtual ~SvxCharPositionPage();

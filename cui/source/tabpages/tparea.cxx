@@ -202,12 +202,6 @@ void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
     }
 }
 
-IMPL_STATIC_LINK_NOARG(
-    SvxTransparenceTabPage, ChangeTrgrTypeHdl_Impl)
-{
-    return 0L;
-}
-
 void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
 {
     switch(eXGS)
@@ -301,7 +295,6 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     // gradient transparency
     m_pMtrTrgrEndValue->SetValue( 100 );
     m_pMtrTrgrStartValue->SetValue( 0 );
-    m_pLbTrgrGradientType->SetSelectHdl(LINK(this, SvxTransparenceTabPage, ChangeTrgrTypeHdl_Impl));
     Link<> aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrHdl_Impl);
     m_pLbTrgrGradientType->SetSelectHdl( aLink );
     m_pMtrTrgrCenterX->SetModifyHdl( aLink );

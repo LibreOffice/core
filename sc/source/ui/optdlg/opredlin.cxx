@@ -47,12 +47,6 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( vcl::Window* pParent,
     get(m_pRemoveColorLB, "deletions");
     get(m_pInsertColorLB, "entries");
     get(m_pMoveColorLB, "insertions");
-
-    Link<> aLk = LINK(this, ScRedlineOptionsTabPage, ColorHdl);
-    m_pContentColorLB->SetSelectHdl( aLk );
-    m_pMoveColorLB->SetSelectHdl( aLk );
-    m_pInsertColorLB->SetSelectHdl( aLk );
-    m_pRemoveColorLB->SetSelectHdl( aLk );
 }
 
 ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
@@ -192,11 +186,6 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
     else
         m_pRemoveColorLB->SelectEntry(Color(nColor));
 
-}
-
-IMPL_STATIC_LINK_NOARG(ScRedlineOptionsTabPage, ColorHdl)
-{
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -90,7 +90,6 @@ SdNavigatorWin::SdNavigatorWin(
     Size aTbxSize( maToolbox->CalcWindowSizePixel() );
     maToolbox->SetOutputSizePixel( aTbxSize );
     maToolbox->SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
-    maToolbox->SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
     maToolbox->SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
     maToolbox->SetItemBits( TBI_DRAGTYPE, maToolbox->GetItemBits( TBI_DRAGTYPE ) | ToolBoxItemBits::DROPDOWNONLY );
 
@@ -312,10 +311,6 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
         break;
     }
 }
-
-IMPL_STATIC_LINK_NOARG_TYPED(
-    SdNavigatorWin, ClickToolboxHdl, ToolBox *, void)
-{}
 
 IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 {

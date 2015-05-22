@@ -146,8 +146,6 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
     }
 
-    Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
-
     m_aAsyncLayoutTimer.SetTimeout( 50 );
     m_aAsyncLayoutTimer.SetTimeoutHdl( LINK( this, LayoutManager, AsyncLayoutHdl ) );
 
@@ -161,7 +159,6 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
 
 LayoutManager::~LayoutManager()
 {
-    Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     m_aAsyncLayoutTimer.Stop();
     setDockingAreaAcceptor(NULL);
     delete m_pGlobalSettings;
@@ -2620,11 +2617,6 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
     return 0;
 }
 
-IMPL_STATIC_LINK_NOARG(LayoutManager, SettingsChanged)
-{
-    return 1;
-}
-
 //  XLayoutManagerEventBroadcaster
 
 void SAL_CALL LayoutManager::addLayoutManagerEventListener( const uno::Reference< frame::XLayoutManagerListener >& xListener )
@@ -2819,7 +2811,6 @@ throw( RuntimeException, std::exception )
     if ( rEvent.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
     {
         // Our frame gets disposed, release all our references that depends on a working frame reference.
-        Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
 
         setDockingAreaAcceptor( Reference< ui::XDockingAreaAcceptor >() );
 

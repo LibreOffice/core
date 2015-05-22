@@ -297,8 +297,6 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     m_pMtrSlant->SetModifyHdl( aLink );
 
     // Preview callback
-    aLink = LINK( this, Svx3DWin, ChangeLightCallbackHdl );
-    m_pCtlLightPreview->SetUserInteractiveChangeCallback(aLink);
     aLink = LINK( this, Svx3DWin, ChangeSelectionCallbackHdl );
     m_pCtlLightPreview->SetUserSelectionChangeCallback(aLink);
 
@@ -2638,14 +2636,6 @@ void Svx3DWin::ClickLight(PushButton& rBtn)
     m_pCtlLightPreview->GetSvx3DLightControl().SelectLight(nLightSource);
     m_pCtlLightPreview->CheckSelection();
 }
-
-
-
-IMPL_STATIC_LINK_NOARG(Svx3DWin, ChangeLightCallbackHdl)
-{
-    return 0L;
-}
-
 
 
 

@@ -265,8 +265,6 @@ void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 {
     maEdVal1->SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
     maEdVal2->SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdVal1->SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
-    maEdVal2->SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     maEdVal1->SetStyle( maEdVal1->GetStyle() | WB_FORCECTRLBACKGROUND );
     maEdVal2->SetStyle( maEdVal2->GetStyle() | WB_FORCECTRLBACKGROUND );
@@ -598,7 +596,6 @@ void ScFormulaFrmtEntry::dispose()
 void ScFormulaFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 {
     maEdFormula->SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdFormula->SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     FillStyleListBox( mpDoc, *maLbStyle.get() );
     maLbStyle->SetSelectHdl( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );

@@ -135,14 +135,9 @@ void CancelableDialog::SetCancelHdl( const Link<>& rLink )
 void CancelableDialog::Show()
 {
    if (mbModal)
-       StartExecuteModal( LINK(this, CancelableDialog, DlgClosedHdl) );
+       StartExecuteModal( Link<>() );
    else
        Dialog::Show();
-}
-
-IMPL_STATIC_LINK_NOARG(CancelableDialog, DlgClosedHdl)
-{
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

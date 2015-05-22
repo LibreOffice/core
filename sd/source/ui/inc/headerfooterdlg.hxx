@@ -38,8 +38,6 @@ class HeaderFooterDialog : public TabDialog
 {
 private:
     DECL_LINK( ActivatePageHdl, TabControl * );
-    DECL_STATIC_LINK_TYPED( HeaderFooterDialog, DeactivatePageHdl, TabControl *, bool );
-
     DECL_LINK( ClickApplyToAllHdl, void * );
     DECL_LINK( ClickApplyHdl, void * );
     DECL_LINK( ClickCancelHdl, void * );

@@ -130,9 +130,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
     aVerSBar->SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollUpDownHdl ) );
     aHorSBar->SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl ) );
-    Link<> aEndScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, EndScrollHdl ) );
-    aVerSBar->SetEndScrollHdl( aEndScrollHdl );
-    aHorSBar->SetEndScrollHdl( aEndScrollHdl );
 
     nHorSBarHeight = aHorSBar->GetSizePixel().Height();
     nVerSBarWidth = aVerSBar->GetSizePixel().Width();
@@ -250,11 +247,6 @@ IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar )
     // arrow left: delta=-1; arrow right: delta=+1
     Scroll( pScrollBar->GetDelta(), 0, true );
     bEndScrollInvalidate = true;
-    return 0;
-}
-
-IMPL_STATIC_LINK_NOARG(SvxIconChoiceCtrl_Impl, EndScrollHdl)
-{
     return 0;
 }
 

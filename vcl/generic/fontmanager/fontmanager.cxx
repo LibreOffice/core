@@ -675,8 +675,10 @@ PrintFontManager::PrintFontManager()
         }
     }
 
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     m_aFontInstallerTimer.SetTimeoutHdl(LINK(this, PrintFontManager, autoInstallFontLangSupport));
     m_aFontInstallerTimer.SetTimeout(5000);
+#endif
 }
 
 PrintFontManager::~PrintFontManager()

@@ -103,8 +103,6 @@ class UcbLockBytes : public virtual SvLockBytes
     bool                    m_bDontClose;
     bool                    m_bStreamValid;
 
-    DECL_STATIC_LINK( UcbLockBytes, DataAvailHdl, void * );
-
                             UcbLockBytes( UcbLockBytesHandler* pHandler );
 protected:
     virtual                 ~UcbLockBytes();
