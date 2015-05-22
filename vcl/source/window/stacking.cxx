@@ -413,7 +413,7 @@ void Window::ImplShowAllOverlaps()
     {
         if ( pOverlapWindow->mpWindowImpl->mbOverlapVisible )
         {
-            pOverlapWindow->Show( true, SHOW_NOACTIVATE );
+            pOverlapWindow->Show( true, ShowFlags::NoActivate );
             pOverlapWindow->mpWindowImpl->mbOverlapVisible = false;
         }
 
@@ -901,7 +901,7 @@ void Window::SetParent( vcl::Window* pNewParent )
         mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
 
     bool bVisible = IsVisible();
-    Show( false, SHOW_NOFOCUSCHANGE );
+    Show( false, ShowFlags::NoFocusChange );
 
     // check if the overlap window changes
     vcl::Window* pOldOverlapWindow;
@@ -1017,7 +1017,7 @@ void Window::SetParent( vcl::Window* pNewParent )
         ImplGetOwnerDrawList().push_back( this );
 
     if ( bVisible )
-        Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+        Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
 }
 
 sal_uInt16 Window::GetChildCount() const

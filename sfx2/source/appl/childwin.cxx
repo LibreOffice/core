@@ -665,7 +665,7 @@ void SfxChildWindow::Hide()
     }
 }
 
-void SfxChildWindow::Show( sal_uInt16 nFlags )
+void SfxChildWindow::Show( ShowFlags nFlags )
 {
     switch ( pWindow->GetType() )
     {

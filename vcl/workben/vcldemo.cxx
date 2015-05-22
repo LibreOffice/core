@@ -1531,7 +1531,7 @@ class DemoPopup : public FloatingWindow
         SetOutputSizePixel( Size( 300, 30 ) );
         SetBackground(Wallpaper(COL_YELLOW));
 
-        Show( true, SHOW_NOACTIVATE );
+        Show( true, ShowFlags::NoActivate );
         Update();
     }
 

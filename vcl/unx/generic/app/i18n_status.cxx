@@ -246,7 +246,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         {
             setText( OUString() );
             m_pLastParent = pParent;
-            Show( false, SHOW_NOACTIVATE );
+            Show( false, ShowFlags::NoActivate );
         }
         if( IsVisible() )
         {
@@ -270,7 +270,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
         Point aPoint = updatePosition();
         pStatusFrame->SetPosSize( aPoint.X(), aPoint.Y(), m_aWindowSize.Width(), m_aWindowSize.Height(), SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y | SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
-    Show( m_bDelayedShow && m_bOn, SHOW_NOACTIVATE );
+    Show( m_bDelayedShow && m_bOn, ShowFlags::NoActivate );
     if( m_bDelayedShow )
     {
         XRaiseWindow( static_cast<Display*>(pData->pDisplay),

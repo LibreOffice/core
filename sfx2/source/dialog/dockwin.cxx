@@ -765,7 +765,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
             // before Show() is called must the reassignment have been made,
             // therefore the base class can not be called
             if ( IsFloatingMode() || !pImp->bSplitable )
-                Show( false, SHOW_NOFOCUSCHANGE );
+                Show( false, ShowFlags::NoFocusChange );
 
             // Set the size for toggling.
             pImp->aSplitSize = rRect.GetSize();
@@ -773,7 +773,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
             {
                 SetFloatingMode( bFloatMode );
                 if ( IsFloatingMode() || !pImp->bSplitable )
-                    Show( true, SHOW_NOFOCUSCHANGE );
+                    Show( true, ShowFlags::NoFocusChange );
             }
             else
             {

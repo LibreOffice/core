@@ -183,7 +183,7 @@ public:
     Point               GetPosPixel()
                         { return pWindow->GetPosPixel(); }
     virtual void        Hide();
-    virtual void        Show( sal_uInt16 nFlags );
+    virtual void        Show( ShowFlags nFlags );
     SfxChildWindowFlags GetFlags() const
                         { return GetInfo().nFlags; }
     bool                CanGetFocus() const;

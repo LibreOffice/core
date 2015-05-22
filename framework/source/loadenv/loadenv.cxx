@@ -1667,7 +1667,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
             pWindow->ToTop();
         else
-            pWindow->Show(true, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
+            pWindow->Show(true, (bForceFrontAndFocus || bForceToFront) ? ShowFlags::ForegroundTask : ShowFlags::NONE );
     }
 }
 

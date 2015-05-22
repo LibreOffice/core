@@ -1660,7 +1660,7 @@ throw (uno::RuntimeException, std::exception)
                 vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                 {
-                    pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
                     bResult   = true;
                     bNotify   = true;
                 }

@@ -675,7 +675,7 @@ bool ToolbarLayoutManager::showToolbar( const OUString& rResourceURL )
         if ( !aUIElement.m_bFloating )
             implts_setLayoutDirty();
         else
-            pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
 
         aUIElement.m_bVisible = true;
         implts_writeWindowStateData( aUIElement );
@@ -755,7 +755,7 @@ void ToolbarLayoutManager::setFloatingToolbarsVisibility( bool bVisible )
             if ( bVisible )
             {
                 if ( pIter->m_bVisible && !pIter->m_bMasterHide )
-                    pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
             }
             else
                 pWindow->Show( false );
@@ -789,7 +789,7 @@ void ToolbarLayoutManager::setVisible( bool bVisible )
             else
             {
                 if ( pIter->m_bFloating )
-                    pWindow->Show(true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pWindow->Show(true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
             }
         }
     }
@@ -1479,7 +1479,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             if ( bShowElement && pWindow )
             {
                 SolarMutexGuard aGuard;
-                pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                pWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
             }
         }
         else
@@ -2542,7 +2542,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             if ( aWinRect.X < nCurrPos )
                 aWinRect.X = nCurrPos;
             pWindow->SetPosSizePixel( ::Point( aWinRect.X, nOffset ), ::Size( aWinRect.Width, rRowColumnWindowData.nStaticSize ));
-            pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
             nCurrPos += ( aWinRect.X - nCurrPos ) + aWinRect.Width;
         }
         else
@@ -2550,7 +2550,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             if ( aWinRect.Y < nCurrPos )
                 aWinRect.Y = nCurrPos;
             pWindow->SetPosSizePixel( ::Point( nOffset, aWinRect.Y ), ::Size( rRowColumnWindowData.nStaticSize, aWinRect.Height ));
-            pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
             nCurrPos += ( aWinRect.Y - nCurrPos ) + aWinRect.Height;
         }
     }

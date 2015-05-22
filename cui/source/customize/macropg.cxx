@@ -196,7 +196,7 @@ void MacroEventListBox::ConnectElements()
     maListBox->InitHeaderBar( maHeaderBar.get() );
 }
 
-void MacroEventListBox::Show( bool bVisible, sal_uInt16 nFlags )
+void MacroEventListBox::Show( bool bVisible, ShowFlags nFlags )
 {
     maListBox->Show( bVisible, nFlags );
     maHeaderBar->Show( bVisible, nFlags );

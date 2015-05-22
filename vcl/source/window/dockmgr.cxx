@@ -833,7 +833,7 @@ ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
 {
     if ( IsFloatingMode() )
     {
-        GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
+        GetWindow()->Show( false, ShowFlags::NoFocusChange );
         SetFloatingMode( false );
     }
 }
@@ -1009,7 +1009,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
         bool bShow = false;
         if ( bFloatMode != IsFloatingMode() )
         {
-            GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
+            GetWindow()->Show( false, ShowFlags::NoFocusChange );
             SetFloatingMode( bFloatMode );
             bShow = true;
             if ( bFloatMode )
@@ -1027,7 +1027,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
         }
 
         if ( bShow )
-            GetWindow()->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            GetWindow()->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
     }
 
     EndDockingData data( aRect, IsFloatingMode(), IsDockingCanceled() );
@@ -1104,7 +1104,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     if( IsFloatingMode() )
         return;
 
-    GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
+    GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
     // prepare reparenting
     vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
@@ -1161,7 +1161,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
 {
-    GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
+    GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
     // set parameter for handler before destroying floating window
     ImplPopupFloatWin *pPopupFloatWin = static_cast<ImplPopupFloatWin*>(mpFloatWin.get());
@@ -1212,7 +1212,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
 
             if ( bFloatMode )
             {
-                GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
+                GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
                 maDockPos = GetWindow()->GetPosPixel();
 
@@ -1265,13 +1265,13 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 mpFloatWin      = pWin;
 
                 if ( bVisible )
-                    GetWindow()->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    GetWindow()->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
 
                 ToggleFloatingMode();
             }
             else
             {
-                GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
+                GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
                 // store FloatingData in FloatingWindow
                 maFloatPos      = mpFloatWin->GetPosPixel();

@@ -168,10 +168,18 @@ namespace o3tl
 }
 
 // Flags for Show()
-#define SHOW_NOPARENTUPDATE             ((sal_uInt16)0x0001)
-#define SHOW_NOFOCUSCHANGE              ((sal_uInt16)0x0002)
-#define SHOW_NOACTIVATE                 ((sal_uInt16)0x0004)
-#define SHOW_FOREGROUNDTASK             ((sal_uInt16)0x0008)
+enum class ShowFlags
+{
+    NONE                       = 0x0000,
+    NoParentUpdate             = 0x0001,
+    NoFocusChange              = 0x0002,
+    NoActivate                 = 0x0004,
+    ForegroundTask             = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ShowFlags> : is_typed_flags<ShowFlags, 0x000f> {};
+}
 
 // Flags for SetZOrder()
 #define WINDOW_ZORDER_BEFOR             ((sal_uInt16)0x0001)
@@ -912,7 +920,7 @@ public:
     // return the dialog we are contained in or NULL if un-contained
     Dialog*                             GetParentDialog() const;
 
-    void                                Show( bool bVisible = true, sal_uInt16 nFlags = 0 );
+    void                                Show( bool bVisible = true, ShowFlags nFlags = ShowFlags::NONE );
     void                                Hide() { Show( false ); }
     bool                                IsVisible() const;
     bool                                IsReallyVisible() const;

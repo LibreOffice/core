@@ -118,7 +118,7 @@ void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
                 pStatusBar->SetProgressValue( sal_uInt16( nValue ));
                 pStatusBar->SetUpdateMode( true );
             }
-            pStatusBar->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pStatusBar->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
         }
     }
 }
