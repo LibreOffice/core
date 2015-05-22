@@ -228,7 +228,6 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             m_pBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel() - m_pBuffer->mnOutOffY;
 
             m_pWindow->PushPaintHelper(this, *m_pWindow);
-            m_pWindow->ApplySettings(*m_pBuffer.get());
             m_pWindow->Paint(*m_pBuffer.get(), m_aPaintRect);
 
             // restore the mnOutOffX/Y value
@@ -239,7 +238,6 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         {
             // direct painting
             m_pWindow->PushPaintHelper(this, *m_pWindow);
-            m_pWindow->ApplySettings(*m_pWindow);
             m_pWindow->Paint(*m_pWindow, m_aPaintRect);
         }
 
@@ -507,6 +505,11 @@ namespace vcl {
 
 void Window::ImplCallPaint(const VclPtr<VirtualDevice>& rBuffer, const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
 {
+    if (rBuffer)
+        ApplySettings(*rBuffer.get());
+    else
+        ApplySettings(*this);
+
     // call PrePaint. PrePaint may add to the invalidate region as well as
     // other parameters used below.
     PrePaint(*this);
@@ -697,7 +700,6 @@ void Window::ImplInvalidateParentFrameRegion( vcl::Region& rRegion )
 
 void Window::ImplInvalidate( const vcl::Region* pRegion, sal_uInt16 nFlags )
 {
-
     // reset background storage
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
         ImplInvalidateAllOverlapBackgrounds();
@@ -1133,7 +1135,6 @@ vcl::Region Window::GetPaintRegion() const
 
 void Window::Invalidate( sal_uInt16 nFlags )
 {
-
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
 
@@ -1143,7 +1144,6 @@ void Window::Invalidate( sal_uInt16 nFlags )
 
 void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
-
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
 
@@ -1160,7 +1160,6 @@ void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void Window::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
 {
-
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
 
