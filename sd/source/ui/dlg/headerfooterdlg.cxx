@@ -223,7 +223,6 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
     ActivatePageHdl( mpTabCtrl );
 
     mpTabCtrl->SetActivatePageHdl( LINK( this, HeaderFooterDialog, ActivatePageHdl ) );
-    mpTabCtrl->SetDeactivatePageHdl( LINK( this, HeaderFooterDialog, DeactivatePageHdl ) );
 
     maPBApplyToAll->SetClickHdl( LINK( this, HeaderFooterDialog, ClickApplyToAllHdl ) );
     maPBApply->SetClickHdl( LINK( this, HeaderFooterDialog, ClickApplyHdl ) );
@@ -265,11 +264,6 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     maPBApply->Enable( mpCurrentPage != NULL );
 
     return 0;
-}
-
-IMPL_STATIC_LINK_NOARG_TYPED(HeaderFooterDialog, DeactivatePageHdl, TabControl *, bool)
-{
-    return true;
 }
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)

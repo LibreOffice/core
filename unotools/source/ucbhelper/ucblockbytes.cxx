@@ -121,24 +121,6 @@ public:
 };
 
 /**
-    Helper class for progress handling while executing UCB commands
- */
-class ProgressHandler_Impl: public ::cppu::WeakImplHelper1< XProgressHandler >
-{
-    Link<>                  m_aProgress;
-
-public:
-                            ProgressHandler_Impl( const Link<>& rLink )
-                                : m_aProgress( rLink )
-                            {}
-    // XProgressHandler
-    virtual void SAL_CALL   push(const Any & /*rStatus*/) throw (RuntimeException, std::exception) SAL_OVERRIDE {}
-    virtual void SAL_CALL   pop() throw (RuntimeException, std::exception) SAL_OVERRIDE {}
-    virtual void SAL_CALL   update(const Any & /*rStatus*/) throw (RuntimeException, std::exception) SAL_OVERRIDE
-                            { if ( m_aProgress.IsSet() ) m_aProgress.Call( 0 ); }
-};
-
-/**
     Helper class for managing interactions and progress when executing UCB commands
  */
 class UcbTaskEnvironment : public ::cppu::WeakImplHelper1< XCommandEnvironment >
@@ -241,7 +223,6 @@ public:
     Moderator(
         Reference < XContent >& xContent,
         Reference < XInteractionHandler >& xInteract,
-        Reference < XProgressHandler >& xProgress,
         const Command& rArg
     )
         throw(
@@ -328,9 +309,6 @@ public:
     void setReply(ReplyType);
 
     void handle( const Reference<XInteractionRequest >& Request );
-    void push( const Any& Status );
-    void update( const Any& Status );
-    void pop(  );
 
     void setStream(const Reference< XStream >& aStream);
     void setInputStream(const Reference<XInputStream> &rxInputStream);
@@ -495,56 +473,6 @@ private:
     Moderator& m_aModerator;
 };
 
-class ModeratorsProgressHandler
-    : public ::cppu::WeakImplHelper1<XProgressHandler>
-{
-public:
-    ModeratorsProgressHandler(Moderator &theModerator);
-
-    virtual ~ModeratorsProgressHandler();
-
-    virtual void SAL_CALL push( const Any& Status )
-        throw (
-            RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual void SAL_CALL update( const Any& Status )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual void SAL_CALL pop(  )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
-
-private:
-    Moderator& m_aModerator;
-};
-
-ModeratorsProgressHandler::ModeratorsProgressHandler(Moderator &theModerator)
-    : m_aModerator(theModerator)
-{
-}
-
-ModeratorsProgressHandler::~ModeratorsProgressHandler()
-{
-}
-
-void SAL_CALL ModeratorsProgressHandler::push( const Any& Status )
-    throw (
-        RuntimeException, std::exception)
-{
-    m_aModerator.push(Status);
-}
-
-void SAL_CALL ModeratorsProgressHandler::update( const Any& Status )
-    throw (RuntimeException, std::exception)
-{
-    m_aModerator.update(Status);
-}
-
-void SAL_CALL ModeratorsProgressHandler::pop(  )
-    throw (RuntimeException, std::exception)
-{
-    m_aModerator.pop();
-}
-
 ModeratorsInteractionHandler::ModeratorsInteractionHandler(
     Moderator &aModerator)
     : m_aModerator(aModerator)
@@ -570,7 +498,6 @@ ModeratorsInteractionHandler::handle(
 Moderator::Moderator(
     Reference < XContent >& xContent,
     Reference < XInteractionHandler >& xInteract,
-    Reference < XProgressHandler >& xProgress,
     const Command& rArg
 )
     throw(
@@ -592,7 +519,7 @@ Moderator::Moderator(
           xContent,
           new UcbTaskEnvironment(
               xInteract.is() ? new ModeratorsInteractionHandler(*this) : 0,
-              xProgress.is() ? new ModeratorsProgressHandler(*this) : 0),
+              0),
           comphelper::getProcessComponentContext())
 {
     // now exchange the whole data sink stuff
@@ -698,56 +625,6 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
     } while(aReplyType != REQUESTHANDLED);
 }
 
-void Moderator::push( const Any& Status )
-{
-    {
-        salhelper::ConditionModifier aMod(m_aRes);
-        m_aResultType = PROGRESSPUSH;
-        m_aResult = Status;
-    }
-    ReplyType aReplyType;
-    {
-        salhelper::ConditionWaiter aWait(m_aRep);
-        aReplyType = m_aReplyType;
-        m_aReplyType = NOREPLY;
-    }
-    if(aReplyType == EXIT)
-        setReply(EXIT);
-}
-
-void Moderator::update( const Any& Status )
-{
-    {
-        salhelper::ConditionModifier aMod(m_aRes);
-        m_aResultType = PROGRESSUPDATE;
-        m_aResult = Status;
-    }
-    ReplyType aReplyType;
-    {
-        salhelper::ConditionWaiter aWait(m_aRep);
-        aReplyType = m_aReplyType;
-        m_aReplyType = NOREPLY;
-    }
-    if(aReplyType == EXIT)
-        setReply(EXIT);
-}
-
-void Moderator::pop(  )
-{
-    {
-        salhelper::ConditionModifier aMod(m_aRes);
-        m_aResultType = PROGRESSPOP;
-    }
-    ReplyType aReplyType;
-    {
-        salhelper::ConditionWaiter aWait(m_aRep);
-        aReplyType = m_aReplyType;
-        m_aReplyType = NOREPLY;
-    }
-    if(aReplyType == EXIT)
-        setReply(EXIT);
-}
-
 void Moderator::setStream(const Reference< XStream >& aStream)
 {
     {
@@ -842,16 +719,14 @@ static bool _UCBOpenContentSync(
     Reference < XContent > xContent,
     const Command& rArg,
     Reference < XInterface > xSink,
-    Reference < XInteractionHandler > xInteract,
-    Reference < XProgressHandler > xProgress );
+    Reference < XInteractionHandler > xInteract );
 
 static bool UCBOpenContentSync(
     UcbLockBytesRef xLockBytes,
     Reference < XContent > xContent,
     const Command& rArg,
     Reference < XInterface > xSink,
-    Reference < XInteractionHandler > xInteract,
-    Reference < XProgressHandler > xProgress )
+    Reference < XInteractionHandler > xInteract )
 {
     // http protocol must be handled in a special way:
     //        during the opening process the input stream may change
@@ -871,7 +746,7 @@ static bool UCBOpenContentSync(
         ! aScheme.equalsIgnoreAsciiCase("vnd.sun.star.webdav") &&
         ! aScheme.equalsIgnoreAsciiCase("ftp"))
         return _UCBOpenContentSync(
-            xLockBytes,xContent,rArg,xSink,xInteract,xProgress);
+            xLockBytes,xContent,rArg,xSink,xInteract);
 
     if ( !aScheme.equalsIgnoreAsciiCase( "http" ) &&
          !aScheme.equalsIgnoreAsciiCase( "https" ) )
@@ -895,7 +770,7 @@ static bool UCBOpenContentSync(
     Moderator* pMod = 0;
     try
     {
-        pMod = new Moderator(xContent,xInteract,xProgress,rArg);
+        pMod = new Moderator(xContent,xInteract,rArg);
         pMod->create();
     }
     catch (const ContentCreationException&)
@@ -914,22 +789,16 @@ static bool UCBOpenContentSync(
         switch(res.type) {
         case Moderator::PROGRESSPUSH:
             {
-                if(xProgress.is())
-                    xProgress->push(res.result);
                 pMod->setReply(Moderator::REQUESTHANDLED);
                 break;
             }
         case Moderator::PROGRESSUPDATE:
             {
-                if(xProgress.is())
-                    xProgress->update(res.result);
                 pMod->setReply(Moderator::REQUESTHANDLED);
                 break;
             }
         case Moderator::PROGRESSPOP:
             {
-                if(xProgress.is())
-                    xProgress->pop();
                 pMod->setReply(Moderator::REQUESTHANDLED);
                 break;
             }
@@ -1094,11 +963,10 @@ static bool _UCBOpenContentSync(
     Reference < XContent > xContent,
     const Command& rArg,
     Reference < XInterface > xSink,
-    Reference < XInteractionHandler > xInteract,
-    Reference < XProgressHandler > xProgress )
+    Reference < XInteractionHandler > xInteract )
 {
     ::ucbhelper::Content aContent(
-        xContent, new UcbTaskEnvironment( xInteract, xProgress ),
+        xContent, new UcbTaskEnvironment( xInteract, 0 ),
         comphelper::getProcessComponentContext() );
     Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
     OUString aScheme = xIdent->getContentProviderScheme();
@@ -1505,11 +1373,6 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     return ERRCODE_NONE;
 }
 
-IMPL_STATIC_LINK_NOARG(UcbLockBytes, DataAvailHdl)
-{
-    return 0;
-}
-
 UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream >& xInputStream )
 {
     if( !xInputStream.is() )
@@ -1566,14 +1429,11 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     aCommand.Name = "open";
     aCommand.Argument <<= aArgument;
 
-    Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
-
     bool bError = UCBOpenContentSync( xLockBytes,
                                       xContent,
                                       aCommand,
                                       xSink,
-                                      xInteractionHandler,
-                                      xProgressHdl );
+                                      xInteractionHandler );
 
     if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
     {

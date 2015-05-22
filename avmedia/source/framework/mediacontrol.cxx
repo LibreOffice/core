@@ -156,7 +156,6 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     maMinSize.Width() += maMuteToolBox->GetSizePixel().Width();
 
     maVolumeSlider->SetSlideHdl( LINK( this, MediaControl, implVolumeHdl ) );
-    maVolumeSlider->SetEndSlideHdl( LINK( this, MediaControl, implVolumeEndHdl ) );
     maVolumeSlider->SetRange( Range( AVMEDIA_DB_RANGE, 0 ) );
     maVolumeSlider->SetUpdateMode( true );
     maVolumeSlider->SetHelpId( HID_AVMEDIA_VOLUMESLIDER );
@@ -474,13 +473,6 @@ IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p )
     execute( aExecItem );
     update();
 
-    return 0;
-}
-
-
-
-IMPL_STATIC_LINK_NOARG(MediaControl, implVolumeEndHdl)
-{
     return 0;
 }
 

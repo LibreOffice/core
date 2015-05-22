@@ -1663,7 +1663,6 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(vcl::Window* pParent, const SfxItemSe
     mpPbSignCertSelect->Enable( true );
     mpPbSignCertSelect->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect ) );
     mpPbSignCertClear->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertClear ) );
-    mpLBSignTSA->SetSelectHdl( LINK( this, ImpPDFTabSigningPage, SelectLBSignTSA ) );
 }
 
 
@@ -1738,11 +1737,6 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear )
     return 0;
 }
 
-
-IMPL_STATIC_LINK_NOARG( ImpPDFTabSigningPage, SelectLBSignTSA )
-{
-    return 0;
-}
 
 VclPtr<SfxTabPage> ImpPDFTabSigningPage::Create( vcl::Window* pParent,
                                                  const SfxItemSet* rAttrSet)

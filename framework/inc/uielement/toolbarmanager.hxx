@@ -132,8 +132,6 @@ class ToolBarManager : public ToolbarManager_Base
         DECL_LINK_TYPED(DropdownClick, ToolBox *, void);
         DECL_LINK_TYPED(DoubleClick, ToolBox *, void);
         DECL_LINK_TYPED(Select, ToolBox *, void);
-        DECL_LINK_TYPED(Activate, ToolBox *, void);
-        DECL_LINK_TYPED(Deactivate, ToolBox *, void);
         DECL_LINK_TYPED( StateChanged, StateChangedType const *, void );
         DECL_LINK_TYPED( DataChanged, DataChangedEvent const *, void );
         DECL_LINK( MiscOptionsChanged, void* );

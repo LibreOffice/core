@@ -148,7 +148,6 @@ class SvxTransparenceTabPage : public SvxTabPage
     DECL_LINK(ClickTransLinearHdl_Impl, void * );
     DECL_LINK(ClickTransGradientHdl_Impl, void * );
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
-    DECL_STATIC_LINK(SvxTransparenceTabPage, ChangeTrgrTypeHdl_Impl, void*);
     DECL_LINK(ModifiedTrgrHdl_Impl, void*);
 
     void ActivateLinear(bool bActivate);

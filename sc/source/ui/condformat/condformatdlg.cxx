@@ -463,7 +463,6 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mpBtnCancel->SetClickHdl( LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mpEdRange->SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
     mpEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
-    mpEdRange->SetLoseFocusHdl( LINK( this, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     mpEdRange->SetText(aRangeString);
 }
@@ -773,12 +772,6 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
 IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, formula::RefEdit*, pEdit )
 {
     mpLastEdit = pEdit;
-    return 0;
-}
-
-IMPL_STATIC_LINK_NOARG( ScCondFormatDlg, RangeLoseFocusHdl )
-{
-    //mpLastEdit = NULL;
     return 0;
 }
 

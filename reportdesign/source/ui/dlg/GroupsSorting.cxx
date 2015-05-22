@@ -116,11 +116,8 @@ public:
     virtual ~OFieldExpressionControl();
     virtual void dispose() SAL_OVERRIDE;
 
-    // XEventListener
-    static void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     // XContainerListener
     void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    static void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
     void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -182,14 +179,14 @@ public:
 };
 
 
-void OFieldExpressionControlContainerListener::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception )
-{ OFieldExpressionControl::disposing(Source); }
+void OFieldExpressionControlContainerListener::disposing(const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+{}
 
 void OFieldExpressionControlContainerListener::elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
 { mpParent->elementInserted(rEvent); }
 
-void OFieldExpressionControlContainerListener::elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
-{ OFieldExpressionControl::elementReplaced(rEvent); }
+void OFieldExpressionControlContainerListener::elementReplaced(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+{}
 
 void OFieldExpressionControlContainerListener::elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
 { mpParent->elementRemoved(rEvent); }
@@ -623,11 +620,6 @@ EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
     }
     return EditBrowseBox::CLEAN;
 }
-//  XEventListener
-
-void SAL_CALL OFieldExpressionControl::disposing(const lang::EventObject& /*e*/) throw( uno::RuntimeException, std::exception )
-{
-}
 
 // XContainerListener
 
@@ -669,10 +661,6 @@ void SAL_CALL OFieldExpressionControl::elementInserted(const container::Containe
         }
         Invalidate();
     }
-}
-
-void SAL_CALL OFieldExpressionControl::elementReplaced(const container::ContainerEvent& /*evt*/) throw(uno::RuntimeException, std::exception)
-{
 }
 
 void SAL_CALL OFieldExpressionControl::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException, std::exception)

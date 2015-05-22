@@ -361,7 +361,6 @@ void AnnotationWindow::InitControls()
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
     Engine()->EnableUndo( true );
-    Engine()->SetModifyHdl( LINK( this, AnnotationWindow, ModifyHdl ) );
 
     Invalidate();
 
@@ -486,7 +485,6 @@ void AnnotationWindow::SetLanguage(const SvxLanguageItem &aNewItem)
     getView()->SetAttribs( aEditAttr );
 
     getView()->SetSelection(aOld);
-    Engine()->SetModifyHdl( LINK( this, AnnotationWindow, ModifyHdl ) );
 
     Invalidate();
 }
@@ -510,11 +508,6 @@ IMPL_LINK(AnnotationWindow, ScrollHdl, ScrollBar*, pScroll)
 {
     long nDiff = getView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     getView()->Scroll( 0, nDiff );
-    return 0;
-}
-
-IMPL_STATIC_LINK_NOARG(AnnotationWindow, ModifyHdl)
-{
     return 0;
 }
 
@@ -553,7 +546,6 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
             Engine()->SetText( *pOPO.get() );
         }
 
-        Engine()->SetModifyHdl( LINK( this, AnnotationWindow, ModifyHdl ) );
         Engine()->ClearModifyFlag();
         Engine()->GetUndoManager().Clear();
 

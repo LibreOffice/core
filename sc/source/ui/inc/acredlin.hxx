@@ -139,7 +139,6 @@ private:
 
     DECL_LINK( FilterHandle, SvxTPFilter* );
     DECL_LINK( RefHandle, void* );
-    DECL_STATIC_LINK( ScAcceptChgDlg, FilterModified, void* );
     DECL_LINK( RejectHandle, SvxTPView*);
     DECL_LINK( AcceptHandle, SvxTPView*);
     DECL_LINK( RejectAllHandle, void*);

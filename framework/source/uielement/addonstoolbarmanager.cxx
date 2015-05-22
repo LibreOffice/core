@@ -82,8 +82,6 @@ AddonsToolBarManager::AddonsToolBarManager( const Reference< XComponentContext >
 {
     m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS );
     m_pToolBar->SetSelectHdl( LINK( this, AddonsToolBarManager, Select) );
-    m_pToolBar->SetActivateHdl( LINK( this, AddonsToolBarManager, Activate) );
-    m_pToolBar->SetDeactivateHdl( LINK( this, AddonsToolBarManager, Deactivate) );
     m_pToolBar->SetClickHdl( LINK( this, AddonsToolBarManager, Click ) );
     m_pToolBar->SetDoubleClickHdl( LINK( this, AddonsToolBarManager, DoubleClick ) );
     m_pToolBar->SetCommandHdl( LINK( this, AddonsToolBarManager, Command ) );
@@ -413,9 +411,6 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, DoubleClick, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Command, CommandEvent const *, void)
-{}
-
 IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Select, ToolBox *, void)
 {
     if ( m_bDisposed )
@@ -432,12 +427,6 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Select, ToolBox *, void)
             xController->execute( nKeyModifier );
     }
 }
-
-IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Activate, ToolBox *, void)
-{}
-
-IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Deactivate, ToolBox *, void)
-{}
 
 IMPL_LINK_TYPED( AddonsToolBarManager, StateChanged, StateChangedType const *, pStateChangedType, void )
 {

@@ -1549,8 +1549,6 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     m_pPasswdCB->SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     m_pPasswdPB->SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     m_pHideCB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
-    // edit in readonly sections
-    m_pEditInReadonlyCB->SetClickHdl       ( LINK( this, SwInsertSectionTabPage, ChangeEditInReadonlyHdl));
     m_pFileCB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
     m_pFilePB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
     m_pCurName->SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
@@ -1697,12 +1695,6 @@ IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
     bool bHide = pBox->IsChecked();
     m_pConditionED->Enable(bHide);
     m_pConditionFT->Enable(bHide);
-    return 0;
-}
-
-IMPL_STATIC_LINK_NOARG(
-    SwInsertSectionTabPage, ChangeEditInReadonlyHdl)
-{
     return 0;
 }
 

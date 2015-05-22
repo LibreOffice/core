@@ -54,7 +54,6 @@ XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
     m_pOKBtn->SetClickHdl( LINK( this, XMLFilterTabDialog, OkHdl ) );
 
     m_pTabCtrl->SetActivatePageHdl( LINK( this, XMLFilterTabDialog, ActivatePageHdl ) );
-    m_pTabCtrl->SetDeactivatePageHdl( LINK( this, XMLFilterTabDialog, DeactivatePageHdl ) );
 
     mpBasicPage = VclPtr<XMLFilterTabPageBasic>::Create(m_pTabCtrl);
     mpBasicPage->SetInfo( mpNewInfo );
@@ -305,10 +304,5 @@ IMPL_STATIC_LINK(
 }
 
 
-
-IMPL_STATIC_LINK_NOARG_TYPED( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, bool )
-{
-    return true;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -146,7 +146,6 @@ public:
 
     DECL_LINK( BtnPressedHdl, Button* );
     DECL_LINK( RangeGetFocusHdl, formula::RefEdit* );
-    DECL_STATIC_LINK( ScCondFormatDlg, RangeLoseFocusHdl, void* );
 };
 
 #endif

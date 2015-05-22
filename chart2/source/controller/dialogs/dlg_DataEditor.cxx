@@ -70,7 +70,6 @@ DataEditor::DataEditor(vcl::Window* pParent,
     m_pTbxData->SetSelectHdl( LINK( this, DataEditor, ToolboxHdl ));
 
     m_xBrwData->SetCursorMovedHdl( LINK( this, DataEditor,   BrowserCursorMovedHdl ));
-    m_xBrwData->SetCellModifiedHdl( LINK( this, DataEditor,  CellModified ));
 
     UpdateData();
     GrabFocus();
@@ -178,11 +177,6 @@ IMPL_LINK_NOARG(DataEditor, MiscHdl)
     m_pTbxData->SetOutStyle( nStyle );
 
     return 0L;
-}
-
-IMPL_STATIC_LINK_NOARG(DataEditor, CellModified)
-{
-    return 0;
 }
 
 void DataEditor::UpdateData()

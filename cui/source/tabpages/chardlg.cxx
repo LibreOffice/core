@@ -2715,7 +2715,6 @@ void SvxCharPositionPage::Initialize()
     m_pFitToLineCB->SetClickHdl( LINK( this, SvxCharPositionPage, FitToLineHdl_Impl ) );
     m_pKerningLB->SetSelectHdl( LINK( this, SvxCharPositionPage, KerningSelectHdl_Impl ) );
     m_pKerningMF->SetModifyHdl( LINK( this, SvxCharPositionPage, KerningModifyHdl_Impl ) );
-    m_pPairKerningBtn->SetClickHdl( LINK( this, SvxCharPositionPage, PairKerningHdl_Impl ) );
     m_pScaleWidthMF->SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
 }
 
@@ -2898,13 +2897,6 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
     rCJKFont.SetFixKerning( (short)nKern );
     rCTLFont.SetFixKerning( (short)nKern );
     m_pPreviewWin->Invalidate();
-    return 0;
-}
-
-
-
-IMPL_STATIC_LINK_NOARG(SvxCharPositionPage, PairKerningHdl_Impl)
-{
     return 0;
 }
 

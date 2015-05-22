@@ -78,8 +78,6 @@ private:
     ScExternalRefLink() SAL_DELETED_FUNCTION;
     ScExternalRefLink(const ScExternalRefLink&) SAL_DELETED_FUNCTION;
 
-    DECL_STATIC_LINK( ScExternalRefLink, ExternalRefEndEditHdl, void* );
-
     sal_uInt16  mnFileId;
     OUString    maFilterName;
     ScDocument* mpDoc;

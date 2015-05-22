@@ -79,8 +79,6 @@ private:
     DECL_LINK( BrowserCursorMovedHdl, void*);
     /// this is called if MiscOptions change, esp. High-Contrast mode
     DECL_LINK( MiscHdl, void* );
-    /// is called when the contents of the edit cell changes
-    DECL_STATIC_LINK( DataEditor, CellModified, void* );
     /// is called when the width of any column in the edit browsebox has changed
     DECL_LINK( BrowserColumnResized, void* );
     /// is called when the browser view was scrolled, @todo: only call on horizontal scroll

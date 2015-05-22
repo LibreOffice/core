@@ -885,9 +885,9 @@ namespace
 #endif
 }
 
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
 IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
 {
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     guint xid = get_xid_for_dbus();
 
     if (!xid)
@@ -939,8 +939,8 @@ IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, voi
     g_free(fonts);
     g_object_unref(G_OBJECT (proxy));
     m_aCurrentRequests.clear();
-#endif
 }
+#endif
 
 bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes )
 {

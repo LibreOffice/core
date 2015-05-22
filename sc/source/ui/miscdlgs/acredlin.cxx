@@ -125,7 +125,6 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
 
     pTPFilter->SetReadyHdl(LINK( this, ScAcceptChgDlg, FilterHandle ));
     pTPFilter->SetRefHdl(LINK( this, ScAcceptChgDlg, RefHandle ));
-    pTPFilter->SetModifyHdl(LINK( this, ScAcceptChgDlg, FilterModified));
     pTPFilter->HideRange(false);
     pTPView->InsertCalcHeader();
     pTPView->SetRejectClickHdl( LINK( this, ScAcceptChgDlg,RejectHandle));
@@ -1862,11 +1861,6 @@ void ScAcceptChgDlg::InitFilter()
 
         pTheView->UpdateFilterTest();
     }
-}
-
-IMPL_STATIC_LINK_NOARG(ScAcceptChgDlg, FilterModified)
-{
-    return 0;
 }
 
 #define CALC_DATE       3
