@@ -990,6 +990,15 @@ DECLARE_OOXMLEXPORT_TEST(testExportShadow, "bnc637947.odt")
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr", "val" , "000000");
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr/a:alpha", "val" , "38000");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testExportAdjustmentValue, "tdf91429.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd", "fmla", "val 50000");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
