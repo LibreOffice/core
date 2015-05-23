@@ -603,8 +603,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
          (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
     {
         SwPosition* pStart = pUnoCrsr->Start();
-        const ::std::unique_ptr<SwUnoCrsr> aNewCrsr(
-            pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false) );
+        auto aNewCrsr(pUnoCrsr->GetDoc()->CreateUnoCrsr2(*pStart, false));
         // one may also go into tables here
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
@@ -1149,8 +1148,7 @@ SwXTextRange::CreateXTextRange(
 {
     const uno::Reference<text::XText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
-    const ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            rDoc.CreateUnoCrsr(rPos, false));
+    const auto pNewCrsr(rDoc.CreateUnoCrsr2(rPos, false));
     if(pMark)
     {
         pNewCrsr->SetMark();
@@ -1284,8 +1282,7 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    const ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
+    const auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr2(aPos, false));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
