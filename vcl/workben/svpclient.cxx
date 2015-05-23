@@ -45,7 +45,6 @@
 
 #include <errno.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -264,9 +263,7 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
 
         Bitmap aBitmap = aGraphicResult.GetBitmap();
 
-        fprintf( stderr, "got bitmap of size %ldx%ld\n",
-                 sal::static_int_cast< long >(aBitmap.GetSizePixel().Width()),
-                 sal::static_int_cast< long >(aBitmap.GetSizePixel().Height()));
+        SAL_INFO("vcl", "got bitmap of size " << aBitmap.GetSizePixel().Width() << "x" << aBitmap.GetSizePixel().Height() << "\n");
         Size aFixedSize( aBitmap.GetSizePixel() );
         aFixedSize.Width() += 10;
         aFixedSize.Height() += 10;

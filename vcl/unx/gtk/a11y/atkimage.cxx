@@ -21,8 +21,6 @@
 
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 
-#include <stdio.h>
-
 using namespace ::com::sun::star;
 
 // FIXME

@@ -40,8 +40,6 @@
 
 #include "KDESalDisplay.hxx"
 
-#include <stdio.h>
-
 #include <config_kde4.h>
 
 #if KDE_HAVE_GLIB

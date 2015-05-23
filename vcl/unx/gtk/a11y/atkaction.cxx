@@ -29,8 +29,6 @@
 #include <algorithm>
 #include <map>
 
-#include <stdio.h>
-
 using namespace ::com::sun::star;
 
 // FIXME

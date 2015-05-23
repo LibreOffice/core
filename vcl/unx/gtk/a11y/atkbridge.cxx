@@ -23,7 +23,6 @@
 #include "atkfactory.hxx"
 #include "atkutil.hxx"
 #include "atkwindow.hxx"
-#include <stdio.h>
 
 bool InitAtkBridge()
 {

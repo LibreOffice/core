@@ -19,7 +19,6 @@
 
 #ifndef INCLUDED_VCL_SALBTYPE_HXX
 #define INCLUDED_VCL_SALBTYPE_HXX
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <tools/debug.hxx>

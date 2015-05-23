@@ -21,8 +21,6 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#include <stdio.h>
-
 using namespace ::com::sun::star;
 
 static accessibility::XAccessibleSelection*

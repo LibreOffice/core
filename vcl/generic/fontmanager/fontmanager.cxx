@@ -1340,10 +1340,8 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         CloseTTFont( pTTFont );
         bSuccess = true;
     }
-#if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "could not OpenTTFont \"%s\"\n", aFile.getStr() );
-#endif
+        SAL_WARN("vcl", "Could not OpenTTFont \"" << aFile.getStr() << "\"\n");
 
     return bSuccess;
 }
