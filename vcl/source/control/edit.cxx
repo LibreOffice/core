@@ -606,7 +606,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
         }
         // draw normal text
         Color aNormalTextColor = rRenderContext.GetTextColor();
-        SetClipRegion(aNormalClipRegion);
+        rRenderContext.SetClipRegion(aNormalClipRegion);
 
         if (IsPaintTransparent())
             rRenderContext.SetTextFillColor();
@@ -1027,6 +1027,10 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, long nXStart,
 
 void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd)
 {
+    // this is not needed when double-buffering
+    if (SupportsDoubleBuffering())
+        return;
+
     Point aTmpPoint;
     Rectangle aRect(aTmpPoint, GetOutputSizePixel());
     aRect.Left() = nXStart;
