@@ -32,6 +32,8 @@
 #include "i18nlangtag/mslangid.hxx"
 #include "i18nlangtag/languagetag.hxx"
 
+#include <comphelper/lok.hxx>
+
 #include <vcl/graphicfilter.hxx>
 #include <vcl/IconThemeScanner.hxx>
 #include <vcl/IconThemeSelector.hxx>
@@ -2424,8 +2426,8 @@ ImplMiscData::ImplMiscData()
     mnDisablePrinting           = TRISTATE_INDET;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != NULL);
-    pEnv = getenv("VCL_HIDE_WINDOWS"); // do not display any windows
-    mbPseudoHeadless = (pEnv != NULL);
+    // Should we display any windows?
+    mbPseudoHeadless = getenv("VCL_HIDE_WINDOWS") || comphelper::LibreOfficeKit::isActive();
 }
 
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
