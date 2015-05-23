@@ -23,6 +23,8 @@
 
 #include <tools/solarmutex.hxx>
 
+#include "comphelper/lok.hxx"
+
 #include "osl/process.h"
 
 #include "rtl/ustrbuf.hxx"
@@ -182,6 +184,9 @@ static void initNSApp()
 
 bool ImplSVMainHook( int * pnInit )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
+
     unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.plist", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
     unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.txt", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
 
