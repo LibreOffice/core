@@ -1599,13 +1599,13 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
 }
 
 SwFormat* SwDoc::FindFormatByName( const SwFormatsBase& rFormatArr,
-                             const OUString& rName )
+                                   const OUString& rName )
 {
     SwFormat* pFnd = 0;
     for( size_t n = 0; n < rFormatArr.GetFormatCount(); ++n )
     {
         // Does the Doc already contain the template?
-        if( rFormatArr.GetFormat(n)->GetName() == rName )
+        if( rFormatArr.GetFormat(n)->HasName( rName ) )
         {
             pFnd = rFormatArr.GetFormat(n);
             break;
