@@ -2137,7 +2137,7 @@ RTLFUNC(DateValue)
         else
         {
             sal_uInt32 n;   // Dummy
-            SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
+            pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
         }
 
         sal_uInt32 nIndex = 0;
@@ -2205,7 +2205,7 @@ RTLFUNC(TimeValue)
         else
         {
             sal_uInt32 n;
-            SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
+            pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
         }
 
         sal_uInt32 nIndex = 0;
@@ -2428,7 +2428,7 @@ RTLFUNC(Time)
             else
             {
                 sal_uInt32 n;   // Dummy
-                SbiInstance::PrepareNumberFormatter( pFormatter, n, nIndex, n );
+                pFormatter = SbiInstance::PrepareNumberFormatter( n, nIndex, n );
             }
 
             pFormatter->GetOutputString( nDays, nIndex, aRes, &pCol );
@@ -2485,7 +2485,7 @@ RTLFUNC(Date)
             else
             {
                 sal_uInt32 n;
-                SbiInstance::PrepareNumberFormatter( pFormatter, nIndex, n, n );
+                pFormatter = SbiInstance::PrepareNumberFormatter( nIndex, n, n );
             }
 
             pFormatter->GetOutputString( nDays, nIndex, aRes, &pCol );
@@ -3274,7 +3274,7 @@ RTLFUNC(FileDateTime)
         else
         {
             sal_uInt32 n;
-            SbiInstance::PrepareNumberFormatter( pFormatter, n, n, nIndex );
+            pFormatter = SbiInstance::PrepareNumberFormatter( n, n, nIndex );
         }
 
         OUString aRes;
