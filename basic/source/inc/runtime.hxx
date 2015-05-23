@@ -31,6 +31,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <vector>
+#include <memory>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <unotools/localedatawrapper.hxx>
@@ -134,11 +135,14 @@ class SbiInstance
 
     SbiRTLData      aRTLData;
 
-    SbiIoSystem*    pIosys;         // file system
-    SbiDdeControl*  pDdeCtrl;       // DDE
-    SbiDllMgr*      pDllMgr;        // DLL-Calls (DECLARE)
+    // file system
+    std::unique_ptr<SbiIoSystem>     pIosys;
+    // DDE
+    std::unique_ptr<SbiDdeControl>    pDdeCtrl;
+    // DLL-Calls (DECLARE)
+    std::unique_ptr<SbiDllMgr>        pDllMgr;
+    std::unique_ptr<SvNumberFormatter> pNumberFormatter;
     StarBASIC*      pBasic;
-    SvNumberFormatter* pNumberFormatter;
     LanguageType    meFormatterLangType;
     DateFormat      meFormatterDateFormat;
     sal_uInt32      nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
@@ -185,8 +189,8 @@ public:
     SbMethod* GetCaller( sal_uInt16 );
     SbModule* GetActiveModule();
 
-    SbiIoSystem* GetIoSystem() { return pIosys; }
-    SbiDdeControl* GetDdeControl() { return pDdeCtrl; }
+    SbiIoSystem* GetIoSystem() { return pIosys.get(); }
+    SbiDdeControl* GetDdeControl() { return pDdeCtrl.get(); }
     StarBASIC* GetBasic() { return pBasic; }
     SbiDllMgr* GetDllMgr();
     SbiRTLData* GetRTLData() const { return const_cast<SbiRTLData*>(&aRTLData); }
@@ -197,8 +201,8 @@ public:
     sal_uInt32 GetStdDateTimeIdx() const { return nStdDateTimeIdx; }
 
     // offer NumberFormatter also static
-    static void PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
-        sal_uInt32 &rnStdDateIdx, sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
+    static SvNumberFormatter* PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
+        sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
         LanguageType* peFormatterLangType=NULL, DateFormat* peFormatterDateFormat=NULL );
 };
 
