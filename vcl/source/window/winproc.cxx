@@ -57,7 +57,7 @@
 bool ImplCallPreNotify( NotifyEvent& rEvt )
 {
     return Application::CallEventHooks( rEvt )
-        || rEvt.GetWindow()->PreNotify( rEvt );
+        || rEvt.GetWindow()->CompatPreNotify( rEvt );
 }
 
 static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePos,
@@ -1866,7 +1866,7 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl)
                 {
                     NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pFocusWin );
                     if ( !ImplCallPreNotify( aNEvt ) )
-                        pFocusWin->LoseFocus();
+                        pFocusWin->CompatLoseFocus();
                     pFocusWin->ImplCallDeactivateListeners( NULL );
                 }
                 // XXX

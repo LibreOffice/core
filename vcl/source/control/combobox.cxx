@@ -664,7 +664,7 @@ void ComboBox::StateChanged( StateChangedType nType )
             mpBtn->EnableRTL( IsRTLEnabled() );
             ImplInitDropDownButton( mpBtn );
         }
-        mpSubEdit->StateChanged( StateChangedType::Mirroring );
+        mpSubEdit->CompatStateChanged( StateChangedType::Mirroring );
         mpImplLB->EnableRTL( IsRTLEnabled() );
         Resize();
     }

@@ -509,10 +509,10 @@ bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
 
 void Window::SetZoom( const Fraction& rZoom )
 {
-    if ( mpWindowImpl->maZoom != rZoom )
+    if ( mpWindowImpl && mpWindowImpl->maZoom != rZoom )
     {
         mpWindowImpl->maZoom = rZoom;
-        StateChanged( StateChangedType::Zoom );
+        CompatStateChanged( StateChangedType::Zoom );
     }
 }
 
@@ -577,11 +577,11 @@ long Window::CalcZoom( long nCalc ) const
 
 void Window::SetControlFont()
 {
-    if (mpWindowImpl->mpControlFont)
+    if (mpWindowImpl && mpWindowImpl->mpControlFont)
     {
         delete mpWindowImpl->mpControlFont;
         mpWindowImpl->mpControlFont = NULL;
-        StateChanged(StateChangedType::ControlFont);
+        CompatStateChanged(StateChangedType::ControlFont);
     }
 }
 
@@ -602,7 +602,7 @@ void Window::SetControlFont(const vcl::Font& rFont)
     else
         mpWindowImpl->mpControlFont = new vcl::Font(rFont);
 
-    StateChanged(StateChangedType::ControlFont);
+    CompatStateChanged(StateChangedType::ControlFont);
 }
 
 vcl::Font Window::GetControlFont() const
@@ -630,7 +630,7 @@ void Window::SetControlForeground()
     {
         mpWindowImpl->maControlForeground = Color(COL_TRANSPARENT);
         mpWindowImpl->mbControlForeground = false;
-        StateChanged(StateChangedType::ControlForeground);
+        CompatStateChanged(StateChangedType::ControlForeground);
     }
 }
 
@@ -642,7 +642,7 @@ void Window::SetControlForeground(const Color& rColor)
         {
             mpWindowImpl->maControlForeground = Color(COL_TRANSPARENT);
             mpWindowImpl->mbControlForeground = false;
-            StateChanged(StateChangedType::ControlForeground);
+            CompatStateChanged(StateChangedType::ControlForeground);
         }
     }
     else
@@ -651,7 +651,7 @@ void Window::SetControlForeground(const Color& rColor)
         {
             mpWindowImpl->maControlForeground = rColor;
             mpWindowImpl->mbControlForeground = true;
-            StateChanged(StateChangedType::ControlForeground);
+            CompatStateChanged(StateChangedType::ControlForeground);
         }
     }
 }
@@ -670,7 +670,7 @@ void Window::SetControlBackground()
     {
         mpWindowImpl->maControlBackground = Color(COL_TRANSPARENT);
         mpWindowImpl->mbControlBackground = false;
-        StateChanged(StateChangedType::ControlBackground);
+        CompatStateChanged(StateChangedType::ControlBackground);
     }
 }
 
@@ -682,7 +682,7 @@ void Window::SetControlBackground(const Color& rColor)
         {
             mpWindowImpl->maControlBackground = Color(COL_TRANSPARENT);
             mpWindowImpl->mbControlBackground = false;
-            StateChanged(StateChangedType::ControlBackground);
+            CompatStateChanged(StateChangedType::ControlBackground);
         }
     }
     else
@@ -691,7 +691,7 @@ void Window::SetControlBackground(const Color& rColor)
         {
             mpWindowImpl->maControlBackground = rColor;
             mpWindowImpl->mbControlBackground = true;
-            StateChanged(StateChangedType::ControlBackground);
+            CompatStateChanged(StateChangedType::ControlBackground);
         }
     }
 }
