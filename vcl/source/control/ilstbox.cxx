@@ -2205,7 +2205,7 @@ void ImplListBox::Clear()
     }
     mpVScrollBar->SetThumbPos( 0 );
     mpHScrollBar->SetThumbPos( 0 );
-    StateChanged( StateChangedType::Data );
+    CompatStateChanged( StateChangedType::Data );
 }
 
 sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr )
@@ -2217,7 +2217,7 @@ sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr )
         delete pNewEntry;
         return nNewPos;
     }
-    StateChanged( StateChangedType::Data );
+    CompatStateChanged( StateChangedType::Data );
     return nNewPos;
 }
 
@@ -2230,14 +2230,14 @@ sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr, const 
         delete pNewEntry;
         return nNewPos;
     }
-    StateChanged( StateChangedType::Data );
+    CompatStateChanged( StateChangedType::Data );
     return nNewPos;
 }
 
 void ImplListBox::RemoveEntry( sal_Int32 nPos )
 {
     maLBWindow->RemoveEntry( nPos );
-    StateChanged( StateChangedType::Data );
+    CompatStateChanged( StateChangedType::Data );
 }
 
 void ImplListBox::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
@@ -2277,7 +2277,7 @@ void ImplListBox::Resize()
 
 IMPL_LINK_NOARG(ImplListBox, MRUChanged)
 {
-    StateChanged( StateChangedType::Data );
+    CompatStateChanged( StateChangedType::Data );
     return 1;
 }
 
@@ -2593,7 +2593,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
     {
         maLBWindow->GetEntryList()->SetMRUCount( nMRUCount );
         SetSeparatorPos( nMRUCount ? nMRUCount-1 : 0 );
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 

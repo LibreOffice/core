@@ -38,8 +38,7 @@ void Window::DataChanged( const DataChangedEvent& )
 
 void Window::NotifyAllChildren( DataChangedEvent& rDCEvt )
 {
-
-    DataChanged( rDCEvt );
+    CompatDataChanged( rDCEvt );
 
     vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
@@ -53,7 +52,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
     if ( mpWindowImpl->mpParent && !ImplIsOverlapWindow() )
-        bDone = mpWindowImpl->mpParent->PreNotify( rNEvt );
+        bDone = mpWindowImpl->mpParent->CompatPreNotify( rNEvt );
 
     if ( !bDone )
     {
@@ -194,7 +193,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
     if ( !nRet )
     {
         if ( mpWindowImpl->mpParent && !ImplIsOverlapWindow() )
-            nRet = mpWindowImpl->mpParent->Notify( rNEvt );
+            nRet = mpWindowImpl->mpParent->CompatNotify( rNEvt );
     }
 
     return nRet;
@@ -427,7 +426,7 @@ void Window::ImplCallInitShow()
 {
     mpWindowImpl->mbReallyShown   = true;
     mpWindowImpl->mbInInitShow    = true;
-    StateChanged( StateChangedType::InitShow );
+    CompatStateChanged( StateChangedType::InitShow );
     mpWindowImpl->mbInInitShow    = false;
 
     vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;

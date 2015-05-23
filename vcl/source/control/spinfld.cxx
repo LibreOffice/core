@@ -824,7 +824,7 @@ void SpinField::StateChanged(StateChangedType nType)
     else if( nType == StateChangedType::Mirroring )
     {
         if (mpEdit)
-            mpEdit->StateChanged(StateChangedType::Mirroring);
+            mpEdit->CompatStateChanged(StateChangedType::Mirroring);
         Resize();
     }
 }

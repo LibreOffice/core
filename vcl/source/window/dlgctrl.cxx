@@ -689,11 +689,11 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
             {
                 NotifyEvent aNEvt1( MouseNotifyEvent::LOSEFOCUS, pSWindow );
                 if ( !ImplCallPreNotify( aNEvt1 ) )
-                    pSWindow->LoseFocus();
+                    pSWindow->CompatLoseFocus();
                 pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
                 NotifyEvent aNEvt2( MouseNotifyEvent::GETFOCUS, pSWindow );
                 if ( !ImplCallPreNotify( aNEvt2 ) )
-                    pSWindow->GetFocus();
+                    pSWindow->CompatGetFocus();
                 pSWindow->mpWindowImpl->mnGetFocusFlags = 0;
                 return true;
             }
@@ -821,11 +821,11 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                         {
                             NotifyEvent aNEvt1( MouseNotifyEvent::LOSEFOCUS, pSWindow );
                             if ( !ImplCallPreNotify( aNEvt1 ) )
-                                pSWindow->LoseFocus();
+                                pSWindow->CompatLoseFocus();
                             pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
                             NotifyEvent aNEvt2( MouseNotifyEvent::GETFOCUS, pSWindow );
                             if ( !ImplCallPreNotify( aNEvt2 ) )
-                                pSWindow->GetFocus();
+                                pSWindow->CompatGetFocus();
                             pSWindow->mpWindowImpl->mnGetFocusFlags = 0;
                             return true;
                         }
