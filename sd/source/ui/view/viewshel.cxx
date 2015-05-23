@@ -288,9 +288,7 @@ void ViewShell::Exit()
     Deactivate (true);
 
     if (IsMainViewShell())
-    {
         GetDocSh()->Disconnect(this);
-    }
 
     SetIsMainViewShell(false);
 }
@@ -330,17 +328,13 @@ void ViewShell::Activate(bool bIsMDIActivate)
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
         if(xSlideShow.is() && xSlideShow->isRunning() )
-        {
             xSlideShow->activate(GetViewShellBase());
-        }
+
         if(HasCurrentFunction())
-        {
             GetCurrentFunction()->Activate();
-        }
 
         if(!GetDocSh()->IsUIActive())
             UpdatePreview( GetActualPage(), true );
-
     }
 
     ReadFrameViewData( mpFrameView );
@@ -383,13 +377,10 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
         if(xSlideShow.is() && xSlideShow->isRunning() )
-        {
             xSlideShow->deactivate(GetViewShellBase());
-        }
+
         if(HasCurrentFunction())
-        {
             GetCurrentFunction()->Deactivate();
-        }
     }
 
     if (mpHorizontalRuler.get() != NULL)
@@ -410,9 +401,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     bool bReturn(false);
 
     if(pWin)
-    {
         SetActiveWindow(pWin);
-    }
 
     if(!bReturn)
     {
@@ -454,9 +443,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     const size_t EndCount = GetView()->GetMarkedObjectList().GetMarkCount();
     // Here, oriCount or endCount must have one value=0, another value > 0, then to switch focus between Document and shape objects
     if(bReturn &&  (OriCount + EndCount > 0) && (OriCount * EndCount == 0))
-    {
         SwitchActiveViewFireFocus();
-    }
 
     if(!bReturn && GetActiveWindow())
     {
@@ -505,9 +492,7 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
         if( !xSelectionController.is() || !xSelectionController->onMouseButtonDown( rMEvt, pWin ) )
         {
             if(HasCurrentFunction())
-            {
                 GetCurrentFunction()->MouseButtonDown(rMEvt);
-            }
         }
     }
 }
@@ -608,9 +593,7 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( pWin )
-    {
         SetActiveWindow(pWin);
-    }
 
     // insert MouseEvent into E3dView
     if (GetView() != NULL)
@@ -650,15 +633,11 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         else
         {
             bool bConsumed = false;
-               if( GetView() )
-               {
+            if( GetView() )
                 bConsumed = GetView()->getSmartTags().Command(rCEvt);
-            }
 
             if( !bConsumed && HasCurrentFunction())
-            {
                 GetCurrentFunction()->Command(rCEvt);
-            }
         }
     }
 }
@@ -714,13 +693,9 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                     {
                         long nDelta = pData->GetDelta();
                         if( nDelta > 0 )
-                        {
                             xSlideShowController->gotoPreviousSlide();
-                        }
                         else if( nDelta < 0 )
-                        {
                             xSlideShowController->gotoNextEffect();
-                        }
                     }
                     break;
                 }
@@ -916,9 +891,7 @@ void ViewShell::Resize()
     ::sd::View* pView = GetView();
 
     if (pView)
-    {
         pView->VisAreaChanged(GetActiveWindow());
-    }
 }
 
 SvBorder ViewShell::GetBorder (bool )
@@ -1047,9 +1020,7 @@ void ViewShell::ArrangeGUIElements()
             maViewSize.Height()-maScrBarWH.Height()));
 
     if (mpContentWindow.get() != NULL)
-    {
         mpContentWindow->UpdateMapOrigin();
-    }
 
     UpdateScrollBars();
 
@@ -1171,10 +1142,8 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
             sal_uInt16 a;
 
             for( a = 0; a < nCount; a++)
-            {
                 // generate one String in list per undo step
                 aStringList.push_back( pUndoManager->GetRedoActionComment(a) );
-            }
 
             // set item
             rSet.Put(SfxStringListItem(SID_GETREDOSTRINGS, &aStringList));
@@ -1208,9 +1177,7 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
                 // when UndoStack is cleared by ModifyPageUndoAction
                 // the nCount may have changed, so test GetUndoActionCount()
                 while(nNumber-- && pUndoManager->GetUndoActionCount())
-                {
                     pUndoManager->Undo();
-                }
             }
             catch( const Exception& )
             {
@@ -1221,9 +1188,7 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
 
         // refresh rulers, maybe UNDO was move of TAB marker in ruler
         if (mbHasRulers)
-        {
             Invalidate(SID_ATTR_TABSTOP);
-        }
     }
 
     // This one is corresponding to the default handling
@@ -1255,9 +1220,7 @@ void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
                 // when UndoStack is cleared by ModifyPageRedoAction
                 // the nCount may have changed, so test GetRedoActionCount()
                 while(nNumber-- && pUndoManager->GetRedoActionCount())
-                {
                     pUndoManager->Redo();
-                }
             }
             catch( const Exception& )
             {
@@ -1447,13 +1410,9 @@ void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
     {
         mpImpl->mbIsMainViewShell = bIsMainViewShell;
         if (bIsMainViewShell)
-        {
             GetDocSh()->Connect (this);
-        }
         else
-        {
             GetDocSh()->Disconnect (this);
-        }
     }
 }
 
@@ -1517,9 +1476,7 @@ void ViewShell::SwitchViewFireFocus(::com::sun::star::uno::Reference< ::com::sun
     {
         ::accessibility::AccessibleDocumentViewBase* pBase = static_cast< ::accessibility::AccessibleDocumentViewBase* >(xAcc.get());
         if (pBase)
-        {
             pBase->SwitchViewActivated();
-        }
     }
 }
 void ViewShell::SwitchActiveViewFireFocus()
