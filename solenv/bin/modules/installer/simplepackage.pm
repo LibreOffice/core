@@ -423,7 +423,7 @@ sub create_package
             }
         }
 
-        $systemcall = "cd $localtempdir && hdiutil create -srcfolder $folder $archive -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
+        $systemcall = "cd $localtempdir && hdiutil create -megabytes 1500 -srcfolder $folder $archive -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
         if (( $ref ne "" ) && ( $$ref ne "" )) {
             $systemcall .= " && hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
         }
