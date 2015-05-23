@@ -1701,10 +1701,12 @@ public:
     // created by hasMoreElements
     uno::Reference< text::XTextContent > m_xNextObject;
     FrameDependList_t m_Frames;
+    ::std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
 
     Impl(SwPaM const & rPaM)
-        : SwClient(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
+        : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr2(*rPaM.GetPoint(), false))
     {
+        m_pUnoCursor->Add(this);
         if (rPaM.HasMark())
         {
             GetCursor()->SetMark();
@@ -1714,7 +1716,6 @@ public:
 
     virtual ~Impl() {
         // Impl owns the cursor; delete it here: SolarMutex is locked
-        delete GetRegisteredIn();
     }
 
     SwUnoCrsr * GetCursor() {
@@ -1725,6 +1726,7 @@ public:
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
 
 struct InvalidFrameDepend {
@@ -1747,6 +1749,17 @@ void SwXParaFrameEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPo
             ::std::remove_if(m_Frames.begin(), m_Frames.end(),
                     InvalidFrameDepend());
         m_Frames.erase(iter, m_Frames.end());
+    }
+}
+
+void SwXParaFrameEnumeration::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    SwClient::SwClientNotify(rModify, rHint);
+    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
+    {
+        assert(m_pUnoCursor->m_bSaneOwnership);
+        m_pUnoCursor->Remove(this);
+        m_pUnoCursor.reset();
     }
 }
 
