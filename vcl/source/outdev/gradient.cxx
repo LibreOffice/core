@@ -20,9 +20,10 @@
 #include <tools/poly.hxx>
 
 #include <vcl/gradient.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include "salgdi.hxx"
 
@@ -31,6 +32,8 @@
 void OutputDevice::DrawGradient( const Rectangle& rRect,
                                  const Gradient& rGradient )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     // Convert rectangle to a tools::PolyPolygon by first converting to a Polygon
     Polygon aPolygon ( rRect );
     tools::PolyPolygon aPolyPoly ( aPolygon );
@@ -41,6 +44,8 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if ( mnDrawMode & DrawModeFlags::NoGradient )
         return;     // nothing to draw!
 
@@ -167,6 +172,8 @@ void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, cons
 void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
                                             const Gradient& rGradient )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if ( !mpMetaFile )
         return;
 
@@ -253,6 +260,8 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
                                        const Gradient& rGradient,
                                        const tools::PolyPolygon* pClixPolyPoly )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     // get BoundRect of rotated rectangle
     Rectangle aRect;
     Point     aCenter;
@@ -433,6 +442,8 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
                                         const Gradient& rGradient,
                                         const tools::PolyPolygon* pClixPolyPoly )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     // Determine if we output via Polygon or PolyPolygon
     // For all rasteroperations other then Overpaint always use PolyPolygon,
     // as we will get wrong results if we output multiple times on top of each other.
@@ -597,6 +608,8 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
 void OutputDevice::DrawLinearGradientToMetafile( const Rectangle& rRect,
                                                  const Gradient& rGradient )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     // get BoundRect of rotated rectangle
     Rectangle aRect;
     Point     aCenter;
@@ -775,6 +788,8 @@ void OutputDevice::DrawLinearGradientToMetafile( const Rectangle& rRect,
 void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
                                                   const Gradient& rGradient )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     // Determine if we output via Polygon or PolyPolygon
     // For all rasteroperations other then Overpaint always use PolyPolygon,
     // as we will get wrong results if we output multiple times on top of each other.

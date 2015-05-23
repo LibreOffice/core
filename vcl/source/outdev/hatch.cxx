@@ -19,11 +19,12 @@
 
 #include <tools/line.hxx>
 
-#include <vcl/salbtype.hxx>
 #include <vcl/hatch.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/outdev.hxx>
+#include <vcl/salbtype.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include "../gdi/pdfwriter_impl.hxx"
 
@@ -43,6 +44,7 @@ extern "C" int SAL_CALL HatchCmpFnc( const void* p1, const void* p2 )
 
 void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     Hatch aHatch( rHatch );
 
@@ -137,6 +139,8 @@ void OutputDevice::AddHatchActions( const tools::PolyPolygon& rPolyPoly, const H
 
 void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if(rPolyPoly.Count())
     {
         // #i115630# DrawHatch does not work with beziers included in the polypolygon, take care of that
@@ -318,6 +322,8 @@ void OutputDevice::CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt
 void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, bool bMtf )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     double  fX, fY;
     long    nAdd, nPCounter = 0;
 

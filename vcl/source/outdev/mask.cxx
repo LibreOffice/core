@@ -19,6 +19,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include <salgdi.hxx>
 #include <impbmp.hxx>
@@ -33,6 +34,8 @@ extern const sal_uLong nVCLLut[ 256 ];
 void OutputDevice::DrawMask( const Point& rDestPt,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     const Size aSizePix( rBitmap.GetSizePixel() );
     DrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, MetaActionType::MASK );
 }
@@ -40,6 +43,8 @@ void OutputDevice::DrawMask( const Point& rDestPt,
 void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     DrawMask( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, rMaskColor, MetaActionType::MASKSCALE );
 }
 
@@ -48,6 +53,8 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Bitmap& rBitmap, const Color& rMaskColor,
                              const MetaActionType nAction )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if( ImplIsRecordLayout() )
         return;
 
@@ -101,6 +108,8 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                               const Point& rDestPt, const Size& rDestSize,
                               const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     const ImpBitmap* pImpBmp = rMask.ImplGetImpBitmap();
     if ( pImpBmp )
     {
