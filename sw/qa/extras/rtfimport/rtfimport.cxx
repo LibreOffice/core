@@ -2292,6 +2292,15 @@ DECLARE_RTFIMPORT_TEST(testTdf86814, "tdf86814.rtf")
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf90315, "tdf90315.rtf")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextSection(xTextSections->getByIndex(0), uno::UNO_QUERY);
+    // This was 0, but default should be 720 twips.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(xTextSection->getPropertyValue("TextColumns"), "AutomaticDistance"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
