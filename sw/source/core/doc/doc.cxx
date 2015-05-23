@@ -1687,7 +1687,6 @@ std::shared_ptr<SwUnoCrsr> SwDoc::CreateUnoCrsr2( const SwPosition& rPos, bool b
     else
         pNew.reset(new SwUnoCrsr( rPos ));
 
-    pNew->m_bSaneOwnership = true;
     mvUnoCrsrTbl2.push_back( pNew );
     return pNew;
 }

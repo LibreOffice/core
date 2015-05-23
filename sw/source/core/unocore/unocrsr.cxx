@@ -32,7 +32,6 @@ SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     , m_bRemainInSection(true)
     , m_bSkipOverHiddenSections(false)
     , m_bSkipOverProtectSections(false)
-    , m_bSaneOwnership(false)
 {}
 
 SwUnoCrsr::~SwUnoCrsr()
@@ -40,10 +39,7 @@ SwUnoCrsr::~SwUnoCrsr()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-        if(m_bSaneOwnership)
-        {
-            //assert(!SwIterator<SwClient,SwUnoCrsr>(this).First());
-        }
+        //assert(!SwIterator<SwClient,SwUnoCrsr>(this).First());
     }
 
     // delete the whole ring
@@ -57,7 +53,6 @@ SwUnoCrsr::~SwUnoCrsr()
 
 std::shared_ptr<SwUnoCrsr> SwUnoTableCrsr::Clone() const
 {
-    assert(m_bSaneOwnership);
     auto pNewCrsr(GetDoc()->CreateUnoCrsr2(*GetPoint(), true));
     if(HasMark())
     {

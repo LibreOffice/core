@@ -1411,7 +1411,6 @@ void SwXTextPortionEnumeration::SwClientNotify(const SwModify& rModify, const Sf
     SwClient::SwClientNotify(rModify, rHint);
     if(!GetRegisteredIn() || typeid(rHint) == typeid(sw::DocDisposingHint))
     {
-        assert(m_pUnoCrsr->m_bSaneOwnership);
         m_pUnoCrsr->Remove(this);
         m_pUnoCrsr.reset();
     }

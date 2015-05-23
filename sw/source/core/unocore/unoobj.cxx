@@ -720,7 +720,6 @@ void SwXTextCursor::Impl::SwClientNotify(const SwModify& rModify, const SfxHint&
     SwClient::SwClientNotify(rModify, rHint);
     if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
     {
-        assert(m_pUnoCursor->m_bSaneOwnership);
         Invalidate();
     }
 }

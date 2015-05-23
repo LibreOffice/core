@@ -486,13 +486,11 @@ protected:
 
 void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
-    assert(m_pCrsr->m_bSaneOwnership);
     ClientModify(this, pOld, pNew);
 }
 
 void SwXParagraphEnumeration::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    assert(m_pCrsr->m_bSaneOwnership);
     SwClient::SwClientNotify(rModify, rHint);
     if(m_pCrsr && typeid(rHint) == typeid(sw::DocDisposingHint))
     {
@@ -1550,7 +1548,6 @@ void SwXTextRanges::Impl::SwClientNotify(const SwModify& rModify, const SfxHint&
     SwClient::SwClientNotify(rModify, rHint);
     if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
     {
-        assert(m_pUnoCursor->m_bSaneOwnership);
         m_pUnoCursor->Remove(this);
         m_pUnoCursor.reset();
     }
@@ -1757,7 +1754,6 @@ void SwXParaFrameEnumeration::Impl::SwClientNotify(const SwModify& rModify, cons
     SwClient::SwClientNotify(rModify, rHint);
     if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
     {
-        assert(m_pUnoCursor->m_bSaneOwnership);
         m_pUnoCursor->Remove(this);
         m_pUnoCursor.reset();
     }

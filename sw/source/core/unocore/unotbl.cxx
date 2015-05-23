@@ -1744,7 +1744,6 @@ void SwXTextTableCursor::SwClientNotify(const SwModify& rModify, const SfxHint& 
     SwClient::SwClientNotify(rModify, rHint);
     if(m_pUnoCrsr && typeid(rHint) == typeid(sw::DocDisposingHint))
     {
-        assert(m_pUnoCrsr->m_bSaneOwnership);
         m_pUnoCrsr->Remove(&aCrsrDepend);
         m_pUnoCrsr.reset();
     }
@@ -3150,7 +3149,6 @@ SwXCellRange::SwXCellRange(std::shared_ptr<SwUnoCrsr> pCrsr, SwFrameFormat& rFra
     , m_bFirstRowAsLabel(false)
     , m_bFirstColumnAsLabel(false)
 {
-    assert(m_pTableCrsr->m_bSaneOwnership);
     m_pTableCrsr->Add(&aCursorDepend);
     aRgDesc.Normalize();
 }
