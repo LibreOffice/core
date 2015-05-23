@@ -30,7 +30,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
-#include <basegfx/numeric/ftools.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::oox::core;
@@ -209,15 +208,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                                     }
                                 } else if ( aAdjustmentSeq.getLength() > 0 ) {
                                     EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
-
-                                    sal_Int32 nValue((*aIter).maFormula.toInt32());
-
-                                    // #i124703# The ms control point coordinates are relative to the
-                                    // object center in the range [-50000 .. 50000] while our customshapes
-                                    // use a range from [0 .. 21600], so adapt the value as needed
-                                    nValue = basegfx::fround((double(nValue) + 50000.0) * (21600.0 / 100000.0));
-
-                                    aAdjustmentVal.Value <<= nValue;
+                                    aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
                                     aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
                                     aAdjustmentVal.Name = (*aIter).maName;
                                     aAdjustmentSeq[ nIndex++ ] = aAdjustmentVal;
