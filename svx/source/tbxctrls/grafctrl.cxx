@@ -307,7 +307,8 @@ void ImplGrafControl::dispose()
 
 void ImplGrafControl::GetFocus()
 {
-    maField->GrabFocus();
+    if (maField)
+        maField->GrabFocus();
 }
 
 class ImplGrafModeControl : public ListBox
