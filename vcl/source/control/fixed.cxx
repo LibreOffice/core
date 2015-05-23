@@ -386,7 +386,8 @@ Size FixedText::GetOptimalSize() const
 void FixedText::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<FixedText*>(this)->Invalidate();
+    ImplDraw(const_cast<FixedText*>(this), 0, Point(), GetOutputSizePixel(), true);
+    //const_cast<FixedText*>(this)->Invalidate();
 }
 
 void FixedText::setMaxWidthChars(sal_Int32 nWidth)
