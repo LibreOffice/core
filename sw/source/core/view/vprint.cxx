@@ -141,7 +141,7 @@ void SwPaintQueue::Repaint()
                 }
             }
             else
-                pSh->Paint( pPt->aRect.SVRect() );
+                pSh->Paint(*pSh->GetOut(), pPt->aRect.SVRect());
             pPt = pPt->pNext;
         } while ( pPt );
 

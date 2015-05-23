@@ -408,7 +408,7 @@ public:
     /*
      * virtual paint method to make selection visible again after Paint
      */
-    void Paint( const Rectangle & rRect ) SAL_OVERRIDE;
+    void Paint(vcl::RenderContext& rRenderContext, const Rectangle & rRect) SAL_OVERRIDE;
 
     // Areas
     inline void SetMark();

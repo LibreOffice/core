@@ -174,10 +174,10 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     SAL_DLLPRIVATE void Reformat();          // Invalidates complete Layout (ApplyViewOption).
 
-    SAL_DLLPRIVATE void PaintDesktop( const SwRect & );  // Collect values for painting of desktop
+    SAL_DLLPRIVATE void PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
                                                         // and calling.
     // PaintDesktop split. This pars is also used by PreviewPage.
-    SAL_DLLPRIVATE void _PaintDesktop( const SwRegionRects &rRegion );
+    SAL_DLLPRIVATE void _PaintDesktop(vcl::RenderContext& rRenderContext, const SwRegionRects &rRegion);
 
     SAL_DLLPRIVATE bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
                                                                     // trigger an action.
@@ -246,7 +246,7 @@ public:
     void DLPostPaint2(bool bPaintFormLayer);
     const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
 
-    virtual void Paint(const Rectangle &rRect);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect);
 
     /** Paint tile.
 
