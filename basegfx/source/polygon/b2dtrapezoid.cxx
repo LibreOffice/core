@@ -638,7 +638,7 @@ namespace basegfx
                         // to not have an endless loop and start next. During development
                         // i constantly had breakpoints here, so i am sure enough to add an
                         // assertion here
-                        OSL_FAIL("Trapeziod decomposer in illegal state (!)");
+                        OSL_FAIL("Trapezoid decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
                         continue;
                     }
@@ -652,7 +652,7 @@ namespace basegfx
                         // line; consume the single edge to not have an endless loop and start
                         // next. During development i constantly had breakpoints here, so i am
                         // sure enough to add an assertion here
-                        OSL_FAIL("Trapeziod decomposer in illegal state (!)");
+                        OSL_FAIL("Trapezoid decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
                         continue;
                     }
