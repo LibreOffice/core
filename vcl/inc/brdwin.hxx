@@ -235,7 +235,6 @@ public:
     static sal_uInt16       ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
     static bool             ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
     bool                    ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    bool                    ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
     static OUString         ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
     static long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
 };
