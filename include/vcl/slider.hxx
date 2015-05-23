@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/field.hxx>
 
 class VCL_DLLPUBLIC Slider : public Control
 {
@@ -51,8 +52,13 @@ private:
     ScrollType      meScrollType;
     bool            mbCalcSize;
     bool            mbFullDrag;
+
+    NumericField*   mpLinkedField;
+
     Link<>          maSlideHdl;
     Link<>          maEndSlideHdl;
+
+    DECL_LINK(LinkedFieldModifyHdl, NumericField*);
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -70,6 +76,8 @@ private:
     SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE long ImplDoSlide( long nNewPos );
     SAL_DLLPRIVATE long ImplDoSlideAction( ScrollType eScrollType );
+    SAL_DLLPRIVATE void ImplSetFieldLink(const Link<>& rLink);
+    SAL_DLLPRIVATE void ImplUpdateLinkedField();
 
 public:
                     Slider( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
@@ -107,6 +115,8 @@ public:
     long            GetDelta() const { return mnDelta; }
 
     Size            CalcWindowSizePixel();
+
+    void            SetLinkedField(NumericField* pField);
 
     void            SetSlideHdl( const Link<>& rLink ) { maSlideHdl = rLink; }
     const Link<>&   GetSlideHdl() const { return maSlideHdl;    }
