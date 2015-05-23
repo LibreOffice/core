@@ -140,7 +140,15 @@ typedef enum
     /**
      * No match was found for the search input
      */
-    LOK_CALLBACK_SEARCH_NOT_FOUND
+    LOK_CALLBACK_SEARCH_NOT_FOUND,
+
+    /**
+     * Number of pages changed in the document.
+     *
+     * Clients should assume that data returned by an earlier
+     * lok::Document::getDocumentSize() call is no longer valid.
+     */
+    LOK_CALLBACK_PAGE_COUNT_CHANGED
 }
 LibreOfficeKitCallbackType;
 
