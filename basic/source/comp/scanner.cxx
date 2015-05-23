@@ -142,7 +142,7 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 void SbiScanner::scanAlphanumeric()
 {
     sal_Int32 n = nCol;
-    while(nCol < aLine.getLength() && (theBasicCharClass::get().isAlphaNumeric(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
+    while(nCol < aLine.getLength() && (BasicCharClass::isAlphaNumeric(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
         ++pLine;
         ++nCol;
@@ -248,7 +248,7 @@ bool SbiScanner::NextSym()
     }
 
     // copy character if symbol
-    if(nCol < aLine.getLength() && (theBasicCharClass::get().isAlpha(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
+    if(nCol < aLine.getLength() && (BasicCharClass::isAlpha(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
         // if there's nothing behind '_' , it's the end of a line!
         if(nCol + 1 == aLine.getLength() && aLine[nCol] == '_')
@@ -283,7 +283,7 @@ bool SbiScanner::NextSym()
         // don't test the exclamation mark
         // if there's a symbol behind it
         else if((nCol >= aLine.getLength() || aLine[nCol] != '!') ||
-                (nCol + 1 >= aLine.getLength() || !theBasicCharClass::get().isAlpha(aLine[nCol + 1], bCompatible)))
+                (nCol + 1 >= aLine.getLength() || !BasicCharClass::isAlpha(aLine[nCol + 1], bCompatible)))
         {
             if(nCol < aLine.getLength())
             {
@@ -439,7 +439,7 @@ bool SbiScanner::NextSym()
         // e.g. -2,147,483,648 through 2,147,483,647 (signed)
         sal_uInt64 lu = 0;
         bool bOverflow = false;
-        while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol], false))
+        while(nCol < aLine.getLength() && BasicCharClass::isAlphaNumeric(aLine[nCol], false))
         {
             sal_Unicode ch = rtl::toAsciiUpperCase(aLine[nCol]);
             ++pLine; ++nCol;
