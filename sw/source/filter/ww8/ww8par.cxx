@@ -4900,7 +4900,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             pDocShell->SetReadOnlyUI(true);
     }
 
-    mpCrsr = m_rDoc.CreateUnoCrsr2(rPos);
+    mpCrsr = m_rDoc.CreateUnoCrsr(rPos);
     m_pPaM = mpCrsr.get();
 
     m_pCtrlStck = new SwWW8FltControlStack( &m_rDoc, m_nFieldFlags, *this );

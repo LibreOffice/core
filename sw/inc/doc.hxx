@@ -1490,7 +1490,7 @@ public:
     void SetOLEObjModified();
 
     // Uno - Interfaces
-    std::shared_ptr<SwUnoCrsr> CreateUnoCrsr2( const SwPosition& rPos, bool bTableCrsr = false );
+    std::shared_ptr<SwUnoCrsr> CreateUnoCrsr( const SwPosition& rPos, bool bTableCrsr = false );
 
     // FeShell - Interfaces
     // !!! These assume always an existing layout !!!
@@ -1664,7 +1664,7 @@ public:
     void dumpAsXml(struct _xmlTextWriter* = 0) const;
 
     std::set<Color> GetDocColors();
-    std::list< std::weak_ptr<SwUnoCrsr> > mvUnoCrsrTbl2;
+    std::list< std::weak_ptr<SwUnoCrsr> > mvUnoCrsrTbl;
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().

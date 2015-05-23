@@ -379,7 +379,7 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAu
 
 void ContentIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    for (auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl2)
+    for (auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl)
     {
         auto pUnoCrsr(pWeakUnoCrsr.lock());
         if(!pUnoCrsr)

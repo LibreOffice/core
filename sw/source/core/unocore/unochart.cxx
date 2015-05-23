@@ -412,7 +412,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 SwPosition aPos(*pSttNd);
 
                 // set cursor to top left box of range
-                auto pUnoCrsr = pTableFormat->GetDoc()->CreateUnoCrsr2(aPos, true);
+                auto pUnoCrsr = pTableFormat->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( false );
 

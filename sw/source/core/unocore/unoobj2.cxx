@@ -601,7 +601,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
          (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
     {
         SwPosition* pStart = pUnoCrsr->Start();
-        auto aNewCrsr(pUnoCrsr->GetDoc()->CreateUnoCrsr2(*pStart, false));
+        auto aNewCrsr(pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false));
         // one may also go into tables here
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
@@ -1146,7 +1146,7 @@ SwXTextRange::CreateXTextRange(
 {
     const uno::Reference<text::XText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
-    const auto pNewCrsr(rDoc.CreateUnoCrsr2(rPos, false));
+    const auto pNewCrsr(rDoc.CreateUnoCrsr(rPos, false));
     if(pMark)
     {
         pNewCrsr->SetMark();
@@ -1280,7 +1280,7 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    const auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr2(aPos, false));
+    const auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1301,7 +1301,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr2(aPos, false));
+    auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1513,7 +1513,7 @@ public:
     {
         if (pPaM)
         {
-            m_pUnoCursor = pPaM->GetDoc()->CreateUnoCrsr2(*pPaM->GetPoint());
+            m_pUnoCursor = pPaM->GetDoc()->CreateUnoCrsr(*pPaM->GetPoint());
             m_pUnoCursor->Add(this);
             ::sw::DeepCopyPaM(*pPaM, *GetCursor());
         }
@@ -1701,7 +1701,7 @@ public:
     ::std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
 
     Impl(SwPaM const & rPaM)
-        : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr2(*rPaM.GetPoint(), false))
+        : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
     {
         m_pUnoCursor->Add(this);
         if (rPaM.HasMark())

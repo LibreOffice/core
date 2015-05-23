@@ -91,7 +91,7 @@ public:
     SwExternalToolEdit(SwWrtShell *const pShell)
         : m_pShell(pShell)
         , m_pCursor( // need only Point, must point to SwGrfNode
-            pShell->GetDoc()->CreateUnoCrsr2(
+            pShell->GetDoc()->CreateUnoCrsr(
                 *pShell->GetCurrentShellCursor().GetPoint()))
     {
     }

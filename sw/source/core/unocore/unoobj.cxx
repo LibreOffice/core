@@ -670,7 +670,7 @@ public:
         : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)
         , m_xParentText(xParent)
-        , m_pUnoCursor(rDoc.CreateUnoCrsr2(rPoint, false))
+        , m_pUnoCursor(rDoc.CreateUnoCrsr(rPoint, false))
     {
         m_pUnoCursor->Add(this);
         if (pMark)
@@ -2050,7 +2050,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     // if we are reseting paragraph attributes, we need to select the full paragraph first
     SwPosition aStart = *rPaM.Start();
     SwPosition aEnd = *rPaM.End();
-    auto pTemp ( rDoc.CreateUnoCrsr2(aStart, false) );
+    auto pTemp ( rDoc.CreateUnoCrsr(aStart, false) );
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {
         pTemp->MovePara(fnParaCurr, fnParaStart);
@@ -3017,7 +3017,7 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
 
-    auto pNewCrsr(rUnoCursor.GetDoc()->CreateUnoCrsr2(*rUnoCursor.GetPoint()) );
+    auto pNewCrsr(rUnoCursor.GetDoc()->CreateUnoCrsr(*rUnoCursor.GetPoint()) );
     if (rUnoCursor.HasMark())
     {
         pNewCrsr->SetMark();

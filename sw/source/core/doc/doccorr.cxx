@@ -121,7 +121,7 @@ void PaMCorrAbs( const SwPaM& rRange,
         }
     }
     {
-        for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl2)
+        for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl)
         {
             auto pUnoCursor(pWeakUnoCrsr.lock());
             if(!pUnoCursor)
@@ -275,7 +275,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
        }
     }
     {
-        for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl2)
+        for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl)
         {
             auto pUnoCrsr(pWeakUnoCrsr.lock());
             if(!pUnoCrsr)

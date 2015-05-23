@@ -53,7 +53,7 @@ SwUnoCrsr::~SwUnoCrsr()
 
 std::shared_ptr<SwUnoCrsr> SwUnoTableCrsr::Clone() const
 {
-    auto pNewCrsr(GetDoc()->CreateUnoCrsr2(*GetPoint(), true));
+    auto pNewCrsr(GetDoc()->CreateUnoCrsr(*GetPoint(), true));
     if(HasMark())
     {
         pNewCrsr->SetMark();

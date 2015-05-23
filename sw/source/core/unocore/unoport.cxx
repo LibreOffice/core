@@ -63,7 +63,7 @@ public:
 
 void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
 {
-    m_pUnoCursor = pPortionCursor->GetDoc()->CreateUnoCrsr2(*pPortionCursor->GetPoint());
+    m_pUnoCursor = pPortionCursor->GetDoc()->CreateUnoCrsr(*pPortionCursor->GetPoint());
     if (pPortionCursor->HasMark())
     {
         m_pUnoCursor->SetMark();

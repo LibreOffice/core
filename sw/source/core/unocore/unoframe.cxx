@@ -3289,7 +3289,7 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration() thr
     if(!pFormat)
         return nullptr;
     SwPosition aPos(pFormat->GetContent().GetContentIdx()->GetNode());
-    auto pUnoCursor(GetDoc()->CreateUnoCrsr2(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FRAME);
 }

@@ -162,7 +162,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
 
         if (*m_entries.back()->GetPoint() != rPos)
         {
-            std::shared_ptr<SwUnoCrsr> pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr2(rPos));
+            std::shared_ptr<SwUnoCrsr> pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr(rPos));
             m_entries.push_back(pCursor);
             pCursor->Add(this);
         }
@@ -170,7 +170,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
     }
     else {
         if ( (!m_entries.empty() && *m_entries.back()->GetPoint() != rPos) || m_entries.empty() ) {
-            auto pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr2(rPos));
+            auto pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr(rPos));
             m_entries.push_back(pCursor);
             pCursor->Add(this);
             bRet = true;

@@ -640,7 +640,7 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
     SwTextNode* pTextNode = const_cast<SwTextNode*>( GetTextNode() );
     SwIndex aIndex( pTextNode, nStart );
     SwPosition aStartPos( *pTextNode, aIndex );
-    auto pUnoCursor(pTextNode->GetDoc()->CreateUnoCrsr2( aStartPos ));
+    auto pUnoCursor(pTextNode->GetDoc()->CreateUnoCrsr( aStartPos ));
     pUnoCursor->SetMark();
     pUnoCursor->GetMark()->nContent = nEnd;
 
