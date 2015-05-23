@@ -637,16 +637,11 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, s
     bool bNativeOK = false;
     // for native widget drawing we must find out what
     // control this border belongs to
-    // FIXME RenderContext - ultimately we'll need to get rid of the
-    // vcl::Window here to get native widgets here
-    vcl::Window* pWin = NULL;
-    vcl::Window* pCtrl = NULL;
-    if (rRenderContext.GetOutDevType() == OUTDEV_WINDOW)
-        pWin = static_cast<vcl::Window*>(&rRenderContext);
+    vcl::Window* pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client);
 
     ControlType aCtrlType = 0;
     ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
-    if (pWin && (pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client)) != NULL)
+    if (pCtrl)
     {
         switch (pCtrl->GetType())
         {
@@ -714,9 +709,9 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, s
         ImplControlValue aControlValue;
         ControlState nState = ControlState::ENABLED;
 
-        if (!pWin->IsEnabled())
+        if (!mpBorderWindow->IsEnabled())
             nState &= ~ControlState::ENABLED;
-        if (pWin->HasFocus())
+        if (mpBorderWindow->HasFocus())
             nState |= ControlState::FOCUSED;
         else if(mbNWFBorder)
         {
@@ -782,7 +777,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, s
         if (nBorderStyle & WindowBorderStyle::MENU)
             nFlags |= DrawFrameFlags::Menu;
         // tell DrawFrame that we're drawing a window border of a frame window to avoid round corners
-        if (pWin && pWin == pWin->ImplGetFrameWindow())
+        if (mpBorderWindow == mpBorderWindow->ImplGetFrameWindow())
             nFlags |= DrawFrameFlags::WindowBorder;
 
         DecorationView aDecoView(&rRenderContext);
