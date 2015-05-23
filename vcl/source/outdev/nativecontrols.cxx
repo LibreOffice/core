@@ -18,6 +18,7 @@
  */
 
 #include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
 #include <vcl/salnativewidgets.hxx>
@@ -301,6 +302,9 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     aTestRegion.Intersect( rControlRegion );
     if (aTestRegion == vcl::Region(rControlRegion))
         nState |= ControlState::CACHING_ALLOWED;   // control is not clipped, caching allowed
+
+    if (dynamic_cast<VirtualDevice*>(this))
+        nState |= ControlState::DOUBLEBUFFERING;
 
     bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
 

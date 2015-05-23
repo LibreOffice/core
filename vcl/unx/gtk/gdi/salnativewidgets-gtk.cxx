@@ -860,12 +860,9 @@ bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
  *  aValue:          An optional value (tristate/numerical/string)
  *  rCaption:      A caption or title string (like button text etc)
  */
-bool GtkSalGraphics::drawNativeControl(    ControlType nType,
-                            ControlPart nPart,
-                            const Rectangle& rControlRegion,
-                            ControlState nState,
-                            const ImplControlValue& aValue,
-                            const OUString& rCaption )
+bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
+        const Rectangle& rControlRegion, ControlState nState,
+        const ImplControlValue& aValue, const OUString& rCaption)
 {
     // get a GC with current clipping region set
     GetFontGC();
@@ -891,7 +888,7 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     std::unique_ptr<GdkX11Pixmap> xPixmap;
     std::unique_ptr<GdkX11Pixmap> xMask;
     Rectangle aPixmapRect;
-    if( ( bNeedPixmapPaint )
+    if ((bNeedPixmapPaint || (nState & ControlState::DOUBLEBUFFERING))
         && nType != CTRL_SCROLLBAR
         && nType != CTRL_SPINBOX
         && nType != CTRL_TAB_ITEM
