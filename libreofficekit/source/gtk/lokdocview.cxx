@@ -908,6 +908,8 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_STATUS_INDICATOR_FINISH";
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
         return "LOK_CALLBACK_SEARCH_NOT_FOUND";
+    case LOK_CALLBACK_PAGE_COUNT_CHANGED:
+        return "LOK_CALLBACK_PAGE_COUNT_CHANGED";
     }
     return 0;
 }
@@ -1002,6 +1004,11 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     break;
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
     break;
+    case LOK_CALLBACK_PAGE_COUNT_CHANGED:
+    {
+        m_pDocument->pClass->getDocumentSize(m_pDocument, &m_nDocumentWidthTwips, &m_nDocumentHeightTwips);
+    }
+    break;
     default:
         g_assert(false);
         break;
@@ -1025,7 +1032,7 @@ void LOKDocView_Impl::globalCallbackWorker(int nType, const char* pPayload, void
 
 void LOKDocView_Impl::callbackWorkerImpl(int nType, const char* pPayload)
 {
-    LOKDocView_Impl::CallbackData* pCallback = new LOKDocView_Impl::CallbackData(nType, pPayload, m_pDocView);
+    LOKDocView_Impl::CallbackData* pCallback = new LOKDocView_Impl::CallbackData(nType, pPayload ? pPayload : "(nil)", m_pDocView);
     g_info("lok_docview_callback_worker: %s, '%s'", LOKDocView_Impl::callbackTypeToString(nType), pPayload);
 #if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(LOKDocView_Impl::callback, pCallback);
