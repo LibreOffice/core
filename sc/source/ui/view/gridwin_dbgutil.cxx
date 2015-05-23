@@ -35,7 +35,7 @@ void dumpScDrawObjData(ScGridWindow& rWindow, ScDrawObjData& rData, MapUnit eMap
 
 }
 
-void ScGridWindow::dumpColumnInformation()
+void ScGridWindow::dumpColumnInformationPixel()
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
@@ -44,6 +44,18 @@ void ScGridWindow::dumpColumnInformation()
         sal_uInt16 nWidth = pDoc->GetColWidth(nCol, nTab, true);
         long nPixel = LogicToPixel(Point(nWidth, 0), MapMode(MAP_TWIP)).getX();
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "px" << std::endl;
+    }
+}
+
+void ScGridWindow::dumpColumnInformationHmm()
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCTAB nTab = pViewData->GetTabNo();
+    for (SCCOL nCol = 0; nCol <= 20; ++nCol)
+    {
+        sal_uInt16 nWidth = pDoc->GetColWidth(nCol, nTab, true);
+        long nPixel = LogicToLogic(Point(nWidth, 0), MAP_TWIP, MAP_100TH_MM).getX();
+        std::cout << "Column: " << nCol << ", Width: " << nPixel << "hmm" << std::endl;
     }
 }
 

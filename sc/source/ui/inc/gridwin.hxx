@@ -439,7 +439,8 @@ protected:
 private:
 
 #ifdef DBG_UTIL
-    void dumpColumnInformation();
+    void dumpColumnInformationPixel();
+    void dumpColumnInformationHmm();
     void dumpGraphicInformation();
 #endif
 

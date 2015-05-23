@@ -3513,11 +3513,15 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     {
         if (rKeyCode.GetCode() == KEY_F12)
         {
-            dumpColumnInformation();
+            dumpColumnInformationPixel();
         }
         else if (rKeyCode.GetCode() == KEY_F11)
         {
             dumpGraphicInformation();
+        }
+        else if (rKeyCode.GetCode() == KEY_F10)
+        {
+            dumpColumnInformationHmm();
         }
     }
 
