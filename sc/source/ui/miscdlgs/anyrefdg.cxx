@@ -823,6 +823,13 @@ bool ScRefHandler::EnterRefMode()
 
 ScRefHandler::~ScRefHandler()
 {
+    disposeRefHandler();
+}
+
+void ScRefHandler::disposeRefHandler()
+{
+    m_rWindow.clear();
+    pActiveWin.clear();
     LeaveRefMode();
 }
 
