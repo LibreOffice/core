@@ -23,6 +23,7 @@
 #include <swtable.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
+#include <calbck.hxx>
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 
@@ -39,7 +40,13 @@ SwUnoCrsr::~SwUnoCrsr()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-        //assert(!SwIterator<SwClient,SwUnoCrsr>(this).First());
+#ifdef DBG_UTIL
+        SwIterator<SwClient, SwUnoCrsr> pClient(*this);
+        assert(!pClient.First());
+#endif
+        // remove the weak_ptr the document keeps to notify about document death
+        pDoc->mvUnoCrsrTbl.remove_if(
+            [this](const std::weak_ptr<SwUnoCrsr>& pWeakPtr) -> bool { return pWeakPtr.lock().get() == this; });
     }
 
     // delete the whole ring
