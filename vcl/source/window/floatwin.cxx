@@ -637,10 +637,6 @@ void FloatingWindow::SetTitleType( FloatWinTitleType nTitle )
 
 void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags nFlags )
 {
-    // avoid flickering
-    if ( IsVisible() )
-        Show( false, ShowFlags::NoFocusChange );
-
     if ( IsRollUp() )
         RollDown();
 
