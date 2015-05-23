@@ -302,9 +302,7 @@ void SbiInstance::CalcBreakCallLevel( sal_uInt16 nFlags )
 SbiInstance::SbiInstance( StarBASIC* p )
     : pIosys(new SbiIoSystem)
     , pDdeCtrl(new SbiDdeControl)
-    , pDllMgr(0) // on demand
     , pBasic(p)
-    , pNumberFormatter(0)
     , meFormatterLangType(LANGUAGE_DONTKNOW)
     , meFormatterDateFormat(YMD)
     , nStdDateIdx(0)
@@ -329,10 +327,6 @@ SbiInstance::~SbiInstance()
         delete pRun;
         pRun = p;
     }
-    delete pIosys;
-    delete pDdeCtrl;
-    delete pDllMgr;
-    delete pNumberFormatter;
 
     try
     {
@@ -351,17 +345,15 @@ SbiInstance::~SbiInstance()
     {
         SAL_WARN("basic", "SbiInstance::~SbiInstance: caught an exception while disposing the components!" );
     }
-
-    ComponentVector.clear();
 }
 
 SbiDllMgr* SbiInstance::GetDllMgr()
 {
     if( !pDllMgr )
     {
-        pDllMgr = new SbiDllMgr;
+        pDllMgr.reset(new SbiDllMgr);
     }
-    return pDllMgr;
+    return pDllMgr.get();
 }
 
 // #39629 create NumberFormatter with the help of a static method now
@@ -375,25 +367,25 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
         if( eLangType != meFormatterLangType ||
             eDate != meFormatterDateFormat )
         {
-            delete pNumberFormatter;
-            pNumberFormatter = NULL;
+            pNumberFormatter.reset(nullptr);
         }
     }
     meFormatterLangType = eLangType;
     meFormatterDateFormat = eDate;
     if( !pNumberFormatter )
     {
-        PrepareNumberFormatter( pNumberFormatter, nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx,
-        &meFormatterLangType, &meFormatterDateFormat );
+        pNumberFormatter.reset(PrepareNumberFormatter( nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx,
+        &meFormatterLangType, &meFormatterDateFormat ));
     }
-    return pNumberFormatter;
+    return pNumberFormatter.get();
 }
 
 // #39629 offer NumberFormatter static too
-void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
-    sal_uInt32 &rnStdDateIdx, sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
+SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
+    sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
     LanguageType* peFormatterLangType, DateFormat* peFormatterDateFormat )
 {
+    SvNumberFormatter* pNumberFormater = nullptr;
     LanguageType eLangType;
     if( peFormatterLangType )
     {
@@ -414,10 +406,10 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
         eDate = aSysLocale.GetLocaleData().getDateFormat();
     }
 
-    rpNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
+    pNumberFormater = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
 
     sal_Int32 nCheckPos = 0; short nType;
-    rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eLangType );
+    rnStdTimeIdx = pNumberFormater->GetStandardFormat( css::util::NumberFormat::TIME, eLangType );
 
     // the formatter's standard templates have only got a two-digit date
     // -> registering an own format
@@ -436,14 +428,15 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
         case YMD: aDateStr = "YYYY/MM/DD"; break;
     }
     OUString aStr( aDateStr );      // PutandConvertEntry() modifies string!
-    rpNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
+    pNumberFormater->PutandConvertEntry( aStr, nCheckPos, nType,
         rnStdDateIdx, LANGUAGE_ENGLISH_US, eLangType );
     nCheckPos = 0;
     OUString aStrHHMMSS(" HH:MM:SS");
     aDateStr += aStrHHMMSS;
     aStr = aDateStr;
-    rpNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
+    pNumberFormater->PutandConvertEntry( aStr, nCheckPos, nType,
         rnStdDateTimeIdx, LANGUAGE_ENGLISH_US, eLangType );
+    return pNumberFormater;
 }
 
 
@@ -574,7 +567,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
            pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(0), m_nLastTime(0)
 {
     nFlags    = pe ? pe->GetDebugFlags() : 0;
-    pIosys    = pInst->pIosys;
+    pIosys    = pInst->GetIoSystem();
     pArgvStk  = NULL;
     pGosubStk = NULL;
     pForStk   = NULL;
@@ -600,11 +593,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     nOps      = 0;
     refExprStk = new SbxArray;
     SetVBAEnabled( pMod->IsVBACompat() );
-#if defined __GNUC__
-    SetParameters( pe ? pe->GetParameters() : (class SbxArray *)NULL );
-#else
-    SetParameters( pe ? pe->GetParameters() : NULL );
-#endif
+    SetParameters( pe ? pe->GetParameters() : nullptr );
     pRefSaveList = NULL;
     pItemStoreList = NULL;
 }

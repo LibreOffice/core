@@ -2542,7 +2542,7 @@ RTLFUNC(FormatDateTime)
             else
             {
                 sal_uInt32 n;   // Dummy
-                SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
+                pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
             }
 
             LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
