@@ -145,7 +145,6 @@ class SwTextFormatColl;
 class SwTextFormatColls;
 class SwURLStateChanged;
 class SwUnoCrsr;
-class SwUnoCrsrTable;
 class SwViewShell;
 class _SetGetExpField;
 class SwDrawContact;
@@ -332,8 +331,6 @@ class SW_DLLPUBLIC SwDoc :
 
     // Hash map to find numrules by name
     mutable std::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
-
-    SwUnoCrsrTable    *mpUnoCrsrTable;
 
     SwPagePreviewPrtData *mpPgPViewPrtData;  //< Indenting / spacing for printing of page view.
     SwPaM           *mpExtInputRing;
@@ -1493,8 +1490,6 @@ public:
     void SetOLEObjModified();
 
     // Uno - Interfaces
-    const SwUnoCrsrTable& GetUnoCrsrTable() const       { return *mpUnoCrsrTable; }
-    SwUnoCrsr* CreateUnoCrsr( const SwPosition& rPos, bool bTableCrsr = false );
     std::shared_ptr<SwUnoCrsr> CreateUnoCrsr2( const SwPosition& rPos, bool bTableCrsr = false );
 
     // FeShell - Interfaces

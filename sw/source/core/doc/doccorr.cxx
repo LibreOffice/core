@@ -121,47 +121,6 @@ void PaMCorrAbs( const SwPaM& rRange,
         }
     }
     {
-        SwUnoCrsrTable& rTable = const_cast<SwUnoCrsrTable&>(pDoc->GetUnoCrsrTable());
-
-        for( SwUnoCrsrTable::iterator it = rTable.begin(); it != rTable.end(); ++it )
-        {
-            SwUnoCrsr *const pUnoCursor = *it;
-
-            bool bChange = false; // has the UNO cursor been corrected?
-
-            // determine whether the UNO cursor will leave it's designated
-            // section
-            bool const bLeaveSection =
-                pUnoCursor->IsRemainInSection() &&
-                ( lcl_FindUnoCrsrSection( aNewPos.nNode.GetNode() ) !=
-                  lcl_FindUnoCrsrSection(
-                      pUnoCursor->GetPoint()->nNode.GetNode() ) );
-
-            for(SwPaM& rPaM : pUnoCursor->GetRingContainer())
-            {
-                bChange |= lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
-            }
-
-            SwUnoTableCrsr *const pUnoTableCrsr =
-                dynamic_cast<SwUnoTableCrsr *>(*it);
-            if( pUnoTableCrsr )
-            {
-                for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
-                {
-                    bChange |=
-                        lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
-                }
-            }
-
-            // if a UNO cursor leaves its designated section, we must inform
-            // (and invalidate) said cursor
-            if (bChange && bLeaveSection)
-            {
-                // the UNO cursor has left its section. We need to notify it!
-                SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
-                pUnoCursor->ModifyNotification( &aHint, NULL );
-            }
-        }
         for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl2)
         {
             auto pUnoCursor(pWeakUnoCrsr.lock());
@@ -316,24 +275,6 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
        }
     }
     {
-        SwUnoCrsrTable& rTable = (SwUnoCrsrTable&)pDoc->GetUnoCrsrTable();
-        for( SwUnoCrsrTable::iterator it = rTable.begin(); it != rTable.end(); ++it )
-        {
-            for(SwPaM& rPaM : (*it)->GetRingContainer())
-            {
-                lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
-            }
-
-            SwUnoTableCrsr* pUnoTableCrsr =
-                dynamic_cast<SwUnoTableCrsr*>(*it);
-            if( pUnoTableCrsr )
-            {
-                for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
-                {
-                    lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
-                }
-            }
-        }
         for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl2)
         {
             auto pUnoCrsr(pWeakUnoCrsr.lock());

@@ -379,21 +379,6 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAu
 
 void ContentIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    for (const SwUnoCrsr* pUnoCrsr : pDoc->GetUnoCrsrTable())
-    {
-        for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pUnoCrsr))->GetRingContainer())
-        {
-            lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nContent, rPaM);
-        }
-        const SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
-        if( pUnoTableCrsr )
-        {
-            for(SwPaM& rPaM : (&(const_cast<SwUnoTableCrsr*>(pUnoTableCrsr))->GetSelRing())->GetRingContainer())
-            {
-                lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nContent, rPaM);
-            }
-        }
-    }
     for (auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl2)
     {
         auto pUnoCrsr(pWeakUnoCrsr.lock());

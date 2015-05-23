@@ -44,15 +44,6 @@ SwUnoCrsr::~SwUnoCrsr()
         {
             //assert(!SwIterator<SwClient,SwUnoCrsr>(this).First());
         }
-        else
-        {
-            // then remove cursor from array
-            SwUnoCrsrTable& rTable = (SwUnoCrsrTable&)pDoc->GetUnoCrsrTable();
-            if( !rTable.erase( this ) )
-            {
-                OSL_ENSURE( false, "UNO Cursor nicht mehr im Array" );
-            }
-        }
     }
 
     // delete the whole ring
@@ -235,15 +226,6 @@ void SwUnoTableCrsr::MakeBoxSels()
             if( pTableNd && 0 != ( pBox = pTableNd->GetTable().GetTableBox( pBoxNd->GetIndex() )) )
                 InsertBox( *pBox );
         }
-    }
-}
-
-SwUnoCrsrTable::~SwUnoCrsrTable()
-{
-    while (!empty())
-    {
-        delete *begin();
-        erase( begin() );
     }
 }
 

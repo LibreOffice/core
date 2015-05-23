@@ -250,7 +250,6 @@ SwDoc::SwDoc()
     mpURLStateChgd( 0 ),
     mpNumberFormatter( 0 ),
     mpNumRuleTable( new SwNumRuleTable ),
-    mpUnoCrsrTable( new SwUnoCrsrTable() ),
     mpPgPViewPrtData( 0 ),
     mpExtInputRing( 0 ),
     mpStyleAccess( 0 ),
@@ -424,7 +423,6 @@ SwDoc::~SwDoc()
     getIDocumentRedlineAccess().GetRedlineTable().DeleteAndDestroyAll();
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
 
-    delete mpUnoCrsrTable;
     const sw::DocDisposingHint aHint;
     std::vector< std::weak_ptr<SwUnoCrsr> > vCursorsToKill(mvUnoCrsrTbl2.begin(), mvUnoCrsrTbl2.end());
     for(auto& pWeakCursor : vCursorsToKill)
