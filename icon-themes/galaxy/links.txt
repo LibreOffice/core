@@ -19,8 +19,10 @@ cmd/sc_objectforwardone.png cmd/sc_forward.png
 cmd/lc_objectbackone.png cmd/lc_backward.png
 cmd/sc_objectbackone.png cmd/sc_backward.png
 
-cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
-cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
+cmd/lc_insertrowsafter.png cmd/lc_insertrows.png
+cmd/sc_insertrowsafter.png cmd/sc_insertrows.png
+cmd/lc_insertcolumnsafter.png cmd/lc_insertcolumns.png
+cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
 
 cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 cmd/sc_templatemenu.png cmd/sc_newdoc.png
