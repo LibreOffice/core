@@ -21,6 +21,7 @@
 #include <wtt.h>
 
 #include <string.h>
+#include <algorithm>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
