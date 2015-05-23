@@ -26,12 +26,13 @@
 #include <gdk/gdkkeysyms.h>
 #include <postx.h>
 
+#include <unx/gtk/gtkframe.hxx>
+
 #if GTK_CHECK_VERSION(3,0,0)
 
 #include <headless/svpgdi.hxx>
 #include "textrender.hxx"
 
-class GtkSalFrame;
 class GtkSalGraphics : public SvpSalGraphics
 {
     GtkSalFrame *mpFrame;

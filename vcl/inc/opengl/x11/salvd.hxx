@@ -18,6 +18,7 @@
 
 class SalDisplay;
 class X11OpenGLSalGraphics;
+class X11SalGraphics;
 
 class X11OpenGLSalVirtualDevice : public SalVirtualDevice
 {
