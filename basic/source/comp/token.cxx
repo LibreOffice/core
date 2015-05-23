@@ -426,7 +426,7 @@ SbiToken SbiTokenizer::Next()
         while( delta );
         // Symbol? if not >= token
         sal_Unicode ch = aSym[0];
-        if( !theBasicCharClass::get().isAlpha( ch, bCompatible ) && !bSymbol )
+        if( !BasicCharClass::isAlpha( ch, bCompatible ) && !bSymbol )
         {
             return eCurTok = (SbiToken) (ch & 0x00FF);
         }
