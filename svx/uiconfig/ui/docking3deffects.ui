@@ -708,7 +708,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Convert to Lathe Object</property>
+                            <property name="tooltip_text" translatable="yes">Convert to Rotation Object</property>
                             <property name="image">image15</property>
                           </object>
                           <packing>
