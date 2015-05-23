@@ -23,6 +23,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/salobj.h>
+#include <unx/gtk/gtkgdi.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/atkbridge.hxx>
@@ -320,7 +321,10 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
     pNew->SetSize( nDX, nDY );
     return pNew;
 #else
-    return X11SalInstance::CreateVirtualDevice( pG, nDX, nDY, nBitCount, pGd );
+    GtkSalGraphics *pGtkSalGraphics = dynamic_cast<GtkSalGraphics*>(pG);
+    assert(pGtkSalGraphics);
+    return CreateX11VirtualDevice(pG, nDX, nDY, nBitCount, pGd,
+            new GtkSalGraphics(pGtkSalGraphics->GetGtkFrame(), pGtkSalGraphics->GetGtkWidget()));
 #endif
 }
 
