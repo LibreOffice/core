@@ -68,6 +68,8 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbCalcSize          = true;
     mbFullDrag          = true;
 
+    mpLinkedField       = nullptr;
+
     Control::ImplInit( pParent, nStyle, NULL );
 
     ImplInitSettings();
@@ -75,7 +77,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 Slider::Slider( vcl::Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_SLIDER )
+    Control(WINDOW_SLIDER)
 {
     ImplInit( pParent, nStyle );
 }
@@ -209,6 +211,34 @@ void Slider::ImplUpdateRects( bool bUpdate )
             }
         }
     }
+}
+
+void Slider::ImplSetFieldLink(const Link<>& rLink)
+{
+    if (mpLinkedField != nullptr)
+    {
+        mpLinkedField->SetModifyHdl(rLink);
+        mpLinkedField->SetUpHdl(rLink);
+        mpLinkedField->SetDownHdl(rLink);
+        mpLinkedField->SetFirstHdl(rLink);
+        mpLinkedField->SetLastHdl(rLink);
+        mpLinkedField->SetLoseFocusHdl(rLink);
+    }
+}
+
+void Slider::ImplUpdateLinkedField()
+{
+    if (mpLinkedField)
+        mpLinkedField->SetValue(mnThumbPos);
+}
+
+IMPL_LINK(Slider, LinkedFieldModifyHdl, NumericField*, pField)
+{
+    if (pField)
+    {
+        SetThumbPos(pField->GetValue());
+    }
+    return 0;
 }
 
 long Slider::ImplCalcThumbPos( long nPixPos )
@@ -762,6 +792,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                 {
                     ImplUpdateRects();
                     Update();
+                    ImplUpdateLinkedField();
                     if ( mbFullDrag && (nOldPos != mnThumbPos) )
                     {
                         mnDelta = mnThumbPos-nOldPos;
@@ -837,6 +868,13 @@ void Slider::Resize()
         ImplCalc( false );
     mnDrawFlags = SLIDER_DRAW_ALL;
     Invalidate();
+}
+
+void Slider::SetLinkedField(NumericField* pField)
+{
+    ImplSetFieldLink(Link<>());
+    mpLinkedField = pField;
+    ImplSetFieldLink(LINK(this, Slider, LinkedFieldModifyHdl));
 }
 
 void Slider::RequestHelp( const HelpEvent& rHEvt )
@@ -947,7 +985,7 @@ void Slider::SetRange( const Range& rRange )
             mnThumbPos = mnMaxRange;
         if ( mnThumbPos < mnMinRange )
             mnThumbPos = mnMinRange;
-
+        ImplUpdateLinkedField();
         StateChanged( StateChangedType::Data );
     }
 }
@@ -962,6 +1000,7 @@ void Slider::SetThumbPos( long nNewThumbPos )
     if ( mnThumbPos != nNewThumbPos )
     {
         mnThumbPos = nNewThumbPos;
+        ImplUpdateLinkedField();
         StateChanged( StateChangedType::Data );
     }
 }
