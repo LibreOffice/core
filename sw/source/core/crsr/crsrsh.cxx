@@ -1237,7 +1237,7 @@ bool SwCrsrShell::GoPrevCrsr()
     return true;
 }
 
-void SwCrsrShell::Paint( const Rectangle &rRect)
+void SwCrsrShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
     comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false));
     SET_CURR_SHELL( this );
@@ -1254,7 +1254,7 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
     }
 
     // re-paint area
-    SwViewShell::Paint( rRect );
+    SwViewShell::Paint(rRenderContext, rRect);
 
     if( m_bHasFocus && !m_bBasicHideCrsr )
     {

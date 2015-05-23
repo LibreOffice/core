@@ -1015,7 +1015,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
     }
     mbInPaint = true;
 
-    OutputDevice* pOutputDev = &rRenderContext; //mrParentViewShell.GetOut();
+    OutputDevice* pOutputDev = &rRenderContext;
 
     // prepare paint
     if ( maPreviewPages.size() > 0 )
@@ -1040,7 +1040,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
             }
         }
         // paint preview background rectangles
-        mrParentViewShell._PaintDesktop( aPreviewBackgrdRegion );
+        mrParentViewShell._PaintDesktop(rRenderContext, aPreviewBackgrdRegion);
     }
 
     // prepare data for paint of pages
@@ -1095,7 +1095,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 mrParentViewShell.maVisArea = aPageRect;
                 aPxPaintRect.Intersection( aPxOutRect );
                 Rectangle aPaintRect = pOutputDev->PixelToLogic( aPxPaintRect );
-                mrParentViewShell.Paint( aPaintRect );
+                mrParentViewShell.Paint(rRenderContext, aPaintRect);
                 // --> OD 2007-08-15 #i80691#
                 // paint page border and shadow
                 {

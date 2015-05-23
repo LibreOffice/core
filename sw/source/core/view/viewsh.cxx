@@ -377,7 +377,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                             mpOut = pVout.get();
                             if ( bPaintsFromSystem )
-                                PaintDesktop( aRect );
+                                PaintDesktop(*mpOut, aRect);
                             pCurrentLayout->Paint( aRect );
                             pOld->DrawOutDev( aRect.Pos(), aRect.SSize(),
                                               aRect.Pos(), aRect.SSize(), *pVout );
@@ -398,7 +398,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         DLPrePaint2(vcl::Region(aRect.SVRect()));
 
                         if ( bPaintsFromSystem )
-                            PaintDesktop( aRect );
+                            PaintDesktop(*GetOut(), aRect);
                         if (!isTiledRendering())
                             pCurrentLayout->Paint( aRect );
                         else
@@ -484,7 +484,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
 
                 OutputDevice *pOld = mpOut;
                 mpOut = pVout.get();
-                Paint( VisArea().SVRect() );
+                Paint(*mpOut, VisArea().SVRect());
                 mpOut = pOld;
                 mpOut->DrawOutDev( VisArea().Pos(), aSize,
                                   VisArea().Pos(), aSize, *pVout );
@@ -1263,7 +1263,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                 mpWin = pOldWin;
 
                 // SW paint stuff
-                PaintDesktop( aRect );
+                PaintDesktop(*GetOut(), aRect);
                 SwViewShell::mbLstAct = true;
                 GetLayout()->Paint( aRect );
                 SwViewShell::mbLstAct = false;
@@ -1404,7 +1404,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
     return false;
 }
 
-void SwViewShell::PaintDesktop( const SwRect &rRect )
+void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect &rRect)
 {
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
         return;                     //for the printer we don't do anything here.
@@ -1488,11 +1488,11 @@ void SwViewShell::PaintDesktop( const SwRect &rRect )
         }
     }
     if ( !aRegion.empty() )
-        _PaintDesktop( aRegion );
+        _PaintDesktop(rRenderContext, aRegion);
 }
 
 // PaintDesktop is split in two, this part is also used by PreviewPage
-void SwViewShell::_PaintDesktop( const SwRegionRects &rRegion )
+void SwViewShell::_PaintDesktop(vcl::RenderContext& /*rRenderContext*/, const SwRegionRects &rRegion)
 {
     // OD 2004-04-23 #116347#
     GetOut()->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
@@ -1644,8 +1644,9 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
     return bRet;
 }
 
-void SwViewShell::Paint(const Rectangle &rRect)
+void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
+    mpOut = &rRenderContext;
     if ( mnLockPaint )
     {
         if ( Imp()->bSmoothUpdate )
@@ -1716,7 +1717,7 @@ void SwViewShell::Paint(const Rectangle &rRect)
                     DLPrePaint2(aRepaintRegion);
 
                     // <--
-                    PaintDesktop( aRect );
+                    PaintDesktop(rRenderContext, aRect);
 
                     //When useful, process or destroy the old InvalidRect.
                     if ( aRect.IsInside( maInvalidRect ) )
@@ -1826,7 +1827,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     CheckInvalidForPaint(aOutRect);
 
     // draw - works in logic coordinates
-    Paint(aOutRect);
+    Paint(rDevice, aOutRect);
 
     // Remove this device in DrawLayer
     if (Imp()->GetDrawView())

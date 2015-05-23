@@ -441,7 +441,7 @@ void SwEditWin::PrePaint(vcl::RenderContext& /*rRenderContext*/)
     }
 }
 
-void  SwEditWin::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)
@@ -467,7 +467,7 @@ void  SwEditWin::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
               GetView().GetVisArea().GetHeight() <= 0 )
         Invalidate( rRect );
     else
-        pWrtShell->Paint( rRect );
+        pWrtShell->Paint(rRenderContext, rRect);
 
     if( bPaintShadowCrsr )
         m_pShadCrsr->Paint();
