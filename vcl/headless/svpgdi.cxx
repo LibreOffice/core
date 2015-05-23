@@ -39,8 +39,6 @@
 #include <sys/stat.h>
 #endif
 
-#include <stdio.h>
-
 inline void dbgOut( const basebmp::BitmapDeviceSharedPtr&
 #if OSL_DEBUG_LEVEL > 2
 rDevice
@@ -233,7 +231,7 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
 
     if( nHit == 0 ) // rendering outside any clipping region
     {
-//        fprintf (stderr, "denegerate case detected ...\n");
+        SAL_WARN("vcl.headless", "SvpSalGraphics::isClippedSetup: denegerate case detected ...\n");
         return true;
     }
     else if( nHit == 1 ) // common path: rendering against just one clipping region
@@ -242,10 +240,10 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
         {
             //The region to be painted (aRect) is equal to or inside the
             //current clipping region
-//        fprintf (stderr, " is inside ! avoid deeper clip ...\n");
+            SAL_WARN("vcl.headless", "SvpSalGraphics::isClippedSetup: is inside ! avoid deeper clip ...\n");
             return false;
         }
-//    fprintf (stderr, " operation only overlaps with a single clip zone\n" );
+        SAL_WARN("vcl.headless", "SvpSalGraphics::isClippedSetup: operation only overlaps with a single clip zone\n");
         rUndo.m_aDevice = m_aDevice;
         m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
                                                  basegfx::B2IBox (aHitRect.Left(),
@@ -254,7 +252,7 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
                                                                   aHitRect.Bottom() + 1) );
         return false;
     }
-//    fprintf (stderr, "URK: complex & slow clipping case\n" );
+    SAL_INFO("vcl.headless", "SvpSalGraphics::isClippedSetup: URK: complex & slow clipping case\n");
     // horribly slow & complicated case ...
 
     ensureClip();

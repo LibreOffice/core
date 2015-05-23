@@ -21,7 +21,6 @@
 
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#include <stdio.h>
 #include <string.h>
 
 using namespace ::com::sun::star;

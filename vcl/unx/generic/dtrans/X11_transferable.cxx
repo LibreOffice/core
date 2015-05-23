@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 #include <X11_transferable.hxx>
 #include <X11/Xatom.h>
 #include <com/sun/star/io/IOException.hpp>
@@ -66,11 +62,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
         if( reinterpret_cast<sal_Unicode const *>(aData.getConstArray())[nLen-1] == 0 )
             nLen--;
         OUString aString( reinterpret_cast<sal_Unicode const *>(aData.getConstArray()), nLen );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "X11Transferable::getTransferData( \"%s\" )\n -> \"%s\"\n",
-             OUStringToOString( rFlavor.MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             OUStringToOString( aString, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+        SAL_INFO( "vcl", "X11Transferable::getTransferData( \"" << rFlavor.MimeType << "\" )\n -> \"" << aString << "\"\n");
         aRet <<= aString.replaceAll("\r\n", "\n");
     }
     else

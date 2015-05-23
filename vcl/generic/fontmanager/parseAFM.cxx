@@ -72,7 +72,6 @@
  *    - changed (width == 250) to (width = 250) in initializeArray
  */
 
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>

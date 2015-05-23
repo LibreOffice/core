@@ -21,17 +21,13 @@
 
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
-#ifdef ENABLE_TRACING
-#include <stdio.h>
-#endif
-
 using namespace ::com::sun::star;
 
 static inline AtkObject *
 atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccessible >& rxAccessible )
 {
 #ifdef ENABLE_TRACING
-    fprintf( stderr, ": %p\n", rxAccessible.get() );
+    SAL_INFO( "vcl.a11y", ": " << rxAccessible.get() << "\n");
 #endif
 
     if( rxAccessible.is() )
@@ -89,11 +85,10 @@ table_wrapper_ref_at (AtkTable *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleCellAt( %u, %u ) returns", row, column );
+            SAL_INFO( "vcl.a11y", "getAccessibleCellAt( " << row << ", " << column << " ) returns\n");
 
         if( column >= 255 )
-            fprintf(stderr, "getAccessibleCellAt( %u, %u ) returns", row, column );
-
+            SAL_INFO( "vcl.a11y", "getAccessibleCellAt( " << row << ", " << column << " ) returns\n");
 #endif
 
         if( pTable )
@@ -119,8 +114,7 @@ table_wrapper_get_index_at (AtkTable      *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleIndex( %u, %u ) returns %u\n",
-                row, column, pTable->getAccessibleIndex( row, column ) );
+            SAL_INFO( "vcl.a11y", "getAccessibleIndex( " << row << ", " << column << " ) returns " << pTable->getAccessibleIndex( row, column ) << "\n");
 #endif
 
         if( pTable )
@@ -144,8 +138,7 @@ table_wrapper_get_column_at_index (AtkTable      *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleColumn( %u ) returns %u\n",
-                nIndex, pTable->getAccessibleColumn( nIndex ) );
+            SAL_INFO( "vcl.a11y", "getAccessibleColumn( " << nIndex << " ) returns " << pTable->getAccessibleColumn( nIndex ) << "\n");
 #endif
 
         if( pTable )
@@ -169,8 +162,7 @@ table_wrapper_get_row_at_index( AtkTable *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleRow( %u ) returns %u\n",
-                nIndex, pTable->getAccessibleRow( nIndex ) );
+            SAL_INFO( "vcl.a11y", "getAccessibleRow( " << nIndex << " ) returns " << pTable->getAccessibleRow( nIndex ) << "\n");
 #endif
 
         if( pTable )
@@ -193,8 +185,7 @@ table_wrapper_get_n_columns( AtkTable *table )
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "XAccessibleTable::getAccessibleColumnCount returns %u\n",
-                pTable->getAccessibleColumnCount() );
+            SAL_INFO( "vcl.a11y", "XAccessibleTable::getAccessibleColumnCount returns " << pTable->getAccessibleColumnCount() << "\n");
 #endif
 
         if( pTable )
@@ -217,8 +208,7 @@ table_wrapper_get_n_rows( AtkTable *table )
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleRowCount() returns %u\n",
-                pTable->getAccessibleRowCount() );
+            SAL_INFO( "vcl.a11y", "getAccessibleRowCount returns " << pTable->getAccessibleRowCount() << "\n");
 #endif
 
         if( pTable )
@@ -243,8 +233,8 @@ table_wrapper_get_column_extent_at( AtkTable *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleColumnExtentAt( %u, %u ) returns %u\n",
-                row, column, pTable->getAccessibleColumnExtentAt( row, column ) );
+            SAL_INFO( "vcl.a11y", "getAccessibleColumnExtentAt ( " << row << ", " << column << " ) returns "
+                << pTable->getAccessibleColumnExtentAt( row, column ) << "\n");;
 #endif
 
         if( pTable )
@@ -269,8 +259,8 @@ table_wrapper_get_row_extent_at( AtkTable *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleRowExtentAt( %u, %u ) returns %u\n",
-                row, column, pTable->getAccessibleRowExtentAt( row, column ) );
+            SAL_INFO( "vcl.a11y", "getAccessibleRowExtentAt ( " << row << ", " << column << " ) returns "
+                << pTable->getAccessibleRowExtentAt( row, column ) << "\n");;
 #endif
 
         if( pTable )
@@ -293,7 +283,7 @@ table_wrapper_get_caption( AtkTable *table )
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleCaption() returns" );
+            SAL_INFO( "vcl.a11y", "getAccessibleCaption() returns\n");
 #endif
 
         if( pTable )
@@ -318,8 +308,7 @@ table_wrapper_get_row_description( AtkTable *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleRowDescription( %u ) returns %s\n",
-                row, getAsConst( pTable->getAccessibleRowDescription( row ) ) );
+            SAL_INFO( "vcl.a11y", "getAccessibleRowDescription( " << row << " ) returns " << getAsConst(pTable->getAccessibleRowDescription(row)) << "\n");
 #endif
 
         if( pTable )
@@ -343,8 +332,7 @@ table_wrapper_get_column_description( AtkTable *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleColumnDescription( %u ) returns %s\n",
-                column, getAsConst( pTable->getAccessibleColumnDescription( column ) ) );
+            SAL_INFO( "vcl.a11y", "getAccessibleColumnDescription( " << column << " ) returns " << getAsConst(pTable->getAccessibleColumnDescription(column)) << "\n");
 #endif
 
         if( pTable )
@@ -371,10 +359,9 @@ table_wrapper_get_row_header( AtkTable *table,
 
 #ifdef ENABLE_TRACING
             if( xRowHeaders.is() )
-                fprintf(stderr, "getAccessibleRowHeader( %u )->getAccessibleCellAt( 0, %u ) returns",
-                    row, row );
+                SAL_INFO( "vcl.a11y", "getAccessibleRowHeader( " << row << ")->getAccessibleCellAt( 0, " << row << " ) returns\n");
             else
-                fprintf(stderr, "getAccessibleRowHeader( %u ) returns %p\n", row, xRowHeaders.get() );
+                SAL_INFO( "vcl.a11y", "getAccessibleRowHeader( " << row << ") returns " << xRowHeaders.get() << "\n");
 #endif
 
             if( xRowHeaders.is() )
@@ -403,10 +390,9 @@ table_wrapper_get_column_header( AtkTable *table,
 
 #ifdef ENABLE_TRACING
             if( xColumnHeaders.is() )
-                fprintf(stderr, "getAccessibleColumnHeader( %u )->getAccessibleCellAt( 0, %u ) returns",
-                    column, column );
+                SAL_INFO( "vcl.a11y", "getAccessibleColumnHeader( " << column << " )->getAccessibleCellAt( 0, " << column << " ) returns\n");
             else
-                fprintf(stderr, "getAccessibleColumnHeader( %u ) returns %p\n", column, xColumnHeaders.get() );
+                SAL_INFO( "vcl.a11y", "getAccessibleColumnHeader( " << column << " ) returns " << xColumnHeaders.get() << "\n");
 #endif
 
             if( xColumnHeaders.is() )
@@ -430,7 +416,7 @@ table_wrapper_get_summary( AtkTable *table )
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleSummary() returns" );
+            SAL_INFO( "vcl.a11y", "getAccessibleSummary() returns\n");
 #endif
 
         if( pTable )
@@ -473,7 +459,7 @@ table_wrapper_get_selected_columns( AtkTable      *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getSelectedAccessibleColumns() \n" );
+            SAL_INFO( "vcl.a11y", "getSelectedAccessibleColumns()\n");
 #endif
 
         if( pTable )
@@ -498,7 +484,7 @@ table_wrapper_get_selected_rows( AtkTable      *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getSelectedAccessibleRows() \n" );
+            SAL_INFO( "vcl.a11y", "getSelectedAccessibleRows()\n");
 #endif
 
         if( pTable )
@@ -522,8 +508,7 @@ table_wrapper_is_column_selected( AtkTable      *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "isAccessibleColumnSelected( %u ) returns %s\n",
-                column, pTable->isAccessibleColumnSelected( column ) ? "true" : "false" );
+            SAL_INFO( "vcl.a11y", "isAccessibleColumnSelected( " << column << " ) returns " << pTable->isAccessibleColumnSelected( column ) ? "true" : "false" << "\n");
 #endif
 
         if( pTable )
@@ -547,8 +532,7 @@ table_wrapper_is_row_selected( AtkTable      *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "isAccessibleRowSelected( %u ) returns %s\n",
-                row, pTable->isAccessibleRowSelected( row ) ? "true" : "false" );
+            SAL_INFO( "vcl.a11y", "isAccessibleRowSelected( " << row << " ) returns " << pTable->isAccessibleRowSelected( row ) ? "true" : "false" << "\n");
 #endif
 
         if( pTable )
@@ -573,8 +557,8 @@ table_wrapper_is_selected( AtkTable      *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "isAccessibleSelected( %u, %u ) returns %s\n",
-                row, column, pTable->isAccessibleSelected( row , column ) ? "true" : "false" );
+            SAL_INFO( "vcl.a11y", "isAccessibleSelected( " << row << ", " << column
+                << " ) returns " << pTable->isAccessibleSelected( row , column ) ? "true" : "false" << "\n");
 #endif
 
         if( pTable )

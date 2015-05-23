@@ -81,7 +81,7 @@ X11Clipboard::~X11Clipboard()
     MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "shutting down instance of X11Clipboard (this=%p, Selecttion=\"%s\")\n", this, OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    fprintf( stderr, "shutting down instance of X11Clipboard (this=%p, Selection=\"%s\")\n", this, OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     if( m_aSelection != None )
         m_rSelectionManager.deregisterHandler( m_aSelection );

@@ -45,10 +45,6 @@
 
 #include <svdata.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nState ) :
     X11SalFrame( pParent, nState )
 {
