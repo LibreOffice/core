@@ -25,6 +25,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
+#include <vcl/slider.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/svxdllapi.h>
 
@@ -46,7 +47,9 @@ private:
     VclPtr<RadioButton>     m_pLosslessRB;
     VclPtr<RadioButton>     m_pJpegCompRB;
     VclPtr<NumericField>    m_pCompressionMF;
+    VclPtr<Slider>          m_pCompressionSlider;
     VclPtr<NumericField>    m_pQualityMF;
+    VclPtr<Slider>          m_pQualitySlider;
     VclPtr<PushButton>      m_pBtnCalculate;
     VclPtr<ListBox>         m_pInterpolationCombo;
 

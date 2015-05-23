@@ -179,7 +179,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Width:</property>
                             <property name="use_underline">True</property>
@@ -208,7 +207,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Height:</property>
                             <property name="use_underline">True</property>
@@ -241,7 +239,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Resolution:</property>
                             <property name="use_underline">True</property>
@@ -296,11 +293,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Quality:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spin-quality</property>
                             <property name="width_chars">15</property>
                           </object>
                           <packing>
@@ -313,11 +308,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Compression:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spin-compression</property>
                             <property name="width_chars">15</property>
                           </object>
                           <packing>
@@ -326,37 +319,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spin-quality">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
-                            <property name="adjustment">quality-adjustment</property>
-                            <property name="numeric">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="spin-compression">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
-                            <property name="adjustment">compression-adjustment</property>
-                            <property name="numeric">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkLabel" id="label12">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Interpolation:</property>
                             <property name="use_underline">True</property>
@@ -416,10 +382,65 @@
                           </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkSpinButton" id="spin-compression">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="adjustment">compression-adjustment</property>
+                            <property name="numeric">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkSpinButton" id="spin-quality">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="adjustment">quality-adjustment</property>
+                            <property name="numeric">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScale" id="scale-quality">
+                            <property name="width_request">100</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="adjustment">quality-adjustment</property>
+                            <property name="fill_level">99</property>
+                            <property name="round_digits">0</property>
+                            <property name="digits">0</property>
+                            <property name="draw_value">False</property>
+                            <property name="value_pos">right</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScale" id="scale-compression">
+                            <property name="width_request">200</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="adjustment">compression-adjustment</property>
+                            <property name="fill_level">9</property>
+                            <property name="round_digits">0</property>
+                            <property name="digits">0</property>
+                            <property name="draw_value">False</property>
+                            <property name="value_pos">right</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">3</property>
+                          </packing>
                         </child>
                         <child>
                           <placeholder/>
@@ -440,7 +461,7 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
@@ -628,7 +649,7 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>

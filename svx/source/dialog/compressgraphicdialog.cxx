@@ -97,8 +97,10 @@ void CompressGraphicsDialog::Initialize()
     get(m_pFixedText6,          "label-new-capacity");
     get(m_pJpegCompRB,          "radio-jpeg");
     get(m_pCompressionMF,       "spin-compression");
+    get(m_pCompressionSlider,   "scale-compression");
     get(m_pLosslessRB,          "radio-lossless");
     get(m_pQualityMF,           "spin-quality");
+    get(m_pQualitySlider,       "scale-quality");
     get(m_pReduceResolutionCB,  "checkbox-reduce-resolution");
     get(m_pMFNewWidth,          "spin-new-width");
     get(m_pMFNewHeight,         "spin-new-height");
@@ -118,6 +120,9 @@ void CompressGraphicsDialog::Initialize()
     m_pJpegCompRB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleCompressionRB ) );
 
     m_pReduceResolutionCB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleReduceResolutionRB ) );
+
+    m_pQualitySlider->SetLinkedField(m_pQualityMF);
+    m_pCompressionSlider->SetLinkedField(m_pCompressionMF);
 
     m_pJpegCompRB->Check();
     m_pReduceResolutionCB->Check();
@@ -318,8 +323,9 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleCompressionRB )
 {
     bool choice = m_pLosslessRB->IsChecked();
     m_pCompressionMF->Enable(choice);
+    m_pCompressionSlider->Enable(choice);
     m_pQualityMF->Enable(!choice);
-
+    m_pQualitySlider->Enable(!choice);
     return 0L;
 }
 
