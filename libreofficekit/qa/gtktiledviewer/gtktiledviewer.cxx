@@ -458,9 +458,9 @@ int main( int argc, char* argv[] )
     populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
     // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
     g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
-#endif
 
     g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
+#endif
 
     gtk_main();
 
