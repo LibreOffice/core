@@ -252,7 +252,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Indent</property>
-                <property name="text" translatable="yes">0.00</property>
+                <property name="text" translatable="no">0.00</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
               </object>
@@ -375,7 +375,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Distance X</property>
-                <property name="text" translatable="yes">0.00</property>
+                <property name="text" translatable="no">0.00</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
               </object>
@@ -413,7 +413,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Distance Y</property>
-                <property name="text" translatable="yes">0</property>
+                <property name="text" translatable="no">0</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
               </object>

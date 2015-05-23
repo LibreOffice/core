@@ -357,7 +357,7 @@
                       <object class="GtkSpinButton" id="scaleddepth:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0</property>
+                        <property name="text" translatable="no">0</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -369,7 +369,7 @@
                       <object class="GtkSpinButton" id="angle:0.0°">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0</property>
+                        <property name="text" translatable="no">0</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">1</property>
                       </object>
@@ -382,7 +382,7 @@
                       <object class="GtkSpinButton" id="depth:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0</property>
+                        <property name="text" translatable="no">0</property>
                         <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
                       </object>
@@ -454,7 +454,7 @@
                           <object class="GtkSpinButton" id="hori">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="text" translatable="yes">0</property>
+                            <property name="text" translatable="no">0</property>
                             <property name="adjustment">adjustment5</property>
                           </object>
                           <packing>
@@ -493,7 +493,7 @@
                           <object class="GtkSpinButton" id="veri">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="text" translatable="yes">0</property>
+                            <property name="text" translatable="no">0</property>
                             <property name="adjustment">adjustment5</property>
                           </object>
                           <packing>
@@ -908,7 +908,7 @@
                       <object class="GtkSpinButton" id="slant:0°">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.0</property>
+                        <property name="text" translatable="no">0.0</property>
                         <property name="adjustment">adjustment6</property>
                       </object>
                       <packing>
@@ -972,7 +972,7 @@
                       <object class="GtkSpinButton" id="focal:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">2</property>
+                        <property name="text" translatable="no">2</property>
                         <property name="adjustment">adjustment7</property>
                         <property name="digits">2</property>
                       </object>
@@ -985,7 +985,7 @@
                       <object class="GtkSpinButton" id="distance:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">2</property>
+                        <property name="text" translatable="no">2</property>
                         <property name="adjustment">adjustment7</property>
                         <property name="digits">2</property>
                       </object>

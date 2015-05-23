@@ -181,7 +181,7 @@
                       <object class="GtkSpinButton" id="tol2:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">10</property>
+                        <property name="text" translatable="no">10</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">10</property>
                       </object>
@@ -196,7 +196,7 @@
                       <object class="GtkSpinButton" id="tol3:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">10</property>
+                        <property name="text" translatable="no">10</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">10</property>
                       </object>
@@ -211,7 +211,7 @@
                       <object class="GtkSpinButton" id="tol4:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">10</property>
+                        <property name="text" translatable="no">10</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">10</property>
                       </object>
