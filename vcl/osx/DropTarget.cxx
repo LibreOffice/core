@@ -27,7 +27,6 @@
 #include "DragActionConversion.hxx"
 #include "DragSource.hxx"
 #include <rtl/ustring.h>
-#include <stdio.h>
 #include <premac.h>
 #include <Carbon/Carbon.h>
 #include <postmac.h>

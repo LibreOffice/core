@@ -29,8 +29,6 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basebmp/scanlineformats.hxx>
 
-#include "stdio.h"
-
 using namespace basegfx;
 using namespace basebmp;
 

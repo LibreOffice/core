@@ -56,8 +56,6 @@
 
 #include "vcl/opengl/OpenGLContext.hxx"
 
-#include <stdio.h>
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
@@ -171,7 +169,7 @@ ResMgr* ImplGetResMgr()
             const char* pMsg =
                 "Missing vcl resource. This indicates that files vital to localization are missing. "
                 "You might have a corrupt installation.";
-            fprintf( stderr, "%s\n", pMsg );
+            SAL_WARN("vcl", "" << pMsg << "\n");
             ScopedVclPtrInstance< MessageDialog > aBox( nullptr, OUString(pMsg, strlen(pMsg), RTL_TEXTENCODING_ASCII_US) );
             aBox->Execute();
         }

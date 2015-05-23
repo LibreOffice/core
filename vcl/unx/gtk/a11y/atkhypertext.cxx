@@ -21,8 +21,6 @@
 
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 
-#include <stdio.h>
-
 using namespace ::com::sun::star;
 
 // ---------------------- AtkHyperlink ----------------------

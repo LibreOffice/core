@@ -24,10 +24,6 @@
 
 #include <vclpluginapi.h>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 #include <rtl/string.hxx>
 
 /// entry point for the KDE4 VCL plugin
