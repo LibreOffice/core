@@ -80,7 +80,7 @@ typedef WeakImplHelper1< script::XStarBasicLibraryInfo > LibraryInfoHelper;
 typedef WeakImplHelper1< script::XStarBasicAccess > StarBasicAccessHelper;
 
 // Version 1
-//    sal_uIntPtr   nEndPos
+//    sal_uInt32    nEndPos
 //    sal_uInt16    nId
 //    sal_uInt16    nVer
 //    bool      bDoLoad
