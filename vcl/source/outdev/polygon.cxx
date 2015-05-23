@@ -25,14 +25,15 @@
 #include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include "salgdi.hxx"
-
 
 #define OUTDEV_POLYPOLY_STACKBUF        32
 
 void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
@@ -130,6 +131,8 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
 void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     // AW: Do NOT paint empty polygons
     if(rB2DPolygon.count())
     {
@@ -140,6 +143,7 @@ void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
 
 void OutputDevice::DrawPolygon( const Polygon& rPoly )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
@@ -235,6 +239,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
 void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( tools::PolyPolygon( rB2DPolyPoly ) ) );

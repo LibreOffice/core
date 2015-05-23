@@ -19,8 +19,9 @@
 #include <sal/types.h>
 
 #include <vcl/outdev.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include <tools/helpers.hxx>
 
@@ -940,6 +941,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
                                  FontUnderline eOverline,
                                  bool bUnderlineAbove )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLineAction( rPos, nWidth, eStrikeout, eUnderline, eOverline ) );
@@ -983,6 +985,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
 
 void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;

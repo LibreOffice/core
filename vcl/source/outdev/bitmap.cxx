@@ -24,6 +24,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
+#include <vcl/window.hxx>
 
 #include <bmpfast.hxx>
 #include <salgdi.hxx>
@@ -35,12 +36,16 @@
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     const Size aSizePix( rBitmap.GetSizePixel() );
     DrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, MetaActionType::BMP );
 }
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     DrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, MetaActionType::BMPSCALE );
 }
 
@@ -49,6 +54,8 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                    const Bitmap& rBitmap, const MetaActionType nAction )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if( ImplIsRecordLayout() )
         return;
 
@@ -229,6 +236,8 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 void OutputDevice::DrawBitmapEx( const Point& rDestPt,
                                  const BitmapEx& rBitmapEx )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if( ImplIsRecordLayout() )
         return;
 
@@ -246,6 +255,8 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const BitmapEx& rBitmapEx )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if( ImplIsRecordLayout() )
         return;
 
@@ -264,6 +275,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                  const BitmapEx& rBitmapEx, const MetaActionType nAction )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if( ImplIsRecordLayout() )
         return;
@@ -480,6 +492,8 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                                      const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                      BitmapEx& rBitmapEx )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if (rBitmapEx.IsAlpha())
     {
         DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
@@ -608,6 +622,8 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     Point     aOutPt(LogicToPixel(rDestPt));
     Size      aOutSz(LogicToPixel(rDestSize));
     Rectangle aDstRect(Point(), GetOutputSizePixel());
@@ -902,6 +918,8 @@ private:
 
 void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const AlphaMask& rAlpha, Rectangle aDstRect, Rectangle aBmpRect, Size& aOutSize, Point& aOutPoint)
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     VirtualDevice* pOldVDev = mpAlphaVDev;
 
     const bool  bHMirr = aOutSize.Width() < 0;
@@ -1018,6 +1036,8 @@ bool OutputDevice::DrawTransformBitmapExDirect(
         const basegfx::B2DHomMatrix& aFullTransform,
         const BitmapEx& rBitmapEx)
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     bool bDone = false;
 
     // try to paint directly
@@ -1137,6 +1157,8 @@ void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix& rTransformation,
     const BitmapEx& rBitmapEx)
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if( ImplIsRecordLayout() )
         return;
 
@@ -1308,12 +1330,16 @@ namespace
 
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     DrawImage( rPos, Size(), rImage, nStyle );
 }
 
 void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                               const Image& rImage, DrawImageFlags nStyle )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     bool bIsSizeValid = rSize.getWidth() != 0 && rSize.getHeight() != 0;
 
     if( rImage.mpImplData && !ImplIsRecordLayout() )

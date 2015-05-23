@@ -23,13 +23,15 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
 #include <vcl/outdev.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include "salgdi.hxx"
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyLineAction( rPoly ) );
@@ -99,6 +101,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if ( rLineInfo.IsDefault() )
     {
@@ -126,6 +129,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                                  basegfx::B2DLineJoin eLineJoin,
                                  css::drawing::LineCap eLineCap)
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if( mpMetaFile )
     {
@@ -271,6 +275,8 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
                                        css::drawing::LineCap eLineCap,
                                        bool bBypassAACheck )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolygon.count())
         return true;

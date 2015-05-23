@@ -272,6 +272,8 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
                             const ImplControlValue& aValue,
                             const OUString& aCaption )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if( !EnableNativeWidget( *this ) )
         return false;
 

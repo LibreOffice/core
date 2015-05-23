@@ -19,8 +19,9 @@
 
 #include <numeric>
 
-#include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include <salgdi.hxx>
 
@@ -34,6 +35,7 @@
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if ( rLineInfo.IsDefault() )
     {
@@ -87,6 +89,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt ) );
