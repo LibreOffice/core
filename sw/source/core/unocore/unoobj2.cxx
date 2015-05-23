@@ -1509,22 +1509,22 @@ class SwXTextRanges::Impl
 {
 public:
     ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
+    std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
 
     Impl(SwPaM *const pPaM)
-        : SwClient( (pPaM)
-            ? pPaM->GetDoc()->CreateUnoCrsr(*pPaM->GetPoint())
-            : 0 )
     {
         if (pPaM)
         {
+            m_pUnoCursor = pPaM->GetDoc()->CreateUnoCrsr2(*pPaM->GetPoint());
+            m_pUnoCursor->Add(this);
             ::sw::DeepCopyPaM(*pPaM, *GetCursor());
         }
         MakeRanges();
     }
 
     virtual ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
-        delete GetRegisteredIn();
+        if(m_pUnoCursor)
+            m_pUnoCursor->Remove(this);
     }
 
     SwUnoCrsr * GetCursor() {
@@ -1537,11 +1537,23 @@ public:
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
 
 void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
+}
+
+void SwXTextRanges::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    SwClient::SwClientNotify(rModify, rHint);
+    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
+    {
+        assert(m_pUnoCursor->m_bSaneOwnership);
+        m_pUnoCursor->Remove(this);
+        m_pUnoCursor.reset();
+    }
 }
 
 void SwXTextRanges::Impl::MakeRanges()
