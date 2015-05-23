@@ -497,7 +497,7 @@ void ScParameterClassification::GenerateDocumentation()
         OpCode eOp = OpCode(i);
         if ( !xMap->getSymbol(eOp).isEmpty() )
         {
-            SAL_TRACE("sc.core", "GenerateDocumentation, env var name: " << aEnvVarName);
+            SAL_INFO("sc.core", "GenerateDocumentation, env var name: " << aEnvVarName);
             OStringBuffer aStr(OUStringToOString(xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8));
             aStr.append('(');
             formula::FormulaByteToken aToken( eOp);
@@ -605,7 +605,7 @@ void ScParameterClassification::GenerateDocumentation()
                 break;
                 default:;
             }
-            SAL_TRACE( "sc.core", "" << aStr.getStr() << "\n");
+            SAL_INFO( "sc.core", "" << aStr.getStr() << "\n");
         }
     }
     fflush( stdout);
