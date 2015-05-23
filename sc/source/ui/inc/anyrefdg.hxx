@@ -127,6 +127,7 @@ private:
     DECL_LINK_TYPED( UpdateFocusHdl, Idle*, void );
 
 protected:
+    void                disposeRefHandler();
     bool                DoClose( sal_uInt16 nId );
 
     static void         SetDispatcherLock( bool bLock );
@@ -280,9 +281,16 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
         SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
     }
 
-    ~ScRefHdlrImpl()
+    virtual void dispose() SAL_OVERRIDE
     {
         SC_MOD()->UnregisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
+        ScRefHdlrImplBase<TBase, bBindRef >::disposeRefHandler();
+        TBase::dispose();
+    }
+
+    ~ScRefHdlrImpl()
+    {
+        dispose();
     }
 };
 
