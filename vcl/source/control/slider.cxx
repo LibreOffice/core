@@ -986,7 +986,7 @@ void Slider::SetRange( const Range& rRange )
         if ( mnThumbPos < mnMinRange )
             mnThumbPos = mnMinRange;
         ImplUpdateLinkedField();
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
@@ -1001,7 +1001,7 @@ void Slider::SetThumbPos( long nNewThumbPos )
     {
         mnThumbPos = nNewThumbPos;
         ImplUpdateLinkedField();
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 

@@ -1408,7 +1408,7 @@ void ListBox::SetReadOnly( bool bReadOnly )
     if ( mpImplLB->IsReadOnly() != bReadOnly )
     {
         mpImplLB->SetReadOnly( bReadOnly );
-        StateChanged( StateChangedType::ReadOnly );
+        CompatStateChanged( StateChangedType::ReadOnly );
     }
 }
 

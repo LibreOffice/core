@@ -2454,7 +2454,7 @@ void Edit::SetReadOnly( bool bReadOnly )
         if ( mpSubEdit )
             mpSubEdit->SetReadOnly( bReadOnly );
 
-        StateChanged( StateChangedType::ReadOnly );
+        CompatStateChanged( StateChangedType::ReadOnly );
     }
 }
 

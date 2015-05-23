@@ -1548,7 +1548,7 @@ void PushButton::SetSymbol( SymbolType eSymbol )
     if ( meSymbol != eSymbol )
     {
         meSymbol = eSymbol;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
@@ -1562,7 +1562,7 @@ void PushButton::SetDropDown( PushButtonDropdownStyle nStyle )
     if ( mnDDStyle != nStyle )
     {
         mnDDStyle = nStyle;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
@@ -1584,7 +1584,7 @@ void PushButton::SetState( TriState eState )
             ImplGetButtonState() |= DrawButtonFlags::DontKnow;
         }
 
-        StateChanged( StateChangedType::State );
+        CompatStateChanged( StateChangedType::State );
         Toggle();
     }
 }
@@ -1594,7 +1594,7 @@ void PushButton::SetPressed( bool bPressed )
     if ( mbPressed != bPressed )
     {
         mbPressed = bPressed;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
@@ -2641,7 +2641,7 @@ bool RadioButton::SetModeRadioImage( const Image& rImage )
     if ( rImage != maImage )
     {
         maImage = rImage;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
         queue_resize();
     }
     return true;
@@ -2659,7 +2659,7 @@ void RadioButton::SetState( bool bCheck )
     if ( mbChecked != bCheck )
     {
         mbChecked = bCheck;
-        StateChanged( StateChangedType::State );
+        CompatStateChanged( StateChangedType::State );
         Toggle();
     }
 }
@@ -2716,7 +2716,7 @@ void RadioButton::Check( bool bCheck )
         mbChecked = bCheck;
         ImplDelData aDelData;
         ImplAddDel( &aDelData );
-        StateChanged( StateChangedType::State );
+        CompatStateChanged( StateChangedType::State );
         if ( aDelData.IsDead() )
             return;
         if ( bCheck && mbRadioCheck )

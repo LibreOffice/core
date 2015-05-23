@@ -805,7 +805,7 @@ bool Dialog::ImplStartExecuteModal()
     if ( GetParent() )
     {
         NotifyEvent aNEvt( MouseNotifyEvent::EXECUTEDIALOG, this );
-        GetParent()->Notify( aNEvt );
+        GetParent()->CompatNotify( aNEvt );
     }
     mbInExecute = true;
     SetModalInputMode( true );
@@ -933,7 +933,7 @@ void Dialog::EndDialog( long nResult )
         if ( GetParent() )
         {
             NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
-            GetParent()->Notify( aNEvt );
+            GetParent()->CompatNotify( aNEvt );
         }
 
         mpDialogImpl->mnResult = nResult;

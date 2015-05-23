@@ -76,7 +76,7 @@ void SpinButton::Up()
     if (ImplIsUpperEnabled())
     {
         mnValue += mnValueStep;
-        StateChanged(StateChangedType::Data);
+        CompatStateChanged(StateChangedType::Data);
 
         ImplMoveFocus(true);
     }
@@ -89,7 +89,7 @@ void SpinButton::Down()
     if (ImplIsLowerEnabled())
     {
         mnValue -= mnValueStep;
-        StateChanged(StateChangedType::Data);
+        CompatStateChanged(StateChangedType::Data);
 
         ImplMoveFocus(false);
     }
@@ -372,7 +372,7 @@ void SpinButton::SetRange( const Range& rRange )
         if ( mnValue < mnMinRange )
             mnValue = mnMinRange;
 
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
@@ -387,7 +387,7 @@ void SpinButton::SetValue( long nValue )
     if ( mnValue != nValue )
     {
         mnValue = nValue;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
