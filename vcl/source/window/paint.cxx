@@ -227,7 +227,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             m_pBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel() - m_pBuffer->mnOutOffX;
             m_pBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel() - m_pBuffer->mnOutOffY;
 
-            m_pWindow->PushPaintHelper(this, *m_pWindow);
+            m_pWindow->PushPaintHelper(this, *m_pBuffer.get());
             m_pWindow->Paint(*m_pBuffer.get(), m_aPaintRect);
 
             // restore the mnOutOffX/Y value
