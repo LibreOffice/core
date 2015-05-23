@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 SectionColumnHandler::SectionColumnHandler()
     : LoggedProperties("SectionColumnHandler")
     , bEqualWidth(false)
-    , nSpace(0)
+    , nSpace(1270) // 720 twips
     , nNum(0)
     , bSep(false)
 {
