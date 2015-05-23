@@ -843,7 +843,7 @@ void FixedBitmap::DataChanged( const DataChangedEvent& rDCEvt )
 void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 {
     maBitmap = rBitmap;
-    StateChanged( StateChangedType::Data );
+    CompatStateChanged( StateChangedType::Data );
     queue_resize();
 }
 
@@ -1020,7 +1020,7 @@ void FixedImage::SetImage( const Image& rImage )
     if ( rImage != maImage )
     {
         maImage = rImage;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
         queue_resize();
     }
 }

@@ -948,7 +948,7 @@ void Slider::SetRange( const Range& rRange )
         if ( mnThumbPos < mnMinRange )
             mnThumbPos = mnMinRange;
 
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
@@ -962,7 +962,7 @@ void Slider::SetThumbPos( long nNewThumbPos )
     if ( mnThumbPos != nNewThumbPos )
     {
         mnThumbPos = nNewThumbPos;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 

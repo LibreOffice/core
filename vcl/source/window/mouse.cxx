@@ -356,7 +356,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                 pOldFocusWindow->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Focus );
             NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pOldFocusWindow );
             if ( !ImplCallPreNotify( aNEvt ) )
-                pOldFocusWindow->LoseFocus();
+                pOldFocusWindow->CompatLoseFocus();
             pOldFocusWindow->ImplCallDeactivateListeners( this );
         }
 
@@ -384,7 +384,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                     mpWindowImpl->mnGetFocusFlags |= GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL;
                 NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
                 if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDead() )
-                    GetFocus();
+                    CompatGetFocus();
                 if( !aDogTag.IsDead() )
                     ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDead()) ? pOldFocusWindow : NULL );
                 if( !aDogTag.IsDead() )

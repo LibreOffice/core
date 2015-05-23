@@ -398,7 +398,7 @@ void Window::dispose()
     // announce the window is to be destroyed
     {
         NotifyEvent aNEvt( MouseNotifyEvent::DESTROY, this );
-        Notify( aNEvt );
+        CompatNotify( aNEvt );
     }
 
     // EndExtTextInputMode
@@ -1910,14 +1910,14 @@ void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const
 void Window::KeyInput( const KeyEvent& rKEvt )
 {
     NotifyEvent aNEvt( MouseNotifyEvent::KEYINPUT, this, &rKEvt );
-    if ( !Notify( aNEvt ) )
+    if ( !CompatNotify( aNEvt ) )
         mpWindowImpl->mbKeyInput = true;
 }
 
 void Window::KeyUp( const KeyEvent& rKEvt )
 {
     NotifyEvent aNEvt( MouseNotifyEvent::KEYUP, this, &rKEvt );
-    if ( !Notify( aNEvt ) )
+    if ( !CompatNotify( aNEvt ) )
         mpWindowImpl->mbKeyUp = true;
 }
 
@@ -1944,13 +1944,13 @@ void Window::GetFocus()
     }
 
     NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
-    Notify( aNEvt );
+    CompatNotify( aNEvt );
 }
 
 void Window::LoseFocus()
 {
     NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, this );
-    Notify( aNEvt );
+    CompatNotify( aNEvt );
 }
 
 void Window::RequestHelp( const HelpEvent& rHEvt )
@@ -2008,7 +2008,7 @@ void Window::Command( const CommandEvent& rCEvt )
     CallEventListeners( VCLEVENT_WINDOW_COMMAND, (void*)&rCEvt );
 
     NotifyEvent aNEvt( MouseNotifyEvent::COMMAND, this, &rCEvt );
-    if ( !Notify( aNEvt ) )
+    if ( !CompatNotify( aNEvt ) )
         mpWindowImpl->mbCommand = true;
 }
 
@@ -2064,12 +2064,11 @@ bool Window::IsLocked( bool bChildren ) const
 
 void Window::SetStyle( WinBits nStyle )
 {
-
-    if ( mpWindowImpl->mnStyle != nStyle )
+    if ( mpWindowImpl && mpWindowImpl->mnStyle != nStyle )
     {
         mpWindowImpl->mnPrevStyle = mpWindowImpl->mnStyle;
         mpWindowImpl->mnStyle = nStyle;
-        StateChanged( StateChangedType::Style );
+        CompatStateChanged( StateChangedType::Style );
     }
 }
 
@@ -2093,7 +2092,7 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
         }
         mpWindowImpl->mnPrevExtendedStyle = mpWindowImpl->mnExtendedStyle;
         mpWindowImpl->mnExtendedStyle = nExtendedStyle;
-        StateChanged( StateChangedType::ExtendedStyle );
+        CompatStateChanged( StateChangedType::ExtendedStyle );
     }
 }
 
@@ -2303,7 +2302,7 @@ void Window::Show(bool bVisible, sal_uInt16 nFlags)
             mpWindowImpl->mpFrame->Show( false, false );
         }
 
-        StateChanged( StateChangedType::Visible );
+        CompatStateChanged( StateChangedType::Visible );
 
         if ( mpWindowImpl->mbReallyVisible )
         {
@@ -2391,7 +2390,7 @@ void Window::Show(bool bVisible, sal_uInt16 nFlags)
             ImplCallResize();
         }
 
-        StateChanged( StateChangedType::Visible );
+        CompatStateChanged( StateChangedType::Visible );
 
         vcl::Window* pTestParent;
         if ( ImplIsOverlapWindow() )
@@ -2578,7 +2577,7 @@ void Window::Enable( bool bEnable, bool bChild )
         mpWindowImpl->mbDisabled = !bEnable;
         if ( mpWindowImpl->mpSysObj )
             mpWindowImpl->mpSysObj->Enable( bEnable && !mpWindowImpl->mbInputDisabled );
-        StateChanged( StateChangedType::Enable );
+        CompatStateChanged( StateChangedType::Enable );
 
         CallEventListeners( bEnable ? VCLEVENT_WINDOW_ENABLED : VCLEVENT_WINDOW_DISABLED );
     }
@@ -2673,7 +2672,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
     if ( bNotify )
     {
         NotifyEvent aNEvt( bEnable ? MouseNotifyEvent::INPUTENABLE : MouseNotifyEvent::INPUTDISABLE, this );
-        Notify( aNEvt );
+        CompatNotify( aNEvt );
     }
 }
 
@@ -3130,9 +3129,8 @@ void Window::Sync()
 
 void Window::SetUpdateMode( bool bUpdate )
 {
-
     mpWindowImpl->mbNoUpdate = !bUpdate;
-    StateChanged( StateChangedType::UpdateMode );
+    CompatStateChanged( StateChangedType::UpdateMode );
 }
 
 void Window::GrabFocus()
@@ -3203,7 +3201,7 @@ void Window::SetText( const OUString& rStr )
             pWindow->CallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
     }
 
-    StateChanged( StateChangedType::Text );
+    CompatStateChanged( StateChangedType::Text );
 }
 
 OUString Window::GetText() const
@@ -3723,7 +3721,7 @@ void Window::EnableNativeWidget( bool bEnable )
         // send datachanged event to allow for internal changes required for NWF
         // like clipmode, transparency, etc.
         DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, mxSettings.get(), AllSettingsFlags::STYLE );
-        DataChanged( aDCEvt );
+        CompatDataChanged( aDCEvt );
 
         // sometimes the borderwindow is queried, so keep it in sync
         if( mpWindowImpl->mpBorderWindow )
@@ -3944,6 +3942,53 @@ bool Window::SupportsDoubleBuffering() const
 void Window::SetDoubleBuffering(bool bDoubleBuffering)
 {
     mpWindowImpl->mbDoubleBuffering = bDoubleBuffering;
+}
+
+/*
+ * The rational here is that we moved destructors to
+ * dispose and this altered a lot of code paths, that
+ * are better left unchanged for now.
+ */
+#define COMPAT_BODY(method,args) \
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose) \
+        Window::method args; \
+    else \
+        method args;
+
+void Window::CompatGetFocus()
+{
+    COMPAT_BODY(GetFocus,())
+}
+
+void Window::CompatLoseFocus()
+{
+    COMPAT_BODY(LoseFocus,())
+}
+
+void Window::CompatStateChanged( StateChangedType nStateChange )
+{
+    COMPAT_BODY(StateChanged,(nStateChange))
+}
+
+void Window::CompatDataChanged( const DataChangedEvent& rDCEvt )
+{
+    COMPAT_BODY(DataChanged,(rDCEvt))
+}
+
+bool Window::CompatPreNotify( NotifyEvent& rNEvt )
+{
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+        return Window::PreNotify( rNEvt );
+    else
+        return PreNotify( rNEvt );
+}
+
+bool Window::CompatNotify( NotifyEvent& rNEvt )
+{
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+        return Window::Notify( rNEvt );
+    else
+        return Notify( rNEvt );
 }
 
 } /* namespace vcl */

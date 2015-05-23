@@ -1387,7 +1387,7 @@ void ScrollBar::SetRange( const Range& rRange )
         if ( mnThumbPos < mnMinRange )
             mnThumbPos = mnMinRange;
 
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
@@ -1401,7 +1401,7 @@ void ScrollBar::SetThumbPos( long nNewThumbPos )
     if ( mnThumbPos != nNewThumbPos )
     {
         mnThumbPos = nNewThumbPos;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
@@ -1416,7 +1416,7 @@ void ScrollBar::SetVisibleSize( long nNewSize )
             mnThumbPos = mnMaxRange-mnVisibleSize;
         if ( mnThumbPos < mnMinRange )
             mnThumbPos = mnMinRange;
-        StateChanged( StateChangedType::Data );
+        CompatStateChanged( StateChangedType::Data );
     }
 }
 
