@@ -34,6 +34,8 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
 } } } }
 
 class SalXLib;
+class X11SalGraphics;
+
 class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 {
 private:
@@ -52,6 +54,10 @@ public:
 
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
     virtual void                DestroyObject( SalObject* pObject ) SAL_OVERRIDE;
+
+    /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.
+    virtual SalVirtualDevice* CreateX11VirtualDevice(SalGraphics* pGraphics, long &nDX, long &nDY,
+            sal_uInt16 nBitCount, const SystemGraphicsData* pData, X11SalGraphics* pNewGraphics);
 
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
