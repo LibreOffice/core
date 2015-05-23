@@ -238,13 +238,6 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm 
         break;
     }
 
-    // add 0.75 mm (27,000 EMUs) in X direction to correct display error
-    if( aAnchorRect.X >= 0 )
-        aAnchorRect.X += 27000;
-    // remove 0.25 mm (9,000 EMUs) in Y direction to correct display error
-    if( aAnchorRect.Y >= 9000 )
-        aAnchorRect.Y -= 9000;
-
     return aAnchorRect;
 }
 
