@@ -25,21 +25,14 @@
 
 #include <vcl/svapp.hxx>
 
-class BasicCharClass
+namespace BasicCharClass
 {
-    bool IsLetterTab[256];
-
-public:
-    BasicCharClass();
-
     bool isLetter( sal_Unicode c );
-    static bool isLetterUnicode( sal_Unicode c );
+    bool isLetterUnicode( sal_Unicode c );
     bool isAlpha( sal_Unicode c, bool bCompatible );
     bool isAlphaNumeric( sal_Unicode c, bool bCompatible );
-    static bool isWhitespace( sal_Unicode c );
+    bool isWhitespace( sal_Unicode c );
 };
-
-class theBasicCharClass: public rtl::Static<BasicCharClass, theBasicCharClass> {};
 
 #endif
 
