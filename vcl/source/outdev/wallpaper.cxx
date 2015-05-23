@@ -19,12 +19,15 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include <wall2.hxx>
 
 void OutputDevice::DrawWallpaper( const Rectangle& rRect,
                                   const Wallpaper& rWallpaper )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaWallpaperAction( rRect, rWallpaper ) );
 
@@ -51,6 +54,8 @@ void OutputDevice::DrawWallpaper( long nX, long nY,
                                   long nWidth, long nHeight,
                                   const Wallpaper& rWallpaper )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     if( rWallpaper.IsBitmap() )
         DrawBitmapWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
     else if( rWallpaper.IsGradient() )
@@ -63,6 +68,8 @@ void OutputDevice::DrawColorWallpaper( long nX, long nY,
                                        long nWidth, long nHeight,
                                        const Wallpaper& rWallpaper )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     // draw wallpaper without border
     Color aOldLineColor = GetLineColor();
     Color aOldFillColor = GetFillColor();
@@ -100,6 +107,8 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
                                             const Wallpaper& rWallpaper )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     BitmapEx aBmpEx;
     const BitmapEx* pCached = rWallpaper.ImplGetImpWallpaper()->ImplGetCachedBitmap();
     Point aPos;
@@ -336,6 +345,8 @@ void OutputDevice::DrawGradientWallpaper( long nX, long nY,
                                           long nWidth, long nHeight,
                                           const Wallpaper& rWallpaper )
 {
+    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+
     Rectangle aBound;
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     const bool bOldMap = mbMap;
