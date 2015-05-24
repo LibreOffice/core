@@ -25,7 +25,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/sdr/properties/properties.hxx>
-
+#include <rtl/instance.hxx>
 
 
 namespace drawinglayer
@@ -35,9 +35,6 @@ namespace drawinglayer
         class ImpSdrTextAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                          mnRefCount;
-
             // all-text attributes. The SdrText itself and a copy
             // of the OPO
             const SdrText*                      mpSdrText;
@@ -90,8 +87,7 @@ namespace drawinglayer
                 bool bInEditMode,
                 bool bFixedCellHeight,
                 bool bWrongSpell)
-            :   mnRefCount(0),
-                mpSdrText(pSdrText),
+            :   mpSdrText(pSdrText),
                 mpOutlinerParaObject(new OutlinerParaObject(rOutlinerParaObject)),
                 maSdrFormTextAttribute(),
                 maTextLeftDistance(aTextLeftDistance),
@@ -128,8 +124,7 @@ namespace drawinglayer
             }
 
             ImpSdrTextAttribute()
-            :   mnRefCount(0),
-                mpSdrText(0),
+            :   mpSdrText(0),
                 mpOutlinerParaObject(0),
                 maSdrFormTextAttribute(),
                 maTextLeftDistance(0),
@@ -149,14 +144,6 @@ namespace drawinglayer
                 mbFixedCellHeight(false),
                 mbWrongSpell(false)
             {
-            }
-
-            ~ImpSdrTextAttribute()
-            {
-                if(mpOutlinerParaObject)
-                {
-                    delete mpOutlinerParaObject;
-                }
             }
 
             // data read access
@@ -241,23 +228,13 @@ namespace drawinglayer
                     && isFixedCellHeight() == rCandidate.isFixedCellHeight()
                     && isWrongSpell() == rCandidate.isWrongSpell());
             }
-
-            static ImpSdrTextAttribute* get_global_default()
-            {
-                static ImpSdrTextAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    // use default constructor
-                    pDefault = new ImpSdrTextAttribute();
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrTextAttribute::ImplType, theGlobalDefault > {};
+        }
 
         SdrTextAttribute::SdrTextAttribute(
             const SdrText& rSdrText,
@@ -278,75 +255,47 @@ namespace drawinglayer
             bool bInEditMode,
             bool bFixedCellHeight,
             bool bWrongSpell)
-        :   mpSdrTextAttribute(new ImpSdrTextAttribute(
-                &rSdrText, rOutlinerParaObject, eFormTextStyle, aTextLeftDistance, aTextUpperDistance,
-                aTextRightDistance, aTextLowerDistance, aSdrTextHorzAdjust, aSdrTextVertAdjust, bContour,
-                bFitToSize, bAutoFit, bHideContour, bBlink, bScroll, bInEditMode, bFixedCellHeight, bWrongSpell))
+        :   mpSdrTextAttribute(
+                ImpSdrTextAttribute(
+                    &rSdrText, rOutlinerParaObject, eFormTextStyle, aTextLeftDistance,
+                    aTextUpperDistance, aTextRightDistance, aTextLowerDistance,
+                    aSdrTextHorzAdjust, aSdrTextVertAdjust, bContour, bFitToSize, bAutoFit,
+                    bHideContour, bBlink, bScroll, bInEditMode, bFixedCellHeight, bWrongSpell))
         {
         }
 
         SdrTextAttribute::SdrTextAttribute()
-        :   mpSdrTextAttribute(ImpSdrTextAttribute::get_global_default())
+            :   mpSdrTextAttribute(theGlobalDefault::get())
         {
-            mpSdrTextAttribute->mnRefCount++;
         }
 
         SdrTextAttribute::SdrTextAttribute(const SdrTextAttribute& rCandidate)
         :   mpSdrTextAttribute(rCandidate.mpSdrTextAttribute)
         {
-            mpSdrTextAttribute->mnRefCount++;
         }
 
         SdrTextAttribute::~SdrTextAttribute()
         {
-            if(mpSdrTextAttribute->mnRefCount)
-            {
-                mpSdrTextAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrTextAttribute;
-            }
         }
 
         bool SdrTextAttribute::isDefault() const
         {
-            return mpSdrTextAttribute == ImpSdrTextAttribute::get_global_default();
+            return mpSdrTextAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrTextAttribute& SdrTextAttribute::operator=(const SdrTextAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrTextAttribute != mpSdrTextAttribute)
-            {
-                if(mpSdrTextAttribute->mnRefCount)
-                {
-                    mpSdrTextAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrTextAttribute;
-                }
-
-                mpSdrTextAttribute = rCandidate.mpSdrTextAttribute;
-                mpSdrTextAttribute->mnRefCount++;
-            }
-
+            mpSdrTextAttribute = rCandidate.mpSdrTextAttribute;
             return *this;
         }
 
         bool SdrTextAttribute::operator==(const SdrTextAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrTextAttribute == mpSdrTextAttribute)
-            {
-                return true;
-            }
-
+            // tdf#87509 default attr is always != non-default attr, even with same values
             if(rCandidate.isDefault() != isDefault())
-            {
                 return false;
-            }
 
-            return (*rCandidate.mpSdrTextAttribute == *mpSdrTextAttribute);
+            return rCandidate.mpSdrTextAttribute == mpSdrTextAttribute;
         }
 
         const SdrText& SdrTextAttribute::getSdrText() const

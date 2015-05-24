@@ -24,7 +24,7 @@
 #include <svx/xenum.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/sdtaitm.hxx>
-
+#include <o3tl/cow_wrapper.hxx>
 
 // predefines
 
@@ -50,8 +50,11 @@ namespace drawinglayer
     {
         class SdrTextAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrTextAttribute > ImplType;
+
         private:
-            ImpSdrTextAttribute*        mpSdrTextAttribute;
+            ImplType mpSdrTextAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
