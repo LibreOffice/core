@@ -21,7 +21,7 @@
 
 String STR_UNITS_ERRORINCELL
 {
-    Text [ en-US ] = "Error in formula in Cell $1" ;
+    Text [ en-US ] = "Units error in formula in Cell $1" ;
 };
 
 PushButton BT_UNITS_EDIT_CELL
