@@ -273,7 +273,6 @@ public:
     void                LoseFocus();
     void UpdateAll( bool bInvalidateCompleteView= true, bool bUpdateVerSBar = true );
     void                SetEntryHeight( short nHeight );
-    void                PaintEntry(SvTreeListEntry* pEntry, vcl::RenderContext& rRenderContext);
     void                InvalidateEntry( SvTreeListEntry* );
     void                RecalcFocusRect();
 
@@ -401,12 +400,6 @@ inline const Image& SvImpLBox::GetDefaultEntryColBmp( )
 inline Point SvImpLBox::GetEntryPosition( SvTreeListEntry* pEntry ) const
 {
     return Point( 0, GetEntryLine( pEntry ) );
-}
-
-inline void SvImpLBox::PaintEntry(SvTreeListEntry* pEntry, vcl::RenderContext& rRenderContext)
-{
-    long nY = GetEntryLine(pEntry);
-    pView->PaintEntry(pEntry, nY, rRenderContext);
 }
 
 inline bool SvImpLBox::IsLineVisible( long nY ) const

@@ -2243,18 +2243,6 @@ void ScTabView::EnableRefInput(bool bFlag)
         pRowBar[SC_SPLIT_TOP]->EnableInput(bFlag,false);
 }
 
-void ScTabView::SetInRefMode( bool bRefMode )
-{
-    if(pGridWin[SC_SPLIT_BOTTOMLEFT])
-        pGridWin[SC_SPLIT_BOTTOMLEFT]->SetInRefMode( bRefMode );
-    if(pGridWin[SC_SPLIT_BOTTOMRIGHT])
-        pGridWin[SC_SPLIT_BOTTOMRIGHT]->SetInRefMode( bRefMode );
-    if(pGridWin[SC_SPLIT_TOPLEFT])
-        pGridWin[SC_SPLIT_TOPLEFT]->SetInRefMode( bRefMode );
-    if(pGridWin[SC_SPLIT_TOPRIGHT])
-        pGridWin[SC_SPLIT_TOPRIGHT]->SetInRefMode( bRefMode );
-}
-
 bool ScTabView::ContinueOnlineSpelling()
 {
     bool bChanged = false;

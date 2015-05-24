@@ -1004,23 +1004,4 @@ void ScRefHandler::RefInputDone( bool bForced )
     m_aHelper.RefInputDone( bForced );
 }
 
-ScRefHdlModalImpl::ScRefHdlModalImpl(vcl::Window* pParent, const OUString& rID,
-    const OUString& rUIXMLDescription)
-    : ModalDialog( pParent, rID, rUIXMLDescription)
-    , ScRefHandler(dynamic_cast<Window&>(*this), NULL, true)
-{
-}
-
-bool ScRefHdlModalImpl::PreNotify( NotifyEvent& rNEvt )
-{
-    ScRefHandler::preNotify( rNEvt, true );
-    return ModalDialog::PreNotify( rNEvt );
-}
-
-void ScRefHdlModalImpl::StateChanged( StateChangedType nStateChange )
-{
-    ModalDialog::StateChanged( nStateChange );
-    ScRefHandler::stateChanged( nStateChange, true );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

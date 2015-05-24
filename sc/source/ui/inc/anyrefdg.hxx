@@ -171,19 +171,6 @@ public:
     inline  bool        CanInputDone( bool bForced );
 };
 
-class ScRefHdlModalImpl : public ModalDialog, public ScRefHandler
-{
-public:
-
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-protected:
-    ScRefHdlModalImpl(vcl::Window* pParent, const OUString& rID,
-        const OUString& rUIXMLDescription);
-
-private:
-};
-
 template<  class TWindow, bool bBindRef = true >
 class ScRefHdlrImplBase: public TWindow, public ScRefHandler
 {

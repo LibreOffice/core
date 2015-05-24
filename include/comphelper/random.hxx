@@ -18,10 +18,6 @@ namespace comphelper
 namespace rng
 {
 
-/// reset initial seed, typically you don't call this as the initial seed is taken from the
-//  time on the first use of the distribution functions
-COMPHELPER_DLLPUBLIC void reseed(int i);
-
 // note that uniform_int_distribution is inclusive of b, i.e. [a,b] while
 // uniform_real_distribution is exclusive of b, i.e. [a,b), std::nextafter may be your friend there
 

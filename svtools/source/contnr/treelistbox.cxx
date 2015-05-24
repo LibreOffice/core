@@ -2864,11 +2864,6 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
     }
 }
 
-long SvTreeListBox::PaintEntry(SvTreeListEntry* pEntry, long nLine, vcl::RenderContext& rRenderContext, SvLBoxTabFlags nTabFlags)
-{
-    return PaintEntry1(pEntry, nLine, rRenderContext, nTabFlags);
-}
-
 long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::RenderContext& rRenderContext,
                                 SvLBoxTabFlags nTabFlags, bool bHasClipRegion)
 {

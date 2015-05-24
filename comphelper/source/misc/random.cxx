@@ -59,12 +59,6 @@ struct RandomNumberGenerator
 
 class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRandomNumberGenerator> {};
 
-// re-initialises the state of the global random number generator
-void reseed(int i)
-{
-    return theRandomNumberGenerator::get().global_rng.seed(i);
-}
-
 // uniform ints [a,b] distribution
 int uniform_int_distribution(int a, int b)
 {

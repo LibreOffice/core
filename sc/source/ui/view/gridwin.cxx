@@ -6543,15 +6543,4 @@ void ScGridWindow::flushOverlayManager()
         xOverlayManager->flush();
 }
 
-void ScGridWindow::SetInRefMode( bool bInRefMode )
-{
-    WinBits nBits = GetStyle();
-    if(bInRefMode)
-        nBits |= WB_REFMODE;
-    else
-        nBits &= ~WB_REFMODE;
-
-    SetStyle( nBits );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
