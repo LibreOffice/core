@@ -45,6 +45,7 @@
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <rtl/instance.hxx>
 
 
 // helper to get line, stroke and transparence attributes from SfxItemSet
@@ -150,9 +151,6 @@ namespace drawinglayer
         class ImpSdrFormTextAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // FormText (FontWork) Attributes
             sal_Int32                               mnFormTextDistance;     // distance from line in upright direction
             sal_Int32                               mnFormTextStart;        // shift from polygon start
@@ -174,8 +172,7 @@ namespace drawinglayer
             bool                                    mbFormTextOutline : 1;  // show contour of objects
 
             explicit ImpSdrFormTextAttribute(const SfxItemSet& rSet)
-            :   mnRefCount(0),
-                mnFormTextDistance(static_cast<const XFormTextDistanceItem&>(rSet.Get(XATTR_FORMTXTDISTANCE)).GetValue()),
+            :   mnFormTextDistance(static_cast<const XFormTextDistanceItem&>(rSet.Get(XATTR_FORMTXTDISTANCE)).GetValue()),
                 mnFormTextStart(static_cast<const XFormTextStartItem&>(rSet.Get(XATTR_FORMTXTSTART)).GetValue()),
                 mnFormTextShdwXVal(static_cast<const XFormTextShadowXValItem&>(rSet.Get(XATTR_FORMTXTSHDWXVAL)).GetValue()),
                 mnFormTextShdwYVal(static_cast<const XFormTextShadowYValItem&>(rSet.Get(XATTR_FORMTXTSHDWYVAL)).GetValue()),
@@ -215,8 +212,7 @@ namespace drawinglayer
             }
 
             ImpSdrFormTextAttribute()
-            :   mnRefCount(0),
-                mnFormTextDistance(0),
+            :   mnFormTextDistance(0),
                 mnFormTextStart(0),
                 mnFormTextShdwXVal(0),
                 mnFormTextShdwYVal(0),
@@ -264,90 +260,51 @@ namespace drawinglayer
                     && getFormTextMirror() == rCandidate.getFormTextMirror()
                     && getFormTextOutline() == rCandidate.getFormTextOutline());
             }
-
-            static ImpSdrFormTextAttribute* get_global_default()
-            {
-                static ImpSdrFormTextAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdrFormTextAttribute();
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
 
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrFormTextAttribute::ImplType, theGlobalDefault > {};
+        }
+
         SdrFormTextAttribute::SdrFormTextAttribute(const SfxItemSet& rSet)
-        :   mpSdrFormTextAttribute(new ImpSdrFormTextAttribute(rSet))
+        :   mpSdrFormTextAttribute(ImpSdrFormTextAttribute(rSet))
         {
         }
 
         SdrFormTextAttribute::SdrFormTextAttribute()
-        :   mpSdrFormTextAttribute(ImpSdrFormTextAttribute::get_global_default())
+        :   mpSdrFormTextAttribute(theGlobalDefault::get())
         {
-            mpSdrFormTextAttribute->mnRefCount++;
         }
 
         SdrFormTextAttribute::SdrFormTextAttribute(const SdrFormTextAttribute& rCandidate)
         :   mpSdrFormTextAttribute(rCandidate.mpSdrFormTextAttribute)
         {
-            mpSdrFormTextAttribute->mnRefCount++;
         }
 
         SdrFormTextAttribute::~SdrFormTextAttribute()
         {
-            if(mpSdrFormTextAttribute->mnRefCount)
-            {
-                mpSdrFormTextAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrFormTextAttribute;
-            }
         }
 
         bool SdrFormTextAttribute::isDefault() const
         {
-            return mpSdrFormTextAttribute == ImpSdrFormTextAttribute::get_global_default();
+            return mpSdrFormTextAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrFormTextAttribute& SdrFormTextAttribute::operator=(const SdrFormTextAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrFormTextAttribute != mpSdrFormTextAttribute)
-            {
-                if(mpSdrFormTextAttribute->mnRefCount)
-                {
-                    mpSdrFormTextAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrFormTextAttribute;
-                }
-
-                mpSdrFormTextAttribute = rCandidate.mpSdrFormTextAttribute;
-                mpSdrFormTextAttribute->mnRefCount++;
-            }
-
+            mpSdrFormTextAttribute = rCandidate.mpSdrFormTextAttribute;
             return *this;
         }
 
         bool SdrFormTextAttribute::operator==(const SdrFormTextAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrFormTextAttribute == mpSdrFormTextAttribute)
-            {
-                return true;
-            }
-
+            // tdf#87509 default attr is always != non-default attr, even with same values
             if(rCandidate.isDefault() != isDefault())
-            {
                 return false;
-            }
 
-            return (*rCandidate.mpSdrFormTextAttribute == *mpSdrFormTextAttribute);
+            return rCandidate.mpSdrFormTextAttribute == mpSdrFormTextAttribute;
         }
 
         sal_Int32 SdrFormTextAttribute::getFormTextDistance() const

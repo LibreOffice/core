@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <svx/xenum.hxx>
 #include <tools/color.hxx>
-
+#include <o3tl/cow_wrapper.hxx>
 
 // predefines
 
@@ -42,8 +42,11 @@ namespace drawinglayer
     {
         class SdrFormTextAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrFormTextAttribute > ImplType;
+
         private:
-            ImpSdrFormTextAttribute*            mpSdrFormTextAttribute;
+            ImplType mpSdrFormTextAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
