@@ -21,7 +21,7 @@
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
-
+#include <rtl/instance.hxx>
 
 
 namespace drawinglayer
@@ -31,9 +31,6 @@ namespace drawinglayer
         class ImpSdrFormTextOutlineAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                          mnRefCount;
-
             // one set of attributes for FormText (FontWork) outline visualisation
             LineAttribute                       maLineAttribute;
             StrokeAttribute                     maStrokeAttribute;
@@ -43,10 +40,16 @@ namespace drawinglayer
                 const LineAttribute& rLineAttribute,
                 const StrokeAttribute& rStrokeAttribute,
                 sal_uInt8 nTransparence)
-            :   mnRefCount(0),
-                maLineAttribute(rLineAttribute),
+            :   maLineAttribute(rLineAttribute),
                 maStrokeAttribute(rStrokeAttribute),
                 mnTransparence(nTransparence)
+            {
+            }
+
+            ImpSdrFormTextOutlineAttribute()
+            : maLineAttribute(),
+              maStrokeAttribute(),
+              mnTransparence(0)
             {
             }
 
@@ -62,97 +65,56 @@ namespace drawinglayer
                     && getStrokeAttribute() == rCandidate.getStrokeAttribute()
                     && getTransparence() == rCandidate.getTransparence());
             }
-
-            static ImpSdrFormTextOutlineAttribute* get_global_default()
-            {
-                static ImpSdrFormTextOutlineAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdrFormTextOutlineAttribute(
-                        LineAttribute(),
-                        StrokeAttribute(),
-                        0);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrFormTextOutlineAttribute::ImplType, theGlobalDefault > {};
+        }
 
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(
             const LineAttribute& rLineAttribute,
             const StrokeAttribute& rStrokeAttribute,
             sal_uInt8 nTransparence)
-        :   mpSdrFormTextOutlineAttribute(new ImpSdrFormTextOutlineAttribute(
-                rLineAttribute, rStrokeAttribute, nTransparence))
+        :   mpSdrFormTextOutlineAttribute(
+                ImpSdrFormTextOutlineAttribute(
+                    rLineAttribute, rStrokeAttribute, nTransparence))
         {
         }
 
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute()
-        :   mpSdrFormTextOutlineAttribute(ImpSdrFormTextOutlineAttribute::get_global_default())
+        :   mpSdrFormTextOutlineAttribute(theGlobalDefault::get())
         {
-            mpSdrFormTextOutlineAttribute->mnRefCount++;
         }
 
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(const SdrFormTextOutlineAttribute& rCandidate)
         :   mpSdrFormTextOutlineAttribute(rCandidate.mpSdrFormTextOutlineAttribute)
         {
-            mpSdrFormTextOutlineAttribute->mnRefCount++;
         }
 
         SdrFormTextOutlineAttribute::~SdrFormTextOutlineAttribute()
         {
-            if(mpSdrFormTextOutlineAttribute->mnRefCount)
-            {
-                mpSdrFormTextOutlineAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrFormTextOutlineAttribute;
-            }
         }
 
         bool SdrFormTextOutlineAttribute::isDefault() const
         {
-            return mpSdrFormTextOutlineAttribute == ImpSdrFormTextOutlineAttribute::get_global_default();
+            return mpSdrFormTextOutlineAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::operator=(const SdrFormTextOutlineAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrFormTextOutlineAttribute != mpSdrFormTextOutlineAttribute)
-            {
-                if(mpSdrFormTextOutlineAttribute->mnRefCount)
-                {
-                    mpSdrFormTextOutlineAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrFormTextOutlineAttribute;
-                }
-
-                mpSdrFormTextOutlineAttribute = rCandidate.mpSdrFormTextOutlineAttribute;
-                mpSdrFormTextOutlineAttribute->mnRefCount++;
-            }
-
+            mpSdrFormTextOutlineAttribute = rCandidate.mpSdrFormTextOutlineAttribute;
             return *this;
         }
 
         bool SdrFormTextOutlineAttribute::operator==(const SdrFormTextOutlineAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrFormTextOutlineAttribute == mpSdrFormTextOutlineAttribute)
-            {
-                return true;
-            }
-
+            // tdf#87509 default attr is always != non-default attr, even with same values
             if(rCandidate.isDefault() != isDefault())
-            {
                 return false;
-            }
 
-            return (*rCandidate.mpSdrFormTextOutlineAttribute == *mpSdrFormTextOutlineAttribute);
+            return rCandidate.mpSdrFormTextOutlineAttribute == mpSdrFormTextOutlineAttribute;
         }
 
         const LineAttribute& SdrFormTextOutlineAttribute::getLineAttribute() const

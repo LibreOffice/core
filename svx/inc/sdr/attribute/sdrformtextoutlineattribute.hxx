@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFORMTEXTOUTLINEATTRIBUTE_HXX
 
 #include <sal/types.h>
-
+#include <o3tl/cow_wrapper.hxx>
 
 // predefines
 
@@ -39,8 +39,11 @@ namespace drawinglayer
     {
         class SdrFormTextOutlineAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrFormTextOutlineAttribute > ImplType;
+
         private:
-            ImpSdrFormTextOutlineAttribute*     mpSdrFormTextOutlineAttribute;
+            ImplType mpSdrFormTextOutlineAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
