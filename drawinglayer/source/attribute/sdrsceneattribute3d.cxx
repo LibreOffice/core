@@ -123,6 +123,10 @@ namespace drawinglayer
 
         bool SdrSceneAttribute::operator==(const SdrSceneAttribute& rCandidate) const
         {
+            // tdf#87509 default attr is always != non-default attr, even with same values
+            if(rCandidate.isDefault() != isDefault())
+                return false;
+
             return rCandidate.mpSdrSceneAttribute == mpSdrSceneAttribute;
         }
 

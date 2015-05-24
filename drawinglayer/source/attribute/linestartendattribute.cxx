@@ -110,6 +110,10 @@ namespace drawinglayer
 
         bool LineStartEndAttribute::operator==(const LineStartEndAttribute& rCandidate) const
         {
+            // tdf#87509 default attr is always != non-default attr, even with same values
+            if(rCandidate.isDefault() != isDefault())
+                return false;
+
             return rCandidate.mpLineStartEndAttribute == mpLineStartEndAttribute;
         }
 

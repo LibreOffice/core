@@ -161,6 +161,10 @@ namespace drawinglayer
 
         bool SdrFillGraphicAttribute::operator==(const SdrFillGraphicAttribute& rCandidate) const
         {
+            // tdf#87509 default attr is always != non-default attr, even with same values
+            if(rCandidate.isDefault() != isDefault())
+                return false;
+
             return rCandidate.mpSdrFillGraphicAttribute == mpSdrFillGraphicAttribute;
         }
 
