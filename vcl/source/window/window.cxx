@@ -3623,9 +3623,6 @@ bool Window::IsInModalMode() const
 
 bool Window::IsInModalNonRefMode() const
 {
-    if(mpWindowImpl->mnStyle & WB_REFMODE)
-        return false;
-
     return IsInModalMode();
 }
 
