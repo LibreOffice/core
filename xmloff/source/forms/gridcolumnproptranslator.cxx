@@ -121,7 +121,7 @@ namespace xmloff
             Reference< XPropertySetInfo >   m_xMasterInfo;
 
         public:
-            OMergedPropertySetInfo( const Reference< XPropertySetInfo >& _rxMasterInfo );
+            explicit OMergedPropertySetInfo( const Reference< XPropertySetInfo >& _rxMasterInfo );
 
         protected:
             virtual ~OMergedPropertySetInfo();

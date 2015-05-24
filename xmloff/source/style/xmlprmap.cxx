@@ -110,7 +110,7 @@ struct XMLPropertySetMapper::Impl
 
     bool mbOnlyExportMappings;
 
-    Impl( bool bForExport ) : mbOnlyExportMappings(bForExport) {}
+    explicit Impl( bool bForExport ) : mbOnlyExportMappings(bForExport) {}
 };
 
 // Ctor

@@ -69,7 +69,7 @@ class RDFaReader
     }
 
 public:
-    RDFaReader(SvXMLImport const & i_rImport)
+    explicit RDFaReader(SvXMLImport const & i_rImport)
         : m_rImport(i_rImport)
     { }
 

@@ -44,7 +44,7 @@ class XMLLineNumberingExport
     SvXMLExport& rExport;
 
 public:
-    XMLLineNumberingExport(SvXMLExport& rExp);
+    explicit XMLLineNumberingExport(SvXMLExport& rExp);
 
     void Export();
 };

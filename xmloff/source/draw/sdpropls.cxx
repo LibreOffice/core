@@ -769,7 +769,7 @@ bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any& rVa
 class XMLMoveSizeProtectHdl : public XMLPropertyHandler
 {
 public:
-    XMLMoveSizeProtectHdl( sal_Int32 nType ) : mnType( nType ) {}
+    explicit XMLMoveSizeProtectHdl( sal_Int32 nType ) : mnType( nType ) {}
 
     virtual bool importXML(
             const OUString& rStrImpValue,

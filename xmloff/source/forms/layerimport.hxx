@@ -130,7 +130,7 @@ namespace xmloff
         );
 
     protected:
-        OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
+        explicit OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
         virtual ~OFormLayerXMLImport_Impl();
 
         /** start importing the forms of the given page

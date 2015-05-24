@@ -120,7 +120,7 @@ namespace xmloff
             // style names of grid columns
 
     public:
-        OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
+        explicit OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
         virtual ~OFormLayerXMLExport_Impl();
 
     protected:

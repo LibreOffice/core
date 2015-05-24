@@ -36,7 +36,7 @@ class lcl_ColorPropertySetInfo : public ::cppu::WeakImplHelper1<
         XPropertySetInfo  >
 {
 public:
-    lcl_ColorPropertySetInfo( bool bFillColor );
+    explicit lcl_ColorPropertySetInfo( bool bFillColor );
 
 protected:
     // ____ XPropertySetInfo ____

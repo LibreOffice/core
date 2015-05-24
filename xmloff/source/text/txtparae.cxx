@@ -231,7 +231,7 @@ namespace xmloff
     class BoundFrameSets
     {
         public:
-            BoundFrameSets(const Reference<XInterface>& rModel);
+            explicit BoundFrameSets(const Reference<XInterface>& rModel);
             const BoundFrames* GetTexts() const
                 { return m_pTexts.get(); };
             const BoundFrames* GetGraphics() const

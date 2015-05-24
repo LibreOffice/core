@@ -136,7 +136,7 @@ class XMLTransformerActions :
                             NameHash_Impl, NameHash_Impl >
 {
 public:
-    XMLTransformerActions( XMLTransformerActionInit *pInit );
+    explicit XMLTransformerActions( XMLTransformerActionInit *pInit );
     ~XMLTransformerActions();
 
     void Add( XMLTransformerActionInit *pInit );

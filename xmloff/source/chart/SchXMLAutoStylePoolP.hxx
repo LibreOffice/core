@@ -38,7 +38,7 @@ protected:
         ) const SAL_OVERRIDE;
 
 public:
-    SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport );
+    explicit SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport );
     virtual ~SchXMLAutoStylePoolP();
 };
 

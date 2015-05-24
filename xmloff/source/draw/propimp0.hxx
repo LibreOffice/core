@@ -38,7 +38,7 @@ class XMLOpacityPropertyHdl : public XMLPropertyHandler
 private:
     SvXMLImport*    mpImport;
 public:
-    XMLOpacityPropertyHdl( SvXMLImport* pImport );
+    explicit XMLOpacityPropertyHdl( SvXMLImport* pImport );
     virtual ~XMLOpacityPropertyHdl();
     virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
@@ -59,7 +59,7 @@ private:
     SvXMLExport* mpExport;
 
 public:
-    XMLDateTimeFormatHdl( SvXMLExport* pExport );
+    explicit XMLDateTimeFormatHdl( SvXMLExport* pExport );
     virtual ~XMLDateTimeFormatHdl();
     virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;

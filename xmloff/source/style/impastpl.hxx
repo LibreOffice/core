@@ -61,7 +61,7 @@ struct XMLAutoStyleFamily : boost::noncopyable
             const rtl::Reference<SvXMLExportPropertyMapper>& rMapper,
             const OUString& rStrPrefix, bool bAsFamily = true );
 
-    XMLAutoStyleFamily( sal_Int32 nFamily );
+    explicit XMLAutoStyleFamily( sal_Int32 nFamily );
     ~XMLAutoStyleFamily();
 
     friend bool operator<(const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2);
@@ -104,7 +104,7 @@ private:
 
 public:
 
-    XMLAutoStylePoolParent( const OUString & rParent ) :
+    explicit XMLAutoStylePoolParent( const OUString & rParent ) :
         msParent( rParent )
     {
     }
@@ -139,7 +139,7 @@ class SvXMLAutoStylePoolP_Impl
 
 public:
 
-    SvXMLAutoStylePoolP_Impl( SvXMLExport& rExport );
+    explicit SvXMLAutoStylePoolP_Impl( SvXMLExport& rExport );
     ~SvXMLAutoStylePoolP_Impl();
 
     SvXMLExport& GetExport() const { return rExport; }

@@ -88,7 +88,7 @@ class XMLPropertyBackpatcher
 
 public:
 
-    XMLPropertyBackpatcher(
+    explicit XMLPropertyBackpatcher(
         const OUString& sPropertyName);
 
     ~XMLPropertyBackpatcher();

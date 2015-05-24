@@ -45,7 +45,7 @@ public:
     /** @descr  Create a class instance and store the given name.
         @param  rName   The name of the property.
     */
-    PropertyWrapperBase (const OUString & rName)
+    explicit PropertyWrapperBase (const OUString & rName)
         :   msName (rName)
     {}
     virtual ~PropertyWrapperBase()
@@ -121,7 +121,7 @@ public:
             not necessarily XPropertySet or XMultiPropertySet.  It
             is casted later to one of the two of them.
     */
-    MultiPropertySetHandler (::com::sun::star::uno::Reference<
+    explicit MultiPropertySetHandler (::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface> xObject);
     ~MultiPropertySetHandler();
     /** @descr  Add a property to handle.  The type given implicitly by the

@@ -38,7 +38,7 @@ namespace xmloff
                 m_xGridColumn;
 
     public:
-        OGridColumnPropertyTranslator(
+        explicit OGridColumnPropertyTranslator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >& _rxGridColumn
         );
 

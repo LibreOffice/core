@@ -56,7 +56,7 @@ public:
     OUString maCustomShowName;
     SdXMLImport& mrImport;
 
-    ShowsImpImpl( SdXMLImport& rImport )
+    explicit ShowsImpImpl( SdXMLImport& rImport )
     :   mrImport( rImport )
     {}
 };

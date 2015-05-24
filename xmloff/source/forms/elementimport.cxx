@@ -1422,7 +1422,7 @@ namespace xmloff
     struct EqualHandle : public ::std::unary_function< PropertyValue, bool >
     {
         const sal_Int32 m_nHandle;
-        EqualHandle( sal_Int32 _nHandle ) : m_nHandle( _nHandle ) { }
+        explicit EqualHandle( sal_Int32 _nHandle ) : m_nHandle( _nHandle ) { }
 
         inline bool operator()( const PropertyValue& _rProp )
         {
@@ -1475,7 +1475,7 @@ namespace xmloff
     struct EqualName : public ::std::unary_function< PropertyValue, bool >
     {
         const OUString m_sName;
-        EqualName( const OUString& _rName ) : m_sName( _rName ) { }
+        explicit EqualName( const OUString& _rName ) : m_sName( _rName ) { }
 
         inline bool operator()( const PropertyValue& _rProp )
         {

@@ -52,7 +52,7 @@ namespace xmloff
         MapString2PropertyValueSequence m_aMappedEvents;
 
     public:
-        OEventDescriptorMapper(
+        explicit OEventDescriptorMapper(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents);
 
         // XNameReplace

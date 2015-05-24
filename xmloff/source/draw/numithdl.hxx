@@ -31,7 +31,7 @@ class XMLNumRulePropHdl : public XMLPropertyHandler
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > mxNumRuleCompare;
 public:
-    XMLNumRulePropHdl( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > xNumRuleCompare );
+    explicit XMLNumRulePropHdl( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > xNumRuleCompare );
     virtual ~XMLNumRulePropHdl();
 
     virtual bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const SAL_OVERRIDE;

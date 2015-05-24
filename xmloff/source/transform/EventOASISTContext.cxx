@@ -43,7 +43,7 @@ class XMLTransformerOASISEventMap_Impl:
                             NameHash_Impl, NameHash_Impl >
 {
 public:
-    XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry *pInit );
+    explicit XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry *pInit );
     ~XMLTransformerOASISEventMap_Impl();
 };
 

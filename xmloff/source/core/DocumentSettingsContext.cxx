@@ -57,7 +57,7 @@ class XMLMyList
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 public:
-    XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext);
+    explicit XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext);
 
     void push_back(beans::PropertyValue& aProp) { aProps.push_back(aProp); nCount++; }
     uno::Sequence<beans::PropertyValue> GetSequence();

@@ -30,7 +30,7 @@ class XMLTextDropCapExport
 
 public:
 
-    XMLTextDropCapExport( SvXMLExport& rExport );
+    explicit XMLTextDropCapExport( SvXMLExport& rExport );
     ~XMLTextDropCapExport();
 
     void exportXML( const ::com::sun::star::uno::Any& rAny,

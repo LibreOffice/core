@@ -65,7 +65,7 @@ typedef ::std::multimap< OUString, OUString >
 
 struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
 {
-    lcl_ApplyCellToData( Sequence< double > & rOutData ) :
+    explicit lcl_ApplyCellToData( Sequence< double > & rOutData ) :
             m_rData( rOutData ),
             m_nIndex( 0 ),
             m_nSize( rOutData.getLength()),

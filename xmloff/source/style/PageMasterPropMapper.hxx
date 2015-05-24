@@ -25,7 +25,7 @@
 class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
 {
 public:
-                        XMLPageMasterPropSetMapper( bool bForExport );
+    explicit XMLPageMasterPropSetMapper( bool bForExport );
                         XMLPageMasterPropSetMapper(
                             const XMLPropertyMapEntry* pEntries,
                             const rtl::Reference< XMLPropertyHandlerFactory >& rFactory,

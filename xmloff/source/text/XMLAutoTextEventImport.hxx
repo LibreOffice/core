@@ -44,7 +44,7 @@ class XMLAutoTextEventImport : public SvXMLImport
         ::com::sun::star::container::XNameReplace> xEvents;
 
 public:
-    XMLAutoTextEventImport(
+    explicit XMLAutoTextEventImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
         ) throw();
 

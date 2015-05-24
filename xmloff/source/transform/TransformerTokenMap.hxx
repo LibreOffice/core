@@ -29,7 +29,7 @@ class XMLTransformerTokenMap :
                                    OUStringHash >
 {
 public:
-    XMLTransformerTokenMap( ::xmloff::token::XMLTokenEnum *pInit );
+    explicit XMLTransformerTokenMap( ::xmloff::token::XMLTokenEnum *pInit );
     ~XMLTransformerTokenMap();
 };
 

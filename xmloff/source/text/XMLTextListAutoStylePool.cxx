@@ -54,7 +54,7 @@ public:
             const OUString& rPrefix,
             sal_uInt32& rName );
 
-    XMLTextListAutoStylePoolEntry_Impl(
+    explicit XMLTextListAutoStylePoolEntry_Impl(
             const Reference < XIndexReplace > & rNumRules ) :
         xNumRules( rNumRules ),
         nPos( 0 ),
@@ -68,7 +68,7 @@ public:
         }
     }
 
-    XMLTextListAutoStylePoolEntry_Impl(
+    explicit XMLTextListAutoStylePoolEntry_Impl(
             const OUString& rInternalName ) :
         sInternalName( rInternalName ),
         nPos( 0 ),

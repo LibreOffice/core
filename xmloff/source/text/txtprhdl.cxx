@@ -532,7 +532,7 @@ class XMLFrameProtectPropHdl_Impl : public XMLPropertyHandler
 {
     const OUString sVal;
 public:
-    XMLFrameProtectPropHdl_Impl( enum XMLTokenEnum eVal ) :
+    explicit XMLFrameProtectPropHdl_Impl( enum XMLTokenEnum eVal ) :
            sVal( GetXMLToken(eVal) ) {}
     virtual ~XMLFrameProtectPropHdl_Impl ();
 
@@ -1068,7 +1068,7 @@ class XMLTextSyncWidthHeightPropHdl_Impl : public XMLPropertyHandler
     const OUString sValue;
 
 public:
-    XMLTextSyncWidthHeightPropHdl_Impl( enum XMLTokenEnum eValue ) :
+    explicit XMLTextSyncWidthHeightPropHdl_Impl( enum XMLTokenEnum eValue ) :
            sValue( GetXMLToken(eValue) )    {}
     virtual ~XMLTextSyncWidthHeightPropHdl_Impl();
 

@@ -143,7 +143,7 @@ class DomExport: public DomVisitor
 
 public:
 
-    DomExport( SvXMLExport& rExport );
+    explicit DomExport( SvXMLExport& rExport );
     virtual ~DomExport();
 
     virtual void element( const Reference<XElement>& ) SAL_OVERRIDE;

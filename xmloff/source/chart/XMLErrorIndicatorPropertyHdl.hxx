@@ -27,7 +27,7 @@ private:
     bool mbUpperIndicator;
 
 public:
-    XMLErrorIndicatorPropertyHdl( bool bUpper ) : mbUpperIndicator( bUpper )
+    explicit XMLErrorIndicatorPropertyHdl( bool bUpper ) : mbUpperIndicator( bUpper )
         {}
     virtual ~XMLErrorIndicatorPropertyHdl();
 

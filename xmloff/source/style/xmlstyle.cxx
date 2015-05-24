@@ -262,7 +262,7 @@ class SvXMLStylesContext_Impl
     void FlushIndex() { delete pIndices; pIndices = 0; }
 
 public:
-    SvXMLStylesContext_Impl( bool bAuto );
+    explicit SvXMLStylesContext_Impl( bool bAuto );
     ~SvXMLStylesContext_Impl();
 
     size_t GetStyleCount() const { return aStyles.size(); }

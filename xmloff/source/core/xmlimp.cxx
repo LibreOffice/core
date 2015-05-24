@@ -112,7 +112,7 @@ private:
     SvXMLImport*    pImport;
 
 public:
-                            SvXMLImportEventListener(SvXMLImport* pImport);
+    explicit SvXMLImportEventListener(SvXMLImport* pImport);
     virtual                 ~SvXMLImportEventListener();
 
                             // XEventListener
@@ -173,7 +173,7 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
             sal_uInt16 mnGeneratorVersion;
 
         public:
-            DocumentInfo( const SvXMLImport& rImport )
+            explicit DocumentInfo( const SvXMLImport& rImport )
                 : mnGeneratorVersion( SvXMLImport::ProductVersionUnknown )
             {
                 OUString const buildIds(

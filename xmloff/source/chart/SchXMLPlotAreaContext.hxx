@@ -45,7 +45,7 @@ namespace com { namespace sun { namespace star {
 class SchXML3DSceneAttributesHelper : public SdXML3DSceneAttributesHelper
 {
 public:
-    SchXML3DSceneAttributesHelper( SvXMLImport& rImporter );
+    explicit SchXML3DSceneAttributesHelper( SvXMLImport& rImporter );
     virtual ~SchXML3DSceneAttributesHelper();
 
     void getCameraDefaultFromDiagram( const ::com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram );
@@ -57,7 +57,7 @@ private:
 class SchXMLPositonAttributesHelper
 {
 public:
-    SchXMLPositonAttributesHelper( SvXMLImport& rImporter );
+    explicit SchXMLPositonAttributesHelper( SvXMLImport& rImporter );
     ~SchXMLPositonAttributesHelper();
 
     bool readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );

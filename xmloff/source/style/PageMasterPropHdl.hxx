@@ -108,7 +108,7 @@ protected:
     OUString         sAttrValue;
 
 public:
-                            XMLPMPropHdl_Print( enum ::xmloff::token::XMLTokenEnum eValue );
+    explicit XMLPMPropHdl_Print( enum ::xmloff::token::XMLTokenEnum eValue );
     virtual                 ~XMLPMPropHdl_Print();
 
     virtual bool            importXML(

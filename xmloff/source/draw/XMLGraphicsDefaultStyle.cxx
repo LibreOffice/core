@@ -85,7 +85,7 @@ SvXMLImportContext *XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPre
 
 struct XMLPropertyByIndex {
     sal_Int32 const m_nIndex;
-    XMLPropertyByIndex(sal_Int32 const nIndex) : m_nIndex(nIndex) {}
+    explicit XMLPropertyByIndex(sal_Int32 const nIndex) : m_nIndex(nIndex) {}
     bool operator()(XMLPropertyState const& rProp) {
         return m_nIndex == rProp.mnIndex;
     }

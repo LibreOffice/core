@@ -39,7 +39,7 @@ class XMLFootnoteSeparatorExport
 
 public:
 
-    XMLFootnoteSeparatorExport(SvXMLExport& rExp);
+    explicit XMLFootnoteSeparatorExport(SvXMLExport& rExp);
 
     ~XMLFootnoteSeparatorExport();
 

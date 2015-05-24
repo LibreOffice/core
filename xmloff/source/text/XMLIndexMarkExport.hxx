@@ -56,7 +56,7 @@ class XMLIndexMarkExport
     SvXMLExport& rExport;
 
 public:
-    XMLIndexMarkExport(SvXMLExport& rExp);
+    explicit XMLIndexMarkExport(SvXMLExport& rExp);
 
     ~XMLIndexMarkExport();
 

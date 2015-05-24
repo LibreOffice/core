@@ -24,7 +24,7 @@
 class XMLSymbolTypePropertyHdl : public XMLPropertyHandler
 {
 public:
-    XMLSymbolTypePropertyHdl( bool bIsNamedSymbol );
+    explicit XMLSymbolTypePropertyHdl( bool bIsNamedSymbol );
     virtual ~XMLSymbolTypePropertyHdl();
 
     virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;

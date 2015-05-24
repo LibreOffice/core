@@ -65,7 +65,7 @@ namespace xmloff
         SvXMLElementExport*     m_pImplElement;
 
     public:
-        OFormsRootExport( SvXMLExport& _rExp );
+        explicit OFormsRootExport( SvXMLExport& _rExp );
         ~OFormsRootExport();
 
     private:

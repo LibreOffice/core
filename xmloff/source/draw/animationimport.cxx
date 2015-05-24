@@ -113,7 +113,7 @@ private:
     SvXMLTokenMap* mpAnimationNodeAttributeTokenMap;
 
 public:
-    AnimationsImportHelperImpl( SvXMLImport& rImport );
+    explicit AnimationsImportHelperImpl( SvXMLImport& rImport );
     ~AnimationsImportHelperImpl();
 
     const SvXMLTokenMap& getAnimationNodeTokenMap();
@@ -1258,7 +1258,7 @@ SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefi
 class AnimationsImport: public SvXMLImport, public XAnimationNodeSupplier
 {
 public:
-    AnimationsImport( const Reference< XComponentContext > & rxContext );
+    explicit AnimationsImport( const Reference< XComponentContext > & rxContext );
     virtual ~AnimationsImport() throw ();
 
     SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList) SAL_OVERRIDE;

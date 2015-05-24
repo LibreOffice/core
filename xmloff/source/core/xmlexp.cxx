@@ -145,7 +145,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
 class SettingsExportFacade : public ::xmloff::XMLSettingsExportContext
 {
 public:
-    SettingsExportFacade( SvXMLExport& i_rExport )
+    explicit SettingsExportFacade( SvXMLExport& i_rExport )
         :m_rExport( i_rExport )
     {
     }
@@ -213,7 +213,7 @@ private:
     SvXMLExport*    pExport;
 
 public:
-                            SvXMLExportEventListener(SvXMLExport* pExport);
+    explicit SvXMLExportEventListener(SvXMLExport* pExport);
     virtual                 ~SvXMLExportEventListener();
 
                             // XEventListener

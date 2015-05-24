@@ -41,7 +41,7 @@ public:
         nToken( nTok )
     {}
 
-    SvXMLTokenMapEntry_Impl( const SvXMLTokenMapEntry& rEntry ) :
+    explicit SvXMLTokenMapEntry_Impl( const SvXMLTokenMapEntry& rEntry ) :
         nPrefixKey( rEntry.nPrefixKey ),
         sLocalName( GetXMLToken( rEntry.eLocalName ) ),
         nToken( rEntry.nToken )

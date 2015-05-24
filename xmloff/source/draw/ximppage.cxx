@@ -536,7 +536,7 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
 class XoNavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
 {
 public:
-    XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
+    explicit XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;

@@ -556,7 +556,7 @@ namespace
     class NewTextListsHelper
     {
         public:
-            NewTextListsHelper( SvXMLExport& rExp )
+            explicit NewTextListsHelper( SvXMLExport& rExp )
                 : mrExport( rExp )
             {
                 mrExport.GetTextParagraphExport()->PushNewTextListsHelper();
