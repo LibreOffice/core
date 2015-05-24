@@ -3652,11 +3652,6 @@ bool Window::IsInModalMode() const
     return (mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mnModalMode != 0);
 }
 
-bool Window::IsInModalNonRefMode() const
-{
-    return IsInModalMode();
-}
-
 void Window::ImplIncModalCount()
 {
     vcl::Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
