@@ -993,11 +993,6 @@ public:
     */
     bool                                IsInModalMode() const;
 
-    /**
-     *  Necessary for calc ref input handling from modal dialogs
-     */
-    bool                                IsInModalNonRefMode() const;
-
     void                                SetActivateMode( sal_uInt16 nMode );
     sal_uInt16                          GetActivateMode() const;
 

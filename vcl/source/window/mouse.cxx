@@ -244,7 +244,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     }
 
     // If the Window is disabled, then we don't change the focus
-    if ( !IsEnabled() || !IsInputEnabled() || IsInModalNonRefMode() )
+    if ( !IsEnabled() || !IsInputEnabled() || IsInModalMode() )
         return;
 
     // we only need to set the focus if it is not already set
