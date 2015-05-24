@@ -757,8 +757,6 @@ public:
 
     SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 
-    long            PaintEntry(SvTreeListEntry* pEntry, long nLine, vcl::RenderContext& rRenderContext,
-                                SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL);
     virtual Rectangle GetFocusRect( SvTreeListEntry*, long nLine );
     // Respects indentation
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );

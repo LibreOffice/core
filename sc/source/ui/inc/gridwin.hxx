@@ -409,8 +409,6 @@ public:
     void            UpdateDPFromFieldPopupMenu();
     bool            UpdateVisibleRange();
 
-    void            SetInRefMode( bool bRefMode );
-
     // #114409#
     void CursorChanged();
     void DrawLayerCreated();

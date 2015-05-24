@@ -515,8 +515,6 @@ public:
     void            SetDrawBrushSet( SfxItemSet* pNew, bool bLock );
     void            ResetBrushDocument();
 
-    void            SetInRefMode( bool bRefMode );
-
     bool ContinueOnlineSpelling();
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
