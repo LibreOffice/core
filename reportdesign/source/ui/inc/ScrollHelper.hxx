@@ -55,7 +55,7 @@ namespace rptui
         VclPtr<ODesignView>         m_pParent;
         VclPtr<OReportWindow>       m_aReportWindow;
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
-                                    m_pReportDefintionMultiPlexer; // listener for property changes
+                                    m_pReportDefinitionMultiPlexer; // listener for property changes
 
         DECL_LINK( ScrollHdl, ScrollBar*);
         Size ResizeScrollBars();

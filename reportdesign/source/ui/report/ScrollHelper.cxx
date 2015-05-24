@@ -51,7 +51,7 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     ,m_aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
     ,m_pParent(_pDesignView)
     ,m_aReportWindow(VclPtr<rptui::OReportWindow>::Create(this,m_pParent))
-    ,m_pReportDefintionMultiPlexer(NULL)
+    ,m_pReportDefinitionMultiPlexer(NULL)
 {
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
@@ -74,8 +74,8 @@ OScrollWindowHelper::~OScrollWindowHelper()
 
 void OScrollWindowHelper::dispose()
 {
-    if ( m_pReportDefintionMultiPlexer.is() )
-        m_pReportDefintionMultiPlexer->dispose();
+    if ( m_pReportDefinitionMultiPlexer.is() )
+        m_pReportDefinitionMultiPlexer->dispose();
 
     m_aHScroll.disposeAndClear();
     m_aVScroll.disposeAndClear();
@@ -102,7 +102,7 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
 void OScrollWindowHelper::initialize()
 {
     uno::Reference<report::XReportDefinition> xReportDefinition = m_pParent->getController().getReportDefinition();
-    m_pReportDefintionMultiPlexer = addStyleListener(xReportDefinition,this);
+    m_pReportDefinitionMultiPlexer = addStyleListener(xReportDefinition,this);
 }
 
 void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
