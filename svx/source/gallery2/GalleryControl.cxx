@@ -74,9 +74,9 @@ GalleryControl::~GalleryControl()
 
 void GalleryControl::dispose()
 {
-    mpSplitter.disposeAndClear();
-    mpBrowser1.disposeAndClear();
     mpBrowser2.disposeAndClear();
+    mpBrowser1.disposeAndClear();
+    mpSplitter.disposeAndClear();
     vcl::Window::dispose();
 }
 
@@ -217,7 +217,8 @@ bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* )
 void GalleryControl::GetFocus()
 {
     Window::GetFocus();
-    mpBrowser1->GrabFocus();
+    if (mpBrowser1)
+        mpBrowser1->GrabFocus();
 }
 
 void GalleryControl::ThemeSelectionHasChanged()
