@@ -210,7 +210,7 @@ namespace drawinglayer
 
         FillGraphicAttribute SdrFillGraphicAttribute::createFillGraphicAttribute(const basegfx::B2DRange& rRange) const
         {
-            // get logical size of bitmap (before expanding eventually)
+            // get logical size of bitmap (before possibly expanding it)
             Graphic aGraphic(getFillGraphic());
 
             // init values with defaults for stretched

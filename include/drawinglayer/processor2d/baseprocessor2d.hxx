@@ -69,7 +69,7 @@ namespace drawinglayer
 
             Basic Primitives:
 
-            - BitmapPrimitive2D (bitmap data, eventually with transparency)
+            - BitmapPrimitive2D (bitmap data, possibly with transparency)
             - PointArrayPrimitive2D (single points)
             - PolygonHairlinePrimitive2D (hairline curves/polygons)
             - PolyPolygonColorPrimitive2D (colored polygons)

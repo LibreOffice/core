@@ -94,7 +94,7 @@ namespace basegfx
             For detailed discussion see B2DPolygon::getB2DRange()
 
             @param rCandidate
-            The B2DPolygon eventually containing bezier segments
+            The B2DPolygon possibly containing bezier segments
 
             @return
             The outer range of the bezier curve

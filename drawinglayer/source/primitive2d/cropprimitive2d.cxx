@@ -116,7 +116,7 @@ namespace drawinglayer
 
                         // apply original transformation. Since we have manipulated the crop
                         // in unit coordinates we do not need to care about mirroring or
-                        // a corrected point for eventual shear or rotation, this all comes for
+                        // a corrected point for a possible shear or rotation, this all comes for
                         // free
                         aNewTransform = getTransformation() * aNewTransform;
 

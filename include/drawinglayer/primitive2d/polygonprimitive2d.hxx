@@ -263,9 +263,9 @@ namespace drawinglayer
     {
         /** PolygonStrokeArrowPrimitive2D class
 
-            This primitive defines a PolygonStrokePrimitive2D which is extended
-            eventually by start and end definitions which are normally used for
-            arrows.
+            This primitive defines a PolygonStrokePrimitive2D,
+            possibly extended by start and end definitions, which are
+            normally used for arrows.
          */
         class DRAWINGLAYER_DLLPUBLIC PolygonStrokeArrowPrimitive2D : public PolygonStrokePrimitive2D
         {

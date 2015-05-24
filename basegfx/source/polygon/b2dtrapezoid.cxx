@@ -763,7 +763,7 @@ namespace basegfx
                         aAllRange.expand(aRightRange);
 
                         // prepare loop iterator; aCurrent needs to stay unchanged for
-                        // eventual sorted insertions of new EdgeNodes. Also prepare stop flag
+                        // possibly sorted insertions of new EdgeNodes. Also prepare stop flag
                         TrDeEdgeEntries::iterator aLoop(aCurrent);
                         bool bDone(false);
 
@@ -848,7 +848,7 @@ namespace basegfx
                     }
 
                     // when we get here, the intended trapezoid can be used. It needs to
-                    // be corrected, eventually (if prepared); but this is no reason not to
+                    // be corrected possibly (if prepared); but this is no reason not to
                     // use it in the same loop iteration
                     if(!bEndOnSameLine)
                     {

@@ -50,8 +50,8 @@ namespace basegfx
             Same as above, but for single polygons. Result will be
             free of self-intersections. When result contains multiple
             polygons, it may be necessary to rearrange their
-            orientations since holes may have been created (use
-            correctOrientations eventually).
+            orientations since holes may have been created (possibly use
+            correctOrientations).
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate);
 

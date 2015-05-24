@@ -49,7 +49,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint  aWorldTopLeft(getObjectTransformation() * getTopLeft());
 
                 // build object matrix in world coordinates so that the top-left
-                // position remains, but eventual transformations (e.g. rotations)
+                // position remains, but possible transformations (e.g. rotations)
                 // in the ObjectToView stack remain and get correctly applied
                 basegfx::B2DHomMatrix aObjectTransform;
 

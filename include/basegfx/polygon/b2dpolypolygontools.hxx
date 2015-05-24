@@ -74,7 +74,7 @@ namespace basegfx
             This method just expands by the range of every sub-Polygon.
 
             @param rCandidate
-            The B2DPolyPolygon eventually containing bezier segments
+            The B2DPolyPolygon possibly containing bezier segments
 
             @return
             The outer range of the polygon
@@ -170,7 +170,7 @@ namespace basegfx
 
         // This method will correct a pair of polyPolygons where the goal is to keep same point count
         // to allow direct point association and also to remove self-intersections produced by shrinks.
-        // This method will eventually change both polyPolygons to reach that goal because there are cases
+        // This method might possibly change both polyPolygons to reach that goal because there are cases
         // where it is necessary to add new cut points to the original
         BASEGFX_DLLPUBLIC void correctGrowShrinkPolygonPair(B2DPolyPolygon& rOriginal, B2DPolyPolygon& rGrown);
 

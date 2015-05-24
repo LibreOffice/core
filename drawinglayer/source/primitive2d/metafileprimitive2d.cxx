@@ -943,8 +943,8 @@ namespace
     /** helper to take needed action on ClipRegion change. This method needs to be called
         on any vcl::Region change, e.g. at the obvious actions doing this, but also at pop-calls
         which change the vcl::Region of the current context. It takes care of creating the
-        current embeddec context, set the new vcl::Region at the context and eventually prepare
-        a new target for embracing new geometry to the current region
+        current embedded context, set the new vcl::Region at the context and possibly prepare
+        a new target for including new geometry into the current region
      */
     void HandleNewClipRegion(
         const basegfx::B2DPolyPolygon& rClipPolyPolygon,

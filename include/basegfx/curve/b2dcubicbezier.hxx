@@ -166,7 +166,7 @@ namespace basegfx
         /** Get the minimum extremum position t
 
             @param rfResult
-            Will be changed and set to a eventually found split value which should be in the
+            Will be changed and might possibly be set to a found split value, which should be in the
             range [0.0 .. 1.0]. It will be the smallest current extremum; there may be more
 
             @return

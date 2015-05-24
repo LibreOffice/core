@@ -29,16 +29,20 @@ namespace drawinglayer { namespace geometry {
     class ViewInformation3D;
 }}
 
-// This class is a helper to encapsulate 3D object changes which shall change the
-// scene's 2D geometry. E.g. when moving one 3D object in a scene, the visualisation
-// would not change since the scene's 2D attributes are defined by it's 2D object
-// transformation and the changed content would be projected to the same 2D bounds
-// as before. To reflect the fact that the 2D positions may 'change' for the user's
-// imagination, it is necessary to calculate a new 2D object transformation of the scene
-// (the SnapRect) using the old 3D transformation stack and the eventually changed
-// 3D content and tu use it. This is only wanted if changes to the scene's
-// content are intended to change the scene's 2D geometry attributes
+/** Helper for 3d object changes affecting 2d geometry
 
+   This class is a helper to encapsulate 3D object changes which shall
+   change the scene's 2D geometry. E.g. when moving one 3D object in a
+   scene, the visualisation would not change since the scene's 2D
+   attributes are defined by it's 2D object transformation and the
+   changed content would be projected to the same 2D bounds as
+   before. To reflect the fact that the 2D positions may 'change' for
+   the user's imagination, it is necessary to calculate a new 2D
+   object transformation of the scene (the SnapRect) using the old 3D
+   transformation stack and the possibly modified 3D content and to
+   use it. This is only desirable if changes to the scene's content
+   are intended to change the scene's 2D geometry attributes
+*/
 class SVX_DLLPUBLIC E3DModifySceneSnapRectUpdater
 {
     // the scene which may be changed. This gets set to the outmost scene
