@@ -27,6 +27,8 @@
 #include <salbmp.hxx>
 #include <salobj.hxx>
 #include <salmenu.hxx>
+#include <tools/solarmutex.hxx>
+#include "generic/geninst.h"
 
 
 SalFrame::SalFrame() : m_pWindow( NULL ), m_pProc( NULL ) {}
@@ -58,6 +60,8 @@ void SalFrame::SetRepresentedURL( const OUString& )
 
 SalInstance::~SalInstance()
 {
+    ::tools::SolarMutex::SetSolarMutex( 0 );
+    delete mpSalYieldMutex;
 }
 
 void SalInstance::FillFontPathList( std::list< OString >& )

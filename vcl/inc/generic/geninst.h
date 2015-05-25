@@ -66,60 +66,6 @@ public:
     oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
-/*
- * Abstract generic class to build vclplugin's instance classes from
- */
-class GenPspGraphics;
-class PhysicalFontCollection;
-class VCL_DLLPUBLIC SalGenericInstance : public SalInstance
-{
-protected:
-    bool           mbPrinterInit;
-    SalYieldMutex *mpSalYieldMutex;
-
-public:
-    SalGenericInstance( SalYieldMutex* pMutex )
-        : mbPrinterInit( false ), mpSalYieldMutex( pMutex ) {}
-    virtual ~SalGenericInstance();
-
-    // Yield mutex
-    virtual comphelper::SolarMutex* GetYieldMutex() SAL_OVERRIDE;
-    virtual sal_uIntPtr         ReleaseYieldMutex() SAL_OVERRIDE;
-    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) SAL_OVERRIDE;
-    virtual bool                CheckYieldMutex() SAL_OVERRIDE;
-
-    // Printing
-    virtual SalInfoPrinter*     CreateInfoPrinter      ( SalPrinterQueueInfo* pQueueInfo,
-                                                         ImplJobSetup* pSetupData ) SAL_OVERRIDE;
-    virtual void                DestroyInfoPrinter     ( SalInfoPrinter* pPrinter ) SAL_OVERRIDE;
-    virtual SalPrinter*         CreatePrinter          ( SalInfoPrinter* pInfoPrinter ) SAL_OVERRIDE;
-    virtual void                DestroyPrinter         ( SalPrinter* pPrinter ) SAL_OVERRIDE;
-    virtual void                GetPrinterQueueInfo    ( ImplPrnQueueList* pList ) SAL_OVERRIDE;
-    virtual void                GetPrinterQueueState   ( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
-    virtual void                DeletePrinterQueueInfo ( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
-    virtual OUString            GetDefaultPrinter() SAL_OVERRIDE;
-    virtual void                PostPrintersChanged() = 0;
-    virtual void                updatePrinterUpdate() SAL_OVERRIDE;
-    virtual void                jobStartedPrinterUpdate() SAL_OVERRIDE;
-    virtual void                jobEndedPrinterUpdate() SAL_OVERRIDE;
-    bool isPrinterInit() const { return mbPrinterInit; }
-    virtual GenPspGraphics     *CreatePrintGraphics() = 0;
-
-    // prolly belongs somewhere else ... just a font help
-    static void RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection );
-    static int  FetchFontSubstitutionFlags();
-
-protected:
-    static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
-                                  SalPrinterQueueInfo* pQueueInfo,
-                                  ImplJobSetup* pSetupData );
-};
-
-inline SalGenericInstance *GetGenericInstance()
-{
-    return static_cast<SalGenericInstance *>(GetSalData()->m_pInstance);
-}
-
 #endif // INCLUDED_VCL_INC_GENERIC_GENINST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

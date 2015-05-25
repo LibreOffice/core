@@ -63,7 +63,7 @@ bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = NULL;
 
 SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
-    SalGenericInstance( pMutex )
+    SalInstance( pMutex )
 {
     m_aTimeout.tv_sec       = 0;
     m_aTimeout.tv_usec      = 0;

@@ -59,7 +59,7 @@ class GenPspGraphics;
 
 SalInstance* svp_create_SalInstance();
 
-class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
+class VCL_DLLPUBLIC SvpSalInstance : public SalInstance
 {
     timeval                 m_aTimeout;
     sal_uLong               m_nTimeoutMS;

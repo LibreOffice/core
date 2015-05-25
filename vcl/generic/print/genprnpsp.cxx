@@ -373,7 +373,7 @@ static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const
  *  SalInstance
  */
 
-void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
+void SalInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
     SalPrinterQueueInfo* pQueueInfo, ImplJobSetup* pJobSetup)
 {
     if( pJobSetup )
@@ -393,7 +393,7 @@ void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
     }
 }
 
-SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo*    pQueueInfo,
+SalInfoPrinter* SalInstance::CreateInfoPrinter( SalPrinterQueueInfo*    pQueueInfo,
                                                    ImplJobSetup*            pJobSetup )
 {
     mbPrinterInit = true;
@@ -403,12 +403,12 @@ SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo*    p
     return pPrinter;
 }
 
-void SalGenericInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
+void SalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-SalPrinter* SalGenericInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+SalPrinter* SalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     mbPrinterInit = true;
     // create and initialize SalPrinter
@@ -418,12 +418,12 @@ SalPrinter* SalGenericInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
     return pPrinter;
 }
 
-void SalGenericInstance::DestroyPrinter( SalPrinter* pPrinter )
+void SalInstance::DestroyPrinter( SalPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
+void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
     mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
@@ -462,17 +462,17 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 }
 
-void SalGenericInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
+void SalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
     delete pInfo;
 }
 
-void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
+void SalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
     mbPrinterInit = true;
 }
 
-OUString SalGenericInstance::GetDefaultPrinter()
+OUString SalInstance::GetDefaultPrinter()
 {
     mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
@@ -530,7 +530,7 @@ SalGraphics* PspSalInfoPrinter::AcquireGraphics()
     SalGraphics* pRet = NULL;
     if( ! m_pGraphics )
     {
-        m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
+        m_pGraphics = GetSalData()->m_pInstance->CreatePrintGraphics();
         m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx, this);
         pRet = m_pGraphics;
     }
@@ -962,7 +962,7 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, bool )
     OSL_TRACE("PspSalPrinter::StartPage");
 
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
-    m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
+    m_pGraphics = GetSalData()->m_pInstance->CreatePrintGraphics();
     m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx, m_pInfoPrinter);
 
     if( m_nCopies > 1 )
@@ -1289,7 +1289,7 @@ class PrinterUpdate
     static void doUpdate();
     DECL_STATIC_LINK_TYPED( PrinterUpdate, UpdateTimerHdl, Idle*, void );
 public:
-    static void update(SalGenericInstance &rInstance);
+    static void update(SalInstance &rInstance);
     static void jobStarted() { nActiveJobs++; }
     static void jobEnded();
 };
@@ -1300,7 +1300,7 @@ int PrinterUpdate::nActiveJobs = 0;
 void PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
-    SalGenericInstance *pInst = static_cast<SalGenericInstance *>( GetSalData()->m_pInstance );
+    SalInstance *pInst = GetSalData()->m_pInstance;
     if( pInst && rManager.checkPrintersChanged( false ) )
         pInst->PostPrintersChanged();
 }
@@ -1317,7 +1317,7 @@ IMPL_STATIC_LINK_NOARG_TYPED( PrinterUpdate, UpdateTimerHdl, Idle*, void )
         pPrinterUpdateIdle->Start();
 }
 
-void PrinterUpdate::update(SalGenericInstance &rInstance)
+void PrinterUpdate::update(SalInstance &rInstance)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
@@ -1340,12 +1340,12 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
     }
 }
 
-void SalGenericInstance::updatePrinterUpdate()
+void SalInstance::updatePrinterUpdate()
 {
     PrinterUpdate::update(*this);
 }
 
-void SalGenericInstance::jobStartedPrinterUpdate()
+void SalInstance::jobStartedPrinterUpdate()
 {
     PrinterUpdate::jobStarted();
 }
@@ -1365,7 +1365,7 @@ void PrinterUpdate::jobEnded()
     }
 }
 
-void SalGenericInstance::jobEndedPrinterUpdate()
+void SalInstance::jobEndedPrinterUpdate()
 {
     PrinterUpdate::jobEnded();
 }

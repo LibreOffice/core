@@ -885,7 +885,7 @@ void GenPspGraphics::GetDevFontList( PhysicalFontCollection *pFontCollection )
             AnnounceFonts( pFontCollection, aInfo );
 
     // register platform specific font substitutions if available
-    SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
+    SalInstance::RegisterFontSubstitutors( pFontCollection );
 }
 
 void GenPspGraphics::ClearDevFontCache()

@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
 class SalXLib;
 class X11SalGraphics;
 
-class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
+class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalInstance
 {
 private:
     std::unordered_map< Atom, com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > > m_aInstances;
@@ -45,7 +45,7 @@ protected:
     SalXLib *mpXLib;
 
 public:
-    X11SalInstance( SalYieldMutex* pMutex ) : SalGenericInstance( pMutex ), mpXLib(NULL) {}
+    X11SalInstance( SalYieldMutex* pMutex ) : SalInstance( pMutex ), mpXLib(NULL) {}
     virtual ~X11SalInstance();
 
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle ) SAL_OVERRIDE;

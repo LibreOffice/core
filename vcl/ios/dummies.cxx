@@ -69,58 +69,58 @@ void SvpSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
     delete pInfo;
 }
 
-SalPrinter* SalGenericInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
+SalPrinter* SalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
     return NULL;
 }
 
-OUString SalGenericInstance::GetDefaultPrinter()
+OUString SalInstance::GetDefaultPrinter()
 {
     return OUString();
 }
 
-void SalGenericInstance::DestroyPrinter( SalPrinter* pPrinter )
+void SalInstance::DestroyPrinter( SalPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-void SalGenericInstance::PostPrintersChanged()
+void SalInstance::PostPrintersChanged()
 {
 }
 
-SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo* /* pQueueInfo */,
+SalInfoPrinter* SalInstance::CreateInfoPrinter( SalPrinterQueueInfo* /* pQueueInfo */,
                                                        ImplJobSetup*        /* pJobSetup */ )
 {
     return NULL;
 }
 
-void SalGenericInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
+void SalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* /* pList */ )
+void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* /* pList */ )
 {
 }
 
-void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* /* pInfo */ )
+void SalInstance::GetPrinterQueueState( SalPrinterQueueInfo* /* pInfo */ )
 {
 }
 
-void SalGenericInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
+void SalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
     delete pInfo;
 }
 
-void SalGenericInstance::updatePrinterUpdate()
+void SalInstance::updatePrinterUpdate()
 {
 }
 
-void SalGenericInstance::jobStartedPrinterUpdate()
+void SalInstance::jobStartedPrinterUpdate()
 {
 }
 
-void SalGenericInstance::jobEndedPrinterUpdate()
+void SalInstance::jobEndedPrinterUpdate()
 {
 }
 

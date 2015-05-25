@@ -56,7 +56,7 @@ public:
     bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const SAL_OVERRIDE;
 };
 
-int SalGenericInstance::FetchFontSubstitutionFlags()
+int SalInstance::FetchFontSubstitutionFlags()
 {
     // init font substitution defaults
     int nDisableBits = 0;
@@ -75,7 +75,7 @@ int SalGenericInstance::FetchFontSubstitutionFlags()
     return nDisableBits;
 }
 
-void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection )
+void SalInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection )
 {
     // init font substitution defaults
     int nDisableBits = 0;

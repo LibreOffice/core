@@ -74,12 +74,12 @@ bool SalYieldMutex::tryToAcquire()
         return false;
 }
 
-comphelper::SolarMutex* SalGenericInstance::GetYieldMutex()
+comphelper::SolarMutex* SalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
 
-sal_uLong SalGenericInstance::ReleaseYieldMutex()
+sal_uLong SalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
@@ -99,7 +99,7 @@ sal_uLong SalGenericInstance::ReleaseYieldMutex()
         return 0;
 }
 
-void SalGenericInstance::AcquireYieldMutex( sal_uLong nCount )
+void SalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     while ( nCount )
@@ -109,7 +109,7 @@ void SalGenericInstance::AcquireYieldMutex( sal_uLong nCount )
     }
 }
 
-bool SalGenericInstance::CheckYieldMutex()
+bool SalInstance::CheckYieldMutex()
 {
     bool bRet = true;
 
@@ -121,12 +121,6 @@ bool SalGenericInstance::CheckYieldMutex()
     }
 
     return bRet;
-}
-
-SalGenericInstance::~SalGenericInstance()
-{
-    ::tools::SolarMutex::SetSolarMutex( 0 );
-    delete mpSalYieldMutex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

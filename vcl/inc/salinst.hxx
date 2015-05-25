@@ -57,14 +57,23 @@ struct SystemGraphicsData;
 struct SystemWindowData;
 class Menu;
 enum class VclInputFlags;
+class SalYieldMutex;
+class GenPspGraphics;
+class PspSalInfoPrinter;
+class PhysicalFontCollection;
 
-class VCL_PLUGIN_PUBLIC SalInstance
+class VCL_DLLPUBLIC SalInstance
 {
+protected:
+    bool           mbPrinterInit;
+    SalYieldMutex *mpSalYieldMutex;
+
 private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
 
 public:
-    SalInstance() {}
+    SalInstance( SalYieldMutex* pMutex )
+        : mbPrinterInit( false ), mpSalYieldMutex( pMutex ) {}
     virtual ~SalInstance();
 
     //called directly after Application::Init
@@ -96,15 +105,16 @@ public:
     // pSetupData must be updatet with the current
     // JobSetup
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pSetupData ) = 0;
-    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) = 0;
-    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter ) = 0;
-    virtual void            DestroyPrinter( SalPrinter* pPrinter ) = 0;
+                                               ImplJobSetup* pSetupData );
+    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );
+    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
+    virtual void            DestroyPrinter( SalPrinter* pPrinter );
 
-    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) = 0;
-    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) = 0;
-    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) = 0;
-    virtual OUString        GetDefaultPrinter() = 0;
+    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
+    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
+    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
+    virtual OUString        GetDefaultPrinter();
+    virtual void            PostPrintersChanged() = 0;
 
     // SalTimer
     virtual SalTimer*       CreateSalTimer() = 0;
@@ -118,11 +128,11 @@ public:
 
     // YieldMutex
     virtual comphelper::SolarMutex*
-                            GetYieldMutex() = 0;
-    virtual sal_uLong       ReleaseYieldMutex() = 0;
-    virtual void            AcquireYieldMutex( sal_uLong nCount ) = 0;
+                            GetYieldMutex();
+    virtual sal_uLong       ReleaseYieldMutex();
+    virtual void            AcquireYieldMutex( sal_uLong nCount );
     // return true, if yield mutex is owned by this thread, else false
-    virtual bool            CheckYieldMutex() = 0;
+    virtual bool            CheckYieldMutex();
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
@@ -173,9 +183,20 @@ public:
         { return css::uno::Reference< css::ui::dialogs::XFolderPicker2 >(); }
 
     // callbacks for printer updates
-    virtual void            updatePrinterUpdate() {}
-    virtual void            jobStartedPrinterUpdate() {}
-    virtual void            jobEndedPrinterUpdate() {}
+    virtual void            updatePrinterUpdate();
+    virtual void            jobStartedPrinterUpdate();
+    virtual void            jobEndedPrinterUpdate();
+
+    bool isPrinterInit() const { return mbPrinterInit; }
+    virtual GenPspGraphics     *CreatePrintGraphics() = 0;
+    // prolly belongs somewhere else ... just a font help
+    static void RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection );
+    static int  FetchFontSubstitutionFlags();
+
+protected:
+    static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
+                                  SalPrinterQueueInfo* pQueueInfo,
+                                  ImplJobSetup* pSetupData );
 };
 
 // called from SVMain

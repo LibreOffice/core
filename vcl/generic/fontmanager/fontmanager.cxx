@@ -1348,7 +1348,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 
 static bool AreFCSubstitutionsEnabled()
 {
-    return (SalGenericInstance::FetchFontSubstitutionFlags() & 3) == 0;
+    return (SalInstance::FetchFontSubstitutionFlags() & 3) == 0;
 }
 
 void PrintFontManager::initialize()
