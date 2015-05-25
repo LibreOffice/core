@@ -2871,9 +2871,9 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
            FSEND );
 
     // Horizontal spans
-    const SwWriteTableRows& aRows = m_xTableWrt->GetRows( );
-    SwWriteTableRow *pRow = aRows[ nRow ];
-    const SwWriteTableCells rTableCells =  pRow->GetCells();
+    const SwWriteTableRows& rRows = m_xTableWrt->GetRows( );
+    SwWriteTableRow *pRow = rRows[ nRow ];
+    const SwWriteTableCells& rTableCells =  pRow->GetCells();
     if (nCell < rTableCells.size() )
     {
         const SwWriteTableCell& rCell = rTableCells[nCell];
@@ -3622,8 +3622,8 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
         }
     }
 
-    const SwWriteTableRows& aRows = m_xTableWrt->GetRows( );
-    SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
+    const SwWriteTableRows& rRows = m_xTableWrt->GetRows( );
+    SwWriteTableRow *pRow = rRows[ pTableTextNodeInfoInner->getRow( ) ];
     sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
     const SwWriteTableCells& rTableCells =  pRow->GetCells();
     if (nCell < rTableCells.size() )
