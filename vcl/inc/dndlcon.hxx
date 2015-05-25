@@ -28,17 +28,17 @@
 #include <cppuhelper/compbase4.hxx>
 
 #include <vcl/unohelp2.hxx>
+#include <osl/mutex.hxx>
 
-class DNDListenerContainer :    public vcl::unohelper::MutexHelper,
-                                public ::cppu::WeakComponentImplHelper4<
-    ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer, \
+class DNDListenerContainer : public ::cppu::WeakComponentImplHelper4<
+    ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer,
     ::com::sun::star::datatransfer::dnd::XDropTargetDragContext,
     ::com::sun::star::datatransfer::dnd::XDropTargetDropContext,
     ::com::sun::star::datatransfer::dnd::XDropTarget >
 {
-    bool m_bActive;
-    sal_Int8 m_nDefaultActions;
-
+    bool         m_bActive;
+    sal_Int8     m_nDefaultActions;
+    ::osl::Mutex maMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext > m_xDropTargetDragContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDropContext > m_xDropTargetDropContext;
 
@@ -46,6 +46,8 @@ public:
 
     DNDListenerContainer( sal_Int8 nDefaultActions );
     virtual ~DNDListenerContainer();
+
+    ::osl::Mutex& GetMutex() { return maMutex; }
 
     sal_uInt32 fireDropEvent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDropContext >& context,

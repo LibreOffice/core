@@ -23,12 +23,11 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
+#include <vcl/dllapi.h>
 
 namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
     class XClipboard;
 } } } } }
-#include <vcl/dllapi.h>
 
 namespace vcl { namespace unohelper {
 
@@ -60,14 +59,6 @@ namespace vcl { namespace unohelper {
             const OUString& rContent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard
         );
-    };
-
-    struct MutexHelper
-    {
-        private:
-            ::osl::Mutex maMutex;
-        public:
-            ::osl::Mutex& GetMutex() { return maMutex; }
     };
 
 }}  // namespace vcl::unohelper
