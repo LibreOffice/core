@@ -3026,6 +3026,19 @@ StyleSettings::SetIconTheme(const OUString& theme)
 OUString
 StyleSettings::DetermineIconTheme() const
 {
+    if (mxData->mIconTheme.isEmpty())
+    {
+        // read from the configuration, or fallback to what the desktop wants
+        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+        if (xContext.is())
+        {
+            mxData->mIconTheme = officecfg::Office::Common::Misc::SymbolStyle::get(xContext);
+
+            if (mxData->mIconTheme.isEmpty() || mxData->mIconTheme == "auto")
+                mxData->mIconTheme = GetAutomaticallyChosenIconTheme();
+        }
+    }
+
     OUString r = mxData->mIconThemeSelector->SelectIconTheme(
                         mxData->mIconThemeScanner->GetFoundIconThemes(),
                         mxData->mIconTheme
