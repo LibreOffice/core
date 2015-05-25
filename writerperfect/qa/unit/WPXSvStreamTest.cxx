@@ -171,8 +171,6 @@ void WPXSvStreamTest::testRead()
 
     // trying to read nothing
     pInput->seek(0, RVNG_SEEK_SET);
-    pText = pTextOrig;
-
     pData = pInput->read(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
