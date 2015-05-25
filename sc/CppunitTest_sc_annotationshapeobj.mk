@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_annotationshapeobj,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_annotationshapeobj))
+$(eval $(call gb_CppunitTest_use_vcl,sc_annotationshapeobj))
 
 $(eval $(call gb_CppunitTest_use_components,sc_annotationshapeobj,\
     basic/util/sb \
@@ -75,6 +76,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_annotationshapeobj,\
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \
@@ -96,6 +98,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_annotationshapeobj,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmloff/util/xo \
+    svtools/util/svt \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_annotationshapeobj))

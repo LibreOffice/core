@@ -7,13 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/text/xtext.hxx>
 
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
+#include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
 
 #define NUMBER_OF_TESTS 1
 
@@ -22,15 +24,15 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScAnnotationShapeObj : public UnoApiTest, apitest::XText
+class ScAnnotationShapeObj : public CalcUnoApiTest, apitest::XText
 {
 public:
     ScAnnotationShapeObj();
 
-    virtual void setUp();
-    virtual void tearDown();
-    virtual uno::Reference<uno::XInterface> init();
-    virtual uno::Reference<text::XTextContent> getTextContent();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
+    virtual uno::Reference<uno::XInterface> init() SAL_OVERRIDE;
+    virtual uno::Reference<text::XTextContent> getTextContent() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScAnnotationShapeObj);
 
@@ -49,12 +51,15 @@ sal_Int32 ScAnnotationShapeObj::nTest = 0;
 uno::Reference<lang::XComponent> ScAnnotationShapeObj::mxComponent;
 uno::Reference<text::XTextContent> ScAnnotationShapeObj::mxField;
 
-ScAnnotationShapeObj::ScAnnotationShapeObj() {}
+ScAnnotationShapeObj::ScAnnotationShapeObj()
+    : CalcUnoApiTest("sc/qa/extras/testdocuments")
+{
+}
 
 void ScAnnotationShapeObj::setUp()
 {
     ++nTest;
-    UnoApiTest::setUp();
+    CalcUnoApiTest::setUp();
 }
 
 void ScAnnotationShapeObj::tearDown()
@@ -66,12 +71,11 @@ void ScAnnotationShapeObj::tearDown()
         mxComponent.clear();
     }
 
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 uno::Reference<uno::XInterface> ScAnnotationShapeObj::init()
 {
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     if (!mxComponent.is())
         // Load an empty document.
         mxComponent = loadFromDesktop("private:factory/scalc");
@@ -81,30 +85,32 @@ uno::Reference<uno::XInterface> ScAnnotationShapeObj::init()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
 
     // Use cell A1 for this.
+
+    table::CellAddress aNotePos(0, 0, 0);
+    Reference<sheet::XSheetAnnotationsSupplier> xAnnosSupp(xSheet, UNO_QUERY_THROW);
+    Reference<sheet::XSheetAnnotations> xAnnos(xAnnosSupp->getAnnotations(), UNO_SET_THROW);
+    // non-empty string required by note implementation (real text will be added below)
+    xAnnos->insertNew(aNotePos, OUString(' '));
+
     uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
     uno::Reference<sheet::XSheetAnnotationAnchor> xAnchor(xCell, UNO_QUERY_THROW);
-    uno::Reference<sheet::XSheetAnnotation> xAnnotation = xAnchor->getAnnotation();
+    uno::Reference<sheet::XSheetAnnotation> xAnnotation(xAnchor->getAnnotation(), UNO_SET_THROW);
     uno::Reference<text::XSimpleText> xAnnoText(xAnnotation, UNO_QUERY_THROW);
     xAnnoText->setString("ScAnnotationShapeObj");
 
     uno::Reference<sheet::XSheetAnnotationShapeSupplier> xShapeSupp(xAnnotation, UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape = xShapeSupp->getAnnotationShape();
+    uno::Reference<drawing::XShape> xShape(xShapeSupp->getAnnotationShape(), UNO_SET_THROW);
 
     return xShape;
-#else
-    return uno::Reference<drawing::XShape>();
-#endif
 }
 
 uno::Reference<text::XTextContent> ScAnnotationShapeObj::getTextContent()
 {
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     if (!mxField.is())
     {
         uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
         mxField.set(xSM->createInstance("com.sun.star.text.TextField.DateTime"), UNO_QUERY_THROW);
     }
-#endif
     return mxField;
 }
 
