@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_THREADMANAGER_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_THREADMANAGER_HXX
 
-#include <ithreadlistenerowner.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <osl/mutex.hxx>
@@ -36,6 +35,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <ifinishedthreadlistener.hxx>
+
 
 /** class to manage threads
 
@@ -44,16 +45,15 @@
     It assures that not more than <mnStartedSize> threads
     are started.
 */
-class ThreadManager : public IThreadListenerOwner
+class ThreadManager
 {
     public:
 
         explicit ThreadManager( ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager >& rThreadJoiner );
         virtual ~ThreadManager();
 
-        // --> IThreadListenerOwner
-        virtual boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef() SAL_OVERRIDE;
-        virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID ) SAL_OVERRIDE;
+        boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
+        void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID );
 
         /** initialization
 
