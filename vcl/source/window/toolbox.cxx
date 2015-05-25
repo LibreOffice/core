@@ -475,7 +475,7 @@ void ToolBox::ImplDrawTransparentBackground(vcl::RenderContext& /*rRenderContext
     mpData->mbIsPaintLocked = true;
 
     // send an invalidate to the first opaque parent and invalidate the whole hierarchy from there (noclipchildren)
-    Invalidate(rRegion, INVALIDATE_UPDATE | INVALIDATE_NOCLIPCHILDREN);
+    Invalidate(rRegion, InvalidateFlags::Update | InvalidateFlags::NoClipChildren);
 
     mpData->mbIsPaintLocked = bOldPaintLock;
 }
@@ -5615,7 +5615,7 @@ void ToolBox::ImplShowFocus()
         {
             vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = true;
-            pWin->Invalidate( 0 );
+            pWin->Invalidate();
         }
     }
 }
@@ -5629,7 +5629,7 @@ void ToolBox::ImplHideFocus()
         {
             vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = false;
-            pWin->Invalidate( 0 );
+            pWin->Invalidate();
         }
     }
 

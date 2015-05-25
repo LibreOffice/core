@@ -172,9 +172,9 @@ public:
     void            LeaveUpdateLock();
     void            Update();
     void            DoOutstandingInvalidations();
-    void            Invalidate( sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
-    void            Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
-    void            Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE
+    void            Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
+    void            Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
+    void            Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE
                     { Control::Invalidate( rRegion, nFlags ); }
 
 protected:

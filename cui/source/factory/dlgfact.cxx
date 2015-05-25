@@ -553,7 +553,7 @@ bool AbstractSvxHlinkDlgMarkWnd_Impl::IsVisible( ) const
     return (( vcl::Window* )pDlg)->IsVisible();
 }
 
-void AbstractSvxHlinkDlgMarkWnd_Impl::Invalidate( sal_uInt16 nFlags )
+void AbstractSvxHlinkDlgMarkWnd_Impl::Invalidate( InvalidateFlags nFlags )
 {
     (( vcl::Window* )pDlg)->Invalidate(nFlags);
 }

@@ -59,9 +59,9 @@ public:
     virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     void ForceInvalidate();
-    virtual void Invalidate( sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
-    virtual void Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
-    virtual void Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    virtual void Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
+    virtual void Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
+    virtual void Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 

@@ -316,7 +316,7 @@ namespace sdr
                         (sal_Int32)ceil(rRange.getMaxY() + fDiscreteOne));
 
                     // simply invalidate
-                    static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);
+                    static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);
                 }
                 else
                 {
@@ -327,7 +327,7 @@ namespace sdr
                         (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
 
                     // simply invalidate
-                    static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);
+                    static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);
                 }
             }
         }

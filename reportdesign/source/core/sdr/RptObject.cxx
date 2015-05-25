@@ -400,7 +400,7 @@ void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
             xSection->setHeight( newHeight );
 
         // TODO
-        //pModel->GetRefDevice()->Invalidate(INVALIDATE_CHILDREN);
+        //pModel->GetRefDevice()->Invalidate(InvalidateFlags::Children);
     }
 }
 

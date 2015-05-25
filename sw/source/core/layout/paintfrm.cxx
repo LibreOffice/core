@@ -3321,7 +3321,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
                     aPageRectTemp._Intersection( pSh->VisArea() );
                     vcl::Region aPageRectRegion( aPageRectTemp.SVRect() );
                     aPageRectRegion.Exclude( aPaintRect.SVRect() );
-                    pSh->GetWin()->Invalidate( aPageRectRegion, INVALIDATE_CHILDREN );
+                    pSh->GetWin()->Invalidate( aPageRectRegion, InvalidateFlags::Children );
                 }
 
                 // #i80793#

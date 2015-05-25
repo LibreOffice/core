@@ -687,7 +687,7 @@ void BrowserDataWin::DoOutstandingInvalidations()
 
 
 
-void BrowserDataWin::Invalidate( sal_uInt16 nFlags )
+void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
     {
@@ -702,7 +702,7 @@ void BrowserDataWin::Invalidate( sal_uInt16 nFlags )
 
 
 
-void BrowserDataWin::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
+void BrowserDataWin::Invalidate( const Rectangle& rRect, InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
         aInvalidRegion.push_back( new Rectangle( rRect ) );

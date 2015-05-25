@@ -148,13 +148,13 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_HEADER,::std::mem_fun(&OReportHelper::getPageHeader),::std::mem_fun(&OReportHelper::getPageHeaderOn))
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_FOOTER,::std::mem_fun(&OReportHelper::getPageFooter),::std::mem_fun(&OReportHelper::getPageFooterOn)) )
             {
-                m_aStartMarker->Invalidate(INVALIDATE_NOERASE);
+                m_aStartMarker->Invalidate(InvalidateFlags::NoErase);
             }
             else
             {
                 OUString sTitle = ModuleRes(RID_STR_DETAIL);
                 m_aStartMarker->setTitle(sTitle);
-                m_aStartMarker->Invalidate(INVALIDATE_CHILDREN);
+                m_aStartMarker->Invalidate(InvalidateFlags::Children);
             }
         }
     }
@@ -176,7 +176,7 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
     {
         OUString sTitle = ModuleRes(_nResId);
         m_aStartMarker->setTitle(sTitle);
-        m_aStartMarker->Invalidate(INVALIDATE_CHILDREN);
+        m_aStartMarker->Invalidate(InvalidateFlags::Children);
     }
     return bRet;
 }
@@ -197,7 +197,7 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
         OUString sTitle( ModuleRes(_nResId).toString() );
         sTitle = sTitle.replaceFirst("#", sExpression);
         m_aStartMarker->setTitle( sTitle );
-        m_aStartMarker->Invalidate(INVALIDATE_CHILDREN);
+        m_aStartMarker->Invalidate(InvalidateFlags::Children);
     }
     return bRet;
 }
@@ -368,7 +368,7 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 void lcl_scroll(vcl::Window& _rWindow,const Point& _aDelta)
 {
     _rWindow.Scroll(-_aDelta.X(),-_aDelta.Y());
-    _rWindow.Invalidate(INVALIDATE_TRANSPARENT);
+    _rWindow.Invalidate(InvalidateFlags::Transparent);
 }
 
 void lcl_setOrigin(vcl::Window& _rWindow,long _nX, long _nY)

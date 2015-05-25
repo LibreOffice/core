@@ -3518,7 +3518,7 @@ void SvTreeListBox::NotifyScrolled()
     aScrolledHdl.Call( this );
 }
 
-void SvTreeListBox::Invalidate( sal_uInt16 nInvalidateFlags )
+void SvTreeListBox::Invalidate( InvalidateFlags nInvalidateFlags )
 {
     if (!pImp)
         return;
@@ -3530,7 +3530,7 @@ void SvTreeListBox::Invalidate( sal_uInt16 nInvalidateFlags )
     pImp->Invalidate();
 }
 
-void SvTreeListBox::Invalidate( const Rectangle& rRect, sal_uInt16 nInvalidateFlags )
+void SvTreeListBox::Invalidate( const Rectangle& rRect, InvalidateFlags nInvalidateFlags )
 {
     if( nFocusWidth == -1 )
         // to make sure that the control doesn't show the wrong focus rectangle
@@ -3768,7 +3768,7 @@ void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 void SvTreeListBox::StateChanged( StateChangedType eType )
 {
     if( eType == StateChangedType::Enable )
-        Invalidate( INVALIDATE_CHILDREN );
+        Invalidate( InvalidateFlags::Children );
 
     Control::StateChanged( eType );
 

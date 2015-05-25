@@ -56,7 +56,7 @@ void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
     {
         m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
         m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;
-        Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::NoErase);
     }
 }
 
@@ -87,7 +87,7 @@ void OColorListener::setMarked(bool _bMark)
     if ( m_bMarked != _bMark)
     {
         m_bMarked = _bMark;
-        Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::NoErase);
     }
 }
 

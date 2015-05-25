@@ -1156,7 +1156,7 @@ void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(::com::sun::star
     SolarMutexGuard aGuard;
 
     if ( GetWindow() )
-        GetWindow()->Invalidate( (sal_uInt16) nInvalidateFlags );
+        GetWindow()->Invalidate( static_cast<InvalidateFlags>(nInvalidateFlags) );
 }
 
 void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, sal_Int16 nInvalidateFlags ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -1164,7 +1164,7 @@ void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, 
     SolarMutexGuard aGuard;
 
     if ( GetWindow() )
-        GetWindow()->Invalidate( VCLRectangle(rRect), (sal_uInt16) nInvalidateFlags );
+        GetWindow()->Invalidate( VCLRectangle(rRect), static_cast<InvalidateFlags>(nInvalidateFlags) );
 }
 
 

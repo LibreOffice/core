@@ -126,9 +126,9 @@ void OTableWindowListBox::NotifyEndScroll()
 {
     if (m_bReallyScrolled)
         // connections of this table, if any,  should be redrawn
-        m_pTabWin->getTableView()->Invalidate(INVALIDATE_NOCHILDREN);
+        m_pTabWin->getTableView()->Invalidate(InvalidateFlags::NoChildren);
 
-        // without INVALIDATE_NOCHILDREN all tables would be redrawn,
+        // without InvalidateFlags::NoChildren all tables would be redrawn,
         // so: flickering
     m_bReallyScrolled = false;
 }

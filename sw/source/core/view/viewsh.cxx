@@ -527,7 +527,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
             {
                 Imp()->UnlockPaint();
                 GetWin()->EnablePaint( true );
-                GetWin()->Invalidate( INVALIDATE_CHILDREN );
+                GetWin()->Invalidate( InvalidateFlags::Children );
             }
             pVout.disposeAndClear();
         }
@@ -535,7 +535,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
         {
             Imp()->UnlockPaint();
             GetWin()->EnablePaint( true );
-            GetWin()->Invalidate( INVALIDATE_CHILDREN );
+            GetWin()->Invalidate( InvalidateFlags::Children );
         }
     }
     else

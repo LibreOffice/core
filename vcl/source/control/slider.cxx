@@ -215,7 +215,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
                 {
                     const Point aPos( GetPosPixel() );
                     aInvalidRegion.Move( aPos.X(), aPos.Y() );
-                    GetParent()->Invalidate( aInvalidRegion, INVALIDATE_TRANSPARENT | INVALIDATE_UPDATE );
+                    GetParent()->Invalidate( aInvalidRegion, InvalidateFlags::Transparent | InvalidateFlags::Update );
                 }
                 else
                     Invalidate( aInvalidRegion );

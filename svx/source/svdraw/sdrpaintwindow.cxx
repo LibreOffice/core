@@ -104,7 +104,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle con
         //rhbz#1007697 this can cause the window itself to be
         //deleted. So we are listening to see if that happens
         //and if so, then skip the update
-        pCandidate->Invalidate(INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN);
+        pCandidate->Invalidate(InvalidateFlags::NoTransparent|InvalidateFlags::Children);
         // important: actually paint the child here!
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
             continue;

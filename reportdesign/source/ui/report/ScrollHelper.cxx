@@ -397,7 +397,7 @@ void OScrollWindowHelper::zoom(const Fraction& _aZoom)
 {
     m_aReportWindow->zoom(_aZoom);
     Resize();
-    Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
+    Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::Transparent);
 }
 
 void OScrollWindowHelper::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const

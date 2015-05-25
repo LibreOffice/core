@@ -169,7 +169,7 @@ namespace offapp
 
     void DriverListControl::updateCurrentRow()
     {
-        Window::Invalidate( GetRowRectPixel( GetCurRow() ), INVALIDATE_UPDATE );
+        Window::Invalidate( GetRowRectPixel( GetCurRow() ), InvalidateFlags::Update );
     }
 
 
@@ -219,7 +219,7 @@ namespace offapp
     void DriverListControl::StateChanged( StateChangedType nStateChange )
     {
         if (StateChangedType::Enable == nStateChange)
-            Window::Invalidate(INVALIDATE_UPDATE);
+            Window::Invalidate(InvalidateFlags::Update);
         EditBrowseBox::StateChanged( nStateChange );
     }
 

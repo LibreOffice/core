@@ -837,7 +837,7 @@ namespace pcr
         }
 
         m_aLinesPlayground->EnablePaint(true);
-        m_aLinesPlayground->Invalidate(INVALIDATE_CHILDREN);
+        m_aLinesPlayground->Invalidate(InvalidateFlags::Children);
     }
 
 

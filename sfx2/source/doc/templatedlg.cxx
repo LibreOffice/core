@@ -969,7 +969,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 }
             }
 
-            mpLocalView->Invalidate(INVALIDATE_NOERASE);
+            mpLocalView->Invalidate(InvalidateFlags::NoErase);
         }
     }
 }
@@ -1527,7 +1527,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
             }
         }
 
-        mpLocalView->Invalidate(INVALIDATE_NOERASE);
+        mpLocalView->Invalidate(InvalidateFlags::NoErase);
 
         if (!aTemplateList.isEmpty())
         {

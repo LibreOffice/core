@@ -354,7 +354,7 @@ void SvtIconChoiceCtrl::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         _pImp->InitSettings();
-        Invalidate(INVALIDATE_NOCHILDREN);
+        Invalidate(InvalidateFlags::NoChildren);
     }
     else
         Control::DataChanged( rDCEvt );
@@ -405,7 +405,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
         aFont.SetColor( rStyleSettings.GetFieldTextColor() );
         SetFont( aFont );
 
-        Invalidate(INVALIDATE_NOCHILDREN);
+        Invalidate(InvalidateFlags::NoChildren);
     }
 }
 

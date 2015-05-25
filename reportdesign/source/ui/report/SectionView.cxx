@@ -123,7 +123,7 @@ void OSectionView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
     }
     else
     {
-        rWin.Invalidate(INVALIDATE_NOERASE);
+        rWin.Invalidate(InvalidateFlags::NoErase);
     }
 }
 

@@ -560,7 +560,7 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
     update();
     if(p)
     {
-        p->Invalidate( INVALIDATE_UPDATE );
+        p->Invalidate( InvalidateFlags::Update );
     }
 }
 

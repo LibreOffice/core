@@ -1308,7 +1308,7 @@ void TabControl::setAllocation(const Size &rAllocation)
         aRect.Right()  += TAB_OFFSET+TAB_BORDER_RIGHT;
         aRect.Bottom() += TAB_OFFSET+TAB_BORDER_BOTTOM;
         if ( bTabPage )
-            Invalidate( aRect, INVALIDATE_NOCHILDREN );
+            Invalidate( aRect, InvalidateFlags::NoChildren );
         else
             Invalidate( aRect );
 
@@ -1316,7 +1316,7 @@ void TabControl::setAllocation(const Size &rAllocation)
     else
     {
         if ( bTabPage )
-            Invalidate( INVALIDATE_NOCHILDREN );
+            Invalidate( InvalidateFlags::NoChildren );
         else
             Invalidate();
     }

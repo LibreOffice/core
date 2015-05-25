@@ -1800,7 +1800,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                             if ( !bInvalidate )
                             {
                                 if ( !pOverlapRegion->IsEmpty() )
-                                    ImplInvalidateFrameRegion( pOverlapRegion, INVALIDATE_CHILDREN );
+                                    ImplInvalidateFrameRegion( pOverlapRegion, InvalidateFlags::Children );
                             }
                         }
                         else
@@ -1809,7 +1809,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                     else
                         bInvalidate = true;
                     if ( bInvalidate )
-                        ImplInvalidateFrameRegion( NULL, INVALIDATE_CHILDREN );
+                        ImplInvalidateFrameRegion( NULL, InvalidateFlags::Children );
                 }
                 else
                 {
@@ -1821,7 +1821,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                         aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
                     ImplClipBoundaries( aRegion, false, true );
                     if ( !aRegion.IsEmpty() )
-                        ImplInvalidateFrameRegion( &aRegion, INVALIDATE_CHILDREN );
+                        ImplInvalidateFrameRegion( &aRegion, InvalidateFlags::Children );
                 }
             }
 
@@ -2445,9 +2445,9 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
 
             if ( !mpWindowImpl->mbFrame )
             {
-                sal_uInt16 nInvalidateFlags = INVALIDATE_CHILDREN;
+                InvalidateFlags nInvalidateFlags = InvalidateFlags::Children;
                 if( ! IsPaintTransparent() )
-                    nInvalidateFlags |= INVALIDATE_NOTRANSPARENT;
+                    nInvalidateFlags |= InvalidateFlags::NoTransparent;
                 ImplInvalidate( NULL, nInvalidateFlags );
                 ImplGenerateMouseMove();
             }

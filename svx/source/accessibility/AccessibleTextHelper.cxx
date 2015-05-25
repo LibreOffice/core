@@ -983,7 +983,7 @@ namespace accessibility
 
             // TODO: maybe optimize here in the following way.  If the
             // number of removed children exceeds a certain threshold,
-            // use INVALIDATE_CHILDREN
+            // use InvalidateFlags::Children
             AccessibleTextHelper_LostChildEvent aFunctor( *this );
 
             ::std::for_each( begin, end, aFunctor );

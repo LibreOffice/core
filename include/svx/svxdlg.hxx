@@ -143,7 +143,7 @@ public:
     virtual Size    GetSizePixel() const = 0;
     virtual void    Hide() = 0;
     virtual bool    IsVisible() const = 0;
-    virtual void    Invalidate( sal_uInt16 nFlags = 0 ) = 0;
+    virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) = 0;
 };
 
 class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog

@@ -1531,7 +1531,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
                 }
                 else
                 {
-                    pBorder->Invalidate( INVALIDATE_NOERASE );
+                    pBorder->Invalidate( InvalidateFlags::NoErase );
                     pBorder->Update();
                 }
             }
