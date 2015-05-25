@@ -225,6 +225,7 @@ void SwTiledRenderingTest::testResetSelection()
     CPPUNIT_ASSERT(!pWrtShell->IsSelFrmMode());
 }
 
+#if !(defined WNT || defined MACOSX)
 void lcl_search()
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -234,6 +235,7 @@ void lcl_search()
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
 }
+#endif
 
 void SwTiledRenderingTest::testSearch()
 {
