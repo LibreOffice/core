@@ -434,7 +434,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                  EXCHG_IN_ACTION_LINK == m_nDropAction) ||
                  SotClipboardFormatId::SBA_CTRLDATAEXCHANGE == m_nDropFormat  )
             {
-                SdrMarkView* pMView = PTR_CAST( SdrMarkView, rSh.GetDrawView() );
+                SdrMarkView* pMView = rSh.GetDrawView();
                 if( pMView && !pMView->IsDesignMode() )
                     return DND_ACTION_NONE;
             }

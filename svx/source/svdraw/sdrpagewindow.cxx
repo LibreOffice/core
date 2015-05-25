@@ -264,7 +264,7 @@ namespace
 
             if(pObjA && pObjA->ISA(SdrPathObj))
             {
-                basegfx::B2DPolyPolygon aPolyA(((SdrPathObj*)pObjA)->GetPathPoly());
+                basegfx::B2DPolyPolygon aPolyA(pObjA->GetPathPoly());
                 aPolyA = basegfx::tools::correctOrientations(aPolyA);
 
                 basegfx::B2DPolyPolygon aPolyB;
@@ -275,7 +275,7 @@ namespace
 
                     if(pObjB && pObjB->ISA(SdrPathObj))
                     {
-                        basegfx::B2DPolyPolygon aCandidate(((SdrPathObj*)pObjB)->GetPathPoly());
+                        basegfx::B2DPolyPolygon aCandidate(pObjB->GetPathPoly());
                         aCandidate = basegfx::tools::correctOrientations(aCandidate);
                         aPolyB.append(aCandidate);
                     }

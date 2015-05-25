@@ -461,7 +461,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
     {
         bool bDrawObject(true);
 
-        if ( !SwFlyFrm::IsPaint( (SdrObject*)this, pShell ) )
+        if ( !SwFlyFrm::IsPaint( const_cast<SwVirtFlyDrawObj*>(this), pShell ) )
         {
             bDrawObject = false;
         }

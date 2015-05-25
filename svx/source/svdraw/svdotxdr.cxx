@@ -56,7 +56,7 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
     if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     if (eKind!=HDL_MOVE) {
         pH=new SdrHdl(aPnt,eKind);
-        pH->SetObj((SdrObject*)this);
+        pH->SetObj(const_cast<SdrTextObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
     }
     return pH;

@@ -267,8 +267,6 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                     //  don't set default text, start edit mode instead
                     //  (Edit mode is started in ScTabViewShell::ExecDraw, because
                     //  it must be handled by FuText)
-                    // String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
-                    // ((SdrCaptionObj*)pObj)->SetText(aText);
 
                     static_cast<SdrCaptionObj*>(pObj)->SetLogicRect(aRect);
                     static_cast<SdrCaptionObj*>(pObj)->SetTailPos(

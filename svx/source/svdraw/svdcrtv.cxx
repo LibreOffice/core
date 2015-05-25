@@ -477,7 +477,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
                 if (!rLogRect.IsEmpty()) pAktCreate->NbcSetLogicRect(rLogRect);
 
                 // make sure drag start point is inside WorkArea
-                const Rectangle& rWorkArea = ((SdrDragView*)this)->GetWorkArea();
+                const Rectangle& rWorkArea = GetWorkArea();
 
                 if(!rWorkArea.IsEmpty())
                 {

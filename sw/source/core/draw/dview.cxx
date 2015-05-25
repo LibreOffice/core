@@ -931,7 +931,7 @@ void SwDrawView::DeleteMarked()
         SdrPageView* pDrawPageView = rImp.GetPageView();
         if ( pDrawPageView )
         {
-            SdrMarkView* pMarkView = PTR_CAST( SdrMarkView, &(pDrawPageView->GetView()) );
+            SdrMarkView* pMarkView = &(pDrawPageView->GetView());
             if ( pMarkView )
             {
                 ReplaceMarkedDrawVirtObjs( *pMarkView );
