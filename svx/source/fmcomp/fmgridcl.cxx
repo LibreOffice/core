@@ -363,7 +363,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         m_pImpl->xDroppedStatement = xStatement;
         m_pImpl->xDroppedResultSet = xResultSet;
 
-        PostUserEvent(LINK(this, FmGridHeader, OnAsyncExecuteDrop));
+        PostUserEvent(LINK(this, FmGridHeader, OnAsyncExecuteDrop), NULL, true);
     }
     catch (Exception&)
     {

@@ -665,7 +665,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         else
             pActRow->SetFieldType( GetView()->getController().getTypeInfoFallBack() );
 
-        nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType) );
+        nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType), NULL, true );
         pActFieldDescr = pActRow->GetActFieldDescr();
         pDescrWin->DisplayData( pActFieldDescr );
         GetUndoManager().AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, TOTypeInfoSP()) );
@@ -1222,7 +1222,7 @@ void OTableEditorCtrl::cut()
     {
         if (nCutEvent)
             Application::RemoveUserEvent(nCutEvent);
-        nCutEvent = Application::PostUserEvent(LINK(this, OTableEditorCtrl, DelayedCut));
+        nCutEvent = Application::PostUserEvent(LINK(this, OTableEditorCtrl, DelayedCut), NULL, true);
     }
 }
 
@@ -1245,7 +1245,7 @@ void OTableEditorCtrl::paste()
     {
         if( nPasteEvent )
             Application::RemoveUserEvent( nPasteEvent );
-        nPasteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedPaste) );
+        nPasteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedPaste), NULL, true );
     }
     else if(m_eChildFocus == NAME)
     {
@@ -1433,12 +1433,12 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                         case SID_DELETE:
                             if( nDeleteEvent )
                                 Application::RemoveUserEvent( nDeleteEvent );
-                            nDeleteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedDelete) );
+                            nDeleteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedDelete), NULL, true );
                             break;
                         case SID_TABLEDESIGN_INSERTROWS:
                             if( nInsNewRowsEvent )
                                 Application::RemoveUserEvent( nInsNewRowsEvent );
-                            nInsNewRowsEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedInsNewRows) );
+                            nInsNewRowsEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedInsNewRows), NULL, true );
                             break;
                         case SID_TABLEDESIGN_TABED_PRIMARYKEY:
                             SetPrimaryKey( !IsPrimaryKey() );

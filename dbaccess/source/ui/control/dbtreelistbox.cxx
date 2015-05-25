@@ -133,7 +133,7 @@ void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
             // an error occurred. The method calling us will reset the entry flags, so it can't be expanded again.
             // But we want that the user may do a second try (i.e. because he misstypes a password in this try), so
             // we have to reset these flags controlling the expand ability
-            PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent);
+            PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent, true);
         }
     }
 }

@@ -193,9 +193,9 @@ namespace dbaui
     bool ORelationControl::PreNotify(NotifyEvent& rNEvt)
     {
         if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
-            PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate));
+            PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate), NULL, true);
         else if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
-            PostUserEvent(LINK(this, ORelationControl, AsynchActivate));
+            PostUserEvent(LINK(this, ORelationControl, AsynchActivate), NULL, true);
 
         return EditBrowseBox::PreNotify(rNEvt);
     }

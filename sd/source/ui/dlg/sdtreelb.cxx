@@ -1171,7 +1171,7 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
         // another document type), but that would kill the StarView MouseMove
         // Handler which is calling Command().
         // For this reason, Drag&Drop is asynchronous.
-        Application::PostUserEvent( LINK( this, SdPageObjsTLB, ExecDragHdl ) );
+        Application::PostUserEvent( LINK( this, SdPageObjsTLB, ExecDragHdl ), NULL, true );
     }
 }
 

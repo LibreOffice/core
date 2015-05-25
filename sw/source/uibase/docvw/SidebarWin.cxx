@@ -1027,7 +1027,7 @@ void SwSidebarWin::DeactivatePostIt()
 
     if ( !IsProtected() && Engine()->GetEditEngine().GetText().isEmpty() )
     {
-        mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );
+        mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0, true );
     }
 }
 
@@ -1071,7 +1071,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         case FN_DELETE_COMMENT:
 
                 //Delete(); // do not kill the parent of our open popup menu
-                mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );
+                mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0, true );
             break;
         case FN_FORMAT_ALL_NOTES:
         case FN_DELETE_ALL_NOTES:

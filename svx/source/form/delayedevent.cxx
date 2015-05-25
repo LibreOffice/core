@@ -17,20 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "delayedevent.hxx"
-
 #include <vcl/svapp.hxx>
-
 
 namespace svxform
 {
-
-
-
-    //= DelayedEvent
-
-
     void DelayedEvent::Call( void* _pArg )
     {
         CancelPendingCall();
@@ -39,7 +30,6 @@ namespace svxform
         m_nEventId = Application::PostUserEvent( LINK( this, DelayedEvent, OnCall ), _pArg );
     }
 
-
     void DelayedEvent::CancelPendingCall()
     {
         if ( m_nEventId )
@@ -47,15 +37,11 @@ namespace svxform
         m_nEventId = 0;
     }
 
-
     IMPL_LINK( DelayedEvent, OnCall, void*, _pArg )
     {
         m_nEventId = 0;
         return m_aHandler.Call( _pArg );
     }
-
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2582,7 +2582,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                     pSect->SetProtectFlag( true );
 
                     Application::PostUserEvent( LINK( &rSh, SwWrtShell,
-                                                InsertRegionDialog ), pSect );
+                                                      InsertRegionDialog ), pSect );
                     nRet = true;
                     }
                 else if( SW_PASTESDR_SETATTR == nAction ||

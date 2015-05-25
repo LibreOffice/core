@@ -1072,7 +1072,7 @@ namespace svt
             // release the controller (asynchronously)
             if (nEndEvent)
                 Application::RemoveUserEvent(nEndEvent);
-            nEndEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,EndEditHdl));
+            nEndEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,EndEditHdl), NULL, true);
         }
     }
 
@@ -1106,7 +1106,7 @@ namespace svt
     {
         if (nCellModifiedEvent)
             Application::RemoveUserEvent(nCellModifiedEvent);
-        nCellModifiedEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,CellModifiedHdl));
+        nCellModifiedEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,CellModifiedHdl), NULL, true);
         return 0;
     }
 
@@ -1293,7 +1293,7 @@ namespace svt
             Application::RemoveUserEvent(nStartEvent);
 
         m_pFocusWhileRequest = Application::GetFocusWindow();
-        nStartEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,StartEditHdl));
+        nStartEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,StartEditHdl), NULL, true);
     }
 
 

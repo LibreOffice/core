@@ -156,13 +156,13 @@ bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
         {
             if (m_nDeactivateEvent)
                 Application::RemoveUserEvent(m_nDeactivateEvent);
-            m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchDeactivate));
+            m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchDeactivate), NULL, true);
         }
     if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
         if (m_nDeactivateEvent)
             Application::RemoveUserEvent(m_nDeactivateEvent);
-        m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchActivate));
+        m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchActivate), NULL, true);
     }
     return EditBrowseBox::PreNotify(rNEvt);
 }

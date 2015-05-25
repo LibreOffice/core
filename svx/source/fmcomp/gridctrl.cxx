@@ -2679,7 +2679,7 @@ void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMe
             // delete asynchronously
             if (m_nDeleteEvent)
                 Application::RemoveUserEvent(m_nDeleteEvent);
-            m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete));
+            m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete), NULL, true);
             break;
         case SID_FM_RECORD_UNDO:
             Undo();
@@ -3258,7 +3258,7 @@ bool DbGridControl::PreNotify(NotifyEvent& rEvt)
                     // delete asynchronously
                     if (m_nDeleteEvent)
                         Application::RemoveUserEvent(m_nDeleteEvent);
-                    m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete));
+                    m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete), NULL, true);
                     return true;
                 }
             }
@@ -3434,7 +3434,7 @@ void DbGridControl::implAdjustInSolarThread(bool _bRows)
     ::osl::MutexGuard aGuard(m_aAdjustSafety);
     if (::osl::Thread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
     {
-        m_nAsynAdjustEvent = PostUserEvent(LINK(this, DbGridControl, OnAsyncAdjust), reinterpret_cast< void* >( _bRows ));
+        m_nAsynAdjustEvent = PostUserEvent(LINK(this, DbGridControl, OnAsyncAdjust), reinterpret_cast< void* >( _bRows ), true);
         m_bPendingAdjustRows = _bRows;
         if (_bRows)
             SAL_INFO("svx.fmcomp", "posting an AdjustRows");

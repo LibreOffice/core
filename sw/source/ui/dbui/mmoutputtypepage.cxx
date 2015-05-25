@@ -540,7 +540,7 @@ void  SwSendMailDialog::IterateMails()
 void SwSendMailDialog::ShowDialog()
 {
     Application::PostUserEvent( LINK( this, SwSendMailDialog,
-                                                StartSendMails ), this );
+                                      StartSendMails ), this, true );
     ModelessDialog::Show();
 }
 
@@ -564,7 +564,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
         m_pImpl->xMailDispatcher.is() && m_pImpl->xMailDispatcher->isStarted())
     {
         Application::PostUserEvent( LINK( this, SwSendMailDialog,
-                                                    StopSendMails ), this );
+                                          StopSendMails ), this, true );
     }
     Image aInsertImg = m_aImageList.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );
 
