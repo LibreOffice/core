@@ -35,6 +35,14 @@
         Text [ en-US ] = "~Distribution..." ; \
     };
 
+#define MN_INSERT_GRAPHIC \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_GRAPHIC; \
+        HelpId = CMD_SID_INSERT_GRAPHIC; \
+        Text [ en-US ] = "Insert I~mage..." ; \
+    };
+
 #define MN_CAPTUREPOINT \
     MenuItem\
     {\
@@ -168,6 +176,7 @@
 
 #define MN_SLIDE_MENU \
     MN_SELECT_BACKGROUND\
+    MN_INSERT_GRAPHIC\
     MN_FORMAT_SLIDE\
     MenuItem\
     {\
