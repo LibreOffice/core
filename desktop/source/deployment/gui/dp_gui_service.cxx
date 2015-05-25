@@ -270,12 +270,12 @@ void ServiceImpl::startExecuteModal(
             if ( bCloseDialog )
                 myExtMgr->Close();
             else
-                myExtMgr->ToTop( TOTOP_RESTOREWHENMIN );
+                myExtMgr->ToTop( ToTopFlags::RestoreWhenMin );
         }
         else
         {
             myExtMgr->Show();
-            myExtMgr->ToTop( TOTOP_RESTOREWHENMIN );
+            myExtMgr->ToTop( ToTopFlags::RestoreWhenMin );
         }
     }
 

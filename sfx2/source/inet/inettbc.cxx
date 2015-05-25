@@ -184,7 +184,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
         if ( pWin )
         {
             pWin->GrabFocus();
-            pWin->ToTop( TOTOP_RESTOREWHENMIN );
+            pWin->ToTop( ToTopFlags::RestoreWhenMin );
         }
     }
 

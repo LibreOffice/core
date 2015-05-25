@@ -64,7 +64,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             // that the frame does not steal it
             pWindow->ImplGetFrameData()->mbSysObjFocus = true;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
-            pWindow->ToTop( TOTOP_NOGRABFOCUS );
+            pWindow->ToTop( ToTopFlags::NoGrabFocus );
             if( aDogTag.IsDead() )
                 break;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = false;
@@ -89,7 +89,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
         case SALOBJ_EVENT_TOTOP:
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
             if ( !Application::GetFocusWindow() || pWindow->HasChildPathFocus() )
-                pWindow->ToTop( TOTOP_NOGRABFOCUS );
+                pWindow->ToTop( ToTopFlags::NoGrabFocus );
             else
                 pWindow->ToTop();
             if( aDogTag.IsDead() )

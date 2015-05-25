@@ -846,7 +846,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                     {
                         vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                         pWin->GrabFocus();
-                        pWin->ToTop( TOTOP_RESTOREWHENMIN );
+                        pWin->ToTop( ToTopFlags::RestoreWhenMin );
                         break;
                     }
 
