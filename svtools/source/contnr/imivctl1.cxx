@@ -1377,7 +1377,7 @@ void SvxIconChoiceCtrl_Impl::Resize()
     if ( ! nUserEventAdjustScrBars )
         nUserEventAdjustScrBars =
             Application::PostUserEvent( LINK( this, SvxIconChoiceCtrl_Impl, UserEventHdl),
-                EVENTID_ADJUST_SCROLLBARS);
+                                        EVENTID_ADJUST_SCROLLBARS);
 
     VisRectChanged();
 }
@@ -2080,7 +2080,7 @@ void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSy
             if( !nUserEventShowCursor )
                 nUserEventShowCursor =
                     Application::PostUserEvent( LINK( this, SvxIconChoiceCtrl_Impl, UserEventHdl),
-                        EVENTID_SHOW_CURSOR );
+                                                EVENTID_SHOW_CURSOR );
         }
     }
 }

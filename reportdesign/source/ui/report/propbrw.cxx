@@ -487,7 +487,7 @@ void PropBrw::Update( OSectionView* pNewView )
         if ( m_bInitialStateChange )
         {
             // if we're just newly created, we want to have the focus
-            PostUserEvent( LINK( this, PropBrw, OnAsyncGetFocus ) );
+            PostUserEvent( LINK( this, PropBrw, OnAsyncGetFocus ), NULL, true );
             m_bInitialStateChange = false;
             // and additionally, we want to show the page which was active during
             // our previous incarnation

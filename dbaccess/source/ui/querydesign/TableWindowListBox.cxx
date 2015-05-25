@@ -63,7 +63,7 @@ void OTableWindowListBox::dragFinished( )
     // second look for ui activities which should happen after d&d
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
-    m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl));
+    m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl), NULL, true);
 }
 
 OTableWindowListBox::~OTableWindowListBox()
@@ -311,7 +311,7 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
         if (m_nDropEvent)
             Application::RemoveUserEvent(m_nDropEvent);
-        m_nDropEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, DropHdl));
+        m_nDropEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, DropHdl), NULL, true);
 
         return DND_ACTION_LINK;
     }

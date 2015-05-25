@@ -1473,7 +1473,7 @@ namespace svxform
         if( !bRes )
         {
             m_pEditEntry = pEntry;
-            nEditEvent = Application::PostUserEvent( LINK(this, NavigatorTree, OnEdit) );
+            nEditEvent = Application::PostUserEvent( LINK(this, NavigatorTree, OnEdit), NULL, true );
         } else
             SetCursor(pEntry, true);
 

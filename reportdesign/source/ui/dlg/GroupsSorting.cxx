@@ -748,7 +748,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                     case SID_DELETE:
                         if( m_nDeleteEvent )
                             Application::RemoveUserEvent( m_nDeleteEvent );
-                        m_nDeleteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedDelete) );
+                        m_nDeleteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedDelete), NULL, true );
                         break;
                     default:
                         break;
@@ -855,7 +855,7 @@ void OFieldExpressionControl::paste()
     {
         if( m_nPasteEvent )
             Application::RemoveUserEvent( m_nPasteEvent );
-        m_nPasteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedPaste) );
+        m_nPasteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedPaste), NULL, true );
     }
 }
 
@@ -1166,7 +1166,7 @@ IMPL_LINK_NOARG_TYPED( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
         }
         if ( nCommand == m_nDeleteId )
         {
-            Application::PostUserEvent( LINK(m_pFieldExpression, OFieldExpressionControl, DelayedDelete) );
+            Application::PostUserEvent( LINK(m_pFieldExpression, OFieldExpressionControl, DelayedDelete), NULL, true );
         }
         else
         {

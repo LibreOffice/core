@@ -902,7 +902,8 @@ void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
             aVerSBar->SetThumbPos( 0 );
             StopUserEvent();
             ShowCursor(true);
-            nCurUserEvent = Application::PostUserEvent(LINK(this, SvImpLBox, MyUserEvent), reinterpret_cast<void*>(1));
+            nCurUserEvent = Application::PostUserEvent(LINK(this, SvImpLBox, MyUserEvent),
+                                                       reinterpret_cast<void*>(1));
             return;
         }
     }

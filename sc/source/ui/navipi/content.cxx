@@ -573,7 +573,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
             //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
             //  Deshalb Drag&Drop asynchron:
 
-            Application::PostUserEvent( LINK( this, ScContentTree, ExecDragHdl ) );
+            Application::PostUserEvent( LINK( this, ScContentTree, ExecDragHdl ), NULL, true );
 
             bDone = true;
             break;

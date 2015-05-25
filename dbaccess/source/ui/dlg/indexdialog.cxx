@@ -631,7 +631,7 @@ namespace dbaui
 
             updateToolbox();
             m_bEditAgain = true;
-            PostUserEvent(LINK(this, DbaIndexDialog, OnEditIndexAgain), _pEntry);
+            PostUserEvent(LINK(this, DbaIndexDialog, OnEditIndexAgain), _pEntry, true);
             return 0L;
         }
 

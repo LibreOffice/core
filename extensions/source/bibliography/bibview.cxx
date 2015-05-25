@@ -153,7 +153,7 @@ namespace bib
             }
             if(bExecute)
             {
-                Application::PostUserEvent( LINK( this, BibView, CallMappingHdl ) );
+                Application::PostUserEvent( LINK( this, BibView, CallMappingHdl ), NULL, true );
             }
         }
     }

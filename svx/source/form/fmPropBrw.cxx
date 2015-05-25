@@ -648,7 +648,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
             if ( m_bInitialStateChange )
             {
                 // if we're just newly created, we want to have the focus
-                PostUserEvent( LINK( this, FmPropBrw, OnAsyncGetFocus ) );
+                PostUserEvent( LINK( this, FmPropBrw, OnAsyncGetFocus ), NULL, true );
 
                 // and additionally, we want to show the page which was active during
                 // our previous incarnation

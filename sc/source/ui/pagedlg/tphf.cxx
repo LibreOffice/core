@@ -165,7 +165,7 @@ IMPL_LINK_NOARG(ScHFPage, BtnHdl)
     // the GrabFocus from the Edit-Dialog under OS/2 doesn't work.(Bug #41805#).
     // With the new StarView, this workaround should be again considered!
 
-    Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ) );
+    Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ), NULL, true );
     return 0;
 }
 

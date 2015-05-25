@@ -324,7 +324,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
     }
 
     // destroy mpThemeProps asynchronously
-    Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), pDialog );
+    Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), pDialog, true );
 }
 
 IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
@@ -509,7 +509,7 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void GalleryBrowser1::ShowContextMenu()
 {
-    Application::PostUserEvent( LINK( this, GalleryBrowser1, ShowContextMenuHdl ), this );
+    Application::PostUserEvent( LINK( this, GalleryBrowser1, ShowContextMenuHdl ), this, true );
 }
 
 bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )

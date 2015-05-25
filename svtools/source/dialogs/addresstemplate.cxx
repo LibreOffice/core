@@ -655,7 +655,7 @@ void AssignmentPersistentData::ImplCommit()
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
             m_pImpl->aLogicalFieldNames.push_back(sLogicalFieldNames.getToken(i, ';'));
 
-        PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize));
+        PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize), NULL, true);
             // so the dialog will at least show up before we do the loading of the
             // configuration data and the (maybe time consuming) analysis of the data source/table to select
 

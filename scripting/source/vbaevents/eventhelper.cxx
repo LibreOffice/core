@@ -706,7 +706,8 @@ EventListener::firing(const ScriptEvent& evt) throw(RuntimeException, std::excep
     // needs some logic to check if the event handler is oneway or not
     // if not oneway then firing_Impl otherwise... as below
     acquire();
-    Application::PostUserEvent( LINK( this, EventListener, OnAsyncScriptEvent ), new ScriptEvent( evt ) );
+    Application::PostUserEvent( LINK( this, EventListener, OnAsyncScriptEvent ),
+                                new ScriptEvent( evt ) );
 #else
     firing_Impl( evt );
 #endif
