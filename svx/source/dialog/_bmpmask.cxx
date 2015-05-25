@@ -335,8 +335,6 @@ SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
 {
 }
 
-
-
 void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
                                          const SfxPoolItem* pItem )
 {
@@ -487,6 +485,7 @@ void SvxBmpMask::dispose()
     m_pQSet4.disposeAndClear();
     m_pCtlPipette.disposeAndClear();
     delete pData;
+    pData = NULL;
     m_pTbxPipette.clear();
     m_pBtnExec.clear();
     m_pCbx1.clear();
@@ -503,6 +502,7 @@ void SvxBmpMask::dispose()
     m_pLbColor4.clear();
     m_pCbxTrans.clear();
     m_pLbColorTrans.clear();
+    aSelItem.dispose();
     SfxDockingWindow::dispose();
 }
 
