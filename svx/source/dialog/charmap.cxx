@@ -647,6 +647,9 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
 
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, bool bFocus )
 {
+    if (mpFontCharMap == nullptr)
+        RecalculateFont(*this);
+
     // get next available char of current font
     sal_UCS4 cNext = mpFontCharMap->GetNextChar( (cNew > 0) ? cNew - 1 : cNew );
 
