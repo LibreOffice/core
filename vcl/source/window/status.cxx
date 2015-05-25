@@ -462,7 +462,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
         }
         else
         {
-            UserDrawEvent aODEvt(this, aTextRect, pItem->mnId);
+            UserDrawEvent aODEvt(&rRenderContext, aTextRect, pItem->mnId);
             UserDraw(aODEvt);
         }
     }
@@ -505,8 +505,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
         }
     }
 
-    const OutputDevice* pOutDev = GetOutDev();
-    if (!pOutDev->ImplIsRecordLayout())
+    if (!rRenderContext.ImplIsRecordLayout())
         CallEventListeners(VCLEVENT_STATUSBAR_DRAWITEM, reinterpret_cast<void*>(pItem->mnId));
 }
 
@@ -1260,7 +1259,6 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
             Update();
             Rectangle aRect = ImplGetItemRectPos(nPos);
             Invalidate(aRect);
-            ImplDrawItem(*this, true, nPos, false, false);
             Flush();
         }
     }
