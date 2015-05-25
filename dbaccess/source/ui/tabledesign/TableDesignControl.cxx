@@ -42,7 +42,6 @@ OTableRowView::OTableRowView(vcl::Window* pParent)
     ,m_nCurrentPos(-1)
     ,m_nCurUndoActId(0)
     ,m_bCurrentModified(false)
-    ,m_bUpdatable(false)
     ,m_bClipboardFilled(false)
 {
 
@@ -66,8 +65,6 @@ void OTableRowView::Init()
 
     BrowserMode nMode = BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::KEEPHIGHLIGHT |
                         BrowserMode::HLINES | BrowserMode::VLINES | BrowserMode::AUTOSIZE_LASTCOL;
-    if (IsUpdatable())
-        nMode |= BrowserMode::HIDECURSOR;
 
     SetMode(nMode);
 }
@@ -116,7 +113,7 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                 aContextMenu.EnableItem( SID_CUT, nSelectRowCount != 0);
                 aContextMenu.EnableItem( SID_COPY, nSelectRowCount  != 0);
                 aContextMenu.EnableItem( SID_PASTE, m_bClipboardFilled );
-                aContextMenu.EnableItem( SID_DELETE, IsUpdatable() && nSelectRowCount != 0 );
+                aContextMenu.EnableItem( SID_DELETE, false );
                 switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
                 {
                     case SID_CUT:

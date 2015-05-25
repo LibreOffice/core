@@ -42,7 +42,6 @@ namespace dbaui
 
     protected:
         bool    m_bCurrentModified;
-        bool    m_bUpdatable;
         bool    m_bClipboardFilled;
 
     public:
@@ -74,8 +73,6 @@ namespace dbaui
         virtual bool IsPrimaryKeyAllowed( long nRow )   = 0;
         virtual bool IsInsertNewAllowed( long nRow )    = 0;
         virtual bool IsDeleteAllowed( long nRow )       = 0;
-
-        bool IsUpdatable() const {return m_bUpdatable;}
 
         virtual RowStatus GetRowStatus(long nRow) const SAL_OVERRIDE;
         virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
