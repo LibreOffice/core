@@ -78,7 +78,6 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 
         OUString    GetIconTheme() const;
         void        SetIconTheme(const OUString&);
-        void        SetIconThemeAutomatically();
         bool        IconThemeWasSetAutomatically();
 
         sal_Int16   GetToolboxStyle() const;

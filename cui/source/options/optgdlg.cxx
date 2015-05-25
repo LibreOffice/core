@@ -789,10 +789,10 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
         // 0 means choose style automatically
-        if (nStyleLB_NewSelection == 0) {
-            aMiscOptions.SetIconThemeAutomatically();
-        }
-        else {
+        if (nStyleLB_NewSelection == 0)
+            aMiscOptions.SetIconTheme("auto");
+        else
+        {
             sal_uInt16 pos = m_pIconStyleLB->GetSelectEntryPos();
             const vcl::IconThemeInfo& iconThemeId = mInstalledIconThemes.at(pos-1);
             aMiscOptions.SetIconTheme(iconThemeId.GetThemeId());

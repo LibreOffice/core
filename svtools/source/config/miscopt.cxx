@@ -179,11 +179,6 @@ class SvtMiscOptions_Impl : public ConfigItem
         bool IconThemeWasSetAutomatically()
         {return m_bIconThemeWasSetAutomatically;}
 
-        /** Set the icon theme automatically by detecting the best theme for the desktop environment.
-         * The parameter setModified controls whether SetModified() will be called.
-         */
-        void SetIconThemeAutomatically(SetModifiedFlag = SET_MODIFIED);
-
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
         inline sal_Int16 GetToolboxStyle()
         { return m_nToolboxStyle ? VCL_TOOLBOX_STYLE_FLAT : 0; }
@@ -333,18 +328,11 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
                 OUString aIconTheme;
-                if( seqValues[nProperty] >>= aIconTheme ) {
-                    if (aIconTheme == "auto") {
-                        SetIconThemeAutomatically(DONT_SET_MODIFIED);
-                    }
-                    else {
-                        SetIconTheme(aIconTheme, DONT_SET_MODIFIED);
-                    }
-                }
+                if (seqValues[nProperty] >>= aIconTheme)
+                    SetIconTheme(aIconTheme, DONT_SET_MODIFIED);
                 else
-                {
                     OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
-                }
+
                 m_bIsSymbolsStyleRO = seqRO[nProperty];
                 break;
             }
@@ -462,17 +450,10 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                     break;
             case PROPERTYHANDLE_SYMBOLSTYLE         :   {
                                                             OUString aIconTheme;
-                                                            if( seqValues[nProperty] >>= aIconTheme ) {
-                                                                if (aIconTheme == "auto") {
-                                                                    SetIconThemeAutomatically(DONT_SET_MODIFIED);
-                                                                }
-                                                                else {
-                                                                    SetIconTheme(aIconTheme, DONT_SET_MODIFIED);
-                                                                }
-                                                            }
-                                                            else {
+                                                            if (seqValues[nProperty] >>= aIconTheme)
+                                                                SetIconTheme(aIconTheme, DONT_SET_MODIFIED);
+                                                            else
                                                                 OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
-                                                            }
                                                         }
                                                     break;
             case PROPERTYHANDLE_DISABLEUICUSTOMIZATION      :   {
@@ -536,10 +517,18 @@ OUString SvtMiscOptions_Impl::GetIconTheme()
 void
 SvtMiscOptions_Impl::SetIconTheme(const OUString &rName, SetModifiedFlag setModified)
 {
+    OUString aTheme(rName);
+    if (aTheme.isEmpty() || aTheme == "auto")
+    {
+        aTheme = Application::GetSettings().GetStyleSettings().GetAutomaticallyChosenIconTheme();
+        m_bIconThemeWasSetAutomatically = true;
+    }
+    else
+        m_bIconThemeWasSetAutomatically = false;
+
     AllSettings aAllSettings = Application::GetSettings();
     StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-    aStyleSettings.SetIconTheme( rName );
-    m_bIconThemeWasSetAutomatically = false;
+    aStyleSettings.SetIconTheme(aTheme);
 
     aAllSettings.SetStyleSettings(aStyleSettings);
     Application::MergeSystemSettings( aAllSettings );
@@ -881,20 +870,6 @@ void SvtMiscOptions::AddListenerLink( const Link<>& rLink )
 void SvtMiscOptions::RemoveListenerLink( const Link<>& rLink )
 {
     m_pDataContainer->RemoveListenerLink( rLink );
-}
-
-void
-SvtMiscOptions_Impl::SetIconThemeAutomatically(enum SetModifiedFlag setModified)
-{
-    OUString theme = Application::GetSettings().GetStyleSettings().GetAutomaticallyChosenIconTheme();
-    SetIconTheme(theme, setModified);
-    m_bIconThemeWasSetAutomatically = true;
-}
-
-void
-SvtMiscOptions::SetIconThemeAutomatically()
-{
-    m_pDataContainer->SetIconThemeAutomatically();
 }
 
 bool
