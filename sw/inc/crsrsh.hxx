@@ -61,7 +61,7 @@ class SwTextAttr;
 class SwTableBox;
 class SwTOXMark;
 class SwRangeRedline;
-class IBlockCursor;
+class SwBlockCursor;
 class SwContentNode;
 class SwPostItField;
 class SwTextField;
@@ -177,7 +177,7 @@ private:
     SwShellCrsr* m_pCrsrStk;      ///< stack for the cursor
     SwVisCrsr *m_pVisCrsr;        ///< the visible cursor
 
-    IBlockCursor *m_pBlockCrsr;   ///< interface of cursor for block (=rectangular) selection
+    SwBlockCursor *m_pBlockCrsr;   ///< interface of cursor for block (=rectangular) selection
 
     SwShellTableCrsr* m_pTableCrsr; /**< table Crsr; only in tables when the
                                    selection lays over 2 columns */
@@ -640,8 +640,8 @@ public:
         { return (const_cast<SwCrsrShell*>(this))->getShellCrsr( bBlock ); }
 
     bool IsBlockMode() const { return 0 != m_pBlockCrsr; }
-    const IBlockCursor* GetBlockCrsr() const { return m_pBlockCrsr; }
-    IBlockCursor* GetBlockCrsr() { return m_pBlockCrsr; }
+    const SwBlockCursor* GetBlockCrsr() const { return m_pBlockCrsr; }
+    SwBlockCursor* GetBlockCrsr() { return m_pBlockCrsr; }
 
     // is the Crsr in a table and is the selection over 2 columns
     bool IsTableMode() const { return 0 != m_pTableCrsr; }
