@@ -326,8 +326,11 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     SwDoc* pDoc = rEditSh.GetDoc();
     if( pFnd )
     {
+        // replace also last colon of keywords surrounded by colons (for example, ":name:")
+        bool replaceLastChar = pFnd->GetShort()[0] == ':' && pFnd->GetShort().endsWith(":");
+
         const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
-        SwPaM aPam( rNd, rSttPos, rNd, nEndPos );
+        SwPaM aPam( rNd, rSttPos, rNd, nEndPos + (replaceLastChar ? 1 : 0) );
 
         if( pFnd->IsTextOnly() )
         {

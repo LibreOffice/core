@@ -2825,12 +2825,16 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     sal_Int32 right_wildcard = rChk.endsWith( ".*" ) ? 2 : 0; // "word.*" pattern?
     sal_Int32 nSttWdPos = nEndPos;
 
-    if ( nEndPos >= rChk.getLength() - left_wildcard - right_wildcard )
+    // direct replacement of keywords surrounded by colons (for example, ":name:")
+    bool bColonNameColon = rTxt[nEndPos] == ':' && rChk[0] == ':' && rChk.endsWith(":");
+    if ( nEndPos + (bColonNameColon ? 1 : 0) >= rChk.getLength() - left_wildcard - right_wildcard )
     {
 
         bool bWasWordDelim = false;
         sal_Int32 nCalcStt = nEndPos - rChk.getLength() + left_wildcard;
-        if( !right_wildcard && ( !nCalcStt || nCalcStt == rStt || left_wildcard ||
+        if (bColonNameColon)
+            nCalcStt++;
+        if( !right_wildcard && ( !nCalcStt || nCalcStt == rStt || left_wildcard || bColonNameColon ||
               ( nCalcStt < rStt &&
                 IsWordDelim( rTxt[ nCalcStt - 1 ] ))) )
         {
