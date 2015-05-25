@@ -103,7 +103,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="add_service_btn">
+              <object class="GtkButton" id="add_service_btn:service_edit_menu">
                 <property name="label" translatable="yes">Add service</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -125,6 +125,18 @@
         <child>
           <placeholder/>
         </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="service_edit_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="edit_service">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Edit service</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
   </object>

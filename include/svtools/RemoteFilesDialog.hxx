@@ -15,6 +15,7 @@
 #include <svtools/PlaceEditDialog.hxx>
 
 #include <vcl/button.hxx>
+#include <vcl/menubtn.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
@@ -45,7 +46,7 @@ private:
     VclPtr<PushButton> m_pOpen_btn;
     VclPtr<PushButton> m_pSave_btn;
     VclPtr<CancelButton> m_pCancel_btn;
-    VclPtr<PushButton> m_pAddService_btn;
+    VclPtr<MenuButton> m_pAddService_btn;
     VclPtr<ListBox> m_pServices_lb;
 
     std::vector<ServicePtr> m_aServices;
@@ -53,6 +54,7 @@ private:
     void fillServicesListbox();
 
     DECL_LINK ( AddServiceHdl, void * );
+    DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX

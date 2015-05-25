@@ -36,7 +36,9 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
         m_pOpen_btn->Hide();
     }
 
-    m_pAddService_btn->SetClickHdl( LINK( this, RemoteFilesDialog, AddServiceHdl) );
+    m_pAddService_btn->SetMenuMode(MENUBUTTON_MENUMODE_TIMED);
+    m_pAddService_btn->SetClickHdl( LINK( this, RemoteFilesDialog, AddServiceHdl ) );
+    m_pAddService_btn->SetSelectHdl( LINK( this, RemoteFilesDialog, EditServiceMenuHdl ) );
 
     fillServicesListbox();
 }
@@ -44,6 +46,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
 void RemoteFilesDialog::fillServicesListbox()
 {
     m_pServices_lb->Clear();
+    m_aServices.clear();
 
     // Load from user settings
     Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context));
@@ -76,7 +79,8 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
     ScopedVclPtrInstance< PlaceEditDialog > aDlg(this);
     short aRetCode = aDlg->Execute();
 
-    switch (aRetCode) {
+    switch(aRetCode)
+    {
         case RET_OK :
         {
             ServicePtr newService = aDlg->GetPlace();
@@ -108,6 +112,55 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
     };
 
     return 1;
+}
+
+IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
+{
+    OString sIdent(pButton->GetCurItemIdent());
+    if(sIdent == "edit_service"  && m_pServices_lb->GetEntryCount() > 0)
+    {
+        unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
+        ScopedVclPtrInstance< PlaceEditDialog > aDlg(this, m_aServices[nSelected]);
+        short aRetCode = aDlg->Execute();
+
+        switch(aRetCode)
+        {
+            case RET_OK :
+            {
+                // load all places (with local bookmarks), edit service and save all
+
+                ServicePtr pEditedService = aDlg->GetPlace();
+
+                Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context));
+                Sequence< OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context));
+
+                for(int i = 0; i < placesUrlsList.getLength() && i < placesNamesList[i].getLength(); i++)
+                {
+                    if(placesNamesList[i].compareTo(m_aServices[nSelected]->GetName()) == 0
+                       && placesUrlsList[i].compareTo(m_aServices[nSelected]->GetUrl()) == 0)
+                    {
+                        placesUrlsList[i] = pEditedService->GetUrl();
+                        placesNamesList[i] = pEditedService->GetName();
+                    }
+                }
+
+                m_aServices[nSelected] = pEditedService;
+                m_pServices_lb->RemoveEntry(nSelected);
+                m_pServices_lb->InsertEntry(pEditedService->GetName(), nSelected);
+                m_pServices_lb->SelectEntryPos(nSelected);
+
+                std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+                officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(placesUrlsList, batch);
+                officecfg::Office::Common::Misc::FilePickerPlacesNames::set(placesNamesList, batch);
+                batch->commit();
+        break;
+            }
+            case RET_CANCEL :
+            default :
+                // Do Nothing
+                break;
+        };
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
