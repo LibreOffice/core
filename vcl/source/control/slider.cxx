@@ -870,7 +870,7 @@ void Slider::Resize()
     Invalidate();
 }
 
-void Slider::SetLinkedField(NumericField* pField)
+void Slider::SetLinkedField(VclPtr<NumericField> pField)
 {
     ImplSetFieldLink(Link<>());
     mpLinkedField = pField;

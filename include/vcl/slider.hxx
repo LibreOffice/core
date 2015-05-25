@@ -53,7 +53,7 @@ private:
     bool            mbCalcSize;
     bool            mbFullDrag;
 
-    NumericField*   mpLinkedField;
+    VclPtr<NumericField> mpLinkedField;
 
     Link<>          maSlideHdl;
     Link<>          maEndSlideHdl;
@@ -116,7 +116,7 @@ public:
 
     Size            CalcWindowSizePixel();
 
-    void            SetLinkedField(NumericField* pField);
+    void            SetLinkedField(VclPtr<NumericField> pField);
 
     void            SetSlideHdl( const Link<>& rLink ) { maSlideHdl = rLink; }
     const Link<>&   GetSlideHdl() const { return maSlideHdl;    }
