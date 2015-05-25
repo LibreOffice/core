@@ -30,7 +30,7 @@ typedef cppu::WeakImplHelper1< ov::msforms::XNewFont > VbaNewFont_BASE;
 class VbaNewFont : public VbaNewFont_BASE
 {
 public:
-    VbaNewFont(
+    explicit VbaNewFont(
         const css::uno::Reference< css::beans::XPropertySet >& rxModelProps ) throw (css::uno::RuntimeException);
 
     // XNewFont attributes

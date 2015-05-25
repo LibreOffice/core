@@ -31,7 +31,7 @@ class PagesImpl : public PagesImpl_Base
 {
     sal_Int32 mnPages;
 public:
-    PagesImpl( sal_Int32 nPages ) : mnPages( nPages ) {}
+    explicit PagesImpl( sal_Int32 nPages ) : mnPages( nPages ) {}
     virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return mnPages; }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, ::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {

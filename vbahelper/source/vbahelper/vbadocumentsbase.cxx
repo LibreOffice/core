@@ -80,7 +80,7 @@ public:
     {
         m_it = m_documents.begin();
     }
-    DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
+    explicit DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();

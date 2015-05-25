@@ -29,7 +29,7 @@ class CommandBarControlEnumeration : public CommandBarControlEnumeration_BASE
     CommandBarControls_BASE* m_pCommandBarControls;
     sal_Int32 m_nCurrentPosition;
 public:
-    CommandBarControlEnumeration( CommandBarControls_BASE* pCommandBarControls ) : m_pCommandBarControls( pCommandBarControls ), m_nCurrentPosition( 0 ) {}
+    explicit CommandBarControlEnumeration( CommandBarControls_BASE* pCommandBarControls ) : m_pCommandBarControls( pCommandBarControls ), m_nCurrentPosition( 0 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         if( m_nCurrentPosition < m_pCommandBarControls->getCount() )

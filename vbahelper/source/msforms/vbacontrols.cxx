@@ -82,7 +82,7 @@ private:
         }
     }
 public:
-    ControlArrayWrapper( const uno::Reference< awt::XControl >& xDialog )
+    explicit ControlArrayWrapper( const uno::Reference< awt::XControl >& xDialog )
     {
         try
         {
