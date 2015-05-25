@@ -93,12 +93,6 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
     EditBrowseBox::KeyInput(rEvt);
 }
 
-void OTableRowView::SetUpdatable( bool bUpdate )
-{
-    m_bUpdatable = bUpdate;
-
-}
-
 void OTableRowView::Command(const CommandEvent& rEvt)
 {
 

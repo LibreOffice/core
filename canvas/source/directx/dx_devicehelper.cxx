@@ -178,16 +178,6 @@ namespace dxcanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    bool DeviceHelper::hasFullScreenMode()
-    {
-        return false;
-    }
-
-    bool DeviceHelper::enterFullScreenMode( bool /*bEnter*/ )
-    {
-        return false;
-    }
-
     uno::Any DeviceHelper::isAccelerated() const
     {
         return ::com::sun::star::uno::makeAny(false);

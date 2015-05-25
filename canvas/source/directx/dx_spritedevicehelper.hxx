@@ -64,9 +64,6 @@ namespace dxcanvas
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
             const ::com::sun::star::geometry::IntegerSize2D&                                        size );
 
-        bool hasFullScreenMode(  );
-        bool enterFullScreenMode( bool bEnter );
-
         void        destroyBuffers(  );
         sal_Bool  showBuffer( bool bIsVisible, sal_Bool bUpdateAll );
         sal_Bool  switchBuffer( bool bIsVisible, sal_Bool bUpdateAll );

@@ -1,6 +1,5 @@
 BigInt::BigInt(unsigned int)
 BitmapFilterStackBlur::filter(BitmapEx&)
-Color::ApplyTintOrShade(short)
 FontCharMap::GetDefaultMap(bool)
 NotifyEvent::NotifyEvent()
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
@@ -73,7 +72,6 @@ apitest::XText::testInsertRemoveTextContent()
 basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 chart::DataBrowser::SetCellModifiedHdl(Link<void*, long> const&)
-comphelper::OAccessibleImplementationAccess::setStateBit(short, bool)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(std::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&)
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(std::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&)
@@ -83,7 +81,6 @@ connectivity::sdbcx::OGroup::OGroup(bool)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, bool)
 dbaccess::OBookmarkContainer::dispose()
 dbaccess::StorageInputStream::close()
-dbaui::OTableRowView::SetUpdatable(bool)
 oglcanvas::CanvasHelper::drawPoint(com::sun::star::rendering::XCanvas const*, com::sun::star::geometry::RealPoint2D const&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&)
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::drawingml::TextListStyle::dump() const

@@ -115,34 +115,6 @@ bool Color::IsBright() const
     return GetLuminance() >= 245;
 }
 
-void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
-{
-    if (n100thPercent > 0)
-    {
-        basegfx::BColor aBColor = basegfx::tools::rgb2hsl(getBColor());
-
-        double fFactor = std::abs(n100thPercent) / 10000.0;
-        aBColor.setBlue(aBColor.getBlue() * fFactor + (100.0 - aBColor.getBlue()));
-        aBColor = basegfx::tools::hsl2rgb(aBColor);
-
-        SetRed(sal_uInt8((aBColor.getRed() * 255.0) + 0.5));
-        SetGreen(sal_uInt8((aBColor.getGreen() * 255.0) + 0.5));
-        SetBlue(sal_uInt8((aBColor.getBlue() * 255.0) + 0.5));
-    }
-    else if (n100thPercent < 0)
-    {
-        basegfx::BColor aBColor = basegfx::tools::rgb2hsl(getBColor());
-
-        double fFactor = std::abs(n100thPercent) / 10000.0;
-        aBColor.setBlue(aBColor.getBlue() * fFactor);
-        aBColor = basegfx::tools::hsl2rgb(aBColor);
-
-        SetRed(sal_uInt8((aBColor.getRed() * 255.0) + 0.5));
-        SetGreen(sal_uInt8((aBColor.getGreen() * 255.0) + 0.5));
-        SetBlue(sal_uInt8((aBColor.getBlue() * 255.0) + 0.5));
-    }
-}
-
 // color space conversion
 
 void Color::RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const

@@ -158,18 +158,6 @@ namespace dxcanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    bool SpriteDeviceHelper::hasFullScreenMode()
-    {
-        // TODO(F3): offer fullscreen mode the XCanvas way
-        return false;
-    }
-
-    bool SpriteDeviceHelper::enterFullScreenMode( bool /*bEnter*/ )
-    {
-        // TODO(F3): offer fullscreen mode the XCanvas way
-        return false;
-    }
-
     void SpriteDeviceHelper::destroyBuffers()
     {
         // TODO(F3): implement XBufferStrategy interface. For now, we

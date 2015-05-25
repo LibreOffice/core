@@ -76,19 +76,6 @@ namespace comphelper
         return m_pImpl->m_nForeignControlledStates;
     }
 
-
-    void OAccessibleImplementationAccess::setStateBit( const sal_Int16 _nState, const bool _bSet )
-    {
-        OSL_ENSURE( _nState >= 0 && static_cast< sal_uInt16 >(_nState) < sizeof( sal_Int64 ) * 8, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
-
-        sal_uInt64 nBitMask( 1 );
-        nBitMask <<= _nState;
-        if ( _bSet )
-            m_pImpl->m_nForeignControlledStates |= nBitMask;
-        else
-            m_pImpl->m_nForeignControlledStates &= ~nBitMask;
-    }
-
     namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
 
