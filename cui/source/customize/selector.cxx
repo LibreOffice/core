@@ -23,6 +23,7 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/builderfactory.hxx>
 #include "selector.hxx"
+#include "cfg.hxx"
 #include <dialmgr.hxx>
 #include <svx/fmresids.hrc>
 #include <svx/dialmgr.hxx>
