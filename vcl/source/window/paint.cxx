@@ -843,7 +843,7 @@ void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
     }
 }
 
-void Window::ImplValidateFrameRegion( const vcl::Region* pRegion, sal_uInt16 nFlags )
+void Window::ImplValidateFrameRegion( const vcl::Region* pRegion, ValidateFlags nFlags )
 {
     if ( !pRegion )
         mpWindowImpl->maInvalidateRegion.SetEmpty();
@@ -874,7 +874,7 @@ void Window::ImplValidateFrameRegion( const vcl::Region* pRegion, sal_uInt16 nFl
     }
     mpWindowImpl->mnPaintFlags &= ~IMPL_PAINT_PAINTALL;
 
-    if ( nFlags & VALIDATE_CHILDREN )
+    if ( nFlags & ValidateFlags::Children )
     {
         vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
@@ -885,19 +885,19 @@ void Window::ImplValidateFrameRegion( const vcl::Region* pRegion, sal_uInt16 nFl
     }
 }
 
-void Window::ImplValidate( const vcl::Region* pRegion, sal_uInt16 nFlags )
+void Window::ImplValidate( const vcl::Region* pRegion, ValidateFlags nFlags )
 {
     // assemble region
     bool    bValidateAll = !pRegion;
-    sal_uInt16  nOrgFlags = nFlags;
-    if ( !(nFlags & (VALIDATE_CHILDREN | VALIDATE_NOCHILDREN)) )
+    ValidateFlags nOrgFlags = nFlags;
+    if ( !(nFlags & (ValidateFlags::Children | ValidateFlags::NoChildren)) )
     {
         if ( GetStyle() & WB_CLIPCHILDREN )
-            nFlags |= VALIDATE_NOCHILDREN;
+            nFlags |= ValidateFlags::NoChildren;
         else
-            nFlags |= VALIDATE_CHILDREN;
+            nFlags |= ValidateFlags::Children;
     }
-    if ( (nFlags & VALIDATE_NOCHILDREN) && mpWindowImpl->mpFirstChild )
+    if ( (nFlags & ValidateFlags::NoChildren) && mpWindowImpl->mpFirstChild )
         bValidateAll = false;
     if ( bValidateAll )
         ImplValidateFrameRegion( NULL, nFlags );
@@ -908,15 +908,15 @@ void Window::ImplValidate( const vcl::Region* pRegion, sal_uInt16 nFlags )
         if ( pRegion )
             aRegion.Intersect( *pRegion );
         ImplClipBoundaries( aRegion, true, true );
-        if ( nFlags & VALIDATE_NOCHILDREN )
+        if ( nFlags & ValidateFlags::NoChildren )
         {
-            nFlags &= ~VALIDATE_CHILDREN;
-            if ( nOrgFlags & VALIDATE_NOCHILDREN )
+            nFlags &= ~ValidateFlags::Children;
+            if ( nOrgFlags & ValidateFlags::NoChildren )
                 ImplClipAllChildren( aRegion );
             else
             {
                 if ( ImplClipChildren( aRegion ) )
-                    nFlags |= VALIDATE_CHILDREN;
+                    nFlags |= ValidateFlags::Children;
             }
         }
         if ( !aRegion.IsEmpty() )
@@ -1180,7 +1180,7 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
     }
 }
 
-void Window::Validate( sal_uInt16 nFlags )
+void Window::Validate( ValidateFlags nFlags )
 {
 
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )

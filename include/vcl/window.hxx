@@ -239,8 +239,16 @@ namespace o3tl
 }
 
 // Flags for Validate
-#define VALIDATE_CHILDREN               ((sal_uInt16)0x0001)
-#define VALIDATE_NOCHILDREN             ((sal_uInt16)0x0002)
+enum class ValidateFlags
+{
+    NONE                = 0x0000,
+    Children            = 0x0001,
+    NoChildren          = 0x0002
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ValidateFlags> : is_typed_flags<ValidateFlags, 0x0003> {};
+}
 
 // Flags for Scroll
 #define SCROLL_CLIP                     ((sal_uInt16)0x0001)
@@ -568,8 +576,8 @@ protected:
     SAL_DLLPRIVATE Point                ImplOutputToFrame( const Point& rPos );
 
     SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( vcl::Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                 ImplValidate( const vcl::Region* rRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, ValidateFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplValidate( const vcl::Region* rRegion, ValidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
     SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
 
@@ -1075,7 +1083,7 @@ public:
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
-    void                                Validate( sal_uInt16 nFlags = 0 );
+    void                                Validate( ValidateFlags nFlags = ValidateFlags::NONE );
     bool                                HasPaintEvent() const;
     void                                Update();
     void                                Flush();
