@@ -81,6 +81,7 @@
 #define CMD_SID_GALLERY_FORMATS                     ".uno:InsertGalleryPic"
 #define CMD_SID_GRID_USE                            ".uno:GridUse"
 #define CMD_SID_GRID_VISIBLE                        ".uno:GridVisible"
+#define CMD_SID_INSERT_GRAPHIC                      ".uno:InsertGraphic"
 #define CMD_SID_INSERT_POSTIT                       ".uno:InsertAnnotation"
 #define CMD_SID_EDIT_POSTIT                         ".uno:InsertAnnotation"
 #define CMD_SID_REPLYTO_POSTIT                      ".uno:ReplyToAnnotation"
