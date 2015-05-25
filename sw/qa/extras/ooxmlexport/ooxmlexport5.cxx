@@ -270,6 +270,14 @@ DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeTableInTable, "ooo96040-2.odt")
        return;
 }
 
+DECLARE_OOXMLEXPORT_TEST(testHyperlinkContainingPlaceholderField, "hyperlink-field.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
