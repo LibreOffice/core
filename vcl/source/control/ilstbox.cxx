@@ -502,7 +502,7 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     SetTextFillColor();
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
 
-    ImplInitSettings( true, true, true );
+    ApplySettings(*this);
     ImplCalcMetrics();
 }
 
@@ -535,35 +535,6 @@ void ImplListBoxWindow::ApplySettings(vcl::RenderContext& rRenderContext)
         rRenderContext.SetBackground(GetControlBackground());
     else
         rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
-}
-
-void ImplListBoxWindow::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
-{
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if (bFont)
-    {
-        vcl::Font aFont = rStyleSettings.GetFieldFont();
-        if (IsControlFont())
-            aFont.Merge(GetControlFont());
-        SetZoomedPointFont(*this, aFont);
-    }
-
-    if (bFont || bForeground)
-    {
-        Color aTextColor = rStyleSettings.GetFieldTextColor();
-        if (IsControlForeground())
-            aTextColor = GetControlForeground();
-        SetTextColor( aTextColor );
-    }
-
-    if (bBackground)
-    {
-        if (IsControlBackground())
-            SetBackground(GetControlBackground());
-        else
-            SetBackground(rStyleSettings.GetFieldColor());
-    }
 }
 
 void ImplListBoxWindow::ImplCalcMetrics()
@@ -1743,7 +1714,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
         }
         else
         {
-            ImplInitSettings(false, true, false);
+            ApplySettings(*this);
             if (!IsEnabled())
                 rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
             rRenderContext.SetTextFillColor();
@@ -1765,7 +1736,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
             nCurr = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nCurr));
         nCurr = sal::static_int_cast<sal_Int32>(nCurr - GetEntryList()->GetMRUCount());
 
-        UserDrawEvent aUDEvt(this, aRect, nPos, nCurr);
+        UserDrawEvent aUDEvt(&rRenderContext, aRect, nPos, nCurr);
         userDrawSignal(&aUDEvt);
         mbInUserDraw = false;
     }
@@ -2088,7 +2059,7 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
 
     if ( nType == StateChangedType::Zoom )
     {
-        ImplInitSettings( true, false, false );
+        ApplySettings(*this);
         ImplCalcMetrics();
         Invalidate();
     }
@@ -2099,18 +2070,18 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::ControlFont )
     {
-        ImplInitSettings( true, false, false );
+        ApplySettings(*this);
         ImplCalcMetrics();
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ApplySettings(*this);
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ApplySettings(*this);
         Invalidate();
     }
     else if( nType == StateChangedType::Enable )
@@ -2131,7 +2102,7 @@ void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         ImplClearLayoutData();
-        ImplInitSettings( true, true, true );
+        ApplySettings(*this);
         ImplCalcMetrics();
         Invalidate();
     }
@@ -2652,7 +2623,8 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
 void ImplWin::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<ImplWin*>(this)->ImplDraw( true );
+    ImplWin* pThis = const_cast<ImplWin*>(this);
+    pThis->ImplDraw(*pThis, true);
 }
 
 bool ImplWin::PreNotify( NotifyEvent& rNEvt )
@@ -2676,17 +2648,17 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-void ImplWin::ImplDraw( bool bLayout )
+void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if( ! bLayout )
+    if (!bLayout)
     {
         bool bNativeOK = false;
 
         ControlState nState = ControlState::ENABLED;
-        if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
-            && IsNativeControlSupported(CTRL_LISTBOX, HAS_BACKGROUND_TEXTURE) )
+        if (rRenderContext.IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
+            && rRenderContext.IsNativeControlSupported(CTRL_LISTBOX, HAS_BACKGROUND_TEXTURE) )
         {
             // Repaint the (focused) area similarly to
             // ImplSmallBorderWindowView::DrawWindow() in
@@ -2728,17 +2700,17 @@ void ImplWin::ImplDraw( bool bLayout )
                                          nState, aControlValue, OUString() );
             }
 
-            bNativeOK = DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                aControlValue, OUString() );
+            bNativeOK = rRenderContext.DrawNativeControl(CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                                         nState, aControlValue, OUString());
         }
 
-        if( IsEnabled() )
+        if (IsEnabled())
         {
             if (HasFocus() && !ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea)
             {
-                SetTextColor( rStyleSettings.GetHighlightTextColor() );
-                SetFillColor( rStyleSettings.GetHighlightColor() );
-                DrawRect( maFocusRect );
+                rRenderContext.SetTextColor( rStyleSettings.GetHighlightTextColor() );
+                rRenderContext.SetFillColor( rStyleSettings.GetHighlightColor() );
+                rRenderContext.DrawRect( maFocusRect );
             }
             else
             {
@@ -2757,31 +2729,31 @@ void ImplWin::ImplDraw( bool bLayout )
                     else
                         aColor = rStyleSettings.GetFieldTextColor();
                 }
-                if( IsControlForeground() )
+                if (IsControlForeground())
                     aColor = GetControlForeground();
-                SetTextColor( aColor );
-                if ( !bNativeOK )
-                    Erase( maFocusRect );
+                rRenderContext.SetTextColor(aColor);
+                if (!bNativeOK)
+                    rRenderContext.Erase(maFocusRect);
             }
         }
         else // Disabled
         {
-            SetTextColor( rStyleSettings.GetDisableColor() );
-            if ( !bNativeOK )
-                Erase( maFocusRect );
+            rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+            if (!bNativeOK)
+                rRenderContext.Erase(maFocusRect);
         }
     }
 
     if ( IsUserDrawEnabled() )
     {
         mbInUserDraw = true;
-        UserDrawEvent aUDEvt( this, maFocusRect, mnItemPos, 0 );
+        UserDrawEvent aUDEvt(&rRenderContext, maFocusRect, mnItemPos, 0);
         userDrawSignal( &aUDEvt );
         mbInUserDraw = false;
     }
     else
     {
-        DrawEntry( true, true, false, bLayout );
+        DrawEntry(rRenderContext, true, true, false, bLayout);
     }
 }
 
@@ -2805,47 +2777,18 @@ void ImplWin::ApplySettings(vcl::RenderContext& rRenderContext)
         rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
 }
 
-void ImplWin::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
+void ImplWin::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if (bFont)
-    {
-        vcl::Font aFont = rStyleSettings.GetFieldFont();
-        if (IsControlFont())
-            aFont.Merge(GetControlFont());
-        SetZoomedPointFont(*this, aFont);
-    }
-
-    if (bFont || bForeground)
-    {
-        Color aTextColor = rStyleSettings.GetFieldTextColor();
-        if (IsControlForeground())
-            aTextColor = GetControlForeground();
-        SetTextColor( aTextColor );
-    }
-
-    if (bBackground)
-    {
-        if (IsControlBackground())
-            SetBackground(GetControlBackground());
-        else
-            SetBackground(rStyleSettings.GetFieldColor());
-    }
+    ImplDraw(rRenderContext);
 }
 
-void ImplWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
-{
-    ImplDraw();
-}
-
-void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout )
+void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout)
 {
     long nBorder = 1;
-    Size aOutSz = GetOutputSizePixel();
+    Size aOutSz = rRenderContext.GetOutputSizePixel();
 
     bool bImage = !!maImage;
-    if( bDrawImage && bImage && !bLayout )
+    if (bDrawImage && bImage && !bLayout)
     {
         DrawImageFlags nStyle = DrawImageFlags::NONE;
         Size aImgSz = maImage.GetSizePixel();
@@ -2857,13 +2800,13 @@ void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImageP
 
         if ( !IsZoom() )
         {
-            DrawImage( aPtImg, *pImage, nStyle );
+            rRenderContext.DrawImage( aPtImg, *pImage, nStyle );
         }
         else
         {
             aImgSz.Width() = CalcZoom( aImgSz.Width() );
             aImgSz.Height() = CalcZoom( aImgSz.Height() );
-            DrawImage( aPtImg, aImgSz, *pImage, nStyle );
+            rRenderContext.DrawImage( aPtImg, aImgSz, *pImage, nStyle );
         }
 
         const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
@@ -2877,7 +2820,7 @@ void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImageP
 
             if(!aBlendFrame.IsEmpty())
             {
-                DrawBitmapEx(aPtImg, aBlendFrame);
+                rRenderContext.DrawBitmapEx(aPtImg, aBlendFrame);
             }
         }
     }
@@ -2905,7 +2848,7 @@ void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImageP
 
         MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
         OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
-        DrawText( aTextRect, maString, nTextStyle, pVector, pDisplayText );
+        rRenderContext.DrawText( aTextRect, maString, nTextStyle, pVector, pDisplayText );
     }
 
     if( HasFocus() && !bLayout )

@@ -564,11 +564,11 @@ private:
     bool            mbInUserDraw : 1;
     bool            mbEdgeBlending : 1;
 
-    void ImplDraw( bool bLayout = false );
+    void ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout = false);
 protected:
     virtual void  FillLayoutData() const SAL_OVERRIDE;
-public:
 
+public:
                     ImplWin( vcl::Window* pParent, WinBits nWinStyle = 0 );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -598,7 +598,8 @@ public:
     void            EnableUserDraw( bool bUserDraw )    { mbUserDrawEnabled = bUserDraw; }
     bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }
 
-    void            DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false, bool bLayout = false );
+    void DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, bool bDrawText,
+                   bool bDrawTextAtImagePos = false, bool bLayout = false);
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
@@ -606,7 +607,6 @@ public:
     virtual void    ShowFocus(const Rectangle& rRect) SAL_OVERRIDE;
 
     using Control::ImplInitSettings;
-    void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
 };
