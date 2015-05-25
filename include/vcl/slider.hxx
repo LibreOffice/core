@@ -81,7 +81,8 @@ private:
 
 public:
                     Slider( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
-
+    virtual         ~Slider();
+    virtual void    dispose() SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
