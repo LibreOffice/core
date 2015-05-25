@@ -60,7 +60,6 @@ SmToken::SmToken(SmTokenType eTokenType,
 static const SmTokenTableEntry aTokenTable[] =
 {
     { "Im" , TIM, MS_IM, TGSTANDALONE, 5 },
-    { "MZ23", TDEBUG, '\0', TGATTRIBUT, 0 },
     { "Re" , TRE, MS_RE, TGSTANDALONE, 5 },
     { "abs", TABS, '\0', TGUNOPER, 13 },
     { "arcosh", TACOSH, '\0', TGFUNCTION, 5 },
