@@ -174,44 +174,36 @@ void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 }
 
 
-void SdrSnapView::ClearVars()
+SdrSnapView::SdrSnapView(SdrModel* pModel1, OutputDevice* pOut)
+    : SdrPaintView(pModel1,pOut)
+    , mpPageOriginOverlay(0L)
+    , mpHelpLineOverlay(0L)
+    , nMagnSizPix(4)
+    , nSnapAngle(1500)
+    , nEliminatePolyPointLimitAngle(0)
+    , eCrookMode(SDRCROOK_ROTATE)
+    , bSnapEnab(true)
+    , bGridSnap(true)
+    , bSnapTo1Pix(true)
+    , bBordSnap(true)
+    , bHlplSnap(true)
+    , bOFrmSnap(true)
+    , bOPntSnap(false)
+    , bOConSnap(true)
+    , bMoveMFrmSnap(true)
+    , bMoveOFrmSnap(true)
+    , bMoveOPntSnap(true)
+    , bMoveOConSnap(true)
+    , bMoveSnapOnlyTopLeft(false)
+    , bOrtho(false)
+    , bBigOrtho(true)
+    , bAngleSnapEnab(false)
+    , bMoveOnlyDragging(false)
+    , bSlantButShear(false)
+    , bCrookNoContortion(false)
+    , bHlplFixed(false)
+    , bEliminatePolyPoints(false)
 {
-    nMagnSizPix=4;
-    bSnapEnab=true;
-    bGridSnap=true;
-    bSnapTo1Pix=true;
-    bBordSnap=true;
-    bHlplSnap=true;
-    bOFrmSnap=true;
-    bOPntSnap=false;
-    bOConSnap=true;
-    bMoveMFrmSnap=true;
-    bMoveOFrmSnap=true;
-    bMoveOPntSnap=true;
-    bMoveOConSnap=true;
-    bMoveSnapOnlyTopLeft=false;
-    bOrtho=false;
-    bBigOrtho=true;
-    nSnapAngle=1500;
-    bAngleSnapEnab=false;
-    bMoveOnlyDragging=false;
-    bSlantButShear=false;
-    bCrookNoContortion=false;
-    eCrookMode=SDRCROOK_ROTATE;
-    bHlplFixed=false;
-    bEliminatePolyPoints=false;
-    nEliminatePolyPointLimitAngle=0;
-
-    BrkSetPageOrg();
-    BrkDragHelpLine();
-}
-
-SdrSnapView::SdrSnapView(SdrModel* pModel1, OutputDevice* pOut):
-    SdrPaintView(pModel1,pOut),
-    mpPageOriginOverlay(0L),
-    mpHelpLineOverlay(0L)
-{
-    ClearVars();
 }
 
 SdrSnapView::~SdrSnapView()

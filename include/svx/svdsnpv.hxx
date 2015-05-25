@@ -91,9 +91,6 @@ protected:
     bool                        bHlplFixed : 1;              // sal_True= fixed auxiliary lines, so it isn't movable
     bool                        bEliminatePolyPoints : 1;
 
-private:
-    SVX_DLLPRIVATE void ClearVars();
-
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
     SdrSnapView(SdrModel* pModel1, OutputDevice* pOut = 0L);
