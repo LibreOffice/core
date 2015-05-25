@@ -1040,11 +1040,6 @@ void DocxAttributeOutput::EndRun()
         {
             StartField_Impl( *pIt );
 
-            if ( m_pHyperlinkAttrList )
-            {
-                m_nFieldsInHyperlink++;
-            }
-
             // Remove the field from the stack if only the start has to be written
             // Unknown fields should be removed too
             if ( !pIt->bClose || ( pIt->eType == ww::eUNKNOWN ) )
@@ -1053,6 +1048,11 @@ void DocxAttributeOutput::EndRun()
                     delete pIt->pField;
                 pIt = m_Fields.erase( pIt );
                 continue;
+            }
+
+            if ( m_pHyperlinkAttrList )
+            {
+                m_nFieldsInHyperlink++;
             }
         }
         ++pIt;
