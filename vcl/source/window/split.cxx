@@ -697,15 +697,15 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void Splitter::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rPaintRect )
+void Splitter::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect)
 {
-    DrawRect( rPaintRect );
+    rRenderContext.DrawRect(rPaintRect);
 
-    Polygon aPoly( rPaintRect );
-    tools::PolyPolygon aPolyPoly( aPoly );
-    DrawTransparent( aPolyPoly, 85 );
+    Polygon aPoly(rPaintRect);
+    tools::PolyPolygon aPolyPoly(aPoly);
+    rRenderContext.DrawTransparent(aPolyPoly, 85);
 
-    if( mbKbdSplitting )
+    if (mbKbdSplitting)
     {
         LineInfo aInfo( LINE_DASH );
         //aInfo.SetDashLen( 2 );
@@ -714,11 +714,11 @@ void Splitter::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& r
         aInfo.SetDotLen( 2 );
         aInfo.SetDotCount( 3 );
 
-        DrawPolyLine( aPoly, aInfo );
+        rRenderContext.DrawPolyLine( aPoly, aInfo );
     }
     else
     {
-        DrawRect( rPaintRect );
+        rRenderContext.DrawRect(rPaintRect);
     }
 }
 
