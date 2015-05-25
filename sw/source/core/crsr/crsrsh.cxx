@@ -31,7 +31,6 @@
 #include <viewimp.hxx>
 #include <pam.hxx>
 #include <swselectionlist.hxx>
-#include <IBlockCursor.hxx>
 #include "BlockCursor.hxx"
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
@@ -890,7 +889,7 @@ void SwCrsrShell::CrsrToBlockCrsr()
     if( !m_pBlockCrsr )
     {
         SwPosition aPos( *m_pCurCrsr->GetPoint() );
-        m_pBlockCrsr = createBlockCursor( *this, aPos );
+        m_pBlockCrsr = new SwBlockCursor( *this, aPos );
         SwShellCrsr &rBlock = m_pBlockCrsr->getShellCrsr();
         rBlock.GetPtPos() = m_pCurCrsr->GetPtPos();
         if( m_pCurCrsr->HasMark() )
