@@ -481,7 +481,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
             Invalidate( aToRect );
         }
         else
-            pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
+            pDataWin->Window::Invalidate( InvalidateFlags::NoChildren );
 
         // adjust header bar positions
         if ( getDataWindow()->pHeaderBar )
@@ -649,13 +649,13 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
                 aScrRect.Bottom() = pDataWin->GetSizePixel().Height();
                 getDataWindow()->Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
                 Rectangle aInvRect( nX, 0, nX + std::max( nWidth, (sal_uLong)nOldWidth ), USHRT_MAX );
-                Control::Invalidate( aInvRect, INVALIDATE_NOCHILDREN );
+                Control::Invalidate( aInvRect, InvalidateFlags::NoChildren );
                 static_cast<BrowserDataWin*>( pDataWin.get() )->Invalidate( aInvRect );
             }
             else
             {
-                Control::Invalidate( INVALIDATE_NOCHILDREN );
-                getDataWindow()->Window::Invalidate( INVALIDATE_NOCHILDREN );
+                Control::Invalidate( InvalidateFlags::NoChildren );
+                getDataWindow()->Window::Invalidate( InvalidateFlags::NoChildren );
             }
 
 
@@ -1028,8 +1028,8 @@ long BrowseBox::ScrollColumns( long nCols )
 
     if( bInvalidateView )
     {
-        Control::Invalidate( INVALIDATE_NOCHILDREN );
-        pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
+        Control::Invalidate( InvalidateFlags::NoChildren );
+        pDataWin->Window::Invalidate( InvalidateFlags::NoChildren );
     }
 
     // implicitly show cursor after scrolling
@@ -1224,7 +1224,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, bool bDoPaint, bool bKeep
                                 SCROLL_FLAGS );
             }
             else
-                pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
+                pDataWin->Window::Invalidate( InvalidateFlags::NoChildren );
         }
         else
             // scroll would cause a repaint, so we must explicitly invalidate
@@ -1368,7 +1368,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
                             SCROLL_FLAGS );
                 }
                 else
-                    pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
+                    pDataWin->Window::Invalidate( InvalidateFlags::NoChildren );
             }
             else
             {

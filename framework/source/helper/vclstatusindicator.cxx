@@ -58,7 +58,7 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
 
     // force repaint!
     pParentWindow->Show();
-    pParentWindow->Invalidate(INVALIDATE_CHILDREN);
+    pParentWindow->Invalidate(InvalidateFlags::Children);
     pParentWindow->Flush();
 
     m_sText  = sText;

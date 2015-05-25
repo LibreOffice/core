@@ -258,7 +258,7 @@ void SvxHpLinkDlg::Move()
         }
 
         if ( bDoInvalid )
-            Invalidate(INVALIDATE_BACKGROUND);
+            Invalidate(InvalidateFlags::Transparent);
     }
 
     Window::Move();

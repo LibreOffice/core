@@ -284,7 +284,7 @@ void SidebarController::BroadcastPropertyChange()
 {
     DataChangedEvent aEvent (DataChangedEventType::USER);
     mpParentWindow->NotifyAllChildren(aEvent);
-    mpParentWindow->Invalidate(INVALIDATE_CHILDREN);
+    mpParentWindow->Invalidate(InvalidateFlags::Children);
 }
 
 void SidebarController::NotifyResize()

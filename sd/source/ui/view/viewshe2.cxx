@@ -345,9 +345,9 @@ void ViewShell::SetZoom(long nZoom)
 
         // #i74769# Here is a 2nd way (besides Window::Scroll) to set the visible prt
         // of the window. It needs - like Scroll(SCROLL_CHILDREN) does - also to move
-        // the child windows. I am trying INVALIDATE_CHILDREN here which makes things better,
+        // the child windows. I am trying InvalidateFlags::Children here which makes things better,
         // but does not solve the problem completely. Neet to ask PL.
-        mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
+        mpContentWindow->Invalidate(InvalidateFlags::Children);
     }
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
@@ -393,7 +393,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
         // When tiled rendering, UpdateMapOrigin() doesn't touch the map mode.
         if (!GetDoc()->isTiledRendering())
             // #i74769# see above
-            mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
+            mpContentWindow->Invalidate(InvalidateFlags::Children);
     }
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();

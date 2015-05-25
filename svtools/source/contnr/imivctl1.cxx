@@ -201,7 +201,7 @@ void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
         pZOrderList->clear();
         SetOrigin( Point() );
         if( bUpdateMode )
-            pView->Invalidate(INVALIDATE_NOCHILDREN);
+            pView->Invalidate(InvalidateFlags::NoChildren);
     }
     AdjustScrollBars();
     size_t nCount = aEntries.size();
@@ -580,7 +580,7 @@ void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
     RecalcAllBoundingRectsSmart();
     // TODO: the invalidation in the detail view should be more intelligent
     //if( !(nWinBits & WB_DETAILS ))
-        pView->Invalidate( INVALIDATE_NOCHILDREN );
+        pView->Invalidate( InvalidateFlags::NoChildren );
     nFlags &= ~F_ARRANGING;
     if( (nWinBits & WB_SMART_ARRANGE) && aCurOutputArea.TopLeft() != aEmptyPoint )
     {
@@ -1505,7 +1505,7 @@ void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
             AdjustScrollBars();
             pImpCursor->Clear();
             pGridMap->Clear();
-            pView->Invalidate(INVALIDATE_NOCHILDREN);
+            pView->Invalidate(InvalidateFlags::NoChildren);
         }
     }
 }
@@ -2306,7 +2306,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, bool bScrBar,
             SCROLL_NOCHILDREN | SCROLL_USECLIPREGION | SCROLL_CLIP );
     }
     else
-        pView->Invalidate(INVALIDATE_NOCHILDREN);
+        pView->Invalidate(InvalidateFlags::NoChildren);
 
     if( aHorSBar->IsVisible() || aVerSBar->IsVisible() )
     {

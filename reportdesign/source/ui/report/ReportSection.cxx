@@ -511,7 +511,7 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             if ( nColor == (sal_Int32)COL_TRANSPARENT )
                 nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
             m_pView->SetApplicationDocumentColor(nColor);
-            Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
+            Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::NoErase);
         }
         else
         {
@@ -537,7 +537,7 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                 m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
             }
             impl_adjustObjectSizePosition(nPaperWidth,nLeftMargin,nRightMargin);
-            m_pParent->Invalidate(INVALIDATE_UPDATE | INVALIDATE_TRANSPARENT);
+            m_pParent->Invalidate(InvalidateFlags::Update | InvalidateFlags::Transparent);
         }
     }
 }

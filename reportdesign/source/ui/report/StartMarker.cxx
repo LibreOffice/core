@@ -262,7 +262,7 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
     if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_COLORS_CHANGED)
     {
         setColor();
-        Invalidate(INVALIDATE_CHILDREN);
+        Invalidate(InvalidateFlags::Children);
     }
 }
 

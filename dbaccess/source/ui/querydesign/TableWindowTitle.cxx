@@ -143,7 +143,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
 
                 pView->InvalidateConnections();
                 pView->getDesignView()->getController().setModified(sal_True);
-                pView->Invalidate(INVALIDATE_NOCHILDREN);
+                pView->Invalidate(InvalidateFlags::NoChildren);
             }
         }
         else

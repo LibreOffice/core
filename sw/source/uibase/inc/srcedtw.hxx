@@ -133,7 +133,7 @@ public:
 
     TextViewOutWin* GetOutWin() {return pOutWin;}
 
-    virtual void    Invalidate( sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
 
     void            ClearModifyFlag()
                         { pTextEngine->SetModified(false); }

@@ -1815,7 +1815,7 @@ namespace svt { namespace table
 
         case TableAreaAll:
             m_pDataWindow->Invalidate();
-            m_pDataWindow->GetParent()->Invalidate( INVALIDATE_TRANSPARENT );
+            m_pDataWindow->GetParent()->Invalidate( InvalidateFlags::Transparent );
             break;
         }
     }
@@ -1892,7 +1892,7 @@ namespace svt { namespace table
     void TableControl_Impl::invalidateRect(const Rectangle &rInvalidateRect)
     {
         m_pDataWindow->Invalidate( rInvalidateRect,
-            m_pDataWindow->GetControlBackground().GetTransparency() ? INVALIDATE_TRANSPARENT : 0 );
+            m_pDataWindow->GetControlBackground().GetTransparency() ? InvalidateFlags::Transparent : InvalidateFlags::NONE );
     }
 
 
@@ -2086,8 +2086,8 @@ namespace svt { namespace table
             }
             else
             {
-                m_pDataWindow->Invalidate( INVALIDATE_UPDATE );
-                m_pDataWindow->GetParent()->Invalidate( INVALIDATE_TRANSPARENT );
+                m_pDataWindow->Invalidate( InvalidateFlags::Update );
+                m_pDataWindow->GetParent()->Invalidate( InvalidateFlags::Transparent );
             }
 
             // update the position at the vertical scrollbar
@@ -2164,8 +2164,8 @@ namespace svt { namespace table
             }
             else
             {
-                m_pDataWindow->Invalidate( INVALIDATE_UPDATE );
-                m_pDataWindow->GetParent()->Invalidate( INVALIDATE_TRANSPARENT );
+                m_pDataWindow->Invalidate( InvalidateFlags::Update );
+                m_pDataWindow->GetParent()->Invalidate( InvalidateFlags::Transparent );
             }
 
             // update the position at the horizontal scrollbar

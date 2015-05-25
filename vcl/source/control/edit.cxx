@@ -1888,7 +1888,7 @@ void Edit::ImplInvalidateOutermostBorder( vcl::Window* pWin )
         pInvalWin = pBorder;
     }
 
-    pInvalWin->Invalidate( INVALIDATE_CHILDREN | INVALIDATE_UPDATE );
+    pInvalWin->Invalidate( InvalidateFlags::Children | InvalidateFlags::Update );
 }
 
 void Edit::GetFocus()

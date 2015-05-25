@@ -682,7 +682,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                             aNewSize = Size(pView->CalcZoom(aNewSize.Width()),pView->CalcZoom(aNewSize.Height()));
                             SetPosSizePixel( ptOld, aNewSize );
                             pView->TabWinSized(this, ptOld, szOld);
-                            Invalidate( INVALIDATE_NOCHILDREN );
+                            Invalidate( InvalidateFlags::NoChildren );
                         }
                     }
                     else
@@ -706,7 +706,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                                 // aNewDataPoint can not be used here because SetPosPixel reset it
                                 pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
                                 pView->TabWinMoved(this,aOldDataPoint);
-                                Invalidate(INVALIDATE_NOCHILDREN);
+                                Invalidate(InvalidateFlags::NoChildren);
                                 getDesignView()->getController().setModified( sal_True );
                             }
                             else

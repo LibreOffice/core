@@ -371,7 +371,7 @@ void Window::ImplStartToTop( ToTopFlags nFlags )
     pCurData = aStartData.mpNext;
     while ( pCurData )
     {
-        pCurData->mpWindow->ImplInvalidateFrameRegion( pCurData->mpInvalidateRegion, INVALIDATE_CHILDREN );
+        pCurData->mpWindow->ImplInvalidateFrameRegion( pCurData->mpInvalidateRegion, InvalidateFlags::Children );
         pNextData = pCurData->mpNext;
         delete pCurData->mpInvalidateRegion;
         delete pCurData;
@@ -591,7 +591,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
                     Rectangle aCompRect( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ),
                                          Size( pWindow->mnOutWidth, pWindow->mnOutHeight ) );
                     if ( aWinRect.IsOver( aCompRect ) )
-                        pWindow->Invalidate( INVALIDATE_CHILDREN | INVALIDATE_NOTRANSPARENT );
+                        pWindow->Invalidate( InvalidateFlags::Children | InvalidateFlags::NoTransparent );
                     pWindow = pWindow->mpWindowImpl->mpNext;
                 }
 
@@ -605,7 +605,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
                                              Size( pWindow->mnOutWidth, pWindow->mnOutHeight ) );
                         if ( aWinRect.IsOver( aCompRect ) )
                         {
-                            Invalidate( INVALIDATE_CHILDREN | INVALIDATE_NOTRANSPARENT );
+                            Invalidate( InvalidateFlags::Children | InvalidateFlags::NoTransparent );
                             break;
                         }
                     }

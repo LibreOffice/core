@@ -221,15 +221,22 @@ namespace o3tl
 }
 
 // Flags for Invalidate
-#define INVALIDATE_CHILDREN             ((sal_uInt16)0x0001)
-#define INVALIDATE_NOCHILDREN           ((sal_uInt16)0x0002)
-#define INVALIDATE_NOERASE              ((sal_uInt16)0x0004)
-#define INVALIDATE_UPDATE               ((sal_uInt16)0x0008)
-#define INVALIDATE_TRANSPARENT          ((sal_uInt16)0x0010)
-#define INVALIDATE_NOTRANSPARENT        ((sal_uInt16)0x0020)
-#define INVALIDATE_NOCLIPCHILDREN       ((sal_uInt16)0x4000)
-// Temporaer fuer Kompatibilitaet
-#define INVALIDATE_BACKGROUND           INVALIDATE_TRANSPARENT
+// must match css::awt::InvalidateStyle
+enum class InvalidateFlags
+{
+    NONE                 = 0x0000,
+    Children             = 0x0001,
+    NoChildren           = 0x0002,
+    NoErase              = 0x0004,
+    Update               = 0x0008,
+    Transparent          = 0x0010,
+    NoTransparent        = 0x0020,
+    NoClipChildren       = 0x4000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<InvalidateFlags> : is_typed_flags<InvalidateFlags, 0x403f> {};
+}
 
 // Flags for Validate
 #define VALIDATE_CHILDREN               ((sal_uInt16)0x0001)
@@ -501,7 +508,7 @@ public:
     SAL_DLLPRIVATE vcl::Window*         ImplGetParent() const;
     SAL_DLLPRIVATE vcl::Window*         ImplFindWindow( const Point& rFramePos );
 
-    SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const vcl::Region* pRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const vcl::Region& rRegion );
 
     SAL_DLLPRIVATE bool                 ImplSetClipFlag( bool bSysObjOnlySmaller = false );
@@ -568,7 +575,7 @@ protected:
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetBorderWindow() const;
 
-    SAL_DLLPRIVATE void                 ImplInvalidate( const vcl::Region* rRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags );
 
     SAL_DLLPRIVATE sal_uInt16           ImplHitTest( const Point& rFramePos );
 
@@ -1065,9 +1072,9 @@ public:
                                                 sal_uInt16 nFlags = 0 );
     void                                Scroll( long nHorzScroll, long nVertScroll,
                                                 const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    virtual void                        Invalidate( sal_uInt16 nFlags = 0 );
-    virtual void                        Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    virtual void                        Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags = 0 );
+    virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
+    virtual void                        Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
+    virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
     void                                Validate( sal_uInt16 nFlags = 0 );
     bool                                HasPaintEvent() const;
     void                                Update();

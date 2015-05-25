@@ -129,7 +129,7 @@ void MyWorkWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
     if (mnPaintCount == 100)
         Application::Quit();
 
-    Invalidate( INVALIDATE_CHILDREN );
+    Invalidate( InvalidateFlags::Children );
 }
 
 void MyWorkWindow::Resize()

@@ -1239,7 +1239,7 @@ namespace pcr
                 sDisplayText = lcl_convertListToDisplayText( lcl_convertMultiLineToList( sDisplayText ) );
 
             m_pImplEdit->SetText( sDisplayText );
-            GetParent()->Invalidate( INVALIDATE_CHILDREN );
+            GetParent()->Invalidate( InvalidateFlags::Children );
             m_bDropdown = false;
             m_pImplEdit->GrabFocus();
         }

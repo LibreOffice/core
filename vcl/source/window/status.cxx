@@ -543,9 +543,9 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
                 Point aTL(pWindow->OutputToAbsoluteScreenPixel(rFramePosSize.TopLeft()));
                 aTL = pEraseWindow->AbsoluteScreenToOutputPixel(aTL);
                 Rectangle aRect(aTL, rFramePosSize.GetSize());
-                pEraseWindow->Invalidate(aRect, INVALIDATE_NOCHILDREN     |
-                                                INVALIDATE_NOCLIPCHILDREN |
-                                                INVALIDATE_TRANSPARENT);
+                pEraseWindow->Invalidate(aRect, InvalidateFlags::NoChildren     |
+                                                InvalidateFlags::NoClipChildren |
+                                                InvalidateFlags::Transparent);
                 pEraseWindow->Update();
             }
             rRenderContext.Push(PushFlags::CLIPREGION);

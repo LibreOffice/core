@@ -498,7 +498,7 @@ void OJoinTableView::EnsureVisible(const OTableWindow* _pWin)
     // data about the tab win
     TTableWindowData::value_type pData = _pWin->GetData();
     EnsureVisible( pData->GetPosition() , pData->GetSize());
-    Invalidate(INVALIDATE_NOCHILDREN);
+    Invalidate(InvalidateFlags::NoChildren);
 }
 
 void OJoinTableView::EnsureVisible(const Point& _rPoint,const Size& _rSize)
@@ -600,7 +600,7 @@ void OJoinTableView::DataChanged(const DataChangedEvent& rDCEvt)
     {
         // consider the worst case: the colors changed, so adjust me
         InitColors();
-        Invalidate(INVALIDATE_NOCHILDREN);
+        Invalidate(InvalidateFlags::NoChildren);
         // due to the Invalidate, the connections are redrawn, so that they are also pictured in the new colors
     }
 }
@@ -716,7 +716,7 @@ bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars
         pTabWin->SetPosPixel( aPos );
     }
 
-    Invalidate(); // INVALIDATE_NOCHILDREN
+    Invalidate(); // InvalidateFlags::NoChildren
 
     return bRet;
 }
@@ -930,7 +930,7 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
             if ((pFirstSourceVisible != pSourceBox->GetFirstEntryInView())
                 || (pFirstDestVisible != pDestBox->GetFirstEntryInView()))
                 // scrolling was done -> redraw
-                Invalidate(INVALIDATE_NOCHILDREN);
+                Invalidate(InvalidateFlags::NoChildren);
         }
     }
 }
@@ -1081,7 +1081,7 @@ IMPL_LINK_NOARG_TYPED(OJoinTableView, OnDragScrollTimer, Idle *, void)
 
 void OJoinTableView::invalidateAndModify(SfxUndoAction *_pAction)
 {
-    Invalidate(INVALIDATE_NOCHILDREN);
+    Invalidate(InvalidateFlags::NoChildren);
     m_pView->getController().addUndoActionAndInvalidate(_pAction);
 }
 

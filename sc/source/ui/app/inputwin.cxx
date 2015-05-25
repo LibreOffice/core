@@ -1939,9 +1939,9 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                 if (nDifPos)
                     nInvPos += GetTextWidth(aString,0,nDifPos);
 
-                sal_uInt16 nFlags = 0;
+                InvalidateFlags nFlags = InvalidateFlags::NONE;
                 if ( nDifPos == aString.getLength() ) // only new characters appended
-                    nFlags = INVALIDATE_NOERASE;      // then background is already clear
+                    nFlags = InvalidateFlags::NoErase;      // then background is already clear
 
                 Invalidate( Rectangle( nInvPos, 0, nStartPos+nTextSize, GetOutputSize().Height()-1 ), nFlags );
             }

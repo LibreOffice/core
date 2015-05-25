@@ -754,11 +754,10 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-void    SwSrcEditWindow::Invalidate(sal_uInt16 )
+void SwSrcEditWindow::Invalidate(InvalidateFlags )
 {
     pOutWin->Invalidate();
     Window::Invalidate();
-
 }
 
 void SwSrcEditWindow::Command( const CommandEvent& rCEvt )

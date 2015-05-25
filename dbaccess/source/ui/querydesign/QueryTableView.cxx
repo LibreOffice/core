@@ -150,7 +150,7 @@ namespace
         // force an invalidation of the bounding rectangle
         _pConnection->InvalidateConnection();
 
-        _pView->Invalidate(INVALIDATE_NOCHILDREN);
+        _pView->Invalidate(InvalidateFlags::NoChildren);
     }
     void addConnections(OQueryTableView* _pView,
                         const OQueryTableWindow& _rSource,
@@ -783,7 +783,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 void OQueryTableView::EnsureVisible(const OTableWindow* pWin)
 {
 
-    Invalidate(INVALIDATE_NOCHILDREN);
+    Invalidate(InvalidateFlags::NoChildren);
     OJoinTableView::EnsureVisible(pWin);
 }
 

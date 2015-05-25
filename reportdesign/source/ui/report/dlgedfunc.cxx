@@ -546,7 +546,7 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
             m_pParent->getSectionWindow()->getViewsWindow()->EndDragObj( bControlKeyPressed, &m_rView, aPnt );
         }
         m_pParent->getSectionWindow()->getViewsWindow()->ForceMarkedToAnotherPage();
-        m_pParent->Invalidate(INVALIDATE_CHILDREN);
+        m_pParent->Invalidate(InvalidateFlags::Children);
     }
     else
         m_pParent->getSectionWindow()->getViewsWindow()->EndAction();

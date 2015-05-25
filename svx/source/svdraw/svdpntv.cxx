@@ -964,13 +964,13 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix)
 void SdrPaintView::InvalidateOneWin(vcl::Window& rWin)
 {
     // do not erase background, that causes flicker (!)
-    rWin.Invalidate(INVALIDATE_NOERASE);
+    rWin.Invalidate(InvalidateFlags::NoErase);
 }
 
 void SdrPaintView::InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect)
 {
     // do not erase background, that causes flicker (!)
-    rWin.Invalidate(rRect, INVALIDATE_NOERASE);
+    rWin.Invalidate(rRect, InvalidateFlags::NoErase);
 }
 
 void SdrPaintView::LeaveOneGroup()

@@ -262,7 +262,7 @@ void SdrGluePoint::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
                     aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
 
     // do not erase background, that causes flicker (!)
-    rWin.Invalidate(aRect, INVALIDATE_NOERASE);
+    rWin.Invalidate(aRect, InvalidateFlags::NoErase);
 
     rWin.EnableMapMode(bMapMerk);
 }

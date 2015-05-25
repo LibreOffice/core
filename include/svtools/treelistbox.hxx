@@ -777,10 +777,10 @@ public:
     SvTreeListEntry* GetCurEntry() const;
 
     using Window::Invalidate;
-    virtual void    Invalidate( sal_uInt16 nFlags = 0) SAL_OVERRIDE;
-    virtual void    Invalidate( const Rectangle&, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE) SAL_OVERRIDE;
+    virtual void    Invalidate( const Rectangle&, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
 
-    void            SetHighlightRange(sal_uInt16 nFirstTab=0,sal_uInt16 nLastTab=0xffff);
+    void            SetHighlightRange(sal_uInt16 nFirstTab=0, sal_uInt16 nLastTab=0xffff);
 
     // A Parent's Children are turned into Children of the Parent which comes next in hierarchy
     void            RemoveParentKeepChildren( SvTreeListEntry* pParent );

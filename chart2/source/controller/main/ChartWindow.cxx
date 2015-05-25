@@ -276,7 +276,7 @@ void ChartWindow::ForceInvalidate()
         m_pOpenGLWindow->Invalidate();
     }
 }
-void ChartWindow::Invalidate( sal_uInt16 nFlags )
+void ChartWindow::Invalidate( InvalidateFlags nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
@@ -286,7 +286,7 @@ void ChartWindow::Invalidate( sal_uInt16 nFlags )
         m_pOpenGLWindow->Invalidate( nFlags );
     }
 }
-void ChartWindow::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
+void ChartWindow::Invalidate( const Rectangle& rRect, InvalidateFlags nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
@@ -296,7 +296,7 @@ void ChartWindow::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
         m_pOpenGLWindow->Invalidate( rRect, nFlags );
     }
 }
-void ChartWindow::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
+void ChartWindow::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;

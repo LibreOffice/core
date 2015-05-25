@@ -432,7 +432,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         const bool bWasMapModeEnabled(rWindow.IsMapModeEnabled());
 
         rWindow.EnableMapMode(false);
-        rWindow.Invalidate(aVCLDiscreteRectangle, INVALIDATE_NOERASE);
+        rWindow.Invalidate(aVCLDiscreteRectangle, InvalidateFlags::NoErase);
         rWindow.EnableMapMode(bWasMapModeEnabled);
     }
 }

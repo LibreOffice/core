@@ -238,8 +238,8 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
         if ( bSet )
         {
             impl_resizeSectionWindow(*pSectionWindow,aStartPoint,bSet);
-            static sal_Int32 nIn = INVALIDATE_UPDATE | INVALIDATE_TRANSPARENT;
-            pSectionWindow->getStartMarker().Invalidate( nIn ); // INVALIDATE_NOERASE |INVALIDATE_NOCHILDREN| INVALIDATE_TRANSPARENT
+            static const InvalidateFlags nIn = InvalidateFlags::Update | InvalidateFlags::Transparent;
+            pSectionWindow->getStartMarker().Invalidate( nIn ); // InvalidateFlags::NoErase |InvalidateFlags::NoChildren| InvalidateFlags::Transparent
             pSectionWindow->getEndMarker().Invalidate( nIn );
         }
     }
@@ -327,7 +327,7 @@ void OViewsWindow::toggleGrid(bool _bVisible)
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
         ::o3tl::compose1(::boost::bind(&OReportSection::SetGridVisible,_1,_bVisible),TReportPairHelper()));
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::o3tl::compose1(::boost::bind(&OReportSection::Window::Invalidate,_1,INVALIDATE_NOERASE),TReportPairHelper()));
+        ::o3tl::compose1(::boost::bind(&OReportSection::Window::Invalidate,_1,InvalidateFlags::NoErase),TReportPairHelper()));
 }
 
 sal_Int32 OViewsWindow::getTotalHeight() const
@@ -546,7 +546,7 @@ void OViewsWindow::showRuler(bool _bShow)
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
         ::o3tl::compose1(::boost::bind(&OStartMarker::showRuler,_1,_bShow),TStartMarkerHelper()));
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::o3tl::compose1(::boost::bind(&OStartMarker::Window::Invalidate, _1, sal_uInt16(INVALIDATE_NOERASE)), TStartMarkerHelper()));
+        ::o3tl::compose1(::boost::bind(&OStartMarker::Window::Invalidate, _1, InvalidateFlags::NoErase), TStartMarkerHelper()));
 }
 
 void OViewsWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -903,8 +903,7 @@ void OViewsWindow::setGridSnap(bool bOn)
     for (; aIter != aEnd ; ++aIter)
     {
         (*aIter)->getReportSection().getSectionView().SetGridSnap(bOn);
-        static sal_Int32 nIn = 0;
-        (*aIter)->getReportSection().Invalidate(nIn);
+        (*aIter)->getReportSection().Invalidate(InvalidateFlags::NONE);
     }
 }
 
@@ -1725,8 +1724,7 @@ void OViewsWindow::zoom(const Fraction& _aZoom)
     aOut = PixelToLogic(aOut);
 
     Rectangle aRect(PixelToLogic(Point(0,0)),aOut);
-    static sal_Int32 nIn = INVALIDATE_NOCHILDREN;
-    Invalidate(aRect,nIn);
+    Invalidate(aRect, InvalidateFlags::NoChildren);
 }
 
 void OViewsWindow::scrollChildren(const Point& _aThumbPos)

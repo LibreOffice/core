@@ -2639,7 +2639,7 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
             if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
             {
-                GetParent()->GetWindow( GetWindowType::Border )->Invalidate( INVALIDATE_NOERASE );
+                GetParent()->GetWindow( GetWindowType::Border )->Invalidate( InvalidateFlags::NoErase );
                 GetParent()->GetWindow( GetWindowType::Border )->Update();
             }
         }

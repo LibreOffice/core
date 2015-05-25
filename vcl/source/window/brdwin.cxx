@@ -2073,11 +2073,11 @@ void ImplBorderWindow::InvalidateBorder()
             // no output area anymore, now invalidate all
             if ( (aWinRect.Right() < aWinRect.Left()) ||
                  (aWinRect.Bottom() < aWinRect.Top()) )
-                Invalidate( INVALIDATE_NOCHILDREN );
+                Invalidate( InvalidateFlags::NoChildren );
             else
             {
                 aRegion.Exclude( aWinRect );
-                Invalidate( aRegion, INVALIDATE_NOCHILDREN );
+                Invalidate( aRegion, InvalidateFlags::NoChildren );
             }
         }
     }

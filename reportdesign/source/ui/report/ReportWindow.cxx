@@ -118,7 +118,7 @@ void OReportWindow::removeSection(sal_uInt16 _nPosition)
 {
     m_aViewsWindow->removeSection(_nPosition);
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
-    m_aViewsWindow->Invalidate(INVALIDATE_TRANSPARENT);
+    m_aViewsWindow->Invalidate(InvalidateFlags::Transparent);
 }
 
 void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry,sal_uInt16 _nPosition)
@@ -389,7 +389,7 @@ void OReportWindow::zoom(const Fraction& _aZoom)
     ScrollChildren( aNewThumbPos );
     Resize();
 
-    Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
+    Invalidate(InvalidateFlags::NoErase | InvalidateFlags::NoChildren | InvalidateFlags::Transparent);
 }
 
 void OReportWindow::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
@@ -439,8 +439,7 @@ void OReportWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
     (void)_rEvent;
     Resize();
     m_aViewsWindow->Resize();
-    static sal_Int32 nIn = INVALIDATE_TRANSPARENT;
-    Invalidate(nIn);
+    Invalidate(InvalidateFlags::Transparent);
 }
 
 }   //rptui

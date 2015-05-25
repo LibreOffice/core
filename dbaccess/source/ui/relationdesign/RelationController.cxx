@@ -474,7 +474,7 @@ IMPL_LINK_NOARG( ORelationController, OnThreadFinished )
     try
     {
         getView()->initialize();    // show the windows and fill with our information
-        getView()->Invalidate(INVALIDATE_NOERASE);
+        getView()->Invalidate(InvalidateFlags::NoErase);
         ClearUndoManager();
         setModified(sal_False);     // and we are not modified yet
 
@@ -575,7 +575,7 @@ void ORelationController::reset()
     if(pView)
     {
         pView->initialize();
-        pView->Invalidate(INVALIDATE_NOERASE);
+        pView->Invalidate(InvalidateFlags::NoErase);
     }
 }
 

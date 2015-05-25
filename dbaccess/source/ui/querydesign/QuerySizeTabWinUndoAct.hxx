@@ -59,9 +59,9 @@ namespace dbaui
         Point ptNext = m_pTabWin->GetPosPixel();
         Size szNext = m_pTabWin->GetSizePixel();
 
-        m_pOwner->Invalidate(INVALIDATE_NOCHILDREN);
+        m_pOwner->Invalidate(InvalidateFlags::NoChildren);
         m_pTabWin->SetPosSizePixel(m_ptNextPosition, m_szNextSize);
-        m_pOwner->Invalidate(INVALIDATE_NOCHILDREN);
+        m_pOwner->Invalidate(InvalidateFlags::NoChildren);
 
         m_ptNextPosition = ptNext;
         m_szNextSize = szNext;

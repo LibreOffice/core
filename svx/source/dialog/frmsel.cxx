@@ -700,7 +700,7 @@ Point FrameSelectorImpl::GetDevPosFromMousePos( const Point& rMousePos ) const
 void FrameSelectorImpl::DoInvalidate( bool bFullRepaint )
 {
     mbFullRepaint |= bFullRepaint;
-    mrFrameSel.Invalidate( INVALIDATE_NOERASE );
+    mrFrameSel.Invalidate( InvalidateFlags::NoErase );
 }
 
 // frame border state and style

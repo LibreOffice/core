@@ -244,7 +244,7 @@ void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 
     }
 
-    Invalidate(INVALIDATE_NOCHILDREN);
+    Invalidate(InvalidateFlags::NoChildren);
 }
 
 void ORelationTableView::AddNewRelation()
