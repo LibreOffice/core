@@ -82,6 +82,17 @@ Slider::Slider( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
+Slider::~Slider()
+{
+    disposeOnce();
+}
+
+void Slider::dispose()
+{
+    mpLinkedField.clear();
+    Control::dispose();
+}
+
 void Slider::ImplInitSettings()
 {
     vcl::Window* pParent = GetParent();
