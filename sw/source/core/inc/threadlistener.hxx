@@ -20,15 +20,16 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_THREADLISTENER_HXX
 
 #include <ifinishedthreadlistener.hxx>
-#include <ithreadlistenerowner.hxx>
 #include <observablethread.hxx>
+
+class ThreadManager;
 
 /** helper class to observe threads
 
     OD 2007-03-30 #i73788#
     An instance of this class can be used to observe a thread in order to
     be notified, if the thread has finished its work. The notification is
-    directly forward to its owner - an instance of IThreadListenerOwner
+    directly forward to its owner - an instance of ThreadManager
     Note:
     - A thread can only have one or none listener.
     - The notification is performed via the ThreadID
@@ -37,7 +38,7 @@ class ThreadListener : public IFinishedThreadListener
 {
     public:
 
-        ThreadListener( IThreadListenerOwner& rThreadListenerOwner );
+        ThreadListener( ThreadManager& rThreadListenerOwner );
         virtual ~ThreadListener();
 
         void ListenToThread( const oslInterlockedCount nThreadID,
@@ -47,7 +48,7 @@ class ThreadListener : public IFinishedThreadListener
 
     private:
 
-        IThreadListenerOwner& mrThreadListenerOwner;
+        ThreadManager& mrThreadListenerOwner;
 };
 #endif
 

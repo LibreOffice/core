@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <threadlistener.hxx>
+#include <threadmanager.hxx>
 
 /** helper class to observe threads
 
     #i73788#
 */
-ThreadListener::ThreadListener( IThreadListenerOwner& rThreadListenerOwner )
+ThreadListener::ThreadListener( ThreadManager& rThreadListenerOwner )
     : IFinishedThreadListener(),
       mrThreadListenerOwner( rThreadListenerOwner )
 {

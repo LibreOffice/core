@@ -24,8 +24,8 @@
 #include <osl/interlck.h>
 
 #include <boost/weak_ptr.hpp>
-#include <ithreadlistenerowner.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <ifinishedthreadlistener.hxx>
 
 /** class for an observable thread
 
