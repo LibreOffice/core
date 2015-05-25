@@ -236,7 +236,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
     }
 }
 
-void Window::ImplToTop( sal_uInt16 nFlags )
+void Window::ImplToTop( ToTopFlags nFlags )
 {
     DBG_ASSERT( ImplIsOverlapWindow(), "Window::ImplToTop(): Is not a OverlapWindow" );
 
@@ -253,11 +253,11 @@ void Window::ImplToTop( sal_uInt16 nFlags )
             if( !ImplGetClientWindow() || !(ImplGetClientWindow()->GetStyle() & WB_SYSTEMFLOATWIN) )
             {
                 sal_uInt16 nSysFlags = 0;
-                if ( nFlags & TOTOP_RESTOREWHENMIN )
+                if ( nFlags & ToTopFlags::RestoreWhenMin )
                     nSysFlags |= SAL_FRAME_TOTOP_RESTOREWHENMIN;
-                if ( nFlags & TOTOP_FOREGROUNDTASK )
+                if ( nFlags & ToTopFlags::ForegroundTask )
                     nSysFlags |= SAL_FRAME_TOTOP_FOREGROUNDTASK;
-                if ( nFlags & TOTOP_GRABFOCUSONLY )
+                if ( nFlags & ToTopFlags::GrabFocusOnly )
                     nSysFlags |= SAL_FRAME_TOTOP_GRABFOCUS_ONLY;
                 mpWindowImpl->mpFrame->ToTop( nSysFlags );
             }
@@ -326,7 +326,7 @@ void Window::ImplToTop( sal_uInt16 nFlags )
     }
 }
 
-void Window::ImplStartToTop( sal_uInt16 nFlags )
+void Window::ImplStartToTop( ToTopFlags nFlags )
 {
     ImplCalcToTopData   aStartData;
     ImplCalcToTopData*  pCurData;
@@ -379,10 +379,10 @@ void Window::ImplStartToTop( sal_uInt16 nFlags )
     }
 }
 
-void Window::ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible )
+void Window::ImplFocusToTop( ToTopFlags nFlags, bool bReallyVisible )
 {
     // do we need to fetch the focus?
-    if ( !(nFlags & TOTOP_NOGRABFOCUS) )
+    if ( !(nFlags & ToTopFlags::NoGrabFocus) )
     {
         // first window with GrabFocus-Activate gets the focus
         vcl::Window* pFocusWindow = this;
@@ -436,7 +436,7 @@ void Window::ImplHideAllOverlaps()
     }
 }
 
-void Window::ToTop( sal_uInt16 nFlags )
+void Window::ToTop( ToTopFlags nFlags )
 {
 
     ImplStartToTop( nFlags );

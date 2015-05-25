@@ -207,10 +207,18 @@ namespace o3tl
 }
 
 // ToTop-Flags
-#define TOTOP_RESTOREWHENMIN            ((sal_uInt16)0x0001)
-#define TOTOP_FOREGROUNDTASK            ((sal_uInt16)0x0002)
-#define TOTOP_NOGRABFOCUS               ((sal_uInt16)0x0004)
-#define TOTOP_GRABFOCUSONLY             ((sal_uInt16)0x0008)
+enum class ToTopFlags
+{
+    NONE            = 0x0000,
+    RestoreWhenMin  = 0x0001,
+    ForegroundTask  = 0x0002,
+    NoGrabFocus     = 0x0004,
+    GrabFocusOnly   = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ToTopFlags> : is_typed_flags<ToTopFlags, 0x000f> {};
+}
 
 // Flags for Invalidate
 #define INVALIDATE_CHILDREN             ((sal_uInt16)0x0001)
@@ -671,9 +679,9 @@ private:
     SAL_DLLPRIVATE void                 ImplToBottomChild();
 
     SAL_DLLPRIVATE void                 ImplCalcToTop( ImplCalcToTopData* pPrevData );
-    SAL_DLLPRIVATE void                 ImplToTop( sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                 ImplStartToTop( sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                 ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible );
+    SAL_DLLPRIVATE void                 ImplToTop( ToTopFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplStartToTop( ToTopFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplFocusToTop( ToTopFlags nFlags, bool bReallyVisible );
 
     SAL_DLLPRIVATE void                 ImplShowAllOverlaps();
     SAL_DLLPRIVATE void                 ImplHideAllOverlaps();
@@ -1020,7 +1028,7 @@ public:
     void                                SetActivateMode( ActivateModeFlags nMode );
     ActivateModeFlags                   GetActivateMode() const;
 
-    void                                ToTop( sal_uInt16 nFlags = 0 );
+    void                                ToTop( ToTopFlags nFlags = ToTopFlags::NONE );
     void                                SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags );
     void                                EnableAlwaysOnTop( bool bEnable = true );
     bool                                IsAlwaysOnTopEnabled() const;

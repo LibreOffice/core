@@ -136,7 +136,7 @@ void VCLXTopWindow_Base::toFront(  ) throw(::com::sun::star::uno::RuntimeExcepti
 
     vcl::Window* pWindow = GetWindowImpl();
     if ( pWindow )
-        static_cast<WorkWindow*>(pWindow)->ToTop( TOTOP_RESTOREWHENMIN );
+        static_cast<WorkWindow*>(pWindow)->ToTop( ToTopFlags::RestoreWhenMin );
 }
 
 void VCLXTopWindow_Base::toBack(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)

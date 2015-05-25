@@ -507,7 +507,7 @@ void MenuFloatingWindow::MouseButtonDown( const MouseEvent& rMEvt )
     // should stay on top...
     // due to focus change this would close all menus -> don't do it (#94123)
     //if ( pActivePopup && pActivePopup->ImplGetWindow() && !pActivePopup->ImplGetFloatingWindow()->pActivePopup )
-    //    pActivePopup->ImplGetFloatingWindow()->ToTop( TOTOP_NOGRABFOCUS );
+    //    pActivePopup->ImplGetFloatingWindow()->ToTop( ToTopFlags::NoGrabFocus );
 
     ImplHighlightItem( rMEvt, true );
 

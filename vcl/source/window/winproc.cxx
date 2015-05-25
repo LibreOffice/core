@@ -698,7 +698,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                 // Auto-ToTop
                 if ( !pSVData->maWinData.mpCaptureWin &&
                      (pChild->GetSettings().GetMouseSettings().GetOptions() & MouseSettingsOptions::AutoFocus) )
-                    pChild->ToTop( TOTOP_NOGRABFOCUS );
+                    pChild->ToTop( ToTopFlags::NoGrabFocus );
 
                 if( aDelData.IsDead() )
                     bCallHelpRequest = false;
@@ -1812,7 +1812,7 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl)
                 vcl::Window*     pTopLevelWindow = ImplGetWindowImpl()->mpFrameData->mpFocusWin->ImplGetFirstOverlapWindow();
                 if ( ( ! pTopLevelWindow->IsInputEnabled() || pTopLevelWindow->IsInModalMode() )
                      && pSVData->maWinData.mpLastExecuteDlg )
-                    pSVData->maWinData.mpLastExecuteDlg->ToTop( TOTOP_RESTOREWHENMIN | TOTOP_GRABFOCUSONLY);
+                    pSVData->maWinData.mpLastExecuteDlg->ToTop( ToTopFlags::RestoreWhenMin | ToTopFlags::GrabFocusOnly);
                 else
                     pTopLevelWindow->GrabFocus();
             }

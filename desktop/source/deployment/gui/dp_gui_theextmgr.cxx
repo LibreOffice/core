@@ -148,7 +148,7 @@ void TheExtensionManager::SetText( const OUString &rTitle )
 }
 
 
-void TheExtensionManager::ToTop( sal_uInt16 nFlags )
+void TheExtensionManager::ToTop( ToTopFlags nFlags )
 {
     const SolarMutexGuard guard;
 
@@ -442,7 +442,7 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
 
     if ( m_pExecuteCmdQueue->isBusy() || ( pDialogHelper && pDialogHelper->isBusy() ) )
     {
-        ToTop( TOTOP_RESTOREWHENMIN );
+        ToTop( ToTopFlags::RestoreWhenMin );
         throw frame::TerminationVetoException(
             "The office cannot be closed while the Extension Manager is running",
             static_cast<frame::XTerminateListener*>(this));

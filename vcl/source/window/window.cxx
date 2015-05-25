@@ -2407,8 +2407,8 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
             // all other windows if needed.
             if ( ImplIsOverlapWindow() && !(nFlags & ShowFlags::NoActivate) )
             {
-                ImplStartToTop(( nFlags & ShowFlags::ForegroundTask ) ? TOTOP_FOREGROUNDTASK : 0 );
-                ImplFocusToTop( 0, false );
+                ImplStartToTop(( nFlags & ShowFlags::ForegroundTask ) ? ToTopFlags::ForegroundTask : ToTopFlags::NONE );
+                ImplFocusToTop( ToTopFlags::NONE, false );
             }
 
             // save background

@@ -87,7 +87,7 @@ public:
 
     void SetText( const OUString &rTitle );
     void Show();
-    void ToTop( sal_uInt16 nFlags );
+    void ToTop( ToTopFlags nFlags );
     bool Close();
     bool isVisible();
 

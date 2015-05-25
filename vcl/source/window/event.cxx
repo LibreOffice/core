@@ -158,7 +158,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
                  * would not notice any change since "this" already has the focus.
                  */
                 if( pWrapper->IsFloatingMode() )
-                    ToTop( TOTOP_GRABFOCUSONLY );
+                    ToTop( ToTopFlags::GrabFocusOnly );
                 return true;
             }
         }
