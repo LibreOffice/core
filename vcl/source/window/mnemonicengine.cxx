@@ -30,7 +30,7 @@ namespace vcl
     {
         IMnemonicEntryList& rEntryList;
 
-        MnemonicEngine_Data( IMnemonicEntryList& _rEntryList )
+        explicit MnemonicEngine_Data( IMnemonicEntryList& _rEntryList )
             :rEntryList( _rEntryList )
         {
         }

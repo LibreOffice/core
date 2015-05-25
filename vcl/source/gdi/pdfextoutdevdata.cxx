@@ -300,7 +300,7 @@ struct PageSyncData
 
     bool                                        mbGroupIgnoreGDIMtfActions;
 
-    PageSyncData( GlobalSyncData* pGlobal ) : mbGroupIgnoreGDIMtfActions ( false ) { mpGlobalData = pGlobal; }
+    explicit PageSyncData( GlobalSyncData* pGlobal ) : mbGroupIgnoreGDIMtfActions ( false ) { mpGlobalData = pGlobal; }
 
     void PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct );
     bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData );

@@ -50,7 +50,7 @@ class NetWMAdaptor : public WMAdaptor
     void initAtoms();
     virtual bool isValid() const SAL_OVERRIDE;
 public:
-    NetWMAdaptor( SalDisplay* );
+    explicit NetWMAdaptor( SalDisplay* );
     virtual ~NetWMAdaptor();
 
     virtual void setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const SAL_OVERRIDE;
@@ -78,7 +78,7 @@ class GnomeWMAdaptor : public WMAdaptor
     void initAtoms();
     virtual bool isValid() const SAL_OVERRIDE;
 public:
-    GnomeWMAdaptor( SalDisplay * );
+    explicit GnomeWMAdaptor( SalDisplay * );
     virtual ~GnomeWMAdaptor();
 
     virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const SAL_OVERRIDE;

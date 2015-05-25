@@ -22,7 +22,7 @@
 class NumbersImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
-    NumbersImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit NumbersImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdsGenerator>(rxContext) {}
 
     // XServiceInfo

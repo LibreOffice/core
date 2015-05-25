@@ -46,7 +46,7 @@ private:
     bool            mbTextSelectable;
 
 public:
-                    TextWindow( vcl::Window* pParent );
+    explicit        TextWindow( vcl::Window* pParent );
     virtual         ~TextWindow();
     virtual void    dispose() SAL_OVERRIDE;
 

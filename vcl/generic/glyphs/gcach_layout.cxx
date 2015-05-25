@@ -311,7 +311,7 @@ private:
     int                     mnUnitsPerEM;
 
 public:
-                            HbLayoutEngine(ServerFont&);
+    explicit                HbLayoutEngine(ServerFont&);
     virtual                 ~HbLayoutEngine();
 
     virtual bool            Layout(ServerFontLayout&, ImplLayoutArgs&) SAL_OVERRIDE;

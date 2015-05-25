@@ -23,7 +23,7 @@
 class EBookImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    EBookImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit EBookImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext) {}
 
     // XServiceInfo

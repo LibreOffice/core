@@ -27,7 +27,7 @@ class SalFrame;
 class KDESalInstance : public X11SalInstance
 {
     public:
-        KDESalInstance( SalYieldMutex* pMutex ) : X11SalInstance( pMutex ) {}
+        explicit KDESalInstance( SalYieldMutex* pMutex ) : X11SalInstance( pMutex ) {}
         virtual ~KDESalInstance() {}
         virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
 

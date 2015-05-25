@@ -228,7 +228,7 @@ namespace x11 {
             ::Window        m_aRootWindow;
 
             DropTargetEntry() : m_pTarget( NULL ), m_aRootWindow( None ) {}
-            DropTargetEntry( DropTarget* pTarget ) :
+            explicit DropTargetEntry( DropTarget* pTarget ) :
                     m_pTarget( pTarget ),
                     m_aRootWindow( None )
                 {}

@@ -67,7 +67,7 @@ protected:
 class SvpGlyphCache : public GlyphCache
 {
 public:
-    SvpGlyphCache( SvpGlyphPeer& rPeer ) : GlyphCache( rPeer) {}
+    explicit SvpGlyphCache( SvpGlyphPeer& rPeer ) : GlyphCache( rPeer) {}
     SvpGlyphPeer& GetPeer() { return reinterpret_cast<SvpGlyphPeer&>( mrPeer ); }
     static SvpGlyphCache& GetInstance();
 };

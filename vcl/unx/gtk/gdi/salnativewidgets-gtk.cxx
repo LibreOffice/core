@@ -182,7 +182,7 @@ private:
     std::vector<NWFWidgetData> mData;
 
 public:
-    WidgetDataVector(size_t nElems = 0) : mData( nElems ) {}
+    explicit WidgetDataVector(size_t nElems = 0) : mData( nElems ) {}
     size_t size() const { return mData.size(); }
     NWFWidgetData &operator [](size_t i) { return mData.at(i); }
     NWFWidgetData &operator [](const SalX11Screen &s) { return mData.at(s.getXScreen()); }
@@ -363,7 +363,7 @@ class NWPixmapCache
     int m_screen;
     NWPixmapCacheData* pData;
 public:
-    NWPixmapCache( SalX11Screen nScreen );
+    explicit NWPixmapCache( SalX11Screen nScreen );
     ~NWPixmapCache();
 
     void SetSize( int n)

@@ -18,7 +18,7 @@
 class VisioImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    VisioImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit VisioImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

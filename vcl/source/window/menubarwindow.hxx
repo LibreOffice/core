@@ -113,7 +113,7 @@ private:
     void            GetFocus() SAL_OVERRIDE;
 
 public:
-                    MenuBarWindow( vcl::Window* pParent );
+    explicit        MenuBarWindow( vcl::Window* pParent );
     virtual         ~MenuBarWindow();
     virtual void    dispose() SAL_OVERRIDE;
 

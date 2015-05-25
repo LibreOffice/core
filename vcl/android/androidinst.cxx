@@ -33,12 +33,12 @@ static int viewWidth = 1, viewHeight = 1;
 class AndroidSalData : public SalGenericData
 {
 public:
-    AndroidSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_ANDROID, pInstance ) {}
+    explicit AndroidSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_ANDROID, pInstance ) {}
     virtual void ErrorTrapPush() {}
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
 
-void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
+void AndroidSalInstance::damaged(AndroidSalFrame* /* frame */)
 {
     static bool beenHere = false;
     static jmethodID nCallbackDamaged = 0;

@@ -23,7 +23,7 @@
 class MWAWCalcImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
-    MWAWCalcImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit MWAWCalcImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdsGenerator>(rxContext) {}
 
     // XServiceInfo

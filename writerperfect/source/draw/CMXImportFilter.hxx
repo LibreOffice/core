@@ -21,7 +21,7 @@
 class CMXImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    CMXImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit CMXImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

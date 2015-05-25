@@ -106,7 +106,7 @@ protected:
 
 public:
 
-    ImpFilterOutputStream( SvStream& rStm ) : mrStm( rStm ) {}
+    explicit ImpFilterOutputStream( SvStream& rStm ) : mrStm( rStm ) {}
     virtual ~ImpFilterOutputStream() {}
 };
 

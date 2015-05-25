@@ -42,7 +42,7 @@ namespace chelp {
 
     public:
 
-        BufferedInputStream(
+        explicit BufferedInputStream(
             const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream);
 
         virtual ~BufferedInputStream();

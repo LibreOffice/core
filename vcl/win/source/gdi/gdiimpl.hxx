@@ -49,7 +49,7 @@ private:
 
 public:
 
-    WinSalGraphicsImpl(WinSalGraphics& rParent);
+    explicit WinSalGraphicsImpl(WinSalGraphics& rParent);
 
     virtual ~WinSalGraphicsImpl();
 

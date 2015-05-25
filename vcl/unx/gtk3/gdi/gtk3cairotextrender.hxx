@@ -19,7 +19,7 @@ protected:
     GtkSalGraphics& mrParent;
 
 public:
-    GtkCairoTextRender(GtkSalGraphics& rParent);
+    explicit GtkCairoTextRender(GtkSalGraphics& rParent);
 
     virtual GlyphCache& getPlatformGlyphCache() SAL_OVERRIDE;
     virtual cairo_t* getCairoContext() SAL_OVERRIDE;

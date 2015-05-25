@@ -95,7 +95,7 @@ private:
     sal_uLong               ImplGetULONG( sal_uLong nPara );
 
 public:
-                        XPMReader( SvStream& rStm );
+    explicit            XPMReader( SvStream& rStm );
     virtual             ~XPMReader();
 
     ReadState           ReadXPM( Graphic& rGraphic );

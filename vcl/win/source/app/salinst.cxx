@@ -118,7 +118,7 @@ public: // for ImplSalYield()
     DWORD                       mnThreadId;
 
 public:
-                                SalYieldMutex( WinSalInstance* pInstData );
+    explicit SalYieldMutex( WinSalInstance* pInstData );
 
     virtual void                acquire();
     virtual void                release();

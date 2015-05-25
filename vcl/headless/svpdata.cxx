@@ -13,7 +13,7 @@
 class SvpSalData : public SalGenericData
 {
 public:
-    SvpSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_SVP, pInstance ) {}
+    explicit SvpSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_SVP, pInstance ) {}
     virtual void ErrorTrapPush() SAL_OVERRIDE {}
     virtual bool ErrorTrapPop( bool ) SAL_OVERRIDE { return false; }
 };

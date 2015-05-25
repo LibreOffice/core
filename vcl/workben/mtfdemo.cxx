@@ -40,10 +40,10 @@ class DemoMtfWin : public WorkWindow
     GDIMetaFile maMtf;
 
 public:
-    DemoMtfWin(OUString& aFileName)
+    explicit DemoMtfWin(const OUString& rFileName)
         : WorkWindow(NULL, WB_APP | WB_STDWORK)
     {
-        SvFileStream aFileStream(aFileName, StreamMode::READ);
+        SvFileStream aFileStream(rFileName, StreamMode::READ);
 
         if (aFileStream.IsOpen())
         {

@@ -36,7 +36,7 @@ class DocumentFocusListener :
 
 public:
 
-    DocumentFocusListener(AquaA11yFocusTracker& rTracker);
+    explicit DocumentFocusListener(AquaA11yFocusTracker& rTracker);
 
     void attachRecursive(
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible

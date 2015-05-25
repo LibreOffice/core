@@ -48,7 +48,7 @@ class GIFLZWDecompressor
 
 public:
 
-                        GIFLZWDecompressor( sal_uInt8 cDataSize );
+    explicit GIFLZWDecompressor( sal_uInt8 cDataSize );
                         ~GIFLZWDecompressor();
 
     HPBYTE              DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, bool& rEOI );

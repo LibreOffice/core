@@ -181,7 +181,7 @@ namespace
     private:
         const OUString& m_rThemeId;
     public:
-        SameTheme(const OUString &rThemeId) : m_rThemeId(rThemeId) {}
+        explicit SameTheme(const OUString &rThemeId) : m_rThemeId(rThemeId) {}
         bool operator()(const vcl::IconThemeInfo &rInfo)
         {
             return m_rThemeId == rInfo.GetThemeId();

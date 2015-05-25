@@ -22,7 +22,7 @@
 class PagesImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    PagesImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit PagesImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext) {}
 
     // XServiceInfo

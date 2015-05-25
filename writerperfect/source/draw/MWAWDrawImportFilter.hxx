@@ -23,7 +23,7 @@
 class MWAWDrawImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    MWAWDrawImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit MWAWDrawImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext) {}
 
     // XServiceInfo

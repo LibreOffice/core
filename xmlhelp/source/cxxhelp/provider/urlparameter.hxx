@@ -38,7 +38,7 @@ namespace chelp {
     {
     public:
 
-        DbtToStringConverter( const sal_Char* ptr )
+        explicit DbtToStringConverter( const sal_Char* ptr )
             : m_ptr( ptr )
         {
         }

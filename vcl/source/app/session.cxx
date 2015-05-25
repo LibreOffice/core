@@ -56,7 +56,7 @@ class VCLSession:
         bool                                        m_bInteractionDone;
         bool                                        m_bSaveDone;
 
-        Listener( const css::uno::Reference< XSessionManagerListener >& xListener )
+        explicit Listener( const css::uno::Reference< XSessionManagerListener >& xListener )
                 : m_xListener( xListener ),
                   m_bInteractionRequested( false ),
                   m_bInteractionDone( false ),

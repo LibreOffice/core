@@ -2246,7 +2246,7 @@ private:
 
 public:
     enum {PDF_FONT_MAGIC = 0xBDFF0A1C };
-                                        ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
+    explicit                            ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
     const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
 
     virtual PhysicalFontFace*           Clone() const SAL_OVERRIDE { return new ImplPdfBuiltinFontData(*this); }
@@ -6052,7 +6052,7 @@ char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/,
 class HashContextScope {
     HASHContext *mpPtr;
 public:
-    HashContextScope(HASHContext *pPtr) : mpPtr(pPtr) {}
+    explicit HashContextScope(HASHContext *pPtr) : mpPtr(pPtr) {}
     ~HashContextScope() { clear(); }
     void clear() { if (mpPtr) { HASH_Destroy(mpPtr); } mpPtr = NULL; }
     HASHContext *get() { return mpPtr; }
@@ -8155,7 +8155,7 @@ struct AnnotSorterLess
 {
     std::vector< PDFWriterImpl::PDFWidget >& m_rWidgets;
 
-    AnnotSorterLess( std::vector< PDFWriterImpl::PDFWidget >& rWidgets ) : m_rWidgets( rWidgets ) {}
+    explicit AnnotSorterLess( std::vector< PDFWriterImpl::PDFWidget >& rWidgets ) : m_rWidgets( rWidgets ) {}
 
     bool operator()( const AnnotationSortEntry& rLeft, const AnnotationSortEntry& rRight )
     {
@@ -8244,7 +8244,7 @@ class PDFStreamIf :
     PDFWriterImpl*  m_pWriter;
     bool            m_bWrite;
     public:
-    PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
+    explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
     virtual ~PDFStreamIf();
 
     virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(std::exception) SAL_OVERRIDE;
@@ -10759,7 +10759,7 @@ class AccessReleaser
 {
     BitmapReadAccess* m_pAccess;
 public:
-    AccessReleaser( BitmapReadAccess* pAccess ) : m_pAccess( pAccess ){}
+    explicit AccessReleaser( BitmapReadAccess* pAccess ) : m_pAccess( pAccess ){}
     ~AccessReleaser() { delete m_pAccess; }
 };
 

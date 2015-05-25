@@ -69,7 +69,7 @@ protected:
 
 public:
 
-                        ImplWheelWindow( vcl::Window* pParent );
+    explicit ImplWheelWindow( vcl::Window* pParent );
     virtual             ~ImplWheelWindow();
     virtual void        dispose() SAL_OVERRIDE;
 

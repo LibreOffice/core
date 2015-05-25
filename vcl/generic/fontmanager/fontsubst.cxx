@@ -134,7 +134,7 @@ namespace
     private:
         const FontSelectPatternAttributes& mrAttributes;
     public:
-        equal(const FontSelectPatternAttributes& rAttributes)
+        explicit equal(const FontSelectPatternAttributes& rAttributes)
             : mrAttributes(rAttributes)
         {
         }

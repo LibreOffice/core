@@ -24,7 +24,7 @@
 class SalKDEDisplay : public SalX11Display
 {
     public:
-        SalKDEDisplay( Display* pDisp );
+        explicit SalKDEDisplay( Display* pDisp );
         virtual ~SalKDEDisplay();
         static SalKDEDisplay* self();
         virtual void Yield() SAL_OVERRIDE;

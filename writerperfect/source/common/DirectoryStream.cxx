@@ -95,7 +95,7 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const 
 
 struct DirectoryStream::Impl
 {
-    Impl(const uno::Reference<ucb::XContent> &rxContent);
+    explicit Impl(const uno::Reference<ucb::XContent> &rxContent);
 
     uno::Reference<ucb::XContent> xContent;
 };

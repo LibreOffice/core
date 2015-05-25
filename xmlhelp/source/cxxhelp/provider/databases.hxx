@@ -116,7 +116,7 @@ namespace chelp {
             void init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids );
         };
 
-        KeywordInfo( const std::vector< KeywordElement >& aVector );
+        explicit KeywordInfo( const std::vector< KeywordElement >& aVector );
 
         ~KeywordInfo() { };
 

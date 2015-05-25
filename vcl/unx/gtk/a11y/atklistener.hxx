@@ -32,7 +32,7 @@ typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessi
 class AtkListener : public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleEventListener >
 {
 public:
-    AtkListener(AtkObjectWrapper * pWrapper);
+    explicit AtkListener(AtkObjectWrapper * pWrapper);
 
     // XEventListener
     virtual void disposing( const ::com::sun::star::lang::EventObject& Source )

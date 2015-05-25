@@ -25,7 +25,7 @@
 class KDEData : public X11SalData
 {
     public:
-                 KDEData( SalInstance *pInstance )
+        explicit KDEData( SalInstance *pInstance )
                         : X11SalData( SAL_DATA_KDE4, pInstance ) {}
         virtual ~KDEData();
 

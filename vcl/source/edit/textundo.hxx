@@ -40,8 +40,8 @@ protected:
     TextView*       GetView() const { return mpTextEngine->GetActiveView(); }
 
 public:
-                    TextUndoManager( TextEngine* pTextEngine );
-                    virtual ~TextUndoManager();
+    explicit TextUndoManager( TextEngine* pTextEngine );
+    virtual ~TextUndoManager();
 
     using SfxUndoManager::Undo;
     virtual bool Undo() SAL_OVERRIDE;
@@ -65,7 +65,7 @@ protected:
 
 public:
                         TYPEINFO_OVERRIDE();
-                        TextUndo( TextEngine* pTextEngine );
+    explicit            TextUndo( TextEngine* pTextEngine );
     virtual             ~TextUndo();
 
     TextEngine*         GetTextEngine() const   { return mpTextEngine; }

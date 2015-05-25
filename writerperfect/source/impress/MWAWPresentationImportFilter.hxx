@@ -23,7 +23,7 @@
 class MWAWPresentationImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 {
 public:
-    MWAWPresentationImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit MWAWPresentationImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdpGenerator>(rxContext) {}
 
     // XServiceInfo

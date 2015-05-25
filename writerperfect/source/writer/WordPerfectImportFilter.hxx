@@ -45,7 +45,7 @@ protected:
     throw (css::uno::RuntimeException, std::exception);
 
 public:
-    WordPerfectImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit WordPerfectImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : mxContext(rxContext) {}
     virtual ~WordPerfectImportFilter() {}
 
@@ -129,7 +129,7 @@ class WordPerfectImportFilterDialog : public cppu::WeakImplHelper3 <
            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
-    WordPerfectImportFilterDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext);
+    explicit WordPerfectImportFilterDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext);
 
 };
 
