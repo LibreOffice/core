@@ -141,6 +141,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                     {
                         placesUrlsList[i] = pEditedService->GetUrl();
                         placesNamesList[i] = pEditedService->GetName();
+                        break;
                     }
                 }
 
