@@ -76,7 +76,7 @@ class HierarchyContentProvider : public ::ucbhelper::ContentProviderImplHelper,
         com::sun::star::util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
 public:
-    HierarchyContentProvider(
+    explicit HierarchyContentProvider(
                 const com::sun::star::uno::Reference<
                     com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~HierarchyContentProvider();

@@ -76,8 +76,8 @@ class SourceProviderPolymorphicStructTypeTemplateEntityPad:
     public SourceProviderEntityPad
 {
 public:
-    SourceProviderPolymorphicStructTypeTemplateEntityPad(bool published):
-        SourceProviderEntityPad(published)
+    explicit SourceProviderPolymorphicStructTypeTemplateEntityPad(bool published)
+        : SourceProviderEntityPad(published)
     {}
 
     std::vector<OUString> typeParameters;

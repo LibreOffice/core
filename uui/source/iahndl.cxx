@@ -112,7 +112,7 @@ namespace {
 class HandleData : public osl::Condition
 {
 public:
-    HandleData(
+    explicit HandleData(
         uno::Reference< task::XInteractionRequest > const & rRequest)
         : osl::Condition(),
           m_rRequest(rRequest),

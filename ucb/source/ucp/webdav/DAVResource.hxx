@@ -45,7 +45,7 @@ struct DAVResource
     std::vector< DAVPropertyValue > properties;
 
     DAVResource() {}
-    DAVResource( const OUString & inUri ) : uri( inUri ) {}
+    explicit DAVResource( const OUString & inUri ) : uri( inUri ) {}
 };
 
 struct DAVResourceInfo
@@ -53,7 +53,7 @@ struct DAVResourceInfo
     OUString uri;
     std::vector < OUString > properties;
 
-    DAVResourceInfo( const OUString & inUri ) : uri( inUri ) {}
+    explicit DAVResourceInfo( const OUString & inUri ) : uri( inUri ) {}
 };
 
 } // namespace http_dav_ucp

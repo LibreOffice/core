@@ -34,8 +34,8 @@ class TickerThread : public osl::Thread
 
 public:
 
-    TickerThread( SerfLockStore & rLockStore )
-    : osl::Thread(), m_bFinish( false ), m_rLockStore( rLockStore ) {}
+    explicit TickerThread( SerfLockStore & rLockStore )
+        : osl::Thread(), m_bFinish( false ), m_rLockStore( rLockStore ) {}
 
     void finish() { m_bFinish = true; }
 

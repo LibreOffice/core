@@ -41,7 +41,7 @@ private:
     GFileInputStream *mpStream;
 
 public:
-    InputStream ( GFileInputStream *pStream );
+    explicit InputStream ( GFileInputStream *pStream );
     virtual ~InputStream();
 
     // XInterface

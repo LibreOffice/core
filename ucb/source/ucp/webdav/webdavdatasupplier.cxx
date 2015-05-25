@@ -47,7 +47,7 @@ struct ResultListEntry
     uno::Reference< sdbc::XRow >              xRow;
     const ContentProperties*                  pData;
 
-    ResultListEntry( const ContentProperties* pEntry ) : pData( pEntry ) {};
+    explicit ResultListEntry( const ContentProperties* pEntry ) : pData( pEntry ) {}
     ~ResultListEntry() { delete pData; }
 };
 

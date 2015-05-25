@@ -75,9 +75,9 @@ class UcbDataSink_Impl : public ::cppu::WeakImplHelper2< XActiveDataControl, XAc
     UcbLockBytesRef         m_xLockBytes;
 
 public:
-                            UcbDataSink_Impl( UcbLockBytes* pLockBytes )
-                                : m_xLockBytes( pLockBytes )
-                            {}
+    explicit UcbDataSink_Impl( UcbLockBytes* pLockBytes )
+        : m_xLockBytes( pLockBytes )
+    {}
 
     // XActiveDataControl.
     virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
@@ -102,9 +102,9 @@ class UcbStreamer_Impl : public ::cppu::WeakImplHelper2< XActiveDataStreamer, XA
     UcbLockBytesRef         m_xLockBytes;
 
 public:
-                            UcbStreamer_Impl( UcbLockBytes* pLockBytes )
-                                : m_xLockBytes( pLockBytes )
-                            {}
+    explicit UcbStreamer_Impl( UcbLockBytes* pLockBytes )
+        : m_xLockBytes( pLockBytes )
+    {}
 
     // XActiveDataControl.
     virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
@@ -150,9 +150,9 @@ class UcbPropertiesChangeListener_Impl : public ::cppu::WeakImplHelper1< XProper
 public:
     UcbLockBytesRef         m_xLockBytes;
 
-                            UcbPropertiesChangeListener_Impl( UcbLockBytesRef rRef )
-                                : m_xLockBytes( rRef )
-                            {}
+    explicit UcbPropertiesChangeListener_Impl( UcbLockBytesRef rRef )
+        : m_xLockBytes( rRef )
+    {}
 
     virtual void SAL_CALL   disposing ( const EventObject &/*rEvent*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
     virtual void SAL_CALL   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException, std::exception) SAL_OVERRIDE;
@@ -341,7 +341,7 @@ class ModeratorsActiveDataStreamer
 {
 public:
 
-    ModeratorsActiveDataStreamer(Moderator &theModerator);
+    explicit ModeratorsActiveDataStreamer(Moderator &theModerator);
 
     virtual ~ModeratorsActiveDataStreamer();
 
@@ -377,7 +377,7 @@ class ModeratorsActiveDataSink
 {
 public:
 
-    ModeratorsActiveDataSink(Moderator &theModerator);
+    explicit ModeratorsActiveDataSink(Moderator &theModerator);
 
     virtual ~ModeratorsActiveDataSink();
 
@@ -460,7 +460,7 @@ class ModeratorsInteractionHandler
 {
 public:
 
-    ModeratorsInteractionHandler(Moderator &theModerator);
+    explicit ModeratorsInteractionHandler(Moderator &theModerator);
 
     virtual ~ModeratorsInteractionHandler();
 

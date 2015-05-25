@@ -52,7 +52,7 @@ class INetMessageEncodeQPStream_Impl : public INetMessageIStream
     virtual int GetMsgLine(sal_Char* pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
-    INetMessageEncodeQPStream_Impl(sal_uIntPtr nMsgBufferSize = 1024);
+    explicit INetMessageEncodeQPStream_Impl(sal_uIntPtr nMsgBufferSize = 1024);
     virtual ~INetMessageEncodeQPStream_Impl();
 };
 
@@ -92,7 +92,7 @@ class INetMessageEncode64Stream_Impl : public INetMessageIStream
     virtual int GetMsgLine(sal_Char* pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
-    INetMessageEncode64Stream_Impl(sal_uIntPtr nMsgBufferSize = 2048);
+    explicit INetMessageEncode64Stream_Impl(sal_uIntPtr nMsgBufferSize = 2048);
     virtual ~INetMessageEncode64Stream_Impl();
 };
 
@@ -109,7 +109,7 @@ class INetMessageDecode64Stream_Impl : public INetMessageOStream
     virtual int PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
-    INetMessageDecode64Stream_Impl(sal_uIntPtr nMsgBufferSize = 128);
+    explicit INetMessageDecode64Stream_Impl(sal_uIntPtr nMsgBufferSize = 128);
     virtual ~INetMessageDecode64Stream_Impl();
 };
 

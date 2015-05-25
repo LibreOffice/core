@@ -164,11 +164,11 @@ struct NeonRequestContext
     const std::vector< OUString > * pHeaderNames;
     DAVResource *                          pResource;
 
-    NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm )
+    explicit NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm )
     : xOutputStream( xOutStrm ), xInputStream( 0 ),
       pHeaderNames( 0 ), pResource( 0 ) {}
 
-    NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm )
+    explicit NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm )
     : xOutputStream( 0 ), xInputStream( xInStrm ),
       pHeaderNames( 0 ), pResource( 0 ) {}
 

@@ -53,7 +53,7 @@ class UcbContentProviderProxyFactory : public cppu::WeakImplHelper2 <
                                 m_xSMgr;
 
 public:
-    UcbContentProviderProxyFactory(
+    explicit UcbContentProviderProxyFactory(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr );
     virtual ~UcbContentProviderProxyFactory();

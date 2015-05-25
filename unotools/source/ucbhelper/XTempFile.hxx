@@ -61,7 +61,7 @@ protected:
     void checkConnected ();
 
 public:
-    OTempFileService (::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
+    explicit OTempFileService (::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
 
     //Methods
     //  XInterface

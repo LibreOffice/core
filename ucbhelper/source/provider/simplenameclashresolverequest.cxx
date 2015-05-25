@@ -40,7 +40,7 @@ class InteractionSupplyName : public InteractionContinuation,
     OUString m_aName;
 
 public:
-    InteractionSupplyName( InteractionRequest * pRequest )
+    explicit InteractionSupplyName( InteractionRequest * pRequest )
     : InteractionContinuation( pRequest ) {}
 
     // XInterface

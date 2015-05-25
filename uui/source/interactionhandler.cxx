@@ -44,7 +44,7 @@ private:
     UUIInteractionHelper * m_pImpl;
 
 public:
-    UUIInteractionHandler(com::sun::star::uno::Reference<
+    explicit UUIInteractionHandler(com::sun::star::uno::Reference<
                   com::sun::star::uno::XComponentContext >
                   const & rxContext);
 

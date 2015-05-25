@@ -53,7 +53,7 @@ struct InteractionRequest_Impl
             com::sun::star::task::XInteractionContinuation > > m_aContinuations;
 
     InteractionRequest_Impl() {}
-    InteractionRequest_Impl( const uno::Any & rRequest )
+    explicit InteractionRequest_Impl( const uno::Any & rRequest )
     : m_aRequest( rRequest ) {}
 };
 
@@ -196,12 +196,7 @@ InteractionRequest::getContinuations()
 }
 
 
-
-
 // InteractionContinuation Implementation.
-
-
-
 
 namespace ucbhelper
 {
@@ -210,7 +205,7 @@ struct InteractionContinuation_Impl
 {
     InteractionRequest * m_pRequest;
 
-    InteractionContinuation_Impl( InteractionRequest * pRequest )
+    explicit InteractionContinuation_Impl( InteractionRequest * pRequest )
     : m_pRequest( pRequest ) {}
 };
 

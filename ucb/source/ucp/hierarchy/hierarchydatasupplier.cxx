@@ -50,7 +50,7 @@ struct ResultListEntry
     uno::Reference< sdbc::XRow >              xRow;
     HierarchyEntryData                        aData;
 
-    ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
+    explicit ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
 };
 
 

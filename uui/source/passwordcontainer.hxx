@@ -47,7 +47,7 @@ namespace uui {
 class PasswordContainerHelper
 {
 public:
-    PasswordContainerHelper(
+    explicit PasswordContainerHelper(
         com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext > const &
                 xContext );

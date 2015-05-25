@@ -51,7 +51,7 @@ struct ContentIdentifier_Impl
     OUString                          m_aProviderScheme;
     osl::Mutex                        m_aMutex;
 
-    ContentIdentifier_Impl( const OUString& rURL );
+    explicit ContentIdentifier_Impl( const OUString& rURL );
 };
 
 

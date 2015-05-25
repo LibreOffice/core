@@ -242,17 +242,13 @@ struct PropertySetRegistry_Impl
     bool                          m_bTriedToGetRootReadAccess;  // #82494#
     bool                          m_bTriedToGetRootWriteAccess; // #82494#
 
-    PropertySetRegistry_Impl( const Sequence< Any > &rInitArgs )
-    : m_aInitArgs( rInitArgs ),
-      m_bTriedToGetRootReadAccess( false ),
-      m_bTriedToGetRootWriteAccess( false )
+    explicit PropertySetRegistry_Impl(const Sequence<Any> &rInitArgs)
+        : m_aInitArgs(rInitArgs)
+        , m_bTriedToGetRootReadAccess(false)
+        , m_bTriedToGetRootWriteAccess(false)
     {
     }
 };
-
-
-
-
 
 // PropertySetRegistry Implementation.
 

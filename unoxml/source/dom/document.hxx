@@ -85,7 +85,7 @@ namespace DOM
 
         ::std::unique_ptr<events::CEventDispatcher> const m_pEventDispatcher;
 
-        CDocument(xmlDocPtr const pDocPtr);
+        explicit CDocument(xmlDocPtr const pDocPtr);
 
 
     public:

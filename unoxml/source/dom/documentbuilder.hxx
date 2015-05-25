@@ -59,7 +59,7 @@ namespace DOM
     public:
 
         // ctor
-        CDocumentBuilder(
+        explicit CDocumentBuilder(
             css::uno::Reference< css::lang::XMultiServiceFactory > const&
                 xFactory);
 

@@ -41,7 +41,7 @@ private:
     GFileOutputStream *mpStream;
 
 public:
-    OutputStream ( GFileOutputStream *pStream );
+    explicit OutputStream ( GFileOutputStream *pStream );
     virtual ~OutputStream();
 
     // XInterface

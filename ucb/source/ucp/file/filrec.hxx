@@ -39,7 +39,7 @@ class ReconnectingFile
 
 public:
 
-    ReconnectingFile( const OUString& aFileURL )
+    explicit ReconnectingFile( const OUString& aFileURL )
         : m_aFile( aFileURL )
         , m_nFlags( 0 )
         , m_bFlagsSet( false )

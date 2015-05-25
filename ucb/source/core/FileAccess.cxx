@@ -94,7 +94,7 @@ class OFileAccess : public FileAccessHelper
         throw ( Exception );
 
 public:
-    OFileAccess( const Reference< XComponentContext > & xContext )
+    explicit OFileAccess( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext), mpEnvironment( NULL ) {}
     // Methods
     virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

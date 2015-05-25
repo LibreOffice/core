@@ -720,7 +720,7 @@ class InsertData
 
 public:
 
-    InsertData(const Reference<XInputStream>& xInputStream)
+    explicit InsertData(const Reference<XInputStream>& xInputStream)
         : m_xInputStream(xInputStream) { }
     virtual ~InsertData() {}
 

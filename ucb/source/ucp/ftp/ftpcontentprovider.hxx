@@ -47,7 +47,7 @@ namespace ftp
     {
     public:
 
-        FTPContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit FTPContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         virtual ~FTPContentProvider();
 

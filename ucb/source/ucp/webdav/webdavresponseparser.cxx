@@ -352,7 +352,7 @@ namespace
         }
 
     public:
-        WebDAVResponseParser(WebDAVResponseParserMode eWebDAVResponseParserMode);
+        explicit WebDAVResponseParser(WebDAVResponseParserMode eWebDAVResponseParserMode);
         virtual ~WebDAVResponseParser();
 
         // Methods XDocumentHandler

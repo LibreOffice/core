@@ -64,7 +64,7 @@ struct ResultListEntry
     uno::Reference< sdbc::XRow >              xRow;
     boost::shared_ptr<ContentProperties> const pData;
 
-    ResultListEntry(boost::shared_ptr<ContentProperties> const& pEntry)
+    explicit ResultListEntry(boost::shared_ptr<ContentProperties> const& pEntry)
         : pData(pEntry)
     {}
 };

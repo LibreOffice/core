@@ -57,7 +57,7 @@ namespace ftp {
     {
     public:
 
-        curl_exception(sal_Int32 err)
+        explicit curl_exception(sal_Int32 err)
             : n_err(err) { }
 
         sal_Int32 code() const { return n_err; }

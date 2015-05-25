@@ -140,8 +140,8 @@ class ContentEventListener_Impl : public cppu::OWeakObject,
     Content_Impl& m_rContent;
 
 public:
-    ContentEventListener_Impl( Content_Impl& rContent )
-    : m_rContent( rContent ) {}
+    explicit ContentEventListener_Impl( Content_Impl& rContent )
+        : m_rContent( rContent ) {}
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

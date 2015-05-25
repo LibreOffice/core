@@ -51,7 +51,7 @@ namespace utl
     class CloseListener_Impl : public CloseListener_Base
     {
     public:
-        CloseListener_Impl(bool const bHasOwnership)
+        explicit CloseListener_Impl(bool const bHasOwnership)
             : m_bHasOwnership(bHasOwnership)
         {
         }

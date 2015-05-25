@@ -327,7 +327,7 @@ class MountOperation
     GError *mpError;
     static void Completed(GObject *source, GAsyncResult *res, gpointer user_data);
 public:
-    MountOperation(const uno::Reference< ucb::XCommandEnvironment >& xEnv);
+    explicit MountOperation(const uno::Reference< ucb::XCommandEnvironment >& xEnv);
     ~MountOperation();
     GError *Mount(GFile *pFile);
 };

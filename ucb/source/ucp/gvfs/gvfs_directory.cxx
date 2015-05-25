@@ -78,7 +78,7 @@ struct ResultListEntry
     uno::Reference< sdbc::XRow >              xRow;
     GnomeVFSFileInfo                          aInfo;
 
-    ResultListEntry( const GnomeVFSFileInfo *fileInfo)
+    explicit ResultListEntry( const GnomeVFSFileInfo *fileInfo)
     {
         gnome_vfs_file_info_copy (&aInfo, fileInfo);
     }

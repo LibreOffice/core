@@ -61,7 +61,7 @@ namespace fileaccess
 
         public:
 
-            TaskHandling(
+            explicit TaskHandling(
                 const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv
                 = com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >( 0 ) )
                 : m_bAbort( false ),

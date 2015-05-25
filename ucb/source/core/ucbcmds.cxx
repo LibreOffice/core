@@ -99,7 +99,7 @@ class InteractionHandlerProxy :
     uno::Reference< task::XInteractionHandler > m_xOrig;
 
 public:
-    InteractionHandlerProxy(
+    explicit InteractionHandlerProxy(
         const uno::Reference< task::XInteractionHandler > & xOrig )
     : m_xOrig( xOrig ) {}
 

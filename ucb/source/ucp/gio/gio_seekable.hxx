@@ -39,7 +39,7 @@ class Seekable : public ::com::sun::star::io::XTruncate,
 private:
     GSeekable *mpStream;
 public:
-    Seekable( GSeekable *pStream );
+    explicit Seekable( GSeekable *pStream );
     virtual ~Seekable();
 
     // XInterface

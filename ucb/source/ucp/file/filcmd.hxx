@@ -39,7 +39,7 @@ namespace fileaccess {
     {
     public:
 
-        XCommandInfo_impl( shell* pMyShell );
+        explicit XCommandInfo_impl( shell* pMyShell );
 
         virtual ~XCommandInfo_impl();
 

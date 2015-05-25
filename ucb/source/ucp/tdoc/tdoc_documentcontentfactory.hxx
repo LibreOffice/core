@@ -34,7 +34,7 @@ class DocumentContentFactory :
             com::sun::star::lang::XServiceInfo >
 {
 public:
-    DocumentContentFactory( const com::sun::star::uno::Reference<
+    explicit DocumentContentFactory( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
     virtual ~DocumentContentFactory();
 

@@ -37,7 +37,7 @@ struct ResultListEntry
     com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > xRow;
     GFileInfo *pInfo;
 
-    ResultListEntry( GFileInfo *pInInfo ) : pInfo(pInInfo)
+    explicit ResultListEntry( GFileInfo *pInInfo ) : pInfo(pInInfo)
     {
         g_object_ref( pInfo );
     }

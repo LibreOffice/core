@@ -407,7 +407,7 @@ private:
     impl_isMyPropertyName( const OUString& rName );
 
 public:
-    CCRS_PropertySetInfo(   Reference<
+    explicit CCRS_PropertySetInfo(   Reference<
             XPropertySetInfo > xPropertySetInfoOrigin );
 
     virtual ~CCRS_PropertySetInfo();

@@ -63,7 +63,7 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    inline ExpandContentProviderImpl(
+    explicit ExpandContentProviderImpl(
         uno::Reference< uno::XComponentContext > const & xComponentContext )
         : t_impl_helper( m_mutex ),
           m_xComponentContext( xComponentContext ),

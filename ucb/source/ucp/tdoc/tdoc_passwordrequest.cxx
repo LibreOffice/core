@@ -40,8 +40,8 @@ namespace tdoc_ucp
                       public task::XInteractionPassword
     {
     public:
-        InteractionSupplyPassword( ucbhelper::InteractionRequest * pRequest )
-        : InteractionContinuation( pRequest ) {}
+        explicit InteractionSupplyPassword( ucbhelper::InteractionRequest * pRequest )
+            : InteractionContinuation( pRequest ) {}
 
         // XInterface
         virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )

@@ -45,7 +45,7 @@ public:
     enum Type { NONE, LINK, FOLDER };
 
     HierarchyEntryData() : m_aType( NONE ) {}
-    HierarchyEntryData( const Type & rType ) : m_aType( rType ) {}
+    explicit HierarchyEntryData( const Type & rType ) : m_aType( rType ) {}
 
     const OUString & getName() const { return m_aName; }
     void setName( const OUString & rName ) { m_aName = rName; }

@@ -59,7 +59,7 @@ namespace fileaccess {
         friend class BaseContent;
     public:
 
-        FileProvider( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+        explicit FileProvider( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~FileProvider();
 
         // XServiceInfo

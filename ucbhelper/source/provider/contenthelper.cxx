@@ -46,7 +46,7 @@ class PropertyEventSequence
     sal_uInt32                                  m_nPos;
 
 public:
-    PropertyEventSequence( sal_uInt32 nSize )
+    explicit PropertyEventSequence( sal_uInt32 nSize )
     : m_aSeq( nSize ), m_nPos( 0 ) {};
 
     void append( const beans::PropertyChangeEvent& rEvt )

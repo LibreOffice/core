@@ -80,7 +80,7 @@ namespace DOM
         static css::uno::Sequence< OUString > _getSupportedServiceNames();
         static css::uno::Reference< XInterface > _getInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr);
 
-        CSAXDocumentBuilder(const css::uno::Reference< css::lang::XMultiServiceFactory >& mgr);
+        explicit CSAXDocumentBuilder(const css::uno::Reference< css::lang::XMultiServiceFactory >& mgr);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()

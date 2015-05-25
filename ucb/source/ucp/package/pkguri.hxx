@@ -48,7 +48,7 @@ private:
 
 public:
     PackageUri() : m_bValid( false ) {}
-    PackageUri( const OUString & rPackageUri )
+    explicit PackageUri( const OUString & rPackageUri )
     : m_aUri( rPackageUri ), m_bValid( false ) {}
 
     bool isValid() const

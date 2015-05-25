@@ -100,14 +100,16 @@ class ValueCounter_Impl
 {
     sal_Int16& rCnt;
 public:
-    ValueCounter_Impl(sal_Int16& rCounter):
-        rCnt(rCounter)
-            {rCnt++;}
+    explicit ValueCounter_Impl(sal_Int16& rCounter)
+        : rCnt(rCounter)
+    {
+        rCnt++;
+    }
     ~ValueCounter_Impl()
-            {
-                OSL_ENSURE(rCnt>0, "RefCount < 0 ??");
-                rCnt--;
-            }
+    {
+        OSL_ENSURE(rCnt>0, "RefCount < 0 ??");
+        rCnt--;
+    }
 };
 
 ConfigChangeListener_Impl::ConfigChangeListener_Impl(

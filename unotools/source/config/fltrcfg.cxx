@@ -63,7 +63,7 @@ protected:
     virtual void            ImplCommit() SAL_OVERRIDE;
 
 public:
-    SvtAppFilterOptions_Impl(const OUString& rRoot) :
+    explicit SvtAppFilterOptions_Impl(const OUString& rRoot) :
         utl::ConfigItem(rRoot),
         bLoadVBA(false),
         bSaveVBA(false)  {}
@@ -137,7 +137,7 @@ private:
     virtual void            ImplCommit() SAL_OVERRIDE;
 
 public:
-    SvtWriterFilterOptions_Impl(const OUString& rRoot) :
+    explicit SvtWriterFilterOptions_Impl(const OUString& rRoot) :
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(false)
     {}
@@ -185,7 +185,7 @@ private:
     virtual void            ImplCommit() SAL_OVERRIDE;
 
 public:
-    SvtCalcFilterOptions_Impl(const OUString& rRoot) :
+    explicit SvtCalcFilterOptions_Impl(const OUString& rRoot) :
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(false)
     {}

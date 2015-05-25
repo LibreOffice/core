@@ -47,9 +47,11 @@ class TickerThread : public salhelper::Thread
 
 public:
 
-    TickerThread( NeonLockStore & rLockStore )
-    : Thread( "NeonTickerThread" ), m_bFinish( false ),
-      m_rLockStore( rLockStore ) {}
+    explicit TickerThread( NeonLockStore & rLockStore )
+        : Thread( "NeonTickerThread" ), m_bFinish( false )
+        , m_rLockStore( rLockStore )
+    {
+    }
 
     void finish() { m_bFinish = true; }
 

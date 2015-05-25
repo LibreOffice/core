@@ -90,7 +90,7 @@ namespace tdoc_ucp {
 
         {
         public:
-            OfficeDocumentsCloseListener( OfficeDocumentsManager * pMgr )
+            explicit OfficeDocumentsCloseListener( OfficeDocumentsManager * pMgr )
                 : m_pManager( pMgr ) {}
 
             // util::XCloseListener

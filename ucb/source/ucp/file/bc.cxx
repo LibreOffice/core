@@ -61,7 +61,7 @@ class fileaccess::PropertyListeners
     : public PropertyListeners_impl
 {
 public:
-    PropertyListeners( ::osl::Mutex& aMutex )
+    explicit PropertyListeners( ::osl::Mutex& aMutex )
         : PropertyListeners_impl( aMutex )
     {
     }

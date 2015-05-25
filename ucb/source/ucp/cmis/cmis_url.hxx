@@ -28,7 +28,7 @@ namespace cmis
             OUString m_sPass;
 
         public:
-            URL( OUString const & urlStr );
+            explicit URL( OUString const & urlStr );
 
             OUString& getObjectPath( ) { return m_sPath; }
             OUString& getObjectId( ) { return m_sId; }

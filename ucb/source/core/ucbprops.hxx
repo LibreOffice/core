@@ -51,7 +51,7 @@ private:
                             com::sun::star::beans::Property& rProp );
 
 public:
-    UcbPropertiesManager( const com::sun::star::uno::Reference<
+    explicit UcbPropertiesManager( const com::sun::star::uno::Reference<
                             com::sun::star::lang::XMultiServiceFactory >&
                                 rxSMgr );
     virtual ~UcbPropertiesManager();

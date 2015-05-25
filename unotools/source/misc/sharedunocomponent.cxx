@@ -75,7 +75,7 @@ namespace utl
         CloseableComponentImpl& operator=(const CloseableComponentImpl&) SAL_DELETED_FUNCTION;
 
     public:
-        CloseableComponentImpl( const Reference< XInterface >& _rxComponent );
+        explicit CloseableComponentImpl( const Reference< XInterface >& _rxComponent );
 
         /** closes the component
 

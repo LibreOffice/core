@@ -200,7 +200,7 @@ public:
 protected:
     rtl::Reference< DAVSessionFactory > m_xFactory;
 
-    DAVSession( rtl::Reference< DAVSessionFactory > const & rFactory )
+    explicit DAVSession( rtl::Reference< DAVSessionFactory > const & rFactory )
     : m_xFactory( rFactory ), m_nRefCount( 0 ) {}
 
     virtual ~DAVSession() {}

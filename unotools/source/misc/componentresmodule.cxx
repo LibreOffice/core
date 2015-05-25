@@ -42,7 +42,7 @@ namespace utl
         OComponentResModuleImpl& operator=(const OComponentResModuleImpl&) SAL_DELETED_FUNCTION;
 
     public:
-        OComponentResModuleImpl( const OString& _rResFilePrefix )
+        explicit OComponentResModuleImpl( const OString& _rResFilePrefix )
             :m_pResources( NULL )
             ,m_bInitialized( false )
             ,m_sResFilePrefix( _rResFilePrefix )

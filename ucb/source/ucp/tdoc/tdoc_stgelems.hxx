@@ -283,7 +283,7 @@ public:
                 com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    Storage( const rtl::Reference< Storage > & rFactory ); // n.i.
+    explicit Storage( const rtl::Reference< Storage > & rFactory ); // n.i.
 
     rtl::Reference< StorageElementFactory >         m_xFactory;
     com::sun::star::uno::Reference<

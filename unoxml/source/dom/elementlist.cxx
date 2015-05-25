@@ -38,7 +38,7 @@ namespace
         css::uno::WeakReference<css::xml::dom::events::XEventListener> mxOwner;
 
     public:
-        WeakEventListener(const css::uno::Reference<css::xml::dom::events::XEventListener>& rOwner)
+        explicit WeakEventListener(const css::uno::Reference<css::xml::dom::events::XEventListener>& rOwner)
             : mxOwner(rOwner)
         {
         }

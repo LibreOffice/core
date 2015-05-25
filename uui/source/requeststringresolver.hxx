@@ -52,7 +52,7 @@ private:
     UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver &) SAL_DELETED_FUNCTION;
     void operator =(UUIInteractionRequestStringResolver) SAL_DELETED_FUNCTION;
 
-    UUIInteractionRequestStringResolver(
+    explicit UUIInteractionRequestStringResolver(
         com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext >
                 const & rxContext);

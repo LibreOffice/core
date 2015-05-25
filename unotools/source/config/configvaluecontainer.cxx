@@ -51,7 +51,7 @@ namespace utl
         Type                aDataType;          // the type object pointed to by pLocation
 
     public:
-        NodeValueAccessor( const OUString& _rNodePath );
+        explicit NodeValueAccessor( const OUString& _rNodePath );
 
         void bind( void* _pLocation, const Type& _rType );
 

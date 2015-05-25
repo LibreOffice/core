@@ -168,7 +168,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
 class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
 {
     public:
-        StringCalculator( const OutputDevice* pDevice )
+        explicit StringCalculator( const OutputDevice* pDevice )
             : m_pDevice( const_cast< OutputDevice * >( pDevice ) )
         {
         }

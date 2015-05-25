@@ -140,7 +140,7 @@ OUString showDirection(
 }
 
 struct EqualsAnnotation {
-    EqualsAnnotation(OUString const & name): name_(name) {}
+    explicit EqualsAnnotation(OUString const & name): name_(name) {}
 
     bool operator ()(unoidl::AnnotatedReference const & ref)
     { return ref.name == name_; }

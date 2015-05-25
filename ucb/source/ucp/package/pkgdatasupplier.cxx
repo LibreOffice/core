@@ -55,7 +55,7 @@ struct ResultListEntry
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
 
-    ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
+    explicit ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
 };
 
 

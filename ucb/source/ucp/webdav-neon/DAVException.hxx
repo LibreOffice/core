@@ -145,7 +145,7 @@ class DAVException : public std::exception
         sal_uInt16      mStatusCode;
 
     public:
-         DAVException( ExceptionCode inExceptionCode ) :
+         explicit DAVException( ExceptionCode inExceptionCode ) :
             mExceptionCode( inExceptionCode ), mStatusCode( SC_NONE ) {};
          DAVException( ExceptionCode inExceptionCode,
                        const OUString & rData ) :

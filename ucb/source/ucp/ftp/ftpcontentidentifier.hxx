@@ -46,7 +46,7 @@ namespace ftp {
     {
     public:
 
-        FTPContentIdentifier(const OUString& ident);
+        explicit FTPContentIdentifier(const OUString& ident);
 
         virtual ~FTPContentIdentifier();
 

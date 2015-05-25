@@ -91,7 +91,7 @@ class SvtViewOptionsBase_Impl
     public:
         enum State { STATE_NONE, STATE_FALSE, STATE_TRUE };
 
-                                                        SvtViewOptionsBase_Impl ( const OUString&                                sList    );
+        explicit SvtViewOptionsBase_Impl(const OUString& rList);
         virtual                                        ~SvtViewOptionsBase_Impl (                                                                );
         bool                                        Exists                  ( const OUString&                                sName    );
         bool                                        Delete                  ( const OUString&                                sName    );

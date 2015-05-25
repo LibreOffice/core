@@ -58,11 +58,11 @@ struct ResultSetMetaData_Impl
     bool                                        m_bObtainedTypes;
     bool                                        m_bGlobalReadOnlyValue;
 
-    ResultSetMetaData_Impl( sal_Int32 nSize )
+    explicit ResultSetMetaData_Impl( sal_Int32 nSize )
     : m_aColumnData( nSize ), m_bObtainedTypes( false ),
       m_bGlobalReadOnlyValue( true ) {}
 
-    ResultSetMetaData_Impl(
+    explicit ResultSetMetaData_Impl(
         const std::vector< ::ucbhelper::ResultSetColumnData >& rColumnData )
     : m_aColumnData( rColumnData ), m_bObtainedTypes( false ),
       m_bGlobalReadOnlyValue( false ) {}

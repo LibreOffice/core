@@ -84,7 +84,7 @@ class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
     PropertyMap * m_pProps;
 
 public:
-    ContentProvider( const ::com::sun::star::uno::Reference<
+    explicit ContentProvider( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider();
 

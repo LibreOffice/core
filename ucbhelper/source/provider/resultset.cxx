@@ -128,8 +128,8 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
 class PropertyChangeListeners : public PropertyChangeListenerContainer
 {
 public:
-    PropertyChangeListeners( osl::Mutex& rMtx )
-    : PropertyChangeListenerContainer( rMtx ) {}
+    explicit PropertyChangeListeners( osl::Mutex& rMtx )
+        : PropertyChangeListenerContainer( rMtx ) {}
 };
 
 } // namespace ucbhelper_impl

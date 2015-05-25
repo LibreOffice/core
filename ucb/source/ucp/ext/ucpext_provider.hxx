@@ -34,7 +34,7 @@ namespace ucb { namespace ucp { namespace ext
     class ContentProvider : public ContentProvider_Base
     {
     public:
-        ContentProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+        explicit ContentProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~ContentProvider();
 
         // XServiceInfo

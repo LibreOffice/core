@@ -62,7 +62,7 @@ class UniversalContentBroker :
                 public com::sun::star::util::XChangesListener
 {
 public:
-    UniversalContentBroker( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+    explicit UniversalContentBroker( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
     virtual ~UniversalContentBroker();
 
     // XInterface

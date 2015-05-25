@@ -26,7 +26,7 @@ namespace cmis
         com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xContent;
         com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > xRow;
 
-        ResultListEntry( com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xCnt ) : xContent( xCnt )
+        explicit ResultListEntry( com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xCnt ) : xContent( xCnt )
         {
         }
 

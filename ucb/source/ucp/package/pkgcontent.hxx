@@ -86,7 +86,7 @@ struct ContentProperties
       bCompressed( true ), bEncrypted( false ),
       bHasEncryptedEntries( false ) {}
 
-    ContentProperties( const OUString& rContentType );
+    explicit ContentProperties( const OUString& rContentType );
 
     com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
     getCreatableContentsInfo( PackageUri const & rUri ) const;

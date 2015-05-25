@@ -88,7 +88,7 @@ namespace fileaccess {
             sal_Int16                              Attributes;
         public:
             MyProperty();
-            MyProperty( const OUString&                              __PropertyName );
+            explicit MyProperty( const OUString&  __PropertyName );
             MyProperty( const bool&                                  __isNative,
                         const OUString&                              __PropertyName,
                         const sal_Int32&                             __Handle,

@@ -65,7 +65,7 @@ namespace XPath
 
     public:
         // ctor
-        CXPathAPI(
+        explicit CXPathAPI(
             const css::uno::Reference< css::lang::XMultiServiceFactory >&
                 rSMgr);
 

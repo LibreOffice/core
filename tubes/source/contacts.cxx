@@ -106,7 +106,7 @@ class TubeContacts : public ModelessDialog
     }
 
 public:
-    TubeContacts( Collaboration* pCollaboration ) :
+    explicit TubeContacts( Collaboration* pCollaboration ) :
         ModelessDialog( NULL, "ContactsDialog", "tubes/ui/contacts.ui" ),
         mpCollaboration( pCollaboration )
     {

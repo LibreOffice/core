@@ -69,8 +69,8 @@ struct InteractionHandlerData
     OUString ServiceName;
 
     InteractionHandlerData() {};
-    InteractionHandlerData(const OUString & rService)
-    : ServiceName( rService ){}
+    explicit InteractionHandlerData(const OUString & rService)
+        : ServiceName( rService ){}
 };
 
 typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
@@ -97,7 +97,7 @@ public:
         com::sun::star::uno::Reference<
             com::sun::star::awt::XWindow > const & rxWindow,
         const OUString & rContextParam);
-    UUIInteractionHelper(
+    explicit UUIInteractionHelper(
         com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext > const & rxContext);
 
@@ -295,9 +295,9 @@ private:
 class ErrorResource: private Resource
 {
 public:
-    inline ErrorResource(ResId & rResId): Resource(rResId) {}
+    explicit ErrorResource(ResId & rResId): Resource(rResId) {}
 
-    inline ~ErrorResource() { FreeResource(); }
+    ~ErrorResource() { FreeResource(); }
 
     bool getString(ErrCode nErrorCode, OUString &rString) const;
 };

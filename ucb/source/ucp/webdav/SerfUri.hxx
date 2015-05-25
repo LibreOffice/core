@@ -50,8 +50,8 @@ class SerfUri
         void calculateURI ();
 
     public:
-        SerfUri( const OUString & inUri ) throw ( DAVException );
-        SerfUri( const apr_uri_t * inUri ) throw ( DAVException );
+        explicit SerfUri( const OUString & inUri ) throw ( DAVException );
+        explicit SerfUri( const apr_uri_t * inUri ) throw ( DAVException );
         ~SerfUri( );
 
         bool operator== ( const SerfUri & rOther ) const;

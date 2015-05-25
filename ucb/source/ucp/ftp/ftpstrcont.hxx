@@ -41,7 +41,7 @@ namespace ftp {
     {
     public:
 
-        FTPOutputStreamContainer(const com::sun::star::uno::Reference<
+        explicit FTPOutputStreamContainer(const com::sun::star::uno::Reference<
                                  com::sun::star::io::XOutputStream>& out);
 
         virtual ~FTPOutputStreamContainer() {}
@@ -61,7 +61,7 @@ namespace ftp {
     {
     public:
 
-        FTPInputStreamContainer(FTPInputStream* out);
+        explicit FTPInputStreamContainer(FTPInputStream* out);
 
         virtual ~FTPInputStreamContainer() {}
 

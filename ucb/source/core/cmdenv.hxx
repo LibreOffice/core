@@ -40,7 +40,7 @@ class UcbCommandEnvironment :
         com::sun::star::ucb::XProgressHandler >     m_xPH;
 
 public:
-    UcbCommandEnvironment(
+    explicit UcbCommandEnvironment(
         const com::sun::star::uno::Reference<
             com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
     virtual ~UcbCommandEnvironment();

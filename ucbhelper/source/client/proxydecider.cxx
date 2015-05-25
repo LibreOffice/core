@@ -62,7 +62,7 @@ private:
     OString m_aWildString;
 
 public:
-    WildCard( const OUString& rWildCard )
+    explicit WildCard( const OUString& rWildCard )
     : m_aWildString(
         OUStringToOString(
             rWildCard, RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase() ) {}
@@ -133,7 +133,7 @@ private:
                          sal_Int32 nPort,
                          bool bUseFullyQualified ) const;
 public:
-    InternetProxyDecider_Impl(
+    explicit InternetProxyDecider_Impl(
         const uno::Reference< uno::XComponentContext >& rxContext );
     virtual ~InternetProxyDecider_Impl();
 

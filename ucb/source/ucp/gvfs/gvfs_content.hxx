@@ -61,7 +61,7 @@ class Authentication
 {
 public:
     // Helper class to make exceptions pleasant
-    Authentication( const com::sun::star::uno::Reference<
+    explicit Authentication( const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XCommandEnvironment > & xEnv );
     ~Authentication();
 };

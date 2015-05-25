@@ -47,7 +47,7 @@ class HierarchyDataSource : public cppu::OWeakObject,
     cppu::OInterfaceContainerHelper * m_pDisposeEventListeners;
 
 public:
-    HierarchyDataSource( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    explicit HierarchyDataSource( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
     virtual ~HierarchyDataSource();
 
     // XInterface

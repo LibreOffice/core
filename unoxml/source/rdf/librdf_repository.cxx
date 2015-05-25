@@ -186,14 +186,14 @@ public:
     struct URI : public Resource
     {
         OString const value;
-        URI(OString const& i_rValue)
+        explicit URI(OString const& i_rValue)
             : value(i_rValue)
         { }
     };
     struct BlankNode : public Resource
     {
         OString const value;
-        BlankNode(OString const& i_rValue)
+        explicit BlankNode(OString const& i_rValue)
             : value(i_rValue)
         { }
     };
@@ -635,7 +635,7 @@ class NodeArrayDeleter : public std::unary_function<librdf_node**, void>
     const int m_Count;
 
 public:
-    NodeArrayDeleter(int i_Count) : m_Count(i_Count) { }
+    explicit NodeArrayDeleter(int i_Count) : m_Count(i_Count) { }
 
     void operator() (librdf_node** io_pArray) const throw ()
     {

@@ -437,7 +437,7 @@ class XPropertySetInfoImpl
 {
 public:
 
-    XPropertySetInfoImpl( const uno::Sequence< beans::Property >& aSeq )
+    explicit XPropertySetInfoImpl( const uno::Sequence< beans::Property >& aSeq )
         : m_aSeq( aSeq )
     {
     }

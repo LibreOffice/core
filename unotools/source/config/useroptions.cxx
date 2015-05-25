@@ -73,7 +73,7 @@ std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
 class SvtUserOptions::ChangeListener : public cppu::WeakImplHelper1<util::XChangesListener>
 {
 public:
-    ChangeListener (Impl& rParent): m_rParent(rParent) { }
+    explicit ChangeListener (Impl& rParent): m_rParent(rParent) { }
 
     // XChangesListener
     virtual void SAL_CALL changesOccurred (util::ChangesEvent const& Event) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
