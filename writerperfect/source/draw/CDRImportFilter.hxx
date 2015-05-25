@@ -21,7 +21,7 @@
 class CDRImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    CDRImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit CDRImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

@@ -51,18 +51,18 @@ class XBMReader : public GraphicReader
     long                nHeight;
     bool                bStatus;
 
-    void                InitTable();
-    OString        FindTokenLine( SvStream* pInStm, const char* pTok1,
+    void            InitTable();
+    OString         FindTokenLine( SvStream* pInStm, const char* pTok1,
                                        const char* pTok2 = NULL, const char* pTok3 = NULL );
-    long                ParseDefine( const sal_Char* pDefine );
+    long            ParseDefine( const sal_Char* pDefine );
     bool            ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat );
 
 public:
 
-                        XBMReader( SvStream& rStm );
-    virtual             ~XBMReader();
+    explicit        XBMReader( SvStream& rStm );
+    virtual         ~XBMReader();
 
-    ReadState           ReadXBM( Graphic& rGraphic );
+    ReadState       ReadXBM( Graphic& rGraphic );
 };
 
 #endif // _XBMPRIVATE

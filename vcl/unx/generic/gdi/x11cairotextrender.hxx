@@ -37,7 +37,7 @@ protected:
     size_t GetHeight() const;
 
 public:
-    X11CairoTextRender(X11SalGraphics& rParent);
+    explicit X11CairoTextRender(X11SalGraphics& rParent);
 
     virtual GlyphCache& getPlatformGlyphCache() SAL_OVERRIDE;
     virtual cairo_t* getCairoContext() SAL_OVERRIDE;

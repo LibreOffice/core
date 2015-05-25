@@ -56,7 +56,7 @@ class Font2
         bool    IsSymbolFont () const
                     { return mbSymbol; }
 
-        Font2 (const PrinterGfx &rGfx);
+        explicit Font2 (const PrinterGfx &rGfx);
         ~Font2 () {}
 };
 

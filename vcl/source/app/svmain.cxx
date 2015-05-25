@@ -206,7 +206,7 @@ static oslSignalHandler pExceptionHandler = NULL;
 class DesktopEnvironmentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
 {
 public:
-    DesktopEnvironmentContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx)
+    explicit DesktopEnvironmentContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx)
         : m_xNextContext( ctx ) {}
 
     // XCurrentContext

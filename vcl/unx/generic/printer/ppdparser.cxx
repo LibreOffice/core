@@ -278,7 +278,7 @@ private:
     OUString       maFileName;
 
 public:
-    PPDDecompressStream( const OUString& rFile );
+    explicit PPDDecompressStream( const OUString& rFile );
     ~PPDDecompressStream();
 
     bool IsOpen() const;

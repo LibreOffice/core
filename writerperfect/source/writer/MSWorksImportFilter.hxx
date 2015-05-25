@@ -23,7 +23,7 @@
 class MSWorksImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    MSWorksImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit MSWorksImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext) {}
 
     // XServiceInfo

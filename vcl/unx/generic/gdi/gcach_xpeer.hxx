@@ -32,7 +32,7 @@ public:
 class X11GlyphCache : public GlyphCache
 {
 public:
-    X11GlyphCache( X11GlyphPeer& );
+    explicit X11GlyphCache( X11GlyphPeer& );
     static X11GlyphCache& GetInstance();
     static void  KillInstance();
 };

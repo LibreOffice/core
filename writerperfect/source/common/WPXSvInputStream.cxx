@@ -285,7 +285,7 @@ struct ZipStreamData
   */
 struct ZipStorageImpl
 {
-    ZipStorageImpl(const Reference<container::XNameAccess> &rxContainer);
+    explicit ZipStorageImpl(const Reference<container::XNameAccess> &rxContainer);
 
     /** Initialize for access.
       *
@@ -400,7 +400,7 @@ Reference<XInputStream> ZipStorageImpl::createStream(const rtl::OUString &rPath)
 class WPXSvInputStreamImpl
 {
 public :
-    WPXSvInputStreamImpl(::com::sun::star::uno::Reference<
+    explicit WPXSvInputStreamImpl(::com::sun::star::uno::Reference<
                          ::com::sun::star::io::XInputStream > xStream);
     ~WPXSvInputStreamImpl();
 

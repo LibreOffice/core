@@ -24,7 +24,7 @@ class WatchDog : public osl::Thread
 {
     sal_Int32 mnSeconds;
 public:
-    WatchDog(sal_Int32 nSeconds) :
+    explicit WatchDog(sal_Int32 nSeconds) :
         Thread(),
         mnSeconds( nSeconds )
     {
@@ -86,7 +86,7 @@ class IdleBool : public Idle
 {
     bool &mrBool;
 public:
-    IdleBool( bool &rBool ) :
+    explicit IdleBool( bool &rBool ) :
         Idle(), mrBool( rBool )
     {
         SetPriority( SchedulerPriority::LOWEST );
@@ -176,7 +176,7 @@ void TimerTest::testAutoTimer()
 class YieldTimer : public Timer
 {
 public:
-    YieldTimer( sal_uLong nMS ) : Timer()
+    explicit YieldTimer( sal_uLong nMS ) : Timer()
     {
         SetTimeout( nMS );
         Start();

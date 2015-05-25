@@ -114,7 +114,7 @@ void LifecycleTest::testParentedWidgets()
 class DisposableChild : public vcl::Window
 {
 public:
-    DisposableChild(vcl::Window *pParent) : vcl::Window(pParent) {}
+    explicit DisposableChild(vcl::Window *pParent) : vcl::Window(pParent) {}
     virtual ~DisposableChild()
     {
         disposeOnce();
@@ -149,7 +149,7 @@ void LifecycleTest::testPostDispose()
 class FocusCrashPostDispose : public TabControl
 {
 public:
-    FocusCrashPostDispose(vcl::Window *pParent) :
+    explicit FocusCrashPostDispose(vcl::Window *pParent) :
         TabControl(pParent, 0)
     {
     }
@@ -159,7 +159,6 @@ public:
     }
     virtual bool Notify( NotifyEvent& ) SAL_OVERRIDE
     {
-//        CPPUNIT_FAIL("notify");
         return false;
     }
     virtual void GetFocus() SAL_OVERRIDE

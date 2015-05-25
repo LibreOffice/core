@@ -18,7 +18,7 @@
 class FreehandImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    FreehandImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit FreehandImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

@@ -101,7 +101,7 @@ private:
 
 public:
 
-    X11SalGraphicsImpl(X11SalGraphics& rParent);
+    explicit X11SalGraphicsImpl(X11SalGraphics& rParent);
 
     virtual void freeResources() SAL_OVERRIDE;
 

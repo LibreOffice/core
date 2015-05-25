@@ -15,7 +15,7 @@
 class OpenGLWindowImpl
 {
 public:
-    OpenGLWindowImpl(vcl::Window* pWindow);
+    explicit OpenGLWindowImpl(vcl::Window* pWindow);
     ~OpenGLWindowImpl() { mxChildWindow.disposeAndClear(); }
     OpenGLContext& getContext() { return maContext;}
 private:

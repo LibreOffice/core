@@ -106,7 +106,7 @@ public:
     ReadState           ReadGIF( Graphic& rGraphic );
     const Graphic&      GetIntermediateGraphic();
 
-                        GIFReader( SvStream& rStm );
+    explicit            GIFReader( SvStream& rStm );
     virtual             ~GIFReader();
 };
 

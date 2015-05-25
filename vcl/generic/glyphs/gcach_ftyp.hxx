@@ -45,7 +45,7 @@ public:
     int                     GetLangBoost() const { return mnLangBoost; }
 
 private:
-                            FtFontFile( const OString& rNativeFileName );
+    explicit                FtFontFile( const OString& rNativeFileName );
 
     const OString    maNativeFileName;
     unsigned char*   mpFileMap;

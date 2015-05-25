@@ -47,7 +47,7 @@ namespace treeview {
 
     public:
 
-        TVDom( TVDom* arent = 0 )
+        explicit TVDom( TVDom* arent = 0 )
             : kind( other ),
               parent( arent ),
               children( 0 )

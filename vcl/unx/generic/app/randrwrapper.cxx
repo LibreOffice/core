@@ -49,7 +49,7 @@ class RandRWrapper
 
     void initFromModule();
 
-    RandRWrapper(Display*);
+    explicit RandRWrapper(Display*);
     ~RandRWrapper();
 public:
     static RandRWrapper& get(Display*);
@@ -176,7 +176,7 @@ class RandRWrapper
 {
     bool m_bValid;
 
-    RandRWrapper(Display*);
+    explicit RandRWrapper(Display*);
 public:
     static RandRWrapper& get(Display*);
     static void releaseWrapper();

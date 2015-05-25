@@ -119,7 +119,7 @@ public:
     bool    IsExportInternalFilter( sal_uInt16 nFormat );
     bool    IsExportPixelFormat( sal_uInt16 nFormat );
 
-                FilterConfigCache( bool bUseConfig );
+    explicit FilterConfigCache( bool bUseConfig );
                 ~FilterConfigCache();
 };
 

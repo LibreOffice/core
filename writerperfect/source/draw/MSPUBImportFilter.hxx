@@ -18,7 +18,7 @@
 class MSPUBImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    MSPUBImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit MSPUBImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

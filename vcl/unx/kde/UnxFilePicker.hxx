@@ -69,7 +69,7 @@ protected:
     ResMgr                     *m_pResMgr;
 
 public:
-    UnxFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+    explicit UnxFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
     virtual ~UnxFilePicker();
 
     // XComponent

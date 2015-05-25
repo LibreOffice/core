@@ -36,7 +36,7 @@ namespace vcl
         ::boost::optional< sal_Unicode >    aSingleSearchChar;
         Timer                               aSearchTimeout;
 
-        QuickSelectionEngine_Data( ISearchableStringList& _entryList )
+        explicit QuickSelectionEngine_Data( ISearchableStringList& _entryList )
             :rEntryList( _entryList )
             ,sCurrentSearchString()
             ,aSingleSearchChar()

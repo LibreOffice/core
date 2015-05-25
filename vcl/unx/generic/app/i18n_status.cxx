@@ -50,7 +50,7 @@ namespace vcl {
 class StatusWindow : public WorkWindow
 {
 protected:
-    StatusWindow( WinBits nWinBits );
+    explicit StatusWindow( WinBits nWinBits );
 public:
 
     virtual void setPosition( SalFrame* );
@@ -94,7 +94,7 @@ class XIMStatusWindow : public StatusWindow
 
     DECL_LINK( DelayedShowHdl, void* );
 public:
-    XIMStatusWindow( bool bOn );
+    explicit XIMStatusWindow( bool bOn );
     virtual ~XIMStatusWindow();
 
     virtual void setPosition( SalFrame* ) SAL_OVERRIDE;

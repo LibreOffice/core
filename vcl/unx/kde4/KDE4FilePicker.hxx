@@ -79,7 +79,7 @@ protected:
     bool allowRemoteUrls;
 
 public:
-    KDE4FilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+    explicit KDE4FilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
     virtual ~KDE4FilePicker();
 
     // XFilePickerNotifier

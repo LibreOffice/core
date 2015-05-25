@@ -61,7 +61,7 @@ using uno::UNO_QUERY;
 class GtkPrintDialog
 {
 public:
-    GtkPrintDialog(vcl::PrinterController& io_rController);
+    explicit GtkPrintDialog(vcl::PrinterController& io_rController);
     bool run();
     GtkPrinter* getPrinter() const
     {

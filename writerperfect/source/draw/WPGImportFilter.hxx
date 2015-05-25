@@ -23,7 +23,7 @@
 class WPGImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    WPGImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit WPGImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

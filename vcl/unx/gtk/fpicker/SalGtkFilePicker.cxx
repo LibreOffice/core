@@ -447,7 +447,7 @@ namespace {
         const OUString& rTitle;
 
     public:
-        FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
+        explicit FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
         bool operator () ( const FilterEntry& _rEntry )
         {

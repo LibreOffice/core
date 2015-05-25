@@ -287,7 +287,7 @@ struct WinMtfFontStyle
 {
     vcl::Font    aFont;
 
-    WinMtfFontStyle( LOGFONTW& rLogFont );
+    explicit WinMtfFontStyle( LOGFONTW& rLogFont );
 };
 
 
@@ -316,7 +316,7 @@ struct WinMtfFillStyle
         , aType(FillStyleSolid)
     {}
 
-    WinMtfFillStyle(Bitmap& rBmp)
+    explicit WinMtfFillStyle(Bitmap& rBmp)
         : bTransparent(false)
         , aType(FillStylePattern)
         , aBmp(rBmp)
@@ -718,7 +718,7 @@ public:
     void                PassEMFPlus( void* pBuffer, sal_uInt32 nLength );
     void                PassEMFPlusHeaderInfo();
 
-                        WinMtfOutput( GDIMetaFile& rGDIMetaFile );
+    explicit            WinMtfOutput( GDIMetaFile& rGDIMetaFile );
     virtual             ~WinMtfOutput();
 };
 

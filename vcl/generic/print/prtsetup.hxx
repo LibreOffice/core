@@ -86,7 +86,7 @@ class RTSPaperPage : public TabPage
 
     DECL_LINK( SelectHdl, ListBox* );
 public:
-    RTSPaperPage( RTSDialog* );
+    explicit RTSPaperPage( RTSDialog* );
     virtual ~RTSPaperPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -113,7 +113,7 @@ class RTSDevicePage : public TabPage
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( ModifyHdl, Edit* );
 public:
-    RTSDevicePage( RTSDialog* );
+    explicit RTSDevicePage( RTSDialog* );
     virtual ~RTSDevicePage();
     virtual void dispose() SAL_OVERRIDE;
 

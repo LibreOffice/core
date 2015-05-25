@@ -65,7 +65,7 @@ class MyDragAndDropListener: public ::cppu::WeakImplHelper3 < XDropTargetListene
 
 public:
 
-    MyDragAndDropListener( vcl::Window * pWindow ) : m_pWindow( pWindow ) {};
+    explicit MyDragAndDropListener( vcl::Window * pWindow ) : m_pWindow( pWindow ) {};
 
     virtual void SAL_CALL dragGestureRecognized( const DragGestureEvent& dge ) throw(RuntimeException);
     virtual void SAL_CALL drop( const DropTargetDropEvent& dtde ) throw(RuntimeException);
@@ -86,7 +86,7 @@ class MyInfoBox : public InfoBox
 
 public:
 
-    MyInfoBox( vcl::Window* pParent );
+    explicit MyInfoBox( vcl::Window* pParent );
 };
 
 class MyListBox : public ListBox
@@ -94,7 +94,7 @@ class MyListBox : public ListBox
 
 public:
 
-    MyListBox( vcl::Window* pParent );
+    explicit MyListBox( vcl::Window* pParent );
 };
 
 class StringTransferable : public ::cppu::WeakImplHelper1< XTransferable >
@@ -103,7 +103,7 @@ class StringTransferable : public ::cppu::WeakImplHelper1< XTransferable >
     Sequence< DataFlavor > m_aFlavorList;
 
 public:
-    StringTransferable( const OUString& rString ) : m_aData( rString ), m_aFlavorList( 1 )
+    explicit StringTransferable( const OUString& rString ) : m_aData( rString ), m_aFlavorList( 1 )
     {
         DataFlavor df;
 

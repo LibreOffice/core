@@ -36,7 +36,7 @@ namespace cairo {
         /// create surface on subarea of given drawable
         Win32Surface( HDC hDC, int x, int y );
         /// create surface for given bitmap data
-        Win32Surface( const BitmapSystemData& rBmpData );
+        explicit Win32Surface( const BitmapSystemData& rBmpData );
 
         // Surface interface
         virtual CairoSharedPtr getCairo() const;

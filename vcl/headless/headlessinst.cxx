@@ -13,7 +13,7 @@
 class HeadlessSalInstance : public SvpSalInstance
 {
 public:
-    HeadlessSalInstance( SalYieldMutex *pMutex );
+    explicit HeadlessSalInstance( SalYieldMutex *pMutex );
     virtual ~HeadlessSalInstance();
 
     virtual SalSystem* CreateSalSystem();
@@ -53,7 +53,7 @@ SalSystem *HeadlessSalInstance::CreateSalSystem()
 class HeadlessSalData : public SalGenericData
 {
 public:
-    HeadlessSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_HEADLESS, pInstance ) {}
+    explicit HeadlessSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_HEADLESS, pInstance ) {}
     virtual void ErrorTrapPush() {}
     virtual bool ErrorTrapPop( bool ) { return false; }
 };

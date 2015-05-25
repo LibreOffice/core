@@ -428,7 +428,7 @@ private:
     const BitmapPalette& mrPalette;
 
 public:
-    ImplPixelFormat8( const BitmapPalette& rPalette )
+    explicit ImplPixelFormat8( const BitmapPalette& rPalette )
     : mrPalette( rPalette )
     {
     }
@@ -457,7 +457,7 @@ private:
     sal_uInt32 mnShift;
 
 public:
-    ImplPixelFormat4( const BitmapPalette& rPalette )
+    explicit ImplPixelFormat4( const BitmapPalette& rPalette )
     : mrPalette( rPalette )
     {
     }
@@ -498,7 +498,7 @@ private:
     sal_uInt32 mnX;
 
 public:
-    ImplPixelFormat1( const BitmapPalette& rPalette )
+    explicit ImplPixelFormat1( const BitmapPalette& rPalette )
     : mrPalette( rPalette )
     {
     }

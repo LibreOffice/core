@@ -662,7 +662,7 @@ namespace chelp {
 
     struct KeywordElementComparator
     {
-        KeywordElementComparator( const Reference< XCollator >& xCollator )
+        explicit KeywordElementComparator( const Reference< XCollator >& xCollator )
             : m_xCollator( xCollator )
         { }
 

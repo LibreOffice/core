@@ -694,7 +694,7 @@ class sortButtons
 {
     bool m_bVerticalContainer;
 public:
-    sortButtons(bool bVerticalContainer)
+    explicit sortButtons(bool bVerticalContainer)
         : m_bVerticalContainer(bVerticalContainer)
     {
     }

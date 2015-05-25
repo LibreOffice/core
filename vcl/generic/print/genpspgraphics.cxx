@@ -78,8 +78,8 @@ private:
 
     public:
 
-                            SalPrinterBmp (BitmapBuffer* pBitmap);
-        virtual             ~SalPrinterBmp ();
+        explicit        SalPrinterBmp (BitmapBuffer* pBitmap);
+        virtual         ~SalPrinterBmp ();
         virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const SAL_OVERRIDE;
         virtual sal_uInt32  GetPaletteEntryCount () const SAL_OVERRIDE;
         virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const SAL_OVERRIDE;
@@ -566,7 +566,7 @@ private:
     sal_IntPtr              mnFontId;
 
 public:
-                            ImplPspFontData( const psp::FastPrintFontInfo& );
+    explicit ImplPspFontData( const psp::FastPrintFontInfo& );
     virtual sal_IntPtr      GetFontId() const SAL_OVERRIDE { return mnFontId; }
     virtual PhysicalFontFace*   Clone() const SAL_OVERRIDE { return new ImplPspFontData( *this ); }
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
@@ -586,7 +586,7 @@ ImplFontEntry* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) co
 class PspFontLayout : public GenericSalLayout
 {
 public:
-                        PspFontLayout( ::psp::PrinterGfx& );
+    explicit            PspFontLayout( ::psp::PrinterGfx& );
     virtual bool        LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void        InitFont() const SAL_OVERRIDE;
     virtual void        DrawText( SalGraphics& ) const SAL_OVERRIDE;

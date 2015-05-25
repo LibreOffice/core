@@ -22,7 +22,7 @@
 class KeynoteImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 {
 public:
-    KeynoteImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit KeynoteImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdpGenerator>(rxContext) {}
     virtual ~KeynoteImportFilter() {}
 
