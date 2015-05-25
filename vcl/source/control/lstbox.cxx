@@ -375,7 +375,7 @@ void ListBox::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
-    mpImplLB->GetMainWindow()->ImplInitSettings( true, true, true );
+    mpImplLB->GetMainWindow()->ApplySettings(*pDev);
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
@@ -555,7 +555,7 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
         if ( mpImplWin )
         {
             mpImplWin->SetSettings( GetSettings() ); // If not yet set...
-            mpImplWin->ImplInitSettings(true, true, true);
+            mpImplWin->ApplySettings(*this);
 
             mpBtn->SetSettings( GetSettings() );
             ImplInitDropDownButton( mpBtn );
@@ -1386,7 +1386,7 @@ void ListBox::DrawEntry(const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawTe
     if (rEvt.GetDevice() == mpImplLB->GetMainWindow())
         mpImplLB->GetMainWindow()->DrawEntry(*rEvt.GetDevice(), rEvt.GetItemId(), bDrawImage, bDrawText, bDrawTextAtImagePos );
     else if (rEvt.GetDevice() == mpImplWin)
-        mpImplWin->DrawEntry(bDrawImage, bDrawText, bDrawTextAtImagePos);
+        mpImplWin->DrawEntry(*rEvt.GetDevice(), bDrawImage, bDrawText, bDrawTextAtImagePos);
 }
 
 void ListBox::SetUserItemSize( const Size& rSz )
