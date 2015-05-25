@@ -70,7 +70,7 @@ public:
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 };
 
-class SaveInData : public ImageProvider
+class SaveInData
 {
 private:
 
@@ -138,7 +138,7 @@ public:
     com::sun::star::uno::Sequence
         < com::sun::star::beans::PropertyValue > m_aSeparatorSeq;
 
-    Image GetImage( const OUString& rCommandURL ) SAL_OVERRIDE;
+    Image GetImage( const OUString& rCommandURL );
 
     virtual bool HasURL( const OUString& aURL ) = 0;
     virtual bool HasSettings() = 0;

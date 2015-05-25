@@ -32,6 +32,8 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+class SaveInData;
+
 #define SVX_CFGGROUP_FUNCTION 1
 #define SVX_CFGFUNCTION_SLOT  2
 #define SVX_CFGGROUP_SCRIPTCONTAINER  3
@@ -80,14 +82,6 @@ struct SvxGroupInfo_Impl
 
 typedef boost::ptr_vector<SvxGroupInfo_Impl> SvxGroupInfoArr_Impl;
 
-class ImageProvider
-{
-public:
-    virtual ~ImageProvider() {}
-
-    virtual Image GetImage( const OUString& rCommandURL ) = 0;
-};
-
 class SvxConfigFunctionListBox : public SvTreeListBox
 {
 friend class SvxConfigGroupListBox;
@@ -124,7 +118,7 @@ class SvxConfigGroupListBox : public SvTreeListBox
     bool                            m_bShowSlots;
 
     VclPtr<SvxConfigFunctionListBox>  pFunctionListBox;
-    ImageProvider*                  m_pImageProvider;
+    SaveInData*                     m_pImageProvider;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
@@ -175,7 +169,7 @@ public:
     void    SetFunctionListBox( SvxConfigFunctionListBox *pBox )
         { pFunctionListBox = pBox; }
 
-    void    SetImageProvider( ImageProvider* provider )
+    void    SetImageProvider( SaveInData* provider )
         { m_pImageProvider = provider; }
 };
 
@@ -211,7 +205,7 @@ public:
     void        SetAddHdl( const Link<>& rLink ) { m_aAddHdl = rLink; }
     const Link<>& GetAddHdl() const { return m_aAddHdl; }
 
-    void        SetImageProvider(ImageProvider* provider)
+    void        SetImageProvider(SaveInData* provider)
     {
         m_pCategories->SetImageProvider(provider);
     }

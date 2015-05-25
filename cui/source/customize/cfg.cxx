@@ -2589,8 +2589,7 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
     // beside the menu contents list and does not obscure it
     m_pSelectorDlg->SetPosPixel( m_pAddCommandsButton->GetPosPixel() );
 
-    m_pSelectorDlg->SetImageProvider(
-        static_cast< ImageProvider* >( GetSaveInData() ) );
+    m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
     m_pSelectorDlg->Show();
     return 1;
@@ -4503,8 +4502,7 @@ IMPL_LINK( SvxToolbarConfigPage, AddCommandsHdl, Button *, pButton )
             LINK( this, SvxToolbarConfigPage, AddFunctionHdl ) );
     }
 
-    m_pSelectorDlg->SetImageProvider(
-        static_cast< ImageProvider* >( GetSaveInData() ) );
+    m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
     m_pSelectorDlg->Show();
     return 1;
