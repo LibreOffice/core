@@ -230,6 +230,14 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
 }
 
 
+DECLARE_OOXMLEXPORT_TEST(testHyperlinkContainingPlaceholderField, "hyperlink-field.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
