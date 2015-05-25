@@ -898,7 +898,7 @@ void ScPreview::DoInvalidate()
     //  The Invalidate must come behind asynchronously
 
    if (bInGetState)
-        Application::PostUserEvent( LINK( this, ScPreview, InvalidateHdl ) );
+        Application::PostUserEvent( LINK( this, ScPreview, InvalidateHdl ), NULL, true );
     else
         StaticInvalidate();     // Immediately
 }

@@ -1179,8 +1179,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
         {
             bFound = true;
             SwGlobalTree::SetShowShell(pCurr);
-            Application::PostUserEvent( LINK(
-                        this, SwGlobalTree, ShowFrameHdl ) );
+            Application::PostUserEvent( LINK( this, SwGlobalTree, ShowFrameHdl ), NULL, true );
             pCurr = 0;
         }
         else

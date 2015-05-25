@@ -150,7 +150,7 @@ void SvxColorValueSet_docking::Command(const CommandEvent& rCEvt)
 
 void SvxColorValueSet_docking::StartDrag( sal_Int8 , const Point&  )
 {
-    Application::PostUserEvent(LINK(this, SvxColorValueSet_docking, ExecDragHdl));
+    Application::PostUserEvent(LINK(this, SvxColorValueSet_docking, ExecDragHdl), NULL, true);
 }
 
 void SvxColorValueSet_docking::DoDrag()

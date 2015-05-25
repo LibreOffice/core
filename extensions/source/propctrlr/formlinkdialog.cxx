@@ -195,7 +195,7 @@ namespace pcr
         m_aRow3->SetLinkChangeHandler( LINK( this, FormLinkDialog, OnFieldChanged ) );
         m_aRow4->SetLinkChangeHandler( LINK( this, FormLinkDialog, OnFieldChanged ) );
 
-        PostUserEvent( LINK( this, FormLinkDialog, OnInitialize ) );
+        PostUserEvent( LINK( this, FormLinkDialog, OnInitialize ), NULL, true );
 
         updateOkButton();
     }

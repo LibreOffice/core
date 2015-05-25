@@ -422,7 +422,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
         else
         {
             nResult=Control::PreNotify(rNEvt);
-            Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ) );
+            Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ), NULL, true );
         }
 
     }
@@ -433,7 +433,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
         if(nSwitch==MouseNotifyEvent::MOUSEBUTTONDOWN || nSwitch==MouseNotifyEvent::MOUSEBUTTONUP)
         {
             bMouseFlag=true;
-            Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ) );
+            Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ), NULL, true );
         }
     }
     return nResult;

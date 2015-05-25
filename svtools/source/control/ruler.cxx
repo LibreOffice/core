@@ -1483,7 +1483,7 @@ void Ruler::ImplUpdate( bool bMustCalc )
     {
         mnUpdateFlags |= RULER_UPDATE_DRAW;
         if (!mnUpdateEvtId)
-            mnUpdateEvtId = Application::PostUserEvent(LINK( this, Ruler, ImplUpdateHdl), NULL );
+            mnUpdateEvtId = Application::PostUserEvent(LINK( this, Ruler, ImplUpdateHdl), NULL, true);
     }
 }
 
@@ -2196,7 +2196,7 @@ void Ruler::Resize()
         Invalidate();
         mnUpdateFlags |= RULER_UPDATE_LINES;
         if ( !mnUpdateEvtId )
-            mnUpdateEvtId = Application::PostUserEvent( LINK( this, Ruler, ImplUpdateHdl ), NULL );
+            mnUpdateEvtId = Application::PostUserEvent( LINK( this, Ruler, ImplUpdateHdl ), NULL, true );
     }
     mbFormat = true;
 
@@ -2340,7 +2340,7 @@ void Ruler::Activate()
     // update positionlies - draw is delayed
     mnUpdateFlags |= RULER_UPDATE_LINES;
     if ( !mnUpdateEvtId )
-        mnUpdateEvtId = Application::PostUserEvent( LINK( this, Ruler, ImplUpdateHdl ), NULL );
+        mnUpdateEvtId = Application::PostUserEvent( LINK( this, Ruler, ImplUpdateHdl ), NULL, true );
 }
 
 void Ruler::Deactivate()

@@ -269,7 +269,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
             {
                 if ( aDesc.maClassName == pDocShell->GetFactory().GetClassId() )
                 {
-                    PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteDrop ), 0 );
+                    PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteDrop ), 0, true );
 
                     bFormatFound = true;
                     nRet =  rEvt.mnAction;

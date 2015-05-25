@@ -254,7 +254,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
 
     m_pStopPB->SetClickHdl(LINK(this, SwTestAccountSettingsDialog, StopHdl));
 
-    Application::PostUserEvent( LINK( this, SwTestAccountSettingsDialog, TestHdl ), this );
+    Application::PostUserEvent( LINK( this, SwTestAccountSettingsDialog, TestHdl ), this, true );
 }
 
 SwTestAccountSettingsDialog::~SwTestAccountSettingsDialog()

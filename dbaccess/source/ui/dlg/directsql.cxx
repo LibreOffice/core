@@ -110,7 +110,7 @@ namespace dbaui
             aError->Execute();
         }
 
-        PostUserEvent(LINK(this, DirectSQLDialog, OnClose));
+        PostUserEvent(LINK(this, DirectSQLDialog, OnClose), NULL, true);
     }
 
     sal_Int32 DirectSQLDialog::getHistorySize() const
