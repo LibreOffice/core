@@ -1573,10 +1573,10 @@ sal_uInt16 SdrPage::GetPageNum() const
 
     if (mbMaster) {
         if (pModel && pModel->IsMPgNumsDirty())
-            ((SdrModel*)pModel)->RecalcPageNums(true);
+            pModel->RecalcPageNums(true);
     } else {
         if (pModel && pModel->IsPagNumsDirty())
-            ((SdrModel*)pModel)->RecalcPageNums(false);
+            pModel->RecalcPageNums(false);
     }
     return nPageNum;
 }

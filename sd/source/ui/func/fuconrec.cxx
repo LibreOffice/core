@@ -907,8 +907,6 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                     }
 
                     // The default text is not inserted anymore.
-                    //  String aText(SdResId(STR_POOLSHEET_TEXT));
-                    //  ((SdrCaptionObj*)pObj)->SetText(aText);
 
                     static_cast<SdrCaptionObj*>(pObj)->SetLogicRect(aRect);
                     static_cast<SdrCaptionObj*>(pObj)->SetTailPos(

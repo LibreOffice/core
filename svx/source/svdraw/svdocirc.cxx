@@ -464,7 +464,7 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
     {
         pH = new SdrHdl(aPnt,eLocalKind);
         pH->SetPointNum(nPNum);
-        pH->SetObj((SdrObject*)this);
+        pH->SetObj(const_cast<SdrCircObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
     }
 

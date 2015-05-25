@@ -337,7 +337,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
             // hack for calc grid sync to ensure the hatched area
             // for a textbox is displayed at correct position
             pH = new ImpTextframeHdl(maRect + GetGridOffset() );
-            pH->SetObj((SdrObject*)this);
+            pH->SetObj(const_cast<SdrRectObj*>(this));
             pH->SetRotationAngle(aGeo.nRotationAngle);
             break;
         }
@@ -375,7 +375,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
         }
 
         pH = new SdrHdl(aPnt,eKind);
-        pH->SetObj((SdrObject*)this);
+        pH->SetObj(const_cast<SdrRectObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
     }
 

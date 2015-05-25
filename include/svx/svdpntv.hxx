@@ -334,20 +334,7 @@ public:
     virtual void HideSdrPage();
 
     // Iterieren ueber alle angemeldeten PageViews
-//  sal_uInt16 GetPageViewCount() const { return sal_uInt16(aPagV.Count()); }
-//  SdrPageView* GetPageViewByIndex(sal_uInt16 nPvNum) const { return ((SdrPageView*)aPagV.GetObject(nPvNum)); }
     SdrPageView* GetSdrPageView() const { return mpPageView; }
-
-    // Pageview einer bestimmten Seite ermitteln
-//  SdrPageView* GetPageViewByPage(const SdrPage* pPage) const;
-//  sal_uInt16 GetIndexByPageView(const SdrPageView* pPV) const;
-
-    // Test, ob eine Seite getroffen
-//  SdrPageView* HitPage(const Point& rPnt) const;
-
-    // Die Seite, die dem Punkt am naechsten ist. Liefert nur NULL,
-    // wenn absolut keine Seite angemeldet ist.
-//  SdrPageView* GetPageViewByPosition(const Point& rPnt) const;
 
     // Eine SdrView kann auf mehreren Fenstern gleichzeitig abgebiltet sein:
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);

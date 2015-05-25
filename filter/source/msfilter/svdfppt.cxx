@@ -2582,7 +2582,7 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
                         DffRecordList* pCList = maShapeRecords.pCList;              // we got a backup of the current position
                         if ( pCList )
                             nCurrent = pCList->nCurrent;
-                        if ( ((SdrEscherImport*)this )->maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
+                        if ( const_cast<SdrPowerPointImport*>(this)->maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
                         {
                             sal_uInt32 nStreamPos = rSt.Tell();
                             PPTTextObj aTextObj( rSt, (SdrPowerPointImport&)*this, rPersistEntry, NULL );
@@ -2615,7 +2615,7 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
                         }
                         if ( pCList )                                               // restoring
                             pCList->nCurrent = nCurrent;
-                        ((SdrEscherImport*)this )->maShapeRecords.pCList = pCList;
+                        const_cast<SdrPowerPointImport*>(this)->maShapeRecords.pCList = pCList;
                     }
                 }
             }

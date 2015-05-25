@@ -268,7 +268,7 @@ void SdTransferable::CreateData()
         mpSdViewIntern->EndListening(*mpSdDrawDocumentIntern );
         mpSdViewIntern->hideMarkHandles();
         SdrPageView* pPageView = mpSdViewIntern->ShowSdrPage(pPage);
-        ((SdrMarkView*)mpSdViewIntern)->MarkAllObj(pPageView);
+        mpSdViewIntern->MarkAllObj(pPageView);
     }
     else if( mpSdView && !mpSdDrawDocumentIntern )
     {
@@ -723,7 +723,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
 
             if( pPage )
             {
-                ( (SdrMarkView*) mpSdViewIntern )->MarkAllObj( mpSdViewIntern->ShowSdrPage( pPage ) );
+                mpSdViewIntern->MarkAllObj( mpSdViewIntern->ShowSdrPage( pPage ) );
             }
         }
 

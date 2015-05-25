@@ -228,7 +228,7 @@ void SwFlyCntPortion::Paint( const SwTextPaintInfo &rInf ) const
 
         if( (GetFlyFrm()->IsCompletePaint() ||
              GetFlyFrm()->Frm().IsOver( aRepaintRect )) &&
-             SwFlyFrm::IsPaint( (SdrObject*)GetFlyFrm()->GetVirtDrawObj(),
+             SwFlyFrm::IsPaint( const_cast<SwVirtFlyDrawObj*>(GetFlyFrm()->GetVirtDrawObj()),
                                 GetFlyFrm()->getRootFrm()->GetCurrShell() ))
         {
             SwRect aRect( GetFlyFrm()->Frm() );

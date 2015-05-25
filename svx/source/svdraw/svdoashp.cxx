@@ -1923,7 +1923,7 @@ SdrHdl* SdrObjCustomShape::GetHdl( sal_uInt32 nHdlNum ) const
                     com::sun::star::awt::Point aPosition( aInteractionHandles[ nCustomShapeHdlNum ].xInteraction->getPosition() );
                     pH = new SdrHdl( Point( aPosition.X, aPosition.Y ), HDL_CUSTOMSHAPE1 );
                     pH->SetPointNum( nCustomShapeHdlNum );
-                    pH->SetObj( (SdrObject*)this );
+                    pH->SetObj( const_cast<SdrObjCustomShape*>(this) );
                 }
                 catch ( const uno::RuntimeException& )
                 {
