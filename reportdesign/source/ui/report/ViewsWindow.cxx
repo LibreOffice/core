@@ -191,6 +191,8 @@ OViewsWindow::~OViewsWindow()
 void OViewsWindow::dispose()
 {
     m_aColorConfig.RemoveListener(this);
+    for (auto i = m_aSections.begin(); i != m_aSections.end(); ++i)
+        i->disposeAndClear();
     m_aSections.clear();
     m_pParent.clear();
     vcl::Window::dispose();
