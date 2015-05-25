@@ -277,14 +277,10 @@ inline bool HashedEntry::operator <( const HashedEntry& rRef ) const
        return mnHashCode < rRef.mnHashCode;
 }
 
-// class HashedEntryList ----------------------------------------------
-// provides a list of _unique_ Entries
-class HashedEntryList : public boost::ptr_set<HashedEntry> {};
-
 // class NameTranslationEntry -----------------------------------------
 
 class NameTranslationEntry : public HashedEntry
-{// a fast compareble String and another String, which is used to get a substitution for a given String
+{// a fast comparable String and another String, which is used to get a substitution for a given String
 protected:
     OUString                maTranslatedName;
 public:
@@ -305,8 +301,8 @@ inline const OUString& NameTranslationEntry::GetTranslation() const
 }
 
 // class NameTranslationList -----------------------------------------
-
-class NameTranslationList : protected HashedEntryList
+// provides a list of _unique_ Entries
+class NameTranslationList : protected boost::ptr_set<HashedEntry>
 {   // contains a list of substitutes of strings for a given folder (as URL)
     // explanation of the circumstances see in remarks for Init();
 protected:
@@ -314,17 +310,17 @@ protected:
     HashedEntry                 maHashedURL;    // for future purposes when dealing with a set of cached
                                                 //  NameTranslationLists
 private:
-    const OUString          maTransFileName;
-    void                    Init();             // reads the translation file and fills the (internal) list
+    const OUString              maTransFileName;
+    void                        Init();         // reads the translation file and fills the (internal) list
 
 public:
-                            NameTranslationList( const INetURLObject& rBaseURL );
+                                NameTranslationList( const INetURLObject& rBaseURL );
                                             // rBaseURL: path to folder for which the translation of the entries
                                             //  should be done
 
-    using HashedEntryList::operator==;
-    using HashedEntryList::operator!=;
-    inline bool operator       !=( const HashedEntry& rRef ) const;
+    using boost::ptr_set<HashedEntry>::operator==;
+    using boost::ptr_set<HashedEntry>::operator!=;
+    inline bool operator        !=( const HashedEntry& rRef ) const;
 
     const OUString*             Translate( const OUString& rName ) const;
                                             // returns NULL, if rName can't be found
