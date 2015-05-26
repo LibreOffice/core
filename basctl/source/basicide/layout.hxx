@@ -61,7 +61,6 @@ protected:
     void Remove (DockingWindow*);
     bool HasSize () const { return !bFirstSize; }
 
-protected:
     // Window:
     virtual void Resize () SAL_OVERRIDE;
     virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
@@ -117,12 +116,10 @@ private:
             VclPtr<Splitter> pSplit;
         };
         std::vector<Item> vItems;
-    private:
+
         Point MakePoint (long, long) const;
         Size MakeSize (long, long) const;
-    private:
         static bool IsDocking (DockingWindow const&);
-    private:
         DECL_LINK(SplitHdl, Splitter*);
         void CheckMarginsFor (Splitter*);
         void InitSplitter (Splitter&);
