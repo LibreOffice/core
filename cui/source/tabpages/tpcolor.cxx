@@ -69,9 +69,7 @@ XPropertyListRef SvxColorTabPage::GetList()
 
     // URGH - abstract this nicely ... for re-using SvxLoadSaveEmbed
     if( !pList.is() ) {
-        SvxColorTabPage *pPage = dynamic_cast< SvxColorTabPage *>( this );
-        if( pPage )
-            pList = pPage->GetColorList();
+        pList = GetColorList();
     }
 
     return XPropertyListRef( static_cast< XPropertyList * >( pList.get() ) );
