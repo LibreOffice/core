@@ -78,9 +78,11 @@ bool RtfTest::load(const OUString&,
 
 void RtfTest::test()
 {
+#ifndef DISABLE_CVE_TESTS
     testDir(OUString(),
             getURLFromSrc("/writerfilter/qa/cppunittests/rtftok/data/"),
             OUString());
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfTest);
