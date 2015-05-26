@@ -46,7 +46,6 @@ SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     , nFlags( 0 )
     , nAttributes( 0 )
     , bIsPhantom( false )
-    , bIsDebug( false )
     , bIsSelected( false )
     , nAccIndex( -1 )
     , aParentNode( NULL )
@@ -256,11 +255,6 @@ void SmNode::PrepareAttributes()
 
 void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-#if OSL_DEBUG_LEVEL > 1
-    bIsDebug    = true;
-#else
-    bIsDebug    = false;
-#endif
     bIsPhantom  = false;
     nFlags      = 0;
     nAttributes = 0;
@@ -298,23 +292,6 @@ sal_uInt16 SmNode::FindIndex() const
     DBG_ASSERT(false, "Connection between parent and child is inconsistent.");
     return 0;
 }
-
-
-#if OSL_DEBUG_LEVEL > 1
-void  SmNode::ToggleDebug() const
-    // toggle 'bIsDebug' in current subtree
-{
-    SmNode *pThis = (SmNode *) this;
-
-    pThis->bIsDebug = bIsDebug ? false : true;
-
-    SmNode *pNode;
-    sal_uInt16      nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
-        if (NULL != (pNode = pThis->GetSubNode(i)))
-            pNode->ToggleDebug();
-}
-#endif
 
 
 void SmNode::Move(const Point& rPosition)

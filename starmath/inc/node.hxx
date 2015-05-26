@@ -100,9 +100,7 @@ class SmNode : public SmRect
     RectHorAlign    eRectHorAlign;
     sal_uInt16          nFlags,
                     nAttributes;
-    bool            bIsPhantom,
-                    bIsDebug;
-
+    bool            bIsPhantom;
     bool            bIsSelected;
 
 protected:
@@ -132,7 +130,6 @@ public:
             sal_uInt16 &    Flags() { return nFlags; }
             sal_uInt16 &    Attributes() { return nAttributes; }
 
-            bool IsDebug() const { return bIsDebug; }
             bool IsPhantom() const { return bIsPhantom; }
             void SetPhantom(bool bIsPhantom);
             void SetColor(const Color &rColor);
@@ -151,10 +148,6 @@ public:
     void PrepareAttributes();
 
     sal_uInt16 FindIndex() const;
-
-#if OSL_DEBUG_LEVEL
-            void ToggleDebug() const;
-#endif
 
     void         SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree = true );
     RectHorAlign GetRectHorAlign() const { return eRectHorAlign; }
