@@ -63,7 +63,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,const Reference< XConnection >& _xCon
                                  ,bool _bCase
                                  ,IRefreshListener* _pRefreshListener
-                                 ,::dbtools::IWarningsContainer* _pWarningsContainer
+                                 ,::dbtools::WarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
     ,m_bInElementRemoved(false)

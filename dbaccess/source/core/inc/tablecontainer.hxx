@@ -91,7 +91,7 @@ namespace dbaccess
             bool _bCase,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener,
-            ::dbtools::IWarningsContainer* _pWarningsContainer,
+            ::dbtools::WarningsContainer* _pWarningsContainer,
             oslInterlockedCount& _nInAppend
             );
 
