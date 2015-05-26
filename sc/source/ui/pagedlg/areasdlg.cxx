@@ -50,7 +50,7 @@ const sal_uInt16 SC_AREASDLG_RR_USER    = 1;
 const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
-#define ERRORBOX(nId)       MessageDialog(this, ScGlobal::GetRscString(nId)).Execute()
+#define ERRORBOX(nId)       ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(nId))->Execute()
 
 // globale Funktionen (->am Ende der Datei):
 

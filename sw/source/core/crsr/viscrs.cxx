@@ -622,8 +622,8 @@ short SwShellCrsr::MaxReplaceArived()
             }
             vActionCounts.push_back(nActCnt);
         }
-        nRet = MessageDialog(pDlg, "AskSearchDialog",
-                "modules/swriter/ui/asksearchdialog.ui").Execute();
+        nRet = ScopedVclPtrInstance<MessageDialog>::Create(pDlg, "AskSearchDialog",
+                "modules/swriter/ui/asksearchdialog.ui")->Execute();
         auto pActionCount = vActionCounts.begin();
         for(SwViewShell& rShell : const_cast< SwCrsrShell* >( GetShell() )->GetRingContainer())
         {

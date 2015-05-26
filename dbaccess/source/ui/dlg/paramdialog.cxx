@@ -198,7 +198,7 @@ namespace dbaui
 
                     OUString sMessage(ModuleRes(STR_COULD_NOT_CONVERT_PARAM));
                     sMessage = sMessage.replaceAll( "$name$", sName );
-                    MessageDialog(NULL, sMessage).Execute();
+                    ScopedVclPtrInstance<MessageDialog>::Create(nullptr, sMessage)->Execute();
                     m_pParam->GrabFocus();
                     return 1L;
                 }

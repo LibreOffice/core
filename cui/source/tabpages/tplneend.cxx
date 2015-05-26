@@ -560,9 +560,9 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
     if ( *pnLineEndListState & ChangeType::MODIFIED )
     {
-        nReturn = MessageDialog( GetParentDialog()
+        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                                 ,"AskSaveList"
-                                ,"cui/ui/querysavelistdialog.ui").Execute();
+                                ,"cui/ui/querysavelistdialog.ui")->Execute();
 
         if ( nReturn == RET_YES )
             pLineEndList->Save();
@@ -603,9 +603,9 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
                 *pnLineEndListState &= ~ChangeType::MODIFIED;
             }
             else
-                MessageDialog( GetParentDialog()
+                ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                               ,"NoLoadedFileDialog"
-                              ,"cui/ui/querynoloadedfiledialog.ui").Execute();
+                              ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
         }
     }
 
@@ -663,9 +663,9 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
         }
         else
         {
-            MessageDialog( GetParentDialog()
+            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                           ,"NoSaveFileDialog"
-                          ,"cui/ui/querynosavefiledialog.ui").Execute();
+                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
     return 0L;

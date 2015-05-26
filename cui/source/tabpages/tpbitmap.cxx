@@ -667,9 +667,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
         }
         else
             // graphic couldn't be loaded
-            MessageDialog( GetParentDialog()
+            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                           ,"NoLoadedFileDialog"
-                          ,"cui/ui/querynoloadedfiledialog.ui").Execute();
+                          ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
     }
 
     return 0L;
@@ -782,9 +782,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 
     if ( *pnBitmapListState & ChangeType::MODIFIED )
     {
-        nReturn = MessageDialog( GetParentDialog()
+        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                                 ,"AskSaveList"
-                                ,"cui/ui/querysavelistdialog.ui").Execute();
+                                ,"cui/ui/querysavelistdialog.ui")->Execute();
 
         if ( nReturn == RET_YES )
             pBitmapList->Save();
@@ -844,9 +844,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
             else
             {
                 LeaveWait();
-                MessageDialog( GetParentDialog()
+                ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                               ,"NoLoadedFileDialog"
-                              ,"cui/ui/querynoloadedfiledialog.ui").Execute();
+                              ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
             }
         }
     }
@@ -918,9 +918,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
         }
         else
         {
-            MessageDialog( GetParentDialog()
+            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                           ,"NoSaveFileDialog"
-                          ,"cui/ui/querynosavefiledialog.ui").Execute();
+                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
 
