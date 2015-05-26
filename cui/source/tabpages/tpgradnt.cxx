@@ -642,9 +642,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
 
     if ( *pnGradientListState & ChangeType::MODIFIED )
     {
-        nReturn = MessageDialog( GetParentDialog()
+        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                                  ,"AskSaveList"
-                                 ,"cui/ui/querysavelistdialog.ui").Execute();
+                                 ,"cui/ui/querysavelistdialog.ui")->Execute();
 
         if ( nReturn == RET_YES )
             pGradientList->Save();
@@ -707,9 +707,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
             else
             {
                 LeaveWait();
-                MessageDialog( GetParentDialog()
+                ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                               ,"NoLoadedFileDialog"
-                              ,"cui/ui/querynoloadedfiledialog.ui").Execute();
+                              ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
             }
         }
     }
@@ -782,9 +782,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
         }
         else
         {
-            MessageDialog( GetParentDialog()
+            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                           ,"NoSaveFileDialog"
-                          ,"cui/ui/querynosavefiledialog.ui").Execute();
+                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
 

@@ -327,7 +327,7 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
                             rCfg.IsSaveRelFile(), pOnlyText );
     if(nSuccess == (sal_uInt16) -1 )
     {
-        MessageDialog(pWrtShell->GetView().GetWindow(), SW_RES(STR_ERR_INSERT_GLOS), VCL_MESSAGE_INFO).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(pWrtShell->GetView().GetWindow(), SW_RES(STR_ERR_INSERT_GLOS), VCL_MESSAGE_INFO)->Execute();
     }
     if( !pCurGrp )
         delete pTmp;

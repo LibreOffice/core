@@ -292,7 +292,7 @@ short SvInsertOleDlg::Execute()
                         // global Resource from svtools (former so3 resource)
                         OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                         aErr = aErr.replaceFirst( "%", aFileName );
-                        MessageDialog(this, aErr).Execute();
+                        ScopedVclPtrInstance<MessageDialog>::Create(this, aErr)->Execute();
                     }
                     else
                     {
@@ -300,7 +300,7 @@ short SvInsertOleDlg::Execute()
                         // global Resource from svtools (former so3 resource)
                         OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
                         aErr = aErr.replaceFirst( "%", aServerName );
-                        MessageDialog(this, aErr).Execute();
+                        ScopedVclPtrInstance<MessageDialog>::Create(this, aErr)->Execute();
                     }
                 }
             }
@@ -341,7 +341,7 @@ short SvInsertOleDlg::Execute()
                 // global Resource from svtools (former so3 resource)
                 OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                 aErr = aErr.replaceFirst( "%", aFileName );
-                MessageDialog(this, aErr).Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(this, aErr)->Execute();
             }
         }
     }
@@ -486,7 +486,7 @@ short SvInsertPlugInDialog::Execute()
             // global Resource from svtools (former so3 resource)
             OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_PLUGIN ) );
             aErr = aErr.replaceFirst( "%", aURL );
-            MessageDialog(this, aErr).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, aErr)->Execute();
         }
     }
 

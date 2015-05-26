@@ -234,7 +234,7 @@ void SdModule::Execute(SfxRequest& rReq)
             }
             else
             {
-                MessageDialog(NULL, SD_RESSTR(STR_CANT_PERFORM_IN_LIVEMODE)).Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SD_RESSTR(STR_CANT_PERFORM_IN_LIVEMODE))->Execute();
 
                 SFX_REQUEST_ARG( rReq, pLinkItem, SfxLinkItem, SID_DONELINK, false );
                 if( pLinkItem )

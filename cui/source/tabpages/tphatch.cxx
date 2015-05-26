@@ -679,9 +679,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 
     if ( *pnHatchingListState & ChangeType::MODIFIED )
     {
-        nReturn = MessageDialog( GetParentDialog()
+        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                                 ,"AskSaveList"
-                                ,"cui/ui/querysavelistdialog.ui").Execute();
+                                ,"cui/ui/querysavelistdialog.ui")->Execute();
 
         if ( nReturn == RET_YES )
             pHatchingList->Save();
@@ -735,9 +735,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
                 *pnHatchingListState &= ~ChangeType::MODIFIED;
             }
             else
-                MessageDialog( GetParentDialog()
+                ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                                ,"NoLoadedFileDialog"
-                               ,"cui/ui/querynoloadedfiledialog.ui").Execute();
+                               ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
         }
     }
 
@@ -808,9 +808,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
         }
         else
         {
-            MessageDialog( GetParentDialog()
+            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                           ,"NoSaveFileDialog"
-                          ,"cui/ui/querynosavefiledialog.ui").Execute();
+                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
 

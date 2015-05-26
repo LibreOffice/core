@@ -465,7 +465,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         const OUString aShortName(m_pShortNameEdit->GetText());
         if(pGlossaryHdl->HasShortName(aShortName))
         {
-            MessageDialog(this, SW_RES(STR_DOUBLE_SHORTNAME), VCL_MESSAGE_INFO).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_DOUBLE_SHORTNAME), VCL_MESSAGE_INFO)->Execute();
             m_pShortNameEdit->SetSelection(Selection(0, SELECTION_MAX));
             m_pShortNameEdit->GrabFocus();
             return 1;
@@ -602,7 +602,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 Init();
             else
             {
-                MessageDialog(this, SW_RES( STR_NO_GLOSSARIES ), VCL_MESSAGE_INFO).Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES( STR_NO_GLOSSARIES ), VCL_MESSAGE_INFO)->Execute();
             }
         }
     }
@@ -817,7 +817,7 @@ IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
     if( pDlg->pGlossaryHdl->HasShortName(m_pNewShort->GetText())
         && sNew != m_pOldShort->GetText() )
     {
-        MessageDialog(this, SW_RES(STR_DOUBLE_SHORTNAME), VCL_MESSAGE_INFO).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_DOUBLE_SHORTNAME), VCL_MESSAGE_INFO)->Execute();
         m_pNewShort->GrabFocus();
     }
     else

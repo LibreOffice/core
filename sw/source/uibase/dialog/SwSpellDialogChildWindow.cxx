@@ -421,7 +421,7 @@ The code below would only be part of the solution.
                 OUString sInfo(SW_RES(STR_SPELLING_COMPLETED));
                 // #i84610#
                 vcl::Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
-                MessageDialog(pTemp, sInfo, VCL_MESSAGE_INFO).Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(pTemp, sInfo, VCL_MESSAGE_INFO)->Execute();
                 LockFocusNotification( false );
                 // take care that the now valid selection is stored
                 LoseFocus();

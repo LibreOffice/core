@@ -91,7 +91,7 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
 {
     if ( !IsValidSbxName(rNewText) )
     {
-        MessageDialog(this, IDE_RESSTR(RID_STR_BADSBXNAME)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_BADSBXNAME))->Execute();
         return false;
     }
 
@@ -835,7 +835,7 @@ void ObjectPage::NewDialog()
 
             if ( aDocument.hasDialog( aLibName, aDlgName ) )
             {
-                MessageDialog(this, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2)).Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
             }
             else
             {
@@ -1047,7 +1047,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         }
         catch (const container::ElementExistException& )
         {
-            MessageDialog(pWin, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(pWin, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
         }
         catch (const container::NoSuchElementException& )
         {

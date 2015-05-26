@@ -535,9 +535,9 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
         {
             short nResult;
             if (nId == SID_ATTR_PAGE_HEADERSET)
-                nResult = DeleteHeaderDialog(this).Execute();
+                nResult = ScopedVclPtrInstance<DeleteHeaderDialog>::Create(this)->Execute();
             else
-                nResult = DeleteFooterDialog(this).Execute();
+                nResult = ScopedVclPtrInstance<DeleteFooterDialog>::Create(this)->Execute();
             bDelete = nResult == RET_YES;
         }
 

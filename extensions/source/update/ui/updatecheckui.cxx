@@ -593,7 +593,7 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl)
             mrJob->execute( aEmpty );
         }
         catch(const uno::Exception&) {
-            MessageDialog( NULL, ResId( STR_NO_WEBBROWSER_FOUND, *mpSfxResMgr )).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create( NULL, ResId( STR_NO_WEBBROWSER_FOUND, *mpSfxResMgr ))->Execute();
         }
     }
 
