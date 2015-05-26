@@ -85,7 +85,11 @@ OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(sal_uLong nTimeout,
 OTableEditorCtrl::ClipboardInvalidator::~ClipboardInvalidator()
 {
     m_aInvalidateTimer.Stop();
+}
 
+void OTableEditorCtrl::ClipboardInvalidator::Stop()
+{
+    m_aInvalidateTimer.Stop();
 }
 
 IMPL_LINK_NOARG_TYPED(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate, Timer *, void)
@@ -259,6 +263,8 @@ void OTableEditorCtrl::dispose()
 {
     // Reset the Undo-Manager
     GetUndoManager().Clear();
+
+    m_aInvalidate.Stop();
 
     // Take possible Events from the queue
     if( nCutEvent )

@@ -208,8 +208,8 @@ void OFieldDescControl::dispose()
     m_pType.clear();
     m_pAutoIncrementValue.clear();
     pFormat.clear();
-    m_pVertScroll.clear();
-    m_pHorzScroll.clear();
+    m_pVertScroll.disposeAndClear();
+    m_pHorzScroll.disposeAndClear();
     TabPage::dispose();
 }
 
