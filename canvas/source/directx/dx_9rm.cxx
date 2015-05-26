@@ -226,7 +226,7 @@ namespace dxcanvas
             COMReference<IDirect3DSwapChain9>           mpSwapChain;
             COMReference<IDirect3DVertexBuffer9>        mpVertexBuffer;
             ::canvas::ISurfaceSharedPtr                 mpTexture;
-            ::boost::scoped_ptr<SystemChildWindow>      mpWindow;
+            VclPtr<SystemChildWindow>                   mpWindow;
             ::basegfx::B2IVector                        maSize;
             typedef std::vector<canvas::Vertex>         vertexCache_t;
             vertexCache_t                               maVertexCache;
@@ -645,7 +645,7 @@ namespace dxcanvas
                 return;
 
             mpTexture.reset();
-            mpWindow.reset();
+            mpWindow.disposeAndClear();
             mhWnd=NULL;
 
             // refrain from releasing the DX9 objects. We're the only
@@ -663,12 +663,11 @@ namespace dxcanvas
             // TODO(P2): get rid of those fine-grained locking
             ::osl::MutexGuard aGuard( maMutex );
 
-            maVertexCache.reserve(1024);
+            maVertexCache.reserve( 1024 );
 
-            mpWindow.reset(
-                VclPtr<SystemChildWindow>::Create(
-
-                const_cast<vcl::Window *>(&rWindow), 0) );
+            mpWindow.disposeAndClear();
+            mpWindow.reset( VclPtr<SystemChildWindow>::Create(
+                              const_cast<vcl::Window *>(&rWindow), 0) );
 
             // system child window must not receive mouse events
             mpWindow->SetMouseTransparent( TRUE );
