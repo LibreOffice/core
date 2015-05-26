@@ -358,9 +358,16 @@ enum class StateChangedType : sal_uInt16
 #define WINDOW_GETCLIPREGION_NULL       ((sal_uInt16)0x0001)
 #define WINDOW_GETCLIPREGION_NOCHILDREN ((sal_uInt16)0x0002)
 
-// EndExtTextInput-Flags
-#define EXTTEXTINPUT_END_COMPLETE       ((sal_uInt16)0x0001)
-#define EXTTEXTINPUT_END_CANCEL         ((sal_uInt16)0x0002)
+// EndExtTextInput() Flags
+enum class EndExtTextInputFlags
+{
+    NONE           = 0x0000,
+    Complete       = 0x0001
+};
+namespace o3tl
+{
+    template<> struct typed_flags<EndExtTextInputFlags> : is_typed_flags<EndExtTextInputFlags, 0x0001> {};
+}
 
 #define IMPL_MINSIZE_BUTTON_WIDTH       70
 #define IMPL_MINSIZE_BUTTON_HEIGHT      22
@@ -912,7 +919,7 @@ public:
 
     void                                SetInputContext( const InputContext& rInputContext );
     const InputContext&                 GetInputContext() const;
-    void                                EndExtTextInput( sal_uInt16 nFlags );
+    void                                EndExtTextInput( EndExtTextInputFlags nFlags );
     void                                SetCursorRect( const Rectangle* pRect = NULL, long nExtTextInputWidth = 0 );
     const Rectangle*                    GetCursorRect() const;
     long                                GetCursorExtTextInputWidth() const;

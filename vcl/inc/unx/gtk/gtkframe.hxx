@@ -155,7 +155,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
         void            createIMContext();
         void            deleteIMContext();
         void            updateIMSpotLocation();
-        void            endExtTextInput( sal_uInt16 nFlags );
+        void            endExtTextInput( EndExtTextInputFlags nFlags );
         bool            handleKeyEvent( GdkEventKey* pEvent );
         void            focusChanged( bool bFocusIn );
 
@@ -405,7 +405,7 @@ public:
     virtual void                Sync() SAL_OVERRIDE;
 
     virtual void                SetInputContext( SalInputContext* pContext ) SAL_OVERRIDE;
-    virtual void                EndExtTextInput( sal_uInt16 nFlags ) SAL_OVERRIDE;
+    virtual void                EndExtTextInput( EndExtTextInputFlags nFlags ) SAL_OVERRIDE;
 
     virtual OUString            GetKeyName( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
     virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode ) SAL_OVERRIDE;

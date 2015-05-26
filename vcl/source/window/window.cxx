@@ -404,7 +404,7 @@ void Window::dispose()
     // EndExtTextInputMode
     if ( pSVData->maWinData.mpExtTextInputWin == this )
     {
-        EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+        EndExtTextInput( EndExtTextInputFlags::Complete );
         if ( pSVData->maWinData.mpExtTextInputWin == this )
             pSVData->maWinData.mpExtTextInputWin = NULL;
     }
@@ -2178,7 +2178,7 @@ void Window::SetInputContext( const InputContext& rInputContext )
         ImplNewInputContext();
 }
 
-void Window::EndExtTextInput( sal_uInt16 nFlags )
+void Window::EndExtTextInput( EndExtTextInputFlags nFlags )
 {
 
     if ( mpWindowImpl->mbExtTextInput )
