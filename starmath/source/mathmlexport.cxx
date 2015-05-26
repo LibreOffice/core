@@ -71,7 +71,7 @@
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <utility.hxx>
-#include <config.hxx>
+#include "cfgitem.hxx"
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -578,7 +578,7 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                 PropertyValue* pProps = rProps.getArray();
                 if (pProps)
                 {
-                    SmConfig *pConfig = SM_MOD()->GetConfig();
+                    SmMathConfig *pConfig = SM_MOD()->GetConfig();
                     const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
 
                     const OUString sFormula ( "Formula" );

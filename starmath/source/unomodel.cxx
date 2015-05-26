@@ -44,8 +44,8 @@
 #include <view.hxx>
 #include <symbol.hxx>
 #include <starmath.hrc>
-#include <config.hxx>
 #include <smdll.hxx>
+#include "cfgitem.hxx"
 
 using namespace ::cppu;
 using namespace ::std;
@@ -66,7 +66,7 @@ SmPrintUIOptions::SmPrintUIOptions()
         return;
 
     SmModule *pp = SM_MOD();
-    SmConfig *pConfig = pp->GetConfig();
+    SmMathConfig *pConfig = pp->GetConfig();
     SAL_WARN_IF( !pConfig, "starmath", "SmConfig not found" );
     if (!pConfig)
         return;

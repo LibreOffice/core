@@ -21,7 +21,6 @@
 
 #include <starmath.hrc>
 #include <smmod.hxx>
-#include <config.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
 

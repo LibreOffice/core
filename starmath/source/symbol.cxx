@@ -32,7 +32,6 @@
 #include "view.hxx"
 #include "utility.hxx"
 #include "dialog.hxx"
-#include "config.hxx"
 #include "cfgitem.hxx"
 #include "smmod.hxx"
 #include "starmath.hrc"

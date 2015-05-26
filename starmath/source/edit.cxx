@@ -47,7 +47,7 @@
 #include "edit.hxx"
 #include "view.hxx"
 #include "document.hxx"
-#include "config.hxx"
+#include "cfgitem.hxx"
 #include "accessibility.hxx"
 #include <memory>
 
