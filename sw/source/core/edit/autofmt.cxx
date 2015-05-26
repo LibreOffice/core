@@ -1785,7 +1785,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
     if( m_aFlags.bAFormatByInput ||
         (!m_aFlags.bAutoCorrect && !bReplaceQuote && !bReplaceSglQuote &&
-        !m_aFlags.bCapitalStartSentence && !m_aFlags.bCptlSttWrd &&
+        !m_aFlags.bCapitalStartSentence && !m_aFlags.bCapitalStartWord &&
         !m_aFlags.bChgOrdinalNumber &&
         !m_aFlags.bChgToEnEmDash && !m_aFlags.bSetINetAttr &&
         !m_aFlags.bChgWeightUnderl && !m_aFlags.bAddNonBrkSpace) )
@@ -1797,7 +1797,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
     bool bGetLanguage = m_aFlags.bChgOrdinalNumber ||
                         m_aFlags.bChgToEnEmDash || m_aFlags.bSetINetAttr ||
-                        m_aFlags.bCptlSttWrd || m_aFlags.bCapitalStartSentence ||
+                        m_aFlags.bCapitalStartWord || m_aFlags.bCapitalStartSentence ||
                         m_aFlags.bAddNonBrkSpace;
 
     m_aDelPam.DeleteMark();
@@ -2040,10 +2040,10 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             else
             {
                 // two capital letters at the beginning of a word?
-                if( m_aFlags.bCptlSttWrd )
+                if( m_aFlags.bCapitalStartWord )
                 {
                     SetRedlineText( STR_AUTOFMTREDL_CPTL_STT_WORD );
-                    pATst->FnCptlSttWrd( aACorrDoc, *pText, nSttPos, nPos, eLang );
+                    pATst->FnCapitalStartWord( aACorrDoc, *pText, nSttPos, nPos, eLang );
                 }
                 // capital letter at the beginning of a sentence?
                 if( m_aFlags.bCapitalStartSentence && bFirst )

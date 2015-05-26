@@ -132,7 +132,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
     OUString        sDeleteEmptyPara;
     OUString        sUseReplaceTbl;
-    OUString        sCptlSttWord;
+    OUString        sCapitalStartWord;
     OUString        sCptlSttSent;
     OUString        sUserStyle;
     OUString        sBullet;

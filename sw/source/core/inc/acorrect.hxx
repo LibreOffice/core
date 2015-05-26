@@ -79,7 +79,7 @@ public:
                                   OUString* pPara ) SAL_OVERRIDE;
 
     // Will be called after swapping characters by the functions
-    //  - FnCptlSttWrd and
+    //  - FnCapitalStartWord and
     //  - FnCapitalStartSentence.
     // Afterwards the words can be added into exception list if needed.
     virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,

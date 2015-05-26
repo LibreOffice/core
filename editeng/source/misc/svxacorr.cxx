@@ -174,7 +174,7 @@ SvxAutoCorrDoc::~SvxAutoCorrDoc()
 }
 
 // Called by the functions:
-//  - FnCptlSttWrd
+//  - FnCapitalStartWord
 //  - FnCapitalStartSentence
 // after the exchange of characters. Then the words, if necessary, can be inserted
 // into the exception list.
@@ -251,7 +251,7 @@ long SvxAutoCorrect::GetDefaultFlags()
 {
     long nRet = Autocorrect
                     | CapitalStartSentence
-                    | CptlSttWrd
+                    | CapitalStartWord
                     | ChgOrdinalNumber
                     | ChgToEnEmDash
                     | AddNonBrkSpace
@@ -342,7 +342,7 @@ void SvxAutoCorrect::SetAutoCorrFlag( long nFlag, bool bOn )
     {
         if( (nOld & CapitalStartSentence) != (nFlags & CapitalStartSentence) )
             nFlags &= ~CplSttLstLoad;
-        if( (nOld & CptlSttWrd) != (nFlags & CptlSttWrd) )
+        if( (nOld & CapitalStartWord) != (nFlags & CapitalStartWord) )
             nFlags &= ~WrdSttLstLoad;
         if( (nOld & Autocorrect) != (nFlags & Autocorrect) )
             nFlags &= ~ChgWordLstLoad;
@@ -351,7 +351,7 @@ void SvxAutoCorrect::SetAutoCorrFlag( long nFlag, bool bOn )
 
 
     // Two capital letters at the beginning of word?
-bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {
@@ -430,7 +430,7 @@ bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
                 {
                     if( SaveWordWrdSttLst & nFlags )
-                        rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
+                        rDoc.SaveCpltSttWord( CapitalStartWord, nSttPos, sWord, cSave );
                     bRet = true;
                 }
             }
@@ -1420,9 +1420,9 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
             // Two capital letters at beginning of word ??
             if( !bUnsupported &&
-                IsAutoCorrFlag( CptlSttWrd ) &&
-                FnCptlSttWrd( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
-                nRet |= CptlSttWrd;
+                IsAutoCorrFlag( CapitalStartWord ) &&
+                FnCapitalStartWord( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
+                nRet |= CapitalStartWord;
 
             if( IsAutoCorrFlag( ChgToEnEmDash ) &&
                 FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
