@@ -144,6 +144,7 @@ class SeriesHeader
 {
 public:
     explicit SeriesHeader(vcl::Window * pParent, vcl::Window *pColorParent);
+            ~SeriesHeader();
 
     void SetColor( const Color & rCol );
     void SetPos( const Point & rPos );
@@ -215,6 +216,13 @@ SeriesHeader::SeriesHeader( vcl::Window * pParent, vcl::Window *pColorParent ) :
     m_spSeriesName->SetModifyHdl( LINK( this, SeriesHeader, SeriesNameEdited ));
     m_spSeriesName->SetHelpId( HID_SCH_DATA_SERIES_LABEL );
     Show();
+}
+
+SeriesHeader::~SeriesHeader()
+{
+    m_spSymbol.disposeAndClear();
+    m_spSeriesName.disposeAndClear();
+    m_spColorBar.disposeAndClear();
 }
 
 void SeriesHeader::notifyChanges()
@@ -417,8 +425,7 @@ bool lcl_SeriesHeaderHasFocus(
     sal_Int32 * pOutIndex = 0 )
 {
     sal_Int32 nIndex = 0;
-    for( ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > >::const_iterator aIt( rSeriesHeader.begin());
-         aIt != rSeriesHeader.end(); ++aIt, ++nIndex )
+    for( auto aIt = rSeriesHeader.begin(); aIt != rSeriesHeader.end(); ++aIt, ++nIndex )
     {
         if( (*aIt)->HasFocus())
         {
