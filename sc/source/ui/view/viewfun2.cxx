@@ -1775,7 +1775,11 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
+            {
+                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
+                                                            pSearchItem->GetSearchString().toUtf8().getStr());
                 SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+            }
 
             break;                      // break 'while (TRUE)'
         }
