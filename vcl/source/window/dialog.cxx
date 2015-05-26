@@ -1081,7 +1081,7 @@ void Dialog::GrabFocusToFirstControl()
          !isEnabledInLayout(pFocusControl) || !pFocusControl->IsInputEnabled() )
     {
         sal_uInt16 n = 0;
-        pFocusControl = ImplGetDlgWindow( n, DLGWINDOW_FIRST );
+        pFocusControl = ImplGetDlgWindow( n, GetDlgWindowType::First );
     }
     if ( pFocusControl )
         pFocusControl->ImplControlFocus( GETFOCUS_INIT );

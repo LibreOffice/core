@@ -5273,7 +5273,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     if (HasFocus() && mpData->mbKeyInputDisabled && bParentIsContainer)
     {
         sal_uInt16 n = 0;
-        vcl::Window *pFocusControl = pParent->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
+        vcl::Window *pFocusControl = pParent->ImplGetDlgWindow( n, GetDlgWindowType::First );
         if ( pFocusControl && pFocusControl != this )
             pFocusControl->ImplControlFocus( GETFOCUS_INIT );
     }
