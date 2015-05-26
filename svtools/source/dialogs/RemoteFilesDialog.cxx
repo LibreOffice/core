@@ -170,6 +170,28 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                 break;
         };
     }
+    else if(sIdent == "delete_service"  && m_pServices_lb->GetEntryCount() > 0)
+    {
+        unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
+        unsigned int nPos = GetSelectedServicePos();
+
+        // TODO: Confirm dialog
+
+        m_aServices.erase(m_aServices.begin() + nPos);
+        m_pServices_lb->RemoveEntry(nSelected);
+
+        if(m_pServices_lb->GetEntryCount() > 0)
+        {
+            m_pServices_lb->SelectEntryPos(0);
+        }
+        else
+        {
+            m_pServices_lb->SetNoSelection();
+            m_pServices_lb->Enable(false);
+        }
+
+        m_bIsUpdated = true;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
