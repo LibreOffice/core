@@ -537,8 +537,8 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
                         m_pCheckLB->IsChecked(CORR_UPPER, CBCOL_SECOND));
 
     bCheck = m_pCheckLB->IsChecked(BEGIN_UPPER, CBCOL_FIRST);
-    bModified |= pOpt->bCptlSttSntnc != bCheck;
-    pOpt->bCptlSttSntnc = bCheck;
+    bModified |= pOpt->bCapitalStartSentence != bCheck;
+    pOpt->bCapitalStartSentence = bCheck;
     pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc,
                         m_pCheckLB->IsChecked(BEGIN_UPPER, CBCOL_SECOND));
 
@@ -673,7 +673,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_pCheckLB->CheckEntryPos( USE_REPLACE_TABLE,  CBCOL_SECOND,   0 != (nFlags & Autocorrect));
     m_pCheckLB->CheckEntryPos( CORR_UPPER,         CBCOL_FIRST,    pOpt->bCptlSttWrd );
     m_pCheckLB->CheckEntryPos( CORR_UPPER,         CBCOL_SECOND,   0 != (nFlags & CptlSttWrd) );
-    m_pCheckLB->CheckEntryPos( BEGIN_UPPER,        CBCOL_FIRST,    pOpt->bCptlSttSntnc );
+    m_pCheckLB->CheckEntryPos( BEGIN_UPPER,        CBCOL_FIRST,    pOpt->bCapitalStartSentence );
     m_pCheckLB->CheckEntryPos( BEGIN_UPPER,        CBCOL_SECOND,   0 != (nFlags & CptlSttSntnc) );
     m_pCheckLB->CheckEntryPos( BOLD_UNDERLINE,     CBCOL_FIRST,    pOpt->bChgWeightUnderl );
     m_pCheckLB->CheckEntryPos( BOLD_UNDERLINE,     CBCOL_SECOND,   0 != (nFlags & ChgWeightUnderl) );

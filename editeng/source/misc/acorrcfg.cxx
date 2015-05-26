@@ -411,7 +411,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                     case   3: rParent.bAutoTextTip = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; // "Text/ShowToolTip",
                     case   4: rParent.bSearchInAllCategories = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; //"Text/SearchInAllCategories"
                     case   5: rSwFlags.bAutoCorrect = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/UseReplacementTable",
-                    case   6: rSwFlags.bCptlSttSntnc = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/TwoCapitalsAtStart",
+                    case   6: rSwFlags.bCapitalStartSentence = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/TwoCapitalsAtStart",
                     case   7: rSwFlags.bCptlSttWrd = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/CapitalAtStartSentence",
                     case   8: rSwFlags.bChgWeightUnderl = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeUnderlineWeight",
                     case   9: rSwFlags.bSetINetAttr = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/SetInetAttribute",
@@ -565,7 +565,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
             case   3: pValues[nProp].setValue(&rParent.bAutoTextTip, rType); break; // "Text/ShowToolTip",
             case   4: pValues[nProp].setValue(&rParent.bSearchInAllCategories, rType );break; //"Text/SearchInAllCategories"
             case   5: bVal = rSwFlags.bAutoCorrect; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/UseReplacementTable",
-            case   6: bVal = rSwFlags.bCptlSttSntnc; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/TwoCapitalsAtStart",
+            case   6: bVal = rSwFlags.bCapitalStartSentence; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/TwoCapitalsAtStart",
             case   7: bVal = rSwFlags.bCptlSttWrd; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/CapitalAtStartSentence",
             case   8: bVal = rSwFlags.bChgWeightUnderl; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeUnderlineWeight",
             case   9: bVal = rSwFlags.bSetINetAttr; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/SetInetAttribute",
