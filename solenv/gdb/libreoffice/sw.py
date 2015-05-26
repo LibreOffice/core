@@ -209,7 +209,7 @@ class BigPtrArrayPrinter(object):
 
         def _node_value(self, node):
             cur_indent = self.indent
-            if str(node.dynamic_type.target()) == "SwTxtNode":
+            if str(node.dynamic_type.target()) == "SwTextNode":
                 # accessing this is completely non-obvious...
                 # also, node.dynamic_cast(node.dynamic_type) is null?
                 value = "    TextNode " + \
