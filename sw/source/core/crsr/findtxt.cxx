@@ -38,6 +38,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <dcontact.hxx>
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
@@ -302,9 +303,23 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             aSearchItem.SetBackward(!bSrchForward);
 
             // If there is an active text edit, then search there.
-            if (SdrView* pSdrView = pWrtShell->GetDrawView())
+            bool bEndedTextEdit = false;
+            SdrView* pSdrView = pWrtShell->GetDrawView();
+            if (pSdrView)
             {
-                if (pSdrView->GetTextEditObject())
+                // If the edited object is not anchored to this node, then ignore it.
+                SdrObject* pObject = pSdrView->GetTextEditObject();
+                if (pObject)
+                {
+                    if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
+                    {
+                        const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
+                        if (!pPosition || pPosition->nNode.GetIndex() != pNode->GetIndex())
+                            pObject = 0;
+                    }
+                }
+
+                if (pObject)
                 {
                     sal_uInt16 nResult = pSdrView->GetTextEditOutlinerView()->StartSearchAndReplace(aSearchItem);
                     if (!nResult)
@@ -315,6 +330,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         pSdrView->UnmarkAll();
                         pWrtShell->SetCursor(&aPoint, true);
                         pWrtShell->Edit();
+                        bEndedTextEdit = true;
                     }
                     else
                     {
@@ -324,17 +340,35 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                 }
             }
 
-            // If there are any shapes anchored to this node, search there.
-            SwPaM aPaM(pNode->GetDoc()->GetNodes().GetEndOfContent());
-            aPaM.GetPoint()->nNode = rTextNode;
-            aPaM.GetPoint()->nContent.Assign(aPaM.GetPoint()->nNode.GetNode().GetTextNode(), nStart);
-            aPaM.SetMark();
-            aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
-            aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTextNode(), 0);
-            if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, aSearchItem))
+            // If we just finished search in shape text, don't attept to do that again.
+            if (!bEndedTextEdit)
             {
-                bFound = true;
-                break;
+                // If there are any shapes anchored to this node, search there.
+                SwPaM aPaM(pNode->GetDoc()->GetNodes().GetEndOfContent());
+                aPaM.GetPoint()->nNode = rTextNode;
+                aPaM.GetPoint()->nContent.Assign(aPaM.GetPoint()->nNode.GetNode().GetTextNode(), nStart);
+                aPaM.SetMark();
+                aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
+                aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTextNode(), 0);
+                if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, aSearchItem) && pSdrView)
+                {
+                    if (SdrObject* pObject = pSdrView->GetTextEditObject())
+                    {
+                        if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
+                        {
+                            const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
+                            if (pPosition)
+                            {
+                                // Set search position to the shape's anchor point.
+                                *GetPoint() = *pPosition;
+                                GetPoint()->nContent.Assign(pPosition->nNode.GetNode().GetContentNode(), 0);
+                                SetMark();
+                                bFound = true;
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             sal_Int32 aStart = 0;

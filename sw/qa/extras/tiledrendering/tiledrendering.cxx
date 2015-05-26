@@ -226,12 +226,12 @@ void SwTiledRenderingTest::testResetSelection()
 }
 
 #if !(defined WNT || defined MACOSX)
-void lcl_search()
+void lcl_search(bool bBackward)
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
-        {"SearchItem.Backward", uno::makeAny(false)}
+        {"SearchItem.Backward", uno::makeAny(bBackward)}
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
 }
@@ -245,24 +245,34 @@ void SwTiledRenderingTest::testSearch()
     size_t nNode = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
 
     // First hit, in the second paragraph, before the shape.
-    lcl_search();
+    lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
     size_t nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
 
     // Next hit, in the shape.
-    lcl_search();
+    lcl_search(false);
     CPPUNIT_ASSERT(pWrtShell->GetDrawView()->GetTextEditObject());
 
     // Next hit, in the shape, still.
-    lcl_search();
+    lcl_search(false);
     CPPUNIT_ASSERT(pWrtShell->GetDrawView()->GetTextEditObject());
 
     // Last hit, in the last paragraph, after the shape.
-    lcl_search();
+    lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
     nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 7, nActual);
+
+    // Now change direction and make sure that the first 2 hits are in the shape, but not the 3rd one.
+    lcl_search(true);
+    CPPUNIT_ASSERT(pWrtShell->GetDrawView()->GetTextEditObject());
+    lcl_search(true);
+    CPPUNIT_ASSERT(pWrtShell->GetDrawView()->GetTextEditObject());
+    lcl_search(true);
+    CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
+    nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
 #endif
 }
 
