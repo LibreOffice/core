@@ -42,6 +42,7 @@
 #include <unotext.hxx>
 #include <frmfmt.hxx>
 #include <tuple>
+#include <unocrsr.hxx>
 
 class SwUnoCrsr;
 class SwTable;
@@ -217,7 +218,6 @@ public:
     SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox* pBox);
     SwXTextTableCursor(SwFrameFormat& rTableFormat,
                         const SwTableCursor* pTableSelection);
-
     DECLARE_XINTERFACE()
 
     //XTextTableCursor
@@ -276,6 +276,12 @@ public:
     SwUnoCrsr*                  GetCrsr();
     std::shared_ptr<SwUnoCrsr> m_pUnoCrsr;
     SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    ~SwXTextTableCursor()
+    {
+        if(m_pUnoCrsr)
+            m_pUnoCrsr->Remove(&aCrsrDepend);
+    }
+
 };
 
 struct SwRangeDescriptor
@@ -469,6 +475,11 @@ public:
     SwXCellRange(std::shared_ptr<SwUnoCrsr> pCrsr, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
+    virtual ~SwXCellRange()
+    {
+        if(m_pTableCrsr)
+            m_pTableCrsr->Remove(&aCursorDepend);
+    }
     std::vector< css::uno::Reference< css::table::XCell > > getCells();
 
     TYPEINFO_OVERRIDE();

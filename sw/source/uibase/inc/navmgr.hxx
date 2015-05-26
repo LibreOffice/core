@@ -14,6 +14,7 @@
 
 #include "swtypes.hxx"
 #include "calbck.hxx"
+#include "unocrsr.hxx"
 
 class   SwWrtShell;
 struct  SwPosition;
@@ -41,6 +42,14 @@ private:
 public:
     /* Constructor that initializes the shell to the current shell */
     SwNavigationMgr( SwWrtShell & rShell );
+    ~SwNavigationMgr()
+    {
+        for(auto pEntry : m_entries)
+        {
+            if(pEntry && GetRegisteredIn() == pEntry.get())
+                pEntry->Remove(this);
+        }
+    }
     /* Can we go back in the history ? */
     bool backEnabled() ;
     /* Can we go forward in the history ? */

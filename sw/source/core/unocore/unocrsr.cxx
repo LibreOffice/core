@@ -40,10 +40,7 @@ SwUnoCrsr::~SwUnoCrsr()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-#ifdef DBG_UTIL_TODO
-        SwIterator<SwClient, SwUnoCrsr> pClient(*this);
-        assert(!pClient.First());
-#endif
+        assert(!static_cast<bool>(SwIterator<SwClient, SwUnoCrsr>(*this).First()));
         // remove the weak_ptr the document keeps to notify about document death
         pDoc->mvUnoCrsrTbl.remove_if(
             [this](const std::weak_ptr<SwUnoCrsr>& pWeakPtr) -> bool { return pWeakPtr.lock().get() == this; });

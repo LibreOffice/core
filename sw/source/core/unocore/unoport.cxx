@@ -137,7 +137,11 @@ SwXTextPortion::SwXTextPortion(
     }
 }
 
-SwXTextPortion::~SwXTextPortion() {};
+SwXTextPortion::~SwXTextPortion()
+{
+    if(m_pUnoCursor)
+        m_pUnoCursor->Remove(this);
+};
 
 uno::Reference< text::XText >  SwXTextPortion::getText()
 throw( uno::RuntimeException, std::exception )

@@ -1712,6 +1712,8 @@ public:
     }
 
     virtual ~Impl() {
+        if(m_pUnoCursor)
+            m_pUnoCursor->Remove(this);
         // Impl owns the cursor; delete it here: SolarMutex is locked
     }
 
