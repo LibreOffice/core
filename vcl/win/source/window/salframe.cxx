@@ -2279,13 +2279,13 @@ void WinSalFrame::SetInputContext( SalInputContext* pContext )
     SendMessageW( mhWnd, SAL_MSG_SETINPUTCONTEXT, 0, (LPARAM)(void*)pContext );
 }
 
-static void ImplSalFrameEndExtTextInput( HWND hWnd, sal_uInt16 nFlags )
+static void ImplSalFrameEndExtTextInput( HWND hWnd, EndExtTextInputFlags nFlags )
 {
     HIMC hIMC = ImmGetContext( hWnd );
     if ( hIMC )
     {
         DWORD nIndex;
-        if ( nFlags & EXTTEXTINPUT_END_COMPLETE )
+        if ( nFlags & EndExtTextInput::Complete )
             nIndex = CPS_COMPLETE;
         else
             nIndex = CPS_CANCEL;
@@ -2295,7 +2295,7 @@ static void ImplSalFrameEndExtTextInput( HWND hWnd, sal_uInt16 nFlags )
     }
 }
 
-void WinSalFrame::EndExtTextInput( sal_uInt16 nFlags )
+void WinSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
 {
     // Must be called in the main thread!
     SendMessageW( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, (WPARAM)nFlags, 0 );
@@ -5809,7 +5809,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
         case SAL_MSG_ENDEXTTEXTINPUT:
-            ImplSalFrameEndExtTextInput( hWnd, (sal_uInt16)(sal_uLong)(void*)wParam );
+            ImplSalFrameEndExtTextInput( hWnd, (EndExtTextInputFlags)(sal_uLong)(void*)wParam );
             rDef = FALSE;
             break;
 

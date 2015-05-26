@@ -23,6 +23,8 @@
 #include <i18nlangtag/lang.h>
 #include "i18n_cb.hxx"
 
+enum class EndExtTextInputFlags;
+
 class SalI18N_InputContext
 {
 
@@ -65,7 +67,7 @@ public:
     void HandleDestroyIM();
 
     int  HandleKeyEvent( XKeyEvent *pEvent, SalFrame *pFrame ); // unused
-    void EndExtTextInput( sal_uInt16 nFlags );                      // unused
+    void EndExtTextInput( EndExtTextInputFlags nFlags );        // unused
     int  CommitStringCallback( sal_Unicode* pText, sal_Size nLength );
     int  CommitKeyEvent( sal_Unicode* pText, sal_Size nLength );
     int  UpdateSpotLocation();

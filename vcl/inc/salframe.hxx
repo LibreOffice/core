@@ -174,7 +174,7 @@ public:
     virtual void            Sync() = 0;
 
     virtual void            SetInputContext( SalInputContext* pContext ) = 0;
-    virtual void            EndExtTextInput( sal_uInt16 nFlags ) = 0;
+    virtual void            EndExtTextInput( EndExtTextInputFlags nFlags ) = 0;
 
     virtual OUString        GetKeyName( sal_uInt16 nKeyCode ) = 0;
 

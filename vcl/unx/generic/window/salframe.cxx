@@ -2496,7 +2496,7 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
     return;
 }
 
-void X11SalFrame::EndExtTextInput( sal_uInt16 nFlags )
+void X11SalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
 {
     if (mpInputContext != NULL)
           mpInputContext->EndExtTextInput( nFlags );
