@@ -40,7 +40,7 @@ SwUnoCrsr::~SwUnoCrsr()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-#ifdef DBG_UTIL
+#ifdef DBG_UTIL_TODO
         SwIterator<SwClient, SwUnoCrsr> pClient(*this);
         assert(!pClient.First());
 #endif
