@@ -529,7 +529,7 @@ VirtualDevice* TextView::GetVirtualDevice()
 {
     if ( !mpImpl->mpVirtDev )
     {
-        mpImpl->mpVirtDev = new VirtualDevice;
+        mpImpl->mpVirtDev = VclPtr<VirtualDevice>::Create();
         mpImpl->mpVirtDev->SetLineColor();
     }
     return mpImpl->mpVirtDev;

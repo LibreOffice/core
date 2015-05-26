@@ -776,7 +776,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     const DXFLayer * pLayer;
     const DXFVPort * pVPort;
 
-    pVirDev = new VirtualDevice;
+    pVirDev = VclPtr<VirtualDevice>::Create();
     pDXF    = &rDXF;
     bStatus = true;
 

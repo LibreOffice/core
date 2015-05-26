@@ -1069,7 +1069,7 @@ inline EditSelection ImpEditEngine::CreateSel( const ESelection& rSel )
 inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, DrawModeFlags nDrawMode )
 {
     if ( !pVirtDev )
-        pVirtDev = new VirtualDevice;
+        pVirtDev = VclPtr<VirtualDevice>::Create();
 
     if ( ( pVirtDev->GetMapMode().GetMapUnit() != rMapMode.GetMapUnit() ) ||
          ( pVirtDev->GetMapMode().GetScaleX() != rMapMode.GetScaleX() ) ||

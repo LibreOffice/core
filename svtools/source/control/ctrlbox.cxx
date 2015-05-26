@@ -725,7 +725,7 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle ),
     m_nWidth( 5 ),
     m_sNone( ),
-    aVirDev( new VirtualDevice ),
+    aVirDev( VclPtr<VirtualDevice>::Create() ),
     aColor( COL_BLACK ),
     maPaintCol( COL_BLACK )
 {

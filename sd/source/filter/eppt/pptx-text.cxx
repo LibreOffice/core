@@ -1432,7 +1432,7 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
         aFont.SetHeight( 100 );
 
         if ( !pVDev )
-            pVDev = new VirtualDevice;
+            pVDev = VclPtr<VirtualDevice>::Create();
 
         pVDev->SetFont( aFont );
         FontMetric aMetric( pVDev->GetFontMetric() );
