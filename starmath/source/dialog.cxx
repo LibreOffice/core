@@ -39,7 +39,7 @@
 
 #include "dialog.hxx"
 #include "starmath.hrc"
-#include "config.hxx"
+#include "cfgitem.hxx"
 #include "smmod.hxx"
 #include "symbol.hxx"
 #include "view.hxx"

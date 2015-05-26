@@ -39,6 +39,7 @@ class SmSym;
 class SmFormat;
 namespace vcl { class Font; }
 struct SmCfgOther;
+class SfxItemSet;
 
 struct SmFontFormat
 {
@@ -91,14 +92,15 @@ public:
     void    SetModified( bool bVal )    { bModified = bVal; }
 };
 
-class SmMathConfig : public utl::ConfigItem
+class SmMathConfig : public utl::ConfigItem, public SfxBroadcaster
 {
     std::unique_ptr<SmFormat>         pFormat;
     std::unique_ptr<SmCfgOther>       pOther;
     std::unique_ptr<SmFontFormatList> pFontFormatList;
     std::unique_ptr<SmSymbolManager>  pSymbolMgr;
-    bool                bIsOtherModified;
-    bool                bIsFormatModified;
+    bool                              bIsOtherModified;
+    bool                              bIsFormatModified;
+    SmFontPickList                    vFontPickList[7];
 
     SmMathConfig(const SmMathConfig&) SAL_DELETED_FUNCTION;
     SmMathConfig& operator=(const SmMathConfig&) SAL_DELETED_FUNCTION;
@@ -173,6 +175,11 @@ public:
     void            SetAutoRedraw( bool bVal );
     bool            IsShowFormulaCursor() const;
     void            SetShowFormulaCursor( bool bVal );
+
+    SmFontPickList & GetFontPickList(sal_uInt16 nIdent) { return vFontPickList[nIdent]; }
+
+    void ItemSetToConfig(const SfxItemSet &rSet);
+    void ConfigToItemSet(SfxItemSet &rSet) const;
 };
 
 #endif

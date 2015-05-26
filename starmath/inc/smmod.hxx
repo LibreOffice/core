@@ -34,9 +34,9 @@
 #include <memory>
 
 class SfxObjectFactory;
-class SmConfig;
 class SmModule;
 class SmSymbolManager;
+class SmMathConfig;
 
 /*************************************************************************
 |*
@@ -88,7 +88,7 @@ public:
 class SmModule : public SfxModule, utl::ConfigurationListener
 {
     std::unique_ptr<svtools::ColorConfig> mpColorConfig;
-    std::unique_ptr<SmConfig> mpConfig;
+    std::unique_ptr<SmMathConfig> mpConfig;
     std::unique_ptr<SmLocalizedSymbolData> mpLocSymbolData;
     std::unique_ptr<SvtSysLocale> mpSysLocale;
     VclPtr<VirtualDevice>    mpVirtualDev;
@@ -111,7 +111,7 @@ public:
 
     svtools::ColorConfig &  GetColorConfig();
 
-    SmConfig *              GetConfig();
+    SmMathConfig *          GetConfig();
     SmSymbolManager &       GetSymbolManager();
 
     SmLocalizedSymbolData &   GetLocSymbolData();

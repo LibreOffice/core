@@ -64,7 +64,7 @@
 
 #include "unomodel.hxx"
 #include "view.hxx"
-#include "config.hxx"
+#include "cfgitem.hxx"
 #include "dialog.hxx"
 #include "document.hxx"
 #include "starmath.hrc"

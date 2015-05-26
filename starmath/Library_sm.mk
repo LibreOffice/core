@@ -65,7 +65,6 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/action \
         starmath/source/caret \
         starmath/source/cfgitem \
-        starmath/source/config \
         starmath/source/cursor \
         starmath/source/dialog \
         starmath/source/document \

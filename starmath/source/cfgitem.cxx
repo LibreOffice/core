@@ -19,6 +19,11 @@
 
 #include <vector>
 
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -1137,5 +1142,70 @@ void SmMathConfig::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {}
 
 
+void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
+{
+    const SfxPoolItem *pItem     = NULL;
+
+    sal_uInt16 nU16;
+    bool bVal;
+    if (rSet.GetItemState(SID_PRINTSIZE, true, &pItem) == SfxItemState::SET)
+    {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+        SetPrintSize( (SmPrintSize) nU16 );
+    }
+    if (rSet.GetItemState(SID_PRINTZOOM, true, &pItem) == SfxItemState::SET)
+    {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+        SetPrintZoomFactor( nU16 );
+    }
+    if (rSet.GetItemState(SID_PRINTTITLE, true, &pItem) == SfxItemState::SET)
+    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        SetPrintTitle( bVal );
+    }
+    if (rSet.GetItemState(SID_PRINTTEXT, true, &pItem) == SfxItemState::SET)
+    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        SetPrintFormulaText( bVal );
+    }
+    if (rSet.GetItemState(SID_PRINTFRAME, true, &pItem) == SfxItemState::SET)
+    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        SetPrintFrame( bVal );
+    }
+    if (rSet.GetItemState(SID_AUTOREDRAW, true, &pItem) == SfxItemState::SET)
+    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        SetAutoRedraw( bVal );
+    }
+    if (rSet.GetItemState(SID_NO_RIGHT_SPACES, true, &pItem) == SfxItemState::SET)
+    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        if (IsIgnoreSpacesRight() != bVal)
+        {
+            SetIgnoreSpacesRight( bVal );
+
+            // reformat (displayed) formulas accordingly
+            Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
+        }
+    }
+    if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, true, &pItem) == SfxItemState::SET)
+    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        SetSaveOnlyUsedSymbols( bVal );
+    }
+
+    SaveOther();
+}
+
+
+void SmMathConfig::ConfigToItemSet(SfxItemSet &rSet) const
+{
+    const SfxItemPool *pPool = rSet.GetPool();
+
+    rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTSIZE),
+                           (sal_uInt16) GetPrintSize()));
+    rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTZOOM),
+                           (sal_uInt16) GetPrintZoomFactor()));
+
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTITLE), IsPrintTitle()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTEXT),  IsPrintFormulaText()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTFRAME), IsPrintFrame()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTOREDRAW), IsAutoRedraw()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), IsIgnoreSpacesRight()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), IsSaveOnlyUsedSymbols()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,7 @@
 #include "starmath.hrc"
 #include "smdll.hxx"
 #include "smmod.hxx"
-#include "config.hxx"
+#include "cfgitem.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;

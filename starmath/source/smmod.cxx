@@ -33,7 +33,7 @@
 #include <tools/rtti.hxx>
 #include "smmod.hxx"
 #include "symbol.hxx"
-#include "config.hxx"
+#include "cfgitem.hxx"
 #include "dialog.hxx"
 #include "edit.hxx"
 #include "view.hxx"
@@ -212,10 +212,10 @@ void SmModule::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 
     ApplyColorConfigValues(*mpColorConfig);
 }
 
-SmConfig * SmModule::GetConfig()
+SmMathConfig * SmModule::GetConfig()
 {
     if(!mpConfig)
-        mpConfig.reset(new SmConfig);
+        mpConfig.reset(new SmMathConfig);
     return mpConfig.get();
 }
 

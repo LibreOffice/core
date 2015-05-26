@@ -73,7 +73,6 @@
 #include <sfx2/sfx.hrc>
 #include <document.hxx>
 #include <action.hxx>
-#include <config.hxx>
 #include <dialog.hxx>
 #include <format.hxx>
 #include <smdll.hxx>
@@ -94,6 +93,7 @@
 #include <tools/diagnose_ex.h>
 #include "visitors.hxx"
 #include "accessibility.hxx"
+#include "cfgitem.hxx"
 #include <memory>
 
 using namespace ::com::sun::star;
