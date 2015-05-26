@@ -229,7 +229,7 @@ bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
     sal_uLong nPos = 0;
     pAutoCorrect->SetAutoCorrFlag(Autocorrect,          m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(CptlSttWrd,           m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc,         m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CapitalStartSentence, m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,      m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        m_pCheckLB->IsChecked(nPos++));
@@ -271,7 +271,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
     sal_uLong nPos = 0;
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & Autocorrect) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CptlSttWrd) );
-    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CptlSttSntnc) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CapitalStartSentence) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & ChgWeightUnderl) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & SetINetAttr) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & ChgToEnEmDash) );
@@ -539,7 +539,7 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     bCheck = m_pCheckLB->IsChecked(BEGIN_UPPER, CBCOL_FIRST);
     bModified |= pOpt->bCapitalStartSentence != bCheck;
     pOpt->bCapitalStartSentence = bCheck;
-    pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc,
+    pAutoCorrect->SetAutoCorrFlag(CapitalStartSentence,
                         m_pCheckLB->IsChecked(BEGIN_UPPER, CBCOL_SECOND));
 
     bCheck = m_pCheckLB->IsChecked(BOLD_UNDERLINE, CBCOL_FIRST);
@@ -674,7 +674,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_pCheckLB->CheckEntryPos( CORR_UPPER,         CBCOL_FIRST,    pOpt->bCptlSttWrd );
     m_pCheckLB->CheckEntryPos( CORR_UPPER,         CBCOL_SECOND,   0 != (nFlags & CptlSttWrd) );
     m_pCheckLB->CheckEntryPos( BEGIN_UPPER,        CBCOL_FIRST,    pOpt->bCapitalStartSentence );
-    m_pCheckLB->CheckEntryPos( BEGIN_UPPER,        CBCOL_SECOND,   0 != (nFlags & CptlSttSntnc) );
+    m_pCheckLB->CheckEntryPos( BEGIN_UPPER,        CBCOL_SECOND,   0 != (nFlags & CapitalStartSentence) );
     m_pCheckLB->CheckEntryPos( BOLD_UNDERLINE,     CBCOL_FIRST,    pOpt->bChgWeightUnderl );
     m_pCheckLB->CheckEntryPos( BOLD_UNDERLINE,     CBCOL_SECOND,   0 != (nFlags & ChgWeightUnderl) );
     m_pCheckLB->CheckEntryPos( IGNORE_DBLSPACE,    CBCOL_SECOND,   0 != (nFlags & IgnoreDoubleSpace) );

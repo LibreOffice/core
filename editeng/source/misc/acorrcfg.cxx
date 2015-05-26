@@ -158,7 +158,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                     break;//"TwoCapitalsAtStart",
                     case  4:
                         if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
-                            nFlags |= CptlSttSntnc;
+                            nFlags |= CapitalStartSentence;
                     break;//"CapitalAtStartSentence",
                     case  5:
                         if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
@@ -267,7 +267,7 @@ void SvxBaseAutoCorrCfg::ImplCommit()
                 pValues[nProp].setValue(&bVal, rType);
             break;//"TwoCapitalsAtStart",
             case  4:
-                bVal = 0 != (nFlags & CptlSttSntnc);
+                bVal = 0 != (nFlags & CapitalStartSentence);
                 pValues[nProp].setValue(&bVal, rType);
             break;//"CapitalAtStartSentence",
             case  5:

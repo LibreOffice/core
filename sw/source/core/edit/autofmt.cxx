@@ -2049,7 +2049,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 if( m_aFlags.bCapitalStartSentence && bFirst )
                 {
                     SetRedlineText( STR_AUTOFMTREDL_CPTL_STT_SENT );
-                    pATst->FnCptlSttSntnc( aACorrDoc, *pText, true, nSttPos, nPos, eLang);
+                    pATst->FnCapitalStartSentence( aACorrDoc, *pText, true, nSttPos, nPos, eLang);
                 }
 
                 bFirst = bFirstSent;

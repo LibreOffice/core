@@ -137,7 +137,7 @@ using namespace com::sun::star;
 static SvxAutoCorrect* lcl_IsAutoCorr()
 {
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    if( pACorr && !pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+    if( pACorr && !pACorr->IsAutoCorrFlag( CapitalStartSentence | CptlSttWrd |
                             AddNonBrkSpace | ChgOrdinalNumber |
                             ChgToEnEmDash | SetINetAttr | Autocorrect ))
         pACorr = 0;

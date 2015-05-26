@@ -2393,7 +2393,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFormatByInput() &&
-                    pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+                    pACorr->IsAutoCorrFlag( CapitalStartSentence | CptlSttWrd |
                                             ChgOrdinalNumber | AddNonBrkSpace |
                                             ChgToEnEmDash | SetINetAttr |
                                             Autocorrect ) &&
@@ -2427,7 +2427,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         case KS_CheckAutoCorrect:
         {
             if( pACorr && pACfg->IsAutoFormatByInput() &&
-                pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+                pACorr->IsAutoCorrFlag( CapitalStartSentence | CptlSttWrd |
                                         ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
