@@ -354,10 +354,6 @@ enum class StateChangedType : sal_uInt16
 #define WINDOW_DLGCTRL_MOD1TAB          ((sal_uInt16)0x0004)
 #define WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ((sal_uInt16)0x0008)
 
-// GetWindowClipRegionPixel-Flags
-#define WINDOW_GETCLIPREGION_NULL       ((sal_uInt16)0x0001)
-#define WINDOW_GETCLIPREGION_NOCHILDREN ((sal_uInt16)0x0002)
-
 // EndExtTextInput() Flags
 enum class EndExtTextInputFlags
 {
@@ -963,7 +959,7 @@ public:
     void                                SetWindowRegionPixel( const vcl::Region& rRegion );
     const vcl::Region&                  GetWindowRegionPixel() const;
     bool                                IsWindowRegionPixel() const;
-    vcl::Region                         GetWindowClipRegionPixel( sal_uInt16 nFlags = 0 ) const;
+    vcl::Region                         GetWindowClipRegionPixel() const;
     vcl::Region                         GetPaintRegion() const;
     bool                                IsInPaint() const;
     // while IsInPaint returns true ExpandPaintClipRegion adds the
