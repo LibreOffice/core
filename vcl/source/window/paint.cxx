@@ -1479,7 +1479,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
 }
 
 void Window::ImplScroll( const Rectangle& rRect,
-                         long nHorzScroll, long nVertScroll, sal_uInt16 nFlags )
+                         long nHorzScroll, long nVertScroll, ScrollFlags nFlags )
 {
     if ( !IsDeviceOutputNecessary() )
         return;
@@ -1497,18 +1497,18 @@ void Window::ImplScroll( const Rectangle& rRect,
     if ( mpWindowImpl->mpCursor )
         mpWindowImpl->mpCursor->ImplSuspend();
 
-    sal_uInt16 nOrgFlags = nFlags;
-    if ( !(nFlags & (SCROLL_CHILDREN | SCROLL_NOCHILDREN)) )
+    ScrollFlags nOrgFlags = nFlags;
+    if ( !(nFlags & (ScrollFlags::Children | ScrollFlags::NoChildren)) )
     {
         if ( GetStyle() & WB_CLIPCHILDREN )
-            nFlags |= SCROLL_NOCHILDREN;
+            nFlags |= ScrollFlags::NoChildren;
         else
-            nFlags |= SCROLL_CHILDREN;
+            nFlags |= ScrollFlags::Children;
     }
 
     vcl::Region  aInvalidateRegion;
-    bool    bScrollChildren = (nFlags & SCROLL_CHILDREN) != 0;
-    bool    bErase = (nFlags & SCROLL_NOERASE) == 0;
+    bool    bScrollChildren(nFlags & ScrollFlags::Children);
+    bool    bErase(nFlags & ScrollFlags::NoErase);
 
     if ( !mpWindowImpl->mpFirstChild )
         bScrollChildren = false;
@@ -1529,7 +1529,7 @@ void Window::ImplScroll( const Rectangle& rRect,
     // adapt paint areas
     ImplMoveAllInvalidateRegions( aRectMirror, nHorzScroll, nVertScroll, bScrollChildren );
 
-    if ( !(nFlags & SCROLL_NOINVALIDATE) )
+    if ( !(nFlags & ScrollFlags::NoInvalidate) )
     {
         ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, true, false );
 
@@ -1543,7 +1543,7 @@ void Window::ImplScroll( const Rectangle& rRect,
             aInvalidateRegion.Move( bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll );
             bErase = true;
         }
-        if ( !(nFlags & SCROLL_NOWINDOWINVALIDATE) )
+        if ( !(nFlags & ScrollFlags::NoWindowInvalidate) )
         {
             Rectangle aDestRect( aRectMirror );
             aDestRect.Move( bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll );
@@ -1556,7 +1556,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     Point aPoint( mnOutOffX, mnOutOffY );
     vcl::Region aRegion( Rectangle( aPoint, Size( mnOutWidth, mnOutHeight ) ) );
-    if ( nFlags & SCROLL_CLIP )
+    if ( nFlags & ScrollFlags::Clip )
         aRegion.Intersect( rRect );
     if ( mpWindowImpl->mbWinRegion )
         aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
@@ -1566,12 +1566,12 @@ void Window::ImplScroll( const Rectangle& rRect,
     ImplClipBoundaries( aRegion, false, true );
     if ( !bScrollChildren )
     {
-        if ( nOrgFlags & SCROLL_NOCHILDREN )
+        if ( nOrgFlags & ScrollFlags::NoChildren )
             ImplClipAllChildren( aRegion );
         else
             ImplClipChildren( aRegion );
     }
-    if ( mbClipRegion && (nFlags & SCROLL_USECLIPREGION) )
+    if ( mbClipRegion && (nFlags & ScrollFlags::UseClipRegion) )
         aRegion.Intersect( maRegion );
     if ( !aRegion.IsEmpty() )
     {
@@ -1629,7 +1629,7 @@ void Window::ImplScroll( const Rectangle& rRect,
             nPaintFlags |= InvalidateFlags::NoErase;
         if ( !bScrollChildren )
         {
-            if ( nOrgFlags & SCROLL_NOCHILDREN )
+            if ( nOrgFlags & ScrollFlags::NoChildren )
                 ImplClipAllChildren( aInvalidateRegion );
             else
                 ImplClipChildren( aInvalidateRegion );
@@ -1650,7 +1650,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         }
     }
 
-    if ( nFlags & SCROLL_UPDATE )
+    if ( nFlags & ScrollFlags::Update )
         Update();
 
     if ( mpWindowImpl->mpCursor )

@@ -251,14 +251,22 @@ namespace o3tl
 }
 
 // Flags for Scroll
-#define SCROLL_CLIP                     ((sal_uInt16)0x0001)
-#define SCROLL_CHILDREN                 ((sal_uInt16)0x0002)
-#define SCROLL_NOCHILDREN               ((sal_uInt16)0x0004)
-#define SCROLL_NOERASE                  ((sal_uInt16)0x0008)
-#define SCROLL_NOINVALIDATE             ((sal_uInt16)0x0010)
-#define SCROLL_NOWINDOWINVALIDATE       ((sal_uInt16)0x0020)
-#define SCROLL_USECLIPREGION            ((sal_uInt16)0x0040)
-#define SCROLL_UPDATE                   ((sal_uInt16)0x0080)
+enum class ScrollFlags
+{
+    NONE                     = 0x0000,
+    Clip                     = 0x0001,
+    Children                 = 0x0002,
+    NoChildren               = 0x0004,
+    NoErase                  = 0x0008,
+    NoInvalidate             = 0x0010,
+    NoWindowInvalidate       = 0x0020,
+    UseClipRegion            = 0x0040,
+    Update                   = 0x0080,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ScrollFlags> : is_typed_flags<ScrollFlags, 0x00ff> {};
+}
 
 // Flags for ParentClipMode
 #define PARENTCLIPMODE_CLIP             ((sal_uInt16)0x0001)
@@ -589,7 +597,7 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplSetMouseTransparent( bool bTransparent );
 
-    SAL_DLLPRIVATE void                 ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, ScrollFlags nFlags );
 
     SAL_DLLPRIVATE void                 ImplSaveOverlapBackground();
     SAL_DLLPRIVATE bool                 ImplRestoreOverlapBackground( vcl::Region& rInvRegion );
@@ -1077,9 +1085,9 @@ public:
 
     bool                                IsScrollable() const;
     virtual void                        Scroll( long nHorzScroll, long nVertScroll,
-                                                sal_uInt16 nFlags = 0 );
+                                                ScrollFlags nFlags = ScrollFlags::NONE );
     void                                Scroll( long nHorzScroll, long nVertScroll,
-                                                const Rectangle& rRect, sal_uInt16 nFlags = 0 );
+                                                const Rectangle& rRect, ScrollFlags nFlags = ScrollFlags::NONE );
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );

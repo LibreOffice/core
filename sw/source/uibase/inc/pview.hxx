@@ -153,7 +153,7 @@ public:
         return maPaintedPreviewDocRect;
     }
 
-    void Scroll(long nXMove, long nYMove, sal_uInt16 nFlags = 0) SAL_OVERRIDE;
+    void Scroll(long nXMove, long nYMove, ScrollFlags nFlags = ScrollFlags::NONE) SAL_OVERRIDE;
 
     /** Method to enable/disable book preview
         @param _bBookPreview

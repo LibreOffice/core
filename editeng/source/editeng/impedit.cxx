@@ -1057,7 +1057,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
         aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
         aVisDocStartPos = pOutWin->PixelToLogic( aVisDocStartPos );
         Rectangle aRect( aOutArea );
-        pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, SCROLL_CLIP );
+        pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
         pOutWin->Update();
         pCrsr->SetPos( pCrsr->GetPos() + Point( nRealDiffX, nRealDiffY ) );
         if ( bVisCursor )

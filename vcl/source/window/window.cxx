@@ -3095,16 +3095,16 @@ Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bo
     return Rectangle( aPos, aSize );
 }
 
-void Window::Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags )
+void Window::Scroll( long nHorzScroll, long nVertScroll, ScrollFlags nFlags )
 {
 
     ImplScroll( Rectangle( Point( mnOutOffX, mnOutOffY ),
                            Size( mnOutWidth, mnOutHeight ) ),
-                nHorzScroll, nVertScroll, nFlags & ~SCROLL_CLIP );
+                nHorzScroll, nVertScroll, nFlags & ~ScrollFlags::Clip );
 }
 
 void Window::Scroll( long nHorzScroll, long nVertScroll,
-                     const Rectangle& rRect, sal_uInt16 nFlags )
+                     const Rectangle& rRect, ScrollFlags nFlags )
 {
 
     OutputDevice *pOutDev = GetOutDev();

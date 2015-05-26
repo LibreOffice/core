@@ -364,7 +364,7 @@ void SvImpLBox::CursorDown()
         pView->Update();
         pStartEntry = pNextFirstToDraw;
         Rectangle aArea( GetVisibleArea() );
-        pView->Scroll( 0, -(pView->GetEntryHeight()), aArea, SCROLL_NOCHILDREN );
+        pView->Scroll( 0, -(pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
         pView->Update();
         ShowCursor( true );
         pView->NotifyScrolled();
@@ -386,7 +386,7 @@ void SvImpLBox::CursorUp()
         pStartEntry = pPrevFirstToDraw;
         Rectangle aArea( GetVisibleArea() );
         aArea.Bottom() -= nEntryHeight;
-        pView->Scroll( 0, nEntryHeight, aArea, SCROLL_NOCHILDREN );
+        pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
         pView->Update();
         ShowCursor( true );
         pView->NotifyScrolled();
@@ -425,7 +425,7 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
         nScroll = pView->GetEntryHeight() * static_cast<long>(nRealDelta);
         nScroll = -nScroll;
         pView->Update();
-        pView->Scroll( 0, nScroll, aArea, SCROLL_NOCHILDREN );
+        pView->Scroll( 0, nScroll, aArea, ScrollFlags::NoChildren );
         pView->Update();
         pView->NotifyScrolled();
     }
@@ -461,7 +461,7 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
         long nEntryHeight = pView->GetEntryHeight();
         Rectangle aArea( GetVisibleArea() );
         pView->Update();
-        pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, SCROLL_NOCHILDREN );
+        pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
         pView->Update();
         pView->NotifyScrolled();
     }
@@ -758,7 +758,7 @@ void SvImpLBox::KeyLeftRight( long nDelta )
     if( !(nFlags & F_IN_RESIZE) )
     {
         Rectangle aRect( GetVisibleArea() );
-        pView->Scroll( -nDelta, 0, aRect, SCROLL_NOCHILDREN );
+        pView->Scroll( -nDelta, 0, aRect, ScrollFlags::NoChildren );
     }
     else
         pView->Invalidate();

@@ -1317,10 +1317,10 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                     Rectangle aTmp( aTmpOldVis.SVRect() );
                     aTmp.Left() = pRect->Left();
                     aTmp.Right()= pRect->Right();
-                    GetWin()->Scroll( 0, lScroll, aTmp, SCROLL_CHILDREN);
+                    GetWin()->Scroll( 0, lScroll, aTmp, ScrollFlags::Children);
                 }
                 else
-                    GetWin()->Scroll( 0, lScroll, SCROLL_CHILDREN );
+                    GetWin()->Scroll( 0, lScroll, ScrollFlags::Children );
 
                 const Point aTmpPt( -VisArea().Left(), -VisArea().Top() );
                 MapMode aTmpMapMode( GetWin()->GetMapMode() );
@@ -1398,9 +1398,9 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
     maVisArea.Pos().X() -= lXDiff;
     maVisArea.Pos().Y() -= lYDiff;
     if ( pRect )
-        GetWin()->Scroll( lXDiff, lYDiff, *pRect, SCROLL_CHILDREN);
+        GetWin()->Scroll( lXDiff, lYDiff, *pRect, ScrollFlags::Children);
     else
-        GetWin()->Scroll( lXDiff, lYDiff, SCROLL_CHILDREN);
+        GetWin()->Scroll( lXDiff, lYDiff, ScrollFlags::Children);
     return false;
 }
 

@@ -4735,7 +4735,7 @@ void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
     bIsInScroll = true;
 
     SetMapMode(MAP_PIXEL);
-    Scroll( nDifX, nDifY, SCROLL_CHILDREN );
+    Scroll( nDifX, nDifY, ScrollFlags::Children );
     SetMapMode( GetDrawMapMode() );             // verschobenen MapMode erzeugen
 
     UpdateEditViewPos();

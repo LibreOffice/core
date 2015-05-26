@@ -2303,7 +2303,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, bool bScrBar,
     {
         // scroll in reverse direction!
         pView->Control::Scroll( -nDx, -nDy, aOutputArea,
-            SCROLL_NOCHILDREN | SCROLL_USECLIPREGION | SCROLL_CLIP );
+            ScrollFlags::NoChildren | ScrollFlags::UseClipRegion | ScrollFlags::Clip );
     }
     else
         pView->Invalidate(InvalidateFlags::NoChildren);

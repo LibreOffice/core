@@ -819,7 +819,7 @@ namespace pcr
         sal_Int32 nLines = CalcVisibleLines();
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + nLines);
 
-        m_aLinesPlayground->Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
+        m_aLinesPlayground->Scroll(0, -nDelta * m_nRowHeight, ScrollFlags::Children);
 
         if (1 == nDelta)
         {
@@ -856,7 +856,7 @@ namespace pcr
 
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + CalcVisibleLines());
 
-        m_aLinesPlayground->Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
+        m_aLinesPlayground->Scroll(0, -nDelta * m_nRowHeight, ScrollFlags::Children);
 
         if (1 == nDelta)
         {

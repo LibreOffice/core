@@ -1739,7 +1739,7 @@ void OViewsWindow::scrollChildren(const Point& _aThumbPos)
 
         aMapMode.SetOrigin( Point(aOld.X() , - aPosY.Y()));
         SetMapMode( aMapMode );
-        Scroll(0, -( aOld.Y() + aPosY.Y()),SCROLL_CHILDREN);
+        Scroll(0, -( aOld.Y() + aPosY.Y()),ScrollFlags::Children);
     }
 
     TSectionsMap::iterator aIter = m_aSections.begin();

@@ -344,7 +344,7 @@ void ViewShell::SetZoom(long nZoom)
         mpContentWindow->SetZoomIntegral(nZoom);
 
         // #i74769# Here is a 2nd way (besides Window::Scroll) to set the visible prt
-        // of the window. It needs - like Scroll(SCROLL_CHILDREN) does - also to move
+        // of the window. It needs - like Scroll(ScrollFlags::Children) does - also to move
         // the child windows. I am trying InvalidateFlags::Children here which makes things better,
         // but does not solve the problem completely. Neet to ask PL.
         mpContentWindow->Invalidate(InvalidateFlags::Children);

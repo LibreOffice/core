@@ -650,7 +650,7 @@ void Window::SetVisibleXY(double fX, double fY)
     if ( fY >= 0 )
         maWinPos.Y() = (long) (fY * maViewSize.Height());
     UpdateMapOrigin(false);
-    Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), SCROLL_CHILDREN);
+    Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), ScrollFlags::Children);
     Update();
 }
 
