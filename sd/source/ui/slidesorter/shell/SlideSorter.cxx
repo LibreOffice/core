@@ -442,7 +442,7 @@ ContentWindow::ContentWindow(
     mrSlideSorter(rSlideSorter),
     mpCurrentFunction()
 {
-    SetDialogControlFlags(GetDialogControlFlags() & ~WINDOW_DLGCTRL_WANTFOCUS);
+    SetDialogControlFlags(GetDialogControlFlags() & ~DialogControlFlags::WantFocus);
     SetStyle(GetStyle() | WB_NOPOINTERFOCUS);
 }
 

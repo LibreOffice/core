@@ -349,10 +349,18 @@ enum class StateChangedType : sal_uInt16
 #define WINDOW_DRAW_ROLLOVER            ((sal_uLong)0x00000100)
 
 // DialogControl-Flags
-#define WINDOW_DLGCTRL_RETURN           ((sal_uInt16)0x0001)
-#define WINDOW_DLGCTRL_WANTFOCUS        ((sal_uInt16)0x0002)
-#define WINDOW_DLGCTRL_MOD1TAB          ((sal_uInt16)0x0004)
-#define WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ((sal_uInt16)0x0008)
+enum class DialogControlFlags
+{
+    NONE                       = 0x0000,
+    Return                     = 0x0001,
+    WantFocus                  = 0x0002,
+    Mod1Tab                    = 0x0004,
+    FloatWinPopupModeEndCancel = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DialogControlFlags> : is_typed_flags<DialogControlFlags, 0x000f> {};
+}
 
 // EndExtTextInput() Flags
 enum class EndExtTextInputFlags
@@ -900,8 +908,8 @@ public:
     bool                                IsPaintTransparent() const;
     void                                SetDialogControlStart( bool bStart );
     bool                                IsDialogControlStart() const;
-    void                                SetDialogControlFlags( sal_uInt16 nFlags );
-    sal_uInt16                          GetDialogControlFlags() const;
+    void                                SetDialogControlFlags( DialogControlFlags nFlags );
+    DialogControlFlags                  GetDialogControlFlags() const;
 
     struct PointerState
     {

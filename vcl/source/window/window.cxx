@@ -648,7 +648,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnPaintFlags                        = 0;                         // Flags for ImplCallPaint
     mnParentClipMode                    = 0;                         // Flags for Parent-ClipChildren-Mode
     mnActivateMode                      = ActivateModeFlags::NONE;   // Will be converted in System/Overlap-Windows
-    mnDlgCtrlFlags                      = 0;                         // DialogControl-Flags
+    mnDlgCtrlFlags                      = DialogControlFlags::NONE;  // DialogControl-Flags
     mnLockCount                         = 0;                         // LockCount
     meAlwaysInputMode                   = AlwaysInputNone;           // neither AlwaysEnableInput nor AlwaysDisableInput called
     meHalign                            = VCL_ALIGN_FILL;
@@ -1927,7 +1927,7 @@ void Window::Deactivate() {}
 
 void Window::GetFocus()
 {
-    if ( HasFocus() && mpWindowImpl->mpLastFocusWindow && !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) )
+    if ( HasFocus() && mpWindowImpl->mpLastFocusWindow && !(mpWindowImpl->mnDlgCtrlFlags & DialogControlFlags::WantFocus) )
     {
         ImplDelData aDogtag( this );
         mpWindowImpl->mpLastFocusWindow->GrabFocus();

@@ -1199,12 +1199,12 @@ bool Window::IsDialogControlStart() const
     return mpWindowImpl && mpWindowImpl->mbDlgCtrlStart;
 }
 
-void Window::SetDialogControlFlags( sal_uInt16 nFlags )
+void Window::SetDialogControlFlags( DialogControlFlags nFlags )
 {
     mpWindowImpl->mnDlgCtrlFlags = nFlags;
 }
 
-sal_uInt16 Window::GetDialogControlFlags() const
+DialogControlFlags Window::GetDialogControlFlags() const
 {
     return mpWindowImpl->mnDlgCtrlFlags;
 }

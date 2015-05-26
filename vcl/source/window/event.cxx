@@ -180,7 +180,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
         {
             ImplDlgCtrlFocusChanged( rNEvt.GetWindow(), rNEvt.GetType() == MouseNotifyEvent::GETFOCUS );
             if ( (rNEvt.GetWindow() == this) && (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS) &&
-                 !(GetStyle() & WB_TABSTOP) && !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) )
+                 !(GetStyle() & WB_TABSTOP) && !(mpWindowImpl->mnDlgCtrlFlags & DialogControlFlags::WantFocus) )
             {
                 sal_uInt16 n = 0;
                 vcl::Window* pFirstChild = ImplGetDlgWindow( n, GetDlgWindowType::First );

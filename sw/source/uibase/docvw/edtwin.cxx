@@ -4937,7 +4937,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
-    SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
+    SetDialogControlFlags( DialogControlFlags::Return | DialogControlFlags::WantFocus );
 
     m_bMBPressed = m_bInsDraw = m_bInsFrm =
     m_bIsInDrag = m_bOldIdle = m_bOldIdleSet = m_bChainMode = m_bWasShdwCrsr = false;

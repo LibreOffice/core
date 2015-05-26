@@ -59,6 +59,7 @@ class SalObject;
 enum class MouseEventModifiers;
 enum class MouseNotifyEvent;
 enum class ActivateModeFlags;
+enum class DialogControlFlags;
 
 namespace com { namespace sun { namespace star {
 
@@ -276,7 +277,7 @@ public:
     sal_uInt16          mnGetFocusFlags;
     sal_uInt16          mnParentClipMode;
     ActivateModeFlags   mnActivateMode;
-    sal_uInt16          mnDlgCtrlFlags;
+    DialogControlFlags  mnDlgCtrlFlags;
     sal_uInt16          mnLockCount;
     AlwaysInputMode     meAlwaysInputMode;
     VclAlign            meHalign;

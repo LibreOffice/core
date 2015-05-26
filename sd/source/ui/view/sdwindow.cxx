@@ -69,7 +69,7 @@ Window::Window(vcl::Window* pParent)
       mpViewShell(NULL),
       mbUseDropScroll (true)
 {
-    SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
+    SetDialogControlFlags( DialogControlFlags::Return | DialogControlFlags::WantFocus );
 
     MapMode aMap(GetMapMode());
     aMap.SetMapUnit(MAP_100TH_MM);

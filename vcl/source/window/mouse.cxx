@@ -216,7 +216,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         // ensure that dialogs on close pass the focus back to
         // the correct window
         if ( mpWindowImpl->mpLastFocusWindow && (mpWindowImpl->mpLastFocusWindow.get() != this) &&
-             !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) &&
+             !(mpWindowImpl->mnDlgCtrlFlags & DialogControlFlags::WantFocus) &&
              mpWindowImpl->mpLastFocusWindow->IsEnabled() &&
              mpWindowImpl->mpLastFocusWindow->IsInputEnabled() &&
              ! mpWindowImpl->mpLastFocusWindow->IsInModalMode()
@@ -232,7 +232,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         // ensure that dialogs on close pass the focus back to
         // the correct window
         if ( mpWindowImpl->mpLastFocusWindow && (mpWindowImpl->mpLastFocusWindow.get() != this) &&
-             !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) &&
+             !(mpWindowImpl->mnDlgCtrlFlags & DialogControlFlags::WantFocus) &&
              mpWindowImpl->mpLastFocusWindow->IsEnabled() &&
              mpWindowImpl->mpLastFocusWindow->IsInputEnabled() &&
              ! mpWindowImpl->mpLastFocusWindow->IsInModalMode()
@@ -380,7 +380,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                 // eg, toolboxes can select their recent active item
                 if( pOldFocusWindow &&
                     ! aOldFocusDel.IsDead() &&
-                    ( pOldFocusWindow->GetDialogControlFlags() & WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ) )
+                    ( pOldFocusWindow->GetDialogControlFlags() & DialogControlFlags::FloatWinPopupModeEndCancel ) )
                     mpWindowImpl->mnGetFocusFlags |= GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL;
                 NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
                 if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDead() )

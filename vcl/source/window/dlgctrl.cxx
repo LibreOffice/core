@@ -596,7 +596,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     sal_uInt16  nIndex;
     sal_uInt16  nFormStart;
     sal_uInt16  nFormEnd;
-    sal_uInt16  nDlgCtrlFlags;
+    DialogControlFlags nDlgCtrlFlags;
 
     // we cannot take over control without Focus-window
     vcl::Window* pFocusWindow = Application::GetFocusWindow();
@@ -610,7 +610,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         return false;
     i = nIndex;
 
-    nDlgCtrlFlags = 0;
+    nDlgCtrlFlags = DialogControlFlags::NONE;
     pTempWindow = pSWindow;
     do
     {
@@ -639,7 +639,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 pButtonWindow = NULL;
         }
 
-        if ( bKeyInput && !pButtonWindow && (nDlgCtrlFlags & WINDOW_DLGCTRL_RETURN) )
+        if ( bKeyInput && !pButtonWindow && (nDlgCtrlFlags & DialogControlFlags::Return) )
         {
             GetDlgWindowType nType;
             sal_uInt16  nGetFocusFlags = GETFOCUS_TAB;
@@ -801,8 +801,8 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 {
                     // Only use Ctrl-TAB if it was allowed for the whole
                     // dialog or for the current control (#103667#)
-                    if ( !aKeyCode.IsMod1() || (nDlgCtrlFlags & WINDOW_DLGCTRL_MOD1TAB) ||
-                        ( pSWindow->GetStyle() & WINDOW_DLGCTRL_MOD1TAB) )
+                    if ( !aKeyCode.IsMod1() || (nDlgCtrlFlags & DialogControlFlags::Mod1Tab) ||
+                        ( pSWindow->GetStyle() & WB_NODIALOGCONTROL) )
                     {
                         if ( aKeyCode.IsShift() )
                         {
