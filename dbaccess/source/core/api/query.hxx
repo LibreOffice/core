@@ -32,7 +32,7 @@
 
 namespace dbtools
 {
-    class IWarningsContainer;
+    class WarningsContainer;
 }
 
 namespace dbaccess
@@ -64,8 +64,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >       m_xCommandPropInfo;
     ::rtl::Reference< OContainerMediator >                                              m_pColumnMediator;
-    ::dbtools::IWarningsContainer*                                                      m_pWarnings;
-    bool                                                                            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
+    ::dbtools::WarningsContainer*                                                       m_pWarnings;
+    bool                                                                                m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
 
     // possible actions on our "aggregate"
     enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };
@@ -131,8 +131,8 @@ public:
 
 public:
     // the caller is responsible for the lifetime!
-    void                            setWarningsContainer( ::dbtools::IWarningsContainer* _pWarnings )   { m_pWarnings = _pWarnings; }
-    ::dbtools::IWarningsContainer*  getWarningsContainer( ) const                                       { return m_pWarnings; }
+    void                            setWarningsContainer( ::dbtools::WarningsContainer* _pWarnings )   { m_pWarnings = _pWarnings; }
+    ::dbtools::WarningsContainer*   getWarningsContainer( ) const                                      { return m_pWarnings; }
 
     // XRename
     virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

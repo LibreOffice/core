@@ -239,7 +239,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                                  const Reference< XConnection >& _xCon,
                                  bool _bCase,
                                  IRefreshListener*  _pRefreshListener,
-                                 ::dbtools::IWarningsContainer* _pWarningsContainer
+                                 ::dbtools::WarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
         :OCollection(_rParent,_bCase,_rMutex,::std::vector< OUString>())
         ,m_bConstructed(false)

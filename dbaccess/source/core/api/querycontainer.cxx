@@ -64,7 +64,7 @@ OQueryContainer::OQueryContainer(
                   const Reference< XNameContainer >& _rxCommandDefinitions
                 , const Reference< XConnection >& _rxConn
                 , const Reference< XComponentContext >& _rxORB,
-                ::dbtools::IWarningsContainer* _pWarnings)
+                ::dbtools::WarningsContainer* _pWarnings)
     :ODefinitionContainer(_rxORB,NULL,TContentPtr(new ODefinitionContainer_Impl))
     ,m_pWarnings( _pWarnings )
     ,m_xCommandDefinitions(_rxCommandDefinitions)
@@ -99,7 +99,7 @@ rtl::Reference<OQueryContainer> OQueryContainer::create(
                   const Reference< XNameContainer >& _rxCommandDefinitions
                 , const Reference< XConnection >& _rxConn
                 , const Reference< XComponentContext >& _rxORB,
-                ::dbtools::IWarningsContainer* _pWarnings)
+                ::dbtools::WarningsContainer* _pWarnings)
 {
     rtl::Reference<OQueryContainer> c(
         new OQueryContainer(

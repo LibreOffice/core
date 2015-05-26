@@ -101,7 +101,7 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  bool _bCase,
                                  const Reference< XNameContainer >& _xTableDefinitions,
                                  IRefreshListener*  _pRefreshListener,
-                                 ::dbtools::IWarningsContainer* _pWarningsContainer
+                                 ::dbtools::WarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
     ,m_xTableDefinitions(_xTableDefinitions)

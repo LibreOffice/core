@@ -45,7 +45,7 @@
 
 namespace dbtools
 {
-    class IWarningsContainer;
+    class WarningsContainer;
 }
 
 namespace dbaccess
@@ -63,7 +63,7 @@ namespace dbaccess
                             , public OQueryContainer_Base
     {
     private:
-        ::dbtools::IWarningsContainer*  m_pWarnings;
+        ::dbtools::WarningsContainer*  m_pWarnings;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                         m_xCommandDefinitions;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
@@ -107,7 +107,7 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            ::dbtools::IWarningsContainer* _pWarnings
+            ::dbtools::WarningsContainer* _pWarnings
             );
 
         void init();
@@ -117,7 +117,7 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            ::dbtools::IWarningsContainer* _pWarnings
+            ::dbtools::WarningsContainer* _pWarnings
             );
 
         DECLARE_XINTERFACE( )

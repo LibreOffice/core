@@ -29,42 +29,21 @@
 namespace dbtools
 {
 
-
-
-    //= IWarningsContainer
-
-    class SAL_NO_VTABLE IWarningsContainer
-    {
-    public:
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning) = 0;
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning) = 0;
-        virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext) = 0;
-
-    protected:
-        ~IWarningsContainer() {}
-    };
-
-
-    //= WarningsContainer
-
     /** helper class for implementing XWarningsSupplier, which mixes own warnings with
         warnings obtained from an external instance
     */
-    class OOO_DLLPUBLIC_DBTOOLS WarningsContainer : public IWarningsContainer
+    class OOO_DLLPUBLIC_DBTOOLS WarningsContainer
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XWarningsSupplier >   m_xExternalWarnings;
-        ::com::sun::star::uno::Any                                                      m_aOwnWarnings;
+        css::uno::Reference< css::sdbc::XWarningsSupplier >   m_xExternalWarnings;
+        css::uno::Any                                         m_aOwnWarnings;
 
     public:
-        WarningsContainer() { }
-        WarningsContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XWarningsSupplier >& _rxExternalWarnings )
-            :m_xExternalWarnings( _rxExternalWarnings )
-        {
-        }
-        virtual ~WarningsContainer();
+        WarningsContainer() {}
+        WarningsContainer( const css::uno::Reference< css::sdbc::XWarningsSupplier >& _rxExternalWarnings )
+            :m_xExternalWarnings( _rxExternalWarnings ) {}
 
-        void setExternalWarnings( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XWarningsSupplier >& _rxExternalWarnings )
+        void setExternalWarnings( const css::uno::Reference< css::sdbc::XWarningsSupplier >& _rxExternalWarnings )
         {
             m_xExternalWarnings = _rxExternalWarnings;
         }
@@ -81,15 +60,14 @@ namespace dbtools
         void appendWarning(
             const OUString& _rWarning,
             const sal_Char* _pAsciiSQLState,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext );
+            const css::uno::Reference< css::uno::XInterface >& _rxContext );
 
-        // IWarningsContainer
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning) SAL_OVERRIDE;
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning) SAL_OVERRIDE;
-        virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext) SAL_OVERRIDE;
+        void appendWarning(const css::sdbc::SQLException& _rWarning);
+        void appendWarning(const css::sdbc::SQLWarning& _rWarning);
+        void appendWarning(const css::sdb::SQLContext& _rContext);
 
         // XWarningsSupplier equivalents
-        ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) const;
+        css::uno::Any SAL_CALL getWarnings(  ) const;
         void SAL_CALL clearWarnings(  );
     };
 

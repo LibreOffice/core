@@ -55,11 +55,6 @@ namespace dbtools
     }
 
 
-    WarningsContainer::~WarningsContainer()
-    {
-    }
-
-
     void WarningsContainer::appendWarning(const SQLException& _rWarning)
     {
         lcl_concatWarnings( m_aOwnWarnings, makeAny( _rWarning ) );

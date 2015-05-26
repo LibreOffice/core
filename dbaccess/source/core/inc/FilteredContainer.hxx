@@ -26,7 +26,7 @@
 
 namespace dbtools
 {
-    class IWarningsContainer;
+    class WarningsContainer;
 }
 
 namespace dbaccess
@@ -39,7 +39,7 @@ namespace dbaccess
         mutable bool m_bConstructed;        // late ctor called
 
     protected:
-        ::dbtools::IWarningsContainer*  m_pWarningsContainer;
+        ::dbtools::WarningsContainer*  m_pWarningsContainer;
         IRefreshListener*               m_pRefreshListener;
         oslInterlockedCount&            m_nInAppend;
 
@@ -104,7 +104,7 @@ namespace dbaccess
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
                             bool _bCase,
                             IRefreshListener*   _pRefreshListener,
-                            ::dbtools::IWarningsContainer* _pWarningsContainer,
+                            ::dbtools::WarningsContainer* _pWarningsContainer,
                             oslInterlockedCount& _nInAppend
                         );
 
