@@ -250,7 +250,7 @@ void ImpVclMEdit::InitFromStyle( WinBits nWinStyle )
         mpTextWindow->SetIgnoreTab( false );
         // #103667# VclMultiLineEdit has the flag, but focusable window also needs this flag
         WinBits nStyle = mpTextWindow->GetStyle();
-        nStyle |= WINDOW_DLGCTRL_MOD1TAB;
+        nStyle |= WB_NODIALOGCONTROL;
         mpTextWindow->SetStyle( nStyle );
     }
 }
@@ -971,7 +971,7 @@ WinBits VclMultiLineEdit::ImplInitStyle( WinBits nStyle )
         nStyle |= WB_GROUP;
 
     if ( !(nStyle & WB_IGNORETAB ))
-        nStyle |= WINDOW_DLGCTRL_MOD1TAB;
+        nStyle |= WB_NODIALOGCONTROL;
 
     return nStyle;
 }

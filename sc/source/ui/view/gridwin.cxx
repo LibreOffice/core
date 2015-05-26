@@ -529,7 +529,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
 
     SetMapMode(pViewData->GetLogicMode(eWhich));
     EnableChildTransparentMode();
-    SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
+    SetDialogControlFlags( DialogControlFlags::Return | DialogControlFlags::WantFocus );
 
     SetHelpId( HID_SC_WIN_GRIDWIN );
     SetUniqueId( HID_SC_WIN_GRIDWIN );

@@ -216,7 +216,7 @@ void FloatingWindow::dispose()
         if( mbPopupModeCanceled )
             // indicates that ESC key was pressed
             // will be handled in Window::ImplGrabFocus()
-            SetDialogControlFlags( GetDialogControlFlags() | WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL );
+            SetDialogControlFlags( GetDialogControlFlags() | DialogControlFlags::FloatWinPopupModeEndCancel );
 
         if ( IsInPopupMode() )
             EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll | FloatWinPopupEndFlags::DontCallHdl );
