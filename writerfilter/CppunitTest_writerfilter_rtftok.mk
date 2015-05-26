@@ -17,6 +17,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
 	writerfilter/qa/cppunittests/rtftok/testrtftok \
 ))
 
+ifeq ($(DISABLE_CVE_TESTS),TRUE)
+$(eval $(call gb_CppunitTest_add_defs,writerfilter_rtftok,\
+    -DDISABLE_CVE_TESTS \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
 	comphelper \
 	cppu \
