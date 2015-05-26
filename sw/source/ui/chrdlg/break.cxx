@@ -112,7 +112,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
             default:; //prevent warning
         }
         if(!bOk) {
-            MessageDialog(this, SW_RES(STR_ILLEGAL_PAGENUM), VCL_MESSAGE_INFO).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_ILLEGAL_PAGENUM), VCL_MESSAGE_INFO)->Execute();
             m_pPageNumEdit->GrabFocus();
             return 0;
         }

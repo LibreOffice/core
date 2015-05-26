@@ -759,7 +759,7 @@ namespace
                         {
                             // only show the messagebox the first time
                             if (!bCritsOnAsterikWarning)
-                                MessageDialog(_pView, ModuleRes( STR_QRY_CRITERIA_ON_ASTERISK)).Execute();
+                                ScopedVclPtrInstance<MessageDialog>::Create(_pView, ModuleRes( STR_QRY_CRITERIA_ON_ASTERISK))->Execute();
                             bCritsOnAsterikWarning = true;
                             continue;
                         }
@@ -918,7 +918,7 @@ namespace
                     {
                         // only show the  MessageBox the first time
                         if (!bCritsOnAsterikWarning)
-                            MessageDialog(_pView, ModuleRes( STR_QRY_ORDERBY_ON_ASTERISK)).Execute();
+                            ScopedVclPtrInstance<MessageDialog>::Create(_pView, ModuleRes( STR_QRY_ORDERBY_ON_ASTERISK))->Execute();
                         bCritsOnAsterikWarning = true;
                         continue;
                     }

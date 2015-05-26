@@ -872,7 +872,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
         case SID_CANCELCHECKOUT:
         {
-            if (MessageDialog(NULL, SfxResId(STR_QUERY_CANCELCHECKOUT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() == RET_YES)
+            if (ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_QUERY_CANCELCHECKOUT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() == RET_YES)
             {
                 CancelCheckOut( );
 
@@ -1398,7 +1398,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         )
     {
         // Only OASIS and OOo6.x formats will be handled further
-        MessageDialog( NULL, SfxResId( STR_INFO_WRONGDOCFORMAT ), VCL_MESSAGE_INFO ).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SfxResId( STR_INFO_WRONGDOCFORMAT ), VCL_MESSAGE_INFO )->Execute();
         return;
     }
 
@@ -1432,8 +1432,8 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         if ( nVersion >= SvtSaveOptions::ODFVER_012 )
         {
 
-            if ( (bHasSign && MessageDialog(NULL, SfxResId(STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() == RET_YES)
-              || (!bHasSign && MessageDialog(NULL, SfxResId(RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() == RET_YES) )
+            if ( (bHasSign && ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() == RET_YES)
+              || (!bHasSign && ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() == RET_YES) )
             {
                 sal_uInt16 nId = SID_SAVEDOC;
                 if ( !GetMedium() || GetMedium()->GetName().isEmpty() )
@@ -1449,7 +1449,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
                     || SotStorage::GetVersion( GetMedium()->GetStorage() ) <= SOFFICE_FILEFORMAT_60 ) )
                 {
                     // Only OASIS format will be handled further
-                    MessageDialog( NULL, SfxResId( STR_INFO_WRONGDOCFORMAT ), VCL_MESSAGE_INFO ).Execute();
+                    ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SfxResId( STR_INFO_WRONGDOCFORMAT ), VCL_MESSAGE_INFO )->Execute();
                     return;
                 }
             }
@@ -1464,7 +1464,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         }
         else
         {
-            MessageDialog(NULL, SfxResId(STR_XMLSEC_ODF12_EXPECTED)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_XMLSEC_ODF12_EXPECTED))->Execute();
             return;
         }
 

@@ -305,7 +305,7 @@ bool ModulWindow::BasicExecute()
     {
         if ( !aDocument.allowMacros() )
         {
-            MessageDialog(this, IDE_RESSTR(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING)->Execute();
             return false;
         }
     }
@@ -443,7 +443,7 @@ bool ModulWindow::LoadBasic()
                 bDone = true;
         }
         else
-            MessageDialog(this, IDE_RESSTR(RID_STR_COULDNTREAD)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_COULDNTREAD))->Execute();
     }
     return bDone;
 }
@@ -489,7 +489,7 @@ bool ModulWindow::SaveBasicSource()
                 bDone = true;
         }
         else
-            MessageDialog(this, IDEResId(RID_STR_COULDNTWRITE)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_COULDNTWRITE))->Execute();
     }
 
     return bDone;

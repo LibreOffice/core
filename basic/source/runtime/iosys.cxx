@@ -859,9 +859,9 @@ void SbiIoSystem::Shutdown()
     {
 #if defined __GNUC__
         vcl::Window* pParent = Application::GetDefDialogParent();
-        MessBox( pParent, WinBits( WB_OK ), OUString(), aOut ).Execute();
+        ScopedVclPtrInstance<MessBox>::Create( pParent, WinBits( WB_OK ), OUString(), aOut )->Execute();
 #else
-        MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOut ).Execute();
+        ScopedVclPtrInstance<MessBox>::Create( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOut )->Execute();
 #endif
     }
     aOut.clear();

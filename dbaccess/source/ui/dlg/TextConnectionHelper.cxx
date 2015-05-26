@@ -328,7 +328,7 @@ namespace dbaui
         }
         else
             return true;
-        MessageDialog(NULL, MnemonicGenerator::EraseAllMnemonicChars(aErrorText)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, MnemonicGenerator::EraseAllMnemonicChars(aErrorText))->Execute();
         pErrorWin->GrabFocus();
         return false;
     }

@@ -842,7 +842,7 @@ void DbgGUIStart()
     }
     else
     {
-        MessageDialog(0, OUString("TOOLS Library has no Debug-Routines")).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, OUString("TOOLS Library has no Debug-Routines"))->Execute();
     }
 }
 

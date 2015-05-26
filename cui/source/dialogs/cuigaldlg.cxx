@@ -1024,7 +1024,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
     {
         aLastFilterName = aText;
 
-        if( MessageDialog( this, "QueryUpdateFileListDialog","cui/ui/queryupdategalleryfilelistdialog.ui" ).Execute() == RET_YES )
+        if( ScopedVclPtrInstance<MessageDialog>::Create( this, "QueryUpdateFileListDialog","cui/ui/queryupdategalleryfilelistdialog.ui" )->Execute() == RET_YES )
             SearchFiles();
     }
 

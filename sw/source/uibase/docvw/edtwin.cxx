@@ -1828,8 +1828,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else
                     {
-                        MessageDialog(this, "InfoReadonlyDialog",
-                            "modules/swriter/ui/inforeadonlydialog.ui").Execute();
+                        ScopedVclPtrInstance<MessageDialog>::Create(this, "InfoReadonlyDialog",
+                            "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
                         eKeyState = KS_End;
                     }
                     break;
@@ -1992,8 +1992,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else
                     {
-                        MessageDialog(this, "InfoReadonlyDialog",
-                            "modules/swriter/ui/inforeadonlydialog.ui").Execute();
+                        ScopedVclPtrInstance<MessageDialog>::Create(this, "InfoReadonlyDialog",
+                            "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
                         eKeyState = KS_End;
                     }
                     break;
@@ -2418,8 +2418,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else
             {
-                MessageDialog(this, "InfoReadonlyDialog",
-                    "modules/swriter/ui/inforeadonlydialog.ui").Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(this, "InfoReadonlyDialog",
+                    "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
                 eKeyState = KS_End;
             }
         break;

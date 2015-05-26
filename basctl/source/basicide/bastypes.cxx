@@ -558,7 +558,7 @@ TabBarAllowRenamingReturnCode TabBar::AllowRenaming()
     bool const bValid = IsValidSbxName(GetEditText());
 
     if ( !bValid )
-        MessageDialog(this, IDEResId(RID_STR_BADSBXNAME)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
 
     return bValid ? TABBAR_RENAMING_YES : TABBAR_RENAMING_NO;
 }
