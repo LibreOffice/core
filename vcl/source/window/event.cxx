@@ -183,7 +183,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
                  !(GetStyle() & WB_TABSTOP) && !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) )
             {
                 sal_uInt16 n = 0;
-                vcl::Window* pFirstChild = ImplGetDlgWindow( n, DLGWINDOW_FIRST );
+                vcl::Window* pFirstChild = ImplGetDlgWindow( n, GetDlgWindowType::First );
                 if ( pFirstChild )
                     pFirstChild->ImplControlFocus();
             }

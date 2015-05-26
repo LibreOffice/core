@@ -375,9 +375,11 @@ enum class StateChangedType : sal_uInt16
 #define IMPL_MSGBOX_OFFSET_EXTRA_Y      2
 #define IMPL_SEP_MSGBOX_IMAGE           8
 
-#define DLGWINDOW_PREV                  0
-#define DLGWINDOW_NEXT                  1
-#define DLGWINDOW_FIRST                 2
+// ImplGetDlgWindow()
+enum class GetDlgWindowType
+{
+    Prev, Next, First
+};
 
 
 // - Window -
@@ -520,7 +522,7 @@ public:
     SAL_DLLPRIVATE vcl::Window*         ImplGetWindow();
     SAL_DLLPRIVATE ImplWinData*         ImplGetWinData() const;
     SAL_DLLPRIVATE vcl::Window*         ImplGetClientWindow() const;
-    SAL_DLLPRIVATE vcl::Window*         ImplGetDlgWindow( sal_uInt16 n, sal_uInt16 nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
+    SAL_DLLPRIVATE vcl::Window*         ImplGetDlgWindow( sal_uInt16 n, GetDlgWindowType nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
     SAL_DLLPRIVATE vcl::Window*         ImplGetParent() const;
     SAL_DLLPRIVATE vcl::Window*         ImplFindWindow( const Point& rFramePos );
 
