@@ -75,6 +75,8 @@ public :
     */
     void SetPopupModeEndHandler (const ::boost::function<void()>& rCallback);
 
+    void dispose();
+
 protected:
     VclPtr<PopupControl> mxControl;
 
