@@ -81,6 +81,7 @@
 
 #include <sfx2/request.hxx>
 #include <boost/bind.hpp>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace com::sun::star;
 
@@ -1098,6 +1099,11 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         mpDrawView->AdjustMarkHdl();
     }
 
+    if (bOK)
+    {
+        OString aPayload = OString::number(nSelectedPage);
+        GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+    }
     return bOK;
 }
 

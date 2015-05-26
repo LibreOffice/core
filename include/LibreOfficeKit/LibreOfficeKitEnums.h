@@ -151,7 +151,14 @@ typedef enum
      * Clients should assume that data returned by an earlier
      * lok::Document::getDocumentSize() call is no longer valid.
      */
-    LOK_CALLBACK_PAGE_COUNT_CHANGED
+    LOK_CALLBACK_PAGE_COUNT_CHANGED,
+
+    /**
+     * The current part number is changed.
+     *
+     * Payload is a single 0-based integer.
+     */
+    LOK_CALLBACK_SET_PART
 }
 LibreOfficeKitCallbackType;
 
