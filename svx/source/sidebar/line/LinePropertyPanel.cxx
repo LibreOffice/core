@@ -213,6 +213,7 @@ void LinePropertyPanel::dispose()
     mpFTCapStyle.clear();
     mpLBCapStyle.clear();
 
+    maLineWidthPopup.dispose();
     maStyleControl.dispose();
     maDashControl.dispose();
     maWidthControl.dispose();

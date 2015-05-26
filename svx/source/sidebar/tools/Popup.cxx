@@ -40,10 +40,15 @@ Popup::Popup (
     OSL_ASSERT(maControlCreator);
 }
 
-Popup::~Popup()
+void Popup::dispose()
 {
     mxControl.disposeAndClear();
     mxContainer.disposeAndClear();
+}
+
+Popup::~Popup()
+{
+    dispose();
 }
 
 void Popup::Show (ToolBox& rToolBox)
