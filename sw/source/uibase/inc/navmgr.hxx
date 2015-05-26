@@ -42,7 +42,7 @@ private:
 public:
     /* Constructor that initializes the shell to the current shell */
     SwNavigationMgr( SwWrtShell & rShell );
-    ~SwNavigationMgr()
+    virtual ~SwNavigationMgr()
     {
         for(auto pEntry : m_entries)
         {
