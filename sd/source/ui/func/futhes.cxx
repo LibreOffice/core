@@ -113,7 +113,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
 
             if (eState == EE_SPELL_NOLANGUAGE)
             {
-                MessageDialog(mpWindow, SD_RESSTR(STR_NOLANGUAGE)).Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(mpWindow, SD_RESSTR(STR_NOLANGUAGE))->Execute();
             }
         }
     }
@@ -140,7 +140,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
 
         if (eState == EE_SPELL_NOLANGUAGE)
         {
-            MessageDialog(mpWindow, SD_RESSTR(STR_NOLANGUAGE)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(mpWindow, SD_RESSTR(STR_NOLANGUAGE))->Execute();
         }
     }
 }

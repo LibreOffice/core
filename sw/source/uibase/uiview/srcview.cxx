@@ -631,8 +631,8 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         {
             if(bNotFoundMessage)
             {
-                MessageDialog(0, "InfoNotFoundDialog",
-                    "modules/swriter/ui/infonotfounddialog.ui").Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(nullptr, "InfoNotFoundDialog",
+                    "modules/swriter/ui/infonotfounddialog.ui")->Execute();
             }
             else if(!bRecursive)
             {
@@ -640,13 +640,13 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 
                 if (!bForward)
                 {
-                    nRet = MessageDialog(0, "QueryContinueEndDialog",
-                        "modules/swriter/ui/querycontinueenddialog.ui").Execute();
+                    nRet = ScopedVclPtrInstance<MessageDialog>::Create(nullptr, "QueryContinueEndDialog",
+                        "modules/swriter/ui/querycontinueenddialog.ui")->Execute();
                 }
                 else
                 {
-                    nRet = MessageDialog(0, "QueryContinueBeginDialog",
-                        "modules/swriter/ui/querycontinuebegindialog.ui").Execute();
+                    nRet = ScopedVclPtrInstance<MessageDialog>::Create(nullptr, "QueryContinueBeginDialog",
+                        "modules/swriter/ui/querycontinuebegindialog.ui")->Execute();
                 }
 
                 if (nRet == RET_YES)
@@ -829,7 +829,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         else
         {
             vcl::Window *pTmpWindow = &GetViewFrame()->GetWindow();
-            MessageDialog(pTmpWindow, SW_RES(STR_ERR_SRCSTREAM), VCL_MESSAGE_INFO).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(pTmpWindow, SW_RES(STR_ERR_SRCSTREAM), VCL_MESSAGE_INFO)->Execute();
         }
     }
     else

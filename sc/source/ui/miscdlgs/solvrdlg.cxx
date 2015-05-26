@@ -35,7 +35,7 @@ namespace
 {
     void lclErrorDialog( vcl::Window* pParent, const OUString& aString )
     {
-        MessageDialog(pParent, aString).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(pParent, aString)->Execute();
     }
 }
 

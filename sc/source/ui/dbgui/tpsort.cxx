@@ -807,7 +807,7 @@ SfxTabPage::sfxpg ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 
         if ( !bPosInputOk )
         {
-            MessageDialog(this, ScGlobal::GetRscString( STR_INVALID_TABREF)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString( STR_INVALID_TABREF))->Execute();
             m_pEdOutPos->GrabFocus();
             m_pEdOutPos->SetSelection( Selection( 0, SELECTION_MAX ) );
             theOutPos.Set(0,0,0);

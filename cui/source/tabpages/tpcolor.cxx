@@ -128,9 +128,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
 
     if( IsModified() && GetList()->Count() > 0 )
     {
-        nReturn = MessageDialog( GetParentDialog()
+        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
                                 ,"AskSaveList"
-                                ,"cui/ui/querysavelistdialog.ui").Execute();
+                                ,"cui/ui/querysavelistdialog.ui")->Execute();
 
         if ( nReturn == RET_YES )
             GetList()->Save();
@@ -173,9 +173,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
             }
             else
             {
-                MessageDialog( mpTopDlg
+                ScopedVclPtrInstance<MessageDialog>::Create( mpTopDlg
                               ,"NoLoadedFileDialog"
-                              ,"cui/ui/querynoloadedfiledialog.ui").Execute();
+                              ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
             }
         }
     }
@@ -235,9 +235,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
         }
         else
         {
-            MessageDialog( mpTopDlg
+            ScopedVclPtrInstance<MessageDialog>::Create( mpTopDlg
                           ,"NoSaveFileDialog"
-                          ,"cui/ui/querynosavefiledialog.ui").Execute();
+                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
     return 0;

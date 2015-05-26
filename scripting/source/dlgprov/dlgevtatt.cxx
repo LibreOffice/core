@@ -646,7 +646,7 @@ namespace dlgprov
                 aOUFinal += aQuoteChar;
                 aOUFinal += aOURes.copy( nIndex + 2 );
 
-                MessageDialog(NULL, aOUFinal).Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(nullptr, aOUFinal)->Execute();
             }
         }
     }

@@ -224,7 +224,7 @@ IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl)
 
 IMPL_LINK_NOARG(SwMailConfigPage, TestHdl)
 {
-    SwTestAccountSettingsDialog(this).Execute();
+    ScopedVclPtrInstance<SwTestAccountSettingsDialog>::Create(this)->Execute();
     return 0;
 }
 

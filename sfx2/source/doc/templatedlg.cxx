@@ -942,7 +942,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                     {
                         OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
                         aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
-                        MessageDialog(this, aMsg.replaceFirst("$2",aTemplateList)).Execute();
+                        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$2",aTemplateList))->Execute();
                     }
                 }
             }
@@ -965,7 +965,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 {
                     OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
                     aMsg = aMsg.replaceFirst("$1",mpLocalView->getCurRegionName());
-                    MessageDialog(this, aMsg.replaceFirst("$2",aTemplateList)).Execute();
+                    ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$2",aTemplateList))->Execute();
                 }
             }
 
@@ -1054,7 +1054,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         if (!aTemplateList.isEmpty())
         {
             OUString aText( SfxResId(STR_MSG_ERROR_EXPORT).toString() );
-            MessageDialog(this, aText.replaceFirst("$1",aTemplateList)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, aText.replaceFirst("$1",aTemplateList))->Execute();
         }
     }
 }
@@ -1216,7 +1216,7 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     if (!aTemplateList.isEmpty())
     {
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
-        MessageDialog(this, aMsg.replaceFirst("$1",aTemplateList)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aTemplateList))->Execute();
     }
 }
 
@@ -1280,7 +1280,7 @@ void SfxTemplateManagerDlg::OnFolderDelete()
     if (!aFolderList.isEmpty())
     {
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
-        MessageDialog(this, aMsg.replaceFirst("$1",aFolderList)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aFolderList))->Execute();
     }
 }
 
@@ -1301,7 +1301,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
 
     if (!mpLocalView->isNonRootRegionVisible() && maSelFolders.empty())
     {
-        MessageDialog(this, SfxResId(STR_MSG_ERROR_SELECT_FOLDER)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, SfxResId(STR_MSG_ERROR_SELECT_FOLDER))->Execute();
         return;
     }
 
@@ -1480,7 +1480,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
             OUString aDst = mpLocalView->getRegionItemName(nItemId);
             OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",aDst);
-            MessageDialog(this, aMsg.replaceFirst( "$2",aTemplateList)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst( "$2",aTemplateList))->Execute();
         }
     }
 }
@@ -1534,7 +1534,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
             OUString aMsg(SfxResId(STR_MSG_ERROR_REMOTE_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",mpRemoteView->getCurRegionName());
             aMsg = aMsg.replaceFirst("$2",mpLocalView->getRegionItemName(nItemId));
-            MessageDialog(this, aMsg.replaceFirst("$1",aTemplateList)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aTemplateList))->Execute();
         }
     }
 }
@@ -1590,7 +1590,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
             OUString aDst = mpLocalView->getRegionItemName(nItemId);
             OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",aDst);
-            MessageDialog(this, aMsg.replaceFirst( "$2",aTemplateList)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst( "$2",aTemplateList))->Execute();
         }
     }
 

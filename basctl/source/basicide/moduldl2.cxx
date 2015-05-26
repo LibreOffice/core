@@ -269,7 +269,7 @@ bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     OUString aLibName = GetEntryText( pEntry, 0 );
     if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
     {
-        MessageDialog(this, IDE_RESSTR(RID_STR_CANNOTCHANGENAMESTDLIB)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_CANNOTCHANGENAMESTDLIB))->Execute();
         return false;
     }
 
@@ -279,7 +279,7 @@ bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
-        MessageDialog(this, IDE_RESSTR(RID_STR_LIBISREADONLY)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_LIBISREADONLY))->Execute();
         return false;
     }
 
@@ -329,7 +329,7 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
         }
         catch (const container::ElementExistException& )
         {
-            MessageDialog(this, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED))->Execute();
             return false;
         }
         catch (const container::NoSuchElementException& )
@@ -342,9 +342,9 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
     if ( !bValid )
     {
         if ( rNewName.getLength() > 30 )
-            MessageDialog(this, IDE_RESSTR(RID_STR_LIBNAMETOLONG)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_LIBNAMETOLONG))->Execute();
         else
-            MessageDialog(this, IDE_RESSTR(RID_STR_BADSBXNAME)).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_BADSBXNAME))->Execute();
     }
 
     return bValid;
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
         EndDialog(1);
     else
     {
-        MessageDialog(this, IDE_RESSTR(RID_STR_BADSBXNAME)).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_BADSBXNAME))->Execute();
         m_pEdit->GrabFocus();
     }
     return 0;
@@ -854,7 +854,7 @@ void LibPage::InsertLib()
             }
 
             if ( !pLibDlg )
-                MessageDialog(this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE), VCL_MESSAGE_INFO).Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE), VCL_MESSAGE_INFO)->Execute();
             else
             {
                 bool bChanges = false;
@@ -891,7 +891,7 @@ void LibPage::InsertLib()
                                     // check, if the library is the Standard library
                                     if ( aLibName == "Standard" )
                                     {
-                                        MessageDialog(this, IDE_RESSTR(RID_STR_REPLACESTDLIB)).Execute();
+                                        ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_REPLACESTDLIB))->Execute();
                                         continue;
                                     }
 
@@ -903,7 +903,7 @@ void LibPage::InsertLib()
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
                                         aErrStr += "\n";
                                         aErrStr += IDE_RESSTR(RID_STR_LIBISREADONLY);
-                                        MessageDialog(this, aErrStr).Execute();
+                                        ScopedVclPtrInstance<MessageDialog>::Create(this, aErrStr)->Execute();
                                         continue;
                                     }
 
@@ -920,7 +920,7 @@ void LibPage::InsertLib()
                                     aErrStr = aErrStr.replaceAll("XX", aLibName);
                                     aErrStr += "\n" ;
                                     aErrStr += IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED);
-                                    MessageDialog(this, aErrStr).Execute();
+                                    ScopedVclPtrInstance<MessageDialog>::Create(this, aErrStr)->Execute();
                                     continue;
                                 }
                             }
@@ -939,7 +939,7 @@ void LibPage::InsertLib()
                                     {
                                         OUString aErrStr( IDE_RESSTR(RID_STR_NOIMPORT) );
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                        MessageDialog(this, aErrStr).Execute();
+                                        ScopedVclPtrInstance<MessageDialog>::Create(this, aErrStr)->Execute();
                                         continue;
                                     }
                                 }
@@ -1513,15 +1513,15 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 
         if ( aLibName.getLength() > 30 )
         {
-            MessageDialog(pWin, IDEResId(RID_STR_LIBNAMETOLONG).toString()).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(pWin, IDEResId(RID_STR_LIBNAMETOLONG).toString())->Execute();
         }
         else if ( !IsValidSbxName( aLibName ) )
         {
-            MessageDialog(pWin, IDEResId(RID_STR_BADSBXNAME).toString()).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(pWin, IDEResId(RID_STR_BADSBXNAME).toString())->Execute();
         }
         else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
         {
-            MessageDialog(pWin, IDEResId(RID_STR_SBXNAMEALLREADYUSED2).toString()).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(pWin, IDEResId(RID_STR_SBXNAMEALLREADYUSED2).toString())->Execute();
         }
         else
         {

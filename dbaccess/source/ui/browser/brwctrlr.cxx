@@ -1386,7 +1386,7 @@ void SbaXDataBrowserController::resetted(const ::com::sun::star::lang::EventObje
 
 sal_Bool SbaXDataBrowserController::confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& /*aEvent*/) throw( RuntimeException, std::exception )
 {
-    if (MessageDialog(getBrowserView(), ModuleRes(STR_QUERY_BRW_DELETE_ROWS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() != RET_YES)
+    if (ScopedVclPtrInstance<MessageDialog>::Create(getBrowserView(), ModuleRes(STR_QUERY_BRW_DELETE_ROWS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() != RET_YES)
         return sal_False;
 
     return sal_True;

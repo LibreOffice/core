@@ -156,7 +156,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     if ( bFound )
     {
         // duplicate names?
-        MessageDialog(this, CUI_RESSTR(RID_SVXSTR_OPT_DOUBLE_DICTS), VCL_MESSAGE_INFO).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, CUI_RESSTR(RID_SVXSTR_OPT_DOUBLE_DICTS), VCL_MESSAGE_INFO)->Execute();
         pNameEdit->GrabFocus();
         return 0;
     }

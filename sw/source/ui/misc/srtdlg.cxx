@@ -382,7 +382,7 @@ void SwSortDlg::Apply()
     }
 
     if( !bRet )
-        MessageDialog( this->GetParent(), SW_RES(STR_SRTERR), VCL_MESSAGE_INFO).Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create( this->GetParent(), SW_RES(STR_SRTERR), VCL_MESSAGE_INFO)->Execute();
 }
 
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )

@@ -2227,7 +2227,7 @@ IMPL_LINK_NOARG( SvxAreaTabPage, ClickImportHdl_Impl )
         else
         {
             // graphic could not be loaded
-            MessageDialog (this, OUString(ResId(RID_SVXSTR_READ_DATA_ERROR, rMgr))).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create (this, OUString(ResId(RID_SVXSTR_READ_DATA_ERROR, rMgr)))->Execute();
         }
     }
 

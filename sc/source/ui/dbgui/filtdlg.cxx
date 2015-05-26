@@ -41,7 +41,7 @@
 
 #include <limits>
 
-#define ERRORBOX(rid)   MessageDialog(this, ScGlobal::GetRscString(rid)).Execute()
+#define ERRORBOX(rid)   ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(rid))->Execute()
 
 #define QUERY_ENTRY_COUNT 4
 #define INVALID_HEADER_POS std::numeric_limits<size_t>::max()

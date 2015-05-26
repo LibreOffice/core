@@ -37,7 +37,7 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
     {
         if ( !pStyle->IsUserDefined() )
         {
-            MessageDialog( this, SfxResId( STR_POOL_STYLE_NAME ), VCL_MESSAGE_INFO ).Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create( this, SfxResId( STR_POOL_STYLE_NAME ), VCL_MESSAGE_INFO )->Execute();
             return 0;
         }
 

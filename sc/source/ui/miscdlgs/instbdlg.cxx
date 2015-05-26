@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
     else
     {
         OUString aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
-        (void)MessageDialog(this, aErrMsg).Execute();
+        (void)ScopedVclPtrInstance<MessageDialog>::Create(this, aErrMsg)->Execute();
     }
     return 0;
 }

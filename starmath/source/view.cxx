@@ -1787,7 +1787,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             SAL_WARN_IF( !pDev, "starmath", "device for font list missing" );
 
             SmModule *pp = SM_MOD();
-            SmSymbolDialog( NULL, pDev, pp->GetSymbolManager(), *this ).Execute();
+            ScopedVclPtrInstance<SmSymbolDialog>::Create( nullptr, pDev, pp->GetSymbolManager(), *this )->Execute();
         }
         break;
     }
