@@ -1,0 +1,38 @@
+From 91d39222d9f120211c0189f69299898702a65d3d Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Tue, 26 May 2015 17:01:22 +0200
+Subject: [PATCH 2/2] remove surplus breaks
+
+Change-Id: Ib98a4a5bcd7d9f9eb03874f0715b45bb141ef12d
+---
+ src/lib/KEY2Parser.cpp                  | 1 -
+ src/lib/contexts/IWORKStylesContext.cpp | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/src/lib/KEY2Parser.cpp b/src/lib/KEY2Parser.cpp
+index 4ba70d2..9a37dcd 100644
+--- a/src/lib/KEY2Parser.cpp
++++ b/src/lib/KEY2Parser.cpp
+@@ -124,7 +124,6 @@ IWORKXMLContextPtr_t StylesContext::element(const int name)
+     return makeContext<KEY2StyleContext>(getState(), name);
+ 
+   case IWORKToken::NS_URI_SF | IWORKToken::layoutstyle_ref :
+-    break;
+     return makeContext<KEY2StyleRefContext>(getState(), name, false, m_anonymous);
+   }
+ 
+diff --git a/src/lib/contexts/IWORKStylesContext.cpp b/src/lib/contexts/IWORKStylesContext.cpp
+index ef3041b..24efa1d 100644
+--- a/src/lib/contexts/IWORKStylesContext.cpp
++++ b/src/lib/contexts/IWORKStylesContext.cpp
+@@ -43,7 +43,6 @@ IWORKXMLContextPtr_t IWORKStylesContext::element(const int name)
+   case IWORKToken::NS_URI_SF | IWORKToken::liststyle_ref :
+   case IWORKToken::NS_URI_SF | IWORKToken::paragraphstyle_ref :
+   case IWORKToken::NS_URI_SF | IWORKToken::vector_style_ref :
+-    break;
+     return makeContext<IWORKStyleRefContext>(getState(), name, false, m_anonymous);
+   }
+ 
+-- 
+2.4.1
+
