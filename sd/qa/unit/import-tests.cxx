@@ -649,7 +649,7 @@ void SdImportTest::testBnc870237()
 
 void SdImportTest::testCreationDate()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71434.pptx"), PPTX);
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71434.pptx"), PPTX);
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
     util::DateTime aDate = xDocumentProperties->getCreationDate();
