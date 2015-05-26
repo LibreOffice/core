@@ -874,12 +874,15 @@ DECLARE_OOXMLIMPORT_TEST(testTDF91122, "tdf91122.docx")
     /*
      * OLE object shape: default vertical position is top in MSO, not bottom
      */
-    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
-    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), xShapeDescriptor->getShapeType());
-    sal_Int16 nValue;
-    xShapeProperties->getPropertyValue("VertOrient") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::TOP, nValue);
+    for (int i = 1; i <= 2; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xShapeProperties( getShape(i), uno::UNO_QUERY );
+        uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), xShapeDescriptor->getShapeType());
+        sal_Int16 nValue;
+        xShapeProperties->getPropertyValue("VertOrient") >>= nValue;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::TOP, nValue);
+    }
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTDF91260, "tdf91260.docx")
