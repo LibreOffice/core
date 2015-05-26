@@ -30,7 +30,7 @@ protected:
 
 public:
 
-    SwHTMLViewShellClient( SwViewShell *pVSh );
+    explicit SwHTMLViewShellClient( SwViewShell *pVSh );
 
     virtual ~SwHTMLViewShellClient();
 

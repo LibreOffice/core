@@ -932,7 +932,7 @@ class SvTextShapeImportHelper : public XMLTextShapeImportHelper
     Reference<drawing::XDrawPage> xPage;
 
 public:
-    SvTextShapeImportHelper(SvXMLImport& rImp);
+    explicit SvTextShapeImportHelper(SvXMLImport& rImp);
     virtual ~SvTextShapeImportHelper();
 };
 

@@ -63,7 +63,7 @@ class SortableGridDataModel :public ::cppu::BaseMutex
                             ,public SortableGridDataModel_PrivateBase
 {
 public:
-    SortableGridDataModel( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    explicit SortableGridDataModel( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
     SortableGridDataModel( SortableGridDataModel const & i_copySource );
 
     bool    isInitialized() const { return m_isInitialized; }

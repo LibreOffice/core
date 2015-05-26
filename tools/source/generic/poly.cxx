@@ -1099,7 +1099,7 @@ class ImplPolygonPointFilter : public ImplPointFilter
     std::unique_ptr<ImplPolygon> mxPoly;
     sal_uInt16      mnSize;
 public:
-    ImplPolygonPointFilter(sal_uInt16 nDestSize)
+    explicit ImplPolygonPointFilter(sal_uInt16 nDestSize)
         : mxPoly(new ImplPolygon(nDestSize))
         , mnSize(0)
     {

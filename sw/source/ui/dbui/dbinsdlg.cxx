@@ -126,7 +126,7 @@ struct _DB_Column
         eColType = DB_SPLITPARA;
     }
 
-    _DB_Column( const OUString& rText )
+    explicit _DB_Column( const OUString& rText )
     {
         pColInfo = 0;
         DB_ColumnData.pText = new OUString( rText );

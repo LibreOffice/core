@@ -82,7 +82,7 @@ namespace toolkit
         {
         }
 
-        CachedImage( OUString const& i_imageURL )
+        explicit CachedImage( OUString const& i_imageURL )
             :sImageURL( i_imageURL )
             ,xGraphic()
         {
@@ -94,7 +94,7 @@ namespace toolkit
         AnimatedImagesPeer&                             rAntiImpl;
         ::std::vector< ::std::vector< CachedImage > >   aCachedImageSets;
 
-        AnimatedImagesPeer_Data( AnimatedImagesPeer& i_antiImpl )
+        explicit AnimatedImagesPeer_Data( AnimatedImagesPeer& i_antiImpl )
             :rAntiImpl( i_antiImpl )
             ,aCachedImageSets()
         {

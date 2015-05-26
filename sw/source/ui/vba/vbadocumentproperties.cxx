@@ -64,7 +64,7 @@ protected:
     uno::Reference< frame::XModel > m_xModel;
     uno::Reference<document::XDocumentProperties> m_xDocProps;
 public:
-    PropertGetSetHelper( const uno::Reference< frame::XModel >& xModel ):m_xModel( xModel )
+    explicit PropertGetSetHelper( const uno::Reference< frame::XModel >& xModel ):m_xModel( xModel )
     {
         uno::Reference<document::XDocumentPropertiesSupplier> const
             xDocPropSupp(m_xModel, uno::UNO_QUERY_THROW);
@@ -84,7 +84,7 @@ public:
 class BuiltinPropertyGetSetHelper : public PropertGetSetHelper
 {
 public:
-    BuiltinPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel )
+    explicit BuiltinPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel )
     {
     }
     virtual uno::Any getPropertyValue( const OUString& rPropName ) SAL_OVERRIDE
@@ -265,7 +265,7 @@ public:
 class CustomPropertyGetSetHelper : public BuiltinPropertyGetSetHelper
 {
 public:
-    CustomPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :BuiltinPropertyGetSetHelper( xModel )
+    explicit CustomPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :BuiltinPropertyGetSetHelper( xModel )
     {
     }
     virtual uno::Any getPropertyValue( const OUString& rPropName ) SAL_OVERRIDE
@@ -284,7 +284,7 @@ class StatisticPropertyGetSetHelper : public PropertGetSetHelper
     SwDocShell* mpDocShell;
     uno::Reference< beans::XPropertySet > mxModelProps;
 public:
-    StatisticPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel ) , mpDocShell( NULL )
+    explicit StatisticPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel ) , mpDocShell( NULL )
     {
             mxModelProps.set( m_xModel, uno::UNO_QUERY_THROW );
             mpDocShell = word::getDocShell( xModel );
@@ -399,7 +399,7 @@ class BuiltInIndexHelper
     MSOIndexToOODocPropInfo m_docPropInfoMap;
 
 public:
-    BuiltInIndexHelper( const uno::Reference< frame::XModel >& xModel )
+    explicit BuiltInIndexHelper( const uno::Reference< frame::XModel >& xModel )
     {
         boost::shared_ptr< PropertGetSetHelper > aStandardHelper( new BuiltinPropertyGetSetHelper( xModel ) );
         boost::shared_ptr< PropertGetSetHelper > aUsingStatsHelper( new StatisticPropertyGetSetHelper( xModel ) );
@@ -645,7 +645,7 @@ class DocPropEnumeration : public DocPropEnumeration_BASE
     DocProps::iterator mIt;
 public:
 
-    DocPropEnumeration( const DocProps& rProps ) : mDocProps( rProps ), mIt( mDocProps.begin() ) {}
+    explicit DocPropEnumeration( const DocProps& rProps ) : mDocProps( rProps ), mIt( mDocProps.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return mIt != mDocProps.end();

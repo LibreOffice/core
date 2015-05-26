@@ -1033,7 +1033,7 @@ class SwStyleProperties_Impl
     sal_uInt32                  nArrLen;
 
 public:
-    SwStyleProperties_Impl(const SfxItemPropertyMap& rMap);
+    explicit SwStyleProperties_Impl(const SfxItemPropertyMap& rMap);
     ~SwStyleProperties_Impl();
 
     bool    SetProperty(const OUString& rName, const uno::Any& rVal);

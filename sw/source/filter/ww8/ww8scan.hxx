@@ -112,7 +112,7 @@ private:
 
 public:
     //7- ids are very different to 8+ ones
-    wwSprmParser(ww::WordVersion eVersion);
+    explicit wwSprmParser(ww::WordVersion eVersion);
     /// Return the SPRM id at the beginning of this byte sequence
     sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
 

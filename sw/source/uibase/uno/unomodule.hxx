@@ -53,9 +53,9 @@ class SwUnoModule : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider
     css::uno::Reference < css::lang::XMultiServiceFactory > m_xFactory;
 
 public:
-                            SwUnoModule( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory )
-                                : m_xFactory( xFactory )
-                            {}
+    explicit SwUnoModule( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory )
+        : m_xFactory( xFactory )
+    {}
 
     // XNotifyingDispatch
     virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs, const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -203,7 +203,7 @@ class SwAnchorMarker
     Point aLastPos;
     bool bTopRightHandle;
 public:
-    SwAnchorMarker( SdrHdl* pH )
+    explicit SwAnchorMarker( SdrHdl* pH )
         : pHdl( pH )
         , aHdlPos( pH->GetPos() )
         , aLastPos( pH->GetPos() )
@@ -5982,7 +5982,7 @@ class CompareIgnoreCaseAsciiFavorExact
 {
     const OUString &m_rOrigWord;
 public:
-    CompareIgnoreCaseAsciiFavorExact(const OUString& rOrigWord)
+    explicit CompareIgnoreCaseAsciiFavorExact(const OUString& rOrigWord)
         : m_rOrigWord(rOrigWord)
     {
     }

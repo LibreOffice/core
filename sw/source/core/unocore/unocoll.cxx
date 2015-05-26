@@ -99,7 +99,7 @@ class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeName
     SwDocShell* mpDocShell;
     OUString msThisDocumentCodeName;
 public:
-    SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
+    explicit SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
         // XCodeNameQuery
 
     OUString SAL_CALL getCodeNameForContainer( const uno::Reference< uno::XInterface >& /*xIf*/ ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE
@@ -243,7 +243,7 @@ class SwVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container:
 {
     SwDocShell* mpDocShell;
 public:
-    SwVbaObjectForCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
+    explicit SwVbaObjectForCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
         // #FIXME #TODO is the code name for ThisDocument read anywhere?
     }

@@ -897,7 +897,9 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
 struct PreviewPosInsidePagePred
 {
     const Point mnPreviewPos;
-    PreviewPosInsidePagePred( const Point& rPreviewPos ) : mnPreviewPos( rPreviewPos ) {};
+    explicit PreviewPosInsidePagePred(const Point& rPreviewPos)
+        : mnPreviewPos( rPreviewPos )
+    {}
     bool operator() ( const PreviewPage* _pPreviewPage )
     {
         if ( _pPreviewPage->bVisible )
@@ -1307,7 +1309,9 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 struct EqualsPageNumPred
 {
     const sal_uInt16 mnPageNum;
-    EqualsPageNumPred( const sal_uInt16 _nPageNum ) : mnPageNum( _nPageNum ) {};
+    explicit EqualsPageNumPred(const sal_uInt16 _nPageNum)
+        : mnPageNum( _nPageNum )
+    {}
     bool operator() ( const PreviewPage* _pPreviewPage )
     {
         return _pPreviewPage->pPage->GetPhyPageNum() == mnPageNum;

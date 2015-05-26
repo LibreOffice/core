@@ -389,7 +389,7 @@ class BasicProjImportHelper
     SwDocShell& mrDocShell;
     uno::Reference< uno::XComponentContext > mxCtx;
 public:
-    BasicProjImportHelper( SwDocShell& rShell ) : mrDocShell( rShell )
+    explicit BasicProjImportHelper( SwDocShell& rShell ) : mrDocShell( rShell )
     {
         mxCtx = comphelper::getProcessComponentContext();
     }

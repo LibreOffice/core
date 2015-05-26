@@ -2980,7 +2980,7 @@ public:
     uno::Sequence< uno::Reference<text::XTextField> > m_Items;
     sal_Int32       m_nNextIndex;  ///< index of next element to be returned
 
-    Impl(SwDoc & rDoc)
+    explicit Impl(SwDoc & rDoc)
         : SwClient(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD))
         , m_pDoc(& rDoc)
         , m_nNextIndex(0)

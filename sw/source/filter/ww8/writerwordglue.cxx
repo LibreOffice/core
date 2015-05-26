@@ -244,7 +244,7 @@ namespace myImplHelpers
         C* MakeNonCollidingStyle(const OUString& rName);
     public:
         typedef std::pair<C*, bool> StyleResult;
-        StyleMapperImpl(SwDoc &rDoc) : maHelper(rDoc) {}
+        explicit StyleMapperImpl(SwDoc &rDoc) : maHelper(rDoc) {}
         StyleResult GetStyle(const OUString& rName, ww::sti eSti);
     };
 
@@ -327,7 +327,7 @@ namespace myImplHelpers
     private:
         sal_Int32 mnStart;
     public:
-        IfBeforeStart(sal_Int32 nStart) : mnStart(nStart) {}
+        explicit IfBeforeStart(sal_Int32 nStart) : mnStart(nStart) {}
         bool operator()(const sw::util::CharRunEntry &rEntry) const
         {
             return rEntry.mnEndPos < mnStart;

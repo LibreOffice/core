@@ -47,7 +47,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
 public:
-    UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
+    explicit UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
     UnoGridModel( const UnoGridModel& rModel );
 
     UnoControlModel* Clone() const SAL_OVERRIDE;

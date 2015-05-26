@@ -77,8 +77,10 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
     SwWrtShell* pWrtSh;
 
     public:
-        SwDBTreeList_Impl(SwWrtShell* pShell) :
-            pWrtSh(pShell) {}
+        explicit SwDBTreeList_Impl(SwWrtShell* pShell)
+            : pWrtSh(pShell)
+        {
+        }
         virtual ~SwDBTreeList_Impl();
 
     virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;

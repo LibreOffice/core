@@ -46,8 +46,8 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
 public:
-                        UnoSpinButtonModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
-                        UnoSpinButtonModel( const UnoSpinButtonModel& rModel ) : UnoControlModel( rModel ) {;}
+    explicit UnoSpinButtonModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+    UnoSpinButtonModel( const UnoSpinButtonModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const SAL_OVERRIDE { return new UnoSpinButtonModel( *this ); }
 

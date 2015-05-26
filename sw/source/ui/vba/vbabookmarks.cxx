@@ -54,7 +54,7 @@ private:
     uno::Reference< container::XIndexAccess > mxIndexAccess;
     uno::Any cachePos;
 public:
-    BookmarkCollectionHelper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) throw (uno::RuntimeException) : mxIndexAccess( xIndexAccess )
+    explicit BookmarkCollectionHelper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) throw (uno::RuntimeException) : mxIndexAccess( xIndexAccess )
     {
         mxNameAccess.set( mxIndexAccess, uno::UNO_QUERY_THROW );
     }

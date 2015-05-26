@@ -32,7 +32,7 @@ typedef toolkit::AnimatedImagesControlModel SpinningProgressControlModel_Base;
 class SpinningProgressControlModel : public SpinningProgressControlModel_Base
 {
 public:
-    SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
+    explicit SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
     SpinningProgressControlModel( const SpinningProgressControlModel& i_copySource );
 
     virtual UnoControlModel* Clone() const SAL_OVERRIDE;

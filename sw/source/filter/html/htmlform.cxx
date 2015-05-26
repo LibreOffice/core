@@ -198,7 +198,7 @@ class SwHTMLForm_Impl
     std::vector<sal_uInt16>     aSelectedList;
 
 public:
-    SwHTMLForm_Impl( SwDocShell *pDSh ) :
+    explicit SwHTMLForm_Impl( SwDocShell *pDSh ) :
         pDocSh( pDSh ),
         pHeaderAttrs( pDSh ? pDSh->GetHeaderAttributes() : 0 )
     {

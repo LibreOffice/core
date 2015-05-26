@@ -265,7 +265,7 @@ protected:
             ) const SAL_OVERRIDE;
 public:
 
-    SwXMLAutoStylePoolP( SvXMLExport& rExport );
+    explicit SwXMLAutoStylePoolP( SvXMLExport& rExport );
     virtual ~SwXMLAutoStylePoolP();
 };
 

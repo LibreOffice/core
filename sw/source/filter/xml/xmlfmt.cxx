@@ -71,7 +71,7 @@ class SwXMLConditionParser_Impl
 
 public:
 
-    SwXMLConditionParser_Impl( const OUString& rInp );
+    explicit SwXMLConditionParser_Impl( const OUString& rInp );
 
     bool IsValid() const { return 0 != nCondition; }
 

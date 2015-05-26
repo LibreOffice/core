@@ -435,7 +435,7 @@ struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
                                                      //   oder beim Reader-Ende geloescht werden sollte
     bool bLSTbUIDSet    :1;// Flag, ob bUsedInDoc in maLSTInfos gesetzt wurde,
                                                      //   und nicht nochmals gesetzt zu werden braucht
-    WW8LFOInfo(const WW8LFO& rLFO);
+    explicit WW8LFOInfo(const WW8LFO& rLFO);
 };
 
 WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)

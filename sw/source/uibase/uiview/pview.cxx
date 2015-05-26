@@ -151,7 +151,7 @@ class SwPreviewZoomDlg : public SvxStandardDialog
     virtual void  Apply() SAL_OVERRIDE;
 
 public:
-    SwPreviewZoomDlg( SwPagePreviewWin& rParent );
+    explicit SwPreviewZoomDlg( SwPagePreviewWin& rParent );
     virtual ~SwPreviewZoomDlg();
     virtual void dispose() SAL_OVERRIDE;
 };

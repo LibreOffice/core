@@ -62,7 +62,7 @@ class SwParaSelection
 {
     SwCursor & m_rCursor;
 public:
-    SwParaSelection(SwCursor & rCursor);
+    explicit SwParaSelection(SwCursor & rCursor);
     ~SwParaSelection();
 };
 

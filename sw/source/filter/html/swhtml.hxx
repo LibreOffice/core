@@ -253,7 +253,7 @@ public:
         bRestartListing( false )
     {}
 
-    _HTMLAttrContext( sal_uInt16 nTokn ) :
+    explicit _HTMLAttrContext( sal_uInt16 nTokn ) :
         pSaveDocContext( 0 ),
         pFrmItemSet( 0 ),
         nToken( nTokn ),

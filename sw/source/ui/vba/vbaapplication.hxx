@@ -36,7 +36,7 @@ typedef cppu::ImplInheritanceHelper1< VbaApplicationBase, ooo::vba::word::XAppli
 class SwVbaApplication : public SwVbaApplication_BASE
 {
 public:
-    SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
+    explicit SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~SwVbaApplication();
 
     // XApplication

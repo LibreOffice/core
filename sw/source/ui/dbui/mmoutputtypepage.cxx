@@ -142,7 +142,7 @@ class SwMailDispatcherListener_Impl : public IMailDispatcherListener
     VclPtr<SwSendMailDialog> m_pSendMailDialog;
 
 public:
-    SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
+    explicit SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
     virtual ~SwMailDispatcherListener_Impl();
 
     virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) SAL_OVERRIDE;

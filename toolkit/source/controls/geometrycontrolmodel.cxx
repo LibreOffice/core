@@ -506,7 +506,7 @@
     struct PropertyNameEqual : public ::std::unary_function< Property, bool >
     {
         const OUString&  m_rCompare;
-        PropertyNameEqual( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
+        explicit PropertyNameEqual( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
 
         bool operator()( const Property& _rLHS )
         {
@@ -589,7 +589,7 @@
     struct Int32Equal : public ::std::unary_function< sal_Int32, bool >
     {
         sal_Int32   m_nCompare;
-        Int32Equal( sal_Int32 _nCompare ) : m_nCompare( _nCompare ) { }
+        explicit Int32Equal( sal_Int32 _nCompare ) : m_nCompare( _nCompare ) { }
 
         bool operator()( sal_Int32 _nLHS )
         {

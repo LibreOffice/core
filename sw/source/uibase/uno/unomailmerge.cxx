@@ -412,7 +412,7 @@ SwXMailMerge::~SwXMailMerge()
 // Guarantee object consistence in case of an exception
 class MailMergeExecuteFinalizer: private boost::noncopyable {
 public:
-    MailMergeExecuteFinalizer(SwXMailMerge *mailmerge)
+    explicit MailMergeExecuteFinalizer(SwXMailMerge *mailmerge)
         : m_pMailMerge(mailmerge)
     {
         assert(m_pMailMerge); //mailmerge object missing

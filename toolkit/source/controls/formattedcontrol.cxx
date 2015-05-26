@@ -291,7 +291,7 @@ namespace toolkit
             bool&   m_rFlag;
 
         public:
-            ResetFlagOnExit( bool& _rFlag )
+            explicit ResetFlagOnExit( bool& _rFlag )
                 :m_rFlag( _rFlag )
             {
             }

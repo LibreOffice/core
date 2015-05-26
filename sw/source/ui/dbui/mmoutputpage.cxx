@@ -198,7 +198,7 @@ class SwCopyToDialog : public SfxModalDialog
     VclPtr<Edit> m_pBCCED;
 
 public:
-    SwCopyToDialog(vcl::Window* pParent)
+    explicit SwCopyToDialog(vcl::Window* pParent)
         : SfxModalDialog(pParent, "CCDialog",
             "modules/swriter/ui/ccdialog.ui")
     {

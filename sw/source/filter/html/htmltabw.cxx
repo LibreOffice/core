@@ -86,7 +86,7 @@ public:
     SwHTMLWrtTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
                     bool bRel, sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0,
                     sal_uInt16 nNumOfRowsToRepeat = 0 );
-    SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
+    explicit SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
 
     void Write( SwHTMLWriter& rWrt, sal_Int16 eAlign=text::HoriOrientation::NONE,
                 bool bTHead=false, const SwFrameFormat *pFrameFormat=0,

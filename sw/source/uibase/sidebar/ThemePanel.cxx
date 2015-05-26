@@ -90,7 +90,7 @@ public:
     OUString maElementName;
 
 public:
-    StyleRedefinition(const OUString& aElementName)
+    explicit StyleRedefinition(const OUString& aElementName)
         : maElementName(aElementName)
     {}
 
@@ -134,7 +134,7 @@ class StyleSet
     std::vector<StyleRedefinition> maStyles;
 
 public:
-    StyleSet(const OUString& aName)
+    explicit StyleSet(const OUString& aName)
         : maName(aName)
         , maStyles()
     {}

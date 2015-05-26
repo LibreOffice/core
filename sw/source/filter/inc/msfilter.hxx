@@ -184,7 +184,7 @@ namespace sw
             //I hate these things stupid pImpl things, but its warranted here
             ParaMapper *mpImpl;
         public:
-            ParaStyleMapper(SwDoc &rDoc);
+            explicit ParaStyleMapper(SwDoc &rDoc);
             ~ParaStyleMapper();
 
             /** StyleResult
@@ -244,7 +244,7 @@ namespace sw
             //I hate these things stupid pImpl things, but its warranted here
             CharMapper *mpImpl;
         public:
-            CharStyleMapper(SwDoc &rDoc);
+            explicit CharStyleMapper(SwDoc &rDoc);
             ~CharStyleMapper();
 
             /** StyleResult
@@ -290,13 +290,13 @@ namespace sw
         public:
             OUString msPrimary;
             OUString msSecondary;
-            FontMapExport(const OUString &rFontDescription);
+            explicit FontMapExport(const OUString &rFontDescription);
         };
 
         class InsertedTableClient : public SwClient
         {
         public:
-            InsertedTableClient(SwTableNode & rNode);
+            explicit InsertedTableClient(SwTableNode & rNode);
             SwTableNode * GetTableNode();
         };
 
@@ -326,7 +326,7 @@ namespace sw
             typedef TableMap::iterator TableMapIter;
             void DelAndMakeTableFrms();
             void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);
-            InsertedTablesManager(const SwDoc &rDoc);
+            explicit InsertedTablesManager(const SwDoc &rDoc);
         private:
             bool mbHasRoot;
             TableMap maTables;

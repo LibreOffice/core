@@ -107,7 +107,7 @@ private:
     sal_uLong nOfs;
 
 public:
-    WW8_WrPlc0( sal_uLong nOffset );
+    explicit WW8_WrPlc0( sal_uLong nOffset );
     sal_uInt16 Count() const                { return aPos.size(); }
     void Append( sal_uLong nStartCpOrFc );
     void Write( SvStream& rStrm );

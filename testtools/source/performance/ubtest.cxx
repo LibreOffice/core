@@ -409,7 +409,7 @@ class TestImpl : public WeakImplHelper2< XServiceInfo, XMain >
     Reference< XInterface > resolveObject( const OUString & rUnoUrl ) throw (Exception);
 
 public:
-    TestImpl( const Reference< XMultiServiceFactory > & xSMgr );
+    explicit TestImpl( const Reference< XMultiServiceFactory > & xSMgr );
     virtual ~TestImpl();
 
     // XServiceInfo

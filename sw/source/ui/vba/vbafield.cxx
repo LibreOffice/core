@@ -77,7 +77,7 @@ private:
     sal_Int32 nLen, nFnd, nNext, nSavPtr;
     OUString aFieldName;
 public:
-    SwVbaReadFieldParams( const OUString& rData );
+    explicit SwVbaReadFieldParams( const OUString& rData );
     ~SwVbaReadFieldParams();
 
     long SkipToNextToken();

@@ -166,7 +166,7 @@ private:
     uno::Reference< container::XNameAccess > mxParaStyles;
     uno::Any cachePos;
 public:
-    StyleCollectionHelper( const uno::Reference< frame::XModel >& _xModel ) : mxModel( _xModel )
+    explicit StyleCollectionHelper( const uno::Reference< frame::XModel >& _xModel ) : mxModel( _xModel )
     {
         // we only concern about the Paragraph styles
         uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( _xModel, uno::UNO_QUERY_THROW);
@@ -252,7 +252,7 @@ class StylesEnumWrapper : public EnumerationHelper_BASE
     SwVbaStyles* pStyles;
     sal_Int32 nIndex;
 public:
-    StylesEnumWrapper( SwVbaStyles* _pStyles ) : pStyles( _pStyles ), nIndex( 1 ) {}
+    explicit StylesEnumWrapper( SwVbaStyles* _pStyles ) : pStyles( _pStyles ), nIndex( 1 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex <= pStyles->getCount() );

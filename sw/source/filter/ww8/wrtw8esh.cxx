@@ -333,7 +333,7 @@ namespace
         const WW8Export& wrt;
 
     public:
-        CompareDrawObjs(const WW8Export& rWrt) : wrt(rWrt) {};
+        explicit CompareDrawObjs(const WW8Export& rWrt) : wrt(rWrt) {};
         bool operator()(DrawObj *a, DrawObj *b) const
         {
             sal_uLong aSort = lcl_getSdrOrderNumber(wrt, a);

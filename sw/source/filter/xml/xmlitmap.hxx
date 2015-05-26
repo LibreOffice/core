@@ -61,7 +61,7 @@ protected:
     SvXMLItemMapEntries_impl* mpImpl;
 
 public:
-    SvXMLItemMapEntries( SvXMLItemMapEntry* pEntrys );
+    explicit SvXMLItemMapEntries(SvXMLItemMapEntry* pEntrys);
     virtual ~SvXMLItemMapEntries();
 
     SvXMLItemMapEntry* getByName( sal_uInt16 nNameSpace,

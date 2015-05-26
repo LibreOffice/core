@@ -68,7 +68,7 @@ class WW8TableNodeInfoInner
 public:
     typedef boost::shared_ptr<WW8TableNodeInfoInner> Pointer_t;
 
-    WW8TableNodeInfoInner(WW8TableNodeInfo * pParent);
+    explicit WW8TableNodeInfoInner(WW8TableNodeInfo * pParent);
     ~WW8TableNodeInfoInner();
 
     void setDepth(sal_uInt32 nDepth);

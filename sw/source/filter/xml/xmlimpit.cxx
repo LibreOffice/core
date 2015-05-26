@@ -228,7 +228,7 @@ struct BoxHolder : private boost::noncopyable
     SvxBorderLine* pLeft;
     SvxBorderLine* pRight;
 
-    BoxHolder(SvxBoxItem* pBox)
+    explicit BoxHolder(SvxBoxItem* pBox)
     {
         pTop    = pBox->GetTop() == NULL ?
             NULL : new SvxBorderLine( *pBox->GetTop() );

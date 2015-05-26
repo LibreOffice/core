@@ -50,7 +50,7 @@ class DropDownFieldDialog;
 protected:                                          \
     ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
-                    Class( DialogClass* p)          \
+    explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \

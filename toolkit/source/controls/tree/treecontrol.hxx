@@ -39,7 +39,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
 public:
-    UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
+    explicit UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
     UnoTreeModel( const UnoTreeModel& rModel );
 
     UnoControlModel* Clone() const SAL_OVERRIDE;

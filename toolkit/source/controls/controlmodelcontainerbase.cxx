@@ -129,7 +129,7 @@ private:
     const OUString& m_rName;
 
 public:
-    FindControlModel( const OUString& _rName ) : m_rName( _rName ) { }
+    explicit FindControlModel( const OUString& _rName ) : m_rName( _rName ) { }
 
     bool operator()( const ControlModelContainerBase::UnoControlModelHolder& _rCompare )
     {
@@ -145,7 +145,7 @@ private:
     ControlModelContainerBase::UnoControlModelHolderList&   m_rTargetList;
 
 public:
-    CloneControlModel( ControlModelContainerBase::UnoControlModelHolderList& _rTargetList )
+    explicit CloneControlModel( ControlModelContainerBase::UnoControlModelHolderList& _rTargetList )
         :m_rTargetList( _rTargetList )
     {
     }
@@ -167,7 +167,7 @@ struct CompareControlModel : public ::std::unary_function< ControlModelContainer
 private:
     Reference< XControlModel > m_xReference;
 public:
-    CompareControlModel( const Reference< XControlModel >& _rxReference ) : m_xReference( _rxReference ) { }
+    explicit CompareControlModel( const Reference< XControlModel >& _rxReference ) : m_xReference( _rxReference ) { }
 
     bool operator()( const ControlModelContainerBase::UnoControlModelHolder& _rCompare )
     {

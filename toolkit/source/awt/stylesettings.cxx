@@ -90,7 +90,7 @@ namespace toolkit
     class StyleMethodGuard
     {
     public:
-        StyleMethodGuard( WindowStyleSettings_Data& i_rData )
+        explicit StyleMethodGuard( WindowStyleSettings_Data& i_rData )
         {
             if ( i_rData.pOwningWindow == NULL )
                 throw DisposedException();

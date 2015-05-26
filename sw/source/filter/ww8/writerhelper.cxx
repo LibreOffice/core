@@ -149,7 +149,7 @@ namespace
     private:
         sal_uLong mnNode;
     public:
-        anchoredto(sal_uLong nNode) : mnNode(nNode) {}
+        explicit anchoredto(sal_uLong nNode) : mnNode(nNode) {}
         bool operator()(const sw::Frame &rFrame) const
         {
             return (mnNode == rFrame.GetPosition().nNode.GetNode().GetIndex());
@@ -702,7 +702,7 @@ namespace sw
         private:
             RedlineType_t meType;
         public:
-            SameOpenRedlineType(RedlineType_t eType) : meType(eType) {}
+            explicit SameOpenRedlineType(RedlineType_t eType) : meType(eType) {}
             bool operator()(const SwFltStackEntry *pEntry) const
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>

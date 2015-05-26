@@ -28,7 +28,7 @@ class ListGalleriesEnumWrapper : public EnumerationHelper_BASE
     SwVbaListGalleries* pListGalleries;
     sal_Int32 nIndex;
 public:
-    ListGalleriesEnumWrapper( SwVbaListGalleries* pGalleries ) : pListGalleries( pGalleries ), nIndex( 1 ) {}
+    explicit ListGalleriesEnumWrapper( SwVbaListGalleries* pGalleries ) : pListGalleries( pGalleries ), nIndex( 1 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex <= pListGalleries->getCount() );

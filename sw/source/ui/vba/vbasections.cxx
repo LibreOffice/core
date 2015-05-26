@@ -38,7 +38,7 @@ class SectionEnumeration : public SectionEnumeration_BASE
     XSectionVec::iterator mIt;
 
 public:
-    SectionEnumeration( const XSectionVec& rVec ) : mxSections( rVec ), mIt( mxSections.begin() ) {}
+    explicit SectionEnumeration( const XSectionVec& rVec ) : mxSections( rVec ), mIt( mxSections.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( mIt != mxSections.end() );

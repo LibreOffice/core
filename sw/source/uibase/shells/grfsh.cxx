@@ -88,7 +88,7 @@ private:
     ::std::shared_ptr<SwUnoCrsr> const m_pCursor;
 
 public:
-    SwExternalToolEdit(SwWrtShell *const pShell)
+    explicit SwExternalToolEdit(SwWrtShell *const pShell)
         : m_pShell(pShell)
         , m_pCursor( // need only Point, must point to SwGrfNode
             pShell->GetDoc()->CreateUnoCrsr(

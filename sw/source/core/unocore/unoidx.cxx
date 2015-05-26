@@ -195,7 +195,7 @@ private:
     virtual ~StyleAccess_Impl();
 
 public:
-    StyleAccess_Impl(SwXDocumentIndex& rParentIdx);
+    explicit StyleAccess_Impl(SwXDocumentIndex& rParentIdx);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -241,7 +241,7 @@ private:
 
 public:
 
-    TokenAccess_Impl(SwXDocumentIndex& rParentIdx);
+    explicit TokenAccess_Impl(SwXDocumentIndex& rParentIdx);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -277,7 +277,7 @@ private:
     OUString m_sUserTOXTypeName;
 
 public:
-    SwDocIndexDescriptorProperties_Impl(SwTOXType const*const pType);
+    explicit SwDocIndexDescriptorProperties_Impl(SwTOXType const*const pType);
 
     SwTOXBase &     GetTOXBase() { return *m_pTOXBase; }
     const OUString& GetTypeName() const { return m_sUserTOXTypeName; }

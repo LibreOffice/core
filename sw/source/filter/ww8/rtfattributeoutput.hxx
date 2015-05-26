@@ -600,7 +600,7 @@ private:
     OUString m_sURL;
 
 public:
-    RtfAttributeOutput(RtfExport& rExport);
+    explicit RtfAttributeOutput(RtfExport& rExport);
 
     virtual ~RtfAttributeOutput();
 

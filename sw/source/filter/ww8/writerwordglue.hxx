@@ -128,7 +128,7 @@ namespace sw
             sal_uInt16 dyaHdrBottom;
             sal_uInt16 dyaTop;
             sal_uInt16 dyaBottom;
-            HdFtDistanceGlue(const SfxItemSet &rPage);
+            explicit HdFtDistanceGlue(const SfxItemSet &rPage);
             bool HasHeader() const { return mbHasHeader; }
             bool HasFooter() const { return mbHasFooter; }
 

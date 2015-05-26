@@ -156,7 +156,7 @@ protected:
     // ::cppu::OPropertySetHelper
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 public:
-    UnoControlDialogModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit UnoControlDialogModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     UnoControlDialogModel( const UnoControlDialogModel& rModel );
     virtual ~UnoControlDialogModel();
 

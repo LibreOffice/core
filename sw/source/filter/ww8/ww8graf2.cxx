@@ -299,7 +299,7 @@ struct WW8PicDesc
     sal_Int16 nCL, nCR, nCT, nCB;
     long nWidth, nHeight;
 
-    WW8PicDesc( const WW8_PIC& rPic );
+    explicit WW8PicDesc( const WW8_PIC& rPic );
 };
 
 WW8PicDesc::WW8PicDesc( const WW8_PIC& rPic )

@@ -107,7 +107,7 @@ class TestBridgeImpl : public osl::DebugBase<TestBridgeImpl>,
     Reference< XComponentContext > m_xContext;
 
 public:
-    TestBridgeImpl( const Reference< XComponentContext > & xContext )
+    explicit TestBridgeImpl( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext )
         {}
     virtual ~TestBridgeImpl()

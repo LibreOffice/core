@@ -172,8 +172,8 @@ class HTMLTableCnts
 
 public:
 
-    HTMLTableCnts( const SwStartNode* pStNd );
-    HTMLTableCnts( HTMLTable* pTab );
+    explicit HTMLTableCnts( const SwStartNode* pStNd );
+    explicit HTMLTableCnts( HTMLTable* pTab );
 
     ~HTMLTableCnts();                   // only allowed in ~HTMLTableCell
 
@@ -284,7 +284,7 @@ public:
 
     bool bBottomBorder;                 // Is there a line after the row?
 
-    HTMLTableRow( sal_uInt16 nCells=0 );    // cells of the row are empty
+    explicit HTMLTableRow( sal_uInt16 nCells=0 );    // cells of the row are empty
 
     ~HTMLTableRow();
 
@@ -2991,7 +2991,7 @@ public:
 
     HTMLTable *pTable;
 
-    _SectionSaveStruct( SwHTMLParser& rParser );
+    explicit _SectionSaveStruct( SwHTMLParser& rParser );
     virtual ~_SectionSaveStruct();
 
 #if OSL_DEBUG_LEVEL > 0
@@ -4963,7 +4963,7 @@ class _TableSaveStruct : public SwPendingStackData
 public:
     HTMLTable *m_pCurrentTable;
 
-    _TableSaveStruct( HTMLTable *pCurTable ) :
+    explicit _TableSaveStruct( HTMLTable *pCurTable ) :
         m_pCurrentTable( pCurTable )
     {}
 

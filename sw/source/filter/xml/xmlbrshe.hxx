@@ -35,7 +35,7 @@ protected:
     SwXMLExport& GetExport() { return rExport; }
 public:
 
-    SwXMLBrushItemExport( SwXMLExport& rExport );
+    explicit SwXMLBrushItemExport( SwXMLExport& rExport );
     ~SwXMLBrushItemExport();
 
     // core API

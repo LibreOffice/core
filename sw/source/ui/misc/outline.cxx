@@ -70,7 +70,7 @@ class SwNumNamesDlg : public ModalDialog
     DECL_LINK(DoubleClickHdl, void *);
 
 public:
-    SwNumNamesDlg(vcl::Window *pParent);
+    explicit SwNumNamesDlg(vcl::Window *pParent);
     virtual ~SwNumNamesDlg();
     virtual void dispose() SAL_OVERRIDE;
     void SetUserNames(const OUString *pList[]);

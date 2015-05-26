@@ -66,7 +66,7 @@ class HeadersFootersEnumWrapper : public EnumerationHelper_BASE
     SwVbaHeadersFooters* pHeadersFooters;
     sal_Int32 nIndex;
 public:
-    HeadersFootersEnumWrapper( SwVbaHeadersFooters* _pHeadersFooters ) : pHeadersFooters( _pHeadersFooters ), nIndex( 0 ) {}
+    explicit HeadersFootersEnumWrapper( SwVbaHeadersFooters* _pHeadersFooters ) : pHeadersFooters( _pHeadersFooters ), nIndex( 0 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex < pHeadersFooters->getCount() );

@@ -275,7 +275,7 @@ SwGlossaryList* GetGlossaryList()
 
 struct ImpAutoFormatNameListLoader : public Resource
 {
-    ImpAutoFormatNameListLoader( std::vector<OUString>& rLst );
+    explicit ImpAutoFormatNameListLoader( std::vector<OUString>& rLst );
 };
 
 void ShellResource::_GetAutoFormatNameLst() const

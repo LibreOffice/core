@@ -70,7 +70,7 @@ class SwTestAccountSettingsDialog : public SfxModalDialog
     DECL_LINK(StopHdl, void *);
     DECL_LINK(TestHdl, void*);
 public:
-    SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
+    explicit SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
     virtual ~SwTestAccountSettingsDialog();
     virtual void dispose() SAL_OVERRIDE;
 };

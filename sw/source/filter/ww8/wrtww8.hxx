@@ -198,7 +198,7 @@ protected:
     MSWordSections( const MSWordSections& );
     MSWordSections& operator=( const MSWordSections& );
 public:
-    MSWordSections( MSWordExportBase& rExport );
+    explicit MSWordSections( MSWordExportBase& rExport );
     virtual ~MSWordSections();
 
     virtual bool HeaderFooterWritten();
@@ -245,7 +245,7 @@ class WW8_WrPlcSepx : public MSWordSections
     WW8_WrPlcSepx& operator=( const WW8_WrPlcSepx& ) SAL_DELETED_FUNCTION;
 
 public:
-    WW8_WrPlcSepx( MSWordExportBase& rExport );
+    explicit WW8_WrPlcSepx( MSWordExportBase& rExport );
     virtual ~WW8_WrPlcSepx();
 
     virtual bool HeaderFooterWritten() SAL_OVERRIDE; // override
@@ -1217,7 +1217,7 @@ private:
     WW8_WrPlcFootnoteEdn(const WW8_WrPlcFootnoteEdn&) SAL_DELETED_FUNCTION;
     WW8_WrPlcFootnoteEdn& operator=(WW8_WrPlcFootnoteEdn &) SAL_DELETED_FUNCTION;
 public:
-    WW8_WrPlcFootnoteEdn( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
+    explicit WW8_WrPlcFootnoteEdn( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
 
     bool WriteText( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
@@ -1234,7 +1234,7 @@ struct WW8_Annotation
     DateTime maDateTime;
     WW8_CP m_nRangeStart, m_nRangeEnd;
     WW8_Annotation(const SwPostItField* pPostIt, WW8_CP nRangeStart, WW8_CP nRangeEnd);
-    WW8_Annotation(const SwRedlineData* pRedline);
+    explicit WW8_Annotation(const SwRedlineData* pRedline);
 };
 
 class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // double Plc for Postits
@@ -1267,7 +1267,7 @@ private:
     WW8_WrPlcTextBoxes(const WW8_WrPlcTextBoxes&) SAL_DELETED_FUNCTION;
     WW8_WrPlcTextBoxes& operator=(WW8_WrPlcTextBoxes&) SAL_DELETED_FUNCTION;
 public:
-    WW8_WrPlcTextBoxes( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
+    explicit WW8_WrPlcTextBoxes( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
 
     bool WriteText( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
@@ -1320,7 +1320,7 @@ protected:
     void Write( SvStream& rStrm );
     WW8_CP Prev() const;
 public:
-    WW8_WrPlc1( sal_uInt16 nStructSz );
+    explicit WW8_WrPlc1( sal_uInt16 nStructSz );
     ~WW8_WrPlc1();
     void Append( WW8_CP nCp, const void* pData );
     void Finish( sal_uLong nLastCp, sal_uLong nStartCp );
@@ -1401,7 +1401,7 @@ private:
     SwWW8WrGrf(const SwWW8WrGrf&) SAL_DELETED_FUNCTION;
     SwWW8WrGrf& operator=(const SwWW8WrGrf&) SAL_DELETED_FUNCTION;
 public:
-    SwWW8WrGrf( WW8Export& rW ) : rWrt( rW ), mnIdx( 0 ) {}
+    explicit SwWW8WrGrf( WW8Export& rW ) : rWrt( rW ), mnIdx( 0 ) {}
     void Insert(const sw::Frame &rFly);
     void Write();
     sal_uLong GetFPos()
@@ -1420,7 +1420,7 @@ private:
 protected:
     MSWordExportBase& m_rExport;
 public:
-    MSWordAttrIter( MSWordExportBase& rExport );
+    explicit MSWordAttrIter( MSWordExportBase& rExport );
     virtual ~MSWordAttrIter();
 
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const = 0;

@@ -457,7 +457,7 @@ protected:
     bool mbOnTOXEnding;
 
 public:
-    WW8AttributeOutput( WW8Export &rWW8Export )
+    explicit WW8AttributeOutput( WW8Export &rWW8Export )
         : AttributeOutputBase()
         , m_rWW8Export(rWW8Export)
         , nPOPosStdLen1(0)

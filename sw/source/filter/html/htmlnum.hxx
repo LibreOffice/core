@@ -60,7 +60,7 @@ public:
         memcpy( &aNumStarts, &rInf.aNumStarts, sizeof( aNumStarts ) );
     }
 
-    SwHTMLNumRuleInfo( const SwTextNode& rTextNd ) { Set( rTextNd ); }
+    explicit SwHTMLNumRuleInfo( const SwTextNode& rTextNd ) { Set( rTextNd ); }
     inline SwHTMLNumRuleInfo& operator=( const SwHTMLNumRuleInfo& rInf );
 
     inline void Clear();

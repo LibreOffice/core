@@ -208,7 +208,7 @@ class SwSrcEditWindow::ChangesListener:
     public cppu::WeakImplHelper< css::beans::XPropertiesChangeListener >
 {
 public:
-    ChangesListener(SwSrcEditWindow & editor): editor_(editor) {}
+    explicit ChangesListener(SwSrcEditWindow & editor): editor_(editor) {}
 
 private:
     virtual ~ChangesListener() {}

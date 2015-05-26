@@ -786,7 +786,7 @@ namespace sw
                 The Writer document whose drawing layers we will be inserting
                 objects into
             */
-            SetLayer(const SwDoc &rDoc);
+            explicit SetLayer(const SwDoc &rDoc);
 
             SetLayer(const SetLayer &rOther) throw();
             SetLayer& operator=(const SetLayer &rOther) throw();

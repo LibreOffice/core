@@ -126,11 +126,11 @@ class SwGlobalFrameListener_Impl : public SfxListener
 {
     bool bValid;
 public:
-    SwGlobalFrameListener_Impl(SfxViewFrame& rFrame) :
-        bValid(true)
-        {
-            StartListening(rFrame);
-        }
+    explicit SwGlobalFrameListener_Impl(SfxViewFrame& rFrame)
+        : bValid(true)
+    {
+        StartListening(rFrame);
+    }
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 

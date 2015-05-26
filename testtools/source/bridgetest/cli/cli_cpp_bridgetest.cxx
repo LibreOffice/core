@@ -806,7 +806,7 @@ static bool raiseException(XBridgeTest* xLBT )
     XComponentContext* m_xContext;
 
     public:
-    BridgeTest( XComponentContext* xContext )
+    explicit BridgeTest( XComponentContext* xContext )
     {
         m_xContext = xContext;
     }

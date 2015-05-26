@@ -230,7 +230,7 @@ struct SwHTMLFormatInfo
     bool bScriptDependent;
 
     // Konstruktor fuer einen Dummy zum Suchen
-    SwHTMLFormatInfo( const SwFormat *pF ) :
+    explicit SwHTMLFormatInfo( const SwFormat *pF ) :
         pFormat( pF ),
         pRefFormat(0),
         pItemSet( 0 ),
@@ -407,7 +407,7 @@ public:
     bool bParaDotLeaders : 1;       // for TOC dot leaders
     // 25
 
-    SwHTMLWriter( const OUString& rBaseURL );
+    explicit SwHTMLWriter( const OUString& rBaseURL );
     virtual ~SwHTMLWriter();
 
     void Out_SwDoc( SwPaM* );       // schreibe den makierten Bereich

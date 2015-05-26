@@ -1509,7 +1509,7 @@ public:
     ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
     std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
 
-    Impl(SwPaM *const pPaM)
+    explicit Impl(SwPaM *const pPaM)
     {
         if (pPaM)
         {
@@ -1700,7 +1700,7 @@ public:
     FrameDependList_t m_Frames;
     ::std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
 
-    Impl(SwPaM const & rPaM)
+    explicit Impl(SwPaM const & rPaM)
         : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
     {
         m_pUnoCursor->Add(this);

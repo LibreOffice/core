@@ -382,7 +382,7 @@ namespace
         protected:
             virtual ~SwXShapesEnumeration() {};
         public:
-            SwXShapesEnumeration(SwXDrawPage* const pDrawPage);
+            explicit SwXShapesEnumeration(SwXDrawPage* const pDrawPage);
 
             //XEnumeration
             virtual sal_Bool SAL_CALL hasMoreElements() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;

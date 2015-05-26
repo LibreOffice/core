@@ -110,7 +110,7 @@ protected:
     sal_uInt8 ch;
 
 public:
-    Tcg255SubStruct( bool bReadId );
+    explicit Tcg255SubStruct( bool bReadId );
     virtual ~Tcg255SubStruct(){}
     sal_uInt8 id() const { return ch; }
     bool Read(SvStream &rS) SAL_OVERRIDE;
@@ -132,7 +132,7 @@ class Customization : public TBBase
     bool ImportMenu( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
 
 public:
-    Customization( SwCTBWrapper* rapper );
+    explicit Customization( SwCTBWrapper* rapper );
     virtual ~Customization();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
@@ -166,7 +166,7 @@ class SwCTBWrapper : public Tcg255SubStruct
     SwCTBWrapper& operator = ( const SwCTBWrapper&) SAL_DELETED_FUNCTION;
 
 public:
-    SwCTBWrapper( bool bReadId = true );
+    explicit SwCTBWrapper( bool bReadId = true );
     virtual ~SwCTBWrapper();
     void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
     SwTBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
@@ -210,7 +210,7 @@ class PlfMcd : public Tcg255SubStruct
     PlfMcd& operator = ( const PlfMcd&) SAL_DELETED_FUNCTION;
 
 public:
-    PlfMcd( bool bReadId = true );
+    explicit PlfMcd( bool bReadId = true );
     bool Read(SvStream &rS) SAL_OVERRIDE;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) SAL_OVERRIDE;
@@ -241,7 +241,7 @@ class PlfAcd: public Tcg255SubStruct
     PlfAcd& operator = ( const PlfAcd&) SAL_DELETED_FUNCTION;
 
 public:
-    PlfAcd( bool bReadId = true );
+    explicit PlfAcd( bool bReadId = true );
     virtual ~PlfAcd();
     bool Read(SvStream &rS) SAL_OVERRIDE;
 #if OSL_DEBUG_LEVEL > 1
@@ -278,7 +278,7 @@ class PlfKme : public Tcg255SubStruct
     PlfKme& operator = ( const PlfKme&) SAL_DELETED_FUNCTION;
 
 public:
-    PlfKme( bool bReadId = true );
+    explicit PlfKme( bool bReadId = true );
     virtual ~PlfKme();
     bool Read(SvStream &rS) SAL_OVERRIDE;
 #if OSL_DEBUG_LEVEL > 1
@@ -319,7 +319,7 @@ class TcgSttbf : public Tcg255SubStruct
     TcgSttbf& operator = ( const TcgSttbf&) SAL_DELETED_FUNCTION;
 
 public:
-    TcgSttbf( bool bReadId = true );
+    explicit TcgSttbf( bool bReadId = true );
     virtual ~TcgSttbf(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
 #if OSL_DEBUG_LEVEL > 1
@@ -369,7 +369,7 @@ class MacroNames : public Tcg255SubStruct
     MacroNames& operator = ( const MacroNames&) SAL_DELETED_FUNCTION;
 
 public:
-    MacroNames( bool bReadId = true );
+    explicit MacroNames( bool bReadId = true );
     virtual ~MacroNames();
     bool Read(SvStream &rS) SAL_OVERRIDE;
 #if OSL_DEBUG_LEVEL > 1

@@ -2136,7 +2136,7 @@ struct ListItem
     {
     }
 
-    ListItem( const OUString& i_rItemText )
+    explicit ListItem( const OUString& i_rItemText )
         :ItemText( i_rItemText )
         ,ItemImageURL()
         ,ItemData()
@@ -2156,7 +2156,7 @@ struct StripItemData : public ::std::unary_function< ListItem, UnoListItem >
 
 struct UnoControlListBoxModel_Data
 {
-    UnoControlListBoxModel_Data( UnoControlListBoxModel& i_rAntiImpl )
+    explicit UnoControlListBoxModel_Data( UnoControlListBoxModel& i_rAntiImpl )
         :m_bSettingLegacyProperty( false )
         ,m_rAntiImpl( i_rAntiImpl )
         ,m_aListItems()

@@ -27,7 +27,7 @@ class ListTemplatesEnumWrapper : public EnumerationHelper_BASE
     SwVbaListTemplates* pListTemplates;
     sal_Int32 nIndex;
 public:
-    ListTemplatesEnumWrapper( SwVbaListTemplates* pTemplates ) : pListTemplates( pTemplates ), nIndex( 1 ) {}
+    explicit ListTemplatesEnumWrapper( SwVbaListTemplates* pTemplates ) : pListTemplates( pTemplates ), nIndex( 1 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex <= pListTemplates->getCount() );

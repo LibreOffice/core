@@ -58,7 +58,7 @@ class SwGlossDecideDlg : public ModalDialog
     DECL_LINK(SelectHdl, void*);
 
 public:
-    SwGlossDecideDlg(vcl::Window* pParent);
+    explicit SwGlossDecideDlg(vcl::Window* pParent);
     virtual ~SwGlossDecideDlg();
     virtual void dispose() SAL_OVERRIDE;
 

@@ -62,7 +62,7 @@ class SwXMLImportTableItemMapper_Impl: public SvXMLImportItemMapper
 
 public:
 
-    SwXMLImportTableItemMapper_Impl( SvXMLItemMapEntriesRef rMapEntries );
+    explicit SwXMLImportTableItemMapper_Impl(SvXMLItemMapEntriesRef rMapEntries);
     virtual ~SwXMLImportTableItemMapper_Impl();
 
     virtual bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,

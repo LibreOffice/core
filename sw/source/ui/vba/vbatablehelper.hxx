@@ -38,7 +38,7 @@ private:
     static sal_Int32 GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) throw (css::uno::RuntimeException);
 
 public:
-    SwVbaTableHelper( const css::uno::Reference< css::text::XTextTable >& xTextTable ) throw (css::uno::RuntimeException);
+    explicit SwVbaTableHelper( const css::uno::Reference< css::text::XTextTable >& xTextTable ) throw (css::uno::RuntimeException);
     ~SwVbaTableHelper() {}
     sal_Int32 getTabColumnsCount( sal_Int32 nRowIndex ) throw (css::uno::RuntimeException);
     sal_Int32 getTabColumnsMaxCount( ) throw (css::uno::RuntimeException);

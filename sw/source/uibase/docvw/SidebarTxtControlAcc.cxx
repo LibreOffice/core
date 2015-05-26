@@ -43,7 +43,7 @@ class SidebarTextEditSource : public SvxEditSource,
                               public SfxBroadcaster
 {
     public:
-        SidebarTextEditSource( SidebarTextControl& rSidebarTextControl );
+        explicit SidebarTextEditSource(SidebarTextControl& rSidebarTextControl);
         virtual ~SidebarTextEditSource();
 
         virtual SvxEditSource* Clone() const SAL_OVERRIDE;

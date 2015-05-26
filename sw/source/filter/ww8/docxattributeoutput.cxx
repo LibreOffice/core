@@ -158,7 +158,7 @@ class FFDataWriterHelper
         m_pSerializer->endElementNS( XML_w, XML_ffData );
     }
 public:
-    FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr& rSerializer ) : m_pSerializer( rSerializer ){}
+    explicit FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr& rSerializer ) : m_pSerializer( rSerializer ){}
     void WriteFormCheckbox( const OUString& rName, const OUString& rDefault, bool bChecked )
     {
        writeCommonStart( rName );
@@ -198,7 +198,7 @@ class FieldMarkParamsHelper
 {
     const sw::mark::IFieldmark& mrFieldmark;
     public:
-    FieldMarkParamsHelper( const sw::mark::IFieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
+    explicit FieldMarkParamsHelper( const sw::mark::IFieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
     OUString getName() { return mrFieldmark.GetName(); }
     template < typename T >
     bool extractParam( const OUString& rKey, T& rResult )

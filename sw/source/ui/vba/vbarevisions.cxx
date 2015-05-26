@@ -34,7 +34,7 @@ class RedlinesEnumeration : public RevisionEnumeration_BASE
     RevisionMap mRevisionMap;
     RevisionMap::iterator mIt;
 public:
-    RedlinesEnumeration( const RevisionMap& sMap ) : mRevisionMap( sMap ), mIt( mRevisionMap.begin() ) {}
+    explicit RedlinesEnumeration( const RevisionMap& sMap ) : mRevisionMap( sMap ), mIt( mRevisionMap.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( mIt != mRevisionMap.end() );

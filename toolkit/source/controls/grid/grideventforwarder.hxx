@@ -43,7 +43,7 @@ namespace toolkit
     class GridEventForwarder : public GridEventForwarder_Base
     {
     public:
-        GridEventForwarder( UnoGridControl& i_parent );
+        explicit GridEventForwarder( UnoGridControl& i_parent );
         virtual ~GridEventForwarder();
 
     public:

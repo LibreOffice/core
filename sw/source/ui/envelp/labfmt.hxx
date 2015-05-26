@@ -60,7 +60,7 @@ class SwLabPreview : public vcl::Window
 
 public:
 
-    SwLabPreview(vcl::Window* pParent);
+    explicit SwLabPreview(vcl::Window* pParent);
 
     void UpdateItem(const SwLabItem& rItem);
 };

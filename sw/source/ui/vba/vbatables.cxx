@@ -69,7 +69,7 @@ class TableCollectionHelper : public TableCollectionHelper_Base
     XTextTableVec::iterator cachePos;
 
 public:
-    TableCollectionHelper( const uno::Reference< frame::XModel >& xDocument )
+    explicit TableCollectionHelper( const uno::Reference< frame::XModel >& xDocument )
     {
         // only count the tables in the body text, not in the header/footer
         uno::Reference< container::XIndexAccess > xTables = lcl_getTables( xDocument );

@@ -68,7 +68,7 @@ public:
     ServiceImpl()
         : _nRef( 0 )
         {}
-    ServiceImpl( const Reference< XMultiServiceFactory > & xMgr )
+    explicit ServiceImpl( const Reference< XMultiServiceFactory > & xMgr )
         : _nRef( 0 )
         {}
 

@@ -66,7 +66,7 @@ protected:
                                        SvXmlExportFlags nFlags );
 
 public:
-    SvXMLExportItemMapper( SvXMLItemMapEntriesRef rMapEntries );
+    explicit SvXMLExportItemMapper( SvXMLItemMapEntriesRef rMapEntries );
     virtual ~SvXMLExportItemMapper();
 
     void exportXML( SvXMLExport& rExport,

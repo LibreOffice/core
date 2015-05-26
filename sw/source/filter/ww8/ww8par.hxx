@@ -438,7 +438,7 @@ public:
     SwNodeIndex maPtNode;
     sal_Int32 mnMkContent;
     sal_Int32 mnPtContent;
-    Position(const SwPaM &rPaM);
+    explicit Position(const SwPaM &rPaM);
     Position(const Position &rEntry);
 private:
     Position& operator=(const Position&) SAL_DELETED_FUNCTION;
@@ -545,7 +545,7 @@ namespace sw
             SwNodeIndex maPtNode;
             sal_Int32 mnPtContent;
         public:
-            Position(const SwPosition &rPos);
+            explicit Position(const SwPosition &rPos);
             Position(const Position &rPos);
             operator SwPosition() const;
             SwNodeIndex GetPtNode() { return maPtNode; };
@@ -692,7 +692,7 @@ private:
     WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&) SAL_DELETED_FUNCTION;
 
 public:
-    WW8FormulaCheckBox(SwWW8ImplReader &rR);
+    explicit WW8FormulaCheckBox(SwWW8ImplReader &rR);
 
     virtual bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
@@ -708,7 +708,7 @@ private:
     WW8FormulaListBox& operator=(const WW8FormulaListBox&) SAL_DELETED_FUNCTION;
 
 public:
-    WW8FormulaListBox(SwWW8ImplReader &rR);
+    explicit WW8FormulaListBox(SwWW8ImplReader &rR);
 
     virtual bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
@@ -723,7 +723,7 @@ private:
     WW8FormulaEditBox(const WW8FormulaEditBox&) SAL_DELETED_FUNCTION;
     WW8FormulaEditBox& operator=(const WW8FormulaEditBox&) SAL_DELETED_FUNCTION;
 public:
-    WW8FormulaEditBox(SwWW8ImplReader &rR);
+    explicit WW8FormulaEditBox(SwWW8ImplReader &rR);
     //no real implementation, return false
     virtual bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> & /* rServiceFactory */,
@@ -788,7 +788,7 @@ protected:
 class wwSection
 {
 public:
-    wwSection(const SwPosition &rPos);
+    explicit wwSection(const SwPosition &rPos);
     SEPr maSep;
     WW8_BRCVer9 brc[4];
     SwNodeIndex maStart;
@@ -887,8 +887,8 @@ private:
     wwSectionManager(const wwSectionManager&) SAL_DELETED_FUNCTION;
     wwSectionManager& operator=(const wwSectionManager&) SAL_DELETED_FUNCTION;
 public:
-    wwSectionManager(SwWW8ImplReader &rReader) : mrReader(rReader), mnDesc(0)
-        {};
+    explicit wwSectionManager(SwWW8ImplReader &rReader) : mrReader(rReader), mnDesc(0)
+        {}
     void SetCurrentSectionHasFootnote();
     bool CurrentSectionIsVertical() const;
     bool CurrentSectionIsProtected() const;
@@ -927,7 +927,7 @@ private:
     std::vector<SwTextNode*> m_aTextNodes;
     SwDoc& m_rDoc;
 public:
-    wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
+    explicit wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
     ~wwExtraneousParas() { delete_all_from_doc(); }
     void push_back(SwTextNode *pTextNode) { m_aTextNodes.push_back(pTextNode); }
     void delete_all_from_doc();

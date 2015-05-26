@@ -554,7 +554,7 @@ class SwNewUserIdxDlg : public ModalDialog
     DECL_LINK( ModifyHdl, Edit*);
 
     public:
-        SwNewUserIdxDlg(SwIndexMarkPane* pPane)
+        explicit SwNewUserIdxDlg(SwIndexMarkPane* pPane)
             : ModalDialog(&(pPane->GetDialog()), "NewUserIndexDialog",
                 "modules/swriter/ui/newuserindexdialog.ui")
             , m_pDlg(pPane)

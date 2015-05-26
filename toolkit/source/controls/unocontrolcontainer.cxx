@@ -363,7 +363,7 @@ private:
     uno::Reference< awt::XControlContainer > mxControlContainer;
 
 public:
-    DialogStepChangedListener( uno::Reference< awt::XControlContainer > xControlContainer )
+    explicit DialogStepChangedListener( uno::Reference< awt::XControlContainer > xControlContainer )
         : mxControlContainer( xControlContainer ) {}
 
     // XEventListener

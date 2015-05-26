@@ -99,7 +99,7 @@ class SwDrawViewSave
     SdrView* pDV;
     bool bPrintControls;
 public:
-    SwDrawViewSave( SdrView* pSdrView );
+    explicit SwDrawViewSave( SdrView* pSdrView );
     ~SwDrawViewSave();
 };
 

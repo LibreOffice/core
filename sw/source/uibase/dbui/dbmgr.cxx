@@ -213,7 +213,7 @@ private:
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
-    SwConnectionDisposedListener_Impl(SwDBManager& rMgr);
+    explicit SwConnectionDisposedListener_Impl(SwDBManager& rMgr);
     virtual ~SwConnectionDisposedListener_Impl();
 
     void Dispose() { m_pDBManager = 0; }
@@ -226,7 +226,7 @@ struct SwDBManager_Impl
     AbstractMailMergeDlg*     pMergeDialog;
     ::rtl::Reference<SwConnectionDisposedListener_Impl> m_xDisposeListener;
 
-    SwDBManager_Impl(SwDBManager& rDBManager)
+    explicit SwDBManager_Impl(SwDBManager& rDBManager)
        :pMergeData(0)
        ,pMergeDialog(0)
        , m_xDisposeListener(new SwConnectionDisposedListener_Impl(rDBManager))

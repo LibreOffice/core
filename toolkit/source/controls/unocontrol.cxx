@@ -101,13 +101,13 @@ private:
     VCLXWindow*  m_pLockWindow;
 
 public:
-    inline VclListenerLock( VCLXWindow* _pLockWindow )
-        :m_pLockWindow( _pLockWindow )
+    explicit VclListenerLock( VCLXWindow* _pLockWindow )
+        : m_pLockWindow( _pLockWindow )
     {
         if ( m_pLockWindow )
             m_pLockWindow->suspendVclEventListening( );
     }
-    inline ~VclListenerLock( )
+    ~VclListenerLock()
     {
         if ( m_pLockWindow )
             m_pLockWindow->resumeVclEventListening( );

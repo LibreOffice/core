@@ -85,7 +85,7 @@ class SwImplShellAction
     SwWrtShell* pSh;
     CurrShell* pCurrSh;
 public:
-    SwImplShellAction( SwDoc& rDoc );
+    explicit SwImplShellAction( SwDoc& rDoc );
     ~SwImplShellAction();
 };
 

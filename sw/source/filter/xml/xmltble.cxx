@@ -69,9 +69,9 @@ class SwXMLTableColumn_Impl : public SwWriteTableCol
 
 public:
 
-    SwXMLTableColumn_Impl( sal_uInt32 nPosition ) :
-        SwWriteTableCol( nPosition ),
-        nRelWidth( 0UL )
+    explicit SwXMLTableColumn_Impl(sal_uInt32 nPosition)
+        : SwWriteTableCol(nPosition)
+        , nRelWidth(0UL)
     {};
 
     void SetStyleName( const OUString& rName ) { sStyleName = rName; }
@@ -107,7 +107,7 @@ class SwXMLTableLines_Impl
 
 public:
 
-    SwXMLTableLines_Impl( const SwTableLines& rLines );
+    explicit SwXMLTableLines_Impl( const SwTableLines& rLines );
 
     ~SwXMLTableLines_Impl() {}
 

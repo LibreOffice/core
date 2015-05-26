@@ -1207,7 +1207,7 @@ class IsPostitFieldWithAuthorOf : public FilterFunctor
 {
     OUString m_sAuthor;
 public:
-    IsPostitFieldWithAuthorOf(const OUString &rAuthor)
+    explicit IsPostitFieldWithAuthorOf(const OUString &rAuthor)
         : m_sAuthor(rAuthor)
     {
     }

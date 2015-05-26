@@ -58,7 +58,7 @@ class RtfSdrExport : public EscherEx
     std::set<const SwFrameFormat*> m_aTextBoxes;
 
 public:
-    RtfSdrExport(RtfExport& rExport);
+    explicit RtfSdrExport(RtfExport& rExport);
     virtual             ~RtfSdrExport();
 
     /// Export the sdr object as Sdr.

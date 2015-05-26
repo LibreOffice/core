@@ -120,7 +120,7 @@ private:
     SAL_DLLPRIVATE com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> GetNumberingInfo()const;
 
 public:
-    SwFieldMgr(SwWrtShell* pSh = 0);
+    explicit SwFieldMgr(SwWrtShell* pSh = 0);
     ~SwFieldMgr();
 
     void                SetWrtShell( SwWrtShell* pShell )
