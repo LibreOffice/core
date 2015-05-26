@@ -21,6 +21,7 @@
 #define  DECLARE_FN_POINTERS 1
 #include "EApi.h"
 static const char *eBookLibNames[] = {
+    "libebook-1.2.so.15",
     "libebook-1.2.so.14", // bumped again (evolution-3.6)
     "libebook-1.2.so.13", // bumped again (evolution-3.4)
     "libebook-1.2.so.12", // bumped again
