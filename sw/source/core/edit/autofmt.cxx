@@ -1785,7 +1785,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
     if( m_aFlags.bAFormatByInput ||
         (!m_aFlags.bAutoCorrect && !bReplaceQuote && !bReplaceSglQuote &&
-        !m_aFlags.bCptlSttSntnc && !m_aFlags.bCptlSttWrd &&
+        !m_aFlags.bCapitalStartSentence && !m_aFlags.bCptlSttWrd &&
         !m_aFlags.bChgOrdinalNumber &&
         !m_aFlags.bChgToEnEmDash && !m_aFlags.bSetINetAttr &&
         !m_aFlags.bChgWeightUnderl && !m_aFlags.bAddNonBrkSpace) )
@@ -1797,7 +1797,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
     bool bGetLanguage = m_aFlags.bChgOrdinalNumber ||
                         m_aFlags.bChgToEnEmDash || m_aFlags.bSetINetAttr ||
-                        m_aFlags.bCptlSttWrd || m_aFlags.bCptlSttSntnc ||
+                        m_aFlags.bCptlSttWrd || m_aFlags.bCapitalStartSentence ||
                         m_aFlags.bAddNonBrkSpace;
 
     m_aDelPam.DeleteMark();
@@ -1809,7 +1809,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
     SwTextFrmInfo aFInfo( 0 );
 
     sal_Int32 nSttPos, nLastBlank = nPos;
-    bool bFirst = m_aFlags.bCptlSttSntnc, bFirstSent = bFirst;
+    bool bFirst = m_aFlags.bCapitalStartSentence, bFirstSent = bFirst;
     sal_Unicode cChar = 0;
 
     CharClass& rAppCC = GetAppCharClass();
@@ -1973,7 +1973,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             case '.':
             case '!':
             case '?':
-                if( m_aFlags.bCptlSttSntnc )
+                if( m_aFlags.bCapitalStartSentence )
                     bFirstSent = true;
                 /* fallthrough */
             default:
@@ -2046,7 +2046,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                     pATst->FnCptlSttWrd( aACorrDoc, *pText, nSttPos, nPos, eLang );
                 }
                 // capital letter at the beginning of a sentence?
-                if( m_aFlags.bCptlSttSntnc && bFirst )
+                if( m_aFlags.bCapitalStartSentence && bFirst )
                 {
                     SetRedlineText( STR_AUTOFMTREDL_CPTL_STT_SENT );
                     pATst->FnCptlSttSntnc( aACorrDoc, *pText, true, nSttPos, nPos, eLang);

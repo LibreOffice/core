@@ -76,7 +76,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     sal_uInt8 nRightMargin;
 
     bool bAutoCorrect : 1;
-    bool bCptlSttSntnc : 1;
+    bool bCapitalStartSentence : 1;
     bool bCptlSttWrd : 1;
     bool bChkFontAttr : 1;
 
