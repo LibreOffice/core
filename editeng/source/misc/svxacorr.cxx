@@ -90,7 +90,7 @@ static const sal_Char
     /* also at these ends - Brackets and all kinds of begin characters */
     sImplEndSkipChars[] = "\"\')]}\x83\x84\x89\x91\x92\x93\x94";
 
-// These characters are allowed in words: (for FnCptlSttSntnc)
+// These characters are allowed in words: (for FnCapitalStartSentence)
 static const sal_Char sImplWordChars[] = "-'";
 
 OUString EncryptBlockName_Imp(const OUString& rName);
@@ -175,7 +175,7 @@ SvxAutoCorrDoc::~SvxAutoCorrDoc()
 
 // Called by the functions:
 //  - FnCptlSttWrd
-//  - FnCptlSttSntnc
+//  - FnCapitalStartSentence
 // after the exchange of characters. Then the words, if necessary, can be inserted
 // into the exception list.
 void SvxAutoCorrDoc::SaveCpltSttWord( sal_uLong, sal_Int32, const OUString&,
@@ -250,7 +250,7 @@ bool SvxAutoCorrect::NeedsHardspaceAutocorr( sal_Unicode cChar )
 long SvxAutoCorrect::GetDefaultFlags()
 {
     long nRet = Autocorrect
-                    | CptlSttSntnc
+                    | CapitalStartSentence
                     | CptlSttWrd
                     | ChgOrdinalNumber
                     | ChgToEnEmDash
@@ -340,7 +340,7 @@ void SvxAutoCorrect::SetAutoCorrFlag( long nFlag, bool bOn )
 
     if( !bOn )
     {
-        if( (nOld & CptlSttSntnc) != (nFlags & CptlSttSntnc) )
+        if( (nOld & CapitalStartSentence) != (nFlags & CapitalStartSentence) )
             nFlags &= ~CplSttLstLoad;
         if( (nOld & CptlSttWrd) != (nFlags & CptlSttWrd) )
             nFlags &= ~WrdSttLstLoad;
@@ -800,7 +800,7 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
 }
 
 
-bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
+bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
                                     const OUString& rTxt, bool bNormalPos,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
@@ -1069,7 +1069,7 @@ bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
     // Parahaps someone wants to have the word
     if( bRet && SaveWordCplSttLst & nFlags )
-        rDoc.SaveCpltSttWord( CptlSttSntnc, nSttPos, sWord, cSave );
+        rDoc.SaveCpltSttWord( CapitalStartSentence, nSttPos, sWord, cSave );
 
     return bRet;
 }
@@ -1335,7 +1335,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         if( IsAutoCorrFlag( Autocorrect ) )
         {
             OUString aPara;
-            OUString* pPara = IsAutoCorrFlag(CptlSttSntnc) ? &aPara : 0;
+            OUString* pPara = IsAutoCorrFlag(CapitalStartSentence) ? &aPara : 0;
 
             // since LibO 4.1, '-' is a word separator
             // fdo#67742 avoid "--" to be replaced by "–" if next is "-"
@@ -1375,10 +1375,10 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         ++nEnd;
 
                     // Capital letter at beginning of paragraph?
-                    if( IsAutoCorrFlag( CptlSttSntnc ) &&
-                        FnCptlSttSntnc( rDoc, aPara, false,
+                    if( IsAutoCorrFlag( CapitalStartSentence ) &&
+                        FnCapitalStartSentence( rDoc, aPara, false,
                                                 nCapLttrPos, nEnd, eLang ) )
-                        nRet |= CptlSttSntnc;
+                        nRet |= CapitalStartSentence;
 
                     if( IsAutoCorrFlag( ChgToEnEmDash ) &&
                         FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nEnd, eLang ) )
@@ -1414,9 +1414,9 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
             // Capital letter at beginning of paragraph ?
             if( !bUnsupported &&
-                IsAutoCorrFlag( CptlSttSntnc ) &&
-                FnCptlSttSntnc( rDoc, rTxt, true, nCapLttrPos, nInsPos, eLang ) )
-                nRet |= CptlSttSntnc;
+                IsAutoCorrFlag( CapitalStartSentence ) &&
+                FnCapitalStartSentence( rDoc, rTxt, true, nCapLttrPos, nInsPos, eLang ) )
+                nRet |= CapitalStartSentence;
 
             // Two capital letters at beginning of word ??
             if( !bUnsupported &&

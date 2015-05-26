@@ -403,7 +403,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
 // Called by the functions:
 //  - FnCptlSttWrd
-//  - FnCptlSttSntnc
+//  - FnCapitalStartSentence
 // after the exchange of characters. Then the words, if necessary, can be inserted
 // into the exception list.
 void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
@@ -443,7 +443,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
         // then add to the list:
         if (CptlSttWrd & m_nFlags)
             pACorr->AddWrtSttException(m_sWord, m_eLanguage);
-        else if (CptlSttSntnc & m_nFlags)
+        else if (CapitalStartSentence & m_nFlags)
             pACorr->AddCplSttException(m_sWord, m_eLanguage);
     }
 }

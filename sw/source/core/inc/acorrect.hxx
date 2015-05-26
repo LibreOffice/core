@@ -80,7 +80,7 @@ public:
 
     // Will be called after swapping characters by the functions
     //  - FnCptlSttWrd and
-    //  - FnCptlSttSntnc.
+    //  - FnCapitalStartSentence.
     // Afterwards the words can be added into exception list if needed.
     virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                     const OUString& rExceptWord, sal_Unicode cChar ) SAL_OVERRIDE;

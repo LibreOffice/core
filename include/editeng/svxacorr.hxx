@@ -55,7 +55,7 @@ class SvStringsISortDtor
 };
 
 // Auto correct flags
-const long CptlSttSntnc     = 0x00000001;   // Capital letters at the beginning of a sentence
+const long CapitalStartSentence = 0x00000001;   // Capital letters at the beginning of a sentence
 const long CptlSttWrd       = 0x00000002;   // not two Capital letters at the beginning of a word
 const long AddNonBrkSpace   = 0x00000004;   // Add non breaking space before :;?!%
 const long ChgOrdinalNumber = 0x00000008;   // Ordinal-Number 1st, 2nd,..
@@ -106,7 +106,7 @@ public:
                                   OUString* pPara ) = 0;
     // Is called after the change of the signs by the functions
     //  - FnCptlSttWrd
-    //  - FnCptlSttSntnc
+    //  - FnCapitalStartSentence
     // As an option, the words can then be inserted into the exception lists.
     virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                     const OUString& rExceptWord,
@@ -405,7 +405,7 @@ public:
     bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    bool FnCptlSttSntnc( SvxAutoCorrDoc&, const OUString&, bool bNormalPos,
+    bool FnCapitalStartSentence( SvxAutoCorrDoc&, const OUString&, bool bNormalPos,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang  = LANGUAGE_SYSTEM);
     bool FnCorrectCapsLock( SvxAutoCorrDoc&, const OUString&,
