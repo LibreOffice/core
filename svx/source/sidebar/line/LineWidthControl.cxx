@@ -263,7 +263,7 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
 
 IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
 {
-    if (pControl == &maVSWidth)
+    if (pControl == maVSWidth.get())
     {
         sal_uInt16 iPos = maVSWidth->GetSelectItemId();
         if (iPos >= 1 && iPos <= 8)
@@ -308,7 +308,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
 
 IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
 {
-    if(pControl == &maMFWidth)
+    if (pControl == maMFWidth.get())
     {
         if(maVSWidth->GetSelItem())
         {
