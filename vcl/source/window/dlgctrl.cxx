@@ -182,7 +182,7 @@ static vcl::Window* ImplGetNextWindow( vcl::Window* pParent, sal_uInt16 n, sal_u
 
 namespace vcl {
 
-vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
+vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType,
                                   sal_uInt16 nFormStart, sal_uInt16 nFormEnd,
                                   sal_uInt16* pIndex )
 {
@@ -194,7 +194,7 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
     sal_uInt16  nTemp;
     sal_uInt16  nStartIndex;
 
-    if ( nType == DLGWINDOW_PREV )
+    if ( nType == GetDlgWindowType::Prev )
     {
         i = nIndex;
         do
@@ -214,12 +214,12 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
     else
     {
         i = nIndex;
-        pWindow = ImplGetChildWindow( this, i, i, (nType == DLGWINDOW_FIRST) );
+        pWindow = ImplGetChildWindow( this, i, i, (nType == GetDlgWindowType::First) );
         if ( pWindow )
         {
             nStartIndex = i;
 
-            if ( nType == DLGWINDOW_NEXT )
+            if ( nType == GetDlgWindowType::Next )
             {
                 if ( i < nFormEnd )
                 {
@@ -260,13 +260,13 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
             }
         }
 
-        if ( nType == DLGWINDOW_FIRST )
+        if ( nType == GetDlgWindowType::First )
         {
             if ( pWindow )
             {
                 if ( pWindow->GetType() == WINDOW_TABCONTROL )
                 {
-                    vcl::Window* pNextWindow = ImplGetDlgWindow( i, DLGWINDOW_NEXT );
+                    vcl::Window* pNextWindow = ImplGetDlgWindow( i, GetDlgWindowType::Next );
                     if ( pNextWindow )
                     {
                         if ( pWindow->IsChild( pNextWindow ) )
@@ -429,7 +429,7 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
                 if ( (pWindow->GetType() == WINDOW_FIXEDTEXT)   ||
                      (pWindow->GetType() == WINDOW_FIXEDLINE)   ||
                      (pWindow->GetType() == WINDOW_GROUPBOX) )
-                    pWindow = pParent->ImplGetDlgWindow( i, DLGWINDOW_NEXT );
+                    pWindow = pParent->ImplGetDlgWindow( i, GetDlgWindowType::Next );
                 rIndex = i;
                 return pWindow;
             }
@@ -641,18 +641,18 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
         if ( bKeyInput && !pButtonWindow && (nDlgCtrlFlags & WINDOW_DLGCTRL_RETURN) )
         {
-            sal_uInt16  nType;
+            GetDlgWindowType nType;
             sal_uInt16  nGetFocusFlags = GETFOCUS_TAB;
             sal_uInt16  nNewIndex;
             sal_uInt16  iStart;
             if ( aKeyCode.IsShift() )
             {
-                nType = DLGWINDOW_PREV;
+                nType = GetDlgWindowType::Prev;
                 nGetFocusFlags |= GETFOCUS_BACKWARD;
             }
             else
             {
-                nType = DLGWINDOW_NEXT;
+                nType = GetDlgWindowType::Next;
                 nGetFocusFlags |= GETFOCUS_FORWARD;
             }
             iStart = i;
@@ -662,7 +662,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 if ( !pTempWindow->mpWindowImpl->mbPushButton )
                 {
                     // get Around-Flag
-                    if ( nType == DLGWINDOW_PREV )
+                    if ( nType == GetDlgWindowType::Prev )
                     {
                         if ( nNewIndex > iStart )
                             nGetFocusFlags |= GETFOCUS_AROUND;
@@ -731,7 +731,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
             // do not skip Alt key, for MS Windows
             if ( !aKeyCode.IsMod2() )
             {
-                sal_uInt16  nType;
+                GetDlgWindowType nType;
                 sal_uInt16  nGetFocusFlags = GETFOCUS_TAB;
                 sal_uInt16  nNewIndex;
                 bool        bFormular = false;
@@ -787,7 +787,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                                                       nFoundFormStart, nFoundFormEnd ) )
                         {
                             nTempIndex = nFoundFormStart;
-                            pFormularFirstWindow = ImplGetDlgWindow( nTempIndex, DLGWINDOW_FIRST, nFoundFormStart, nFoundFormEnd );
+                            pFormularFirstWindow = ImplGetDlgWindow( nTempIndex, GetDlgWindowType::First, nFoundFormStart, nFoundFormEnd );
                             if ( pFormularFirstWindow )
                             {
                                 pFormularFirstWindow->ImplControlFocus();
@@ -806,12 +806,12 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                     {
                         if ( aKeyCode.IsShift() )
                         {
-                            nType = DLGWINDOW_PREV;
+                            nType = GetDlgWindowType::Prev;
                             nGetFocusFlags |= GETFOCUS_BACKWARD;
                         }
                         else
                         {
-                            nType = DLGWINDOW_NEXT;
+                            nType = GetDlgWindowType::Next;
                             nGetFocusFlags |= GETFOCUS_FORWARD;
                         }
                         vcl::Window* pWindow = ImplGetDlgWindow( i, nType, nFormStart, nFormEnd, &nNewIndex );
@@ -832,7 +832,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                         else if ( pWindow )
                         {
                             // get Around-Flag
-                            if ( nType == DLGWINDOW_PREV )
+                            if ( nType == GetDlgWindowType::Prev )
                             {
                                 if ( nNewIndex > i )
                                     nGetFocusFlags |= GETFOCUS_AROUND;
@@ -994,7 +994,7 @@ if ( !pDlgCtrlParent || (GetStyle() & WB_NODIALOGCONTROL) || ((pDlgCtrlParent->G
     if ( !pSWindow )
         return;
 
-    vcl::Window* pWindow = pDlgCtrlParent->ImplGetDlgWindow( nIndex, DLGWINDOW_NEXT, nFormStart, nFormEnd );
+    vcl::Window* pWindow = pDlgCtrlParent->ImplGetDlgWindow( nIndex, GetDlgWindowType::Next, nFormStart, nFormEnd );
     if ( pWindow && (pWindow != pSWindow) )
         pWindow->ImplControlFocus();
 }
