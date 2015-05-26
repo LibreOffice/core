@@ -262,7 +262,7 @@ public:
         if( !pCompDev )
         {
             apDummyVDev.disposeAndClear();
-            apDummyVDev.reset( new VirtualDevice );
+            apDummyVDev.reset( VclPtr<VirtualDevice>::Create() );
             pCompDev = apDummyVDev.get();
         }
     }
