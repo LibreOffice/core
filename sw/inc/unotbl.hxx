@@ -276,7 +276,7 @@ public:
     SwUnoCrsr*                  GetCrsr();
     std::shared_ptr<SwUnoCrsr> m_pUnoCrsr;
     SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
-    ~SwXTextTableCursor()
+    virtual ~SwXTextTableCursor()
     {
         if(m_pUnoCrsr)
             m_pUnoCrsr->Remove(&aCrsrDepend);
