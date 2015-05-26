@@ -910,6 +910,8 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_SEARCH_NOT_FOUND";
     case LOK_CALLBACK_PAGE_COUNT_CHANGED:
         return "LOK_CALLBACK_PAGE_COUNT_CHANGED";
+    case LOK_CALLBACK_SET_PART:
+        return "LOK_CALLBACK_SET_PART";
     }
     return 0;
 }
@@ -1007,6 +1009,11 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     case LOK_CALLBACK_PAGE_COUNT_CHANGED:
     {
         m_pDocument->pClass->getDocumentSize(m_pDocument, &m_nDocumentWidthTwips, &m_nDocumentHeightTwips);
+    }
+    break;
+    case LOK_CALLBACK_SET_PART:
+    {
+        renderDocument(0);
     }
     break;
     default:
@@ -1203,7 +1210,6 @@ SAL_DLLPUBLIC_EXPORT int lok_docview_get_part( LOKDocView* pDocView )
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_part( LOKDocView* pDocView, int nPart)
 {
     pDocView->m_pImpl->m_pDocument->pClass->setPart( pDocView->m_pImpl->m_pDocument, nPart );
-    pDocView->m_pImpl->renderDocument(0);
 }
 
 SAL_DLLPUBLIC_EXPORT char* lok_docview_get_part_name( LOKDocView* pDocView, int nPart )
