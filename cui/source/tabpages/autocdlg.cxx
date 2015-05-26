@@ -416,7 +416,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     , sDeleteEmptyPara(CUI_RESSTR(RID_SVXSTR_DEL_EMPTY_PARA))
     , sUseReplaceTbl(CUI_RESSTR(RID_SVXSTR_USE_REPLACE))
     , sCapitalStartWord(CUI_RESSTR(RID_SVXSTR_CPTL_STT_WORD))
-    , sCptlSttSent(CUI_RESSTR(RID_SVXSTR_CPTL_STT_SENT))
+    , sCapitalStartSentence(CUI_RESSTR(RID_SVXSTR_CPTL_STT_SENT))
     , sUserStyle(CUI_RESSTR(RID_SVXSTR_USER_STYLE))
     , sBullet(CUI_RESSTR(RID_SVXSTR_BULLET))
     , sBoldUnder(CUI_RESSTR(RID_SVXSTR_BOLD_UNDER))
@@ -650,8 +650,8 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     // The following entries have to be inserted in the same order
     // as in the OfaAutoFmtOptions-enum!
     m_pCheckLB->GetModel()->Insert(CreateEntry(sUseReplaceTbl,     CBCOL_BOTH  ));
-    m_pCheckLB->GetModel()->Insert(CreateEntry(sCapitalStartWord,       CBCOL_BOTH  ));
-    m_pCheckLB->GetModel()->Insert(CreateEntry(sCptlSttSent,       CBCOL_BOTH  ));
+    m_pCheckLB->GetModel()->Insert(CreateEntry(sCapitalStartWord,  CBCOL_BOTH  ));
+    m_pCheckLB->GetModel()->Insert(CreateEntry(sCapitalStartSentence, CBCOL_BOTH  ));
     m_pCheckLB->GetModel()->Insert(CreateEntry(sBoldUnder,         CBCOL_BOTH  ));
     m_pCheckLB->GetModel()->Insert(CreateEntry(sDetectURL,         CBCOL_BOTH  ));
     m_pCheckLB->GetModel()->Insert(CreateEntry(sDash,              CBCOL_BOTH  ));
