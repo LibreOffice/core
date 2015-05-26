@@ -6652,10 +6652,10 @@ if test "$ENABLE_JAVA" != ""; then
         fi
     fi
 
+    dnl Check that the JDK found is correct architecture (at least 2 reasons to
+    dnl check: officebean needs to link -ljawt, and libjpipe.so needs to be
+    dnl loaded by java to run JunitTests:
     if test "$build_os" = "cygwin"; then
-        # Check that the JDK found is correct architecture
-        # Why is this necessary, we don't link with any library from the JDK I think,
-
         shortjdkhome=`cygpath -d "$with_jdk_home"`
         if test "$BITNESS_OVERRIDE" = 64 -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
             AC_MSG_WARN([You are building 64-bit binaries but the JDK $howfound is 32-bit])
@@ -6670,8 +6670,6 @@ if test "$ENABLE_JAVA" != ""; then
         fi
         JAVAINTERPRETER=`win_short_path_for_make "$JAVAINTERPRETER"`
     elif test "$cross_compiling" != "yes"; then
-        # at least 2 reasons to check: officebean needs to link -ljawt,
-        # and libjpipe.so needs to be loaded by java to run JunitTests.
         case $CPUNAME in
             AARCH64|AXP|X86_64|HPPA|IA64|POWERPC64|S390X|SPARC64)
                 if test -f "$JAVAINTERPRETER" -a "`$JAVAINTERPRETER -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
