@@ -339,7 +339,7 @@ void OReportController::disposing()
     {
         SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
         aDlgOpt.SetWindowState(OStringToOUString(m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
-        m_pGroupsFloater = NULL;
+        m_pGroupsFloater.disposeAndClear();
     }
 
     try
