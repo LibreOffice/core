@@ -1285,7 +1285,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
                 rRenderContext.SetLineColor();
                 rRenderContext.SetFillColor(aSelectColor);
                 aDrawer.drawOverTopBorder();
-                return;
+                break;
             }
 
             pItem = prev();
@@ -1293,7 +1293,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
         else
         {
             if (bCurrent)
-                return;
+                break;
 
             pItem = NULL;
         }
@@ -1301,6 +1301,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
         if (!pItem)
             pItem = pCurItem;
     }
+    rRenderContext.Pop();
 }
 
 void TabBar::Resize()
