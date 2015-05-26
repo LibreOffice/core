@@ -441,15 +441,16 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
         {
             OUString sURL;
             mAny >>= sURL;
-                if( !sURL.isEmpty() ) {
-                    OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
-                    sURL, true );
+            if( !sURL.isEmpty() )
+            {
+                OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                        sURL, true );
 
-                    mpFS->singleElementNS( XML_a, XML_hlinkClick,
-                    FSNS( XML_r,XML_id ), USS( sRelId ),
-                    FSEND );
-                 }
+                mpFS->singleElementNS( XML_a, XML_hlinkClick,
+                        FSNS( XML_r,XML_id ), USS( sRelId ),
+                        FSEND );
+            }
         }
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
