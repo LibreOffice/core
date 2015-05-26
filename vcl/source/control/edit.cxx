@@ -1078,16 +1078,16 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
                     aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
                 }
 
-                vcl::Region oldRgn(rRenderContext.GetClipRegion());
-                rRenderContext.SetClipRegion(aClipRgn);
+                vcl::Region oldRgn(pBorder->GetClipRegion());
+                pBorder->SetClipRegion(aClipRgn);
 
-                pBorder->Paint(rRenderContext, Rectangle());
+                pBorder->Paint(*pBorder, Rectangle()); // FIXME
 
-                rRenderContext.SetClipRegion(oldRgn);
+                pBorder->SetClipRegion(oldRgn);
             }
             else
             {
-                pBorder->Paint(rRenderContext, Rectangle());
+                pBorder->Paint(*pBorder, Rectangle()); // FIXME
             }
         }
     }
