@@ -402,7 +402,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 }
 
 // Called by the functions:
-//  - FnCptlSttWrd
+//  - FnCapitalStartWord
 //  - FnCapitalStartSentence
 // after the exchange of characters. Then the words, if necessary, can be inserted
 // into the exception list.
@@ -441,7 +441,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
         // then add to the list:
-        if (CptlSttWrd & m_nFlags)
+        if (CapitalStartWord & m_nFlags)
             pACorr->AddWrtSttException(m_sWord, m_eLanguage);
         else if (CapitalStartSentence & m_nFlags)
             pACorr->AddCplSttException(m_sWord, m_eLanguage);

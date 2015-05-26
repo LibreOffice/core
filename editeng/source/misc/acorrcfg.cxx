@@ -154,7 +154,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                     break;//"UseReplacementTable",
                     case  3:
                         if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
-                            nFlags |= CptlSttWrd;
+                            nFlags |= CapitalStartWord;
                     break;//"TwoCapitalsAtStart",
                     case  4:
                         if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
@@ -263,7 +263,7 @@ void SvxBaseAutoCorrCfg::ImplCommit()
                 pValues[nProp].setValue(&bVal, rType);
             break;//"UseReplacementTable",
             case  3:
-                bVal = 0 != (nFlags & CptlSttWrd);
+                bVal = 0 != (nFlags & CapitalStartWord);
                 pValues[nProp].setValue(&bVal, rType);
             break;//"TwoCapitalsAtStart",
             case  4:
@@ -412,7 +412,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                     case   4: rParent.bSearchInAllCategories = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; //"Text/SearchInAllCategories"
                     case   5: rSwFlags.bAutoCorrect = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/UseReplacementTable",
                     case   6: rSwFlags.bCapitalStartSentence = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/TwoCapitalsAtStart",
-                    case   7: rSwFlags.bCptlSttWrd = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/CapitalAtStartSentence",
+                    case   7: rSwFlags.bCapitalStartWord = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/CapitalAtStartSentence",
                     case   8: rSwFlags.bChgWeightUnderl = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeUnderlineWeight",
                     case   9: rSwFlags.bSetINetAttr = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/SetInetAttribute",
                     case  10: rSwFlags.bChgOrdinalNumber = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeOrdinalNumber",
@@ -566,7 +566,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
             case   4: pValues[nProp].setValue(&rParent.bSearchInAllCategories, rType );break; //"Text/SearchInAllCategories"
             case   5: bVal = rSwFlags.bAutoCorrect; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/UseReplacementTable",
             case   6: bVal = rSwFlags.bCapitalStartSentence; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/TwoCapitalsAtStart",
-            case   7: bVal = rSwFlags.bCptlSttWrd; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/CapitalAtStartSentence",
+            case   7: bVal = rSwFlags.bCapitalStartWord; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/CapitalAtStartSentence",
             case   8: bVal = rSwFlags.bChgWeightUnderl; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeUnderlineWeight",
             case   9: bVal = rSwFlags.bSetINetAttr; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/SetInetAttribute",
             case  10: bVal = rSwFlags.bChgOrdinalNumber; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeOrdinalNumber",

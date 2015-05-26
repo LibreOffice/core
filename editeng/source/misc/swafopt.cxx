@@ -27,7 +27,7 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
 {
     bAutoCorrect =
     bCapitalStartSentence =
-    bCptlSttWrd =
+    bCapitalStartWord =
     bChkFontAttr =
     bChgUserColl =
     bChgEnumNum =
@@ -85,7 +85,7 @@ SvxSwAutoFormatFlags& SvxSwAutoFormatFlags::operator=( const SvxSwAutoFormatFlag
 {
     bAutoCorrect = rAFFlags.bAutoCorrect;
     bCapitalStartSentence = rAFFlags.bCapitalStartSentence;
-    bCptlSttWrd = rAFFlags.bCptlSttWrd;
+    bCapitalStartWord = rAFFlags.bCapitalStartWord;
     bChkFontAttr = rAFFlags.bChkFontAttr;
 
     bChgUserColl = rAFFlags.bChgUserColl;

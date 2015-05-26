@@ -228,7 +228,7 @@ bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
 
     sal_uLong nPos = 0;
     pAutoCorrect->SetAutoCorrFlag(Autocorrect,          m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(CptlSttWrd,           m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CapitalStartWord,     m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(CapitalStartSentence, m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,      m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          m_pCheckLB->IsChecked(nPos++));
@@ -270,7 +270,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
 
     sal_uLong nPos = 0;
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & Autocorrect) );
-    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CptlSttWrd) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CapitalStartWord) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CapitalStartSentence) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & ChgWeightUnderl) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & SetINetAttr) );
@@ -415,7 +415,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     : SfxTabPage(pParent, "ApplyAutoFmtPage", "cui/ui/applyautofmtpage.ui", &rSet)
     , sDeleteEmptyPara(CUI_RESSTR(RID_SVXSTR_DEL_EMPTY_PARA))
     , sUseReplaceTbl(CUI_RESSTR(RID_SVXSTR_USE_REPLACE))
-    , sCptlSttWord(CUI_RESSTR(RID_SVXSTR_CPTL_STT_WORD))
+    , sCapitalStartWord(CUI_RESSTR(RID_SVXSTR_CPTL_STT_WORD))
     , sCptlSttSent(CUI_RESSTR(RID_SVXSTR_CPTL_STT_SENT))
     , sUserStyle(CUI_RESSTR(RID_SVXSTR_USER_STYLE))
     , sBullet(CUI_RESSTR(RID_SVXSTR_BULLET))
@@ -531,9 +531,9 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
                         m_pCheckLB->IsChecked(USE_REPLACE_TABLE, CBCOL_SECOND));
 
     bCheck = m_pCheckLB->IsChecked(CORR_UPPER, CBCOL_FIRST);
-    bModified |= pOpt->bCptlSttWrd != bCheck;
-    pOpt->bCptlSttWrd = bCheck;
-    pAutoCorrect->SetAutoCorrFlag(CptlSttWrd,
+    bModified |= pOpt->bCapitalStartWord != bCheck;
+    pOpt->bCapitalStartWord = bCheck;
+    pAutoCorrect->SetAutoCorrFlag(CapitalStartWord,
                         m_pCheckLB->IsChecked(CORR_UPPER, CBCOL_SECOND));
 
     bCheck = m_pCheckLB->IsChecked(BEGIN_UPPER, CBCOL_FIRST);
@@ -650,7 +650,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     // The following entries have to be inserted in the same order
     // as in the OfaAutoFmtOptions-enum!
     m_pCheckLB->GetModel()->Insert(CreateEntry(sUseReplaceTbl,     CBCOL_BOTH  ));
-    m_pCheckLB->GetModel()->Insert(CreateEntry(sCptlSttWord,       CBCOL_BOTH  ));
+    m_pCheckLB->GetModel()->Insert(CreateEntry(sCapitalStartWord,       CBCOL_BOTH  ));
     m_pCheckLB->GetModel()->Insert(CreateEntry(sCptlSttSent,       CBCOL_BOTH  ));
     m_pCheckLB->GetModel()->Insert(CreateEntry(sBoldUnder,         CBCOL_BOTH  ));
     m_pCheckLB->GetModel()->Insert(CreateEntry(sDetectURL,         CBCOL_BOTH  ));
@@ -671,8 +671,8 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
 
     m_pCheckLB->CheckEntryPos( USE_REPLACE_TABLE,  CBCOL_FIRST,    pOpt->bAutoCorrect );
     m_pCheckLB->CheckEntryPos( USE_REPLACE_TABLE,  CBCOL_SECOND,   0 != (nFlags & Autocorrect));
-    m_pCheckLB->CheckEntryPos( CORR_UPPER,         CBCOL_FIRST,    pOpt->bCptlSttWrd );
-    m_pCheckLB->CheckEntryPos( CORR_UPPER,         CBCOL_SECOND,   0 != (nFlags & CptlSttWrd) );
+    m_pCheckLB->CheckEntryPos( CORR_UPPER,         CBCOL_FIRST,    pOpt->bCapitalStartWord );
+    m_pCheckLB->CheckEntryPos( CORR_UPPER,         CBCOL_SECOND,   0 != (nFlags & CapitalStartWord) );
     m_pCheckLB->CheckEntryPos( BEGIN_UPPER,        CBCOL_FIRST,    pOpt->bCapitalStartSentence );
     m_pCheckLB->CheckEntryPos( BEGIN_UPPER,        CBCOL_SECOND,   0 != (nFlags & CapitalStartSentence) );
     m_pCheckLB->CheckEntryPos( BOLD_UNDERLINE,     CBCOL_FIRST,    pOpt->bChgWeightUnderl );

@@ -77,7 +77,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
 
     bool bAutoCorrect : 1;
     bool bCapitalStartSentence : 1;
-    bool bCptlSttWrd : 1;
+    bool bCapitalStartWord : 1;
     bool bChkFontAttr : 1;
 
     bool bChgUserColl : 1;
