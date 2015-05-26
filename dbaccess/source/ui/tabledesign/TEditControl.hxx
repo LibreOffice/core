@@ -76,6 +76,7 @@ namespace dbaui
         public:
             ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl*);
             ~ClipboardInvalidator();
+            void Stop();
 
         protected:
             DECL_LINK_TYPED(OnInvalidate, Timer*, void);
