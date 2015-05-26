@@ -731,7 +731,7 @@ void SAL_CALL VCLXToolkit::disposing()
 
     SolarMutexGuard aSolarGuard;
 
-    VirtualDevice* pV = new VirtualDevice;
+    VclPtrInstance<VirtualDevice> pV;
     pV->SetOutputSizePixel( Size( Width, Height ) );
     pVDev->SetVirtualDevice( pV );
 

@@ -660,9 +660,9 @@ void Parser::readFont()
 
     }
 
-    static VirtualDevice* vDev = 0;
-    if (vDev == 0)
-        vDev = new VirtualDevice;
+    static VclPtr<VirtualDevice> vDev;
+    if (!vDev)
+        vDev = VclPtr<VirtualDevice>::Create();
 
     vcl::Font font(aResult.familyName, Size(0, 1000));
     vDev->SetFont(font);

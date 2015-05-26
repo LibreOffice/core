@@ -93,7 +93,7 @@ TextEngine::TextEngine()
     mpIdleFormatter = new IdleFormatter;
     mpIdleFormatter->SetIdleHdl( LINK( this, TextEngine, IdleFormatHdl ) );
 
-    mpRefDev = new VirtualDevice;
+    mpRefDev = VclPtr<VirtualDevice>::Create();
 
     ImpInitLayoutMode( mpRefDev );
 

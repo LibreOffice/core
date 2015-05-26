@@ -1710,7 +1710,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     bEmbedEMF = true;
     bStatus=true;
-    pVirDev = new VirtualDevice;
+    pVirDev = VclPtr<VirtualDevice>::Create();
 
     if (pFConfigItem)
     {

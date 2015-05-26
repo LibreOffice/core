@@ -33,8 +33,8 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         maSz            ( rSz ),
         maSzPix         ( mpOut->LogicToPixel( maSz ) ),
         maClip          ( mpOut->GetClipRegion() ),
-        mpBackground    ( new VirtualDevice ),
-        mpRestore       ( new VirtualDevice ),
+        mpBackground    ( VclPtr<VirtualDevice>::Create() ),
+        mpRestore       ( VclPtr<VirtualDevice>::Create() ),
         meLastDisposal  ( DISPOSE_BACK ),
         mbPause         ( false ),
         mbMarked        ( false ),
@@ -217,7 +217,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         // get output device
         if( !pVDev )
         {
-            pDev = new VirtualDevice;
+            pDev = VclPtr<VirtualDevice>::Create();
             pDev->SetOutputSizePixel( maSzPix, false );
             pDev->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
         }

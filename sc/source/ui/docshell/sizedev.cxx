@@ -39,7 +39,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
     }
     else
     {
-        pDevice = new VirtualDevice;
+        pDevice = VclPtr<VirtualDevice>::Create();
         pDevice->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
         bOwner = true;
     }
