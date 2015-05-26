@@ -529,25 +529,17 @@ void Window::dispose()
     // cleanup Extra Window Data, TODO: add and use ImplWinData destructor
     if ( mpWindowImpl->mpWinData )
     {
-        if ( mpWindowImpl->mpWinData->mpExtOldText )
-            delete mpWindowImpl->mpWinData->mpExtOldText;
-        if ( mpWindowImpl->mpWinData->mpExtOldAttrAry )
-            delete mpWindowImpl->mpWinData->mpExtOldAttrAry;
-        if ( mpWindowImpl->mpWinData->mpCursorRect )
-            delete mpWindowImpl->mpWinData->mpCursorRect;
-        if ( mpWindowImpl->mpWinData->mpCompositionCharRects)
-            delete[] mpWindowImpl->mpWinData->mpCompositionCharRects;
-        if ( mpWindowImpl->mpWinData->mpFocusRect )
-            delete mpWindowImpl->mpWinData->mpFocusRect;
-        if ( mpWindowImpl->mpWinData->mpTrackRect )
-            delete mpWindowImpl->mpWinData->mpTrackRect;
-
+        delete mpWindowImpl->mpWinData->mpExtOldText;
+        delete mpWindowImpl->mpWinData->mpExtOldAttrAry;
+        delete mpWindowImpl->mpWinData->mpCursorRect;
+        delete[] mpWindowImpl->mpWinData->mpCompositionCharRects;
+        delete mpWindowImpl->mpWinData->mpFocusRect;
+        delete mpWindowImpl->mpWinData->mpTrackRect;
         delete mpWindowImpl->mpWinData;
     }
 
     // cleanup overlap related window data
-    if ( mpWindowImpl->mpOverlapData )
-        delete mpWindowImpl->mpOverlapData;
+    delete mpWindowImpl->mpOverlapData;
 
     // remove BorderWindow or Frame window data
     mpWindowImpl->mpBorderWindow.disposeAndClear();
