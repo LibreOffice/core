@@ -663,7 +663,6 @@ private:
     DECL_LINK( ClickSaveHdl_Impl, void * );
 
     XPropertyListRef GetList();
-    void HideLoadSaveEmbed();
     bool GetEmbed();
     void SetEmbed( bool bEmbed );
     void UpdateTableName();

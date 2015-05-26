@@ -69,9 +69,7 @@ XPropertyListRef SvxColorTabPage::GetList()
 
     // URGH - abstract this nicely ... for re-using SvxLoadSaveEmbed
     if( !pList.is() ) {
-        SvxColorTabPage *pPage = dynamic_cast< SvxColorTabPage *>( this );
-        if( pPage )
-            pList = pPage->GetColorList();
+        pList = GetColorList();
     }
 
     return XPropertyListRef( static_cast< XPropertyList * >( pList.get() ) );
@@ -95,13 +93,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, EmbedToggleHdl_Impl)
 {
     SetEmbed( m_pBoxEmbed->IsChecked() );
     return 0;
-}
-
-void SvxColorTabPage::HideLoadSaveEmbed()
-{
-    m_pBtnLoad->Hide();
-    m_pBtnSave->Hide();
-    m_pBoxEmbed->Hide();
 }
 
 void SvxColorTabPage::UpdateTableName()
@@ -167,9 +158,11 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
 
                 // FIXME: want to have a generic set and get method by type ...
                 if( pArea )
-                    pArea->SetNewColorList( pList );
+                    pArea->SetNewColorList(pList);
                 else if( pLine )
-                    pLine->SetNewColorList( pList );
+                    pLine->SetNewColorList(pList);
+                else
+                    SetColorList(pList);
 
                 bLoaded = true;
                 UpdateTableName();
@@ -451,8 +444,6 @@ void SvxColorTabPage::Construct()
     }
 }
 
-
-
 void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
     if( nDlgType == 0 ) // area dialog
@@ -502,10 +493,8 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
         }
     }
     else
-        HideLoadSaveEmbed();
+        m_pBoxEmbed->Hide();
 }
-
-
 
 SfxTabPage::sfxpg SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
