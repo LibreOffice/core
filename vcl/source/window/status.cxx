@@ -1242,7 +1242,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
         {
             Update();
             Rectangle aRect = ImplGetItemRectPos(nPos);
-            Invalidate(aRect, INVALIDATE_NOERASE);
+            Invalidate(aRect, InvalidateFlags::NoErase);
             Flush();
         }
     }

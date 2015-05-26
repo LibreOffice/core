@@ -29,7 +29,7 @@ void FolderTree::RequestingChildren( SvTreeListEntry* pEntry )
 {
     EnableChildPointerOverwrite( true );
     SetPointer( PointerStyle::Wait );
-    Invalidate(INVALIDATE_UPDATE);
+    Invalidate(InvalidateFlags::Update);
 
     FillTreeEntry( pEntry );
 

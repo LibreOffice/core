@@ -323,7 +323,7 @@ void DlgEditor::DoScroll( ScrollBar* )
     //  rWindow.SetBackground();
 
     // #i74769# children should be scrolled
-    rWindow.Scroll( -nX, -nY, SCROLL_CHILDREN);
+    rWindow.Scroll( -nX, -nY, ScrollFlags::Children);
     aMap.SetOrigin( Point( -aScrollPos.Width(), -aScrollPos.Height() ) );
     rWindow.SetMapMode( aMap );
     rWindow.Update();

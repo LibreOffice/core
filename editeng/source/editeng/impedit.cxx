@@ -1100,7 +1100,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
         aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
         aVisDocStartPos = pOutWin->PixelToLogic( aVisDocStartPos );
         Rectangle aRect( aOutArea );
-        pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, SCROLL_CLIP );
+        pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
 
         if (comphelper::LibreOfficeKit::isActive())
             // Need to invalidate the window, otherwise no tile will be re-painted.

@@ -2082,7 +2082,7 @@ namespace svt { namespace table
                 &&  std::abs( nPixelDelta ) < aDataArea.GetHeight()
                 )
             {
-                m_pDataWindow->Scroll( 0, (long)-nPixelDelta, aDataArea, SCROLL_CLIP | SCROLL_UPDATE | SCROLL_CHILDREN);
+                m_pDataWindow->Scroll( 0, (long)-nPixelDelta, aDataArea, ScrollFlags::Clip | ScrollFlags::Update | ScrollFlags::Children);
             }
             else
             {
@@ -2145,7 +2145,7 @@ namespace svt { namespace table
                 -   m_aColumnWidths[ m_nLeftColumn ].getStart();
 
             // update our column positions
-            // Do this *before* scrolling, as SCROLL_UPDATE will trigger a paint, which already needs the correct
+            // Do this *before* scrolling, as ScrollFlags::Update will trigger a paint, which already needs the correct
             // information in m_aColumnWidths
             for (   ColumnPositions::iterator colPos = m_aColumnWidths.begin();
                     colPos != m_aColumnWidths.end();
@@ -2160,7 +2160,7 @@ namespace svt { namespace table
                 &&  std::abs( nPixelDelta ) < aDataArea.GetWidth()
                 )
             {
-                m_pDataWindow->Scroll( nPixelDelta, 0, aDataArea, SCROLL_CLIP | SCROLL_UPDATE );
+                m_pDataWindow->Scroll( nPixelDelta, 0, aDataArea, ScrollFlags::Clip | ScrollFlags::Update );
             }
             else
             {

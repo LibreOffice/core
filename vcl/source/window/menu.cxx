@@ -2631,7 +2631,7 @@ bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
                     pWin->SetMBWHideAccel(false);
                 else
                     pWin->SetMBWHideAccel(true);
-                pWin->Invalidate(INVALIDATE_UPDATE);
+                pWin->Invalidate(InvalidateFlags::Update);
             }
             return true;
         }

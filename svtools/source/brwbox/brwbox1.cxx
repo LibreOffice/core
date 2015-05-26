@@ -35,7 +35,7 @@
 #include "brwimpl.hxx"
 
 
-#define SCROLL_FLAGS (SCROLL_CLIP | SCROLL_NOCHILDREN)
+#define SCROLL_FLAGS (ScrollFlags::Clip | ScrollFlags::NoChildren)
 #define getDataWindow() (static_cast<BrowserDataWin*>(pDataWin.get()))
 
 using namespace com::sun::star::accessibility::AccessibleEventId;

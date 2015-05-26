@@ -603,7 +603,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
             Invalidate();
         }
 
-        Scroll( 0, nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), SCROLL_CLIP );
+        Scroll( 0, nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), ScrollFlags::Clip );
     }
     else if ( bScrollDown && !bUp )
     {
@@ -627,7 +627,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
             Invalidate();
         }
 
-        Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), SCROLL_CLIP );
+        Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), ScrollFlags::Clip );
     }
 
     Invalidate();

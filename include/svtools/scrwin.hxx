@@ -85,7 +85,7 @@ public:
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
 
     using Window::Scroll;
-    virtual void    Scroll( long nDeltaX, long nDeltaY, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    virtual void    Scroll( long nDeltaX, long nDeltaY, ScrollFlags nFlags = ScrollFlags::NONE ) SAL_OVERRIDE;
 
 private:
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;

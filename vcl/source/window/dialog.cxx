@@ -601,7 +601,7 @@ bool Dialog::ImplHandleCmdEvent( const CommandEvent& rCEvent )
                     pControl->SetShowAccelerator(true);
                 else
                     pControl->SetShowAccelerator(false);
-                pControl->Invalidate(INVALIDATE_UPDATE);
+                pControl->Invalidate(InvalidateFlags::Update);
             }
             pGetChild = nextLogicalChildOfParent(this, pGetChild);
         }

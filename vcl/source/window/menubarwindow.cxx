@@ -870,7 +870,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                 mbAutoPopup = true;
                 SetMBWMenuKey(true);
                 SetMBWHideAccel(true);
-                Invalidate(INVALIDATE_UPDATE);
+                Invalidate(InvalidateFlags::Update);
                 ChangeHighlightItem( nEntry, true );
                 bDone = true;
             }

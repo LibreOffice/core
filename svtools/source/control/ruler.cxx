@@ -1469,7 +1469,7 @@ void Ruler::ImplUpdate( bool bMustCalc )
 {
     // clear lines in this place so they aren't considered at recalculation
     if (!mbFormat)
-        Invalidate(INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoErase);
 
     // set flags
     if (bMustCalc)
@@ -1483,7 +1483,7 @@ void Ruler::ImplUpdate( bool bMustCalc )
     // otherwise trigger update
     if (IsReallyVisible() && IsUpdateMode())
     {
-        Invalidate(INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoErase);
     }
 }
 
@@ -1879,7 +1879,7 @@ bool Ruler::ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier )
         mbDrag = true;
         mnStartDragPos = mnDragPos;
         StartTracking();
-        Invalidate(INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoErase);
         return true;
     }
     else
@@ -1946,7 +1946,7 @@ void Ruler::ImplDrag( const Point& rPos )
             Drag();
 
             // and redraw
-            Invalidate(INVALIDATE_NOERASE);
+            Invalidate(InvalidateFlags::NoErase);
 
             // reset the data as before cancel
             *mpDragData = aTempData;
@@ -1967,7 +1967,7 @@ void Ruler::ImplDrag( const Point& rPos )
 
         // redraw
         if (mbFormat)
-            Invalidate(INVALIDATE_NOERASE);
+            Invalidate(InvalidateFlags::NoErase);
     }
 }
 
@@ -1996,7 +1996,7 @@ void Ruler::ImplEndDrag()
     mnStartDragPos  = 0;
 
     // redraw
-    Invalidate(INVALIDATE_NOERASE);
+    Invalidate(InvalidateFlags::NoErase);
 }
 
 void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
@@ -2010,7 +2010,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
         // update ruler
         if ( mbFormat )
         {
-            Invalidate(INVALIDATE_NOERASE);
+            Invalidate(InvalidateFlags::NoErase);
         }
 
         if ( maExtraRect.IsInside( aMousePos ) )
@@ -2119,7 +2119,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 
     if (mbFormat)
     {
-        Invalidate(INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoErase);
     }
 }
 
@@ -2176,7 +2176,7 @@ void Ruler::Resize()
     if ( bVisible && !mpData->pLines.empty() )
     {
         mnUpdateFlags |= RULER_UPDATE_LINES;
-        Invalidate(INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoErase);
     }
 
     // recalculate some values if the height/width changes
@@ -2199,7 +2199,7 @@ void Ruler::Resize()
     if ( bVisible )
     {
         if ( nNewHeight )
-            Invalidate(INVALIDATE_NOERASE);
+            Invalidate(InvalidateFlags::NoErase);
         else if ( mpData->bAutoPageWidth )
         {
             // only at AutoPageWidth muss we redraw
@@ -2226,7 +2226,7 @@ void Ruler::Resize()
                 aRect.Right()   = RULER_OFF + mnVirHeight;
             }
 
-            Invalidate(aRect, INVALIDATE_NOERASE);
+            Invalidate(aRect, InvalidateFlags::NoErase);
         }
     }
 
@@ -2318,13 +2318,13 @@ void Ruler::Activate()
 
     // update positionlies - draw is delayed
     mnUpdateFlags |= RULER_UPDATE_LINES;
-    Invalidate(INVALIDATE_NOERASE);
+    Invalidate(InvalidateFlags::NoErase);
 }
 
 void Ruler::Deactivate()
 {
     // clear positionlines
-    Invalidate(INVALIDATE_NOERASE);
+    Invalidate(InvalidateFlags::NoErase);
 
     mbActive = false;
 }
@@ -2350,7 +2350,7 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
                 ImplFormat(*this);
             }
 
-            Invalidate(INVALIDATE_NOERASE);
+            Invalidate(InvalidateFlags::NoErase);
         }
 
         if ( nMouseClicks == 1 )
@@ -2415,7 +2415,7 @@ RulerType Ruler::GetType( const Point& rPos, sal_uInt16* pAryPos )
     // update ruler
     if ( IsReallyVisible() && mbFormat )
     {
-        Invalidate(INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoErase);
     }
 
     (void)ImplHitTest(rPos, &aHitTest);
@@ -2465,7 +2465,7 @@ void Ruler::SetBorderPos( long nOff )
             mnBorderOff = nOff;
 
             if ( IsReallyVisible() && IsUpdateMode() )
-                Invalidate(INVALIDATE_NOERASE);
+                Invalidate(InvalidateFlags::NoErase);
         }
     }
 }
@@ -2626,7 +2626,7 @@ void Ruler::SetLines( sal_uInt32 aLineArraySize, const RulerLine* pLineArray )
 
     // Delete old lines
     if ( bMustUpdate )
-        Invalidate(INVALIDATE_NOERASE);
+        Invalidate(InvalidateFlags::NoErase);
 
     // New data set
     if ( !aLineArraySize || !pLineArray )
@@ -2647,7 +2647,7 @@ void Ruler::SetLines( sal_uInt32 aLineArraySize, const RulerLine* pLineArray )
                    mpData->pLines.begin() );
 
         if ( bMustUpdate )
-            Invalidate(INVALIDATE_NOERASE);
+            Invalidate(InvalidateFlags::NoErase);
     }
 }
 
@@ -2839,7 +2839,7 @@ RulerUnitData Ruler::GetCurrentRulerUnit() const
 void Ruler::DrawTicks()
 {
     mbFormat = true;
-    Invalidate(INVALIDATE_NOERASE);
+    Invalidate(InvalidateFlags::NoErase);
 }
 
 uno::Reference< XAccessible > Ruler::CreateAccessible()
