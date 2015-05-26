@@ -1771,12 +1771,13 @@ void SwWrtShell::ChangeHeaderOrFooter(
 
                 vcl::Window* pParent = &GetView().GetViewFrame()->GetWindow();
                 short nResult;
-                if (bHeader)
-                    nResult = DeleteHeaderDialog(pParent).Execute();
-                else
-                    nResult = DeleteFooterDialog(pParent).Execute();
-                bExecute = nResult == RET_YES;
+                if (bHeader) {
+                    nResult = ScopedVclPtrInstance<DeleteHeaderDialog>::Create(pParent)->Execute();
+                } else {
+                    nResult = ScopedVclPtrInstance<DeleteFooterDialog>::Create(pParent)->Execute();
+                }
 
+                bExecute = nResult == RET_YES;
                 StartAllAction();
             }
             if( bExecute )
