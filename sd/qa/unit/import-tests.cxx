@@ -199,7 +199,7 @@ void SdImportTest::testDocumentLayout()
     {
         int nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
 
-        ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ), aFilesToCompare[i].nFormat );
+        sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ), aFilesToCompare[i].nFormat );
         if( aFilesToCompare[i].nExportType >= 0 )
             xDocShRef = saveAndReload( xDocShRef, aFilesToCompare[i].nExportType );
         compareWithShapesDump( xDocShRef,
@@ -210,7 +210,7 @@ void SdImportTest::testDocumentLayout()
 
 void SdImportTest::testSmoketest()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/smoketest.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/smoketest.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -238,7 +238,7 @@ void SdImportTest::testSmoketest()
 
 void SdImportTest::testN759180()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/n759180.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/n759180.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -276,7 +276,7 @@ void SdImportTest::testN759180()
 
 void SdImportTest::testN862510_1()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_1.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_1.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -301,7 +301,7 @@ void SdImportTest::testN862510_1()
 
 void SdImportTest::testN862510_2()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_2.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_2.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -320,7 +320,7 @@ void SdImportTest::testN862510_2()
 
 void SdImportTest::testN862510_4()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_4.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_4.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -345,7 +345,7 @@ void SdImportTest::testN862510_4()
 
 void SdImportTest::testN828390_2()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_2.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_2.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -365,7 +365,7 @@ void SdImportTest::testN828390_2()
 void SdImportTest::testN828390_3()
 {
     bool bPassed = true;
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -397,7 +397,7 @@ void SdImportTest::testN828390_3()
 
 void SdImportTest::testMasterPageStyleParent()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/masterpage_style_parent.odp"), ODP );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/masterpage_style_parent.odp"), ODP );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -436,7 +436,7 @@ void SdImportTest::testMasterPageStyleParent()
 
 void SdImportTest::testN778859()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -455,7 +455,7 @@ void SdImportTest::testN778859()
 
 void SdImportTest::testFdo68594()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/fdo68594.ppt"), PPT);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/fdo68594.ppt"), PPT);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -474,7 +474,7 @@ void SdImportTest::testFdo68594()
 
 void SdImportTest::testFdo72998()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/cshapes.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/cshapes.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -504,7 +504,7 @@ std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 
 void SdImportTest::testFdo77027()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"), ODP);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"), ODP);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -528,7 +528,7 @@ void SdImportTest::testFdo77027()
 
 void SdImportTest::testFdo64512()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo64512.odp"), ODP);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo64512.odp"), ODP);
 
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -573,7 +573,7 @@ void SdImportTest::testFdo71075()
 {
     double values[] = { 12.0, 13.0, 14.0 };
     ::com::sun::star::uno::Any aAny;
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"), ODP);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"), ODP);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -615,7 +615,7 @@ void SdImportTest::testFdo71075()
 
 void SdImportTest::testStrictOOXML()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/strict_ooxml.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/strict_ooxml.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -629,7 +629,7 @@ void SdImportTest::testStrictOOXML()
 
 void SdImportTest::testBnc870237()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870237.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870237.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -662,7 +662,7 @@ void SdImportTest::testCreationDate()
 
 void SdImportTest::testBnc887225()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc887225.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc887225.pptx"), PPTX );
     // In the document, lastRow and lastCol table properties are used.
     // Make sure styles are set properly for individual cells.
 
@@ -710,7 +710,7 @@ void SdImportTest::testBnc887225()
 
 void SdImportTest::testBnc480256()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc480256.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc480256.pptx"), PPTX);
     // In the document, there are two tables with table background properties.
     // Make sure colors are set properly for individual cells.
 
@@ -769,7 +769,7 @@ void SdImportTest::testBnc584721_1()
 {
     // Title text shape on the master page contained wrong text.
 
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1_2.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1_2.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -787,7 +787,7 @@ void SdImportTest::testBnc584721_2()
 {
     // Import created an extra/unneeded outliner shape on the master slide next to the imported title shape.
 
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1_2.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1_2.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -803,7 +803,7 @@ void SdImportTest::testBnc584721_3()
     // Subtitle was simply skipped on master slides.
     // Check whether the second shape is a subtitle shape with the right text.
 
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_3.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_3.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -825,7 +825,7 @@ void SdImportTest::testBnc584721_3()
 
 void SdImportTest::testBnc591147()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc591147.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc591147.pptx"), PPTX);
 
     // In the document, there are two slides with media files.
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
@@ -864,7 +864,7 @@ void SdImportTest::testBnc584721_4()
 {
     // Black text was imported as white because of wrong caching mechanism
 
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_4.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_4.pptx"), PPTX);
 
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -903,7 +903,7 @@ void SdImportTest::testBnc904423()
 {
     // Here the problem was that different fill properties were applied in wrong order on the shape
     // Right order: 1) master slide fill style, 2) theme, 3) direct formatting
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/bnc904423.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/bnc904423.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -956,7 +956,7 @@ void SdImportTest::testShapeLineStyle()
 {
     // Here the problem was that different line properties were applied in wrong order on the shape
     // Right order: 1) master slide line style, 2) theme, 3) direct formatting
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/ShapeLineProperties.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/ShapeLineProperties.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -1023,7 +1023,7 @@ void SdImportTest::testShapeLineStyle()
 void SdImportTest::testBnc862510_6()
 {
     // Black text was imported instead of gray
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_6.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_6.pptx"), PPTX);
 
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -1061,7 +1061,7 @@ void SdImportTest::testBnc862510_6()
 void SdImportTest::testBnc862510_7()
 {
     // Title shape's text was aligned to left instead of center.
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_7.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_7.pptx"), PPTX);
 
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -1094,7 +1094,7 @@ void SdImportTest::testBnc862510_7()
 
 void SdImportTest::testPDFImport()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -1114,7 +1114,7 @@ void SdImportTest::testPDFImportSkipImages()
     SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     pParams->Put( SfxStringItem ( SID_FILE_FILTEROPTIONS, OUString("SkipImages") ) );
 
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, pParams);
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, pParams);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -1133,7 +1133,7 @@ void SdImportTest::testPDFImportSkipImages()
 
 void SdImportTest::testBulletSuffix()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n83889.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n83889.pptx"), PPTX );
 
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -1158,7 +1158,7 @@ void SdImportTest::testBulletSuffix()
 void SdImportTest::testBnc910045()
 {
     // Problem with table style which defines cell color with fill style
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc910045.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc910045.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -1178,7 +1178,7 @@ void SdImportTest::testBnc910045()
 
 void SdImportTest::testRowHeight()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n80340.pptx"), PPTX );
+    sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n80340.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
