@@ -2826,7 +2826,8 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     sal_Int32 nSttWdPos = nEndPos;
 
     // direct replacement of keywords surrounded by colons (for example, ":name:")
-    bool bColonNameColon = rTxt[nEndPos] == ':' && rChk[0] == ':' && rChk.endsWith(":");
+    bool bColonNameColon = rTxt.getLength() > nEndPos &&
+        rTxt[nEndPos] == ':' && rChk[0] == ':' && rChk.endsWith(":");
     if ( nEndPos + (bColonNameColon ? 1 : 0) >= rChk.getLength() - left_wildcard - right_wildcard )
     {
 
