@@ -157,7 +157,7 @@ bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
                 bool bIsEmptyPresObj = false;
                 if ( xPropSet->getPropertyValue( "IsEmptyPresentationObject" ) >>= bIsEmptyPresObj )
                 {
-                    DBG(fprintf(stderr, "empty presentation object %d, props:\n", bIsEmptyPresObj));
+                    SAL_INFO("oox.shape", "empty presentation object " << bIsEmptyPresObj << " , props:");
                     if( bIsEmptyPresObj )
                        return true;
                 }
@@ -168,7 +168,7 @@ bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
                 bool bIsPresObj = false;
                 if ( xPropSet->getPropertyValue( "IsPresentationObject" ) >>= bIsPresObj )
                 {
-                    DBG(fprintf(stderr, "presentation object %d, props:\n", bIsPresObj));
+                    SAL_INFO("oox.shape", "presentation object " << bIsPresObj << ", props:");
                     if( bIsPresObj )
                        return true;
                 }
@@ -186,7 +186,7 @@ bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
 
 ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bClosed )
 {
-    DBG(fprintf(stderr, "write open bezier shape\n"));
+    SAL_INFO("oox.shape", "write open bezier shape");
 
     FSHelperPtr pFS = GetFS();
     pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
@@ -196,7 +196,8 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bCl
 
 #if OSL_DEBUG_LEVEL > 0
     awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
-    DBG(fprintf(stderr, "poly count %d\nsize: %d x %d", aPolyPolygon.Count(), int( size.Width ), int( size.Height )));
+    SAL_INFO("oox.shape", "poly count " << aPolyPolygon.Count());
+    SAL_INFO("oox.shape", "size: " << size.Width << " x " << size.Height);
 #endif
 
     // non visual shape properties
@@ -366,7 +367,7 @@ static bool lcl_IsOnWhitelist(OUString& rShapeType)
 
 ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 {
-    DBG(fprintf(stderr, "write custom shape\n"));
+    SAL_INFO("oox.shape", "write custom shape");
 
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     bool bPredefinedHandlesUsed = true;
@@ -377,7 +378,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>( GetSdrObjectFromXShape( xShape ) );
     bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );
     const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry( USS( sShapeType ) );
-    DBG(fprintf(stderr, "custom shape type: %s ==> %s\n", USS( sShapeType ), sPresetShape));
+    SAL_INFO("oox.shape", "custom shape type: " << sShapeType << " ==> " << sPresetShape);
     Sequence< PropertyValue > aGeometrySeq;
     sal_Int32 nAdjustmentValuesIndex = -1;
 
@@ -385,13 +386,13 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     bool bFlipV = false;
 
     if( GETA( CustomShapeGeometry ) ) {
-        DBG(fprintf(stderr, "got custom shape geometry\n"));
+        SAL_INFO("oox.shape", "got custom shape geometry");
         if( mAny >>= aGeometrySeq ) {
 
-            DBG(fprintf(stderr, "got custom shape geometry sequence\n"));
+            SAL_INFO("oox.shape", "got custom shape geometry sequence");
             for( int i = 0; i < aGeometrySeq.getLength(); i++ ) {
                 const PropertyValue& rProp = aGeometrySeq[ i ];
-                DBG(fprintf(stderr, "geometry property: %s\n", USS( rProp.Name )));
+                SAL_INFO("oox.shape", "geometry property: " << rProp.Name);
 
                 if ( rProp.Name == "MirroredX" )
                     rProp.Value >>= bFlipH;
@@ -526,7 +527,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
 ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 {
-    DBG(fprintf(stderr, "write ellipse shape\n"));
+    SAL_INFO("oox.shape", "write ellipse shape");
 
     FSHelperPtr pFS = GetFS();
 
@@ -578,7 +579,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 
 void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const Graphic* pGraphic )
 {
-    DBG(fprintf(stderr, "write graphic object shape\n"));
+    SAL_INFO("oox.shape", "write graphic object shape");
 
     if( NonEmptyText( xShape ) )
     {
@@ -587,7 +588,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
         if( xText.is() && xText->getString().getLength() )
         {
-            DBG(fprintf(stderr, "graphicObject: wrote only text\n"));
+            SAL_INFO("oox.shape", "graphicObject: wrote only text");
 
             WriteTextShape( xShape );
 
@@ -596,13 +597,13 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
         }
     }
 
-    DBG(fprintf(stderr, "graphicObject without text\n"));
+    SAL_INFO("oox.shape", "graphicObject without text");
 
     OUString sGraphicURL;
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
     if( !pGraphic && ( !xShapeProps.is() || !( xShapeProps->getPropertyValue( "GraphicURL" ) >>= sGraphicURL ) ) )
     {
-        DBG(fprintf(stderr, "no graphic URL found\n"));
+        SAL_INFO("oox.shape", "no graphic URL found");
         return;
     }
 
@@ -677,7 +678,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
     bool bFlipH = false;
     bool bFlipV = false;
 
-    DBG(fprintf(stderr, "write connector shape\n"));
+    SAL_INFO("oox.shape", "write connector shape");
 
     FSHelperPtr pFS = GetFS();
 
@@ -768,7 +769,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     bool bFlipH = false;
     bool bFlipV = false;
 
-    DBG(fprintf(stderr, "write line shape\n"));
+    SAL_INFO("oox.shape", "write line shape");
 
     FSHelperPtr pFS = GetFS();
 
@@ -839,7 +840,7 @@ ShapeExport& ShapeExport::WriteNonVisualProperties( Reference< XShape > )
 
 ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 {
-    DBG(fprintf(stderr, "write rectangle shape\n"));
+    SAL_INFO("oox.shape", "write rectangle shape");
 
     FSHelperPtr pFS = GetFS();
 
