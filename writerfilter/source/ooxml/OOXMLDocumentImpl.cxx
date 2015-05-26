@@ -547,19 +547,18 @@ void OOXMLDocumentImpl::incrementProgress()
 void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
 {
     // Resolving all item[n].xml files from CustomXml folder.
-    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
-    if (mxRelationshipAccess.is())
+    uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
+    xRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    if (xRelationshipAccess.is())
     {
         static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
         static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
-        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
-                mxRelationshipAccess->getAllRelationships();
-        uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomListTemp(aSeqs.getLength());
-        uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomPropsListTemp(aSeqs.getLength());
+        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
+        uno::Sequence<uno::Reference<xml::dom::XDocument> > xCustomXmlDomListTemp(aSeqs.getLength());
+        uno::Sequence<uno::Reference<xml::dom::XDocument> > xCustomXmlDomPropsListTemp(aSeqs.getLength());
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -585,8 +584,8 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
                 // grabbag list.
                 if(mxCustomXmlProsDom.is() && customXmlTemp.is())
                 {
-                    mxCustomXmlDomListTemp[counter] = customXmlTemp;
-                    mxCustomXmlDomPropsListTemp[counter] = mxCustomXmlProsDom;
+                    xCustomXmlDomListTemp[counter] = customXmlTemp;
+                    xCustomXmlDomPropsListTemp[counter] = mxCustomXmlProsDom;
                     counter++;
                     resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
                 }
@@ -594,10 +593,10 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
             }
         }
 
-        mxCustomXmlDomListTemp.realloc(counter);
-        mxCustomXmlDomPropsListTemp.realloc(counter);
-        mxCustomXmlDomList = mxCustomXmlDomListTemp;
-        mxCustomXmlDomPropsList = mxCustomXmlDomPropsListTemp;
+        xCustomXmlDomListTemp.realloc(counter);
+        xCustomXmlDomPropsListTemp.realloc(counter);
+        mxCustomXmlDomList = xCustomXmlDomListTemp;
+        mxCustomXmlDomPropsList = xCustomXmlDomPropsListTemp;
     }
 }
 
@@ -623,14 +622,13 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                  "createStream for glossary" << OOXMLStream::GLOSSARY << " : " << e.Message);
         return;
     }
-    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
-    if (mxRelationshipAccess.is())
+    uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
+    xRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    if (xRelationshipAccess.is())
     {
 
-        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
-                mxRelationshipAccess->getAllRelationships();
-        uno::Sequence<uno::Sequence< uno::Any> > mxGlossaryDomListTemp(aSeqs.getLength());
+        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
+        uno::Sequence<uno::Sequence< uno::Any> > xGlossaryDomListTemp(aSeqs.getLength());
          sal_Int32 counter = 0;
          for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
          {
@@ -700,21 +698,21 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                       glossaryTuple[2] = uno::makeAny(gType);
                       glossaryTuple[3] = uno::makeAny(gTarget);
                       glossaryTuple[4] = uno::makeAny(contentType);
-                      mxGlossaryDomListTemp[counter] = glossaryTuple;
+                      xGlossaryDomListTemp[counter] = glossaryTuple;
                       counter++;
                   }
               }
           }
-          mxGlossaryDomListTemp.realloc(counter);
-          mxGlossaryDomList = mxGlossaryDomListTemp;
+          xGlossaryDomListTemp.realloc(counter);
+          mxGlossaryDomList = xGlossaryDomListTemp;
       }
 }
 
 void OOXMLDocumentImpl::resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream)
 {
-    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
-    if (mxRelationshipAccess.is())
+    uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
+    xRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    if (xRelationshipAccess.is())
     {
         OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
         OUString sChartTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/chart");
@@ -727,8 +725,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream)
         bool bFound = false;
         bool bHeaderFooterFound = false;
         OOXMLStream::StreamType_t streamType = OOXMLStream::UNKNOWN;
-        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
-                mxRelationshipAccess->getAllRelationships();
+        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -802,19 +799,18 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream)
 void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
 {
     // Resolving all ActiveX[n].xml files from ActiveX folder.
-    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
-    if (mxRelationshipAccess.is())
+    uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
+    xRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    if (xRelationshipAccess.is())
     {
         static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control";
         static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/control";
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
-        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
-                mxRelationshipAccess->getAllRelationships();
-        uno::Sequence<uno::Reference<xml::dom::XDocument> > mxActiveXDomListTemp(aSeqs.getLength());
-        uno::Sequence<uno::Reference<io::XInputStream> > mxActiveXBinListTemp(aSeqs.getLength());
+        uno::Sequence< uno::Sequence< beans::StringPair > > aSeqs = xRelationshipAccess->getAllRelationships();
+        uno::Sequence<uno::Reference<xml::dom::XDocument> > xActiveXDomListTemp(aSeqs.getLength());
+        uno::Sequence<uno::Reference<io::XInputStream> > xActiveXBinListTemp(aSeqs.getLength());
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -839,10 +835,10 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
                 // This will add all ActiveX[n].xml to grabbag list.
                 if(activeXTemp.is())
                 {
-                    mxActiveXDomListTemp[counter] = activeXTemp;
+                    xActiveXDomListTemp[counter] = activeXTemp;
                     if(mxActiveXBin.is())
                     {
-                        mxActiveXBinListTemp[counter] = mxActiveXBin;
+                        xActiveXBinListTemp[counter] = mxActiveXBin;
                     }
                     counter++;
                     resolveFastSubStream(rStream, OOXMLStream::ACTIVEX);
@@ -850,10 +846,10 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
                 bFound = false;
             }
         }
-        mxActiveXDomListTemp.realloc(counter);
-        mxActiveXBinListTemp.realloc(counter);
-        mxActiveXDomList = mxActiveXDomListTemp;
-        mxActiveXBinList = mxActiveXBinListTemp;
+        xActiveXDomListTemp.realloc(counter);
+        xActiveXBinListTemp.realloc(counter);
+        mxActiveXDomList = xActiveXDomListTemp;
+        mxActiveXBinList = xActiveXBinListTemp;
     }
 }
 
