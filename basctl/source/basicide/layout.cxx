@@ -184,7 +184,10 @@ void Layout::SplittedSide::dispose()
 {
     aSplitter.disposeAndClear();
     for (auto i = vItems.begin(); i != vItems.end(); ++i)
+    {
         i->pSplit.disposeAndClear();
+        i->pWin.clear();
+    }
 }
 
 // Add() -- adds a new window to the side (after construction)
@@ -223,6 +226,8 @@ void Layout::SplittedSide::Remove (DockingWindow* pWin)
     if (iWin == vItems.size())
         return;
     // remove
+    vItems[iWin].pSplit.disposeAndClear();
+    vItems[iWin].pWin.clear();
     vItems.erase(vItems.begin() + iWin);
     // if that was the first one, remove the first splitter line
     if (iWin == 0 && !vItems.empty())
