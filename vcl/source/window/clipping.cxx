@@ -112,37 +112,19 @@ void Window::ExpandPaintClipRegion( const vcl::Region& rRegion )
     }
 }
 
-vcl::Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
+vcl::Region Window::GetWindowClipRegionPixel() const
 {
-
     vcl::Region aWinClipRegion;
 
-    if ( nFlags & WINDOW_GETCLIPREGION_NOCHILDREN )
-    {
-        if ( mpWindowImpl->mbInitWinClipRegion )
-            const_cast<vcl::Window*>(this)->ImplInitWinClipRegion();
-        aWinClipRegion = mpWindowImpl->maWinClipRegion;
-    }
-    else
-    {
-        vcl::Region* pWinChildClipRegion = const_cast<vcl::Window*>(this)->ImplGetWinChildClipRegion();
-        aWinClipRegion = *pWinChildClipRegion;
-        // --- RTL --- remirror clip region before passing it to somebody
-        if( ImplIsAntiparallel() )
-        {
-            const OutputDevice *pOutDev = GetOutDev();
-            pOutDev->ReMirror( aWinClipRegion );
-        }
-    }
+    if ( mpWindowImpl->mbInitWinClipRegion )
+        const_cast<vcl::Window*>(this)->ImplInitWinClipRegion();
+    aWinClipRegion = mpWindowImpl->maWinClipRegion;
 
-    if ( nFlags & WINDOW_GETCLIPREGION_NULL )
-    {
-        Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
-        vcl::Region      aWinRegion( aWinRect );
+    Rectangle     aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+    vcl::Region   aWinRegion( aWinRect );
 
-        if ( aWinRegion == aWinClipRegion )
-            aWinClipRegion.SetNull();
-    }
+    if ( aWinRegion == aWinClipRegion )
+        aWinClipRegion.SetNull();
 
     aWinClipRegion.Move( -mnOutOffX, -mnOutOffY );
 
