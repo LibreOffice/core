@@ -38,10 +38,13 @@ class SVT_DLLPUBLIC RemoteFilesDialog : public ModalDialog
 public:
     RemoteFilesDialog(vcl::Window* pParent, WinBits nBits);
 
+    virtual void dispose() SAL_OVERRIDE;
+
 private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
     SvtRemoteDlgMode m_eMode;
+    bool m_bIsUpdated;
 
     VclPtr<PushButton> m_pOpen_btn;
     VclPtr<PushButton> m_pSave_btn;
@@ -51,7 +54,8 @@ private:
 
     std::vector<ServicePtr> m_aServices;
 
-    void fillServicesListbox();
+    void FillServicesListbox();
+    unsigned int GetSelectedServicePos();
 
     DECL_LINK ( AddServiceHdl, void * );
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
