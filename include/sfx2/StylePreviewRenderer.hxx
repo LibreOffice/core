@@ -26,8 +26,14 @@ protected:
     OutputDevice& mrOutputDev;
     SfxStyleSheetBase* mpStyle;
     long mnMaxHeight;
+    OUString msRenderText;
 
 public:
+    enum class RenderAlign
+    {
+        TOP, CENTER, BOTTOM
+    };
+
     StylePreviewRenderer(const SfxObjectShell& rShell,
                          OutputDevice& rOutputDev,
                          SfxStyleSheetBase* pStyle,
@@ -36,14 +42,20 @@ public:
         , mrOutputDev(rOutputDev)
         , mpStyle(pStyle)
         , mnMaxHeight(nMaxHeight)
+        , msRenderText()
     {}
 
     virtual ~StylePreviewRenderer()
     {}
 
+    void setRenderText(OUString& rRenderText)
+    {
+        msRenderText = rRenderText;
+    }
+
     virtual bool recalculate() = 0;
     virtual Size getRenderSize() = 0;
-    virtual bool render(const Rectangle& aRectangle) = 0;
+    virtual bool render(const Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) = 0;
 };
 
 } // end namespace sfx2

@@ -35,7 +35,7 @@ public:
 
     virtual bool recalculate() SAL_OVERRIDE;
     virtual Size getRenderSize() SAL_OVERRIDE;
-    virtual bool render(const Rectangle& aRectangle) SAL_OVERRIDE;
+    virtual bool render(const Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) SAL_OVERRIDE;
 };
 
 } // end namespace svx

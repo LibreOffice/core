@@ -19,6 +19,8 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 
+#include <sfx2/objsh.hxx>
+
 #include <svx/pageitem.hxx>
 #include <svx/rulritem.hxx>
 #include <editeng/sizeitem.hxx>
@@ -31,6 +33,8 @@
 #include <vcl/field.hxx>
 #include <svl/intitem.hxx>
 #include <svl/lstner.hxx>
+
+#include <svtools/valueset.hxx>
 
 #include <svx/fntctrl.hxx>
 
@@ -64,6 +68,10 @@ private:
         OUString maURL;
     };
 
+    void RefreshList();
+    BitmapEx CreatePreview(OUString& aUrl, OUString& aName);
+    BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString& aName);
+
     StylePresetsPanel(vcl::Window* pParent,
                    const css::uno::Reference<css::frame::XFrame>& rxFrame,
                    SfxBindings* pBindings);
@@ -73,7 +81,7 @@ private:
 
     SfxBindings* mpBindings;
 
-    VclPtr<ListBox> mpListBox;
+    VclPtr<ValueSet> mpValueSet;
 
     std::vector<std::unique_ptr<TemplateEntry>> maTemplateEntries;
 

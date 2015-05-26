@@ -174,8 +174,10 @@ Size CommonStylePreviewRenderer::getRenderSize()
     return maPixelSize;
 }
 
-bool CommonStylePreviewRenderer::render(const Rectangle& aRectangle)
+bool CommonStylePreviewRenderer::render(const Rectangle& aRectangle, RenderAlign eRenderAlign)
 {
+    const OUString& rText = msRenderText.isEmpty() ? maStyleName : msRenderText;
+
     // setup the device & draw
     vcl::Font aOldFont(mrOutputDev.GetFont());
     Color aOldColor(mrOutputDev.GetTextColor());
@@ -192,10 +194,18 @@ bool CommonStylePreviewRenderer::render(const Rectangle& aRectangle)
         mrOutputDev.SetTextColor(maFontColor);
 
     Point aFontDrawPosition = aRectangle.TopLeft();
-    if (aRectangle.GetHeight() > maPixelSize.Height())
-        aFontDrawPosition.Y() += ( aRectangle.GetHeight() - maPixelSize.Height() ) / 2;
+    if (eRenderAlign == RenderAlign::CENTER)
+    {
+        if (aRectangle.GetHeight() > maPixelSize.Height())
+            aFontDrawPosition.Y() += (aRectangle.GetHeight() - maPixelSize.Height()) / 2;
+    }
+    else if (eRenderAlign == RenderAlign::BOTTOM)
+    {
+        if (aRectangle.GetHeight() > maPixelSize.Height())
+            aFontDrawPosition.Y() += aRectangle.GetHeight() - maPixelSize.Height();
+    }
 
-    mrOutputDev.DrawText(aFontDrawPosition, maStyleName);
+    mrOutputDev.DrawText(aFontDrawPosition, rText);
 
     mrOutputDev.SetFillColor(aOldFillColor);
     mrOutputDev.SetTextColor(aOldColor);

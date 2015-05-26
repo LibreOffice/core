@@ -63,14 +63,18 @@ StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
     : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
     , mpBindings(pBindings)
 {
+    get(mpValueSet, "valueset");
 
-    get(mpListBox, "listbox");
+    mpValueSet->SetColCount(2);
 
-    mpListBox->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
+    mpValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
 
+    RefreshList();
+}
 
+void StylePresetsPanel::RefreshList()
+{
     SfxDocumentTemplates aTemplates;
-
     sal_uInt16 nCount = aTemplates.GetRegionCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
@@ -81,12 +85,110 @@ StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
             {
                 OUString aName = aTemplates.GetName(i,j);
                 OUString aURL = aTemplates.GetPath(i,j);
-                sal_Int32 nIndex = mpListBox->InsertEntry(aName);
+                BitmapEx aPreview = CreatePreview(aURL, aName);
+                mpValueSet->InsertItem(j, Image(aPreview), aName);
                 maTemplateEntries.push_back(std::unique_ptr<TemplateEntry>(new TemplateEntry(aName, aURL)));
-                mpListBox->SetEntryData(nIndex, maTemplateEntries.back().get());
+                mpValueSet->SetItemData(j, maTemplateEntries.back().get());
             }
         }
     }
+}
+
+BitmapEx StylePresetsPanel::CreatePreview(OUString& aUrl, OUString& aName)
+{
+    SfxMedium aMedium(aUrl, STREAM_STD_READWRITE);
+    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+    SfxObjectShellLock xTemplDoc = pObjectShell->CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
+    xTemplDoc->DoInitNew(0);
+    if (xTemplDoc->LoadFrom(aMedium))
+    {
+        return GenerateStylePreview(*xTemplDoc, aName);
+    }
+    return BitmapEx();
+}
+
+void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevice,
+                   OUString sName, sal_Int32 nHeight, Rectangle& aRect)
+{
+    sfx2::StylePreviewRenderer* pStylePreviewRenderer;
+
+    SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(sName, SFX_STYLE_FAMILY_PARA);
+
+    if (pStyleSheet)
+    {
+        pStylePreviewRenderer = pStyleManager->CreateStylePreviewRenderer(aOutputDevice, pStyleSheet, nHeight);
+        pStylePreviewRenderer->recalculate();
+        pStylePreviewRenderer->render(aRect, sfx2::StylePreviewRenderer::RenderAlign::TOP);
+    }
+}
+
+BitmapEx StylePresetsPanel::GenerateStylePreview(SfxObjectShell& rSource, OUString& aName)
+{
+    sfx2::StyleManager* pStyleManager = rSource.GetStyleManager();
+
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev(*Application::GetDefaultDevice());
+
+    sal_Int32 nScalingFactor = pVirtualDev->GetDPIScaleFactor();
+
+    sal_Int32 nMargin = 6 * nScalingFactor;
+
+    sal_Int32 nPreviewWidth = 144 * nScalingFactor;
+
+    sal_Int32 nNameHeight = 16 * nScalingFactor;
+    sal_Int32 nTitleHeight = 32 * nScalingFactor;
+    sal_Int32 nHeadingHeight = 24 * nScalingFactor;
+    sal_Int32 nTextBodyHeight = 16 * nScalingFactor;
+    sal_Int32 nBottomMargin = 2 * nScalingFactor;
+
+    sal_Int32 nNameFontSize = 12 * nScalingFactor;
+
+    sal_Int32 nPreviewHeight = nNameHeight + nTitleHeight + nHeadingHeight + nTextBodyHeight + nBottomMargin;
+
+    Size aSize(nPreviewWidth, nPreviewHeight);
+
+    pVirtualDev->SetOutputSizePixel(aSize);
+
+    pVirtualDev->SetLineColor(COL_LIGHTGRAY);
+    pVirtualDev->SetFillColor();
+
+    long y = 0;
+    {
+        pVirtualDev->SetFillColor(COL_LIGHTGRAY);
+        Rectangle aNameRect(0, y, nPreviewWidth, nNameHeight);
+        pVirtualDev->DrawRect(aNameRect);
+
+        vcl::Font aFont;
+        aFont.SetSize(Size(0, nNameFontSize));
+
+        pVirtualDev->SetFont(aFont);
+
+        Size aTextSize(pVirtualDev->GetTextWidth(aName), pVirtualDev->GetTextHeight());
+
+        Point aPoint((aNameRect.GetWidth()  / 2.0) - (aTextSize.Width()  / 2.0),
+                     y + (aNameRect.GetHeight() / 2.0) - (aTextSize.Height() / 2.0));
+
+        pVirtualDev->DrawText(aPoint, aName);
+
+        y += nNameHeight;
+    }
+
+    {
+        Rectangle aRenderRect(Point(nMargin, y), aSize);
+        renderPreview(pStyleManager, *pVirtualDev.get(), "Title", nTitleHeight, aRenderRect);
+        y += nTitleHeight;
+    }
+
+    {
+        Rectangle aRenderRect(Point(nMargin, y), aSize);
+        renderPreview(pStyleManager, *pVirtualDev.get(), "Heading 1", nHeadingHeight, aRenderRect);
+        y += nHeadingHeight;
+    }
+    {
+        Rectangle aRenderRect(Point(nMargin, y), aSize);
+        renderPreview(pStyleManager, *pVirtualDev.get(), "Text Body", nTextBodyHeight, aRenderRect);
+    }
+
+    return pVirtualDev->GetBitmapEx(Point(), aSize);
 }
 
 StylePresetsPanel::~StylePresetsPanel()
@@ -96,15 +198,15 @@ StylePresetsPanel::~StylePresetsPanel()
 
 void StylePresetsPanel::dispose()
 {
-    mpListBox.disposeAndClear();
+    mpValueSet.disposeAndClear();
 
     PanelLayout::dispose();
 }
 
 IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl)
 {
-    sal_Int32 nIndex = mpListBox->GetSelectEntryPos();
-    TemplateEntry* pEntry = static_cast<TemplateEntry*>(mpListBox->GetEntryData(nIndex));
+    sal_Int32 nItemId = mpValueSet->GetSelectItemId();
+    TemplateEntry* pEntry = static_cast<TemplateEntry*>(mpValueSet->GetItemData(nItemId));
 
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     if (pDocSh)
@@ -115,7 +217,7 @@ IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl)
         pDocSh->LoadStylesFromFile(pEntry->maURL, aOption, false);
     }
 
-    return 1;
+    return 0;
 }
 
 void StylePresetsPanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,
