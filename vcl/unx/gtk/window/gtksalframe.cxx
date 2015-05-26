@@ -1942,7 +1942,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 }
                 // #i44068# reset parent's IM context
                 if( m_pParent )
-                    m_pParent->EndExtTextInput(0);
+                    m_pParent->EndExtTextInput(EndExtTextInputFlags::NONE);
             }
             if( m_bWindowIsGtkPlug )
                 askForXEmbedFocus( 0 );
@@ -3085,7 +3085,7 @@ void GtkSalFrame::SetInputContext( SalInputContext* pContext )
         m_pIMHandler = new IMHandler( this );
 }
 
-void GtkSalFrame::EndExtTextInput( sal_uInt16 nFlags )
+void GtkSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
 {
     if( m_pIMHandler )
         m_pIMHandler->endExtTextInput( nFlags );
@@ -4325,7 +4325,7 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
         m_pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
 }
 
-void GtkSalFrame::IMHandler::endExtTextInput( sal_uInt16 /*nFlags*/ )
+void GtkSalFrame::IMHandler::endExtTextInput( EndExtTextInputFlags /*nFlags*/ )
 {
     gtk_im_context_reset ( m_pIMContext );
 

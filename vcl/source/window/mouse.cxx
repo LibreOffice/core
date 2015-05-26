@@ -290,7 +290,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         // EndExtTextInput if it is not the same window
         if ( pSVData->maWinData.mpExtTextInputWin &&
              (pSVData->maWinData.mpExtTextInputWin.get() != this) )
-            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EndExtTextInputFlags::Complete );
 
         // mark this windows as the last FocusWindow
         vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();

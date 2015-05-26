@@ -929,7 +929,7 @@ void AquaSalFrame::SetInputContext( SalInputContext* pContext )
         return;
 }
 
-void AquaSalFrame::EndExtTextInput( sal_uInt16 )
+void AquaSalFrame::EndExtTextInput( EndExtTextInputFlags )
 {
 }
 
