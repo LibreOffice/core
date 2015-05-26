@@ -43,6 +43,10 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -2196,6 +2200,208 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
 
     mpFS->endElementNS( XML_a, XML_avLst );
     mpFS->endElementNS(  XML_a, XML_prstGeom );
+}
+
+void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
+{
+    uno::Reference< beans::XPropertySet > aXPropSet;
+    uno::Any aAny( rXShape->queryInterface(cppu::UnoType<beans::XPropertySet>::get()));
+
+    if ( ! (aAny >>= aXPropSet) )
+        return;
+
+    try
+    {
+        aAny = aXPropSet->getPropertyValue( "CustomShapeGeometry" );
+        if ( !aAny.hasValue() )
+            return;
+    }
+    catch( const ::uno::Exception& )
+    {
+        return;
+    }
+
+
+    mpFS->startElementNS( XML_a, XML_custGeom, FSEND );
+    mpFS->singleElementNS( XML_a, XML_avLst, FSEND );
+    mpFS->singleElementNS( XML_a, XML_gdLst, FSEND );
+    mpFS->singleElementNS( XML_a, XML_ahLst, FSEND );
+    mpFS->singleElementNS( XML_a, XML_rect,
+                           XML_l, "l",
+                           XML_t, "t",
+                           XML_r, "r",
+                           XML_b, "b",
+                           FSEND );
+
+    mpFS->startElementNS( XML_a, XML_pathLst, FSEND );
+
+    uno::Sequence< beans::PropertyValue > const * pGeometrySeq =
+        static_cast<uno::Sequence< beans::PropertyValue > const *>(aAny.getValue());
+
+    if ( pGeometrySeq )
+    {
+        for( int i = 0; i < pGeometrySeq->getLength(); ++i )
+        {
+            const beans::PropertyValue& rProp = (*pGeometrySeq)[ i ];
+            if ( rProp.Name == "Path" )
+            {
+                uno::Sequence<beans::PropertyValue> aPathProp;
+                rProp.Value >>= aPathProp;
+
+                uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
+                uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+                uno::Sequence<awt::Size> aPathSize;
+                bool bHasSubViewSize = false;
+                for (int j = 0; j < aPathProp.getLength(); ++j )
+                {
+                    const beans::PropertyValue& rPathProp = aPathProp[j];
+                    if (rPathProp.Name == "Coordinates")
+                        rPathProp.Value >>= aPairs;
+                    else if (rPathProp.Name == "Segments")
+                        rPathProp.Value >>= aSegments;
+                    else if (rPathProp.Name == "SubViewSize")
+                    {
+                        rPathProp.Value >>= aPathSize;
+                        bHasSubViewSize = true;
+                    }
+                }
+
+                if ( bHasSubViewSize )
+                {
+                    mpFS->startElementNS( XML_a, XML_path,
+                          XML_w, I64S( aPathSize[0].Width ),
+                          XML_h, I64S( aPathSize[0].Height ),
+                          FSEND );
+                }
+                else
+                {
+                    sal_Int32 nXMin = aPairs[0].First.Value.get<sal_Int32>();
+                    sal_Int32 nXMax = nXMin;
+                    sal_Int32 nYMin = aPairs[0].Second.Value.get<sal_Int32>();
+                    sal_Int32 nYMax = nYMin;
+
+                    for ( int j = 0; j < aPairs.getLength(); ++j )
+                    {
+                        if ( aPairs[j].First.Value.get<sal_Int32>() < nXMin )
+                            nXMin = aPairs[j].First.Value.get<sal_Int32>();
+                        if ( aPairs[j].Second.Value.get<sal_Int32>() < nYMin )
+                            nYMin = aPairs[j].Second.Value.get<sal_Int32>();
+                        if ( aPairs[j].First.Value.get<sal_Int32>() > nXMax )
+                            nXMax = aPairs[j].First.Value.get<sal_Int32>();
+                        if ( aPairs[j].Second.Value.get<sal_Int32>() > nYMax )
+                            nYMax = aPairs[j].Second.Value.get<sal_Int32>();
+                    }
+                    mpFS->startElementNS( XML_a, XML_path,
+                          XML_w, I64S( nXMax - nXMin ),
+                          XML_h, I64S( nYMax - nYMin ),
+                          FSEND );
+                }
+
+
+                int nPairIndex = 0;
+                for( int j = 0; j < aSegments.getLength(); ++j )
+                {
+                    if ( aSegments[ j ].Command == drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH )
+                    {
+                        mpFS->singleElementNS( XML_a, XML_close, FSEND );
+                    }
+                    for ( int k = 0; k < aSegments[j].Count; ++k )
+                    {
+                        switch( aSegments[ j ].Command )
+                        {
+                            case drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
+                            {
+                                mpFS->startElementNS( XML_a, XML_moveTo, FSEND );
+
+                                mpFS->singleElementNS( XML_a, XML_pt,
+                                   XML_x, I64S( aPairs[nPairIndex].First.Value.get<sal_Int32>() ),
+                                   XML_y, I64S( aPairs[nPairIndex].Second.Value.get<sal_Int32>() ),
+                                   FSEND );
+
+                                mpFS->endElementNS( XML_a, XML_moveTo );
+                                nPairIndex++;
+                                break;
+                            }
+                            case drawing::EnhancedCustomShapeSegmentCommand::LINETO :
+                            {
+                                mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
+                                mpFS->singleElementNS( XML_a, XML_pt,
+                                   XML_x, I64S( aPairs[nPairIndex].First.Value.get<sal_Int32>() ),
+                                   XML_y, I64S( aPairs[nPairIndex].Second.Value.get<sal_Int32>() ),
+                                   FSEND );
+                                mpFS->endElementNS( XML_a, XML_lnTo );
+                                nPairIndex++;
+                                break;
+                            }
+                            case drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
+                            {
+                                mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
+                                for( sal_uInt8 l = 0; l <= 2; ++l )
+                                {
+                                    mpFS->singleElementNS( XML_a, XML_pt,
+                                    XML_x, I64S( aPairs[nPairIndex+l].First.Value.get<sal_Int32>() ),
+                                    XML_y, I64S( aPairs[nPairIndex+l].Second.Value.get<sal_Int32>() ),
+                                    FSEND );
+
+                                }
+                                mpFS->endElementNS( XML_a, XML_cubicBezTo );
+                                nPairIndex += 3;
+                                break;
+                            }
+                            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
+                            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
+                            {
+                                nPairIndex += 3;
+                                break;
+                            }
+                            case drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
+                            case drawing::EnhancedCustomShapeSegmentCommand::ARC :
+                            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
+                            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
+                            {
+                                nPairIndex += 4;
+                                break;
+                            }
+                            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
+                            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
+                            {
+                                nPairIndex++;
+                                break;
+                            }
+                            case drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO :
+                            {
+                                mpFS->startElementNS( XML_a, XML_quadBezTo, FSEND );
+                                for( sal_uInt8 l = 0; l < 2; ++l )
+                                {
+                                    mpFS->singleElementNS( XML_a, XML_pt,
+                                    XML_x, I64S( aPairs[nPairIndex+l].First.Value.get<sal_Int32>() ),
+                                    XML_y, I64S( aPairs[nPairIndex+l].Second.Value.get<sal_Int32>() ),
+                                    FSEND );
+
+                                }
+                                mpFS->endElementNS( XML_a, XML_quadBezTo );
+                                nPairIndex += 2;
+                                break;
+                            }
+                            case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
+                            {
+                                nPairIndex += 2;
+                                break;
+                            }
+                            default:
+                                // do nothing
+                                break;
+                        }
+                    }
+                }
+                mpFS->endElementNS( XML_a, XML_path );
+            }
+        }
+    }
+
+    mpFS->endElementNS( XML_a, XML_pathLst );
+
+    mpFS->endElementNS( XML_a, XML_custGeom );
 }
 
 void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )

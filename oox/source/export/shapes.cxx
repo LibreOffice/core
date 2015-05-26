@@ -291,6 +291,7 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
     static
 #endif
     const std::initializer_list<OUStringLiteral> vBlacklist = {
+        OUStringLiteral("ellipse"),
         OUStringLiteral("ring"),
         OUStringLiteral("can"),
         OUStringLiteral("cube"),
@@ -478,17 +479,13 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     else if( bHasHandles )
         bCustGeom = true;
 
-    if (bCustGeom && pShape)
+    if (bHasHandles && bCustGeom && pShape)
     {
-        basegfx::B2DPolyPolygon aB2DPolyPolygon = pShape->GetLineGeometry(true);
-        tools::PolyPolygon aPolyPolygon;
-        for( sal_uInt32 i = 0; i < aB2DPolyPolygon.count(); ++i )
-        {
-            basegfx::B2DPolygon aB2DPolygon = aB2DPolyPolygon.getB2DPolygon(i);
-            aPolyPolygon.Insert( Polygon( aB2DPolygon ), POLYPOLY_APPEND );
-        }
-
-        WritePolyPolygon( aPolyPolygon );
+        WritePolyPolygon( tools::PolyPolygon( pShape->GetLineGeometry(true) ) );
+    }
+    else if (bCustGeom && pShape)
+    {
+        WriteCustomGeometry( xShape );
     }
     else // preset geometry
     {
