@@ -384,7 +384,7 @@ void ContentIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
         auto pUnoCrsr(pWeakUnoCrsr.lock());
         if(!pUnoCrsr)
             continue;
-        for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pUnoCrsr.get()))->GetRingContainer())
+        for(SwPaM& rPaM : pUnoCrsr.get()->GetRingContainer())
         {
             lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nContent, rPaM);
         }
