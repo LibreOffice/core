@@ -69,25 +69,37 @@
 
 #include <boost/scoped_ptr.hpp>
 
-/** Try to parse the given range using Calc-style syntax first, then
-    Excel-style if that fails. */
 static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
 {
-    sal_uInt16 nResult = rScRange.Parse(aAddress, pDoc);
+    // start with the address convention set in the document
+    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    sal_uInt16 nResult = rScRange.Parse(aAddress, pDoc, eConv);
     if ( (nResult & SCA_VALID) )
         return nResult;
 
+    // try the default calc address convention
+    nResult = rScRange.Parse(aAddress, pDoc);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    // try excel a1
     return rScRange.Parse(aAddress, pDoc, ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1, 0, 0));
 }
 
-/** Try to parse the given address using Calc-style syntax first, then
-    Excel-style if that fails. */
 static sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
 {
-    sal_uInt16 nResult = rScAddress.Parse(aAddress, pDoc);
+    // start with the address convention set in the document
+    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    sal_uInt16 nResult = rScAddress.Parse(aAddress, pDoc, eConv);
     if ( (nResult & SCA_VALID) )
         return nResult;
 
+    // try the default calc address convention
+    nResult = rScAddress.Parse(aAddress, pDoc);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    // try excel a1
     return rScAddress.Parse(aAddress, pDoc, ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1, 0, 0));
 }
 
