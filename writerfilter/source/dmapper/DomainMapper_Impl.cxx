@@ -4700,8 +4700,10 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( const OUString& sAuthor )
 {
     if (!m_xAnnotationField.is())
     {
-        assert( m_currentRedline.get());
-        m_currentRedline->m_sAuthor = sAuthor;
+        if (m_currentRedline.get())
+            m_currentRedline->m_sAuthor = sAuthor;
+        else
+            SAL_INFO("writerfilter.dmapper", "numberingChange not implemented");
     }
     else
         m_xAnnotationField->setPropertyValue("Author", uno::makeAny(sAuthor));
@@ -4717,8 +4719,10 @@ void DomainMapper_Impl::SetCurrentRedlineDate( const OUString& sDate )
 {
     if (!m_xAnnotationField.is())
     {
-        assert( m_currentRedline.get());
-        m_currentRedline->m_sDate = sDate;
+        if (m_currentRedline.get())
+            m_currentRedline->m_sDate = sDate;
+        else
+            SAL_INFO("writerfilter.dmapper", "numberingChange not implemented");
     }
     else
         m_xAnnotationField->setPropertyValue("DateTimeValue", uno::makeAny(ConversionHelper::ConvertDateStringToDateTime(sDate)));
