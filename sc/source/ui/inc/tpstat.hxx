@@ -41,6 +41,7 @@ private:
     VclPtr<FixedText>       m_pFtTables;
     VclPtr<FixedText>       m_pFtCells;
     VclPtr<FixedText>       m_pFtPages;
+    VclPtr<FixedText>       m_pFtFormula;
 };
 
 #endif

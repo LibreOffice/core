@@ -47,6 +47,7 @@
 
 #include "document.hxx"
 #include "table.hxx"
+#include "column.hxx"
 #include "attrib.hxx"
 #include "attarray.hxx"
 #include "markarr.hxx"
@@ -5748,6 +5749,19 @@ sal_uLong ScDocument::GetCellCount() const
     return nCellCount;
 }
 
+sal_uLong ScDocument::GetFormulaGroupCount() const
+{
+    sal_uLong nFormulaGroupCount = 0L;
+
+    ScFormulaGroupIterator aIter( const_cast<ScDocument*>(this) );
+    for ( sc::FormulaGroupEntry* ptr = aIter.first(); ptr; ptr = aIter.next())
+    {
+         nFormulaGroupCount++;
+    }
+
+    return nFormulaGroupCount;
+}
+
 sal_uLong ScDocument::GetCodeCount() const
 {
     sal_uLong nCodeCount = 0;
@@ -5832,6 +5846,7 @@ void ScDocument::GetDocStat( ScDocStat& rDocStat )
 {
     rDocStat.nTableCount = GetTableCount();
     rDocStat.aDocName    = aDocName;
+    rDocStat.nFormulaCount = GetFormulaGroupCount();
     rDocStat.nCellCount  = GetCellCount();
 }
 
