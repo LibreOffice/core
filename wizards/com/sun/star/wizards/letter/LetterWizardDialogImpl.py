@@ -123,7 +123,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.myConfig.cp_PrivateLetter.cp_Salutation = \
                     self.resources.SalutationLabels[2]
 
-            if self.myPathSelection.xSaveTextBox.Text.lower():
+            if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
 
             xContainerWindow = self.myLetterDoc.xFrame.ContainerWindow
@@ -256,7 +256,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.lstBusinessStyleItemChanged()
         self.enableSenderReceiver()
         self.setPossibleFooter(True)
-        if self.myPathSelection.xSaveTextBox.Text.lower():
+        if self.myPathSelection.xSaveTextBox.Text.lower() == "":
             self.myPathSelection.initializePath()
 
     def optPrivOfficialLetterItemChanged(self):
@@ -273,7 +273,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.disableBusinessPaper()
         self.disableSenderReceiver()
         self.setPossibleFooter(True)
-        if self.myPathSelection.xSaveTextBox.Text.lower():
+        if self.myPathSelection.xSaveTextBox.Text.lower() == "":
             self.myPathSelection.initializePath()
         self.myLetterDoc.fillSenderWithUserData()
 
@@ -291,7 +291,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.disableBusinessPaper()
         self.disableSenderReceiver()
         self.setPossibleFooter(False)
-        if self.myPathSelection.xSaveTextBox.Text.lower():
+        if self.myPathSelection.xSaveTextBox.Text.lower() == "":
             self.myPathSelection.initializePath()
 
     def optSenderPlaceholderItemChanged(self):
