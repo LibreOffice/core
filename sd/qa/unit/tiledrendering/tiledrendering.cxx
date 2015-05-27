@@ -37,6 +37,7 @@ static const char* DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
 class SdTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
 public:
+    SdTiledRenderingTest();
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
@@ -73,8 +74,16 @@ private:
 #if !defined(WNT) && !defined(MACOSX)
     Rectangle m_aInvalidation;
     std::vector<Rectangle> m_aSelection;
+    sal_Int32 m_nPart;
 #endif
 };
+
+SdTiledRenderingTest::SdTiledRenderingTest()
+#if !defined(WNT) && !defined(MACOSX)
+    : m_nPart(0)
+#endif
+{
+}
 
 void SdTiledRenderingTest::setUp()
 {
@@ -156,6 +165,12 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             lcl_convertRectangle(rString, aRectangle);
             m_aSelection.push_back(aRectangle);
         }
+    }
+    break;
+    case LOK_CALLBACK_SET_PART:
+    {
+        OUString aPayload = OUString::createFromAscii(pPayload);
+        m_nPart = aPayload.toInt32();
     }
     break;
     }
@@ -306,6 +321,16 @@ void SdTiledRenderingTest::testResetSelection()
     CPPUNIT_ASSERT(!pView->GetTextEditObject());
 }
 
+static void lcl_search(const OUString& rKey)
+{
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(rKey)},
+        {"SearchItem.Backward", uno::makeAny(false)}
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+}
+
 void SdTiledRenderingTest::testSearch()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
@@ -314,12 +339,7 @@ void SdTiledRenderingTest::testSearch()
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString("Aaa bbb.");
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"SearchItem.SearchString", uno::makeAny(OUString("bbb"))},
-        {"SearchItem.Backward", uno::makeAny(false)}
-    }));
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    lcl_search("bbb");
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView = pViewShell->GetView();
@@ -329,6 +349,10 @@ void SdTiledRenderingTest::testSearch()
 
     // Did the selection callback fire?
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), m_aSelection.size());
+
+    // Search for something on the second slide, and make sure that the set-part callback fired.
+    lcl_search("bbb");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
 }
 
 #endif
