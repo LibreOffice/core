@@ -70,6 +70,7 @@
 #include "framework/FrameworkHelper.hxx"
 #include <svx/svxids.hrc>
 #include <editeng/editerr.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1056,7 +1057,12 @@ void Outliner::ShowEndOfSearchDialog()
         if (mbStringFound)
             aString = SD_RESSTR(STR_END_SEARCHING);
         else
+        {
             aString = SD_RESSTR(STR_STRING_NOTFOUND);
+            mpDrawDocument->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
+                                          mpSearchItem->GetSearchString().toUtf8().getStr());
+
+        }
     }
     else
     {
