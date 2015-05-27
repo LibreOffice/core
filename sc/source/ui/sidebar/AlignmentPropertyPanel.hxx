@@ -73,9 +73,7 @@ private:
     VclPtr<CheckBox>                                   mpCBXWrapText;
     VclPtr<CheckBox>                                   mpCBXMergeCell;
     VclPtr<FixedText>                                  mpFtRotate;
-    VclPtr<svx::sidebar::SidebarDialControl>           mpCtrlDial;
     VclPtr<MetricBox>                                  mpMtrAngle;
-    VclPtr<CheckBox>                                   mpCbStacked;
 
     ::sfx2::sidebar::ControllerItem             maAlignHorControl;
     ::sfx2::sidebar::ControllerItem             maLeftIndentControl;

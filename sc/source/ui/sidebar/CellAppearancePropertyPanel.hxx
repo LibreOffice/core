@@ -84,7 +84,6 @@ private:
     VclPtr<ToolBox>                                mpTBLineStyle;
     VclPtr<ToolBox>                                mpTBLineColor;
     ::boost::scoped_ptr< CellBorderUpdater > mpCellBorderUpdater;
-    VclPtr<CheckBox>                               mpCBXShowGrid;
 
     ::sfx2::sidebar::ControllerItem         maLineStyleControl;
     ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
@@ -143,7 +142,6 @@ private:
 
     DECL_LINK_TYPED(TbxCellBorderSelectHdl, ToolBox*, void);
     DECL_LINK_TYPED(TbxLineStyleSelectHdl, ToolBox*, void);
-    DECL_LINK(CBOXGridShowClkHdl, void*);
 
     // for CellLineStyle popup
     svx::sidebar::PopupControl* CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent);
