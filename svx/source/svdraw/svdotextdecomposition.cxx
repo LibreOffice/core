@@ -739,7 +739,7 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
             aNextRect.Bottom()-aNextRect.Top()
             )
      );
-    rOutliner.SetUpdateMode(true);
+    //rOutliner.SetUpdateMode(true);
     rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
     rOutliner.SetText(*mpOverflowingText);  // XXX: copies overflown text
     Size aNewSize(rOutliner.CalcTextSize());
