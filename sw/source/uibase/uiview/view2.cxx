@@ -147,7 +147,6 @@
 #include <vcl/settings.hxx>
 
 #include <boost/scoped_ptr.hpp>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 const char sStatusDelim[] = " : ";
 const char sStatusComma[] = " , ";
@@ -1281,7 +1280,6 @@ void SwView::Execute(SfxRequest &rReq)
 /// invalidate page numbering field
 void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr)
 {
-    GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_PAGE_COUNT_CHANGED, 0);
     OUString sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
     const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
     // Used to distinguish which tooltip to show
