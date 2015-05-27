@@ -400,8 +400,12 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                     rProp.Value >>= bFlipV;
                 if ( rProp.Name == "AdjustmentValues" )
                     nAdjustmentValuesIndex = i;
-                else if ( rProp.Name == "Handles" ) {
-                    bHasHandles = true;
+                else if ( rProp.Name == "Handles" )
+                {
+                    uno::Sequence<beans::PropertyValue> aHandles;
+                    rProp.Value >>= aHandles;
+                    if ( aHandles.getLength() )
+                        bHasHandles = true;
                     if( !bIsDefaultObject )
                         bPredefinedHandlesUsed = false;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here
