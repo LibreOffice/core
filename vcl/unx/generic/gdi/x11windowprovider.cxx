@@ -32,7 +32,7 @@ Display *OpenX11Display(OString& rDisplay)
 
     sal_uInt32 nParams = osl_getCommandArgCount();
     OUString aParam;
-    for (sal_uInt16 i=0; i<nParams; i++)
+    for (sal_uInt32 i=0; i<nParams; i++)
     {
         osl_getCommandArg(i, &aParam.pData);
         if ( aParam == "-display" )

@@ -1274,7 +1274,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                   0,
                                   0);
 
-        for (sal_uInt16 i=0 ; i < reader.getFieldCount(); i++)
+        for (sal_uInt32 i=0 ; i < reader.getFieldCount(); i++)
         {
             writer.setFieldData(index,
                                reader.getFieldName(i),
@@ -1285,7 +1285,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                reader.getFieldConstValue(i));
             index++;
         }
-        for (sal_uInt16 i=0 ; i < reader2.getFieldCount(); i++)
+        for (sal_uInt32 i=0 ; i < reader2.getFieldCount(); i++)
         {
             if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
             {

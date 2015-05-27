@@ -570,11 +570,11 @@ void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
     boost::scoped_array<sal_Int16> pConvertedDXAry(new sal_Int16[ nOriginalTextLen ]);
     sal_Int32 j = 0;
     pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ 0 ] );
-    for (sal_uInt16 i = 1; i < ( nOriginalTextLen - 1 ); ++i)
+    for (sal_Int32 i = 1; i < ( nOriginalTextLen - 1 ); ++i)
         pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ i ] - pDXAry[ i - 1 ] );
     pConvertedDXAry[ j ] = (sal_Int16)ScaleWidth( pDXAry[ nOriginalTextLen - 2 ] / ( nOriginalTextLen - 1 ) );
 
-    for (sal_uInt16 i = 0; i < nOriginalTextLen; ++i)
+    for (sal_Int32 i = 0; i < nOriginalTextLen; ++i)
     {
         sal_Int16 nDx = pConvertedDXAry[ i ];
         pWMF->WriteInt16( nDx );

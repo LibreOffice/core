@@ -135,7 +135,7 @@ void PropParser::Extract( const OString& rPOFile )
         return;
     }
 
-    for( unsigned nIndex = 0; nIndex < m_vLines.size(); ++nIndex )
+    for( size_t nIndex = 0; nIndex < m_vLines.size(); ++nIndex )
     {
         const OString sLine = m_vLines[nIndex];
         const sal_Int32 nEqualSign = sLine.indexOf('=');
@@ -184,7 +184,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         }
     }
 
-    for( unsigned nIndex = 0; nIndex < m_vLines.size(); ++nIndex )
+    for( size_t nIndex = 0; nIndex < m_vLines.size(); ++nIndex )
     {
         const OString sLine = m_vLines[nIndex];
         const sal_Int32 nEqualSign = sLine.indexOf('=');

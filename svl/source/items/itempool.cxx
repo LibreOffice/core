@@ -778,7 +778,7 @@ void SfxPoolItemArray_Impl::ReHash()
     maFree.clear();
     maHash.clear();
 
-    for (sal_uInt32 nIdx = 0; nIdx < size(); ++nIdx)
+    for (size_t nIdx = 0; nIdx < size(); ++nIdx)
     {
         SfxPoolItem *pItem = (*this)[nIdx];
         if (!pItem)

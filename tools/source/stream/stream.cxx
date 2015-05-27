@@ -1589,7 +1589,7 @@ static unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long
     }
     else // BugFix #25888#
     {
-        for( sal_uInt16 i = 0; i < nLen; i++ ) {
+        for( sal_Int32 i = 0; i < nLen; i++ ) {
             nCryptMask ^= pStr[i];
             if( nCryptMask & 0x80 ) {
                 nCryptMask <<= 1;

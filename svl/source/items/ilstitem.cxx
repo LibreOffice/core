@@ -34,7 +34,7 @@ SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::std::vector < 
     : SfxPoolItem( which )
 {
     m_aList.realloc( rList.size() );
-    for ( sal_uInt16 n=0; n<rList.size(); ++n )
+    for ( size_t n=0; n<rList.size(); ++n )
         m_aList[n] = rList[n];
 }
 

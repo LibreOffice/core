@@ -334,7 +334,7 @@ void PNGWriterImpl::ImplWritePalette()
 
     ImplOpenChunk(PNGCHUNK_PLTE);
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( sal_uLong i = 0; i < nCount; i++ )
     {
         const BitmapColor& rColor = mpAccess->GetPaletteColor(i);
         *pTmp++ = rColor.GetRed();

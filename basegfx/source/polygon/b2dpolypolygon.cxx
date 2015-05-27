@@ -105,7 +105,7 @@ public:
 
     void setClosed(bool bNew)
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        for(size_t a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].setClosed(bNew);
         }
@@ -127,7 +127,7 @@ public:
 
     void transform(const basegfx::B2DHomMatrix& rMatrix)
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        for(size_t a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].transform(rMatrix);
         }

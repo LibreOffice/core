@@ -745,9 +745,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pBmp = aBmp.AcquireReadAccess();
             if ( pBmp )
             {
-                for ( sal_Int32 y = 0; y < pBmp->Height(); y++ )
+                for ( long y = 0; y < pBmp->Height(); y++ )
                 {
-                    for ( sal_Int32 x = 0; x < pBmp->Width(); x++ )
+                    for ( long x = 0; x < pBmp->Width(); x++ )
                     {
                         const BitmapColor aColor( pBmp->GetColor( y, x ) );
 

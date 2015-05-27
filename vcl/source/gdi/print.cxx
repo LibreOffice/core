@@ -431,7 +431,7 @@ SalPrinterQueueInfo::~SalPrinterQueueInfo()
 ImplPrnQueueList::~ImplPrnQueueList()
 {
     ImplSVData*         pSVData = ImplGetSVData();
-    for( unsigned int i = 0; i < m_aQueueInfos.size(); i++ )
+    for( size_t i = 0; i < m_aQueueInfos.size(); i++ )
     {
         delete m_aQueueInfos[i].mpQueueInfo;
         pSVData->mpDefInst->DeletePrinterQueueInfo( m_aQueueInfos[i].mpSalQueueInfo );
@@ -908,7 +908,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
             return pInfo->mpSalQueueInfo;
 
         // then search case insensitive
-        for( unsigned int i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
+        for( size_t i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
         {
             if( pPrnList->m_aQueueInfos[i].mpSalQueueInfo->maPrinterName.equalsIgnoreAsciiCase( rPrinterName ) )
                 return pPrnList->m_aQueueInfos[i].mpSalQueueInfo;
@@ -917,7 +917,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
         // then search for driver name
         if ( pDriver )
         {
-            for( unsigned int i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
+            for( size_t i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
             {
                 if( pPrnList->m_aQueueInfos[i].mpSalQueueInfo->maDriver == *pDriver )
                     return pPrnList->m_aQueueInfos[i].mpSalQueueInfo;

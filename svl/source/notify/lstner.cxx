@@ -45,7 +45,7 @@ SfxListener::SfxListener() : mpImpl(new Impl)
 
 SfxListener::SfxListener( const SfxListener &rListener ) : mpImpl(new Impl)
 {
-    for ( sal_uInt16 n = 0; n < rListener.mpImpl->maBCs.size(); ++n )
+    for ( size_t n = 0; n < rListener.mpImpl->maBCs.size(); ++n )
         StartListening( *rListener.mpImpl->maBCs[n] );
 }
 
@@ -54,7 +54,7 @@ SfxListener::SfxListener( const SfxListener &rListener ) : mpImpl(new Impl)
 SfxListener::~SfxListener()
 {
     // unregister at all remaining broadcasters
-    for ( sal_uInt16 nPos = 0; nPos < mpImpl->maBCs.size(); ++nPos )
+    for ( size_t nPos = 0; nPos < mpImpl->maBCs.size(); ++nPos )
     {
         SfxBroadcaster *pBC = mpImpl->maBCs[nPos];
         pBC->RemoveListener(*this);

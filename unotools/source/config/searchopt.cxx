@@ -177,7 +177,7 @@ bool SvtSearchOptions_Impl::Load()
         bSucc = true;
 
         const Any* pValues = aValues.getConstArray();
-        for (sal_uInt16 i = 0;  i < nProps;  ++i)
+        for (sal_Int32 i = 0;  i < nProps;  ++i)
         {
             const Any &rVal = pValues[i];
             DBG_ASSERT( rVal.hasValue(), "property value missing" );
@@ -227,7 +227,7 @@ bool SvtSearchOptions_Impl::Save()
             "unexpected size of index" );
     if (nProps  &&  nProps == MAX_FLAGS_OFFSET + 1)
     {
-        for (sal_uInt16 i = 0;  i < nProps;  ++i)
+        for (sal_Int32 i = 0;  i < nProps;  ++i)
             pValue[i] <<= GetFlag(i);
         bSucc |= PutProperties( aNames, aValues );
     }
