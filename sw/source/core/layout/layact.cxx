@@ -2111,7 +2111,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
         {
             Rectangle aRect( 0, 0, 5, 5 );
             aRect = pWin->PixelToLogic( aRect );
-            // OD 2004-04-23 #116347#
+            // Depending on if idle layout is in progress or not, draw a "red square" or a "green square".
             pWin->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
             pWin->SetFillColor( eColorData );
             pWin->SetLineColor();
