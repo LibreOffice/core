@@ -38,6 +38,26 @@
 // We know that VirtualDevices use a DPI of 96.
 static const int DPI = 96;
 
+namespace {
+
+/// Sets rWidth and rHeight from a "width, height" string.
+void payloadToSize(const char* pPayload, long& rWidth, long& rHeight)
+{
+    rWidth = rHeight = 0;
+    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 2);
+    gchar** ppCoordinate = ppCoordinates;
+    if (!*ppCoordinate)
+        return;
+    rWidth = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
+        return;
+    rHeight = atoi(*ppCoordinate);
+    g_strfreev(ppCoordinates);
+}
+
+}
+
 /// Holds data used by LOKDocView only.
 struct LOKDocView_Impl
 {
@@ -170,8 +190,6 @@ struct LOKDocView_Impl
      * the tiles that intersect with pPartial.
      */
     void renderDocument(GdkRectangle* pPartial);
-    /// Sets rWidth and rHeight from a "width, height" string.
-    static void payloadToSize(const char* pPayload, long& rWidth, long& rHeight);
     /// Returns the GdkRectangle of a width,height,x,y string.
     static GdkRectangle payloadToRectangle(const char* pPayload);
     /// Returns the GdkRectangles of a w,h,x,y;w2,h2,x2,y2;... string.
@@ -846,21 +864,6 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
     }
 }
 
-void LOKDocView_Impl::payloadToSize(const char* pPayload, long& rWidth, long& rHeight)
-{
-    rWidth = rHeight = 0;
-    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 2);
-    gchar** ppCoordinate = ppCoordinates;
-    if (!*ppCoordinate)
-        return;
-    rWidth = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (!*ppCoordinate)
-        return;
-    rHeight = atoi(*ppCoordinate);
-    g_strfreev(ppCoordinates);
-}
-
 GdkRectangle LOKDocView_Impl::payloadToRectangle(const char* pPayload)
 {
     GdkRectangle aRet;
@@ -1033,7 +1036,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     break;
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
-        LOKDocView_Impl::payloadToSize(pCallback->m_aPayload.c_str(), m_nDocumentWidthTwips, m_nDocumentHeightTwips);
+        payloadToSize(pCallback->m_aPayload.c_str(), m_nDocumentWidthTwips, m_nDocumentHeightTwips);
     }
     break;
     case LOK_CALLBACK_SET_PART:
