@@ -52,6 +52,24 @@
       "revId": "60e92e066ec12af54ba5e562ea7e3f31b7e14174",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_fe998120",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2015-05-27T10:20:06Z",
+      "side": 1,
+      "message": "Ok, I\u0027m going to remove the scope resolution operator in the declaration of xDocShRef, in such case.",
+      "parentUuid": "3a57f1b5_3ef9594e",
+      "revId": "60e92e066ec12af54ba5e562ea7e3f31b7e14174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
