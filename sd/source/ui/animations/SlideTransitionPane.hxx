@@ -89,7 +89,6 @@ private:
 
     DECL_LINK( ApplyToAllButtonClicked, void * );
     DECL_LINK( PlayButtonClicked, void * );
-    DECL_LINK( SlideShowButtonClicked, void * );
     DECL_LINK( AutoPreviewClicked, void * );
 
     DECL_LINK( TransitionSelected, void * );
@@ -116,7 +115,6 @@ private:
     VclPtr<MetricField>  mpMF_ADVANCE_AUTO_AFTER;
     VclPtr<PushButton>   mpPB_APPLY_TO_ALL;
     VclPtr<PushButton>   mpPB_PLAY;
-    VclPtr<PushButton>   mpPB_SLIDE_SHOW;
     VclPtr<CheckBox>     mpCB_AUTO_PREVIEW;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView >             mxView;
