@@ -474,9 +474,9 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
 
 namespace vcl {
 
-void Window::ImplControlFocus( sal_uInt16 nFlags )
+void Window::ImplControlFocus( GetFocusFlags nFlags )
 {
-    if ( nFlags & GETFOCUS_MNEMONIC )
+    if ( nFlags & GetFocusFlags::Mnemonic )
     {
         if ( GetType() == WINDOW_RADIOBUTTON )
         {
@@ -488,7 +488,7 @@ void Window::ImplControlFocus( sal_uInt16 nFlags )
         else
         {
             ImplGrabFocus( nFlags );
-            if ( nFlags & GETFOCUS_UNIQUEMNEMONIC )
+            if ( nFlags & GetFocusFlags::UniqueMnemonic )
             {
                 if ( GetType() == WINDOW_CHECKBOX )
                     static_cast<CheckBox*>(this)->ImplCheck();
@@ -543,7 +543,7 @@ namespace
 
             if (isSuitableDestination(pWindow))
             {
-                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_FORWARD );
+                pWindow->ImplControlFocus( GetFocusFlags::Cursor | GetFocusFlags::Forward );
                 return true;
             }
         }
@@ -554,7 +554,7 @@ namespace
 
             if (isSuitableDestination(pWindow))
             {
-                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_FORWARD );
+                pWindow->ImplControlFocus( GetFocusFlags::Cursor | GetFocusFlags::Forward );
                 return true;
             }
         }
@@ -642,18 +642,18 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         if ( bKeyInput && !pButtonWindow && (nDlgCtrlFlags & DialogControlFlags::Return) )
         {
             GetDlgWindowType nType;
-            sal_uInt16  nGetFocusFlags = GETFOCUS_TAB;
+            GetFocusFlags    nGetFocusFlags = GetFocusFlags::Tab;
             sal_uInt16  nNewIndex;
             sal_uInt16  iStart;
             if ( aKeyCode.IsShift() )
             {
                 nType = GetDlgWindowType::Prev;
-                nGetFocusFlags |= GETFOCUS_BACKWARD;
+                nGetFocusFlags |= GetFocusFlags::Backward;
             }
             else
             {
                 nType = GetDlgWindowType::Next;
-                nGetFocusFlags |= GETFOCUS_FORWARD;
+                nGetFocusFlags |= GetFocusFlags::Forward;
             }
             iStart = i;
             pTempWindow = ImplGetDlgWindow( i, nType, nFormStart, nFormEnd, &nNewIndex );
@@ -665,12 +665,12 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                     if ( nType == GetDlgWindowType::Prev )
                     {
                         if ( nNewIndex > iStart )
-                            nGetFocusFlags |= GETFOCUS_AROUND;
+                            nGetFocusFlags |= GetFocusFlags::Around;
                     }
                     else
                     {
                         if ( nNewIndex < iStart )
-                            nGetFocusFlags |= GETFOCUS_AROUND;
+                            nGetFocusFlags |= GetFocusFlags::Around;
                     }
                     pTempWindow->ImplControlFocus( nGetFocusFlags );
                     return true;
@@ -690,11 +690,11 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 NotifyEvent aNEvt1( MouseNotifyEvent::LOSEFOCUS, pSWindow );
                 if ( !ImplCallPreNotify( aNEvt1 ) )
                     pSWindow->CompatLoseFocus();
-                pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
+                pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GetFocusFlags::Around;
                 NotifyEvent aNEvt2( MouseNotifyEvent::GETFOCUS, pSWindow );
                 if ( !ImplCallPreNotify( aNEvt2 ) )
                     pSWindow->CompatGetFocus();
-                pSWindow->mpWindowImpl->mnGetFocusFlags = 0;
+                pSWindow->mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
                 return true;
             }
         }
@@ -732,7 +732,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
             if ( !aKeyCode.IsMod2() )
             {
                 GetDlgWindowType nType;
-                sal_uInt16  nGetFocusFlags = GETFOCUS_TAB;
+                GetFocusFlags    nGetFocusFlags = GetFocusFlags::Tab;
                 sal_uInt16  nNewIndex;
                 bool        bFormular = false;
 
@@ -807,12 +807,12 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                         if ( aKeyCode.IsShift() )
                         {
                             nType = GetDlgWindowType::Prev;
-                            nGetFocusFlags |= GETFOCUS_BACKWARD;
+                            nGetFocusFlags |= GetFocusFlags::Backward;
                         }
                         else
                         {
                             nType = GetDlgWindowType::Next;
-                            nGetFocusFlags |= GETFOCUS_FORWARD;
+                            nGetFocusFlags |= GetFocusFlags::Forward;
                         }
                         vcl::Window* pWindow = ImplGetDlgWindow( i, nType, nFormStart, nFormEnd, &nNewIndex );
                         // if this is the same window, simulate a Get/LoseFocus,
@@ -822,11 +822,11 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                             NotifyEvent aNEvt1( MouseNotifyEvent::LOSEFOCUS, pSWindow );
                             if ( !ImplCallPreNotify( aNEvt1 ) )
                                 pSWindow->CompatLoseFocus();
-                            pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
+                            pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GetFocusFlags::Around;
                             NotifyEvent aNEvt2( MouseNotifyEvent::GETFOCUS, pSWindow );
                             if ( !ImplCallPreNotify( aNEvt2 ) )
                                 pSWindow->CompatGetFocus();
-                            pSWindow->mpWindowImpl->mnGetFocusFlags = 0;
+                            pSWindow->mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
                             return true;
                         }
                         else if ( pWindow )
@@ -835,12 +835,12 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                             if ( nType == GetDlgWindowType::Prev )
                             {
                                 if ( nNewIndex > i )
-                                    nGetFocusFlags |= GETFOCUS_AROUND;
+                                    nGetFocusFlags |= GetFocusFlags::Around;
                             }
                             else
                             {
                                 if ( nNewIndex < i )
-                                    nGetFocusFlags |= GETFOCUS_AROUND;
+                                    nGetFocusFlags |= GetFocusFlags::Around;
                             }
                             pWindow->ImplControlFocus( nGetFocusFlags );
                             return true;
@@ -868,7 +868,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                         if (isSuitableDestination(pWindow))
                         {
                             if ( pWindow != pSWindow )
-                                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
+                                pWindow->ImplControlFocus( GetFocusFlags::Cursor | GetFocusFlags::Backward );
                             return true;
                         }
 
@@ -898,7 +898,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
                     if (isSuitableDestination(pWindow))
                     {
-                        pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
+                        pWindow->ImplControlFocus( GetFocusFlags::Cursor | GetFocusFlags::Backward );
                         return true;
                     }
 
@@ -914,9 +914,9 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 pSWindow = ::ImplFindAccelWindow( this, i, c, nFormStart, nFormEnd );
                 if ( pSWindow )
                 {
-                    sal_uInt16 nGetFocusFlags = GETFOCUS_MNEMONIC;
+                    GetFocusFlags nGetFocusFlags = GetFocusFlags::Mnemonic;
                     if ( pSWindow == ::ImplFindAccelWindow( this, i, c, nFormStart, nFormEnd ) )
-                        nGetFocusFlags |= GETFOCUS_UNIQUEMNEMONIC;
+                        nGetFocusFlags |= GetFocusFlags::UniqueMnemonic;
                     pSWindow->ImplControlFocus( nGetFocusFlags );
                     return true;
                 }

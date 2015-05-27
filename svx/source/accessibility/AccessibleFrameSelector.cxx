@@ -465,20 +465,20 @@ void    AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
     aEvent.FocusFlags = 0;
     if(bGetFocus)
     {
-        sal_uInt16 nFocusFlags = mpFrameSel->GetGetFocusFlags();
-        if(nFocusFlags&GETFOCUS_TAB)
+        GetFocusFlags nFocusFlags = mpFrameSel->GetGetFocusFlags();
+        if(nFocusFlags & GetFocusFlags::Tab)
             aEvent.FocusFlags |= AwtFocusChangeReason::TAB;
-        if(nFocusFlags&GETFOCUS_CURSOR)
+        if(nFocusFlags & GetFocusFlags::Cursor)
             aEvent.FocusFlags |= AwtFocusChangeReason::CURSOR;
-        if(nFocusFlags&GETFOCUS_MNEMONIC)
+        if(nFocusFlags & GetFocusFlags::Mnemonic)
             aEvent.FocusFlags |= AwtFocusChangeReason::MNEMONIC;
-        if(nFocusFlags&GETFOCUS_FORWARD)
+        if(nFocusFlags & GetFocusFlags::Forward)
             aEvent.FocusFlags |= AwtFocusChangeReason::FORWARD;
-        if(nFocusFlags&GETFOCUS_BACKWARD)
+        if(nFocusFlags & GetFocusFlags::Backward)
             aEvent.FocusFlags |= AwtFocusChangeReason::BACKWARD;
-        if(nFocusFlags&GETFOCUS_AROUND)
+        if(nFocusFlags & GetFocusFlags::Around)
             aEvent.FocusFlags |= AwtFocusChangeReason::AROUND;
-        if(nFocusFlags&GETFOCUS_UNIQUEMNEMONIC)
+        if(nFocusFlags & GetFocusFlags::UniqueMnemonic)
             aEvent.FocusFlags |= AwtFocusChangeReason::UNIQUEMNEMONIC;
     }
     aEvent.Temporary = sal_False;

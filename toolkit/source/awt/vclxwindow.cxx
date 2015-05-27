@@ -582,7 +582,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 {
                     ::com::sun::star::awt::FocusEvent aEvent;
                     aEvent.Source = (::cppu::OWeakObject*)this;
-                    aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
+                    aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
                     aEvent.Temporary = sal_False;
                     mpImpl->getFocusListeners().focusGained( aEvent );
                 }
@@ -604,7 +604,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 {
                     ::com::sun::star::awt::FocusEvent aEvent;
                     aEvent.Source = (::cppu::OWeakObject*)this;
-                    aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
+                    aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
                     aEvent.Temporary = sal_False;
 
                     vcl::Window* pNext = Application::GetFocusWindow();

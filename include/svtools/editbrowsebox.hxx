@@ -667,7 +667,7 @@ namespace svt
                                 sal_uInt16 nColumnId ) const SAL_OVERRIDE;
         using Control::ImplInitSettings;
         SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-        SVT_DLLPRIVATE void DetermineFocus( const sal_uInt16 _nGetFocusFlags = 0);
+        SVT_DLLPRIVATE void DetermineFocus( const GetFocusFlags _nGetFocusFlags = GetFocusFlags::NONE);
         static inline void HideAndDisable(CellControllerRef& rController);
         inline void EnableAndShow() const;
 

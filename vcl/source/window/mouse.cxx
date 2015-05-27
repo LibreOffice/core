@@ -195,7 +195,7 @@ static bool IsWindowFocused(const WindowImpl& rWinImpl)
     return false;
 }
 
-void Window::ImplGrabFocus( sal_uInt16 nFlags )
+void Window::ImplGrabFocus( GetFocusFlags nFlags )
 {
     // #143570# no focus for destructing windows
     if( !mpWindowImpl || mpWindowImpl->mbInDispose )
@@ -381,7 +381,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                 if( pOldFocusWindow &&
                     ! aOldFocusDel.IsDead() &&
                     ( pOldFocusWindow->GetDialogControlFlags() & DialogControlFlags::FloatWinPopupModeEndCancel ) )
-                    mpWindowImpl->mnGetFocusFlags |= GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL;
+                    mpWindowImpl->mnGetFocusFlags |= GetFocusFlags::FloatWinPopupModeEndCancel;
                 NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
                 if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDead() )
                     CompatGetFocus();
@@ -389,7 +389,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                     ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDead()) ? pOldFocusWindow : NULL );
                 if( !aDogTag.IsDead() )
                 {
-                    mpWindowImpl->mnGetFocusFlags = 0;
+                    mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
                     mpWindowImpl->mbInFocusHdl = false;
                 }
             }
@@ -399,7 +399,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     }
 }
 
-void Window::ImplGrabFocusToDocument( sal_uInt16 nFlags )
+void Window::ImplGrabFocusToDocument( GetFocusFlags nFlags )
 {
     vcl::Window *pWin = this;
     while( pWin )

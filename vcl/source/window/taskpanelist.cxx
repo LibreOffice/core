@@ -80,7 +80,7 @@ static void ImplTaskPaneListGrabFocus( vcl::Window *pWindow, bool bForward )
     // that can deal with the focus
     if( pWindow->ImplIsFloatingWindow() && pWindow->GetWindow( GetWindowType::FirstChild ) )
         pWindow = pWindow->GetWindow( GetWindowType::FirstChild );
-    pWindow->ImplGrabFocus( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
+    pWindow->ImplGrabFocus( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
 }
 
 TaskPaneList::TaskPaneList()
@@ -178,7 +178,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
                 // Ctrl-F6 goes directly to the document
                 if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
                 {
-                    pWin->ImplGrabFocusToDocument( GETFOCUS_F6 );
+                    pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 );
                     return true;
                 }
 
@@ -204,7 +204,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
 
                     // we did not find another taskpane, so
                     // put focus back into document
-                    pWin->ImplGrabFocusToDocument( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
+                    pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
                 }
 
                 return true;

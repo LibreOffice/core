@@ -646,7 +646,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
             sal_uInt16  n = 0;
             vcl::Window* pFirstChild = pPage->ImplGetDlgWindow( n, GetDlgWindowType::First );
             if ( pFirstChild )
-                pFirstChild->ImplControlFocus( GETFOCUS_INIT );
+                pFirstChild->ImplControlFocus( GetFocusFlags::Init );
             else
                 GrabFocus();
         }

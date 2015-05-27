@@ -2272,7 +2272,7 @@ void RadioButton::ImplUncheckAllOther()
     }
 }
 
-void RadioButton::ImplCallClick( bool bGrabFocus, sal_uInt16 nFocusFlags )
+void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
 {
     mbStateChanged = !mbChecked;
     mbChecked = true;

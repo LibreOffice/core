@@ -272,7 +272,7 @@ IMPL_LINK(SwAddressControl_Impl, ScrollHdl_Impl, ScrollBar*, pScroll)
 
 IMPL_LINK(SwAddressControl_Impl, GotFocusHdl_Impl, Edit*, pEdit)
 {
-    if(0 != (GETFOCUS_TAB & pEdit->GetGetFocusFlags()))
+    if(GetFocusFlags::Tab & pEdit->GetGetFocusFlags())
     {
         Rectangle aRect(pEdit->GetPosPixel(), pEdit->GetSizePixel());
         MakeVisible(aRect);
