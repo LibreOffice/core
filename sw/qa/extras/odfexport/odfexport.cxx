@@ -71,6 +71,104 @@ public:
     }
 };
 
+DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
+{
+   //Counting the Number of Frames and checking with the expected number to ensure the exact number of frames
+   uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), xIndexAccess->getCount());
+    //Getting all the shapes
+    uno::Reference<drawing::XShape> xTextFrame[16];
+    for(int i = 0; i < 16; i++) {
+        xTextFrame[i] = getShape(i+1);
+        }
+    //Checking Frame 1
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xTextFrame[0], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[0], "FillTransparence"));
+    //Checking Frame 2
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame[1], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x006600), getProperty<util::Color>(xTextFrame[1], "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[1], "FillTransparence"));
+    //Checking Frame 3
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame[2], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x006600), getProperty<util::Color>(xTextFrame[2], "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame[2], "FillTransparence"));
+    //Checking Frame 4
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame[3], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x579D1C), getProperty<util::Color>(xTextFrame[3], "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Transparency 1"), getProperty<OUString>(xTextFrame[3], "FillTransparenceGradientName"));
+    //awt::Gradient aGradient = getProperty<awt::Gradient>(xTextFrame[3], "FillTransparenceGradient");
+         //std::cout<<"StartVal:"<<aGradient.StartIntensity<<"\n";
+        // std::cout<<"EndVal:"<<aGradient.EndIntensity<<"\n";
+             //...Transparency Gradient...
+    //Checking Frame 5
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame[4], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[4], "FillTransparence"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Subtle Tango Green"), getProperty<OUString>(xTextFrame[4], "FillGradientName"));
+    //Checking Frame 6
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame[5], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Subtle Tango Green"), getProperty<OUString>(xTextFrame[5], "FillGradientName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame[5], "FillTransparence"));
+    //Checking Frame 7
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame[6], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Subtle Tango Green"), getProperty<OUString>(xTextFrame[6], "FillGradientName"));
+            //...Transparency Gradient...
+    //Checking Frame 8
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame[7], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 0 Degrees"), getProperty<OUString>(xTextFrame[7], "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(false), getProperty<sal_Bool>(xTextFrame[7], "FillBackground"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[7], "FillTransparence"));
+    //Checking Frame 9
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame[8], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 0 Degrees"), getProperty<OUString>(xTextFrame[8], "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), getProperty<sal_Bool>(xTextFrame[8], "FillBackground"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[8], "FillTransparence"));
+    //Checking Frame 10
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame[9], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 0 Degrees"), getProperty<OUString>(xTextFrame[9], "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(false), getProperty<sal_Bool>(xTextFrame[9], "FillBackground"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame[9], "FillTransparence"));
+    //Checking Frame 11
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame[10], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 0 Degrees"), getProperty<OUString>(xTextFrame[10], "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), getProperty<sal_Bool>(xTextFrame[10], "FillBackground"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame[10], "FillTransparence"));
+    //Checking Frame 12
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame[11], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 0 Degrees"), getProperty<OUString>(xTextFrame[11], "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(false), getProperty<sal_Bool>(xTextFrame[11], "FillBackground"));
+                //...Transparency Gradient...
+    //Checking Frame 13
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame[12], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 0 Degrees"), getProperty<OUString>(xTextFrame[12], "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), getProperty<sal_Bool>(xTextFrame[12], "FillBackground"));
+                //...Transparency Gradient...
+    //Checking Frame 14
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame[13], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sky"), getProperty<OUString>(xTextFrame[13], "FillBitmapName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[13], "FillTransparence"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[13], "FillBitmapPositionOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[13], "FillBitmapPositionOffsetY"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[13], "FillBitmapOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[13], "FillBitmapOffsetY"));
+             //...some more bitmap properties...
+    //Checking Frame 15
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame[14], "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame[14], "FillTransparence"));
+     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[14], "FillBitmapPositionOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[14], "FillBitmapPositionOffsetY"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[14], "FillBitmapOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[14], "FillBitmapOffsetY"));
+            //...some more bitmap properties...
+    //Checking Frame 16
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame[15], "FillStyle"));
+     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[15], "FillBitmapPositionOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[15], "FillBitmapPositionOffsetY"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[15], "FillBitmapOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame[15], "FillBitmapOffsetY"));
+            //...some more bitmap properties...
+}           //...Transparency Gradient...
+
 DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
 {
     // See ooxmlexport's testFdo38244().
