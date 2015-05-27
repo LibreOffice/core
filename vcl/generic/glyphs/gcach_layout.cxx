@@ -446,7 +446,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
 
                 // tdf#89231 if it's just a missing non-breaking space, then use a normal space
-                if (!nGlyphIndex && (SalLayoutFlags::ForFallback & rArgs.mnFlags) && nCharPos >= 0 && rArgs.mpStr[nCharPos] == 0x202F)
+                if (!nGlyphIndex && (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags) && nCharPos >= 0 && rArgs.mpStr[nCharPos] == 0x202F)
                 {
                     nGlyphIndex = rFont.GetGlyphIndex(' ');
                 }
