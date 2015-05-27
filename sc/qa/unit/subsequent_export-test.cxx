@@ -145,6 +145,7 @@ public:
     void testTextUnderlineColor();
     void testSheetRunParagraphProperty();
     void testHiddenShape();
+    void testSheetImageHyperlink();
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapes();
 
@@ -201,6 +202,7 @@ public:
     CPPUNIT_TEST(testTextUnderlineColor);
     CPPUNIT_TEST(testSheetRunParagraphProperty);
     CPPUNIT_TEST(testHiddenShape);
+    CPPUNIT_TEST(testSheetImageHyperlink);
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
 
@@ -2647,6 +2649,21 @@ void ScExportTest::testHiddenShape()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
 }
+void ScExportTest::testSheetImageHyperlink()
+{
+    ScDocShellRef xShell = loadDoc("image-hyperlink.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:pic[1]/xdr:nvPicPr[1]/xdr:cNvPr[1]/a:hlinkClick[1]", 1);
+
+    xDocSh->DoClose();
+}
 
 void ScExportTest::testHyperlinkXLSX()
 {
@@ -2820,6 +2837,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
 
     xDocSh2->DoClose();
 }
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
