@@ -48,6 +48,7 @@
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace com::sun::star;
@@ -737,7 +738,8 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     // XXX: experimental code 27/5/15
     //OutlinerParaObject *someText = rOutliner.CreateParaObject(0,1); // only first para
     //pNextTextObj->SetOutlinerParaObject(*someText);
-    pNextTextObj->SetText("Bukowski, were are thou?");
+    //pNextTextObj->SetText("Bukowski, were are thou?");
+    pNextTextObj->SetText(mpOverflowingText->GetTextObject().GetText(0));
     //rOutliner.Insert("Bukowski, were are thou?");
     //rOutliner.Clear();
     //rOutliner.SetStatusEventHdl1(Link());
