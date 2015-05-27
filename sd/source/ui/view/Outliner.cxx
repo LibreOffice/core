@@ -1092,6 +1092,14 @@ bool Outliner::ShowWrapArroundDialog()
         // Spell checking needs the dialog, too.
         bShowDialog = (meMode == SPELL);
 
+    boost::shared_ptr<ViewShell> pViewShell(mpWeakViewShell.lock());
+    if (pViewShell && pViewShell->GetDoc()->isTiledRendering())
+    {
+        // Wrap around without asking anything.
+        bShowDialog = false;
+        bDoWrapArround = true;
+    }
+
     if (bShowDialog)
     {
         // The question text depends on the search direction.
