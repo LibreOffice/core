@@ -959,11 +959,11 @@ static const NameToConvertMapType& lcl_GetConverters(DrawingML::DocumentType eDo
 ShapeExport& ShapeExport::WriteShape( Reference< XShape > xShape )
 {
     OUString sShapeType = xShape->getShapeType();
-    DBG( fprintf( stderr, "write shape: %s\n", USS( sShapeType ) ) );
+    SAL_INFO("oox.shape", "write shape: " << sShapeType);
     NameToConvertMapType::const_iterator aConverter = lcl_GetConverters(GetDocumentType()).find( USS( sShapeType ) );
     if( aConverter == lcl_GetConverters(GetDocumentType()).end() )
     {
-        DBG( fprintf( stderr, "unknown shape\n" ) );
+        SAL_INFO("oox.shape", "unknown shape");
         return WriteUnknownShape( xShape );
     }
     (this->*(aConverter->second))( xShape );

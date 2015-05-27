@@ -626,8 +626,8 @@ void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
                     cap = "rnd";
                 }
 
-                DBG(fprintf(stderr, "dash dots: %d dashes: %d dotlen: %d dashlen: %d distance: %d\n",
-                            int( aLineDash.Dots ), int( aLineDash.Dashes ), int( aLineDash.DotLen ), int( aLineDash.DashLen ), int( aLineDash.Distance )));
+                SAL_INFO("oox.shape", "dash dots: " << aLineDash.Dots << " dashes: " << aLineDash.Dashes
+                        << " dotlen: " << aLineDash.DotLen << " dashlen: " << aLineDash.DashLen <<  " distance: " <<  aLineDash.Distance);
             }
             /* fallthru intended */
         case drawing::LineStyle_SOLID:
@@ -778,7 +778,7 @@ OUString DrawingML::WriteImage( const OUString& rURL, bool bRelPathToMedia )
 
     if ( index != -1 )
     {
-        DBG(fprintf (stderr, "begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
+        SAL_INFO("oox.shape", "begin: " << sizeof( aURLBegin ) << " " <<  USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ));
         Graphic aGraphic = GraphicObject( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) ).GetTransformedGraphic ();
 
         return WriteImage( aGraphic , bRelPathToMedia );
@@ -960,7 +960,7 @@ void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet, const OUStri
     if (GetProperty( rXPropSet, "FillBitmapMode" ) )
         mAny >>= eBitmapMode;
 
-    DBG(fprintf(stderr, "fill bitmap mode: %d\n", eBitmapMode));
+    SAL_INFO("oox.shape", "fill bitmap mode: " << int(eBitmapMode));
 
     switch (eBitmapMode)
     {
@@ -1008,7 +1008,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, const OUStri
 {
     if ( !sBitmapURL.isEmpty() )
     {
-        DBG(fprintf (stderr, "URL: %s\n", OUStringToOString( sBitmapURL, RTL_TEXTENCODING_UTF8 ).getStr() ));
+        SAL_INFO("oox.shape", "URL: " << sBitmapURL);
 
         mpFS->startElementNS( nXmlNamespace , XML_blipFill, FSEND );
 
@@ -1135,7 +1135,7 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
 
 void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation  )
 {
-    DBG(fprintf(stderr,  "write shape transformation\n" ));
+    SAL_INFO("oox.shape",  "write shape transformation");
 
     sal_Int32 nRotation=0;
     awt::Point aPos = rXShape->getPosition();
@@ -1352,7 +1352,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     if( GETAD( CharColor ) )
     {
         sal_uInt32 color = *static_cast<sal_uInt32 const *>(mAny.getValue());
-        DBG(fprintf(stderr, "run color: %x auto: %x\n", static_cast<unsigned int>( color ), static_cast<unsigned int>( COL_AUTO )));
+        SAL_INFO("oox.shape", "run color: " << color << " auto: " << COL_AUTO);
 
         if( color == COL_AUTO )  // nCharColor depends to the background color
         {
@@ -1445,7 +1445,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
     if( GETA( TextPortionType ) )
     {
         aFieldType = OUString( *static_cast<OUString const *>(mAny.getValue()) );
-        DBG(fprintf (stderr, "field type: %s\n", USS(aFieldType) ));
+        SAL_INFO("oox.shape", "field type: " << aFieldType);
     }
 
     if( aFieldType == "TextField" )
@@ -1459,7 +1459,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
             if( rXPropSet.is() )
             {
                 OUString aFieldKind( rXTextField->getPresentation( true ) );
-                DBG(fprintf (stderr, "field kind: %s\n", USS(aFieldKind) ));
+                SAL_INFO("oox.shape", "field kind: " << aFieldKind);
                 if( aFieldKind == "Page" )
                 {
                     return "slidenum";
@@ -1626,7 +1626,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     if (!(mAny >>= rXIndexAccess) || nLevel >= rXIndexAccess->getCount())
         return;
 
-    DBG(fprintf (stderr, "numbering rules\n"));
+    SAL_INFO("oox.shape", "numbering rules");
 
     Sequence<PropertyValue> aPropertySequence;
     rXIndexAccess->getByIndex(nLevel) >>= aPropertySequence;
@@ -1656,7 +1656,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
         if ( pValue )
         {
             OUString aPropName( pPropValue[ i ].Name );
-            DBG(fprintf (stderr, "pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
+            SAL_INFO("oox.shape", "pro name: " << aPropName);
             if ( aPropName == "NumberingType" )
             {
                 nNumberingType = *( static_cast<sal_Int16 const *>(pValue) );
@@ -1705,7 +1705,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             else if ( aPropName == "GraphicURL" )
             {
                 aGraphicURL = *static_cast<OUString const *>(pValue);
-                DBG(fprintf (stderr, "graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
+                SAL_INFO("oox.shape", "graphic url: " << aGraphicURL);
             }
             else if ( aPropName == "GraphicSize" )
             {
@@ -1716,7 +1716,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                     pPropValue[ i ].Value >>= aSize;
                     //aBuGraSize.nA = aSize.Width;
                     //aBuGraSize.nB = aSize.Height;
-                    DBG(fprintf(stderr, "graphic size: %dx%d\n", int( aSize.Width ), int( aSize.Height )));
+                    SAL_INFO("oox.shape", "graphic size: " << aSize.Width << "x" << aSize.Height);
                 }
             }
         }
@@ -1778,7 +1778,7 @@ sal_Int32 DrawingML::getBulletMarginIndentation (Reference< XPropertySet > rXPro
     if (!(mAny >>= rXIndexAccess) || nLevel >= rXIndexAccess->getCount())
         return 0;
 
-    DBG(fprintf (stderr, "numbering rules\n"));
+    SAL_INFO("oox.shape", "numbering rules");
 
     Sequence<PropertyValue> aPropertySequence;
     rXIndexAccess->getByIndex(nLevel) >>= aPropertySequence;
@@ -1796,7 +1796,7 @@ sal_Int32 DrawingML::getBulletMarginIndentation (Reference< XPropertySet > rXPro
         if ( pValue )
         {
             OUString aPropName( pPropValue[ i ].Name );
-            DBG(fprintf (stderr, "pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
+            SAL_INFO("oox.shape", "pro name: " << aPropName);
             if ( aPropName == propName )
                 return *( static_cast<sal_Int32 const *>(pValue) );
         }
@@ -2172,7 +2172,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
          && OString(pShape) != "rect" //some shape types are commented out in pCustomShapeTypeTranslationTable[] & are being defaulted to rect & rect does not have adjustment values/name.
         )
     {
-        DBG(fprintf(stderr, "adj seq len: %d\n", int( aAdjustmentSeq.getLength() )));
+        SAL_INFO("oox.shape", "adj seq len: " << aAdjustmentSeq.getLength());
         if ( bPredefinedHandlesUsed )
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
 
