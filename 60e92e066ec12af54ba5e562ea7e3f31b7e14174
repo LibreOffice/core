@@ -34,6 +34,24 @@
       "revId": "60e92e066ec12af54ba5e562ea7e3f31b7e14174",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_3ef9594e",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-05-27T10:01:25Z",
+      "side": 1,
+      "message": "might be better to instead change \"::sd\" -\u003e \"sd\" in other places in that file, then",
+      "parentUuid": "3a57f1b5_5e021540",
+      "revId": "60e92e066ec12af54ba5e562ea7e3f31b7e14174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
