@@ -289,8 +289,16 @@ namespace o3tl
 }
 
 // Flags for Invert()
-#define INVERT_HIGHLIGHT                ((sal_uInt16)0x0001)
-#define INVERT_50                       ((sal_uInt16)0x0002)
+enum class InvertFlags
+{
+    NONE                    = 0x0000,
+    Highlight               = 0x0001,
+    N50                     = 0x0002,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<InvertFlags> : is_typed_flags<InvertFlags, 0x0003> {};
+}
 
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
 
@@ -786,8 +794,8 @@ public:
      */
     ///@{
 public:
-    void                                Invert( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    void                                Invert( const Polygon& rPoly, sal_uInt16 nFlags = 0 );
+    void                                Invert( const Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE );
+    void                                Invert( const Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
     ///@}
 
     /** @name Line functions

@@ -52,11 +52,11 @@ static void ImplCursorInvert( ImplCursorData* pData )
     Rectangle aPaintRect;
     bool    bMapMode = pRenderContext->IsMapModeEnabled();
     pRenderContext->EnableMapMode( false );
-    sal_uInt16 nInvertStyle;
+    InvertFlags nInvertStyle;
     if ( pData->mnStyle & CURSOR_SHADOW )
-        nInvertStyle = INVERT_50;
+        nInvertStyle = InvertFlags::N50;
     else
-        nInvertStyle = 0;
+        nInvertStyle = InvertFlags::NONE;
 
     Rectangle aRect( pData->maPixPos, pData->maPixSize );
     if ( pData->mnDirection != CursorDirection::NONE || pData->mnOrientation || pData->mnPixSlant )

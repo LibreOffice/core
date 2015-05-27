@@ -1567,12 +1567,12 @@ void ScPreview::DrawInvert( long nDragPos, PointerStyle nFlags )
     if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )
     {
         Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,(long)( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));
-        Invert( aRect,INVERT_50 );
+        Invert( aRect, InvertFlags::N50 );
     }
     else if( nFlags == PointerStyle::VSizeBar )
     {
         Rectangle aRect( -aOffset.X(), nDragPos,(long)( ( nWidth * HMM_PER_TWIPS ) - aOffset.X() ), nDragPos + 1 );
-        Invert( aRect,INVERT_50 );
+        Invert( aRect, InvertFlags::N50 );
     }
 }
 
