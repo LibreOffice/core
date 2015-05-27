@@ -2463,7 +2463,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             if (pLclRegisteredIn && pLclRegisteredIn->HasWriterListeners())
             {
                 pLclRegisteredIn->Remove(this);
-                pTableCrsr = NULL;
+                pTableCrsr = nullptr;
             }
         }
 
