@@ -70,8 +70,9 @@ static bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
     return false;
 }
 
-ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
-                        sal_uLong nRange, bool bAllDocs, bool bWait )
+ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
+                       sal_uLong nRange, bool bAllDocs, bool bWait)
+    : bEnabled(true)
 {
 
     if ( pGlobalProgress || SfxProgress::GetActiveProgress( NULL ) )
@@ -114,9 +115,11 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
     }
 }
 
-ScProgress::ScProgress() :
-        pProgress( NULL )
-{   // DummyInterpret
+ScProgress::ScProgress()
+    : bEnabled(true)
+    , pProgress(NULL)
+{
+    // DummyInterpret
 }
 
 ScProgress::~ScProgress()
