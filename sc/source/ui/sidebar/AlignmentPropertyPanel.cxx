@@ -56,9 +56,7 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     get(mpCBXWrapText, "wraptext");
     get(mpCBXMergeCell, "mergecells");
     get(mpFtRotate, "orientationlabel");
-    get(mpCtrlDial, "orientationcontrol");
     get(mpMtrAngle, "orientationdegrees");
-    get(mpCbStacked, "verticallystacked");
 
     Initialize();
 
@@ -78,9 +76,7 @@ void AlignmentPropertyPanel::dispose()
     mpCBXWrapText.clear();
     mpCBXMergeCell.clear();
     mpFtRotate.clear();
-    mpCtrlDial.clear();
     mpMtrAngle.clear();
-    mpCbStacked.clear();
 
     maAlignHorControl.dispose();
     maLeftIndentControl.dispose();
@@ -107,8 +103,6 @@ void AlignmentPropertyPanel::Initialize()
     mpCBXWrapText->SetClickHdl ( aLink );
 
     //rotation control
-    mpCtrlDial->SetAccessibleName(OUString( "Text Orientation"));   //wj acc
-    mpCtrlDial->SetModifyHdl(LINK( this, AlignmentPropertyPanel, RotationHdl));
 
     //rotation
     mpMtrAngle->SetAccessibleName(OUString( "Text Orientation"));   //wj acc
@@ -116,7 +110,6 @@ void AlignmentPropertyPanel::Initialize()
     mpMtrAngle->EnableAutocomplete( false );
 
     //Vertical stacked
-    mpCbStacked->SetClickHdl( LINK( this, AlignmentPropertyPanel, ClickStackHdl ) );
 
     mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);
     mpMtrAngle->InsertValue(45, FUNIT_CUSTOM);
@@ -170,27 +163,6 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
         SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, &aAngleItem, 0L );
     return 0;
 }
-
-IMPL_LINK_NOARG( AlignmentPropertyPanel, RotationHdl )
-{
-    sal_Int32 nTmp = mpCtrlDial->GetRotation();
-    SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,(sal_uInt32) nTmp);
-
-    GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, &aAngleItem, 0L );
-
-    return 0;
-}
-
-IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl )
-{
-    bool bVertical = mpCbStacked->IsChecked();
-    SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
-    GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, &aStackItem, 0L );
-    return 0;
-}
-
 IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl)
 {
     mpCBXWrapText->EnableTriState(false);
@@ -282,17 +254,14 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
             if( meHorAlignState == SVX_HOR_JUSTIFY_REPEAT )
             {
                 mpFtRotate->Disable();
-                mpCtrlDial->Disable();
                 mpMtrAngle->Disable();
             }
             else
             {
                 mpFtRotate->Enable(!mbMultiDisable);
-                mpCtrlDial->Enable(!mbMultiDisable);
                 mpMtrAngle->Enable(!mbMultiDisable);
             }
 
-            mpCbStacked->Enable( meHorAlignState != SVX_HOR_JUSTIFY_REPEAT );
             mpFTLeftIndent->Enable( meHorAlignState == SVX_HOR_JUSTIFY_LEFT );
             mpMFLeftIndent->Enable( meHorAlignState == SVX_HOR_JUSTIFY_LEFT );
         }
@@ -352,7 +321,6 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         {
             long nTmp = static_cast<const SfxInt32Item*>(pState)->GetValue();
             mpMtrAngle->SetValue( nTmp / 100);  //wj
-            mpCtrlDial->SetRotation( nTmp );
             switch(nTmp)
             {
                 case 0:
@@ -383,28 +351,21 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         else
         {
             mpMtrAngle->SetText( OUString() );
-            mpCtrlDial->SetRotation( 0 );
         }
         break;
     case SID_ATTR_ALIGN_STACKED:
         if (eState >= SfxItemState::DEFAULT)
         {
-            mpCbStacked->EnableTriState(false);
             const SfxBoolItem* aStackItem = static_cast<const SfxBoolItem*>(pState);
             mbMultiDisable = aStackItem->GetValue();
-            mpCbStacked->Check(mbMultiDisable);
             mpFtRotate->Enable(!mbMultiDisable);
             mpMtrAngle->Enable(!mbMultiDisable);
-            mpCtrlDial->Enable(!mbMultiDisable);
         }
         else
         {
             mbMultiDisable = true;
             mpFtRotate->Disable();
             mpMtrAngle->Disable();
-            mpCtrlDial->Disable();
-            mpCbStacked->EnableTriState(true);
-            mpCbStacked->SetState(TRISTATE_INDET);
         }
     }
 }

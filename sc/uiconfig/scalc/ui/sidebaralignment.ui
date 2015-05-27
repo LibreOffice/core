@@ -13,7 +13,7 @@
         <property name="can_focus">False</property>
         <property name="border_width">6</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">10</property>
         <child>
           <object class="GtkBox" id="box3">
             <property name="visible">True</property>
@@ -85,42 +85,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="writedirection">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-                <child>
-                  <object class="GtkToolButton" id="lefttoright">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="is_important">True</property>
-                    <property name="action_name">.uno:ParaLeftToRight</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="righttoleft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="is_important">True</property>
-                    <property name="action_name">.uno:ParaRightToLeft</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <object class="sfxlo-SidebarToolBox" id="verticalalignment">
@@ -196,7 +161,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Left _indent:</property>
+                    <property name="label" translatable="yes">_Indent:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">leftindent:0pt</property>
                   </object>
@@ -289,90 +254,42 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="orientationlabel">
+          <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Text _orientation:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">orientationcontrol</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">12</property>
+            <property name="hexpand">True</property>
+            <property name="column_spacing">12</property>
             <child>
-              <object class="svxlo-SidebarDialControl" id="orientationcontrol">
+              <object class="GtkLabel" id="orientationlabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="vexpand">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Text _orientation:</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkCheckButton" id="verticallystacked">
-                    <property name="label" translatable="yes">Vertically stacked</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Aligns text vertically.</property>
-                    <property name="tooltip_text" translatable="yes">Aligns text vertically.</property>
-                    <property name="xalign">0</property>
-                    <property name="image_position">bottom</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="VclComboBoxNumeric" id="orientationdegrees:0degrees">
+              <object class="VclComboBoxNumeric" id="orientationdegrees:0degrees">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup" translatable="yes">Select the angle for rotation.</property>
                     <property name="tooltip_text" translatable="yes">Select the angle for rotation.</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="pack_type">end</property>
-                <property name="position">1</property>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

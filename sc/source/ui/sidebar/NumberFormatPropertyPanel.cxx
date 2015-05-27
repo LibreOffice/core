@@ -41,8 +41,8 @@ using ::sfx2::sidebar::Theme;
 const char UNO_NUMERICFIELD[]         = ".uno:NumericField";
 const char UNO_NUMBERFORMATPERCENT[]  = ".uno:NumberFormatPercent";
 const char UNO_NUMBERFORMATCURRENCY[] = ".uno:NumberFormatCurrency";
-const char UNO_NUMBERFORMATDATE[]     = ".uno:NumberFormatDate";
-const char UNO_INSERTFIXEDTEXT[]      = ".uno:InsertFixedText";
+//const char UNO_NUMBERFORMATDATE[]     = ".uno:NumberFormatDate";
+//const char UNO_INSERTFIXEDTEXT[]      = ".uno:InsertFixedText";
 
 namespace sc { namespace sidebar {
 
@@ -125,10 +125,10 @@ IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox, void )
         nId = 2;
     else if(aCommand == UNO_NUMBERFORMATCURRENCY)
         nId = 3;
-    else if(aCommand == UNO_NUMBERFORMATDATE)
-        nId = 4;
-    else if(aCommand == UNO_INSERTFIXEDTEXT)
-        nId = 9;
+    //else if(aCommand == UNO_NUMBERFORMATDATE)
+      //  nId = 4;
+    //else if(aCommand == UNO_INSERTFIXEDTEXT)
+      //  nId = 9;
 
     if( nId != mnCategorySelected )
     {
