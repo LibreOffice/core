@@ -223,6 +223,14 @@ public:
     {
         return (m_rInnerRef > handle.m_rInnerRef);
     }
+
+    /** Deleted address-of operator.
+
+        To avoid confusion whether it returns the address of either the
+        pointed-to raw object (for which to use VclPtr::get instead) or the
+        wrapper itself (for which to use std::addressof instead).
+     */
+    void operator &() = delete;
 }; // class VclPtr
 
 template<typename T1, typename T2>

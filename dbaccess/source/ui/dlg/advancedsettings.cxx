@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "advancedsettings.hxx"
 #include "advancedsettingsdlg.hxx"
 #include "moduledbu.hxx"
@@ -169,22 +173,22 @@ namespace dbaui
 
         // for easier maintenance, write the table in this form, then copy it to m_aBooleanSettings
         BooleanSettingDesc aSettings[] = {
-            { &m_pIsSQL92Check,                 "usesql92",        DSID_SQL92CHECK,            false },
-            { &m_pAppendTableAlias,             "append",          DSID_APPEND_TABLE_ALIAS,    false },
-            { &m_pAsBeforeCorrelationName,      "useas",           DSID_AS_BEFORE_CORRNAME,    false },
-            { &m_pEnableOuterJoin,              "useoj",           DSID_ENABLEOUTERJOIN,       false },
-            { &m_pIgnoreDriverPrivileges,       "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false },
-            { &m_pParameterSubstitution,        "replaceparams",   DSID_PARAMETERNAMESUBST,    false },
-            { &m_pSuppressVersionColumn,        "displayver",      DSID_SUPPRESSVERSIONCL,     true  },
-            { &m_pCatalog,                      "usecatalogname",  DSID_CATALOG,               false },
-            { &m_pSchema,                       "useschemaname",   DSID_SCHEMA,                false },
-            { &m_pIndexAppendix,                "createindex",     DSID_INDEXAPPENDIX,         false },
-            { &m_pDosLineEnds,                  "eol",             DSID_DOSLINEENDS,           false },
-            { &m_pCheckRequiredFields,          "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false },
-            { &m_pIgnoreCurrency,               "inputchecks",     DSID_IGNORECURRENCY,        false },
-            { &m_pEscapeDateTime,               "useodbcliterals", DSID_ESCAPE_DATETIME,       false },
-            { &m_pPrimaryKeySupport,            "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false },
-            { &m_pRespectDriverResultSetType,   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false }
+            { std::addressof(m_pIsSQL92Check),                 "usesql92",        DSID_SQL92CHECK,            false },
+            { std::addressof(m_pAppendTableAlias),             "append",          DSID_APPEND_TABLE_ALIAS,    false },
+            { std::addressof(m_pAsBeforeCorrelationName),      "useas",           DSID_AS_BEFORE_CORRNAME,    false },
+            { std::addressof(m_pEnableOuterJoin),              "useoj",           DSID_ENABLEOUTERJOIN,       false },
+            { std::addressof(m_pIgnoreDriverPrivileges),       "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false },
+            { std::addressof(m_pParameterSubstitution),        "replaceparams",   DSID_PARAMETERNAMESUBST,    false },
+            { std::addressof(m_pSuppressVersionColumn),        "displayver",      DSID_SUPPRESSVERSIONCL,     true  },
+            { std::addressof(m_pCatalog),                      "usecatalogname",  DSID_CATALOG,               false },
+            { std::addressof(m_pSchema),                       "useschemaname",   DSID_SCHEMA,                false },
+            { std::addressof(m_pIndexAppendix),                "createindex",     DSID_INDEXAPPENDIX,         false },
+            { std::addressof(m_pDosLineEnds),                  "eol",             DSID_DOSLINEENDS,           false },
+            { std::addressof(m_pCheckRequiredFields),          "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false },
+            { std::addressof(m_pIgnoreCurrency),               "inputchecks",     DSID_IGNORECURRENCY,        false },
+            { std::addressof(m_pEscapeDateTime),               "useodbcliterals", DSID_ESCAPE_DATETIME,       false },
+            { std::addressof(m_pPrimaryKeySupport),            "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false },
+            { std::addressof(m_pRespectDriverResultSetType),   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false }
         };
 
         for ( const BooleanSettingDesc& pCopy : aSettings )
