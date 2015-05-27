@@ -673,7 +673,7 @@ namespace dxcanvas
             mpWindow->SetMouseTransparent( TRUE );
 
             // parent should receive paint messages as well
-            // [PARENTCLIPMODE_NOCLIP], the argument is here
+            // [ParentClipMode::NoClip], the argument is here
             // passed as plain numeric value since the stupid
             // define utilizes a USHORT cast.
             mpWindow->SetParentClipMode(0x0002);

@@ -83,7 +83,7 @@ void ProgressBar::ImplInitSettings( bool bFont,
             EnableChildTransparentMode( true );
             SetPaintTransparent( true );
             SetBackground();
-            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+            SetParentClipMode( ParentClipMode::NoClip );
         }
         else
         {

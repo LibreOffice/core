@@ -101,12 +101,12 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     pWindow->SetBackground();
     if ( ! bEnableParentClip)
     {
-        pWindow->SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        pWindow->SetParentClipMode(ParentClipMode::NoClip);
         pWindow->SetPaintTransparent(true);
     }
     else
     {
-        pWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
+        pWindow->SetParentClipMode(ParentClipMode::Clip);
         pWindow->SetPaintTransparent(false);
     }
 

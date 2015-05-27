@@ -114,7 +114,7 @@ void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, 
     if ( GetSystemData() )
     {
         mpWindowImpl->mpSysObj->SetCallback( this, ImplSysChildProc );
-        SetParentClipMode( PARENTCLIPMODE_CLIP );
+        SetParentClipMode( ParentClipMode::Clip );
         SetBackground();
     }
 }

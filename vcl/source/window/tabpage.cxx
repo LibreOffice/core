@@ -52,14 +52,14 @@ void TabPage::ImplInitSettings()
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
         EnableChildTransparentMode( true );
-        SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+        SetParentClipMode( ParentClipMode::NoClip );
         SetPaintTransparent( true );
         SetBackground();
     }
     else
     {
         EnableChildTransparentMode( false );
-        SetParentClipMode( 0 );
+        SetParentClipMode( ParentClipMode::NONE );
         SetPaintTransparent( false );
 
         if ( IsControlBackground() )

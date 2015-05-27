@@ -145,7 +145,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
         aCloseBtn->SetOutStyle(TOOLBOX_STYLE_FLAT);
         aCloseBtn->SetBackground();
         aCloseBtn->SetPaintTransparent(true);
-        aCloseBtn->SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        aCloseBtn->SetParentClipMode(ParentClipMode::NoClip);
 
         aCloseBtn->InsertItem(IID_DOCUMENTCLOSE, aCloseBtn->maImage, ToolBoxItemBits::NONE);
         aCloseBtn->SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
@@ -1058,7 +1058,7 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
         rRenderContext.SetBackground(aWallpaper);
         SetPaintTransparent(false);
-        SetParentClipMode(0);
+        SetParentClipMode(ParentClipMode::NONE);
     }
     else if (rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_ENTIRE_CONTROL))
     {
@@ -1070,7 +1070,7 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
         aWallpaper.SetStyle(WALLPAPER_APPLICATIONGRADIENT);
         rRenderContext.SetBackground(aWallpaper);
         SetPaintTransparent(false);
-        SetParentClipMode(0);
+        SetParentClipMode(ParentClipMode::NONE);
     }
 
     rRenderContext.SetTextColor(rStyleSettings.GetMenuBarTextColor());
