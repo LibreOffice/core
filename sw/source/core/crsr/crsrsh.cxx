@@ -908,12 +908,12 @@ void SwCrsrShell::ClearMark()
     // is there any GetMark?
     if( m_pTableCrsr )
     {
-        std::vector<SwViewShell*> vShells;
-        for(SwViewShell& rShell : GetRingContainer())
-            if(&rShell != this)
-                vShells.push_back(&rShell);
-        for(SwViewShell* pShell : vShells)
-            delete pShell;
+        std::vector<SwPaM*> vCrsrs;
+        for(auto& rCrsr : m_pCurCrsr->GetRingContainer())
+            if(&rCrsr != m_pCurCrsr)
+                vCrsrs.push_back(&rCrsr);
+        for(auto pCrsr : vCrsrs)
+            delete pCrsr;
         m_pTableCrsr->DeleteMark();
 
         m_pCurCrsr->DeleteMark();
