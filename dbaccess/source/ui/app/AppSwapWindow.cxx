@@ -118,7 +118,7 @@ void OApplicationSwapWindow::clearSelection()
     SvxIconChoiceCtrlEntry* pEntry = m_aIconControl->GetSelectedEntry(nPos);
     if ( pEntry )
         m_aIconControl->InvalidateEntry(pEntry);
-    m_aIconControl->GetClickHdl().Call(&m_aIconControl);
+    m_aIconControl->GetClickHdl().Call(m_aIconControl.get());
 }
 
 void OApplicationSwapWindow::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )

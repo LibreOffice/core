@@ -214,7 +214,7 @@ void TextUnderlineControl::Rearrange(FontUnderline eLine)
 
 IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
 {
-    if ( pControl == &maVSUnderline )
+    if ( pControl == maVSUnderline.get() )
     {
         const sal_uInt16 iPos = maVSUnderline->GetSelectItemId();
         const FontUnderline eUnderline = ( iPos == 0 )

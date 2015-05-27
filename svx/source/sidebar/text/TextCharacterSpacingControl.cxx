@@ -308,7 +308,7 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
 {
     mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
 
-    if(pControl == &maVSSpacing)
+    if(pControl == maVSSpacing.get())
     {
         sal_uInt16 iPos = maVSSpacing->GetSelectItemId();
         short nKern = 0;

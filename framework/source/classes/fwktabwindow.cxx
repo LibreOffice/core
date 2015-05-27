@@ -338,7 +338,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
 void FwkTabWindow::ActivatePage( sal_Int32 nIndex )
 {
     m_aTabCtrl->SetCurPageId( static_cast< sal_uInt16 >( nIndex ) );
-    ActivatePageHdl( &m_aTabCtrl );
+    ActivatePageHdl( m_aTabCtrl.get() );
 }
 
 void FwkTabWindow::RemovePage( sal_Int32 nIndex )
