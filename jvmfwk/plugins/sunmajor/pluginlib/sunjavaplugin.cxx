@@ -28,9 +28,6 @@
 # include <dlfcn.h>
 #endif
 
-#if OSL_DEBUG_LEVEL > 0
-#include <stdio.h>
-#endif
 #include <string.h>
 
 #include "boost/scoped_array.hpp"

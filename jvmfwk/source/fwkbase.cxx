@@ -239,11 +239,9 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
             OString sParam =
                 OUStringToOString(sValue, osl_getThreadTextEncoding());
             vecParams.push_back(sParam);
-#if OSL_DEBUG_LEVEL >=2
-            OString sParamName = OUStringToOString(sName, osl_getThreadTextEncoding());
-            fprintf(stderr,"[Java framework] Using bootstrap parameter %s"
-                    " = %s.\n", sParamName.getStr(), sParam.getStr());
-#endif
+            SAL_INFO(
+                "jfw.level2",
+                "Using bootstrap parameter " << sName << " = " << sParam);
         }
         else
             break;
@@ -270,10 +268,10 @@ OString BootParams::getClasspath()
         sCP))
     {
         sClassPath = OUStringToOString(sCP, osl_getThreadTextEncoding());
-#if OSL_DEBUG_LEVEL >=2
-        fprintf(stderr,"[Java framework] Using bootstrap parameter "
-            UNO_JAVA_JFW_CLASSPATH " = %s.\n", sClassPath.getStr());
-#endif
+        SAL_INFO(
+            "jfw.level2",
+            "Using bootstrap parameter " UNO_JAVA_JFW_CLASSPATH " = "
+                << sClassPath);
     }
 
     OUString sEnvCP;
@@ -287,10 +285,10 @@ OString BootParams::getClasspath()
             char szSep[] = {SAL_PATHSEPARATOR,0};
             sClassPath += OString(szSep) + OString(pCp);
         }
-#if OSL_DEBUG_LEVEL >=2
-        fprintf(stderr,"[Java framework] Using bootstrap parameter "
-            UNO_JAVA_JFW_ENV_CLASSPATH " and class path is:\n %s.\n", pCp ? pCp : "");
-#endif
+        SAL_INFO(
+            "jfw.level2",
+            "Using bootstrap parameter " UNO_JAVA_JFW_ENV_CLASSPATH
+                " and class path is: " << (pCp ? pCp : ""));
     }
 
     return sClassPath;
@@ -326,11 +324,10 @@ OUString BootParams::getVendorSettings()
                                  UNO_JAVA_JFW_VENDOR_SETTINGS));
             }
         }
-#if OSL_DEBUG_LEVEL >=2
-    OString sValue = OUStringToOString(sVendor, osl_getThreadTextEncoding());
-    fprintf(stderr,"[Java framework] Using bootstrap parameter "
-            UNO_JAVA_JFW_VENDOR_SETTINGS" = %s.\n", sValue.getStr());
-#endif
+    SAL_INFO(
+        "jfw.level2",
+        "Using bootstrap parameter " UNO_JAVA_JFW_VENDOR_SETTINGS " = "
+            << sVendor);
     }
     return sVendor;
 }
@@ -372,10 +369,10 @@ OUString BootParams::getJREHome()
                 JFW_E_ERROR,
                 OString("[Java framework] Error in function BootParams::getJREHome() "
                              "(fwkbase.cxx)."));
-#if OSL_DEBUG_LEVEL >=2
-    fprintf(stderr,"[Java framework] Using bootstrap parameter "
-            UNO_JAVA_JFW_ENV_JREHOME" with JAVA_HOME = %s.\n", pJRE);
-#endif
+        SAL_INFO(
+            "jfw.level2",
+            "Using bootstrap parameter " UNO_JAVA_JFW_ENV_JREHOME
+                " with JAVA_HOME = " << pJRE);
     }
     else if (getMode() == JFW_MODE_DIRECT
         && !bEnvJRE
@@ -388,14 +385,9 @@ OUString BootParams::getJREHome()
                          " must be set in direct mode."));
     }
 
-#if OSL_DEBUG_LEVEL >=2
-    if (bJRE == sal_True)
-    {
-        OString sValue = OUStringToOString(sJRE, osl_getThreadTextEncoding());
-        fprintf(stderr,"[Java framework] Using bootstrap parameter "
-            UNO_JAVA_JFW_JREHOME" = %s.\n", sValue.getStr());
-    }
-#endif
+    SAL_INFO_IF(
+        bJRE, "jfw.level2",
+        "Using bootstrap parameter " UNO_JAVA_JFW_JREHOME " = " << sJRE);
     return sJRE;
 }
 
@@ -405,11 +397,10 @@ OUString BootParams::getClasspathUrls()
     Bootstrap::get()->getFrom(
         OUString(UNO_JAVA_JFW_CLASSPATH_URLS),
         sParams);
-#if OSL_DEBUG_LEVEL >=2
-    OString sValue = OUStringToOString(sParams, osl_getThreadTextEncoding());
-    fprintf(stderr,"[Java framework] Using bootstrap parameter "
-            UNO_JAVA_JFW_CLASSPATH_URLS " = %s.\n", sValue.getStr());
-#endif
+    SAL_INFO(
+        "jfw.level2",
+        "Using bootstrap parameter " UNO_JAVA_JFW_CLASSPATH_URLS " = "
+            << sParams);
     return sParams;
 }
 

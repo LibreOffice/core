@@ -61,11 +61,8 @@ bool isVendorSupported(const OUString& sVendor)
         if (sVendor.equalsAscii(gVendorMap[pos].sVendorName))
             return true;
     }
-#if OSL_DEBUG_LEVEL >= 2
-    OString sVendorName = OUStringToOString(sVendor, osl_getThreadTextEncoding());
-    fprintf(stderr, "[Java frameworksunjavaplugin.so]sunjavaplugin does not support vendor: %s.\n",
-            sVendorName.getStr());
-#endif
+    SAL_INFO(
+        "jfw.level2", "sunjavaplugin does not support vendor: " << sVendor);
     return false;
 }
 

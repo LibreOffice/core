@@ -29,10 +29,6 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/byteseq.hxx"
 #include "osl/thread.hxx"
-#if OSL_DEBUG_LEVEL >=2
-#include <stdio.h>
-#endif
-
 
 namespace jfw
 {
@@ -58,10 +54,7 @@ struct Bootstrap :
             buf.appendAscii(SAL_CONFIGFILE("/jvmfwk3"));
             OUString sIni = buf.makeStringAndClear();
             ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);
-#if OSL_DEBUG_LEVEL >=2
-        OString o = OUStringToOString( sIni , osl_getThreadTextEncoding() );
-        fprintf(stderr, "[Java framework] Using configuration file %s\n" , o.getStr() );
-#endif
+        SAL_INFO("jfw.level2", "Using configuration file " << sIni);
         return bootstrap;
     }
 };
