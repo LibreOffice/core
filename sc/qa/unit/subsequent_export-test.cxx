@@ -148,6 +148,7 @@ public:
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapes();
     void testMatrixMultiplication();
+    void testSheetImageHyperlink();
 
 
     CPPUNIT_TEST_SUITE(ScExportTest);
@@ -206,6 +207,7 @@ public:
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
     CPPUNIT_TEST(testMatrixMultiplication);
+    CPPUNIT_TEST(testSheetImageHyperlink);
 
 
     CPPUNIT_TEST_SUITE_END();
@@ -2651,6 +2653,7 @@ void ScExportTest::testHiddenShape()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
 }
+
 void ScExportTest::testHyperlinkXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("hyperlink.", XLSX);
@@ -2846,6 +2849,22 @@ void ScExportTest::testMatrixMultiplication()
 
     // make sure that the CellFormulaType is array.
     CPPUNIT_ASSERT_EQUAL(OUString("array"), CellFormulaType);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testSheetImageHyperlink()
+{
+    ScDocShellRef xShell = loadDoc("image-hyperlink.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:pic[1]/xdr:nvPicPr[1]/xdr:cNvPr[1]/a:hlinkClick[1]", 1);
 
     xDocSh->DoClose();
 }
