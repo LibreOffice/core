@@ -1856,7 +1856,7 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl)
                 // TrackingMode is ended in ImplHandleLoseFocus
 #ifdef _WIN32
                 // To avoid problems with the Unix IME
-                pFocusWin->EndExtTextInput( EndExtTextInput::Complete );
+                pFocusWin->EndExtTextInput( EndExtTextInputFlags::Complete );
 #endif
 
                 // XXX #102010# hack for accessibility: do not close the menu,
