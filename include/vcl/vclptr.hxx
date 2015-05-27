@@ -229,8 +229,15 @@ public:
         To avoid confusion whether it returns the address of either the
         pointed-to raw object (for which to use VclPtr::get instead) or the
         wrapper itself (for which to use std::addressof instead).
+
+        (Cannot be deleted at least with MSVC 12, as at least the innards of
+        std::stable_sort on a std::vector<VclPtr<T>>, as called from
+        TaskPaneList::FindNextSplitter in vcl/source/window/taskpanelist.cxx
+        require an address-of operator for VclPtr<T>.)
      */
+#if !defined _MSC_VER
     void operator &() = delete;
+#endif
 }; // class VclPtr
 
 template<typename T1, typename T2>
