@@ -1971,13 +1971,16 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
             ImpAutoFitText(*pEdtOutl);
             mbInDownScale = false;
         }
-        else if ( GetNextLinkInChain() != NULL )
+        else if ( GetNextLinkInChain() != NULL ) // is this a chainable object?
         {
-            // set the need for chaining
+            // set whether there is need for chaining
             SetToBeChained( pEditStatus->IsPageOverflow() );
             fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
                 pEditStatus->IsPageOverflow() ? "TRUE" : "FALSE");
-            //impDecomposeChainedTextPrimitive();
+            // Trying to copy stuff right away
+            SdrTextObj *pNextTextObj = GetNextLinkInChain();
+            impCopyTextInTextObj(pNextTextObj);
+
         }
     }
 }
