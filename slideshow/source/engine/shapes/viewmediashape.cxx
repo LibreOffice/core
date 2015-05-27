@@ -489,7 +489,7 @@ namespace slideshow
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
                             mpMediaWindow->SetBackground( Color( COL_BLACK ) );
-                            mpMediaWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+                            mpMediaWindow->SetParentClipMode( ParentClipMode::NoClip );
                             mpMediaWindow->EnableEraseBackground( false );
                             mpMediaWindow->EnablePaint( false );
                             mpMediaWindow->SetForwardKey( true );

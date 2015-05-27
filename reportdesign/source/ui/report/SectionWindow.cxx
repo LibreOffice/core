@@ -208,7 +208,7 @@ void OSectionWindow::ImplInitSettings()
     if ( t )
     {
     EnableChildTransparentMode( true );
-    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    SetParentClipMode( ParentClipMode::NoClip );
     SetPaintTransparent( true );
     }
     SetBackground( );

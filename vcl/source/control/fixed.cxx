@@ -211,14 +211,14 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
     if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
         EnableChildTransparentMode(true);
-        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();
     }
     else
     {
         EnableChildTransparentMode(false);
-        SetParentClipMode(0);
+        SetParentClipMode(ParentClipMode::NONE);
         SetPaintTransparent(false);
 
         if (IsControlBackground())
@@ -619,14 +619,14 @@ void FixedLine::ApplySettings(vcl::RenderContext& rRenderContext)
     if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
         EnableChildTransparentMode(true);
-        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();
     }
     else
     {
         EnableChildTransparentMode(false);
-        SetParentClipMode(0);
+        SetParentClipMode(ParentClipMode::NONE);
         SetPaintTransparent(false);
 
         if (IsControlBackground())
@@ -751,14 +751,14 @@ void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
     if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
         EnableChildTransparentMode(true);
-        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();
     }
     else
     {
         EnableChildTransparentMode(false);
-        SetParentClipMode(0);
+        SetParentClipMode(ParentClipMode::NONE);
         SetPaintTransparent(false);
 
         if (IsControlBackground())
@@ -921,14 +921,14 @@ void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
     if (pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
         EnableChildTransparentMode(true);
-        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();
     }
     else
     {
         EnableChildTransparentMode(false);
-        SetParentClipMode(0);
+        SetParentClipMode(ParentClipMode::NONE);
         SetPaintTransparent(false);
 
         if (IsControlBackground())

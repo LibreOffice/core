@@ -1450,7 +1450,7 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
         aColor = GetControlBackground();
         SetBackground( aColor );
         SetPaintTransparent(false);
-        SetParentClipMode( 0 );
+        SetParentClipMode( ParentClipMode::NONE );
     }
     else
     {
@@ -1461,7 +1461,7 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
             rRenderContext.SetBackground();
             rRenderContext.SetTextColor(rStyleSettings.GetMenuBarTextColor());
             SetPaintTransparent(true);
-            SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+            SetParentClipMode(ParentClipMode::NoClip);
             mpData->maDisplayBackground = Wallpaper(rStyleSettings.GetFaceColor());
         }
         else
@@ -1473,7 +1473,7 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
 
             rRenderContext.SetBackground(aColor);
             SetPaintTransparent(false);
-            SetParentClipMode(0);
+            SetParentClipMode(ParentClipMode::NONE);
         }
     }
 }
@@ -1513,7 +1513,7 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
             aColor = GetControlBackground();
             SetBackground( aColor );
             SetPaintTransparent(false);
-            SetParentClipMode( 0 );
+            SetParentClipMode( ParentClipMode::NONE );
         }
         else
         {
@@ -1524,7 +1524,7 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
                 SetBackground();
                 SetTextColor(rStyleSettings.GetMenuBarTextColor());
                 SetPaintTransparent( true );
-                SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+                SetParentClipMode( ParentClipMode::NoClip );
                 mpData->maDisplayBackground = Wallpaper( rStyleSettings.GetFaceColor() );
             }
             else
@@ -1536,7 +1536,7 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 
                 SetBackground(aColor);
                 SetPaintTransparent(false);
-                SetParentClipMode(0);
+                SetParentClipMode(ParentClipMode::NONE);
             }
         }
     }

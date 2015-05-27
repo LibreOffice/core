@@ -269,8 +269,16 @@ namespace o3tl
 }
 
 // Flags for ParentClipMode
-#define PARENTCLIPMODE_CLIP             ((sal_uInt16)0x0001)
-#define PARENTCLIPMODE_NOCLIP           ((sal_uInt16)0x0002)
+enum class ParentClipMode
+{
+    NONE             = 0x0000,
+    Clip             = 0x0001,
+    NoClip           = 0x0002,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ParentClipMode> : is_typed_flags<ParentClipMode, 0x0003> {};
+}
 
 // Flags for Invert()
 enum class InvertFlags
@@ -1001,8 +1009,8 @@ public:
     bool IsControlBackground() const;
     void ApplyControlBackground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor);
 
-    void                                SetParentClipMode( sal_uInt16 nMode = 0 );
-    sal_uInt16                          GetParentClipMode() const;
+    void                                SetParentClipMode( ParentClipMode nMode = ParentClipMode::NONE );
+    ParentClipMode                      GetParentClipMode() const;
 
     void                                SetWindowRegionPixel();
     void                                SetWindowRegionPixel( const vcl::Region& rRegion );

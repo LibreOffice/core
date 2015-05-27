@@ -145,7 +145,7 @@ void TabControl::ImplInitSettings( bool bFont,
             // set transparent mode for NWF tabcontrols to have
             // the background always cleared properly
             EnableChildTransparentMode( true );
-            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+            SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
             ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
@@ -153,7 +153,7 @@ void TabControl::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( 0 );
+            SetParentClipMode( ParentClipMode::NONE );
             SetPaintTransparent( false );
 
             if ( IsControlBackground() )

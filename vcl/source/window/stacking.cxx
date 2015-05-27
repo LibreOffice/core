@@ -941,7 +941,7 @@ void Window::SetParent( vcl::Window* pNewParent )
     }
     ImplRemoveWindow( bNewFrame );
     ImplInsertWindow( pNewParent );
-    if ( mpWindowImpl->mnParentClipMode & PARENTCLIPMODE_CLIP )
+    if ( mpWindowImpl->mnParentClipMode & ParentClipMode::Clip )
         pNewParent->mpWindowImpl->mbClipChildren = true;
     ImplUpdateWindowPtr();
     if ( ImplUpdatePos() )

@@ -79,7 +79,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
     SetBackground();
     SetPaintTransparent( true );
-    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    SetParentClipMode( ParentClipMode::NoClip );
 
     if( MEDIACONTROLSTYLE_SINGLELINE != meControlStyle )
     {

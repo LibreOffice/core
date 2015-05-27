@@ -80,7 +80,7 @@ void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rR
 void OEndMarker::ImplInitSettings()
 {
     EnableChildTransparentMode( true );
-    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    SetParentClipMode( ParentClipMode::NoClip );
     SetPaintTransparent( true );
 
     SetBackground( Wallpaper( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor)  );

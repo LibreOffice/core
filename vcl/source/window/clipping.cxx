@@ -63,9 +63,8 @@ void Window::InitClipRegion()
     mbInitClipRegion = false;
 }
 
-void Window::SetParentClipMode( sal_uInt16 nMode )
+void Window::SetParentClipMode( ParentClipMode nMode )
 {
-
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetParentClipMode( nMode );
     else
@@ -73,15 +72,14 @@ void Window::SetParentClipMode( sal_uInt16 nMode )
         if ( !ImplIsOverlapWindow() )
         {
             mpWindowImpl->mnParentClipMode = nMode;
-            if ( nMode & PARENTCLIPMODE_CLIP )
+            if ( nMode & ParentClipMode::Clip )
                 mpWindowImpl->mpParent->mpWindowImpl->mbClipChildren = true;
         }
     }
 }
 
-sal_uInt16 Window::GetParentClipMode() const
+ParentClipMode Window::GetParentClipMode() const
 {
-
     if ( mpWindowImpl->mpBorderWindow )
         return mpWindowImpl->mpBorderWindow->GetParentClipMode();
     else
@@ -207,9 +205,9 @@ bool Window::ImplClipChildren( vcl::Region& rRegion )
         if ( pWindow->mpWindowImpl->mbReallyVisible )
         {
             // read-out ParentClipMode-Flags
-            sal_uInt16 nClipMode = pWindow->GetParentClipMode();
-            if ( !(nClipMode & PARENTCLIPMODE_NOCLIP) &&
-                 ((nClipMode & PARENTCLIPMODE_CLIP) || (GetStyle() & WB_CLIPCHILDREN)) )
+            ParentClipMode nClipMode = pWindow->GetParentClipMode();
+            if ( !(nClipMode & ParentClipMode::NoClip) &&
+                 ((nClipMode & ParentClipMode::Clip) || (GetStyle() & WB_CLIPCHILDREN)) )
                 pWindow->ImplExcludeWindowRegion( rRegion );
             else
                 bOtherClip = true;
@@ -488,7 +486,7 @@ bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
 
         vcl::Window* pParent = ImplGetParent();
         if ( pParent &&
-             ((pParent->GetStyle() & WB_CLIPCHILDREN) || (mpWindowImpl->mnParentClipMode & PARENTCLIPMODE_CLIP)) )
+             ((pParent->GetStyle() & WB_CLIPCHILDREN) || (mpWindowImpl->mnParentClipMode & ParentClipMode::Clip)) )
         {
             pParent->mbInitClipRegion = true;
             pParent->mpWindowImpl->mbInitChildRegion = true;

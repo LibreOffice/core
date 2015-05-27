@@ -61,6 +61,7 @@ enum class MouseNotifyEvent;
 enum class ActivateModeFlags;
 enum class DialogControlFlags;
 enum class GetFocusFlags;
+enum class ParentClipMode;
 
 namespace com { namespace sun { namespace star {
 
@@ -276,7 +277,7 @@ public:
     sal_uInt16          mnWaitCount;
     sal_uInt16          mnPaintFlags;
     GetFocusFlags       mnGetFocusFlags;
-    sal_uInt16          mnParentClipMode;
+    ParentClipMode      mnParentClipMode;
     ActivateModeFlags   mnActivateMode;
     DialogControlFlags  mnDlgCtrlFlags;
     sal_uInt16          mnLockCount;

@@ -691,13 +691,13 @@ void PushButton::ImplInitSettings( bool bFont,
     {
         SetBackground();
         // #i38498#: do not check for GetParent()->IsChildTransparentModeEnabled()
-        // otherwise the formcontrol button will be overdrawn due to PARENTCLIPMODE_NOCLIP
+        // otherwise the formcontrol button will be overdrawn due to ParentClipMode::NoClip
         // for radio and checkbox this is ok as they should appear transparent in documents
         if ( IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) ||
              (GetStyle() & WB_FLATBUTTON) != 0 )
         {
             EnableChildTransparentMode( true );
-            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+            SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             mpWindowImpl->mbUseNativeFocus = (GetStyle() & WB_FLATBUTTON) == 0
                 && ImplGetSVData()->maNWFData.mbNoFocusRects;
@@ -705,7 +705,7 @@ void PushButton::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( 0 );
+            SetParentClipMode( ParentClipMode::NONE );
             SetPaintTransparent( false );
         }
     }
@@ -1855,7 +1855,7 @@ void RadioButton::ImplInitSettings( bool bFont,
             (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) ) )
         {
             EnableChildTransparentMode( true );
-            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+            SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
             if( IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) )
@@ -1864,7 +1864,7 @@ void RadioButton::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( 0 );
+            SetParentClipMode( ParentClipMode::NONE );
             SetPaintTransparent( false );
 
             if ( IsControlBackground() )
@@ -2993,7 +2993,7 @@ void CheckBox::ImplInitSettings( bool bFont,
             (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) ) )
         {
             EnableChildTransparentMode( true );
-            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+            SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
             if( IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) )
@@ -3002,7 +3002,7 @@ void CheckBox::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( 0 );
+            SetParentClipMode( ParentClipMode::NONE );
             SetPaintTransparent( false );
 
             if ( IsControlBackground() )

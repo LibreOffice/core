@@ -1088,7 +1088,7 @@ bool OpenGLContext::initWindow()
     if( m_pChildWindow )
     {
         m_pChildWindow->SetMouseTransparent( true );
-        m_pChildWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
+        m_pChildWindow->SetParentClipMode(ParentClipMode::Clip);
         m_pChildWindow->EnableEraseBackground( false );
         m_pChildWindow->SetControlForeground();
         m_pChildWindow->SetControlBackground();
@@ -1115,7 +1115,7 @@ bool OpenGLContext::initWindow()
     if( m_pChildWindow )
     {
         m_pChildWindow->SetMouseTransparent( true );
-        m_pChildWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
+        m_pChildWindow->SetParentClipMode(ParentClipMode::Clip);
         m_pChildWindow->EnableEraseBackground( false );
         m_pChildWindow->SetControlForeground();
         m_pChildWindow->SetControlBackground();
@@ -1152,7 +1152,7 @@ bool OpenGLContext::initWindow()
         return false;
 
     m_pChildWindow->SetMouseTransparent( true );
-    m_pChildWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    m_pChildWindow->SetParentClipMode( ParentClipMode::NoClip );
     m_pChildWindow->EnableEraseBackground( false );
     m_pChildWindow->SetControlForeground();
     m_pChildWindow->SetControlBackground();

@@ -646,7 +646,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnGetFocusFlags                     = GetFocusFlags::NONE;       // Flags fuer GetFocus()-Aufruf
     mnWaitCount                         = 0;                         // Wait-Count (>1 == Warte-MousePointer)
     mnPaintFlags                        = 0;                         // Flags for ImplCallPaint
-    mnParentClipMode                    = 0;                         // Flags for Parent-ClipChildren-Mode
+    mnParentClipMode                    = ParentClipMode::NONE;      // Flags for Parent-ClipChildren-Mode
     mnActivateMode                      = ActivateModeFlags::NONE;   // Will be converted in System/Overlap-Windows
     mnDlgCtrlFlags                      = DialogControlFlags::NONE;  // DialogControl-Flags
     mnLockCount                         = 0;                         // LockCount
