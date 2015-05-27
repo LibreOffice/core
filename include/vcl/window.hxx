@@ -286,13 +286,21 @@ namespace o3tl
 #define SHOWTRACK_STYLE                 ((sal_uInt16)0x000F)
 
 // Flags for StartTracking()
-#define STARTTRACK_KEYINPUT             ((sal_uInt16)0x0001)
-#define STARTTRACK_KEYMOD               ((sal_uInt16)0x0002)
-#define STARTTRACK_NOKEYCANCEL          ((sal_uInt16)0x0004)
-#define STARTTRACK_SCROLLREPEAT         ((sal_uInt16)0x0008)
-#define STARTTRACK_BUTTONREPEAT         ((sal_uInt16)0x0010)
-#define STARTTRACK_MOUSEBUTTONDOWN      ((sal_uInt16)0x0020)
-#define STARTTRACK_FOCUSCANCEL          ((sal_uInt16)0x0040)
+enum class StartTrackingFlags
+{
+    NONE                 = 0x0000,
+    KeyInput             = 0x0001,
+    KeyMod               = 0x0002,
+    NoKeyCancel          = 0x0004,
+    ScrollRepeat         = 0x0008,
+    ButtonRepeat         = 0x0010,
+    MouseButtonDown      = 0x0020,
+    FocusCancel          = 0x0040,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<StartTrackingFlags> : is_typed_flags<StartTrackingFlags, 0x007f> {};
+}
 
 // Flags for StartAutoScroll()
 enum class StartAutoScrollFlags
@@ -1248,7 +1256,7 @@ public:
                                                         sal_uInt16 nFlags = SHOWTRACK_SMALL );
     void                                InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags = 0 );
 
-    void                                StartTracking( sal_uInt16 nFlags = 0 );
+    void                                StartTracking( StartTrackingFlags nFlags = StartTrackingFlags::NONE );
     void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );
     bool                                IsTracking() const;
 

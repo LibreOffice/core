@@ -898,7 +898,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     if (rMEvt.IsLeft() || rMEvt.IsMiddle() || rMEvt.IsRight())
     {
         const Point&        rMousePos = rMEvt.GetPosPixel();
-        sal_uInt16          nTrackFlags = 0;
+        StartTrackingFlags  nTrackFlags = StartTrackingFlags::NONE;
         bool                bHorizontal = ( GetStyle() & WB_HORZ ) != 0;
         bool                bIsInside = false;
         bool                bDragToMouse = false;
@@ -913,7 +913,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
             {
-                nTrackFlags     = STARTTRACK_BUTTONREPEAT;
+                nTrackFlags     = StartTrackingFlags::ButtonRepeat;
                 meScrollType    = SCROLL_LINEUP;
                 mnDragDraw      = SCRBAR_DRAW_BTN1;
             }
@@ -925,7 +925,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
             {
-                nTrackFlags     = STARTTRACK_BUTTONREPEAT;
+                nTrackFlags     = StartTrackingFlags::ButtonRepeat;
                 meScrollType    = SCROLL_LINEDOWN;
                 mnDragDraw      = SCRBAR_DRAW_BTN2;
             }
@@ -953,7 +953,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
 
                 if ( mnVisibleSize < mnMaxRange-mnMinRange )
                 {
-                    nTrackFlags     = 0;
+                    nTrackFlags     = StartTrackingFlags::NONE;
                     meScrollType    = SCROLL_DRAG;
                     mnDragDraw      = SCRBAR_DRAW_THUMB;
 
@@ -982,7 +982,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                                            aControlRegion, rMousePos, bIsInside ) ||
                 bIsInside) )
             {
-                nTrackFlags = STARTTRACK_BUTTONREPEAT;
+                nTrackFlags = StartTrackingFlags::ButtonRepeat;
 
                 // HitTestNativeControl, see remark at top of file
                 if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,

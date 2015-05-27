@@ -1216,7 +1216,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
                     mbHighlight  = true;
                     mnHighItemId = mnSelItemId;
                     ImplHighlightItem( pItem->mnId );
-                    StartTracking( STARTTRACK_SCROLLREPEAT );
+                    StartTracking( StartTrackingFlags::ScrollRepeat );
                 }
                 else if ( rMouseEvent.GetClicks() == 2 )
                     DoubleClick();

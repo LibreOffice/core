@@ -1398,7 +1398,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                     // it should really read BUTTONREPEAT, therefore do not
                     // change it to SCROLLREPEAT, check with TH,
                     // why it could be different (71775)
-                    StartTracking( STARTTRACK_BUTTONREPEAT );
+                    StartTracking( StartTrackingFlags::ButtonRepeat );
                 }
                 else
                 {

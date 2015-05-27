@@ -3871,14 +3871,14 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             }
 
             // update actual data
-            sal_uInt16 nTrackFlags = 0;
+            StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
             mnCurPos         = i;
             mnCurItemId      = it->mnId;
             mnDownItemId     = mnCurItemId;
             mnMouseClicks    = rMEvt.GetClicks();
             mnMouseModifier  = rMEvt.GetModifier();
             if ( it->mnBits & ToolBoxItemBits::REPEAT )
-                nTrackFlags |= STARTTRACK_BUTTONREPEAT;
+                nTrackFlags |= StartTrackingFlags::ButtonRepeat;
 
             if ( mbSelection )
             {
@@ -3939,7 +3939,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                     Click();
 
                 // also call Select handler at repeat
-                if ( nTrackFlags & STARTTRACK_BUTTONREPEAT )
+                if ( nTrackFlags & StartTrackingFlags::ButtonRepeat )
                     Select();
 
                 // if the actions was not aborted in Click handler

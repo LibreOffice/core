@@ -1375,7 +1375,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             ImplSetCursorPos( nCharPos, rMEvt.IsShift() );
 
         if ( !mbClickedInSelection && rMEvt.IsLeft() && ( rMEvt.GetClicks() == 1 ) )
-            StartTracking( STARTTRACK_SCROLLREPEAT );
+            StartTracking( StartTrackingFlags::ScrollRepeat );
     }
 
     mbInMBDown = true;  // then do not select all in GetFocus

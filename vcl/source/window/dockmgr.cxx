@@ -730,7 +730,7 @@ void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
         {
             // start window move
             mbMoving = true;
-            StartTracking( STARTTRACK_NOKEYCANCEL );
+            StartTracking( StartTrackingFlags::NoKeyCancel );
             return;
         }
         if( !mbHighlight && GetDragRect().IsInside( aMousePos ) )
@@ -891,7 +891,7 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     GetWindow()->ImplUpdateAll();
     GetWindow()->ImplGetFrameWindow()->ImplUpdateAll();
 
-    GetWindow()->StartTracking( STARTTRACK_KEYMOD );
+    GetWindow()->StartTracking( StartTrackingFlags::KeyMod );
     return true;
 }
 

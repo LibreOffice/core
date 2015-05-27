@@ -776,7 +776,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
         }
 
         if( !pEntry && !(nWinBits & WB_NODRAGSELECTION))
-            pView->StartTracking( STARTTRACK_SCROLLREPEAT );
+            pView->StartTracking( StartTrackingFlags::ScrollRepeat );
         return true;
     }
     else
@@ -796,7 +796,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
                 else
                     nFlags |= F_ADD_MODE;
                 aCurSelectionRect.SetPos( aDocPos );
-                pView->StartTracking( STARTTRACK_SCROLLREPEAT );
+                pView->StartTracking( StartTrackingFlags::ScrollRepeat );
             }
             else
                 bHandled = false;

@@ -859,7 +859,7 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( mbGrabFocus )
                     GrabFocus();
 
-                StartTracking( STARTTRACK_SCROLLREPEAT );
+                StartTracking( StartTrackingFlags::ScrollRepeat );
             }
         }
         if( rMEvt.GetClicks() == 2 )
@@ -946,7 +946,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 if ( mbStackMode && ( mpEntryList->GetSelectionAnchor() == LISTBOX_ENTRY_NOTFOUND ) )
                     mpEntryList->SetSelectionAnchor( 0 );
 
-                StartTracking( STARTTRACK_SCROLLREPEAT );
+                StartTracking( StartTrackingFlags::ScrollRepeat );
             }
         }
     }

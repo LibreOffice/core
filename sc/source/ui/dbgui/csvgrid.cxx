@@ -863,7 +863,7 @@ void ScCsvGrid::MouseButtonDown( const MouseEvent& rMEvt )
             DoSelectAction( nColIx, rMEvt.GetModifier() );
             mnMTCurrCol = nColIx;
             mbMTSelecting = IsSelected( nColIx );
-            StartTracking( STARTTRACK_BUTTONREPEAT );
+            StartTracking( StartTrackingFlags::ButtonRepeat );
         }
     }
     EnableRepaint();

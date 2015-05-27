@@ -1200,17 +1200,17 @@ void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() &&
          ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
     {
-        sal_uInt16 nTrackFlags = 0;
+        StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
 
         if ( ( GetStyle() & WB_REPEAT ) &&
              ! ( GetStyle() & WB_TOGGLE ) )
-            nTrackFlags |= STARTTRACK_BUTTONREPEAT;
+            nTrackFlags |= StartTrackingFlags::ButtonRepeat;
 
         ImplGetButtonState() |= DrawButtonFlags::Pressed;
         Invalidate();
         StartTracking( nTrackFlags );
 
-        if ( nTrackFlags & STARTTRACK_BUTTONREPEAT )
+        if ( nTrackFlags & StartTrackingFlags::ButtonRepeat )
             Click();
     }
 }

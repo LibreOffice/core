@@ -350,7 +350,7 @@ IMPL_LINK_TYPED( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
     ImplSVData* pSVData = ImplGetSVData();
 
     // Bei Button-Repeat muessen wir den Timeout umsetzen
-    if ( pSVData->maWinData.mnTrackFlags & STARTTRACK_BUTTONREPEAT )
+    if ( pSVData->maWinData.mnTrackFlags & StartTrackingFlags::ButtonRepeat )
         pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
 
     // Tracking-Event erzeugen
@@ -369,7 +369,7 @@ IMPL_LINK_TYPED( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
     Tracking( aTEvt );
 }
 
-void Window::StartTracking( sal_uInt16 nFlags )
+void Window::StartTracking( StartTrackingFlags nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -379,11 +379,11 @@ void Window::StartTracking( sal_uInt16 nFlags )
             pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     }
 
-    if ( nFlags & (STARTTRACK_SCROLLREPEAT | STARTTRACK_BUTTONREPEAT) )
+    if ( nFlags & (StartTrackingFlags::ScrollRepeat | StartTrackingFlags::ButtonRepeat) )
     {
         pSVData->maWinData.mpTrackTimer = new AutoTimer;
 
-        if ( nFlags & STARTTRACK_SCROLLREPEAT )
+        if ( nFlags & StartTrackingFlags::ScrollRepeat )
             pSVData->maWinData.mpTrackTimer->SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
         else
             pSVData->maWinData.mpTrackTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
@@ -413,7 +413,7 @@ void Window::EndTracking( TrackingEventFlags nFlags )
         }
 
         pSVData->maWinData.mpTrackWin    = NULL;
-        pSVData->maWinData.mnTrackFlags  = 0;
+        pSVData->maWinData.mnTrackFlags  = StartTrackingFlags::NONE;
         ReleaseMouse();
         }
 
