@@ -731,41 +731,17 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     // trying to copy text in obj 1
     //SdrText* pText = getActiveText();
 
-    Rectangle &aNextRect = pNextTextObj->aRect;
     SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner();
-    rOutliner.SetPaperSize(
-        Size(
-            aNextRect.Right()-aNextRect.Left(),
-            aNextRect.Bottom()-aNextRect.Top()
-            )
-     );
-    rOutliner.SetUpdateMode(true);
-    rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
-
+    //rOutliner.SetUpdateMode(true);
+    //rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
     // XXX: experimental code 27/5/15
-    OutlinerParaObject *someText = rOutliner.CreateParaObject();
+    //OutlinerParaObject *someText = rOutliner.CreateParaObject(0,1); // only first para
+    //pNextTextObj->SetOutlinerParaObject(*someText);
+    pNextTextObj->SetText("Bukowski, were are thou?");
+    //rOutliner.Insert("Bukowski, were are thou?");
+    //rOutliner.Clear();
+    //rOutliner.SetStatusEventHdl1(Link());
 
-    rOutliner.SetText(*someText);  // XXX: copies overflown text
-
-    // clean up code and such
-    Size aNewSize(rOutliner.CalcTextSize());
-    // create OutlinerParaObject for pNextTextObj
-    OutlinerParaObject* pNewParaObject=rOutliner.CreateParaObject();
-    rOutliner.Clear();
-    rOutliner.SetStatusEventHdl1(Link());
-
-    aNewSize.Width()++; // because of possible rounding errors
-    aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
-    aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
-
-    Rectangle aNewRect(aNextRect);
-    aNewRect.SetSize(aNewSize);
-    pNextTextObj->ImpJustifyRect(aNewRect);
-    if (aNewRect!=aNextRect) {
-        pNextTextObj->SetLogicRect(aNewRect);
-    }
-    // Set text object's string
-    pNextTextObj->SetOutlinerParaObject( pNewParaObject );
 
 }
 
@@ -1461,8 +1437,8 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
 
 void SdrTextObj::impDecomposeChainedTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
-        const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
-        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
+        const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& /*rSdrChainedTextPrimitive*/,
+        const drawinglayer::geometry::ViewInformation2D& /*aViewInformation*/) const
 {
     // FIXME(matteocam)
     /* fprintf(stderr, "Object #0 = %p, Object #1 = %p\n",
