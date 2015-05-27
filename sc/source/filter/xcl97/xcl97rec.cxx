@@ -1111,7 +1111,7 @@ bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
         if (nResult & SCA_VALID)
         {
             OUString aString = aRange.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
-            rNewURL = OUString("#") + aString;
+            rNewURL = "#" + aString;
             return true;
         }
         else
@@ -1120,7 +1120,7 @@ bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
             if(nResult & SCA_VALID)
             {
                 OUString aString = aAddress.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
-                rNewURL = OUString("#") + aString;
+                rNewURL = "#" + aString;
                 return true;
             }
         }
