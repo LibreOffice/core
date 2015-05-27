@@ -62,6 +62,7 @@
 #include "IMark.hxx"
 #include "ring.hxx"
 #include "calbck.hxx"
+#include "pagedesc.hxx"
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
@@ -109,6 +110,7 @@ public:
     void testFormulas();
     void testIntrusiveRing();
     void testClientModify();
+    void test64kPageDescs();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
 
@@ -141,6 +143,7 @@ public:
     CPPUNIT_TEST(testFormulas);
     CPPUNIT_TEST(testIntrusiveRing);
     CPPUNIT_TEST(testClientModify);
+    CPPUNIT_TEST(test64kPageDescs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1563,6 +1566,53 @@ void SwDocTest::testClientModify()
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,2);
     CPPUNIT_ASSERT_EQUAL(aClient1.m_nNotifyCount,1);
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,1);
+}
+
+void SwDocTest::test64kPageDescs()
+{
+    size_t nPageDescCount = 65536; // USHRT_MAX + 1
+
+    for (size_t i = 0; i < nPageDescCount; ++i)
+    {
+        OUString aName = OUString("Page") + OUString::number(i);
+        m_pDoc->MakePageDesc( aName );
+    }
+
+    size_t nCount = m_pDoc->GetPageDescCnt();
+    // +1 because Writer always creates a dummy page desc
+    // in a new SwDoc
+    CPPUNIT_ASSERT_EQUAL( nPageDescCount + 1, nCount );
+
+    const SwPageDesc &rDesc = m_pDoc->GetPageDesc( nPageDescCount );
+    SwPageDesc &rZeroDesc = m_pDoc->GetPageDesc( 0 );
+    CPPUNIT_ASSERT_EQUAL( OUString("Page65535"), rDesc.GetName() );
+
+    SwPageDesc aDesc( rDesc );
+    const OUString aChanged("Changed01");
+    aDesc.SetName( aChanged );
+    m_pDoc->ChgPageDesc( nPageDescCount, aDesc );
+
+    size_t nPos;
+    SwPageDesc *pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
+    CPPUNIT_ASSERT( pDesc != NULL );
+    CPPUNIT_ASSERT( nPos == nPageDescCount );
+
+    // check if we didn't mess up PageDesc at pos 0
+    // (happens with 16bit int overflow)
+    OUString aZeroName = rZeroDesc.GetName();
+    rZeroDesc = m_pDoc->GetPageDesc( 0 );
+    CPPUNIT_ASSERT_EQUAL( aZeroName, rZeroDesc.GetName() );
+
+    m_pDoc->DelPageDesc( aChanged, nPos );
+    pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
+    // not there anymore
+    CPPUNIT_ASSERT( pDesc == NULL );
+    CPPUNIT_ASSERT( nPos == SIZE_MAX );
+
+    // check if PageDesc at pos 0 is still there
+    pDesc = m_pDoc->FindPageDesc( aZeroName, &nPos );
+    CPPUNIT_ASSERT( pDesc != NULL );
+    CPPUNIT_ASSERT( nPos == 0 );
 }
 
 void SwDocTest::setUp()
