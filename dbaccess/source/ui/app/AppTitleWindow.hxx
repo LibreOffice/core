@@ -42,6 +42,8 @@ namespace dbaui
         virtual void Resize() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 
+        virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
         /** sets the child window which should be displayed below the title. It will be destroyed at the end.
             @param  _pChild
                 The child window.

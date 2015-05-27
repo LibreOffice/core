@@ -40,9 +40,17 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
     SetBorderStyle(WindowBorderStyle::MONO);
     ImplInitSettings( true, true, true );
 
-    vcl::Window* pWindows [] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get() };
+    const StyleSettings& rStyle = Application::GetSettings().GetStyleSettings();
+    vcl::Window* pWindows[] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get() };
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+    {
+        vcl::Font aFont = pWindows[i]->GetControlFont();
+        aFont.SetWeight(WEIGHT_BOLD);
+        pWindows[i]->SetControlFont(aFont);
+        pWindows[i]->SetControlForeground(rStyle.GetLightColor());
+        pWindows[i]->SetControlBackground(rStyle.GetShadowColor());
         pWindows[i]->Show();
+    }
 }
 
 OTitleWindow::~OTitleWindow()
@@ -158,18 +166,28 @@ void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
 
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
+}
 
-    vcl::Window* pWindows [] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get()};
-    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
-    {
-        vcl::Font aFont = pWindows[i]->GetFont();
-        aFont.SetWeight(WEIGHT_BOLD);
-        pWindows[i]->SetFont(aFont);
-        pWindows[i]->SetTextColor( aStyle.GetLightColor() );
-        pWindows[i]->SetBackground( Wallpaper( aStyle.GetShadowColor() ) );
-    }
+void OTitleWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    // FIXME RenderContext
+    AllSettings aAllSettings = rRenderContext.GetSettings();
+    StyleSettings aStyle = aAllSettings.GetStyleSettings();
+    aStyle.SetMonoColor(aStyle.GetActiveBorderColor());//GetMenuBorderColor());
+    aAllSettings.SetStyleSettings(aStyle);
+    rRenderContext.SetSettings(aAllSettings);
+
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    vcl::Font aFont;
+    aFont = rStyleSettings.GetFieldFont();
+    aFont.SetColor(rStyleSettings.GetWindowTextColor());
+    SetPointFont(*this, aFont);
+
+    rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
+    rRenderContext.SetTextFillColor();
+
+    rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
 }
 
 } // namespace dbaui
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
