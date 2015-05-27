@@ -144,6 +144,7 @@ public:
     void testTextUnderlineColor();
     void testSheetRunParagraphProperty();
     void testHiddenShape();
+    void testTextDirection();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -198,6 +199,7 @@ public:
     CPPUNIT_TEST(testTextUnderlineColor);
     CPPUNIT_TEST(testSheetRunParagraphProperty);
     CPPUNIT_TEST(testHiddenShape);
+    CPPUNIT_TEST(testTextDirection);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2640,6 +2642,19 @@ void ScExportTest::testHiddenShape()
     xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
+}
+
+void ScExportTest::testTextDirection()
+{
+    ScDocShellRef xDocSh = loadDoc("writingMode.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/styles.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment", "readingOrder", "0");//context
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
