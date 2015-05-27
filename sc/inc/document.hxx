@@ -230,10 +230,12 @@ struct ScDocStat
     OUString  aDocName;
     SCTAB   nTableCount;
     sal_uLong   nCellCount;
+    sal_uLong   nFormulaCount;
     sal_uInt16  nPageCount;
     ScDocStat()
         : nTableCount(0)
         , nCellCount(0)
+        , nFormulaCount(0)
         , nPageCount(0)
     {
     }
@@ -250,6 +252,7 @@ class ScDocument
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
+friend class ScFormulaGroupIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScHorizontalCellIterator;
@@ -464,6 +467,7 @@ public:
     bool              IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     void              SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells
+    SC_DLLPUBLIC sal_uLong          GetFormulaGroupCount() const;       // all cells
     sal_uLong           GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, sal_uInt16 * );
                                                                 // number formatter

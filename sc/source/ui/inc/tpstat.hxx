@@ -41,6 +41,7 @@ private:
     FixedText*       m_pFtTables;
     FixedText*       m_pFtCells;
     FixedText*       m_pFtPages;
+    FixedText*       m_pFtFormula;
 };
 
 #endif

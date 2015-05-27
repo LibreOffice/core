@@ -38,6 +38,7 @@ ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )
     get(m_pFtTables,"nosheets");
     get(m_pFtCells,"nocells");
     get(m_pFtPages,"nopages");
+    get(m_pFtFormula,"noformula");
     ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
     ScDocStat   aDocStat;
 
@@ -51,6 +52,7 @@ ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )
     m_pFtTables   ->SetText( OUString::number( aDocStat.nTableCount ) );
     m_pFtCells    ->SetText( OUString::number( aDocStat.nCellCount ) );
     m_pFtPages    ->SetText( OUString::number( aDocStat.nPageCount ) );
+    m_pFtFormula  ->SetText( OUString::number( aDocStat.nFormulaCount ) );
 
 }
 
