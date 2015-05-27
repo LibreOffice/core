@@ -1931,8 +1931,12 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
 
         // Reschedule slows the whole thing down considerably, thus only execute on percent change
-        ScProgress::GetInterpretProgress()->SetStateCountDownOnPercent(
-            pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
+        ScProgress *pProgress = ScProgress::GetInterpretProgress();
+        if (pProgress && pProgress->Enabled())
+        {
+            pProgress->SetStateCountDownOnPercent(
+                pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
+        }
 
         switch (p->GetVolatileType())
         {
