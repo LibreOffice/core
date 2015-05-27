@@ -196,7 +196,7 @@ struct ImplSVWinData
     ImageList*              mpMsgBoxImgList;                // ImageList for MessageBox
     VclPtr<vcl::Window>     mpAutoScrollWin;                // window, that is in AutoScrollMode mode
     sal_uInt16              mnTrackFlags;                   // tracking flags
-    sal_uInt16              mnAutoScrollFlags;              // auto scroll flags
+    StartAutoScrollFlags    mnAutoScrollFlags;              // auto scroll flags
     bool                    mbNoDeactivate;                 // true: do not execute Deactivate
     bool                    mbNoSaveFocus;                  // true: menus must not save/restore focus
     bool                    mbNoSaveBackground;             // true: save background is unnecessary or even less performant

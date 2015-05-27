@@ -2143,12 +2143,12 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
         case CommandEventId::StartAutoScroll:
         {
             pView->EndTracking();
-            sal_uInt16 nScrollFlags = 0;
+            StartAutoScrollFlags nScrollFlags = StartAutoScrollFlags::NONE;
             if( bHor )
-                nScrollFlags |= AUTOSCROLL_HORZ;
+                nScrollFlags |= StartAutoScrollFlags::Horz;
             if( bVer )
-                nScrollFlags |= AUTOSCROLL_VERT;
-            if( nScrollFlags )
+                nScrollFlags |= StartAutoScrollFlags::Vert;
+            if( nScrollFlags != StartAutoScrollFlags::NONE )
             {
                 pView->StartAutoScroll( nScrollFlags );
                 return true;

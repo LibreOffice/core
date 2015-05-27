@@ -295,8 +295,16 @@ namespace o3tl
 #define STARTTRACK_FOCUSCANCEL          ((sal_uInt16)0x0040)
 
 // Flags for StartAutoScroll()
-#define AUTOSCROLL_VERT                 ((sal_uInt16)0x0001)
-#define AUTOSCROLL_HORZ                 ((sal_uInt16)0x0002)
+enum class StartAutoScrollFlags
+{
+    NONE                 = 0x0000,
+    Vert                 = 0x0001,
+    Horz                 = 0x0002,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<StartAutoScrollFlags> : is_typed_flags<StartAutoScrollFlags, 0x0003> {};
+}
 
 // Flags for StateChanged()
 enum class StateChangedType : sal_uInt16
@@ -1244,7 +1252,7 @@ public:
     void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );
     bool                                IsTracking() const;
 
-    void                                StartAutoScroll( sal_uInt16 nFlags );
+    void                                StartAutoScroll( StartAutoScrollFlags nFlags );
     void                                EndAutoScroll();
 
     bool                                HandleScrollCommand( const CommandEvent& rCmd,
