@@ -144,6 +144,7 @@ public:
     void testTextUnderlineColor();
     void testSheetRunParagraphProperty();
     void testHiddenShape();
+    void testHyperlinkXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -198,6 +199,7 @@ public:
     CPPUNIT_TEST(testTextUnderlineColor);
     CPPUNIT_TEST(testSheetRunParagraphProperty);
     CPPUNIT_TEST(testHiddenShape);
+    CPPUNIT_TEST(testHyperlinkXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -225,7 +227,8 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("text"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0") },
         { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") },
         { BAD_CAST("xdr"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") },
-        { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") }
+        { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") },
+        { BAD_CAST("r"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships") }
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -2640,6 +2643,16 @@ void ScExportTest::testHiddenShape()
     xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
+}
+
+void ScExportTest::testHyperlinkXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("hyperlink.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "#Sheet2!A1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
