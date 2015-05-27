@@ -231,11 +231,11 @@ BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffe
         AlphaMask::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
 
         size_t nCurPos = 0;
-        for( int y = 0; y < nHeight; ++y)
+        for( long y = 0; y < nHeight; ++y)
         {
             Scanline pScan = pWriteAccess->GetScanline(y);
             Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
-            for( int x = 0; x < nWidth; ++x )
+            for( long x = 0; x < nWidth; ++x )
             {
                 *pScan++ = pBuffer[nCurPos];
                 *pScan++ = pBuffer[nCurPos+1];

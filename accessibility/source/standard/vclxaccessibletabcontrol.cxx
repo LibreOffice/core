@@ -59,7 +59,7 @@ VCLXAccessibleTabControl::~VCLXAccessibleTabControl()
 
 void VCLXAccessibleTabControl::UpdateFocused()
 {
-    for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
@@ -243,7 +243,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
                 m_pTabControl = NULL;
 
                 // dispose all tab pages
-                for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+                for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
                 {
                     Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
                     if ( xComponent.is() )
@@ -326,7 +326,7 @@ void VCLXAccessibleTabControl::disposing()
         m_pTabControl = NULL;
 
         // dispose all tab pages
-        for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
             if ( xComponent.is() )

@@ -855,9 +855,9 @@ namespace
                 const Size aDestinationSizePixel(aDestination.GetSizePixel());
                 const BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
 
-                for(sal_Int32 y(0L); y < aDestinationSizePixel.getHeight(); y++)
+                for(long y(0L); y < aDestinationSizePixel.getHeight(); y++)
                 {
-                    for(sal_Int32 x(0L); x < aDestinationSizePixel.getWidth(); x++)
+                    for(long x(0L); x < aDestinationSizePixel.getWidth(); x++)
                     {
                         const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
 

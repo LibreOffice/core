@@ -2361,7 +2361,7 @@ TextFilter::~TextFilter()
 OUString TextFilter::filter(const OUString &rText)
 {
     OUString sTemp(rText);
-    for (sal_uInt16 i = 0; i < sForbiddenChars.getLength(); ++i)
+    for (sal_Int32 i = 0; i < sForbiddenChars.getLength(); ++i)
     {
         sTemp = comphelper::string::remove(sTemp, sForbiddenChars[i]);
     }

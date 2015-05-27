@@ -74,7 +74,7 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
 {
     // find left portion at nCharPos at portion border
     sal_uInt16 nTmpPos = 0;
-    for ( sal_uInt16 nPortion = 0; nPortion < size(); nPortion++ )
+    for ( size_t nPortion = 0; nPortion < size(); nPortion++ )
     {
         TETextPortion* pPortion = operator[]( nPortion );
         nTmpPos = nTmpPos + pPortion->GetLen();
@@ -161,7 +161,7 @@ void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/
 
 sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, bool bInclEnd )
 {
-    for ( sal_uInt16 nLine = 0; nLine < maLines.size(); nLine++ )
+    for ( size_t nLine = 0; nLine < maLines.size(); nLine++ )
     {
         TextLine& pLine = maLines[ nLine ];
         if ( ( bInclEnd && ( pLine.GetEnd() >= nChar ) ) ||

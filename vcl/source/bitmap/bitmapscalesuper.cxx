@@ -327,7 +327,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
             long nSumB = 0;
             long nTotalWeightY = 0;
 
-            for(int i = 0; i<= nLineRange; i++)
+            for(long i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 long nSumRowR = 0;
@@ -335,7 +335,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
                 long nSumRowB = 0;
                 long nTotalWeightX = 0;
 
-                for(int j = 0; j <= nRowRange; j++)
+                for(long j = 0; j <= nRowRange; j++)
                 {
                     const BitmapColor& rCol = rCtx.mpSrc->GetPaletteColor( pTmpY[ nRowStart + j ] );
 
@@ -451,14 +451,14 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
             long nSumB = 0;
             long nTotalWeightY = 0;
 
-            for(int i = 0; i<= nLineRange; i++)
+            for(long i = 0; i<= nLineRange; i++)
             {
                 long nSumRowR = 0;
                 long nSumRowG = 0;
                 long nSumRowB = 0;
                 long nTotalWeightX = 0;
 
-                for(int j = 0; j <= nRowRange; j++)
+                for(long j = 0; j <= nRowRange; j++)
                 {
                     BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor ( rCtx.mpSrc->GetPixelIndex( nLineStart + i, nRowStart + j ) );
 
@@ -580,7 +580,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
             long nSumB = 0;
             long nTotalWeightY = 0;
 
-            for(int i = 0; i<= nLineRange; i++)
+            for(long i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 Scanline pTmpX = pTmpY + 3L * nRowStart;
@@ -589,7 +589,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                 long nSumRowB = 0;
                 long nTotalWeightX = 0;
 
-                for(int j = 0; j <= nRowRange; j++)
+                for(long j = 0; j <= nRowRange; j++)
                 {
                     if(nX == nEndX )
                     {
@@ -701,7 +701,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
             long nSumB = 0;
             long nTotalWeightY = 0;
 
-            for(int i = 0; i<= nLineRange; i++)
+            for(long i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 Scanline pTmpX = pTmpY + 3L * nRowStart;
@@ -710,7 +710,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                 long nSumRowB = 0;
                 long nTotalWeightX = 0;
 
-                for(int j = 0; j <= nRowRange; j++)
+                for(long j = 0; j <= nRowRange; j++)
                 {
                     if(nX == nEndX )
                     {
@@ -822,14 +822,14 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
             long nSumB = 0;
             long nTotalWeightY = 0;
 
-            for(int i = 0; i<= nLineRange; i++)
+            for(long i = 0; i<= nLineRange; i++)
             {
                 long nSumRowR = 0;
                 long nSumRowG = 0;
                 long nSumRowB = 0;
                 long nTotalWeightX = 0;
 
-                for(int j = 0; j <= nRowRange; j++)
+                for(long j = 0; j <= nRowRange; j++)
                 {
                     BitmapColor aCol0 = rCtx.mpSrc->GetPixel( nLineStart + i, nRowStart + j );
 

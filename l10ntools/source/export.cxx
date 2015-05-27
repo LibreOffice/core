@@ -662,7 +662,7 @@ int Export::Execute( int nToken, const char * pToken )
         // the current token must be written to dest. without merging
 
         if( bDefine && sOrig.getLength() > 2 ){
-            for( sal_uInt16 n = 0 ; n < sOrig.getLength() ; n++ ){
+            for( sal_Int32 n = 0; n < sOrig.getLength(); n++ ){
                 if( sOrig[n] == '\n' && sOrig[n-1] != '\\'){
                     sOrig = sOrig.replaceAt(n++, 0, "\\");
                 }
@@ -1019,7 +1019,7 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
     bool bFirst = true;
     OString sCur;
 
-    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
+    for( size_t n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
 
         OString sText;
@@ -1048,7 +1048,7 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
                 sOutput.append(";\n");
             else
                 bAddSemicolon = true;
-            for ( sal_uInt16 j = 1; j < nLevel; j++ )
+            for ( size_t j = 1; j < nLevel; j++ )
                 sOutput.append("\t");
             WriteToMerged( sOutput.makeStringAndClear() , true );
         }
@@ -1103,7 +1103,7 @@ void Export::MergeRest( ResData *pResData )
             sSpace += "\t";
 
         OString sCur;
-        for( unsigned int n = 0; n < aLanguages.size(); n++ )
+        for( size_t n = 0; n < aLanguages.size(); n++ )
         {
             sCur = aLanguages[ n ];
 

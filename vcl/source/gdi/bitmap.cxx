@@ -1435,7 +1435,7 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) 
                     aSubRect.Top() = nYStart;
                     aSubRect.Bottom() = nY ? nY - 1 : 0;
 
-                    for(sal_uInt32 a(0); a < aLine.size();)
+                    for(size_t a(0); a < aLine.size();)
                     {
                         aSubRect.Left() = aLine[a++];
                         aSubRect.Right() = aLine[a++];
@@ -1458,7 +1458,7 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) 
             aSubRect.Top() = nYStart;
             aSubRect.Bottom() = nY ? nY - 1 : 0;
 
-            for(sal_uInt32 a(0); a < aLine.size();)
+            for(size_t a(0); a < aLine.size();)
             {
                 aSubRect.Left() = aLine[a++];
                 aSubRect.Right() = aLine[a++];

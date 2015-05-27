@@ -390,7 +390,7 @@ rtl::Reference< Entity > readEntity(
                 }
                 std::vector< PlainStructTypeEntity::Member > mems;
                 n = reader.getFieldCount();
-                for (sal_uInt16 j = 0; j != n; ++j) {
+                for (sal_uInt32 j = 0; j != n; ++j) {
                     mems.push_back(
                         PlainStructTypeEntity::Member(
                             reader.getFieldName(j),
@@ -411,13 +411,13 @@ rtl::Reference< Entity > readEntity(
                          " with key " + sub.getName()));
                 }
                 std::vector< OUString > params;
-                for (sal_uInt16 j = 0; j != n; ++j) {
+                for (sal_uInt32 j = 0; j != n; ++j) {
                     params.push_back(
                         reader.getReferenceTypeName(j).replace('/', '.'));
                 }
                 std::vector< PolymorphicStructTypeTemplateEntity::Member > mems;
                 n = reader.getFieldCount();
-                for (sal_uInt16 j = 0; j != n; ++j) {
+                for (sal_uInt32 j = 0; j != n; ++j) {
                     mems.push_back(
                         PolymorphicStructTypeTemplateEntity::Member(
                             reader.getFieldName(j),

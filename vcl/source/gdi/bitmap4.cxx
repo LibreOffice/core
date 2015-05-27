@@ -1160,9 +1160,9 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     BitmapColor aColor, aColorBlur;
 
     // For all pixels in original image subtract pixels values from blurred image
-    for( int x = 0; x < nWidth; x++ )
+    for( long x = 0; x < nWidth; x++ )
     {
-        for( int y = 0; y < nHeight; y++ )
+        for( long y = 0; y < nHeight; y++ )
         {
             aColorBlur = pReadAccBlur->GetColor( y , x );
             aColor = pReadAcc->GetColor( y , x );
@@ -1194,9 +1194,9 @@ bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColo
     const BitmapColor aColorOne( static_cast< sal_uInt8 >( nColorOne >> 16 ), static_cast< sal_uInt8 >( nColorOne >> 8 ), static_cast< sal_uInt8 >( nColorOne ) );
     const BitmapColor aColorTwo( static_cast< sal_uInt8 >( nColorTwo >> 16 ), static_cast< sal_uInt8 >( nColorTwo >> 8 ), static_cast< sal_uInt8 >( nColorTwo ) );
 
-    for( int x = 0; x < nWidth; x++ )
+    for( long x = 0; x < nWidth; x++ )
     {
-        for( int y = 0; y < nHeight; y++ )
+        for( long y = 0; y < nHeight; y++ )
         {
             BitmapColor aColor = pReadAcc->GetColor( y, x );
             sal_uInt8 luminance = aColor.GetLuminance();

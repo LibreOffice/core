@@ -2421,7 +2421,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
                 {
                     ImplSplitItems& pItems = mpSplitSet->mpItems;
                     size_t          nItems = pItems.size();
-                    for ( sal_uInt16 i = 0; i < nItems; i++ )
+                    for ( size_t i = 0; i < nItems; i++ )
                     {
                         pItems[i]->mnSize     = mpLastSizes[i*2];
                         pItems[i]->mnPixSize  = mpLastSizes[i*2+1];
@@ -2807,7 +2807,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
     // calculate area, which could be affected by splitting
     sal_uInt16 nMin = 0;
     sal_uInt16 nMax = nItems;
-    for (sal_uInt16 i = 0; i < nItems; ++i)
+    for (size_t i = 0; i < nItems; ++i)
     {
         if ( pItems[i]->mbFixed )
         {
@@ -3140,7 +3140,7 @@ sal_uInt16 SplitWindow::GetItemPos( sal_uInt16 nId, sal_uInt16 nSetId ) const
 
     if ( pSet )
     {
-        for ( sal_uInt16 i = 0; i < pSet->mpItems.size(); i++ )
+        for ( size_t i = 0; i < pSet->mpItems.size(); i++ )
         {
             if ( pSet->mpItems[i]->mnId == nId )
             {

@@ -341,7 +341,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
     m_pLevelBox->SetEntryData(0, m_pLevelBox->GetEntryData(1));
     m_pLevelBox->RemoveEntry(1);
 
-    for( sal_uInt16 i = 0; i < m_pLevelBox->GetEntryCount(); i++ )
+    for( sal_Int32 i = 0; i < m_pLevelBox->GetEntryCount(); i++ )
     {
         if( reinterpret_cast<sal_uLong>(m_pLevelBox->GetEntryData( i )) == nLevelEntryData )
         {
