@@ -155,6 +155,7 @@ public:
     void testMoveCellAnchoredShapes();
     void testMatrixMultiplication();
     void testPreserveTextWhitespaceXLSX();
+    void testTextDirection();
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
@@ -221,6 +222,7 @@ public:
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
     CPPUNIT_TEST(testMatrixMultiplication);
+    CPPUNIT_TEST(testTextDirection);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -2988,7 +2990,6 @@ void ScExportTest::testMatrixMultiplication()
     xDocSh->DoClose();
 }
 
-
 void ScExportTest::testRefStringXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("ref_string.", FORMAT_XLSX);
@@ -3086,6 +3087,18 @@ void ScExportTest::testHeaderImage()
     OUString aURL;
     xStyle->getPropertyValue("HeaderBackGraphicURL") >>= aURL;
     CPPUNIT_ASSERT(aURL.startsWith("vnd.sun.star.GraphicObject:"));
+}
+
+void ScExportTest::testTextDirection()
+{
+    ScDocShellRef xDocSh = loadDoc("writingMode.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
