@@ -650,12 +650,31 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
     if ( ( bHaveDesc = GetProperty( xShapeProps, "Description" ) ) )
         mAny >>= sDescr;
 
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+    pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( GetNewShapeID( xShape ) ),
                           XML_name,   bHaveName ? USS( sName ) : OString( "Picture " + OString::number( mnPictureIdMax++ )).getStr(),
                           XML_descr,  bHaveDesc ? USS( sDescr ) : NULL,
                           FSEND );
-    // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkClick, XML_hlinkHover
+    // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkHover
+
+    if(GetDocumentType() == DOCUMENT_XLSX)
+    {
+        OUString sURL;
+        if((xShapeProps->getPropertyValue( "URL" ) >>= sURL))
+        {
+             if( !sURL.isEmpty() ) {
+                  OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                  mpURLTransformer->getTransformedString(sURL),
+                  mpURLTransformer->isExternalURL(sURL));
+
+                   mpFS->singleElementNS( XML_a, XML_hlinkClick,
+                  FSNS( XML_r,XML_id ), USS( sRelId ),
+                 FSEND );
+                }
+        }
+    }
+    pFS->endElementNS( mnXmlNamespace, XML_cNvPr );
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPicPr,
                           // OOXTODO: XML_preferRelativeSize
