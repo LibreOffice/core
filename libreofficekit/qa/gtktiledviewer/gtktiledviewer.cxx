@@ -45,6 +45,8 @@ static GtkWidget* pVBox;
 // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 static GtkComboBoxText* pPartSelector;
+/// Should the part selector avoid calling lok::Document::setPart()?
+static bool g_bPartSelectorBroadcast = true;
 #endif
 GtkWidget* pFindbar;
 GtkWidget* pFindbarEntry;
@@ -238,6 +240,15 @@ static void signalSearch(LOKDocView* /*pLOKDocView*/, char* /*pPayload*/, gpoint
     gtk_label_set_text(GTK_LABEL(pFindbarLabel), "Search key not found");
 }
 
+static void signalPart(LOKDocView* /*pLOKDocView*/, int nPart, gpointer /*pData*/)
+{
+#if GTK_CHECK_VERSION(2,24,0)
+    g_bPartSelectorBroadcast = false;
+    gtk_combo_box_set_active(GTK_COMBO_BOX(pPartSelector), nPart);
+    g_bPartSelectorBroadcast = true;
+#endif
+}
+
 /// User clicked on a cmmand button -> inform LOKDocView.
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
@@ -285,7 +296,7 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 {
     int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
 
-    if ( pDocView )
+    if (g_bPartSelectorBroadcast && pDocView)
     {
         lok_docview_set_part( LOK_DOCVIEW(pDocView), nPart );
     }
@@ -443,6 +454,7 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
+    g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
 
     // Input handling.
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);

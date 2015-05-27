@@ -194,6 +194,8 @@ struct LOKDocView_Impl
     void commandChanged(const std::string& rPayload);
     /// Search did not find any matches.
     void searchNotFound(const std::string& rPayload);
+    /// LOK decided to change parts, need to update UI.
+    void setPart(const std::string& rPayload);
 };
 
 namespace {
@@ -1019,7 +1021,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     break;
     case LOK_CALLBACK_SET_PART:
     {
-        renderDocument(0);
+        setPart(pCallback->m_aPayload);
     }
     break;
     default:
@@ -1066,6 +1068,7 @@ enum
     EDIT_CHANGED,
     COMMAND_CHANGED,
     SEARCH_NOT_FOUND,
+    PART_CHANGED,
     LAST_SIGNAL
 };
 
@@ -1079,6 +1082,12 @@ void LOKDocView_Impl::commandChanged(const std::string& rString)
 void LOKDocView_Impl::searchNotFound(const std::string& rString)
 {
     g_signal_emit(m_pDocView, docview_signals[SEARCH_NOT_FOUND], 0, rString.c_str());
+}
+
+void LOKDocView_Impl::setPart(const std::string& rString)
+{
+    g_signal_emit(m_pDocView, docview_signals[PART_CHANGED], 0, std::stoi(rString));
+    renderDocument(0);
 }
 
 static void lok_docview_class_init( gpointer ptr )
@@ -1115,6 +1124,16 @@ static void lok_docview_class_init( gpointer ptr )
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
+    pClass->part_changed = 0;
+    docview_signals[PART_CHANGED] =
+        g_signal_new("part-changed",
+                     G_TYPE_FROM_CLASS(gobject_class),
+                     G_SIGNAL_RUN_FIRST,
+                     G_STRUCT_OFFSET(LOKDocViewClass, part_changed),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__INT,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_INT);
 }
 
 static void lok_docview_init( GTypeInstance* pInstance, gpointer )
