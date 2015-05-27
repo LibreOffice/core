@@ -153,6 +153,7 @@ public:
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapes();
     void testMatrixMultiplication();
+    void testTextDirection();
 
 
     CPPUNIT_TEST_SUITE(ScExportTest);
@@ -214,6 +215,7 @@ public:
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
     CPPUNIT_TEST(testMatrixMultiplication);
+    CPPUNIT_TEST(testTextDirection);
 
 
     CPPUNIT_TEST_SUITE_END();
@@ -2885,6 +2887,18 @@ void ScExportTest::testMatrixMultiplication()
     CPPUNIT_ASSERT_EQUAL(OUString("array"), CellFormulaType);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTextDirection()
+{
+    ScDocShellRef xDocSh = loadDoc("writingMode.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/styles.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
