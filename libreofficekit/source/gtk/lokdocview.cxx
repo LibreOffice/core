@@ -170,6 +170,8 @@ struct LOKDocView_Impl
      * the tiles that intersect with pPartial.
      */
     void renderDocument(GdkRectangle* pPartial);
+    /// Sets rWidth and rHeight from a "width, height" string.
+    void payloadToSize(const char* pPayload, long& rWidth, long& rHeight);
     /// Returns the GdkRectangle of a width,height,x,y string.
     static GdkRectangle payloadToRectangle(const char* pPayload);
     /// Returns the GdkRectangles of a w,h,x,y;w2,h2,x2,y2;... string.
@@ -844,6 +846,21 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
     }
 }
 
+void LOKDocView_Impl::payloadToSize(const char* pPayload, long& rWidth, long& rHeight)
+{
+    rWidth = rHeight = 0;
+    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 2);
+    gchar** ppCoordinate = ppCoordinates;
+    if (!*ppCoordinate)
+        return;
+    rWidth = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
+        return;
+    rHeight = atoi(*ppCoordinate);
+    g_strfreev(ppCoordinates);
+}
+
 GdkRectangle LOKDocView_Impl::payloadToRectangle(const char* pPayload)
 {
     GdkRectangle aRet;
@@ -913,8 +930,8 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_STATUS_INDICATOR_FINISH";
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
         return "LOK_CALLBACK_SEARCH_NOT_FOUND";
-    case LOK_CALLBACK_PAGE_COUNT_CHANGED:
-        return "LOK_CALLBACK_PAGE_COUNT_CHANGED";
+    case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        return "LOK_CALLBACK_DOCUMENT_SIZE_CHANGED";
     case LOK_CALLBACK_SET_PART:
         return "LOK_CALLBACK_SET_PART";
     }
@@ -1014,9 +1031,9 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         searchNotFound(pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_PAGE_COUNT_CHANGED:
+    case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
-        m_pDocument->pClass->getDocumentSize(m_pDocument, &m_nDocumentWidthTwips, &m_nDocumentHeightTwips);
+        LOKDocView_Impl::payloadToSize(pCallback->m_aPayload.c_str(), m_nDocumentWidthTwips, m_nDocumentHeightTwips);
     }
     break;
     case LOK_CALLBACK_SET_PART:
