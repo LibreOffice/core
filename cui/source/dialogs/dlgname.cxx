@@ -41,7 +41,7 @@ SvxNameDialog::SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const
     pFtDescription->SetText( rDesc );
     pEdtName->SetText( rName );
     pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(&pEdtName);
+    ModifyHdl(pEdtName.get());
     pEdtName->SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
 }
 
@@ -82,7 +82,7 @@ SvxObjectNameDialog::SvxObjectNameDialog(
 
     // activate name
     pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(&pEdtName);
+    ModifyHdl(pEdtName.get());
     pEdtName->SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
 }
 

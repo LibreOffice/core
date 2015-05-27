@@ -118,7 +118,7 @@ void CellLineStyleControl::SetAllNoSel()
 
 IMPL_LINK(CellLineStyleControl, VSSelectHdl, void *, pControl)
 {
-    if(pControl == &maCellLineStyleValueSet)
+    if(pControl == maCellLineStyleValueSet.get())
     {
         const sal_uInt16 iPos(maCellLineStyleValueSet->GetSelectItemId());
         SvxLineItem aLineItem(SID_FRAME_LINESTYLE);

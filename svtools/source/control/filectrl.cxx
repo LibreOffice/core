@@ -246,7 +246,7 @@ void FileControl::ImplBrowseFile( )
                 if ( aObj.GetProtocol() == INetProtocol::File )
                     aNewText = aObj.PathToFileName();
                 SetText( aNewText );
-                maEdit->GetModifyHdl().Call( &maEdit );
+                maEdit->GetModifyHdl().Call( maEdit.get() );
             }
         }
     }

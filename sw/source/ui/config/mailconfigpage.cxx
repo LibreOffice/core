@@ -191,7 +191,7 @@ void SwMailConfigPage::Reset( const SfxItemSet* /*rSet*/ )
 
     m_pReplyToED->SetText(m_pConfigItem->GetMailReplyTo()) ;
     m_pReplyToCB->Check(m_pConfigItem->IsMailReplyTo());
-    m_pReplyToCB->GetClickHdl().Call(&m_pReplyToCB);
+    m_pReplyToCB->GetClickHdl().Call(m_pReplyToCB.get());
 
     m_pServerED->SetText(m_pConfigItem->GetMailServer());
     m_pPortNF->SetValue(m_pConfigItem->GetMailPort());
