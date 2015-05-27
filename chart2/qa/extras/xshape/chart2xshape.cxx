@@ -29,10 +29,12 @@ public:
 
     void testFdo75075();
     void testPropertyMappingBarChart();
+    void testPieChartLabels1();
 
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
     CPPUNIT_TEST(testFdo75075);
     CPPUNIT_TEST(testPropertyMappingBarChart);
+    CPPUNIT_TEST(testPieChartLabels1);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -85,6 +87,13 @@ void Chart2XShapeTest::testPropertyMappingBarChart()
 {
     load("chart2/qa/extras/xshape/data/ods/", "property-mapping-bar.ods");
     compareAgainstReference("property-mapping-bar.xml");
+}
+
+void Chart2XShapeTest::testPieChartLabels1()
+{
+    // inside placement for the best fit case
+    load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-1.xlsx");
+    compareAgainstReference("tdf90839-1.xml");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2XShapeTest);
