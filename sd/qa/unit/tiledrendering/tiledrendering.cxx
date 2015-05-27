@@ -74,13 +74,15 @@ private:
 #if !defined(WNT) && !defined(MACOSX)
     Rectangle m_aInvalidation;
     std::vector<Rectangle> m_aSelection;
+    bool m_bFound;
     sal_Int32 m_nPart;
 #endif
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
 #if !defined(WNT) && !defined(MACOSX)
-    : m_nPart(0)
+    : m_bFound(true),
+    m_nPart(0)
 #endif
 {
 }
@@ -165,6 +167,11 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             lcl_convertRectangle(rString, aRectangle);
             m_aSelection.push_back(aRectangle);
         }
+    }
+    break;
+    case LOK_CALLBACK_SEARCH_NOT_FOUND:
+    {
+        m_bFound = false;
     }
     break;
     case LOK_CALLBACK_SET_PART:
@@ -353,6 +360,12 @@ void SdTiledRenderingTest::testSearch()
     // Search for something on the second slide, and make sure that the set-part callback fired.
     lcl_search("bbb");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+
+    // This should trigger the not-found callback.
+    Application::EnableHeadlessMode(false);
+    lcl_search("ccc");
+    CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
 
 #endif
