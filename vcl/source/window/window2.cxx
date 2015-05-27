@@ -127,7 +127,7 @@ void Window::HideFocus()
     mpWindowImpl->mbInHideFocus = false;
 }
 
-void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
+void Window::Invert( const Rectangle& rRect, InvertFlags nFlags )
 {
     if ( !IsDeviceOutputNecessary() )
         return;
@@ -153,14 +153,14 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
         return;
 
     SalInvert nSalFlags = 0;
-    if ( nFlags & INVERT_HIGHLIGHT )
+    if ( nFlags & InvertFlags::Highlight )
         nSalFlags |= SAL_INVERT_HIGHLIGHT;
-    if ( nFlags & INVERT_50 )
+    if ( nFlags & InvertFlags::N50 )
         nSalFlags |= SAL_INVERT_50;
     mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
 }
 
-void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
+void Window::Invert( const Polygon& rPoly, InvertFlags nFlags )
 {
     if ( !IsDeviceOutputNecessary() )
         return;
@@ -187,9 +187,9 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
         return;
 
     SalInvert nSalFlags = 0;
-    if ( nFlags & INVERT_HIGHLIGHT )
+    if ( nFlags & InvertFlags::Highlight )
         nSalFlags |= SAL_INVERT_HIGHLIGHT;
-    if ( nFlags & INVERT_50 )
+    if ( nFlags & InvertFlags::N50 )
         nSalFlags |= SAL_INVERT_50;
     const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );

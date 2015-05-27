@@ -1160,7 +1160,7 @@ void ScrollBar::ImplInvert()
         aRect.Bottom() -= 2;
     }
 
-    Invert( aRect, 0 );
+    Invert( aRect );
 }
 
 void ScrollBar::GetFocus()
