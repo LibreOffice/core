@@ -1151,7 +1151,7 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
 
 IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, ListBox*, pBox)
 {
-    if(0 != (GETFOCUS_TAB & pBox->GetGetFocusFlags()))
+    if(GetFocusFlags::Tab & pBox->GetGetFocusFlags())
     {
         sal_Int32 nIndex = 0;
         for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)

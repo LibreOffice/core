@@ -3576,7 +3576,7 @@ IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
 
 void SwTokenWindow::GetFocus()
 {
-    if(GETFOCUS_TAB & GetGetFocusFlags())
+    if(GetFocusFlags::Tab & GetGetFocusFlags())
     {
         if (!aControlList.empty())
         {

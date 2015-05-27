@@ -325,16 +325,25 @@ enum class StateChangedType : sal_uInt16
 };
 
 // GetFocusFlags
-#define GETFOCUS_TAB                    ((sal_uInt16)0x0001)
-#define GETFOCUS_CURSOR                 ((sal_uInt16)0x0002)
-#define GETFOCUS_MNEMONIC               ((sal_uInt16)0x0004)
-#define GETFOCUS_F6                     ((sal_uInt16)0x0008)
-#define GETFOCUS_FORWARD                ((sal_uInt16)0x0010)
-#define GETFOCUS_BACKWARD               ((sal_uInt16)0x0020)
-#define GETFOCUS_AROUND                 ((sal_uInt16)0x0040)
-#define GETFOCUS_UNIQUEMNEMONIC         ((sal_uInt16)0x0100)
-#define GETFOCUS_INIT                   ((sal_uInt16)0x0200)
-#define GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL ((sal_uInt16)0x0400)
+// must match constants in css:awt::FocusChangeReason
+enum class GetFocusFlags
+{
+    NONE                   = 0x0000,
+    Tab                    = 0x0001,
+    Cursor                 = 0x0002,
+    Mnemonic               = 0x0004,
+    F6                     = 0x0008,
+    Forward                = 0x0010,
+    Backward               = 0x0020,
+    Around                 = 0x0040,
+    UniqueMnemonic         = 0x0100,
+    Init                   = 0x0200,
+    FloatWinPopupModeEndCancel = 0x0400,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<GetFocusFlags> : is_typed_flags<GetFocusFlags, 0x077f> {};
+}
 
 
 // Flags for Draw()
@@ -563,8 +572,8 @@ public:
 
     SAL_DLLPRIVATE Point                ImplFrameToOutput( const Point& rPos );
 
-    SAL_DLLPRIVATE void                 ImplGrabFocus( sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                 ImplGrabFocusToDocument( sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplGrabFocus( GetFocusFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplGrabFocusToDocument( GetFocusFlags nFlags );
     SAL_DLLPRIVATE void                 ImplInvertFocus( const Rectangle& rRect );
 
     SAL_DLLPRIVATE PointerStyle         ImplGetMousePointer() const;
@@ -578,7 +587,7 @@ public:
 
     SAL_DLLPRIVATE void                 ImplDeleteOverlapBackground();
 
-    SAL_DLLPRIVATE void                 ImplControlFocus( sal_uInt16 nFlags = 0 );
+    SAL_DLLPRIVATE void                 ImplControlFocus( GetFocusFlags nFlags = GetFocusFlags::NONE );
 
     SAL_DLLPRIVATE void                 ImplMirrorFramePos( Point &pt ) const;
 
@@ -1134,7 +1143,7 @@ public:
     bool                                HasChildPathFocus( bool bSystemWindow = false ) const;
     bool                                IsActive() const;
     bool                                HasActiveChildFrame();
-    sal_uInt16                          GetGetFocusFlags() const;
+    GetFocusFlags                       GetGetFocusFlags() const;
     void                                GrabFocusToDocument();
 
     /**

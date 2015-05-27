@@ -60,6 +60,7 @@ enum class MouseEventModifiers;
 enum class MouseNotifyEvent;
 enum class ActivateModeFlags;
 enum class DialogControlFlags;
+enum class GetFocusFlags;
 
 namespace com { namespace sun { namespace star {
 
@@ -274,7 +275,7 @@ public:
     ControlPart         mnNativeBackground;
     sal_uInt16          mnWaitCount;
     sal_uInt16          mnPaintFlags;
-    sal_uInt16          mnGetFocusFlags;
+    GetFocusFlags       mnGetFocusFlags;
     sal_uInt16          mnParentClipMode;
     ActivateModeFlags   mnActivateMode;
     DialogControlFlags  mnDlgCtrlFlags;

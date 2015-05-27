@@ -47,10 +47,10 @@ namespace svt
     namespace
     {
 
-        sal_uInt16 getRealGetFocusFlags( vcl::Window* _pWindow )
+        GetFocusFlags getRealGetFocusFlags( vcl::Window* _pWindow )
         {
-            sal_uInt16 nFlags = 0;
-            while ( _pWindow && !nFlags )
+            GetFocusFlags nFlags = GetFocusFlags::NONE;
+            while ( _pWindow && nFlags == GetFocusFlags::NONE )
             {
                 nFlags = _pWindow->GetGetFocusFlags( );
                 _pWindow = _pWindow->GetParent();
@@ -228,7 +228,7 @@ namespace svt
     void EditBrowseBox::LoseFocus()
     {
         BrowseBox::LoseFocus();
-        DetermineFocus( 0 );
+        DetermineFocus( GetFocusFlags::NONE );
     }
 
 
@@ -747,7 +747,7 @@ namespace svt
                 break;
 
             case MouseNotifyEvent::LOSEFOCUS:
-                DetermineFocus( 0 );
+                DetermineFocus( GetFocusFlags::NONE );
                 break;
 
             default:

@@ -1330,7 +1330,7 @@ bool Window::IsActive() const
     return mpWindowImpl->mbActive;
 }
 
-sal_uInt16 Window::GetGetFocusFlags() const
+GetFocusFlags Window::GetGetFocusFlags() const
 {
     return mpWindowImpl->mnGetFocusFlags;
 }

@@ -3441,7 +3441,7 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
 
             awt::FocusEvent aEvent;
             aEvent.Source = *this;
-            aEvent.FocusFlags = _rWindow.GetGetFocusFlags();
+            aEvent.FocusFlags = static_cast<sal_Int16>(_rWindow.GetGetFocusFlags());
             aEvent.Temporary = sal_False;
 
             if ( bFocusGained )

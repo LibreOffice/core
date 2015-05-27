@@ -1835,7 +1835,8 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                 xNext = pFocus->GetComponentInterface(true);
             css::awt::FocusEvent aAwtEvent(
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
-                pWindow->GetGetFocusFlags(), xNext, false);
+                static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
+                xNext, false);
             for (::sal_Int32 i = 0; i < aListeners.getLength(); ++i)
             {
                 css::uno::Reference< css::awt::XFocusListener > xListener(

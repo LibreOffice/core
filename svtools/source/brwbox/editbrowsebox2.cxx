@@ -133,7 +133,7 @@ void EditBrowseBox::GrabTableFocus()
         aController->GetWindow().GrabFocus();
 }
 
-void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
+void EditBrowseBox::DetermineFocus( const GetFocusFlags _nGetFocusFlags )
 {
     bool bFocus = false;
     for (vcl::Window* pWindow = Application::GetFocusWindow();
@@ -148,7 +148,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
         if ( GetBrowserFlags( ) & EditBrowseBoxFlags::SMART_TAB_TRAVEL )
         {
             if  (   bHasFocus                           // we got the focus
-                &&  ( _nGetFocusFlags & GETFOCUS_TAB )  // using the TAB key
+                &&  ( _nGetFocusFlags & GetFocusFlags::Tab )  // using the TAB key
                 )
             {
                 long nRows = GetRowCount();
@@ -156,7 +156,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
 
                 if ( ( nRows > 0 ) && ( nCols > 0 ) )
                 {
-                    if ( _nGetFocusFlags & GETFOCUS_FORWARD )
+                    if ( _nGetFocusFlags & GetFocusFlags::Forward )
                     {
                         if ( GetColumnId( 0 ) != HandleColumnId )
                         {
@@ -168,7 +168,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
                                 GoToRowColumnId( 0, GetColumnId( 1 ) );
                         }
                     }
-                    else if ( _nGetFocusFlags & GETFOCUS_BACKWARD )
+                    else if ( _nGetFocusFlags & GetFocusFlags::Backward )
                     {
                         GoToRowColumnId( nRows - 1, GetColumnId( nCols -1 ) );
                     }

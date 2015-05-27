@@ -463,10 +463,10 @@ bool BackingWindow::Notify( NotifyEvent& rNEvt )
 
 void BackingWindow::GetFocus()
 {
-    sal_uInt16 nFlags = GetParent()->GetGetFocusFlags();
-    if( nFlags & GETFOCUS_F6 )
+    GetFocusFlags nFlags = GetParent()->GetGetFocusFlags();
+    if( nFlags & GetFocusFlags::F6 )
     {
-        if( nFlags & GETFOCUS_FORWARD ) // F6
+        if( nFlags & GetFocusFlags::Forward ) // F6
         {
             mpOpenButton->GrabFocus();
             return;

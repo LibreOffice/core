@@ -128,7 +128,7 @@ void ScPivotLayoutTreeListBase::GetFocus()
 {
     SvTreeListBox::GetFocus();
 
-    if( GetGetFocusFlags() & GETFOCUS_MNEMONIC )
+    if( GetGetFocusFlags() & GetFocusFlags::Mnemonic )
     {
         SvTreeListEntry* pEntry = mpParent->mpPreviouslyFocusedListBox->GetCurEntry();
         if (pEntry)

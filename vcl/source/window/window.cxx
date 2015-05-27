@@ -643,7 +643,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnExtendedStyle                     = 0;                         // extended style (init in ImplInitWindow)
     mnPrevExtendedStyle                 = 0;                         // prevstyle (set in SetExtendedStyle)
     mnType                              = nType;                     // type
-    mnGetFocusFlags                     = 0;                         // Flags fuer GetFocus()-Aufruf
+    mnGetFocusFlags                     = GetFocusFlags::NONE;       // Flags fuer GetFocus()-Aufruf
     mnWaitCount                         = 0;                         // Wait-Count (>1 == Warte-MousePointer)
     mnPaintFlags                        = 0;                         // Flags for ImplCallPaint
     mnParentClipMode                    = 0;                         // Flags for Parent-ClipChildren-Mode
@@ -3127,7 +3127,7 @@ void Window::SetUpdateMode( bool bUpdate )
 
 void Window::GrabFocus()
 {
-    ImplGrabFocus( 0 );
+    ImplGrabFocus( GetFocusFlags::NONE );
 }
 
 bool Window::HasFocus() const
@@ -3137,7 +3137,7 @@ bool Window::HasFocus() const
 
 void Window::GrabFocusToDocument()
 {
-    ImplGrabFocusToDocument(0);
+    ImplGrabFocusToDocument(GetFocusFlags::NONE);
 }
 
 void Window::SetFakeFocus( bool bFocus )

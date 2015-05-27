@@ -317,7 +317,7 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-    SAL_DLLPRIVATE void     ImplCallClick( bool bGrabFocus = false, sal_uInt16 nFocusFlags = 0 );
+    SAL_DLLPRIVATE void     ImplCallClick( bool bGrabFocus = false, GetFocusFlags nFocusFlags = GetFocusFlags::NONE );
     SAL_DLLPRIVATE void     ImplSetMinimumNWFSize();
 
 protected:

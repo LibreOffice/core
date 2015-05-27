@@ -1901,7 +1901,7 @@ void Edit::GetFocus()
 
         SelectionOptions nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
         if ( !( GetStyle() & (WB_NOHIDESELECTION|WB_READONLY) )
-                && ( GetGetFocusFlags() & (GETFOCUS_INIT|GETFOCUS_TAB|GETFOCUS_CURSOR|GETFOCUS_MNEMONIC) ) )
+                && ( GetGetFocusFlags() & (GetFocusFlags::Init|GetFocusFlags::Tab|GetFocusFlags::Cursor|GetFocusFlags::Mnemonic) ) )
         {
             if ( nSelOptions & SelectionOptions::ShowFirst )
             {

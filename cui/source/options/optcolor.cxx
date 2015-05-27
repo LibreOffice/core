@@ -1024,7 +1024,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
     long aCtrlPosY = pCtrl->GetPosPixel().Y();
     unsigned const nWinHeight = m_pScrollWindow->GetSizePixel().Height();
     unsigned const nEntryHeight = m_pScrollWindow->GetEntryHeight();
-    if (0 != (GETFOCUS_TAB & pCtrl->GetGetFocusFlags()) &&
+    if ((GetFocusFlags::Tab & pCtrl->GetGetFocusFlags()) &&
         (aCtrlPosY < 0 || nWinHeight < aCtrlPosY + nEntryHeight)
     ) {
         long nThumbPos = m_pVScroll->GetThumbPos();

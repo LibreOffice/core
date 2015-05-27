@@ -4379,7 +4379,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
                 ImplChangeHighlight( ImplGetItem( mnLastFocusItemId ) );
                 mnLastFocusItemId = 0;
             }
-            else if( (GetGetFocusFlags() & (GETFOCUS_BACKWARD|GETFOCUS_TAB) ) == (GETFOCUS_BACKWARD|GETFOCUS_TAB))
+            else if( (GetGetFocusFlags() & (GetFocusFlags::Backward|GetFocusFlags::Tab) ) == (GetFocusFlags::Backward|GetFocusFlags::Tab))
                 // Shift-TAB was pressed in the parent
                 ImplChangeHighlightUpDn( false );
             else
@@ -4993,7 +4993,7 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
         {
             ImplHideFocus();
             mbChangingHighlight = true;  // avoid focus change due to loss of focus
-            pToolItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
+            pToolItem->mpWindow->ImplControlFocus( GetFocusFlags::Tab );
             mbChangingHighlight = false;
         }
         else
@@ -5249,7 +5249,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 vcl::Window *pFocusWindow = Application::GetFocusWindow();
                 ImplHideFocus();
                 mbChangingHighlight = true;  // avoid focus change due to loss of focus
-                pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
+                pItem->mpWindow->ImplControlFocus( GetFocusFlags::Tab );
                 mbChangingHighlight = false;
                 if( pFocusWindow != Application::GetFocusWindow() )
                     Application::GetFocusWindow()->KeyInput( rKEvt );
@@ -5275,7 +5275,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         sal_uInt16 n = 0;
         vcl::Window *pFocusControl = pParent->ImplGetDlgWindow( n, GetDlgWindowType::First );
         if ( pFocusControl && pFocusControl != this )
-            pFocusControl->ImplControlFocus( GETFOCUS_INIT );
+            pFocusControl->ImplControlFocus( GetFocusFlags::Init );
     }
 
     mnKeyModifier = 0;
@@ -5354,7 +5354,7 @@ sal_uInt16 ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vecto
 void ToolBox::ChangeHighlight( sal_uInt16 nPos )
 {
     if ( nPos < GetItemCount() ) {
-        ImplGrabFocus( 0 );
+        ImplGrabFocus( GetFocusFlags::NONE );
         ImplChangeHighlight ( ImplGetItem ( GetItemId ( (sal_uInt16) nPos ) ), false );
     }
 }
