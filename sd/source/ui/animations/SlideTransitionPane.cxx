@@ -436,7 +436,6 @@ SlideTransitionPane::SlideTransitionPane(
     get(mpMF_ADVANCE_AUTO_AFTER, "auto_after_value");
     get(mpPB_APPLY_TO_ALL, "apply_to_all");
     get(mpPB_PLAY, "play");
-    get(mpPB_SLIDE_SHOW, "slide_show");
     get(mpCB_AUTO_PREVIEW, "auto_preview");
 
     mpLB_SLIDE_TRANSITIONS->set_width_request(mpLB_SLIDE_TRANSITIONS->approximate_char_width() * 16);
@@ -460,7 +459,6 @@ SlideTransitionPane::SlideTransitionPane(
     // set handlers
     mpPB_APPLY_TO_ALL->SetClickHdl( LINK( this, SlideTransitionPane, ApplyToAllButtonClicked ));
     mpPB_PLAY->SetClickHdl( LINK( this, SlideTransitionPane, PlayButtonClicked ));
-    mpPB_SLIDE_SHOW->SetClickHdl( LINK( this, SlideTransitionPane, SlideShowButtonClicked ));
 
     mpLB_SLIDE_TRANSITIONS->SetSelectHdl( LINK( this, SlideTransitionPane, TransitionSelected ));
 
@@ -501,7 +499,6 @@ void SlideTransitionPane::dispose()
     mpMF_ADVANCE_AUTO_AFTER.clear();
     mpPB_APPLY_TO_ALL.clear();
     mpPB_PLAY.clear();
-    mpPB_SLIDE_SHOW.clear();
     mpCB_AUTO_PREVIEW.clear();
     PanelLayout::dispose();
 }
@@ -1004,12 +1001,6 @@ IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked)
 IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked)
 {
     playCurrentEffect();
-    return 0;
-}
-
-IMPL_LINK_NOARG(SlideTransitionPane, SlideShowButtonClicked)
-{
-    mrBase.StartPresentation();
     return 0;
 }
 
