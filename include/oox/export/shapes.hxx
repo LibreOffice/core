@@ -40,6 +40,16 @@ namespace drawing {
 
 namespace oox { namespace drawingml {
 
+class OOX_DLLPUBLIC URLTransformer
+{
+public:
+    virtual ~URLTransformer();
+
+    virtual OUString getTransformedString(const OUString& rURL) const;
+
+    virtual bool isExternalURL(const OUString& rURL) const;
+};
+
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
 private:
@@ -69,6 +79,7 @@ private:
     sal_Int32           mnXmlNamespace;
     Fraction            maFraction;
     MapMode             maMapModeSrc, maMapModeDest;
+    std::shared_ptr<URLTransformer> mpURLTransformer;
 
     ::com::sun::star::awt::Size MapSize( const ::com::sun::star::awt::Size& ) const;
 
@@ -80,6 +91,8 @@ public:
 
     ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = NULL, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 );
     virtual ~ShapeExport() {}
+
+    void SetURLTranslator(std::shared_ptr<URLTransformer> pTransformer);
 
     static bool     NonEmptyText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface );
 

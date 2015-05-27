@@ -211,7 +211,7 @@ public:
 class XclExpShapeObj : public XclObjAny, public XclMacroHelper
 {
 public:
-    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, ScDocument* pDoc );
     virtual             ~XclExpShapeObj();
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) SAL_OVERRIDE;

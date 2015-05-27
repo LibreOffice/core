@@ -107,6 +107,20 @@ using ::sax_fastparser::FSHelperPtr;
 
 namespace oox { namespace drawingml {
 
+URLTransformer::~URLTransformer()
+{
+}
+
+OUString URLTransformer::getTransformedString(const OUString& rString) const
+{
+    return rString;
+}
+
+bool URLTransformer::isExternalURL(const OUString& /*rURL*/) const
+{
+    return true;
+}
+
 #define GETA(propName) \
     GetProperty( rXPropSet, OUString(#propName))
 
@@ -130,6 +144,12 @@ ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap
     , maMapModeDest( MAP_INCH, Point(), maFraction, maFraction )
     , mpShapeMap( pShapeMap ? pShapeMap : &maShapeMap )
 {
+    mpURLTransformer.reset(new URLTransformer);
+}
+
+void ShapeExport::SetURLTranslator(std::shared_ptr<URLTransformer> pTransformer)
+{
+    mpURLTransformer = pTransformer;
 }
 
 awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
@@ -445,7 +465,8 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
             {
                 OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
-                        sURL, true );
+                        mpURLTransformer->getTransformedString(sURL),
+                        mpURLTransformer->isExternalURL(sURL));
 
                 mpFS->singleElementNS( XML_a, XML_hlinkClick,
                         FSNS( XML_r,XML_id ), USS( sRelId ),

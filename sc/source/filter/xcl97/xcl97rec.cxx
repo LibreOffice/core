@@ -30,6 +30,7 @@
 #include <editeng/writingmodeitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <tools/urlobj.hxx>
 
 #include <rtl/math.hxx>
 #include <svl/zformat.hxx>
@@ -956,9 +957,10 @@ void XclObjOle::Save( XclExpStream& rStrm )
 
 // --- class XclObjAny -------------------------------------------
 
-XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr, const Reference< XShape >& rShape )
+XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr, const Reference< XShape >& rShape, ScDocument* pDoc )
     : XclObj( rObjMgr, EXC_OBJTYPE_UNKNOWN )
     , mxShape( rShape )
+    , mpDoc(pDoc)
 {
 }
 
@@ -1047,6 +1049,104 @@ GetEditAs( XclObjAny& rObj )
     return "absolute";
 }
 
+namespace {
+
+sal_uInt16 parseRange(const OUString& rString, ScRange& rRange, ScDocument* pDoc)
+{
+    // start with the address convention set in the document
+    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    sal_uInt16 nResult = rRange.Parse(rString, pDoc, eConv);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    // try the default calc address convention
+    nResult = rRange.Parse(rString, pDoc);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    // try excel a1
+    return rRange.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+}
+
+sal_uInt16 parseAddress(const OUString& rString, ScAddress& rAddress, ScDocument* pDoc)
+{
+    // start with the address convention set in the document
+    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    sal_uInt16 nResult = rAddress.Parse(rString, pDoc, eConv);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    // try the default calc address convention
+    nResult = rAddress.Parse(rString, pDoc);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    // try excel a1
+    return rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+}
+
+bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
+{
+    if (rOldURL.startsWith("#"))
+    {
+        //  URL has to be decoded for escaped characters (%20)
+        OUString aURL = INetURLObject::decode( rOldURL,
+                INetURLObject::DECODE_WITH_CHARSET,
+                RTL_TEXTENCODING_UTF8 );
+        OUString aAddressString = aURL.copy(1);
+
+        ScRange aRange;
+        ScAddress aAddress;
+        sal_uInt16 nResult = parseRange(aAddressString, aRange, pDoc);
+        if (nResult & SCA_VALID)
+        {
+            OUString aString = aRange.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
+            rNewURL = OUString("#") + aString;
+            return true;
+        }
+        else
+        {
+            nResult = parseAddress(aAddressString, aAddress, pDoc);
+            if(nResult & SCA_VALID)
+            {
+                OUString aString = aAddress.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
+                rNewURL = OUString("#") + aString;
+                return true;
+            }
+        }
+    }
+
+    rNewURL = rOldURL;
+    return false;
+}
+
+class ScURLTransformer : public oox::drawingml::URLTransformer
+{
+public:
+    ScURLTransformer(ScDocument& rDoc):
+        mrDoc(rDoc)
+    {
+    }
+
+    virtual OUString getTransformedString(const OUString& rURL) const SAL_OVERRIDE
+    {
+        OUString aNewURL;
+        transformURL(rURL, aNewURL, &mrDoc);
+        return aNewURL;
+    }
+
+    virtual bool isExternalURL(const OUString& rURL) const SAL_OVERRIDE
+    {
+        OUString aNewURL;
+        return transformURL(rURL, aNewURL, &mrDoc);
+    }
+
+private:
+    ScDocument& mrDoc;
+};
+
+}
+
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 {
     // ignore group shapes at the moment, we don't process them correctly
@@ -1057,6 +1157,8 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
     ShapeExport aDML( XML_xdr, pDrawing, NULL, &rStrm, DrawingML::DOCUMENT_XLSX );
+    std::shared_ptr<oox::drawingml::URLTransformer> pURLTransformer(new ScURLTransformer(*mpDoc));
+    aDML.SetURLTranslator(pURLTransformer);
 
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
             XML_editAs, GetEditAs( *this ),

@@ -58,7 +58,7 @@ class ShapeInteractionHelper
 {
 public:
    static XclExpShapeObj* CreateShapeObj( XclExpObjectManager& rObjMgr, const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShape >& xShape );
+                            ::com::sun::star::drawing::XShape >& xShape, ScDocument* pDoc );
    static void PopulateShapeInteractionInfo( XclExpObjectManager& rObjMgr, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, EscherExHostAppData& rHostAppData );
 };
 

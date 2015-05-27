@@ -250,7 +250,8 @@ protected:
 
 public:
                                 XclObjAny( XclExpObjectManager& rObjMgr,
-                                    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape );
+                                    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
+                                    ScDocument* pDoc);
     virtual                     ~XclObjAny();
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
@@ -264,6 +265,7 @@ public:
 private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
                                 mxShape;
+    ScDocument* mpDoc;
 };
 
 // --- class ExcBof8_Base --------------------------------------------
