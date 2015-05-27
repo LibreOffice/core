@@ -299,7 +299,7 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
         ImplGetFrameWindow()->ImplUpdateAll();
     }
 
-    StartTracking( STARTTRACK_KEYMOD );
+    StartTracking( StartTrackingFlags::KeyMod );
     return true;
 }
 

@@ -658,12 +658,11 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
     {
-        const Point&    rMousePos = rMEvt.GetPosPixel();
-        sal_uInt16          nTrackFlags = 0;
+        const Point&       rMousePos = rMEvt.GetPosPixel();
+        StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
 
         if ( maThumbRect.IsInside( rMousePos ) )
         {
-            nTrackFlags     = 0;
             meScrollType    = SCROLL_DRAG;
             mnDragDraw      = SLIDER_DRAW_THUMB;
 
@@ -680,7 +679,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
                 meScrollType = SCROLL_SET;
             else
             {
-                nTrackFlags = STARTTRACK_BUTTONREPEAT;
+                nTrackFlags = StartTrackingFlags::ButtonRepeat;
                 meScrollType = SCROLL_PAGEUP;
             }
 
@@ -692,7 +691,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
                 meScrollType = SCROLL_SET;
             else
             {
-                nTrackFlags = STARTTRACK_BUTTONREPEAT;
+                nTrackFlags = StartTrackingFlags::ButtonRepeat;
                 meScrollType = SCROLL_PAGEDOWN;
             }
 

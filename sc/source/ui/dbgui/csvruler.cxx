@@ -476,7 +476,7 @@ void ScCsvRuler::StartMouseTracking( sal_Int32 nPos )
     maOldSplits = maSplits;
     Execute( CSVCMD_INSERTSPLIT, nPos );
     if( HasSplit( nPos ) )
-        StartTracking( STARTTRACK_BUTTONREPEAT );
+        StartTracking( StartTrackingFlags::ButtonRepeat );
 }
 
 void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )

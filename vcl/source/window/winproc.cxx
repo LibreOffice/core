@@ -688,7 +688,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                 {
                     // When ScrollRepeat, we restart the timer
                     if ( pSVData->maWinData.mpTrackTimer &&
-                         (pSVData->maWinData.mnTrackFlags & STARTTRACK_SCROLLREPEAT) )
+                         (pSVData->maWinData.mnTrackFlags & StartTrackingFlags::ScrollRepeat) )
                         pSVData->maWinData.mpTrackTimer->Start();
                 }
                 bCallHelpRequest = false;
@@ -718,7 +718,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         else if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             if ( pSVData->maWinData.mpTrackWin &&
-                 !(pSVData->maWinData.mnTrackFlags & STARTTRACK_MOUSEBUTTONDOWN) )
+                 !(pSVData->maWinData.mnTrackFlags & StartTrackingFlags::MouseButtonDown) )
                 bRet = true;
             else
             {
@@ -948,7 +948,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         {
             sal_uInt16 nOrigCode = aKeyCode.GetCode();
 
-            if ( (nOrigCode == KEY_ESCAPE) && !(pSVData->maWinData.mnTrackFlags & STARTTRACK_NOKEYCANCEL) )
+            if ( (nOrigCode == KEY_ESCAPE) && !(pSVData->maWinData.mnTrackFlags & StartTrackingFlags::NoKeyCancel) )
             {
                 pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Key );
                 if ( pSVData->maWinData.mpFirstFloat )
@@ -969,7 +969,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Key );
                 return true;
             }
-            else if ( !(pSVData->maWinData.mnTrackFlags & STARTTRACK_KEYINPUT) )
+            else if ( !(pSVData->maWinData.mnTrackFlags & StartTrackingFlags::KeyInput) )
                 return true;
         }
 
