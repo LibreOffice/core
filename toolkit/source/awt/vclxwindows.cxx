@@ -2359,7 +2359,7 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
         Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
 
-        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+        pWindow->Draw( pDev, aPos, aSize, DrawFlags::NoControls );
     }
 }
 
@@ -2492,7 +2492,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
         Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
 
-        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+        pWindow->Draw( pDev, aPos, aSize, DrawFlags::NoControls );
     }
 }
 
@@ -2769,7 +2769,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
         Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
 
-        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+        pWindow->Draw( pDev, aPos, aSize, DrawFlags::NoControls );
     }
 }
 
@@ -6583,7 +6583,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
         Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
 
-        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+        pWindow->Draw( pDev, aPos, aSize, DrawFlags::NoControls );
     }
 }
 

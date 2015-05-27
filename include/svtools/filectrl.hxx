@@ -83,7 +83,7 @@ public:
     Edit&           GetEdit() { return *maEdit.get(); }
     PushButton&     GetButton() { return *maButton.get(); }
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
 
     void            SetOpenDialog( bool bOpen )     { mbOpenDlg = bOpen; }
     bool            IsOpenDialog() const            { return mbOpenDlg; }

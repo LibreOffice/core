@@ -977,12 +977,12 @@ IMPL_LINK_TYPED( SpinField, ImplTimeout, Timer*, pTimer, void )
     }
 }
 
-void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags)
+void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags)
 {
     Edit::Draw(pDev, rPos, rSize, nFlags);
 
     WinBits nFieldStyle = GetStyle();
-    if ( !(nFlags & WINDOW_DRAW_NOCONTROLS ) && ( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
+    if ( !(nFlags & DrawFlags::NoControls ) && ( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
     {
         Point aPos = pDev->LogicToPixel( rPos );
         Size aSize = pDev->LogicToPixel( rSize );
@@ -1010,7 +1010,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, s
         aDown.Move(aPos.X(), aPos.Y());
 
         Color aButtonTextColor;
-        if ((nFlags & WINDOW_DRAW_MONO) || (eOutDevType == OUTDEV_PRINTER))
+        if ((nFlags & DrawFlags::Mono) || (eOutDevType == OUTDEV_PRINTER))
             aButtonTextColor = Color( COL_BLACK );
         else
             aButtonTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();
@@ -1024,7 +1024,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, s
             if (GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::SpinUpDown)
                 eSymbol = SymbolType::SPIN_UPDOWN;
 
-            DrawSymbolFlags nSymbolStyle = (IsEnabled() || (nFlags & WINDOW_DRAW_NODISABLE)) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
+            DrawSymbolFlags nSymbolStyle = (IsEnabled() || (nFlags & DrawFlags::NoDisable)) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
             aView.DrawSymbol(aInnerRect, eSymbol, aButtonTextColor, nSymbolStyle);
         }
 

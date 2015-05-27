@@ -126,7 +126,7 @@ void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
     }
 }
 
-void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong)
+void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags)
 {
     //Take the control's height, but overwrite the scrollbar area if there was one
     Size aSize(PixelToLogic(GetSizePixel()));

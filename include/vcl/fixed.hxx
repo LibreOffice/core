@@ -44,7 +44,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
     SAL_DLLPRIVATE static DrawTextFlags ImplGetTextStyle( WinBits nWinBits );
@@ -66,7 +66,7 @@ public:
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -120,7 +120,7 @@ public:
     virtual void    ApplySettings(vcl::RenderContext&) SAL_OVERRIDE;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -138,7 +138,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize );
 
 public:
@@ -147,7 +147,7 @@ public:
     virtual void    ApplySettings(vcl::RenderContext&) SAL_OVERRIDE;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -174,7 +174,7 @@ private:
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
 
 protected:
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
@@ -185,7 +185,7 @@ public:
     virtual void    ApplySettings(vcl::RenderContext&) SAL_OVERRIDE;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

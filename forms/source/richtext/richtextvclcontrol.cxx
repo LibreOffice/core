@@ -296,7 +296,7 @@ namespace frm
     }
 
 
-    void RichTextControl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong _nFlags )
+    void RichTextControl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, DrawFlags _nFlags )
     {
         m_pImpl->Draw( _pDev, _rPos, _rSize, _nFlags );
     }

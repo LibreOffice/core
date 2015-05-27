@@ -1360,7 +1360,7 @@ void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
     ImplInitSettings( true, true, true );
 
@@ -1378,8 +1378,8 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    bool bBorder = !(nFlags & DrawFlags::NoBorder ) && (GetStyle() & WB_BORDER);
+    bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -1396,11 +1396,11 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     }
 
     // contents
-    if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
+    if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
         pDev->SetTextColor( Color( COL_BLACK ) );
     else
     {
-        if ( !(nFlags & WINDOW_DRAW_NODISABLE ) && !IsEnabled() )
+        if ( !(nFlags & DrawFlags::NoDisable ) && !IsEnabled() )
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             pDev->SetTextColor( rStyleSettings.GetDisableColor() );

@@ -70,7 +70,7 @@ void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY ) throw(Run
             aPos  = pDev->PixelToLogic( aPos );
             aSize = pDev->PixelToLogic( aSize );
 
-            pTabPage->Draw( pDev, aPos, aSize, 0 );
+            pTabPage->Draw( pDev, aPos, aSize, DrawFlags::NONE );
         }
     }
 

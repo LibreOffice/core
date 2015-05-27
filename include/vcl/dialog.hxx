@@ -71,7 +71,7 @@ public:
 protected:
     explicit        Dialog( WindowType nType );
     explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag = InitFlag::Default );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    settingOptimalLayoutSize(Window *pBox) SAL_OVERRIDE;
 
 protected:

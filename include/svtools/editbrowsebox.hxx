@@ -291,7 +291,7 @@ namespace svt
         virtual void GetFocus() SAL_OVERRIDE;
         virtual bool PreNotify(NotifyEvent& rEvt) SAL_OVERRIDE;
         virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rClientRect) SAL_OVERRIDE;
-        virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+        virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
         virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
         virtual void DataChanged( const DataChangedEvent& _rEvent ) SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;

@@ -436,7 +436,7 @@ public:
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
     virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
 

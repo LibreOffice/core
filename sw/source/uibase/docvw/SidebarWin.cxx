@@ -234,7 +234,7 @@ void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
     }
 }
 
-void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong nInFlags)
+void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
 {
     if (mpMetadataAuthor->IsVisible() )
     {

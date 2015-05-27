@@ -701,9 +701,9 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 
 
 
-void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
-    bool bDrawSelection = (nFlags & WINDOW_DRAW_NOSELECTION) == 0;
+    bool bDrawSelection = !(nFlags & DrawFlags::NoSelection);
 
     // we need pixel coordinates
     Size aRealSize = pDev->LogicToPixel(rSize);
@@ -815,7 +815,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
     pDev->SetClipRegion( pDev->PixelToLogic( aRegion ) );
 
     // do we have to paint the background
-    bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && GetDataWindow().IsControlBackground();
+    bool bBackground = !(nFlags & DrawFlags::NoBackground) && GetDataWindow().IsControlBackground();
     if ( bBackground )
     {
         Rectangle aRect( aRealPos, aRealSize );

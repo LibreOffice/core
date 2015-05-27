@@ -97,7 +97,7 @@ public:
     virtual void Tracking(const TrackingEvent& rTEvt) SAL_OVERRIDE;
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
     virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;

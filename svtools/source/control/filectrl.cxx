@@ -205,7 +205,7 @@ void FileControl::SetEditModifyHdl( const Link<>& rLink )
     maEdit->SetModifyHdl(rLink);
 }
 
-void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
     WinBits nOldEditStyle = GetEdit().GetStyle();
     if ( GetStyle() & WB_BORDER )

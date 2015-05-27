@@ -148,7 +148,7 @@ void TabPage::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
     }
 }
 
-void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
+void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );

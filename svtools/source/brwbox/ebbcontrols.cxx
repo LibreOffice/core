@@ -288,7 +288,7 @@ namespace svt
     }
 
 
-    void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+    void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
     {
         pBox->Draw(pDev,rPos,rSize,nFlags);
     }

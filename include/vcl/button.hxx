@@ -49,9 +49,9 @@ private:
 public:
     SAL_DLLPRIVATE DrawButtonFlags  ImplGetButtonState() const;
     SAL_DLLPRIVATE DrawButtonFlags& ImplGetButtonState();
-    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
+    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( OUString& rText, WinBits nWinStyle, DrawFlags nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
-                                              bool bLayout, sal_uLong nImageSep, sal_uLong nDrawFlags,
+                                              bool bLayout, sal_uLong nImageSep, DrawFlags nDrawFlags,
                                               DrawTextFlags nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
@@ -126,11 +126,11 @@ protected:
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, sal_uLong nDrawFlags,
+    SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
                                                              const Rectangle& rRect, bool bLayout, bool bMenuBtnSep);
     SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLayout = false);
     using Button::ImplGetTextStyle;
-    SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( sal_uLong nDrawFlags ) const;
+    SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( DrawFlags nDrawFlags ) const;
     SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
     SAL_DLLPRIVATE bool            IsImage() const { return Button::HasImage(); }
 
@@ -165,7 +165,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
@@ -298,7 +298,7 @@ private:
     SAL_DLLPRIVATE WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void     ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize,
                               const Size& rImageSize, Rectangle& rStateRect,
                               Rectangle& rMouseRect, bool bLayout = false );
@@ -347,7 +347,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
@@ -426,7 +426,7 @@ private:
     SAL_DLLPRIVATE void         ImplInitCheckBoxData();
     SAL_DLLPRIVATE WinBits      ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+    SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                                     const Point& rPos, const Size& rSize,
                                     const Size& rImageSize, Rectangle& rStateRect,
                                     Rectangle& rMouseRect, bool bLayout );
@@ -462,7 +462,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;

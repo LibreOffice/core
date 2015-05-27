@@ -92,7 +92,7 @@ GroupBox::GroupBox( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
     long                    nTop;
@@ -104,7 +104,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 
     if ( GetStyle() & WB_NOLABEL )
         nTextStyle &= ~DrawTextFlags::Mnemonic;
-    if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
+    if ( nDrawFlags & DrawFlags::NoMnemonic )
     {
         if ( nTextStyle & DrawTextFlags::Mnemonic )
         {
@@ -112,16 +112,16 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
             nTextStyle &= ~DrawTextFlags::Mnemonic;
         }
     }
-    if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+    if ( !(nDrawFlags & DrawFlags::NoDisable) )
     {
         if ( !IsEnabled() )
             nTextStyle |= DrawTextFlags::Disable;
     }
-    if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
+    if ( (nDrawFlags & DrawFlags::Mono) ||
          (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
     {
         nTextStyle |= DrawTextFlags::Mono;
-        nDrawFlags |= WINDOW_DRAW_MONO;
+        nDrawFlags |= DrawFlags::Mono;
     }
 
     if (aText.isEmpty())
@@ -141,7 +141,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 
     if( ! bLayout )
     {
-        if ( nDrawFlags & WINDOW_DRAW_MONO )
+        if ( nDrawFlags & DrawFlags::Mono )
             pDev->SetLineColor( Color( COL_BLACK ) );
         else
             pDev->SetLineColor( rStyleSettings.GetShadowColor() );
@@ -161,7 +161,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         // if we're drawing onto a printer, spare the 3D effect
         // #i46986# / 2005-04-13 / frank.schoenheit@sun.com
 
-        if ( !bIsPrinter && !(nDrawFlags & WINDOW_DRAW_MONO) )
+        if ( !bIsPrinter && !(nDrawFlags & DrawFlags::Mono) )
         {
             pDev->SetLineColor( rStyleSettings.GetLightColor() );
             if (aText.isEmpty())
@@ -185,16 +185,16 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 void GroupBox::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
+    const_cast<GroupBox*>(this)->ImplDraw( const_cast<GroupBox*>(this), DrawFlags::NONE, Point(), GetOutputSizePixel(), true );
 }
 
 void GroupBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                     sal_uLong nFlags )
+                     DrawFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -203,7 +203,7 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
-    if ( nFlags & WINDOW_DRAW_MONO )
+    if ( nFlags & DrawFlags::Mono )
         pDev->SetTextColor( Color( COL_BLACK ) );
     else
         pDev->SetTextColor( GetTextColor() );

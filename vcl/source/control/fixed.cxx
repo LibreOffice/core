@@ -159,7 +159,7 @@ DrawTextFlags FixedText::ImplGetTextStyle( WinBits nWinStyle )
     return nTextStyle;
 }
 
-void FixedText::ImplDraw(OutputDevice* pDev, sal_uLong nDrawFlags,
+void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
                          const Point& rPos, const Size& rSize,
                          bool bFillLayout) const
 {
@@ -177,7 +177,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, sal_uLong nDrawFlags,
         nTextStyle &= ~DrawTextFlags(DrawTextFlags::EndEllipsis | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
         nTextStyle |= DrawTextFlags::PathEllipsis;
     }
-    if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
+    if ( nDrawFlags & DrawFlags::NoMnemonic )
     {
         if ( nTextStyle & DrawTextFlags::Mnemonic )
         {
@@ -185,12 +185,12 @@ void FixedText::ImplDraw(OutputDevice* pDev, sal_uLong nDrawFlags,
             nTextStyle &= ~DrawTextFlags::Mnemonic;
         }
     }
-    if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+    if ( !(nDrawFlags & DrawFlags::NoDisable) )
     {
         if ( !IsEnabled() )
             nTextStyle |= DrawTextFlags::Disable;
     }
-    if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
+    if ( (nDrawFlags & DrawFlags::Mono) ||
          (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
         nTextStyle |= DrawTextFlags::Mono;
 
@@ -230,11 +230,11 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedText::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }
 
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                      sal_uLong nFlags )
+                      DrawFlags nFlags )
 {
     ApplySettings(*pDev);
 
@@ -245,14 +245,14 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
-    if ( nFlags & WINDOW_DRAW_MONO )
+    if ( nFlags & DrawFlags::Mono )
         pDev->SetTextColor( Color( COL_BLACK ) );
     else
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();
 
-    bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    bool bBorder = !(nFlags & DrawFlags::NoBorder ) && (GetStyle() & WB_BORDER);
+    bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -386,7 +386,7 @@ Size FixedText::GetOptimalSize() const
 void FixedText::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    ImplDraw(const_cast<FixedText*>(this), 0, Point(), GetOutputSizePixel(), true);
+    ImplDraw(const_cast<FixedText*>(this), DrawFlags::NONE, Point(), GetOutputSizePixel(), true);
     //const_cast<FixedText*>(this)->Invalidate();
 }
 
@@ -641,7 +641,7 @@ void FixedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     ImplDraw(rRenderContext);
 }
 
-void FixedLine::Draw( OutputDevice*, const Point&, const Size&, sal_uLong )
+void FixedLine::Draw( OutputDevice*, const Point&, const Size&, DrawFlags )
 {
 }
 
@@ -727,7 +727,7 @@ FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
+void FixedBitmap::ImplDraw( OutputDevice* pDev, DrawFlags /* nDrawFlags */,
                             const Point& rPos, const Size& rSize )
 {
     Bitmap* pBitmap = &maBitmap;
@@ -770,11 +770,11 @@ void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                        sal_uLong nFlags )
+                        DrawFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -784,7 +784,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
     pDev->SetMapMode();
 
     // Border
-    if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
+    if ( !(nFlags & DrawFlags::NoBorder) && (GetStyle() & WB_BORDER) )
     {
         DecorationView aDecoView( pDev );
         aRect = aDecoView.DrawFrame( aRect, DrawFrameStyle::DoubleIn );
@@ -890,11 +890,11 @@ FixedImage::FixedImage( vcl::Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+void FixedImage::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                            const Point& rPos, const Size& rSize )
 {
     DrawImageFlags nStyle = DrawImageFlags::NONE;
-    if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+    if ( !(nDrawFlags & DrawFlags::NoDisable) )
     {
         if ( !IsEnabled() )
             nStyle |= DrawImageFlags::Disable;
@@ -941,7 +941,7 @@ void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedImage::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }
 
 Size FixedImage::GetOptimalSize() const
@@ -950,7 +950,7 @@ Size FixedImage::GetOptimalSize() const
 }
 
 void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                       sal_uLong nFlags )
+                       DrawFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -960,7 +960,7 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetMapMode();
 
     // Border
-    if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
+    if ( !(nFlags & DrawFlags::NoBorder) && (GetStyle() & WB_BORDER) )
     {
         ImplDrawFrame( pDev, aRect );
     }

@@ -337,16 +337,24 @@ enum class StateChangedType : sal_uInt16
 #define GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL ((sal_uInt16)0x0400)
 
 
-// Draw-Flags fuer Draw()
-#define WINDOW_DRAW_MONO                ((sal_uLong)0x00000001)
-#define WINDOW_DRAW_NOBORDER            ((sal_uLong)0x00000002)
-#define WINDOW_DRAW_NOCONTROLS          ((sal_uLong)0x00000004)
-#define WINDOW_DRAW_NODISABLE           ((sal_uLong)0x00000008)
-#define WINDOW_DRAW_NOMNEMONIC          ((sal_uLong)0x00000010)
-#define WINDOW_DRAW_NOSELECTION         ((sal_uLong)0x00000020)
-#define WINDOW_DRAW_NOFOCUS             ((sal_uLong)0x00000040)
-#define WINDOW_DRAW_NOBACKGROUND        ((sal_uLong)0x00000080)
-#define WINDOW_DRAW_ROLLOVER            ((sal_uLong)0x00000100)
+// Flags for Draw()
+enum class DrawFlags
+{
+    NONE                = 0x0000,
+    Mono                = 0x0001,
+    NoBorder            = 0x0002,
+    NoControls          = 0x0004,
+    NoDisable           = 0x0008,
+    NoMnemonic          = 0x0010,
+    NoSelection         = 0x0020,
+    NoFocus             = 0x0040,
+    NoBackground        = 0x0080,
+    NoRollover          = 0x0100,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DrawFlags> : is_typed_flags<DrawFlags, 0x01ff> {};
+}
 
 // DialogControl-Flags
 enum class DialogControlFlags
@@ -826,7 +834,7 @@ public:
         OutputDevice::Erase(rRect);
     }
 
-    virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
+    virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags );
     virtual void                        Move();
     virtual void                        Resize();
     virtual void                        Activate();

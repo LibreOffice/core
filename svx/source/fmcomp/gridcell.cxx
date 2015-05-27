@@ -992,7 +992,7 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect )
         m_pPainter->SetParentUpdateMode( true );
     }
     else
-        m_pPainter->Draw( &_rDev, _rRect.TopLeft(), _rRect.GetSize(), 0 );
+        m_pPainter->Draw( &_rDev, _rRect.TopLeft(), _rRect.GetSize(), DrawFlags::NONE );
 }
 
 

@@ -1793,7 +1793,7 @@ void Edit::Resize()
     }
 }
 
-void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
@@ -1808,8 +1808,8 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_u
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    bool bBorder = !(nFlags & DrawFlags::NoBorder ) && (GetStyle() & WB_BORDER);
+    bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -1825,11 +1825,11 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_u
     }
 
     // Inhalt
-    if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
+    if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
         pDev->SetTextColor( Color( COL_BLACK ) );
     else
     {
-        if ( !(nFlags & WINDOW_DRAW_NODISABLE ) && !IsEnabled() )
+        if ( !(nFlags & DrawFlags::NoDisable ) && !IsEnabled() )
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             pDev->SetTextColor( rStyleSettings.GetDisableColor() );

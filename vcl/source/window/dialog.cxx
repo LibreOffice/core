@@ -1093,7 +1093,7 @@ void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
     aImplWin->GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
 
-void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
+void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );

@@ -36,7 +36,7 @@ private:
     SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void     ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                                       const Point& rPos, const Size& rSize, bool bLayout = false );
 
     virtual void    FillLayoutData() const SAL_OVERRIDE;
@@ -49,7 +49,7 @@ public:
     explicit        GroupBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
