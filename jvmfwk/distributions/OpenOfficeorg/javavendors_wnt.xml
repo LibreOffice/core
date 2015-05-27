@@ -32,6 +32,9 @@
   <vendor name="IBM Corporation">
     <minVersion>1.5.0</minVersion>
   </vendor>
+  <vendor name="Azul Systems, Inc.">
+    <minVersion>1.6.0</minVersion>
+  </vendor>
  </vendorInfos>
 
 </javaSelection>
