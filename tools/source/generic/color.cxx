@@ -312,6 +312,32 @@ SvStream& ReadColor( SvStream& rIStream, Color& rColor )
     return rIStream;
 }
 
+void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
+{
+    if (n100thPercent == 0)
+        return;
+
+    basegfx::BColor aBColor = basegfx::tools::rgb2hsl(getBColor());
+    double fFactor = 1.0 - (std::abs(double(n100thPercent)) / 10000.0);
+    double fResult;
+
+    if (n100thPercent > 0) // tint
+    {
+        fResult = aBColor.getBlue() * fFactor + (1.0 - fFactor);
+    }
+    else if (n100thPercent < 0) // shade
+    {
+        fResult = aBColor.getBlue() * fFactor;
+    }
+
+    aBColor.setBlue(fResult);
+    aBColor = basegfx::tools::hsl2rgb(aBColor);
+
+    SetRed(sal_uInt8((  aBColor.getRed()   * 255.0) + 0.5));
+    SetGreen(sal_uInt8((aBColor.getGreen() * 255.0) + 0.5));
+    SetBlue(sal_uInt8(( aBColor.getBlue()  * 255.0) + 0.5));
+}
+
 SvStream& WriteColor( SvStream& rOStream, const Color& rColor )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Color::<< - Solar-Version not set on rOStream" );

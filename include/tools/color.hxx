@@ -163,6 +163,16 @@ public:
 
     void DecreaseContrast(sal_uInt8 cContDec);
 
+    /**
+     * Apply tint or shade to a color.
+     *
+     * The input value is the percentage (in 100th of percent) of how much the
+     * color changes towards the black (shade) or white (tint). If the value
+     * is positive, the color is tinted, if the value is negative, the color is
+     * shaded.
+     **/
+    void ApplyTintOrShade(sal_Int16 n100thPercent);
+
     void Invert();
 
     void Merge(const Color& rMergeColor, sal_uInt8 cTransparency);

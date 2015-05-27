@@ -23,10 +23,12 @@ class Test: public CppUnit::TestFixture
 public:
     void test_asRGBColor();
     void test_readAndWriteStream();
+    void test_ApplyTintOrShade();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test_asRGBColor);
     CPPUNIT_TEST(test_readAndWriteStream);
+    CPPUNIT_TEST(test_ApplyTintOrShade);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -74,6 +76,64 @@ void Test::test_readAndWriteStream()
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x34), aReadColor.GetGreen());
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x56), aReadColor.GetBlue());
     }
+}
+
+bool checkTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString sReference, sal_Int16 nTintShade, OUString sExpected)
+{
+    Color aColor(nR, nG, nB);
+    if (sReference != aColor.AsRGBHexString())
+        return false;
+    aColor.ApplyTintOrShade(nTintShade);
+    return sExpected == aColor.AsRGBHexString();
+}
+
+void Test::test_ApplyTintOrShade()
+{
+    // BLACK reference
+
+    // 5% tint
+    CPPUNIT_ASSERT(checkTintShade(0x00, 0x00, 0x00, "000000",  500, "0d0d0d"));
+    // 15% tint
+    CPPUNIT_ASSERT(checkTintShade(0x00, 0x00, 0x00, "000000",  1500, "262626"));
+    // 25% tint
+    CPPUNIT_ASSERT(checkTintShade(0x00, 0x00, 0x00, "000000",  2500, "404040"));
+    // 50% tint
+    CPPUNIT_ASSERT(checkTintShade(0x00, 0x00, 0x00, "000000",  5000, "808080"));
+    // 100% tint
+    CPPUNIT_ASSERT(checkTintShade(0x00, 0x00, 0x00, "000000", 10000, "ffffff"));
+
+    // WHITE reference
+
+    // 5% shade
+    CPPUNIT_ASSERT(checkTintShade(0xff, 0xff, 0xff, "ffffff",   -500, "f2f2f2"));
+    // 15% shade
+    CPPUNIT_ASSERT(checkTintShade(0xff, 0xff, 0xff, "ffffff",  -1500, "d9d9d9"));
+    // 25% shade
+    CPPUNIT_ASSERT(checkTintShade(0xff, 0xff, 0xff, "ffffff",  -2500, "bfbfbf"));
+    // 50% shade
+    CPPUNIT_ASSERT(checkTintShade(0xff, 0xff, 0xff, "ffffff",  -5000, "808080"));
+    // 100% shade
+    CPPUNIT_ASSERT(checkTintShade(0xff, 0xff, 0xff, "ffffff", -10000, "000000"));
+
+    // GREY reference
+
+    // 0% - no change
+    CPPUNIT_ASSERT(checkTintShade(0x80, 0x80, 0x80, "808080",      0, "808080"));
+
+    // 25% tint
+    CPPUNIT_ASSERT(checkTintShade(0x80, 0x80, 0x80, "808080",   2500, "a0a0a0"));
+    // 50% tint
+    CPPUNIT_ASSERT(checkTintShade(0x80, 0x80, 0x80, "808080",   5000, "c0c0c0"));
+    // 100% tint
+    CPPUNIT_ASSERT(checkTintShade(0x80, 0x80, 0x80, "808080",  10000, "ffffff"));
+
+    // 25% shade
+    CPPUNIT_ASSERT(checkTintShade(0x80, 0x80, 0x80, "808080",  -2500, "606060"));
+    // 50% shade
+    CPPUNIT_ASSERT(checkTintShade(0x80, 0x80, 0x80, "808080",  -5000, "404040"));
+    // 100% shade
+    CPPUNIT_ASSERT(checkTintShade(0x80, 0x80, 0x80, "808080", -10000, "000000"));
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
