@@ -209,6 +209,7 @@ friend class ScDocument;                    // for FillInfo
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
+friend class ScFormulaGroupIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScHorizontalCellIterator;

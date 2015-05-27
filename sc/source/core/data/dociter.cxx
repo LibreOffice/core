@@ -785,6 +785,58 @@ bool ScDBQueryDataIterator::GetNext(Value& rValue)
     return mpData->getNext(rValue);
 }
 
+ScFormulaGroupIterator::ScFormulaGroupIterator( ScDocument* pDoc ) :
+    mpDoc(pDoc),
+    mnTab(0),
+    mnCol(0),
+    mnIndex(0)
+{
+    ScTable *pTab = mpDoc->FetchTable(mnTab);
+    ScColumn *pCol = pTab->FetchColumn(mnCol);
+    if (pCol)
+    {
+        mbNullCol = false;
+        maEntries = pCol->GetFormulaGroupEntries();
+    }
+    else
+        mbNullCol = true;
+}
+
+sc::FormulaGroupEntry* ScFormulaGroupIterator::first()
+{
+    return this->next();
+}
+
+sc::FormulaGroupEntry* ScFormulaGroupIterator::next()
+{
+    if (mnIndex >= maEntries.size() || mbNullCol)
+    {
+        while (mnIndex >= maEntries.size() || mbNullCol)
+        {
+            mnIndex = 0;
+            mnCol++;
+            if (mnCol > MAXCOL)
+            {
+                mnCol = 0;
+                mnTab++;
+                if (mnTab >= mpDoc->GetTableCount())
+                    return NULL;
+            }
+            ScTable *pTab = mpDoc->FetchTable(mnTab);
+            ScColumn *pCol = pTab->FetchColumn(mnCol);
+            if (pCol)
+            {
+                mbNullCol = false;
+                maEntries = pCol->GetFormulaGroupEntries();
+            }
+            else
+                mbNullCol = true;
+        }
+    }
+
+    return &maEntries[mnIndex++];
+}
+
 ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, sal_uInt16 nSubTotalFlags ) :
     mpDoc(pDoc),
     maStartPos(rRange.aStart),
