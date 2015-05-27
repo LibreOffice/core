@@ -147,6 +147,7 @@ public:
     void testHiddenShape();
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapes();
+    void testTextDirection();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -203,6 +204,7 @@ public:
     CPPUNIT_TEST(testHiddenShape);
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
+    CPPUNIT_TEST(testTextDirection);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2819,6 +2821,18 @@ void ScExportTest::testMoveCellAnchoredShapes()
     CPPUNIT_ASSERT_EQUAL(pNData->maEnd , aNDataEnd);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testTextDirection()
+{
+    ScDocShellRef xDocSh = loadDoc("writingMode.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/styles.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
