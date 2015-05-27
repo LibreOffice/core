@@ -49,9 +49,9 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     DBG_ASSERT( pParent, "ImplWheelWindow::ImplWheelWindow(): Parent not set!" );
 
     const Size      aSize( pParent->GetOutputSizePixel() );
-    const sal_uInt16    nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const StartAutoScrollFlags nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const bool      bHorz( nFlags & StartAutoScrollFlags::Horz );
+    const bool      bVert( nFlags & StartAutoScrollFlags::Vert );
 
     // calculate maximum speed distance
     mnMaxWidth = (sal_uLong) ( 0.4 * hypot( (double) aSize.Width(), aSize.Height() ) );
@@ -237,9 +237,9 @@ void ImplWheelWindow::ImplRecalcScrollValues()
 PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
 {
     PointerStyle    eStyle;
-    const sal_uInt16    nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const StartAutoScrollFlags nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const bool      bHorz( nFlags & StartAutoScrollFlags::Horz );
+    const bool      bVert( nFlags & StartAutoScrollFlags::Vert );
 
     if( bHorz || bVert )
     {
@@ -316,9 +316,9 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     mnActDist = (sal_uLong) hypot( (double) nDistX, nDistY );
 
     const PointerStyle  eActStyle = ImplGetMousePointer( nDistX, nDistY );
-    const sal_uInt16        nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const bool          bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const bool          bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const StartAutoScrollFlags nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const bool          bHorz( nFlags & StartAutoScrollFlags::Horz );
+    const bool          bVert( nFlags & StartAutoScrollFlags::Vert );
     const bool          bOuter = mnActDist > WHEEL_RADIUS;
 
     if( bOuter && ( maLastMousePos != aMousePos ) )

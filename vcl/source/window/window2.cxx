@@ -375,7 +375,7 @@ bool Window::IsTracking() const
     return (ImplGetSVData()->maWinData.mpTrackWin == this);
 }
 
-void Window::StartAutoScroll( sal_uInt16 nFlags )
+void Window::StartAutoScroll( StartAutoScrollFlags nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -397,7 +397,7 @@ void Window::EndAutoScroll()
     if ( pSVData->maWinData.mpAutoScrollWin.get() == this )
     {
         pSVData->maWinData.mpAutoScrollWin = NULL;
-        pSVData->maWinData.mnAutoScrollFlags = 0;
+        pSVData->maWinData.mnAutoScrollFlags = StartAutoScrollFlags::NONE;
         pSVData->maAppData.mpWheelWindow->ImplStop();
         pSVData->maAppData.mpWheelWindow->doLazyDelete();
         pSVData->maAppData.mpWheelWindow = NULL;
@@ -719,21 +719,21 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
         {
             case CommandEventId::StartAutoScroll:
             {
-                sal_uInt16 nFlags = 0;
+                StartAutoScrollFlags nFlags = StartAutoScrollFlags::NONE;
                 if ( pHScrl )
                 {
                     if ( (pHScrl->GetVisibleSize() < pHScrl->GetRangeMax()) &&
                          pHScrl->IsEnabled() && pHScrl->IsInputEnabled() && ! pHScrl->IsInModalMode() )
-                        nFlags |= AUTOSCROLL_HORZ;
+                        nFlags |= StartAutoScrollFlags::Horz;
                 }
                 if ( pVScrl )
                 {
                     if ( (pVScrl->GetVisibleSize() < pVScrl->GetRangeMax()) &&
                          pVScrl->IsEnabled() && pVScrl->IsInputEnabled() && ! pVScrl->IsInModalMode() )
-                        nFlags |= AUTOSCROLL_VERT;
+                        nFlags |= StartAutoScrollFlags::Vert;
                 }
 
-                if ( nFlags )
+                if ( nFlags != StartAutoScrollFlags::NONE )
                 {
                     StartAutoScroll( nFlags );
                     bRet = true;
