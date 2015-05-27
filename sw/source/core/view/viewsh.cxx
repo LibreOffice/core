@@ -78,6 +78,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #if !HAVE_FEATURE_DESKTOP
 #include <vcl/sysdata.hxx>
@@ -989,6 +990,15 @@ void SwViewShell::SizeChgNotify()
                 const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
                 OUString sDisplay = rNum.GetNumStr( nVirtNum );
                 PageNumNotify( this, pCnt->GetPhyPageNum(), nVirtNum, sDisplay );
+
+                if (isTiledRendering())
+                {
+                    Size aDocSize = GetDocSize();
+                    std::stringstream ss;
+                    ss << aDocSize.Width() + 2L * DOCUMENTBORDER << ", " << aDocSize.Height() + 2L * DOCUMENTBORDER;
+                    OString sRect = ss.str().c_str();
+                    libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
+                }
             }
         }
     }

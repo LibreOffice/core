@@ -146,12 +146,12 @@ typedef enum
     LOK_CALLBACK_SEARCH_NOT_FOUND,
 
     /**
-     * Number of pages changed in the document.
+     * Size of the document changed.
      *
-     * Clients should assume that data returned by an earlier
-     * lok::Document::getDocumentSize() call is no longer valid.
+     * Payload format is "width, height", i.e. clients get the new size without
+     * having to do an explicit lok::Document::getDocumentSize() call.
      */
-    LOK_CALLBACK_PAGE_COUNT_CHANGED,
+    LOK_CALLBACK_DOCUMENT_SIZE_CHANGED,
 
     /**
      * The current part number is changed.
