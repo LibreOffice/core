@@ -16,6 +16,24 @@
       "revId": "60e92e066ec12af54ba5e562ea7e3f31b7e14174",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_5e021540",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2015-05-27T09:42:49Z",
+      "side": 1,
+      "message": "It\u0027s for maintaining the code style in import-tests.cxx file, it\u0027s not a bug fix. A further improvement would be to use always canonical paths in getURLFromSrc, by treating duplicate slashes or avoiding them in declarations. i.e. git grep getURLFromSrc, which is also a code style improvement in Unix-like OSs.",
+      "parentUuid": "3a57f1b5_5e6d3531",
+      "revId": "60e92e066ec12af54ba5e562ea7e3f31b7e14174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
