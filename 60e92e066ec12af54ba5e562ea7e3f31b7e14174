@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_5e6d3531",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-05-27T07:46:13Z",
+      "side": 1,
+      "message": "in how far is a use of the unary scope operator :: missing here?  name resolution appears to work just fine even with the current (arguably more idomatic) code",
+      "revId": "60e92e066ec12af54ba5e562ea7e3f31b7e14174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
