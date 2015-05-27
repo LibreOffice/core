@@ -198,8 +198,11 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
 
     // fill up with the sequence types
     SwWrtShell *pSh = GetWrtShell();
-    if(!pSh)
+    if (!pSh)
         pSh = ::GetActiveWrtShell();
+
+    if (!pSh)
+        return;
 
     const sal_uInt16 nFieldTypeCnt = pSh->GetFieldTypeCount(RES_SETEXPFLD);
 
