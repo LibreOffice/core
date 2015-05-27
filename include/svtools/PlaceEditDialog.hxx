@@ -21,6 +21,8 @@
 #include <svtools/inettbc.hxx>
 #include <svtools/place.hxx>
 
+#include <config_oauth2.h>
+
 #include <memory>
 #include <vector>
 

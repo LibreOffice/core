@@ -10,9 +10,12 @@
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/ServerDetailsControls.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>
 #include <vcl/msgbox.hxx>
+
+using namespace com::sun::star::uno;
 
 PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
@@ -136,10 +139,39 @@ void PlaceEditDialog::InitDetails( )
     xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSmbDetails);
 
-    // Create CMIS control
-    std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this));
-    xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xCmisDetails);
+    // Create CMIS controls for each server type
+
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+
+    // Load the ServerType entries
+    bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
+                       OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
+    bool bSkipAlfresco = OUString( ALFRESCO_CLOUD_CLIENT_ID ).isEmpty() ||
+                       OUString( ALFRESCO_CLOUD_CLIENT_SECRET ).isEmpty();
+    bool bSkipOneDrive= OUString( ONEDRIVE_CLIENT_ID ).isEmpty() ||
+                       OUString( ONEDRIVE_CLIENT_SECRET ).isEmpty();
+
+
+    Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
+    Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
+
+    unsigned int nPos = 0;
+    for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
+    {
+        OUString sUrl = aTypesUrlsList[i];
+        if ( !( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) &&
+             !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) &&
+             !( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
+        {
+            m_pLBServerType->InsertEntry( aTypesNamesList[i]);
+
+            std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
+            xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+            m_aDetailsContainers.push_back(xCmisDetails);
+
+            nPos++;
+        }
+    }
 
     // Set default to first value
     m_pLBServerType->SelectEntryPos( 0 );

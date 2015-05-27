@@ -248,58 +248,38 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
     return bSuccess;
 }
 
-CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
+CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString sBinding ) :
     DetailsContainer( pBuilder, "CmisDetails" ),
     m_sUsername( ),
     m_xCmdEnv( ),
-    m_aServerTypesURLs( ),
     m_aRepoIds( ),
-    m_sRepoId( )
+    m_sRepoId( ),
+    m_sBinding( sBinding )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xGlobalInteractionHandler(
         InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 
-    pBuilder->get( m_pLBServerType, "serverType" );
-    m_pLBServerType->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectServerTypeHdl ) );
-
     pBuilder->get( m_pEDBinding, "binding" );
-    m_pEDBinding->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-
     pBuilder->get( m_pLBRepository, "repositories" );
-    m_pLBRepository->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
-
     pBuilder->get( m_pBTRepoRefresh, "repositoriesRefresh" );
-    m_pBTRepoRefresh->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
-
     pBuilder->get( m_pEDPath, "cmisPath" );
-    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
 
     show( false );
+}
 
-    // Load the ServerType entries
-    bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
-                       OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
-    bool bSkipAlfresco = OUString( ALFRESCO_CLOUD_CLIENT_ID ).isEmpty() ||
-                       OUString( ALFRESCO_CLOUD_CLIENT_SECRET ).isEmpty();
-    bool bSkipOneDrive= OUString( ONEDRIVE_CLIENT_ID ).isEmpty() ||
-                       OUString( ONEDRIVE_CLIENT_SECRET ).isEmpty();
+void CmisDetailsContainer::show( bool bShow )
+{
+    DetailsContainer::show( bShow );
 
+    m_pEDBinding->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+    m_pLBRepository->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
+    m_pBTRepoRefresh->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
+    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
 
-    Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
-    Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
-    for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
-    {
-        OUString sUrl = aTypesUrlsList[i];
-        if ( !( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) &&
-             !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) &&
-             !( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
-        {
-            m_pLBServerType->InsertEntry( aTypesNamesList[i] );
-            m_aServerTypesURLs.push_back( sUrl );
-        }
-    }
+    m_pEDBinding->SetText( m_sBinding );
 }
 
 INetURLObject CmisDetailsContainer::getUrl( )
@@ -354,14 +334,6 @@ void CmisDetailsContainer::selectRepository( )
     m_sRepoId = m_aRepoIds[nPos];
 
     notifyChange( );
-}
-
-IMPL_LINK_NOARG( CmisDetailsContainer, SelectServerTypeHdl  )
-{
-    // Set a sample URL for the server
-    sal_uInt16 nId = m_pLBServerType->GetSelectEntryPos( );
-    m_pEDBinding->SetText( m_aServerTypesURLs[nId] );
-    return 0;
 }
 
 IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )

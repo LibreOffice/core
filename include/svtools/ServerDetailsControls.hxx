@@ -116,27 +116,26 @@ class CmisDetailsContainer : public DetailsContainer
     private:
         OUString m_sUsername;
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
-        std::vector< OUString > m_aServerTypesURLs;
         std::vector< OUString > m_aRepoIds;
         OUString m_sRepoId;
+        OUString m_sBinding;
 
         VclPtr<Edit>       m_pEDBinding;
         VclPtr<ListBox>    m_pLBRepository;
         VclPtr<Button>     m_pBTRepoRefresh;
-        VclPtr<ListBox>    m_pLBServerType;
         VclPtr<Edit>       m_pEDPath;
 
     public:
-        CmisDetailsContainer( VclBuilderContainer* pBuilder );
+        CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString sBinding );
         virtual ~CmisDetailsContainer( ) { };
 
+        virtual void show( bool bShow = true );
         virtual INetURLObject getUrl( ) SAL_OVERRIDE;
         virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
         virtual void setUsername( const OUString& rUsername ) SAL_OVERRIDE;
 
     private:
         void selectRepository( );
-        DECL_LINK ( SelectServerTypeHdl, void * );
         DECL_LINK ( RefreshReposHdl, void * );
         DECL_LINK ( SelectRepoHdl, void * );
 };
