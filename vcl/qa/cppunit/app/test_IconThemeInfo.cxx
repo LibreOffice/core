@@ -53,6 +53,8 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     CPPUNIT_TEST(ThemeIdIsDetectedFromFileNameWithUnderscore);
     CPPUNIT_TEST(ImagesZipIsNotValid);
     CPPUNIT_TEST(ImagesOxygenZipIsValid);
+    CPPUNIT_TEST(DisplayNameForHicontrastIsHighContrast);
+    CPPUNIT_TEST(DisplayNameForTango_testingIsTangoTesting);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined1);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined2);
 
