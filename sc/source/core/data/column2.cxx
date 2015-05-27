@@ -43,6 +43,7 @@
 #include "formulagroup.hxx"
 #include "listenercontext.hxx"
 #include "mtvcellfunc.hxx"
+#include "progress.hxx"
 #include "scmatrix.hxx"
 #include <rowheightcontext.hxx>
 
@@ -2306,10 +2307,23 @@ bool appendToBlock(
                 sc::formula_block::iterator itData, itDataEnd;
                 getBlockIterators<sc::formula_block>(it, nLenRemain, itData, itDataEnd);
 
+                /* tdf#91416 setting progress in triggers a resize of the window
+                   and so ScTabView::DoResize and an InterpretVisible and
+                   InterpretDirtyCells which resets the mpFormulaGroupCxt that
+                   the current rCxt points to, which is bad, so disable progress
+                   during GetResult
+                 */
+                ScProgress *pProgress = ScProgress::GetInterpretProgress();
+                bool bTempDisableProgress = pProgress && pProgress->Enabled();
+                if (bTempDisableProgress)
+                    pProgress->Disable();
+
                 for (; itData != itDataEnd; ++itData, ++nPos)
                 {
                     ScFormulaCell& rFC = **itData;
+
                     sc::FormulaResultValue aRes = rFC.GetResult();
+
                     if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError)
                     {
                         if (aRes.mnError == ScErrorCodes::errCircularReference)
@@ -2332,6 +2346,9 @@ bool appendToBlock(
                         (*rColArray.mpNumArray)[nPos] = aRes.mfValue;
                     }
                 }
+
+                if (bTempDisableProgress)
+                    pProgress->Enable();
             }
             break;
             case sc::element_type_empty:
