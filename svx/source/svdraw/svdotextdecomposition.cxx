@@ -739,9 +739,15 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
             aNextRect.Bottom()-aNextRect.Top()
             )
      );
-    //rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateMode(true);
     rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
-    rOutliner.SetText(*mpOverflowingText);  // XXX: copies overflown text
+
+    // XXX: experimental code 27/5/15
+    OutlinerParaObject *someText = rOutliner.CreateParaObject();
+
+    rOutliner.SetText(*someText);  // XXX: copies overflown text
+
+    // clean up code and such
     Size aNewSize(rOutliner.CalcTextSize());
     // create OutlinerParaObject for pNextTextObj
     OutlinerParaObject* pNewParaObject=rOutliner.CreateParaObject();

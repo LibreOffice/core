@@ -265,7 +265,6 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
 void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 {
     OutlinerParaObject* pNewText = NULL;
-    OutlinerParaObject* pNextText = NULL;
 
     if(rOutl.IsModified())
     {
@@ -279,8 +278,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             // set non overflow part of text to current box
             pNewText = rOutl.GetNonOverflowingParaObject(); // empty text obj. if 1st para is overflowing
             // set overflowing text for SdrChainedTextPrimitive2D
-            pNextText = rOutl.GetOverflowingParaObject();
-            mpOverflowingText = pNextText;
+            mpOverflowingText = rOutl.GetOverflowingParaObject();
             // TODO: factor the lines of code above in a single function
 
         }
