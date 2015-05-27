@@ -621,14 +621,14 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSText,
 /// parameters for search and replace in text
 struct SwFindParaText : public SwFindParas
 {
-    const SearchOptions& rSearchOpt;
-    SwCursor& rCursor;
-    utl::TextSearch aSText;
-    bool bReplace;
-    bool bSearchInNotes;
+    const SearchOptions& m_rSearchOpt;
+    SwCursor& m_rCursor;
+    utl::TextSearch m_aSText;
+    bool m_bReplace;
+    bool m_bSearchInNotes;
 
-    SwFindParaText( const SearchOptions& rOpt, bool bSearchNotes, bool bRepl, SwCursor& rCrsr )
-        : rSearchOpt( rOpt ), rCursor( rCrsr ), aSText( rOpt ), bReplace( bRepl ), bSearchInNotes( bSearchNotes )
+    SwFindParaText( const SearchOptions& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCrsr )
+        : m_rSearchOpt( rOpt ), m_rCursor( rCrsr ), m_aSText( rOpt ), m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) SAL_OVERRIDE;
     virtual bool IsReplaceMode() const SAL_OVERRIDE;
@@ -642,15 +642,15 @@ SwFindParaText::~SwFindParaText()
 int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
                           const SwPaM* pRegion, bool bInReadOnly )
 {
-    if( bInReadOnly && bReplace )
+    if( bInReadOnly && m_bReplace )
         bInReadOnly = false;
 
-    const bool bFnd = pCrsr->Find( rSearchOpt, bSearchInNotes, aSText, fnMove, pRegion, bInReadOnly );
+    const bool bFnd = pCrsr->Find( m_rSearchOpt, m_bSearchInNotes, m_aSText, fnMove, pRegion, bInReadOnly );
 
-    if( bFnd && bReplace ) // replace string
+    if( bFnd && m_bReplace ) // replace string
     {
         // use replace method in SwDoc
-        const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);
+        const bool bRegExp(SearchAlgorithms_REGEXP == m_rSearchOpt.algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
         // add to shell-cursor-ring so that the regions will be moved eventually
@@ -658,17 +658,17 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         if( bRegExp )
         {
             pPrev = const_cast<SwPaM*>(pRegion)->GetPrev();
-            const_cast<SwPaM*>(pRegion)->GetRingContainer().merge( rCursor.GetRingContainer() );
+            const_cast<SwPaM*>(pRegion)->GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
         boost::scoped_ptr<OUString> pRepl( (bRegExp)
-                ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0 );
+                ? ReplaceBackReferences( m_rSearchOpt, pCrsr ) : 0 );
         bool const bReplaced =
-            rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
+            m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
                 *pCrsr,
-                (pRepl.get()) ? *pRepl : rSearchOpt.replaceString,
+                (pRepl.get()) ? *pRepl : m_rSearchOpt.replaceString,
                 bRegExp );
-        rCursor.SaveTableBoxContent( pCrsr->GetPoint() );
+        m_rCursor.SaveTableBoxContent( pCrsr->GetPoint() );
 
         if( bRegExp )
         {
@@ -697,7 +697,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
 bool SwFindParaText::IsReplaceMode() const
 {
-    return bReplace;
+    return m_bReplace;
 }
 
 sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes,
