@@ -82,8 +82,13 @@ static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, Sc
     if ( (nResult & SCA_VALID) )
         return nResult;
 
+    // try the default calc address convention
+    nResult = rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
     // try excel a1
-    return rScRange.Parse(aAddress, pDoc, ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1, 0, 0));
+    return rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
 static sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
@@ -99,8 +104,13 @@ static sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddre
     if ( (nResult & SCA_VALID) )
         return nResult;
 
+    // try the default calc address convention
+    nResult = rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
     // try excel a1
-    return rScAddress.Parse(aAddress, pDoc, ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1, 0, 0));
+    return rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
 void ScTabViewShell::Execute( SfxRequest& rReq )

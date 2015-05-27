@@ -1065,7 +1065,12 @@ sal_uInt16 parseRange(const OUString& rString, ScRange& rRange, ScDocument* pDoc
         return nResult;
 
     // try excel a1
-    return rRange.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+    nResult = rRange.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+    if (nResult & SCA_VALID)
+        return nResult;
+
+    // try r1c1
+    return rRange.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
 sal_uInt16 parseAddress(const OUString& rString, ScAddress& rAddress, ScDocument* pDoc)
@@ -1082,7 +1087,12 @@ sal_uInt16 parseAddress(const OUString& rString, ScAddress& rAddress, ScDocument
         return nResult;
 
     // try excel a1
-    return rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+    nResult = rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    // try r1c1
+    return rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
 bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
