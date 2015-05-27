@@ -1002,7 +1002,8 @@ void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
         theFont.SetFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
 
     pImpVclMEdit->GetTextWindow()->SetFont(theFont);
-    pImpVclMEdit->GetTextWindow()->GetTextEngine()->SetFont(theFont);
+    // FIXME: next call causes infinite invalidation loop, rethink how to properly fix this situation
+    // pImpVclMEdit->GetTextWindow()->GetTextEngine()->SetFont(theFont);
     pImpVclMEdit->GetTextWindow()->SetTextColor(aTextColor);
 
     if (IsPaintTransparent())
