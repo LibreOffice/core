@@ -1598,7 +1598,6 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
     maEntries[0]->SetFirstEntry();
 
     SetHeight();
-    static_cast<ScCondFormatList*>(GetParent())->RecalcAll();
 
     return 0;
 }
