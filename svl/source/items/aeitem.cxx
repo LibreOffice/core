@@ -111,7 +111,7 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
 
     pValues = new SfxAllEnumValueArr;
 
-    for ( sal_uInt16 nPos = 0; nPos < rCopy.pValues->size(); ++nPos )
+    for ( size_t nPos = 0; nPos < rCopy.pValues->size(); ++nPos )
     {
         SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
         pVal->nValue = (*rCopy.pValues)[nPos].nValue;

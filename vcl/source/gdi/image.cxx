@@ -341,7 +341,7 @@ ImageList::ImageList( const ::std::vector< OUString >& rNameVector,
     ImplInit( sal::static_int_cast< sal_uInt16 >( rNameVector.size() ), Size() );
 
     mpImplData->maPrefix = rPrefix;
-    for( sal_uInt32 i = 0; i < rNameVector.size(); ++i )
+    for( size_t i = 0; i < rNameVector.size(); ++i )
     {
         mpImplData->AddImage( rNameVector[ i ], static_cast< sal_uInt16 >( i ) + 1, BitmapEx() );
     }
@@ -515,7 +515,7 @@ void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 void ImageList::RemoveImage( sal_uInt16 nId )
 {
 
-    for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); ++i )
+    for( size_t i = 0; i < mpImplData->maImages.size(); ++i )
     {
         if( mpImplData->maImages[ i ]->mnId == nId )
         {
@@ -585,7 +585,7 @@ sal_uInt16 ImageList::GetImagePos( sal_uInt16 nId ) const
 
     if( mpImplData && nId )
     {
-        for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); ++i )
+        for( size_t i = 0; i < mpImplData->maImages.size(); ++i )
         {
             if (mpImplData->maImages[ i ]->mnId == nId)
                 return static_cast< sal_uInt16 >( i );
@@ -605,7 +605,7 @@ sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const
 
     if( mpImplData && !rImageName.isEmpty() )
     {
-        for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
+        for( size_t i = 0; i < mpImplData->maImages.size(); i++ )
         {
             if (mpImplData->maImages[i]->maName == rImageName)
                 return static_cast< sal_uInt16 >( i );
@@ -641,7 +641,7 @@ void ImageList::GetImageNames( ::std::vector< OUString >& rNames ) const
 
     if( mpImplData )
     {
-        for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
+        for( size_t i = 0; i < mpImplData->maImages.size(); i++ )
         {
             const OUString& rName( mpImplData->maImages[ i ]->maName );
             if( !rName.isEmpty())

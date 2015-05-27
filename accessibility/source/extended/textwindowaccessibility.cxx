@@ -1416,7 +1416,7 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
                 static_cast< css::uno::XWeak * >( this ) );
         ::sal_Int32 nLineStart = 0;
         ::sal_Int32 nLineEnd = 0;
-        for ( ::sal_uInt16 nLine = 0; nLine <= nLineNo; ++nLine )
+        for ( ::sal_Int32 nLine = 0; nLine <= nLineNo; ++nLine )
         {
             ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >(
                 m_rEngine.GetLineLen( nNumber, nLine ) );

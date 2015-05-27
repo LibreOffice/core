@@ -352,7 +352,7 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
             // Step to left side of window
             nBlockStart = nX;
 
-            for ( sal_Int16 i=1; i<=nBlockCount; ++i )
+            for ( sal_Int32 i=1; i<=nBlockCount; ++i )
             {
                 // step free field
                 nBlockStart +=  PROGRESSBAR_FREESPACE;
@@ -370,7 +370,7 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
             nBlockStart  =  nY+impl_getHeight();
             nBlockStart -=  m_aBlockSize.Height;
 
-            for ( sal_Int16 i=1; i<=nBlockCount; ++i )
+            for ( sal_Int32 i=1; i<=nBlockCount; ++i )
             {
                 // step free field
                 nBlockStart -=  PROGRESSBAR_FREESPACE;

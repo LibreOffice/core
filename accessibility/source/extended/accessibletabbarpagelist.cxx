@@ -80,7 +80,7 @@ namespace accessibility
 
     void AccessibleTabBarPageList::UpdateShowing( bool bShowing )
     {
-        for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
             if ( xChild.is() )
@@ -399,7 +399,7 @@ namespace accessibility
         AccessibleTabBarBase::disposing();
 
         // dispose all children
-        for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
             if ( xComponent.is() )
@@ -580,7 +580,7 @@ namespace accessibility
         OExternalLockGuard aGuard( this );
 
         Reference< XAccessible > xChild;
-        for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XAccessible > xAcc = getAccessibleChild( i );
             if ( xAcc.is() )

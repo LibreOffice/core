@@ -1774,7 +1774,7 @@ vcl::Region vcl::Region::GetRegionFromPolyPolygon( const tools::PolyPolygon& rPo
     int nPolygonRects = 0, nPolygonPolygons = 0;
     int nPolygons = rPolyPoly.Count();
 
-    for( sal_uInt16 i = 0; i < nPolygons; i++ )
+    for( int i = 0; i < nPolygons; i++ )
     {
         const Polygon& rPoly = rPolyPoly[i];
 
@@ -1796,7 +1796,7 @@ vcl::Region vcl::Region::GetRegionFromPolyPolygon( const tools::PolyPolygon& rPo
     vcl::Region aResult;
     Rectangle aRect;
 
-    for( sal_uInt16 i = 0; i < nPolygons; i++ )
+    for( int i = 0; i < nPolygons; i++ )
     {
         const Polygon& rPoly = rPolyPoly[i];
 

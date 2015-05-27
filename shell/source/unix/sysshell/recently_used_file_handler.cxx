@@ -151,7 +151,7 @@ namespace /* private */ {
         static OString escape_content(const string_t &text)
         {
             OStringBuffer aBuf;
-            for (sal_uInt32 i = 0; i < text.length(); i++)
+            for (size_t i = 0; i < text.length(); i++)
             {
                 switch (text[i])
                 {

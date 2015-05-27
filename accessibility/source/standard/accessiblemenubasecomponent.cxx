@@ -248,7 +248,7 @@ void OAccessibleMenuBaseComponent::UpdateFocused( sal_Int32 i, bool bFocused )
 void OAccessibleMenuBaseComponent::UpdateVisible()
 {
     SetVisible( IsVisible() );
-    for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
@@ -489,7 +489,7 @@ bool OAccessibleMenuBaseComponent::IsChildHighlighted()
 {
     bool bChildHighlighted = false;
 
-    for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
@@ -669,7 +669,7 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
                 m_pMenu = NULL;
 
                 // dispose all menu items
-                for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+                for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
                 {
                     Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
                     if ( xComponent.is() )
@@ -713,7 +713,7 @@ void OAccessibleMenuBaseComponent::disposing()
         m_pMenu = NULL;
 
         // dispose all menu items
-        for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
             if ( xComponent.is() )

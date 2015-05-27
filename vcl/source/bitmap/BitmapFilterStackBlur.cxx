@@ -492,9 +492,9 @@ void centerExtendBitmap(Bitmap& rBitmap, sal_Int32 nExtendSize, Color aColor)
         long nWidthBorder  = nExtendSize + rSize.Width();
         long nHeightBorder = nExtendSize + rSize.Height();
 
-        for (int y = 0; y < aNewSize.Height(); y++)
+        for (long y = 0; y < aNewSize.Height(); y++)
         {
-            for (int x = 0; x < aNewSize.Width(); x++)
+            for (long x = 0; x < aNewSize.Width(); x++)
             {
                 if (y < nExtendSize || y >= nHeightBorder
                  || x < nExtendSize || x >= nWidthBorder)

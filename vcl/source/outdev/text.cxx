@@ -689,7 +689,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         }
     }
 #ifdef DBG_UTIL
-    for ( sal_uInt16 nL = 0; nL < rLineInfo.Count(); nL++ )
+    for ( sal_Int32 nL = 0; nL < rLineInfo.Count(); nL++ )
     {
         ImplTextLineInfo* pLine = rLineInfo.GetLine( nL );
         OUString aLine = rStr.copy( pLine->GetIndex(), pLine->GetLen() );

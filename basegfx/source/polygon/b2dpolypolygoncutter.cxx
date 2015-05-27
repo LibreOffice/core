@@ -1038,7 +1038,7 @@ namespace basegfx
                 B2DPolyPolygonVector aResult;
                 aResult.reserve(aInput.size());
 
-                for(sal_uInt32 a(0); a < aInput.size(); a++)
+                for(size_t a(0); a < aInput.size(); a++)
                 {
                     const basegfx::B2DPolyPolygon aCandidate(prepareForPolygonOperation(aInput[a]));
 
@@ -1080,7 +1080,7 @@ namespace basegfx
                 B2DPolyPolygonVector aResult;
                 aResult.reserve((aInput.size() / 2) + 1);
 
-                for(sal_uInt32 a(0); a < aInput.size(); a += 2)
+                for(size_t a(0); a < aInput.size(); a += 2)
                 {
                     if(a + 1 < aInput.size())
                     {

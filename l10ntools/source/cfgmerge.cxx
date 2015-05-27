@@ -470,7 +470,7 @@ void CfgMerge::WorkOnResourceEnd()
         if ( pEntrys ) {
             OString sCur;
 
-            for( unsigned int i = 0; i < aLanguages.size(); ++i ){
+            for( size_t i = 0; i < aLanguages.size(); ++i ){
                 sCur = aLanguages[ i ];
 
                 OString sContent;

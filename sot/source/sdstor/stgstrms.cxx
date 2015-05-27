@@ -611,7 +611,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
                 pMaster = rIo.Copy( nFAT, STG_FREE );
                 if ( pMaster.is() )
                 {
-                    for( short k = 0; k < ( nPageSize >> 2 ); k++ )
+                    for( short k = 0; k < (short)( nPageSize >> 2 ); k++ )
                         rIo.SetToPage( pMaster, k, STG_FREE );
                     // Verkettung herstellen
                     if( !pOldPage.is() )
@@ -763,7 +763,7 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
             rtl::Reference< StgPage > pPg = rIo.Copy( nNewPage, STG_FREE );
             if ( !pPg.is() )
                 return false;
-            for( short j = 0; j < ( nPageSize >> 2 ); j++ )
+            for( short j = 0; j < (short)( nPageSize >> 2 ); j++ )
                 rIo.SetToPage( pPg, j, STG_FREE );
 
             // store the page number into the master FAT
@@ -776,7 +776,7 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
             sal_uInt32 nMax = rIo.aHdr.GetMasters( );
             sal_uInt32 nFAT = rIo.aHdr.GetFATChain();
             if( nMasterAlloc )
-                for( sal_uInt16 nCount = 0; nCount < nMax; nCount++ )
+                for( sal_uInt32 nCount = 0; nCount < nMax; nCount++ )
                 {
                     if( !Pos2Page( nFAT << 2 ) )
                         return false;

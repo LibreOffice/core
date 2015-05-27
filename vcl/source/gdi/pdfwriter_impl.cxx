@@ -1359,7 +1359,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     unsigned int nStreamObjects = m_aStreamObjects.size();
     if( nStreamObjects > 1 )
         aLine.append( '[' );
-    for( unsigned int i = 0; i < m_aStreamObjects.size(); i++ )
+    for( size_t i = 0; i < m_aStreamObjects.size(); i++ )
     {
         aLine.append( ' ' );
         aLine.append( m_aStreamObjects[i] );
@@ -5394,7 +5394,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                     if( rWidget.m_nFlags & 0x200000 ) // multiselect
                     {
                         aValue.append( "[" );
-                        for( unsigned int i = 0; i < rWidget.m_aSelectedEntries.size(); i++ )
+                        for( size_t i = 0; i < rWidget.m_aSelectedEntries.size(); i++ )
                         {
                             sal_Int32 nEntry = rWidget.m_aSelectedEntries[i];
                             if( nEntry >= 0 && nEntry < sal_Int32(rWidget.m_aListEntries.size()) )
@@ -5441,7 +5441,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         if( rWidget.m_aKids.size() )
         {
             aLine.append( "/Kids[" );
-            for( unsigned int i = 0; i < rWidget.m_aKids.size(); i++ )
+            for( size_t i = 0; i < rWidget.m_aKids.size(); i++ )
             {
                 aLine.append( rWidget.m_aKids[i] );
                 aLine.append( " 0 R" );
@@ -8138,7 +8138,7 @@ bool PDFWriterImpl::emitTrailer()
     if( m_aAdditionalStreams.size() > 0 )
     {
         aLine.append( "/AdditionalStreams [" );
-        for( unsigned int i = 0; i < m_aAdditionalStreams.size(); i++ )
+        for( size_t i = 0; i < m_aAdditionalStreams.size(); i++ )
         {
             aLine.append( "/" );
             appendName( m_aAdditionalStreams[i].m_aMimeType, aLine );
@@ -11028,7 +11028,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
         default:
             for( int y = aSize.Height()-1; y >= 0; y-- )
             {
-                for( int x = 0; x < aSize.Width(); x++ )
+                for( long x = 0; x < aSize.Width(); x++ )
                 {
                     BitmapColor aColor = pAccess->GetColor( y, x );
                     aCol[0] = aColor.GetRed();
@@ -11454,7 +11454,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         {
             const int nScanLineBytes = 1 + ( pAccess->GetBitCount() * ( pAccess->Width() - 1 ) / 8U );
 
-            for( int i = 0; i < pAccess->Height(); i++ )
+            for( long i = 0; i < pAccess->Height(); i++ )
             {
                 CHECK_RETURN( writeBuffer( pAccess->GetScanline( i ), nScanLineBytes ) );
             }
@@ -11463,9 +11463,9 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         {
             const int nScanLineBytes = pAccess->Width()*3;
             boost::shared_array<sal_uInt8> pCol( new sal_uInt8[ nScanLineBytes ] );
-            for( int y = 0; y < pAccess->Height(); y++ )
+            for( long y = 0; y < pAccess->Height(); y++ )
             {
-                for( int x = 0; x < pAccess->Width(); x++ )
+                for( long x = 0; x < pAccess->Width(); x++ )
                 {
                     BitmapColor aColor = pAccess->GetColor( y, x );
                     pCol[3*x+0] = aColor.GetRed();

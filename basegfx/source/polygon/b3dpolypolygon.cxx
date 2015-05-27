@@ -121,7 +121,7 @@ public:
 
     void transform(const ::basegfx::B3DHomMatrix& rMatrix)
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        for(size_t a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].transform(rMatrix);
         }
@@ -129,7 +129,7 @@ public:
 
     void clearBColors()
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        for(size_t a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].clearBColors();
         }
@@ -137,7 +137,7 @@ public:
 
     void transformNormals(const ::basegfx::B3DHomMatrix& rMatrix)
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        for(size_t a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].transformNormals(rMatrix);
         }
@@ -145,7 +145,7 @@ public:
 
     void clearNormals()
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        for(size_t a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].clearNormals();
         }
@@ -153,7 +153,7 @@ public:
 
     void transformTextureCoordiantes(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        for(size_t a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].transformTextureCoordiantes(rMatrix);
         }
@@ -161,7 +161,7 @@ public:
 
     void clearTextureCoordinates()
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        for(size_t a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].clearTextureCoordinates();
         }

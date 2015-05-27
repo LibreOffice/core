@@ -867,7 +867,7 @@ WinMtfOutput::~WinMtfOutput()
     else
         mpGDIMetaFile->SetPrefSize( mrclFrame.GetSize() );
 
-    for ( sal_uInt32 i = 0; i < vGDIObj.size(); i++ )
+    for ( size_t i = 0; i < vGDIObj.size(); i++ )
         delete vGDIObj[ i ];
 }
 

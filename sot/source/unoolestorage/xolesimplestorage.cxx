@@ -560,7 +560,7 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
     }
 
     uno::Sequence< OUString > aSeq( aList.size() );
-    for ( sal_uInt32 nInd = 0; nInd < aList.size(); nInd++ )
+    for ( size_t nInd = 0; nInd < aList.size(); nInd++ )
         aSeq[nInd] = aList[nInd].GetName();
 
     return aSeq;

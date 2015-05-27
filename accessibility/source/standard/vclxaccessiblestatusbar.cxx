@@ -207,7 +207,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         case VCLEVENT_STATUSBAR_SHOWALLITEMS:
         case VCLEVENT_STATUSBAR_HIDEALLITEMS:
         {
-            for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+            for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
                 UpdateShowing( i, rVclWindowEvent.GetId() == VCLEVENT_STATUSBAR_SHOWALLITEMS );
         }
         break;
@@ -238,7 +238,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
                 m_pStatusBar = NULL;
 
                 // dispose all children
-                for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+                for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
                 {
                     Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
                     if ( xComponent.is() )
@@ -268,7 +268,7 @@ void VCLXAccessibleStatusBar::disposing()
         m_pStatusBar = NULL;
 
         // dispose all children
-        for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
             if ( xComponent.is() )

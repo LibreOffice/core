@@ -430,7 +430,7 @@ void TextEngine::ImpRemoveText()
 
     TextPaM aStartPaM( 0, 0 );
     TextSelection aEmptySel( aStartPaM, aStartPaM );
-    for ( sal_uInt16 nView = 0; nView < mpViews->size(); nView++ )
+    for ( size_t nView = 0; nView < mpViews->size(); nView++ )
     {
         TextView* pView = (*mpViews)[ nView ];
         pView->ImpSetSelection( aEmptySel );
@@ -453,7 +453,7 @@ void TextEngine::SetText( const OUString& rText )
     if ( !rText.isEmpty() )
         aPaM = ImpInsertText( aEmptySel, rText );
 
-    for ( sal_uInt16 nView = 0; nView < mpViews->size(); nView++ )
+    for ( size_t nView = 0; nView < mpViews->size(); nView++ )
     {
         TextView* pView = (*mpViews)[ nView ];
         pView->ImpSetSelection( aEmptySel );
@@ -898,7 +898,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
     long nY = 0;
     sal_uInt16 nCurIndex = 0;
     TextLine* pLine = 0;
-    for ( sal_uInt16 nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
+    for ( size_t nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
     {
         TextLine& pTmpLine = pPortion->GetLines()[ nLine ];
         if ( ( pTmpLine.GetStart() == rPaM.GetIndex() ) || ( pTmpLine.IsIn( rPaM.GetIndex(), bSpecial ) ) )
@@ -1482,7 +1482,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
 
-    for ( sal_uInt16 nView = 0; nView < mpViews->size(); nView++ )
+    for ( size_t nView = 0; nView < mpViews->size(); nView++ )
     {
         TextView* pView = (*mpViews)[ nView ];
         pView->HideCursor();
@@ -1768,7 +1768,7 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
     {
         sal_uInt16 nLastAttr = 0xFFFF;
-        for( sal_uInt16 n = 0; n < mpIMEInfos->nLen; n++ )
+        for( sal_Int32 n = 0; n < mpIMEInfos->nLen; n++ )
         {
             if ( mpIMEInfos->pAttribs[n] != nLastAttr )
             {
@@ -2935,7 +2935,7 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
         int32_t nEnd;
         UBiDiLevel nCurrDir;
 
-        for ( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
+        for ( long nIdx = 0; nIdx < nCount; ++nIdx )
         {
             ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
             rInfos.push_back( TEWritingDirectionInfo( nCurrDir, (sal_uInt16)nStart, (sal_uInt16)nEnd ) );
