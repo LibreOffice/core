@@ -278,7 +278,7 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
 }
 
 void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh, bool bDrag,
-                             const Rectangle& rItemRect, const Rectangle* pRect, sal_uLong )
+                             const Rectangle& rItemRect, const Rectangle* pRect, DrawFlags )
 {
     ImplControlValue aControlValue(0);
     Rectangle aCtrlRegion;
@@ -619,7 +619,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
                              bool bHigh, bool bDrag, const Rectangle* pRect )
 {
     Rectangle aRect = ImplGetItemRect(nPos);
-    ImplDrawItem(rRenderContext, nPos, bHigh, bDrag, aRect, pRect, 0 );
+    ImplDrawItem(rRenderContext, nPos, bHigh, bDrag, aRect, pRect, DrawFlags::NONE );
 }
 
 void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd, bool /*bDirect*/)
@@ -947,7 +947,7 @@ void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 }
 
 void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                      sal_uLong nFlags )
+                      DrawFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -957,13 +957,13 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
-    if ( nFlags & WINDOW_DRAW_MONO )
+    if ( nFlags & DrawFlags::Mono )
         pDev->SetTextColor( Color( COL_BLACK ) );
     else
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();
 
-    if ( !(nFlags & WINDOW_DRAW_NOBACKGROUND) )
+    if ( !(nFlags & DrawFlags::NoBackground) )
     {
         pDev->DrawWallpaper( aRect, GetBackground() );
         if ( mnBorderOff1 || mnBorderOff2 )

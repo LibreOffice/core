@@ -380,7 +380,7 @@ void SwSidebarWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, b
     mpSidebarTextControl->Pop();
 }
 
-void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong nInFlags)
+void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
 {
     if (mpMetadataAuthor->IsVisible() )
     {

@@ -177,7 +177,7 @@ class SwSidebarWin : public vcl::Window
         void ChangeSidebarItem( SwSidebarItem& rSidebarItem );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
-        virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, sal_uLong) SAL_OVERRIDE;
+        virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) SAL_OVERRIDE;
         virtual void KeyInput(const KeyEvent& rKeyEvt) SAL_OVERRIDE;
         virtual void MouseButtonDown(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
         virtual void MouseButtonUp(const MouseEvent& rMouseEvent) SAL_OVERRIDE;

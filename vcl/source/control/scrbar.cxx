@@ -411,13 +411,13 @@ void ScrollBar::ImplCalc( bool bUpdate )
     ImplUpdateRects( bUpdate );
 }
 
-void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& /* rSize */, sal_uLong nFlags )
+void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& /* rSize */, DrawFlags nFlags )
 {
     Point aPos  = pDev->LogicToPixel( rPos );
 
     pDev->Push();
     pDev->SetMapMode();
-    if ( !(nFlags & WINDOW_DRAW_MONO) )
+    if ( !(nFlags & DrawFlags::Mono) )
     {
         // DecoView uses the FaceColor...
         AllSettings aSettings = pDev->GetSettings();

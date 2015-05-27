@@ -67,10 +67,10 @@ namespace
     }
 }
 
-void ImageControl::ImplDraw(OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize) const
+void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Point& rPos, const Size& rSize) const
 {
     DrawImageFlags nStyle = DrawImageFlags::NONE;
-    if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+    if ( !(nDrawFlags & DrawFlags::NoDisable) )
     {
         if ( !IsEnabled() )
             nStyle |= DrawImageFlags::Disable;
@@ -87,7 +87,7 @@ void ImageControl::ImplDraw(OutputDevice& rDev, sal_uLong nDrawFlags, const Poin
 
         WinBits nWinStyle = GetStyle();
         DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
-        if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+        if ( !(nDrawFlags & DrawFlags::NoDisable) )
             if ( !IsEnabled() )
                 nTextStyle |= DrawTextFlags::Disable;
 
@@ -133,7 +133,7 @@ void ImageControl::ImplDraw(OutputDevice& rDev, sal_uLong nDrawFlags, const Poin
 
 void ImageControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    ImplDraw(rRenderContext, 0, Point(), GetOutputSizePixel());
+    ImplDraw(rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 
     if (HasFocus())
     {
@@ -157,7 +157,7 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
     }
 }
 
-void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
     const Size      aSize = pDev->LogicToPixel( rSize );
@@ -167,7 +167,7 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSiz
     pDev->SetMapMode();
 
     // Border
-    if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
+    if ( !(nFlags & DrawFlags::NoBorder) && (GetStyle() & WB_BORDER) )
     {
         ImplDrawFrame( pDev, aRect );
     }

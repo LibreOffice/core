@@ -373,7 +373,7 @@ void ListBox::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground();
 }
 
-void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
     mpImplLB->GetMainWindow()->ApplySettings(*pDev);
 
@@ -390,8 +390,8 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    bool bBorder = !(nFlags & DrawFlags::NoBorder ) && (GetStyle() & WB_BORDER);
+    bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -407,13 +407,13 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
     }
 
     // Content
-    if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
+    if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
     {
         pDev->SetTextColor( Color( COL_BLACK ) );
     }
     else
     {
-        if ( !(nFlags & WINDOW_DRAW_NODISABLE ) && !IsEnabled() )
+        if ( !(nFlags & DrawFlags::NoDisable ) && !IsEnabled() )
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             pDev->SetTextColor( rStyleSettings.GetDisableColor() );

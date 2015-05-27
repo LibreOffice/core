@@ -42,13 +42,13 @@ public:
     ::sal_Int16     GetScaleMode() const { return mnScaleMode; }
 
     virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
 
 protected:
-    void    ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const;
+    void    ImplDraw( OutputDevice& rDev, DrawFlags nDrawFlags, const Point& rPos, const Size& rSize ) const;
 };
 
 #endif // INCLUDED_VCL_IMGCTRL_HXX

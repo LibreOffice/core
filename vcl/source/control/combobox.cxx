@@ -1129,7 +1129,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     }
 }
 
-void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
     mpImplLB->GetMainWindow()->ApplySettings(*pDev);
 
@@ -1146,8 +1146,8 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, s
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    bool bBorder = !(nFlags & DrawFlags::NoBorder ) && (GetStyle() & WB_BORDER);
+    bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -1182,13 +1182,13 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, s
         else
             nTextStyle |= DrawTextFlags::Left;
 
-        if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
+        if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
         {
             pDev->SetTextColor( Color( COL_BLACK ) );
         }
         else
         {
-            if ( !(nFlags & WINDOW_DRAW_NODISABLE ) && !IsEnabled() )
+            if ( !(nFlags & DrawFlags::NoDisable ) && !IsEnabled() )
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
                 pDev->SetTextColor( rStyleSettings.GetDisableColor() );

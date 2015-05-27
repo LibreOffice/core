@@ -272,7 +272,7 @@ private:
     SVT_DLLPRIVATE sal_uInt16               ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
     SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
     SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh, bool bDrag,
-                                                 const Rectangle& rItemRect, const Rectangle* pRect, sal_uLong nFlags);
+                                                 const Rectangle& rItemRect, const Rectangle* pRect, DrawFlags nFlags);
     SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh = false,
                                                  bool bDrag = false, const Rectangle* pRect = NULL);
     SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
@@ -292,7 +292,7 @@ public:
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
     virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;

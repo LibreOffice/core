@@ -142,7 +142,7 @@ namespace frm
         bool    GetHideInactiveSelection() const;
 
         /// draws the control onto a given output device
-        void    Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong _nFlags );
+        void    Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, DrawFlags _nFlags );
 
         /// handles command events arrived at the anti-impl control
         long    HandleCommand( const CommandEvent& _rEvent );

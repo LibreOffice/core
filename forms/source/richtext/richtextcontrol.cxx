@@ -359,7 +359,7 @@ namespace frm
         if ( eTargetUnit != MAP_PIXEL )
             aPos = pTargetDevice->PixelToLogic( aPos );
 
-        pControl->Draw( pTargetDevice, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+        pControl->Draw( pTargetDevice, aPos, aSize, DrawFlags::NoControls );
     }
 
 

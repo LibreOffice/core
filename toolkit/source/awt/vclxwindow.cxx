@@ -2249,7 +2249,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             aPos  = pDev->PixelToLogic( aPos );
             aSize = pDev->PixelToLogic( aSize );
 
-            pTabPage->Draw( pDev, aPos, aSize, 0 );
+            pTabPage->Draw( pDev, aPos, aSize, DrawFlags::NONE );
             return;
         }
 
@@ -2306,7 +2306,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
                                || ( pPDFExport != NULL );
             if ( bDrawSimple )
             {
-                pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
+                pWindow->Draw( pDev, aP, aSz, DrawFlags::NoControls );
             }
             else
             {
