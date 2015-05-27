@@ -3167,6 +3167,11 @@ void SwXTextDocument::initializeForTiledRendering()
         return;
     pView->SetViewLayout(nColumns, bBookMode, true);
 
+    // Tiled rendering defaults.
+    SwViewOption aViewOption(*pViewShell->GetViewOptions());
+    aViewOption.SetHardBlank(false);
+    pViewShell->ApplyViewOptions(aViewOption);
+
     // Disable map mode, so that it's possible to send mouse event coordinates
     // directly in twips.
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
