@@ -50,6 +50,7 @@ BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("Free Software Foundation, Inc.", GnuInfo)
     VENDOR_MAP_ENTRY("The FreeBSD Foundation", OtherInfo)
 #endif
+    VENDOR_MAP_ENTRY("Azul Systems, Inc.", OtherInfo)
 END_VENDOR_MAP()
 
 
