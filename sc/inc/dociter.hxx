@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_DOCITER_HXX
 
 #include "address.hxx"
+#include "formulagroup.hxx"
 #include <tools/solar.h>
 #include "global.hxx"
 #include "scdllapi.h"
@@ -182,6 +183,23 @@ public:
     bool            GetFirst(Value& rValue);
     /// Does NOT reset rValue if no value found!
     bool            GetNext(Value& rValue);
+};
+
+class ScFormulaGroupIterator
+{
+private:
+    ScDocument* mpDoc;
+    SCTAB mnTab;
+    SCCOL mnCol;
+    bool nullCol;
+    size_t mnIndex;
+    std::vector<sc::FormulaGroupEntry> maEntries;
+
+public:
+    ScFormulaGroupIterator( ScDocument* pDoc );
+
+    sc::FormulaGroupEntry* first();
+    sc::FormulaGroupEntry* next();
 };
 
 /**

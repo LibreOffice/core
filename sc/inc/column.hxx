@@ -145,6 +145,7 @@ friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
 friend class ScQueryCellIterator;
+friend class ScFormulaGroupIterator;
 friend class ScCellIterator;
 friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
