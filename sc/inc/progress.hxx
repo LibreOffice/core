@@ -49,6 +49,7 @@ private:
     static  bool            bAllowInterpretProgress;
     static  ScDocument*     pInterpretDoc;
     static  bool            bIdleWasEnabled;
+            bool            bEnabled;
 
             SfxProgress*    pProgress;
 
@@ -144,6 +145,9 @@ public:
                                         return pProgress->GetState();
                                     return 0;
                                 }
+            bool                Enabled() const { return bEnabled; }
+            void                Disable() { bEnabled = false; }
+            void                Enable() { bEnabled = true; }
 };
 
 #endif
