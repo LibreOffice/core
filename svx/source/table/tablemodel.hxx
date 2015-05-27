@@ -69,7 +69,7 @@ class TableModel : public ::comphelper::OBaseMutex,
     friend class TableModelNotifyGuard;
 
 public:
-    TableModel( SdrTableObj* pTableObj );
+    explicit TableModel( SdrTableObj* pTableObj );
     TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTable );
     virtual ~TableModel();
 
@@ -183,14 +183,14 @@ private:
 class TableModelNotifyGuard
 {
 public:
-    TableModelNotifyGuard( TableModel* pModel )
+    explicit TableModelNotifyGuard( TableModel* pModel )
     : mxBroadcaster( static_cast< ::com::sun::star::util::XBroadcaster* >( pModel ) )
     {
         if( mxBroadcaster.is() )
             mxBroadcaster->lockBroadcasts();
     }
 
-    TableModelNotifyGuard( ::com::sun::star::uno::XInterface* pInterface )
+    explicit TableModelNotifyGuard( ::com::sun::star::uno::XInterface* pInterface )
     : mxBroadcaster( pInterface, ::com::sun::star::uno::UNO_QUERY )
     {
         if( mxBroadcaster.is() )

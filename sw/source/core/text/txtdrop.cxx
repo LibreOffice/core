@@ -72,7 +72,7 @@ class SwDropSave
     long nY;
 
 public:
-    SwDropSave( const SwTextPaintInfo &rInf );
+    explicit SwDropSave( const SwTextPaintInfo &rInf );
     ~SwDropSave();
 };
 

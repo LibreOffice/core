@@ -35,7 +35,7 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 class SelectionTypePopup : public PopupMenu
 {
 public:
-    SelectionTypePopup( sal_uInt16 nCurrent );
+    explicit SelectionTypePopup( sal_uInt16 nCurrent );
 };
 
 /// Item id's cannot start from 0, so we need to convert

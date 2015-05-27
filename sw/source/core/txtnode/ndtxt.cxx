@@ -4678,7 +4678,7 @@ namespace {
                                       const sal_uInt16 nWhich2 );
             HandleResetAttrAtTextNode( SwTextNode& rTextNode,
                                       const std::vector<sal_uInt16>& rWhichArr );
-            HandleResetAttrAtTextNode( SwTextNode& rTextNode );
+            explicit HandleResetAttrAtTextNode( SwTextNode& rTextNode );
 
             ~HandleResetAttrAtTextNode();
 

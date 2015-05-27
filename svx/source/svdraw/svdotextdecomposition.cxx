@@ -106,7 +106,7 @@ namespace
         void impHandleDrawBulletInfo(const DrawBulletInfo& rInfo);
 
     public:
-        impTextBreakupHandler(SdrOutliner& rOutliner)
+        explicit impTextBreakupHandler(SdrOutliner& rOutliner)
         :   maTextPortionPrimitives(),
             maLinePrimitives(),
             maParagraphPrimitives(),

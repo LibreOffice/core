@@ -62,7 +62,7 @@ class ColorWindow : public Control
 
 
 public:
-    ColorWindow(vcl::Window* pParent)
+    explicit ColorWindow(vcl::Window* pParent)
         : Control(pParent, WB_BORDER)
         , aColor( COL_WHITE )
     {

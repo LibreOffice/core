@@ -206,7 +206,7 @@ class SwOszControl
     std::vector<Point*> maObjPositions;
 
 public:
-    SwOszControl( const SwFlyFrm *pFrm );
+    explicit SwOszControl( const SwFlyFrm *pFrm );
     ~SwOszControl();
     bool ChkOsz();
     static bool IsInProgress( const SwFlyFrm *pFly );

@@ -1468,7 +1468,7 @@ class DisableCallbackAction
         bool mbOldCallbackActionState;
 
     public:
-        DisableCallbackAction( const SwRootFrm& _rRootFrm ) :
+        explicit DisableCallbackAction( const SwRootFrm& _rRootFrm ) :
             mrRootFrm( const_cast<SwRootFrm&>(_rRootFrm) ),
             mbOldCallbackActionState( _rRootFrm.IsCallbackActionEnabled() )
         {

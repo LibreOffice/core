@@ -34,7 +34,7 @@ class EmptyPanel
     : public Control
 {
 public:
-    EmptyPanel (vcl::Window* pParent);
+    explicit EmptyPanel (vcl::Window* pParent);
     virtual ~EmptyPanel();
     virtual void dispose() SAL_OVERRIDE;
 

@@ -114,7 +114,7 @@ namespace {
         Fraction    maScaleX;
         Fraction    maScaleY;
 
-        ExportSettings( SdrModel* pDoc );
+        explicit ExportSettings( SdrModel* pDoc );
     };
 
     ExportSettings::ExportSettings( SdrModel* pDoc )
@@ -284,7 +284,7 @@ namespace {
 class ImplExportCheckVisisbilityRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 public:
-    ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage );
+    explicit ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage );
     virtual ~ImplExportCheckVisisbilityRedirector();
 
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(

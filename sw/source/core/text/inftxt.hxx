@@ -132,7 +132,7 @@ protected:
 public:
     void CtorInitTextInfo( SwTextFrm *pFrm );
     SwTextInfo( const SwTextInfo &rInf );
-    SwTextInfo( SwTextFrm *pFrm ) { CtorInitTextInfo( pFrm ); }
+    explicit SwTextInfo( SwTextFrm *pFrm ) { CtorInitTextInfo( pFrm ); }
     SwParaPortion *GetParaPortion() { return m_pPara; }
     const SwParaPortion *GetParaPortion() const { return m_pPara; }
     sal_Int32 GetTextStart() const { return m_nTextStart; }

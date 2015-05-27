@@ -64,7 +64,7 @@ typedef std::unordered_map< Reference< XCell >, rtl::Reference< AccessibleCell >
 class AccessibleTableShapeImpl : public cppu::WeakImplHelper1< XModifyListener >
 {
 public:
-    AccessibleTableShapeImpl( AccessibleShapeTreeInfo& rShapeTreeInfo );
+    explicit AccessibleTableShapeImpl( AccessibleShapeTreeInfo& rShapeTreeInfo );
 
     void init( const Reference< XAccessible>& xAccessible, const Reference< XTable >& xTable );
     void dispose();

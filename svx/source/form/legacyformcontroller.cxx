@@ -76,7 +76,7 @@ namespace svxform
         }
 
     protected:
-        LegacyFormController( const Reference< XComponentContext >& _rxContext )
+        explicit LegacyFormController( const Reference< XComponentContext >& _rxContext )
             :m_xDelegator( FormController::create(_rxContext) )
         {
         }

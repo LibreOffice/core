@@ -37,7 +37,7 @@ class SwLooping
     sal_uInt16 nCount;
     sal_uInt16 mnLoopControlStage;
 public:
-    SwLooping( SwPageFrm* pPage );
+    explicit SwLooping( SwPageFrm* pPage );
     void Control( SwPageFrm* pPage );
     void Drastic( SwFrm* pFrm );
     bool IsLoopingLouieLight() const { return nCount > LOOP_DETECT - 30; };
@@ -49,7 +49,7 @@ class SwEndnoter
     SwSectionFrm* pSect;
     SwFootnoteFrms*    pEndArr;
 public:
-    SwEndnoter( SwLayouter* pLay )
+    explicit SwEndnoter( SwLayouter* pLay )
         : pMaster( pLay ), pSect( NULL ), pEndArr( NULL ) {}
     ~SwEndnoter() { delete pEndArr; }
     void CollectEndnotes( SwSectionFrm* pSct );

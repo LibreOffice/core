@@ -83,7 +83,7 @@ namespace
         bool                                        mbRTL : 1;
 
     public:
-        impPathTextPortion(DrawPortionInfo& rInfo)
+        explicit impPathTextPortion(DrawPortionInfo& rInfo)
         :   maOffset(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y()),
             maText(rInfo.maText),
             mnTextStart(rInfo.mnTextStart),
@@ -174,7 +174,7 @@ namespace
         DECL_LINK(decompositionPathTextPrimitive, DrawPortionInfo* );
 
     public:
-        impTextBreakupHandler(SdrOutliner& rOutliner)
+        explicit impTextBreakupHandler(SdrOutliner& rOutliner)
         :   mrOutliner(rOutliner)
         {
         }

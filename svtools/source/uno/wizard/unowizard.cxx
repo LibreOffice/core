@@ -97,7 +97,7 @@ namespace {
                     , public Wizard_PBase
     {
     public:
-        Wizard( const uno::Reference< uno::XComponentContext >& i_rContext );
+        explicit Wizard( const uno::Reference< uno::XComponentContext >& i_rContext );
 
         // lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;

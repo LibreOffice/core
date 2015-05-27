@@ -87,7 +87,7 @@ struct _CpyTabFrm
     } Value;
     SwTableBoxFormat *pNewFrameFormat;
 
-    _CpyTabFrm( SwTableBoxFormat* pAktFrameFormat ) : pNewFrameFormat( 0 )
+    explicit _CpyTabFrm( SwTableBoxFormat* pAktFrameFormat ) : pNewFrameFormat( 0 )
     {   Value.pFrameFormat = pAktFrameFormat; }
 
     _CpyTabFrm& operator=( const _CpyTabFrm& );

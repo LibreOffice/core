@@ -119,9 +119,9 @@ namespace svxform
         Reference< css::xml::dom::XNode >   m_xNode;
         Reference< XPropertySet >           m_xPropSet;
 
-        ItemNode( const Reference< css::xml::dom::XNode >& _rxNode ) :
+        explicit ItemNode( const Reference< css::xml::dom::XNode >& _rxNode ) :
             m_xNode( _rxNode ) {}
-        ItemNode( const Reference< XPropertySet >& _rxSet ) :
+        explicit ItemNode( const Reference< XPropertySet >& _rxSet ) :
             m_xPropSet( _rxSet ) {}
     };
 

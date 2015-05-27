@@ -35,7 +35,7 @@ using namespace ::cppu;
 class SvxUnoHatchTable : public SvxUnoNameItemTable
 {
 public:
-    SvxUnoHatchTable( SdrModel* pModel ) throw();
+    explicit SvxUnoHatchTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoHatchTable() throw();
 
     virtual NameOrIndex* createItem() const throw() SAL_OVERRIDE;

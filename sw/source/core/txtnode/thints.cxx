@@ -99,7 +99,7 @@ SwpHints::SwpHints()
 struct TextAttrDeleter
 {
     SwAttrPool & m_rPool;
-    TextAttrDeleter( SwDoc & rDoc ) : m_rPool( rDoc.GetAttrPool() ) { }
+    explicit TextAttrDeleter( SwDoc & rDoc ) : m_rPool( rDoc.GetAttrPool() ) { }
     void operator() (SwTextAttr * const pAttr)
     {
         if (RES_TXTATR_META == pAttr->Which() ||
@@ -114,7 +114,7 @@ struct TextAttrDeleter
 struct TextAttrContains
 {
     sal_Int32 m_nPos;
-    TextAttrContains( const sal_Int32 nPos ) : m_nPos( nPos ) { }
+    explicit TextAttrContains( const sal_Int32 nPos ) : m_nPos( nPos ) { }
     bool operator() (SwTextAttrEnd * const pAttr)
     {
         return (pAttr->GetStart() < m_nPos) && (m_nPos < *pAttr->End());
@@ -2306,7 +2306,7 @@ struct IsAutoStyle
   */
 struct RemovePresentAttrs
 {
-    RemovePresentAttrs(SfxItemSet& io_rAttrSet)
+    explicit RemovePresentAttrs(SfxItemSet& io_rAttrSet)
         : m_rAttrSet(io_rAttrSet)
     {
     }
@@ -2405,7 +2405,7 @@ lcl_FillWhichIds(const SfxItemSet& i_rAttrSet, std::vector<sal_uInt16>& o_rClear
 struct SfxItemSetClearer
 {
     SfxItemSet & m_rItemSet;
-    SfxItemSetClearer(SfxItemSet & rItemSet) : m_rItemSet(rItemSet) { }
+    explicit SfxItemSetClearer(SfxItemSet & rItemSet) : m_rItemSet(rItemSet) { }
     void operator()(sal_uInt16 const nWhich) { m_rItemSet.ClearItem(nWhich); }
 };
 

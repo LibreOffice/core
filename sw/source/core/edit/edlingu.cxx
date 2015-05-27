@@ -143,9 +143,10 @@ class SwConvIter : public SwLinguIter
 {
     SwConversionArgs &rArgs;
 public:
-    SwConvIter( SwConversionArgs &rConvArgs ) :
-        rArgs( rConvArgs )
-    {}
+    explicit SwConvIter(SwConversionArgs &rConvArgs)
+        : rArgs(rConvArgs)
+    {
+    }
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
 

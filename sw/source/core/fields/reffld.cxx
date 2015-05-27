@@ -934,7 +934,7 @@ private:
     static sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
-    _RefIdsMap( const OUString& rName ) : aName( rName ), bInit( false ) {}
+    explicit _RefIdsMap( const OUString& rName ) : aName( rName ), bInit( false ) {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField, bool bField );
 

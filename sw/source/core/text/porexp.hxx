@@ -68,7 +68,7 @@ class SwPostItsPortion : public SwExpandPortion
 {
     bool    bScript;
 public:
-            SwPostItsPortion( bool bScrpt );
+    explicit SwPostItsPortion( bool bScrpt );
     virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;

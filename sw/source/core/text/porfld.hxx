@@ -220,7 +220,7 @@ class SwCombinedPortion : public SwFieldPortion
     sal_uInt16 nLowPos;     // the Y position of the lower baseline
     sal_uInt8 nProportion;  // relative font height
 public:
-    SwCombinedPortion( const OUString &rExpand );
+    explicit SwCombinedPortion( const OUString &rExpand );
     virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
@@ -234,7 +234,7 @@ namespace sw { namespace mark {
 class SwFieldFormDropDownPortion : public SwFieldPortion
 {
 public:
-    SwFieldFormDropDownPortion(const OUString &rExpand)
+    explicit SwFieldFormDropDownPortion(const OUString &rExpand)
         : SwFieldPortion(rExpand)
     {
     }

@@ -66,7 +66,7 @@ using com::sun::star::embed::XTransactedObject;
 class SvxXMLTableEntryExporter
 {
 public:
-    SvxXMLTableEntryExporter( SvXMLExport& rExport ) : mrExport( rExport ) {}
+    explicit SvxXMLTableEntryExporter( SvXMLExport& rExport ) : mrExport( rExport ) {}
     virtual ~SvxXMLTableEntryExporter();
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) = 0;
@@ -78,7 +78,7 @@ protected:
 class SvxXMLColorEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
-    SvxXMLColorEntryExporter( SvXMLExport& rExport );
+    explicit SvxXMLColorEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLColorEntryExporter();
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
@@ -87,7 +87,7 @@ public:
 class SvxXMLLineEndEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
-    SvxXMLLineEndEntryExporter( SvXMLExport& rExport );
+    explicit SvxXMLLineEndEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLLineEndEntryExporter();
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
@@ -98,7 +98,7 @@ private:
 class SvxXMLDashEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
-    SvxXMLDashEntryExporter( SvXMLExport& rExport );
+    explicit SvxXMLDashEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLDashEntryExporter();
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
@@ -110,7 +110,7 @@ private:
 class SvxXMLHatchEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
-    SvxXMLHatchEntryExporter( SvXMLExport& rExport );
+    explicit SvxXMLHatchEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLHatchEntryExporter();
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
@@ -121,7 +121,7 @@ private:
 class SvxXMLGradientEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
-    SvxXMLGradientEntryExporter( SvXMLExport& rExport );
+    explicit SvxXMLGradientEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLGradientEntryExporter();
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
@@ -132,7 +132,7 @@ private:
 class SvxXMLBitmapEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
-    SvxXMLBitmapEntryExporter( SvXMLExport& rExport );
+    explicit SvxXMLBitmapEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLBitmapEntryExporter();
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;

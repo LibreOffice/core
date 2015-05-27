@@ -90,7 +90,7 @@ namespace sdr
 
         public:
             /// basic constructor, used from SdrObject.
-            VCOfSwFlyDrawObj(SwFlyDrawObj& rObj)
+            explicit VCOfSwFlyDrawObj(SwFlyDrawObj& rObj)
             :   ViewContactOfSdrObj(rObj)
             {
             }
@@ -269,7 +269,7 @@ namespace sdr
 
         public:
             /// basic constructor, used from SdrObject.
-            VCOfSwVirtFlyDrawObj(SwVirtFlyDrawObj& rObj)
+            explicit VCOfSwVirtFlyDrawObj(SwVirtFlyDrawObj& rObj)
             :   ViewContactOfVirtObj(rObj)
             {
             }

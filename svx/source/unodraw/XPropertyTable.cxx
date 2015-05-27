@@ -246,7 +246,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
 class SvxUnoXColorTable : public SvxUnoXPropertyTable
 {
 public:
-    SvxUnoXColorTable( XPropertyList* pList ) throw() : SvxUnoXPropertyTable( XATTR_LINECOLOR, pList ) {};
+    explicit SvxUnoXColorTable( XPropertyList* pList ) throw() : SvxUnoXPropertyTable( XATTR_LINECOLOR, pList ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() SAL_OVERRIDE;
@@ -308,7 +308,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(
 class SvxUnoXLineEndTable : public SvxUnoXPropertyTable
 {
 public:
-    SvxUnoXLineEndTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINEEND, pTable ) {};
+    explicit SvxUnoXLineEndTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINEEND, pTable ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() SAL_OVERRIDE;
@@ -381,7 +381,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceName
 class SvxUnoXDashTable : public SvxUnoXPropertyTable
 {
 public:
-    SvxUnoXDashTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINEDASH, pTable ) {};
+    explicit SvxUnoXDashTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINEDASH, pTable ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() SAL_OVERRIDE;
@@ -462,7 +462,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames( 
 class SvxUnoXHatchTable : public SvxUnoXPropertyTable
 {
 public:
-    SvxUnoXHatchTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLHATCH, pTable ) {};
+    explicit SvxUnoXHatchTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLHATCH, pTable ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() SAL_OVERRIDE;
@@ -538,7 +538,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(
 class SvxUnoXGradientTable : public SvxUnoXPropertyTable
 {
 public:
-    SvxUnoXGradientTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLGRADIENT, pTable ) {};
+    explicit SvxUnoXGradientTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLGRADIENT, pTable ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() SAL_OVERRIDE;
@@ -626,7 +626,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNam
 class SvxUnoXBitmapTable : public SvxUnoXPropertyTable
 {
 public:
-    SvxUnoXBitmapTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLBITMAP, pTable ) {};
+    explicit SvxUnoXBitmapTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLBITMAP, pTable ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw(uno::RuntimeException) SAL_OVERRIDE;

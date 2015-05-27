@@ -41,7 +41,7 @@ class SwHyphStrPortion : public SwHyphPortion
 {
     OUString aExpand;
 public:
-    SwHyphStrPortion(const OUString &rStr)
+    explicit SwHyphStrPortion(const OUString &rStr)
         : aExpand(rStr + "-")
     {
         SetWhichPor( POR_HYPHSTR );
@@ -82,7 +82,7 @@ public:
 class SwSoftHyphStrPortion : public SwHyphStrPortion
 {
 public:
-    SwSoftHyphStrPortion( const OUString &rStr );
+    explicit SwSoftHyphStrPortion( const OUString &rStr );
     virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };

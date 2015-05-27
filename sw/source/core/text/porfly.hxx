@@ -32,7 +32,7 @@ class SwFlyPortion : public SwFixPortion
 {
     sal_uInt16 nBlankWidth;
 public:
-    inline  SwFlyPortion( const SwRect &rFlyRect )
+    explicit SwFlyPortion( const SwRect &rFlyRect )
         : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( POR_FLY ); }
     inline sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }

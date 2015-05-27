@@ -69,7 +69,7 @@ class SwAutoCompleteWord_Impl
     SwAutoCompleteClientVector  aClientVector;
     SwAutoCompleteWord&         rAutoCompleteWord;
 public:
-    SwAutoCompleteWord_Impl(SwAutoCompleteWord& rParent) :
+    explicit SwAutoCompleteWord_Impl(SwAutoCompleteWord& rParent) :
         rAutoCompleteWord(rParent){}
     void AddDocument(SwDoc& rDoc);
     void RemoveDocument(const SwDoc& rDoc);

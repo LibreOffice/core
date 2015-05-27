@@ -59,7 +59,7 @@ class RulerDebugWindow : public vcl::Window
 {
     ListBox aBox;
 public:
-        RulerDebugWindow(vcl::Window* pParent) :
+        explicit RulerDebugWindow(vcl::Window* pParent) :
             Window(pParent, WB_BORDER|WB_SIZEMOVE|WB_DIALOGCONTROL|WB_CLIPCHILDREN|WB_SYSTEMWINDOW),
             aBox(this, WB_BORDER)
             {

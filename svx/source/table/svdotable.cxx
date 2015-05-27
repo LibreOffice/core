@@ -89,7 +89,7 @@ protected:
 
 public:
     // basic constructor
-    TableProperties(SdrObject& rObj );
+    explicit TableProperties(SdrObject& rObj );
 
     // constructor for copying, but using new object
     TableProperties(const TableProperties& rProps, SdrObject& rObj );

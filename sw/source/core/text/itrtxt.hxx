@@ -53,7 +53,7 @@ protected:
     // Reset in the first line
     void Init();
     void CtorInitTextIter( SwTextFrm *pFrm, SwTextInfo *pInf );
-    SwTextIter(SwTextNode* pTextNode)
+    explicit SwTextIter(SwTextNode* pTextNode)
         : SwAttrIter(pTextNode)
         , pFrm(NULL)
         , pInf(NULL)
@@ -160,7 +160,7 @@ protected:
     inline void SetDropLeft( const sal_uInt16 nNew ) { nDropLeft = nNew; }
 
     void CtorInitTextMargin( SwTextFrm *pFrm, SwTextSizeInfo *pInf );
-    SwTextMargin(SwTextNode* pTextNode)
+    explicit SwTextMargin(SwTextNode* pTextNode)
         : SwTextIter(pTextNode)
         , nLeft(0)
         , nRight(0)
@@ -239,7 +239,7 @@ class SwTextAdjuster : public SwTextMargin
                                   const SwRect &rCurrRect );
 
 protected:
-    inline SwTextAdjuster(SwTextNode* pTextNode) : SwTextMargin(pTextNode) { }
+    explicit SwTextAdjuster(SwTextNode* pTextNode) : SwTextMargin(pTextNode) { }
     // Creates the Glues for adjusted paragraphs
     void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
         SwTwips nReal = 0, bool bSkipKashida = false );
@@ -274,7 +274,7 @@ class SwTextCursor : public SwTextAdjuster
     void _GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* );
 protected:
     void CtorInitTextCursor( SwTextFrm *pFrm, SwTextSizeInfo *pInf );
-    SwTextCursor(SwTextNode* pTextNode) : SwTextAdjuster(pTextNode) { }
+    explicit SwTextCursor(SwTextNode* pTextNode) : SwTextAdjuster(pTextNode) { }
 public:
     SwTextCursor( SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf )
         : SwTextAdjuster(pTextFrm->GetTextNode())
@@ -308,7 +308,7 @@ class SwHookOut
     VclPtr<OutputDevice> pOut;
     bool bOnWin;
 public:
-    SwHookOut( SwTextSizeInfo& rInfo );
+    explicit SwHookOut( SwTextSizeInfo& rInfo );
     ~SwHookOut();
 };
 

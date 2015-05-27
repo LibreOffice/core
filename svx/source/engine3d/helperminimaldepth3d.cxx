@@ -46,7 +46,7 @@ namespace drawinglayer
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate) SAL_OVERRIDE;
 
         public:
-            MinimalDephInViewExtractor(const geometry::ViewInformation3D& rViewInformation)
+            explicit MinimalDephInViewExtractor(const geometry::ViewInformation3D& rViewInformation)
             :   BaseProcessor3D(rViewInformation),
                 mfMinimalDepth(DBL_MAX)
             {}

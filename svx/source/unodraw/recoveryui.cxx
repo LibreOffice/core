@@ -81,7 +81,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
 
 
         /** @short  TODO */
-        RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+        explicit RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
 
         /** @short  TODO */

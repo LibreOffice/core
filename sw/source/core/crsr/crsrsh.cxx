@@ -1372,7 +1372,7 @@ class SwNotifyAccAboutInvalidTextSelections
         SwCrsrShell& mrCrsrSh;
 
     public:
-        SwNotifyAccAboutInvalidTextSelections( SwCrsrShell& _rCrsrSh )
+        explicit SwNotifyAccAboutInvalidTextSelections( SwCrsrShell& _rCrsrSh )
             : mrCrsrSh( _rCrsrSh )
         {}
 

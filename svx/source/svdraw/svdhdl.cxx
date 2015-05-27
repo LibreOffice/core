@@ -89,7 +89,7 @@ class SdrHdlBitmapSet
     BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle);
 
 public:
-    SdrHdlBitmapSet(sal_uInt16 nResId);
+    explicit SdrHdlBitmapSet(sal_uInt16 nResId);
     ~SdrHdlBitmapSet();
 
     const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd=0);

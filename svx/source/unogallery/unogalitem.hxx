@@ -107,7 +107,7 @@ class GalleryDrawingModel : public SvxUnoDrawingModel
 {
 public:
 
-                GalleryDrawingModel( SdrModel* pDoc ) throw();
+    explicit    GalleryDrawingModel( SdrModel* pDoc ) throw();
     virtual     ~GalleryDrawingModel() throw();
 
                 UNO3_GETIMPLEMENTATION_DECL( GalleryDrawingModel )

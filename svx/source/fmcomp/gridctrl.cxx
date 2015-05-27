@@ -89,7 +89,7 @@ class RowSetEventListener : public ::cppu::WeakImplHelper1<XRowsChangeListener>
 {
     VclPtr<DbGridControl> m_pControl;
 public:
-    RowSetEventListener(DbGridControl* i_pControl) : m_pControl(i_pControl)
+    explicit RowSetEventListener(DbGridControl* i_pControl) : m_pControl(i_pControl)
     {
     }
 
@@ -256,7 +256,7 @@ class FmXGridSourcePropListener : public ::comphelper::OPropertyChangeListener
     sal_Int16           m_nSuspended;
 
 public:
-    FmXGridSourcePropListener(DbGridControl* _pParent);
+    explicit FmXGridSourcePropListener(DbGridControl* _pParent);
 
     void suspend() { ++m_nSuspended; }
     void resume() { --m_nSuspended; }

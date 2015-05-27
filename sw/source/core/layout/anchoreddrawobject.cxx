@@ -44,7 +44,7 @@ class SwPosNotify
         SwPageFrm* mpOldPageFrm;
 
     public:
-        SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj );
+        explicit SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj );
         ~SwPosNotify();
         // #i32795#
         Point LastObjPos() const;
@@ -133,7 +133,7 @@ class SwObjPosOscillationControl
         std::vector<Point*> maObjPositions;
 
     public:
-        SwObjPosOscillationControl( const SwAnchoredDrawObject& _rAnchoredDrawObj );
+        explicit SwObjPosOscillationControl( const SwAnchoredDrawObject& _rAnchoredDrawObj );
         ~SwObjPosOscillationControl();
 
         bool OscillationDetected();

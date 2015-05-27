@@ -37,7 +37,7 @@ class ChineseDictionaryDialog;
 class ChineseTranslationDialog : public ModalDialog
 {
 public:
-    ChineseTranslationDialog( vcl::Window* pParent );
+    explicit ChineseTranslationDialog( vcl::Window* pParent );
     virtual ~ChineseTranslationDialog();
     virtual void dispose() SAL_OVERRIDE;
 

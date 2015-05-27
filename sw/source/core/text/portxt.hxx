@@ -76,9 +76,9 @@ class SwHolePortion : public SwLinePortion
 {
     sal_uInt16 nBlankWidth;
 public:
-            SwHolePortion( const SwTextPortion &rPor );
-    inline sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
-    inline void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
+    explicit SwHolePortion( const SwTextPortion &rPor );
+    sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
+    void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
     virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;

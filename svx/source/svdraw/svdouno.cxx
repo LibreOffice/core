@@ -71,7 +71,7 @@ protected:
     SdrUnoObj*                  pObj;
 
 public:
-    SdrControlEventListenerImpl(SdrUnoObj* _pObj)
+    explicit SdrControlEventListenerImpl(SdrUnoObj* _pObj)
     :   pObj(_pObj)
     {}
 

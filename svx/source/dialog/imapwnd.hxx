@@ -72,7 +72,7 @@ public:
                                 SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
                                 mpObj           ( ) {}
 
-                            IMapUserData( const IMapObjectPtr& rIMapObj ) :
+                   explicit IMapUserData( const IMapObjectPtr& rIMapObj ) :
                                 SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
                                 mpObj           ( rIMapObj ) {}
 

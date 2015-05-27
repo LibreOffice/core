@@ -38,7 +38,7 @@ using namespace ::cppu;
 class SvxUnoBitmapTable : public SvxUnoNameItemTable
 {
 public:
-    SvxUnoBitmapTable( SdrModel* pModel ) throw();
+    explicit SvxUnoBitmapTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoBitmapTable() throw();
 
     virtual NameOrIndex* createItem() const throw() SAL_OVERRIDE;

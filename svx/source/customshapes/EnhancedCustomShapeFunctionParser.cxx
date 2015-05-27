@@ -98,7 +98,7 @@ class ConstantValueExpression : public ExpressionNode
 
 public:
 
-    ConstantValueExpression( double rValue ) :
+    explicit ConstantValueExpression( double rValue ) :
         maValue( rValue )
     {
     }
@@ -792,7 +792,7 @@ class DoubleConstantFunctor
     ParserContextSharedPtr  mxContext;
 
 public:
-    DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
+    explicit DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
         mxContext( rContext )
     {
     }
@@ -918,7 +918,7 @@ class IfFunctor
 
 public :
 
-    IfFunctor( const ParserContextSharedPtr& rContext ) :
+    explicit IfFunctor( const ParserContextSharedPtr& rContext ) :
         mxContext( rContext )
     {
     }
@@ -1006,7 +1006,7 @@ public:
         @param rParserContext
         Contains context info for the parser
         */
-    ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
+    explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
         mpParserContext( rParserContext )
     {
     }
@@ -1015,7 +1015,7 @@ public:
     {
     public:
         // grammar definition
-        definition( const ExpressionGrammar& self )
+        explicit definition( const ExpressionGrammar& self )
         {
             using ::boost::spirit::str_p;
             using ::boost::spirit::range_p;

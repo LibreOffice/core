@@ -113,7 +113,7 @@ private:
 class ChineseDictionaryDialog : public ModalDialog
 {
 public:
-    ChineseDictionaryDialog( vcl::Window* pParent );
+    explicit ChineseDictionaryDialog( vcl::Window* pParent );
     virtual ~ChineseDictionaryDialog();
     virtual void dispose() SAL_OVERRIDE;
 

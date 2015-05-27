@@ -63,7 +63,7 @@ class SdrObjList::WeakSdrObjectContainerType
     : public ::std::vector<SdrObjectWeakRef>
 {
 public:
-    WeakSdrObjectContainerType (const sal_Int32 nInitialSize)
+    explicit WeakSdrObjectContainerType (const sal_Int32 nInitialSize)
         : ::std::vector<SdrObjectWeakRef>(nInitialSize) {};
 };
 

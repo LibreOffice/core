@@ -40,7 +40,7 @@ class ImpSdrObjTextLink: public ::sfx2::SvBaseLink
     SdrTextObj*                 pSdrObj;
 
 public:
-    ImpSdrObjTextLink( SdrTextObj* pObj1 )
+    explicit ImpSdrObjTextLink( SdrTextObj* pObj1 )
         : ::sfx2::SvBaseLink( ::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SIMPLE_FILE ),
             pSdrObj( pObj1 )
     {}

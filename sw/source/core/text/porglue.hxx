@@ -29,7 +29,7 @@ class SwGluePortion : public SwLinePortion
 private:
     sal_uInt16 nFixWidth;
 public:
-                SwGluePortion( const sal_uInt16 nInitFixWidth );
+    explicit SwGluePortion( const sal_uInt16 nInitFixWidth );
 
     void Join( SwGluePortion *pVictim );
 
@@ -52,8 +52,8 @@ class SwFixPortion : public SwGluePortion
 {
     sal_uInt16 nFix;        // The width offset in the line
 public:
-        SwFixPortion( const SwRect &rFlyRect );
-        SwFixPortion( const sal_uInt16 nFixWidth, const sal_uInt16 nFixPos );
+    explicit SwFixPortion( const SwRect &rFlyRect );
+    SwFixPortion( const sal_uInt16 nFixWidth, const sal_uInt16 nFixPos );
     inline void   Fix( const sal_uInt16 nNewFix ) { nFix = nNewFix; }
     inline sal_uInt16 Fix() const { return nFix; }
     OUTPUT_OPERATOR_OVERRIDE
@@ -62,8 +62,8 @@ public:
 class SwMarginPortion : public SwGluePortion
 {
 public:
-        SwMarginPortion( const sal_uInt16 nFixWidth );
-        void AdjustRight( const SwLineLayout* pCurr );
+    explicit SwMarginPortion( const sal_uInt16 nFixWidth );
+    void AdjustRight( const SwLineLayout* pCurr );
     OUTPUT_OPERATOR_OVERRIDE
 };
 

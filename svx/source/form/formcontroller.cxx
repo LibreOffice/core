@@ -247,7 +247,7 @@ struct ColumnInfo
 class ColumnInfoCache
 {
 public:
-    ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSupplier );
+    explicit ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSupplier );
 
     size_t        getColumnCount() const { return m_aColumns.size(); }
     const ColumnInfo&   getColumnInfo( size_t _pos );
@@ -717,7 +717,7 @@ namespace
 
     struct RemoveComponentTextListener : public ::std::unary_function< Reference< XTextComponent >, void >
     {
-        RemoveComponentTextListener( const Reference< XTextListener >& _rxListener )
+        explicit RemoveComponentTextListener( const Reference< XTextListener >& _rxListener )
             :m_xListener( _rxListener )
         {
         }

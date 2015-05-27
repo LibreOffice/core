@@ -503,13 +503,10 @@ public:
     }
 };
 
-
-
-
 class AtomContainerTreeListBox : public SvTreeListBox
 {
 public:
-    AtomContainerTreeListBox( vcl::Window* pParent );
+    explicit AtomContainerTreeListBox( vcl::Window* pParent );
     ~AtomContainerTreeListBox();
 
     void SetRootAtom( const Atom* pAtom );
@@ -705,14 +702,12 @@ void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvTreeListEntry* p
     }
 }
 
-
-
 extern void load_config( const OUString& rPath );
 
 class PPTDocument
 {
 public:
-    PPTDocument( const OUString& rFilePath );
+    explicit PPTDocument( const OUString& rFilePath );
     ~PPTDocument();
 
     Atom* getRootAtom() const;

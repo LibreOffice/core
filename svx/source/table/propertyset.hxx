@@ -39,7 +39,7 @@ typedef std::unordered_map< OUString, ::sal_uInt32, OUStringHash, std::equal_to<
 class FastPropertySetInfo : public ::cppu::WeakAggImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
 {
 public:
-    FastPropertySetInfo( const PropertyVector& rProps );
+    explicit FastPropertySetInfo( const PropertyVector& rProps );
     virtual ~FastPropertySetInfo();
 
     void addProperties( const PropertyVector& rProps );
@@ -62,7 +62,7 @@ private:
 class FastPropertySet : public ::cppu::WeakAggImplHelper3<  ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XMultiPropertySet, ::com::sun::star::beans::XFastPropertySet >
 {
 public:
-    FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo );
+    explicit FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo );
     virtual ~FastPropertySet();
 
     // XPropertySet

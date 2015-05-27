@@ -144,7 +144,7 @@ struct SvxShapeImpl
 class ShapePositionProvider : public PropertyValueProvider
 {
 public:
-    ShapePositionProvider( const SvxShapeImpl& _shapeImpl )
+    explicit ShapePositionProvider( const SvxShapeImpl& _shapeImpl )
         :PropertyValueProvider( _shapeImpl.mrAntiImpl, "Position" )
     {
     }
@@ -160,7 +160,7 @@ protected:
 class ShapeSizeProvider : public PropertyValueProvider
 {
 public:
-    ShapeSizeProvider( const SvxShapeImpl& _shapeImpl )
+    explicit ShapeSizeProvider( const SvxShapeImpl& _shapeImpl )
         :PropertyValueProvider( _shapeImpl.mrAntiImpl, "Size" )
     {
     }

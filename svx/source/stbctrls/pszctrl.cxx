@@ -94,7 +94,7 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxPosSizeStatusBarControl, SvxSizeItem);
 class FunctionPopup_Impl : public PopupMenu
 {
 public:
-    FunctionPopup_Impl( sal_uInt16 nCheck );
+    explicit FunctionPopup_Impl( sal_uInt16 nCheck );
 
     sal_uInt16          GetSelected() const { return nSelected; }
 

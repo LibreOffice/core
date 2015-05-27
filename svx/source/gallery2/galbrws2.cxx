@@ -99,7 +99,7 @@ struct CommandInfo
     css::util::URL                               URL;
     css::uno::Reference< css::frame::XDispatch > Dispatch;
 
-    CommandInfo( const OUString &rURL )
+    explicit CommandInfo( const OUString &rURL )
     {
         URL.Complete = rURL;
     }

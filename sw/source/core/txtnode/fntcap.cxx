@@ -94,7 +94,7 @@ protected:
     SwDrawTextInfo &rInf;
     SwCapitalInfo* pCapInf; // referes to additional information
                            // required by the ::Do function
-    SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( 0 ) { }
+    explicit SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( 0 ) { }
     ~SwDoCapitals() {}
 public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) = 0;
@@ -110,7 +110,7 @@ class SwDoGetCapitalSize : public SwDoCapitals
 protected:
     Size aTextSize;
 public:
-    SwDoGetCapitalSize( SwDrawTextInfo &rInfo ) : SwDoCapitals ( rInfo ) { }
+    explicit SwDoGetCapitalSize( SwDrawTextInfo &rInfo ) : SwDoCapitals ( rInfo ) { }
     virtual ~SwDoGetCapitalSize() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
     virtual void Do() SAL_OVERRIDE;
@@ -236,7 +236,7 @@ protected:
     SwFntObj *pUpperFnt;
     SwFntObj *pLowerFnt;
 public:
-    SwDoDrawCapital( SwDrawTextInfo &rInfo ) :
+    explicit SwDoDrawCapital( SwDrawTextInfo &rInfo ) :
         SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0)
         { }
     virtual ~SwDoDrawCapital() {}

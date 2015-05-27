@@ -35,7 +35,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SdrDragMovHdl(SdrDragView& rNewView);
+    explicit SdrDragMovHdl(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
     virtual bool BeginSdrDrag() SAL_OVERRIDE;
@@ -56,7 +56,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
-    SdrDragRotate(SdrDragView& rNewView);
+    explicit SdrDragRotate(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
     virtual bool BeginSdrDrag() SAL_OVERRIDE;
@@ -106,7 +106,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
-    SdrDragMirror(SdrDragView& rNewView);
+    explicit SdrDragMirror(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
     virtual bool BeginSdrDrag() SAL_OVERRIDE;
@@ -178,7 +178,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SdrDragCrook(SdrDragView& rNewView);
+    explicit SdrDragCrook(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
     virtual bool BeginSdrDrag() SAL_OVERRIDE;
@@ -209,7 +209,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SdrDragDistort(SdrDragView& rNewView);
+    explicit SdrDragDistort(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
     virtual bool BeginSdrDrag() SAL_OVERRIDE;
@@ -227,7 +227,7 @@ class SdrDragCrop : public SdrDragObjOwn
 {
 public:
     TYPEINFO_OVERRIDE();
-    SdrDragCrop(SdrDragView& rNewView);
+    explicit SdrDragCrop(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
     virtual bool BeginSdrDrag() SAL_OVERRIDE;

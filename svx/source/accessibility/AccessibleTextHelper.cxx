@@ -348,7 +348,7 @@ namespace accessibility
     class AccessibleTextHelper_OffsetChildIndex : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {
     public:
-        AccessibleTextHelper_OffsetChildIndex( sal_Int32 nDifference ) : mnDifference(nDifference) {}
+        explicit AccessibleTextHelper_OffsetChildIndex( sal_Int32 nDifference ) : mnDifference(nDifference) {}
         void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
         {
             rPara.SetIndexInParent( rPara.GetIndexInParent() + mnDifference );
@@ -848,7 +848,7 @@ namespace accessibility
         ::accessibility::AccessibleParaManager::WeakChild >
     {
     public:
-        AccessibleTextHelper_UpdateChildBounds( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
+        explicit AccessibleTextHelper_UpdateChildBounds( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
         ::accessibility::AccessibleParaManager::WeakChild operator()( const ::accessibility::AccessibleParaManager::WeakChild& rChild )
         {
             // retrieve hard reference from weak one
@@ -902,7 +902,7 @@ namespace accessibility
     class AccessibleTextHelper_LostChildEvent : public ::std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&, void >
     {
     public:
-        AccessibleTextHelper_LostChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
+        explicit AccessibleTextHelper_LostChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
         void operator()( const ::accessibility::AccessibleParaManager::WeakChild& rPara )
         {
             // retrieve hard reference from weak one

@@ -3645,7 +3645,7 @@ struct _SetAFormatTabPara
     sal_uInt16 nEndBox, nCurBox;
     sal_uInt8 nAFormatLine, nAFormatBox;
 
-    _SetAFormatTabPara( const SwTableAutoFormat& rNew )
+    explicit _SetAFormatTabPara( const SwTableAutoFormat& rNew )
         : rTableFormat( (SwTableAutoFormat&)rNew ), pUndo( 0 ),
         nEndBox( 0 ), nCurBox( 0 ), nAFormatLine( 0 ), nAFormatBox( 0 )
     {}

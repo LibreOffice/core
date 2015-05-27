@@ -82,7 +82,7 @@ typedef std::vector<std::shared_ptr<SfxItemSet> > SfxItemSets;
 
 class SwUndoSaveSections : public boost::ptr_vector<SwUndoSaveSection> {
 public:
-    SwUndoSaveSections(size_type n) : boost::ptr_vector<SwUndoSaveSection>(n) {}
+    explicit SwUndoSaveSections(size_type n) : boost::ptr_vector<SwUndoSaveSection>(n) {}
 };
 
 class SwUndoMoves : public boost::ptr_vector<SwUndoMove> {};
@@ -90,7 +90,7 @@ class SwUndoMoves : public boost::ptr_vector<SwUndoMove> {};
 struct SwTableToTextSave;
 class SwTableToTextSaves : public boost::ptr_vector<SwTableToTextSave> {
 public:
-    SwTableToTextSaves(size_type n) : boost::ptr_vector<SwTableToTextSave>(n) {}
+    explicit SwTableToTextSaves(size_type n) : boost::ptr_vector<SwTableToTextSave>(n) {}
 };
 
 struct _UndoTableCpyTable_Entry
@@ -102,7 +102,7 @@ struct _UndoTableCpyTable_Entry
     // Was the last paragraph of the new and the first paragraph of the old content joined?
     bool bJoin; // For redlining only
 
-    _UndoTableCpyTable_Entry( const SwTableBox& rBox );
+    explicit _UndoTableCpyTable_Entry( const SwTableBox& rBox );
     ~_UndoTableCpyTable_Entry();
 };
 class _UndoTableCpyTable_Entries : public boost::ptr_vector<_UndoTableCpyTable_Entry> {};

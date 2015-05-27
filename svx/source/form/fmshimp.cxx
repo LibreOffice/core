@@ -2743,7 +2743,7 @@ private:
     bool            m_bEnabled;
 
 public:
-    SuspendPropertyTracking( FmXFormShell& _rShell )
+    explicit SuspendPropertyTracking( FmXFormShell& _rShell )
         :m_rShell( _rShell )
         ,m_bEnabled( false )
     {

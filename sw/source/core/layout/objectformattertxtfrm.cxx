@@ -39,7 +39,7 @@ private:
     const bool bOldFollowFormatAllowed;
 
 public:
-    SwForbidFollowFormat( SwTextFrm& _rTextFrm )
+    explicit SwForbidFollowFormat( SwTextFrm& _rTextFrm )
         : mrTextFrm( _rTextFrm ),
           bOldFollowFormatAllowed( _rTextFrm.FollowFormatAllowed() )
     {

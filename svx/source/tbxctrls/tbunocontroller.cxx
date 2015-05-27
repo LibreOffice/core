@@ -47,7 +47,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
                                  public lang::XServiceInfo
 {
     public:
-        FontHeightToolBoxControl(
+        explicit FontHeightToolBoxControl(
             const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rServiceManager );
         virtual ~FontHeightToolBoxControl();
 

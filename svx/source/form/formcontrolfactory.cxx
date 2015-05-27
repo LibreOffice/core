@@ -99,7 +99,7 @@ namespace svxform
     {
         Reference<XComponentContext>  m_xContext;
 
-        FormControlFactory_Data( const Reference<XComponentContext>& _rContext )
+        explicit FormControlFactory_Data( const Reference<XComponentContext>& _rContext )
             :m_xContext( _rContext )
         {
         }

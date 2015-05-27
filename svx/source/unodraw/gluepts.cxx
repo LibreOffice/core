@@ -41,7 +41,7 @@ private:
     SdrObjectWeakRef    mpObject;
 
 public:
-    SvxUnoGluePointAccess( SdrObject* pObject ) throw();
+    explicit SvxUnoGluePointAccess( SdrObject* pObject ) throw();
     virtual ~SvxUnoGluePointAccess() throw();
 
     // XIdentifierContainer

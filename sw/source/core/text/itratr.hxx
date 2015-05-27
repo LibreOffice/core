@@ -65,7 +65,7 @@ protected:
     void Chg( SwTextAttr *pHt );
     void Rst( SwTextAttr *pHt );
     void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrm* pFrm = 0 );
-    SwAttrIter(SwTextNode* pTextNode)
+    explicit SwAttrIter(SwTextNode* pTextNode)
         : pShell(0)
         , pFnt(0)
         , pHints(0)

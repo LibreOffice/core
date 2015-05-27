@@ -111,7 +111,7 @@ class SdrGraphicLink : public sfx2::SvBaseLink
     SdrGraphicUpdater*  pGraphicUpdater;
 
 public:
-                        SdrGraphicLink(SdrGrafObj& rObj);
+    explicit            SdrGraphicLink(SdrGrafObj& rObj);
     virtual             ~SdrGraphicLink();
 
     virtual void        Closed() SAL_OVERRIDE;

@@ -31,8 +31,8 @@ private:
     SvStream&   rStm;
 
 public:
-                GalleryCodec( SvStream& rIOStm );
-                ~GalleryCodec();
+    explicit GalleryCodec( SvStream& rIOStm );
+    ~GalleryCodec();
 
     void        Write( SvStream& rStmToWrite );
     void        Read( SvStream& rStmToRead );

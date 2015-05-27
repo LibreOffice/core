@@ -231,7 +231,7 @@ class FmFilterHint : public SfxHint
     FmFilterData*   m_pData;
 
 public:
-    FmFilterHint(FmFilterData* pData):m_pData(pData){}
+    explicit FmFilterHint(FmFilterData* pData):m_pData(pData){}
     FmFilterData* GetData() const { return m_pData; }
 };
 
@@ -252,7 +252,7 @@ public:
 class FmFilterRemovedHint : public FmFilterHint
 {
 public:
-    FmFilterRemovedHint(FmFilterData* pData)
+    explicit FmFilterRemovedHint(FmFilterData* pData)
         :FmFilterHint(pData){}
 };
 
@@ -260,7 +260,7 @@ public:
 class FmFilterTextChangedHint : public FmFilterHint
 {
 public:
-    FmFilterTextChangedHint(FmFilterData* pData)
+    explicit FmFilterTextChangedHint(FmFilterData* pData)
         :FmFilterHint(pData){}
 };
 

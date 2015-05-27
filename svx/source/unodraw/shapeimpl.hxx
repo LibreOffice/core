@@ -23,7 +23,7 @@
 class SvxShapeCaption : public SvxShapeText
 {
 public:
-    SvxShapeCaption( SdrObject* pObj ) throw();
+    explicit SvxShapeCaption( SdrObject* pObj ) throw();
     virtual ~SvxShapeCaption() throw();
 };
 class SvxPluginShape : public SvxOle2Shape
@@ -34,7 +34,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
-    SvxPluginShape( SdrObject* pObj ) throw();
+    explicit SvxPluginShape( SdrObject* pObj ) throw();
     virtual ~SvxPluginShape() throw();
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -52,7 +52,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
-    SvxAppletShape( SdrObject* pObj ) throw();
+    explicit SvxAppletShape( SdrObject* pObj ) throw();
     virtual ~SvxAppletShape() throw();
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -75,7 +75,7 @@ protected:
                    std::exception) SAL_OVERRIDE;
 
 public:
-    SvxFrameShape( SdrObject* pObj ) throw();
+    explicit SvxFrameShape( SdrObject* pObj ) throw();
     virtual ~SvxFrameShape() throw();
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -101,7 +101,7 @@ protected:
 
 public:
 
-    SvxTableShape( SdrObject* pObj ) throw();
+    explicit SvxTableShape( SdrObject* pObj ) throw();
     virtual ~SvxTableShape() throw();
 };
 

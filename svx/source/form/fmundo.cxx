@@ -79,7 +79,7 @@ typedef cppu::WeakImplHelper1< XScriptListener > ScriptEventListener_BASE;
 class ScriptEventListenerWrapper : public ScriptEventListener_BASE
 {
 public:
-    ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException )
+    explicit ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException )
         :m_rModel( _rModel )
         ,m_attemptedListenerCreation( false )
     {

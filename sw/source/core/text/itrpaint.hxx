@@ -32,7 +32,7 @@ class SwTextPainter : public SwTextCursor
                                 long nAdjustBaseLine = 0 );
 protected:
     void CtorInitTextPainter( SwTextFrm *pFrm, SwTextPaintInfo *pInf );
-    SwTextPainter(SwTextNode* pTextNode)
+    explicit SwTextPainter(SwTextNode* pTextNode)
         : SwTextCursor(pTextNode)
         , bPaintDrop(false)
     {

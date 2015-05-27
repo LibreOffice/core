@@ -33,7 +33,13 @@ protected:
     void _ChgClip( const SwRect &rRect, const SwTextFrm* pFrm,
                    bool bEnlargeRect );
 public:
-    inline SwSaveClip( OutputDevice* pOut );
+    explicit SwSaveClip(OutputDevice* pOutDev)
+        : bOn(pOutDev && pOutDev->IsClipRegion())
+        , bChg(false)
+        , pOut(pOutDev)
+    {
+    }
+
     inline ~SwSaveClip();
     inline void ChgClip( const SwRect &rRect, const SwTextFrm* pFrm = 0,
                          bool bEnlargeRect = false)
@@ -43,12 +49,6 @@ public:
     inline bool IsChg() const { return bChg; }
     inline OutputDevice *GetOut() { return pOut; }
 };
-
-inline SwSaveClip::SwSaveClip( OutputDevice* pOutDev ) :
-    bOn( pOutDev && pOutDev->IsClipRegion() ),
-    bChg( false ),
-    pOut(pOutDev)
-{}
 
 inline SwSaveClip::~SwSaveClip()
 {

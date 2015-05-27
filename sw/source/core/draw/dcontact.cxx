@@ -2026,7 +2026,7 @@ namespace sdr
 
         public:
             /// basic constructor, used from SdrObject.
-            VCOfDrawVirtObj(SwDrawVirtObj& rObj)
+            explicit VCOfDrawVirtObj(SwDrawVirtObj& rObj)
             :   ViewContactOfVirtObj(rObj)
             {
             }

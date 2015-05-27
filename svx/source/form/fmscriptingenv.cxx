@@ -87,7 +87,7 @@ namespace svxform
         FormScriptingEnvironment *m_pScriptExecutor;
 
     public:
-        FormScriptListener( FormScriptingEnvironment * pScriptExecutor );
+        explicit FormScriptListener( FormScriptingEnvironment * pScriptExecutor );
 
         // XScriptListener
         virtual void SAL_CALL firing( const ScriptEvent& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -152,7 +152,7 @@ namespace svxform
         bool                    m_bDisposed;
 
     public:
-        FormScriptingEnvironment( FmFormModel& _rModel );
+        explicit FormScriptingEnvironment( FmFormModel& _rModel );
         virtual ~FormScriptingEnvironment();
 
         // callback for FormScriptListener

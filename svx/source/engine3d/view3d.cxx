@@ -93,7 +93,7 @@ class Impl3DMirrorConstructOverlay
     drawinglayer::primitive2d::Primitive2DSequence  maFullOverlay;
 
 public:
-    Impl3DMirrorConstructOverlay(const E3dView& rView);
+    explicit Impl3DMirrorConstructOverlay(const E3dView& rView);
     ~Impl3DMirrorConstructOverlay();
 
     void SetMirrorAxis(Point aMirrorAxisA, Point aMirrorAxisB);

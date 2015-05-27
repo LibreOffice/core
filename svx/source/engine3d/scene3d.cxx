@@ -59,7 +59,7 @@ class ImpRemap3DDepth
 
 public:
     ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth);
-    ImpRemap3DDepth(sal_uInt32 nOrdNum);
+    explicit ImpRemap3DDepth(sal_uInt32 nOrdNum);
     ~ImpRemap3DDepth();
 
     // for ::std::sort
@@ -116,7 +116,7 @@ class Imp3DDepthRemapper
     ImpRemap3DDepthVector       maVector;
 
 public:
-    Imp3DDepthRemapper(E3dScene& rScene);
+    explicit Imp3DDepthRemapper(E3dScene& rScene);
     ~Imp3DDepthRemapper();
 
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;

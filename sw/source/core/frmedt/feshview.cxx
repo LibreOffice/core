@@ -1243,7 +1243,7 @@ namespace
     class MarkableObjectsOnly : public svx::ISdrObjectFilter
     {
     public:
-        MarkableObjectsOnly( SdrPageView* i_pPV )
+        explicit MarkableObjectsOnly( SdrPageView* i_pPV )
             :m_pPV( i_pPV )
         {
         }

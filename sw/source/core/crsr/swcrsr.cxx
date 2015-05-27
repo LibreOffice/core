@@ -73,7 +73,7 @@ struct _PercentHdl
         ::StartProgress( STR_STATSTR_SEARCH, nStt, nEnd, 0 );
     }
 
-    _PercentHdl( const SwPaM& rPam )
+    explicit _PercentHdl( const SwPaM& rPam )
         : pDSh( rPam.GetDoc()->GetDocShell() )
     {
         sal_uLong nStt, nEnd;

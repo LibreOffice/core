@@ -124,7 +124,7 @@ namespace svx
         struct MatchFeatureDescriptionByURL : public ::std::unary_function< FeatureDescription, bool >
         {
             const OUString&  m_rURL;
-            MatchFeatureDescriptionByURL( const OUString& _rURL ) :m_rURL( _rURL ) { }
+            explicit MatchFeatureDescriptionByURL( const OUString& _rURL ) :m_rURL( _rURL ) { }
 
             bool operator()( const FeatureDescription& _compare )
             {
@@ -136,7 +136,7 @@ namespace svx
         struct MatchFeatureDescriptionBySlotId : public ::std::unary_function< FeatureDescription, bool >
         {
             sal_Int32   m_nSlotId;
-            MatchFeatureDescriptionBySlotId( sal_Int32 _nSlotId ) :m_nSlotId( _nSlotId ) { }
+            explicit MatchFeatureDescriptionBySlotId( sal_Int32 _nSlotId ) :m_nSlotId( _nSlotId ) { }
 
             bool operator()( const FeatureDescription& _compare )
             {
@@ -148,7 +148,7 @@ namespace svx
         struct MatchFeatureDescriptionByFormFeature : public ::std::unary_function< FeatureDescription, bool >
         {
             sal_Int32   m_nFormFeature;
-            MatchFeatureDescriptionByFormFeature( sal_Int32 _nFormFeature ) :m_nFormFeature( _nFormFeature ) { }
+            explicit MatchFeatureDescriptionByFormFeature( sal_Int32 _nFormFeature ) :m_nFormFeature( _nFormFeature ) { }
 
             bool operator()( const FeatureDescription& _compare )
             {

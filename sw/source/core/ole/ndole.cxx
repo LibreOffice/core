@@ -90,7 +90,7 @@ class SwOLEListener_Impl : public ::cppu::WeakImplHelper< embed::XStateChangeLis
 {
     SwOLEObj* mpObj;
 public:
-    SwOLEListener_Impl( SwOLEObj* pObj );
+    explicit SwOLEListener_Impl( SwOLEObj* pObj );
     void Release();
     virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (embed::WrongStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -147,7 +147,7 @@ class SwEmbedObjectLink : public sfx2::SvBaseLink
     SwOLENode*          pOleNode;
 
 public:
-                        SwEmbedObjectLink(SwOLENode* pNode);
+    explicit            SwEmbedObjectLink(SwOLENode* pNode);
     virtual             ~SwEmbedObjectLink();
 
     virtual void        Closed() SAL_OVERRIDE;

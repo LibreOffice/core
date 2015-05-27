@@ -79,7 +79,7 @@ private:
     virtual void execute() SAL_OVERRIDE;
 
 public:
-    ExternalToolEditThread(OUString const& rFileName)
+    explicit ExternalToolEditThread(OUString const& rFileName)
         : ::salhelper::Thread("ExternalToolEdit")
         , m_aFileName(rFileName)
     {}

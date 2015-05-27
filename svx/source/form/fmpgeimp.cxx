@@ -127,7 +127,7 @@ namespace
     class FormComponentAssignment
     {
     public:
-        FormComponentAssignment( MapControlModels& _out_controlModelMap )
+        explicit FormComponentAssignment( MapControlModels& _out_controlModelMap )
             :m_rControlModelMap( _out_controlModelMap )
         {
         }

@@ -605,7 +605,11 @@ class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
     sal_Int32 nCount;
 
 public:
-    inline SwAccAllTableSelHander_Impl( sal_Int32 nSize );
+    explicit SwAccAllTableSelHander_Impl(sal_Int32 nSize)
+        : aSelected(nSize, true)
+        , nCount(nSize)
+    {
+    }
 
     uno::Sequence < sal_Int32 > GetSelSequence();
 
@@ -614,12 +618,6 @@ public:
 };
 
 SwAccAllTableSelHander_Impl::~SwAccAllTableSelHander_Impl()
-{
-}
-
-inline SwAccAllTableSelHander_Impl::SwAccAllTableSelHander_Impl( sal_Int32 nSize ) :
-    aSelected( nSize, true ),
-    nCount( nSize )
 {
 }
 

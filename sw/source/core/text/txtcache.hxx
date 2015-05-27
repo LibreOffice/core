@@ -49,7 +49,7 @@ protected:
     virtual SwCacheObj *NewObj() SAL_OVERRIDE;
 
 public:
-    SwTextLineAccess( const SwTextFrm *pOwner );
+    explicit SwTextLineAccess( const SwTextFrm *pOwner );
 
     SwParaPortion *GetPara();
 

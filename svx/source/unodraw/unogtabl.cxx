@@ -35,7 +35,7 @@ using namespace ::cppu;
 class SvxUnoGradientTable : public SvxUnoNameItemTable
 {
 public:
-    SvxUnoGradientTable( SdrModel* pModel ) throw();
+    explicit SvxUnoGradientTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoGradientTable() throw();
 
     virtual NameOrIndex* createItem() const throw() SAL_OVERRIDE;

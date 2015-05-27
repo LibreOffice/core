@@ -55,7 +55,7 @@ struct RTFCellDefault
     sal_uInt16              mnTwips;         // right border of the cell
     sal_Int32           mnColSpan;   // MergeCell if >1, merged cells if 0
 
-    RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnCol(0), mnTwips(0 ), mnColSpan(1) {}
+    explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnCol(0), mnTwips(0 ), mnColSpan(1) {}
 };
 
 typedef std::vector< boost::shared_ptr< RTFCellDefault > > RTFCellDefaultVector;
@@ -67,7 +67,7 @@ struct RTFCellInfo
     sal_Int32           mnParaCount;
     sal_Int32           mnColSpan;
 
-    RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnColSpan(0) {}
+    explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnColSpan(0) {}
 };
 
 typedef boost::shared_ptr< RTFCellInfo > RTFCellInfoPtr;
@@ -80,7 +80,7 @@ typedef std::vector< RTFColumnVectorPtr > RTFRowVector;
 class SdrTableRTFParser
 {
 public:
-    SdrTableRTFParser( SdrTableObj& rTableObj );
+    explicit SdrTableRTFParser( SdrTableObj& rTableObj );
     ~SdrTableRTFParser();
 
     void Read( SvStream& rStream );

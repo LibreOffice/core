@@ -510,7 +510,7 @@ class ImpPathForDragAndCreate
     bool                        mbCreating;
 
 public:
-    ImpPathForDragAndCreate(SdrPathObj& rSdrPathObject);
+    explicit ImpPathForDragAndCreate(SdrPathObj& rSdrPathObject);
     ~ImpPathForDragAndCreate();
 
     // drag stuff

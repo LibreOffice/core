@@ -33,8 +33,8 @@ class ElementConfig
 public:
     ElementConfig() : mnType( ECT_HEXDUMP ) {}
     ElementConfig( const OUString& rName, ElementConfigType rType ) : maName( rName ), mnType( rType ) {}
-    ElementConfig( const OUString& rName ) : maName( rName ) {}
-    ElementConfig( ElementConfigType rType ) : mnType( rType ) {}
+    explicit ElementConfig( const OUString& rName ) : maName( rName ) {}
+    explicit ElementConfig( ElementConfigType rType ) : mnType( rType ) {}
 
     virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
 
@@ -73,8 +73,8 @@ class ElementConfigContainer : public ElementConfig
 public:
     ElementConfigContainer() : ElementConfig( ETC_CONTAINER ) {}
     ElementConfigContainer( const OUString& rName, ElementConfigType rType ) : ElementConfig( rName, rType ) {}
-    ElementConfigContainer( const OUString& rName ) : ElementConfig( rName, ETC_CONTAINER ) {}
-    ElementConfigContainer( ElementConfigType rType ) : ElementConfig( rType ) {}
+    explicit ElementConfigContainer( const OUString& rName ) : ElementConfig( rName, ETC_CONTAINER ) {}
+    explicit ElementConfigContainer( ElementConfigType rType ) : ElementConfig( rType ) {}
 
     virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
 
@@ -89,7 +89,7 @@ protected:
 class CaseElementConfig : public ElementConfigContainer
 {
 public:
-    CaseElementConfig( const OUString& rValue ) : maValue( rValue ) {}
+    explicit CaseElementConfig( const OUString& rValue ) : maValue( rValue ) {}
 
     const OUString& getValue() const { return maValue; }
 
@@ -97,17 +97,13 @@ private:
     OUString maValue;
 };
 
-
-
 class SwitchElementConfig : public ElementConfigContainer
 {
 public:
-    SwitchElementConfig( ElementConfigType rType ) : ElementConfigContainer( rType ) {}
+    explicit SwitchElementConfig( ElementConfigType rType ) : ElementConfigContainer( rType ) {}
 
     virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
 };
-
-
 
 class AtomConfig : public ElementConfigContainer
 {

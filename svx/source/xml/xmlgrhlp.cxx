@@ -90,7 +90,7 @@ private:
 
 public:
 
-                                    SvXMLGraphicInputStream( const OUString& rGraphicId );
+    explicit                        SvXMLGraphicInputStream( const OUString& rGraphicId );
     virtual                         ~SvXMLGraphicInputStream();
 
     bool                            Exists() const { return mxStmWrapper.is(); }
@@ -914,7 +914,7 @@ class SvXMLGraphicImportExportHelper :
     public impl::SvXMLGraphicImportExportHelper_Base
 {
 public:
-    SvXMLGraphicImportExportHelper( SvXMLGraphicHelperMode eMode );
+    explicit SvXMLGraphicImportExportHelper( SvXMLGraphicHelperMode eMode );
 
 protected:
     // is called from WeakComponentImplHelper when XComponent::dispose() was

@@ -2518,7 +2518,7 @@ class SwTabFrmPainter
     void AdjustTopLeftFrames();
 
 public:
-    SwTabFrmPainter( const SwTabFrm& rTabFrm );
+    explicit SwTabFrmPainter( const SwTabFrm& rTabFrm );
 
     void PaintLines( OutputDevice& rDev, const SwRect& rRect ) const;
 };
@@ -3131,7 +3131,7 @@ namespace
             const SwViewShell& mrViewShell;
 
         public:
-            SwViewObjectContactRedirector( const SwViewShell& rSh )
+            explicit SwViewObjectContactRedirector( const SwViewShell& rSh )
                 : mrViewShell( rSh )
             {};
 

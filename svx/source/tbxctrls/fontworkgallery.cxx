@@ -394,7 +394,7 @@ IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl)
 class FontworkAlignmentControl : public svt::PopupWindowController
 {
 public:
-    FontworkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    explicit FontworkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
@@ -634,7 +634,7 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl)
 class FontworkCharacterSpacingControl : public svt::PopupWindowController
 {
 public:
-    FontworkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    explicit FontworkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 

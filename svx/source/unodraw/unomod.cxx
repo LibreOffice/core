@@ -72,7 +72,7 @@ private:
     SvxUnoDrawingModel& mrModel;
 
 public:
-    SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel ) throw();
+    explicit SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel ) throw();
     virtual ~SvxUnoDrawPagesAccess() throw();
 
     // XDrawPages

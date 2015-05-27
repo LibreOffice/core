@@ -56,7 +56,7 @@ namespace
         SwTableNode* pTableNd;
         SwSectionNode* pSectNd;
 
-        _FindItem(const OUString& rS)
+        explicit _FindItem(const OUString& rS)
             : m_Item(rS), pTableNd(0), pSectNd(0)
         {}
      };

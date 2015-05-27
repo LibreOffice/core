@@ -86,7 +86,7 @@ namespace sdr { namespace table {
 class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XModifyListener >
 {
 public:
-    SvxTableControllerModifyListener( SvxTableController* pController )
+    explicit SvxTableControllerModifyListener( SvxTableController* pController )
         : mpController( pController ) {}
 
     // XModifyListener

@@ -809,7 +809,7 @@ IMPL_LINK_NOARG_TYPED( SwDoc, DoUpdateModifiedOLE, Idle *, void )
 }
 
 struct CompareSwPageDescName {
-    CompareSwPageDescName(const OUString &rName) : mName(rName) {}
+    explicit CompareSwPageDescName(const OUString &rName) : mName(rName) {}
     bool operator () (const SwPageDesc& other) const { return other.GetName() == mName; }
     const OUString &mName;
 };
@@ -846,7 +846,7 @@ SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, size_t* pPos ) const
 }
 
 struct CompareSwPageDescToPtr {
-    CompareSwPageDescToPtr(const SwPageDesc* ptr) : mPtr(ptr) {}
+    explicit CompareSwPageDescToPtr(const SwPageDesc* ptr) : mPtr(ptr) {}
     bool operator () (const SwPageDesc& other) const { return &other == mPtr; }
     const SwPageDesc *mPtr;
 };

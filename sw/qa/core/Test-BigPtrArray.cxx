@@ -41,7 +41,7 @@ namespace /* private */
     class BigPtrEntryMock : public BigPtrEntry
     {
     public:
-        BigPtrEntryMock(sal_uLong count) : count_(count)
+        explicit BigPtrEntryMock(sal_uLong count) : count_(count)
         {
         }
 
@@ -611,7 +611,7 @@ class PerformanceTracer
 public:
 
 public:
-    PerformanceTracer(const string& methodName) :
+    explicit PerformanceTracer(const string& methodName) :
         startString_(START),
         endString_(END)
     {

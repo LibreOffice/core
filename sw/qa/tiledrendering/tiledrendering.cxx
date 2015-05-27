@@ -67,7 +67,7 @@ private:
     VclPtr<FixedImage> mpImage;
 
 public:
-    TiledRenderingDialog(TiledRenderingApp * app) :
+    explicit TiledRenderingDialog(TiledRenderingApp * app) :
         ModalDialog(nullptr, "TiledRendering", "qa/sw/ui/tiledrendering.ui", Dialog::InitFlag::NoParent),
         mpApp(app)
     {

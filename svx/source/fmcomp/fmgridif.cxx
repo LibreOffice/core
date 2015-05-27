@@ -981,7 +981,7 @@ protected:
     FmXGridPeer*        m_pPeer;
 
 public:
-    GridListenerDelegator( FmXGridPeer* _pPeer );
+    explicit GridListenerDelegator( FmXGridPeer* _pPeer );
     virtual ~GridListenerDelegator();
 
 protected:

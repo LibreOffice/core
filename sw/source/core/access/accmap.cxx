@@ -127,7 +127,7 @@ protected:
     virtual ~SwDrawModellListener_Impl();
 
 public:
-    SwDrawModellListener_Impl( SdrModel *pDrawModel );
+    explicit SwDrawModellListener_Impl( SdrModel *pDrawModel );
 
     virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -232,7 +232,7 @@ public:
 #if OSL_DEBUG_LEVEL > 0
     bool mbLocked;
 #endif
-    SwAccessibleShapeMap_Impl( SwAccessibleMap *pMap )
+    explicit SwAccessibleShapeMap_Impl( SwAccessibleMap *pMap )
         : maMap()
 #if OSL_DEBUG_LEVEL > 0
         , mbLocked( false )
@@ -375,7 +375,7 @@ public:
                 "wrong event constructor, DISPOSE only");
     }
 
-    SwAccessibleEvent_Impl( EventType eT )
+    explicit SwAccessibleEvent_Impl( EventType eT )
         : meType( eT ),
           mnStates( AccessibleStates::NONE ),
           mpParentFrm( nullptr )
@@ -770,7 +770,7 @@ void SwAccPreviewData::InvalidateSelection( const SwPageFrm* _pSelectedPageFrm )
 struct ContainsPredicate
 {
     const Point& mrPoint;
-    ContainsPredicate( const Point& rPoint ) : mrPoint(rPoint) {}
+    explicit ContainsPredicate( const Point& rPoint ) : mrPoint(rPoint) {}
     bool operator() ( const Rectangle& rRect ) const
     {
         return rRect.IsInside( mrPoint );

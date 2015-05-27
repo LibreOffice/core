@@ -32,7 +32,7 @@ namespace sdr { namespace table {
 class TableColumns : public ::cppu::WeakAggImplHelper1< ::com::sun::star::table::XTableColumns >
 {
 public:
-    TableColumns( const TableModelRef& xTableModel );
+    explicit TableColumns( const TableModelRef& xTableModel );
     virtual ~TableColumns();
 
     void dispose();

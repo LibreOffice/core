@@ -118,7 +118,7 @@ class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper5
 
 
 public:
-    SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj );
+    explicit SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj );
     void Release();
 
     void SetSizeScale( const Fraction& aScaleWidth, const Fraction& aScaleHeight )
@@ -595,7 +595,7 @@ class SdrEmbedObjectLink : public sfx2::SvBaseLink
     SdrOle2Obj*         pObj;
 
 public:
-                        SdrEmbedObjectLink(SdrOle2Obj* pObj);
+    explicit            SdrEmbedObjectLink(SdrOle2Obj* pObj);
     virtual             ~SdrEmbedObjectLink();
 
     virtual void        Closed() SAL_OVERRIDE;
@@ -692,7 +692,7 @@ public:
 
     SvxUnoShapeModifyListener* mpModifyListener;
 
-    SdrOle2ObjImpl( bool bFrame ) :
+    explicit SdrOle2ObjImpl( bool bFrame ) :
         mpGraphic(NULL),
         mpGraphicObject(NULL),
         pLightClient (NULL),

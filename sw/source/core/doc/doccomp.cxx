@@ -178,7 +178,7 @@ class Hash
     sal_uLong nCount, nPrime;
 
 public:
-    Hash( sal_uLong nSize );
+    explicit Hash( sal_uLong nSize );
     ~Hash();
 
     void CalcHashValue( CompareData& rData );
@@ -344,7 +344,7 @@ private:
                                                 int nStt2, int nEnd2 );
 
 public:
-    LgstCommonSubseq( ArrayComparator &rComparator );
+    explicit LgstCommonSubseq( ArrayComparator &rComparator );
     ~LgstCommonSubseq();
 
     int Find( int *pSubseq1, int *pSubseq2 );
@@ -360,7 +360,7 @@ private:
                                              int nStt2, int nEnd2  );
 
 public:
-    FastCommonSubseq( ArrayComparator &rComparator )
+    explicit FastCommonSubseq( ArrayComparator &rComparator )
         : CommonSubseq( rComparator, CUTOFF )
     {
     }
@@ -993,7 +993,7 @@ class SwCompareLine : public CompareLine
 {
     const SwNode& rNode;
 public:
-    SwCompareLine( const SwNode& rNd );
+    explicit SwCompareLine( const SwNode& rNd );
     virtual ~SwCompareLine();
 
     virtual sal_uLong GetHashValue() const SAL_OVERRIDE;

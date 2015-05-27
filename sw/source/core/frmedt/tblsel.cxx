@@ -91,7 +91,7 @@ struct _Sort_CellFrm
 {
     const SwCellFrm* pFrm;
 
-    _Sort_CellFrm( const SwCellFrm& rCFrm )
+    explicit _Sort_CellFrm( const SwCellFrm& rCFrm )
         : pFrm( &rCFrm ) {}
 };
 

@@ -101,7 +101,7 @@ class XmlPortionDumper:public SwPortionHandler
 
   public:
 
-    XmlPortionDumper( xmlTextWriterPtr some_writer ):writer( some_writer ), ofs( 0 )
+    explicit XmlPortionDumper( xmlTextWriterPtr some_writer ):writer( some_writer ), ofs( 0 )
     {
     }
 

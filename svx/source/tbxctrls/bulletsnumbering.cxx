@@ -59,7 +59,7 @@ class NumberingToolBoxControl : public svt::PopupWindowController
     bool mbBulletItem;
 
 public:
-    NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
     bool IsInImpressDraw();
 

@@ -44,7 +44,6 @@ using namespace com::sun::star;
 
 // - SvxColorValueSetData -
 
-
 class SvxColorValueSetData : public TransferableHelper
 {
 private:
@@ -59,18 +58,14 @@ protected:
 
 public:
 
-                            SvxColorValueSetData( const XFillAttrSetItem& rSetItem ) :
-                                maData( rSetItem ) {}
+    explicit SvxColorValueSetData( const XFillAttrSetItem& rSetItem ) :
+        maData( rSetItem ) {}
 };
-
-
 
 void SvxColorValueSetData::AddSupportedFormats()
 {
     AddFormat( SotClipboardFormatId::XFA );
 }
-
-
 
 bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {

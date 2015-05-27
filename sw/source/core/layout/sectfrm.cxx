@@ -1083,7 +1083,7 @@ class ExtraFormatToPositionObjs
         bool mbExtraFormatPerformed;
 
     public:
-        ExtraFormatToPositionObjs( SwSectionFrm& _rSectFrm)
+        explicit ExtraFormatToPositionObjs( SwSectionFrm& _rSectFrm)
             : mpSectFrm( &_rSectFrm ),
               mbExtraFormatPerformed( false )
         {}

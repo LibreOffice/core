@@ -59,7 +59,7 @@ private:
     ItemPoolVector maItemSetVector;
 
 public:
-    SvxUnoMarkerTable( SdrModel* pModel ) throw();
+    explicit SvxUnoMarkerTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoMarkerTable() throw();
 
     void dispose();

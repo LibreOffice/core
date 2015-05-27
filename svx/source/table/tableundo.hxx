@@ -170,7 +170,7 @@ private:
 class TableColumnUndo : public SdrUndoAction
 {
 public:
-    TableColumnUndo( const TableColumnRef& xCol );
+    explicit TableColumnUndo( const TableColumnRef& xCol );
     virtual ~TableColumnUndo();
 
     virtual void            Undo() SAL_OVERRIDE;
@@ -202,7 +202,7 @@ private:
 class TableRowUndo : public SdrUndoAction
 {
 public:
-    TableRowUndo( const TableRowRef& xRow );
+    explicit TableRowUndo( const TableRowRef& xRow );
     virtual ~TableRowUndo();
 
     virtual void            Undo() SAL_OVERRIDE;
@@ -230,12 +230,10 @@ private:
     bool mbHasRedoData;
 };
 
-
-
 class TableStyleUndo : public SdrUndoAction
 {
 public:
-    TableStyleUndo( const SdrTableObj& rTableObj );
+    explicit TableStyleUndo( const SdrTableObj& rTableObj );
 
     virtual void            Undo() SAL_OVERRIDE;
     virtual void            Redo() SAL_OVERRIDE;

@@ -70,7 +70,7 @@ struct block
 struct containsPos
 {
     const sal_Int32 m_nPos;
-    containsPos(const sal_Int32 nPos)
+    explicit containsPos(const sal_Int32 nPos)
         : m_nPos(nPos)
     {
     }

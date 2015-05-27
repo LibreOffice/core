@@ -159,11 +159,9 @@ class FmXFormView::ObjectRemoveListener : public SfxListener
 {
     FmXFormView* m_pParent;
 public:
-    ObjectRemoveListener( FmXFormView* pParent );
+    explicit ObjectRemoveListener( FmXFormView* pParent );
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
-
-
 
 FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),

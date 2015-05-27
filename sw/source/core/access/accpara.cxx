@@ -1421,7 +1421,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessiblePa
 struct IndexCompare
 {
     const PropertyValue* pValues;
-    IndexCompare( const PropertyValue* pVals ) : pValues(pVals) {}
+    explicit IndexCompare( const PropertyValue* pVals ) : pValues(pVals) {}
     bool operator() ( const sal_Int32& a, const sal_Int32& b ) const
     {
         return (pValues[a].Name < pValues[b].Name);
@@ -3088,7 +3088,7 @@ class SwHyperlinkIter_Impl
     size_t nPos;
 
 public:
-    SwHyperlinkIter_Impl( const SwTextFrm *pTextFrm );
+    explicit SwHyperlinkIter_Impl( const SwTextFrm *pTextFrm );
     const SwTextAttr *next();
     size_t getCurrHintPos() const { return nPos-1; }
 

@@ -71,7 +71,7 @@ private:
 class ExtrusionDirectionControl : public svt::PopupWindowController
 {
 public:
-    ExtrusionDirectionControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ExtrusionDirectionControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
@@ -118,7 +118,7 @@ public:
 class ExtrusionDepthController : public svt::PopupWindowController
 {
 public:
-    ExtrusionDepthController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ExtrusionDepthController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
@@ -175,7 +175,7 @@ public:
 class ExtrusionLightingControl : public svt::PopupWindowController
 {
 public:
-    ExtrusionLightingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ExtrusionLightingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
@@ -219,7 +219,7 @@ public:
 class ExtrusionSurfaceControl : public svt::PopupWindowController
 {
 public:
-    ExtrusionSurfaceControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ExtrusionSurfaceControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
