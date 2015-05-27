@@ -731,7 +731,7 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     // trying to copy text in obj 1
     //SdrText* pText = getActiveText();
 
-    SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner();
+    //SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner();
     //rOutliner.SetUpdateMode(true);
     //rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
     // XXX: experimental code 27/5/15

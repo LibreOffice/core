@@ -1978,8 +1978,11 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
             fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
                 pEditStatus->IsPageOverflow() ? "TRUE" : "FALSE");
             // Trying to copy stuff right away
-            SdrTextObj *pNextTextObj = GetNextLinkInChain();
-            impCopyTextInTextObj(pNextTextObj);
+
+            if (pEditStatus->IsPageOverflow()) {
+                SdrTextObj *pNextTextObj = GetNextLinkInChain();
+                impCopyTextInTextObj(pNextTextObj);
+            }
 
         }
     }
