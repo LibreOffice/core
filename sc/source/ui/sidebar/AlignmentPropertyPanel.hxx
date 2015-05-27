@@ -73,16 +73,13 @@ private:
     VclPtr<CheckBox>                                   mpCBXWrapText;
     VclPtr<CheckBox>                                   mpCBXMergeCell;
     VclPtr<FixedText>                                  mpFtRotate;
-    VclPtr<svx::sidebar::SidebarDialControl>           mpCtrlDial;
     VclPtr<MetricBox>                                  mpMtrAngle;
-    VclPtr<CheckBox>                                   mpCbStacked;
 
     ::sfx2::sidebar::ControllerItem             maAlignHorControl;
     ::sfx2::sidebar::ControllerItem             maLeftIndentControl;
     ::sfx2::sidebar::ControllerItem             maMergeCellControl;
     ::sfx2::sidebar::ControllerItem             maWrapTextControl;
     ::sfx2::sidebar::ControllerItem             maAngleControl;
-    ::sfx2::sidebar::ControllerItem             maStackControl;
 
     /// bitfield
     bool                                        mbMultiDisable : 1;

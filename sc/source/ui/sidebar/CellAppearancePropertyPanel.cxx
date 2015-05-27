@@ -132,7 +132,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     get(mpTBCellBorder, "cellbordertype");
     get(mpTBLineStyle,  "borderlinestyle");
     get(mpTBLineColor,  "borderlinecolor");
-    get(mpCBXShowGrid,  "cellgridlines");
 
     mpCellBorderUpdater.reset( new CellBorderUpdater(
         mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE ), *mpTBCellBorder) );
@@ -150,7 +149,6 @@ void CellAppearancePropertyPanel::dispose()
     mpTBCellBorder.clear();
     mpTBLineStyle.clear();
     mpTBLineColor.clear();
-    mpCBXShowGrid.clear();
 
     maLineStyleControl.dispose();
     maBorderOuterControl.dispose();
@@ -180,8 +178,6 @@ void CellAppearancePropertyPanel::Initialize()
     mpTBLineStyle->Disable();
 
     mpTBLineColor->Disable();
-
-    mpCBXShowGrid->SetClickHdl ( LINK(this, CellAppearancePropertyPanel, CBOXGridShowClkHdl) );
 
     mpTBLineColor->SetAccessibleRelationLabeledBy(mpTBLineColor);
     mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle);
@@ -230,14 +226,6 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pT
             mpCellLineStylePopup->Show(*pToolBox);
         }
     }
-}
-
-IMPL_LINK_NOARG(CellAppearancePropertyPanel, CBOXGridShowClkHdl)
-{
-    bool bState = mpCBXShowGrid->IsChecked();
-    SfxBoolItem aItem( FID_TAB_TOGGLE_GRID , bState);
-    GetBindings()->GetDispatcher()->Execute(FID_TAB_TOGGLE_GRID, SfxCallMode::RECORD, &aItem, 0L);
-    return 0;
 }
 
 VclPtr<vcl::Window> CellAppearancePropertyPanel::Create (
@@ -475,22 +463,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
         mbBLTR = false;
         UpdateControlState();
-        break;
-    case FID_TAB_TOGGLE_GRID:
-        if(eState >= SfxItemState::DEFAULT)
-        {
-            const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >(pState);
-
-            if(pItem)
-            {
-                const bool bVal = pItem->GetValue();
-
-                if(bVal)
-                    mpCBXShowGrid->Check(true);
-                else
-                    mpCBXShowGrid->Check(false);
-            }
-        }
         break;
     }
 }
