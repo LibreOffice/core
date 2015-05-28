@@ -79,7 +79,6 @@
 #include <rtl/strbuf.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <xmloff/odffields.hxx>
-#include <tools/urlobj.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -1146,7 +1145,7 @@ void SwHTMLWriter::OutImplicitMark( const OUString& rMark,
     }
 }
 
-void SwHTMLWriter::convertHyperlinkHRefValue( const OUString& rURL )
+void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
 {
     OUString sURL( rURL );
     sal_Int32 nPos = sURL.lastIndexOf( cMarkSeparator );
@@ -1168,14 +1167,10 @@ void SwHTMLWriter::convertHyperlinkHRefValue( const OUString& rURL )
             }
         }
     }
-    INetURLObject aURL( sURL );
-    return URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-}
 
-void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
-{
-    OUString sURL = convertHyperlinkHRefValue(rURL);
-    HTMLOutFuncs::Out_String( Strm(), sURL, eDestEnc, &aNonConvertableCharacters );
+    sURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), sURL);
+    HTMLOutFuncs::Out_String( Strm(), sURL, eDestEnc,
+                              &aNonConvertableCharacters );
 }
 
 void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic )
