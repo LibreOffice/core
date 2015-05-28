@@ -217,7 +217,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             {
                 if( ( pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected() ) )
                 {
-                    short nBtn = SvxPrtQryBox(&GetEditWin()).Execute();
+                    short nBtn = ScopedVclPtr<SvxPrtQryBox>::Create(&GetEditWin())->Execute();
                     if( RET_CANCEL == nBtn )
                         return;
 

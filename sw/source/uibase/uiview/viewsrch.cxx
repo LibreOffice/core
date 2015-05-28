@@ -355,7 +355,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                         OUString aText( SW_RES( STR_NB_REPLACED ) );
                         aText = aText.replaceFirst("XX", OUString::number( nFound ));
                         vcl::Window* pParentWindow = GetParentWindow( m_pSrchDlg );
-                        InfoBox( pParentWindow, aText ).Execute();
+                        ScopedVclPtr<InfoBox>::Create( pParentWindow, aText )->Execute();
                     }
                 }
 #if HAVE_FEATURE_DESKTOP

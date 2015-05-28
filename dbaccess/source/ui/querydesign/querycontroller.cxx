@@ -1425,7 +1425,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     if ( !editingCommand() && !haveDataSource() )
     {
         OUString aMessage(ModuleRes(STR_DATASOURCE_DELETED));
-        OSQLWarningBox( getView(), aMessage ).Execute();
+        ScopedVclPtr<OSQLWarningBox>::Create( getView(), aMessage )->Execute();
         return false;
     }
 

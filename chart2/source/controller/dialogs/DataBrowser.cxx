@@ -136,8 +136,8 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
     Edit::MouseButtonDown( rMEvt );
 
     if( m_bShowWarningBox )
-        WarningBox(this, WinBits( WB_OK ),
-                   SCH_RESSTR(STR_INVALID_NUMBER)).Execute();
+        ScopedVclPtr<WarningBox>::Create(this, WinBits( WB_OK ),
+                   SCH_RESSTR(STR_INVALID_NUMBER))->Execute();
 }
 
 class SeriesHeader
@@ -767,8 +767,8 @@ void DataBrowser::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
 void DataBrowser::ShowWarningBox()
 {
-    WarningBox(this, WinBits( WB_OK ),
-               SCH_RESSTR(STR_INVALID_NUMBER)).Execute();
+    ScopedVclPtr<WarningBox>::Create(this, WinBits( WB_OK ),
+                                     SCH_RESSTR(STR_INVALID_NUMBER))->Execute();
 }
 
 bool DataBrowser::ShowQueryBox()

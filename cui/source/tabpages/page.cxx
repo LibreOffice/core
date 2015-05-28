@@ -1493,7 +1493,7 @@ SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 
     if ( ePaper != PAPER_SCREEN_4_3 && ePaper != PAPER_SCREEN_16_9 && ePaper != PAPER_SCREEN_16_10 && IsMarginOutOfRange() )
     {
-        if ( QueryBox( this, WB_YES_NO | WB_DEF_NO, m_pPrintRangeQueryText->GetText() ).Execute() == RET_NO )
+        if ( ScopedVclPtr<QueryBox>::Create( this, WB_YES_NO | WB_DEF_NO, m_pPrintRangeQueryText->GetText() )->Execute() == RET_NO )
         {
             MetricField* pField = NULL;
             if ( IsPrinterRangeOverflow( *m_pLeftMarginEdit, nFirstLeftMargin, nLastLeftMargin, MARGIN_LEFT ) )
