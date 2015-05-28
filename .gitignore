@@ -21,6 +21,7 @@
 
 # uncommitted patches
 /uncommitted-patches
+/uncommitted-patches.applied
 
 # where stuff is built
 /instdir
