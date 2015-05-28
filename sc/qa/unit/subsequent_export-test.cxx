@@ -147,6 +147,7 @@ public:
     void testHiddenShape();
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapes();
+    void testNumericHyperlinkXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -203,6 +204,7 @@ public:
     CPPUNIT_TEST(testHiddenShape);
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
+    CPPUNIT_TEST(testNumericHyperlinkXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2819,6 +2821,17 @@ void ScExportTest::testMoveCellAnchoredShapes()
     CPPUNIT_ASSERT_EQUAL(pNData->maEnd , aNDataEnd);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testNumericHyperlinkXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("numHyperlink.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/worksheets/sheet1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[1]", "1"); // Hyperlink for numeric data
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]", "1"); // Hyperlink for text data
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);

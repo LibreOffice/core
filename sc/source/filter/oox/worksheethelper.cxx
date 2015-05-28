@@ -1018,7 +1018,7 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
     ScRefCellValue aCell;
     aCell.assign(rDoc.getDoc(), aPos);
 
-    if (aCell.meType == CELLTYPE_STRING || aCell.meType == CELLTYPE_EDIT)
+    if (aCell.meType == CELLTYPE_STRING || aCell.meType == CELLTYPE_EDIT || aCell.meType == CELLTYPE_VALUE)
     {
         OUString aStr = aCell.getString(&rDoc.getDoc());
         ScFieldEditEngine& rEE = rDoc.getDoc().GetEditEngine();
