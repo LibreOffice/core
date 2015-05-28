@@ -200,7 +200,6 @@
 #define STR_IMPORT_GRFILTER_TOOBIG          (RID_APP_START+340)
 
 #define STR_OBJECTS                         (RID_APP_START+341)
-#define STR_END_SEARCHING                   (RID_APP_START+342)
 #define STR_END_SPELLING                    (RID_APP_START+343)
 #define STR_NOLANGUAGE                      (RID_APP_START+344)
 #define STR_ASK_FOR_CONVERT_TO_BEZIER       (RID_APP_START+347)
@@ -210,7 +209,6 @@
 #define STR_UNDO_INSERT_FILE                (RID_APP_START+352)
 #define STR_UNDO_INSERT_SPECCHAR            (RID_APP_START+353)
 #define STR_UNDO_SET_PRESLAYOUT             (RID_APP_START+354)
-#define STR_STRING_NOTFOUND                 (RID_APP_START+355)
 #define STR_PLAY                            (RID_APP_START+356)
 #define STR_STOP                            (RID_APP_START+357)
 #define STR_UNDO_ORIGINALSIZE               (RID_APP_START+359)
