@@ -34,7 +34,7 @@
 #include "consdlg.hxx"
 #include <vcl/msgbox.hxx>
 
-#define INFOBOX(id) InfoBox(this, ScGlobal::GetRscString(id)).Execute()
+#define INFOBOX(id) ScopedVclPtr<InfoBox>::Create(this, ScGlobal::GetRscString(id))->Execute()
 
 class ScAreaData
 {

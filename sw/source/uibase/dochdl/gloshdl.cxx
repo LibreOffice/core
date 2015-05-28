@@ -486,7 +486,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
             }
             OUString aTmp( SW_RES(STR_NOGLOS));
             aTmp = aTmp.replaceFirst("%1", aShortName);
-            InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
+            ScopedVclPtr<InfoBox>::Create( pWrtShell->GetView().GetWindow(), aTmp )->Execute();
         }
 
         return false;

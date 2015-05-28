@@ -993,7 +993,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             if(bHasEEFeatureItems)
             {
                 OUString aMessage("SdrEditView::SetAttrToMarked(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
-                InfoBox(NULL, aMessage).Execute();
+                ScopedVclPtr<InfoBox>::Create(nullptr, aMessage)->Execute();
             }
         }
 #endif

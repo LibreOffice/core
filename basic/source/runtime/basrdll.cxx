@@ -98,7 +98,7 @@ void BasicDLL::BasicBreak()
         {
             bJustStopping = true;
             StarBASIC::Stop();
-            InfoBox( 0, BasResId(IDS_SBERR_TERMINATED).toString() ).Execute();
+            ScopedVclPtr<InfoBox>::Create( nullptr, BasResId(IDS_SBERR_TERMINATED).toString() )->Execute();
             bJustStopping = false;
         }
     }

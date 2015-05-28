@@ -173,7 +173,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     {
         if(!bAPICall)
         {
-            InfoBox( 0, SW_RESSTR(STR_CANTOPEN)).Execute();
+            ScopedVclPtr<InfoBox>::Create( nullptr, SW_RESSTR(STR_CANTOPEN))->Execute();
         }
         return 0;
     }
@@ -519,8 +519,8 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
     if( !xWriter.Is() )
     {   // Filter not available
-        InfoBox( 0,
-                 SW_RESSTR(STR_DLLNOTFOUND) ).Execute();
+        ScopedVclPtr<InfoBox>::Create( nullptr,
+                 SW_RESSTR(STR_DLLNOTFOUND) )->Execute();
         return false;
     }
 

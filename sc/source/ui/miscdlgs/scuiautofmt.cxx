@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
         aMsg += aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES ==
-             QueryBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg ).Execute() )
+             ScopedVclPtr<QueryBox>::Create( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg )->Execute() )
         {
             m_pLbFormat->RemoveEntry( nIndex );
             m_pLbFormat->SelectEntryPos( nIndex-1 );

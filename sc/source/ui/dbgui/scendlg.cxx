@@ -171,12 +171,12 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 
     if ( !ScDocument::ValidTabName( aName ) )
     {
-        InfoBox( this, ScGlobal::GetRscString( STR_INVALIDTABNAME ) ).Execute();
+        ScopedVclPtr<InfoBox>::Create( this, ScGlobal::GetRscString( STR_INVALIDTABNAME ) )->Execute();
         m_pEdName->GrabFocus();
     }
     else if ( !bIsEdit && !pDoc->ValidNewTabName( aName ) )
     {
-        InfoBox( this, ScGlobal::GetRscString( STR_NEWTABNAMENOTUNIQUE ) ).Execute();
+        ScopedVclPtr<InfoBox>::Create( this, ScGlobal::GetRscString( STR_NEWTABNAMENOTUNIQUE ) )->Execute();
         m_pEdName->GrabFocus();
     }
     else

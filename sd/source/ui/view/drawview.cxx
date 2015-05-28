@@ -434,9 +434,8 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
     {
         if (IsPresObjSelected(false, true))
         {
-
-            InfoBox(mpDrawViewShell->GetActiveWindow(),
-                    SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+            ScopedVclPtr<InfoBox>::Create(mpDrawViewShell->GetActiveWindow(),
+                    SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             bResult = false;
         }
         else

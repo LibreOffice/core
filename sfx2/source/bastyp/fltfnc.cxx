@@ -540,7 +540,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
         {
 #ifdef DBG_UTIL
             // Start Setup
-            InfoBox( NULL, "Here should the Setup now be starting!" ).Execute();
+            ScopedVclPtr<InfoBox>::Create( nullptr, "Here should the Setup now be starting!" )->Execute();
 #endif
             // Installation must still give feedback if it worked or not,
             // then the  Filterflag be deleted
@@ -552,7 +552,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
     {
         OUString aText( SfxResId(STR_FILTER_CONSULT_SERVICE).toString() );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
-        InfoBox ( NULL, aText ).Execute();
+        ScopedVclPtr<InfoBox>::Create( nullptr, aText )->Execute();
         return false;
     }
     else

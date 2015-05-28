@@ -53,7 +53,7 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
         if(sTmp.getLength() != nLen)
         {
             pBox->SetText(sTmp);
-            InfoBox(this, sRemoveWarning+sMsg).Execute();
+            ScopedVclPtr<InfoBox>::Create(this, sRemoveWarning+sMsg)->Execute();
         }
 
     }

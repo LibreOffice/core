@@ -568,10 +568,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     //  source isn't basic -> ask again
 
                         bDoIt = ( RET_YES ==
-                                  QueryBox( GetDialogParent(),
+                                  ScopedVclPtr<QueryBox>::Create( GetDialogParent(),
                                             WinBits( WB_YES_NO | WB_DEF_YES ),
                                             ScGlobal::GetRscString(STR_QUERY_DELTAB)
-                                      ).Execute() );
+                                      )->Execute() );
                 }
                 if( bDoIt )
                 {

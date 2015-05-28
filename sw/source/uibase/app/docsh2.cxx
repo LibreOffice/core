@@ -1098,7 +1098,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if( !bDone && !rReq.IsAPI() )
                     {
-                        InfoBox( 0, SW_RESSTR( STR_CANTCREATE )).Execute();
+                        ScopedVclPtr<InfoBox>::Create( nullptr, SW_RESSTR( STR_CANTCREATE ))->Execute();
                     }
                 }
             }

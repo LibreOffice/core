@@ -396,7 +396,7 @@ bool Shell::PrepareClose( bool bUI )
         if( bUI )
         {
             vcl::Window *pParent = &GetViewFrame()->GetWindow();
-            InfoBox( pParent, IDE_RESSTR(RID_STR_CANNOTCLOSE)).Execute();
+            ScopedVclPtr<InfoBox>::Create( pParent, IDE_RESSTR(RID_STR_CANNOTCLOSE))->Execute();
         }
         return false;
     }
