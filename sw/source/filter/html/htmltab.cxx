@@ -2989,7 +2989,7 @@ class _SectionSaveStruct : public SwPendingStackData
 
 public:
 
-    HTMLTable *pTable;
+    HTMLTable *m_pTable;
 
     explicit _SectionSaveStruct( SwHTMLParser& rParser );
     virtual ~_SectionSaveStruct();
@@ -3003,7 +3003,7 @@ public:
 _SectionSaveStruct::_SectionSaveStruct( SwHTMLParser& rParser ) :
     nBaseFontStMinSave(0), nFontStMinSave(0), nFontStHeadStartSave(0),
     nDefListDeepSave(0), nContextStMinSave(0), nContextStAttrMinSave(0),
-    pTable( 0 )
+    m_pTable( 0 )
 {
     // Font-Stacks einfrieren
     nBaseFontStMinSave = rParser.nBaseFontStMin;
@@ -3884,7 +3884,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     // nur wenn eine neue Tabelle aufgemacht wird, aber
                     // nicht wenn nach einem Pending in der Tabelle
                     // weitergelesen wird!
-                    pSaveStruct->pTable = pTable;
+                    pSaveStruct->m_pTable = pTable;
 
                     // HACK: Eine Section fuer eine Tabelle anlegen, die
                     // in einen Rahmen kommt.
@@ -3991,7 +3991,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         }
                     }
 
-                    pTable = pSaveStruct->pTable;
+                    pTable = pSaveStruct->m_pTable;
                 }
             }
             break;
@@ -4858,8 +4858,8 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         case HTML_TABLE_ON:
             if( !pPendStack )
             {
-                pSaveStruct->pTable = pTable;
-                bool bHasToFly = pSaveStruct->pTable!=pCurTable;
+                pSaveStruct->m_pTable = pTable;
+                bool bHasToFly = pSaveStruct->m_pTable!=pCurTable;
                 BuildTable( pCurTable->GetTableAdjust( true ),
                             false, true, bHasToFly );
             }
@@ -4869,7 +4869,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             }
             if( SVPAR_PENDING != GetStatus() )
             {
-                pTable = pSaveStruct->pTable;
+                pTable = pSaveStruct->m_pTable;
             }
             break;
         case HTML_TABLE_OFF:
