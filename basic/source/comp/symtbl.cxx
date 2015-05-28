@@ -249,7 +249,7 @@ sal_uInt32 SbiSymPool::Reference( const OUString& rName )
 
 void SbiSymPool::CheckRefs()
 {
-    for( sal_uInt16 i = 0; i < aData.size(); i++ )
+    for( size_t i = 0; i < aData.size(); i++ )
     {
         SbiSymDef &r = aData[ i ];
         if( !r.IsDefined() )

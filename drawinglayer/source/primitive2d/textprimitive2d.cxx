@@ -130,7 +130,7 @@ namespace drawinglayer
                         ::std::vector< double > aScaledDXArray = getDXArray();
                         const double fDXArrayScale(1.0 / aScale.getX());
 
-                        for(sal_uInt32 a(0); a < aScaledDXArray.size(); a++)
+                        for(size_t a(0); a < aScaledDXArray.size(); a++)
                         {
                             aScaledDXArray[a] *= fDXArrayScale;
                         }

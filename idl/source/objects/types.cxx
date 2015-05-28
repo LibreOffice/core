@@ -771,7 +771,7 @@ OString SvMetaAttribute::Compare( SvMetaAttribute* pAttr )
                 }
                 else
                 {
-                    for ( sal_uInt16 n=0; n<nCount; n++ )
+                    for ( sal_uLong n=0; n<nCount; n++ )
                     {
                         SvMetaAttribute *pAttr1 = rList[n];
                         SvMetaAttribute *pAttr2 = rOtherList[n];

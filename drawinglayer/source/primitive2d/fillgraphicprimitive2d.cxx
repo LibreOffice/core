@@ -73,7 +73,7 @@ namespace drawinglayer
                                 rGraphic,
                                 basegfx::B2DHomMatrix());
 
-                            for(sal_uInt32 a(0); a < aMatrices.size(); a++)
+                            for(size_t a(0); a < aMatrices.size(); a++)
                             {
                                 aRetval[a] = new TransformPrimitive2D(
                                     getTransformation() * aMatrices[a],

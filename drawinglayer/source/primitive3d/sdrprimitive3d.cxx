@@ -57,7 +57,7 @@ namespace drawinglayer
 
             if(!rSlices.empty())
             {
-                for(sal_uInt32 a(0L); a < rSlices.size(); a++)
+                for(size_t a(0); a < rSlices.size(); a++)
                 {
                     aRetval.expand(basegfx::tools::getRange(rSlices[a].getB3DPolyPolygon()));
                 }

@@ -160,7 +160,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     // syntax highlighting
     // this must be possible improved by using notifychange correctly
     bool bTempModified = GetTextEngine()->IsModified();
-    for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
+    for (sal_uLong nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         OUString aLine( GetTextEngine()->GetText( nLine ) );
         GetTextEngine()->RemoveAttribs( nLine, true );

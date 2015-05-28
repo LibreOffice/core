@@ -163,7 +163,7 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
     Sequence< Reference< XDispatch > > aReturn( aDescripts.getLength() );
     Reference< XDispatch >* pReturn = aReturn.getArray();
     const DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-    for ( sal_Int16 i = 0; i < aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
+    for ( sal_Int32 i = 0; i < aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
     {
         *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
     }

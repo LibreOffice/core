@@ -225,7 +225,7 @@ bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( Runtime
 SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
 {
     aImpl._aProps.realloc( rPropVals.size() );
-    for ( sal_uInt16 n = 0; n < rPropVals.size(); ++n )
+    for ( size_t n = 0; n < rPropVals.size(); ++n )
     {
         Property &rProp = aImpl._aProps.getArray()[n];
         const PropertyValue &rPropVal = rPropVals[n];

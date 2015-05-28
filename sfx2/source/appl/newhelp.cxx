@@ -963,7 +963,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
             bChecked = aUserData.getToken(1, ';').toInt32() == 1;
             m_pScopeCB->Check( bChecked );
 
-            for ( sal_uInt16 i = 2; i < comphelper::string::getTokenCount(aUserData, ';'); ++i )
+            for ( sal_Int32 i = 2; i < comphelper::string::getTokenCount(aUserData, ';'); ++i )
             {
                 OUString aToken = aUserData.getToken(i, ';');
                 m_pSearchED->InsertEntry( INetURLObject::decode(
@@ -1028,7 +1028,7 @@ void SearchTabPage_Impl::ClearSearchResults()
 
 void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 {
-    for ( sal_uInt16 i = 0; i < m_pSearchED->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0; i < m_pSearchED->GetEntryCount(); ++i )
     {
         if ( rSearchText == m_pSearchED->GetEntry(i) )
         {
@@ -1488,7 +1488,7 @@ void SfxHelpIndexWindow_Impl::dispose()
     pSPage.disposeAndClear();
     pBPage.disposeAndClear();
 
-    for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
         delete static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
 
     SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
@@ -1536,7 +1536,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
         InitHdl( NULL );
     }
 
-    for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
     {
         OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
         *pFactory = pFactory->toAsciiLowerCase();
@@ -1788,7 +1788,7 @@ void SfxHelpIndexWindow_Impl::AddBookmarks( const OUString& rTitle, const OUStri
 bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
 {
     bool bValid = false;
-    for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
     {
         OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
         if ( *pFactory == _rFactory )

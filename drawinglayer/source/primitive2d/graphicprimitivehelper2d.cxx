@@ -107,7 +107,7 @@ namespace
             aVirtualDevice->Erase();
             aVirtualDeviceMask->Erase();
 
-            for(sal_uInt16 a(0L); a < maAnimation.Count(); a++)
+            for(size_t a(0); a < maAnimation.Count(); a++)
             {
                 animationStep aNextStep;
                 aNextStep.mnTime = generateStepTime(a);

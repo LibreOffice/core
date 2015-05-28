@@ -60,9 +60,9 @@ void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_uInt8 cIndexFrom, sal_Int
     BitmapReadAccess* pReadAccess = rBitmap.AcquireReadAccess();
     if ( pReadAccess && pWriteAccess )
     {
-        for ( sal_Int32 nY = 0; nY < pReadAccess->Height(); nY++ )
+        for ( long nY = 0; nY < pReadAccess->Height(); nY++ )
         {
-            for ( sal_Int32 nX = 0; nX < pReadAccess->Width(); nX++ )
+            for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
             {
                 const sal_uInt8 cIndex = pReadAccess->GetPixelIndex( nY, nX );
                 if ( cIndex == cIndexFrom )

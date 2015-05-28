@@ -298,7 +298,7 @@ sal_uInt16 BitSet::CountBits(sal_uInt32 nBits)
 
 sal_uInt16 IndexBitSet::GetFreeIndex()
 {
-  for(sal_uInt16 i=0;i<USHRT_MAX;i++)
+  for(int i=0;i<USHRT_MAX;i++)
     if(!Contains(i))
       {
         *this|=i;

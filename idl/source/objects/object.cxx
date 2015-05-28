@@ -338,7 +338,7 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
     rList.push_back( this );
 
     // my imports
-    for( sal_uInt32 n = 0; n < aClassList.size(); n++ )
+    for( size_t n = 0; n < aClassList.size(); n++ )
     {
         SvClassElement * pEle = aClassList[n];
         SvMetaClass * pCl = pEle->GetClass();

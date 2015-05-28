@@ -482,7 +482,7 @@ void StatusbarController::bindListener()
     if ( !xStatusListener.is() )
         return;
 
-    for ( sal_uInt32 i = 0; i < aDispatchVector.size(); i++ )
+    for ( size_t i = 0; i < aDispatchVector.size(); i++ )
     {
         try
         {

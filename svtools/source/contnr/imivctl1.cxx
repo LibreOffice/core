@@ -2815,7 +2815,7 @@ void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& r
         bGo = false;
 
     long nCurRight = 0;
-    for( sal_uInt16 nCur = 0; nCur < rRow.size(); nCur++ )
+    for( size_t nCur = 0; nCur < rRow.size(); nCur++ )
     {
         SvxIconChoiceCtrlEntry* pCur = rRow[ nCur ];
         if( !bGo && pCur == pStart )

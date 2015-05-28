@@ -1925,7 +1925,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
             aRect = GetDateRect( aLastDate );
             nDaysOff = rDate-aLastDate;
             nDayIndex = 0;
-            for ( sal_uInt16 i = 0; i <= nDaysOff; i++ )
+            for ( sal_uLong i = 0; i <= nDaysOff; i++ )
             {
                 if ( aLastDate == rDate )
                 {
