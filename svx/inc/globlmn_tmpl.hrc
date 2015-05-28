@@ -271,7 +271,7 @@
 #define ITEM_CHANGE_PICTURE \
     Identifier = SID_CHANGE_PICTURE ; \
     Command = ".uno:ChangePicture" ; \
-    Text [ en-US ] = "Change Image..." ; \
+    Text [ en-US ] = "Replace Image..." ; \
 
 #define ITEM_VIEW_ATTR_ZOOM \
     Identifier = SID_ATTR_ZOOM ; \
