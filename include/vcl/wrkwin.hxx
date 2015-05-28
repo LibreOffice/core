@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 struct SystemParentData;
@@ -32,9 +33,17 @@ struct SystemParentData;
 
 
 // Presentation Flags
-#define PRESENTATION_HIDEALLAPPS    ((sal_uInt16)0x0001)
-#define PRESENTATION_NOFULLSCREEN   ((sal_uInt16)0x0002)
-#define PRESENTATION_NOAUTOSHOW     ((sal_uInt16)0x0004)
+enum class PresentationFlags
+{
+    NONE           = 0x0000,
+    HideAllApps    = 0x0001,
+    NoFullScreen   = 0x0002,
+    NoAutoShow     = 0x0004,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<PresentationFlags> : is_typed_flags<PresentationFlags, 0x0007> {};
+}
 
 
 // - WorkWindow -
@@ -43,11 +52,11 @@ struct SystemParentData;
 class VCL_DLLPUBLIC WorkWindow : public SystemWindow
 {
 private:
-    sal_uInt16          mnPresentationFlags;
-    bool            mbPresentationMode:1,
-                    mbPresentationVisible:1,
-                    mbPresentationFull:1,
-                    mbFullScreenMode:1;
+    PresentationFlags mnPresentationFlags;
+    bool              mbPresentationMode:1,
+                      mbPresentationVisible:1,
+                      mbPresentationFull:1,
+                      mbFullScreenMode:1;
 
     SAL_DLLPRIVATE void ImplInitWorkWindowData();
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken );
@@ -77,28 +86,28 @@ public:
     */
     void            ShowFullScreenMode( bool bFullScreenMode = true );
     void            EndFullScreenMode() { ShowFullScreenMode( false ); }
-    bool        IsFullScreenMode() const { return mbFullScreenMode; }
+    bool            IsFullScreenMode() const { return mbFullScreenMode; }
 
     void            StartPresentationMode( bool   bPresentation,
-                                           sal_uInt16 nFlags,
+                                           PresentationFlags nFlags,
                                            sal_Int32  nDisplayScreen );
     /**
      @overload void StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, sal_uInt32 nDisplayScreen)
     */
     void            StartPresentationMode( bool   bPresentation = true,
-                                           sal_uInt16 nFlags = 0 );
+                                           PresentationFlags nFlags = PresentationFlags::NONE );
     void            EndPresentationMode() {  StartPresentationMode( false ); }
-    bool        IsPresentationMode() const { return mbPresentationMode; }
+    bool            IsPresentationMode() const { return mbPresentationMode; }
 
-    bool        IsMinimized() const;
+    bool            IsMinimized() const;
 
-    bool        SetPluginParent( SystemParentData* pParent );
+    bool            SetPluginParent( SystemParentData* pParent );
 
     void            Minimize();
     void            Restore();
 
     void            Maximize( bool bMaximize = true );
-    bool        IsMaximized() const;
+    bool            IsMaximized() const;
 };
 
 #endif // INCLUDED_VCL_WRKWIN_HXX

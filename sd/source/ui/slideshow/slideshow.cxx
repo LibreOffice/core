@@ -689,7 +689,7 @@ void SAL_CALL SlideShow::end()
                 WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
-                    pWorkWindow->StartPresentationMode( false, isAlwaysOnTop() ? PRESENTATION_HIDEALLAPPS : 0 );
+                    pWorkWindow->StartPresentationMode( false, isAlwaysOnTop() ? PresentationFlags::HideAllApps : PresentationFlags::NONE );
                 }
             }
         }
@@ -1161,7 +1161,7 @@ void SlideShow::StartFullscreenPresentation( )
     const sal_Int32 nDisplay (GetDisplay());
     VclPtr<WorkWindow> pWorkWindow = VclPtr<FullScreenWorkWindow>::Create(this, mpCurrentViewShellBase);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
-    pWorkWindow->StartPresentationMode( true, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
+    pWorkWindow->StartPresentationMode( true, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PresentationFlags::HideAllApps : PresentationFlags::NONE, nDisplay);
     //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);
 
     if (pWorkWindow->IsVisible())

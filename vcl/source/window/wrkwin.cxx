@@ -36,7 +36,7 @@ void WorkWindow::ImplInitWorkWindowData()
 {
     mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow
 
-    mnPresentationFlags     = 0;
+    mnPresentationFlags     = PresentationFlags::NONE;
     mbPresentationMode      = false;
     mbPresentationVisible   = false;
     mbPresentationFull      = false;
@@ -157,12 +157,12 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
     }
 }
 
-void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags )
+void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nFlags )
 {
     return StartPresentationMode( bPresentation, nFlags, GetScreenNumber());
 }
 
-void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, sal_Int32 nDisplayScreen )
+void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nFlags, sal_Int32 nDisplayScreen )
 {
     if ( !bPresentation == !mbPresentationMode )
         return;
@@ -174,18 +174,18 @@ void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, s
         mbPresentationFull      = mbFullScreenMode;
         mnPresentationFlags     = nFlags;
 
-        if ( !(mnPresentationFlags & PRESENTATION_NOFULLSCREEN) )
+        if ( !(mnPresentationFlags & PresentationFlags::NoFullScreen) )
             ShowFullScreenMode( true, nDisplayScreen );
         if ( !mbSysChild )
         {
-            if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
+            if ( mnPresentationFlags & PresentationFlags::HideAllApps )
                 mpWindowImpl->mpFrame->SetAlwaysOnTop( true );
-            if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
+            if ( !(mnPresentationFlags & PresentationFlags::NoAutoShow) )
                 ToTop();
             mpWindowImpl->mpFrame->StartPresentation( true );
         }
 
-        if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
+        if ( !(mnPresentationFlags & PresentationFlags::NoAutoShow) )
             Show();
     }
     else
@@ -194,7 +194,7 @@ void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, s
         if ( !mbSysChild )
         {
             mpWindowImpl->mpFrame->StartPresentation( false );
-            if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
+            if ( mnPresentationFlags & PresentationFlags::HideAllApps )
                 mpWindowImpl->mpFrame->SetAlwaysOnTop( false );
         }
         ShowFullScreenMode( mbPresentationFull, nDisplayScreen );
@@ -202,7 +202,7 @@ void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, s
         mbPresentationMode      = false;
         mbPresentationVisible   = false;
         mbPresentationFull      = false;
-        mnPresentationFlags     = 0;
+        mnPresentationFlags     = PresentationFlags::NONE;
     }
 }
 
