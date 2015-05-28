@@ -83,7 +83,10 @@ endif
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     JunitTest_sw_complex \
-    JunitTest_sw_unoapi \
+    JunitTest_sw_unoapi_1 \
+    JunitTest_sw_unoapi_2 \
+    JunitTest_sw_unoapi_3 \
+    JunitTest_sw_unoapi_4 \
 ))
 endif
 
