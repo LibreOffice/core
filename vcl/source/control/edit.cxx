@@ -551,7 +551,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
         rRenderContext.DrawRect(Rectangle(aPos, Size(GetOutputSizePixel().Width() - 2 * mnXOffset, GetOutputSizePixel().Height())));
         rRenderContext.Pop();
 
-        SetTextFillColor(GetControlBackground());
+        rRenderContext.SetTextFillColor(GetControlBackground());
     }
     else if (IsPaintTransparent() || ImplUseNativeBorder(rRenderContext, GetStyle()))
         rRenderContext.SetTextFillColor();
