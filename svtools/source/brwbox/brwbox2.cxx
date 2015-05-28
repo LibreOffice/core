@@ -450,7 +450,7 @@ sal_uInt16 BrowseBox::GetColumnId( sal_uInt16 nPos ) const
 sal_uInt16 BrowseBox::GetColumnPos( sal_uInt16 nId ) const
 {
 
-    for ( sal_uInt16 nPos = 0; nPos < pCols->size(); ++nPos )
+    for ( size_t nPos = 0; nPos < pCols->size(); ++nPos )
         if ( (*pCols)[ nPos ]->GetId() == nId )
             return nPos;
     return BROWSER_INVALIDID;

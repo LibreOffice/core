@@ -3012,7 +3012,7 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
                 bClickedIsFreePlace = true;
                 sal_Int32               nSelectedEntries = pView->GetSelectionCount();
                 SvTreeListEntry*        pSelected = pView->FirstSelected();
-                for(sal_uInt16 nSel = 0; nSel < nSelectedEntries; nSel++ )
+                for(sal_Int32 nSel = 0; nSel < nSelectedEntries; nSel++ )
                 {
                     aSelRestore.push(pSelected);
                     pSelected = pView->NextSelected( pSelected );
@@ -3224,7 +3224,7 @@ SvLBoxTab* SvImpLBox::NextTab( SvLBoxTab* pTab )
     sal_uInt16 nTabCount = pView->TabCount();
     if( nTabCount <= 1 )
         return 0;
-    for( sal_uInt16 nTab=0; nTab < (nTabCount-1); nTab++)
+    for( int nTab=0; nTab < (nTabCount-1); nTab++)
     {
         if( pView->aTabs[nTab]==pTab )
             return (SvLBoxTab*)(pView->aTabs[nTab+1]);

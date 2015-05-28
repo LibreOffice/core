@@ -203,7 +203,7 @@ namespace toolkit
                 else
                 {
                     ::std::vector< Size > aImageSizes( nImageSetCount );
-                    for ( sal_Int32 nImageSet = 0; size_t( nImageSet ) < nImageSetCount; ++nImageSet )
+                    for ( size_t nImageSet = 0; nImageSet < nImageSetCount; ++nImageSet )
                     {
                         ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
                         if  (   ( rImageSet.empty() )

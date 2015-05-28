@@ -144,7 +144,7 @@ namespace
 void SfxPickList::RemovePickListEntries()
 {
     ::osl::MutexGuard aGuard( thePickListMutex::get() );
-    for ( sal_uInt32 i = 0; i < m_aPicklistVector.size(); i++ )
+    for ( size_t i = 0; i < m_aPicklistVector.size(); i++ )
         delete m_aPicklistVector[i];
     m_aPicklistVector.clear();
 }
@@ -319,7 +319,7 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
         pMenu->InsertSeparator();
 
     OUString aEmptyString;
-    for ( sal_uInt32 i = 0; i < m_aPicklistVector.size(); i++ )
+    for ( size_t i = 0; i < m_aPicklistVector.size(); i++ )
     {
         PickListEntry* pEntry = GetPickListEntry( i );
 

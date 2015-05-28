@@ -629,7 +629,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     Out_String( rStream, rOutName, eDestEnc, pNonConvertableChars );
     rStream.WriteCharPtr( "\">" );
 
-    for( sal_uInt16 i=0U; i<rIMap.GetIMapObjectCount(); i++ )
+    for( size_t i=0; i<rIMap.GetIMapObjectCount(); i++ )
     {
         const IMapObject* pObj = rIMap.GetIMapObject( i );
         DBG_ASSERT( pObj, "Wo ist das ImageMap-Object?" );

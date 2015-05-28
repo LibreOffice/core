@@ -2002,7 +2002,7 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
 
             if( nParamCount > 0 )
             {
-                for( sal_uInt16 j = 0; j < nParamCount; j++ )
+                for( sal_uInt32 j = 0; j < nParamCount; j++ )
                 {
                     aRet.append ( Dbg_SbxDataType2String( unoToSbxType( pParams[ j ] ) ) );
                     if( j < nParamCount - 1 )

@@ -183,7 +183,7 @@ namespace drawinglayer
                                             a2DUnitLine.append(basegfx::B2DPoint(0.0, 0.0));
                                             a2DUnitLine.append(basegfx::B2DPoint(1.0, 0.0));
 
-                                            for(sal_uInt32 c(0); c < aMatrices.size(); c++)
+                                            for(size_t c(0); c < aMatrices.size(); c++)
                                             {
                                                 const basegfx::B2DHomMatrix& rMatrix = aMatrices[c];
                                                 basegfx::B2DPolygon aNewLine(a2DUnitLine);

@@ -545,7 +545,7 @@ void ToolboxController::bindListener()
     {
         try
         {
-            for ( sal_uInt32 i = 0; i < aDispatchVector.size(); i++ )
+            for ( size_t i = 0; i < aDispatchVector.size(); i++ )
             {
                 Listener& rListener = aDispatchVector[i];
                 if ( rListener.xDispatch.is() )

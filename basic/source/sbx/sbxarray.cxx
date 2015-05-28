@@ -63,7 +63,7 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
         eType = rArray.eType;
         Clear();
         VarEntriesType* pSrc = rArray.mpVarEntries;
-        for( sal_uInt32 i = 0; i < pSrc->size(); i++ )
+        for( size_t i = 0; i < pSrc->size(); i++ )
         {
             SbxVarEntry* pSrcRef = (*pSrc)[i];
             SbxVariableRef pSrc_ = pSrcRef->mpVar;
@@ -325,7 +325,7 @@ void SbxArray::Remove( SbxVariable* pVar )
 {
     if( pVar )
     {
-        for( sal_uInt32 i = 0; i < mpVarEntries->size(); i++ )
+        for( size_t i = 0; i < mpVarEntries->size(); i++ )
         {
             SbxVarEntry* pRef = (*mpVarEntries)[i];
             if (&pRef->mpVar == pVar)

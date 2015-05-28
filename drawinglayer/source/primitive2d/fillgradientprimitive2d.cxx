@@ -166,7 +166,7 @@ namespace drawinglayer
                     rOuterColor));
 
             // create solid fill steps
-            for(sal_uInt32 a(0); a < rEntries.size(); a++)
+            for(size_t a(0); a < rEntries.size(); a++)
             {
                 // create part polygon
                 basegfx::B2DPolygon aNewPoly(rUnitPolygon);

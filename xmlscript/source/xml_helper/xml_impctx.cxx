@@ -392,7 +392,7 @@ inline ExtendedAttributes::ExtendedAttributes(
 {
     m_pHandler->acquire();
 
-    for ( sal_Int16 nPos = 0; nPos < nAttributes; ++nPos )
+    for ( sal_Int32 nPos = 0; nPos < nAttributes; ++nPos )
     {
         m_pValues[ nPos ] = xAttributeList->getValueByIndex( nPos );
     }
