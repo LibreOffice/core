@@ -96,7 +96,7 @@ enum class BrowserMode
 };
 namespace o3tl
 {
-    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x7aff3f> {};
+    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x7cff3f> {};
 }
 
 #define BROWSER_NONE                      0
