@@ -205,7 +205,7 @@ void getAllHit3DObjectsSortedFrontToBack(
                         ::std::vector< basegfx::B3DPoint > aHitsWithObject;
                         getAllHit3DObjectWithRelativePoint(aFront, aBack, *pCandidate, aViewInfo3D, aHitsWithObject, false);
 
-                        for(sal_uInt32 a(0); a < aHitsWithObject.size(); a++)
+                        for(size_t a(0); a < aHitsWithObject.size(); a++)
                         {
                             const basegfx::B3DPoint aPointInViewCoordinates(aViewInfo3D.getObjectToView() * aHitsWithObject[a]);
                             aDepthAndObjectResults.push_back(ImplPairDephAndObject(pCandidate, aPointInViewCoordinates.getZ()));

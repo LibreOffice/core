@@ -270,7 +270,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
             if ( pFactories )
             {
                 SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
+                for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
                     if ( rFactories[nFactory].nTypeId == aSlotType &&
                          ( ( rFactories[nFactory].nSlotId == 0 ) ||
                            ( rFactories[nFactory].nSlotId == nId) ) )
@@ -280,7 +280,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
 
         SfxMenuCtrlFactArr_Impl &rFactories = pApp->GetMenuCtrlFactories_Impl();
 
-        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
+        for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
             if ( rFactories[nFactory].nTypeId == aSlotType &&
                  ( ( rFactories[nFactory].nSlotId == 0 ) ||
                    ( rFactories[nFactory].nSlotId == nId) ) )

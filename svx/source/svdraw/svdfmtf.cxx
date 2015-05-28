@@ -1612,9 +1612,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
                         {
                             const double fOpNew(1.0 - fTransparence);
 
-                            for(int y(0); y < pOld->Height(); y++)
+                            for(long y(0); y < pOld->Height(); y++)
                             {
-                                for(int x(0); x < pOld->Width(); x++)
+                                for(long x(0); x < pOld->Width(); x++)
                                 {
                                     const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
                                     const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
@@ -1631,9 +1631,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
                             {
                                 if(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height())
                                 {
-                                    for(int y(0); y < pOld->Height(); y++)
+                                    for(long y(0); y < pOld->Height(); y++)
                                     {
-                                        for(int x(0); x < pOld->Width(); x++)
+                                        for(long x(0); x < pOld->Width(); x++)
                                         {
                                             const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
                                             const double fOpNew(1.0 - (pNew->GetPixel(y, x).GetIndex() * fFactor));

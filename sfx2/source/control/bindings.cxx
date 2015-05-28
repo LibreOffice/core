@@ -424,7 +424,7 @@ void SfxBindings::Update_Impl
             // Post Status
             const SfxInterface *pInterface =
                 rDispat.GetShell(pMsgServer->GetShellLevel())->GetInterface();
-            for ( sal_uInt16 nPos = 0; nPos < aFound.size(); ++nPos )
+            for ( size_t nPos = 0; nPos < aFound.size(); ++nPos )
             {
                 const SfxFoundCache_Impl& rFound = aFound[nPos];
                 sal_uInt16 nWhich = rFound.nWhichId;
@@ -706,7 +706,7 @@ void SfxBindings::InvalidateAll
     pImp->bMsgDirty = pImp->bMsgDirty || pImp->bAllMsgDirty || bWithMsg;
     pImp->bAllDirty = true;
 
-    for ( sal_uInt16 n = 0; n < pImp->pCaches->size(); ++n )
+    for ( size_t n = 0; n < pImp->pCaches->size(); ++n )
         (*pImp->pCaches)[n]->Invalidate(bWithMsg);
 
     pImp->nMsgPos = 0;
@@ -807,7 +807,7 @@ void SfxBindings::InvalidateShell
     sal_uInt16 nLevel = pDispatcher->GetShellLevel(rSh);
     if ( nLevel != USHRT_MAX )
     {
-        for ( sal_uInt16 n = 0; n < pImp->pCaches->size(); ++n )
+        for ( size_t n = 0; n < pImp->pCaches->size(); ++n )
         {
             SfxStateCache *pCache = (*pImp->pCaches)[n];
             const SfxSlotServer *pMsgServer =

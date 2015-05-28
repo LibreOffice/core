@@ -125,7 +125,7 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
         return 0;
 
     // First, search their own interfaces
-    for ( sal_uInt16 nInterf = 0; nInterf < _pInterfaces->size(); ++nInterf )
+    for ( size_t nInterf = 0; nInterf < _pInterfaces->size(); ++nInterf )
     {
         const SfxSlot *pDef = ((*_pInterfaces)[nInterf])->GetSlot(nId);
         if ( pDef )

@@ -71,7 +71,7 @@ void CloneList::CopyConnections() const
 {
     sal_uInt32 cloneCount = maCloneList.size();
 
-    for(sal_uInt32 a = 0; a < maOriginalList.size(); a++)
+    for(size_t a = 0; a < maOriginalList.size(); a++)
     {
         const SdrEdgeObj* pOriginalEdge = PTR_CAST(SdrEdgeObj, GetOriginal(a));
         SdrEdgeObj* pCloneEdge = PTR_CAST(SdrEdgeObj, GetClone(a));

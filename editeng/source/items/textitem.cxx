@@ -156,7 +156,7 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
         sal_Int32 nCount = pFontList->GetFontNameCount();
         aFontNameSeq.realloc( nCount );
 
-        for ( sal_uInt16 i = 0; i < nCount; i++ )
+        for ( sal_Int32 i = 0; i < nCount; i++ )
             aFontNameSeq[i] = pFontList->GetFontName(i).GetName();
     }
 }

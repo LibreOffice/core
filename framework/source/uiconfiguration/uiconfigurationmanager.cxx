@@ -839,7 +839,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
             aGuard.clear();
 
             // Notify our listeners
-            for ( sal_uInt32 k = 0; k < aRemoveEventNotifyContainer.size(); k++ )
+            for ( size_t k = 0; k < aRemoveEventNotifyContainer.size(); k++ )
                 implts_notifyContainerListener( aRemoveEventNotifyContainer[k], NotifyOp_Remove );
         }
         catch ( const ::com::sun::star::lang::IllegalArgumentException& )
@@ -1300,9 +1300,9 @@ void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exc
         aGuard.clear();
 
         // Notify our listeners
-        for ( sal_uInt32 j = 0; j < aRemoveNotifyContainer.size(); j++ )
+        for ( size_t j = 0; j < aRemoveNotifyContainer.size(); j++ )
             implts_notifyContainerListener( aRemoveNotifyContainer[j], NotifyOp_Remove );
-        for ( sal_uInt32 k = 0; k < aReplaceNotifyContainer.size(); k++ )
+        for ( size_t k = 0; k < aReplaceNotifyContainer.size(); k++ )
             implts_notifyContainerListener( aReplaceNotifyContainer[k], NotifyOp_Replace );
     }
 }

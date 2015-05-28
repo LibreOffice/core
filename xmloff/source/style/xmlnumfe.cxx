@@ -218,7 +218,7 @@ void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
     DBG_ASSERT(nWasUsedCount == 0, "WasUsed should be empty");
     sal_Int32 nCount(rWasUsed.getLength());
     const sal_Int32* pWasUsed = rWasUsed.getConstArray();
-    for (sal_uInt16 i = 0; i < nCount; i++, pWasUsed++)
+    for (sal_Int32 i = 0; i < nCount; i++, pWasUsed++)
     {
         std::pair<SvXMLuInt32Set::const_iterator, bool> aPair = aWasUsed.insert( *pWasUsed );
         if (aPair.second)

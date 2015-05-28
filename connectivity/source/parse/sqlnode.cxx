@@ -1756,7 +1756,7 @@ bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodePara
 
 void OSQLParseNode::replaceNodeValue(const OUString& rTableAlias, const OUString& rColumnName)
 {
-    for (sal_uInt32 i=0;i<count();++i)
+    for (size_t i=0;i<count();++i)
     {
         if (SQL_ISRULE(this,column_ref) && count() == 1 && getChild(0)->getTokenValue() == rColumnName)
         {

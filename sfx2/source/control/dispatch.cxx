@@ -559,7 +559,7 @@ sal_uInt16 SfxDispatcher::GetShellLevel(const SfxShell& rShell)
     SFX_STACK(SfxDispatcher::GetShellLevel);
     Flush();
 
-    for ( sal_uInt16 n = 0; n < xImp->aStack.size(); ++n )
+    for ( size_t n = 0; n < xImp->aStack.size(); ++n )
         if ( *( xImp->aStack.rbegin() + n ) == &rShell )
             return n;
     if ( xImp->pParent )
@@ -732,7 +732,7 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
     if ( IsAppDispatcher() && !pSfxApp->IsDowning() )
         return;
 
-    for ( sal_uInt16 i = 0; i < xImp->aStack.size(); ++i )
+    for ( size_t i = 0; i < xImp->aStack.size(); ++i )
         (*(xImp->aStack.rbegin() + i))->DoDeactivate_Impl(xImp->pFrame, bMDI);
 
     bool bHidePopups = bMDI && xImp->pFrame;

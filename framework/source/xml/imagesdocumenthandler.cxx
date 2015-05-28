@@ -646,7 +646,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     {
         ImageListDescriptor* pImageList = m_aImageListsItems.pImageList;
 
-        for ( sal_uInt16 i = 0; i < m_aImageListsItems.pImageList->size(); i++ )
+        for ( size_t i = 0; i < m_aImageListsItems.pImageList->size(); i++ )
         {
             const ImageListItemDescriptor* pImageItems = &(*pImageList)[i];
             WriteImageList( pImageItems );
@@ -728,7 +728,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     ImageItemListDescriptor* pImageItemList = pImageList->pImageItemList;
     if ( pImageItemList )
     {
-        for ( sal_uInt16 i = 0; i < pImageItemList->size(); i++ )
+        for ( size_t i = 0; i < pImageItemList->size(); i++ )
             WriteImage( &(*pImageItemList)[i] );
     }
 
@@ -763,7 +763,7 @@ void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageIte
     m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_EXTERNALIMAGES ), m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    for ( sal_uInt16 i = 0; i < pExternalImageList->size(); i++ )
+    for ( size_t i = 0; i < pExternalImageList->size(); i++ )
     {
         const ExternalImageItemDescriptor* pItem = &(*pExternalImageList)[i];
         WriteExternalImage( pItem );

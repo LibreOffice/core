@@ -524,7 +524,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 // remove all old picklist entries from menu handler
                 if ( nRemoveItemCount > 0 )
                 {
-                    for( sal_uInt32 nIndex = m_aMenuItemHandlerVector.size() - nRemoveItemCount;
+                    for( size_t nIndex = m_aMenuItemHandlerVector.size() - nRemoveItemCount;
                          nIndex < m_aMenuItemHandlerVector.size();  )
                     {
                         delete m_aMenuItemHandlerVector.at( nIndex );
