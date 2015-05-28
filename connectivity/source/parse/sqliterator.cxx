@@ -525,7 +525,7 @@ void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLP
             {
                 const OSQLParseNode* pColumnCommalist = pJoin_spec->getChild(2);
                 // All columns in the column_commalist ...
-                for (sal_uInt32 i = 0; i < pColumnCommalist->count(); i++)
+                for (size_t i = 0; i < pColumnCommalist->count(); i++)
                 {
                     const OSQLParseNode * pCol = pColumnCommalist->getChild(i);
                     // add twice because the column must exists in both tables
@@ -619,7 +619,7 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
 
     const OSQLParseNode* pTableName = NULL;
     OUString aTableRange;
-    for (sal_uInt32 i = 0; i < pTableRefCommalist->count(); i++)
+    for (size_t i = 0; i < pTableRefCommalist->count(); i++)
     {   // Process FROM clause
         aTableRange.clear();
 
@@ -868,7 +868,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
     if (!SQL_ISRULE(pSelectNode,base_table_element_commalist))
         return ;
 
-    for (sal_uInt32 i = 0; i < pSelectNode->count(); i++)
+    for (size_t i = 0; i < pSelectNode->count(); i++)
     {
         OSQLParseNode *pColumnRef = pSelectNode->getChild(i);
 
@@ -945,7 +945,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
         // SELECT column[,column] oder SELECT COUNT(*) ...
         OSQLParseNode * pSelection = pSelectNode->getChild(2);
 
-        for (sal_uInt32 i = 0; i < pSelection->count(); i++)
+        for (size_t i = 0; i < pSelection->count(); i++)
         {
             OSQLParseNode *pColumnRef = pSelection->getChild(i);
 

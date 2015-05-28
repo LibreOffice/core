@@ -1542,7 +1542,7 @@ SfxViewFrame* SfxViewFrame::GetFirst
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // search for a SfxDocument of the specified type
-    for ( sal_uInt16 nPos = 0; nPos < rFrames.size(); ++nPos )
+    for ( size_t nPos = 0; nPos < rFrames.size(); ++nPos )
     {
         SfxViewFrame *pFrame = rFrames[nPos];
         if  (   ( !pDoc || pDoc == pFrame->GetObjectShell() )

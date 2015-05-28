@@ -309,7 +309,7 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
     // New mechanism to search for necessary disconnections for
     // changed connectors inside the transitive hull of all at
     // the beginning of UNDO selected objects
-    for(sal_uInt32 a(0L); a < rAllMarkedObjects.size(); a++)
+    for(size_t a(0); a < rAllMarkedObjects.size(); a++)
     {
         SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, rAllMarkedObjects[a]);
 

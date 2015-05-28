@@ -2074,7 +2074,7 @@ XMLParaContext::~XMLParaContext()
 
     if( pHints && !pHints->empty() )
     {
-        for( sal_uInt16 i=0; i<pHints->size(); i++ )
+        for( size_t i=0; i<pHints->size(); i++ )
         {
             XMLHint_Impl *pHint = &(*pHints)[i];
             xAttrCursor->gotoRange( pHint->GetStart(), sal_False );

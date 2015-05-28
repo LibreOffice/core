@@ -456,7 +456,7 @@ bool ImageManagerImpl::implts_loadUserImages(
                 sal_Int32 nCount = pList->pImageItemList->size();
                 std::vector< OUString > aUserImagesVector;
                 aUserImagesVector.reserve(nCount);
-                for ( sal_uInt16 i=0; i < nCount; i++ )
+                for ( sal_Int32 i=0; i < nCount; i++ )
                 {
                     const ImageItemDescriptor* pItem = &(*pList->pImageItemList)[i];
                     aUserImagesVector.push_back( pItem->aCommandURL );
