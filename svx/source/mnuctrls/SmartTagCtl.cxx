@@ -71,7 +71,7 @@ void SvxSmartTagsControl::FillMenu()
     const Reference<text::XTextRange>& xTextRange = mpSmartTagItem->GetTextRange();
     const Reference<frame::XController>& xController = mpSmartTagItem->GetController();
 
-    for ( sal_uInt16 j = 0; j < rActionComponentsSequence.getLength(); ++j )
+    for ( sal_Int32 j = 0; j < rActionComponentsSequence.getLength(); ++j )
     {
         Reference< container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[j];
 
@@ -109,7 +109,7 @@ void SvxSmartTagsControl::FillMenu()
         pSbMenu->InsertSeparator(OString(), nSubMenuPos++);
 
         // Add subitem for every action reference for the current smart tag type:
-        for ( sal_uInt16 i = 0; i < rActionComponents.getLength(); ++i )
+        for ( sal_Int32 i = 0; i < rActionComponents.getLength(); ++i )
         {
             xAction = rActionComponents[i];
 

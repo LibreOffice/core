@@ -309,7 +309,7 @@ void SvxRubyDialog::dispose()
 
 void SvxRubyDialog::ClearCharStyleList()
 {
-    for (sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
+    for (sal_Int32 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
     {
         void* pData = m_pCharStyleLB->GetEntryData(i);
         delete static_cast<OUString*>(pData);
@@ -528,7 +528,7 @@ void SvxRubyDialog::Update()
         sCharStyleName = cRubies;
     if (!sCharStyleName.isEmpty())
     {
-        for (sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
+        for (sal_Int32 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
         {
             const OUString* pCoreName = static_cast<const OUString*>(m_pCharStyleLB->GetEntryData(i));
             if (pCoreName && sCharStyleName == *pCoreName)

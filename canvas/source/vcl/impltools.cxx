@@ -330,7 +330,7 @@ namespace vclcanvas
                     aTransform.invert();
 
                     // for the time being, always read as ARGB
-                    for( int y=0; y<aDestBmpSize.Height(); ++y )
+                    for( long y=0; y<aDestBmpSize.Height(); ++y )
                     {
                         if( bModulateColors )
                         {
@@ -346,7 +346,7 @@ namespace vclcanvas
                             if( rBitmap.IsTransparent() )
                             {
                                 // Handling alpha and mask just the same...
-                                for( int x=0; x<aDestBmpSize.Width(); ++x )
+                                for( long x=0; x<aDestBmpSize.Width(); ++x )
                                 {
                                     ::basegfx::B2DPoint aPoint(x,y);
                                     aPoint *= aTransform;
@@ -392,7 +392,7 @@ namespace vclcanvas
                             }
                             else
                             {
-                                for( int x=0; x<aDestBmpSize.Width(); ++x )
+                                for( long x=0; x<aDestBmpSize.Width(); ++x )
                                 {
                                     ::basegfx::B2DPoint aPoint(x,y);
                                     aPoint *= aTransform;
@@ -449,7 +449,7 @@ namespace vclcanvas
                             if( rBitmap.IsTransparent() )
                             {
                                 // Handling alpha and mask just the same...
-                                for( int x=0; x<aDestBmpSize.Width(); ++x )
+                                for( long x=0; x<aDestBmpSize.Width(); ++x )
                                 {
                                     ::basegfx::B2DPoint aPoint(x,y);
                                     aPoint *= aTransform;
@@ -471,7 +471,7 @@ namespace vclcanvas
                             }
                             else
                             {
-                                for( int x=0; x<aDestBmpSize.Width(); ++x )
+                                for( long x=0; x<aDestBmpSize.Width(); ++x )
                                 {
                                     ::basegfx::B2DPoint aPoint(x,y);
                                     aPoint *= aTransform;

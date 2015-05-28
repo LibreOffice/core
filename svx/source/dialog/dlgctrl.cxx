@@ -1452,9 +1452,9 @@ namespace
             {
                 const Size aBitmapSize(rBitmapEx.GetSizePixel());
 
-                for(sal_Int32 y(0); y < rSize.Height(); y += aBitmapSize.Height())
+                for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
                 {
-                    for(sal_Int32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
+                    for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
                     {
                         pVirtualDevice->DrawBitmapEx(
                             Point(x, y),

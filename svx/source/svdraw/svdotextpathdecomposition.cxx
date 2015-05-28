@@ -219,7 +219,7 @@ namespace
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
             double fRetval(0.0);
 
-            for(sal_uInt32 a(0L); a < rTextPortions.size(); a++)
+            for(size_t a(0); a < rTextPortions.size(); a++)
             {
                 const impPathTextPortion* pCandidate = rTextPortions[a];
 
@@ -595,7 +595,7 @@ namespace
     {
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aNewPrimitives;
 
-        for(sal_uInt32 a(0L); a < rSource.size(); a++)
+        for(size_t a(0); a < rSource.size(); a++)
         {
             const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pTextCandidate = dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(rSource[a]);
 
@@ -722,7 +722,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 // filter text portions for this paragraph
                 ::std::vector< const impPathTextPortion* > aParagraphTextPortions;
 
-                for(sal_uInt32 b(0L); b < rPathTextPortions.size(); b++)
+                for(size_t b(0); b < rPathTextPortions.size(); b++)
                 {
                     const impPathTextPortion& rCandidate = rPathTextPortions[b];
 

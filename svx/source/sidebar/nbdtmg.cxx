@@ -557,7 +557,7 @@ void GraphyicBulletsTypeMgr::Init()
 {
     std::vector<OUString> aGrfNames;
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
-    for(sal_uInt16 i = 0; i < aGrfNames.size(); i++)
+    for(size_t i = 0; i < aGrfNames.size(); i++)
     {
         OUString sGrfNm = aGrfNames[i];
         INetURLObject aObj(sGrfNm);
@@ -599,7 +599,7 @@ sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uI
     if ( pGrf )
     {
         Graphic aGraphic;
-        for (sal_uInt16 i=0; i < aGrfDataLst.size(); ++i)
+        for (size_t i=0; i < aGrfDataLst.size(); ++i)
         {
             GrfBulDataRelation* pEntry = aGrfDataLst[i];
             bool bExist = false;

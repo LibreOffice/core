@@ -156,7 +156,7 @@ AccessibleDialogWindow::~AccessibleDialogWindow()
 
 void AccessibleDialogWindow::UpdateFocused()
 {
-    for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i].rxAccessible );
         if ( xChild.is() )
@@ -174,7 +174,7 @@ void AccessibleDialogWindow::UpdateSelected()
 {
     NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
 
-    for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i].rxAccessible );
         if ( xChild.is() )
@@ -190,7 +190,7 @@ void AccessibleDialogWindow::UpdateSelected()
 
 void AccessibleDialogWindow::UpdateBounds()
 {
-    for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i].rxAccessible );
         if ( xChild.is() )
@@ -436,7 +436,7 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
                 m_pDlgEdModel = NULL;
 
                 // dispose all children
-                for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+                for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
                 {
                     Reference< XComponent > xComponent( m_aAccessibleChildren[i].rxAccessible, UNO_QUERY );
                     if ( xComponent.is() )
@@ -586,7 +586,7 @@ void AccessibleDialogWindow::disposing()
         m_pDlgEdModel = NULL;
 
         // dispose all children
-        for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XComponent > xComponent( m_aAccessibleChildren[i].rxAccessible, UNO_QUERY );
             if ( xComponent.is() )
@@ -787,7 +787,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
     OExternalLockGuard aGuard( this );
 
     Reference< XAccessible > xChild;
-    for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )

@@ -204,7 +204,7 @@ PptSlidePersistList::~PptSlidePersistList() {}
 
 sal_uInt16 PptSlidePersistList::FindPage(sal_uInt32 nId) const
 {
-    for ( sal_uInt16 i=0; i < mvEntries.size(); i++ )
+    for ( size_t i=0; i < mvEntries.size(); i++ )
     {
         if (mvEntries[ i ].GetSlideId()==nId) return i;
     }
@@ -1543,7 +1543,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             for ( nPageListNum = 0; nPageListNum < 3; nPageListNum++ )
             {
                 PptSlidePersistList* pPageList = GetPageList( PptPageKind( nPageListNum ) );
-                for ( sal_uInt16 nPageNum = 0; nPageNum < pPageList->size(); nPageNum++ )
+                for ( size_t nPageNum = 0; nPageNum < pPageList->size(); nPageNum++ )
                 {
                     PptSlidePersistEntry& rE2 = (*pPageList)[ nPageNum ];
                     sal_uLong nPersist = rE2.aPersistAtom.nPsrReference;
@@ -1618,7 +1618,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                     else if ( pHeadersFootersHd->nRecInstance == 4 )    // notes master
                         ImportHeaderFooterContainer( *pHeadersFootersHd, aNotesMaster );
                 }
-                for ( sal_uInt16 i = 0; i < pMasterPages->size(); i++ )
+                for ( size_t i = 0; i < pMasterPages->size(); i++ )
                 {
                     if ( (*pMasterPages)[ i ].bNotesMaster )
                         (*pMasterPages)[ i ].pHeaderFooterEntry = new HeaderFooterEntry( aNotesMaster );

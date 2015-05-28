@@ -745,7 +745,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         // New mechanism to re-create the connections of cloned connectors
         CloneList aCloneList;
 
-        for( sal_uInt32 i(0); i < aSdrObjects.size(); i++ )
+        for( size_t i(0); i < aSdrObjects.size(); i++ )
         {
             const SdrObject*    pObj = aSdrObjects[i];
             SdrObject*          pNeuObj;

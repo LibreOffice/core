@@ -724,7 +724,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
             // check for hidden cols
             Reference< ::com::sun::star::beans::XPropertySet >  xCurCol;
             Any aHidden,aName;
-            for (sal_uInt16 i=0; i<xCols->getCount(); ++i)
+            for (sal_Int32 i=0; i<xCols->getCount(); ++i)
             {
                 xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
                 DBG_ASSERT(xCurCol.is(), "FmGridHeader::PreExecuteColumnContextMenu : the Peer has invalid columns !");
@@ -879,7 +879,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         {
             // just iterate through all the cols ...
             Reference< ::com::sun::star::beans::XPropertySet >  xCurCol;
-            for (sal_uInt16 i=0; i<xCols->getCount(); ++i)
+            for (sal_Int32 i=0; i<xCols->getCount(); ++i)
             {
                 xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
                 xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(false));
@@ -1097,7 +1097,7 @@ void FmGridControl::SetDesignMode(bool bMode)
                 if (aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE)
                     xColumn.set(aSelection, css::uno::UNO_QUERY);
                 Reference< XInterface >  xCurrent;
-                for (sal_uInt16 i=0; i<xColumns->getCount(); ++i)
+                for (sal_Int32 i=0; i<xColumns->getCount(); ++i)
                 {
                     xCurrent.set(xColumns->getByIndex(i), css::uno::UNO_QUERY);
                     if (xCurrent == xColumn)

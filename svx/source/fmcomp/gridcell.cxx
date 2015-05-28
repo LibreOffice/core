@@ -4100,7 +4100,7 @@ void SAL_CALL FmXListBoxCell::addItems(const ::comphelper::StringSequence& aItem
     if (m_pBox)
     {
         sal_uInt16 nP = nPos;
-        for ( sal_uInt16 n = 0; n < aItems.getLength(); n++ )
+        for ( sal_Int32 n = 0; n < aItems.getLength(); n++ )
         {
             m_pBox->InsertEntry( aItems.getConstArray()[n], nP );
             if ( nPos != -1 )    // Nicht wenn 0xFFFF, weil LIST_APPEND
@@ -4430,7 +4430,7 @@ void SAL_CALL FmXComboBoxCell::addItems( const Sequence< OUString >& _Items, sal
     if ( m_pComboBox )
     {
         sal_uInt16 nP = _Pos;
-        for ( sal_uInt16 n = 0; n < _Items.getLength(); n++ )
+        for ( sal_Int32 n = 0; n < _Items.getLength(); n++ )
         {
             m_pComboBox->InsertEntry( _Items.getConstArray()[n], nP );
             if ( _Pos != -1 )

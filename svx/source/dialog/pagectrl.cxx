@@ -289,7 +289,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
             break;
         }
         sText += OUString(cArrow);
-        for (sal_uInt16 i = 0; i < sText.getLength(); i++)
+        for (sal_Int32 i = 0; i < sText.getLength(); i++)
         {
             OUString sDraw(sText.copy(i,1));
             long nHDiff = 0;

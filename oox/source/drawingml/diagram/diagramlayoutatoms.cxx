@@ -339,12 +339,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             const sal_Int32 nHackyFontHeight=50;
             const sal_Int32 nHackyFontWidth=20;
             awt::Size aTotalSize;
-            for( sal_uInt32 nPara=0; nPara<pTextBody->getParagraphs().size(); ++nPara )
+            for( size_t nPara=0; nPara<pTextBody->getParagraphs().size(); ++nPara )
             {
                 aTotalSize.Height += nHackyFontHeight;
 
                 sal_Int32 nLocalWidth=0;
-                for( sal_uInt32 nRun=0; nRun<pTextBody->getParagraphs().at(nPara)->getRuns().size(); ++nRun )
+                for( size_t nRun=0; nRun<pTextBody->getParagraphs().at(nPara)->getRuns().size(); ++nRun )
                     nLocalWidth +=
                         pTextBody->getParagraphs().at(nPara)->getRuns().at(nRun)->getText().getLength()
                         * nHackyFontWidth;

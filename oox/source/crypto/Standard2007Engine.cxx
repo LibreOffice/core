@@ -138,7 +138,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
 
     // derive key
     vector<sal_uInt8> buffer(64, 0x36);
-    for( sal_uInt32 i = 0; i < hash.size(); ++i )
+    for( size_t i = 0; i < hash.size(); ++i )
         buffer[i] ^= hash[i];
 
     Digest::sha1(hash, buffer);

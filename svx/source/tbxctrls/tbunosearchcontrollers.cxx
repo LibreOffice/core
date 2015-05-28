@@ -290,7 +290,7 @@ void SearchToolbarControllersManager::saveSearchHistory(const FindTextFieldContr
 
 void SearchToolbarControllersManager::loadSearchHistory(FindTextFieldControl* pFindTextFieldControl)
 {
-    for( sal_uInt16 i=0; i<m_aSearchStrings.size(); ++i )
+    for( size_t i=0; i<m_aSearchStrings.size(); ++i )
     {
         pFindTextFieldControl->InsertEntry(m_aSearchStrings[i],i);
     }
