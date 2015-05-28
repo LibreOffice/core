@@ -1974,13 +1974,14 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         else if ( GetNextLinkInChain() != NULL ) // is this a chainable object?
         {
             // set whether there is need for chaining
+            // (used in EndTextEdit to crop the overflowing part)
+            // XXX: might be removed later when we remove text in real time
             SetToBeChained( pEditStatus->IsPageOverflow() );
             fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
                 pEditStatus->IsPageOverflow() ? "TRUE" : "FALSE");
-            // Trying to copy stuff right away
 
-            if (pEditStatus->IsPageOverflow()) {
-                mpOverflowingText = pEdtOutl->GetOverflowingParaObject();
+            // Pushes text in next link on the fly
+            if ( pEditStatus->IsPageOverflow() ) {
                 SdrTextObj *pNextTextObj = GetNextLinkInChain();
                 impCopyTextInTextObj(pNextTextObj);
             }

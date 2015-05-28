@@ -723,29 +723,18 @@ void SdrTextObj::embedText() const
 
 void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
 {
-    // Code inspired from SdrTextObj::FitFrameToTextSize
-
-    // avoid copying text in same box
+    // prevent copying text in same box
     if ( this ==  pNextTextObj )
         return;
 
-    // trying to copy text in obj 1
-    //SdrText* pText = getActiveText();
+   //rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
-    //SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner();
-    //rOutliner.SetUpdateMode(true);
-    //rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
-    // XXX: experimental code 27/5/15
-    //OutlinerParaObject *someText = rOutliner.CreateParaObject(0,1); // only first para
-    //pNextTextObj->SetOutlinerParaObject(*someText);
-    //pNextTextObj->SetText("Bukowski, were are thou?");
+   // Push text through the chain if there's any
+   mpOverflowingText = pEdtOutl->GetOverflowingParaObject();
     if (mpOverflowingText) {
         pNextTextObj->NbcSetOutlinerParaObject(mpOverflowingText);
     }
-    //rOutliner.Insert("Bukowski, were are thou?");
-    //rOutliner.Clear();
     //rOutliner.SetStatusEventHdl1(Link());
-
 
 }
 
