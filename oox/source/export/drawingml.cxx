@@ -2222,18 +2222,6 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
     }
 
 
-    mpFS->startElementNS( XML_a, XML_custGeom, FSEND );
-    mpFS->singleElementNS( XML_a, XML_avLst, FSEND );
-    mpFS->singleElementNS( XML_a, XML_gdLst, FSEND );
-    mpFS->singleElementNS( XML_a, XML_ahLst, FSEND );
-    mpFS->singleElementNS( XML_a, XML_rect,
-                           XML_l, "l",
-                           XML_t, "t",
-                           XML_r, "r",
-                           XML_b, "b",
-                           FSEND );
-
-    mpFS->startElementNS( XML_a, XML_pathLst, FSEND );
 
     uno::Sequence< beans::PropertyValue > const * pGeometrySeq =
         static_cast<uno::Sequence< beans::PropertyValue > const *>(aAny.getValue());
@@ -2251,7 +2239,6 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                 uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
                 uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
                 uno::Sequence<awt::Size> aPathSize;
-                bool bHasSubViewSize = false;
                 for (int j = 0; j < aPathProp.getLength(); ++j )
                 {
                     const beans::PropertyValue& rPathProp = aPathProp[j];
@@ -2260,13 +2247,21 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                     else if (rPathProp.Name == "Segments")
                         rPathProp.Value >>= aSegments;
                     else if (rPathProp.Name == "SubViewSize")
-                    {
                         rPathProp.Value >>= aPathSize;
-                        bHasSubViewSize = true;
-                    }
                 }
 
-                if ( bHasSubViewSize )
+                if ( !aPairs.hasElements() || !aSegments.hasElements() )
+                    return;
+
+                mpFS->startElementNS( XML_a, XML_custGeom, FSEND );
+                mpFS->singleElementNS( XML_a, XML_avLst, FSEND );
+                mpFS->singleElementNS( XML_a, XML_gdLst, FSEND );
+                mpFS->singleElementNS( XML_a, XML_ahLst, FSEND );
+                mpFS->singleElementNS( XML_a, XML_rect, XML_l, "l", XML_t, "t",
+                        XML_r, "r", XML_b, "b", FSEND );
+                mpFS->startElementNS( XML_a, XML_pathLst, FSEND );
+
+                if ( aPathSize.hasElements() )
                 {
                     mpFS->startElementNS( XML_a, XML_path,
                           XML_w, I64S( aPathSize[0].Width ),
@@ -2395,13 +2390,12 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                     }
                 }
                 mpFS->endElementNS( XML_a, XML_path );
+                mpFS->endElementNS( XML_a, XML_pathLst );
+                mpFS->endElementNS( XML_a, XML_custGeom );
             }
         }
     }
 
-    mpFS->endElementNS( XML_a, XML_pathLst );
-
-    mpFS->endElementNS( XML_a, XML_custGeom );
 }
 
 void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
