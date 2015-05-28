@@ -158,15 +158,15 @@ public:
 
 class HTMLTableCnts
 {
-    HTMLTableCnts *pNext;               // next content
+    HTMLTableCnts *m_pNext;               // next content
 
     // Only one of the next two pointers must be set!
-    const SwStartNode *pStartNode;      // a paragraph
-    HTMLTable *pTable;                  // a table
+    const SwStartNode *m_pStartNode;      // a paragraph
+    HTMLTable *m_pTable;                  // a table
 
-    SwHTMLTableLayoutCnts* pLayoutInfo;
+    SwHTMLTableLayoutCnts* m_pLayoutInfo;
 
-    bool bNoBreak;
+    bool m_bNoBreak;
 
     void InitCtor();
 
@@ -178,20 +178,20 @@ public:
     ~HTMLTableCnts();                   // only allowed in ~HTMLTableCell
 
     // Determine SwStartNode and HTMLTable respectively
-    const SwStartNode *GetStartNode() const { return pStartNode; }
-    const HTMLTable *GetTable() const { return pTable; }
-    HTMLTable *GetTable() { return pTable; }
+    const SwStartNode *GetStartNode() const { return m_pStartNode; }
+    const HTMLTable *GetTable() const { return m_pTable; }
+    HTMLTable *GetTable() { return m_pTable; }
 
     // Add a new node at the end of the list
     void Add( HTMLTableCnts* pNewCnts );
 
     // Determine next node
-    const HTMLTableCnts *Next() const { return pNext; }
-    HTMLTableCnts *Next() { return pNext; }
+    const HTMLTableCnts *Next() const { return m_pNext; }
+    HTMLTableCnts *Next() { return m_pNext; }
 
     inline void SetTableBox( SwTableBox *pBox );
 
-    void SetNoBreak() { bNoBreak = true; }
+    void SetNoBreak() { m_bNoBreak = true; }
 
     SwHTMLTableLayoutCnts *CreateLayoutInfo();
 };
@@ -619,59 +619,59 @@ public:
 
 void HTMLTableCnts::InitCtor()
 {
-    pNext = 0;
-    pLayoutInfo = 0;
+    m_pNext = 0;
+    m_pLayoutInfo = 0;
 
-    bNoBreak = false;
+    m_bNoBreak = false;
 }
 
 HTMLTableCnts::HTMLTableCnts( const SwStartNode* pStNd ):
-    pStartNode(pStNd), pTable(0)
+    m_pStartNode(pStNd), m_pTable(0)
 {
     InitCtor();
 }
 
 HTMLTableCnts::HTMLTableCnts( HTMLTable* pTab ):
-    pStartNode(0), pTable(pTab)
+    m_pStartNode(0), m_pTable(pTab)
 {
     InitCtor();
 }
 
 HTMLTableCnts::~HTMLTableCnts()
 {
-    delete pTable;              // die Tabellen brauchen wir nicht mehr
-    delete pNext;
+    delete m_pTable;              // die Tabellen brauchen wir nicht mehr
+    delete m_pNext;
 }
 
 void HTMLTableCnts::Add( HTMLTableCnts* pNewCnts )
 {
     HTMLTableCnts *pCnts = this;
 
-    while( pCnts->pNext )
-        pCnts = pCnts->pNext;
+    while( pCnts->m_pNext )
+        pCnts = pCnts->m_pNext;
 
-    pCnts->pNext = pNewCnts;
+    pCnts->m_pNext = pNewCnts;
 }
 
 inline void HTMLTableCnts::SetTableBox( SwTableBox *pBox )
 {
-    OSL_ENSURE( pLayoutInfo, "Da sit noch keine Layout-Info" );
-    if( pLayoutInfo )
-        pLayoutInfo->SetTableBox( pBox );
+    OSL_ENSURE( m_pLayoutInfo, "Da sit noch keine Layout-Info" );
+    if( m_pLayoutInfo )
+        m_pLayoutInfo->SetTableBox( pBox );
 }
 
 SwHTMLTableLayoutCnts *HTMLTableCnts::CreateLayoutInfo()
 {
-    if( !pLayoutInfo )
+    if( !m_pLayoutInfo )
     {
-        SwHTMLTableLayoutCnts *pNextInfo = pNext ? pNext->CreateLayoutInfo() : 0;
-        SwHTMLTableLayout *pTableInfo = pTable ? pTable->CreateLayoutInfo() : 0;
+        SwHTMLTableLayoutCnts *pNextInfo = m_pNext ? m_pNext->CreateLayoutInfo() : 0;
+        SwHTMLTableLayout *pTableInfo = m_pTable ? m_pTable->CreateLayoutInfo() : 0;
 
-        pLayoutInfo = new SwHTMLTableLayoutCnts( pStartNode, pTableInfo,
-                                                 bNoBreak, pNextInfo );
+        m_pLayoutInfo = new SwHTMLTableLayoutCnts( m_pStartNode, pTableInfo,
+                                                 m_bNoBreak, pNextInfo );
     }
 
-    return pLayoutInfo;
+    return m_pLayoutInfo;
 }
 
 HTMLTableCell::HTMLTableCell():
@@ -3301,12 +3301,12 @@ void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 
     if( rParser.nContextStAttrMin == GetContextStAttrMin() )
     {
-        _HTMLAttr** pHTMLTable = reinterpret_cast<_HTMLAttr**>(&rParser.aAttrTab);
+        _HTMLAttr** pTable = reinterpret_cast<_HTMLAttr**>(&rParser.aAttrTab);
 
         for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-            nCnt--; ++pHTMLTable )
+            nCnt--; ++pTable )
         {
-            OSL_ENSURE( !*pHTMLTable, "Die Attribut-Tabelle ist nicht leer" );
+            OSL_ENSURE( !*pTable, "Die Attribut-Tabelle ist nicht leer" );
         }
     }
 #endif
