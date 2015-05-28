@@ -74,6 +74,9 @@ void            lok_docview_post_command    (LOKDocView* pDocView, const char* p
 
 /// Posts a keyboard event to LibreOfficeKit.
 void            lok_docview_post_key    (GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData);
+
+/// Get the visible area of the document (in twips).
+void lok_docview_get_visarea(LOKDocView* pThis, GdkRectangle* pArea);
 #ifdef __cplusplus
 }
 #endif

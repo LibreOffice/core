@@ -158,10 +158,18 @@ static void doSearch(bool bBackwards)
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/value", '/'), pText);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/value", '/'), bBackwards);
+
+    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+    GdkRectangle aArea;
+    lok_docview_get_visarea(pLOKDocView, &aArea);
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/type", '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/value", '/'), aArea.x);
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/type", '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/value", '/'), aArea.y);
+
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
     lok_docview_post_command(pLOKDocView, ".uno:ExecuteSearch", aStream.str().c_str());
 }
 
