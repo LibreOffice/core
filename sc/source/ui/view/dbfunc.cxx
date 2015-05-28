@@ -354,10 +354,10 @@ void ScDBFunc::ToggleAutoFilter()
         {
             if (!bHeader)
             {
-                if ( MessBox( GetViewData().GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                if ( ScopedVclPtr<MessBox>::Create( GetViewData().GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
                         ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // header from first row?
-                    ).Execute() == RET_YES )
+                    )->Execute() == RET_YES )
                 {
                     pDBData->SetHeader( true );     //! Undo ??
                     bHeader = true;

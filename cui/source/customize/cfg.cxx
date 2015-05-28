@@ -5079,7 +5079,7 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
     (void)pButton;
 
     OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
-    if ( WarningBox( this, WinBits(WB_OK_CANCEL), message ).Execute() == RET_OK )
+    if ( ScopedVclPtr<WarningBox>::Create( this, WinBits(WB_OK_CANCEL), message )->Execute() == RET_OK )
     {
         sal_uInt16 nCount = pTbSymbol->GetItemCount();
 
@@ -5204,7 +5204,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         {
             aIndex = rPaths[0].lastIndexOf( '/' );
             aIconName = rPaths[0].copy( aIndex+1 );
-            ret = SvxIconReplacementDialog( this, aIconName ).ShowDialog();
+            ret = ScopedVclPtr<SvxIconReplacementDialog>::Create( this, aIconName )->ShowDialog();
             if ( ret == 2 )
             {
                 ReplaceGraphicItem( rPaths[0] );
@@ -5232,7 +5232,7 @@ void SvxIconSelectorDialog::ImportGraphics(
             {
                 aIndex = rPaths[i].lastIndexOf( '/' );
                 aIconName = rPaths[i].copy( aIndex+1 );
-                ret = SvxIconReplacementDialog( this, aIconName, true ).ShowDialog();
+                ret = ScopedVclPtr<SvxIconReplacementDialog>::Create( this, aIconName, true )->ShowDialog();
                 if ( ret == 2 )
                 {
                     ReplaceGraphicItem( aPath );
@@ -5388,8 +5388,7 @@ MessBox( pWindow, WB_DEF_YES, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_R
 
 SvxIconReplacementDialog :: SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage )
-    :
-MessBox( pWindow, WB_YES_NO_CANCEL, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
+    : MessBox( pWindow, WB_YES_NO_CANCEL, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 {
     SetImage( WarningBox::GetStandardImage() );
     SetMessText( ReplaceIconName( aMessage ));

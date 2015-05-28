@@ -591,7 +591,7 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
  */
 IMPL_LINK_NOARG_TYPED(View, DropErrorHdl, Idle *, void)
 {
-    InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
+    ScopedVclPtr<InfoBox>::Create( mpViewSh ? mpViewSh->GetActiveWindow() : 0, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
 }
 
 /**

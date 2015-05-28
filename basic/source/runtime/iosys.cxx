@@ -1004,9 +1004,10 @@ void SbiIoSystem::WriteCon(const OUString& rText)
         }
         {
             SolarMutexGuard aSolarGuard;
-            if( !MessBox( Application::GetDefDialogParent(),
+            if( !ScopedVclPtr<MessBox>::Create(
+                        Application::GetDefDialogParent(),
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
-                        OUString(), s ).Execute() )
+                        OUString(), s )->Execute() )
             {
                 nError = SbERR_USER_ABORT;
             }

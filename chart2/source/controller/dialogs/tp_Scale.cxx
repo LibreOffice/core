@@ -621,7 +621,7 @@ bool ScaleTabPage::ShowWarning( sal_uInt16 nResIdMessage, Control* pControl /* =
     if( nResIdMessage == 0 )
         return false;
 
-    WarningBox( this, WinBits( WB_OK ), SCH_RESSTR( nResIdMessage ) ).Execute();
+    ScopedVclPtr<WarningBox>::Create( this, WinBits( WB_OK ), SCH_RESSTR( nResIdMessage ) )->Execute();
     if( pControl )
     {
         pControl->GrabFocus();

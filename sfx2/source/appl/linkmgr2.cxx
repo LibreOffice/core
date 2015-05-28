@@ -327,7 +327,7 @@ void LinkManager::UpdateAllLinks(
 
         if( bAskUpdate )
         {
-            int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ).toString() ).Execute();
+            int nRet = ScopedVclPtr<QueryBox>::Create( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ).toString() )->Execute();
             if( RET_YES != nRet )
             {
                 SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();

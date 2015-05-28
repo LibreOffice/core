@@ -395,8 +395,8 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
         aModificator.SetDocumentModified();
         if ( bOverflow )
         {
-            InfoBox( NULL,
-                    ScGlobal::GetRscString( STR_DETINVALID_OVERFLOW ) ).Execute();
+            ScopedVclPtr<InfoBox>::Create( nullptr,
+                    ScGlobal::GetRscString( STR_DETINVALID_OVERFLOW ) )->Execute();
         }
     }
     else
@@ -4920,9 +4920,9 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         aMessage += aName;
                         aMessage += aTemplate.getToken( 1, '#' );
 
-                        short nResult = QueryBox( ScDocShell::GetActiveDialogParent(),
+                        short nResult = ScopedVclPtr<QueryBox>::Create( ScDocShell::GetActiveDialogParent(),
                                                     WinBits(WB_YES_NO_CANCEL | WB_DEF_YES),
-                                                    aMessage ).Execute();
+                                                    aMessage )->Execute();
                         if ( nResult == RET_YES )
                         {
                             rList.erase(*pOld);

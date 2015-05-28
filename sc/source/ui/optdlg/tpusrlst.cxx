@@ -425,7 +425,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
         if ( bValueIgnored )
         {
-            InfoBox( this, aStrCopyErr ).Execute();
+            ScopedVclPtr<InfoBox>::Create( this, aStrCopyErr )->Execute();
         }
     }
 
@@ -622,10 +622,10 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             aMsg += mpLbLists->GetEntry( nRemovePos );
             aMsg += aStrQueryRemove.getToken( 1, '#' );
 
-            if ( RET_YES == QueryBox( this,
+            if ( RET_YES == ScopedVclPtr<QueryBox>::Create( this,
                                       WinBits( WB_YES_NO | WB_DEF_YES ),
                                       aMsg
-                                     ).Execute() )
+                                     )->Execute() )
             {
                 RemoveList( nRemovePos );
                 UpdateUserListBox();

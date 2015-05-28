@@ -524,7 +524,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
                 m_pVisibleCell->GetBox().EnableInput(false);
                 OUString aMessage(ModuleRes(STR_QRY_ORDERBY_UNRELATED));
                 OQueryDesignView* paDView = getDesignView();
-                InfoBox(paDView, aMessage).Execute();
+                ScopedVclPtr<InfoBox>::Create(paDView, aMessage)->Execute();
             }
         }   break;
         case BROW_ORDER_ROW:
@@ -614,7 +614,7 @@ bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, const OUSt
         {
             OUString sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
             sErrorMsg = sErrorMsg.replaceFirst("$name$",_sColumnName);
-            OSQLErrorBox( this, sErrorMsg ).Execute();
+            ScopedVclPtr<OSQLErrorBox>::Create( this, sErrorMsg )->Execute();
             bError = true;
         }
         else
@@ -719,7 +719,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
         // something different which we have to check
         OUString sErrorMessage( ModuleRes( STR_QRY_COLUMN_NOT_FOUND ) );
         sErrorMessage = sErrorMessage.replaceFirst("$name$",_sFieldName);
-        OSQLErrorBox( this, sErrorMessage ).Execute();
+        ScopedVclPtr<OSQLErrorBox>::Create( this, sErrorMessage )->Execute();
 
         return true;
     }
@@ -876,7 +876,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
             { // the field could not be inserted
                 OUString sErrorMessage( ModuleRes( RID_STR_FIELD_DOESNT_EXIST ) );
                 sErrorMessage = sErrorMessage.replaceFirst("$name$",aSelEntry->GetField());
-                OSQLErrorBox( this, sErrorMessage ).Execute();
+                ScopedVclPtr<OSQLErrorBox>::Create( this, sErrorMessage )->Execute();
                 bError = true;
             }
         }
@@ -1143,7 +1143,7 @@ bool OSelectionBrowseBox::SaveModified()
                             {
                                 if ( !m_bDisableErrorBox )
                                 {
-                                    OSQLWarningBox( this, aErrorMsg ).Execute();
+                                    ScopedVclPtr<OSQLWarningBox>::Create( this, aErrorMsg )->Execute();
                                 }
                                 bError = true;
                             }
@@ -1152,7 +1152,7 @@ bool OSelectionBrowseBox::SaveModified()
                         {
                             if ( !m_bDisableErrorBox )
                             {
-                                OSQLWarningBox( this, aErrorMsg ).Execute();
+                                ScopedVclPtr<OSQLWarningBox>::Create( this, aErrorMsg )->Execute();
                             }
                             bError = true;
                         }

@@ -106,7 +106,7 @@ void DrawViewShell::DeleteActualLayer()
     // replace placeholder
     aString = aString.replaceFirst("$", rName);
 
-    if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
+    if (ScopedVclPtr<QueryBox>::Create(GetActiveWindow(), WB_YES_NO, aString)->Execute() == RET_YES)
     {
         const SdrLayer* pLayer = rAdmin.GetLayer(rName, false);
         mpDrawView->DeleteLayer( pLayer->GetName() );

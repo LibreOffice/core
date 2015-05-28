@@ -126,7 +126,7 @@ static bool lcl_IsPasswordCorrect( const OUString &rPassword )
     if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
         bRes = true;    // password was correct
     else
-        InfoBox( NULL, SFX2_RESSTR(RID_SVXSTR_INCORRECT_PASSWORD) ).Execute();
+        ScopedVclPtr<InfoBox>::Create( nullptr, SFX2_RESSTR(RID_SVXSTR_INCORRECT_PASSWORD) )->Execute();
 
     return bRes;
 }
