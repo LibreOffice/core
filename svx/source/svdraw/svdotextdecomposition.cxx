@@ -727,13 +727,14 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     if ( this ==  pNextTextObj )
         return;
 
-   //rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
+   SdrOutliner &rOutliner = ImpGetDrawOutliner();
+   rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
    // Push text through the chain if there's any
     if (mpOverflowingText) {
         pNextTextObj->NbcSetOutlinerParaObject(mpOverflowingText);
     }
-    //rOutliner.SetStatusEventHdl1(Link());
+    rOutliner.SetStatusEventHdl1(Link());
 
 }
 
