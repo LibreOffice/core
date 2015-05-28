@@ -169,6 +169,11 @@ FilterConfigItem::FilterConfigItem( const OUString& rSubTree,
 
 FilterConfigItem::~FilterConfigItem()
 {
+    WriteModifiedConfig();
+}
+
+void FilterConfigItem::WriteModifiedConfig()
+{
     if ( xUpdatableView.is() )
     {
         if ( xPropSet.is() && bModified )
@@ -179,6 +184,7 @@ FilterConfigItem::~FilterConfigItem()
                 try
                 {
                     xUpdateControl->commitChanges();
+                    bModified = false;
                 }
                 catch ( ::com::sun::star::uno::Exception& )
                 {
