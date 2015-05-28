@@ -295,7 +295,7 @@ void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrLis
     const SvXMLNamespaceMap& rMap = m_rContext.getGlobalContext().GetNamespaceMap();
     sal_uInt16 nNamespace;
     OUString sLocalName;
-    for (sal_Int16 i=0; i<nAttributeCount; ++i)
+    for (sal_Int32 i=0; i<nAttributeCount; ++i)
     {
         nNamespace = rMap.GetKeyByAttrName(_rxAttrList->getNameByIndex(i), &sLocalName);
         handleAttribute(nNamespace, sLocalName, _rxAttrList->getValueByIndex(i));
@@ -486,7 +486,7 @@ void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxA
     sal_uInt16 nNamespace;
     OUString sAttributeName;
     const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-    for ( sal_Int16 i = 0; i < nAttributeCount; ++i )
+    for ( sal_Int32 i = 0; i < nAttributeCount; ++i )
     {
         nNamespace = rMap.GetKeyByAttrName( _rxAttrList->getNameByIndex( i ), &sAttributeName );
         if  (   ( XML_NAMESPACE_FORM == nNamespace )
@@ -566,7 +566,7 @@ void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttr
     sal_uInt16 nNamespace;
     OUString sAttributeName;
     const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-    for ( sal_Int16 i = 0; i < nAttributeCount; ++i )
+    for ( sal_Int32 i = 0; i < nAttributeCount; ++i )
     {
         nNamespace = rMap.GetKeyByAttrName( _rxAttrList->getNameByIndex( i ), &sAttributeName );
         if ( XML_NAMESPACE_OFFICE == nNamespace )

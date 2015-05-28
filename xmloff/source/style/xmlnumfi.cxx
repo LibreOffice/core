@@ -1609,7 +1609,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 
     sal_uInt32 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-    for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
+    for (size_t i = 0; i < aMyConditions.size(); i++)
     {
         SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>( static_cast<const SvXMLNumFormatContext *>(pStyles->FindStyleChildContext(
             XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, false)));

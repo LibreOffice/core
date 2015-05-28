@@ -462,11 +462,11 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
     fprintf( fp, "\nMinAutoPaperSize: %li x %li", pEE->GetMinAutoPaperSize().Width(), pEE->GetMinAutoPaperSize().Height() );
     fprintf( fp, "\nUpdate: %i", pEE->GetUpdateMode() );
     fprintf( fp, "\nNumber of Views: %" SAL_PRI_SIZET "i", pEE->GetViewCount() );
-    for ( sal_uInt16 nView = 0; nView < pEE->GetViewCount(); nView++ )
+    for ( size_t nView = 0; nView < pEE->GetViewCount(); nView++ )
     {
         EditView* pV = pEE->GetView( nView );
         DBG_ASSERT( pV, "View not found!" );
-        fprintf( fp, "\nView %i: Focus=%i", nView, pV->GetWindow()->HasFocus() );
+        fprintf( fp, "\nView %zu: Focus=%i", nView, pV->GetWindow()->HasFocus() );
         Rectangle aR( pV->GetOutputArea() );
         fprintf( fp, "\n  OutputArea: nX=%li, nY=%li, dX=%li, dY=%li, MapMode = %i", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() , pV->GetWindow()->GetMapMode().GetMapUnit() );
         aR = pV->GetVisArea();
@@ -492,7 +492,7 @@ bool ParaPortion::DbgCheckTextPortions(ParaPortion const& rPara)
 {
     // check, if Portion length ok:
     sal_uInt16 nXLen = 0;
-    for (sal_uInt16 nPortion = 0; nPortion < rPara.aTextPortionList.Count(); nPortion++)
+    for (sal_Int32 nPortion = 0; nPortion < rPara.aTextPortionList.Count(); nPortion++)
     {
         nXLen = nXLen + rPara.aTextPortionList[nPortion]->GetLen();
     }

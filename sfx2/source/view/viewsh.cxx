@@ -1512,7 +1512,7 @@ SfxViewShell* SfxViewShell::GetFirst
     // search for a SfxViewShell of the specified type
     SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
     SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
-    for ( sal_uInt16 nPos = 0; nPos < rShells.size(); ++nPos )
+    for ( size_t nPos = 0; nPos < rShells.size(); ++nPos )
     {
         SfxViewShell *pShell = rShells[nPos];
         if ( pShell )
@@ -1520,7 +1520,7 @@ SfxViewShell* SfxViewShell::GetFirst
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
             // these ViewShells shouldn't be accessible anymore
             // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
-            for ( sal_uInt16 n=0; n<rFrames.size(); ++n )
+            for ( size_t n=0; n<rFrames.size(); ++n )
             {
                 SfxViewFrame *pFrame = rFrames[n];
                 if ( pFrame == pShell->GetViewFrame() )
@@ -1562,7 +1562,7 @@ SfxViewShell* SfxViewShell::GetNext
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
             // these ViewShells shouldn't be accessible anymore
             // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
-            for ( sal_uInt16 n=0; n<rFrames.size(); ++n )
+            for ( size_t n=0; n<rFrames.size(); ++n )
             {
                 SfxViewFrame *pFrame = rFrames[n];
                 if ( pFrame == pShell->GetViewFrame() )
@@ -1595,7 +1595,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                 {
                     // avoid access to dangling ViewShells
                     SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
-                    for ( sal_uInt16 n=0; n<rFrames.size(); ++n )
+                    for ( size_t n=0; n<rFrames.size(); ++n )
                     {
                         SfxViewFrame *frame = rFrames[n];
                         if ( frame == GetViewFrame() && &rBC == GetObjectShell() )

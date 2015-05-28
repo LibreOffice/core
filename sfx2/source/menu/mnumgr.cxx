@@ -108,7 +108,7 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
         SfxObjectShell* pDoc = pView->GetObjectShell();
         pMenu->InsertSeparator();
         sal_uInt16 nr=0;
-        for ( sal_uInt16 n = 0; n < aVerbs.getLength(); ++n )
+        for ( sal_Int32 n = 0; n < aVerbs.getLength(); ++n )
         {
             // check for ReadOnly verbs
             if ( pDoc->IsReadOnly() && !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
@@ -169,7 +169,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
             if (!sThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty())
                 aImage = Image( aSynonymsImageUrl );
 
-            for (sal_uInt16 i = 0; (size_t)i < nNumSynonyms; ++i)
+            for (size_t i = 0; i < nNumSynonyms; ++i)
             {
                 //! item ids should start with values > 0, since 0 has special meaning
                 const sal_uInt16 nId = i + 1;

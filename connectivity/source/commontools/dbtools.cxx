@@ -964,7 +964,7 @@ try
     OUString sPropClassId("ClassId");
     OUString sFormattedServiceName( "com.sun.star.form.component.FormattedField" );
 
-    for (sal_Int16 i=0; i<aOldProperties.getLength(); ++i)
+    for (sal_Int32 i=0; i<aOldProperties.getLength(); ++i)
     {
         if  (   (!pOldProps[i].Name.equals(sPropDefaultControl))
             &&  (!pOldProps[i].Name.equals(sPropLabelControl))

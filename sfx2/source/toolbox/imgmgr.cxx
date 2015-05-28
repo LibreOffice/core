@@ -125,7 +125,7 @@ SfxImageManager_Impl::~SfxImageManager_Impl()
     m_aOpt.RemoveListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     if (m_bAppEventListener)
         Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
-    for ( sal_uInt32 i = 0; i < m_aToolBoxes.size(); i++ )
+    for ( size_t i = 0; i < m_aToolBoxes.size(); i++ )
         delete m_aToolBoxes[i];
 }
 
@@ -163,7 +163,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
         m_nSymbolsSize = nNewSymbolsSize;
         bool bLarge( m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
 
-        for ( sal_uInt32 n=0; n < m_aToolBoxes.size(); n++ )
+        for ( size_t n=0; n < m_aToolBoxes.size(); n++ )
         {
             ToolBoxInf_Impl *pInf = m_aToolBoxes[n];
             if ( pInf->nFlags & SfxToolboxFlags::CHANGESYMBOLSET )
@@ -315,7 +315,7 @@ void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
 {
     SolarMutexGuard aGuard;
 
-    for ( sal_uInt32 n=0; n < pImp->m_aToolBoxes.size(); n++ )
+    for ( size_t n=0; n < pImp->m_aToolBoxes.size(); n++ )
     {
         if ((pImp->m_aToolBoxes[n])->pToolBox == pBox )
         {

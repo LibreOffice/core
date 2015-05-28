@@ -302,7 +302,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     , m_bDeleteUserData( rItem.m_bDeleteUserData )
     , m_bUseUserData( rItem.m_bUseUserData )
 {
-    for ( sal_uInt32 i = 0; i < rItem.m_aCustomProperties.size(); i++ )
+    for ( size_t i = 0; i < rItem.m_aCustomProperties.size(); i++ )
     {
         CustomProperty* pProp = new CustomProperty( rItem.m_aCustomProperties[i]->m_sName,
                                                     rItem.m_aCustomProperties[i]->m_aValue );
@@ -421,7 +421,7 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
             }
         }
 
-        for ( sal_uInt32 k = 0; k < m_aCustomProperties.size(); ++k )
+        for ( size_t k = 0; k < m_aCustomProperties.size(); ++k )
         {
             try
             {
@@ -456,7 +456,7 @@ void SfxDocumentInfoItem::SetUseUserData( bool bSet )
 std::vector< CustomProperty* > SfxDocumentInfoItem::GetCustomProperties() const
 {
     std::vector< CustomProperty* > aRet;
-    for ( sal_uInt32 i = 0; i < m_aCustomProperties.size(); i++ )
+    for ( size_t i = 0; i < m_aCustomProperties.size(); i++ )
     {
         CustomProperty* pProp = new CustomProperty( m_aCustomProperties[i]->m_sName,
                                                     m_aCustomProperties[i]->m_aValue );
@@ -468,7 +468,7 @@ std::vector< CustomProperty* > SfxDocumentInfoItem::GetCustomProperties() const
 
 void SfxDocumentInfoItem::ClearCustomProperties()
 {
-    for ( sal_uInt32 i = 0; i < m_aCustomProperties.size(); i++ )
+    for ( size_t i = 0; i < m_aCustomProperties.size(); i++ )
         delete m_aCustomProperties[i];
     m_aCustomProperties.clear();
 }
@@ -2253,7 +2253,7 @@ void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
     m_pPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = static_cast<const SfxDocumentInfoItem &>(rItemSet->Get(SID_DOCINFO));
     std::vector< CustomProperty* > aCustomProps = rInfoItem.GetCustomProperties();
-    for ( sal_uInt32 i = 0; i < aCustomProps.size(); i++ )
+    for ( size_t i = 0; i < aCustomProps.size(); i++ )
     {
         m_pPropertiesCtrl->AddLine( aCustomProps[i]->m_sName, aCustomProps[i]->m_aValue, false );
     }

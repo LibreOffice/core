@@ -118,7 +118,7 @@ void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed:
     if ( pVCLPopupMenu )
     {
         const OUString aVerbCommand( ".uno:ObjectMenue?VerbID:short=" );
-        for ( sal_uInt16 i = 0; i < rVerbCommandSeq.getLength(); i++ )
+        for ( sal_Int32 i = 0; i < rVerbCommandSeq.getLength(); i++ )
         {
             const com::sun::star::embed::VerbDescriptor& rVerb = pVerbCommandArray[i];
             if ( rVerb.VerbAttributes & com::sun::star::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
