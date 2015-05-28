@@ -459,10 +459,6 @@ String STR_OBJECTS
 {
     Text [ en-US ] = "Objects" ;
 };
-String STR_END_SEARCHING
-{
-    Text [ en-US ] = "The document search is finished." ;
-};
 String STR_END_SPELLING
 {
     Text [ en-US ] = "Spellcheck of entire document has been completed." ;
@@ -506,10 +502,6 @@ String STR_UNDO_INSERT_SPECCHAR
 String STR_UNDO_SET_PRESLAYOUT
 {
     Text [ en-US ] = "Apply presentation layout" ;
-};
-String STR_STRING_NOTFOUND
-{
-    Text [ en-US ] = "Search key not found." ;
 };
 String STR_PLAY
 {

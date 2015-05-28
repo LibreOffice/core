@@ -18,10 +18,6 @@
  */
 
 #include "sdstring.hrc"
-String STR_SAR_NOT_FOUND
-{
-    Text [ en-US ] = "Search key not found.";
-};
 
 String STR_SAR_WRAP_FORWARD
 {
