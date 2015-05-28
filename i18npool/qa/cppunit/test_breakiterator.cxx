@@ -809,7 +809,7 @@ void TestBreakIterator::testLao()
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 
-    CPPUNIT_ASSERT_EQUAL(0, aBounds.startPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aBounds.startPos);
     //TODO: Expected: 5 | Actual : 12
     //CPPUNIT_ASSERT_EQUAL(5, aBounds.endPos);
 
