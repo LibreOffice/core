@@ -663,13 +663,8 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
     if (!nCount)
         return;
 
-    bool bResetClipRegion = false;
-    if (!rRenderContext.IsClipRegion())
-    {
-        vcl::Region const aOutputArea(GetOutputRect());
-        bResetClipRegion = true;
-        rRenderContext.SetClipRegion(aOutputArea);
-    }
+    rRenderContext.Push(PushFlags::CLIPREGION);
+    rRenderContext.SetClipRegion(vcl::Region(rRect));
 
     SvxIconChoiceCtrlEntryList_impl* pNewZOrderList = new SvxIconChoiceCtrlEntryList_impl();
     boost::scoped_ptr<SvxIconChoiceCtrlEntryList_impl> pPaintedEntries(new SvxIconChoiceCtrlEntryList_impl());
@@ -701,15 +696,27 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
     }
     pPaintedEntries.reset();
 
-    if (bResetClipRegion)
-        rRenderContext.SetClipRegion();
+    rRenderContext.Pop();
 }
 
-void SvxIconChoiceCtrl_Impl::RepaintEntries(SvxIconViewFlags /*nEntryFlagsMask*/)
+void SvxIconChoiceCtrl_Impl::RepaintEntries(SvxIconViewFlags nEntryFlagsMask)
 {
-    pView->Invalidate();
-}
+    const size_t nCount = pZOrderList->size();
+    if (!nCount)
+        return;
 
+    Rectangle aOutRect(GetOutputRect());
+    for (size_t nCur = 0; nCur < nCount; nCur++)
+    {
+        SvxIconChoiceCtrlEntry* pEntry = (*pZOrderList)[nCur];
+        if (pEntry->GetFlags() & nEntryFlagsMask)
+        {
+            const Rectangle& rBoundRect = GetEntryBoundRect(pEntry);
+            if (aOutRect.IsOver(rBoundRect))
+                pView->Invalidate(rBoundRect);
+        }
+    }
+}
 
 void SvxIconChoiceCtrl_Impl::InitScrollBarBox()
 {
@@ -1691,7 +1698,9 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         PaintEmphasis(aTextRect, aBmpRect, bSelected, bDropTarget, bCursored, rRenderContext, bIsBackgroundPainted);
 
     if ( bShowSelection )
-        pView->DrawSelectionBackground(CalcFocusRect(pEntry), bActiveSelection ? 1 : 2, false, true, false);
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView.get(), CalcFocusRect(pEntry),
+                                                  bActiveSelection ? 1 : 2, false, true, false);
+
 
     PaintItem(aBmpRect, IcnViewFieldTypeImage, pEntry, nBmpPaintFlags, rRenderContext);
 
@@ -3575,12 +3584,20 @@ void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame( SvxIconChoiceCtrlEntry* pEn
     if( !bKeepHighlightFlags )
         bHighlightFramePressed = false;
 
-    HideEntryHighlightFrame();
-    pCurHighlightFrame = pEntry;
-    if( pEntry )
+    if (pCurHighlightFrame)
     {
-        Rectangle aBmpRect(CalcFocusRect(pEntry));
-        pView->Invalidate(aBmpRect);
+        Rectangle aInvalidationRect(GetEntryBoundRect(pCurHighlightFrame));
+        aInvalidationRect.expand(5);
+        pCurHighlightFrame = nullptr;
+        pView->Invalidate(aInvalidationRect);
+    }
+
+    pCurHighlightFrame = pEntry;
+    if (pEntry)
+    {
+        Rectangle aInvalidationRect(GetEntryBoundRect(pEntry));
+        aInvalidationRect.expand(5);
+        pView->Invalidate(aInvalidationRect);
     }
 }
 
@@ -3590,9 +3607,10 @@ void SvxIconChoiceCtrl_Impl::HideEntryHighlightFrame()
         return;
 
     SvxIconChoiceCtrlEntry* pEntry = pCurHighlightFrame;
-    pCurHighlightFrame = 0;
-    Rectangle aBmpRect(CalcFocusRect(pEntry));
-    pView->Invalidate(aBmpRect);
+    pCurHighlightFrame = nullptr;
+    Rectangle aInvalidationRect(GetEntryBoundRect(pEntry));
+    aInvalidationRect.expand(5);
+    pView->Invalidate(aInvalidationRect);
 }
 
 void SvxIconChoiceCtrl_Impl::CallSelectHandler( SvxIconChoiceCtrlEntry* )
