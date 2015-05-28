@@ -1168,12 +1168,8 @@ void SwHTMLWriter::convertHyperlinkHRefValue( const OUString& rURL )
             }
         }
     }
-    else
-    {
-        INetURLObject aURL(sURL);
-        sURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
-    }
-    return URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), sURL );
+    INetURLObject aURL( sURL );
+    return URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 }
 
 void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )

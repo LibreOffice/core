@@ -183,15 +183,6 @@ DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutto
 }
 #endif
 
-DECLARE_HTMLEXPORT_TEST(testExportInternalUrl, "tdf90905.odt")
-{
-    htmlDocPtr pDoc = parseHtml(maTempFile);
-    CPPUNIT_ASSERT(pDoc);
-
-    // Internal url should be valid
-    assertXPath(pDoc, "/html/body/p/a", "href", "#0.0.1.Text|outline");
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
