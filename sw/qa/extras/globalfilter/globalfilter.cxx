@@ -33,7 +33,9 @@ public:
     void testCharHighlightBody();
     void testMSCharBackgroundEditing();
     void testCharBackgroundToHighlighting();
+#if !defined(WNT) && !defined(MACOSX)
     void testSkipImages();
+#endif
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSwappedOutImageExport);
@@ -657,6 +659,7 @@ void Test::testCharBackgroundToHighlighting()
     }
 }
 
+#if !defined(WNT) && !defined(MACOSX)
 void Test::testSkipImages()
 {
     // Check how LO skips image loading (but not texts of textboxes and custom shapes)
@@ -732,7 +735,7 @@ void Test::testSkipImages()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(bSkipImages ? 0 : 3), nImageCount );
     }
 }
-
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
