@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_791dab0e",
+        "filename": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-05-28T11:46:11Z",
+      "side": 1,
+      "message": "Keep those buttons here, but maybe make them invisible by default ...",
+      "revId": "995f9df5a857ac743fbb69f3bea4fac310b95ea5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
