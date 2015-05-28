@@ -1,4 +1,3 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -17,20 +16,22 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,toolkit))
-
-$(eval $(call gb_Module_add_targets,toolkit,\
-    Library_tk \
-))
-
-ifneq ($(OOO_JUNIT_JAR),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,toolkit,\
-    JunitTest_toolkit_complex \
-    JunitTest_toolkit_unoapi_1 \
-    JunitTest_toolkit_unoapi_2 \
-    JunitTest_toolkit_unoapi_3 \
-    JunitTest_toolkit_unoapi_4 \
-))
-endif
-
-# vim: set noet sw=4 ts=4:
+#allegedly was i80788, but still broken: -o toolkit.UnoControlDialog
+-o toolkit.UnoControlDialogModel
+-o toolkit.UnoControlEdit
+-o toolkit.UnoControlEditModel
+#i86011 -o toolkit.UnoControlFileControl
+-o toolkit.UnoControlFileControlModel
+-o toolkit.UnoControlFixedLineModel
+-o toolkit.UnoControlFixedText
+-o toolkit.UnoControlFixedTextModel
+#i86013 -o toolkit.UnoControlFormattedField
+-o toolkit.UnoControlFormattedFieldModel
+-o toolkit.UnoControlGroupBox
+-o toolkit.UnoControlGroupBoxModel
+-o toolkit.UnoControlImageControl
+-o toolkit.UnoControlImageControlModel
+#i86019 -o toolkit.UnoControlListBox
+-o toolkit.UnoControlListBoxModel
+-o toolkit.UnoControlNumericField
+-o toolkit.UnoControlNumericFieldModel

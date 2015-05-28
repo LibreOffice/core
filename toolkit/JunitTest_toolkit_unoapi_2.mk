@@ -17,20 +17,25 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,toolkit))
+$(eval $(call gb_JunitTest_JunitTest,toolkit_unoapi_2))
 
-$(eval $(call gb_Module_add_targets,toolkit,\
-    Library_tk \
+$(eval $(call gb_JunitTest_set_defs,toolkit_unoapi_2,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/toolkit/qa/unoapi/toolkit_2.sce \
+    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/toolkit/qa/unoapi/knownissues.xcl \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/toolkit/qa/unoapi/testdocuments \
 ))
 
-ifneq ($(OOO_JUNIT_JAR),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,toolkit,\
-    JunitTest_toolkit_complex \
-    JunitTest_toolkit_unoapi_1 \
-    JunitTest_toolkit_unoapi_2 \
-    JunitTest_toolkit_unoapi_3 \
-    JunitTest_toolkit_unoapi_4 \
+$(eval $(call gb_JunitTest_use_jars,toolkit_unoapi_2,\
+    OOoRunner \
+    ridl \
+    test \
+    unoil \
+    jurt \
 ))
-endif
+
+$(eval $(call gb_JunitTest_add_classes,toolkit_unoapi_2,\
+    org.openoffice.test.UnoApiTest \
+))
 
 # vim: set noet sw=4 ts=4:
