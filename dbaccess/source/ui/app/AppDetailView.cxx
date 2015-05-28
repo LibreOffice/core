@@ -87,6 +87,8 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
 
 void OCreationList::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
 {
+    SetBackground();
+
     if (m_pMouseDownEntry)
         m_aOriginalFont = rRenderContext.GetFont();
 
@@ -119,11 +121,13 @@ void OCreationList::PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListE
 
             // and temporary set a transparent background, for all the other
             // paint operations the SvTreeListBox is going to do
-            aEntryBackground = Wallpaper(Color(COL_TRANSPARENT));
+            aEntryBackground = Wallpaper();
+            _pEntry->SetBackColor(Color(COL_TRANSPARENT));
         }
     }
 
     rRenderContext.SetBackground(aEntryBackground);
+    _pEntry->SetBackColor(aEntryBackground.GetColor());
 }
 
 void OCreationList::SelectSearchEntry( const void* _pEntry )

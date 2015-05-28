@@ -3043,10 +3043,14 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
             // realize tab listboxes with lines.
             if (!(nCurTab == 0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab))
             {
-                rRenderContext.SetFillColor(aWallpaper.GetColor());
-                // this case may occur for smaller horizontal resizes
-                if (aRect.Left() < aRect.Right())
-                    rRenderContext.DrawRect(aRect);
+                Color aBackgroundColor = aWallpaper.GetColor();
+                if (aBackgroundColor != Color(COL_TRANSPARENT))
+                {
+                    rRenderContext.SetFillColor(aBackgroundColor);
+                    // this case may occur for smaller horizontal resizes
+                    if (aRect.Left() < aRect.Right())
+                        rRenderContext.DrawRect(aRect);
+                }
             }
             // draw item
             // center vertically
