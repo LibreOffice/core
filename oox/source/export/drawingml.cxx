@@ -2273,7 +2273,7 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                           XML_h, I64S( aPathSize[0].Height ),
                           FSEND );
                 }
-                else
+                else if ( aPairs.getLength() )
                 {
                     sal_Int32 nXMin = aPairs[0].First.Value.get<sal_Int32>();
                     sal_Int32 nXMax = nXMin;
@@ -2296,6 +2296,10 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                           XML_h, I64S( nYMax - nYMin ),
                           FSEND );
                 }
+                else
+                {
+                    mpFS->startElementNS( XML_a, XML_path, FSEND );
+                }
 
 
                 int nPairIndex = 0;
@@ -2307,6 +2311,11 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                     }
                     for ( int k = 0; k < aSegments[j].Count; ++k )
                     {
+                        if ( nPairIndex > aPairs.getLength() - 1 )
+                        {
+                            SAL_WARN("oox", "CustomShapes: Segments <-> Coordinates mismatch");
+                            break;
+                        }
                         switch( aSegments[ j ].Command )
                         {
                             case drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
