@@ -1723,6 +1723,8 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
 
 void Window::set_height_request(sal_Int32 nHeightRequest)
 {
+    if (!mpWindowImpl)
+        return;
 
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
 
@@ -1735,6 +1737,8 @@ void Window::set_height_request(sal_Int32 nHeightRequest)
 
 void Window::set_width_request(sal_Int32 nWidthRequest)
 {
+    if (!mpWindowImpl)
+        return;
 
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
 
