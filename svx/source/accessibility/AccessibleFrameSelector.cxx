@@ -468,7 +468,7 @@ void    AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
         GetFocusFlags nFocusFlags = mpFrameSel->GetGetFocusFlags();
         if(nFocusFlags & GetFocusFlags::Tab)
             aEvent.FocusFlags |= AwtFocusChangeReason::TAB;
-        if(nFocusFlags & GetFocusFlags::Cursor)
+        if(nFocusFlags & GetFocusFlags::CURSOR)
             aEvent.FocusFlags |= AwtFocusChangeReason::CURSOR;
         if(nFocusFlags & GetFocusFlags::Mnemonic)
             aEvent.FocusFlags |= AwtFocusChangeReason::MNEMONIC;

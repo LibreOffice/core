@@ -543,7 +543,7 @@ namespace
 
             if (isSuitableDestination(pWindow))
             {
-                pWindow->ImplControlFocus( GetFocusFlags::Cursor | GetFocusFlags::Forward );
+                pWindow->ImplControlFocus( GetFocusFlags::CURSOR | GetFocusFlags::Forward );
                 return true;
             }
         }
@@ -554,7 +554,7 @@ namespace
 
             if (isSuitableDestination(pWindow))
             {
-                pWindow->ImplControlFocus( GetFocusFlags::Cursor | GetFocusFlags::Forward );
+                pWindow->ImplControlFocus( GetFocusFlags::CURSOR | GetFocusFlags::Forward );
                 return true;
             }
         }
@@ -868,7 +868,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                         if (isSuitableDestination(pWindow))
                         {
                             if ( pWindow != pSWindow )
-                                pWindow->ImplControlFocus( GetFocusFlags::Cursor | GetFocusFlags::Backward );
+                                pWindow->ImplControlFocus( GetFocusFlags::CURSOR | GetFocusFlags::Backward );
                             return true;
                         }
 
@@ -898,7 +898,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
                     if (isSuitableDestination(pWindow))
                     {
-                        pWindow->ImplControlFocus( GetFocusFlags::Cursor | GetFocusFlags::Backward );
+                        pWindow->ImplControlFocus( GetFocusFlags::CURSOR | GetFocusFlags::Backward );
                         return true;
                     }
 
