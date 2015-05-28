@@ -723,9 +723,12 @@ bool Outliner::SearchAndReplaceOnce()
     {
         ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(pViewShell));
 
-        sal_uInt16 nSelectedPage = pDrawViewShell->GetCurPageId();
-        OString aPayload = OString::number(nSelectedPage);
-        pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+        sal_uInt16 nSelectedPage = pDrawViewShell->GetCurPageId() - 1;
+        if (nSelectedPage != mnStartPageIndex)
+        {
+            OString aPayload = OString::number(nSelectedPage);
+            pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+        }
     }
 
     return mbEndOfSearch;
