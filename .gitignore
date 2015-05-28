@@ -19,6 +19,9 @@
 # should not catch anything but possibly /external/tarballs
 #
 
+# uncommitted patches
+/uncommitted-patches
+
 # where stuff is built
 /instdir
 /instdir_for_build
