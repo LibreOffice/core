@@ -1964,7 +1964,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
                     }
                     else
                     {
-                        for (sal_uInt32 j = 0;
+                        for (size_t j = 0;
                             j < m_xImpl->m_xOutlineStylesCandidates[i].size();
                             ++j)
                         {

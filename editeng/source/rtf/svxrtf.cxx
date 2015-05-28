@@ -1072,7 +1072,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 
     // then process all the children
     if( rSet.pChildList )
-        for( sal_uInt16 n = 0; n < rSet.pChildList->size(); ++n )
+        for( size_t n = 0; n < rSet.pChildList->size(); ++n )
             SetAttrSet( (*rSet.pChildList)[ n ] );
 }
 

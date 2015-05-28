@@ -1359,7 +1359,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
                         {
                             // Check if this kind of attribute was empty and expanded here...
                             sal_uInt16 nW = pAttrib->GetItem()->Which();
-                            for ( sal_uInt16 nA = 0; nA < nAttr; nA++ )
+                            for ( sal_Int32 nA = 0; nA < nAttr; nA++ )
                             {
                                 const EditCharAttrib& r = aCharAttribList.GetAttribs()[nA];
                                 if ( ( r.GetStart() == 0 ) && ( r.GetItem()->Which() == nW ) )
