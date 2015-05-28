@@ -739,7 +739,9 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     //OutlinerParaObject *someText = rOutliner.CreateParaObject(0,1); // only first para
     //pNextTextObj->SetOutlinerParaObject(*someText);
     //pNextTextObj->SetText("Bukowski, were are thou?");
-    pNextTextObj->SetText(mpOverflowingText->GetTextObject().GetText(0));
+    if (mpOverflowingText) {
+        pNextTextObj->SetText(mpOverflowingText->GetTextObject().GetText(0));
+    }
     //rOutliner.Insert("Bukowski, were are thou?");
     //rOutliner.Clear();
     //rOutliner.SetStatusEventHdl1(Link());
