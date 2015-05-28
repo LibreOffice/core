@@ -1,4 +1,3 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -16,26 +15,21 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-
-$(eval $(call gb_JunitTest_JunitTest,sw_unoapi))
-
-$(eval $(call gb_JunitTest_set_defs,sw_unoapi,\
-    $$(DEFS) \
-    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/sw/qa/unoapi/sw.sce \
-    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/sw/qa/unoapi/knownissues.xcl \
-    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sw/qa/unoapi/testdocuments \
-))
-
-$(eval $(call gb_JunitTest_use_jars,sw_unoapi,\
-    OOoRunner \
-    ridl \
-    test \
-    unoil \
-    jurt \
-))
-
-$(eval $(call gb_JunitTest_add_classes,sw_unoapi,\
-    org.openoffice.test.UnoApiTest \
-))
-
-# vim: set noet sw=4 ts=4:
+-o sw.SwXTextTable
+-o sw.SwXTextTableCursor
+-o sw.SwXTextTableRow
+-o sw.SwXTextTables
+#i85580 -o sw.SwXTextView
+-o sw.SwXTextViewCursor
+-o sw.SwXViewSettings
+-o sw.XMLContentExporter
+#i23394 -o sw.XMLContentImporter
+#i111194-o sw.XMLExporter
+-o sw.XMLImporter
+#i23394 -o sw.XMLMetaExporter
+-o sw.XMLMetaImporter
+-o sw.XMLSettingsExporter
+-o sw.XMLSettingsImporter
+-o sw.XMLStylesExporter
+#i23394 -o sw.XMLStylesImporter
+-o sw.DocumentSettings
