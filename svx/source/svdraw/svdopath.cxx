@@ -617,7 +617,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
 
         if(aDelta.X() || aDelta.Y())
         {
-            for(sal_uInt32 a(0); a < mpSdrPathDragData->maHandles.size(); a++)
+            for(size_t a(0); a < mpSdrPathDragData->maHandles.size(); a++)
             {
                 SdrHdl* pHandle = mpSdrPathDragData->maHandles[a];
                 const sal_uInt16 nPolyIndex((sal_uInt16)pHandle->GetPolyNum());

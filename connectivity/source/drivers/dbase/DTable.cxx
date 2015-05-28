@@ -1604,7 +1604,7 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     Reference<XPropertySet> xCol;
     OUString aColName;
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
-    for (sal_uInt16 i = 0; i < m_pColumns->getCount(); i++)
+    for (sal_Int32 i = 0; i < m_pColumns->getCount(); i++)
     {
         Reference<XPropertySet> xIndex = isUniqueByColumnName(i);
         if (xIndex.is())

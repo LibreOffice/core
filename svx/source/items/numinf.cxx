@@ -101,7 +101,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
     {
         pDelFormatArr = new sal_uInt32[ rItem.nDelCount ];
 
-        for ( sal_uInt16 i = 0; i < rItem.nDelCount; ++i )
+        for ( sal_uInt32 i = 0; i < rItem.nDelCount; ++i )
             pDelFormatArr[i] = rItem.pDelFormatArr[i];
     }
 }
@@ -202,7 +202,7 @@ void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
 
         if ( pData != NULL )
         {
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            for ( sal_uInt32 i = 0; i < nCount; ++i )
                 pDelFormatArr[i] = pData[i];
         }
     }

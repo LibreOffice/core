@@ -1359,8 +1359,8 @@ bool OResultSet::OpenImpl()
                     // order of columns that are not specified in ORDER BY
                     // clause is undefined, so it doesn't hurt to sort on
                     // these; pad the vectors to include them.
-                    for (sal_Int32 i = 1; // 0: bookmark (see setBoundedColumns)
-                         static_cast<size_t>(i) < m_aColMapping.size(); ++i)
+                    for (size_t i = 1; // 0: bookmark (see setBoundedColumns)
+                         i < m_aColMapping.size(); ++i)
                     {
                         if (::std::find(m_aOrderbyColumnNumber.begin(),
                                         m_aOrderbyColumnNumber.end(), i)

@@ -1341,7 +1341,7 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
     Reference< XIndexContainer> xControlModels(m_xActiveForm, UNO_QUERY);
     if (xControlModels.is())
     {
-        for (sal_Int16 i=0; i<xControlModels->getCount(); ++i)
+        for (sal_Int32 i=0; i<xControlModels->getCount(); ++i)
         {
             Reference< XPropertySet> xModelSet;
             xControlModels->getByIndex(i) >>= xModelSet;
@@ -2422,7 +2422,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                     DBG_ASSERT(xModelColumns->getCount() >= xPeerContainer->getCount(), "FmXFormShell::OnSearchContextRequest : impossible : have more view than model columns !");
 
                     Reference< XInterface> xCurrentColumn;
-                    for (sal_Int16 nViewPos=0; nViewPos<xPeerContainer->getCount(); ++nViewPos)
+                    for (sal_Int32 nViewPos=0; nViewPos<xPeerContainer->getCount(); ++nViewPos)
                     {
                         xPeerContainer->getByIndex(nViewPos) >>= xCurrentColumn;
                         if (!xCurrentColumn.is())

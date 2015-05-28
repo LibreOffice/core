@@ -440,7 +440,7 @@ void SvxNumValueSet::SetNumberingSettings(
     aLocale = rLocale;
     if(aNum.getLength() > 8)
             SetStyle( GetStyle()|WB_VSCROLL);
-    for ( sal_uInt16 i = 0; i < aNum.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < aNum.getLength(); i++ )
     {
             InsertItem( i + 1, i );
             if( i < 8 )
@@ -458,7 +458,7 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     aLocale = rLocale;
     if(aOutlineSettings.getLength() > 8)
         SetStyle( GetStyle() | WB_VSCROLL );
-    for ( sal_uInt16 i = 0; i < aOutlineSettings.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < aOutlineSettings.getLength(); i++ )
     {
         InsertItem( i + 1, i );
         if( i < 8 )

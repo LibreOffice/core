@@ -291,7 +291,7 @@ SvxRuler::SvxRuler(
 
         mpIndents.resize(5 + INDENT_GAP);
 
-        for(sal_uInt32 nIn = 0; nIn < mpIndents.size(); nIn++)
+        for(size_t nIn = 0; nIn < mpIndents.size(); nIn++)
         {
             mpIndents[nIn].nPos = 0;
             mpIndents[nIn].nStyle = RULER_STYLE_DONTKNOW;
@@ -3681,7 +3681,7 @@ long SvxRuler::CalcPropMaxRight(sal_uInt16 nCol) const
         if(mxColumnItem->IsTable())
         {
             sal_uInt16 nVisCols = 0;
-            for(sal_uInt16 i = GetActRightColumn(false, nCol); i < mpBorders.size();)
+            for(size_t i = GetActRightColumn(false, nCol); i < mpBorders.size();)
             {
                 if((*mxColumnItem.get())[i].bVisible)
                     nVisCols++;

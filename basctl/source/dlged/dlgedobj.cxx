@@ -1444,7 +1444,7 @@ void DlgEdForm::UpdateTabIndices()
 
         // create a map of tab indices and control names, sorted by tab index
         IndexToNameMap aIndexToNameMap;
-        for ( sal_Int16 i = 0; i < nCtrls; ++i )
+        for ( sal_Int32 i = 0; i < nCtrls; ++i )
         {
             // get name
             OUString aName( pNames[i] );

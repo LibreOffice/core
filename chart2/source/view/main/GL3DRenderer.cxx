@@ -568,7 +568,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     {
         m_RoundBarMesh.iElementSizes[k] = indices[k].size() - m_RoundBarMesh.iElementStartIndices[k];
         m_RoundBarMesh.iElementStartIndices[k] = m_Indices.size() * sizeof(unsigned short);
-        for (unsigned int IdxCnt = 0; IdxCnt < indices[k].size(); IdxCnt++)
+        for (size_t IdxCnt = 0; IdxCnt < indices[k].size(); IdxCnt++)
         {
             m_Indices.push_back(indices[k][IdxCnt]);
         }

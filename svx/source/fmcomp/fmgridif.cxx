@@ -2665,7 +2665,7 @@ Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
         };
         aSupported.realloc(sizeof(nSupported)/sizeof(nSupported[0]));
         sal_uInt16* pSupported = aSupported.getArray();
-        for (sal_uInt16 i=0; i<aSupported.getLength(); ++i, ++pSupported)
+        for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
             *pSupported = nSupported[i];
     }
     return aSupported;
@@ -2716,7 +2716,7 @@ void FmXGridPeer::UpdateDispatches()
     const Sequence< ::com::sun::star::util::URL>& aSupportedURLs = getSupportedURLs();
     const ::com::sun::star::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
     Reference< ::com::sun::star::frame::XDispatch >  xNewDispatch;
-    for (sal_uInt16 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
+    for (sal_Int32 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
         xNewDispatch = queryDispatch(*pSupportedURLs, OUString(), 0);
         if (xNewDispatch != m_pDispatchers[i])
@@ -2758,7 +2758,7 @@ void FmXGridPeer::ConnectToDispatcher()
 
     sal_uInt16 nDispatchersGot = 0;
     const ::com::sun::star::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
-    for (sal_uInt16 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
+    for (sal_Int32 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
         m_pStateCache[i] = false;
         m_pDispatchers[i] = queryDispatch(*pSupportedURLs, OUString(), 0);
@@ -2787,7 +2787,7 @@ void FmXGridPeer::DisConnectFromDispatcher()
 
     const Sequence< ::com::sun::star::util::URL>& aSupportedURLs = getSupportedURLs();
     const ::com::sun::star::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
-    for (sal_uInt16 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
+    for (sal_Int32 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
         if (m_pDispatchers[i].is())
             m_pDispatchers[i]->removeStatusListener((::com::sun::star::frame::XStatusListener*)this, *pSupportedURLs);
@@ -2810,7 +2810,7 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
     // search the given slot with our supported sequence
     Sequence<sal_uInt16>& aSupported = getSupportedGridSlots();
     const sal_uInt16* pSlots = aSupported.getConstArray();
-    for (sal_uInt16 i=0; i<aSupported.getLength(); ++i)
+    for (sal_Int32 i=0; i<aSupported.getLength(); ++i)
     {
         if (pSlots[i] == nSlot)
         {
@@ -2839,7 +2839,7 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
     DBG_ASSERT(aSlots.getLength() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconstent data returned by getSupportedURLs/getSupportedGridSlots !");
 
     sal_uInt16 nSlot = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(pSlot);
-    for (sal_uInt16 i=0; i<aSlots.getLength(); ++i, ++pUrls, ++pSlots)
+    for (sal_Int32 i=0; i<aSlots.getLength(); ++i, ++pUrls, ++pSlots)
     {
         if (*pSlots == nSlot)
         {

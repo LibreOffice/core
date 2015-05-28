@@ -88,7 +88,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         OSQLParseNode* pSelection = pSQLParseNode->getChild(2);
         if ( SQL_ISRULE(pSelection,scalar_exp_commalist) )
         {
-            for (sal_uInt32 i = 0; i < pSelection->count(); i++)
+            for (size_t i = 0; i < pSelection->count(); i++)
             {
                 OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
                 if ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 )
@@ -797,7 +797,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             {
                 m_aCodeList.push_back(new OStopOperand);
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
-                for (sal_uInt32 i=0; i < pList->count(); ++i)
+                for (size_t i=0; i < pList->count(); ++i)
                     execute(pList->getChild(i));
 
                 switch( nTokenId )
@@ -869,7 +869,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             if ( pPredicateNode->count() == 4 ) //char_substring_fct
             {
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
-                for (sal_uInt32 i=0; i < pList->count(); ++i)
+                for (size_t i=0; i < pList->count(); ++i)
                     execute(pList->getChild(i));
             }
             else
@@ -886,7 +886,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             if ( pPredicateNode->count() == 4 ) //position_exp
             {
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
-                for (sal_uInt32 i=0; i < pList->count(); ++i)
+                for (size_t i=0; i < pList->count(); ++i)
                     execute(pList->getChild(i));
             }
             else

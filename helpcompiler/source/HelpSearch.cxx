@@ -39,7 +39,7 @@ bool HelpSearch::query(OUString const &queryStr, bool captionOnly,
         pQuery = _CLNEW lucene::search::TermQuery(_CLNEW lucene::index::Term(field, &aQueryStr[0]));
 
     lucene::search::Hits *hits = searcher.search(pQuery);
-    for (unsigned i = 0; i < hits->length(); ++i) {
+    for (size_t i = 0; i < hits->length(); ++i) {
         lucene::document::Document &doc = hits->doc(i); // Document* belongs to Hits.
         wchar_t const *path = doc.get(L"path");
         rDocuments.push_back(TCHARArrayToOUString(path != 0 ? path : L""));

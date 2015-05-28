@@ -64,7 +64,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
         OSQLParseNode* pSelection = pSQLParseNode->getChild(2);
         if ( SQL_ISRULE(pSelection,scalar_exp_commalist) )
         {
-            for (sal_uInt32 i = 0; i < pSelection->count(); i++)
+            for (size_t i = 0; i < pSelection->count(); i++)
             {
                 OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
                 if (    ( SQL_ISRULE(pColumnRef,set_fct_spec) && pColumnRef->count() == 4 )

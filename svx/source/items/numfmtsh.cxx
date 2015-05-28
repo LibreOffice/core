@@ -1566,7 +1566,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const OUString& rFmtString 
         {
             nStart=nCount;
         }
-        for(sal_uInt16 j=nStart;j<aCurCurrencyList.size();j++)
+        for(size_t j=nStart;j<aCurCurrencyList.size();j++)
         {
             if(aCurCurrencyList[j]==nPos) return j;
         }
@@ -1649,7 +1649,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpC
     {
         nStart=nCount;
     }
-    for(sal_uInt16 j=nStart;j<aCurCurrencyList.size();j++)
+    for(size_t j=nStart;j<aCurCurrencyList.size();j++)
     {
         if(aCurCurrencyList[j]==nPos) return j;
     }
@@ -1677,7 +1677,7 @@ bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos,
                 pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
                                 *pTmpCurrencyEntry, bTmpBanking );
 
-                for(sal_uInt16 i=0;i<aWSStringsDtor.size();i++)
+                for(size_t i=0;i<aWSStringsDtor.size();i++)
                 {
                     if (aWSStringsDtor[i] == rFmtString)
                     {

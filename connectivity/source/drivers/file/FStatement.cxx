@@ -341,7 +341,7 @@ void OStatement_Base::anylizeSQL()
         OSQLParseNode * pOrderingSpecCommalist = pOrderbyClause->getChild(2);
         OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Fehler im Parse Tree");
 
-        for (sal_uInt32 m = 0; m < pOrderingSpecCommalist->count(); m++)
+        for (size_t m = 0; m < pOrderingSpecCommalist->count(); m++)
         {
             OSQLParseNode * pOrderingSpec = pOrderingSpecCommalist->getChild(m);
             OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Fehler im Parse Tree");
@@ -548,7 +548,7 @@ void OStatement_Base::GetAssignValues()
             OSL_ENSURE(pColumnCommalist->count() > 0,"OResultSet: Fehler im Parse Tree");
 
             // All Columns in the column_commalist ...
-            for (sal_uInt32 i = 0; i < pColumnCommalist->count(); i++)
+            for (size_t i = 0; i < pColumnCommalist->count(); i++)
             {
                 OSQLParseNode * pCol = pColumnCommalist->getChild(i);
                 OSL_ENSURE(pCol != NULL,"OResultSet: Fehler im Parse Tree");
@@ -576,7 +576,7 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
         sal_Int32 nIndex=0;
-        for (sal_uInt32 i = 0; i < pInsertAtomCommalist->count(); i++)
+        for (size_t i = 0; i < pInsertAtomCommalist->count(); i++)
         {
             OSQLParseNode * pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
             OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
@@ -590,7 +590,7 @@ void OStatement_Base::GetAssignValues()
             {
                 if(pRow_Value_Const->count() == aColumnNameList.size())
                 {
-                    for (sal_uInt32 j = 0; j < pRow_Value_Const->count(); ++j)
+                    for (size_t j = 0; j < pRow_Value_Const->count(); ++j)
                         ParseAssignValues(aColumnNameList,pRow_Value_Const->getChild(j),nIndex++);
                 }
                 else
@@ -618,7 +618,7 @@ void OStatement_Base::GetAssignValues()
 
         // work on all assignments (commalist) ...
         ::std::vector< OUString> aList(1);
-        for (sal_uInt32 i = 0; i < pAssignmentCommalist->count(); i++)
+        for (size_t i = 0; i < pAssignmentCommalist->count(); i++)
         {
             OSQLParseNode * pAssignment = pAssignmentCommalist->getChild(i);
             OSL_ENSURE(pAssignment != NULL,"OResultSet: pAssignment == NULL");

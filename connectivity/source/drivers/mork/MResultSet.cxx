@@ -1543,7 +1543,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
 {
     m_aColMapping = _aColumnMapping;
 #if OSL_DEBUG_LEVEL > 0
-    for ( sal_uInt32 i = 0; i < m_aColMapping.size(); i++ )
+    for ( size_t i = 0; i < m_aColMapping.size(); i++ )
         SAL_INFO(
             "connectivity.mork",
             "Set Mapped: " << i << " -> " << m_aColMapping[i]);
