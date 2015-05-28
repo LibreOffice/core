@@ -858,7 +858,7 @@ IMPL_LINK_TYPED( SfxVirtualMenu, Activate, Menu *, pMenu, bool )
                 // append new window list entries to menu
                 pMenu->InsertSeparator();
                 nItemId = START_ITEMID_WINDOWLIST;
-                for ( sal_uInt32 i = 0; i < aNewWindowListVector.size(); i++ )
+                for ( size_t i = 0; i < aNewWindowListVector.size(); i++ )
                 {
                     pMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MenuItemBits::RADIOCHECK );
                     if ( nItemId == nActiveItemId )

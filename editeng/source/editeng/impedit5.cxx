@@ -209,7 +209,7 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
         ContentAttribsInfo* pInf = new ContentAttribsInfo( pNode->GetContentAttribs().GetItems() );
         pUndo->AppendContentInfo(pInf);
 
-        for ( sal_uInt16 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
+        for ( sal_Int32 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
         {
             const EditCharAttrib& rAttr = pNode->GetCharAttribs().GetAttribs()[nAttr];
             if (rAttr.GetLen())

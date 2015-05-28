@@ -2133,7 +2133,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     ParaPortion* pDestPortion = GetParaPortions().SafeGetObject( nNewPos );
 
     ParaPortionList aTmpPortionList;
-    for (sal_Int32 i = aOldPositions.Min(); i <= aOldPositions.Max(); i++  )
+    for (long i = aOldPositions.Min(); i <= aOldPositions.Max(); i++  )
     {
         // always aOldPositions.Min(), since Remove().
         ParaPortion* pTmpPortion = GetParaPortions().Release(aOldPositions.Min());

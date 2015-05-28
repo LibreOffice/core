@@ -547,14 +547,14 @@ public:
         aName(rName), aParent(rParent), pChildren(0) {}
     ~StyleTree_Impl();
     void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos=ULONG_MAX);
-    sal_uIntPtr Count();
+    size_t Count();
 
     OUString getName() { return aName; }
     OUString getParent() { return aParent; }
     StyleTree_Impl *operator[](size_t idx) const { return pChildren[idx]; }
 };
 
-sal_uIntPtr StyleTree_Impl::Count()
+size_t StyleTree_Impl::Count()
 {
     return pChildren.size();
 }
@@ -642,7 +642,7 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 
     pBox->GetModel()->InvalidateEntry(pTreeListEntry);
 
-    for(sal_uInt16 i = 0; i < pEntry->Count(); ++i)
+    for(size_t i = 0; i < pEntry->Count(); ++i)
     {
         FillBox_Impl(pBox, (*pEntry)[i], rEntries, eStyleFamily, pTreeListEntry);
     }

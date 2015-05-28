@@ -359,9 +359,9 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
                     if(pWriteAccess)
                     {
-                        for(sal_Int32 y(0L); y < pReadAccess->Height(); y++)
+                        for(long y(0L); y < pReadAccess->Height(); y++)
                         {
-                            for(sal_Int32 x(0L); x < pReadAccess->Width(); x++)
+                            for(long x(0L); x < pReadAccess->Width(); x++)
                             {
                                 sal_uInt16 nLuminance((sal_uInt16)pReadAccess->GetLuminance(y, x) + 1);
                                 const BitmapColor aDestColor(

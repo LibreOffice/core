@@ -613,7 +613,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
             if ( pFactories )
             {
                 SfxStbCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
+                for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
                 if ( rFactories[nFactory].nTypeId == aSlotType &&
                      ( ( rFactories[nFactory].nSlotId == 0 ) ||
                      ( rFactories[nFactory].nSlotId == nSlotID) ) )
@@ -622,7 +622,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
         }
 
         SfxStbCtrlFactArr_Impl &rFactories = pApp->GetStbCtrlFactories_Impl();
-        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
+        for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
         if ( rFactories[nFactory].nTypeId == aSlotType &&
              ( ( rFactories[nFactory].nSlotId == 0 ) ||
              ( rFactories[nFactory].nSlotId == nSlotID) ) )
