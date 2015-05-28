@@ -725,6 +725,12 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
                 if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO) )
                 {
+                    //  Toggle out of paste mode if we are in it, otherwise
+                    //  pressing return in this object will instead go to the
+                    //  sheet and be considered an overwrite-cell instruction
+                    pViewShell->GetViewData().SetPasteMode(SC_PASTE_NONE);
+                    pViewShell->UpdateCopySourceOverlay();
+
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
 
