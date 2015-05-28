@@ -1982,6 +1982,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 
             // Pushes text in next link on the fly
             if ( pEditStatus->IsPageOverflow() ) {
+                mpOverflowingText = pEdtOutl->GetOverflowingParaObject();
                 SdrTextObj *pNextTextObj = GetNextLinkInChain();
                 impCopyTextInTextObj(pNextTextObj);
             }

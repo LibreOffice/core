@@ -730,7 +730,6 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
    //rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
    // Push text through the chain if there's any
-   mpOverflowingText = pEdtOutl->GetOverflowingParaObject();
     if (mpOverflowingText) {
         pNextTextObj->NbcSetOutlinerParaObject(mpOverflowingText);
     }
