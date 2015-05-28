@@ -1,4 +1,3 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -17,20 +16,21 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,toolkit))
-
-$(eval $(call gb_Module_add_targets,toolkit,\
-    Library_tk \
-))
-
-ifneq ($(OOO_JUNIT_JAR),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,toolkit,\
-    JunitTest_toolkit_complex \
-    JunitTest_toolkit_unoapi_1 \
-    JunitTest_toolkit_unoapi_2 \
-    JunitTest_toolkit_unoapi_3 \
-    JunitTest_toolkit_unoapi_4 \
-))
-endif
-
-# vim: set noet sw=4 ts=4:
+-o toolkit.AccessibleWindow
+-o toolkit.MutableTreeDataModel
+-o toolkit.MutableTreeNode
+-o toolkit.TabController
+-o toolkit.TabControllerModel
+-o toolkit.Toolkit
+-o toolkit.UnoControlButton
+-o toolkit.UnoControlButtonModel
+-o toolkit.UnoControlCheckBox
+-o toolkit.UnoControlCheckBoxModel
+-o toolkit.UnoControlComboBox
+-o toolkit.UnoControlComboBoxModel
+-o toolkit.UnoControlContainer
+-o toolkit.UnoControlContainerModel
+-o toolkit.UnoControlCurrencyField
+-o toolkit.UnoControlCurrencyFieldModel
+-o toolkit.UnoControlDateField
+-o toolkit.UnoControlDateFieldModel

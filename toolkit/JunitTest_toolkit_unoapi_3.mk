@@ -17,16 +17,16 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_JunitTest_JunitTest,toolkit_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,toolkit_unoapi_3))
 
-$(eval $(call gb_JunitTest_set_defs,toolkit_unoapi,\
+$(eval $(call gb_JunitTest_set_defs,toolkit_unoapi_3,\
     $$(DEFS) \
-    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/toolkit/qa/unoapi/toolkit.sce \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/toolkit/qa/unoapi/toolkit_3.sce \
     -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/toolkit/qa/unoapi/knownissues.xcl \
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/toolkit/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,toolkit_unoapi,\
+$(eval $(call gb_JunitTest_use_jars,toolkit_unoapi_3,\
     OOoRunner \
     ridl \
     test \
@@ -34,7 +34,7 @@ $(eval $(call gb_JunitTest_use_jars,toolkit_unoapi,\
     jurt \
 ))
 
-$(eval $(call gb_JunitTest_add_classes,toolkit_unoapi,\
+$(eval $(call gb_JunitTest_add_classes,toolkit_unoapi_3,\
     org.openoffice.test.UnoApiTest \
 ))
 
