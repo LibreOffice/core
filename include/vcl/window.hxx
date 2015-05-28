@@ -362,7 +362,7 @@ enum class GetFocusFlags
 {
     NONE                   = 0x0000,
     Tab                    = 0x0001,
-    Cursor                 = 0x0002,
+    CURSOR                 = 0x0002, // avoid name-clash with X11 #define
     Mnemonic               = 0x0004,
     F6                     = 0x0008,
     Forward                = 0x0010,
