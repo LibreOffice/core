@@ -423,6 +423,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
 
         case NID_POSTIT:
             {
+                rSh.EnterStdMode();
                 sw::sidebarwindows::SwSidebarWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
                 if (pPostIt)
                     GetPostItMgr()->SetActiveSidebarWin(0);
