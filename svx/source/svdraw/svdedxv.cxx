@@ -1517,7 +1517,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             if(bHasEEFeatureItems)
             {
                 OUString aMessage("SdrObjEditView::SetAttributes(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
-                InfoBox(NULL, aMessage).Execute();
+                ScopedVclPtr<InfoBox>::Create(nullptr, aMessage)->Execute();
             }
         }
 #endif

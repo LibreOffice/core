@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
         if ( !rInf.SignatureIsValid )
             aText.append( "NOT " );
         aText.append( "valid" );
-        InfoBox( this, aText ).Execute();
+        ScopedVclPtr<InfoBox>::Create( this, aText )->Execute();
     }
 
     return 0;

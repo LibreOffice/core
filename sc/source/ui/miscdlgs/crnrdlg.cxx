@@ -26,8 +26,8 @@
 #include <vcl/msgbox.hxx>
 #include <boost/scoped_array.hpp>
 
-#define ERRORBOX(s) ScopedVclPtrInstance<MessageDialog>::Create(this, s)->Execute()
-#define QUERYBOX(m) ScopedVclPtrInstance<QueryBox>::Create(this,WinBits(WB_YES_NO|WB_DEF_YES),m)->Execute()
+#define ERRORBOX(s) ScopedVclPtr<MessageDialog>::Create(this, s)->Execute()
+#define QUERYBOX(m) ScopedVclPtr<QueryBox>::Create(this,WinBits(WB_YES_NO|WB_DEF_YES),m)->Execute()
 
 const sal_uLong nEntryDataCol = 0;
 const sal_uLong nEntryDataRow = 1;

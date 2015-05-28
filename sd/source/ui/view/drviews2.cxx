@@ -627,7 +627,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -672,7 +672,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -700,7 +700,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(true,true,true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -1161,7 +1161,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(false, true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -1347,7 +1347,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 #endif
 
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(nId)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(nId))->Execute();
             }
             else
             {
@@ -2061,7 +2061,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected( true, true, true ) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2180,7 +2180,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2197,7 +2197,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2217,7 +2217,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2238,7 +2238,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2259,7 +2259,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2288,7 +2288,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2380,7 +2380,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
+                ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {

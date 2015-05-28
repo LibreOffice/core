@@ -188,7 +188,7 @@ void ScScenarioListBox::EditScenario()
 void ScScenarioListBox::DeleteScenario( bool bQueryBox )
 {
     if( GetSelectEntryCount() > 0 )
-        if( !bQueryBox || (::QueryBox( 0, WinBits( WB_YES_NO | WB_DEF_YES ), ScGlobal::GetRscString( STR_QUERY_DELSCENARIO ) ).Execute() == RET_YES) )
+        if( !bQueryBox || (ScopedVclPtr<QueryBox>::Create( nullptr, WinBits( WB_YES_NO | WB_DEF_YES ), ScGlobal::GetRscString( STR_QUERY_DELSCENARIO ) )->Execute() == RET_YES) )
             ExecuteScenarioSlot( SID_DELETE_SCENARIO );
 }
 

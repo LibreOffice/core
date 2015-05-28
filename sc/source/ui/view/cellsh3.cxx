@@ -412,8 +412,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     {
                         if (   rReq.IsAPI()
                             || RET_YES ==
-                               QueryBox( pTabViewShell->GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                                         ScGlobal::GetRscString(STR_UPDATE_SCENARIO) ).
+                               ScopedVclPtr<QueryBox>::Create( pTabViewShell->GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                                         ScGlobal::GetRscString(STR_UPDATE_SCENARIO) )->
                                         Execute() )
                         {
                             pTabViewShell->ExtendScenario();
