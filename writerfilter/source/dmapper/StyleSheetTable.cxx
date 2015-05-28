@@ -1239,7 +1239,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
-    for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
+    for( size_t nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
     {
         if( m_pImpl->m_aStyleSheetEntries[nPos]->sStyleIdentifierD == sIndex)
         {
@@ -1254,7 +1254,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& s
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
-    for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
+    for( size_t nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
     {
         if( m_pImpl->m_aStyleSheetEntries[nPos]->sStyleName == sIndex)
         {
@@ -1269,7 +1269,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const OUStri
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
-    for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
+    for( size_t nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
     {
         if( m_pImpl->m_aStyleSheetEntries[nPos]->sConvertedStyleName == sIndex)
         {

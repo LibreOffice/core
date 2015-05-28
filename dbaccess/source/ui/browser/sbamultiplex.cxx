@@ -86,7 +86,7 @@ void SbaXPropertiesChangeMultiplexer::propertiesChange(const ::com::sun::star::u
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent> aMulti(aEvts);
     ::com::sun::star::beans::PropertyChangeEvent* pMulti = aMulti.getArray();
-    for (sal_uInt16 i=0; i<aMulti.getLength(); ++i, ++pMulti)
+    for (sal_Int32 i=0; i<aMulti.getLength(); ++i, ++pMulti)
         pMulti->Source = &m_rParent;
 
     ::cppu::OInterfaceIteratorHelper aIt(*this);

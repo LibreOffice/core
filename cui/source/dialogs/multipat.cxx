@@ -270,7 +270,7 @@ OUString SvxMultiPathDialog::GetPath() const
     sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
 
     OUString sWritable;
-    for ( sal_uInt16 i = 0; i < m_pRadioLB->GetEntryCount(); ++i )
+    for ( sal_uLong i = 0; i < m_pRadioLB->GetEntryCount(); ++i )
     {
         SvTreeListEntry* pEntry = m_pRadioLB->GetEntry(i);
         if ( m_pRadioLB->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
@@ -294,7 +294,7 @@ OUString SvxPathSelectDialog::GetPath() const
     OUString sNewPath;
     sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
 
-    for ( sal_uInt16 i = 0; i < m_pPathLB->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0; i < m_pPathLB->GetEntryCount(); ++i )
     {
         if ( !sNewPath.isEmpty() )
             sNewPath += OUString(cDelim);

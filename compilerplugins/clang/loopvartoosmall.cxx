@@ -112,7 +112,7 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
 }
 
 
-loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall", true);
+loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall", false);
 
 }
 

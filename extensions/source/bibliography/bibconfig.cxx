@@ -159,7 +159,7 @@ BibConfig::BibConfig()
             Sequence<OUString> aAssignmentPropertyNames(aAssignmentNodeNames.getLength() * 2);
             OUString* pAssignmentPropertyNames = aAssignmentPropertyNames.getArray();
             sal_Int16 nFieldIdx = 0;
-            for(sal_Int16 nField = 0; nField < aAssignmentNodeNames.getLength(); nField++)
+            for(sal_Int32 nField = 0; nField < aAssignmentNodeNames.getLength(); nField++)
             {
                 OUString sSubPrefix(sPrefix);
                 sSubPrefix += "/";
@@ -294,7 +294,7 @@ void    BibConfig::ImplCommit()
 
 const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 {
-    for(sal_uInt16 i = 0; i < pMappingsArr->size(); i++)
+    for(size_t i = 0; i < pMappingsArr->size(); i++)
     {
         Mapping& rMapping = (*pMappingsArr)[i];
         bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
@@ -306,7 +306,7 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 
 void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapping)
 {
-    for(sal_uInt16 i = 0; i < pMappingsArr->size(); i++)
+    for(size_t i = 0; i < pMappingsArr->size(); i++)
     {
         Mapping& rMapping = (*pMappingsArr)[i];
         bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);

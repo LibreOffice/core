@@ -626,7 +626,7 @@ void DomainMapperTableManager::endOfRowAction()
     // a grid of "20:40:20" and it doesn't have to do something with the tableWidth
     // -> so we have get the sum of each grid entry for the fullWidthRelative:
     int nFullWidthRelative = 0;
-    for (unsigned int i = 0 ; i < (*pTableGrid.get()).size(); i++ )
+    for (size_t i = 0 ; i < (*pTableGrid.get()).size(); i++ )
         nFullWidthRelative += (*pTableGrid.get())[ i ];
 
     if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
@@ -664,7 +664,7 @@ void DomainMapperTableManager::endOfRowAction()
                 throw o3tl::divide_by_zero();
 
             ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
-            for( sal_uInt32 nBorder = 0; nBorder < nWidthsBound; ++nBorder )
+            for( size_t nBorder = 0; nBorder < nWidthsBound; ++nBorder )
             {
                 double fGridWidth = 0.;
                 for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
@@ -707,7 +707,7 @@ void DomainMapperTableManager::endOfRowAction()
         sal_uInt32 nPos = 0;
         // Avoid divide by zero (if there's no grid, position using cell widths).
         if( nFullWidthRelative == 0 )
-            for (sal_uInt32 i = 0; i < pCellWidths->size(); ++i)
+            for (size_t i = 0; i < pCellWidths->size(); ++i)
                 nFullWidthRelative += (*pCellWidths.get())[i];
 
         size_t nWidthsBound = pCellWidths->size() - 1;
@@ -716,7 +716,7 @@ void DomainMapperTableManager::endOfRowAction()
             if (nFullWidthRelative == 0)
                 throw o3tl::divide_by_zero();
 
-            for (sal_uInt32 i = 0; i < nWidthsBound; ++i)
+            for (size_t i = 0; i < nWidthsBound; ++i)
             {
                 nSum += (*pCellWidths.get())[i];
                 pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position

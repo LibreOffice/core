@@ -167,7 +167,7 @@ bool OWizColumnSelect::LeavePage()
 
     m_pParent->clearDestColumns();
 
-    for(sal_uInt16 i=0 ; i< m_pNewColumnNames->GetEntryCount();++i)
+    for(sal_Int32 i=0 ; i< m_pNewColumnNames->GetEntryCount();++i)
     {
         OFieldDescription* pField = static_cast<OFieldDescription*>(m_pNewColumnNames->GetEntryData(i));
         OSL_ENSURE(pField,"The field information can not be null!");
@@ -226,7 +226,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 
     if(!bAll)
     {
-        for(sal_uInt16 i=0; i < pLeft->GetSelectEntryCount(); ++i)
+        for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
             moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
 
         for(sal_uInt16 j=pLeft->GetSelectEntryCount(); j ; --j)
@@ -272,7 +272,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox *, pListBox )
     ::std::vector< OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
-    for(sal_uInt16 i=0; i < pLeft->GetSelectEntryCount(); ++i)
+    for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
         moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
     for(sal_uInt16 j=pLeft->GetSelectEntryCount(); j ; --j)
         pLeft->RemoveEntry(pLeft->GetSelectEntry(j-1));

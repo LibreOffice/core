@@ -464,7 +464,7 @@ bool HelpCompiler::compile()
     std::string title;
     // returns a clone of the document with switch-cases resolved
     std::string appl = module.substr(1);
-    for (unsigned int i = 0; i < appl.length(); ++i)
+    for (size_t i = 0; i < appl.length(); ++i)
     {
         appl[i]=toupper(appl[i]);
     }

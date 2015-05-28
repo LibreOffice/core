@@ -841,7 +841,7 @@ short IconChoiceDialog::Ok()
 void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
 {
     // set focus to icon for the current visible page
-    for ( sal_uInt16 i=0; i<m_pIconCtrl->GetEntryCount(); i++)
+    for ( sal_uLong i=0; i<m_pIconCtrl->GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
         sal_uInt16* pUserData = static_cast<sal_uInt16*>(pEntry->GetUserData());

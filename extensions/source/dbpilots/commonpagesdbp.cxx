@@ -137,7 +137,7 @@ namespace dbp
             OSL_VERIFY( rContext.xForm->getPropertyValue("CommandType") >>= nCommandType );
 
             // search the entry of the given type with the given name
-            for ( sal_uInt16 nLookup = 0; nLookup < m_pTable->GetEntryCount(); ++nLookup )
+            for ( sal_Int32 nLookup = 0; nLookup < m_pTable->GetEntryCount(); ++nLookup )
             {
                 if (sCommand.equals(m_pTable->GetEntry(nLookup)))
                 {

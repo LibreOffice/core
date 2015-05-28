@@ -884,7 +884,7 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< XControlMo
     if (xColumns.is())
     {
         sal_Int32 nCount = xColumns->getCount();
-        for (sal_uInt16 i=0; i < nCount; ++i)
+        for (sal_Int32 i=0; i < nCount; ++i)
         {
             Reference< XPropertySet >  xCol(xColumns->getByIndex(i),UNO_QUERY);
             RemoveColumnListener(xCol);
@@ -2642,7 +2642,7 @@ void SbaXDataBrowserController::addColumnListeners(const Reference< ::com::sun::
     if (xColumns.is())
     {
         sal_Int32 nCount = xColumns->getCount();
-        for (sal_uInt16 i=0; i < nCount; ++i)
+        for (sal_Int32 i=0; i < nCount; ++i)
         {
             Reference< XPropertySet >  xCol(xColumns->getByIndex(i),UNO_QUERY);
             AddColumnListener(xCol);

@@ -709,7 +709,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         aArgs[1].Name = "SynchronMode";
         aArgs[1].Value <<= sal_True;
 
-        for ( sal_uInt32 n = 0; n < aDispatches.size(); n++ )
+        for ( size_t n = 0; n < aDispatches.size(); n++ )
         {
             Reference< XDispatch > xDispatch = aDispatches[n].xDispatch;
             Reference < XNotifyingDispatch > xDisp( xDispatch, UNO_QUERY );

@@ -474,7 +474,7 @@ namespace pcr
             m_aVScroll->SetPosSizePixel( aVScrollPos, aVScrollSize );
         }
 
-        for ( sal_uInt16 i = 0; i < m_aLines.size(); ++i )
+        for ( size_t i = 0; i < m_aLines.size(); ++i )
             m_aOutOfDateLines.insert( i );
 
         // repaint

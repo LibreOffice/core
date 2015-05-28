@@ -1171,7 +1171,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
         if (!m_sUserLocaleValue.isEmpty())
         {
             sal_Int32 d = 0;
-            for (sal_uInt16 i=0; i < m_pUserInterfaceLB->GetEntryCount(); i++)
+            for (sal_Int32 i=0; i < m_pUserInterfaceLB->GetEntryCount(); i++)
             {
                 d = (sal_Int32)reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetEntryData(i));
                 if ( d > 0 && seqInstalledLanguages.getLength() > d-1 && seqInstalledLanguages[d-1].equals(m_sUserLocaleValue))

@@ -57,7 +57,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
     if (m_xColumns.is())
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
-        for (sal_uInt16 i=0; i < m_pList->GetSelectEntryCount(); ++i)
+        for (sal_Int32 i=0; i < m_pList->GetSelectEntryCount(); ++i)
         {
             m_xColumns->getByIndex(sal::static_int_cast<sal_Int32>(reinterpret_cast<sal_uIntPtr>(m_pList->GetEntryData(m_pList->GetSelectEntryPos(i))))) >>= xCol;
             if (xCol.is())
@@ -90,7 +90,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  xCurCol;
     OUString sCurName;
-    for (sal_uInt16 i=0; i<xCols->getCount(); ++i)
+    for (sal_Int32 i=0; i<xCols->getCount(); ++i)
     {
         sCurName.clear();
         xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);

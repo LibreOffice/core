@@ -251,7 +251,7 @@ namespace dbp
         rSettings.aValues.clear();
         rSettings.aLabels.reserve(m_pExistingRadios->GetEntryCount());
         rSettings.aValues.reserve(m_pExistingRadios->GetEntryCount());
-        for (::svt::WizardTypes::WizardState i=0; i<m_pExistingRadios->GetEntryCount(); ++i)
+        for (sal_Int32 i=0; i<m_pExistingRadios->GetEntryCount(); ++i)
         {
             rSettings.aLabels.push_back(m_pExistingRadios->GetEntry(i));
             rSettings.aValues.push_back(OUString::number((i + 1)));

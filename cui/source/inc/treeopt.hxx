@@ -87,11 +87,11 @@ typedef ::std::vector< VectorOfLeaves > VectorOfGroupedLeaves;
 
 struct OptionsNode
 {
-    OUString           m_sId;
-    OUString           m_sLabel;
-    OUString           m_sPageURL;
+    OUString                m_sId;
+    OUString                m_sLabel;
+    OUString                m_sPageURL;
     bool                    m_bAllModules;
-    OUString           m_sGroupId;
+    OUString                m_sGroupId;
     sal_Int32               m_nGroupIndex;
     VectorOfLeaves          m_aLeaves;
     VectorOfGroupedLeaves   m_aGroupedLeaves;
@@ -111,7 +111,7 @@ struct OptionsNode
 
     ~OptionsNode()
     {
-        for ( sal_uInt32 i = 0; i < m_aLeaves.size(); ++i )
+        for ( size_t i = 0; i < m_aLeaves.size(); ++i )
             delete m_aLeaves[i];
         m_aLeaves.clear();
         m_aGroupedLeaves.clear();
@@ -122,9 +122,9 @@ typedef ::std::vector< OptionsNode* > VectorOfNodes;
 
 struct LastPageSaver
 {
-    sal_uInt16          m_nLastPageId;
-    OUString   m_sLastPageURL_Tools;
-    OUString   m_sLastPageURL_ExtMgr;
+    sal_uInt16   m_nLastPageId;
+    OUString     m_sLastPageURL_Tools;
+    OUString     m_sLastPageURL_ExtMgr;
 
     LastPageSaver() : m_nLastPageId( USHRT_MAX ) {}
 };

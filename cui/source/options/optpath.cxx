@@ -243,7 +243,7 @@ void SvxPathTabPage::dispose()
 {
     if ( pPathBox )
     {
-        for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
+        for ( sal_uLong i = 0; i < pPathBox->GetEntryCount(); ++i )
             delete static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
         pPathBox.disposeAndClear();
     }
@@ -263,7 +263,7 @@ VclPtr<SfxTabPage> SvxPathTabPage::Create( vcl::Window* pParent,
 
 bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 {
-    for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
+    for ( sal_uLong i = 0; i < pPathBox->GetEntryCount(); ++i )
     {
         PathUserData_Impl* pPathImpl = static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
         sal_uInt16 nRealId = pPathImpl->nRealId;
