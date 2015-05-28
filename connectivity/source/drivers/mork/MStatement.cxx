@@ -476,7 +476,7 @@ void OCommonStatement::analyseSQL()
         OSQLParseNode * pOrderingSpecCommalist = pOrderbyClause->getChild(2);
         OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Fehler im Parse Tree");
 
-        for (sal_uInt32 m = 0; m < pOrderingSpecCommalist->count(); m++)
+        for (size_t m = 0; m < pOrderingSpecCommalist->count(); m++)
         {
             OSQLParseNode * pOrderingSpec = pOrderingSpecCommalist->getChild(m);
             OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Fehler im Parse Tree");

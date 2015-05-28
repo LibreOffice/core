@@ -791,7 +791,7 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 {
     clearControlTexts();
     Reference< XInterface >  xCurrent;
-    for (sal_uInt32 i=0; i<arrFields.size(); ++i)
+    for (size_t i=0; i<arrFields.size(); ++i)
     {
         xCurrent = arrFields.at(i);
         DBG_ASSERT(xCurrent.is(), "FmSearchEngine::fillControlTexts : invalid field interface !");

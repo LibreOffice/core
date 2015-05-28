@@ -127,7 +127,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                 ::std::vector< OUString > aObjList;
                 if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
                 {
-                    for ( sal_uInt16 i = 0; i < aObjList.size(); ++i )
+                    for ( size_t i = 0; i < aObjList.size(); ++i )
                     {
                         if ( aObjList[ i ].equalsIgnoreAsciiCase( m_aCustomShapeType ) )
                         {

@@ -83,7 +83,7 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
     }
 
     // Further descend in Parse Tree
-    for (sal_uInt32 i = 0; i < pParseNode->count(); i++)
+    for (size_t i = 0; i < pParseNode->count(); i++)
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
 

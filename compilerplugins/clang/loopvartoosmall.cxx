@@ -49,7 +49,7 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
 {
     if (ignoreLocation( stmt ))
         return true;
-    // ignore SAL for now
+    // ignore sal/ module for now
     StringRef aFileName = getFilename(stmt->getLocStart());
     if (aFileName.startswith(SRCDIR "/sal/")) {
         return true;
@@ -76,8 +76,9 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
     if (binOp->getOpcode() != BO_LT && binOp->getOpcode() != BO_LE)
         return true;
     const Expr* binOpRHS = binOp->getRHS();
-    // ignore complex expressions for now
-    if (isa<BinaryOperator>(binOpRHS))
+    // ignore complex expressions for now, promotion rules on conditions like "i < (size()+1)"
+    // make it hard to guess at a correct type.
+    if (isa<BinaryOperator>(binOpRHS) || isa<ParenExpr>(binOpRHS))
         return true;
     if (isa<ImplicitCastExpr>(binOpRHS)) {
         const ImplicitCastExpr* castExpr = dyn_cast<ImplicitCastExpr>(binOpRHS);
@@ -105,13 +106,13 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
             "loop index type is smaller than length type. " + qt.getAsString() + " < " + qt2.getAsString(),
             stmt->getInit()->getLocStart())
           << stmt->getInit()->getSourceRange();
-//        stmt->getCond()->dump();
+        //stmt->getCond()->dump();
     }
     return true;
 }
 
 
-loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall", false);
+loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall", true);
 
 }
 

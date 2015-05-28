@@ -915,7 +915,7 @@ Reference< XShape > Shape::createAndInsert(
             {
                 Sequence< PropertyValue > aGradientStops( aFillProperties.maGradientProps.maGradientStops.size() );
                 ::std::map< double, Color >::iterator aIt = aFillProperties.maGradientProps.maGradientStops.begin();
-                for( sal_uInt32 i = 0; i < aFillProperties.maGradientProps.maGradientStops.size(); ++i )
+                for( size_t i = 0; i < aFillProperties.maGradientProps.maGradientStops.size(); ++i )
                 { // for each stop in the gradient definition:
 
                     // save position

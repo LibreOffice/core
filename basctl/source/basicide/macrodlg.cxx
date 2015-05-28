@@ -586,7 +586,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
         {
             OUString aEdtText( m_pMacroNameEdit->GetText() );
             bool bFound = false;
-            for ( sal_uInt16 n = 0; n < m_pMacroBox->GetEntryCount(); n++ )
+            for ( sal_uLong n = 0; n < m_pMacroBox->GetEntryCount(); n++ )
             {
                 SvTreeListEntry* pEntry = m_pMacroBox->GetEntry( n );
                 DBG_ASSERT( pEntry, "Entry ?!" );

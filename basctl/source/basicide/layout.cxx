@@ -381,7 +381,7 @@ IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter)
     else
     {
         // Item::nStartPos, Item::nLength
-        for (unsigned i = 1; i < vItems.size(); ++i)
+        for (size_t i = 1; i < vItems.size(); ++i)
         {
             if (vItems[i].pSplit.get() == pSplitter)
             {

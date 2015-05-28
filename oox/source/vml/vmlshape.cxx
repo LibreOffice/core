@@ -939,11 +939,11 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         }
 
         aBezierCoords.Coordinates.realloc( aCoordLists.size() );
-        for ( unsigned int i = 0; i < aCoordLists.size(); i++ )
+        for ( size_t i = 0; i < aCoordLists.size(); i++ )
             aBezierCoords.Coordinates[i] = ContainerHelper::vectorToSequence( aCoordLists[i] );
 
         aBezierCoords.Flags.realloc( aFlagLists.size() );
-        for ( unsigned int i = 0; i < aFlagLists.size(); i++ )
+        for ( size_t i = 0; i < aFlagLists.size(); i++ )
             aBezierCoords.Flags[i] = ContainerHelper::vectorToSequence( aFlagLists[i] );
 
         if( !aCoordLists.front().empty() && !aCoordLists.back().empty()

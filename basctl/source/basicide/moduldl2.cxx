@@ -872,7 +872,7 @@ void LibPage::InsertLib()
                     bool bRemove = false;
                     bool bReplace = pLibDlg->IsReplace();
                     bool bReference = pLibDlg->IsReference();
-                    for ( sal_uInt16 nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
+                    for ( sal_uLong nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
                     {
                         if ( pLibDlg->GetLibBox().IsChecked( nLib ) )
                         {

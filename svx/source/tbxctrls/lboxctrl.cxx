@@ -298,7 +298,7 @@ VclPtr<SfxPopupWindow> SvxUndoRedoControl::CreatePopupWindow()
     ListBox &rListBox = pPopupWin->GetListBox();
     rListBox.SetSelectHdl( LINK( this, SvxUndoRedoControl, SelectHdl ) );
 
-    for( sal_uInt32 n = 0; n < aUndoRedoList.size(); n++ )
+    for( size_t n = 0; n < aUndoRedoList.size(); n++ )
         rListBox.InsertEntry( aUndoRedoList[n] );
 
     rListBox.SelectEntryPos( 0 );

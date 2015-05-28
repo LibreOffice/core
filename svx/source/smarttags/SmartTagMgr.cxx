@@ -91,7 +91,7 @@ void SmartTagMgr::RecognizeString( const OUString& rText,
                              const lang::Locale& rLocale,
                              sal_uInt32 nStart, sal_uInt32 nLen ) const
 {
-    for ( sal_uInt32 i = 0; i < maRecognizerList.size(); i++ )
+    for ( size_t i = 0; i < maRecognizerList.size(); i++ )
     {
         Reference < smarttags::XSmartTagRecognizer > xRecognizer = maRecognizerList[i];
 
@@ -121,7 +121,7 @@ void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange>& xRange,
                              const Reference< text::XTextMarkup >& xMarkup,
                              const Reference< frame::XController >& xController) const
 {
-    for ( sal_uInt32 i = 0; i < maRecognizerList.size(); i++ )
+    for ( size_t i = 0; i < maRecognizerList.size(); i++ )
     {
         Reference < smarttags::XSmartTagRecognizer > xRecognizer = maRecognizerList[i];
 
@@ -159,7 +159,7 @@ void SmartTagMgr::GetActionSequences( Sequence < OUString >& rSmartTagTypes,
     rActionComponentsSequence.realloc( rSmartTagTypes.getLength() );
     rActionIndicesSequence.realloc( rSmartTagTypes.getLength() );
 
-    for ( sal_uInt16 j = 0; j < rSmartTagTypes.getLength(); ++j )
+    for ( sal_Int32 j = 0; j < rSmartTagTypes.getLength(); ++j )
     {
         const OUString& rSmartTagType = rSmartTagTypes[j];
 

@@ -142,7 +142,7 @@ void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox
     {
         std::vector<OUString> aLst = pSrchItem->GetList();
 
-        for ( sal_uInt16 i = 0; i < aLst.size(); ++i )
+        for ( size_t i = 0; i < aLst.size(); ++i )
         {
             rStrLst.push_back(aLst[i]);
             rCBox.InsertEntry(aLst[i]);
@@ -159,7 +159,7 @@ void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
 SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
     SrchAttrItemList(rList)
 {
-    for ( sal_uInt16 i = 0; i < size(); ++i )
+    for ( size_t i = 0; i < size(); ++i )
         if ( !IsInvalidItem( (*this)[i].pItem ) )
             (*this)[i].pItem = (*this)[i].pItem->Clone();
 }
@@ -213,7 +213,7 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 {
     SfxItemPool* pPool = rSet.GetPool();
 
-    for ( sal_uInt16 i = 0; i < size(); ++i )
+    for ( size_t i = 0; i < size(); ++i )
         if ( IsInvalidItem( (*this)[i].pItem ) )
             rSet.InvalidateItem( pPool->GetWhich( (*this)[i].nSlot ) );
         else
@@ -225,7 +225,7 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 
 void SearchAttrItemList::Clear()
 {
-    for ( sal_uInt16 i = 0; i < size(); ++i )
+    for ( size_t i = 0; i < size(); ++i )
         if ( !IsInvalidItem( (*this)[i].pItem ) )
             delete (*this)[i].pItem;
     SrchAttrItemList::clear();

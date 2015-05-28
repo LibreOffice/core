@@ -899,7 +899,7 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     // clear the listbox
     pCodeCompleteWnd->ClearListBox();
     // fill the listbox
-    for(unsigned int l = 0; l < aEntryVect.size(); ++l)
+    for(size_t l = 0; l < aEntryVect.size(); ++l)
     {
         pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
     }
@@ -1013,7 +1013,7 @@ void EditorWindow::CreateEditEngine()
     aSyntaxIdle.Stop();
     bDoSyntaxHighlight = bWasDoSyntaxHighlight;
 
-    for (sal_uInt16 nLine = 0; nLine < nLines; nLine++)
+    for (sal_Int32 nLine = 0; nLine < nLines; nLine++)
         aSyntaxLineTable.insert(nLine);
     ForceSyntaxTimeout();
 
@@ -2669,7 +2669,7 @@ void CodeCompleteListBox::InsertSelectedEntry()
 
 void CodeCompleteListBox::SetMatchingEntries()
 {
-    for(sal_uInt16 i=0; i< GetEntryCount(); ++i)
+    for(sal_Int32 i=0; i< GetEntryCount(); ++i)
     {
         OUString sEntry = GetEntry(i);
         if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() ) )

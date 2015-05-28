@@ -72,7 +72,7 @@ void Organize( sal_Int16 tabId )
 
 bool IsValidSbxName( const OUString& rName )
 {
-    for ( sal_uInt16 nChar = 0; nChar < rName.getLength(); nChar++ )
+    for ( sal_Int32 nChar = 0; nChar < rName.getLength(); nChar++ )
     {
         sal_Unicode c = rName[nChar];
         bool bValid = (
