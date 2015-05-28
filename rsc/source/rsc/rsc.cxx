@@ -930,7 +930,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                     aOStm.WriteLine(OString("FileList = {"));
 
-                    for( sal_uInt32 i = 0; i < aEntryVector.size(); ++i )
+                    for( size_t i = 0; i < aEntryVector.size(); ++i )
                     {
                         OStringBuffer aEntryString("< \"");
 
@@ -956,7 +956,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
     {
         OStringBuffer aImagesStr;
 
-        for( sal_uInt32 i = 0; i < aMissingImages.size(); ++i )
+        for( size_t i = 0; i < aMissingImages.size(); ++i )
         {
             if( i )
                 aImagesStr.append(' ');

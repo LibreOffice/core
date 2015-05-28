@@ -50,7 +50,7 @@ namespace drawinglayer
         {
             basegfx::B3DRange aRetval;
 
-            for(sal_uInt32 a(0); a < rFill.size(); a++)
+            for(size_t a(0); a < rFill.size(); a++)
             {
                 aRetval.expand(basegfx::tools::getRange(rFill[a]));
             }
@@ -63,7 +63,7 @@ namespace drawinglayer
             // create sphere normals
             const basegfx::B3DPoint aCenter(rRange.getCenter());
 
-            for(sal_uInt32 a(0); a < rFill.size(); a++)
+            for(size_t a(0); a < rFill.size(); a++)
             {
                 rFill[a] = basegfx::tools::applyDefaultNormalsSphere(rFill[a], aCenter);
             }
@@ -71,7 +71,7 @@ namespace drawinglayer
 
         void applyNormalsKindFlatTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
         {
-            for(sal_uInt32 a(0); a < rFill.size(); a++)
+            for(size_t a(0); a < rFill.size(); a++)
             {
                 rFill[a].clearNormals();
             }
@@ -80,7 +80,7 @@ namespace drawinglayer
         void applyNormalsInvertTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
         {
             // invert normals
-            for(sal_uInt32 a(0); a < rFill.size(); a++)
+            for(size_t a(0); a < rFill.size(); a++)
             {
                 rFill[a] = basegfx::tools::invertNormals(rFill[a]);
             }
@@ -180,7 +180,7 @@ namespace drawinglayer
                 // create list of simple fill primitives
                 aRetval.realloc(r3DPolyPolygonVector.size());
 
-                for(sal_uInt32 a(0L); a < r3DPolyPolygonVector.size(); a++)
+                for(size_t a(0); a < r3DPolyPolygonVector.size(); a++)
                 {
                     // get scaled PolyPolygon
                     basegfx::B3DPolyPolygon aScaledPolyPolygon(r3DPolyPolygonVector[a]);

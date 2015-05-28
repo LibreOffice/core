@@ -279,7 +279,7 @@ SbxArray* StringToByteArray(const OUString& rStr)
         pArray->unoAddDim( 0, -1 );
     }
 
-    for( sal_uInt16 i=0; i< nArraySize; i++)
+    for( sal_Int32 i=0; i< nArraySize; i++)
     {
         SbxVariable* pNew = new SbxVariable( SbxBYTE );
         sal_uInt8 aByte = static_cast< sal_uInt8 >( (i%2) ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );

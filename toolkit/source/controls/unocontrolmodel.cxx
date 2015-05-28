@@ -1314,7 +1314,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
         // if somebody sets properties which are single aspects of a font descriptor,
         // remove them, and build a font descriptor instead
         boost::scoped_ptr< awt::FontDescriptor > pFD;
-        for ( sal_uInt16 n = 0; n < nProps; ++n )
+        for ( sal_Int32 n = 0; n < nProps; ++n )
         {
             if ( ( pHandles[n] >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( pHandles[n] <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
             {

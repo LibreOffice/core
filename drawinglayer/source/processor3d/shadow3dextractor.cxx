@@ -253,7 +253,7 @@ namespace drawinglayer
         {
             OSL_ENSURE(0 == maPrimitive2DSequence.size(),
                 "OOps, someone used Shadow3DExtractingProcessor, but did not fetch the results (!)");
-            for(sal_uInt32 a(0); a < maPrimitive2DSequence.size(); a++)
+            for(size_t a(0); a < maPrimitive2DSequence.size(); a++)
             {
                 delete maPrimitive2DSequence[a];
             }

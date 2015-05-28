@@ -628,7 +628,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         {
             // get X-Pos of the column changed
             long nX = 0;
-            for ( sal_uInt16 nCol = 0; nCol < nItemPos; ++nCol )
+            for ( size_t nCol = 0; nCol < nItemPos; ++nCol )
             {
                 BrowserColumn *pCol = (*pCols)[ nCol ];
                 if ( pCol->IsFrozen() || nCol >= nFirstCol )
@@ -1272,7 +1272,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, bool bDoPaint, bool bKeep
             Any()
         );
 
-        for (sal_Int32 i = nRow+1 ; i <= nRowCount ; ++i)
+        for (long i = nRow+1 ; i <= nRowCount ; ++i)
         {
             commitHeaderBarEvent(
                 CHILD,
@@ -1443,7 +1443,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
                 Any()
             );
 
-            for (sal_Int32 i = nRow+1 ; i <= (nRow+nNumRows) ; ++i)
+            for (long i = nRow+1 ; i <= (nRow+nNumRows) ; ++i)
             {
                 commitHeaderBarEvent(
                     CHILD,

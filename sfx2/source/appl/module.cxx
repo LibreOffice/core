@@ -219,7 +219,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
     if (!pImpl->pFactArr)
         pImpl->pFactArr = new SfxChildWinFactArr_Impl;
 
-    for (sal_uInt16 nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
+    for (size_t nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
     {
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory].nId)
         {
@@ -240,7 +240,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
         pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
     {
         SfxTbxCtrlFactory *pF = &(*pImpl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -262,7 +262,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
         pImpl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pImpl->pStbCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pImpl->pStbCtrlFac->size(); n++ )
     {
         SfxStbCtrlFactory *pF = &(*pImpl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -284,7 +284,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
         pImpl->pMenuCtrlFac = new SfxMenuCtrlFactArr_Impl;
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pImpl->pMenuCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pImpl->pMenuCtrlFac->size(); n++ )
     {
         SfxMenuCtrlFactory *pF = &(*pImpl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&

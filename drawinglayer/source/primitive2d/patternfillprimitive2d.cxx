@@ -73,7 +73,7 @@ namespace drawinglayer
                         aRetval.realloc(aMatrices.size());
 
                         // create one primitive for each matrix
-                        for(sal_uInt32 a(0); a < aMatrices.size(); a++)
+                        for(size_t a(0); a < aMatrices.size(); a++)
                         {
                             aRetval[a] = new TransformPrimitive2D(
                                 aMatrices[a],

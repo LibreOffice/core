@@ -251,7 +251,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
             sal_uInt16 nFound=0;
-            for ( sal_uInt16 n=0; n<nCount; n++ )
+            for ( sal_Int32 n=0; n<nCount; n++ )
             {
                 const beans::PropertyValue& rPropValue = pPropsVal[n];
                 sal_uInt16 nSub;
@@ -329,7 +329,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         if ( nSubCount == 0 )
         {
             // "simple" (base type) argument
-            for ( sal_uInt16 n=0; n<nCount; n++ )
+            for ( sal_Int32 n=0; n<nCount; n++ )
             {
                 const beans::PropertyValue& rProp = pPropsVal[n];
                 OUString aName = rProp.Name;
@@ -357,7 +357,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         {
             // complex argument, could be passed in one struct
             bool bAsWholeItem = false;
-            for ( sal_uInt16 n=0; n<nCount; n++ )
+            for ( sal_Int32 n=0; n<nCount; n++ )
             {
                 const beans::PropertyValue& rProp = pPropsVal[n];
                 OUString aName = rProp.Name;
@@ -387,7 +387,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 // only put item if at least one member was found and had the correct type
                 // (is this a good idea?! Should we ask for *all* members?)
                 bool bRet = false;
-                for ( sal_uInt16 n=0; n<nCount; n++ )
+                for ( sal_Int32 n=0; n<nCount; n++ )
                 {
                     const beans::PropertyValue& rProp = pPropsVal[n];
                     for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
@@ -436,7 +436,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     // f.e. "SaveAs" shouldn't support parameters not in the slot definition!)
     if ( nSlotId == SID_NEWWINDOW )
     {
-        for ( sal_uInt16 n=0; n<nCount; n++ )
+        for ( sal_Int32 n=0; n<nCount; n++ )
         {
             const beans::PropertyValue& rProp = pPropsVal[n];
             OUString aName = rProp.Name;
@@ -457,7 +457,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     }
     else if ( bIsMediaDescriptor )
     {
-        for ( sal_uInt16 n=0; n<nCount; n++ )
+        for ( sal_Int32 n=0; n<nCount; n++ )
         {
 #ifdef DBG_UTIL
             ++nFoundArgs;
@@ -887,7 +887,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         OUString sPropName( "OptionsPageURL" );
         if ( sSlotName == OUString( pSlot->pUnoName, strlen(pSlot->pUnoName), RTL_TEXTENCODING_UTF8 ) )
         {
-            for ( sal_uInt16 n = 0; n < nCount; ++n )
+            for ( sal_Int32 n = 0; n < nCount; ++n )
             {
                 const PropertyValue& rProp = pPropsVal[n];
                 OUString sName( rProp.Name );

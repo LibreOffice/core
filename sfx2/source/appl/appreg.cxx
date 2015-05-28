@@ -75,7 +75,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pTbxCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pAppData_Impl->pTbxCtrlFac->size(); n++ )
     {
         SfxTbxCtrlFactory *pF = &(*pAppData_Impl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -100,7 +100,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pStbCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pAppData_Impl->pStbCtrlFac->size(); n++ )
     {
         SfxStbCtrlFactory *pF = &(*pAppData_Impl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -125,7 +125,7 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pMenuCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pAppData_Impl->pMenuCtrlFac->size(); n++ )
     {
         SfxMenuCtrlFactory *pF = &(*pAppData_Impl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&

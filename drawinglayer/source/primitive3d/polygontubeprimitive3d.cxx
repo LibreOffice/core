@@ -498,7 +498,7 @@ namespace drawinglayer
 
                 Primitive3DSequence aRetval(aResultVector.size());
 
-                for(sal_uInt32 a(0L); a < aResultVector.size(); a++)
+                for(size_t a(0); a < aResultVector.size(); a++)
                 {
                     aRetval[a] = Primitive3DReference(aResultVector[a]);
                 }
@@ -732,7 +732,7 @@ namespace drawinglayer
             // prepare return value
             Primitive3DSequence aRetval(aResultVector.size());
 
-            for(sal_uInt32 a(0L); a < aResultVector.size(); a++)
+            for(size_t a(0); a < aResultVector.size(); a++)
             {
                 aRetval[a] = Primitive3DReference(aResultVector[a]);
             }

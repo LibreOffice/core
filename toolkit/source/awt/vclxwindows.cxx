@@ -4237,7 +4237,7 @@ void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< OUString>& a
     if ( pBox )
     {
         sal_uInt16 nP = nPos;
-        for ( sal_uInt16 n = 0; n < aItems.getLength(); n++ )
+        for ( sal_Int32 n = 0; n < aItems.getLength(); n++ )
         {
             pBox->InsertEntry( aItems.getConstArray()[n], nP );
             if ( nP == 0xFFFF )

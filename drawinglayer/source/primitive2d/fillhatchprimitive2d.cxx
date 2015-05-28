@@ -122,7 +122,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint aStart(0.0, 0.0);
                 const basegfx::B2DPoint aEnd(1.0, 0.0);
 
-                for(sal_uInt32 a(0L); a < aMatrices.size(); a++)
+                for(size_t a(0); a < aMatrices.size(); a++)
                 {
                     const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
                     basegfx::B2DPolygon aNewLine;

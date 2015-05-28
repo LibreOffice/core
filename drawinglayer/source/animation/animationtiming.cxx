@@ -182,7 +182,7 @@ namespace drawinglayer
 
         AnimationEntryList::~AnimationEntryList()
         {
-            for(sal_uInt32 a(0L); a < maEntries.size(); a++)
+            for(size_t a(0); a < maEntries.size(); a++)
             {
                 delete maEntries[a];
             }
@@ -192,7 +192,7 @@ namespace drawinglayer
         {
             AnimationEntryList* pNew = new AnimationEntryList();
 
-            for(sal_uInt32 a(0L); a < maEntries.size(); a++)
+            for(size_t a(0); a < maEntries.size(); a++)
             {
                 pNew->append(*maEntries[a]);
             }
@@ -206,7 +206,7 @@ namespace drawinglayer
 
             if(pCompare && mfDuration == pCompare->mfDuration)
             {
-                for(sal_uInt32 a(0L); a < maEntries.size(); a++)
+                for(size_t a(0); a < maEntries.size(); a++)
                 {
                     if(!(*maEntries[a] == *pCompare->maEntries[a]))
                     {
@@ -286,7 +286,7 @@ namespace drawinglayer
         {
             AnimationEntryLoop* pNew = new AnimationEntryLoop(mnRepeat);
 
-            for(sal_uInt32 a(0L); a < maEntries.size(); a++)
+            for(size_t a(0); a < maEntries.size(); a++)
             {
                 pNew->append(*maEntries[a]);
             }

@@ -841,7 +841,7 @@ void ViewTabListBox_Impl::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEn
 
 void ViewTabListBox_Impl::ClearAll()
 {
-    for ( sal_uInt16 i = 0; i < GetEntryCount(); ++i )
+    for ( sal_uLong i = 0; i < GetEntryCount(); ++i )
         delete static_cast<SvtContentEntry*>(GetEntry(i)->GetUserData());
     Clear();
 }

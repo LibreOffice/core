@@ -18,7 +18,8 @@
 // revealed by the terminating condition.
 // If not, we might end up in an endless loop, or just not process certain parts.
 
-namespace {
+namespace
+{
 
 class LoopVarTooSmall:
     public RecursiveASTVisitor<LoopVarTooSmall>, public loplugin::Plugin
@@ -26,7 +27,9 @@ class LoopVarTooSmall:
 public:
     explicit LoopVarTooSmall(InstantiationData const & data): Plugin(data) {}
 
-    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override {
+        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
 
     bool VisitForStmt( const ForStmt* stmt );
 
@@ -76,8 +79,7 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
     // ignore complex expressions for now
     if (isa<BinaryOperator>(binOpRHS))
         return true;
-    if (isa<ImplicitCastExpr>(binOpRHS))
-    {
+    if (isa<ImplicitCastExpr>(binOpRHS)) {
         const ImplicitCastExpr* castExpr = dyn_cast<ImplicitCastExpr>(binOpRHS);
         binOpRHS = castExpr->getSubExpr();
     }
@@ -90,22 +92,19 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
     if (binOpRHS->EvaluateAsInt(aIntResult, compiler.getASTContext())) {
         if (aIntResult.getSExtValue() > 0 && aIntResult.getSExtValue() < 1<<7) {
             qt2BitWidth = 8;
-        }
-        else if (aIntResult.getSExtValue() > 0 && aIntResult.getSExtValue() < 1<<15) {
+        } else if (aIntResult.getSExtValue() > 0 && aIntResult.getSExtValue() < 1<<15) {
             qt2BitWidth = 16;
-        }
-        else if (aIntResult.getSExtValue() > 0 && aIntResult.getSExtValue() < 1L<<31) {
+        } else if (aIntResult.getSExtValue() > 0 && aIntResult.getSExtValue() < 1L<<31) {
             qt2BitWidth = 32;
         }
     }
 
-    if (qt1BitWidth < qt2BitWidth)
-    {
+    if (qt1BitWidth < qt2BitWidth) {
         report(
             DiagnosticsEngine::Warning,
-            "loop index variable is shorter than length type. " + qt.getAsString() + " < " + qt2.getAsString(),
+            "loop index type is smaller than length type. " + qt.getAsString() + " < " + qt2.getAsString(),
             stmt->getLocStart())
-          << stmt->getSourceRange();
+                << stmt->getSourceRange();
 //        stmt->getCond()->dump();
     }
     return true;

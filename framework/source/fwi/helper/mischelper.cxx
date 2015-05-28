@@ -200,7 +200,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
         Sequence< Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ));
         if ( rLocales.getLength() > 0 )
         {
-            for ( sal_uInt16 i = 0; i < rLocales.getLength(); ++i )
+            for ( sal_Int32 i = 0; i < rLocales.getLength(); ++i )
             {
                 if ( rLangItems.size() == static_cast< size_t >(nMaxCount) )
                     break;

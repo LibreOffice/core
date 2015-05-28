@@ -48,7 +48,7 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
     if (!pAppData_Impl->pFactArr)
         pAppData_Impl->pFactArr = new SfxChildWinFactArr_Impl;
 
-    for (sal_uInt16 nFactory=0; nFactory<pAppData_Impl->pFactArr->size(); ++nFactory)
+    for (size_t nFactory=0; nFactory<pAppData_Impl->pFactArr->size(); ++nFactory)
     {
         if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory].nId)
         {

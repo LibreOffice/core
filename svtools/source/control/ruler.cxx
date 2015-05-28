@@ -422,7 +422,7 @@ void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext, bool bErase)
             aRect.Right() = nY;
 
         // Draw lines
-        for (sal_uInt32 i = 0; i < mpData->pLines.size(); i++)
+        for (size_t i = 0; i < mpData->pLines.size(); i++)
         {
             const long n = mpData->pLines[i].nPos + nNullWinOff;
             if ((n >= nRulX1) && (n < nRulX2))
@@ -1022,7 +1022,7 @@ void Ruler::ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, s
 
 void Ruler::ImplDrawTabs(vcl::RenderContext& /*rRenderContext*/, long nMin, long nMax, long nVirTop, long nVirBottom)
 {
-    for (sal_uInt32 i = 0; i < mpData->pTabs.size(); i++)
+    for (size_t i = 0; i < mpData->pTabs.size(); i++)
     {
         if (mpData->pTabs[i].nStyle & RULER_STYLE_INVISIBLE)
             continue;

@@ -132,7 +132,7 @@ namespace drawinglayer
             // prepare return value
             Primitive2DSequence aRetval(aTempPrimitiveTarget.size());
 
-            for(sal_uInt32 a(0L); a < aTempPrimitiveTarget.size(); a++)
+            for(size_t a(0); a < aTempPrimitiveTarget.size(); a++)
             {
                 const Primitive2DReference xRef(aTempPrimitiveTarget[a]);
                 aRetval[a] = xRef;

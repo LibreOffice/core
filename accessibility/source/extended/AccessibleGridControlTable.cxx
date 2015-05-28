@@ -278,7 +278,7 @@ void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
 
     ensureIsAlive();
     Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
-    for(int i=0;i<m_aTable.GetRowCount();i++)
+    for(long i=0; i<m_aTable.GetRowCount(); i++)
         selectedRows[i]=i;
 }
 sal_Int32 SAL_CALL AccessibleGridControlTable::getSelectedAccessibleChildCount()
