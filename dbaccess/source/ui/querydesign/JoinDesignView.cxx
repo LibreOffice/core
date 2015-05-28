@@ -66,8 +66,8 @@ OJoinDesignView::~OJoinDesignView()
 
 void OJoinDesignView::dispose()
 {
-    m_pScrollWindow.disposeAndClear();
     m_pTableView.disposeAndClear();
+    m_pScrollWindow.disposeAndClear();
     ODataView::dispose();
 }
 

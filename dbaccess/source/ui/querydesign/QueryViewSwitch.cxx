@@ -42,6 +42,9 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 
 OQueryViewSwitch::~OQueryViewSwitch()
 {
+    // destroy children
+    m_pDesignView.disposeAndClear();
+    m_pTextView.disposeAndClear();
 }
 
 void OQueryViewSwitch::Construct()
