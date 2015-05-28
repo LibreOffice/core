@@ -1058,7 +1058,7 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
             nCount++;
         }
     }
-   return pRet;
+    return pRet;
 }
 
 /// @return the names of all set references in the Doc

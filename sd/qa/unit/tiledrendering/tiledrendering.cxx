@@ -82,7 +82,7 @@ private:
 SdTiledRenderingTest::SdTiledRenderingTest()
 #if !defined(WNT) && !defined(MACOSX)
     : m_bFound(true),
-    m_nPart(0)
+      m_nPart(0)
 #endif
 {
 }
