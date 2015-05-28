@@ -90,7 +90,7 @@ void SAL_CALL OConnection::release() throw()
     relase_ChildImpl();
 }
 
-oslGenericFunction OConnection::getOdbcFunction(sal_Int32 _nIndex)  const
+oslGenericFunction OConnection::getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
 {
     OSL_ENSURE(m_pDriver,"OConnection::getOdbcFunction: m_pDriver is null!");
     return m_pDriver->getOdbcFunction(_nIndex);

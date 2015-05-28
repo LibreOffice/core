@@ -139,7 +139,7 @@ void OTools::getValue(  OConnection* _pConnection,
     OSL_ENSURE(static_cast<size_t>(_nSize) >= properSize, "memory region is too small");
     SQLLEN pcbValue = SQL_NULL_DATA;
     OTools::ThrowException(_pConnection,
-                            (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLGetData)))(_aStatementHandle,
+                            (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetData)))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         _nType,
                                         _pValue,
@@ -175,7 +175,7 @@ void OTools::bindValue( OConnection* _pConnection,
     if (columnIndex != 0 && !_pValue)
     {
         *pLen = SQL_NULL_DATA;
-        nRetcode = (*reinterpret_cast<T3SQLBindCol>(_pConnection->getOdbcFunction(ODBC3SQLBindCol)))(_aStatementHandle,
+        nRetcode = (*reinterpret_cast<T3SQLBindCol>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::BindCol)))(_aStatementHandle,
                                 (SQLUSMALLINT)columnIndex,
                                 fCType,
                                 _pData,
@@ -276,7 +276,7 @@ void OTools::bindValue( OConnection* _pConnection,
         {
         }
 
-        nRetcode = (*reinterpret_cast<T3SQLBindCol>(_pConnection->getOdbcFunction(ODBC3SQLBindCol)))(_aStatementHandle,
+        nRetcode = (*reinterpret_cast<T3SQLBindCol>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::BindCol)))(_aStatementHandle,
                                 (SQLUSMALLINT)columnIndex,
                                 fCType,
                                 _pData,
@@ -329,7 +329,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
     // statements of this connection [what in this case will probably be the same, but the Reference
     // Manual isn't totally clear in this...].
     // corresponding for hdbc.
-    SQLRETURN n = (*reinterpret_cast<T3SQLGetDiagRec>(_pConnection->getOdbcFunction(ODBC3SQLGetDiagRec)))(_nHandleType,_pContext,1,
+    SQLRETURN n = (*reinterpret_cast<T3SQLGetDiagRec>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetDiagRec)))(_nHandleType,_pContext,1,
                          szSqlState,
                          &pfNativeError,
                          szErrorMessage,sizeof szErrorMessage - 1,&pcbErrorMsg);
@@ -367,7 +367,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     while (pcbValue == SQL_NO_TOTAL || pcbValue > nMaxLen)
     {
         OTools::ThrowException(_pConnection,
-                               (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLGetData)))(
+                               (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetData)))(
                                    _aStatementHandle,
                                    (SQLUSMALLINT)columnIndex,
                                    _fSqlType,
@@ -427,7 +427,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
         while ((pcbValue == SQL_NO_TOTAL ) || (pcbValue >= nMaxSize) )
         {
             OTools::ThrowException(_pConnection,
-                                   (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLGetData)))(
+                                   (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetData)))(
                                        _aStatementHandle,
                                        (SQLUSMALLINT)columnIndex,
                                        SQL_C_WCHAR,
@@ -471,7 +471,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
         while ((pcbValue == SQL_NO_TOTAL ) || (pcbValue >= nMaxLen) )
         {
             OTools::ThrowException(_pConnection,
-                                   (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLGetData)))(
+                                   (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetData)))(
                                        _aStatementHandle,
                                        (SQLUSMALLINT)columnIndex,
                                        SQL_C_CHAR,
@@ -519,7 +519,7 @@ void OTools::GetInfo(OConnection* _pConnection,
     char aValue[512];
     SQLSMALLINT nValueLen=0;
     OTools::ThrowException(_pConnection,
-        (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLGetInfo)))(_aConnectionHandle,_nInfo,aValue,(sizeof aValue)-1,&nValueLen),
+        (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetInfo)))(_aConnectionHandle,_nInfo,aValue,(sizeof aValue)-1,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 
     _rValue = OUString(aValue,nValueLen,_nTextEncoding);
@@ -534,7 +534,7 @@ void OTools::GetInfo(OConnection* _pConnection,
     SQLSMALLINT nValueLen;
     _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
     OTools::ThrowException(_pConnection,
-        (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLGetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
+        (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 
@@ -547,7 +547,7 @@ void OTools::GetInfo(OConnection* _pConnection,
     SQLSMALLINT nValueLen;
     _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
     OTools::ThrowException(_pConnection,
-        (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLGetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
+        (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 
@@ -560,7 +560,7 @@ void OTools::GetInfo(OConnection* _pConnection,
     SQLSMALLINT nValueLen;
     _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
     OTools::ThrowException(_pConnection,
-        (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLGetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
+        (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 
@@ -572,7 +572,7 @@ void OTools::GetInfo(OConnection* _pConnection,
 {
     SQLSMALLINT nValueLen;
     OTools::ThrowException(_pConnection,
-                            (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLGetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
+                            (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
                             _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 

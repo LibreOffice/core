@@ -122,7 +122,7 @@ namespace connectivity
             ODatabaseMetaDataResultSet(OConnection* _pConnection);
 
 
-            inline oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const
+            inline oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
             {
                 return m_pConnection->getOdbcFunction(_nIndex);
             }

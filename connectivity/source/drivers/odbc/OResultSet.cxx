@@ -154,7 +154,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         //       We use SQLFetchScroll unconditionally in several places
         //       the *only* difference this makes is whether ::next() uses SQLFetchScroll or SQLFetch
         //       so this test seems pointless
-        if ( getOdbcFunction(ODBC3SQLGetFunctions) )
+        if ( getOdbcFunction(ODBC3SQLFunctionId::GetFunctions) )
         {
             SQLUSMALLINT nSupported = 0;
             m_bUseFetchScroll = ( N3SQLGetFunctions(m_aConnectionHandle,SQL_API_SQLFETCHSCROLL,&nSupported) == SQL_SUCCESS && nSupported == 1 );
@@ -847,7 +847,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException, st
                                 &nRealLen
                                 );
 
-    bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
+    bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLFunctionId::BulkOperations ) );
     if ( bPositionByBookmark )
     {
         nRet = N3SQLBulkOperations( m_aStatementHandle, SQL_ADD );
@@ -914,7 +914,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException, st
 
     try
     {
-        bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
+        bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLFunctionId::BulkOperations ) );
         if ( bPositionByBookmark )
         {
             getBookmark();

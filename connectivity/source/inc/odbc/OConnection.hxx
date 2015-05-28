@@ -27,6 +27,7 @@
 #include <connectivity/CommonTools.hxx>
 #include "TConnection.hxx"
 #include "OTypeInfo.hxx"
+#include "OTools.hxx"
 #include <cppuhelper/weakref.hxx>
 #include "AutoRetrievingBase.hxx"
 #include <osl/module.h>
@@ -83,7 +84,7 @@ namespace connectivity
             OConnection*    cloneConnection(); // creates a new connection
 
         public:
-            oslGenericFunction  getOdbcFunction(sal_Int32 _nIndex)  const;
+            oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const;
             SQLRETURN       Construct( const OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
 
             OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*  _pDriver);

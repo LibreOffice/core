@@ -28,6 +28,7 @@
 #include "odbc/odbcbasedllapi.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <osl/module.h>
+#include "OTools.hxx"
 
 namespace connectivity
 {
@@ -54,7 +55,7 @@ namespace connectivity
             ODBCDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // only possibility to get the odbc functions
-            virtual oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const = 0;
+            virtual oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const = 0;
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface

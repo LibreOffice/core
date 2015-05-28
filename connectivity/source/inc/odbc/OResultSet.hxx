@@ -221,7 +221,7 @@ namespace connectivity
 
             void construct();
 
-            inline oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const
+            inline oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
             {
                 return m_pStatement->getOdbcFunction(_nIndex);
             }

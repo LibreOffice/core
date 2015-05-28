@@ -30,60 +30,63 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/textenc.h>
 
-#define ODBC3SQLAllocHandle         1
-#define ODBC3SQLConnect             2
-#define ODBC3SQLDriverConnect       3
-#define ODBC3SQLBrowseConnect       4
-#define ODBC3SQLDataSources         5
-#define ODBC3SQLDrivers             6
-#define ODBC3SQLGetInfo             7
-#define ODBC3SQLGetFunctions        8
-#define ODBC3SQLGetTypeInfo         9
-#define ODBC3SQLSetConnectAttr      10
-#define ODBC3SQLGetConnectAttr      11
-#define ODBC3SQLSetEnvAttr          12
-#define ODBC3SQLGetEnvAttr          13
-#define ODBC3SQLSetStmtAttr         14
-#define ODBC3SQLGetStmtAttr         15
-#define ODBC3SQLPrepare             16
-#define ODBC3SQLBindParameter       17
-#define ODBC3SQLSetCursorName       18
-#define ODBC3SQLExecute             19
-#define ODBC3SQLExecDirect          20
-#define ODBC3SQLDescribeParam       21
-#define ODBC3SQLNumParams           22
-#define ODBC3SQLParamData           23
-#define ODBC3SQLPutData             24
-#define ODBC3SQLRowCount            25
-#define ODBC3SQLNumResultCols       26
-#define ODBC3SQLDescribeCol         27
-#define ODBC3SQLColAttribute        28
-#define ODBC3SQLBindCol             29
-#define ODBC3SQLFetch               30
-#define ODBC3SQLFetchScroll         31
-#define ODBC3SQLGetData             32
-#define ODBC3SQLSetPos              33
-#define ODBC3SQLBulkOperations      34
-#define ODBC3SQLMoreResults         35
-#define ODBC3SQLGetDiagRec          36
-#define ODBC3SQLColumnPrivileges    37
-#define ODBC3SQLColumns             38
-#define ODBC3SQLForeignKeys         39
-#define ODBC3SQLPrimaryKeys         40
-#define ODBC3SQLProcedureColumns    41
-#define ODBC3SQLProcedures          42
-#define ODBC3SQLSpecialColumns      43
-#define ODBC3SQLStatistics          44
-#define ODBC3SQLTablePrivileges     45
-#define ODBC3SQLTables              46
-#define ODBC3SQLFreeStmt            47
-#define ODBC3SQLCloseCursor         48
-#define ODBC3SQLCancel              49
-#define ODBC3SQLEndTran             50
-#define ODBC3SQLDisconnect          51
-#define ODBC3SQLFreeHandle          52
-#define ODBC3SQLGetCursorName       53
-#define ODBC3SQLNativeSql           54
+enum class ODBC3SQLFunctionId
+{
+    AllocHandle         = 1,
+    Connect             = 2,
+    DriverConnect       = 3,
+    BrowseConnect       = 4,
+    DataSources         = 5,
+    Drivers             = 6,
+    GetInfo             = 7,
+    GetFunctions        = 8,
+    GetTypeInfo         = 9,
+    SetConnectAttr      = 10,
+    GetConnectAttr      = 11,
+    SetEnvAttr          = 12,
+    GetEnvAttr          = 13,
+    SetStmtAttr         = 14,
+    GetStmtAttr         = 15,
+    Prepare             = 16,
+    BindParameter       = 17,
+    SetCursorName       = 18,
+    Execute             = 19,
+    ExecDirect          = 20,
+    DescribeParam       = 21,
+    NumParams           = 22,
+    ParamData           = 23,
+    PutData             = 24,
+    RowCount            = 25,
+    NumResultCols       = 26,
+    DescribeCol         = 27,
+    ColAttribute        = 28,
+    BindCol             = 29,
+    Fetch               = 30,
+    FetchScroll         = 31,
+    GetData             = 32,
+    SetPos              = 33,
+    BulkOperations      = 34,
+    MoreResults         = 35,
+    GetDiagRec          = 36,
+    ColumnPrivileges    = 37,
+    Columns             = 38,
+    ForeignKeys         = 39,
+    PrimaryKeys         = 40,
+    ProcedureColumns    = 41,
+    Procedures          = 42,
+    SpecialColumns      = 43,
+    Statistics          = 44,
+    TablePrivileges     = 45,
+    Tables              = 46,
+    FreeStmt            = 47,
+    CloseCursor         = 48,
+    Cancel              = 49,
+    EndTran             = 50,
+    Disconnect          = 51,
+    FreeHandle          = 52,
+    GetCursorName       = 53,
+    NativeSql           = 54,
+};
 
 namespace connectivity
 {

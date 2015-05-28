@@ -391,7 +391,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     rDataLen = _nDataLen;
 
     SQLRETURN nRetcode;
-    nRetcode = (*reinterpret_cast<T3SQLBindParameter>(m_pConnection->getOdbcFunction(ODBC3SQLBindParameter)))(
+    nRetcode = (*reinterpret_cast<T3SQLBindParameter>(m_pConnection->getOdbcFunction(ODBC3SQLFunctionId::BindParameter)))(
                   m_aStatementHandle,
                   // checkParameterIndex guarantees this is safe
                   static_cast<SQLUSMALLINT>(parameterIndex),
