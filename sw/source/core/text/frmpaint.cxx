@@ -300,7 +300,7 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
             return;
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
-        SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(this));
+        SWAP_IF_NOT_SWAPPED swap(const_cast<SwTextFrm *>(this));
         SwRect rOldRect( rRect );
 
         if ( IsVertical() )
@@ -647,7 +647,7 @@ void SwTextFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         SwRect aOldRect( rRect );
 
         {
-            SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(this));
+            SWAP_IF_NOT_SWAPPED swap(const_cast<SwTextFrm *>(this));
 
             if ( IsVertical() )
                 SwitchVerticalToHorizontal( (SwRect&)rRect );
