@@ -60,7 +60,10 @@ public :
     FilterConfigItem( const OUString& rSubTree );
     FilterConfigItem( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
     FilterConfigItem( const OUString& rSubTree, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
+    /// Writes config in destructor
     ~FilterConfigItem();
+    /// Writes config and sets unmodified state again.
+    void WriteModifiedConfig();
 
     // all read methods are trying to return values in following order:
     // 1. FilterData PropertySequence

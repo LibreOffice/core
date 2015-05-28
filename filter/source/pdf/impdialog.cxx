@@ -325,6 +325,8 @@ void ImpPDFTabDialog::dispose()
     RemoveTabPage(mnLinksPage);
     RemoveTabPage(mnSecurityPageId);
     RemoveTabPage(mnSigningPageId);
+    maConfigItem.WriteModifiedConfig();
+    maConfigI18N.WriteModifiedConfig();
     SfxTabDialog::dispose();
 }
 
