@@ -170,7 +170,7 @@ OJoinDesignView* OJoinController::getJoinView()
 
 void OJoinController::disposing()
 {
-    m_pAddTableDialog   = NULL;
+    m_pAddTableDialog.disposeAndClear();
 
     OJoinController_BASE::disposing();
 
