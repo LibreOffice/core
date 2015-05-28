@@ -740,7 +740,7 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     //pNextTextObj->SetOutlinerParaObject(*someText);
     //pNextTextObj->SetText("Bukowski, were are thou?");
     if (mpOverflowingText) {
-        pNextTextObj->SetText(mpOverflowingText->GetTextObject().GetText(0));
+        pNextTextObj->NbcSetOutlinerParaObject(mpOverflowingText);
     }
     //rOutliner.Insert("Bukowski, were are thou?");
     //rOutliner.Clear();
