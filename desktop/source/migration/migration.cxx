@@ -253,7 +253,7 @@ bool MigrationImpl::doMigration()
 
         const OUString sMenubarResourceURL("private:resource/menubar/menubar");
         const OUString sToolbarResourcePre("private:resource/toolbar/");
-        for (sal_uInt32 i=0; i<vModulesInfo.size(); ++i)
+        for (size_t i=0; i<vModulesInfo.size(); ++i)
         {
             OUString sModuleIdentifier = mapModuleShortNameToIdentifier(vModulesInfo[i].sModuleShortName);
             if (sModuleIdentifier.isEmpty())
@@ -1322,7 +1322,7 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
 
     uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = ui::theModuleUIConfigurationManagerSupplier::get( ::comphelper::getProcessComponentContext() );
 
-    for (sal_uInt32 i=0; i<vModulesInfo.size(); ++i)
+    for (size_t i=0; i<vModulesInfo.size(); ++i)
     {
         OUString sModuleIdentifier = mapModuleShortNameToIdentifier(vModulesInfo[i].sModuleShortName);
         if (!sModuleIdentifier.isEmpty())

@@ -218,7 +218,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
 
         Reference< XRowSet >  xMasterForm;
         // search the arguments for the master form
-        for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArguments)
+        for (sal_Int32 i=0; i<aArgs.getLength(); ++i, ++pArguments)
         {
             if ( (pArguments->Name == "MasterForm") && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE) )
             {

@@ -1861,7 +1861,7 @@ bool SvxConfigPage::FillItemSet( SfxItemSet* )
 {
     bool result = false;
 
-    for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         SaveInData* pData =
             static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
@@ -2264,7 +2264,7 @@ void SvxMenuConfigPage::Init()
 
 void SvxMenuConfigPage::dispose()
 {
-    for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         MenuSaveInData* pData =
             static_cast<MenuSaveInData*>(m_pSaveInListBox->GetEntryData( i ));
@@ -2963,7 +2963,7 @@ SvxToolbarConfigPage::~SvxToolbarConfigPage()
 
 void SvxToolbarConfigPage::dispose()
 {
-    for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         ToolbarSaveInData* pData =
             static_cast<ToolbarSaveInData*>(m_pSaveInListBox->GetEntryData( i ));
@@ -3201,7 +3201,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             sal_uInt16 nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( sal_uInt16 i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
+            for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
             {
                 if ( m_pContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3299,7 +3299,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             sal_uInt16 nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( sal_uInt16 i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
+            for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
             {
                 if ( m_pContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3377,7 +3377,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             sal_uInt16 nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( sal_uInt16 i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
+            for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
             {
                 if ( m_pContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3447,7 +3447,7 @@ void SvxToolbarConfigPage::Init()
     sal_uInt16 nPos = 0;
     if ( !m_aURLToSelect.isEmpty() )
     {
-        for ( sal_uInt16 i = 0 ; i < m_pTopLevelListBox->GetEntryCount(); ++i )
+        for ( sal_Int32 i = 0 ; i < m_pTopLevelListBox->GetEntryCount(); ++i )
         {
             SvxConfigEntry* pData =
                 static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( i ));
@@ -4437,7 +4437,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
 
     sal_uInt16 nInsertPos;
-    for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         SaveInData* pData =
             static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));

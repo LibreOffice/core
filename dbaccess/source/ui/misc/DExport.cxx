@@ -833,7 +833,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     ::std::vector< OUString> aInsertList;
     aInsertList.resize(aDestColumnNames.getLength()+1);
     sal_Int32 i = 0;
-    for(sal_uInt32 j=0; j < aInsertList.size() ;++i,++j)
+    for(size_t j=0; j < aInsertList.size() ;++i,++j)
     {
         ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
             ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::o3tl::select2nd<ODatabaseExport::TPositions::value_type>()));

@@ -419,7 +419,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
             if(xQuery.is())
             {
-                for(sal_uInt16 n = 0; n < aDocTypeLB->GetEntryCount(); n++)
+                for(sal_Int32 n = 0; n < aDocTypeLB->GetEntryCount(); n++)
                 {
                     sal_IntPtr nData = reinterpret_cast<sal_IntPtr>(aDocTypeLB->GetEntryData(n));
                     OUString sCommand;

@@ -2744,7 +2744,7 @@ namespace pcr
                 {
                     const sal_uInt32* pDeletedKeys = pInfoItem->GetDelArray();
 
-                    for (sal_uInt16 i=0; i< pInfoItem->GetDelCount(); ++i, ++pDeletedKeys)
+                    for (sal_uInt32 i=0; i< pInfoItem->GetDelCount(); ++i, ++pDeletedKeys)
                         pFormatter->DeleteEntry(*pDeletedKeys);
                 }
 

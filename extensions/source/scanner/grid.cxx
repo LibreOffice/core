@@ -525,7 +525,7 @@ void GridWindow::drawNew(vcl::RenderContext& rRenderContext)
 
 void GridWindow::drawHandles(vcl::RenderContext& rRenderContext)
 {
-    for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
+    for(size_t i(0L); i < m_aHandles.size(); i++)
     {
         m_aHandles[i].draw(rRenderContext, m_aMarkerBitmap);
     }
@@ -678,7 +678,7 @@ void GridWindow::ChangeMode(int nType)
 
     if (m_pNewYValues)
     {
-        for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
+        for(size_t i(0); i < m_aHandles.size(); i++)
         {
             // find nearest xvalue
             double x, y;

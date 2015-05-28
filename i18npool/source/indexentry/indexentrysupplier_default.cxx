@@ -271,7 +271,7 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (
     sal_Int16 j=0;
     sal_Unicode start = unicode::getUnicodeScriptStart((UnicodeScript)0);
     sal_Unicode end = unicode::getUnicodeScriptEnd((UnicodeScript)0);
-    for (sal_Int16 i= (scriptList[0] == (UnicodeScript)0) ? 1 : 0; i< scriptList.getLength(); i++) {
+    for (sal_Int32 i= (scriptList[0] == (UnicodeScript)0) ? 1 : 0; i< scriptList.getLength(); i++) {
         if (unicode::getUnicodeScriptStart(scriptList[i]) != end+1) {
             tables[j++].init(start, end, keys, key_count, this);
             start = unicode::getUnicodeScriptStart(scriptList[i]);

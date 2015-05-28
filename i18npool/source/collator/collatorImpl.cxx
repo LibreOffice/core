@@ -74,7 +74,7 @@ sal_Int32 SAL_CALL
 CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collatorOptions) throw(RuntimeException, std::exception)
 {
     const Sequence< Implementation > &imp = mxLocaleData->getCollatorImplementations(rLocale);
-    for (sal_Int16 i = 0; i < imp.getLength(); i++)
+    for (sal_Int32 i = 0; i < imp.getLength(); i++)
         if (imp[i].isDefault)
             return loadCollatorAlgorithm(imp[i].unoID, rLocale, collatorOptions);
 

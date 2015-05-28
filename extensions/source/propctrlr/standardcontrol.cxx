@@ -683,7 +683,7 @@ namespace pcr
 
         if ( pColorList.is() )
         {
-            for (sal_uInt16 i = 0; i < pColorList->Count(); ++i)
+            for (long i = 0; i < pColorList->Count(); ++i)
             {
                 XColorEntry* pEntry = pColorList->GetColor( i );
                 getTypedControlWindow()->InsertEntry( pEntry->GetColor(), pEntry->GetName() );

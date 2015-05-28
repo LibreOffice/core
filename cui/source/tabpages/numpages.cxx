@@ -2670,7 +2670,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
             if (aBlackColor == aBackColor)
                 aBlackColor.Invert();
 
-            for (sal_uInt8 nLevel = 0; nLevel < pActNum->GetLevelCount(); ++nLevel, nYStart = nYStart + nYStep)
+            for (sal_uInt16 nLevel = 0; nLevel < pActNum->GetLevelCount(); ++nLevel, nYStart = nYStart + nYStep)
             {
                 const SvxNumberFormat &rFmt = pActNum->GetLevel(nLevel);
                 aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();

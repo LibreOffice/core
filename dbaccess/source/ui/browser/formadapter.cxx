@@ -1338,7 +1338,7 @@ Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL SbaXFormAdapter::getP
     // set them all to DEFAULT
      Sequence< ::com::sun::star::beans::PropertyState> aReturn(aPropertyName.getLength());
     ::com::sun::star::beans::PropertyState* pStates = aReturn.getArray();
-    for (sal_uInt16 i=0; i<aPropertyName.getLength(); ++i, ++pStates)
+    for (sal_Int32 i=0; i<aPropertyName.getLength(); ++i, ++pStates)
         *pStates = ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
     return aReturn;
 }

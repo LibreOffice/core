@@ -426,7 +426,7 @@ void SaneDlg::InitFields()
                     // workaround: offer at least some more standard dpi resolution between
                     // min and max value
                     int bGot300 = 0;
-                    for ( int nRes = (long) pDouble[0] * 2; nRes < (long) pDouble[1]; nRes = nRes * 2 )
+                    for ( long nRes = (long) pDouble[0] * 2; nRes < (long) pDouble[1]; nRes = nRes * 2 )
                     {
                         if ( !bGot300 && nRes > 300 ) {
                             nRes = 300; bGot300 = 1;

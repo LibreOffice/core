@@ -518,7 +518,7 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, MenuHdl, ToolBox*, void)
 void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
                                             throw( uno::RuntimeException )
 {
-    for(sal_uInt16 i = 0; i < aListenerArr.size(); i++)
+    for(size_t i = 0; i < aListenerArr.size(); i++)
     {
         BibToolBarListenerRef* pListener = &aListenerArr[i];
         (*pListener)->statusChanged(rEvent);

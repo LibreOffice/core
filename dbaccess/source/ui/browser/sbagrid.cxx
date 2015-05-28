@@ -430,7 +430,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     SolarMutexGuard aGuard;
     sal_Int16 nColId = -1;
     const PropertyValue* pArgs = aArgs.getConstArray();
-    for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
+    for (sal_Int32 i=0; i<aArgs.getLength(); ++i, ++pArgs)
     {
         if (pArgs->Name == "ColumnViewPos")
         {

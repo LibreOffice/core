@@ -2047,7 +2047,7 @@ void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, bool _bVis)
 long OSelectionBrowseBox::GetBrowseRow(long nRowId) const
 {
     sal_uInt16 nCount(0);
-    for(sal_uInt16 i = 0 ; i < nRowId ; ++i)
+    for(long i = 0 ; i < nRowId ; ++i)
     {
         if ( m_bVisibleRow[i] )
             ++nCount;

@@ -982,14 +982,14 @@ bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet* )
         std::vector<SvxAutocorrWord> aDeleteWords;
         std::vector<SvxAutocorrWord> aNewWords;
 
-        for (sal_uInt32 i = 0; i < rStringChangeList.aDeletedEntries.size(); i++)
+        for (size_t i = 0; i < rStringChangeList.aDeletedEntries.size(); i++)
         {
             DoubleString& deleteEntry = rStringChangeList.aDeletedEntries[i];
             SvxAutocorrWord aDeleteWord( deleteEntry.sShort, deleteEntry.sLong );
             aDeleteWords.push_back( aDeleteWord );
         }
 
-        for (sal_uInt32 i = 0; i < rStringChangeList.aNewEntries.size(); i++)
+        for (size_t i = 0; i < rStringChangeList.aNewEntries.size(); i++)
         {
             DoubleString& newEntry = rStringChangeList.aNewEntries[i];
 
@@ -1055,7 +1055,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
     if( aDoubleStringTable.find(eLang) != aDoubleStringTable.end() )
     {
         DoubleStringArray& rArray = aDoubleStringTable[eNewLanguage];
-        for( sal_uInt32 i = 0; i < rArray.size(); i++ )
+        for( size_t i = 0; i < rArray.size(); i++ )
         {
             DoubleString& rDouble = rArray[i];
             bool bTextOnly = 0 == rDouble.pUserData;
@@ -1183,7 +1183,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
 void OfaAutocorrReplacePage::NewEntry(const OUString& sShort, const OUString& sLong, bool bKeepSourceFormatting)
 {
     DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
-    for (sal_uInt32 i = 0; i < rNewArray.size(); i++)
+    for (size_t i = 0; i < rNewArray.size(); i++)
     {
         if (rNewArray[i].sShort == sShort)
         {
@@ -1193,7 +1193,7 @@ void OfaAutocorrReplacePage::NewEntry(const OUString& sShort, const OUString& sL
     }
 
     DoubleStringArray& rDeletedArray = aChangesTable[eLang].aDeletedEntries;
-    for (sal_uInt32 i = 0; i < rDeletedArray.size(); i++)
+    for (size_t i = 0; i < rDeletedArray.size(); i++)
     {
         if (rDeletedArray[i].sShort == sShort)
         {
@@ -1213,7 +1213,7 @@ void OfaAutocorrReplacePage::NewEntry(const OUString& sShort, const OUString& sL
 void OfaAutocorrReplacePage::DeleteEntry(const OUString& sShort, const OUString& sLong)
 {
     DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
-    for (sal_uInt32 i = 0; i < rNewArray.size(); i++)
+    for (size_t i = 0; i < rNewArray.size(); i++)
     {
         if (rNewArray[i].sShort == sShort)
         {
@@ -1223,7 +1223,7 @@ void OfaAutocorrReplacePage::DeleteEntry(const OUString& sShort, const OUString&
     }
 
     DoubleStringArray& rDeletedArray = aChangesTable[eLang].aDeletedEntries;
-    for (sal_uInt32 i = 0; i < rDeletedArray.size(); i++)
+    for (size_t i = 0; i < rDeletedArray.size(); i++)
     {
         if (rDeletedArray[i].sShort == sShort)
         {
@@ -1324,7 +1324,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
             bool bFound = false;
             bool bTmpSelEntry=false;
 
-            for(sal_uInt32 i = 0; i < m_pReplaceTLB->GetEntryCount(); i++)
+            for(sal_uLong i = 0; i < m_pReplaceTLB->GetEntryCount(); i++)
             {
                 SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( i );
                 OUString aTestStr = SvTabListBox::GetEntryText(pEntry, 0);

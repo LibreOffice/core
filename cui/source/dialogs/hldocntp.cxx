@@ -136,7 +136,7 @@ void SvxHyperlinkNewDocTp::dispose()
 {
     if (m_pLbDocTypes)
     {
-        for ( sal_uInt16 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
+        for ( sal_Int32 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
             delete static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData ( n ));
         m_pLbDocTypes = NULL;
     }

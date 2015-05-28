@@ -109,9 +109,9 @@ SvxOpenCLTabPage::~SvxOpenCLTabPage()
 
 void SvxOpenCLTabPage::dispose()
 {
-   for ( sal_uInt16 i = 0; i < mpBlackList->GetEntryCount(); ++i )
+   for ( sal_uLong i = 0; i < mpBlackList->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(mpBlackList->GetEntry(i)->GetUserData());
-    for ( sal_uInt16 i = 0; i < mpWhiteList->GetEntryCount(); ++i )
+    for ( sal_uLong i = 0; i < mpWhiteList->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(mpWhiteList->GetEntry(i)->GetUserData());
     mpBlackList.disposeAndClear();
     mpWhiteList.disposeAndClear();
@@ -176,7 +176,7 @@ void fillListBox(SvSimpleTable* pListBox, const OpenCLConfig::ImplMatcherSet& rS
 {
     pListBox->SetUpdateMode(false);
 // kill added UserData to treeitem
-    for ( sal_uInt16 i = 0; i < pListBox->GetEntryCount(); ++i )
+    for ( sal_uLong i = 0; i < pListBox->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(pListBox->GetEntry(i)->GetUserData());
 
     pListBox->Clear();

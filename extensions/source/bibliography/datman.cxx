@@ -354,7 +354,7 @@ MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMa
     aListBoxes[0]->SetSelectHdl(aLnk);
     for(sal_uInt16 i = 1; i < COLUMN_COUNT; i++)
     {
-        for(sal_uInt16 j = 0; j < aListBoxes[0]->GetEntryCount();j++)
+        for(sal_Int32 j = 0; j < aListBoxes[0]->GetEntryCount();j++)
             aListBoxes[i]->InsertEntry(aListBoxes[0]->GetEntry(j));
         aListBoxes[i]->SelectEntryPos(0);
         aListBoxes[i]->SetSelectHdl(aLnk);
@@ -581,7 +581,7 @@ void BibInterceptorHelper::ReleaseInterceptor()
     Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
     Reference< XDispatch >* pReturn = aReturn.getArray();
     const DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-    for ( sal_Int16 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
+    for ( sal_Int32 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
     {
         *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
     }

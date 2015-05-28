@@ -1796,7 +1796,7 @@ bool isNodeActive( OptionsNode* pNode, Module* pModule )
         // search node in active module
         if ( pModule->m_bActive )
         {
-            for ( sal_uInt32 j = 0; j < pModule->m_aNodeList.size(); ++j )
+            for ( size_t j = 0; j < pModule->m_aNodeList.size(); ++j )
                 if ( pModule->m_aNodeList[j]->m_sId == pNode->m_sId )
                     return true;
         }
@@ -1990,7 +1990,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                                 bool bAlreadyOpened = false;
                                 if ( pNode->m_aGroupedLeaves.size() > 0 )
                                 {
-                                    for ( sal_uInt32 k = 0;
+                                    for ( size_t k = 0;
                                           k < pNode->m_aGroupedLeaves.size(); ++k )
                                     {
                                         if ( pNode->m_aGroupedLeaves[k].size() > 0 &&
@@ -2106,7 +2106,7 @@ static void lcl_insertLeaf(
 
 void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
 {
-    for ( sal_uInt32 i = 0; i < rNodeList.size(); ++i )
+    for ( size_t i = 0; i < rNodeList.size(); ++i )
     {
         OptionsNode* pNode = rNodeList[i];
 
@@ -2115,7 +2115,7 @@ void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
             sal_uInt32 j = 0;
             for ( ; j < pNode->m_aGroupedLeaves.size(); ++j )
             {
-                for ( sal_uInt32 k = 0; k < pNode->m_aGroupedLeaves[j].size(); ++k )
+                for ( size_t k = 0; k < pNode->m_aGroupedLeaves[j].size(); ++k )
                 {
                     OptionsLeaf* pLeaf = pNode->m_aGroupedLeaves[j][k];
                     lcl_insertLeaf( this, pNode, pLeaf, *pTreeLB );
