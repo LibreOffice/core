@@ -717,6 +717,17 @@ bool Outliner::SearchAndReplaceOnce()
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( false );
 
+    // notify LibreOfficeKit about changed page
+    if (pViewShell && pViewShell->GetDoc()->isTiledRendering() &&
+            mbStringFound && pViewShell->ISA(DrawViewShell))
+    {
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(pViewShell));
+
+        sal_uInt16 nSelectedPage = pDrawViewShell->GetCurPageId();
+        OString aPayload = OString::number(nSelectedPage);
+        pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+    }
+
     return mbEndOfSearch;
 }
 
