@@ -57,7 +57,7 @@ inline bool IsNastyFollow( const SwTextFrm *pFrm )
 SwTextFrmBreak::SwTextFrmBreak( SwTextFrm *pNewFrm, const SwTwips nRst )
     : nRstHeight(nRst), pFrm(pNewFrm)
 {
-    SWAP_IF_SWAPPED( pFrm )
+    SWAP_IF_SWAPPED(const_cast<SwTextFrm *>(pFrm));
     SWRECTFN( pFrm )
     nOrigin = (pFrm->*fnRect->fnGetPrtTop)();
     bKeep = !pFrm->IsMoveable() || IsNastyFollow( pFrm );
@@ -78,8 +78,6 @@ SwTextFrmBreak::SwTextFrmBreak( SwTextFrm *pNewFrm, const SwTwips nRst )
         if( nRstHeight < 0 )
             nRstHeight = 0;
     }
-
-    UNDO_SWAP( pFrm )
 }
 
 /**
@@ -106,7 +104,7 @@ bool SwTextFrmBreak::IsInside( SwTextMargin &rLine ) const
 {
     bool bFit = false;
 
-    SWAP_IF_SWAPPED( pFrm )
+    SWAP_IF_SWAPPED(const_cast<SwTextFrm *>(pFrm));
     SWRECTFN( pFrm )
     // nOrigin is an absolut value, rLine referes to the swapped situation.
 
@@ -158,14 +156,12 @@ bool SwTextFrmBreak::IsInside( SwTextMargin &rLine ) const
         }
     }
 
-    UNDO_SWAP( pFrm );
-
     return bFit;
 }
 
 bool SwTextFrmBreak::IsBreakNow( SwTextMargin &rLine )
 {
-    SWAP_IF_SWAPPED( pFrm )
+    SWAP_IF_SWAPPED(const_cast<SwTextFrm *>(pFrm));
 
     // bKeep is stronger than IsBreakNow()
     // Is there enough space ?
@@ -198,8 +194,6 @@ bool SwTextFrmBreak::IsBreakNow( SwTextMargin &rLine )
         }
     }
 
-    UNDO_SWAP( pFrm )
-
     return bBreak;
 }
 
@@ -226,7 +220,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrm *pNewFrm, const SwTwips nRst,
     bool bChkKeep   )
     : SwTextFrmBreak( pNewFrm, nRst ), nWidLines( 0 ), nOrphLines( 0 )
 {
-    SWAP_IF_SWAPPED( pFrm )
+    SWAP_IF_SWAPPED(const_cast<SwTextFrm *>(pFrm));
 
     if( bKeep )
     {
@@ -294,8 +288,6 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrm *pNewFrm, const SwTwips nRst,
             nWidLines = 0;
         }
     }
-
-    UNDO_SWAP( pFrm )
 }
 
 /**
@@ -310,7 +302,7 @@ bool WidowsAndOrphans::FindBreak( SwTextFrm *pFrame, SwTextMargin &rLine,
     // Thus, assertion on situation, that these are different to figure out why.
     OSL_ENSURE( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
 
-    SWAP_IF_SWAPPED( pFrm )
+    SWAP_IF_SWAPPED(const_cast<SwTextFrm *>(pFrm));
 
     bool bRet = true;
     sal_uInt16 nOldOrphans = nOrphLines;
@@ -344,8 +336,6 @@ bool WidowsAndOrphans::FindBreak( SwTextFrm *pFrame, SwTextMargin &rLine,
         bRet = bBack;
     }
     nOrphLines = nOldOrphans;
-
-    UNDO_SWAP( pFrm )
 
     return bRet;
 }

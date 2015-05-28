@@ -79,7 +79,7 @@ void ValidateText( SwFrm *pFrm )     // Friend of frame
 void SwTextFrm::ValidateFrm()
 {
     // Validate surroundings to avoid oscillation
-    SWAP_IF_SWAPPED( this )
+    SWAP_IF_SWAPPED( this );
 
     if ( !IsInFly() && !IsInTab() )
     {   // Only validate 'this' when inside a fly, the rest should actually only be
@@ -106,8 +106,6 @@ void SwTextFrm::ValidateFrm()
     const bool bMustFit = pPara->IsPrepMustFit();
     ResetPreps();
     pPara->SetPrepMustFit( bMustFit );
-
-    UNDO_SWAP( this )
 }
 
 // After a RemoveFootnote the BodyFrm and all Frms contained within it, need to be
@@ -134,19 +132,17 @@ void _ValidateBodyFrm( SwFrm *pFrm )
 
 void SwTextFrm::ValidateBodyFrm()
 {
-    SWAP_IF_SWAPPED( this )
+    SWAP_IF_SWAPPED( this );
 
      // See comment in ValidateFrm()
     if ( !IsInFly() && !IsInTab() &&
          !( IsInSct() && FindSctFrm()->Lower()->IsColumnFrm() ) )
         _ValidateBodyFrm( GetUpper() );
-
-    UNDO_SWAP( this )
 }
 
 bool SwTextFrm::_GetDropRect( SwRect &rRect ) const
 {
-    SWAP_IF_NOT_SWAPPED( this )
+    SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(this));
 
     OSL_ENSURE( HasPara(), "SwTextFrm::_GetDropRect: try again next year." );
     SwTextSizeInfo aInf( const_cast<SwTextFrm*>(this) );
@@ -163,11 +159,8 @@ bool SwTextFrm::_GetDropRect( SwRect &rRect ) const
 
         if ( IsVertical() )
             SwitchHorizontalToVertical( rRect );
-        UNDO_SWAP( this )
         return true;
     }
-
-    UNDO_SWAP( this )
 
     return false;
 }
@@ -186,7 +179,7 @@ const SwBodyFrm *SwTextFrm::FindBodyFrm() const
 
 bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
 {
-    SWAP_IF_SWAPPED( this )
+    SWAP_IF_SWAPPED( this );
 
     OSL_ENSURE( HasFollow(), "CalcFollow: missing Follow." );
 
@@ -338,12 +331,9 @@ bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
                               nMyPos - Frm().Right() :
                               Frm().Top() - nMyPos ) )
         {
-            UNDO_SWAP( this )
             return true;
         }
     }
-
-    UNDO_SWAP( this )
 
     return false;
 }
@@ -359,7 +349,7 @@ void SwTextFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
 
     // AdjustFrm is called with a swapped frame during
     // formatting but the frame is not swapped during FormatEmpty
-    SWAP_IF_SWAPPED( this )
+    SWAP_IF_SWAPPED( this );
     SWRECTFN ( this )
 
     // The Frame's size variable is incremented by Grow or decremented by Shrink.
@@ -385,7 +375,6 @@ void SwTextFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
                             Prt().SSize().Width() += nChgHght;
                         else
                             Prt().SSize().Height() += nChgHght;
-                        UNDO_SWAP( this )
                         return;
                     }
                 }
@@ -495,8 +484,6 @@ void SwTextFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
     }
     else
         Shrink( -nChgHght );
-
-    UNDO_SWAP( this )
 }
 
 com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTextFrm::GetTabStopInfo( SwTwips CurrentPos )
@@ -674,7 +661,7 @@ SwContentFrm *SwTextFrm::JoinFrm()
 
 SwContentFrm *SwTextFrm::SplitFrm( const sal_Int32 nTextPos )
 {
-    SWAP_IF_SWAPPED( this )
+    SWAP_IF_SWAPPED( this );
 
     // The Paste sends a Modify() to me
     // I lock myself, so that my data does not disappear
@@ -747,7 +734,6 @@ SwContentFrm *SwTextFrm::SplitFrm( const sal_Int32 nTextPos )
 
     pNew->ManipOfst( nTextPos );
 
-    UNDO_SWAP( this )
     return pNew;
 }
 
@@ -866,59 +852,60 @@ bool SwTextFrm::CalcPreps()
                 }
             }
 
-            SWAP_IF_NOT_SWAPPED( this )
+            {
+                SWAP_IF_NOT_SWAPPED( this );
 
-            SwTextFormatInfo aInf( this );
-            SwTextFormatter aLine( this, &aInf );
+                SwTextFormatInfo aInf( this );
+                SwTextFormatter aLine( this, &aInf );
 
-            WidowsAndOrphans aFrmBreak( this );
-            // Whatever the attributes say: we split the paragraph in
-            // MustFit in any case
-            if( bPrepMustFit )
-            {
-                aFrmBreak.SetKeep( false );
-                aFrmBreak.ClrOrphLines();
-            }
-            // Before calling FormatAdjust, we need to make sure
-            // that the lines protruding at the bottom get indeed
-            // truncated
-            bool bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
-            bRet = true;
-            while( !bBreak && aLine.Next() )
-            {
-                bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
-            }
-            if( bBreak )
-            {
-                // We run into troubles: when TruncLines get called, the
-                // conditions in IsInside change immediately such that
-                // IsBreakNow can return different results.
-                // For this reason, we make it clear to rFrmBreak, that the
-                // end is reached at the location of rLine.
-                // Let's see if it works ...
-                aLine.TruncLines();
-                aFrmBreak.SetRstHeight( aLine );
-                FormatAdjust( aLine, aFrmBreak, aInf.GetText().getLength(), aInf.IsStop() );
-            }
-            else
-            {
-                if( !GetFollow() )
+                WidowsAndOrphans aFrmBreak( this );
+                // Whatever the attributes say: we split the paragraph in
+                // MustFit in any case
+                if( bPrepMustFit )
                 {
-                    FormatAdjust( aLine, aFrmBreak,
-                                  aInf.GetText().getLength(), aInf.IsStop() );
+                    aFrmBreak.SetKeep( false );
+                    aFrmBreak.ClrOrphLines();
                 }
-                else if ( !aFrmBreak.IsKeepAlways() )
+                // Before calling FormatAdjust, we need to make sure
+                // that the lines protruding at the bottom get indeed
+                // truncated
+                bool bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
+                bRet = true;
+                while( !bBreak && aLine.Next() )
                 {
-                    // We delete a line before the Master, because the Follow
-                    // could hand over a line
-                    const SwCharRange aFollowRg( GetFollow()->GetOfst(), 1 );
-                    pPara->GetReformat() += aFollowRg;
-                    // We should continue!
+                    bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
+                }
+                if( bBreak )
+                {
+                    // We run into troubles: when TruncLines get called, the
+                    // conditions in IsInside change immediately such that
+                    // IsBreakNow can return different results.
+                    // For this reason, we make it clear to rFrmBreak, that the
+                    // end is reached at the location of rLine.
+                    // Let's see if it works ...
+                    aLine.TruncLines();
+                    aFrmBreak.SetRstHeight( aLine );
+                    FormatAdjust( aLine, aFrmBreak, aInf.GetText().getLength(), aInf.IsStop() );
+                }
+                else
+                {
+                    if( !GetFollow() )
+                    {
+                        FormatAdjust( aLine, aFrmBreak,
+                                      aInf.GetText().getLength(), aInf.IsStop() );
+                    }
+                    else if ( !aFrmBreak.IsKeepAlways() )
+                    {
+                        // We delete a line before the Master, because the Follow
+                        // could hand over a line
+                        const SwCharRange aFollowRg( GetFollow()->GetOfst(), 1 );
+                        pPara->GetReformat() += aFollowRg;
+                        // We should continue!
                     bRet = false;
+                    }
                 }
             }
 
-            UNDO_SWAP( this )
             // A final check, if FormatAdjust() didn't help we need to
             // truncate
             if( bPrepMustFit )
@@ -961,7 +948,7 @@ void SwTextFrm::FormatAdjust( SwTextFormatter &rLine,
                              const sal_Int32 nStrLen,
                              const bool bDummy )
 {
-    SWAP_IF_NOT_SWAPPED( this )
+    SWAP_IF_NOT_SWAPPED( this );
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
 
@@ -1119,8 +1106,6 @@ void SwTextFrm::FormatAdjust( SwTextFormatter &rLine,
         _AdjustFollow( rLine, nEnd, nStrLen, nNew );
 
     pPara->SetPrepMustFit( false );
-
-    UNDO_SWAP( this )
 }
 
 // bPrev is set whether Reformat.Start() was called because of Prev().

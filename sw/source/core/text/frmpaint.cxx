@@ -300,7 +300,7 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
             return;
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
-        SWAP_IF_NOT_SWAPPED( this )
+        SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(this));
         SwRect rOldRect( rRect );
 
         if ( IsVertical() )
@@ -337,7 +337,6 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
                 if( !aLine.Next() )
                 {
                     (SwRect&)rRect = rOldRect;
-                    UNDO_SWAP( this )
                     return;
                 }
             }
@@ -399,7 +398,6 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
         }
 
         (SwRect&)rRect = rOldRect;
-        UNDO_SWAP( this )
     }
 }
 
@@ -648,60 +646,61 @@ void SwTextFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
         SwRect aOldRect( rRect );
 
-        SWAP_IF_NOT_SWAPPED( this )
-
-        if ( IsVertical() )
-            SwitchVerticalToHorizontal( (SwRect&)rRect );
-
-        if ( IsRightToLeft() )
-            SwitchRTLtoLTR( (SwRect&)rRect );
-
-        SwTextPaintInfo aInf( const_cast<SwTextFrm*>(this), rRect );
-        aInf.SetWrongList( const_cast<SwTextNode*>(GetTextNode())->GetWrong() );
-        aInf.SetGrammarCheckList( const_cast<SwTextNode*>(GetTextNode())->GetGrammarCheck() );
-        aInf.SetSmartTags( const_cast<SwTextNode*>(GetTextNode())->GetSmartTags() );
-        aInf.GetTextFly().SetTopRule();
-
-        SwTextPainter  aLine( const_cast<SwTextFrm*>(this), &aInf );
-        // Optimization: if no free flying Frm overlaps into our line, the
-        // SwTextFly just switches off
-        aInf.GetTextFly().Relax();
-
-        OutputDevice* pOut = aInf.GetOut();
-        const bool bOnWin = pSh->GetWin() != 0;
-
-        SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : 0 );
-
-        // Output loop: For each Line ... (which is still visible) ...
-        //   adapt rRect (Top + 1, Bottom - 1)
-        // Because the Iterator attaches the Lines without a gap to each other
-        aLine.TwipsToLine( rRect.Top() + 1 );
-        long nBottom = rRect.Bottom();
-
-        bool bNoPrtLine = 0 == GetMinPrtLine();
-        if( !bNoPrtLine )
         {
-            while ( aLine.Y() < GetMinPrtLine() && aLine.Next() )
-                ;
-            bNoPrtLine = aLine.Y() >= GetMinPrtLine();
-        }
-        if( bNoPrtLine )
-        {
-            do
+            SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(this));
+
+            if ( IsVertical() )
+                SwitchVerticalToHorizontal( (SwRect&)rRect );
+
+            if ( IsRightToLeft() )
+                SwitchRTLtoLTR( (SwRect&)rRect );
+
+            SwTextPaintInfo aInf( const_cast<SwTextFrm*>(this), rRect );
+            aInf.SetWrongList( const_cast<SwTextNode*>(GetTextNode())->GetWrong() );
+            aInf.SetGrammarCheckList( const_cast<SwTextNode*>(GetTextNode())->GetGrammarCheck() );
+            aInf.SetSmartTags( const_cast<SwTextNode*>(GetTextNode())->GetSmartTags() );
+            aInf.GetTextFly().SetTopRule();
+
+            SwTextPainter  aLine( const_cast<SwTextFrm*>(this), &aInf );
+            // Optimization: if no free flying Frm overlaps into our line, the
+            // SwTextFly just switches off
+            aInf.GetTextFly().Relax();
+
+            OutputDevice* pOut = aInf.GetOut();
+            const bool bOnWin = pSh->GetWin() != 0;
+
+            SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : 0 );
+
+            // Output loop: For each Line ... (which is still visible) ...
+            //   adapt rRect (Top + 1, Bottom - 1)
+            // Because the Iterator attaches the Lines without a gap to each other
+            aLine.TwipsToLine( rRect.Top() + 1 );
+            long nBottom = rRect.Bottom();
+
+            bool bNoPrtLine = 0 == GetMinPrtLine();
+            if( !bNoPrtLine )
             {
-                aLine.DrawTextLine( rRect, aClip, IsUndersized() );
+                while ( aLine.Y() < GetMinPrtLine() && aLine.Next() )
+                    ;
+                bNoPrtLine = aLine.Y() >= GetMinPrtLine();
+            }
+            if( bNoPrtLine )
+            {
+                do
+                {
+                    aLine.DrawTextLine( rRect, aClip, IsUndersized() );
 
-            } while( aLine.Next() && aLine.Y() <= nBottom );
+                } while( aLine.Next() && aLine.Y() <= nBottom );
+            }
+
+            // Once is enough:
+            if( aLine.IsPaintDrop() )
+                aLine.PaintDropPortion();
+
+            if( rRepaint.HasArea() )
+                rRepaint.Clear();
         }
 
-        // Once is enough:
-        if( aLine.IsPaintDrop() )
-            aLine.PaintDropPortion();
-
-        if( rRepaint.HasArea() )
-            rRepaint.Clear();
-
-        UNDO_SWAP( this )
         (SwRect&)rRect = aOldRect;
 
         OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );

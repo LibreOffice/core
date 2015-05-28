@@ -268,18 +268,19 @@ SwTwips SwTextFrm::GetFootnoteLine( const SwTextFootnote *pFootnote ) const
                IsVertical() ? Frm().Left() : Frm().Bottom();
     }
 
-    SWAP_IF_NOT_SWAPPED( this )
+    SwTwips nRet;
+    {
+        SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(this));
 
-    SwTextInfo aInf( pThis );
-    SwTextIter aLine( pThis, &aInf );
-    const sal_Int32 nPos = pFootnote->GetStart();
-    aLine.CharToLine( nPos );
+        SwTextInfo aInf( pThis );
+        SwTextIter aLine( pThis, &aInf );
+        const sal_Int32 nPos = pFootnote->GetStart();
+        aLine.CharToLine( nPos );
 
-    SwTwips nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
-    if( IsVertical() )
-        nRet = SwitchHorizontalToVertical( nRet );
-
-    UNDO_SWAP( this )
+        nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
+        if( IsVertical() )
+            nRet = SwitchHorizontalToVertical( nRet );
+    }
 
     nRet = lcl_GetFootnoteLower( pThis, nRet );
 
@@ -302,7 +303,7 @@ SwTwips SwTextFrm::_GetFootnoteFrmHeight() const
                                         GetFootnote().IsEndNote() ) )
         return 0;
 
-    SWAP_IF_SWAPPED( this )
+    SWAP_IF_SWAPPED(const_cast<SwTextFrm *>(this));
 
     SwTwips nHeight = pRef->IsInFootnoteConnect() ?
                             1 : pRef->GetFootnoteLine( pFootnoteFrm->GetAttr() );
@@ -358,8 +359,6 @@ SwTwips SwTextFrm::_GetFootnoteFrmHeight() const
                 nHeight = 0;
         }
     }
-
-    UNDO_SWAP( this )
 
     return nHeight;
 }
@@ -805,7 +804,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     if( rInf.IsTest() )
         return new SwFootnotePortion( rFootnote.GetViewNumStr( *pDoc ), pFootnote );
 
-    SWAP_IF_SWAPPED( pFrm )
+    SWAP_IF_SWAPPED(const_cast<SwTextFrm *>(pFrm));
 
     sal_uInt16 nReal;
     {
@@ -866,7 +865,6 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
                 if( !pFootnoteCont )
                 {
                     rInf.SetStop( true );
-                    UNDO_SWAP( pFrm )
                     return 0;
                 }
                 else
@@ -883,7 +881,6 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
                             if( pTmpFrm && *pTmpFrm < pFootnote )
                             {
                                 rInf.SetStop( true );
-                                UNDO_SWAP( pFrm )
                                 return 0;
                             }
                         }
@@ -910,7 +907,6 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
                                 // We're in the last Line and the Footnote has moved
                                 // to another Page. We also want to be on that Page!
                                 rInf.SetStop( true );
-                                UNDO_SWAP( pFrm )
                                 return 0;
                             }
                         }
@@ -923,8 +919,6 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     SwFootnotePortion *pRet = new SwFootnotePortion( rFootnote.GetViewNumStr( *pDoc ),
                                            pFootnote, nReal );
     rInf.SetFootnoteInside( true );
-
-    UNDO_SWAP( pFrm )
 
     return pRet;
  }
@@ -1109,11 +1103,12 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 
     Right( Right() - nQuoWidth );
 
-    SWAP_IF_NOT_SWAPPED( pFrm )
+    sal_Int32 nRet;
+    {
+        SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(pFrm));
 
-    const sal_Int32 nRet = FormatLine( nStart );
-
-    UNDO_SWAP( pFrm )
+        nRet = FormatLine( nStart );
+    }
 
     Right( rInf.Left() + nOldRealWidth - 1 );
 

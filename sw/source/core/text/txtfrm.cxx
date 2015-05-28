@@ -271,24 +271,20 @@ SwFrmSwapper::~SwFrmSwapper()
 
 void SwTextFrm::SwitchLTRtoRTL( SwRect& rRect ) const
 {
-    SWAP_IF_NOT_SWAPPED( this )
+    SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(this));
 
     long nWidth = rRect.Width();
     rRect.Left( 2 * ( Frm().Left() + Prt().Left() ) +
                 Prt().Width() - rRect.Right() - 1 );
 
     rRect.Width( nWidth );
-
-    UNDO_SWAP( this )
 }
 
 void SwTextFrm::SwitchLTRtoRTL( Point& rPoint ) const
 {
-    SWAP_IF_NOT_SWAPPED( this )
+    SWAP_IF_NOT_SWAPPED(const_cast<SwTextFrm *>(this));
 
     rPoint.X() = 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rPoint.X() - 1;
-
-    UNDO_SWAP( this )
 }
 
 SwLayoutModeModifier::SwLayoutModeModifier( const OutputDevice& rOutp ) :
@@ -1382,7 +1378,7 @@ void SwTextFrm::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
     sal_uInt16 nHave = nNeed;
 
     // We yield a few lines and shrink in CalcPreps()
-    SWAP_IF_NOT_SWAPPED( this )
+    SWAP_IF_NOT_SWAPPED( this );
 
     SwTextSizeInfo aInf( this );
     SwTextMargin aLine( this, &aInf );
@@ -1420,8 +1416,6 @@ void SwTextFrm::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
         _InvalidateSize();
         InvalidatePage();
     }
-
-    UNDO_SWAP( this )
 }
 
 static bool lcl_ErgoVadis( SwTextFrm* pFrm, sal_Int32 &rPos, const PrepareHint ePrep )
@@ -2004,8 +1998,6 @@ bool SwTextFrm::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
         } while ( aLine.Next() );
     }
 
-    UNDO_SWAP( this )
-
     return bRet;
 }
 
@@ -2052,7 +2044,7 @@ sal_uInt16 SwTextFrm::GetParHeight() const
  */
 SwTextFrm* SwTextFrm::GetFormatted( bool bForceQuickFormat )
 {
-    SWAP_IF_SWAPPED( this )
+    SWAP_IF_SWAPPED( this );
 
     // The IdleCollector could've removed my cached information
     // Calc() calls our format
@@ -2070,8 +2062,6 @@ SwTextFrm* SwTextFrm::GetFormatted( bool bForceQuickFormat )
         if( bFormat && !FormatQuick( bForceQuickFormat ) )
             Format();
     }
-
-    UNDO_SWAP( this )
 
     return this;
 }

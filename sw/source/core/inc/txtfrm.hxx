@@ -779,25 +779,42 @@ inline void SwTextFrm::ResetBlinkPor() const
     const_cast<SwTextFrm*>(this)->bBlinkPor = false;
 }
 
-#define SWAP_IF_SWAPPED( pFrm )\
-    bool bUndoSwap = false;   \
-    if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
-    {                                 \
-        bUndoSwap = true;         \
-        const_cast<SwTextFrm*>(pFrm)->SwapWidthAndHeight();         \
+class TemporarySwap {
+protected:
+    explicit TemporarySwap(SwTextFrm * frame, bool swap):
+        frame_(frame), undo_(false)
+    {
+        if (frame_->IsVertical() && swap) {
+            undo_ = true;
+            frame_->SwapWidthAndHeight();
+        }
     }
 
-#define SWAP_IF_NOT_SWAPPED( pFrm )\
-    bool bUndoSwap = false;     \
-    if ( pFrm->IsVertical() && ! pFrm->IsSwapped() )\
-    {                                   \
-        bUndoSwap = true;           \
-        const_cast<SwTextFrm*>(pFrm)->SwapWidthAndHeight();         \
+    ~TemporarySwap() {
+        if (undo_) {
+            frame_->SwapWidthAndHeight();
+        }
     }
 
-#define UNDO_SWAP( pFrm )\
-    if ( bUndoSwap )\
-        const_cast<SwTextFrm*>(pFrm)->SwapWidthAndHeight();
+private:
+    TemporarySwap(TemporarySwap &) = delete;
+    void operator =(TemporarySwap &) = delete;
+
+    SwTextFrm * frame_;
+    bool undo_;
+};
+
+class SWAP_IF_SWAPPED: private TemporarySwap {
+public:
+    explicit SWAP_IF_SWAPPED(SwTextFrm * frame):
+        TemporarySwap(frame, frame->IsSwapped()) {}
+};
+
+class SWAP_IF_NOT_SWAPPED: private TemporarySwap {
+public:
+    explicit SWAP_IF_NOT_SWAPPED(SwTextFrm * frame):
+        TemporarySwap(frame, !frame->IsSwapped()) {}
+};
 
 /**
  * Helper class which can be used instead of the macros if a function
