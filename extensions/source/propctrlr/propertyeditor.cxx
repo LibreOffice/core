@@ -166,7 +166,8 @@ namespace pcr
 
     void OPropertyEditor::GetFocus()
     {
-        m_aTabControl->GrabFocus();
+        if ( m_aTabControl )
+            m_aTabControl->GrabFocus();
     }
 
 
