@@ -172,7 +172,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
         }
     } else if (nOpCode >= SC_OPCODE_START_2_PAR &&
                nOpCode < SC_OPCODE_STOP_2_PAR) {
-        sal_uInt8 nParams = pToken->GetByte();
+        sal_uInt8 nParams = pToken->GetParamCount();
 
         assert(nParams <= rStack.size());
 
