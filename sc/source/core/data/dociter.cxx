@@ -819,7 +819,6 @@ sc::FormulaGroupEntry* ScFormulaGroupIterator::next()
             {
                 mnCol = 0;
                 mnTab++;
-                int test =  mpDoc->GetTableCount();
                 if (mnTab >= mpDoc->GetTableCount())
                     return NULL;
             }
