@@ -53,6 +53,8 @@
 #define MID_SEARCH_INSERTEDCHARS        17
 #define MID_SEARCH_TRANSLITERATEFLAGS   18
 #define MID_SEARCH_COMMAND              19
+#define MID_SEARCH_STARTPOINTX          20
+#define MID_SEARCH_STARTPOINTY          21
 
 #endif
 

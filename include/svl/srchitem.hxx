@@ -84,6 +84,10 @@ class SVL_DLLPUBLIC SvxSearchItem :
     bool            bContent;           // search in content
     bool            bAsianOptions;      // use asian options?
 
+    // Start search at this point (absolute twips).
+    sal_Int32       m_nStartPointX;
+    sal_Int32       m_nStartPointY;
+
     virtual void    ImplCommit() SAL_OVERRIDE;
 
 public:
@@ -184,6 +188,11 @@ public:
 
     inline  bool            IsUseAsianOptions() const           { return bAsianOptions; }
     inline  void            SetUseAsianOptions( bool bVal ) { bAsianOptions = bVal; }
+
+    sal_Int32 GetStartPointX() const;
+    sal_Int32 GetStartPointY() const;
+    /// Either x or y start point is set.
+    bool HasStartPoint() const;
 };
 
 const OUString SvxSearchItem::GetSearchString() const
