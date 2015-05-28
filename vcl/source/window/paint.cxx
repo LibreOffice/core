@@ -217,6 +217,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         {
             // double-buffering
             SetupBuffer();
+            m_pWindow->ApplySettings(*m_pBuffer.get());
 
             // temporarily decrease the mnOutOffX/Y of the buffer for the
             // subwidgets (because the m_pBuffer is our base here)
@@ -237,6 +238,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         else
         {
             // direct painting
+            m_pWindow->ApplySettings(*m_pWindow);
             m_pWindow->PushPaintHelper(this, *m_pWindow);
             m_pWindow->Paint(*m_pWindow, m_aPaintRect);
         }
@@ -505,11 +507,6 @@ namespace vcl {
 
 void Window::ImplCallPaint(const VclPtr<VirtualDevice>& rBuffer, const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
 {
-    if (rBuffer)
-        ApplySettings(*rBuffer.get());
-    else
-        ApplySettings(*this);
-
     // call PrePaint. PrePaint may add to the invalidate region as well as
     // other parameters used below.
     PrePaint(*this);
