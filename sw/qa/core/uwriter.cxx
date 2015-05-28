@@ -1574,7 +1574,7 @@ void SwDocTest::test64kPageDescs()
 
     for (size_t i = 0; i < nPageDescCount; ++i)
     {
-        OUString aName = OUString("Page") + OUString::number(i);
+        OUString aName = "Page" + OUString::number(i);
         m_pDoc->MakePageDesc( aName );
     }
 
