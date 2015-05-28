@@ -1827,6 +1827,8 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
     if (bLayout)
         mpLayoutData->m_aVisibleItemBoundRects.clear();
 
+    rRenderContext.SetTextColor(rSettings.GetMenuTextColor());
+
     // Paint title
     if (!pThisItemOnly && !IsMenuBar() && nTitleHeight > 0)
         ImplPaintMenuTitle(rRenderContext, Rectangle(aTopLeft, aOutSz));
