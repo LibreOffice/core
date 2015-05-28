@@ -439,6 +439,9 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 {
     bool bEndOfSearch = true;
 
+    // clear the search toolbar entry
+    SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
+
     mpDrawDocument->GetDocSh()->SetWaitCursor( true );
     if (mbPrepareSpellingPending)
         PrepareSpelling();
@@ -718,8 +721,7 @@ bool Outliner::SearchAndReplaceOnce()
     mpDrawDocument->GetDocSh()->SetWaitCursor( false );
 
     // notify LibreOfficeKit about changed page
-    if (pViewShell && pViewShell->GetDoc()->isTiledRendering() &&
-            mbStringFound && pViewShell->ISA(DrawViewShell))
+    if (pViewShell && pViewShell->GetDoc()->isTiledRendering() && mbStringFound)
     {
         OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
         pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
@@ -1040,86 +1042,73 @@ void Outliner::EndOfSearch()
 
 void Outliner::ShowEndOfSearchDialog()
 {
-    OUString aString;
+    mbWholeDocumentProcessed = true;
+
     if (meMode == SEARCH)
     {
-        if (mbStringFound)
-            aString = SD_RESSTR(STR_END_SEARCHING);
-        else
+        if (!mbStringFound)
         {
-            aString = SD_RESSTR(STR_STRING_NOTFOUND);
+            SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
             mpDrawDocument->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
-                                          mpSearchItem->GetSearchString().toUtf8().getStr());
-
+                    mpSearchItem->GetSearchString().toUtf8().getStr());
         }
+
+        // don't do anything else for search
+        return;
     }
+
+    OUString aString;
+    if (mpView->AreObjectsMarked())
+        aString = SD_RESSTR(STR_END_SPELLING_OBJ);
     else
-    {
-        if (mpView->AreObjectsMarked())
-            aString = SD_RESSTR(STR_END_SPELLING_OBJ);
-        else
-            aString = SD_RESSTR(STR_END_SPELLING);
-    }
+        aString = SD_RESSTR(STR_END_SPELLING);
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
     ScopedVclPtrInstance< MessageDialog > aInfoBox(nullptr, aString, VCL_MESSAGE_INFO);
-
     ShowModalMessageBox (*aInfoBox.get());
-
-    mbWholeDocumentProcessed = true;
 }
 
 bool Outliner::ShowWrapArroundDialog()
 {
-    bool bDoWrapArround = false;
-
     // Determine whether to show the dialog.
-    bool bShowDialog = false;
-    if (mpSearchItem != NULL)
+    if (mpSearchItem)
     {
         // When searching display the dialog only for single find&replace.
-        const SvxSearchCmd nCommand (mpSearchItem->GetCommand());
-        bShowDialog = (nCommand==SvxSearchCmd::REPLACE)
-            || (nCommand==SvxSearchCmd::FIND);
-    }
-    else
-        // Spell checking needs the dialog, too.
-        bShowDialog = (meMode == SPELL);
+        const SvxSearchCmd nCommand(mpSearchItem->GetCommand());
+        if (nCommand == SvxSearchCmd::REPLACE || nCommand == SvxSearchCmd::FIND)
+        {
+            if (mbDirectionIsForward)
+                SvxSearchDialogWrapper::SetSearchLabel(SL_End);
+            else
+                SvxSearchDialogWrapper::SetSearchLabel(SL_Start);
 
-    boost::shared_ptr<ViewShell> pViewShell(mpWeakViewShell.lock());
-    if (pViewShell && pViewShell->GetDoc()->isTiledRendering())
-    {
-        // Wrap around without asking anything.
-        bShowDialog = false;
-        bDoWrapArround = true;
-    }
-
-    if (bShowDialog)
-    {
-        // The question text depends on the search direction.
-        bool bImpress = mpDrawDocument!=NULL
-            && mpDrawDocument->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
-        sal_uInt16 nStringId;
-        if (mbDirectionIsForward)
-            nStringId = bImpress
-                ? STR_SAR_WRAP_FORWARD
-                : STR_SAR_WRAP_FORWARD_DRAW;
+            return true;
+        }
         else
-            nStringId = bImpress
-                ? STR_SAR_WRAP_BACKWARD
-                : STR_SAR_WRAP_BACKWARD_DRAW;
-
-        // Pop up question box that asks the user whether to wrap around.
-        // The dialog is made modal with respect to the whole application.
-        ScopedVclPtrInstance<QueryBox> aQuestionBox (
-            nullptr, WB_YES_NO | WB_DEF_YES, SD_RESSTR(nStringId));
-        aQuestionBox->SetImage (QueryBox::GetStandardImage());
-        sal_uInt16 nBoxResult = ShowModalMessageBox(*aQuestionBox.get());
-        bDoWrapArround = (nBoxResult == RET_YES);
+            return false;
     }
 
-    return bDoWrapArround;
+    // show dialog only for spelling
+    if (meMode != SPELL)
+        return false;
+
+    // The question text depends on the search direction.
+    bool bImpress = mpDrawDocument && mpDrawDocument->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+
+    sal_uInt16 nStringId;
+    if (mbDirectionIsForward)
+        nStringId = bImpress ? STR_SAR_WRAP_FORWARD : STR_SAR_WRAP_FORWARD_DRAW;
+    else
+        nStringId = bImpress ? STR_SAR_WRAP_BACKWARD : STR_SAR_WRAP_BACKWARD_DRAW;
+
+    // Pop up question box that asks the user whether to wrap around.
+    // The dialog is made modal with respect to the whole application.
+    ScopedVclPtrInstance<QueryBox> aQuestionBox(nullptr, WB_YES_NO | WB_DEF_YES, SD_RESSTR(nStringId));
+    aQuestionBox->SetImage(QueryBox::GetStandardImage());
+    sal_uInt16 nBoxResult = ShowModalMessageBox(*aQuestionBox.get());
+
+    return (nBoxResult == RET_YES);
 }
 
 bool Outliner::IsValidTextObject (const ::sd::outliner::IteratorPosition& rPosition)
@@ -1375,16 +1364,15 @@ bool Outliner::HandleFailedSearch()
         // that there is no match.
         if (HasNoPreviousMatch ())
         {
-            // No match found in the whole presentation.  Tell the user.
-            ScopedVclPtrInstance< InfoBox > aInfoBox(nullptr, SD_RESSTR(STR_SAR_NOT_FOUND));
-            ShowModalMessageBox (*aInfoBox.get());
+            // No match found in the whole presentation.
+            SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
         }
 
         else
         {
             // No further matches found.  Ask the user whether to wrap
             // around and start again.
-            bContinueSearch = ShowWrapArroundDialog ();
+            bContinueSearch = ShowWrapArroundDialog();
         }
     }
 
