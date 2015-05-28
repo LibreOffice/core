@@ -89,6 +89,8 @@
         INT32       InsertedChars   MID_SEARCH_INSERTEDCHARS;
         INT32       TransliterateFlags MID_SEARCH_TRANSLITERATEFLAGS;
         INT16       Command         MID_SEARCH_COMMAND;
+        INT32       SearchStartPointX MID_SEARCH_STARTPOINTX;
+        INT32       SearchStartPointY MID_SEARCH_STARTPOINTY;
     };
     item SvxSearch SvxSearchItem;
 

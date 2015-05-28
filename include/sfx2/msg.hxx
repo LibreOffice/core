@@ -155,7 +155,7 @@ SFX_DECL_TYPE(13); // for SwAddPrinterItem, Sd...
 SFX_DECL_TYPE(14);
 SFX_DECL_TYPE(16); // for SwDocDisplayItem
 SFX_DECL_TYPE(17); // for SvxAddressItem
-SFX_DECL_TYPE(18); // for SvxSearchItem
+SFX_DECL_TYPE(20); // for SvxSearchItem
 
 // all SfxTypes must be in this header
 #undef SFX_DECL_TYPE

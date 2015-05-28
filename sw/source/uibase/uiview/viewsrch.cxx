@@ -476,6 +476,16 @@ bool SwView::SearchAndWrap(bool bApi)
     // selected regions as the cursor doesn't mark the selection in that case.)
     m_pWrtShell->GetCrsr()->Normalize( m_pSrchItem->GetBackward() );
 
+    if (!m_pWrtShell->HasSelection() && (m_pSrchItem->HasStartPoint()))
+    {
+        // No selection -> but we have a start point (top left corner of the
+        // current view), start searching from there, not from the current
+        // cursor position.
+        SwEditShell& rShell = GetWrtShell();
+        Point aPosition(m_pSrchItem->GetStartPointX(), m_pSrchItem->GetStartPointY());
+        rShell.SetCrsr(aPosition);
+    }
+
         // If you want to search in selected areas, they must not be unselected.
     if (!m_pSrchItem->GetSelection())
         m_pWrtShell->KillSelection(0, false);
