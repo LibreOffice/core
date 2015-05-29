@@ -1229,7 +1229,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                 Sequence < sal_Int8 > aSequence ( nPathLength );
                 sal_Int8 *pArray = aSequence.getArray();
                 const sal_Unicode *pChar = sTempString.getStr();
-                for ( sal_Int16 i = 0; i < nPathLength; i++ )
+                for ( sal_Int32 i = 0; i < nPathLength; i++ )
                     pArray[i] = static_cast < const sal_Int8 > ( pChar[i] );
                 aNewKey = aSequence;
             }

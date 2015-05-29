@@ -417,7 +417,7 @@ OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno
 
     aStack.push_back( ManifestScopeEntry( aConvertedName, aNamespaces ) );
 
-    for ( sal_uInt16 nInd = 0; nInd < aAttribsStrs.size(); nInd++ )
+    for ( size_t nInd = 0; nInd < aAttribsStrs.size(); nInd++ )
     {
         // convert the attribute names on filling
         o_aConvertedAttribs[ConvertName( aAttribsStrs[nInd].first )] = aAttribsStrs[nInd].second;

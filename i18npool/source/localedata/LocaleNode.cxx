@@ -660,7 +660,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     NameSet  aDefaultsSet;
     bool bCtypeIsRef = false;
 
-    for (sal_Int16 i = 0; i< getNumberOfChildren() ; i++, formatCount++)
+    for (sal_Int32 i = 0; i< getNumberOfChildren() ; i++, formatCount++)
     {
         LocaleNode * currNode = getChildAt (i);
         if ( currNode->getName() == "DateAcceptancePattern" )

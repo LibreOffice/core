@@ -2601,7 +2601,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
         }
     }
     mnCursorPos += nLen;
-    for( sal_uInt16 n = 0UL; n < nLen; n++  )
+    for( sal_uLong n = 0; n < nLen; n++  )
     {
         if ( n == nLen - nCount )
         {
