@@ -845,6 +845,7 @@ void SwContentTree::dispose()
     Clear(); // If applicable erase content types previously.
     bIsInDrag = false;
     aUpdTimer.Stop();
+    SetActiveShell(0);
     SvTreeListBox::dispose();
 }
 
