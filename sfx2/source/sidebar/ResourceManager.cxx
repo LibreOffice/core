@@ -376,7 +376,7 @@ void ResourceManager::ReadContextList (
             }
             else
             {
-                OSL_FAIL("application name not recognized");
+                SAL_WARN("sfx2.sidebar", "application name " << sApplicationName << " not recognized");
                 continue;
             }
         }
