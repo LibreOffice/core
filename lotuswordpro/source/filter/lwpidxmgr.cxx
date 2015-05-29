@@ -288,14 +288,14 @@ void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
         akey->id.Read(pObjStrm);
         m_ObjectKeys.push_back(akey);
 
-        for (sal_uInt8 k = 1; k < KeyCount; k++)
+        for (sal_uInt16 k = 1; k < KeyCount; k++)
         {
             akey = new LwpKey();
             akey->id.ReadCompressed(pObjStrm, m_ObjectKeys.at(m_nKeyCount+k-1)->id);
             m_ObjectKeys.push_back(akey);
         }
 
-        for (sal_uInt8 j = 0; j < KeyCount; j++)
+        for (sal_uInt16 j = 0; j < KeyCount; j++)
             m_ObjectKeys.at(m_nKeyCount+j)->offset = pObjStrm->QuickReaduInt32();
     }
     m_nKeyCount += KeyCount;

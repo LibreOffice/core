@@ -222,7 +222,7 @@ TransliterationImpl::loadModuleNew( const Sequence < TransliterationModulesNew >
     sal_Int32 mask = 0, count = modType.getLength();
     if (count > maxCascade)
         throw ERROR; // could not handle more than maxCascade
-    for (sal_Int16 i = 0; i < count; i++) {
+    for (sal_Int32 i = 0; i < count; i++) {
         for (sal_Int16 j = 0; TMlist[j].tmn; j++) {
             if (TMlist[j].tmn == modType[i]) {
                 if (mask == 0)

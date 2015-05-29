@@ -669,7 +669,7 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
             case REF_MONTHS:
             case REF_GMONTHS:
             case REF_PMONTHS:
-                for (sal_Int16 j = 0; j < nSize; ++j, ++pItem)
+                for (sal_Int32 j = 0; j < nSize; ++j, ++pItem)
                 {
                     CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
                             allCalendars[rnOffset+2], allCalendars[rnOffset+3]);
@@ -679,7 +679,7 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
                 break;
             case REF_ERAS:
                 // Absent narrow name.
-                for (sal_Int16 j = 0; j < nSize; ++j, ++pItem)
+                for (sal_Int32 j = 0; j < nSize; ++j, ++pItem)
                 {
                     CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
                             allCalendars[rnOffset+2], OUString());

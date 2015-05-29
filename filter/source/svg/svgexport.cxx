@@ -1125,7 +1125,7 @@ bool SVGFilter::implGenerateMetaData()
                 }
             }
             // text fields are used only for generating meta info so we don't need them anymore
-            for( sal_uInt32 i = 0; i < aFieldSet.size(); ++i )
+            for( size_t i = 0; i < aFieldSet.size(); ++i )
             {
                 if( aFieldSet[i] != NULL )
                 {

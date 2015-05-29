@@ -1630,7 +1630,7 @@ ImplErrorDialog::~ImplErrorDialog()
 void ImplErrorDialog::dispose()
 {
     // free strings again
-    for( sal_uInt16 n = 0; n < m_pErrors->GetEntryCount(); n++ )
+    for( sal_Int32 n = 0; n < m_pErrors->GetEntryCount(); n++ )
         delete static_cast<OUString*>(m_pErrors->GetEntryData( n ));
     m_pErrors.clear();
     m_pExplanation.clear();

@@ -103,7 +103,7 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
     if (qt1BitWidth < qt2BitWidth) {
         report(
             DiagnosticsEngine::Warning,
-            "loop index type is smaller than length type. " + qt.getAsString() + " < " + qt2.getAsString(),
+            "loop index type is narrower than length type. " + qt.getAsString() + " < " + qt2.getAsString(),
             stmt->getInit()->getLocStart())
           << stmt->getInit()->getSourceRange();
         //stmt->getCond()->dump();
