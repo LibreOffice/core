@@ -100,7 +100,7 @@ ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 
     if( pImageMaps )
     {
-        for( sal_uInt16 i=0; i<pImageMaps->size(); i++ )
+        for( size_t i=0; i<pImageMaps->size(); i++ )
         {
             ImageMap *pIMap = &(*pImageMaps)[i];
             if( rName.equalsIgnoreAsciiCase( pIMap->GetName() ) )
@@ -1354,7 +1354,7 @@ void SwHTMLParser::StripTrailingPara()
 
             const SwFrameFormats& rFrameFormatTable = *pDoc->GetSpzFrameFormats();
 
-            for( sal_uInt16 i=0; i<rFrameFormatTable.size(); i++ )
+            for( size_t i=0; i<rFrameFormatTable.size(); i++ )
             {
                 SwFrameFormat const*const pFormat = rFrameFormatTable[i];
                 SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();

@@ -380,7 +380,7 @@ void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
 void SwHTMLParser::ClearContext( _HTMLAttrContext *pContext )
 {
     _HTMLAttrs &rAttrs = pContext->GetAttrs();
-    for( sal_uInt16 i=0; i<rAttrs.size(); i++ )
+    for( size_t i=0; i<rAttrs.size(); i++ )
     {
         // einfaches Loeschen reicht hier nicht, weil das
         // Attribut auch aus seiner Liste ausgetragen werden

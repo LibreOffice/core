@@ -330,7 +330,7 @@ void SwHTMLWriter::OutFootEndNotes()
 #endif
     nFootNote = 0, nEndNote = 0;
 
-    for( sal_uInt16 i=0; i<pFootEndNotes->size(); i++ )
+    for( size_t i=0; i<pFootEndNotes->size(); i++ )
     {
         SwTextFootnote *pTextFootnote = (*pFootEndNotes)[i];
         pFormatFootnote = &pTextFootnote->GetFootnote();

@@ -166,7 +166,7 @@ bool SwSortElement::operator==(const SwSortElement& ) const
 bool SwSortElement::operator<(const SwSortElement& rCmp) const
 {
     // The actual comparison
-    for(sal_uInt16 nKey = 0; nKey < pOptions->aKeys.size(); ++nKey)
+    for(size_t nKey = 0; nKey < pOptions->aKeys.size(); ++nKey)
     {
         int nCmp = keycompare(rCmp, nKey);
 

@@ -1818,7 +1818,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTextNode* pNd,
         // find the page numbers in aNumStr and set the character style
         sal_Int32 nOffset = pNd->GetText().getLength() - aNumStr.getLength();
         SwFormatCharFormat aCharFormat(pCharFormat);
-        for (sal_uInt16 j = 0; j < xCharStyleIdx->size(); j += 2)
+        for (size_t j = 0; j < xCharStyleIdx->size(); j += 2)
         {
             sal_Int32 nStartIdx = (*xCharStyleIdx)[j] + nOffset;
             sal_Int32 nEndIdx   = (*xCharStyleIdx)[j + 1]  + nOffset;

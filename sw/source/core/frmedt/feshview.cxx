@@ -635,7 +635,7 @@ void SwFEShell::StartCropImage()
     // If more than a single SwVirtFlyDrawObj is selected, select only the first SwVirtFlyDrawObj
     if ( rMarkList.GetMarkCount() > 1 )
     {
-        for ( sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); ++i )
+        for ( size_t i = 0; i < rMarkList.GetMarkCount(); ++i )
         {
             SdrObject *pTmpObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
             bool bForget = pTmpObj->ISA(SwVirtFlyDrawObj);

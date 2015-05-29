@@ -2252,7 +2252,7 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
 void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, bool bRemove )
 {
     _HTMLAttrs &rAttrs = pContext->GetAttrs();
-    for( sal_uInt16 i=0; i<rAttrs.size(); i++ )
+    for( size_t i=0; i<rAttrs.size(); i++ )
     {
         _HTMLAttr *pAttr = rAttrs[i];
 

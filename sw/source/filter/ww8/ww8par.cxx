@@ -5322,7 +5322,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                         }
                     }
                     // Remove additional pictures
-                    for (sal_uInt16 i = 0; i < vecFrameFormat.size(); ++i)
+                    for (size_t i = 0; i < vecFrameFormat.size(); ++i)
                     {
                         m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat(vecFrameFormat[i]);
                     }
@@ -5784,7 +5784,7 @@ void SwWW8ImplReader::SetOutlineStyles()
     const SwNumRule* pChosenWW8ListStyle = NULL;
     {
         std::map<const SwNumRule*, int> aWW8ListStyleCounts;
-        for (sal_uInt16 nI = 0; nI < m_vColl.size(); ++nI)
+        for (size_t nI = 0; nI < m_vColl.size(); ++nI)
         {
             SwWW8StyInf& rSI = m_vColl[nI];
 

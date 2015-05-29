@@ -258,7 +258,7 @@ void RtfExport::WriteRevTab()
     // RTF always seems to use Unknown as the default first entry
     GetRedline(OUString("Unknown"));
 
-    for (sal_uInt16 i = 0; i < m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++i)
+    for (size_t i = 0; i < m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++i)
     {
         const SwRangeRedline* pRedl = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ i ];
 
@@ -267,7 +267,7 @@ void RtfExport::WriteRevTab()
 
     // Now write the table
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_REVTBL).WriteChar(' ');
-    for (sal_uInt16 i = 0; i < m_aRedlineTable.size(); ++i)
+    for (size_t i = 0; i < m_aRedlineTable.size(); ++i)
     {
         const OUString* pAuthor = GetRedline(i);
         Strm().WriteChar('{');

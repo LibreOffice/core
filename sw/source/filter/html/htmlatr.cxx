@@ -1393,7 +1393,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
 
 bool HTMLEndPosLst::ExistsOnTagItem( sal_uInt16 nWhich, sal_Int32 nPos )
 {
-    for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
+    for( size_t i=0; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
 
@@ -1429,7 +1429,7 @@ bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
         return false;
     }
 
-    for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
+    for( size_t i=0; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
 
@@ -1479,7 +1479,7 @@ void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, sal_Int32 nNewEnd,
     aEndLst.insert( aEndLst.begin() + nEndPos, pPos );
 
     // jetzt noch die spaeter gestarteten Attribute anpassen
-    for( sal_uInt16 i=nStartPos+1; i<aStartLst.size(); i++ )
+    for( size_t i=nStartPos+1; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
         sal_Int32 nTestEnd = pTest->GetEnd();
@@ -1555,7 +1555,7 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
     // erstmal muessen wir die alten Items anhand der Startliste suchen
     // und die neuen Item-Bereiche festlegen
 
-    for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
+    for( size_t i=0; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
         sal_Int32 nTestStart = pTest->GetStart();
@@ -1958,7 +1958,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
     }
 
     // die Attribute in der Start-Liste sind aufsteigend sortiert
-    for( sal_uInt16 i=0; i< aStartLst.size(); i++ )
+    for( size_t i=0; i< aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pPos = 0;
         if( nCharBoxIndex < aStartLst.size() )
@@ -2024,7 +2024,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             bool bSkipOut = false;
             if( pPos->GetItem()->Which() == RES_CHRATR_BOX )
             {
-                for(sal_uInt16 nIndex = _FindStartPos(pPos) + 1; nIndex < aStartLst.size(); ++nIndex )
+                for(size_t nIndex = _FindStartPos(pPos) + 1; nIndex < aStartLst.size(); ++nIndex )
                 {
                     HTMLSttEndPos *pEndPos = aStartLst[nIndex];
                     if( pEndPos->GetItem()->Which() == RES_CHRATR_BOX &&

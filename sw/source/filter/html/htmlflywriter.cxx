@@ -248,7 +248,7 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrameFormat& rFrameFormat,
                     bEmpty = true;
                     if( pHTMLPosFlyFrms )
                     {
-                        for( sal_uInt16 i=0; i<pHTMLPosFlyFrms->size(); i++ )
+                        for( size_t i=0; i<pHTMLPosFlyFrms->size(); i++ )
                         {
                             sal_uLong nIdx = (*pHTMLPosFlyFrms)[i]
                                                 ->GetNdIndex().GetIndex();
@@ -1940,7 +1940,7 @@ void SwHTMLWriter::CollectLinkTargets()
             const ImageMap *pIMap = pURL->GetMap();
             if( pIMap )
             {
-                for( sal_uInt16 i=0; i<pIMap->GetIMapObjectCount(); i++ )
+                for( size_t i=0; i<pIMap->GetIMapObjectCount(); i++ )
                 {
                     const IMapObject* pObj = pIMap->GetIMapObject( i );
                     if( pObj )

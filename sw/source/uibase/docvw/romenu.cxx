@@ -138,7 +138,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
             pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
             pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
 
-            for ( sal_uInt16 i=0; i < aThemeList.size(); ++i )
+            for ( size_t i=0; i < aThemeList.size(); ++i )
                 pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
         }
         else
@@ -169,7 +169,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
                 pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
                 bEnableBackGallery = true;
 
-                for ( sal_uInt16 i=0; i < aThemeList.size(); ++i )
+                for ( size_t i=0; i < aThemeList.size(); ++i )
                     pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
             }
         }
