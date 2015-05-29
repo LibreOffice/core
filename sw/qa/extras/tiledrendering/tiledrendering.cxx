@@ -33,6 +33,7 @@ public:
     void testSetGraphicSelection();
     void testResetSelection();
     void testSearch();
+    void testDocumentSizeChanged();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -42,6 +43,7 @@ public:
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
+    CPPUNIT_TEST(testDocumentSizeChanged);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -49,6 +51,7 @@ private:
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
     Rectangle m_aInvalidation;
+    Size m_aDocumentSize;
 };
 
 SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
@@ -75,12 +78,22 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         if (m_aInvalidation.IsEmpty())
         {
             uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+            if (OString("EMPTY") == pPayload)
+                return;
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
             m_aInvalidation.setX(aSeq[0].toInt32());
             m_aInvalidation.setY(aSeq[1].toInt32());
             m_aInvalidation.setWidth(aSeq[2].toInt32());
             m_aInvalidation.setHeight(aSeq[3].toInt32());
         }
+    }
+    break;
+    case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+    {
+        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeq.getLength());
+        m_aDocumentSize.setWidth(aSeq[0].toInt32());
+        m_aDocumentSize.setHeight(aSeq[1].toInt32());
     }
     break;
     }
@@ -273,6 +286,26 @@ void SwTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
     nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
+#endif
+}
+
+void SwTiledRenderingTest::testDocumentSizeChanged()
+{
+#if !defined(WNT) && !defined(MACOSX)
+    // Get the current document size.
+    SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
+    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pXTextDocument->initializeForTiledRendering();
+    Size aSize = pXTextDocument->getDocumentSize();
+
+    // Delete the second page and see how the size changes.
+    pWrtShell->Down(false);
+    pWrtShell->DelLeft();
+    // Document width should not change, this was 0.
+    CPPUNIT_ASSERT_EQUAL(aSize.getWidth(), m_aDocumentSize.getWidth());
+    // Document height should be smaller now.
+    CPPUNIT_ASSERT(aSize.getHeight() > m_aDocumentSize.getHeight());
 #endif
 }
 
