@@ -30,12 +30,12 @@ using namespace ::com::sun::star;
 
 SectionColumnHandler::SectionColumnHandler()
     : LoggedProperties("SectionColumnHandler")
-    , bEqualWidth(false)
-    , nSpace(1270) // 720 twips
-    , nNum(0)
-    , bSep(false)
+    , m_bEqualWidth(false)
+    , m_nSpace(1270) // 720 twips
+    , m_nNum(0)
+    , m_bSep(false)
 {
-    aTempColumn.nWidth = aTempColumn.nSpace = 0;
+    m_aTempColumn.nWidth = m_aTempColumn.nSpace = 0;
 }
 
 SectionColumnHandler::~SectionColumnHandler()
@@ -48,23 +48,23 @@ void SectionColumnHandler::lcl_attribute(Id rName, Value & rVal)
     switch( rName )
     {
         case NS_ooxml::LN_CT_Columns_equalWidth:
-            bEqualWidth = (nIntValue != 0);
+            m_bEqualWidth = (nIntValue != 0);
             break;
         case NS_ooxml::LN_CT_Columns_space:
-            nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
+            m_nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
             break;
         case NS_ooxml::LN_CT_Columns_num:
-            nNum = nIntValue;
+            m_nNum = nIntValue;
             break;
         case NS_ooxml::LN_CT_Columns_sep:
-            bSep = (nIntValue != 0);
+            m_bSep = (nIntValue != 0);
             break;
 
         case NS_ooxml::LN_CT_Column_w:
-            aTempColumn.nWidth = ConversionHelper::convertTwipToMM100( nIntValue );
+            m_aTempColumn.nWidth = ConversionHelper::convertTwipToMM100( nIntValue );
             break;
         case NS_ooxml::LN_CT_Column_space:
-            aTempColumn.nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
+            m_aTempColumn.nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
             break;
         default:
             OSL_FAIL( "SectionColumnHandler: unknown attribute");
@@ -77,12 +77,12 @@ void SectionColumnHandler::lcl_sprm(Sprm & rSprm)
     {
         case NS_ooxml::LN_CT_Columns_col:
         {
-            aTempColumn.nWidth = aTempColumn.nSpace = 0;
+            m_aTempColumn.nWidth = m_aTempColumn.nSpace = 0;
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
             {
                 pProperties->resolve(*this);
-                aCols.push_back(aTempColumn);
+                m_aCols.push_back(m_aTempColumn);
             }
         }
         break;

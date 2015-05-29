@@ -35,13 +35,13 @@ struct _Column
 
 class SectionColumnHandler : public LoggedProperties
 {
-    bool        bEqualWidth;
-    sal_Int32   nSpace;
-    sal_Int32   nNum;
-    bool        bSep;
-    std::vector<_Column> aCols;
+    bool        m_bEqualWidth;
+    sal_Int32   m_nSpace;
+    sal_Int32   m_nNum;
+    bool        m_bSep;
+    std::vector<_Column> m_aCols;
 
-    _Column   aTempColumn;
+    _Column   m_aTempColumn;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
@@ -51,12 +51,12 @@ public:
     SectionColumnHandler();
     virtual ~SectionColumnHandler();
 
-    bool        IsEqualWidth() const { return bEqualWidth; }
-    sal_Int32   GetSpace() const { return nSpace; }
-    sal_Int32   GetNum() const { return nNum; }
-    bool        IsSeparator() const { return bSep; }
+    bool        IsEqualWidth() const { return m_bEqualWidth; }
+    sal_Int32   GetSpace() const { return m_nSpace; }
+    sal_Int32   GetNum() const { return m_nNum; }
+    bool        IsSeparator() const { return m_bSep; }
 
-    const std::vector<_Column>& GetColumns() const { return aCols;}
+    const std::vector<_Column>& GetColumns() const { return m_aCols;}
 
 };
 typedef std::shared_ptr< SectionColumnHandler >          SectionColumnHandlerPtr;
