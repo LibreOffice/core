@@ -4470,7 +4470,7 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
     const SwFrameFormats& rFrameFormatTable = *pDoc->GetSpzFrameFormats();
 
     bool bFound = false;
-    for ( sal_uInt16 i=0; i<rFrameFormatTable.size(); i++ )
+    for ( size_t i=0; i<rFrameFormatTable.size(); i++ )
     {
         const SwFrameFormat *const pFormat = rFrameFormatTable[i];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
@@ -5111,7 +5111,7 @@ void SwHTMLParser::InsertLineBreak()
         {
             const SwFrameFormats& rFrameFormatTable = *pDoc->GetSpzFrameFormats();
 
-            for( sal_uInt16 i=0; i<rFrameFormatTable.size(); i++ )
+            for( size_t i=0; i<rFrameFormatTable.size(); i++ )
             {
                 SwFrameFormat *const pFormat = rFrameFormatTable[i];
                 SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();

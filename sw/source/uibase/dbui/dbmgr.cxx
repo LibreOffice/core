@@ -725,7 +725,7 @@ SwDBManager::SwDBManager()
 
 SwDBManager::~SwDBManager()
 {
-    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
+    for(size_t nPos = 0; nPos < aDataSourceParams.size(); nPos++)
     {
         SwDSParam* pParam = &aDataSourceParams[nPos];
         if(pParam->xConnection.is())
@@ -2283,7 +2283,7 @@ void    SwDBManager::CloseAll(bool bIncludingMerge)
 {
     //the only thing done here is to reset the selection index
     //all connections stay open
-    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
+    for(size_t nPos = 0; nPos < aDataSourceParams.size(); nPos++)
     {
         SwDSParam* pParam = &aDataSourceParams[nPos];
         if(bIncludingMerge || pParam != pImpl->pMergeData)
@@ -2359,7 +2359,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
          return pImpl->pMergeData;
     }
     SwDSParam* pFound = 0;
-    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
+    for(size_t nPos = 0; nPos < aDataSourceParams.size(); nPos++)
     {
         SwDSParam* pParam = &aDataSourceParams[nPos];
         if(rDataSource == pParam->sDataSource)
@@ -2824,7 +2824,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
     }
     if(pFound)
     {
-        for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
+        for(size_t nPos = 0; nPos < aDataSourceParams.size(); nPos++)
         {
             SwDSParam* pParam = &aDataSourceParams[nPos];
             if(pParam == pFound)

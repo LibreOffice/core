@@ -3596,7 +3596,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         // verschoben. Deshalb entfernen wir alle harten
                         // Attribute des Absatzes
 
-                        for( sal_uInt16 i=0; i<aParaAttrs.size(); i++ )
+                        for( size_t i=0; i<aParaAttrs.size(); i++ )
                             aParaAttrs[i]->Invalidate();
                     }
 

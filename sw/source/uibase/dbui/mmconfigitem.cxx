@@ -389,7 +389,7 @@ static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeader
 {
     //convert the strings used for UI to numbers used for the configuration
     OUString sBlock(rBlock.replaceAll("\n", OUString("\\n")));
-    for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
+    for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
     {
         OUString sHeader = "<" + rHeaders.GetString( i ) + ">";
         OUString sReplace = "<" + OUString('0' + i) + ">";
@@ -619,7 +619,7 @@ const Sequence< OUString> SwMailMergeConfigItem_Impl::GetAddressBlocks(
 {
     Sequence< OUString> aRet(aAddressBlocks.size());
     OUString* pRet = aRet.getArray();
-    for(sal_uInt32 nBlock = 0; nBlock < aAddressBlocks.size(); nBlock++)
+    for(size_t nBlock = 0; nBlock < aAddressBlocks.size(); nBlock++)
     {
         pRet[nBlock] = aAddressBlocks[nBlock];
         if(bConvertToConfig)
@@ -653,7 +653,7 @@ const Sequence< OUString>   SwMailMergeConfigItem_Impl::GetGreetings(
                                 aNeutralGreetingLines;
     Sequence< OUString> aRet(rGreetings.size());
     OUString* pRet = aRet.getArray();
-    for(sal_uInt32 nGreeting = 0; nGreeting < rGreetings.size(); nGreeting++)
+    for(size_t nGreeting = 0; nGreeting < rGreetings.size(); nGreeting++)
     {
         pRet[nGreeting] = rGreetings[nGreeting];
         if(bConvertToConfig)

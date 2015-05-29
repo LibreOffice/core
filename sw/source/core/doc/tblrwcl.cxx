@@ -2546,7 +2546,7 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                             SwTwips nDist, bool bCheck )
 {
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-    for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
+    for( size_t n = 0; n < rBoxes.size(); ++n )
     {
         SwTableBox* pBox = rBoxes[ n ];
         SwTableBoxFormat* pFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
@@ -2557,7 +2557,7 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
         if( bCheck )
         {
-            for( sal_uInt16 i = 0; i < pBox->GetTabLines().size(); ++i )
+            for( size_t i = 0; i < pBox->GetTabLines().size(); ++i )
                 if( !::lcl_InsSelBox( pBox->GetTabLines()[ i ], rParam,
                                             nDist, true ))
                     return false;
@@ -3505,7 +3505,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         // Break down to USHRT_MAX / 2
                         CR_SetBoxWidth aTmpPara( 0, aSz.GetWidth() / 2,
                                         0, aSz.GetWidth(), aSz.GetWidth(), aParam.pTableNd );
-                        for( sal_uInt16 nLn = 0; nLn < aLines.size(); ++nLn )
+                        for( size_t nLn = 0; nLn < aLines.size(); ++nLn )
                             ::lcl_AjustLines( aLines[ nLn ], aTmpPara );
                         aSz.SetWidth( aSz.GetWidth() / 2 );
                         aParam.nDiff = nRelDiff /= 2;

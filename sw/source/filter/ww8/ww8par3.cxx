@@ -1246,7 +1246,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         std::deque<bool> aNotReallyThere;
         aNotReallyThere.resize(nMaxLevel);
         pListInfo->maParaSprms.resize(nMaxLevel);
-        for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
+        for (sal_uInt16 nLevel = 0; nLevel < nLvlCount; ++nLevel)
         {
             SwNumFormat aNumFormat( rMyNumRule.Get( nLevel ) );
             // LVLF einlesen
@@ -1264,7 +1264,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         // 1.2.2 die ItemPools mit den CHPx Einstellungen der verschiedenen
         //       Level miteinander vergleichen und ggfs. Style(s) erzeugen
 
-        for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
+        for (sal_uInt16 nLevel = 0; nLevel < nLvlCount; ++nLevel)
         {
             bool bDummy;
             AdjustLVL( nLevel, rMyNumRule, pListInfo->aItemSet,
@@ -1273,7 +1273,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
         // 1.2.3 ItemPools leeren und loeschen
 
-        for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
+        for (sal_uInt16 nLevel = 0; nLevel < nLvlCount; ++nLevel)
             delete pListInfo->aItemSet[ nLevel ];
     }
 
@@ -1293,7 +1293,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
     // 2.1 alle LFO einlesen
 
-    for (sal_uInt16 nLfo = 0; nLfo < nLfoCount; ++nLfo)
+    for (sal_Int32 nLfo = 0; nLfo < nLfoCount; ++nLfo)
     {
         bOk = false;
 

@@ -1782,7 +1782,7 @@ void DocumentRedlineManager::CompressRedlines()
     }
 
     // Try to merge identical ones
-    for( sal_uInt16 n = 1; n < mpRedlineTable->size(); ++n )
+    for( size_t n = 1; n < mpRedlineTable->size(); ++n )
     {
         SwRangeRedline* pPrev = (*mpRedlineTable)[ n-1 ],
                     * pCur = (*mpRedlineTable)[ n ];
@@ -2003,7 +2003,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwStartNode& rNode, bool bSave
 sal_uInt16 DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
 {
     const sal_uLong nNdIdx = rNd.GetIndex();
-    for( sal_uInt16 n = 0; n < mpRedlineTable->size() ; ++n )
+    for( size_t n = 0; n < mpRedlineTable->size() ; ++n )
     {
         const SwRangeRedline* pTmp = (*mpRedlineTable)[ n ];
         sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
@@ -2606,7 +2606,7 @@ sal_uInt16 DocumentRedlineManager::InsertRedlineAuthor( const OUString& rNew )
 void DocumentRedlineManager::UpdateRedlineAttr()
 {
     const SwRedlineTable& rTable = GetRedlineTable();
-    for( sal_uInt16 n = 0; n < rTable.size(); ++n )
+    for( size_t n = 0; n < rTable.size(); ++n )
     {
         SwRangeRedline* pRedl = rTable[ n ];
         if( pRedl->IsVisible() )
