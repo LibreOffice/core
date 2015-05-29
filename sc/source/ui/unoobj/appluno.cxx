@@ -38,7 +38,6 @@
 #include "funcdesc.hxx"
 #include <com/sun/star/document/LinkUpdateModes.hpp>
 #include <com/sun/star/sheet/FunctionArgument.hpp>
-#include "ScPanelFactory.hxx"
 #include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
