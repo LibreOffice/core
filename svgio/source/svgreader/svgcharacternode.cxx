@@ -306,7 +306,7 @@ namespace svgio
                         ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
                         aTextArray.reserve(nLength);
 
-                        for(sal_uInt32 a(0); a < aExtendArray.size(); a++)
+                        for(size_t a(0); a < aExtendArray.size(); a++)
                         {
                             aTextArray.push_back(aExtendArray[a] + fStartX);
                         }
@@ -331,7 +331,7 @@ namespace svgio
                             aTextArray = aTextLayouterDevice.getTextArray(getText(), nIndex, nLength);
                         }
 
-                        for(sal_uInt32 a(0); a < aTextArray.size(); a++)
+                        for(size_t a(0); a < aTextArray.size(); a++)
                         {
                             aTextArray[a] *= fFactor;
                         }
@@ -615,7 +615,7 @@ namespace svgio
             {
                 const double fFactor(F_PI / 180.0);
 
-                for(sal_uInt32 a(0); a < maRotate.size(); a++)
+                for(size_t a(0); a < maRotate.size(); a++)
                 {
                     maRotate[a] *= fFactor;
                 }

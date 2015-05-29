@@ -97,7 +97,7 @@ inline void XFInputList::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( "text:value", " " );
     pStrm->StartElement( "text:label" );
     pStrm->EndElement( "text:label" );
-    for(sal_uInt32 i=0; i< m_list.size();i++)
+    for(size_t i=0; i< m_list.size();i++)
     {
         pAttrList->Clear();
         pAttrList->AddAttribute( "text:value", m_list[i] );

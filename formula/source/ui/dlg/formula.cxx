@@ -883,7 +883,7 @@ void FormulaDlg_Impl::FillControls(bool &rbNext, bool &rbPrev)
         sal_Int32   nEditPos = pMEdit->GetSelection().Min();
         bool    bFlag    = false;
 
-        for(sal_uInt16 i=0;i<nArgs;i++)
+        for(sal_Int32 i=0;i<nArgs;i++)
         {
             sal_Int32 nLength = m_aArguments[i].getLength()+1;
             pParaWin->SetArgument(i,m_aArguments[i]);
@@ -1180,7 +1180,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
             m_aArguments[nEd] = pParaWin->GetArgument(nEd);
 
         sal_uInt16 nClearPos=nEd+1;
-        for(sal_uInt16 i=nEd+1; i<nArgs; i++)
+        for(sal_Int32 i=nEd+1; i<nArgs; i++)
         {
             if( !pParaWin->GetArgument(i).isEmpty() )
             {
@@ -1188,7 +1188,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
             }
         }
 
-        for(sal_uInt16 i=nClearPos; i<nArgs; i++)
+        for(sal_Int32 i=nClearPos; i<nArgs; i++)
         {
             m_aArguments[i].clear();
         }

@@ -610,7 +610,7 @@ namespace frm
                 pStr++;
             }
             aListSourceSeq.realloc( nTokens );
-            for (sal_uInt16 i=0; i<nTokens; ++i)
+            for (sal_Int32 i=0; i<nTokens; ++i)
             {
                 sal_Int32 nTmp = 0;
                 aListSourceSeq.getArray()[i] = sListSource.getToken(i,';',nTmp);
@@ -941,9 +941,9 @@ namespace frm
                         if(*aBoundColumn == -1)
                         {
                             // the type of i matters! It will be the type of the ORowSetValue pushed to aValueList!
-                            for(sal_Int16 i=0; static_cast<ValueList::size_type>(i) < aDisplayList.size(); ++i)
+                            for(size_t i=0; i < aDisplayList.size(); ++i)
                             {
-                                aValueList.push_back(i);
+                                aValueList.push_back(static_cast<connectivity::ORowSetValue >(i));
                             }
                         }
                         else

@@ -127,7 +127,7 @@ void CGM::ImplDoClass4()
             {
                 sal_uInt32 nPoints = mnElementSize / ImplGetPointSize();
                 Polygon aPolygon( (sal_uInt16)nPoints );
-                for ( sal_uInt16 i = 0; i < nPoints; i++)
+                for ( sal_uInt32 i = 0; i < nPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, true );

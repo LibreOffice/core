@@ -103,7 +103,7 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
     {
         report(
             DiagnosticsEngine::Warning,
-            "loop index variable is shorter than length type. " + qt.getAsString() + " < " + qt2.getAsString(),
+            "loop index type is narrower than length type. " + qt.getAsString() + " < " + qt2.getAsString(),
             stmt->getInit()->getLocStart())
           << stmt->getInit()->getSourceRange();
 //        stmt->getCond()->dump();

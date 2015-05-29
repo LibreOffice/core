@@ -88,7 +88,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
     {
         vector<OUString> aVector;
         aVector.reserve(rFontNameSeq.getLength());
-        for ( sal_uInt16 i = 0; i < rFontNameSeq.getLength(); i++ )
+        for ( sal_Int32 i = 0; i < rFontNameSeq.getLength(); i++ )
         {
             aVector.push_back(MnemonicGenerator::EraseAllMnemonicChars(pFontNameArray[i]));
         }

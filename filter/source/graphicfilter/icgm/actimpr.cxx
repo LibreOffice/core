@@ -701,7 +701,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
         drawing::PointSequence* pOuterSequence = aRetval.Coordinates.getArray();
         drawing::FlagSequence* pOuterFlags = aRetval.Flags.getArray();
 
-        for( sal_uInt16 a = 0; a < nNumPolys; a++ )
+        for( sal_uInt32 a = 0; a < nNumPolys; a++ )
         {
             Polygon aPolygon( rPolyPolygon.GetObject( a ) );
             sal_uInt32 nNumPoints = aPolygon.GetSize();
@@ -714,7 +714,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
             awt::Point* pInnerSequence = pOuterSequence->getArray();
             drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
 
-            for( sal_uInt16 b = 0; b < nNumPoints; b++ )
+            for( sal_uInt32 b = 0; b < nNumPoints; b++ )
             {
                 *pInnerSequence++ = awt::Point( aPolygon.GetPoint( b ).X(), aPolygon.GetPoint( b ).Y() ) ;
                 *pInnerFlags++ = (drawing::PolygonFlags)aPolygon.GetFlags( b );

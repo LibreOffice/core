@@ -774,7 +774,7 @@ BitmapChecksum FlashExporter::ActionSummer(Reference< XShapes >& xShapes)
 
     Reference< XShape > xShape2;
 
-    for( sal_uInt16 nShape = 0; nShape < nShapeCount; nShape++ )
+    for( sal_uInt32 nShape = 0; nShape < nShapeCount; nShape++ )
     {
         xShapes->getByIndex( nShape ) >>= xShape2;
 

@@ -117,7 +117,7 @@ namespace svgio
                     OUString aConcatenatedSelector;
 
                     // re-combine without spaces, create a unique name (for now)
-                    for(sal_uInt32 a(0); a < aSelectorParts.size(); a++)
+                    for(size_t a(0); a < aSelectorParts.size(); a++)
                     {
                         aConcatenatedSelector += aSelectorParts[a];
                     }
