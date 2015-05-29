@@ -353,11 +353,11 @@ void SvxSearchDialog::dispose()
     Hide();
 
     rBindings.EnterRegistrations();
-    delete pSearchController;
-    delete pOptionsController;
-    delete pFamilyController;
-    delete pSearchSetController;
-    delete pReplaceSetController;
+    DELETEZ( pSearchController );
+    DELETEZ( pOptionsController );
+    DELETEZ( pFamilyController );
+    DELETEZ( pSearchSetController );
+    DELETEZ( pReplaceSetController );
     rBindings.LeaveRegistrations();
 
     delete pSearchItem;

@@ -333,9 +333,9 @@ void Svx3DWin::dispose()
     pVDev.disposeAndClear();
     delete pModel;
 
-    delete pControllerItem;
-    delete pConvertTo3DItem;
-    delete pConvertTo3DLatheItem;
+    DELETEZ( pControllerItem );
+    DELETEZ( pConvertTo3DItem );
+    DELETEZ( pConvertTo3DLatheItem );
 
     delete mpRemember2DAttributes;
 
