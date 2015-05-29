@@ -718,8 +718,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     else
         aOutputData.SetSolidBackground(true);
 
-    pContentDev->SetMapMode(MAP_PIXEL);
     aOutputData.DrawDocumentBackground();
+
+    pContentDev->SetMapMode(MAP_PIXEL);
 
     if ( bGridFirst && ( bGrid || bPage ) )
         aOutputData.DrawGrid( bGrid, bPage );
