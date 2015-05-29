@@ -4509,6 +4509,8 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     if (!pFocusWin)
         return true;
 
+    SolarMutexGuard aGuard;
+
     uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
     if (xText.is())
     {
