@@ -767,13 +767,14 @@ void ScOutputData::DrawDocumentBackground()
     if ( !bSolidBackground )
         return;
 
-    Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
-    long nOneX = aOnePixel.Width();
-    long nOneY = aOnePixel.Height();
-    Rectangle aRect(nScrX - nOneX, nScrY - nOneY, nScrX + nScrW, nScrY + nScrH);
     Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
+    mpDev->SetLineColor(aBgColor);
     mpDev->SetFillColor(aBgColor);
-    mpDev->DrawRect(aRect);
+
+    Point aScreenPos  = mpDev->PixelToLogic(Point(nScrX, nScrY));
+    Size  aScreenSize = mpDev->PixelToLogic(Size(nScrW - 1,nScrH - 1));
+
+    mpDev->DrawRect(Rectangle(aScreenPos, aScreenSize));
 }
 
 namespace {
