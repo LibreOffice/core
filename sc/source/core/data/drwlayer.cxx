@@ -2114,7 +2114,7 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
 
 ImageMap* ScDrawLayer::GetImageMapForObject(SdrObject* pObj)
 {
-    ScIMapInfo* pIMapInfo = const_cast<ScIMapInfo*>( GetIMapInfo( pObj ) );
+    ScIMapInfo* pIMapInfo = GetIMapInfo( pObj );
     if ( pIMapInfo )
     {
         return const_cast<ImageMap*>( &(pIMapInfo->GetImageMap()) );

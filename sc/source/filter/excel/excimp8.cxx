@@ -878,7 +878,7 @@ XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( SCTAB nTab )
     for( it = maFilters.begin(); it != maFilters.end(); ++it )
     {
         if( it->Tab() == nTab )
-            return const_cast<XclImpAutoFilterData*>(&(*it));
+            return &(*it);
     }
     return NULL;
 }
