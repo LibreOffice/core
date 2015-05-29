@@ -108,7 +108,7 @@ Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException, s
         // allowed
     }
 
-    return const_cast<OGroup*>(this)->m_pUsers;
+    return m_pUsers;
 }
 
 

@@ -163,7 +163,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumn
         OSL_FAIL( "OIndex::getColumns: caught an exception!" );
     }
 
-    return const_cast<OIndex*>(this)->m_pColumns;
+    return m_pColumns;
 }
 
 Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(RuntimeException, std::exception)

@@ -171,7 +171,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OKey::getColumns(
         // allowed
     }
 
-    return const_cast<OKey*>(this)->m_pColumns;
+    return m_pColumns;
 }
 
 Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  ) throw(RuntimeException, std::exception)
