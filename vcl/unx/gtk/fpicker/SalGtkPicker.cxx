@@ -47,7 +47,7 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
     if (!pIn)
         return OUString();
 
-    OUString sURL( const_cast<const sal_Char *>(pIn), strlen(pIn),
+    OUString sURL( pIn, strlen(pIn),
         RTL_TEXTENCODING_UTF8 );
 
     INetURLObject aURL(sURL);

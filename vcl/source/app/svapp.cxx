@@ -1668,7 +1668,7 @@ ImplDelData::~ImplDelData()
     if( !mbDel && mpWindow )
     {
         // the window still exists but we were not removed
-        const_cast<vcl::Window*>(mpWindow.get())->ImplRemoveDel( this );
+        mpWindow.get()->ImplRemoveDel( this );
         mpWindow = NULL;
     }
 }

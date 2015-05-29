@@ -218,13 +218,9 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 
 void GlyphCache::UncacheFont( ServerFont& rServerFont )
 {
-    // the interface for rServerFont must be const because a
-    // user who wants to release it only got const ServerFonts.
-    // The caching algorithm needs a non-const object
-    ServerFont* pFont = const_cast<ServerFont*>( &rServerFont );
-    if( (pFont->Release() <= 0) && (mnMaxSize <= mnBytesUsed) )
+    if( (rServerFont.Release() <= 0) && (mnMaxSize <= mnBytesUsed) )
     {
-        mpCurrentGCFont = pFont;
+        mpCurrentGCFont = &rServerFont;
         GarbageCollect();
     }
 }

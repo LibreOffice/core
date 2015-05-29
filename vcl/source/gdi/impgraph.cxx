@@ -697,7 +697,7 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
             if(maSvgData.get() && maEx.IsEmpty())
             {
                 // use maEx as local buffer for rendered svg
-                const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
+                maEx = maSvgData->getReplacement();
             }
 
             // #108077# Push through pref size to animation object,
