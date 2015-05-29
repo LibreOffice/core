@@ -670,7 +670,7 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
         sal_uInt16          nExecuteId = 0;
         INetURLObject       aURL;
 
-        const_cast< GalleryTheme* >( mpCurTheme )->GetURL( nItemId - 1, aURL );
+        mpCurTheme->GetURL( nItemId - 1, aURL );
 
         const bool  bValidURL = ( aURL.GetProtocol() != INetProtocol::NotValid );
         bool        bPreview = bValidURL;

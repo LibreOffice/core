@@ -933,7 +933,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
             sfx2::LinkManager::GetDisplayNames( mpImpl->mpObjectLink, 0, &aNewLinkURL, 0, 0 );
             if ( !aNewLinkURL.equalsIgnoreAsciiCase( mpImpl->maLinkURL ) )
             {
-                const_cast<SdrOle2Obj*>(this)->GetObjRef_Impl();
+                GetObjRef_Impl();
                 uno::Reference<embed::XCommonEmbedPersist> xPersObj( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY );
                 OSL_ENSURE( xPersObj.is(), "The object must exist!\n" );
                 if ( xPersObj.is() )
