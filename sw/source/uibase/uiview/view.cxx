@@ -1263,7 +1263,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                  bGotZoomFactor = false, bGotIsSelectedFrame = false,
                  bGotViewLayoutColumns = false, bGotViewLayoutBookMode = false;
 
-        for (sal_Int16 i = 0 ; i < nLength; i++)
+        for (sal_Int32 i = 0 ; i < nLength; i++)
         {
             if ( pValue->Name == "ViewLeft" )
             {

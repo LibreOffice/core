@@ -447,7 +447,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
 
                 boost::scoped_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(0, aShortName));
                 assert(pDlg && "Dialog creation failed!");
-                for(sal_uInt16 i = 0; i < aFoundArr.size(); ++i)
+                for(size_t i = 0; i < aFoundArr.size(); ++i)
                 {
                     TextBlockInfo_Impl* pData = &aFoundArr[i];
                     pDlg->InsertGlos(pData->sTitle, pData->sLongName);
