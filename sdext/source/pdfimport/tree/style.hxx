@@ -87,7 +87,7 @@ namespace pdfi
                 }
                 nRet = size_t(Contents.hashCode());
                 nRet ^= size_t(ContainedElement);
-                for( unsigned int n = 0; n < SubStyles.size(); ++n )
+                for( size_t n = 0; n < SubStyles.size(); ++n )
                      nRet ^= size_t(SubStyles[n]);
                 return nRet;
             }
@@ -101,7 +101,7 @@ namespace pdfi
                     SubStyles.size() != rRight.SubStyles.size()
                     )
                     return false;
-                for( unsigned int n = 0; n < SubStyles.size(); ++n )
+                for( size_t n = 0; n < SubStyles.size(); ++n )
                 {
                     if( SubStyles[n] != rRight.SubStyles[n] )
                         return false;

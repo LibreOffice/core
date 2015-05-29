@@ -508,7 +508,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                                    &aRoot, &aChild,
                                    &root_x, &root_y, &lx, &ly, &mask );
                     const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
-                    for( unsigned int i = 0; i < rScreens.size(); i++ )
+                    for( size_t i = 0; i < rScreens.size(); i++ )
                         if( rScreens[i].IsInside( Point( root_x, root_y ) ) )
                         {
                             x = rScreens[i].Left();
@@ -1466,7 +1466,7 @@ void X11SalFrame::Center( )
                            &x, &y,
                            &mask );
         const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
-        for( unsigned int i = 0; i < rScreens.size(); i++ )
+        for( size_t i = 0; i < rScreens.size(); i++ )
             if( rScreens[i].IsInside( Point( root_x, root_y ) ) )
             {
                 nScreenX            = rScreens[i].Left();

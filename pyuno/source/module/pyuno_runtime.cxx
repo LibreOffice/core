@@ -723,7 +723,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
     else if (PyTuple_Check (o))
     {
         Sequence<Any> s (PyTuple_Size (o));
-        for (int i = 0; i < PyTuple_Size (o); i++)
+        for (Py_ssize_t i = 0; i < PyTuple_Size (o); i++)
         {
             s[i] = pyObject2Any (PyTuple_GetItem (o, i), mode );
         }

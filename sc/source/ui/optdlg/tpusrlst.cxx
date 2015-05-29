@@ -284,7 +284,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
         std::size_t nSubCount = pList->GetSubCount();
         OUString          aEntryListStr;
 
-        for ( sal_uInt16 i=0; i<nSubCount; i++ )
+        for ( size_t i=0; i<nSubCount; i++ )
         {
             if ( i!=0 )
                 aEntryListStr += OUString(CR);

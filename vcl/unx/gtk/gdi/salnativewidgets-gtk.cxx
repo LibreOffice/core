@@ -567,7 +567,7 @@ void GtkData::initNWF()
  *********************************************************/
 void GtkData::deInitNWF()
 {
-    for( unsigned int i = 0; i < gWidgetData.size(); i++ )
+    for( size_t i = 0; i < gWidgetData.size(); i++ )
     {
         // free up global widgets
         // gtk_widget_destroy will in turn destroy the child hierarchy
@@ -871,7 +871,7 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
     if( GtkSalGraphics::bThemeChanged )
     {
         // invalidate caches
-        for( unsigned int i = 0; i < gWidgetData.size(); i++ )
+        for( size_t i = 0; i < gWidgetData.size(); i++ )
             if( gWidgetData[i].gNWPixmapCacheList )
                 gWidgetData[i].gNWPixmapCacheList->ThemeChanged();
         GtkSalGraphics::bThemeChanged = false;

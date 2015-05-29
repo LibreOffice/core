@@ -122,7 +122,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         if ( nOpt == ONE_IMAGE )
         {
             OUString sUrl;
-            for( sal_Int16 i = 0; i < pImagesLst->GetEntryCount(); ++i )
+            for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); ++i )
             {
                 OUString const * pData = static_cast<OUString const *>(pImagesLst->GetEntryData(i));
                 sUrl = *pData;

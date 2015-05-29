@@ -144,7 +144,7 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
     m_pRemoveColorLB->SetUpdateMode( false);
 
     XColorListRef xColorLst = XColorList::GetStdColorList();
-    for( sal_uInt16 i = 0; i < xColorLst->Count(); ++i )
+    for( long i = 0; i < xColorLst->Count(); ++i )
     {
         XColorEntry* pEntry = xColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();

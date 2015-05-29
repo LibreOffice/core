@@ -652,7 +652,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     rLabelData.maMembers = maLabelData.maMembers;
     sal_uLong nVisCount = m_pLbHide->GetEntryCount();
-    for( sal_uInt16 nPos = 0; nPos < nVisCount; ++nPos )
+    for( sal_uLong nPos = 0; nPos < nVisCount; ++nPos )
         rLabelData.maMembers[nPos].mbVisible = !m_pLbHide->IsChecked(nPos);
 
     // *** HIERARCHY ***

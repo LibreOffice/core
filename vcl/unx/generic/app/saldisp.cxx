@@ -315,7 +315,7 @@ void SalDisplay::doDestruct()
         delete mpInputMethod, mpInputMethod = NULL;
         delete mpKbdExtension, mpKbdExtension = NULL;
 
-        for( unsigned int i = 0; i < m_aScreens.size(); i++ )
+        for( size_t i = 0; i < m_aScreens.size(); i++ )
         {
             ScreenData& rData = m_aScreens[i];
             if( rData.m_bInit )
@@ -1939,7 +1939,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
         case PropertyNotify:
             if( pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
             {
-                for( unsigned int i = 0; i < m_aScreens.size(); i++ )
+                for( size_t i = 0; i < m_aScreens.size(); i++ )
                 {
                     if( pEvent->xproperty.window == m_aScreens[i].m_aRefWindow )
                     {
@@ -2685,7 +2685,7 @@ static sal_uInt16 sal_Lookup( const std::vector<SalColor>& rPalette,
     sal_uInt16 nPixel = 0;
     int    nBest  = ColorDiff( rPalette[0], r, g, b );
 
-    for( sal_uInt16 i = 1; i < nUsed; i++ )
+    for( Pixel i = 1; i < nUsed; i++ )
     {
         int n = ColorDiff( rPalette[i], r, g, b );
 

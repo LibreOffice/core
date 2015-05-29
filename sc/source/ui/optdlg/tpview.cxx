@@ -404,7 +404,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
 
     m_pAlignCB->SetClickHdl(LINK(this, ScTpLayoutOptions, AlignHdl));
 
-    for ( sal_uInt16 i = 0; i < aUnitArr.Count(); ++i )
+    for ( sal_uInt32 i = 0; i < aUnitArr.Count(); ++i )
     {
         OUString sMetric = aUnitArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aUnitArr.GetValue( i );

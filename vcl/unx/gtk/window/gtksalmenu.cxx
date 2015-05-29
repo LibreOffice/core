@@ -708,7 +708,7 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
 {
     SolarMutexGuard aGuard;
     GtkSalMenu* pMenu = NULL;
-    for ( sal_uInt16 nPos = 0; nPos < maItems.size(); nPos++ )
+    for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
     {
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
 
@@ -754,7 +754,7 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
 void GtkSalMenu::ActivateAllSubmenus(MenuBar* pMenuBar)
 {
     pMenuBar->HandleMenuActivateEvent(mpVCLMenu);
-    for ( sal_uInt16 nPos = 0; nPos < maItems.size(); nPos++ )
+    for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
     {
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
         if ( pSalItem->mpSubMenu != NULL )
