@@ -342,8 +342,11 @@ public:
      * SwContentFrm: the shortcut for the Frames
      * If the void* casts wrongly, it's its own fault!
      * The void* must be checked for 0 in any case!
+     *
+     * return true if the Portion associated with this SwTxtFrm was
+     * potentially destroyed and replaced by Prepare
      */
-    virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
+    virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = 0, bool bNotify = true ) SAL_OVERRIDE;
 
     /**

@@ -332,9 +332,10 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     }
 }
 
-void SwFrm::Prepare( const PrepareHint, const void *, bool )
+bool SwFrm::Prepare( const PrepareHint, const void *, bool )
 {
     /* Do nothing */
+    return false;
 }
 
 /**
