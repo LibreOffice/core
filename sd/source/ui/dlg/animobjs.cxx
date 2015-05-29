@@ -211,7 +211,7 @@ AnimationWindow::~AnimationWindow()
 
 void AnimationWindow::dispose()
 {
-    delete pControllerItem;
+    DELETEZ( pControllerItem );
 
     for (size_t i = 0; i < m_FrameList.size(); ++i)
     {

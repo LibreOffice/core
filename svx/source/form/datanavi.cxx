@@ -2177,6 +2177,7 @@ namespace svxform
     void DataNavigator::dispose()
     {
         m_aDataWin.disposeAndClear();
+        ::SfxControllerItem::dispose();
         SfxDockingWindow::dispose();
     }
 
