@@ -48,26 +48,27 @@ public:
     void testKhmer();
     void testJapanese();
     void testChinese();
+
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
+    CPPUNIT_TEST(testWordBoundaries);
     CPPUNIT_TEST(testGraphemeIteration);
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
     CPPUNIT_TEST(testThai);
+#if (U_ICU_VERSION_MAJOR_NUM > 51)
+    CPPUNIT_TEST(testLao);
+#endif
 #ifdef TODO
     CPPUNIT_TEST(testNorthernThai);
 #endif
-
-    CPPUNIT_TEST(testWordBoundaries);
 #if (U_ICU_VERSION_MAJOR_NUM > 4)
     CPPUNIT_TEST(testKhmer);
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM > 51)
-    CPPUNIT_TEST(testLao);
 #endif
     CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST(testChinese);
     CPPUNIT_TEST_SUITE_END();
+
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
     void doTestJapanese(uno::Reference< i18n::XBreakIterator > &xBreak);
