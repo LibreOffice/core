@@ -472,8 +472,9 @@ namespace accessibility
             {
                 // find the one with the cursor and get/set focus accordingly
                 ESelection aSelection;
+                // per definition elsewhere, edit mode text has the focus
                 if( GetEditViewForwarder().GetSelection( aSelection ) )
-                    SetChildFocus( aSelection.nEndPara, bHaveFocus );
+                    SetChildFocus( aSelection.nEndPara, true );
             }
             catch( const uno::Exception& ) {}
         }
