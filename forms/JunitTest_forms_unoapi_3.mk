@@ -7,16 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_JunitTest_JunitTest,forms_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,forms_unoapi_3))
 
-$(eval $(call gb_JunitTest_set_defs,forms_unoapi,\
+$(eval $(call gb_JunitTest_set_defs,forms_unoapi_3,\
     $$(DEFS) \
-    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/forms/qa/unoapi/forms.sce \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/forms/qa/unoapi/forms_3.sce \
     -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/forms/qa/unoapi/knownissues.xcl \
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/forms/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,forms_unoapi,\
+$(eval $(call gb_JunitTest_use_jars,forms_unoapi_3,\
     OOoRunner \
     ridl \
     test \
@@ -24,7 +24,7 @@ $(eval $(call gb_JunitTest_use_jars,forms_unoapi,\
     jurt \
 ))
 
-$(eval $(call gb_JunitTest_add_classes,forms_unoapi,\
+$(eval $(call gb_JunitTest_add_classes,forms_unoapi_3,\
     org.openoffice.test.UnoApiTest \
 ))
 
