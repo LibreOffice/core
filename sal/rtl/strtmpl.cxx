@@ -26,7 +26,7 @@
 #include <cassert>
 #include <limits>
 
-#include <string.h>
+#include <cstring>
 #include <wchar.h>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
@@ -387,7 +387,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar_WithLength )( const IMPL_RTL_ST
 //    assert(nLen >= 0);
 #if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
-    IMPL_RTL_STRCODE* p = static_cast<IMPL_RTL_STRCODE*>(const_cast<void *>(memchr(pStr, c, nLen)));
+    IMPL_RTL_STRCODE* p = static_cast<IMPL_RTL_STRCODE*>(std::memchr(const_cast<IMPL_RTL_STRCODE *>(pStr), c, nLen));
     return p ? p - pStr : -1;
 #else
     const IMPL_RTL_STRCODE* pTempStr = pStr;
