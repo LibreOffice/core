@@ -653,7 +653,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                     // only optimizing common bitmap actions:
                     case( MetaActionType::MAPMODE ):
                     {
-                        const_cast< MetaAction* >( pAction )->Execute( aDummyVDev.get() );
+                        pAction->Execute( aDummyVDev.get() );
                         break;
                     }
                     case( MetaActionType::PUSH ):
