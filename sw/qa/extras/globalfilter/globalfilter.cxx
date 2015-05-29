@@ -45,7 +45,7 @@ public:
     CPPUNIT_TEST(testCharHighlight);
     CPPUNIT_TEST(testMSCharBackgroundEditing);
     CPPUNIT_TEST(testCharBackgroundToHighlighting);
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(WNT)
     CPPUNIT_TEST(testSkipImages);
 #endif
     CPPUNIT_TEST_SUITE_END();
