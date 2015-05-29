@@ -106,6 +106,7 @@ void ImpSVGDialog::dispose()
     maBTOK.disposeAndClear();
     maBTCancel.disposeAndClear();
     maBTHelp.disposeAndClear();
+    maConfigItem.WriteModifiedConfig();
     ModalDialog::dispose();
 }
 
