@@ -741,7 +741,7 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy:
     listAnchor.realloc( id.size() );
     listTitle.realloc( id.size() );
 
-    for( sal_uInt32 i = 0; i < id.size(); ++i )
+    for( size_t i = 0; i < id.size(); ++i )
     {
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
@@ -771,7 +771,7 @@ KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
       listAnchor( aVec.size() ),
       listTitle( aVec.size() )
 {
-    for( unsigned int i = 0; i < aVec.size(); ++i )
+    for( size_t i = 0; i < aVec.size(); ++i )
     {
         listKey[i] = aVec[i].key;
         listId[i] = aVec[i].listId;

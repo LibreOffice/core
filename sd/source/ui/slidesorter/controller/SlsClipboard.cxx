@@ -360,7 +360,7 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
     // after the nInsertIndex position.
     PageSelector& rSelector (mrController.GetPageSelector());
     rSelector.DeselectAllPages();
-    for (sal_uInt16 i=0; i<nPageCount; i++)
+    for (sal_Int32 i=0; i<nPageCount; i++)
     {
         model::SharedPageDescriptor pDescriptor (
             mrSlideSorter.GetModel().GetPageDescriptor(nFirstIndex + i));

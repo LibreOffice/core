@@ -287,7 +287,7 @@ void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     else
         boxX = nControlWidth / perLine;
 
-    for (sal_uInt16 i = 0; i < maElementList.size() ; i++)
+    for (size_t i = 0; i < maElementList.size() ; i++)
     {
         SmElement* element = maElementList[i].get();
         if (element->isSeparator())
@@ -390,7 +390,7 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
     OUString tooltip;
     if (Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {
-        for (sal_uInt16 i = 0; i < maElementList.size() ; i++)
+        for (size_t i = 0; i < maElementList.size() ; i++)
         {
             SmElement* element = maElementList[i].get();
             Rectangle rect(element->mBoxLocation, element->mBoxSize);
@@ -419,7 +419,7 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 
     if (rMouseEvent.IsLeft() && Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {
-        for (sal_uInt16 i = 0; i < maElementList.size() ; i++)
+        for (size_t i = 0; i < maElementList.size() ; i++)
         {
             SmElement* element = maElementList[i].get();
             Rectangle rect(element->mBoxLocation, element->mBoxSize);

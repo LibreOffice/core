@@ -567,7 +567,7 @@ void LayoutMenu::Fill()
 
 void LayoutMenu::Clear()
 {
-    for (sal_uInt16 nId=1; nId<=GetItemCount(); nId++)
+    for (size_t nId=1; nId<=GetItemCount(); nId++)
         delete static_cast<AutoLayout*>(GetItemData(nId));
     ValueSet::Clear();
 }

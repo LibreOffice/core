@@ -218,8 +218,8 @@ void FramePainter::OffsetBitmap::PaintCenter (
     const Rectangle& rBox) const
 {
     const Size aBitmapSize (maBitmap.GetSizePixel());
-    for (sal_Int32 nY=rBox.Top(); nY<=rBox.Bottom(); nY+=aBitmapSize.Height())
-        for (sal_Int32 nX=rBox.Left(); nX<=rBox.Right(); nX+=aBitmapSize.Width())
+    for (long nY=rBox.Top(); nY<=rBox.Bottom(); nY+=aBitmapSize.Height())
+        for (long nX=rBox.Left(); nX<=rBox.Right(); nX+=aBitmapSize.Width())
             rDevice.DrawBitmapEx(
                 Point(nX,nY),
                 Size(

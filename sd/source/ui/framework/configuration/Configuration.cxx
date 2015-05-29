@@ -170,7 +170,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
 
     // Copy the resources from the vector into a new sequence.
     Sequence<Reference<XResourceId> > aResult (aResources.size());
-    for (sal_uInt32 nIndex=0; nIndex<aResources.size(); ++nIndex)
+    for (size_t nIndex=0; nIndex<aResources.size(); ++nIndex)
         aResult[nIndex] = aResources[nIndex];
 
     return aResult;

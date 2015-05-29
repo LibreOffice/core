@@ -2406,7 +2406,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow()
 
 void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 {
-    const long nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
+    const sal_uInt16 nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
 
     if( nSlideCount )
     {

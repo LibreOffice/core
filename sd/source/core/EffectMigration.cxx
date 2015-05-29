@@ -1406,7 +1406,7 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
             const double fDurationShow(0.2);
             const double fDurationHide(0.001);
 
-            for(sal_uInt32 a(0); a < aObjects.size(); a++)
+            for(size_t a(0); a < aObjects.size(); a++)
             {
                 SdrObject* pLast = pNext;
                 pNext = aObjects[a];

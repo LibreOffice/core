@@ -2106,7 +2106,7 @@ void Complex::Csch() throw( uno::RuntimeException, lang::IllegalArgumentExceptio
 
 ComplexList::~ComplexList()
 {
-    for( sal_uInt32 i = 0; i < maVector.size(); ++i )
+    for( size_t i = 0; i < maVector.size(); ++i )
         delete maVector[i];
 }
 

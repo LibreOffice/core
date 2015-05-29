@@ -816,7 +816,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                 {
                     sValue += "note:";
                     const EditTextObject& rEdit = pPara->GetTextObject();
-                    for (sal_uInt16 i=0;i<rEdit.GetParagraphCount();i++)
+                    for (sal_Int32 i=0;i<rEdit.GetParagraphCount();i++)
                     {
                         OUString strNote = rEdit.GetText(i);
                         strNote = strNote.replaceFirst( "\\", "\\\\" );

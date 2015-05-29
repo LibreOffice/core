@@ -199,8 +199,8 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
             const sal_Int32 nIconHeight (aExclusionOverlay.GetSizePixel().Height());
             if (nIconWidth>0 && nIconHeight>0)
             {
-                for (sal_Int32 nX=0; nX<rPreviewSize.Width(); nX+=nIconWidth)
-                    for (sal_Int32 nY=0; nY<rPreviewSize.Height(); nY+=nIconHeight)
+                for (long nX=0; nX<rPreviewSize.Width(); nX+=nIconWidth)
+                    for (long nY=0; nY<rPreviewSize.Height(); nY+=nIconHeight)
                         rContent.DrawBitmapEx(Point(nX,nY)+aPageOffset, aExclusionOverlay);
             }
             rContent.SetClipRegion(aSavedClipRegion);

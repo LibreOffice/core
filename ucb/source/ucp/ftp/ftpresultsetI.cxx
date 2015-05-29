@@ -46,7 +46,7 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
                        const std::vector<FTPDirentry>&  dirvec)
     : ResultSetBase(rxContext,xProvider,nOpenMode,seqProp,seqSort)
 {
-    for( unsigned int i = 0; i < dirvec.size(); ++i)
+    for( size_t i = 0; i < dirvec.size(); ++i)
         m_aPath.push_back(dirvec[i].m_aURL);
 
     // m_aIdents holds the contentidentifiers
@@ -54,7 +54,7 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
     m_aItems.resize( m_aPath.size() );
     m_aIdents.resize( m_aPath.size() );
 
-    for(unsigned n = 0; n < m_aItems.size(); ++n) {
+    for(size_t n = 0; n < m_aItems.size(); ++n) {
         rtl::Reference<ucbhelper::PropertyValueSet> xRow =
             new ucbhelper::PropertyValueSet(rxContext);
 

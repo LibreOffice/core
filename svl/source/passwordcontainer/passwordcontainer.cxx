@@ -51,7 +51,7 @@ static OUString createIndex(const vector< OUString >& lines)
 {
     OString aResult;
 
-    for( unsigned int i = 0; i < lines.size(); i++ )
+    for( size_t i = 0; i < lines.size(); i++ )
     {
         if( i )
             aResult += OString( "__" );
@@ -180,7 +180,7 @@ static ::rtl::ByteSequence getBufFromAsciiLine( const OUString& line )
 static Sequence< OUString > copyVectorToSequence( const vector< OUString >& original )
 {
     Sequence< OUString > newOne ( original.size() );
-    for( unsigned int i = 0; i < original.size() ; i++ )
+    for( size_t i = 0; i < original.size() ; i++ )
         newOne[i] = original[i];
 
     return newOne;

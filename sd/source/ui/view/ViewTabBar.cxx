@@ -483,7 +483,7 @@ bool ViewTabBar::HasTabBarButton (
 {
     bool bResult (false);
 
-    for (sal_uInt32 nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+    for (size_t nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
     {
         if (IsEqual(maTabBarButtons[nIndex], rButton))
         {
@@ -517,7 +517,7 @@ void ViewTabBar::UpdateActiveButton()
     if (xView.is())
     {
         Reference<XResourceId> xViewId (xView->getResourceId());
-        for (sal_uInt16 nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+        for (size_t nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
         {
             if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)
             {

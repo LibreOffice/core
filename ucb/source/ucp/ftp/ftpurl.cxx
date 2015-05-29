@@ -275,7 +275,7 @@ OUString FTPURL::ident(bool withslash,bool internal) const
     else
         bff.append('/');
 
-    for(unsigned i = 0; i < m_aPathSegmentVec.size(); ++i)
+    for(size_t i = 0; i < m_aPathSegmentVec.size(); ++i)
         if(i == 0)
             bff.append(m_aPathSegmentVec[i]);
         else
@@ -323,7 +323,7 @@ OUString FTPURL::parent(bool internal) const
 
     OUString last;
 
-    for(unsigned int i = 0; i < m_aPathSegmentVec.size(); ++i)
+    for(size_t i = 0; i < m_aPathSegmentVec.size(); ++i)
         if(1+i == m_aPathSegmentVec.size())
             last = m_aPathSegmentVec[i];
         else if(i == 0)
@@ -614,7 +614,7 @@ FTPDirentry FTPURL::direntry() const
 
         std::vector<FTPDirentry> aList = aURL.list(OpenMode::ALL);
 
-        for(unsigned i = 0; i < aList.size(); ++i) {
+        for(size_t i = 0; i < aList.size(); ++i) {
             if(aList[i].m_aName == nettitle) { // the relevant file is found
                 aDirentry = aList[i];
                 break;
@@ -778,7 +778,7 @@ void FTPURL::del() const
 
     if(aDirentry.m_nMode & INETCOREFTP_FILEMODE_ISDIR) {
         std::vector<FTPDirentry> vec = list(sal_Int16(OpenMode::ALL));
-        for( unsigned int i = 0; i < vec.size(); ++i )
+        for( size_t i = 0; i < vec.size(); ++i )
             try {
                 FTPURL url(vec[i].m_aURL,m_pFCP);
                 url.del();

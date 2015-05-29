@@ -49,7 +49,7 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< uno::XComponentContext
     aCommand.Name = "getPropertyValues";
     aCommand.Argument <<= m_sProperty;
 
-    for( sal_uInt32 i = 0; i < m_aPath.size(); ++i )
+    for( size_t i = 0; i < m_aPath.size(); ++i )
     {
         m_aPath[i] =
             "vnd.sun.star.help://" +

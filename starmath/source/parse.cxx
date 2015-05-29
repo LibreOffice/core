@@ -1235,7 +1235,7 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
     SmNodeArray  aSubNodes;
     aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
     aSubNodes[0] = popOrZero(m_aNodeStack);
-    for (sal_uInt16 i = 1;  i < aSubNodes.size();  i++)
+    for (size_t i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
     // process all sub-/supscripts

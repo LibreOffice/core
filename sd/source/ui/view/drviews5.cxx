@@ -466,7 +466,7 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
 
     const sal_Int32 nLength = rSequence.getLength();
     const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
-    for (sal_Int16 i = 0 ; i < nLength; i++, pValue++ )
+    for (sal_Int32 i = 0 ; i < nLength; i++, pValue++ )
     {
         if ( pValue->Name == sUNO_View_ZoomOnPage )
         {
