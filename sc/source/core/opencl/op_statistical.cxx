@@ -7624,7 +7624,7 @@ void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -7749,7 +7749,7 @@ void OpMinA::GenSlidingWindowFunction(
     int isMixed = 0;
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -7899,7 +7899,7 @@ vSubArguments)
     int isMixed = 0;
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -8039,7 +8039,7 @@ vSubArguments)
     int isMixed = 0;
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -8190,7 +8190,7 @@ vSubArguments)
     int isMixed = 0;
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -8342,7 +8342,7 @@ void OpVarA::GenSlidingWindowFunction(std::stringstream &ss,
     int isMixedSV = 0;
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -8712,7 +8712,7 @@ void OpVarPA::GenSlidingWindowFunction(std::stringstream &ss,
     int isMixedSV = 0;
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -9079,7 +9079,7 @@ void OpStDevA::GenSlidingWindowFunction(std::stringstream &ss,
     int isMixedSV = 0;
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -9447,7 +9447,7 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
     int isMixedSV = 0;
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -9813,7 +9813,7 @@ void OpAveDev:: GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"( ";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -9826,7 +9826,7 @@ void OpAveDev:: GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double length;\n";
     ss << "    double totallength=0;\n";
     ss << "    double tmp = 0;\n";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -9876,7 +9876,7 @@ void OpAveDev:: GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss << "    double mean = sum * pow(totallength,-1);\n";
     ss << "    sum = 0.0;\n";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);

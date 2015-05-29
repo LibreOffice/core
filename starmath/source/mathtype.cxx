@@ -2078,12 +2078,12 @@ void MathType::HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel)
     int nBytes=(pMatrix->GetNumRows()+1)*2/8;
     if (((pMatrix->GetNumRows()+1)*2)%8)
         nBytes++;
-    for (sal_uInt16 j = 0; j < nBytes; j++)
+    for (int j = 0; j < nBytes; j++)
         pS->WriteUChar( 0x00 ); //row_parts
     nBytes=(pMatrix->GetNumCols()+1)*2/8;
     if (((pMatrix->GetNumCols()+1)*2)%8)
         nBytes++;
-    for (sal_uInt16 k = 0; k < nBytes; k++)
+    for (int k = 0; k < nBytes; k++)
         pS->WriteUChar( 0x00 ); //col_parts
     sal_uInt16  nSize = pMatrix->GetNumSubNodes();
     for (sal_uInt16 i = 0; i < nSize; i++)

@@ -1946,7 +1946,7 @@ void ExcelToSc::ReadExtensions( const ExtensionTypeVec& rExtensions,
 {
     unsigned int nArray = 0;
 
-    for( unsigned int i = 0 ; i < rExtensions.size() ; i++ )
+    for( size_t i = 0 ; i < rExtensions.size() ; i++ )
     {
         ExtensionType eType = rExtensions[i];
 

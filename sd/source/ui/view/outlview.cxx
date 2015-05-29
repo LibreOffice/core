@@ -1086,7 +1086,7 @@ void OutlineView::FillOutliner()
     mrOutliner.SetUpdateMode(false);
 
     Paragraph* pTitleToSelect = NULL;
-    sal_uLong nPageCount = mrDoc.GetSdPageCount(PK_STANDARD);
+    sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PK_STANDARD);
 
     // fill outliner with paragraphs from slides title & (outlines|subtitles)
     for (sal_uInt16 nPage = 0; nPage < nPageCount; nPage++)

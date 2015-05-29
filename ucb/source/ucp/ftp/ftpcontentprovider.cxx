@@ -246,7 +246,7 @@ bool FTPContentProvider::forHost( const OUString& host,
                                   OUString& account)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
+    for(size_t i = 0; i < m_ServerInfo.size(); ++i)
         if(host == m_ServerInfo[i].host &&
            port == m_ServerInfo[i].port &&
            username == m_ServerInfo[i].username )
@@ -274,7 +274,7 @@ bool  FTPContentProvider::setHost( const OUString& host,
 
     bool present(false);
     osl::MutexGuard aGuard(m_aMutex);
-    for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
+    for(size_t i = 0; i < m_ServerInfo.size(); ++i)
         if(host == m_ServerInfo[i].host &&
            port == m_ServerInfo[i].port &&
            username == m_ServerInfo[i].username)

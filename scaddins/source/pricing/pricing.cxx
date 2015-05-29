@@ -113,7 +113,7 @@ ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     ScaResStringArrLoader aArrLoader( RID_PRICING_DEFFUNCTION_NAMES, nCompListID, rResMgr );
     const ResStringArray& rArr = aArrLoader.GetStringArray();
 
-    for( sal_uInt16 nIndex = 0; nIndex < rArr.Count(); nIndex++ )
+    for( sal_uInt32 nIndex = 0; nIndex < rArr.Count(); nIndex++ )
         aCompList.Append( rArr.GetString( nIndex ) );
 }
 

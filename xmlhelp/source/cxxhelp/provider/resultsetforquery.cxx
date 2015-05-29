@@ -180,7 +180,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 if( nQueryListSize > 1 )
                     aSet.clear();
 
-                for (unsigned j = 0; j < aPathVector.size(); ++j) {
+                for (size_t j = 0; j < aPathVector.size(); ++j) {
                     pQueryResultVector->push_back(HitItem(aPathVector[j], aScoreVector[j]));
                     if (nQueryListSize > 1)
                         aSet.insert(aPathVector[j]);

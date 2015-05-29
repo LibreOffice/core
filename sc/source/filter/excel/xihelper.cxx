@@ -170,7 +170,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
             aNextRun.mnChar = 0xFFFF;
 
         sal_Int32 nLen = rString.GetText().getLength();
-        for( sal_uInt16 nChar = 0; nChar < nLen; ++nChar )
+        for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )
         {
             // reached new different formatted text portion
             if( nChar >= aNextRun.mnChar )

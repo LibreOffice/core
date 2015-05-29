@@ -573,7 +573,7 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    for (sal_uInt16 nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
+    for (size_t nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
         if (pData != NULL)
@@ -593,7 +593,7 @@ void MasterPagesSelector::UpdateAllPreviews()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    for (sal_uInt16 nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
+    for (size_t nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
         if (pData != NULL)
@@ -613,7 +613,7 @@ void MasterPagesSelector::ClearPageSet()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    for (sal_uInt16 nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
+    for (size_t nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
         if (pData != NULL)

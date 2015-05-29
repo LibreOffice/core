@@ -203,7 +203,7 @@ void PresenterConfigurationAccess::ForAll (
             {
                 // Get from the current item of the container the children
                 // that match the names in the rArguments list.
-                for (sal_uInt32 nValueIndex=0; nValueIndex<aValues.size(); ++nValueIndex)
+                for (size_t nValueIndex=0; nValueIndex<aValues.size(); ++nValueIndex)
                 {
                     if ( ! xSetItem->hasByName(rArguments[nValueIndex]))
                         bHasAllValues = false;

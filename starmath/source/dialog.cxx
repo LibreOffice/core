@@ -1148,7 +1148,7 @@ void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const Rect
     size_t nSymbols = aSymbolSet.size();
 
     Color aTxtColor(rRenderContext.GetTextColor());
-    for (sal_uInt16 i = v; i < nSymbols ; i++)
+    for (size_t i = v; i < nSymbols ; i++)
     {
         SmSym aSymbol(*aSymbolSet[i]);
         vcl::Font aFont(aSymbol.GetFace());

@@ -187,13 +187,13 @@ void LayeredDevice::Invalidate (
 
 void LayeredDevice::InvalidateAllLayers (const Rectangle& rInvalidationArea)
 {
-    for (sal_uInt32 nLayer=0; nLayer<mpLayers->size(); ++nLayer)
+    for (size_t nLayer=0; nLayer<mpLayers->size(); ++nLayer)
         (*mpLayers)[nLayer]->InvalidateRectangle(rInvalidationArea);
 }
 
 void LayeredDevice::InvalidateAllLayers (const vcl::Region& rInvalidationRegion)
 {
-    for (sal_uInt32 nLayer=0; nLayer<mpLayers->size(); ++nLayer)
+    for (size_t nLayer=0; nLayer<mpLayers->size(); ++nLayer)
         (*mpLayers)[nLayer]->InvalidateRegion(rInvalidationRegion);
 }
 

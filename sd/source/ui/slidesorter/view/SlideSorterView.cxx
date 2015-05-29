@@ -469,7 +469,7 @@ void SlideSorterView::DeterminePageObjectVisibilities()
             mbPreciousFlagUpdatePending |= true;
 
         model::SharedPageDescriptor pDescriptor;
-        for (int nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
+        for (long nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
         {
             pDescriptor = mrModel.GetPageDescriptor(nIndex);
             if (pDescriptor.get() != NULL)
@@ -675,7 +675,7 @@ void SlideSorterView::Paint (
     // Paint all page objects that are fully or partially inside the
     // repaint region.
     const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(rRepaintArea));
-    for (sal_Int32 nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
+    for (long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
     {
         model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
         if (!pDescriptor || ! pDescriptor->HasState(PageDescriptor::ST_Visible))

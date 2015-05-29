@@ -86,7 +86,7 @@ Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizerD
     Sequence< Reference< com::sun::star::frame::XDispatch> > aReturn( aDescripts.getLength() );
     Reference< com::sun::star::frame::XDispatch>* pReturn = aReturn.getArray();
     const com::sun::star::frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-    for (sal_Int16 i = 0; i < aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
+    for (sal_Int32 i = 0; i < aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
     {
         *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
     }

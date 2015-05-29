@@ -1358,7 +1358,7 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
         if( nNewLevel >= mnCurrLevel )
         {
             // new level(s) opened, or no level closed - update all level infos
-            for( sal_uInt16 nScLevel = 0; nScLevel <= nNewOpenScLevel; ++nScLevel )
+            for( size_t nScLevel = 0; nScLevel <= nNewOpenScLevel; ++nScLevel )
             {
                 /*  In each level: check if a new group is started (there may be
                     neighbored groups without gap - therefore check ALL levels). */

@@ -398,7 +398,7 @@ bool DataSupplier::getData()
                 aPath = NeonUri::unescape( aPath );
                 bool bFoundParent = false;
 
-                for ( sal_uInt32 n = 0; n < resources.size(); ++n )
+                for ( size_t n = 0; n < resources.size(); ++n )
                 {
                     const DAVResource & rRes = resources[ n ];
 

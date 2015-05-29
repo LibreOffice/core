@@ -1412,7 +1412,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     if ( pActEntry->maImageList.size() > 0 )
     {
         long nWidth = 0;
-        for ( sal_uInt32 i=0; i < pActEntry->maImageList.size(); ++i )
+        for ( size_t i=0; i < pActEntry->maImageList.size(); ++i )
         {
             ScHTMLImage* pI = &pActEntry->maImageList[ i ];
             if ( pI->nDir & nHorizontal )
