@@ -2821,7 +2821,7 @@ void SAL_CALL
 shell::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* >* listeners_vec )
 {
     std::list< ContentEventNotifier* >* listeners;
-    for( sal_uInt32 i = 0; i < listeners_vec->size(); ++i )
+    for( size_t i = 0; i < listeners_vec->size(); ++i )
     {
         listeners = (*listeners_vec)[i];
         std::list< ContentEventNotifier* >::iterator it = listeners->begin();

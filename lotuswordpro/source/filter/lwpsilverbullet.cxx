@@ -97,7 +97,7 @@ void LwpSilverBullet::Read()
 
     sal_uInt16 nNumPos = m_pObjStrm->QuickReaduInt16();
 
-    for (sal_uInt8 nC = 0; nC < nNumPos; nC++)
+    for (sal_uInt16 nC = 0; nC < nNumPos; nC++)
         m_pResetPositionFlags[nC] = m_pObjStrm->QuickReaduInt8();
 
     m_nUseCount = m_pObjStrm->QuickReaduInt32();

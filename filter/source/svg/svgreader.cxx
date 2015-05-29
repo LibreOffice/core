@@ -1650,7 +1650,7 @@ struct ShapeWritingVisitor
                       boost::bind(&basegfx::B2DPolyPolygon::transform,
                                   _1,boost::cref(aState.maCTM)));
 
-        for( sal_uInt32 i=0; i<aPolys.size(); ++i )
+        for( size_t i=0; i<aPolys.size(); ++i )
         {
             const basegfx::B2DRange aBounds(
                 aPolys[i].areControlPointsUsed() ?

@@ -108,7 +108,7 @@ namespace svgio
                             }
                         }
 
-                        for(sal_uInt32 a(0); a < aParts.size(); a++)
+                        for(size_t a(0); a < aParts.size(); a++)
                         {
                             const OUString aNewConcatenated(
                                 "." + aParts[a] + aConcatenated);
@@ -238,7 +238,7 @@ namespace svgio
                 // as current
                 SvgStyleAttributes* pCurrent = const_cast< SvgStyleAttributes* >(maCssStyleVector[0]);
 
-                for(sal_uInt32 a(1); a < maCssStyleVector.size(); a++)
+                for(size_t a(1); a < maCssStyleVector.size(); a++)
                 {
                     SvgStyleAttributes* pNext = const_cast< SvgStyleAttributes* >(maCssStyleVector[a]);
 

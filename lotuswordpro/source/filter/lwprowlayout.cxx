@@ -309,7 +309,7 @@ sal_Int32 LwpRowLayout::FindMarkConnCell(sal_uInt8 nStartCol,sal_uInt8 nEndCol)
     sal_uInt16 nSpannRows = 1;
     sal_Int32 nMarkConnCell = -1;
 
-    for (sal_uInt16 i=0;i<m_ConnCellList.size();i++)
+    for (size_t i=0;i<m_ConnCellList.size();i++)
     {
         if (m_ConnCellList[i]->GetColID()>=nEndCol)
             break;
@@ -334,7 +334,7 @@ sal_Int32 LwpRowLayout::FindNextMarkConnCell(sal_uInt16 nMarkConnCell,sal_uInt8 
 {
     sal_uInt16 nMaxRows = m_ConnCellList[nMarkConnCell]->GetNumrows();
 
-    for (sal_uInt16 i=nMarkConnCell+1;i<m_ConnCellList.size();i++)
+    for (size_t i=nMarkConnCell+1;i<m_ConnCellList.size();i++)
     {
         if (m_ConnCellList[i]->GetColID()>=nEndCol)
             break;
@@ -446,7 +446,7 @@ void LwpRowLayout::CollectMergeInfo()
 void LwpRowLayout::SetCellSplit(sal_uInt16 nEffectRows)
 {
     LwpConnectedCellLayout* pConnCell;
-    for (sal_uInt32 i=0; i<m_ConnCellList.size(); i++)
+    for (size_t i=0; i<m_ConnCellList.size(); i++)
     {
         pConnCell = m_ConnCellList[i];
         sal_uInt16 nRowSpan = pConnCell->GetRowID()+pConnCell->GetNumrows();

@@ -2015,7 +2015,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, bool bAp
         const OUString   aComma( "," );
         OUString         aDashArrayStr;
 
-        for( unsigned int k = 0; k < rShape.maDashArray.size(); ++k )
+        for( size_t k = 0; k < rShape.maDashArray.size(); ++k )
         {
             const sal_Int32 nDash = ( bApplyMapping ?
                                         ImplMap( FRound( rShape.maDashArray[ k ] ) ) :

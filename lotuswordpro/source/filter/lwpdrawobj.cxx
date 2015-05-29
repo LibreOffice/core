@@ -537,7 +537,7 @@ XFFrame* LwpDrawPolyLine::CreateDrawObj(const OUString& rStyleName )
     XFDrawPath* pPolyline = new XFDrawPath();
     pPolyline->MoveTo(XFPoint((double)m_pVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
             (double)m_pVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
-    for (sal_uInt8 nC = 1; nC < m_aPolyLineRec.nNumPoints; nC++)
+    for (sal_uInt16 nC = 1; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
         pPolyline->LineTo(XFPoint((double)m_pVector[nC].x/TWIPS_PER_CM * m_pTransData->fScaleX,
             (double)m_pVector[nC].y/TWIPS_PER_CM * m_pTransData->fScaleY));
@@ -552,7 +552,7 @@ XFFrame* LwpDrawPolyLine::CreateDrawObj(const OUString& rStyleName )
 XFFrame* LwpDrawPolyLine::CreateStandardDrawObj(const  OUString& rStyleName)
 {
     XFDrawPolyline* pPolyline = new XFDrawPolyline();
-    for (sal_uInt8 nC = 0; nC < m_aPolyLineRec.nNumPoints; nC++)
+    for (sal_uInt16 nC = 0; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
         pPolyline->AddPoint((double)m_pVector[nC].x/TWIPS_PER_CM,
             (double)m_pVector[nC].y/TWIPS_PER_CM);
@@ -1169,7 +1169,7 @@ void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
     pPath->MoveTo(aStart);
 
     sal_uInt8 nPtIndex = 1;
-    for (sal_uInt8 nC = 1; nC <= m_aTextArtRec.aPath[0].n; nC++)
+    for (sal_uInt16 nC = 1; nC <= m_aTextArtRec.aPath[0].n; nC++)
     {
         nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
         nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
