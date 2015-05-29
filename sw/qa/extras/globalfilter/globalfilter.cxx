@@ -33,7 +33,7 @@ public:
     void testCharHighlightBody();
     void testMSCharBackgroundEditing();
     void testCharBackgroundToHighlighting();
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(WNT)
     void testSkipImages();
 #endif
 
@@ -659,7 +659,7 @@ void Test::testCharBackgroundToHighlighting()
     }
 }
 
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(WNT)
 void Test::testSkipImages()
 {
     // Check how LO skips image loading (but not texts of textboxes and custom shapes)
