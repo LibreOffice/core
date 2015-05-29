@@ -2033,7 +2033,7 @@ void SwTabFrm::MakeAll()
                         // First, we remove an existing follow flow line.
                         if ( HasFollowFlowLine() )
                         {
-                            SwFrm* pLastLine = const_cast<SwFrm*>(GetLastLower());
+                            SwFrm* pLastLine = GetLastLower();
                             RemoveFollowFlowLine();
                             // invalidate and rebuild last row
                             if ( pLastLine )
@@ -4347,7 +4347,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
                  && this == pTab->GetFirstNonHeadlineRow()
                  && !pTab->IsInRecalcLowerRow() )
             {
-                SwTabFrm* pMasterTab = const_cast< SwTabFrm* >( pTab->FindMaster() );
+                SwTabFrm* pMasterTab = pTab->FindMaster();
                 pMasterTab->InvalidatePos();
             }
         }

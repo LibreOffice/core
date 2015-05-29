@@ -32,7 +32,7 @@ public:
         : pPageDesc(p)
     {}
 
-    SwPageDesc* GetPageDesc() const { return const_cast<SwPageDesc*>(pPageDesc); }
+    SwPageDesc* GetPageDesc() const { return pPageDesc; }
 };
 
 #endif

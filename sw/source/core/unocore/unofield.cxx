@@ -811,7 +811,7 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
     if (m_pImpl->m_bIsDescriptor)
         return 0;
     else
-        return static_cast<SwFieldType*>(const_cast<SwModify*>(m_pImpl->GetRegisteredIn()));
+        return static_cast<SwFieldType*>(m_pImpl->GetRegisteredIn());
 }
 
 typedef std::vector<SwFormatField*> SwDependentFields;
@@ -1297,8 +1297,8 @@ SwXTextField::getTextFieldMaster() throw (uno::RuntimeException, std::exception)
     SwFieldType* pType = 0;
     if (m_pImpl->m_bIsDescriptor && m_pImpl->m_FieldTypeClient.GetRegisteredIn())
     {
-        pType = static_cast<SwFieldType*>(const_cast<SwModify*>(
-                    m_pImpl->m_FieldTypeClient.GetRegisteredIn()));
+        pType = static_cast<SwFieldType*>(
+                    m_pImpl->m_FieldTypeClient.GetRegisteredIn());
     }
     else
     {
@@ -1995,7 +1995,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     m_pImpl->m_bIsDescriptor = false;
     if (m_pImpl->m_FieldTypeClient.GetRegisteredIn())
     {
-        const_cast<SwModify*>(m_pImpl->m_FieldTypeClient.GetRegisteredIn())
+        m_pImpl->m_FieldTypeClient.GetRegisteredIn()
             ->Remove(&m_pImpl->m_FieldTypeClient);
     }
     m_pImpl->m_pProps.reset();

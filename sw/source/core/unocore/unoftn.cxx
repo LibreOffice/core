@@ -97,7 +97,7 @@ void SwXFootnote::Impl::Invalidate()
 {
     if (GetRegisteredIn())
     {
-        const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
+        GetRegisteredIn()->Remove(this);
     }
     m_pFormatFootnote = 0;
     m_rThis.SetDoc(0);

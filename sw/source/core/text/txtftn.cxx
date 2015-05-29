@@ -804,7 +804,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     if( rInf.IsTest() )
         return new SwFootnotePortion( rFootnote.GetViewNumStr( *pDoc ), pFootnote );
 
-    SWAP_IF_SWAPPED swap(const_cast<SwTextFrm *>(pFrm));
+    SWAP_IF_SWAPPED swap(pFrm);
 
     sal_uInt16 nReal;
     {
@@ -1105,7 +1105,7 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 
     sal_Int32 nRet;
     {
-        SWAP_IF_NOT_SWAPPED swap(const_cast<SwTextFrm *>(pFrm));
+        SWAP_IF_NOT_SWAPPED swap(pFrm);
 
         nRet = FormatLine( nStart );
     }

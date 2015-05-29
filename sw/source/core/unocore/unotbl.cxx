@@ -2075,7 +2075,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
         pCursor = reinterpret_cast<OTextCursorHelper*>(
                 sal::static_int_cast<sal_IntPtr>(xRangeTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())));
     }
-    SwDoc* pDoc = pRange ? const_cast<SwDoc*>(pRange->GetDoc()) : pCursor ? const_cast<SwDoc*>(pCursor->GetDoc()) : nullptr;
+    SwDoc* pDoc = pRange ? pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     if(!pDoc || !nRows || !nColumns)
         throw lang::IllegalArgumentException();
     SwUnoInternalPaM aPam(*pDoc);

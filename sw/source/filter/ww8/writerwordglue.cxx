@@ -173,7 +173,7 @@ namespace myImplHelpers
     SwTextFormatColl* MapperImpl<SwTextFormatColl>::MakeStyle(const OUString &rName)
     {
         return mrDoc.MakeTextFormatColl(rName,
-            const_cast<SwTextFormatColl *>(mrDoc.GetDfltTextFormatColl()));
+            mrDoc.GetDfltTextFormatColl());
     }
 
     template<> class MapperImpl<SwCharFormat>

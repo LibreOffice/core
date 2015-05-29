@@ -258,13 +258,13 @@ namespace sw
             {
                 MoveTo(our_pClientIters);
                 our_pClientIters = this;
-                m_pCurrent = m_pPosition = const_cast<WriterListener*>(m_rRoot.m_pWriterListeners);
+                m_pCurrent = m_pPosition = m_rRoot.m_pWriterListeners;
             }
             WriterListener* GetLeftOfPos() { return m_pPosition->m_pLeft; }
             WriterListener* GetRightOfPos() { return m_pPosition->m_pRight; }
             WriterListener* GoStart()
             {
-                if((m_pPosition = const_cast<WriterListener*>(m_rRoot.m_pWriterListeners)))
+                if((m_pPosition = m_rRoot.m_pWriterListeners))
                     while( m_pPosition->m_pLeft )
                         m_pPosition = m_pPosition->m_pLeft;
                 return m_pCurrent = m_pPosition;
@@ -302,7 +302,7 @@ public:
     TElementType* Last()
     {
         if(!m_pPosition)
-            m_pPosition = const_cast<sw::WriterListener*>(m_rRoot.m_pWriterListeners);
+            m_pPosition = m_rRoot.m_pWriterListeners;
         if(!m_pPosition)
             return static_cast<TElementType*>(Sync());
         while(GetRightOfPos())
@@ -339,7 +339,7 @@ public:
     SwClient* Last()
     {
         if(!m_pPosition)
-            m_pPosition = const_cast<sw::WriterListener*>(m_rRoot.m_pWriterListeners);
+            m_pPosition = m_rRoot.m_pWriterListeners;
         if(!m_pPosition)
             return m_pCurrent = nullptr;
         while(GetRightOfPos())

@@ -878,7 +878,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 pPor = new SwFieldMarkPortion();
             else if (rInf.GetText()[rInf.GetIdx()]==CH_TXT_ATR_FORMELEMENT)
             {
-                SwTextNode *pNd = const_cast<SwTextNode *>(rInf.GetTextFrm()->GetTextNode());
+                SwTextNode *pNd = rInf.GetTextFrm()->GetTextNode();
                 const SwDoc *doc = pNd->GetDoc();
                 SwIndex aIndex(pNd, rInf.GetIdx());
                 SwPosition aPosition(*pNd, aIndex);

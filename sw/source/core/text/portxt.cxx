@@ -856,7 +856,7 @@ void SwFieldFormCheckboxPortion::Paint( const SwTextPaintInfo& rInf ) const
 
 bool SwFieldFormCheckboxPortion::Format( SwTextFormatInfo & rInf )
 {
-    SwTextNode *pNd = const_cast < SwTextNode * >( rInf.GetTextFrm(  )->GetTextNode(  ) );
+    SwTextNode *pNd = rInf.GetTextFrm(  )->GetTextNode(  );
     const SwDoc *doc = pNd->GetDoc(  );
     SwIndex aIndex( pNd, rInf.GetIdx(  ) );
     SwPosition aPosition( *pNd, aIndex );

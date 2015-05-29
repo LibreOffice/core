@@ -43,7 +43,7 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
     if(pDead && pDead->pObject == pRegisteredIn)
     {
         // I've got a notification from the object I know
-        SwModify* pAbove = const_cast<SwModify*>(pRegisteredIn->GetRegisteredIn());
+        SwModify* pAbove = pRegisteredIn->GetRegisteredIn();
         if(pAbove)
         {
             // if the dying object itself was listening at an SwModify, I take over

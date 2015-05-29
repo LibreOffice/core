@@ -990,7 +990,7 @@ void SwXShape::AddExistingShapeToFormat( SdrObject& _rObj )
         {
             if ( pSwShape->m_bDescriptor )
             {
-                SwFrameFormat* pFormat = ::FindFrameFormat( const_cast< SdrObject* >( pCurrent ) );
+                SwFrameFormat* pFormat = ::FindFrameFormat( pCurrent );
                 if ( pFormat )
                     pFormat->Add( pSwShape );
                 pSwShape->m_bDescriptor = false;

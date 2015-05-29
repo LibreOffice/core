@@ -1383,7 +1383,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     // update page numbers
     pTOX->GetFormat()->Add(m_pImpl.get());
     pTOX->GetFormat()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
-    const_cast<SwTOXBaseSection*>(pTOX)->UpdatePageNum();
+    pTOX->UpdatePageNum();
 
     m_pImpl->m_pProps.reset();
     m_pImpl->m_pDoc = pDoc;
@@ -1624,10 +1624,10 @@ void SwXDocumentIndexMark::Impl::Invalidate()
 {
     if (GetRegisteredIn())
     {
-        const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
+        GetRegisteredIn()->Remove(this);
         if (m_TypeDepend.GetRegisteredIn())
         {
-            const_cast<SwModify*>(m_TypeDepend.GetRegisteredIn())->Remove(
+            m_TypeDepend.GetRegisteredIn()->Remove(
                 &m_TypeDepend);
         }
     }

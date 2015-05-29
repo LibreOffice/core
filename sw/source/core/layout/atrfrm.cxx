@@ -3468,7 +3468,7 @@ bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat)
     const SwFlyFrameFormat* pFlyFrameFormat = dynamic_cast<const SwFlyFrameFormat*>(&rFormat);
     if (!pFlyFrameFormat)
         return false;
-    SwFlyFrm* pFlyFrm = const_cast<SwFlyFrm*>(pFlyFrameFormat->GetFrm());
+    SwFlyFrm* pFlyFrm = pFlyFrameFormat->GetFrm();
     if (!pFlyFrm) // fdo#54648: "hidden" drawing object has no layout frame
     {
         return false;

@@ -868,7 +868,7 @@ void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     if ( m_pOldSet.get() ) {
         SwUndoFormatAttrHelper aTmp(
-            *const_cast<SwTextFormatColl*>(rDoc.GetDfltTextFormatColl()) );
+            *rDoc.GetDfltTextFormatColl() );
         rDoc.SetDefault( *m_pOldSet );
         m_pOldSet.reset( 0 );
         if ( aTmp.GetUndo() ) {

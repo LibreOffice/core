@@ -218,7 +218,7 @@ IMPL_LINK_NOARG(SwView, FormControlActivated)
         if ( pSdrView && pSdrView->IsTextEdit() )
             pSdrView->SdrEndTextEdit( true );
 
-        const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell );
+        AttrChangedNotify( m_pWrtShell );
     }
 
     return 0L;

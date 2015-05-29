@@ -5366,7 +5366,7 @@ static const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm
                 // determine last row of complete table.
                 SwFrm* pLastRow = pLastTabFrm->GetLastLower();
                 // return first bottom border cell in last row
-                SwFrm* pLowerCell = const_cast<SwFrm*>(pLastRow->GetLower());
+                SwFrm* pLowerCell = pLastRow->GetLower();
                 while ( !pLowerCell->IsCellFrm() ||
                         ( pLowerCell->GetLower() && pLowerCell->GetLower()->IsRowFrm() )
                       )

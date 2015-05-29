@@ -4006,7 +4006,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
             if (pFormat)
                 aDrop.SetCharFormat(const_cast<SwCharFormat*>(pFormat));
             else if(pNewSwCharFormat)
-                aDrop.SetCharFormat(const_cast<SwCharFormat*>(pNewSwCharFormat));
+                aDrop.SetCharFormat(pNewSwCharFormat);
 
             SwPosition aStart(*pEndNd);
             m_pCtrlStck->NewAttr(aStart, aDrop);

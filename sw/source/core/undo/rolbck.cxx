@@ -1371,7 +1371,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
         return false;
 
     SwTextNode * const pTextNode =
-        dynamic_cast<SwTextNode *>(const_cast<SwModify *>(GetRegisteredIn()));
+        dynamic_cast<SwTextNode *>(GetRegisteredIn());
 
     OSL_ENSURE(pTextNode, "SwRegHistory not registered at text node?");
     if (!pTextNode)
@@ -1432,12 +1432,12 @@ void SwRegHistory::_MakeSetWhichIds()
         if( GetRegisteredIn()->ISA( SwContentNode ) )
         {
             pSet = static_cast<SwContentNode*>(
-                    const_cast<SwModify*>(GetRegisteredIn()))->GetpSwAttrSet();
+                    GetRegisteredIn())->GetpSwAttrSet();
         }
         else if ( GetRegisteredIn()->ISA( SwFormat ) )
         {
             pSet = &static_cast<SwFormat*>(
-                    const_cast<SwModify*>(GetRegisteredIn()))->GetAttrSet();
+                    GetRegisteredIn())->GetAttrSet();
         }
         if( pSet && pSet->Count() )
         {

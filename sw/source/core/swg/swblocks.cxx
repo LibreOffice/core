@@ -544,7 +544,7 @@ bool SwTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
     bool bRet = false;
     if( pImp && !pImp->bInPutMuchBlocks )
     {
-        SwBlockName* pBlkNm = const_cast<SwBlockName*>( pImp->aNames[ nIdx ] );
+        SwBlockName* pBlkNm = pImp->aNames[ nIdx ];
         if( !pBlkNm->bIsOnlyTextFlagInit &&
             !pImp->IsFileChanged() && !pImp->OpenFile( true ) )
         {

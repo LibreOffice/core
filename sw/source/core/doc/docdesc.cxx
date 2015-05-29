@@ -823,7 +823,7 @@ static SwPageDesc* lcl_FindPageDesc( SwPageDescs *pPageDescs,
     SwPageDesc* res = NULL;
     if( it != pPageDescs->end() )
     {
-        res = const_cast <SwPageDesc *>( &( *it ) );;
+        res = &( *it ) ;;
         if( pPos )
             *pPos = std::distance( pPageDescs->begin(), it );
     }
@@ -856,7 +856,7 @@ bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, size_t* pPos )
     if (pDesc == NULL)
         return false;
     SwPageDesc *res = lcl_FindPageDesc<CompareSwPageDescToPtr>(
-        const_cast <SwPageDescs *>( &maPageDescs ), pPos,
+        &maPageDescs, pPos,
         CompareSwPageDescToPtr(pDesc) );
     return res != NULL;
 }

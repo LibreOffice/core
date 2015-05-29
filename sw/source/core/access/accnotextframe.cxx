@@ -166,7 +166,7 @@ void SwAccessibleNoTextFrame::Dispose( bool bRecursive )
     SolarMutexGuard aGuard;
 
     if( aDepend.GetRegisteredIn() )
-        const_cast < SwModify *>( aDepend.GetRegisteredIn() )->Remove( &aDepend );
+        aDepend.GetRegisteredIn()->Remove( &aDepend );
 
     SwAccessibleFrameBase::Dispose( bRecursive );
 }

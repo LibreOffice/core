@@ -472,7 +472,7 @@ public:
 
     SwUnoCrsr * GetCursor() {
         return static_cast<SwUnoCrsr*>(
-                const_cast<SwModify*>(GetRegisteredIn()));
+                GetRegisteredIn());
     }
 
     uno::Reference< text::XTextContent > NextElement_Impl()
@@ -763,14 +763,14 @@ void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew
         // if the depend was removed then the range must be removed too
         if (!m_ObjectDepend.GetRegisteredIn() && GetRegisteredIn())
         {
-            const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
+            GetRegisteredIn()->Remove(this);
         }
         // or if the range has been removed but the depend is still
         // connected then the depend must be removed
         else if (bAlreadyRegistered && !GetRegisteredIn() &&
                     m_ObjectDepend.GetRegisteredIn())
         {
-            const_cast<SwModify*>(m_ObjectDepend.GetRegisteredIn())
+            m_ObjectDepend.GetRegisteredIn()
                 ->Remove(& m_ObjectDepend);
         }
     }
@@ -1527,7 +1527,7 @@ public:
 
     SwUnoCrsr * GetCursor() {
         return static_cast<SwUnoCrsr*>(
-                const_cast<SwModify*>(GetRegisteredIn()));
+                GetRegisteredIn());
     }
 
     void MakeRanges();
@@ -1719,7 +1719,7 @@ public:
 
     SwUnoCrsr * GetCursor() {
         return static_cast<SwUnoCrsr*>(
-                const_cast<SwModify*>(GetRegisteredIn()));
+                GetRegisteredIn());
     }
 
 protected:
@@ -1769,8 +1769,8 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     if (!i_rFrames.size())
         return false;
 
-    SwFrameFormat *const pFormat = static_cast<SwFrameFormat*>(const_cast<SwModify*>(
-                i_rFrames.front()->GetRegisteredIn()));
+    SwFrameFormat *const pFormat = static_cast<SwFrameFormat*>(
+                i_rFrames.front()->GetRegisteredIn());
     i_rFrames.pop_front();
     // the format should be valid here, otherwise the client
     // would have been removed in ::Modify

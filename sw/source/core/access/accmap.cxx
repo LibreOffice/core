@@ -1343,7 +1343,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     else if( nStartIndex.GetNode().IsTableNode() )
                     {
                         SwTableNode * pTable = static_cast<SwTableNode *>(&(nStartIndex.GetNode()));
-                        SwTableFormat* pFormat = const_cast<SwTableFormat*>(pTable->GetTable().GetFrameFormat());
+                        SwTableFormat* pFormat = pTable->GetTable().GetFrameFormat();
                         pFrm = SwIterator<SwFrm, SwTableFormat>(*pFormat).First();
                     }
 

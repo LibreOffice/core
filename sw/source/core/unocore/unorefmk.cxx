@@ -82,7 +82,7 @@ void SwXReferenceMark::Impl::Invalidate()
 {
     if (IsValid())
     {
-        const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
+        GetRegisteredIn()->Remove(this);
     }
     m_pDoc = 0;
     m_pMarkFormat = 0;
