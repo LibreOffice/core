@@ -73,6 +73,7 @@ void ImpSWFDialog::dispose()
     mpCheckExportSound.clear();
     mpCheckExportOLEAsJPEG.clear();
     mpCheckExportMultipleFiles.clear();
+    maConfigItem.WriteModifiedConfig();
     ModalDialog::dispose();
 }
 
