@@ -385,7 +385,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
     switch( nHandle )
     {
         case DrawController::PROPERTY_CURRENTPAGE:
-            aValue <<= (const_cast<SdUnoDrawView*>(this))->getCurrentPage();
+            aValue <<= getCurrentPage();
             break;
 
         case DrawController::PROPERTY_MASTERPAGEMODE:
@@ -397,7 +397,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
             break;
 
         case DrawController::PROPERTY_ACTIVE_LAYER:
-            aValue <<= (const_cast<SdUnoDrawView*>(this))->getActiveLayer();
+            aValue <<= getActiveLayer();
             break;
 
         case DrawController::PROPERTY_ZOOMVALUE:

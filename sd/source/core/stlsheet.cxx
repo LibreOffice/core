@@ -132,7 +132,7 @@ SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& 
 : SdStyleSheetBase( OUString( rDisplayName ), _rPool, eFamily, _nMask)
 , ::cppu::BaseMutex()
 , msApiName( rDisplayName )
-, mxPool( const_cast< SfxStyleSheetBasePool* >(&_rPool) )
+, mxPool( &_rPool )
 , mrBHelper( m_aMutex )
 {
 }
