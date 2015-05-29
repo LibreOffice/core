@@ -1831,7 +1831,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
 #ifdef __MINGW32__
     params[0] <<= reinterpret_cast<sal_uInt32>( spUnknown.p );
 #else
-    params[0] <<= (sal_uInt32) spUnknown.p;
+    params[0] <<= reinterpret_cast<sal_uIntPtr>(spUnknown.p);
 #endif
     sal_Bool bDisp = pVar->vt == VT_DISPATCH ? sal_True : sal_False;
     params[1].setValue( & bDisp, cppu::UnoType<bool>::get());
