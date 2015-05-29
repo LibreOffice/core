@@ -61,7 +61,7 @@ String STR_NO_ADDITIONAL_SETTINGS
 
 String STR_COMMONURL
 {
-    Text [ en-US ] = "Datasource URL" ;
+    Text [ en-US ] = "Datasource URL (e.g. postgresql://host:port/database)" ;
 };
 
 String STR_HOSTNAME
