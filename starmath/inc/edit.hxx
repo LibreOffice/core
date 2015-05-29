@@ -44,8 +44,7 @@ void SmGetLeftSelectionPart(const ESelection &rSelection, sal_Int32 &nPara, sal_
 
 class SmEditWindow : public vcl::Window, public DropTargetHelper
 {
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible;
-    SmEditAccessible* pAccessible;
+    rtl::Reference<SmEditAccessible> mxAccessible;
 
     SmCmdBoxWindow& rCmdBox;
     std::unique_ptr<EditView> pEditView;
@@ -133,7 +132,7 @@ public:
     using Window::GetAccessible;
     SmEditAccessible* GetAccessible()
     {
-        return pAccessible;
+        return mxAccessible.get();
     }
 };
 
