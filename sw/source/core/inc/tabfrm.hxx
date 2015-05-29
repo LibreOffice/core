@@ -133,7 +133,7 @@ public:
     virtual void Cut() SAL_OVERRIDE;
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 
-    virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
+    virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = 0, bool bNotify = true ) SAL_OVERRIDE;
 
                  SwContentFrm *FindLastContent();

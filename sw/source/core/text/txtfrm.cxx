@@ -1447,9 +1447,11 @@ static bool lcl_ErgoVadis( SwTextFrm* pFrm, sal_Int32 &rPos, const PrepareHint e
     return true;
 }
 
-void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
+bool SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         bool bNotify )
 {
+    bool bParaPossiblyInvalid = false;
+
     SwFrmSwapper aSwapper( this, false );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1465,7 +1467,7 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 SetInvalidVert( true ); // Test
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
-            case PREP_FTN_GONE :    return;
+            case PREP_FTN_GONE :    return bParaPossiblyInvalid;
 
             case PREP_POS_CHGD :
             {
@@ -1497,7 +1499,7 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if ( GetDrawObjs() )
                     break;
 
-                return;
+                return bParaPossiblyInvalid;
             }
             default:
                 break;
@@ -1512,7 +1514,7 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             InvalidateSize();
         else
             _InvalidateSize();
-        return;
+        return bParaPossiblyInvalid;
     }
 
     // Get object from cache while locking
@@ -1543,7 +1545,7 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         case PREP_WIDOWS :
             // MustFit is stronger than anything else
             if( pPara->IsPrepMustFit() )
-                return;
+                return bParaPossiblyInvalid;
             // see comment in WidowsAndOrphans::FindOrphans and CalcPreps()
             PrepWidows( *static_cast<const sal_uInt16 *>(pVoid), bNotify );
             break;
@@ -1709,17 +1711,23 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             else
             {
                 if( GetTextNode()->GetSwAttrSet().GetRegister().GetValue() )
-                    Prepare( PREP_REGISTER, 0, bNotify );
-
+                    bParaPossiblyInvalid = Prepare( PREP_REGISTER, 0, bNotify );
                 // The Frames need to be readjusted, which caused by changes
                 // in position
                 else if( HasFootnote() )
                 {
-                    Prepare( PREP_ADJUST_FRM, 0, bNotify );
+                    bParaPossiblyInvalid = Prepare( PREP_ADJUST_FRM, 0, bNotify );
                     _InvalidateSize();
                 }
                 else
-                    return; // So that there's no SetPrep()
+                    return bParaPossiblyInvalid; // So that there's no SetPrep()
+
+                if (bParaPossiblyInvalid)
+                {
+                    // It's possible that pPara was deleted above; retrieve it again
+                    pPara = aAccess.GetPara();
+                }
+
             }
             break;
         }
@@ -1730,7 +1738,9 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 CalcLineSpace();
 
                 // It's possible that pPara was deleted above; retrieve it again
+                bParaPossiblyInvalid = true;
                 pPara = aAccess.GetPara();
+
                 InvalidateSize();
                 _InvalidatePrt();
                 SwFrm* pNxt;
@@ -1756,7 +1766,7 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if( nPos )
                     --nPos; // The char preceding our Follow
                 InvalidateRange( SwCharRange( nPos, 1 ), 0 );
-                return;
+                return bParaPossiblyInvalid;
             }
         case PREP_ERGOSUM:
         case PREP_QUOVADIS:
@@ -1773,7 +1783,7 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 sal_Int32 nWhere = CalcFlyPos( const_cast<SwFrameFormat *>(static_cast<SwFrameFormat const *>(pVoid)) );
                 OSL_ENSURE( COMPLETE_STRING != nWhere, "Prepare: Why me?" );
                 InvalidateRange( SwCharRange( nWhere, 1 ) );
-                return;
+                return bParaPossiblyInvalid;
             }
             // else: continue with default case block
         }
@@ -1802,11 +1812,15 @@ void SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 else
                     _InvalidateSize();
             }
-            return; // no SetPrep() happened
+            return bParaPossiblyInvalid; // no SetPrep() happened
         }
     }
     if( pPara )
+    {
         pPara->SetPrep();
+    }
+
+    return bParaPossiblyInvalid;
 }
 
 /**

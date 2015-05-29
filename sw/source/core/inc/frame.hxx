@@ -770,7 +770,7 @@ public:
     // HACK: shortcut between frame and formatting
     // It's your own fault if you cast void* incorrectly! In any case check
     // the void* for 0.
-    virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
+    virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = 0, bool bNotify = true );
 
     // true if it is the correct class, false otherwise

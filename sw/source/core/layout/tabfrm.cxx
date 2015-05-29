@@ -3490,10 +3490,11 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     }
 }
 
-void SwTabFrm::Prepare( const PrepareHint eHint, const void *, bool )
+bool SwTabFrm::Prepare( const PrepareHint eHint, const void *, bool )
 {
     if( PREP_BOSS_CHGD == eHint )
         CheckDirChange();
+    return false;
 }
 
 SwRowFrm::SwRowFrm(const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent)
