@@ -88,7 +88,6 @@ bool SmEditWindow::IsInlineEditEnabled()
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin),
     DropTargetHelper    ( this ),
-    pAccessible         (0),
     rCmdBox             (rMyCmdBoxWin)
 {
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
@@ -131,14 +130,11 @@ void SmEditWindow::dispose()
     // clean up of classes used for accessibility
     // must be done before EditView (and thus EditEngine) is no longer
     // available for those classes.
-    if (pAccessible)
+    if (mxAccessible.is())
     {
-        pAccessible->ClearWin();    // make Accessible defunctional
-        pAccessible = NULL;
-        xAccessible.clear();
+        mxAccessible->ClearWin();    // make Accessible defunctional
+        mxAccessible.clear();
     }
-    // Note: memory for pAccessible will be freed when the reference
-    // xAccessible is released. FIXME: horribly redundant lifecycle ! ...
 
     if (pEditView)
     {
@@ -699,10 +695,10 @@ void SmEditWindow::GetFocus()
 {
     Window::GetFocus();
 
-    if (xAccessible.is())
+    if (mxAccessible.is())
     {
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
-        ::accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
+        ::accessibility::AccessibleTextHelper *pHelper = mxAccessible->GetTextHelper();
         if (pHelper)
             pHelper->SetFocus(true);
     }
@@ -727,10 +723,10 @@ void SmEditWindow::LoseFocus()
 
     Window::LoseFocus();
 
-    if (xAccessible.is())
+    if (mxAccessible.is())
     {
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
-        ::accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
+        ::accessibility::AccessibleTextHelper *pHelper = mxAccessible->GetTextHelper();
         if (pHelper)
             pHelper->SetFocus(false);
     }
@@ -1113,13 +1109,12 @@ void SmEditWindow::DeleteEditView( SmViewShell & /*rView*/ )
 
 uno::Reference< XAccessible > SmEditWindow::CreateAccessible()
 {
-    if (!pAccessible)
+    if (!mxAccessible.is())
     {
-        pAccessible = new SmEditAccessible( this );
-        xAccessible = pAccessible;
-        pAccessible->Init();
+        mxAccessible.set(new SmEditAccessible( this ));
+        mxAccessible->Init();
     }
-    return xAccessible;
+    return uno::Reference< XAccessible >(mxAccessible.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
