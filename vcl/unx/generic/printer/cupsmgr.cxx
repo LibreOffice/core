@@ -663,6 +663,7 @@ bool CUPSManager::supportsBatchPrint() const
 bool CUPSManager::flushBatchPrint()
 {
     osl::MutexGuard aGuard( m_aCUPSMutex );
+    batchMode = false;                 // reset the batch print mode
     return processPendingJobs();
 }
 
