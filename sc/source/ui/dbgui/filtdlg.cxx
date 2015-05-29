@@ -863,7 +863,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             SCSIZE nCount = theQueryData.GetEntryCount();
             if (maRefreshExceptQuery.size() < nCount + 1)
                 maRefreshExceptQuery.resize(nCount + 1, false);
-            for (sal_uInt16 i = nOffset; i < nCount; ++i)
+            for (SCSIZE i = nOffset; i < nCount; ++i)
             {
                 theQueryData.GetEntry(i).bDoQuery = false;
                 maRefreshExceptQuery[i] = false;
@@ -910,7 +910,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             SCSIZE nCount = theQueryData.GetEntryCount();
             if (maRefreshExceptQuery.size() < nCount)
                 maRefreshExceptQuery.resize(nCount, false);
-            for (sal_uInt16 i= nTemp; i< nCount; i++)
+            for (SCSIZE i= nTemp; i< nCount; i++)
             {
                 theQueryData.GetEntry(i).bDoQuery = false;
                 maRefreshExceptQuery[i] = false;
@@ -950,7 +950,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             SCSIZE nCount = theQueryData.GetEntryCount();
             if (maRefreshExceptQuery.size() < nCount)
                 maRefreshExceptQuery.resize(nCount, false);
-            for (sal_uInt16 i = nTemp; i < nCount; ++i)
+            for (SCSIZE i = nTemp; i < nCount; ++i)
             {
                 theQueryData.GetEntry(i).bDoQuery = false;
                 maRefreshExceptQuery[i] = false;
@@ -982,7 +982,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             SCSIZE nCount = theQueryData.GetEntryCount();
             if (maRefreshExceptQuery.size() < nCount)
                 maRefreshExceptQuery.resize(nCount, false);
-            for (sal_uInt16 i = nTemp; i < nCount; ++i)
+            for (SCSIZE i = nTemp; i < nCount; ++i)
             {
                 theQueryData.GetEntry(i).bDoQuery = false;
                 maRefreshExceptQuery[i] = false;

@@ -124,7 +124,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
     uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
     uno::Reference< frame::XDispatch>* pReturn = aReturn.getArray();
     const frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-    for (sal_Int16 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts)
+    for (sal_Int32 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts)
     {
         *pReturn = queryDispatch(pDescripts->FeatureURL,
                 pDescripts->FrameName, pDescripts->SearchFlags);
@@ -361,7 +361,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
 
             lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
 
-            for ( sal_uInt16 n=0; n<aDataSourceListeners.size(); n++ )
+            for ( size_t n=0; n<aDataSourceListeners.size(); n++ )
                 aDataSourceListeners[n]->statusChanged( aEvent );
 
             aLastImport = aNewImport;
@@ -380,7 +380,7 @@ void SAL_CALL ScDispatch::disposing( const ::com::sun::star::lang::EventObject& 
 
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( sal_uInt16 n=0; n<aDataSourceListeners.size(); n++ )
+    for ( size_t n=0; n<aDataSourceListeners.size(); n++ )
         aDataSourceListeners[n]->disposing( aEvent );
 
     pViewShell = NULL;

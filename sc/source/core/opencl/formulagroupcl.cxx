@@ -1030,7 +1030,7 @@ public:
                     ss << "}\n\t";
                 }
                 // The residual of mod outLoopSize
-                for (unsigned int count = nCurWindowSize / outLoopSize * outLoopSize; count < nCurWindowSize; count++)
+                for (size_t count = nCurWindowSize / outLoopSize * outLoopSize; count < nCurWindowSize; count++)
                 {
                     ss << "i = " << count << ";\n\t";
                     if (count == nCurWindowSize / outLoopSize * outLoopSize)
@@ -1073,7 +1073,7 @@ public:
                     ss << "}\n\t";
                 }
                 // The residual of mod outLoopSize
-                for (unsigned int count = nCurWindowSize / outLoopSize * outLoopSize; count < nCurWindowSize; count++)
+                for (size_t count = nCurWindowSize / outLoopSize * outLoopSize; count < nCurWindowSize; count++)
                 {
                     ss << "i = " << count << ";\n\t";
                     if (count == nCurWindowSize / outLoopSize * outLoopSize)
@@ -1675,7 +1675,7 @@ public:
     {
         ss << "\ndouble " << sSymName;
         ss << "_" << BinFuncName() << "(";
-        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        for (size_t i = 0; i < vSubArguments.size(); i++)
         {
             if (i)
                 ss << ", ";
@@ -1792,7 +1792,7 @@ public:
         ss << "\ndouble " << sSymName;
         ss << "_" << BinFuncName() << "(";
         assert(vSubArguments.size() == 2);
-        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        for (size_t i = 0; i < vSubArguments.size(); i++)
         {
             if (i)
                 ss << ", ";
@@ -1820,7 +1820,7 @@ public:
         const formula::DoubleVectorRefToken* pCurDVR = NULL;
         ss << "\ndouble " << sSymName;
         ss << "_" << BinFuncName() << "(";
-        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        for (size_t i = 0; i < vSubArguments.size(); i++)
         {
             if (i)
                 ss << ",";
@@ -1859,7 +1859,7 @@ public:
                 ss << "i = outLoop*" << outLoopSize << "+" << count << ";\n";
                 if (count == 0)
                 {
-                    for (unsigned i = 0; i < vSubArguments.size(); i++)
+                    for (size_t i = 0; i < vSubArguments.size(); i++)
                     {
                         tmpCur = vSubArguments[i]->GetFormulaToken();
                         if (ocPush == tmpCur->GetOpCode())
@@ -1881,7 +1881,7 @@ public:
                     }
 
                     temp3 << "tmp = fsum(";
-                    for (unsigned i = 0; i < vSubArguments.size(); i++)
+                    for (size_t i = 0; i < vSubArguments.size(); i++)
                     {
                         if (i)
                             temp3 << "*";
@@ -1929,13 +1929,13 @@ public:
             ss << "}\n\t";
         }
         //The residual of mod outLoopSize
-        for (unsigned int count = nCurWindowSize / outLoopSize * outLoopSize;
+        for (size_t count = nCurWindowSize / outLoopSize * outLoopSize;
             count < nCurWindowSize; count++)
         {
             ss << "i =" << count << ";\n";
             if (count == nCurWindowSize / outLoopSize * outLoopSize)
             {
-                for (unsigned i = 0; i < vSubArguments.size(); i++)
+                for (size_t i = 0; i < vSubArguments.size(); i++)
                 {
                     tmpCur = vSubArguments[i]->GetFormulaToken();
                     if (ocPush == tmpCur->GetOpCode())
@@ -1957,7 +1957,7 @@ public:
                 }
 
                 temp4 << "tmp = fsum(";
-                for (unsigned i = 0; i < vSubArguments.size(); i++)
+                for (size_t i = 0; i < vSubArguments.size(); i++)
                 {
                     if (i)
                         temp4 << "*";
@@ -2417,13 +2417,13 @@ public:
 
     virtual void GenSlidingWindowFunction( std::stringstream& ss ) SAL_OVERRIDE
     {
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        for (size_t i = 0; i < mvSubArguments.size(); i++)
             mvSubArguments[i]->GenSlidingWindowFunction(ss);
         mpCodeGen->GenSlidingWindowFunction(ss, mSymName, mvSubArguments);
     }
     virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
     {
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        for (size_t i = 0; i < mvSubArguments.size(); i++)
         {
             if (i)
                 ss << ",";
@@ -2444,7 +2444,7 @@ public:
     virtual size_t GetWindowSize() const SAL_OVERRIDE
     {
         size_t nCurWindowSize = 0;
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        for (size_t i = 0; i < mvSubArguments.size(); i++)
         {
             size_t nCurChildWindowSize = mvSubArguments[i]->GetWindowSize();
             nCurWindowSize = (nCurWindowSize < nCurChildWindowSize) ?
@@ -2472,7 +2472,7 @@ public:
         if (!nested)
         {
             ss << mSymName << "_" << mpCodeGen->BinFuncName() << "(";
-            for (unsigned i = 0; i < mvSubArguments.size(); i++)
+            for (size_t i = 0; i < mvSubArguments.size(); i++)
             {
                 if (i)
                     ss << ", ";
@@ -2503,7 +2503,7 @@ public:
     virtual std::string DumpOpName() const SAL_OVERRIDE
     {
         std::string t = "_" + mpCodeGen->BinFuncName();
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        for (size_t i = 0; i < mvSubArguments.size(); i++)
             t = t + mvSubArguments[i]->DumpOpName();
         return t;
     }
@@ -2511,7 +2511,7 @@ public:
         std::set<std::string>& funs ) const SAL_OVERRIDE
     {
         mpCodeGen->BinInlineFun(decls, funs);
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        for (size_t i = 0; i < mvSubArguments.size(); i++)
             mvSubArguments[i]->DumpInlineFun(decls, funs);
     }
     virtual ~DynamicKernelSoPArguments()
@@ -2593,7 +2593,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
 {
     size_t nChildren = ft->Children.size();
 
-    for (unsigned i = 0; i < nChildren; i++)
+    for (size_t i = 0; i < nChildren; i++)
     {
         FormulaTreeNodeRef rChild = ft->Children[i];
         if (!rChild)

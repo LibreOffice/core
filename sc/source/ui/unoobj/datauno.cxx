@@ -1964,7 +1964,7 @@ void ScDatabaseRangeObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source = (cppu::OWeakObject*)this;
-    for ( sal_uInt16 n=0; n<aRefreshListeners.size(); n++ )
+    for ( size_t n=0; n<aRefreshListeners.size(); n++ )
         aRefreshListeners[n]->refreshed( aEvent );
 }
 

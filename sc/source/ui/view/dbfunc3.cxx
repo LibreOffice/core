@@ -1997,7 +1997,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
         // There is no data to show.  Bail out.
         return;
 
-    sal_Int32 nColSize = aTabData[0].getLength();
+    SCCOL nColSize = aTabData[0].getLength();
 
     SCTAB nNewTab = GetViewData().GetTabNo();
 

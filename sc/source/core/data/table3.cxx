@@ -902,7 +902,7 @@ void ScTable::SortReorderByColumn(
 
     // Cut formula grouping at row and reference boundaries before the reordering.
     ScRange aSortRange(nStart, nRow1, nTab, nLast, nRow2, nTab);
-    for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+    for (SCCOL nCol = nStart; nCol <= (SCCOL)nLast; ++nCol)
         aCol[nCol].SplitFormulaGroupByRelativeRef(aSortRange);
 
     // Collect all listeners of cell broadcasters of sorted range.
@@ -911,7 +911,7 @@ void ScTable::SortReorderByColumn(
     if (!pArray->IsUpdateRefs())
     {
         // Collect listeners of cell broadcasters.
-        for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+        for (SCCOL nCol = nStart; nCol <= (SCCOL)nLast; ++nCol)
             aCol[nCol].CollectListeners(aCellListeners, nRow1, nRow2);
 
         // Remove any duplicate listener entries.  We must ensure that we
@@ -952,7 +952,7 @@ void ScTable::SortReorderByColumn(
 
     // Reset formula cell positions which became out-of-sync after column reordering.
     bool bUpdateRefs = pArray->IsUpdateRefs();
-    for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+    for (SCCOL nCol = nStart; nCol <= (SCCOL)nLast; ++nCol)
         aCol[nCol].ResetFormulaCellPositions(nRow1, nRow2, bUpdateRefs);
 
     if (pArray->IsUpdateRefs())
@@ -970,7 +970,7 @@ void ScTable::SortReorderByColumn(
         // Collect all listeners within sorted range ahead of time.
         std::vector<SvtListener*> aListeners;
 
-        for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+        for (SCCOL nCol = nStart; nCol <= (SCCOL)nLast; ++nCol)
             aCol[nCol].CollectListeners(aListeners, nRow1, nRow2);
 
         // Get all area listeners that listen on one column within the range
@@ -1020,7 +1020,7 @@ void ScTable::SortReorderByColumn(
 
     // Re-join formulas at row boundaries now that all the references have
     // been adjusted for column reordering.
-    for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+    for (SCCOL nCol = nStart; nCol <= (SCCOL)nLast; ++nCol)
     {
         sc::CellStoreType& rCells = aCol[nCol].maCells;
         sc::CellStoreType::position_type aPos = rCells.position(nRow1);

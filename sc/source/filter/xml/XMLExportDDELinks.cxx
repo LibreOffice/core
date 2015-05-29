@@ -129,7 +129,7 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
             if (nCount)
             {
                 SvXMLElementExport aElemDDEs(rExport, XML_NAMESPACE_TABLE, XML_DDE_LINKS, true, true);
-                for (sal_uInt16 nDDELink = 0; nDDELink < nCount; ++nDDELink)
+                for (sal_Int32 nDDELink = 0; nDDELink < nCount; ++nDDELink)
                 {
                     uno::Reference<sheet::XDDELink> xDDELink(xIndex->getByIndex(nDDELink), uno::UNO_QUERY);
                     if (xDDELink.is())

@@ -384,7 +384,7 @@ void ScTabViewShell::UpdateNumberFormatter(
     {
         const sal_uInt32* pDelArr = rInfoItem.GetDelArray();
 
-        for ( sal_uInt16 i=0; i<nDelCount; i++ )
+        for ( sal_uInt32 i=0; i<nDelCount; i++ )
             rInfoItem.GetNumberFormatter()->DeleteEntry( pDelArr[i] );
     }
 }

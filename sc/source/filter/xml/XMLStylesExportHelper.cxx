@@ -982,7 +982,7 @@ OUString* ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, const
 void ScFormatRangeStyles::Sort()
 {
     sal_Int32 nTables = aTables.size();
-    for (sal_Int16 i = 0; i < nTables; ++i)
+    for (sal_Int32 i = 0; i < nTables; ++i)
         if (!aTables[i]->empty())
             aTables[i]->sort();
 }

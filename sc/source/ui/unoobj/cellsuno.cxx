@@ -1612,7 +1612,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                 lang::EventObject aEvent;
                 aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-                for ( sal_uInt16 n=0; n<aValueListeners.size(); n++ )
+                for ( size_t n=0; n<aValueListeners.size(); n++ )
                     aValueListeners[n]->disposing( aEvent );
 
                 aValueListeners.clear();
@@ -1642,7 +1642,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 // the EventObject holds a Ref to this object until after the listener calls
 
                 ScDocument& rDoc = pDocShell->GetDocument();
-                for ( sal_uInt16 n=0; n<aValueListeners.size(); n++ )
+                for ( size_t n=0; n<aValueListeners.size(); n++ )
                     rDoc.AddUnoListenerCall( aValueListeners[n], aEvent );
 
                 bGotDataChangedHint = false;
@@ -4533,7 +4533,7 @@ static bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
 
     if ( !rNamedEntries.empty() )
     {
-        for ( sal_uInt16 n=0; n<rNamedEntries.size(); n++ )
+        for ( size_t n=0; n<rNamedEntries.size(); n++ )
             if ( rNamedEntries[n].GetName() == rName )
             {
                 //  test if named entry is contained in rRanges

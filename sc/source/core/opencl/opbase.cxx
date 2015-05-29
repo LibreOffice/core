@@ -189,7 +189,7 @@ void Normal::GenSlidingWindowFunction(
     ArgVector argVector;
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -209,7 +209,7 @@ void Normal::GenSlidingWindowFunction(
 void CheckVariables::GenTmpVariables(
     std::stringstream& ss, SubArguments& vSubArguments )
 {
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         ss << "    double tmp";
         ss << i;
@@ -312,7 +312,7 @@ void CheckVariables::CheckAllSubArgumentIsNan(
     std::stringstream& ss, SubArguments& vSubArguments )
 {
     ss << "    int k = gid0;\n";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         CheckSubArgumentIsNan(ss, vSubArguments, i);
     }

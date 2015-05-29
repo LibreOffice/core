@@ -2202,7 +2202,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         SCTAB nCount = rDoc.GetTableCount();
 
         OUString aOldName;
-        for(unsigned int i=0; i<TheTabs.size(); ++i)
+        for(size_t i=0; i<TheTabs.size(); ++i)
         {
             SCTAB nTab = TheTabs[i];
             if (i==0)
@@ -2615,7 +2615,7 @@ void ScViewFunc::MoveTable(
             nDestTab=pDestDoc->GetTableCount();
         SCTAB nDestTab1=nDestTab;
         ScClipParam aParam;
-        for( sal_uInt16 j=0; j<TheTabs.size(); ++j, ++nDestTab1 )
+        for( size_t j=0; j<TheTabs.size(); ++j, ++nDestTab1 )
         {   // insert sheets first and update all references
             OUString aName;
             if (bRename)
@@ -2636,7 +2636,7 @@ void ScViewFunc::MoveTable(
         if ( nErrVal > 0 )
         {
             nDestTab1 = nDestTab;
-            for(sal_uInt16 i=0; i<TheTabs.size();++i)
+            for(size_t i=0; i<TheTabs.size();++i)
             {
                 nErrVal = pDestShell->TransferTab( *pDocShell, TheTabs[i], static_cast<SCTAB>(nDestTab1), false, false );
                 nDestTab1++;

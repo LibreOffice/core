@@ -252,7 +252,7 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
     };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
-    for ( sal_uInt16 i=0; i<aPropNames.getLength(); ++i )
+    for ( sal_Int32 i=0; i<aPropNames.getLength(); ++i )
         aPropIdMap[aPropNames[i]] = aVals[ i ];
     return aPropIdMap;
 }

@@ -2857,7 +2857,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
                 if( m_pDocument )
                 {
-                    for ( sal_uInt16 n=0; n<m_aValueListeners.size(); n++ )
+                    for ( size_t n=0; n<m_aValueListeners.size(); n++ )
                         m_pDocument->AddUnoListenerCall( m_aValueListeners[n], aEvent );
                 }
 
