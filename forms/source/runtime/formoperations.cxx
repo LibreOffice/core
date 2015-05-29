@@ -803,7 +803,7 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
         }
 
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );

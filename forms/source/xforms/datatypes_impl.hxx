@@ -51,8 +51,8 @@ template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 {
     if ( !m_bPropertiesRegistered )
     {
-        const_cast< ODerivedDataType* >( this )->registerProperties();
-        const_cast< ODerivedDataType* >( this )->m_bPropertiesRegistered = true;
+        this->registerProperties();
+        m_bPropertiesRegistered = true;
     }
 
     return *ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getArrayHelper();

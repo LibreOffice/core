@@ -4052,7 +4052,7 @@ OUString SAL_CALL ODatabaseForm::getName() throw( RuntimeException, std::excepti
     {
         throw WrappedTargetRuntimeException(
             "ODatabaseForm::getName",
-            *const_cast< ODatabaseForm* >( this ),
+            *this,
             ::cppu::getCaughtException()
         );
     }

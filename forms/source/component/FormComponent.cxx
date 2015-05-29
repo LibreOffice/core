@@ -646,7 +646,7 @@ OUString SAL_CALL OControlModel::getName() throw(RuntimeException, std::exceptio
         css::uno::Any a(cppu::getCaughtException());
         throw WrappedTargetRuntimeException(
             "OControlModel::getName",
-            *const_cast< OControlModel* >( this ),
+            *this,
             a
         );
     }
@@ -664,7 +664,7 @@ void SAL_CALL OControlModel::setName(const OUString& _rName) throw(RuntimeExcept
         css::uno::Any a(cppu::getCaughtException());
         throw WrappedTargetRuntimeException(
             "OControlModel::setName",
-            *const_cast< OControlModel* >( this ),
+            *this,
             a
         );
     }
