@@ -348,7 +348,7 @@ void fillDateGroupDimension(
     // Now, populate the group items in the cache.
     rCache.ResetGroupItems(nGroupDim, rDateInfo, nDatePart);
 
-    for (sal_Int32 nValue = nStart; nValue <= nEnd; ++nValue)
+    for (long nValue = nStart; nValue <= nEnd; ++nValue)
         rCache.SetGroupItem(nGroupDim, ScDPItemData(nDatePart, nValue));
 
     // add first/last entry (min/max)

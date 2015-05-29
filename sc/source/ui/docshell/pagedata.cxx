@@ -97,7 +97,7 @@ bool ScPageBreakData::operator==( const ScPageBreakData& rOther ) const
     if ( nUsed != rOther.nUsed )
         return false;
 
-    for (sal_uInt16 i=0; i<nUsed; i++)
+    for (size_t i=0; i<nUsed; i++)
         if ( pData[i].GetPrintRange() != rOther.pData[i].GetPrintRange() )
             return false;
 
@@ -111,7 +111,7 @@ void ScPageBreakData::AddPages()
     if ( nUsed > 1 )
     {
         long nPage = pData[0].GetFirstPage();
-        for (sal_uInt16 i=0; sal::static_int_cast<size_t>(i+1)<nUsed; i++)
+        for (size_t i=0; i+1<nUsed; i++)
         {
             nPage += ((long)pData[i].GetPagesX())*pData[i].GetPagesY();
             pData[i+1].SetFirstPage( nPage );

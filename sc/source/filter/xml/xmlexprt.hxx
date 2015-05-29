@@ -133,8 +133,8 @@ class ScXMLExport : public SvXMLExport
     bool                        mbShowProgress;
 
     sal_Int32       GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const;
-    void            CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount);
-    void            CollectShapesAutoStyles(const sal_Int32 nTableCount);
+    void            CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount);
+    void            CollectShapesAutoStyles(SCTAB nTableCount);
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
     void            WriteView(const com::sun::star::uno::Any& aView);
     virtual void _ExportFontDecls() SAL_OVERRIDE;

@@ -357,7 +357,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
 
        // get all snapping points:
        std::set< sal_uInt16 > aTmpSnappingPoints;
-       for ( sal_uInt16 j = 0; j < rSnappingPoints.getLength(); ++j )
+       for ( sal_Int32 j = 0; j < rSnappingPoints.getLength(); ++j )
        {
            const sal_Int32 nSnappingPoint = rSnappingPoints[j];
            aTmpSnappingPoints.insert( (sal_uInt16)nSnappingPoint );

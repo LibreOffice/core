@@ -346,7 +346,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         // fdo#39500 don't deduce increment from multiple equal list entries
         bool bAllSame = true;
-        for (sal_uInt16 i = 0; i < nCount; ++i)
+        for (SCSIZE i = 0; i < nCount; ++i)
         {
             OUString aTestStr;
             GetString(static_cast<SCCOL>(nCol + i* nAddX), static_cast<SCROW>(nRow + i * nAddY), aTestStr);

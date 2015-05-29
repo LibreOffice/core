@@ -291,7 +291,7 @@ void ScUndoDeleteTab::SetChangeTrack()
         nStartChangeAction = pChangeTrack->GetActionMax() + 1;
         nEndChangeAction = 0;
         ScRange aRange( 0, 0, 0, MAXCOL, MAXROW, 0 );
-        for ( unsigned int i = 0; i < theTabs.size(); ++i )
+        for ( size_t i = 0; i < theTabs.size(); ++i )
         {
             aRange.aStart.SetTab( theTabs[i] );
             aRange.aEnd.SetTab( theTabs[i] );

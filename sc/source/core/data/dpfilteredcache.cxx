@@ -311,7 +311,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
                                  const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     sal_Int32 nRowSize = getRowSize();
-    sal_Int32 nColSize = getColSize();
+    SCCOL nColSize = getColSize();
 
     if (!nRowSize)
         // no data to filter.
