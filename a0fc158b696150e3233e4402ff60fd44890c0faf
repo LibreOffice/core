@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_f9351bf7",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-05-29T08:51:28Z",
+      "side": 1,
+      "message": "IMHO this does not make much sense. If we can\u0027t import it we will just ignore it during import but if it does not cause issues we should always export it.",
+      "revId": "a0fc158b696150e3233e4402ff60fd44890c0faf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_d9305f0a",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-05-29T08:51:28Z",
+      "side": 1,
+      "message": "using sURL and true here is wrong. Please use oox::drawingml::URLTransformer here.",
+      "revId": "a0fc158b696150e3233e4402ff60fd44890c0faf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
