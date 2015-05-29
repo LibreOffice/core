@@ -1640,6 +1640,23 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     if (bAddUndo && !rDoc.IsUndoEnabled())
         bAddUndo = false;
 
+    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() && (pSearchItem->HasStartPoint()) )
+    {
+        // No selection -> but we have a start point (top left corner of the
+        // current view), start searching from there, not from the current
+        // cursor position.
+        SCsCOL nPosX;
+        SCsROW nPosY;
+
+        int nPixelX = pSearchItem->GetStartPointX() * GetViewData().GetPPTX();
+        int nPixelY = pSearchItem->GetStartPointY() * GetViewData().GetPPTY();
+
+        GetViewData().GetPosFromPixel(nPixelX, nPixelY, GetViewData().GetActivePart(), nPosX, nPosY);
+
+        AlignToCursor( nPosX, nPosY, SC_FOLLOW_JUMP );
+        SetCursor( nPosX, nPosY, true );
+    }
+
     SCCOL nCol, nOldCol;
     SCROW nRow, nOldRow;
     SCTAB nTab, nOldTab;
@@ -1829,9 +1846,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if (pGridWindow)
             {
                 // move the cell selection handles
+                pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_RESET, aCurPos.X(), aCurPos.Y());
                 pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_START, aCurPos.X(), aCurPos.Y());
                 pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_END, aCurPos.X(), aCurPos.Y());
-                pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_RESET, aCurPos.X(), aCurPos.Y());
             }
         }
 
