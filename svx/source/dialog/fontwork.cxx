@@ -294,7 +294,7 @@ SvxFontWorkDialog::~SvxFontWorkDialog()
 void SvxFontWorkDialog::dispose()
 {
     for (sal_uInt16 i = 0; i < CONTROLLER_COUNT; i++)
-        DELETEZ(pCtrlItems[i]);
+        pCtrlItems[i]->dispose();
     m_pTbxStyle.clear();
     m_pTbxAdjust.clear();
     m_pFbDistance.clear();

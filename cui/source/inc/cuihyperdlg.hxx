@@ -44,6 +44,7 @@ private :
 
 public :
     SvxHlinkCtrl( sal_uInt16 nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                 const SfxPoolItem* pState ) SAL_OVERRIDE;

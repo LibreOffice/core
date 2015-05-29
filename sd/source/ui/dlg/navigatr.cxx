@@ -162,8 +162,8 @@ SdNavigatorWin::~SdNavigatorWin()
 
 void SdNavigatorWin::dispose()
 {
-    delete mpNavigatorCtrlItem;
-    delete mpPageNameCtrlItem;
+    DELETEZ( mpNavigatorCtrlItem );
+    DELETEZ( mpPageNameCtrlItem );
     maToolbox.disposeAndClear();
     maTlbObjects.disposeAndClear();
     maLbDocs.disposeAndClear();

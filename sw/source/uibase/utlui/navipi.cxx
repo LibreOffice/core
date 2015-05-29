@@ -877,6 +877,8 @@ void SwNavigationPI::dispose()
 
     aPageChgIdle.Stop();
 
+    ::SfxControllerItem::dispose();
+
     vcl::Window::dispose();
 }
 

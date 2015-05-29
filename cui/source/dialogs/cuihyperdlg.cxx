@@ -42,6 +42,12 @@ SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkD
     pParent = pDlg;
 }
 
+void SvxHlinkCtrl::dispose()
+{
+    aRdOnlyForwarder.dispose();
+    ::SfxControllerItem::dispose();
+}
+
 void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
