@@ -59,7 +59,8 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/server/jvm.dll" // needed by Azul
 #elif defined UNX
 #ifdef MACOSX
-        "/../../../../../Frameworks/JavaVM.framework/JavaVM"  //as of  1.6.0_22
+        "/../../../../../Frameworks/JavaVM.framework/JavaVM", //as of  1.6.0_22
+        "/lib/server/libjvm.dylib" // needed by Azul
 #else
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
