@@ -205,6 +205,7 @@ public:
     void testEditEngStrikeThroughXLSX();
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
+    void testShapeRotationXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -301,6 +302,7 @@ public:
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
+    CPPUNIT_TEST(testShapeRotationXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3122,6 +3124,38 @@ void ScFiltersTest::testRefStringConfigXLSX()
     ScCalcConfig aConfig = rDoc.GetCalcConfig();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_OOO,
                             aConfig.meStringRefAddressSyntax);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testShapeRotationXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("shapeRotation.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load shapeRotation.xlsx", xDocSh.Is());
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+
+    uno::Reference< frame::XModel > xModel = xDocSh->GetModel();
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xDraws(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 1 shapes.", static_cast<sal_Int32>(1), xDraws->getCount());
+
+    uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
+
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = XPropSet->getPropertySetInfo();
+
+    sal_Int32 nRotation = 0;
+    if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
+        XPropSet->getPropertyValue("RotateAngle") >>= nRotation;
+
+    sal_Int32 nOriginalRotation = sal_Int32( NormAngle360( 900000 / -600 ) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The shape is not imported with correct Rotation Anlgle.", nOriginalRotation, nRotation);
 
     xDocSh->DoClose();
 }

@@ -152,6 +152,7 @@ public:
     void testHiddenShape();
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapes();
+    void testShapeRotation();
     void testMatrixMultiplication();
     void testPreserveTextWhitespaceXLSX();
 
@@ -214,6 +215,7 @@ public:
     CPPUNIT_TEST(testHiddenShape);
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
+    CPPUNIT_TEST(testShapeRotation);
     CPPUNIT_TEST(testMatrixMultiplication);
 
 
@@ -2873,6 +2875,22 @@ void ScExportTest::testMoveCellAnchoredShapes()
     CPPUNIT_ASSERT_EQUAL(pNData->maEnd , aNDataEnd);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testShapeRotation()
+{
+    ScDocShellRef xShell = loadDoc("shapeRotation.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:spPr/a:xfrm", "rot", "900000");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testMatrixMultiplication()
