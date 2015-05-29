@@ -122,6 +122,7 @@ public:
     void testTransparentBackground();
 
     void testFdo90607();
+    void testTdf91378();
 #if !defined WNT
     void testBnc822341();
 #endif
@@ -155,6 +156,7 @@ public:
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTransparentBackground);
+    CPPUNIT_TEST(testTdf91378);
 
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
@@ -949,6 +951,26 @@ void SdExportTest::testBulletColor()
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0xff0000),pNumFmt->GetNumRule()->GetLevel(0).GetBulletColor().GetColor());
+}
+
+void SdExportTest::testTdf91378()
+{
+
+    //Check For Import and Export Both
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf91378.pptx"), PPTX);
+    for( sal_uInt32 i=0;i<2;i++)
+    {
+      SdDrawDocument *pDoc = xDocShRef->GetDoc();
+      CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+      uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier( xDocShRef->GetModel(), uno::UNO_QUERY );
+      uno::Reference<document::XDocumentProperties> xProps( xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY );
+      uno::Reference<beans::XPropertySet> xUDProps( xProps->getUserDefinedProperties(), uno::UNO_QUERY );
+      OUString propValue;
+      xUDProps->getPropertyValue(OUString("Testing")) >>= propValue;
+      CPPUNIT_ASSERT(propValue.isEmpty());
+      xDocShRef = saveAndReload( xDocShRef, PPTX );
+    }
+    xDocShRef->DoClose();
 }
 
 #if !defined WNT

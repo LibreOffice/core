@@ -539,8 +539,6 @@ OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputSt
 static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const OUString& sValue )
 {
-    if( sValue.isEmpty() )
-        return;
     pDoc->startElement( nXmlElement, FSEND );
     pDoc->writeEscaped( sValue );
     pDoc->endElement( nXmlElement );
@@ -745,10 +743,6 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
     {
         if ( !aprop[n].Name.isEmpty() )
         {
-            // Ignore empty string property as well.
-            if (aprop[n].Value.has<OUString>() && aprop[n].Value.get<OUString>().isEmpty())
-                continue;
-
             OString aName = OUStringToOString( aprop[n].Name, RTL_TEXTENCODING_ASCII_US );
             // pid starts from 2 not from 1 as MS supports pid from 2
             pAppProps->startElement( XML_property ,
