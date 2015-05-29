@@ -287,7 +287,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
     SwTextFormatColl* pNewColl;
     sal_uInt16 nOutLvlBits = 0;
-    for( sal_uInt16 n = 0; n < m_rDoc.GetTextFormatColls()->size(); ++n )
+    for( size_t n = 0; n < m_rDoc.GetTextFormatColls()->size(); ++n )
     {
         if( nId == ( pNewColl = (*m_rDoc.GetTextFormatColls())[ n ] )->GetPoolFormatId() )
         {

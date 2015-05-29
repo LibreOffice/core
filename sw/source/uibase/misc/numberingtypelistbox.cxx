@@ -89,7 +89,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
     }
     SwOLENames aNames(SW_RES(STRRES_NUMTYPES));
     ResStringArray& rNames = aNames.GetNames();
-    for(sal_uInt16 i = 0; i < rNames.Count(); i++)
+    for(size_t i = 0; i < rNames.Count(); i++)
     {
         sal_IntPtr nValue = rNames.GetValue(i);
         bool bInsert = true;

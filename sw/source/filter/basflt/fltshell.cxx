@@ -210,7 +210,7 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
 void SwFltControlStack::MarkAllAttrsOld()
 {
     size_t nCnt = maEntries.size();
-    for (sal_uInt16 i=0; i < nCnt; ++i)
+    for (size_t i=0; i < nCnt; ++i)
         maEntries[i].bOld = true;
 }
 

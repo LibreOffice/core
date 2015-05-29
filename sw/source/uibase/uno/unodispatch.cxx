@@ -95,7 +95,7 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderIntercept
     uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
     uno::Reference< frame::XDispatch>* pReturn = aReturn.getArray();
     const frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-    for (sal_Int16 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts)
+    for (sal_Int32 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts)
     {
         *pReturn = queryDispatch(pDescripts->FeatureURL,
                 pDescripts->FrameName, pDescripts->SearchFlags);

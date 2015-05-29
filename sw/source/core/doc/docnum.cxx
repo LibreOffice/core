@@ -1346,7 +1346,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
 
 void SwDoc::InvalidateNumRules()
 {
-    for (sal_uInt16 n = 0; n < mpNumRuleTable->size(); ++n)
+    for (size_t n = 0; n < mpNumRuleTable->size(); ++n)
         (*mpNumRuleTable)[n]->SetInvalidRule(true);
 }
 
@@ -1924,7 +1924,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 
                 // All, that are in the to-be-deleted Node, need to be
                 // moved to the next Node
-                for( sal_uInt16 n = 0; n < getIDocumentRedlineAccess().GetRedlineTable().size(); ++n )
+                for( size_t n = 0; n < getIDocumentRedlineAccess().GetRedlineTable().size(); ++n )
                 {
                     SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ n ];
 
@@ -2104,7 +2104,7 @@ SwNumRule* SwDoc::FindNumRulePtr( const OUString& rName ) const
 
     if ( !pResult )
     {
-        for (sal_uInt16 n = 0; n < mpNumRuleTable->size(); ++n)
+        for (size_t n = 0; n < mpNumRuleTable->size(); ++n)
         {
             if ((*mpNumRuleTable)[n]->GetName() == rName)
             {
@@ -2274,7 +2274,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
 void SwDoc::UpdateNumRule()
 {
     const SwNumRuleTable& rNmTable = GetNumRuleTable();
-    for( sal_uInt16 n = 0; n < rNmTable.size(); ++n )
+    for( size_t n = 0; n < rNmTable.size(); ++n )
         if( rNmTable[ n ]->IsInvalidRule() )
             rNmTable[ n ]->Validate();
 }

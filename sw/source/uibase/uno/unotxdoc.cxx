@@ -1055,7 +1055,7 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
     const SwTextNode * pTextNd = rOutlineNodes[ nIndex ]->GetTextNode();
     SwNumberTree::tNumberVector aNumVector = pTextNd->GetNumberVector();
     if( pOutlRule && pTextNd->GetNumRule())
-        for( sal_Int8 nLevel = 0;
+        for( int nLevel = 0;
              nLevel <= pTextNd->GetActualListLevel();
              nLevel++ )
         {

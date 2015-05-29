@@ -725,7 +725,7 @@ void WW8_WrPlc1::Finish( sal_uLong nLastCp, sal_uLong nSttCp )
     {
         aPos.push_back( nLastCp );
         if( nSttCp )
-            for( sal_uInt32 n = 0; n < aPos.size(); ++n )
+            for( size_t n = 0; n < aPos.size(); ++n )
                 aPos[ n ] -= nSttCp;
     }
 }
@@ -929,7 +929,7 @@ void WW8_WrPlcPn::WriteFkps()
 {
     nFkpStartPage = (sal_uInt16) ( SwWW8Writer::FillUntil( rWrt.Strm() ) >> 9 );
 
-    for( sal_uInt16 i = 0; i < aFkps.size(); i++ )
+    for( size_t i = 0; i < aFkps.size(); i++ )
         aFkps[ i ].Write( rWrt.Strm(), *rWrt.m_pGrf );
 
     if( CHP == ePlc )
@@ -1333,7 +1333,7 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_I
     if( GetWriter().GetBookmarks( rNd, nAktPos, nAktEnd, aArr ))
     {
         sal_uLong nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
-        for( sal_uInt16 n = 0; n < aArr.size(); ++n )
+        for( size_t n = 0; n < aArr.size(); ++n )
         {
             const ::sw::mark::IMark& rBkmk = *(aArr[ n ]);
             if(dynamic_cast< const ::sw::mark::IFieldmark *>(&rBkmk))
@@ -2973,7 +2973,7 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
         if (!pIMap)
             continue;
 
-        for (sal_uInt16 i=0; i < pIMap->GetIMapObjectCount(); ++i)
+        for (size_t i=0; i < pIMap->GetIMapObjectCount(); ++i)
         {
             const IMapObject* pObj = pIMap->GetIMapObject(i);
             if (!pObj)

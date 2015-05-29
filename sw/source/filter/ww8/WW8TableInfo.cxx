@@ -760,7 +760,7 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
         if (bEndOfLine)
             pNodeInfo->setEndOfLine(true);
 
-        for (sal_uInt32 n = 0; n < rLines.size(); n++)
+        for (size_t n = 0; n < rLines.size(); n++)
         {
             const SwTableLine * pLine = rLines[n];
 
