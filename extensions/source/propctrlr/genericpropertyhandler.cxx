@@ -363,7 +363,7 @@ namespace pcr
     Any SAL_CALL GenericPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        const_cast< GenericPropertyHandler* >( this )->impl_ensurePropertyMap();
+        impl_ensurePropertyMap();
 
         PropertyMap::const_iterator pos = m_aProperties.find( _rPropertyName );
         if ( pos == m_aProperties.end() )
@@ -389,7 +389,7 @@ namespace pcr
     Any SAL_CALL GenericPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        const_cast< GenericPropertyHandler* >( this )->impl_ensurePropertyMap();
+        impl_ensurePropertyMap();
 
         PropertyMap::const_iterator pos = m_aProperties.find( _rPropertyName );
         if ( pos == m_aProperties.end() )
@@ -526,7 +526,7 @@ namespace pcr
     Sequence< Property > SAL_CALL GenericPropertyHandler::getSupportedProperties() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        const_cast< GenericPropertyHandler* >( this )->impl_ensurePropertyMap();
+        impl_ensurePropertyMap();
 
         Sequence< Property > aReturn( m_aProperties.size() );
         ::std::transform( m_aProperties.begin(), m_aProperties.end(),
@@ -557,7 +557,7 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        const_cast< GenericPropertyHandler* >( this )->impl_ensurePropertyMap();
+        impl_ensurePropertyMap();
 
         PropertyMap::const_iterator pos = m_aProperties.find( _rPropertyName );
         if ( pos == m_aProperties.end() )

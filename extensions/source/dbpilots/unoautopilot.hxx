@@ -92,7 +92,7 @@ namespace dbp
 
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE
         {
-            return *const_cast<OUnoAutoPilot*>(this)->getArrayHelper();
+            return *this->getArrayHelper();
         }
 
         // OPropertyArrayUsageHelper

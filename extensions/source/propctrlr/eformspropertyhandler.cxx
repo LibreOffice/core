@@ -423,7 +423,7 @@ namespace pcr
         {
         case PROPERTY_ID_LIST_BINDING:
             nControlType = PropertyControlType::ListBox;
-            const_cast< EFormsHelper* >( m_pHelper.get() )->getAllElementUINames( EFormsHelper::Binding, aListEntries, true );
+            m_pHelper.get()->getAllElementUINames( EFormsHelper::Binding, aListEntries, true );
             break;
 
         case PROPERTY_ID_XML_DATA_MODEL:

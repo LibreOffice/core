@@ -108,7 +108,7 @@ namespace pcr
         try
         {
             if ( m_xContext.is() )
-                m_xContext->activateNextControl( const_cast< XPropertyControl* >( &m_rAntiImpl ) );
+                m_xContext->activateNextControl( &m_rAntiImpl );
         }
         catch( const Exception& )
         {

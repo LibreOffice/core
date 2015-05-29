@@ -712,7 +712,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_bEventsMapInitialized )
         {
-            const_cast< EventHandler* >( this )->m_bEventsMapInitialized = true;
+            m_bEventsMapInitialized = true;
             try
             {
                 Sequence< Type > aListeners;
@@ -749,7 +749,7 @@ namespace pcr
                         if ( !impl_filterMethod_nothrow( aEvent ) )
                             continue;
 
-                        const_cast< EventHandler* >( this )->m_aEvents.insert( EventMap::value_type(
+                        m_aEvents.insert( EventMap::value_type(
                             lcl_getEventPropertyName( sListenerClassName, *pMethods ), aEvent ) );
                     }
                 }
