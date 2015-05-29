@@ -655,10 +655,6 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
             pCursor = aEntries[ 0 ];
     }
 
-    // Show Focus at Init-Time
-    if (pView->HasFocus())
-        GetFocus();
-
     size_t nCount = pZOrderList->size();
     if (!nCount)
         return;
@@ -1642,20 +1638,20 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     bool bDropTarget = pEntry->IsDropTarget();
     bool bNoEmphasis = pEntry->IsBlockingEmphasis();
 
-    vcl::Font aTempFont(rRenderContext.GetFont());
+    rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     OUString aEntryText(SvtIconChoiceCtrl::GetEntryText(pEntry, false));
     Rectangle aTextRect(CalcTextRect(pEntry, &rPos, false, &aEntryText));
     Rectangle aBmpRect(CalcBmpRect(pEntry, &rPos));
 
-    bool bShowSelection = (((bSelected && !bCursored) || bDropTarget) && !bNoEmphasis && (eSelectionMode != NO_SELECTION));
+    bool bShowSelection = ((bSelected && !bCursored) && !bNoEmphasis && (eSelectionMode != NO_SELECTION));
 
     bool bActiveSelection = (0 != (nWinBits & WB_NOHIDESELECTION)) || pView->HasFocus();
 
     if (bShowSelection)
     {
         const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
-        vcl::Font aNewFont(aTempFont);
+        vcl::Font aNewFont(rRenderContext.GetFont());
 
         // font fill colors that are attributed "hard" need corresponding "hard"
         // attributed highlight colors
@@ -1710,7 +1706,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     if (pEntry == pCurHighlightFrame && !bNoEmphasis)
         DrawHighlightFrame(rRenderContext, CalcFocusRect(pEntry), false);
 
-    rRenderContext.SetFont(aTempFont);
+    rRenderContext.Pop();
     if (bResetClipRegion)
         rRenderContext.SetClipRegion();
 }
