@@ -326,7 +326,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
         const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
         const SfxObjectItem *pObj = PTR_CAST( SfxObjectItem, pRet );
         if ( pObj )
-            xDoc = const_cast<SfxObjectShell*>(PTR_CAST( SfxObjectShell, pObj->GetShell() ));
+            xDoc = PTR_CAST( SfxObjectShell, pObj->GetShell() );
         else
         {
             const SfxViewFrameItem *pView = PTR_CAST( SfxViewFrameItem, pRet );
