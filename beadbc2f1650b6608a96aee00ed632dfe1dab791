@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_19583756",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-05-29T08:48:22Z",
+      "side": 1,
+      "message": "I\u0027d prefer not to see the export of the default value.",
+      "revId": "beadbc2f1650b6608a96aee00ed632dfe1dab791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
