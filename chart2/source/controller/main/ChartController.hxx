@@ -494,61 +494,59 @@ private:
     };
 
 private:
-    mutable ::apphelper::LifeTimeManager    m_aLifeTimeManager;
+    mutable ::apphelper::LifeTimeManager m_aLifeTimeManager;
 
-    mutable ::osl::Mutex    m_aControllerMutex;
+    mutable ::osl::Mutex m_aControllerMutex;
     bool m_bSuspended;
     bool m_bCanClose;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xCC;
 
     //model
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xFrame;
-    mutable ::osl::Mutex    m_aModelMutex;
-    TheModelRef             m_aModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    mutable ::osl::Mutex m_aModelMutex;
+    TheModelRef m_aModel;
 
     //view
-    VclPtr<ChartWindow>        m_pChartWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xViewWindow;
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XInterface >                  m_xChartView;
+    VclPtr<ChartWindow> m_pChartWindow;
+    ::com::sun::star::uno::Reference<::com::sun::star::awt::XWindow> m_xViewWindow;
+    ::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface> m_xChartView;
     ::boost::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
-    DrawViewWrapper*    m_pDrawViewWrapper;
+    DrawViewWrapper* m_pDrawViewWrapper;
 
-    Selection           m_aSelection;
-    SdrDragMode         m_eDragMode;
+    Selection m_aSelection;
+    SdrDragMode m_eDragMode;
 
-    Timer               m_aDoubleClickTimer;
+    Timer m_aDoubleClickTimer;
     bool m_bWaitingForDoubleClick;
     bool m_bWaitingForMouseUp;
 
     bool m_bConnectingToView;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >    m_xUndoManager;
-    ::std::unique_ptr< UndoGuard >                                                    m_pTextActionUndoGuard;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > m_xUndoManager;
+    ::std::unique_ptr< UndoGuard > m_pTextActionUndoGuard;
     /// needed for dispatching URLs in FeatureStateEvents
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 
-    ::std::unique_ptr< ::svt::AcceleratorExecute >  m_apAccelExecute;
+    ::std::unique_ptr< ::svt::AcceleratorExecute > m_apAccelExecute;
 
     CommandDispatchContainer m_aDispatchContainer;
 
-    ::std::unique_ptr< DropTargetHelper >           m_apDropTargetHelper;
+    ::std::unique_ptr< DropTargetHelper > m_apDropTargetHelper;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XLayoutManagerEventBroadcaster >
-                                                  m_xLayoutManagerEventBroadcaster;
+            ::com::sun::star::frame::XLayoutManagerEventBroadcaster > m_xLayoutManagerEventBroadcaster;
 
-    ChartDrawMode       m_eDrawMode;
+    ChartDrawMode m_eDrawMode;
 
 private:
     //private methods
 
-    bool            impl_isDisposedOrSuspended() const;
+    bool impl_isDisposedOrSuspended() const;
     ReferenceSizeProvider* impl_createReferenceSizeProvider();
-    void                impl_adaptDataSeriesAutoResize();
+    void impl_adaptDataSeriesAutoResize();
 
-    void                impl_createDrawViewController();
-    void                impl_deleteDrawViewController();
+    void impl_createDrawViewController();
+    void impl_deleteDrawViewController();
 
     //executeDispatch methods
     void executeDispatch_ObjectProperties();
@@ -558,69 +556,69 @@ private:
 
     void executeDispatch_ChartType();
 
-    void                executeDispatch_InsertTitles();
-    void                executeDispatch_InsertLegend();
-    void                executeDispatch_DeleteLegend();
-    void                executeDispatch_OpenLegendDialog();
-    void                executeDispatch_InsertAxes();
-    void                executeDispatch_InsertGrid();
+    void executeDispatch_InsertTitles();
+    void executeDispatch_InsertLegend();
+    void executeDispatch_DeleteLegend();
+    void executeDispatch_OpenLegendDialog();
+    void executeDispatch_InsertAxes();
+    void executeDispatch_InsertGrid();
 
-    void                executeDispatch_InsertMenu_DataLabels();
-    void                executeDispatch_InsertMenu_Trendlines();
-    void                executeDispatch_InsertMenu_MeanValues();
+    void executeDispatch_InsertMenu_DataLabels();
+    void executeDispatch_InsertMenu_Trendlines();
+    void executeDispatch_InsertMenu_MeanValues();
 
-    void                executeDispatch_InsertMeanValue();
-    void                executeDispatch_InsertTrendline();
-    void                executeDispatch_InsertTrendlineEquation( bool bInsertR2=false );
-    void                executeDispatch_InsertErrorBars( bool bYError );
+    void executeDispatch_InsertMeanValue();
+    void executeDispatch_InsertTrendline();
+    void executeDispatch_InsertTrendlineEquation( bool bInsertR2=false );
+    void executeDispatch_InsertErrorBars( bool bYError );
 
-    void                executeDispatch_InsertR2Value();
-    void                executeDispatch_DeleteR2Value();
+    void executeDispatch_InsertR2Value();
+    void executeDispatch_DeleteR2Value();
 
-    void                executeDispatch_DeleteMeanValue();
-    void                executeDispatch_DeleteTrendline();
-    void                executeDispatch_DeleteTrendlineEquation();
-    void                executeDispatch_DeleteErrorBars( bool bYError );
+    void executeDispatch_DeleteMeanValue();
+    void executeDispatch_DeleteTrendline();
+    void executeDispatch_DeleteTrendlineEquation();
+    void executeDispatch_DeleteErrorBars( bool bYError );
 
-    void                executeDispatch_InsertDataLabels();
-    void                executeDispatch_InsertDataLabel();
-    void                executeDispatch_DeleteDataLabels();
-    void                executeDispatch_DeleteDataLabel();
+    void executeDispatch_InsertDataLabels();
+    void executeDispatch_InsertDataLabel();
+    void executeDispatch_DeleteDataLabels();
+    void executeDispatch_DeleteDataLabel();
 
-    void                executeDispatch_ResetAllDataPoints();
-    void                executeDispatch_ResetDataPoint();
+    void executeDispatch_ResetAllDataPoints();
+    void executeDispatch_ResetDataPoint();
 
-    void                executeDispatch_InsertAxis();
-    void                executeDispatch_InsertAxisTitle();
-    void                executeDispatch_InsertMajorGrid();
-    void                executeDispatch_InsertMinorGrid();
-    void                executeDispatch_DeleteAxis();
-    void                executeDispatch_DeleteMajorGrid();
-    void                executeDispatch_DeleteMinorGrid();
+    void executeDispatch_InsertAxis();
+    void executeDispatch_InsertAxisTitle();
+    void executeDispatch_InsertMajorGrid();
+    void executeDispatch_InsertMinorGrid();
+    void executeDispatch_DeleteAxis();
+    void executeDispatch_DeleteMajorGrid();
+    void executeDispatch_DeleteMinorGrid();
 
     void executeDispatch_InsertSpecialCharacter();
     void executeDispatch_EditText( const Point* pMousePixel = NULL );
     void executeDispatch_SourceData();
     void executeDispatch_MoveSeries( bool bForward );
 
-    void                StartTextEdit( const Point* pMousePixel = NULL );
-    bool                EndTextEdit();
+    void StartTextEdit( const Point* pMousePixel = NULL );
+    bool EndTextEdit();
 
     void executeDispatch_View3D();
     void executeDispatch_PositionAndSize();
 
-    void                executeDispatch_EditData();
+    void executeDispatch_EditData();
 
-    void                executeDispatch_NewArrangement();
-    void                executeDispatch_ScaleText();
+    void executeDispatch_NewArrangement();
+    void executeDispatch_ScaleText();
 
-    void                executeDispatch_Paste();
-    void                executeDispatch_Copy();
-    void                executeDispatch_Cut();
-    bool                executeDispatch_Delete();
-    void                executeDispatch_ToggleLegend();
-    void                executeDispatch_ToggleGridHorizontal();
-    void                executeDispatch_ToggleGridVertical();
+    void executeDispatch_Paste();
+    void executeDispatch_Copy();
+    void executeDispatch_Cut();
+    bool executeDispatch_Delete();
+    void executeDispatch_ToggleLegend();
+    void executeDispatch_ToggleGridHorizontal();
+    void executeDispatch_ToggleGridVertical();
 
     void impl_ShapeControllerDispatch( const ::com::sun::star::util::URL& rURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
