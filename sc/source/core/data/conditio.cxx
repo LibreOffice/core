@@ -1831,7 +1831,7 @@ bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
         return false;
 
     //TODO: Test for same entries in reverse order?
-    for (sal_uInt16 i=0; i<size(); i++)
+    for (size_t i=0; i<size(); i++)
         if ( ! (maEntries == r.maEntries ) )
             return false;
 

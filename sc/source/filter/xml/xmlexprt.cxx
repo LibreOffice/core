@@ -491,7 +491,7 @@ sal_Int32 ScXMLExport::GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const
     return itr->second;
 }
 
-void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount)
+void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
 {
     if (!GetModel().is())
         return;
@@ -579,7 +579,7 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
     }
 }
 
-void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
+void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
 {
     // #i84077# To avoid compiler warnings about uninitialized aShapeItr,
     // it's initialized using this dummy list. The iterator contains shapes
@@ -653,14 +653,14 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
 void ScXMLExport::_ExportMeta()
 {
     sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
-    sal_Int32 nTableCount(0);
+    SCTAB nTableCount(0);
     sal_Int32 nShapesCount(0);
     GetAutoStylePool()->ClearEntries();
     CollectSharedData(nTableCount, nShapesCount);
 
     uno::Sequence<beans::NamedValue> stats(3);
     stats[0] = beans::NamedValue(OUString("TableCount"),
-                uno::makeAny(nTableCount));
+                uno::makeAny((sal_Int32)nTableCount));
     stats[1] = beans::NamedValue(OUString("CellCount"),
                 uno::makeAny(nCellCount));
     stats[2] = beans::NamedValue(OUString("ObjectCount"),
@@ -1800,7 +1800,7 @@ void ScXMLExport::_ExportContent()
     nCurrentTable = 0;
     if (!pSharedData)
     {
-        sal_Int32 nTableCount(0);
+        SCTAB nTableCount(0);
         sal_Int32 nShapesCount(0);
         CollectSharedData(nTableCount, nShapesCount);
         OSL_FAIL("no shared data setted");
@@ -1892,7 +1892,7 @@ void ScXMLExport::_ExportStyles( bool bUsed )
 {
     if (!pSharedData)
     {
-        sal_Int32 nTableCount(0);
+        SCTAB nTableCount(0);
         sal_Int32 nShapesCount(0);
         CollectSharedData(nTableCount, nShapesCount);
     }
@@ -2455,7 +2455,7 @@ void ScXMLExport::_ExportAutoStyles()
 
         if (!pSharedData)
         {
-            sal_Int32 nTableCount(0);
+            SCTAB nTableCount(0);
             sal_Int32 nShapesCount(0);
             CollectSharedData(nTableCount, nShapesCount);
         }

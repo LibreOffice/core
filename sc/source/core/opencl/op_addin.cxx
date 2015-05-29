@@ -27,7 +27,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -194,7 +194,7 @@ void OpGestep::GenSlidingWindowFunction(
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";

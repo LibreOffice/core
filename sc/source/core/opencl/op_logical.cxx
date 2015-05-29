@@ -26,7 +26,7 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -35,7 +35,7 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double t = 1,tmp=0;\n";
-    for(unsigned int j = 0; j< vSubArguments.size(); j++)
+    for(size_t j = 0; j< vSubArguments.size(); j++)
     {
         ss << "    double tmp"<<j<<" = 1;\n";
         FormulaToken *tmpCur0 = vSubArguments[j]->GetFormulaToken();
@@ -111,7 +111,7 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -120,7 +120,7 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double t = 0,tmp=0;\n";
-    for(unsigned int j = 0; j< vSubArguments.size(); j++)
+    for(size_t j = 0; j< vSubArguments.size(); j++)
     {
         ss << "    double tmp"<<j<<" = 0;\n";
         FormulaToken *tmpCur0 = vSubArguments[j]->GetFormulaToken();
@@ -190,7 +190,7 @@ void OpNot::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -227,7 +227,7 @@ void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -237,7 +237,7 @@ void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    int t = 0,tmp0 = 0;\n";
     ss << "    double tmp = 0;\n";
-    for(unsigned int j = 0; j< vSubArguments.size(); j++)
+    for(size_t j = 0; j< vSubArguments.size(); j++)
     {
         FormulaToken *tmpCur0 = vSubArguments[j]->GetFormulaToken();
         if(tmpCur0->GetType() == formula::svSingleVectorRef)
@@ -306,7 +306,7 @@ void OpIf::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";

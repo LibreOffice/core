@@ -104,7 +104,7 @@ public:
 private:
 
     ScDocument* mpDoc;
-    long mnColumnCount;
+    SCCOL mnColumnCount;
 
     /**
      * All pivot table objects that references this cache.

@@ -25,7 +25,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -155,7 +155,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -286,7 +286,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -415,7 +415,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -549,7 +549,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -734,7 +734,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -919,7 +919,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -1049,7 +1049,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -1234,7 +1234,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -1419,7 +1419,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
@@ -1550,7 +1550,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
