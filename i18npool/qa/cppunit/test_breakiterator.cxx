@@ -39,7 +39,9 @@ public:
     void testWeak();
     void testAsian();
     void testThai();
+#if (U_ICU_VERSION_MAJOR_NUM > 51)
     void testLao();
+#endif
 #ifdef TODO
     void testNorthernThai();
 #endif
@@ -52,7 +54,6 @@ public:
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
     CPPUNIT_TEST(testThai);
-    CPPUNIT_TEST(testLao);
 #ifdef TODO
     CPPUNIT_TEST(testNorthernThai);
 #endif
@@ -797,6 +798,7 @@ void TestBreakIterator::testAsian()
     }
 }
 
+#if (U_ICU_VERSION_MAJOR_NUM > 51)
 //A test to ensure that our Lao word boundary detection is useful
 void TestBreakIterator::testLao()
 {
@@ -809,18 +811,16 @@ void TestBreakIterator::testLao()
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aBounds.startPos);
-    //TODO: Expected: 5 | Actual : 12
-    //CPPUNIT_ASSERT_EQUAL(5, aBounds.endPos);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
 
     aBounds = m_xBreak->getWordBoundary(aTest, aBounds.endPos, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 
-    //TODO: Expected: 5 | Actual : 12
-    //CPPUNIT_ASSERT_EQUAL(5, aBounds.startPos);
-    //TODO: Expected: 9 | Actual : 12
-    //CPPUNIT_ASSERT_EQUAL(9, aBounds.endPos);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
 }
+#endif
 
 //A test to ensure that our thai word boundary detection is useful
 void TestBreakIterator::testThai()
