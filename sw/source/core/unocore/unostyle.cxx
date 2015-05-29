@@ -3407,7 +3407,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
         }
     }
 
-    for(sal_Int16 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         const OUString& rPropName = pNames[nProp];
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);

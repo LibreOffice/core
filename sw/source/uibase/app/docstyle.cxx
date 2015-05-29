@@ -2887,7 +2887,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
         const SwNumRuleTable& rNumTable = rDoc.GetNumRuleTable();
-        for(sal_uInt16 i = 0; i < rNumTable.size(); ++i)
+        for(size_t i = 0; i < rNumTable.size(); ++i)
         {
             const SwNumRule& rRule = *rNumTable[ i ];
             if( !rRule.IsAutoRule() )

@@ -129,7 +129,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
         {
             long nTmp = 0;
             const SwTableLines &rLines = pBox->GetTabLines();
-            for( sal_uInt16 nLine=0; nLine<rLines.size(); nLine++ )
+            for( size_t nLine=0; nLine<rLines.size(); nLine++ )
             {
                 nTmp += GetLineHeight( rLines[nLine] );
             }

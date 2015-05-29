@@ -559,7 +559,7 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
     {
         std::vector<OUString> aFaxList;
         const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
-        for (unsigned int i = 0; i < rPrinters.size(); ++i)
+        for (size_t i = 0; i < rPrinters.size(); ++i)
             aFaxList.insert(aFaxList.begin(), rPrinters[i]);
         SetFax( aFaxList );
     }
@@ -2031,7 +2031,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     pChangedColorLB->InsertEntry(sAuthor);
 
     XColorListRef pColorLst = XColorList::GetStdColorList();
-    for( sal_Int32 i = 0; i < pColorLst->Count(); ++i )
+    for( long i = 0; i < pColorLst->Count(); ++i )
     {
         XColorEntry* pEntry = pColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();

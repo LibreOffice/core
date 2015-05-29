@@ -6540,7 +6540,7 @@ void DocxAttributeOutput::WritePostitFieldReference()
 
 void DocxAttributeOutput::WritePostitFields()
 {
-    for( unsigned int i = 0;
+    for( size_t i = 0;
          i < m_postitFields.size();
          ++i )
     {

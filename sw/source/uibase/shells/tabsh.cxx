@@ -846,7 +846,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     long minX = std::numeric_limits<long>::max();
                     long minY = std::numeric_limits<long>::max();
                     long nbBoxes = aBoxes.size();
-                    for ( int i = 0; i < nbBoxes; i++ )
+                    for ( long i = 0; i < nbBoxes; i++ )
                     {
                         Point aCoord ( aBoxes[i]->GetCoordinates() );
                         if ( aCoord.X() < minX ) minX = aCoord.X();

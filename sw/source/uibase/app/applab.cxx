@@ -308,9 +308,9 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                 aFrmVertOrient.SetVertOrient( text::VertOrientation::TOP );
                 pFormat->SetFormatAttr(aFrmVertOrient);
 
-                for ( sal_uInt16 i = 0; i < rItem.nRows; ++i )
+                for ( sal_Int32 i = 0; i < rItem.nRows; ++i )
                 {
-                    for ( sal_uInt16 j = 0; j < rItem.nCols; ++j )
+                    for ( sal_Int32 j = 0; j < rItem.nCols; ++j )
                     {
                         pSh->Push();
                         const SwFrameFormat *pTmp = ( bLabel ?
