@@ -990,6 +990,7 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
     if (nType == StateChangedType::ControlForeground ||
         nType == StateChangedType::ControlBackground)
     {
+        ApplySettings(*this);
         Invalidate();
     }
     else if(pMenu)
@@ -1002,6 +1003,8 @@ void MenuBarWindow::LayoutChanged()
 {
     if (!pMenu)
         return;
+
+    ApplySettings(*this);
 
     // if the font was changed.
     long nHeight = pMenu->ImplCalcSize(this).Height();
@@ -1023,6 +1026,7 @@ void MenuBarWindow::LayoutChanged()
 
 void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
+    Window::ApplySettings(rRenderContext);
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     SetPointFont(rRenderContext, rStyleSettings.GetMenuFont());
@@ -1083,6 +1087,7 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
+        ApplySettings(*this);
         ImplInitStyleSettings();
         LayoutChanged();
     }

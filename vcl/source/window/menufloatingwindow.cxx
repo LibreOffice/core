@@ -46,6 +46,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
     bKeyInput           = false;
 
     EnableSaveBackground();
+    ApplySettings(*this);
 
     SetPopupModeEndHdl( LINK( this, MenuFloatingWindow, PopupEnd ) );
 
@@ -120,6 +121,8 @@ void MenuFloatingWindow::Resize()
 
 void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
+    FloatingWindow::ApplySettings(rRenderContext);
+
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     SetPointFont(rRenderContext, rStyleSettings.GetMenuFont());
@@ -1214,6 +1217,7 @@ void MenuFloatingWindow::StateChanged( StateChangedType nType )
 
     if ( ( nType == StateChangedType::ControlForeground ) || ( nType == StateChangedType::ControlBackground ) )
     {
+        ApplySettings(*this);
         Invalidate();
     }
 }
@@ -1227,6 +1231,7 @@ void MenuFloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
+        ApplySettings(*this);
         Invalidate();
     }
 }
