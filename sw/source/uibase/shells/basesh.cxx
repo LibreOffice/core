@@ -2600,7 +2600,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     {
                         SwTableAutoFormatTable aTableTable;
                         aTableTable.Load();
-                        for ( sal_uInt16 n=0; n<aTableTable.size(); n++ )
+                        for ( size_t n=0; n<aTableTable.size(); n++ )
                         {
                             if ( aTableTable[n].GetName() == aAutoName )
                             {

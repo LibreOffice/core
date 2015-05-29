@@ -371,7 +371,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
                 // get number or numString
-                for( unsigned i = 0; i < pDoc->GetFootnoteIdxs().size(); ++i )
+                for( size_t i = 0; i < pDoc->GetFootnoteIdxs().size(); ++i )
                 {
                     SwTextFootnote* const pFootnoteIdx = pDoc->GetFootnoteIdxs()[i];
                     if( nSeqNo == pFootnoteIdx->GetSeqRefNo() )

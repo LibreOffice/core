@@ -181,7 +181,7 @@ void SwSpellPopup::fillLangPopupMenu(
         uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ) );
         if (rLocales.getLength() > 0)
         {
-            for (sal_uInt16 i = 0; i < rLocales.getLength(); ++i)
+            for (sal_Int32 i = 0; i < rLocales.getLength(); ++i)
             {
                 if (aLangItems.size() == (size_t)nMaxCount)
                     break;
@@ -514,7 +514,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
         }
 
         sal_uInt16 nItemId = MN_SUGGESTION_START;
-        for (sal_uInt16 i = 0;  i < nStringCount;  ++i)
+        for (sal_Int32 i = 0;  i < nStringCount;  ++i)
         {
             const OUString aEntry = m_aSuggestions[ i ];
             InsertItem(nItemId, aEntry, MenuItemBits::NONE, OString(), nPos++);

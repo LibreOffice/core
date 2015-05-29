@@ -139,7 +139,7 @@ sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
 {
     const OUString s( GetAppCharClass().uppercase( rShort ) );
     const sal_uInt16 nHash = Hash( s );
-    for( sal_uInt16 i = 0; i < aNames.size(); i++ )
+    for( size_t i = 0; i < aNames.size(); i++ )
     {
         const SwBlockName* pName = aNames[ i ];
         if( pName->nHashS == nHash
@@ -152,7 +152,7 @@ sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
 sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
 {
     sal_uInt16 nHash = Hash( rLong );
-    for( sal_uInt16 i = 0; i < aNames.size(); i++ )
+    for( size_t i = 0; i < aNames.size(); i++ )
     {
         const SwBlockName* pName = aNames[ i ];
         if( pName->nHashL == nHash

@@ -1789,7 +1789,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 {
                     SwNumberTree::tNumberVector aNumVector =
                         pTextNd->GetNumberVector();
-                    for( sal_Int8 nLevel = 0;
+                    for( int nLevel = 0;
                          nLevel <= pTextNd->GetActualListLevel();
                          nLevel++ )
                     {
