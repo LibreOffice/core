@@ -1674,7 +1674,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                         bool bResetAtoms = false;
                         Atom* pAtoms = reinterpret_cast<Atom*>(pData);
                         aGuard.clear();
-                        for( unsigned int i = 0; i < nItems; i += 2 )
+                        for( unsigned long i = 0; i < nItems; i += 2 )
                         {
 #if OSL_DEBUG_LEVEL > 1
                             fprintf( stderr, "   %s => %s: ",

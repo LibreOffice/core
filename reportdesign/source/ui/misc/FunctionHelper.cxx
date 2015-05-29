@@ -191,7 +191,7 @@ OUString FunctionDescription::getFormula(const ::std::vector< OUString >& _aArgu
 void FunctionDescription::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
 {
     const sal_Int32 nCount = m_aParameter.getLength();
-    for(sal_uInt16 i = 0;i < nCount; ++i)
+    for(sal_Int32 i = 0;i < nCount; ++i)
     {
         _rArguments.push_back(i);
     }

@@ -391,7 +391,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "supported protocols:\n" );
 #endif
-                for( unsigned int i = 0; i < nItems; i++ )
+                for( unsigned long i = 0; i < nItems; i++ )
                 {
                     // #i80971# protect against invalid atoms
                     if( pAtomNames[i] == NULL )
@@ -649,7 +649,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "supported protocols:\n" );
 #endif
-                for( unsigned int i = 0; i < nItems; i++ )
+                for( unsigned long i = 0; i < nItems; i++ )
                 {
                     // #i80971# protect against invalid atoms
                     if( pAtomNames[i] == NULL )
@@ -1476,7 +1476,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
         {
             Point aMed( aTL.X() + rGeom.nWidth/2, aTL.Y() + rGeom.nHeight/2 );
             const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
-            for( unsigned int i = 0; i < rScreens.size(); i++ )
+            for( size_t i = 0; i < rScreens.size(); i++ )
                 if( rScreens[i].IsInside( aMed ) )
                 {
                     aTL += rScreens[i].TopLeft();
@@ -2076,7 +2076,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
                 &root_x, &root_y, &lx, &ly, &mask );
                 const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
                 Point aMousePoint( root_x, root_y );
-                for( unsigned int i = 0; i < rScreens.size(); i++ )
+                for( size_t i = 0; i < rScreens.size(); i++ )
                 {
                     if( rScreens[i].IsInside( aMousePoint ) )
                     {

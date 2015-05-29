@@ -56,7 +56,7 @@ namespace treeview {
 
         ~TVDom()
         {
-            for( unsigned i = 0; i < children.size(); ++i )
+            for( size_t i = 0; i < children.size(); ++i )
                 delete children[i];
         }
 
@@ -399,7 +399,7 @@ extern "C" void data_handler( void *userData,
 TVChildTarget::TVChildTarget( const ConfigData& configData,TVDom* tvDom )
 {
     Elements.resize( tvDom->children.size() );
-    for( unsigned i = 0; i < Elements.size(); ++i )
+    for( size_t i = 0; i < Elements.size(); ++i )
         Elements[i] = new TVRead( configData,tvDom->children[i] );
 }
 
@@ -445,7 +445,7 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
     // now TVDom holds the relevant information
 
     Elements.resize( tvDom.children.size() );
-    for( unsigned i = 0; i < Elements.size(); ++i )
+    for( size_t i = 0; i < Elements.size(); ++i )
         Elements[i] = new TVRead( configData,tvDom.children[i] );
 }
 
@@ -470,7 +470,7 @@ void TVChildTarget::Check(TVDom* tvDom)
             {
                 TVDom* p = tvDom->children[tvDom->children.size()-1];
 
-                for(unsigned k=0; k<p->children.size(); ++k)
+                for(size_t k=0; k<p->children.size(); ++k)
                     if (!SearchAndInsert(p->children[k], tvDom->children[i]))       tvDom->children[i]->newChild(p->children[k]);
 
                 tvDom->children.pop_back();
@@ -547,7 +547,7 @@ TVChildTarget::getElementNames( )
     throw( RuntimeException, std::exception )
 {
     Sequence< OUString > seq( Elements.size() );
-    for( unsigned i = 0; i < Elements.size(); ++i )
+    for( size_t i = 0; i < Elements.size(); ++i )
         seq[i] = OUString::number( 1+i );
 
     return seq;

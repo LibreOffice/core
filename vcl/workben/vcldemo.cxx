@@ -288,9 +288,9 @@ public:
                 rDev.SetLineColor(Color(COL_BLACK));
                 rDev.DrawRect(r);
 
-                for(int i=0; i<r.GetHeight(); i+=15)
+                for(long i=0; i<r.GetHeight(); i+=15)
                     rDev.DrawLine(Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i));
-                for(int i=0; i<r.GetWidth(); i+=15)
+                for(long i=0; i<r.GetWidth(); i+=15)
                     rDev.DrawLine(Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()));
 
                 // Should draw a white-line across the middle

@@ -449,7 +449,7 @@ void PixmapHolder::setBitmapDataPalette( const sal_uInt8* pData, XImage* pImage 
     sal_uInt32 nHeight  = readLE32( pData+8 );
     sal_uInt16 nDepth = readLE16( pData+14 );
 
-    for( sal_uInt16 i = 0 ; i < nColors; i++ )
+    for( sal_uInt32 i = 0 ; i < nColors; i++ )
     {
         if( m_aInfo.c_class != TrueColor )
         {

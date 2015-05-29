@@ -44,7 +44,7 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     aSearchStyle.Properties             = rStyle.Properties;
     aSearchStyle.Contents               = rStyle.Contents;
     aSearchStyle.ContainedElement       = rStyle.ContainedElement;
-    for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
+    for( size_t n = 0; n < rStyle.SubStyles.size(); ++n )
         aSearchStyle.SubStyles.push_back( impl_getStyleId( *rStyle.SubStyles[n], true ) );
 
     std::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator it =
@@ -195,7 +195,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
             aProps[ "draw:name" ] = aProps[ "style:name" ];
         rContext.rEmitter.beginTag( rStyle.Name.getStr(), aProps );
 
-        for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
+        for( size_t n = 0; n < rStyle.SubStyles.size(); ++n )
             impl_emitStyle( rStyle.SubStyles[n], rContext, rContainedElemVisitor );
         if( !rStyle.Contents.isEmpty() )
             rContext.rEmitter.write( rStyle.Contents );
