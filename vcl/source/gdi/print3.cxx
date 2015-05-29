@@ -299,7 +299,7 @@ void Printer::PrintJob( const boost::shared_ptr<PrinterController>& i_pControlle
     }
 }
 
-void Printer::PreparePrintJob( boost::shared_ptr<PrinterController> pController,
+bool Printer::PreparePrintJob( boost::shared_ptr<PrinterController> pController,
                             const JobSetup& i_rInitSetup
                             )
 {
@@ -460,7 +460,7 @@ void Printer::PreparePrintJob( boost::shared_ptr<PrinterController> pController,
         {
             ErrorBox aBox( NULL, VclResId( SV_PRINT_NOCONTENT ) );
             aBox.Execute();
-            return;
+            return false;
         }
     }
 
@@ -477,7 +477,7 @@ void Printer::PreparePrintJob( boost::shared_ptr<PrinterController> pController,
             if( ! aDlg.Execute() )
             {
                 pController->abortJob();
-                return;
+                return false;
             }
             if( aDlg.isPrintToFile() )
             {
@@ -485,7 +485,7 @@ void Printer::PreparePrintJob( boost::shared_ptr<PrinterController> pController,
                 if( aFile.isEmpty() )
                 {
                     pController->abortJob();
-                    return;
+                    return false;
                 }
                 pController->setValue( OUString( "LocalFileName" ),
                                        makeAny( aFile ) );
@@ -502,6 +502,8 @@ void Printer::PreparePrintJob( boost::shared_ptr<PrinterController> pController,
     }
 
     pController->pushPropertiesToPrinter();
+
+    return true;
 }
 
 bool Printer::ExecutePrintJob(boost::shared_ptr<PrinterController> pController)
@@ -523,8 +525,9 @@ void Printer::FinishPrintJob(boost::shared_ptr<PrinterController> pController)
 void Printer::ImplPrintJob(boost::shared_ptr<PrinterController> xController,
                            const JobSetup& i_rInitSetup)
 {
-    PreparePrintJob( xController, i_rInitSetup );
-    ExecutePrintJob( xController );
+    if (PreparePrintJob( xController, i_rInitSetup ))
+        ExecutePrintJob( xController );
+
     FinishPrintJob( xController );
 }
 
