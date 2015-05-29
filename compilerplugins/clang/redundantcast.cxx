@@ -52,6 +52,8 @@ public:
 
     bool VisitCXXReinterpretCastExpr(CXXReinterpretCastExpr const * expr);
 
+    bool VisitCXXConstCastExpr(CXXConstCastExpr const * expr);
+
     bool VisitCallExpr(CallExpr const * expr);
 
     bool VisitCXXDeleteExpr(CXXDeleteExpr const * expr);
@@ -259,6 +261,23 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
             expr->getExprLoc())
             << expr->getSubExprAsWritten()->getType() << expr->getType()
             << expr->getSourceRange();
+    }
+    return true;
+}
+
+bool RedundantCast::VisitCXXConstCastExpr(CXXConstCastExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    if (expr->getTypeAsWritten().getCanonicalType().getTypePtr()
+        == (expr->getSubExprAsWritten()->getType().getCanonicalType()
+            .getTypePtr()))
+    {
+        report(
+            DiagnosticsEngine::Warning, "redundant const_cast from %0 to %1",
+            expr->getExprLoc())
+            << expr->getSubExprAsWritten()->getType()
+            << expr->getTypeAsWritten() << expr->getSourceRange();
     }
     return true;
 }
