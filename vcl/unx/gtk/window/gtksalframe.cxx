@@ -4526,6 +4526,14 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
             nDeleteEnd = xText->getCharacterCount();
 
         xText->deleteText(nDeletePos, nDeleteEnd);
+        //tdf91641 adjust cursor if deleted chars shift it forward (normal case)
+        if (nDeletePos < nPosition)
+        {
+            if (nDeleteEnd <= nPosition)
+                xText->setCaretPosition( nPosition-(nDeleteEnd-nDeletePos) );
+            else
+                xText->setCaretPosition( nDeletePos );
+        }
         return true;
     }
 
