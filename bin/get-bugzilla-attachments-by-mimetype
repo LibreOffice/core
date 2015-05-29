@@ -195,7 +195,7 @@ def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
     print('looking for all bugs having %s attachment(s)' % mimetype)
     process(query, True, get_file_bz_ids(files, prefix))
 
-def get_through_rss_query(queryurl, mimetype, prefix, suffix):
+def get_through_rss_query(queryurl, mimetype, prefix, suffix, startid):
     try:
         os.mkdir(suffix)
     except:
@@ -211,14 +211,22 @@ def get_through_rss_query(queryurl, mimetype, prefix, suffix):
         d = feedparser.parse(url)
         print(str(len(d['entries'])) + ' bugs to process')
 
+        entries = []
+        for entry in d['entries']:
+            bugid = entry['id'].split('=')[-1]
+            if (int(bugid) >= startid):
+                entries.append(entry)
+            else:
+                print("Dropping " + bugid + " because < startid of " + str(startid))
+
         if full:
-            available = set([str(entry['id'].split('=')[-1]) for entry in d['entries']])
+            available = set([str(entry['id'].split('=')[-1]) for entry in entries])
             # we already have files from all available bugs
             if available.difference(set(have)) == set():
                 print("assuming all downloaded files are up to date")
                 return
 
-        for entry in d['entries']:
+        for entry in entries:
             try:
                 get_bug_function(entry['id'], mimetype, prefix, suffix)
             except KeyboardInterrupt:
@@ -315,22 +323,22 @@ def get_launchpad_bugs(prefix):
                 f.write(handle.read())
                 f.close()
 
-rss_bugzillas = {
-    'abi': 'http://bugzilla.abisource.com/buglist.cgi', #added for abiword
-    'fdo': 'http://bugs.libreoffice.org/buglist.cgi',
-    'gentoo': 'http://bugs.gentoo.org/buglist.cgi',
-    'gnome': 'http://bugzilla.gnome.org/buglist.cgi', # added for gnumeric
-    'kde': 'http://bugs.kde.org/buglist.cgi', # added for koffice/calligra
-    'mandriva': 'https://qa.mandriva.com/buglist.cgi',
-    'moz': 'https://bugzilla.mozilla.org/buglist.cgi',
+rss_bugzillas = (
+    ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi', 0 ), #added for abiword
+    ( 'fdo', 'http://bugs.libreoffice.org/buglist.cgi', 0 ),
+    ( 'gentoo', 'http://bugs.gentoo.org/buglist.cgi', 0 ),
+    ( 'gnome', 'http://bugzilla.gnome.org/buglist.cgi', 0 ), # added for gnumeric
+    ( 'kde', 'http://bugs.kde.org/buglist.cgi', 0 ), # added for koffice/calligra
+    ( 'mandriva', 'https://qa.mandriva.com/buglist.cgi', 0 ),
+    ( 'moz', 'https://bugzilla.mozilla.org/buglist.cgi', 0 ),
     # It seems something has changed and it is no longer possible to
     # download any files from there.
     # NOTE: I am leaving it in the list, commented out, just so someone
     # does not add it back immediately .-)
     # 'novell': 'https://bugzilla.novell.com/buglist.cgi',
-    'ooo': 'https://bz.apache.org/ooo/buglist.cgi',
-    'tdf': 'http://bugs.documentfoundation.org/buglist.cgi',
-}
+    ( 'ooo', 'https://bz.apache.org/ooo/buglist.cgi', 0 ),
+    ( 'tdf', 'http://bugs.documentfoundation.org/buglist.cgi', 88776 ),
+)
 
 redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
 redhatbug = 'https://bugzilla.redhat.com/show_bug.cgi?id='
@@ -485,8 +493,8 @@ class manage_threads(threading.Thread):
                 # Get job from queue
                 # Use job parameters to call our query
                 # Then let the queue know we are done with this job
-                job = jobs.get(True,5)
-                get_through_rss_query(job[0], job[1], job[2], job[3]) # [0] = uri; [1] = mimetype; [2] = prefix; [3] = extension
+                job = jobs.get(True,6)
+                get_through_rss_query(job[0], job[1], job[2], job[3], job[4]) # [0] = uri; [1] = mimetype; [2] = prefix; [3] = extension; [4] = startid
                 jobs.task_done()
             except KeyboardInterrupt:
                 raise # Ctrl+C should work
@@ -494,7 +502,7 @@ class manage_threads(threading.Thread):
                 break
 
 def generate_multi_threading():
-    for (prefix, uri) in rss_bugzillas.items():
+    for (prefix, uri, startid) in rss_bugzillas:
 
         # Initialize threads
         for i in xrange(max_threads):
@@ -511,7 +519,7 @@ def generate_multi_threading():
                     continue
 
             try:
-                jobs.put([uri, mimetype, prefix, extension], block=True, timeout=3)
+                jobs.put([uri, mimetype, prefix, extension, startid], block=True, timeout=3)
                 print("successfully placed a job in the queue searching for " + mimetype + " in bugtracker " + prefix)
             except KeyboardInterrupt:
                 raise # Ctrl+C should work
