@@ -5951,7 +5951,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
 
     if ( rACList.GetWordsMatching( rWord, strings ) )
     {
-        for (unsigned int i= 0; i<strings.size(); i++)
+        for (size_t i= 0; i<strings.size(); i++)
         {
             OUString aCompletedString = strings[i];
             //fdo#61251 if it's an exact match, ensure unchanged replacement

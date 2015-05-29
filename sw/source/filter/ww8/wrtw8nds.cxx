@@ -1255,7 +1255,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
 bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) const
 {
     // search next Redline
-    for( sal_uInt16 nPos = nCurRedlinePos;
+    for( size_t nPos = nCurRedlinePos;
         nPos < m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nPos )
     {
         const SwRangeRedline *pRange = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[nPos];
@@ -1313,7 +1313,7 @@ const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
     pCurRedline = NULL;
 
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
-    for( sal_uInt16 nRedlinePos = 0; nRedlinePos < m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nRedlinePos )
+    for( size_t nRedlinePos = 0; nRedlinePos < m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nRedlinePos )
     {
         const SwRangeRedline* pRedl = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nRedlinePos ];
 

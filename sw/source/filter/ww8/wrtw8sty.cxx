@@ -278,7 +278,7 @@ void MSWordStyles::BuildStylesTable()
                                         // Standard und HeadingX u.a.
     const SwCharFormats& rArr = *m_rExport.m_pDoc->GetCharFormats();       // first CharFormat
     // das Default-ZeichenStyle ( 0 ) wird nicht mit ausgegeben !
-    for( sal_uInt16 n = 1; n < rArr.size(); n++ )
+    for( size_t n = 1; n < rArr.size(); n++ )
     {
         SwCharFormat* pFormat = rArr[n];
         m_pFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
@@ -286,7 +286,7 @@ void MSWordStyles::BuildStylesTable()
 
     const SwTextFormatColls& rArr2 = *m_rExport.m_pDoc->GetTextFormatColls();   // then TextFormatColls
     // das Default-TextStyle ( 0 ) wird nicht mit ausgegeben !
-    for( sal_uInt16 n = 1; n < rArr2.size(); n++ )
+    for( size_t n = 1; n < rArr2.size(); n++ )
     {
         SwTextFormatColl* pFormat = rArr2[n];
         m_pFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
@@ -1891,7 +1891,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     unsigned int nOldIndex = rWrt.GetHdFtIndex();
     rWrt.SetHdFtIndex( 0 );
 
-    for ( sal_uInt16 i = 0; i < aSects.size(); ++i )
+    for ( size_t i = 0; i < aSects.size(); ++i )
     {
         ::boost::shared_ptr<WW8_PdAttrDesc> const pAttrDesc(new WW8_PdAttrDesc);
         m_SectionAttributes.push_back(pAttrDesc);
@@ -2115,7 +2115,7 @@ bool WW8_WrPlcAnnotations::IsNewRedlineComment( const SwRedlineData *pRedline )
 
 WW8_WrPlcAnnotations::~WW8_WrPlcAnnotations()
 {
-    for( sal_uInt16 n=0; n < aContent.size(); n++ )
+    for( size_t n=0; n < aContent.size(); n++ )
         delete static_cast<WW8_Annotation const *>(aContent[n]);
 }
 

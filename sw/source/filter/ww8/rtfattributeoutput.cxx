@@ -603,7 +603,7 @@ void RtfAttributeOutput::TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t p
     // Not using m_nTableDepth, which is not yet incremented here.
     sal_uInt32 nCurrentDepth = pTableTextNodeInfoInner->getDepth();
     m_aCells[nCurrentDepth] = pRow->GetCells().size();
-    for (sal_uInt16 i = 0; i < m_aCells[nCurrentDepth]; i++)
+    for (sal_uInt32 i = 0; i < m_aCells[nCurrentDepth]; i++)
     {
         const SwWriteTableCell* pCell = &pRow->GetCells()[ i ];
         const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
@@ -929,7 +929,7 @@ void RtfAttributeOutput::EndTableRow()
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", (depth is " << m_nTableDepth << ")");
 
     // Trying to end the row without writing the required number of cells? Fill with empty ones.
-    for (sal_uInt16 i = 0; i < m_aCells[m_nTableDepth]; i++)
+    for (sal_uInt32 i = 0; i < m_aCells[m_nTableDepth]; i++)
         m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_CELL);
 
     if (m_nTableDepth > 1)
