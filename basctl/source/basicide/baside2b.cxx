@@ -1402,7 +1402,30 @@ void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
         rRenderContext.DrawImage(Point(0, nY) + aBmpOff, aBrk[rBrk.bEnabled]);
     }
 
-    Invalidate();
+    ShowMarker(rRenderContext);
+}
+
+void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
+{
+    if (nMarkerPos == NoMarker)
+        return;
+
+    Size const aOutSz = GetOutputSize();
+    long const nLineHeight = GetTextHeight();
+
+    Image aMarker = GetImage(bErrorMarker ? IMGID_ERRORMARKER : IMGID_STEPMARKER);
+
+    Size aMarkerSz(aMarker.GetSizePixel());
+    aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);
+    Point aMarkerOff(0, 0);
+    aMarkerOff.X() = (aOutSz.Width() - aMarkerSz.Width()) / 2;
+    aMarkerOff.Y() = (nLineHeight - aMarkerSz.Height()) / 2;
+
+    sal_uLong nY = nMarkerPos * nLineHeight - nCurYOffset;
+    Point aPos(0, nY);
+    aPos += aMarkerOff;
+
+    rRenderContext.DrawImage(aPos, aMarker);
 }
 
 void BreakPointWindow::DoScroll( long nHorzScroll, long nVertScroll )
