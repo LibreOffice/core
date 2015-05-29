@@ -99,7 +99,7 @@ void Ruler::dispose()
 {
     SfxBindings& rBindings = pCtrlItem->GetBindings();
     rBindings.EnterRegistrations();
-    delete pCtrlItem;
+    DELETEZ( pCtrlItem );
     rBindings.LeaveRegistrations();
     pSdWin.clear();
     SvxRuler::dispose();

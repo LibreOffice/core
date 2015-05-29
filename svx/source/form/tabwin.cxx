@@ -211,6 +211,7 @@ void FmFieldWin::dispose()
     }
     pListBox.disposeAndClear();
     delete pData;
+    ::SfxControllerItem::dispose();
     SfxFloatingWindow::dispose();
 }
 

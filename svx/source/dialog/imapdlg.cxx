@@ -222,7 +222,7 @@ void SvxIMapDlg::dispose()
 {
     // Delete URL-List
     pIMapWnd.disposeAndClear();
-    delete pOwnData;
+    DELETEZ( pOwnData );
     m_pTbxIMapDlg1.clear();
     m_pFtURL.clear();
     m_pURLBox.clear();
@@ -232,6 +232,7 @@ void SvxIMapDlg::dispose()
     m_pCbbTarget.clear();
     m_pStbStatus.clear();
     SfxModelessDialog::dispose();
+    aIMapItem.dispose();
 }
 
 bool SvxIMapDlg::Close()

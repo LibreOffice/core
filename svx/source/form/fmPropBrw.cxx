@@ -279,6 +279,7 @@ void FmPropBrw::dispose()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+    ::SfxControllerItem::dispose();
     SfxFloatingWindow::dispose();
 }
 

@@ -305,6 +305,7 @@ void SvxSuperContourDlg::dispose()
     m_pTbx1.clear();
     m_pMtfTolerance.clear();
     m_pStbStatus.clear();
+    aContourItem.dispose();
     SvxContourDlg::dispose();
 }
 

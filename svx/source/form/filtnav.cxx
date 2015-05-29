@@ -1873,6 +1873,7 @@ FmFilterNavigatorWin::~FmFilterNavigatorWin()
 void FmFilterNavigatorWin::dispose()
 {
     m_pNavigator.disposeAndClear();
+    ::SfxControllerItem::dispose();
     SfxDockingWindow::dispose();
 }
 
