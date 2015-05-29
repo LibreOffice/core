@@ -308,15 +308,14 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     if ( bSuccess )
     {
-        OUString sBindingUrl;
         OUString sRepositoryId;
 
         OUString sDecodedHost = rUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
         INetURLObject aHostUrl( sDecodedHost );
-        sBindingUrl = aHostUrl.GetURLNoMark( );
+        m_sBinding = aHostUrl.GetURLNoMark( );
         sRepositoryId = aHostUrl.GetMark( );
 
-        m_pEDBinding->SetText( sBindingUrl );
+        m_pEDBinding->SetText( m_sBinding );
         m_pEDPath->SetText( rUrl.GetURLPath() );
     }
     return bSuccess;
