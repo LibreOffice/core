@@ -83,8 +83,7 @@ std::vector< BinaryAny >::iterator copyMemberValues(
     for (sal_Int32 j = 0; j != ctd->nMembers; ++j) {
         uno_type_copyData(
             static_cast< char * >(buffer) + ctd->pMemberOffsets[j],
-            const_cast< void * >(
-                i++->getValue(css::uno::TypeDescription(ctd->ppTypeRefs[j]))),
+            i++->getValue(css::uno::TypeDescription(ctd->ppTypeRefs[j])),
             ctd->ppTypeRefs[j], 0);
     }
     return i;
@@ -462,7 +461,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
     for (sal_uInt32 i = 0; i != n; ++i) {
         uno_copyData(
             static_cast< sal_Sequence * >(buf)->elements + i * ctd.get()->nSize,
-            const_cast< void * >(as[i].getValue(ctd)), ctd.get(), 0);
+            as[i].getValue(ctd), ctd.get(), 0);
     }
     return BinaryAny(type, &buf);
 }
