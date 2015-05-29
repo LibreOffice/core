@@ -1322,7 +1322,7 @@ ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
 {
     if ( !m_aEmbeddedMacros )
     {
-        if ( ::sfx2::DocumentMacroMode::storageHasMacros( const_cast< ODatabaseModelImpl* >( this )->getOrCreateRootStorage() ) )
+        if ( ::sfx2::DocumentMacroMode::storageHasMacros( getOrCreateRootStorage() ) )
         {
             m_aEmbeddedMacros.reset( eDocumentWideMacros );
         }

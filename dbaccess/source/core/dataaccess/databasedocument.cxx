@@ -1766,7 +1766,7 @@ Sequence< OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNames(  )
 
 void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference< XStorage >& _rxNewRootStorage )
 {
-    Reference< XInterface > xMe( *const_cast< ODatabaseDocument* >( this ) );
+    Reference< XInterface > xMe( *this );
 
     m_aStorageListeners.forEach< XStorageChangeListener >(
         boost::bind( &XStorageChangeListener::notifyStorageChange, _1, boost::cref( xMe ), boost::cref( _rxNewRootStorage ) ) );
