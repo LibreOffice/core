@@ -727,13 +727,44 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     if ( this ==  pNextTextObj )
         return;
 
-   SdrOutliner &rOutliner = ImpGetDrawOutliner();
+    SdrOutliner &rOutliner = ImpGetDrawOutliner();
+
+    // append a string in front of everything
+    // NOTE: Trying with set-text first
+
+    if (mpOverflowingText) {
+        // Set text first
+
+        rOutliner.SetText(*mpOverflowingText);
+        Paragraph *pFstPara = rOutliner.GetParagraph(0);
+        OUString aTxtFstPara = rOutliner.GetText(pFstPara);
+
+        rOutliner.SetText("X" + aTxtFstPara, pFstPara);
+        // gets the whole thing
+        OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
+        // draws everything - result = "X" ++ overflowingText
+        pNextTextObj->NbcSetOutlinerParaObject(pNewText);
+    }
+
+
+    /*
+    // Code inspired by SvxOutlinerForwarder::AppendTextPortion
+    sal_Int32 nLen = 0;
+
+    EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
+    sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
+    DBG_ASSERT( 0 <= nPara && nPara < nParaCount, "paragraph index out of bounds" );
+    if (0 <= nPara && nPara < nParaCount)
+    {
+        nLen = rEditEngine.GetTextLen( nPara );
+        rEditEngine.QuickInsertText( rText, ESelection( nPara, nLen, nPara, nLen ) );
+    }
+    * */
+
    rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
    // Push text through the chain if there's any
-    if (mpOverflowingText) {
-        pNextTextObj->NbcSetOutlinerParaObject(mpOverflowingText);
-    }
+
     rOutliner.SetStatusEventHdl1(Link());
 
 }
