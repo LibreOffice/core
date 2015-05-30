@@ -1259,11 +1259,11 @@ PopupMenu* SwContentTree::CreateContextMenu()
         SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
         if ( (pType->GetType() == CONTENT_TYPE_POSTIT) &&  (!pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
         {
-                pSubPop4->InsertItem(600, sPostItShow );
-                pSubPop4->InsertItem(601, sPostItHide );
-                pSubPop4->InsertItem(602, sPostItDelete );
-                pPop->InsertItem(4, pType->GetSingleName());
-                pPop->SetPopupMenu(4, pSubPop4);
+            pSubPop4->InsertItem(600, sPostItShow );
+            pSubPop4->InsertItem(601, sPostItHide );
+            pSubPop4->InsertItem(602, sPostItDelete );
+            pPop->InsertItem(4, pType->GetSingleName());
+            pPop->SetPopupMenu(4, pSubPop4);
         }
     }
 
@@ -1308,50 +1308,48 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
             SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
 
             const size_t nCount = pCntType->GetMemberCount();
-             // Add for outline plus/minus
-             if(pCntType->GetType() == CONTENT_TYPE_OUTLINE)
-             {
-                 SvTreeListEntry* pChild = 0;
-                 for(size_t i = 0; i < nCount; ++i)
-                 {
-                     const SwContent* pCnt = pCntType->GetMember(i);
-                     if(pCnt)
-                     {
-                         const auto nLevel = static_cast<const SwOutlineContent*>(pCnt)->GetOutlineLevel();
-                         OUString sEntry = pCnt->GetName();
-                         if(sEntry.isEmpty())
-                             sEntry = sSpace;
-                         if(!pChild || (nLevel == 0))
-                             pChild = InsertEntry(sEntry, pParent,
-                                         false, TREELIST_APPEND,(void*)pCnt);
-                         else
-                         {
-                             //back search parent.
-                             if(static_cast<const SwOutlineContent*>(pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
-                                 pChild = InsertEntry(sEntry, pChild,
-                                         false, TREELIST_APPEND, (void*)pCnt);
-                             else
-                             {
-                                 pChild = Prev(pChild);
-                                 while(pChild &&
-                                         lcl_IsContent(pChild) &&
-                                         !(static_cast<SwOutlineContent*>(pChild->GetUserData())->GetOutlineLevel() < nLevel)
-                                      )
-                                 {
-                                     pChild = Prev(pChild);
-                                 }
-                                 if(pChild)
-                                     pChild = InsertEntry(sEntry, pChild,
-                                                 false, TREELIST_APPEND, (void*)pCnt);
-                             }
+            // Add for outline plus/minus
+            if(pCntType->GetType() == CONTENT_TYPE_OUTLINE)
+            {
+                SvTreeListEntry* pChild = 0;
+                for(size_t i = 0; i < nCount; ++i)
+                {
+                    const SwContent* pCnt = pCntType->GetMember(i);
+                    if(pCnt)
+                    {
+                        const auto nLevel = static_cast<const SwOutlineContent*>(pCnt)->GetOutlineLevel();
+                        OUString sEntry = pCnt->GetName();
+                        if(sEntry.isEmpty())
+                            sEntry = sSpace;
+                        if(!pChild || (nLevel == 0))
+                            pChild = InsertEntry(sEntry, pParent, false, TREELIST_APPEND,(void*)pCnt);
+                        else
+                        {
+                            //back search parent.
+                            if(static_cast<const SwOutlineContent*>(pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
+                                pChild = InsertEntry(sEntry, pChild, false, TREELIST_APPEND, (void*)pCnt);
+                            else
+                            {
+                                pChild = Prev(pChild);
+                                while(pChild &&
+                                        lcl_IsContent(pChild) &&
+                                        !(static_cast<SwOutlineContent*>(pChild->GetUserData())->GetOutlineLevel() < nLevel)
+                                    )
+                                {
+                                    pChild = Prev(pChild);
+                                }
+                                if(pChild)
+                                    pChild = InsertEntry(sEntry, pChild,
+                                                false, TREELIST_APPEND, (void*)pCnt);
+                            }
                         }
-                     }
-                 }
-             }
-             else
-             {
-                 for(size_t i = 0; i < nCount; ++i)
-                 {
+                    }
+                }
+            }
+            else
+            {
+                for(size_t i = 0; i < nCount; ++i)
+                {
                     SvTreeListEntry* pChild = NULL;
                     const SwContent* pCnt = pCntType->GetMember(i);
                     if (pCnt)
@@ -1359,8 +1357,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                         OUString sEntry = pCnt->GetName();
                         if (sEntry.isEmpty())
                             sEntry = sSpace;
-                        pChild = InsertEntry(sEntry, pParent,
-                            false, TREELIST_APPEND, (void*)pCnt);
+                        pChild = InsertEntry(sEntry, pParent, false, TREELIST_APPEND, (void*)pCnt);
                     }
                     if (pChild)
                     {
@@ -1380,11 +1377,10 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                     //sEntry += String::CreateFromAscii(" *");
                                     pChild->SetMarked(true);
                                 }
-
                             }
                         }
-                     }
-                 }
+                    }
+                }
             }
         }
     }
@@ -1509,7 +1505,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
             void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
             mOutLineNodeMap[key] = false;
         }
-            bRet = SvTreeListBox::Collapse(pParent);
+        bRet = SvTreeListBox::Collapse(pParent);
     }
     else
         bRet = SvTreeListBox::Collapse(pParent);
@@ -1693,9 +1689,9 @@ void SwContentTree::Display( bool bActive )
                             false, TREELIST_APPEND, (void*)pCnt);
                     }
                 }
-             }
-             else
-                 RequestingChildren(pParent);
+            }
+            else
+                RequestingChildren(pParent);
             Expand(pParent);
             if( nRootType == CONTENT_TYPE_OUTLINE && bIsActive )
             {
@@ -1843,8 +1839,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 // only if a primarily link shall be integrated.
                 bRet = true;
             }
-            else if(    nActType == CONTENT_TYPE_REGION ||
-                        nActType == CONTENT_TYPE_BOOKMARK )
+            else if ( nActType == CONTENT_TYPE_REGION || nActType == CONTENT_TYPE_BOOKMARK )
             {
                 // For field and bookmarks a link is also allowed
                 // without a filename into its own document.
@@ -2649,9 +2644,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                 case 0:
                     if(lcl_IsContentType(pEntry))
                     {
-                        IsExpanded(pEntry) ?
-                            Collapse(pEntry) :
-                                Expand(pEntry);
+                        IsExpanded(pEntry) ? Collapse(pEntry) : Expand(pEntry);
                     }
                     else
                         ContentDoubleClickHdl(0);
