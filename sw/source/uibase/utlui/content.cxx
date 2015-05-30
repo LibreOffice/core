@@ -481,7 +481,7 @@ void    SwContentType::Invalidate()
 void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 {
     SwContentArr*   pOldMember = 0;
-    int nOldMemberCount = -1;
+    int nOldMemberCount = 0;
     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, 0 );
     if(pMember && pbLevelOrVisibilityChanged)
     {
