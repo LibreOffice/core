@@ -173,7 +173,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXTextRanges *const pRanges(
+    SwXTextRanges* const pRanges(
         ::sw::UnoTunnelGetImplementation<SwXTextRanges>(xTunnel));
     if (pRanges)
     {
