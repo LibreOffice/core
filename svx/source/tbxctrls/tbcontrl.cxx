@@ -606,9 +606,9 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
 
 void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice* pDevice, const OUString& rStyleName, bool bIsNotSelected)
 {
+    unsigned int nId = rRect.GetHeight() != 0 ? (rRect.getY() / rRect.GetHeight()) : MAX_STYLES_ENTRIES;
     if (nItem == 0 || nItem == GetEntryCount() - 1)
     {
-        unsigned int nId = (rRect.getY() / rRect.GetHeight());
         if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
             m_pButtons[nId]->Hide();
     }
@@ -735,14 +735,12 @@ void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, Outp
                 // handle the push-button
                 if (bIsNotSelected)
                 {
-                    unsigned int nId = (rRect.getY() / rRect.GetHeight());
-                    if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
+                    if (nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
                         m_pButtons[nId]->Hide();
                 }
                 else
                 {
-                    unsigned int nId = (rRect.getY() / rRect.GetHeight());
-                    if(nId < MAX_STYLES_ENTRIES)
+                    if (nId < MAX_STYLES_ENTRIES)
                     {
                         if(m_pButtons[nId] == nullptr)
                         {
