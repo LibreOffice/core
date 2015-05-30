@@ -87,11 +87,10 @@ enum {
     RENDER_SCROLLBAR = 9,
     RENDER_SPINBUTTON = 10,
     RENDER_COMBOBOX = 11,
-    RENDER_EXTENSION = 12,
-    RENDER_EXPANDER = 13,
-    RENDER_ICON = 14,
-    RENDER_PROGRESS = 15,
-    RENDER_FOCUS = 16,
+    RENDER_EXPANDER = 12,
+    RENDER_ICON = 13,
+    RENDER_PROGRESS = 14,
+    RENDER_FOCUS = 15,
 };
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
@@ -1088,9 +1087,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         {
             gtk_render_frame(context, cr, nX, nY, nWidth, nHeight);
         }
-        break;
-    case RENDER_EXTENSION:
-        gtk_render_extension(context, cr, nX, nY, nWidth, nHeight, GTK_POS_BOTTOM);
         break;
     case RENDER_CHECK:
     case RENDER_RADIO:
