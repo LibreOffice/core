@@ -4490,7 +4490,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
     if (xText.is())
     {
-        sal_uInt32 nPosition = xText->getCaretPosition();
+        sal_Int32 nPosition = xText->getCaretPosition();
         OUString sAllText = xText->getText();
         OString sUTF = OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
         OUString sCursorText(sAllText.copy(0, nPosition));
