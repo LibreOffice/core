@@ -34,10 +34,12 @@
  <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
  <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
- <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineFont"/>
  <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToLower" toolbar:visible="false"/>
