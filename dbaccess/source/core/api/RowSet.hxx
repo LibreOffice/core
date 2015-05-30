@@ -197,7 +197,7 @@ namespace dbaccess
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
                         impl_prepareAndExecute_throw();
-        void            impl_makeNewStatement_throw();
+        void            impl_ensureStatement_throw();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  calcConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
         // free clones and ParseTree. Plus, if _bComplete is <TRUE/>, *all* other associated resources

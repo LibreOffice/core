@@ -1624,10 +1624,17 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
     _rxStatement->setPropertyValue( PROPERTY_RESULTSETCONCURRENCY, makeAny( nResultSetConcurrency ) );
 }
 
-void ORowSet::impl_makeNewStatement_throw()
+void ORowSet::impl_ensureStatement_throw()
 {
     OUString sCommandToExecute;
-    impl_initComposer_throw( sCommandToExecute );
+    if(m_bCommandFacetsDirty)
+    {
+        impl_initComposer_throw( sCommandToExecute );
+    }
+    else
+    {
+        sCommandToExecute = m_bUseEscapeProcessing ? m_xComposer->getQueryWithSubstitution() : m_aActiveCommand;
+    }
 
     try
     {
@@ -1672,8 +1679,7 @@ void ORowSet::impl_makeNewStatement_throw()
 
 Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
 {
-    if(m_bCommandFacetsDirty)
-        impl_makeNewStatement_throw();
+    impl_ensureStatement_throw();
 
     m_aParameterValueForCache.get().resize(1);
     Reference< XParameters > xParam( m_xStatement, UNO_QUERY_THROW );
