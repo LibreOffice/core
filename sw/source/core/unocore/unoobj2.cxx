@@ -409,10 +409,8 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
     }
 }
 
-class SwXParagraphEnumeration::Impl
-    : public SwClient
+struct SwXParagraphEnumeration::Impl
 {
-public:
     uno::Reference< text::XText > const     m_xParentText;
     const CursorType        m_eCursorType;
     /// Start node of the cell _or_ table the enumeration belongs to.
@@ -425,14 +423,14 @@ public:
     sal_Int32               m_nLastParaEnd;
     bool                    m_bFirstParagraph;
     uno::Reference< text::XTextContent >    m_xNextPara;
-    std::shared_ptr<SwUnoCrsr> m_pCrsr;
+    //UnoCursorPointerWithClientModify m_pCrsr;
+    sw::UnoCursorPointer m_pCrsr;
 
     Impl(   uno::Reference< text::XText > const& xParent,
             ::std::shared_ptr<SwUnoCrsr> pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
-        : SwClient( nullptr )
-        , m_xParentText( xParent )
+        : m_xParentText( xParent )
         , m_eCursorType( eType )
         // remember table and start node for later travelling
         // (used in export of tables in tables)
@@ -446,9 +444,7 @@ public:
         , m_bFirstParagraph( true )
         , m_pCrsr(pCursor)
     {
-        m_pCrsr->Add(this);
         OSL_ENSURE(m_xParentText.is(), "SwXParagraphEnumeration: no parent?");
-        OSL_ENSURE(GetRegisteredIn(),  "SwXParagraphEnumeration: no cursor?");
         OSL_ENSURE(   !((CURSOR_SELECTION_IN_TABLE == eType) ||
                         (CURSOR_TBLTEXT == eType))
                    || (m_pOwnTable && m_pOwnStartNode),
@@ -466,38 +462,17 @@ public:
     }
 
     virtual ~Impl() {
-        if(m_pCrsr)
-            m_pCrsr->Remove(this);
+        m_pCrsr.reset(nullptr);
     }
 
-    SwUnoCrsr * GetCursor() {
-        return static_cast<SwUnoCrsr*>(
-                GetRegisteredIn());
+    SwUnoCrsr* GetCursor() {
+        return &(*m_pCrsr);
     }
 
     uno::Reference< text::XTextContent > NextElement_Impl()
         throw (container::NoSuchElementException, lang::WrappedTargetException,
                 uno::RuntimeException);
-protected:
-    // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE;
 };
-
-void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-}
-
-void SwXParagraphEnumeration::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    SwClient::SwClientNotify(rModify, rHint);
-    if(m_pCrsr && typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        m_pCrsr->Remove(this);
-        m_pCrsr.reset();
-    }
-}
 
 SwXParagraphEnumeration::SwXParagraphEnumeration(
         uno::Reference< text::XText > const& xParent,
@@ -519,14 +494,6 @@ SwXParagraphEnumeration::getImplementationName() throw (uno::RuntimeException, s
     return OUString("SwXParagraphEnumeration");
 }
 
-static char const*const g_ServicesParagraphEnum[] =
-{
-    "com.sun.star.text.ParagraphEnumeration",
-};
-
-static const size_t g_nServicesParagraphEnum(
-    sizeof(g_ServicesParagraphEnum)/sizeof(g_ServicesParagraphEnum[0]));
-
 sal_Bool SAL_CALL
 SwXParagraphEnumeration::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException, std::exception)
@@ -538,8 +505,7 @@ uno::Sequence< OUString > SAL_CALL
 SwXParagraphEnumeration::getSupportedServiceNames()
 throw (uno::RuntimeException, std::exception)
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesParagraphEnum, g_ServicesParagraphEnum);
+    return {"com.sun.star.text.ParagraphEnumeration"};
 }
 
 sal_Bool SAL_CALL
