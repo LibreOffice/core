@@ -155,10 +155,10 @@ public class RowSet extends TestCase
      *      the command to use for the RowSet
      *  @param commandType
      *      the command type to use for the RowSet
-     *  @param limitFetchSize
-     *      determines whether the fetch size of the RowSet should be limited to MAX_FETCH_ROWS
      *  @param execute
      *      determines whether the RowSet should be executed
+     *  @param limitFetchSize
+     *      determines whether the fetch size of the RowSet should be limited to MAX_FETCH_ROWS
      */
     private void createRowSet(String command, int commandType, boolean execute, boolean limitFetchSize)
     {
@@ -969,7 +969,7 @@ public class RowSet extends TestCase
         }
         catch (Exception e)
         {
-            fail("could not test the relationship between XParameters and XParametersSupplier" + e.getMessage());
+            fail("could not test the relationship between XParameters and XParametersSupplier: " + e.getMessage());
         }
     }
 
