@@ -2253,6 +2253,18 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                 if ( !aPairs.hasElements() || !aSegments.hasElements() )
                     return;
 
+                int nExpectedPairCount = 0;
+                for( int j = 0; j < aSegments.getLength(); ++j )
+                {
+                    nExpectedPairCount += aSegments[j].Count;
+                }
+
+                if ( nExpectedPairCount > aPairs.getLength() )
+                {
+                    SAL_WARN("oox", "Segments need " << nExpectedPairCount << " coordinates, but Coordinates have only " << aPairs.getLength() << " pairs.");
+                    return;
+                }
+
                 mpFS->startElementNS( XML_a, XML_custGeom, FSEND );
                 mpFS->singleElementNS( XML_a, XML_avLst, FSEND );
                 mpFS->singleElementNS( XML_a, XML_gdLst, FSEND );
