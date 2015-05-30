@@ -102,6 +102,47 @@ public:
     const SwCursor& GetSelRing() const      { return m_aTableSel; }
 };
 
+namespace sw
+{
+    class UnoCursorPointer : public SwClient
+    {
+        public:
+            UnoCursorPointer(std::shared_ptr<SwUnoCrsr> pCursor)
+                : m_pCursor(pCursor)
+            {
+                m_pCursor->Add(this);
+            }
+            virtual ~UnoCursorPointer() SAL_OVERRIDE
+            {
+                if(m_pCursor)
+                    m_pCursor->Remove(this);
+            }
+            virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE
+            {
+                SwClient::SwClientNotify(rModify, rHint);
+                if(m_pCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
+                    m_pCursor->Remove(this);
+                if(!GetRegisteredIn())
+                    m_pCursor.reset();
+            };
+            SwUnoCrsr& operator*() const
+                { return *m_pCursor.get(); }
+            SwUnoCrsr* operator->() const
+                { return m_pCursor.get(); }
+            explicit operator bool() const
+                { return static_cast<bool>(m_pCursor); }
+            void reset(std::shared_ptr<SwUnoCrsr> pNew)
+            {
+                if(pNew)
+                    pNew->Add(this);
+                else if(m_pCursor)
+                    m_pCursor->Remove(this);
+                m_pCursor = pNew;
+            }
+        private:
+            std::shared_ptr<SwUnoCrsr> m_pCursor;
+    };
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
