@@ -207,6 +207,9 @@ public class RowSet extends TestCase
         // absolute positioning
         testAbsolutePositioning(m_resultSet, m_row);
 
+        // position during modify
+        testModifyPosition(m_resultSet, m_row);
+
         // 3rd test
         test3(createClone(), m_resultSet);
         // 4th test
@@ -285,6 +288,24 @@ public class RowSet extends TestCase
         catch (Exception e)
         {
             fail("testAbsolutePositioning failed: " + e);
+        }
+    }
+
+
+    void testModifyPosition(XResultSet _resultSet, XRow _row)
+    {
+        try
+        {
+            final int testPos = 3;
+            assertTrue("testModifyPosition wants at least " + (testPos+1) + " rows", MAX_FETCH_ROWS >= testPos+1);
+            assertTrue("testModifyPosition failed on moving to row " + testPos, _resultSet.absolute(testPos));
+            UnoRuntime.queryInterface( XRowUpdate.class, _row ).updateString(2, TEST21);
+            testPosition(_resultSet, _row, testPos, "testModifyPosition");
+            UnoRuntime.queryInterface( XResultSetUpdate.class, _resultSet ).cancelRowUpdates();
+        }
+        catch (Exception e)
+        {
+            fail("testModifyPosition failed: " + e);
         }
     }
 

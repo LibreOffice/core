@@ -929,15 +929,6 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException, std::
     fireRowcount();
 }
 
-sal_Int32 SAL_CALL ORowSet::getRow(  ) throw(SQLException, RuntimeException, std::exception)
-{
-    ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
-
-    // check if we are inserting a row
-    return (m_pCache && isInsertRow()) ? 0 : ORowSetBase::getRow();
-}
-
 void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
@@ -1517,7 +1508,7 @@ Reference< XIndexAccess > SAL_CALL ORowSet::getParameters(  ) throw (RuntimeExce
         }
         catch( const Exception& )
         {
-            // silence it
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
