@@ -148,7 +148,7 @@ namespace
         return IDocumentMarkAccess::GetType(*rpMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }
 
-    sal_uInt16 lcl_InsertURLFieldContent(
+    size_t lcl_InsertURLFieldContent(
         SwContentArr *pMember,
         SwWrtShell* pWrtShell,
         const SwContentType *pCntType)
@@ -237,18 +237,17 @@ SwContentType::SwContentType(SwWrtShell* pShell, sal_uInt16 nType, sal_uInt8 nLe
 void SwContentType::Init(bool* pbInvalidateWindow)
 {
     // if the MemberCount is changing ...
-    sal_uInt16 nOldMemberCount = nMemberCount;
+    size_t nOldMemberCount = nMemberCount;
     nMemberCount = 0;
     switch(nContentType)
     {
         case CONTENT_TYPE_OUTLINE   :
         {
             sTypeToken = "outline";
-            const size_t nOutlineCount =
-                pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-            nMemberCount = static_cast<sal_uInt16>(nOutlineCount);
-            if(nOutlineLevel < MAXLEVEL)
+            nMemberCount = pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+            if (nMemberCount < MAXLEVEL)
             {
+                const size_t nOutlineCount = nMemberCount;
                 for(size_t j = 0; j < nOutlineCount; ++j)
                 {
                     if(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > nOutlineLevel )
@@ -261,7 +260,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
 
         case CONTENT_TYPE_TABLE     :
             sTypeToken = "table";
-            nMemberCount = static_cast<sal_uInt16>(pWrtShell->GetTableFrameFormatCount(true));
+            nMemberCount = pWrtShell->GetTableFrameFormatCount(true);
             bEdit = true;
         break;
 
@@ -288,10 +287,10 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         case CONTENT_TYPE_BOOKMARK:
         {
             IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
-            nMemberCount = static_cast<sal_uInt16>(count_if(
+            nMemberCount = count_if(
                 pMarkAccess->getBookmarksBegin(),
                 pMarkAccess->getBookmarksEnd(),
-                &lcl_IsUiVisibleBookmark));
+                &lcl_IsUiVisibleBookmark);
             sTypeToken.clear();
             bEdit = true;
         }
@@ -311,7 +310,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             }
             const Point aNullPt;
             nMemberCount = pWrtShell->GetSectionFormatCount();
-            for(sal_uInt16 i = 0; i < nMemberCount; i++)
+            for(size_t i = 0; i < nMemberCount; ++i)
             {
                 const SwSectionFormat* pFormat;
                 SectionType eTmpType;
@@ -458,7 +457,7 @@ SwContentType::~SwContentType()
 
 // Deliver content, for that if necessary fill the list
 
-const SwContent* SwContentType::GetMember(sal_uInt16 nIndex)
+const SwContent* SwContentType::GetMember(size_t nIndex)
 {
     if(!bDataValid || !pMember)
     {
@@ -466,9 +465,8 @@ const SwContent* SwContentType::GetMember(sal_uInt16 nIndex)
     }
     if(nIndex < pMember->size())
         return (*pMember)[nIndex];
-    else
-        return 0;
 
+    return nullptr;
 }
 
 void    SwContentType::Invalidate()
@@ -481,7 +479,7 @@ void    SwContentType::Invalidate()
 void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 {
     SwContentArr*   pOldMember = 0;
-    int nOldMemberCount = 0;
+    size_t nOldMemberCount = 0;
     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, 0 );
     if(pMember && pbLevelOrVisibilityChanged)
     {
@@ -498,11 +496,11 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
     {
         case CONTENT_TYPE_OUTLINE   :
         {
-            sal_uInt16 nOutlineCount = nMemberCount =
-                static_cast<sal_uInt16>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
+            const size_t nOutlineCount = nMemberCount =
+                pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
 
-            sal_uInt16 nPos = 0;
-            for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
+            size_t nPos = 0;
+            for (size_t i = 0; i < nOutlineCount; ++i)
             {
                 const sal_Int8 nLevel = (sal_Int8)pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
                 if(nLevel >= nOutlineLevel )
@@ -518,7 +516,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     // with the same number and existing "pOldMember" the
                     // old one is compared with the new OutlinePos.
                     // cast for Win16
-                    if(nOldMemberCount > (int)nPos &&
+                    if (nOldMemberCount > nPos &&
                         static_cast<SwOutlineContent*>((*pOldMember)[nPos])->GetOutlineLevel() != nLevel)
                         *pbLevelOrVisibilityChanged = true;
 
@@ -531,11 +529,11 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
         case CONTENT_TYPE_TABLE     :
         {
-            OSL_ENSURE(nMemberCount == static_cast<sal_uInt16>(pWrtShell->GetTableFrameFormatCount(true)),
-                       "MemberCount differs");
+            const size_t nCount = pWrtShell->GetTableFrameFormatCount(true);
+            OSL_ENSURE(nMemberCount == nCount, "MemberCount differs");
             Point aNullPt;
-            nMemberCount = static_cast<sal_uInt16>(pWrtShell->GetTableFrameFormatCount(true));
-            for(sal_uInt16 i = 0; i < nMemberCount; i++)
+            nMemberCount = nCount;
+            for(size_t i = 0; i < nMemberCount; ++i)
             {
                 const SwFrameFormat& rTableFormat = pWrtShell->GetTableFrameFormat(i, true);
                 const OUString sTableName( rTableFormat.GetName() );
@@ -548,7 +546,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
                 pMember->insert(pCnt);
 
-                if(nOldMemberCount > (int)i &&
+                if(nOldMemberCount > i &&
                     (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
                         *pbLevelOrVisibilityChanged = true;
             }
@@ -592,7 +590,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
                 pMember->insert(pCnt);
-                if(nOldMemberCount > (int)i &&
+                if (nOldMemberCount > i &&
                     (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
                         *pbLevelOrVisibilityChanged = true;
             }
@@ -619,7 +617,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         {
             const Point aNullPt;
             nMemberCount = pWrtShell->GetSectionFormatCount();
-            for(sal_uInt16 i = 0; i < nMemberCount; i++)
+            for(size_t i = 0; i < nMemberCount; ++i)
             {
                 const SwSectionFormat* pFormat;
                 SectionType eTmpType;
@@ -645,7 +643,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         pCnt->SetInvisible();
                     pMember->insert(pCnt);
 
-                    sal_uInt16 nPos = pMember->size() - 1;
+                    const size_t nPos = pMember->size() - 1;
                     if(nOldMemberCount > nPos &&
                         (*pOldMember)[nPos]->IsInvisible()
                                 != pCnt->IsInvisible())
@@ -674,7 +672,8 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         case CONTENT_TYPE_INDEX:
         {
 
-            sal_uInt16 nCount = nMemberCount = pWrtShell->GetTOXCount();
+            const sal_uInt16 nCount = pWrtShell->GetTOXCount();
+            nMemberCount = nCount;
             for ( sal_uInt16 nTox = 0; nTox < nCount; nTox++ )
             {
                 const SwTOXBase* pBase = pWrtShell->GetTOX( nTox );
@@ -688,7 +687,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     pCnt->SetInvisible();
 
                 pMember->insert( pCnt );
-                sal_uInt16 nPos = pMember->size() - 1;
+                const size_t nPos = pMember->size() - 1;
                 if(nOldMemberCount > nPos &&
                     (*pOldMember)[nPos]->IsInvisible()
                             != pCnt->IsInvisible())
@@ -762,7 +761,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                             pCnt->SetInvisible();
                         pMember->insert(pCnt);
                         nMemberCount++;
-                        if(nOldMemberCount > (int)i &&
+                        if (nOldMemberCount > i &&
                             (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible() )
                                 *pbLevelOrVisibilityChanged = true;
                     }
@@ -818,12 +817,12 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
     SetNodeDefaultImages();
     SetDoubleClickHdl(LINK(this, SwContentTree, ContentDoubleClickHdl));
     SetDragDropMode(DragDropMode::APP_COPY);
-    for (sal_uInt16 i = 0; i < CONTENT_TYPE_MAX; i++)
+    for (int i = 0; i < CONTENT_TYPE_MAX; ++i)
     {
         aActiveContentArr[i]    = 0;
         aHiddenContentArr[i]    = 0;
     }
-    for (sal_uInt16 i = 0; i < CONTEXT_COUNT; i++)
+    for (int i = 0; i < CONTEXT_COUNT; ++i)
     {
         aContextStrings[i] = SW_RESSTR(i+ST_CONTEXT_FIRST);
     }
@@ -1121,12 +1120,12 @@ PopupMenu* SwContentTree::CreateContextMenu()
     PopupMenu* pSubPop3 = new PopupMenu;
     PopupMenu* pSubPop4 = new PopupMenu; // Edit
 
-    for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
+    for(int i = 1; i <= MAXLEVEL; ++i)
     {
         pSubPop1->InsertItem( i + 100, OUString::number(i));
     }
     pSubPop1->CheckItem(100 + nOutlineLevel);
-    for(sal_uInt16 i=0; i < 3; ++i)
+    for(int i=0; i < 3; ++i)
     {
         pSubPop2->InsertItem( i + 201, aContextStrings[
                 ST_HYPERLINK - ST_CONTEXT_FIRST + i]);
@@ -1279,7 +1278,7 @@ PopupMenu* SwContentTree::CreateContextMenu()
 
 sal_IntPtr SwContentTree::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
-    sal_uInt16 nLevel = 0;
+    sal_IntPtr nLevel = 0;
     if(lcl_IsContent(pEntry))
     {
         nLevel++;
@@ -1293,8 +1292,7 @@ sal_IntPtr SwContentTree::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
                 nLevel = nLevel + static_cast<SwRegionContent*>(pCnt)->GetRegionLevel();
         }
     }
-    sal_uInt16 nBasis = bIsRoot ? 0 : 5;
-    return nLevel * 10 + nBasis + pTab->GetPos();  //determined empirically
+    return nLevel * 10 + (bIsRoot ? 0 : 5) + pTab->GetPos();  //determined empirically
 }
 
 // Content will be integrated into the Box only on demand.
@@ -1309,17 +1307,17 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
             OSL_ENSURE(pParent->GetUserData(), "no UserData?");
             SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
 
-            const sal_uInt16 nCount = pCntType->GetMemberCount();
+            const size_t nCount = pCntType->GetMemberCount();
              // Add for outline plus/minus
              if(pCntType->GetType() == CONTENT_TYPE_OUTLINE)
              {
                  SvTreeListEntry* pChild = 0;
-                 for(sal_uInt16 i = 0; i < nCount; i++)
+                 for(size_t i = 0; i < nCount; ++i)
                  {
                      const SwContent* pCnt = pCntType->GetMember(i);
                      if(pCnt)
                      {
-                         const sal_uInt16 nLevel = static_cast<const SwOutlineContent*>(pCnt)->GetOutlineLevel();
+                         const auto nLevel = static_cast<const SwOutlineContent*>(pCnt)->GetOutlineLevel();
                          OUString sEntry = pCnt->GetName();
                          if(sEntry.isEmpty())
                              sEntry = sSpace;
@@ -1352,7 +1350,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
              }
              else
              {
-                 for(sal_uInt16 i = 0; i < nCount; i++)
+                 for(size_t i = 0; i < nCount; ++i)
                  {
                     SvTreeListEntry* pChild = NULL;
                     const SwContent* pCnt = pCntType->GetMember(i);
@@ -1683,7 +1681,7 @@ void SwContentTree::Display( bool bActive )
 
             if(nRootType != CONTENT_TYPE_OUTLINE)
             {
-                for(sal_uInt16 i = 0; i < (*ppRootContentT)->GetMemberCount(); i++ )
+                for(size_t i = 0; i < (*ppRootContentT)->GetMemberCount(); ++i)
                 {
                     const SwContent* pCnt = (*ppRootContentT)->GetMember(i);
                     if(pCnt)
@@ -1961,7 +1959,7 @@ bool SwContentTree::HasContentChanged()
 
     if(!bIsActive && ! bIsConstant)
     {
-        for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
+        for(int i=0; i < CONTENT_TYPE_MAX; ++i)
         {
             if(aActiveContentArr[i])
                 aActiveContentArr[i]->Invalidate();
@@ -1987,7 +1985,7 @@ bool SwContentTree::HasContentChanged()
                         0 != ( pFirstSel = FirstSelected()) &&
                             lcl_IsContent(pFirstSel))
                 {
-                    const sal_uInt16 nSelLevel =
+                    const auto nSelLevel =
                         static_cast<SwOutlineContent*>(pFirstSel->GetUserData())->GetOutlineLevel();
                     SwWrtShell* pSh = GetWrtShell();
                     const sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
@@ -2005,8 +2003,8 @@ bool SwContentTree::HasContentChanged()
                             bRepaint = true;
                     else
                     {
-                        const sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
-                        for(sal_uInt16 j = 0; j < nChildCount; j++)
+                        const size_t nChildCount = GetChildCount(pEntry);
+                        for(size_t j = 0; j < nChildCount; ++j)
                         {
                             pEntry = Next(pEntry);
                             const SwContent* pCnt = pArrType->GetMember(j);
@@ -2048,7 +2046,7 @@ bool SwContentTree::HasContentChanged()
         {
             bool bNext = true; // at least a next must be
             SwContentType* pTreeType = static_cast<SwContentType*>(pEntry->GetUserData());
-            const sal_uInt16 nTreeCount = pTreeType->GetMemberCount();
+            const size_t nTreeCount = pTreeType->GetMemberCount();
             const sal_uInt16 nType = pTreeType->GetType();
             SwContentType* pArrType = aActiveContentArr[nType];
             if(!pArrType)
@@ -2064,7 +2062,7 @@ bool SwContentTree::HasContentChanged()
                     // or if the visibility of objects (frames, sections, tables) has changed
                     // i.e. in header/footer
                     pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
-                    const sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
+                    const size_t nChildCount = GetChildCount(pEntry);
                     if((nType == CONTENT_TYPE_OUTLINE) && bLevelOrVisibiblityChanged)
                         bRepaint = true;
                     if(bLevelOrVisibiblityChanged)
@@ -2074,7 +2072,7 @@ bool SwContentTree::HasContentChanged()
                         bRepaint = true;
                     else
                     {
-                        for(sal_uInt16 j = 0; j < nChildCount; j++)
+                        for(size_t j = 0; j < nChildCount; ++j)
                         {
                             pEntry = Next(pEntry);
                             bNext = false;
@@ -2099,7 +2097,7 @@ bool SwContentTree::HasContentChanged()
                     // i.e. in header/footer
                     pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
                     bool bRemoveChildren = false;
-                    const sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
+                    const size_t nChildCount = GetChildCount(pEntry);
                     if( nChildCount != pArrType->GetMemberCount() )
                     {
                         bRemoveChildren = true;
@@ -2107,7 +2105,7 @@ bool SwContentTree::HasContentChanged()
                     else
                     {
                         SvTreeListEntry* pChild = FirstChild(pEntry);
-                        for(sal_uInt16 j = 0; j < nChildCount; j++)
+                        for(size_t j = 0; j < nChildCount; ++j)
                         {
                             const SwContent* pCnt = pArrType->GetMember(j);
                             pChild->SetUserData((void*)pCnt);
@@ -2122,7 +2120,7 @@ bool SwContentTree::HasContentChanged()
                     {
                         SvTreeListEntry* pChild = FirstChild(pEntry);
                         SvTreeListEntry* pRemove = pChild;
-                        for(sal_uInt16 j = 0; j < nChildCount; j++)
+                        for(size_t j = 0; j < nChildCount; ++j)
                         {
                             pChild = Next(pRemove);
                             GetModel()->Remove(pRemove);
@@ -2188,7 +2186,7 @@ void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
     bIsHidden = true;
     bIsActive = bIsConstant = false;
     FindActiveTypeAndRemoveUserData();
-    for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
+    for(int i=0; i < CONTENT_TYPE_MAX; ++i)
     {
         DELETEZ(aHiddenContentArr[i]);
     }
@@ -2228,7 +2226,7 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
         if (pActiveShell)
             StartListening(*pActiveShell->GetView().GetDocShell());
         FindActiveTypeAndRemoveUserData();
-        for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
+        for(int i=0; i < CONTENT_TYPE_MAX; ++i)
         {
             DELETEZ(aActiveContentArr[i]);
         }
@@ -2247,7 +2245,7 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
     bIsConstant     = true;
     StartListening(*pActiveShell->GetView().GetDocShell());
     FindActiveTypeAndRemoveUserData();
-    for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
+    for(int i=0; i < CONTENT_TYPE_MAX; ++i)
     {
         DELETEZ(aActiveContentArr[i]);
     }
@@ -2332,7 +2330,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                     {
                         sal_uInt16 nActEndPos = nActPos;
                         SvTreeListEntry* pEntry = pFirstEntry;
-                        sal_uInt16 nActLevel = static_cast<SwOutlineContent*>(
+                        const auto nActLevel = static_cast<SwOutlineContent*>(
                                 pFirstEntry->GetUserData())->GetOutlineLevel();
                         pEntry = Next(pEntry);
                         while( pEntry && CONTENT_TYPE_OUTLINE ==
@@ -2858,7 +2856,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             }
             else
             {
-                const sal_uInt16 nMemberCount = static_cast<SwContentType*>(pUserData)->GetMemberCount();
+                const size_t nMemberCount = static_cast<SwContentType*>(pUserData)->GetMemberCount();
                 sEntry = OUString::number(nMemberCount);
                 sEntry += " ";
                 sEntry += nMemberCount == 1
