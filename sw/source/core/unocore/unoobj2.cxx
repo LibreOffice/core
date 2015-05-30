@@ -1467,55 +1467,25 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 }
 
 class SwXTextRanges::Impl
-    : public SwClient
 {
 public:
     ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
-    std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
+    sw::UnoCursorPointer m_pUnoCursor;
 
     explicit Impl(SwPaM *const pPaM)
     {
         if (pPaM)
         {
-            m_pUnoCursor = pPaM->GetDoc()->CreateUnoCrsr(*pPaM->GetPoint());
-            m_pUnoCursor->Add(this);
+            m_pUnoCursor.reset(pPaM->GetDoc()->CreateUnoCrsr(*pPaM->GetPoint()));
             ::sw::DeepCopyPaM(*pPaM, *GetCursor());
         }
         MakeRanges();
     }
 
-    virtual ~Impl() {
-        if(m_pUnoCursor)
-            m_pUnoCursor->Remove(this);
-    }
-
-    SwUnoCrsr * GetCursor() {
-        return static_cast<SwUnoCrsr*>(
-                GetRegisteredIn());
-    }
-
+    SwUnoCrsr* GetCursor()
+        { return &(*m_pUnoCursor); }
     void MakeRanges();
-
-protected:
-    // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
-
-void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-}
-
-void SwXTextRanges::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    SwClient::SwClientNotify(rModify, rHint);
-    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        m_pUnoCursor->Remove(this);
-        m_pUnoCursor.reset();
-    }
-}
 
 void SwXTextRanges::Impl::MakeRanges()
 {
