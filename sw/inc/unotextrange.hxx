@@ -263,54 +263,11 @@ typedef ::cppu::WeakImplHelper
 ,   ::com::sun::star::container::XIndexAccess
 > SwXTextRanges_Base;
 
-class SwXTextRanges
-    : public SwXTextRanges_Base
+struct SwXTextRanges : public SwXTextRanges_Base
 {
-
-private:
-
-    class Impl;
-    ::sw::UnoImplPtr<Impl> m_pImpl;
-
-    virtual ~SwXTextRanges();
-
-public:
-
-    SwXTextRanges(SwPaM *const pCrsr);
-
-    const SwUnoCrsr* GetCursor() const;
-
+    virtual SwUnoCrsr* GetCursor() =0;
+    static SwXTextRanges* Create(SwPaM* const pCrsr);
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService(
-            const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 };
 
 #endif // INCLUDED_SW_INC_UNOTEXTRANGE_HXX

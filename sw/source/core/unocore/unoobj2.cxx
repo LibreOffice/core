@@ -1466,13 +1466,25 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwUnoCursorHelper::makeRedline( aPaM, rRedlineType, rRedlineProperties );
 }
 
-class SwXTextRanges::Impl
+struct SwXTextRangesImpl SAL_FINAL : public SwXTextRanges
 {
-public:
-    ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
-    sw::UnoCursorPointer m_pUnoCursor;
 
-    explicit Impl(SwPaM *const pPaM)
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    SwXTextRangesImpl(SwPaM *const pPaM)
     {
         if (pPaM)
         {
@@ -1481,13 +1493,19 @@ public:
         }
         MakeRanges();
     }
-
-    SwUnoCrsr* GetCursor()
-        { return &(*m_pUnoCursor); }
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE
+    {
+        SolarMutexGuard g;
+        OWeakObject::release();
+    }
+    virtual SwUnoCrsr* GetCursor() SAL_OVERRIDE
+        { return &(*m_pUnoCursor); };
     void MakeRanges();
+    ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
+    sw::UnoCursorPointer m_pUnoCursor;
 };
 
-void SwXTextRanges::Impl::MakeRanges()
+void SwXTextRangesImpl::MakeRanges()
 {
     if (GetCursor())
     {
@@ -1505,19 +1523,8 @@ void SwXTextRanges::Impl::MakeRanges()
     }
 }
 
-const SwUnoCrsr* SwXTextRanges::GetCursor() const
-{
-    return m_pImpl->GetCursor();
-}
-
-SwXTextRanges::SwXTextRanges(SwPaM *const pPaM)
-    : m_pImpl( new SwXTextRanges::Impl(pPaM) )
-{
-}
-
-SwXTextRanges::~SwXTextRanges()
-{
-}
+SwXTextRanges* SwXTextRanges::Create(SwPaM *const pPaM)
+    { return new SwXTextRangesImpl(pPaM); }
 
 namespace
 {
@@ -1525,13 +1532,11 @@ namespace
 }
 
 const uno::Sequence< sal_Int8 > & SwXTextRanges::getUnoTunnelId()
-{
-    return theSwXTextRangesUnoTunnelId::get().getSeq();
-}
+    { return theSwXTextRangesUnoTunnelId::get().getSeq(); }
 
 sal_Int64 SAL_CALL
-SwXTextRanges::getSomething(const uno::Sequence< sal_Int8 >& rId)
-throw (uno::RuntimeException, std::exception)
+SwXTextRangesImpl::getSomething(const uno::Sequence< sal_Int8 >& rId)
+    throw (uno::RuntimeException, std::exception)
 {
     return ::sw::UnoTunnelImpl<SwXTextRanges>(rId, this);
 }
@@ -1541,63 +1546,46 @@ throw (uno::RuntimeException, std::exception)
  * Up to the first access to a text position, only a SwCursor is stored.
  * Afterwards, an array with uno::Reference<XTextPosition> will be created.
  */
-OUString SAL_CALL
-SwXTextRanges::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL SwXTextRangesImpl::getImplementationName()
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXTextRanges");
 }
 
-static char const*const g_ServicesTextRanges[] =
-{
-    "com.sun.star.text.TextRanges",
-};
-
-static const size_t g_nServicesTextRanges(
-    sizeof(g_ServicesTextRanges)/sizeof(g_ServicesTextRanges[0]));
-
-sal_Bool SAL_CALL SwXTextRanges::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXTextRangesImpl::supportsService(const OUString& rServiceName)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
-SwXTextRanges::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL SwXTextRangesImpl::getSupportedServiceNames()
+    throw (uno::RuntimeException, std::exception)
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesTextRanges, g_ServicesTextRanges);
+    return { "com.sun.star.text.TextRanges" };
 }
 
-sal_Int32 SAL_CALL SwXTextRanges::getCount() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL SwXTextRangesImpl::getCount()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
-    return static_cast<sal_Int32>(m_pImpl->m_Ranges.size());
+    return static_cast<sal_Int32>(m_Ranges.size());
 }
 
-uno::Any SAL_CALL SwXTextRanges::getByIndex(sal_Int32 nIndex)
-throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
+uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
-    if ((nIndex < 0) ||
-        (static_cast<size_t>(nIndex) >= m_pImpl->m_Ranges.size()))
-    {
+    if ((nIndex < 0) || (static_cast<size_t>(nIndex) >= m_Ranges.size()))
         throw lang::IndexOutOfBoundsException();
-    }
     uno::Any ret;
-    ret <<= (m_pImpl->m_Ranges.at(nIndex));
+    ret <<= (m_Ranges.at(nIndex));
     return ret;
 }
 
 uno::Type SAL_CALL
-SwXTextRanges::getElementType() throw (uno::RuntimeException, std::exception)
-{
-    return cppu::UnoType<text::XTextRange>::get();
-}
+SwXTextRangesImpl::getElementType() throw (uno::RuntimeException, std::exception)
+    { return cppu::UnoType<text::XTextRange>::get(); }
 
-sal_Bool SAL_CALL SwXTextRanges::hasElements() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXTextRangesImpl::hasElements() throw (uno::RuntimeException, std::exception)
 {
     // no mutex necessary: getCount() does locking
     return getCount() > 0;

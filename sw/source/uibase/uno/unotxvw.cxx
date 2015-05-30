@@ -352,7 +352,7 @@ uno::Any SwXTextView::getSelection()
             case SHELL_MODE_TABLE_LIST_TEXT:
             case SHELL_MODE_TEXT            :
             {
-                uno::Reference< container::XIndexAccess >  xPos = new SwXTextRanges(rSh.GetCrsr());
+                uno::Reference< container::XIndexAccess > xPos = SwXTextRanges::Create(rSh.GetCrsr());
                 aRef = uno::Reference< uno::XInterface >(xPos, uno::UNO_QUERY);
             }
             break;

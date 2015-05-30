@@ -942,7 +942,7 @@ Reference< XIndexAccess >
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XIndexAccess >  xRet;
-    xRet = new SwXTextRanges( (nResult) ? pResultCrsr.get() : 0 );
+    xRet = SwXTextRanges::Create( (nResult) ? pResultCrsr.get() : nullptr );
     return xRet;
 }
 
