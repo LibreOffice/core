@@ -1648,7 +1648,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         case PANGO_STRETCH_EXTRA_EXPANDED:    aInfo.m_eWidth = WIDTH_EXTRA_EXPANDED;break;
         case PANGO_STRETCH_ULTRA_EXPANDED:    aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;break;
     }
-    aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
