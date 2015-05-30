@@ -32,6 +32,7 @@
 #include <editeng/acorrcfg.hxx>
 #include <unotools/streamwrap.hxx>
 #include <test/mtfxmldump.hxx>
+#include <unocrsr.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -95,6 +96,7 @@ public:
     void testTdf86639();
     void testTdf90883TableBoxGetCoordinates();
     void testEmbeddedDataSource();
+    void testUnoCursorPointer();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -133,7 +135,7 @@ public:
     CPPUNIT_TEST(testTdf86639);
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testEmbeddedDataSource);
-
+    CPPUNIT_TEST(testUnoCursorPointer);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1022,6 +1024,24 @@ void SwUiWriterTest::testEmbeddedDataSource()
     mxComponent.clear();
     CPPUNIT_ASSERT(!xDatabaseContext->hasByName("calc-data-source"));
 #endif
+}
+
+void SwUiWriterTest::testUnoCursorPointer()
+{
+    auto xDocComponent(loadFromDesktop(
+            getURLFromSrc(DATA_DIRECTORY) + "empty.odt",
+            "com.sun.star.text.TextDocument"));
+    auto pxDocDocument(
+            dynamic_cast<SwXTextDocument *>(xDocComponent.get()));
+    CPPUNIT_ASSERT(pxDocDocument);
+    SwDoc* const pDoc(pxDocDocument->GetDocShell()->GetDoc());
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    std::unique_ptr<SwPosition> pPos(new SwPosition(aIdx));
+    sw::UnoCursorPointer pCursor(pDoc->CreateUnoCrsr(*pPos));
+    CPPUNIT_ASSERT(static_cast<bool>(pCursor));
+    pPos.reset(nullptr); // we need to kill the SwPosition before disposing
+    xDocComponent->dispose();
+    CPPUNIT_ASSERT(!static_cast<bool>(pCursor));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
