@@ -162,7 +162,7 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
     auto pUnoCursor(GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_REDLINE);
 }
 
 uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException, std::exception)
@@ -539,7 +539,7 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration() throw
     SwPaM aPam(*pNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
     auto pUnoCursor(GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_REDLINE);
 }
 
 uno::Type SwXRedline::getElementType(  ) throw(uno::RuntimeException, std::exception)

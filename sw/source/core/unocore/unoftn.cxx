@@ -480,7 +480,7 @@ SwXFootnote::createEnumeration() throw (uno::RuntimeException, std::exception)
     SwPosition aPos( *pTextFootnote->GetStartNode() );
     auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
-    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FOOTNOTE);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_FOOTNOTE);
 }
 
 uno::Type SAL_CALL SwXFootnote::getElementType() throw (uno::RuntimeException, std::exception)

@@ -302,46 +302,16 @@ public:
 
 };
 
-class SwXParagraphEnumeration
+
+struct SwXParagraphEnumeration
     : public SwSimpleEnumeration_Base
 {
-
-private:
-
-    class Impl;
-    ::sw::UnoImplPtr<Impl> m_pImpl;
-
-    virtual ~SwXParagraphEnumeration();
-
-public:
-
-    /// takes ownership of cursor
-    SwXParagraphEnumeration(
-            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
-                const & xParent,
-            std::shared_ptr<SwUnoCrsr> pCursor,
-            const CursorType eType,
-            SwStartNode const*const pStartNode = 0,
-            SwTable const*const pTable = 0);
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService(
-            const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
-        throw (::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
+    static SwXParagraphEnumeration* Create(
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const & xParent,
+        std::shared_ptr<SwUnoCrsr> pCursor,
+        const CursorType eType,
+        SwStartNode const*const pStartNode = 0,
+        SwTable const*const pTable = 0);
 };
 
 #endif // INCLUDED_SW_INC_UNOPARAGRAPH_HXX
