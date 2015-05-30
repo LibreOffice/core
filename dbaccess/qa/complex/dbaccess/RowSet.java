@@ -86,10 +86,11 @@ public class RowSet extends TestCase
 
         public void run()
         {
+	    int i=-1;
             try
             {
                 m_resultSet.beforeFirst();
-                for (int i = 0; m_resultSet.next(); ++i)
+                for (i = 0; m_resultSet.next(); ++i)
                 {
                     int pos = m_resultSet.getRow();
                     testPosition(m_resultSet, m_row, i + 1, "clone move(" + m_id + ")");
@@ -99,7 +100,7 @@ public class RowSet extends TestCase
             }
             catch (Exception e)
             {
-                fail("ResultSetMovementStress(" + m_id + ") failed: " + e);
+                fail("ResultSetMovementStress(" + m_id + ") failed at i=" + i + ": " + e);
             }
         }
     }
@@ -122,7 +123,7 @@ public class RowSet extends TestCase
 
         try
         {
-            createStruture();
+	    createStructure();
         }
         catch (SQLException e)
         {
@@ -227,7 +228,7 @@ public class RowSet extends TestCase
     }
 
 
-    void createStruture() throws SQLException
+    void createStructure() throws SQLException
     {
         m_database.executeSQL("DROP TABLE \"TEST1\" IF EXISTS");
         m_database.executeSQL("CREATE TABLE \"TEST1\" (\"ID\" integer not null primary key, \"col2\" varchar(50) )");
