@@ -1505,7 +1505,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     vcl::Region  aInvalidateRegion;
     bool    bScrollChildren(nFlags & ScrollFlags::Children);
-    bool    bErase(nFlags & ScrollFlags::NoErase);
+    bool    bErase(!(nFlags & ScrollFlags::NoErase));
 
     if ( !mpWindowImpl->mpFirstChild )
         bScrollChildren = false;
