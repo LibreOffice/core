@@ -1480,14 +1480,13 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 
 bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
-    bool bRet(false);
     if(!bIsRoot || (static_cast<SwContentType*>(pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
             (nRootType == CONTENT_TYPE_OUTLINE))
     {
         if(lcl_IsContentType(pParent))
         {
             if(bIsRoot)
-                return bRet = false;
+                return false;
             SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
             const sal_Int32 nAnd = ~(1 << pCntType->GetType());
             if(bIsActive || bIsConstant)
@@ -1505,11 +1504,9 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
             void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
             mOutLineNodeMap[key] = false;
         }
-        bRet = SvTreeListBox::Collapse(pParent);
     }
-    else
-        bRet = SvTreeListBox::Collapse(pParent);
-    return bRet;
+
+    return SvTreeListBox::Collapse(pParent);
 }
 
 // Also on double click will be initially opened only.
