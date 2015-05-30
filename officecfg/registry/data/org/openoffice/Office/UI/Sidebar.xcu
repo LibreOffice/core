@@ -203,6 +203,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>600</value>
         </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="DesignDeck" oor:op="replace">
