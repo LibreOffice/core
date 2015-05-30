@@ -74,6 +74,7 @@
 
 #include "globalnames.hxx"
 #include <boost/scoped_ptr.hpp>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace com::sun::star;
 
@@ -1289,8 +1290,17 @@ bool ScDocument::SearchAndReplace(
                                 rTab = nTab;
                             }
                             else
+                            {
                                 ScDocument::GetSearchAndReplaceStart(
                                     rSearchItem, nCol, nRow );
+
+                                // notify LibreOfficeKit about changed page
+                                if ( GetDrawLayer() && GetDrawLayer()->isTiledRendering() )
+                                {
+                                    OString aPayload = OString::number(nTab);
+                                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                                }
+                            }
                         }
                     }
             }
@@ -1310,8 +1320,17 @@ bool ScDocument::SearchAndReplace(
                                 rTab = nTab;
                             }
                             else
+                            {
                                 ScDocument::GetSearchAndReplaceStart(
                                     rSearchItem, nCol, nRow );
+
+                                // notify LibreOfficeKit about changed page
+                                if ( GetDrawLayer() && GetDrawLayer()->isTiledRendering() )
+                                {
+                                    OString aPayload = OString::number(nTab);
+                                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                                }
+                            }
                         }
                     }
             }
