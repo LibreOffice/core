@@ -150,10 +150,17 @@ namespace connectivity { namespace hsqldb
                             m_bReadOnly = true;
                     }
                 }
-                if ( !m_bReadOnly )
+                try
                 {
-                    Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-                    xStmt->execute( OUString( "CHECKPOINT DEFRAG" ) );
+                    if ( !m_bReadOnly )
+                    {
+                        Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
+                        xStmt->execute( OUString( "CHECKPOINT DEFRAG" ) );
+                    }
+                }
+                catch(const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
 
