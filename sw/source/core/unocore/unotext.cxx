@@ -2566,7 +2566,7 @@ throw (uno::RuntimeException, std::exception)
     SwPosition aPos(rNode);
     auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveBackward, fnGoDoc);
-    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_BODY);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_BODY);
 }
 
 uno::Type SAL_CALL
@@ -2828,8 +2828,7 @@ throw (uno::RuntimeException, std::exception)
     SwPosition aPos(rNode);
     auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
-    return new SwXParagraphEnumeration(this, pUnoCursor,
-                (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
 }
 
 uno::Type SAL_CALL

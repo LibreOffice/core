@@ -3030,7 +3030,7 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException, std::exception)
             : 0);
     SwTable const*const pTable(
             (pStartNode) ? & pStartNode->GetTable() : 0 );
-    return new SwXParagraphEnumeration(pParentText, pNewCrsr, eSetType, pStartNode, pTable);
+    return SwXParagraphEnumeration::Create(pParentText, pNewCrsr, eSetType, pStartNode, pTable);
 }
 
 uno::Type SAL_CALL

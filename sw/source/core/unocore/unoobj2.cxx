@@ -409,24 +409,24 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
     }
 }
 
-struct SwXParagraphEnumeration::Impl
+struct SwXParagraphEnumerationImpl SAL_FINAL : public SwXParagraphEnumeration
 {
-    uno::Reference< text::XText > const     m_xParentText;
-    const CursorType        m_eCursorType;
+    uno::Reference< text::XText > const m_xParentText;
+    const CursorType m_eCursorType;
     /// Start node of the cell _or_ table the enumeration belongs to.
     /// Used to restrict the movement of the UNO cursor to the cell and its
     /// embedded tables.
     SwStartNode const*const m_pOwnStartNode;
-    SwTable const*const     m_pOwnTable;
-    const sal_uLong             m_nEndIndex;
-    sal_Int32               m_nFirstParaStart;
-    sal_Int32               m_nLastParaEnd;
-    bool                    m_bFirstParagraph;
-    uno::Reference< text::XTextContent >    m_xNextPara;
-    //UnoCursorPointerWithClientModify m_pCrsr;
+    SwTable const*const m_pOwnTable;
+    const sal_uLong m_nEndIndex;
+    sal_Int32 m_nFirstParaStart;
+    sal_Int32 m_nLastParaEnd;
+    bool m_bFirstParagraph;
+    uno::Reference< text::XTextContent > m_xNextPara;
     sw::UnoCursorPointer m_pCrsr;
 
-    Impl(   uno::Reference< text::XText > const& xParent,
+    SwXParagraphEnumerationImpl(
+            uno::Reference< text::XText > const& xParent,
             ::std::shared_ptr<SwUnoCrsr> pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
@@ -461,59 +461,62 @@ struct SwXParagraphEnumeration::Impl
         }
     }
 
-    virtual ~Impl() {
-        m_pCrsr.reset(nullptr);
+    virtual ~SwXParagraphEnumerationImpl()
+        { m_pCrsr.reset(nullptr); }
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE
+    {
+        SolarMutexGuard g;
+        OWeakObject::release();
     }
 
-    SwUnoCrsr* GetCursor() {
-        return &(*m_pCrsr);
-    }
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    // XEnumeration
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Any SAL_CALL nextElement() throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    SwUnoCrsr* GetCursor()
+        { return &(*m_pCrsr); }
     uno::Reference< text::XTextContent > NextElement_Impl()
-        throw (container::NoSuchElementException, lang::WrappedTargetException,
-                uno::RuntimeException);
+        throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 };
 
-SwXParagraphEnumeration::SwXParagraphEnumeration(
-        uno::Reference< text::XText > const& xParent,
-        ::std::shared_ptr<SwUnoCrsr> pCursor,
-        const CursorType eType,
-        SwStartNode const*const pStartNode, SwTable const*const pTable)
-    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, pCursor, eType,
-                    pStartNode, pTable) )
+SwXParagraphEnumeration* SwXParagraphEnumeration::Create(
+    uno::Reference< text::XText > const& xParent,
+    ::std::shared_ptr<SwUnoCrsr> pCursor,
+    const CursorType eType,
+    SwStartNode const*const pStartNode,
+    SwTable const*const pTable)
 {
-}
-
-SwXParagraphEnumeration::~SwXParagraphEnumeration()
-{
+    return new SwXParagraphEnumerationImpl(xParent, pCursor, eType, pStartNode, pTable);
 }
 
 OUString SAL_CALL
-SwXParagraphEnumeration::getImplementationName() throw (uno::RuntimeException, std::exception)
+SwXParagraphEnumerationImpl::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXParagraphEnumeration");
 }
 
 sal_Bool SAL_CALL
-SwXParagraphEnumeration::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException, std::exception)
+SwXParagraphEnumerationImpl::supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXParagraphEnumeration::getSupportedServiceNames()
-throw (uno::RuntimeException, std::exception)
+SwXParagraphEnumerationImpl::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     return {"com.sun.star.text.ParagraphEnumeration"};
 }
 
 sal_Bool SAL_CALL
-SwXParagraphEnumeration::hasMoreElements() throw (uno::RuntimeException, std::exception)
+SwXParagraphEnumerationImpl::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
-    return m_pImpl->m_bFirstParagraph || m_pImpl->m_xNextPara.is();
+    return m_bFirstParagraph || m_xNextPara.is();
 }
 
 //!! compare to SwShellTableCrsr::FillRects() in viscrs.cxx
@@ -551,9 +554,7 @@ lcl_CursorIsInSection(
 }
 
 uno::Reference< text::XTextContent >
-SwXParagraphEnumeration::Impl::NextElement_Impl()
-throw (container::NoSuchElementException, lang::WrappedTargetException,
-        uno::RuntimeException)
+SwXParagraphEnumerationImpl::NextElement_Impl() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SwUnoCrsr *const pUnoCrsr = GetCursor();
     if (!pUnoCrsr)
@@ -650,23 +651,20 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     return xRef;
 }
 
-uno::Any SAL_CALL SwXParagraphEnumeration::nextElement()
-throw (container::NoSuchElementException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
+uno::Any SAL_CALL SwXParagraphEnumerationImpl::nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
-    if (m_pImpl->m_bFirstParagraph)
+    if (m_bFirstParagraph)
     {
-        m_pImpl->m_xNextPara = m_pImpl->NextElement_Impl();
-        m_pImpl->m_bFirstParagraph = false;
+        m_xNextPara = NextElement_Impl();
+        m_bFirstParagraph = false;
     }
-    const uno::Reference< text::XTextContent > xRef = m_pImpl->m_xNextPara;
+    const uno::Reference< text::XTextContent > xRef = m_xNextPara;
     if (!xRef.is())
     {
         throw container::NoSuchElementException();
     }
-    m_pImpl->m_xNextPara = m_pImpl->NextElement_Impl();
+    m_xNextPara = NextElement_Impl();
 
     uno::Any aRet;
     aRet <<= xRef;
@@ -1279,7 +1277,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
 
     const CursorType eSetType = (RANGE_IN_CELL == m_pImpl->m_eRangePosition)
             ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    return new SwXParagraphEnumeration(m_pImpl->m_xParentText, pNewCrsr, eSetType);
+    return SwXParagraphEnumeration::Create(m_pImpl->m_xParentText, pNewCrsr, eSetType);
 }
 
 uno::Type SAL_CALL SwXTextRange::getElementType() throw (uno::RuntimeException, std::exception)
