@@ -2146,9 +2146,9 @@
           <value xml:lang="en-US">~Line Numbering...</value>
         </prop>
       </node>
-      <node oor:name=".uno:Graphic" oor:op="replace">
+      <node oor:name=".uno:ShowGraphics" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Hide ~Images</value>
+          <value xml:lang="en-US">~Images and Charts</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
