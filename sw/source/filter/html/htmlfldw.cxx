@@ -380,12 +380,12 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 rHTMLWrt.bTagOn = true;
 
                 const SfxPoolItem *aItems[5];
-                sal_uInt16 nItems = 0;
+                int nItems = 0;
 
                 assert(pWhichIds && pRefWhichIds);
                 if (pWhichIds && pRefWhichIds)
                 {
-                    for( sal_uInt16 i=0; i<4; i++ )
+                    for( int i=0; i<4; i++ )
                     {
                         const SfxPoolItem *pRefItem =
                             aScriptItemSet.GetItem( pRefWhichIds[i] );

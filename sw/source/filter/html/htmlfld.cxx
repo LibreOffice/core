@@ -351,7 +351,7 @@ void SwHTMLParser::NewField()
             if( pFormatOption )
             {
                 const OUString& rFormat = pFormatOption->GetString();
-                for( sal_uInt16 k = 0; pFormatTable[k].pName; k++ )
+                for( int k = 0; pFormatTable[k].pName; ++k )
                 {
                     if( rFormat.equalsIgnoreAsciiCaseAscii( pFormatTable[k].pName ) )
                     {
@@ -616,7 +616,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
 
         sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
         const sal_Int32 nIdx = pPam->GetPoint()->nContent.GetIndex();
-        for( sal_uInt16 i = aSetAttrTab.size(); i > 0; )
+        for( auto i = aSetAttrTab.size(); i > 0; )
         {
             _HTMLAttr *pAttr = aSetAttrTab[--i];
             if( pAttr->GetSttParaIdx() != nNodeIdx ||

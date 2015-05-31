@@ -217,9 +217,9 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     }
     else if( nAmount && Application::GetDefaultDevice() )
     {
-        nAmount = (sal_uInt16)(Application::GetDefaultDevice()
+        nAmount = Application::GetDefaultDevice()
                             ->LogicToPixel( Size(nAmount,0),
-                                            MapMode(MAP_TWIP) ).Width());
+                                            MapMode(MAP_TWIP) ).Width();
     }
     if( nAmount )
     {
