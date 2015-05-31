@@ -383,7 +383,7 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             sStyleName =
-                SwStyleNameMapper::GetProgName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
+                SwStyleNameMapper::GetProgName( RES_POOLCOLL_HEADLINE1 + i,
                                                 sStyleName );
             aDefOutlStyleNames[i] = sStyleName;
         }

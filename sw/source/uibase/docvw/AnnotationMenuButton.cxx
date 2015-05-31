@@ -189,8 +189,7 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Recta
 void AnnotationMenuButton::KeyInput(const KeyEvent& rKeyEvt)
 {
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
-    const sal_uInt16 nKey = rKeyCode.GetCode();
-    if (nKey == KEY_TAB)
+    if (rKeyCode.GetCode() == KEY_TAB)
     {
         mrSidebarWin.ActivatePostIt();
         mrSidebarWin.GrabFocus();

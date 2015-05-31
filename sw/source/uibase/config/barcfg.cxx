@@ -38,7 +38,7 @@ SwToolbarConfigItem::SwToolbarConfigItem( bool bWeb ) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/ObjectBar") : OUString("Office.Writer/ObjectBar"),
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
 {
-    for(sal_uInt16 i = 0; i <= SEL_TYPE_GRAPHIC; i++ )
+    for(int i = 0; i <= SEL_TYPE_GRAPHIC; ++i)
         aTbxIdArray[i] = -1;
 
     Sequence<OUString> aNames = GetPropertyNames();

@@ -1054,7 +1054,7 @@ void SwDocTest::randomTest()
         "Jim", "Bob", "JimBobina", "Helga", "Gertrude", "Spagna", "Hurtleweed"
     };
 
-    for( sal_uInt16 rlm = 0; rlm < SAL_N_ELEMENTS(modes); rlm++ )
+    for( size_t rlm = 0; rlm < SAL_N_ELEMENTS(modes); rlm++ )
     {
         m_pDoc->ClearDoc();
 
