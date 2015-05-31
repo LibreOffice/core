@@ -248,10 +248,9 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrameFormat& rFrameFormat,
                     bEmpty = true;
                     if( pHTMLPosFlyFrms )
                     {
-                        for( sal_uInt16 i=0; i<pHTMLPosFlyFrms->size(); i++ )
+                        for( auto pHTMLPosFlyFrm : *pHTMLPosFlyFrms )
                         {
-                            sal_uLong nIdx = (*pHTMLPosFlyFrms)[i]
-                                                ->GetNdIndex().GetIndex();
+                            sal_uLong nIdx = pHTMLPosFlyFrm->GetNdIndex().GetIndex();
                             bEmpty = (nIdx != nStt) && (nIdx != nStt-1);
                             if( !bEmpty || nIdx > nStt )
                                 break;
@@ -367,9 +366,9 @@ bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nContentIdx, sal_uInt8
         bFlysLeft = bRestart = false;
 
         // suche nach dem Anfang der FlyFrames
-        sal_uInt16 i;
+        size_t i {0};
 
-        for( i = 0; i < pHTMLPosFlyFrms->size() &&
+        for( ; i < pHTMLPosFlyFrms->size() &&
             (*pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() < nNdIdx; i++ )
             ;
         for( ; !bRestart && i < pHTMLPosFlyFrms->size() &&
@@ -1940,7 +1939,7 @@ void SwHTMLWriter::CollectLinkTargets()
             const ImageMap *pIMap = pURL->GetMap();
             if( pIMap )
             {
-                for( sal_uInt16 i=0; i<pIMap->GetIMapObjectCount(); i++ )
+                for( size_t i=0; i<pIMap->GetIMapObjectCount(); ++i )
                 {
                     const IMapObject* pObj = pIMap->GetIMapObject( i );
                     if( pObj )
