@@ -428,7 +428,7 @@ void ScTable::DeleteArea(
                 aCol[i].DeleteArea(nRow1, nRow2, nDelFlag, bBroadcast, pBroadcastSpans);
         }
 
-            // Zellschutz auf geschuetzter Tabelle nicht setzen
+            // Do not set protected cell in a protected table
 
         if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
         {
