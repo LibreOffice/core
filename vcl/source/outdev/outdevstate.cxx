@@ -39,35 +39,39 @@
 #include "salgdi.hxx"
 #include "sallayout.hxx"
 
-OutDevState::OutDevState() :
-    mnFlags(PushFlags::NONE)
+OutDevState::OutDevState()
+    : mpMapMode(0)
+    , mbMapActive(false)
+    , mpClipRegion(0)
+    , mpLineColor(0)
+    , mpFillColor(0)
+    , mpFont(0)
+    , mpTextColor(0)
+    , mpTextFillColor(0)
+    , mpTextLineColor(0)
+    , mpOverlineColor(0)
+    , mpRefPoint(0)
+    , meTextAlign(ALIGN_TOP)
+    , meRasterOp(ROP_OVERPAINT)
+    , mnTextLayoutMode(TEXT_LAYOUT_DEFAULT)
+    , meTextLanguage(0)
+    , mnFlags(PushFlags::NONE)
 {
 }
 
 OutDevState::~OutDevState()
 {
-    if ( mnFlags & PushFlags::LINECOLOR )
-        delete mpLineColor;
-    if ( mnFlags & PushFlags::FILLCOLOR )
-        delete mpFillColor;
-    if ( mnFlags & PushFlags::FONT )
-        delete mpFont;
-    if ( mnFlags & PushFlags::TEXTCOLOR )
-        delete mpTextColor;
-    if ( mnFlags & PushFlags::TEXTFILLCOLOR )
-        delete mpTextFillColor;
-    if ( mnFlags & PushFlags::TEXTLINECOLOR )
-        delete mpTextLineColor;
-    if ( mnFlags & PushFlags::OVERLINECOLOR )
-        delete mpOverlineColor;
-    if ( mnFlags & PushFlags::MAPMODE )
-        delete mpMapMode;
-    if ( mnFlags & PushFlags::CLIPREGION )
-        delete mpClipRegion;
-    if ( mnFlags & PushFlags::REFPOINT )
-        delete mpRefPoint;
+    delete mpLineColor;
+    delete mpFillColor;
+    delete mpFont;
+    delete mpTextColor;
+    delete mpTextFillColor;
+    delete mpTextLineColor;
+    delete mpOverlineColor;
+    delete mpMapMode;
+    delete mpClipRegion;
+    delete mpRefPoint;
 }
-
 
 void OutputDevice::Push( PushFlags nFlags )
 {
@@ -79,44 +83,29 @@ void OutputDevice::Push( PushFlags nFlags )
 
     pState->mnFlags = nFlags;
 
-    if ( nFlags & PushFlags::LINECOLOR )
+    if (nFlags & PushFlags::LINECOLOR && mbLineColor)
     {
-        if ( mbLineColor )
-            pState->mpLineColor = new Color( maLineColor );
-        else
-            pState->mpLineColor = NULL;
+        pState->mpLineColor = new Color( maLineColor );
     }
-    if ( nFlags & PushFlags::FILLCOLOR )
+    if (nFlags & PushFlags::FILLCOLOR && mbFillColor)
     {
-        if ( mbFillColor )
-            pState->mpFillColor = new Color( maFillColor );
-        else
-            pState->mpFillColor = NULL;
+        pState->mpFillColor = new Color( maFillColor );
     }
     if ( nFlags & PushFlags::FONT )
         pState->mpFont = new vcl::Font( maFont );
     if ( nFlags & PushFlags::TEXTCOLOR )
         pState->mpTextColor = new Color( GetTextColor() );
-    if ( nFlags & PushFlags::TEXTFILLCOLOR )
+    if (nFlags & PushFlags::TEXTFILLCOLOR && IsTextFillColor())
     {
-        if ( IsTextFillColor() )
-            pState->mpTextFillColor = new Color( GetTextFillColor() );
-        else
-            pState->mpTextFillColor = NULL;
+        pState->mpTextFillColor = new Color( GetTextFillColor() );
     }
-    if ( nFlags & PushFlags::TEXTLINECOLOR )
+    if (nFlags & PushFlags::TEXTLINECOLOR && IsTextLineColor())
     {
-        if ( IsTextLineColor() )
-            pState->mpTextLineColor = new Color( GetTextLineColor() );
-        else
-            pState->mpTextLineColor = NULL;
+        pState->mpTextLineColor = new Color( GetTextLineColor() );
     }
-    if ( nFlags & PushFlags::OVERLINECOLOR )
+    if (nFlags & PushFlags::OVERLINECOLOR && IsOverlineColor())
     {
-        if ( IsOverlineColor() )
-            pState->mpOverlineColor = new Color( GetOverlineColor() );
-        else
-            pState->mpOverlineColor = NULL;
+        pState->mpOverlineColor = new Color( GetOverlineColor() );
     }
     if ( nFlags & PushFlags::TEXTALIGN )
         pState->meTextAlign = GetTextAlign();
@@ -131,19 +120,13 @@ void OutputDevice::Push( PushFlags nFlags )
         pState->mpMapMode = new MapMode( maMapMode );
         pState->mbMapActive = mbMap;
     }
-    if ( nFlags & PushFlags::CLIPREGION )
+    if (nFlags & PushFlags::CLIPREGION && mbClipRegion)
     {
-        if ( mbClipRegion )
-            pState->mpClipRegion = new vcl::Region( maRegion );
-        else
-            pState->mpClipRegion = NULL;
+        pState->mpClipRegion = new vcl::Region( maRegion );
     }
-    if ( nFlags & PushFlags::REFPOINT )
+    if (nFlags & PushFlags::REFPOINT && mbRefPoint)
     {
-        if ( mbRefPoint )
-            pState->mpRefPoint = new Point( maRefPoint );
-        else
-            pState->mpRefPoint = NULL;
+        pState->mpRefPoint = new Point( maRefPoint );
     }
 
     mpOutDevStateStack->push_back( pState );
