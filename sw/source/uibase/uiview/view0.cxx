@@ -278,7 +278,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_VIEW_BOUNDS:
                 aBool.SetValue( SwViewOption::IsDocBoundaries()); break;
             case FN_VIEW_GRAPHIC:
-                aBool.SetValue( !pOpt->IsGraphic() ); break;
+                aBool.SetValue( pOpt->IsGraphic() ); break;
             case FN_VIEW_FIELDS:
                 aBool.SetValue( SwViewOption::IsFieldShadings() ); break;
             case FN_VIEW_FIELDNAME:

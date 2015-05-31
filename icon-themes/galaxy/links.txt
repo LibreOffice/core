@@ -72,3 +72,6 @@ cmd/sc_showannotations.png cmd/sc_insertannotation.png
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
+
+# Toggle graphics visibility in Writer
+cmd/sc_showgraphics.png cmd/sc_graphic.png

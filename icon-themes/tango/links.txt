@@ -208,8 +208,6 @@ cmd/lc_hyperlinkdialog.png cmd/lc_inserthyperlink.png
 cmd/sc_hyperlinkdialog.png cmd/sc_inserthyperlink.png
 cmd/lc_draw.png cmd/lc_reload.png
 cmd/sc_draw.png cmd/sc_reload.png
-cmd/lc_graphic.png cmd/lc_insertgraphic.png
-cmd/sc_graphic.png cmd/sc_insertgraphic.png
 cmd/lc_selectmode.png cmd/lc_selectobject.png
 cmd/lc_drawselect.png cmd/lc_selectobject.png
 cmd/sc_selectmode.png cmd/sc_selectobject.png
@@ -556,3 +554,7 @@ cmd/sc_showannotations.png cmd/sc_insertannotation.png
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
+
+# Toggle graphics visibility in Writer
+cmd/sc_showgraphics.png cmd/sc_insertgraphic.png
+cmd/lc_showgraphics.png cmd/lc_insertgraphic.png
