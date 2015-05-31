@@ -143,7 +143,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
     // alle noch offenen Attribute beenden und hinter der Tabelle
     // neu aufspannen
     _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
+    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         _HTMLAttr *pAttr = *pHTMLAttributes;
         while( pAttr )
@@ -380,14 +380,14 @@ void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
 void SwHTMLParser::ClearContext( _HTMLAttrContext *pContext )
 {
     _HTMLAttrs &rAttrs = pContext->GetAttrs();
-    for( sal_uInt16 i=0; i<rAttrs.size(); i++ )
+    for( auto pAttr : rAttrs )
     {
         // einfaches Loeschen reicht hier nicht, weil das
         // Attribut auch aus seiner Liste ausgetragen werden
         // muss. Theoretisch koennt man natuerlich auch die Liste
         // und die Attribute getrennt loeschen, aber wenn man
         // dann was falsch gemacht hat, sieht es uebel aus.
-        DeleteAttr( rAttrs[i] );
+        DeleteAttr( pAttr );
     }
 
     OSL_ENSURE( !pContext->GetSpansSection(),
