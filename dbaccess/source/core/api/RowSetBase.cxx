@@ -1239,7 +1239,7 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
     if ( m_aBookmark.hasValue() )
     {
         if (_ePrepareForDirection == MOVE_NONE_REFRESH ||
-            (m_pCache->isAfterLast() != isAfterLast()) || ( m_pCache->isBeforeFirst() != isBeforeFirst() ) ||
+            (m_pCache->isAfterLast() != bool(isAfterLast())) || ( m_pCache->isBeforeFirst() != bool(isBeforeFirst()) ) ||
              m_pCache->compareBookmarks( m_aBookmark, m_pCache->getBookmark() ) != CompareBookmark::EQUAL )
             bSuccess = m_pCache->moveToBookmark( m_aBookmark );
         else
