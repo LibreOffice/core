@@ -838,7 +838,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              MetricVector* pVector, OUString* pDisplayText
                              )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if(nLen == 0x0FFFF)
     {
@@ -961,7 +961,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const long* pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if(nLen == 0x0FFFF)
     {
@@ -1166,7 +1166,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                     const OUString& rStr,
                                     sal_Int32 nIndex, sal_Int32 nLen)
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if(nIndex < 0 || nIndex == 0x0FFFF || nLen == 0x0FFFF)
     {
@@ -1840,7 +1840,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, D
                              MetricVector* pVector, OUString* pDisplayText,
                              vcl::ITextLayout* _pTextLayout )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if (mpOutDevData->mpRecordLayout)
     {
@@ -2148,7 +2148,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                                  sal_Int32 nIndex, sal_Int32 nLen,
                                  DrawTextFlags nStyle, MetricVector* pVector, OUString* pDisplayText )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if(nLen == 0x0FFFF)
     {

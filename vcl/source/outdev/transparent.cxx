@@ -218,7 +218,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 
 void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency)
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolyPoly.count())
@@ -282,7 +282,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 
 void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     // short circuit if the polygon border is invisible too
     if( !mbLineColor )
@@ -298,7 +298,7 @@ void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
 bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly,
                                              sal_uInt16 nTransparencePercent )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     bool bDrawn = false;
 
@@ -607,7 +607,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     // short circuit for drawing an opaque polygon
     if( (nTransparencePercent < 1) || (mnDrawMode & DrawModeFlags::NoTransparency) )
@@ -659,7 +659,7 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
 void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                                     const Size& rSize, const Gradient& rTransparenceGradient )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     const Color aBlack( COL_BLACK );
 
