@@ -69,3 +69,4 @@ cmd/sc_mailmergewizard.png cmd/sc_autoformat.png
 cmd/sc_macrosmenu.png cmd/sc_trackchanges.png
 cmd/sc_showannotations.png cmd/sc_insertannotation.png
 
+cmd/sc_showgraphics.png cmd/sc_graphic.png
