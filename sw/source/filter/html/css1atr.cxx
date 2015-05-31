@@ -600,10 +600,8 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
 
     // the Default-TextStyle is not also exported !!
     // 0-Style is the Default; is never exported !!
-    sal_uInt16 nArrLen = pDoc->GetTextFormatColls()->size();
-    sal_uInt16 i;
-
-    for( i = 1; i < nArrLen; i++ )
+    const size_t nTextFormats = pDoc->GetTextFormatColls()->size();
+    for( size_t i = 1; i < nTextFormats; ++i )
     {
         const SwTextFormatColl* pColl = (*pDoc->GetTextFormatColls())[i];
         sal_uInt16 nPoolId = pColl->GetPoolFormatId();
@@ -613,8 +611,8 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
     }
 
     // the Default-TextStyle is not also exported !!
-    nArrLen = pDoc->GetCharFormats()->size();
-    for( i=1; i<nArrLen; i++ )
+    const size_t nCharFormats = pDoc->GetCharFormats()->size();
+    for( size_t i = 1; i < nCharFormats; ++i )
     {
         const SwCharFormat *pCFormat = (*pDoc->GetCharFormats())[i];
         sal_uInt16 nPoolId = pCFormat->GetPoolFormatId();
@@ -625,11 +623,10 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
     }
 
     const SwFootnoteIdxs& rIdxs = pDoc->GetFootnoteIdxs();
-    nArrLen = rIdxs.size();
     sal_uInt16 nEnd = 0, nFootnote = 0;
-    for( i=0; i < nArrLen; i++ )
+    for( auto pIdx : rIdxs )
     {
-        if( rIdxs[i]->GetFootnote().IsEndNote() )
+        if( pIdx->GetFootnote().IsEndNote() )
             nEnd++;
         else
             nFootnote++;
@@ -1213,10 +1210,10 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
         0,                      0,                          0
     };
 
-    for( sal_uInt16 i=0; aWhichIds[i]; i += 3 )
+    for( int i=0; aWhichIds[i]; i += 3 )
     {
         const SfxPoolItem *pItem = 0, *pItemCJK = 0, *pItemCTL = 0, *pTmp;
-        sal_uInt16 nItemCount = 0;
+        int nItemCount = 0;
         if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,
                                                    &pTmp ) )
         {
