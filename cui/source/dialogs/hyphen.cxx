@@ -31,7 +31,6 @@
 #include <vcl/builderfactory.hxx>
 
 #define HYPH_POS_CHAR       '='
-#define CONTINUE_HYPH       USHRT_MAX
 
 #define CUR_HYPH_POS_CHAR   '-'
 
@@ -223,16 +222,16 @@ void SvxHyphenWordDialog::InitControls_Impl()
 }
 
 
-void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
+void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
 {
-    if ( nInsPos != CONTINUE_HYPH  &&  xPossHyph.is())
+    if ( nInsPos >= 0 && xPossHyph.is() )
     {
         if (nInsPos)
         {
             OUString aTmp( aEditWord );
             DBG_ASSERT(nInsPos <= aTmp.getLength() - 2, "wrong hyphen position");
 
-            sal_Int16 nIdxPos = -1;
+            sal_Int32 nIdxPos = -1;
             for (sal_Int32 i = 0; i <= nInsPos; ++i)
             {
                 if (HYPH_POS_CHAR == aTmp[ i ])
@@ -385,7 +384,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, DeleteHdl_Impl)
     if( !bBusy )
     {
         bBusy = true;
-        ContinueHyph_Impl();
+        ContinueHyph_Impl( 0 );
         bBusy = false;
     }
     return 0;
@@ -397,7 +396,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, ContinueHdl_Impl)
     if( !bBusy )
     {
         bBusy = true;
-        ContinueHyph_Impl( CONTINUE_HYPH );
+        ContinueHyph_Impl();
         bBusy = false;
     }
     return 0;

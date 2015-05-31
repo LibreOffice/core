@@ -298,7 +298,7 @@ void SvxSpellWrapper::ReplaceAll( const OUString &, sal_Int16 )
 {   // Replace Word from the Replace list
 }
 
-void SvxSpellWrapper::InsertHyphen( const sal_uInt16 )
+void SvxSpellWrapper::InsertHyphen( const sal_Int32 )
 {   // inserting and deleting Hyphae
 }
 

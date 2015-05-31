@@ -59,7 +59,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
     LanguageType        nActLanguage;       // and its language
     sal_uInt16          nMaxHyphenationPos; // right most valid hyphenation pos
     sal_uInt16          nHyphPos;
-    sal_uInt16          nOldPos;
+    sal_Int32           nOldPos;
     sal_Int32           nHyphenationPositionsOffset;
     bool            bBusy;
 
@@ -68,7 +68,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
     OUString        EraseUnusableHyphens_Impl( css::uno::Reference< css::linguistic2::XPossibleHyphens >  &rxPossHyph, sal_uInt16 nMaxHyphenationPos );
 
     void            InitControls_Impl();
-    void            ContinueHyph_Impl( sal_uInt16 nInsPos = 0 );
+    void            ContinueHyph_Impl( sal_Int32 nInsPos = -1 ); // continue by default
     sal_uInt16      GetHyphIndex_Impl();
 
     DECL_LINK(Left_Impl, void *);

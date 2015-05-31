@@ -136,7 +136,7 @@ protected:
     // Wort via Thesaurus ersetzen
     virtual void ChangeThesWord( const OUString& rNewWord );
     virtual void AutoCorrect( const OUString& rAktStr, const OUString& rNewStr );
-    virtual void InsertHyphen( const sal_uInt16 nPos ); // Insert hyphen
+    virtual void InsertHyphen( const sal_Int32 nPos ); // Insert hyphen
 
     void SetCurTextObj( SdrObject* pObj ) { mpTextObj = pObj; }
     SdrObject* GetCurTextObj() { return mpTextObj; }

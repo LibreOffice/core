@@ -108,10 +108,10 @@ bool SwHyphWrapper::SpellMore()
     return false;
 }
 
-void SwHyphWrapper::InsertHyphen( const sal_uInt16 nPos )
+void SwHyphWrapper::InsertHyphen( const sal_Int32 nPos )
 {
     if( nPos)
-        SwEditShell::InsertSoftHyph( nPos + 1); // does nPos == 1 really mean
+        SwEditShell::InsertSoftHyph(nPos + 1); // does nPos == 1 really mean
                                         // insert hyphen after first char?
                                         // (instead of nPos == 0)
     else

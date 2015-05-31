@@ -42,7 +42,7 @@ protected:
     virtual bool SpellContinue() SAL_OVERRIDE;
     virtual void SpellEnd( ) SAL_OVERRIDE;
     virtual bool SpellMore() SAL_OVERRIDE;
-    virtual void InsertHyphen( const sal_uInt16 nPos ) SAL_OVERRIDE; // insert hyphen
+    virtual void InsertHyphen( const sal_Int32 nPos ) SAL_OVERRIDE; // insert hyphen
 
 public:
     SwHyphWrapper( SwView* pVw,
