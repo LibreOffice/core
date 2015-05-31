@@ -113,6 +113,8 @@ public:
     virtual RangeUnits getUnitsForRange(const ScRangeList& rRangeList,
                                         ScDocument* pDoc) SAL_OVERRIDE;
 
+    virtual bool isValidUnit(const OUString& rsUnit) SAL_OVERRIDE;
+
 private:
     UnitsResult getOutputUnitsForOpCode(std::stack< RAUSItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc);
 
