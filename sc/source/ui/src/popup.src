@@ -125,7 +125,7 @@ Menu RID_POPUP_CELLS
         {
             Identifier = SID_DELETE ;
             HelpId = CMD_SID_DELETE ;
-            Text [ en-US ] = "Delete C~ontents..." ;
+            Text [ en-US ] = "Cl~ear Contents..." ;
         };
         MenuItem
         {
@@ -217,6 +217,9 @@ Menu RID_POPUP_TAB
             HelpId = CMD_FID_TAB_MOVE ;
             Text [ en-US ] = "~Move/Copy Sheet..." ;
         };
+
+        MenuItem { Separator = TRUE ; };
+
         MenuItem
         {
             Identifier = FID_TAB_MENU_SET_TAB_BG_COLOR ;
@@ -228,6 +231,11 @@ Menu RID_POPUP_TAB
             Identifier = FID_PROTECT_TABLE ;
             HelpId = CMD_FID_PROTECT_TABLE ;
             Text [ en-US ] = "~Protect Sheet..." ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_TOGGLE_GRID ;
+            Text [ en-US ] = "Sheet ~Gridlines..." ;
         };
         MenuItem
         {
