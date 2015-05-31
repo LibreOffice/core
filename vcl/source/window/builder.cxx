@@ -878,6 +878,18 @@ namespace
         return sTooltipText;
     }
 
+    OString extractPlaceholderText(VclBuilder::stringmap &rMap)
+    {
+        OString sPlaceholderText;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("placeholder_text"));
+        if (aFind != rMap.end())
+        {
+            sPlaceholderText = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sPlaceholderText;
+    }
+
     void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const uno::Reference<frame::XFrame>& rFrame)
     {
         if (!rFrame.is())
@@ -1607,7 +1619,12 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkEntry")
     {
-        xWindow = VclPtr<Edit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+        VclPtrInstance<Edit> xEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+
+        OUString sPlaceHolderText(OStringToOUString(extractPlaceholderText(rMap), RTL_TEXTENCODING_UTF8));
+        xEdit->SetPlaceholderText(sPlaceHolderText);
+
+        xWindow = xEdit;
         ensureDefaultWidthChars(rMap);
     }
     else if (name == "GtkNotebook")
