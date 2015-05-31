@@ -481,6 +481,8 @@
             <menu:menuitem menu:id=".uno:DataStreams"/>
             <menu:menuitem menu:id=".uno:ManageXMLSource"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ConvertUnits"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DataSort"/>
             <menu:menu menu:id=".uno:FilterMenu">
                 <menu:menupopup>

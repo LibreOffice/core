@@ -24,6 +24,7 @@
 #define CMD_FID_COL_WIDTH                           ".uno:ColumnWidth"
 #define CMD_SID_CREATE_SW_DRAWVIEW                  ".uno:CreateSWDrawView"
 #define CMD_SID_OPENDLG_PIVOTTABLE                  ".uno:DataDataPilotRun"
+#define CMD_SID_UNITSONVERSION_DIALOG               ".uno:ConvertUnits"
 #define CMD_SID_DATA_SELECT                         ".uno:DataSelect"
 #define CMD_SID_DEFINE_PRINTAREA                    ".uno:DefinePrintArea"
 #define CMD_FID_DELETE_CELL                         ".uno:DeleteCell"
