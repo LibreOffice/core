@@ -424,7 +424,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     {
         const SfxItemSet& rItemSet = pTextNd->GetAnyFormatColl().GetAttrSet();
         const SfxPoolItem *pItem;
-        for( sal_uInt16 i=0; nWhichIds[i]; i++ )
+        for( int i=0; nWhichIds[i]; ++i )
         {
             if( SfxItemState::SET == rItemSet.GetItemState( nWhichIds[i], true, &pItem ) )
                 PutEEPoolItem( aItemSet, *pItem );
@@ -433,7 +433,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // die Attribute der Umgebung am Draw-Objekt setzen
     _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
+    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         _HTMLAttr *pAttr = *pHTMLAttributes;
         if( pAttr )
