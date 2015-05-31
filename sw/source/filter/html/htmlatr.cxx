@@ -78,6 +78,7 @@
 #include <svtools/HtmlWriter.hxx>
 
 #include <memory>
+#include <algorithm>
 
 using namespace css;
 
@@ -1121,10 +1122,6 @@ class HTMLEndPosLst
     sal_uLong nHTMLMode;
     bool bOutStyles : 1;    // werden Styles exportiert
 
-    // die Position eines Items in der Start-/Ende-Liste suchen
-    sal_uInt16 _FindStartPos( const HTMLStartEndPos *pPos ) const;
-    sal_uInt16 _FindEndPos( const HTMLStartEndPos *pPos ) const;
-
     // Eine SttEndPos in die Start- und Ende-Listen eintragen bzw. aus
     // ihnen loeschen, wobei die Ende-Position bekannt ist
     void _InsertItem( HTMLStartEndPos *pPos, sal_uInt16 nEndPos );
@@ -1188,29 +1185,6 @@ public:
     bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
 };
 
-sal_uInt16 HTMLEndPosLst::_FindStartPos( const HTMLStartEndPos *pPos ) const
-{
-    sal_uInt16 i;
-    for( i = 0; i < aStartLst.size() && aStartLst[i] != pPos;  i++ )
-        ;
-
-    OSL_ENSURE(i != aStartLst.size(), "Item not found in Start List!" );
-
-    return i==aStartLst.size() ? USHRT_MAX : i;
-}
-
-sal_uInt16 HTMLEndPosLst::_FindEndPos( const HTMLStartEndPos *pPos ) const
-{
-    sal_uInt16 i;
-
-    for( i = 0; i < aEndLst.size() && aEndLst[i] != pPos;  i++ )
-        ;
-
-    OSL_ENSURE(i != aEndLst.size(), "Item not found in End List!" );
-
-    return i==aEndLst.size() ? USHRT_MAX : i;
-}
-
 void HTMLEndPosLst::_InsertItem( HTMLStartEndPos *pPos, sal_uInt16 nEndPos )
 {
     // In der Start-Liste das Attribut hinter allen vorher und an
@@ -1232,9 +1206,11 @@ void HTMLEndPosLst::_RemoveItem( sal_uInt16 nEndPos )
     HTMLStartEndPos *pPos = aEndLst[nEndPos];
 
     // jetzt Suchen wir es in der Start-Liste
-    sal_uInt16 nStartPos = _FindStartPos( pPos );
-    if( nStartPos != USHRT_MAX )
-        aStartLst.erase( aStartLst.begin() + nStartPos );
+    HTMLStartEndPositions::iterator it =
+        std::find(aStartLst.begin(), aStartLst.end(), pPos );
+    OSL_ENSURE(it != aStartLst.end(), "Item not found in Start List!");
+    if( it != aStartLst.end() )
+        aStartLst.erase( it );
 
     aEndLst.erase( aEndLst.begin() + nEndPos );
 
@@ -1467,12 +1443,15 @@ void HTMLEndPosLst::FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
     pPos->SetEnd( nNewEnd );
 
     // das Item aus der End-Liste entfernen
-    sal_uInt16 nEndPos = _FindEndPos( pPos );
-    if( nEndPos != USHRT_MAX )
-        aEndLst.erase( aEndLst.begin() + nEndPos );
+    HTMLStartEndPositions::iterator it =
+        std::find(aEndLst.begin(), aEndLst.end(), pPos );
+    OSL_ENSURE(it != aEndLst.end(), "Item not found in End List!" );
+    if( it != aEndLst.end() )
+        aEndLst.erase( it );
 
     // es wird von nun an als letztes an der entsprechenden Position
     // beendet
+    HTMLStartEndPositions::size_type nEndPos;
     for( nEndPos=0; nEndPos < aEndLst.size() &&
                     aEndLst[nEndPos]->GetEnd() <= nNewEnd; nEndPos++ )
         ;
@@ -1498,9 +1477,10 @@ void HTMLEndPosLst::FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
             pTest->SetEnd( nNewEnd );
 
             // das Attribut aus der End-Liste entfernen
-            sal_uInt16 nEPos = _FindEndPos( pTest );
-            if( nEPos != USHRT_MAX )
-                aEndLst.erase( aEndLst.begin() + nEPos );
+            it = std::find(aEndLst.begin(), aEndLst.end(), pTest );
+            OSL_ENSURE(it != aEndLst.end(), "Item not found in End List!" );
+            if( it != aEndLst.end() )
+                aEndLst.erase( it );
 
             // es endet jetzt als erstes Attribut an der entsprechenden
             // Position. Diese Position in der Ende-Liste kennen wir schon.
@@ -1593,9 +1573,11 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                     aStartLst.erase( aStartLst.begin() + i );
                     i--;
 
-                    sal_uInt16 nEndPos = _FindEndPos( pTest );
-                    if( nEndPos != USHRT_MAX )
-                        aEndLst.erase( aEndLst.begin() + nEndPos );
+                    HTMLStartEndPositions::iterator it =
+                        std::find(aEndLst.begin(), aEndLst.end(), pTest );
+                    OSL_ENSURE(it != aEndLst.end(), "Item not found in End List!" );
+                    if( it != aEndLst.end() )
+                        aEndLst.erase( it );
                 }
 
                 // ggf den zweiten Teil des gesplitteten Attribts einfuegen
@@ -2024,9 +2006,14 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             bool bSkipOut = false;
             if( pPos->GetItem()->Which() == RES_CHRATR_BOX )
             {
-                for(sal_uInt16 nIndex = _FindStartPos(pPos) + 1; nIndex < aStartLst.size(); ++nIndex )
+                HTMLStartEndPositions::iterator it =
+                    std::find(aStartLst.begin(), aStartLst.end(), pPos );
+                OSL_ENSURE(it != aStartLst.end(), "Item not found in Start List!" );
+                if (it != aStartLst.end())
+                    ++it;
+                while(it != aStartLst.end() )
                 {
-                    HTMLStartEndPos *pEndPos = aStartLst[nIndex];
+                    HTMLStartEndPos *pEndPos = *it;
                     if( pEndPos->GetItem()->Which() == RES_CHRATR_BOX &&
                         *static_cast<const SvxBoxItem*>(pEndPos->GetItem()) ==
                         *static_cast<const SvxBoxItem*>(pPos->GetItem()) )
@@ -2035,6 +2022,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                         bSkipOut = true;
                         break;
                     }
+                    ++it;
                 }
             }
             if( !bSkipOut )
