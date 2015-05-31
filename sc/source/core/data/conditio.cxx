@@ -987,7 +987,7 @@ bool ScConditionEntry::IsError( const ScAddress& rPos ) const
     return false;
 }
 
-bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
+bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos, bool isTime ) const
 {
     // Interpret must already have been called
     if ( bIsStr1 )
@@ -1012,10 +1012,17 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
 
     double nComp1 = nVal1; // Copy, so that it can be changed
     double nComp2 = nVal2;
+    bool timeWraparound = false;
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( nComp1 > nComp2 )
         {
+            if (isTime) // time wraparound
+            {
+                nComp1 -= 0.00001157407; // one second
+                nComp2 += 0.00001157407;
+                timeWraparound = true; // inverts condition
+            }
             // Right order for value range
             double nTemp = nComp1; nComp1 = nComp2; nComp2 = nTemp;
         }
@@ -1137,7 +1144,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             SAL_WARN("sc", "unknown operation at ScConditionEntry");
             break;
     }
-    return bValid;
+    return bValid ^ timeWraparound;
 }
 
 bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos ) const
@@ -1248,7 +1255,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     return bValid;
 }
 
-bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
+bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos, bool isTime ) const
 {
     const_cast<ScConditionEntry*>(this)->Interpret(rPos); // Evaluate formula
 
@@ -1256,7 +1263,7 @@ bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos
     OUString aArgStr;
     bool bVal = lcl_GetCellContent( rCell, bIsStr1, nArg, aArgStr, mpDoc );
     if (bVal)
-        return IsValid( nArg, rPos );
+        return IsValid( nArg, rPos, isTime );
     else
         return IsValidStr( aArgStr, rPos );
 }

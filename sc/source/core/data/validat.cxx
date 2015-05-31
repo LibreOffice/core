@@ -510,19 +510,21 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
     }
 
     bool bOk = true;
+    bool isTime = false;
     switch (eDataMode)
     {
         // SC_VALID_ANY schon oben
 
+        case SC_VALID_TIME:
+            isTime = true;
         case SC_VALID_WHOLE:
         case SC_VALID_DECIMAL:
         case SC_VALID_DATE:         // Date/Time is only formatting
-        case SC_VALID_TIME:
             bOk = bIsVal;
             if ( bOk && eDataMode == SC_VALID_WHOLE )
                 bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // integers
             if ( bOk )
-                bOk = IsCellValid(rCell, rPos);
+                bOk = IsCellValid(rCell, rPos, isTime);
             break;
 
         case SC_VALID_CUSTOM:

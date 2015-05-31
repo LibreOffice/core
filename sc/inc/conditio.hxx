@@ -184,7 +184,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
                         bool bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
-    bool    IsValid( double nArg, const ScAddress& rPos ) const;
+    bool    IsValid( double nArg, const ScAddress& rPos, bool isTime = 0 ) const;
     bool    IsValidStr( const OUString& rArg, const ScAddress& rPos ) const;
 
 public:
@@ -206,7 +206,7 @@ public:
 
     virtual void SetParent( ScConditionalFormat* pNew ) SAL_OVERRIDE  { pCondFormat = pNew; }
 
-    bool IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
+    bool IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos, bool isTime = 0 ) const;
 
     ScConditionMode GetOperation() const        { return eOp; }
     void SetOperation(ScConditionMode eMode);

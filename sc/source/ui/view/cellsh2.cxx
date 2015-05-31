@@ -887,23 +887,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                             ScGlobal::pLocaleData->getNumDecimalSep()[0], true));
                                 else
                                     aExpr2 = aTemp2;
-                                if ( eMode == SC_VALID_TIME ) {
-                                    sal_Int32 wraparound = aExpr1.compareTo(aExpr2);
-                                    if (wraparound > 0) {
-                                        if (eOper == SC_COND_BETWEEN) {
-                                            eOper = SC_COND_NOTBETWEEN;
-                                            OUString tmp = aExpr1;
-                                            aExpr1 = aExpr2;
-                                            aExpr2 = tmp;
-                                        }
-                                        else if (eOper == SC_COND_NOTBETWEEN) {
-                                            eOper = SC_COND_BETWEEN;
-                                            OUString tmp = aExpr1;
-                                            aExpr1 = aExpr2;
-                                            aExpr2 = tmp;
-                                        }
-                                    }
-                                }
                             }
                             else
                                 aExpr2 = aTemp2;
