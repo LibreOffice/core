@@ -723,12 +723,8 @@ bool Outliner::SearchAndReplaceOnce()
     // notify LibreOfficeKit about changed page
     if (pViewShell && pViewShell->GetDoc()->isTiledRendering() && mbStringFound)
     {
-        sal_uInt16 nSelectedPage = maCurrentPosition.mnPageIndex;
-        if (nSelectedPage != mnStartPageIndex)
-        {
-            OString aPayload = OString::number(nSelectedPage);
-            pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-        }
+        OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
+        pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
     }
 
     return mbEndOfSearch;
