@@ -117,6 +117,8 @@ public:
     virtual RangeUnits getUnitsForRange(const ScRangeList& rRangeList,
                                         ScDocument* pDoc) = 0;
 
+    virtual bool isValidUnit(const OUString& rsUnit) = 0;
+
     virtual ~Units() {}
 };
 
