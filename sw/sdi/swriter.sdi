@@ -3144,7 +3144,7 @@ SfxBoolItem GoUp FN_LINE_UP
     GroupId = GID_NAVIGATOR;
 ]
 
-SfxBoolItem Graphic FN_VIEW_GRAPHIC
+SfxBoolItem ShowGraphics FN_VIEW_GRAPHIC
 
 [
     /* flags: */
