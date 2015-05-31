@@ -309,17 +309,8 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
 
 void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 {
-    SCCOL nX;
-    SCROW nY;
-    long nPosX;
-    long nPosY;
-    SCSIZE nArrY;
     ScBreakType nBreak    = BREAK_NONE;
     ScBreakType nBreakOld = BREAK_NONE;
-
-    bool bSingle;
-    Color aPageColor;
-    Color aManualColor;
 
     if (bPagebreakMode)
         bPage = false;          // no "normal" breaks over the whole width/height
@@ -327,14 +318,10 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
     //! um den einen Pixel sieht das Metafile (oder die Druck-Ausgabe) anders aus
     //! als die Bildschirmdarstellung, aber wenigstens passen Druck und Metafile zusammen
 
-    Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
-    long nOneX = aOnePixel.Width();
-    long nOneY = aOnePixel.Height();
-    if (bMetaFile)
-        nOneX = nOneY = 1;
-
     long nLayoutSign = bLayoutRTL ? -1 : 1;
-    long nSignedOneX = nOneX * nLayoutSign;
+
+    Color aPageColor;
+    Color aManualColor;
 
     if ( eType == OUTTYPE_WINDOW )
     {
@@ -349,15 +336,16 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
     }
 
     mpDev->SetLineColor( aGridColor );
-    ScGridMerger aGrid( mpDev, nOneX, nOneY );
+    ScGridMerger aGrid( mpDev, 1, 1 );
 
     // vertical lines
 
-    nPosX = nScrX;
+    long nPosX = nScrX;
+    long nPosY;
     if ( bLayoutRTL )
-        nPosX += nMirrorW - nOneX;
+        nPosX += nMirrorW - 1;
 
-    for (nX=nX1; nX<=nX2; nX++)
+    for (SCCOL nX = nX1; nX <= nX2; nX++)
     {
         SCCOL nXplus1 = nX+1;
         SCCOL nXplus2 = nX+2;
@@ -392,11 +380,11 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
             bool bDraw = bGrid || nBreakOld; // simple grid only if set that way
 
             sal_uInt16 nWidthXplus2 = pRowInfo[0].pCellInfo[nXplus2].nWidth;
-            bSingle = bSingleGrid; //! get into Fillinfo !!!!!
+            bool bSingle = bSingleGrid; //! get into Fillinfo !!!!!
             if ( nX<MAXCOL && !bSingle )
             {
                 bSingle = ( nWidthXplus2 == 0 );
-                for (nArrY=1; nArrY+1<nArrCount && !bSingle; nArrY++)
+                for (SCSIZE nArrY = 1; nArrY + 1 < nArrCount && !bSingle; nArrY++)
                 {
                     if (pRowInfo[nArrY].pCellInfo[nXplus2].bHOverlapped)
                         bSingle = true;
@@ -414,7 +402,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                         ++nVisX;
 
                     nPosY = nScrY;
-                    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
+                    for (SCSIZE nArrY = 1; nArrY + 1 < nArrCount; nArrY++)
                     {
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                         const long nNextY = nPosY + pThisRowInfo->nHeight;
@@ -441,14 +429,18 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 
                         if (pThisRowInfo->bChanged && !bHOver)
                         {
-                            aGrid.AddVerLine( nPosX-nSignedOneX, nPosY, nNextY-nOneY );
+                            Point pos1 = mpDev->PixelToLogic(Point(nPosX - nLayoutSign, nPosY     ));
+                            Point pos2 = mpDev->PixelToLogic(Point(0                  , nNextY -1 ));
+                            aGrid.AddVerLine( pos1.X(), pos1.Y(), pos2.Y() );
                         }
                         nPosY = nNextY;
                     }
                 }
                 else
                 {
-                    aGrid.AddVerLine( nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY );
+                    Point pos1 = mpDev->PixelToLogic(Point(nPosX - nLayoutSign, nScrY            ));
+                    Point pos2 = mpDev->PixelToLogic(Point(0                  , nScrY + nScrH - 1));
+                    aGrid.AddVerLine( pos1.X(), pos1.Y(), pos2.Y() );
                 }
             }
         }
@@ -459,10 +451,10 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
     bool bHiddenRow = true;
     SCROW nHiddenEndRow = -1;
     nPosY = nScrY;
-    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
+    for (SCSIZE nArrY = 1; nArrY + 1 < nArrCount; nArrY++)
     {
         SCSIZE nArrYplus1 = nArrY+1;
-        nY = pRowInfo[nArrY].nRowNo;
+        SCROW nY = pRowInfo[nArrY].nRowNo;
         SCROW nYplus1 = nY+1;
         nPosY += pRowInfo[nArrY].nHeight;
 
@@ -498,7 +490,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
             bool bDraw = bGrid || nBreakOld;    // simple grid only if set so
 
             bool bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
-            bSingle = !bNextYisNextRow;             // Hidden
+            bool bSingle = !bNextYisNextRow;             // Hidden
             for (SCCOL i=nX1; i<=nX2 && !bSingle; i++)
             {
                 if (pRowInfo[nArrYplus1].pCellInfo[i+1].bVOverlapped)
@@ -513,7 +505,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 
                     nPosX = nScrX;
                     if ( bLayoutRTL )
-                        nPosX += nMirrorW - nOneX;
+                        nPosX += nMirrorW - 1;
 
                     for (SCCOL i=nX1; i<=nX2; i++)
                     {
@@ -535,7 +527,9 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                             }
                             if (!bVOver)
                             {
-                                aGrid.AddHorLine( nPosX, nNextX-nSignedOneX, nPosY-nOneY );
+                                Point pos1 = mpDev->PixelToLogic(Point(nPosX               , nPosY - 1));
+                                Point pos2 = mpDev->PixelToLogic(Point(nNextX - nLayoutSign,         0));
+                                aGrid.AddHorLine( pos1.X(), pos2.X(), pos1.Y() );
                             }
                         }
                         nPosX = nNextX;
@@ -543,7 +537,9 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                 }
                 else
                 {
-                    aGrid.AddHorLine( nScrX, nScrX+nScrW-nOneX, nPosY-nOneY );
+                    Point pos1 = mpDev->PixelToLogic(Point(nScrX            , nPosY - 1));
+                    Point pos2 = mpDev->PixelToLogic(Point(nScrX + nScrW - 1,         0));
+                    aGrid.AddHorLine( pos1.X(), pos2.X(), pos1.Y() );
                 }
             }
         }
