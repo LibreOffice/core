@@ -476,6 +476,8 @@
     </menu:menu>
     <menu:menu menu:id=".uno:DataMenu">
         <menu:menupopup>
+            <menu:menuitem menu:id=".uno:ConvertUnits"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DataSort"/>
             <menu:menuitem menu:id=".uno:SortAscending"/>
             <menu:menuitem menu:id=".uno:SortDescending"/>

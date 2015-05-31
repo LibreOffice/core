@@ -76,6 +76,7 @@
 #include "markdata.hxx"
 #include "docpool.hxx"
 #include "condformatdlg.hxx"
+#include "unitsconversiondlg.hxx"
 #include "attrib.hxx"
 
 #include "globstr.hrc"
@@ -127,6 +128,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             case SID_OPENDLG_CONDFRMT:
             case SID_OPENDLG_COLORSCALE:
             case SID_OPENDLG_DATABAR:
+            case SID_UNITSCONVERSION_DIALOG:
 
             pScMod->InputEnterHandler();
             pTabViewShell->UpdateInputHandler();
@@ -1908,6 +1910,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_ADD_NAME:
             {
                 sal_uInt16          nId  = ScNameDefDlgWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
+            }
+            break;
+
+        case SID_UNITSCONVERSION_DIALOG:
+            {
+                sal_uInt16 nId  = ScUnitsConversionDialogWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 

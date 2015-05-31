@@ -73,6 +73,13 @@ private:
     ScRandomNumberGeneratorDialogWrapper() = delete;
 };
 
+class ScUnitsConversionDialogWrapper :
+    public ChildWindowWrapper<SID_UNITSCONVERSION_DIALOG>
+{
+private:
+    ScUnitsConversionDialogWrapper() SAL_DELETED_FUNCTION;
+};
+
 class ScAnalysisOfVarianceDialogWrapper :
     public ChildWindowWrapper<SID_ANALYSIS_OF_VARIANCE_DIALOG>
 {

@@ -88,6 +88,7 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScValidityRefChildWin::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
 
+    GetStaticInterface()->RegisterChildWindow(ScUnitsConversionDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScRandomNumberGeneratorDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScSamplingDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScDescriptiveStatisticsDialogWrapper::GetChildWindowId());

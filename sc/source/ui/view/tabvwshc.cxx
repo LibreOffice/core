@@ -56,6 +56,7 @@
 #include "markdata.hxx"
 #include "reffact.hxx"
 #include "condformatdlg.hxx"
+#include "unitsconversiondlg.hxx"
 #include "xmlsourcedlg.hxx"
 
 #include "RandomNumberGeneratorDialog.hxx"
@@ -321,6 +322,12 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
                                  rViewData.GetCurY(),
                                  rViewData.GetTabNo());
             pResult = VclPtr<ScSolverDlg>::Create( pB, pCW, pParent, rViewData.GetDocument(), aCurPos );
+        }
+        break;
+
+        case SID_UNITSCONVERSION_DIALOG:
+        {
+            pResult = VclPtr<ScUnitsConversionDialog>::Create( pB, pCW, pParent, &GetViewData() );
         }
         break;
 

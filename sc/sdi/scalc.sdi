@@ -3279,6 +3279,30 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem ConvertUnits SID_UNITSCONVERSION_DIALOG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DATA;
+]
+
 SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG
 (SfxBoolItem Visible SID_SEARCH_RESULTS_DIALOG)
 [
