@@ -4085,7 +4085,7 @@ void SwHTMLParser::EndHeading()
 
     // Kontext zu dem Token suchen und vom Stack holen
     _HTMLAttrContext *pCntxt = 0;
-    sal_uInt16 nPos = aContexts.size();
+    auto nPos = aContexts.size();
     while( !pCntxt && nPos>nContextStMin )
     {
         switch( aContexts[--nPos]->GetToken() )
@@ -4283,7 +4283,7 @@ void SwHTMLParser::NewDefList()
     nDefListDeep++;
 
     bool bInDD = false, bNotInDD = false;
-    sal_uInt16 nPos = aContexts.size();
+    auto nPos = aContexts.size();
     while( !bInDD && !bNotInDD && nPos>nContextStMin )
     {
         sal_uInt16 nCntxtToken = aContexts[--nPos]->GetToken();
@@ -4377,7 +4377,7 @@ void SwHTMLParser::NewDefListItem( int nToken )
 {
     // festellen, ob das DD/DT in einer DL vorkommt
     bool bInDefList = false, bNotInDefList = false;
-    sal_uInt16 nPos = aContexts.size();
+    auto nPos = aContexts.size();
     while( !bInDefList && !bNotInDefList && nPos>nContextStMin )
     {
         sal_uInt16 nCntxtToken = aContexts[--nPos]->GetToken();
@@ -4418,7 +4418,7 @@ void SwHTMLParser::EndDefListItem( int nToken, bool bSetColl,
     // Kontext zu dem Token suchen und vom Stack holen
     nToken &= ~1;
     _HTMLAttrContext *pCntxt = 0;
-    sal_uInt16 nPos = aContexts.size();
+    auto nPos = aContexts.size();
     while( !pCntxt && nPos>nContextStMin )
     {
         sal_uInt16 nCntxtToken = aContexts[--nPos]->GetToken();
@@ -4547,9 +4547,8 @@ void SwHTMLParser::SetTextCollAttrs( _HTMLAttrContext *pContext )
 
     sal_uInt16 nLeftMargin = 0, nRightMargin = 0;   // die Einzuege und
     short nFirstLineIndent = 0;                 // Abstaende
-    sal_uInt16 i;
 
-    for( i = nContextStAttrMin; i < aContexts.size(); i++ )
+    for( auto i = nContextStAttrMin; i < aContexts.size(); ++i )
     {
         const _HTMLAttrContext *pCntxt = aContexts[i];
 
@@ -4716,8 +4715,8 @@ void SwHTMLParser::SetTextCollAttrs( _HTMLAttrContext *pContext )
     // bisherige harte Attributierung des Absatzes entfernen
     if( !aParaAttrs.empty() )
     {
-        for( i=0; i<aParaAttrs.size(); i++ )
-            aParaAttrs[i]->Invalidate();
+        for( auto pParaAttr : aParaAttrs )
+            pParaAttr->Invalidate();
 
         aParaAttrs.clear();
     }

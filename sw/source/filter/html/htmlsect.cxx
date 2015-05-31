@@ -389,7 +389,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
     // Stack-Eintrag zu dem Token suchen (weil wir noch den Div-Stack
     // haben unterscheiden wir erst einmal nicht zwischen DIV und CENTER
     _HTMLAttrContext *pCntxt = 0;
-    sal_uInt16 nPos = aContexts.size();
+    auto nPos = aContexts.size();
     while( !pCntxt && nPos>nContextStMin )
     {
         switch( aContexts[--nPos]->GetToken() )
@@ -524,7 +524,7 @@ bool SwHTMLParser::EndSection( bool bLFStripped )
 bool SwHTMLParser::EndSections( bool bLFStripped )
 {
     bool bSectionClosed = false;
-    sal_uInt16 nPos = aContexts.size();
+    auto nPos = aContexts.size();
     while( nPos>nContextStMin )
     {
         _HTMLAttrContext *pCntxt = aContexts[--nPos];
@@ -589,7 +589,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     //.is the multicol elememt contained in a container? That may be the
     // case for 5.0 documents.
     bool bInCntnr = false;
-    sal_uInt16 i = aContexts.size();
+    auto i = aContexts.size();
     while( !bInCntnr && i > nContextStMin )
         bInCntnr = 0 != aContexts[--i]->GetFrmItemSet();
 

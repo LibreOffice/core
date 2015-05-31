@@ -160,7 +160,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            SfxItemSet& rFrmItemSet )
 {
     const SfxItemSet *pCntnrItemSet = 0;
-    sal_uInt16 i = aContexts.size();
+    auto i = aContexts.size();
     while( !pCntnrItemSet && i > nContextStMin )
         pCntnrItemSet = aContexts[--i]->GetFrmItemSet();
 

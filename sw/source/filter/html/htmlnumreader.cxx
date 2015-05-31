@@ -559,7 +559,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, bool bSetColl,
 
     // Kontext zu dem Token suchen und vom Stack holen
     _HTMLAttrContext *pCntxt = 0;
-    sal_uInt16 nPos = aContexts.size();
+    auto nPos = aContexts.size();
     nToken &= ~1;
     while( !pCntxt && nPos>nContextStMin )
     {

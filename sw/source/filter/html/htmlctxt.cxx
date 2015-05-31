@@ -47,10 +47,10 @@ class _HTMLAttrContext_SaveDoc
                                     // wenn Attributierung nicht
                                     // beibehalten werden soll.
 
-    sal_uInt16 nContextStMin;           // In Umgebung gueltige Stack-
+    size_t nContextStMin;           // In Umgebung gueltige Stack-
                                     // Untergrenze, wenn der Stack
                                     // geschuetzt werden soll.
-    sal_uInt16 nContextStAttrMin;       // In Umgebung gueltige Stack-
+    size_t nContextStAttrMin;       // In Umgebung gueltige Stack-
                                     // Untergrenze, wenn die Attribute
                                     // nicht beibehalten werden sollen.
 
@@ -63,7 +63,7 @@ public:
 
     _HTMLAttrContext_SaveDoc() :
         pPos( 0 ), pAttrTab( 0 ),
-        nContextStMin( USHRT_MAX ), nContextStAttrMin( USHRT_MAX ),
+        nContextStMin( SIZE_MAX ), nContextStAttrMin( SIZE_MAX ),
         bStripTrailingPara( false ), bKeepNumRules( false ),
         bFixHeaderDist( false ), bFixFooterDist( false )
     {}
@@ -80,11 +80,11 @@ public:
 
     _HTMLAttrTable *GetAttrTab( bool bCreate= false );
 
-    void SetContextStMin( sal_uInt16 nMin ) { nContextStMin = nMin; }
-    sal_uInt16 GetContextStMin() const { return nContextStMin; }
+    void SetContextStMin( size_t nMin ) { nContextStMin = nMin; }
+    size_t GetContextStMin() const { return nContextStMin; }
 
-    void SetContextStAttrMin( sal_uInt16 nMin ) { nContextStAttrMin = nMin; }
-    sal_uInt16 GetContextStAttrMin() const { return nContextStAttrMin; }
+    void SetContextStAttrMin( size_t nMin ) { nContextStAttrMin = nMin; }
+    size_t GetContextStAttrMin() const { return nContextStAttrMin; }
 
     void SetStripTrailingPara( bool bSet ) { bStripTrailingPara = bSet; }
     bool GetStripTrailingPara() const { return bStripTrailingPara; }
@@ -309,10 +309,10 @@ void SwHTMLParser::RestoreDocContext( _HTMLAttrContext *pCntxt )
         SetAttr();
     }
 
-    if( USHRT_MAX != pSave->GetContextStMin() )
+    if( SIZE_MAX != pSave->GetContextStMin() )
     {
         nContextStMin = pSave->GetContextStMin();
-        if( USHRT_MAX != pSave->GetContextStAttrMin() )
+        if( SIZE_MAX != pSave->GetContextStAttrMin() )
             nContextStAttrMin = pSave->GetContextStAttrMin();
     }
 

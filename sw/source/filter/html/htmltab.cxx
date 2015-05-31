@@ -108,8 +108,8 @@ class _HTMLTableContext
     SwFrameFormat *pFrameFormat;              // der Fly frame::Frame, containing the table
     SwPosition *pPos;               // position behind the table
 
-    sal_uInt16 nContextStAttrMin;
-    sal_uInt16 nContextStMin;
+    size_t nContextStAttrMin;
+    size_t nContextStMin;
 
     bool    bRestartPRE : 1;
     bool    bRestartXMP : 1;
@@ -119,8 +119,8 @@ public:
 
     _HTMLAttrTable aAttrTab;        // attributes
 
-    _HTMLTableContext( SwPosition *pPs, sal_uInt16 nCntxtStMin,
-                       sal_uInt16 nCntxtStAttrMin ) :
+    _HTMLTableContext( SwPosition *pPs, size_t nCntxtStMin,
+                       size_t nCntxtStAttrMin ) :
         pTableNd( 0 ),
         pFrameFormat( 0 ),
         pPos( pPs ),
@@ -149,8 +149,8 @@ public:
     void SetFrameFormat( SwFrameFormat *pFormat ) { pFrameFormat = pFormat; }
     SwFrameFormat *GetFrameFormat() const { return pFrameFormat; }
 
-    sal_uInt16 GetContextStMin() const { return nContextStMin; }
-    sal_uInt16 GetContextStAttrMin() const { return nContextStAttrMin; }
+    size_t GetContextStMin() const { return nContextStMin; }
+    size_t GetContextStAttrMin() const { return nContextStAttrMin; }
 };
 
 // Cell content is a linked list with SwStartNodes and
@@ -2985,7 +2985,9 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 class _SectionSaveStruct : public SwPendingStackData
 {
     sal_uInt16 nBaseFontStMinSave, nFontStMinSave, nFontStHeadStartSave;
-    sal_uInt16 nDefListDeepSave, nContextStMinSave, nContextStAttrMinSave;
+    sal_uInt16 nDefListDeepSave;
+    size_t nContextStMinSave;
+    size_t nContextStAttrMinSave;
 
 public:
 
@@ -2995,7 +2997,7 @@ public:
     virtual ~_SectionSaveStruct();
 
 #if OSL_DEBUG_LEVEL > 0
-    sal_uInt16 GetContextStAttrMin() const { return nContextStAttrMinSave; }
+    size_t GetContextStAttrMin() const { return nContextStAttrMinSave; }
 #endif
     void Restore( SwHTMLParser& rParser );
 };
@@ -3303,7 +3305,7 @@ void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
     {
         _HTMLAttr** pTable = reinterpret_cast<_HTMLAttr**>(&rParser.aAttrTab);
 
-        for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
+        for( auto nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
             nCnt--; ++pTable )
         {
             OSL_ENSURE( !*pTable, "Die Attribut-Tabelle ist nicht leer" );
@@ -4096,7 +4098,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         // Alle noch offenen Kontexte beenden. Wir nehmen hier
         // AttrMin, weil nContxtStMin evtl. veraendert wurde.
         // Da es durch EndContext wieder restauriert wird, geht das.
-        while( (sal_uInt16)aContexts.size() > nContextStAttrMin+1 )
+        while( aContexts.size() > nContextStAttrMin+1 )
         {
             _HTMLAttrContext *pCntxt = PopContext();
             EndContext( pCntxt );
@@ -4915,7 +4917,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     }
 
     // Alle noch offenen Kontexte beenden
-    while( (sal_uInt16)aContexts.size() > nContextStAttrMin+1 )
+    while( aContexts.size() > nContextStAttrMin+1 )
     {
         _HTMLAttrContext *pCntxt = PopContext();
         EndContext( pCntxt );
