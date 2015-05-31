@@ -2192,7 +2192,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
                 // keep original cursor and make copy of it that gets handed
                 // over to the SwXCellRange object which takes ownership and
                 // thus will destroy the copy later.
-                SwXCellRange aRange( dynamic_cast<SwUnoTableCrsr*>(pTableCrsr.get())->Clone(), *pTableFormat, aDesc );
+                SwXCellRange aRange( dynamic_cast<SwUnoTableCrsr&>(*pTableCrsr.get()).Clone(), *pTableFormat, aDesc );
                 aRange.GetDataSequence( 0, &aRes, 0 );
             }
         }
@@ -2221,7 +2221,7 @@ uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
                 // keep original cursor and make copy of it that gets handed
                 // over to the SwXCellRange object which takes ownership and
                 // thus will destroy the copy later.
-                SwXCellRange aRange( dynamic_cast<SwUnoTableCrsr*>(pTableCrsr.get())->Clone(), *pTableFormat, aDesc );
+                SwXCellRange aRange( dynamic_cast<SwUnoTableCrsr&>(*pTableCrsr.get()).Clone(), *pTableFormat, aDesc );
 
                 // get numerical values and make an effort to return the
                 // numerical value for text formatted cells
