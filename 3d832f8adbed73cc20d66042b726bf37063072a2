@@ -22,6 +22,52 @@
       "revId": "3d832f8adbed73cc20d66042b726bf37063072a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_ab9e6a05",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-31T09:39:17Z",
+      "side": 1,
+      "message": "this should be \"/\u003e",
+      "range": {
+        "startLine": 186,
+        "startChar": 65,
+        "endLine": 186,
+        "endChar": 67
+      },
+      "revId": "3d832f8adbed73cc20d66042b726bf37063072a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_cba3a64e",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-31T09:39:17Z",
+      "side": 1,
+      "message": "same thing here",
+      "range": {
+        "startLine": 191,
+        "startChar": 68,
+        "endLine": 191,
+        "endChar": 70
+      },
+      "revId": "3d832f8adbed73cc20d66042b726bf37063072a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
