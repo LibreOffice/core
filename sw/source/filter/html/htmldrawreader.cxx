@@ -309,8 +309,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 }
                 else
                 {
-                    sal_uInt32 nLoop = rOption.GetSNumber();
-                    nCount = (sal_uInt16)(nLoop>0 ? nLoop : 0 );
+                    const sal_Int32 nLoop = rOption.GetSNumber();
+                    nCount = static_cast<sal_uInt16>(nLoop>0 ? nLoop : 0);
                 }
                 break;
 
