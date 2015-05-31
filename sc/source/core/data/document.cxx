@@ -2742,7 +2742,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         pDestRanges = &aLocalRangeList;
     }
 
-    bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
+    bInsertingFromOtherDoc = true;  // No Broadcast/Listener created at Insert
 
     sc::ColumnSpanSet aBroadcastSpans(false);
 
