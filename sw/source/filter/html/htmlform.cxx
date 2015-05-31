@@ -762,9 +762,8 @@ static void lcl_html_setEvents(
 {
     // Erstmal muss die Anzahl der Events ermittelt werden ...
     sal_Int32 nEvents = 0;
-    sal_uInt16 i;
 
-    for( i = 0; HTML_ET_END != aEventTypeTable[i]; i++ )
+    for( int i = 0; HTML_ET_END != aEventTypeTable[i]; ++i )
     {
         const SvxMacro *pMacro = rMacroTable.Get( aEventTypeTable[i] );
         // Solange nicht alle Events implementiert sind, enthaelt die
@@ -772,9 +771,8 @@ static void lcl_html_setEvents(
         if( pMacro && aEventListenerTable[i] )
             nEvents++;
     }
-    for( i=0; i< rUnoMacroTable.size(); i++ )
+    for( const auto &rStr : rUnoMacroTable )
     {
-        const OUString& rStr(rUnoMacroTable[i]);
         sal_Int32 nIndex = 0;
         if( rStr.getToken( 0, '-', nIndex ).isEmpty() || -1 == nIndex )
             continue;
@@ -791,7 +789,7 @@ static void lcl_html_setEvents(
     script::ScriptEventDescriptor* pDescs = aDescs.getArray();
     sal_Int32 nEvent = 0;
 
-    for( i=0; HTML_ET_END != aEventTypeTable[i]; i++ )
+    for( int i=0; HTML_ET_END != aEventTypeTable[i]; ++i )
     {
         const SvxMacro *pMacro = rMacroTable.Get( aEventTypeTable[i] );
         if( pMacro && aEventListenerTable[i] )
@@ -805,9 +803,8 @@ static void lcl_html_setEvents(
         }
     }
 
-    for( i=0; i< rUnoMacroTable.size(); ++i )
+    for( const auto &rStr : rUnoMacroTable )
     {
-        const OUString& rStr = rUnoMacroTable[i];
         sal_Int32 nIndex = 0;
         OUString sListener( rStr.getToken( 0, '-', nIndex ) );
         if( sListener.isEmpty() || -1 == nIndex )
@@ -884,8 +881,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
     if( !bHidden )
     {
         Any aTmp;
-        sal_uInt16 nLeftSpace = 0, nRightSpace = 0,
-                      nUpperSpace = 0, nLowerSpace = 0;
+        sal_Int32 nLeftSpace = 0;
+        sal_Int32 nRightSpace = 0;
+        sal_Int32 nUpperSpace = 0;
+        sal_Int32 nLowerSpace = 0;
 
         const uno::Reference< XMultiServiceFactory > & rServiceFactory =
             pFormImpl->GetServiceFactory();
@@ -919,12 +918,12 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             aLRItem.SetTextFirstLineOfst( 0 );
             if( rCSS1PropInfo.bLeftMargin )
             {
-                nLeftSpace = static_cast< sal_uInt16 >(convertTwipToMm100( aLRItem.GetLeft() ));
+                nLeftSpace = convertTwipToMm100( aLRItem.GetLeft() );
                 rCSS1PropInfo.bLeftMargin = false;
             }
             if( rCSS1PropInfo.bRightMargin )
             {
-                nRightSpace = static_cast< sal_uInt16 >(convertTwipToMm100( aLRItem.GetRight() ));
+                nRightSpace = convertTwipToMm100( aLRItem.GetRight() );
                 rCSS1PropInfo.bRightMargin = false;
             }
             rCSS1ItemSet.ClearItem( RES_LR_SPACE );
@@ -932,10 +931,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         if( nLeftSpace || nRightSpace )
         {
             Any aAny2;
-            aAny2 <<= (sal_Int32)nLeftSpace;
+            aAny2 <<= nLeftSpace;
             xShapePropSet->setPropertyValue("LeftMargin", aAny2 );
 
-            aAny2 <<= (sal_Int32)nRightSpace;
+            aAny2 <<= nRightSpace;
             xShapePropSet->setPropertyValue("RightMargin", aAny2 );
         }
 
@@ -961,10 +960,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         if( nUpperSpace || nLowerSpace )
         {
             uno::Any aAny2;
-            aAny2 <<= (sal_Int32)nUpperSpace;
+            aAny2 <<= nUpperSpace;
             xShapePropSet->setPropertyValue("TopMargin", aAny2 );
 
-            aAny2 <<= (sal_Int32)nLowerSpace;
+            aAny2 <<= nLowerSpace;
             xShapePropSet->setPropertyValue("BottomMargin", aAny2 );
         }
 
