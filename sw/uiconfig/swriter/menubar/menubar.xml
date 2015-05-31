@@ -140,7 +140,7 @@
       <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
       <menu:menuitem menu:id=".uno:ControlCodes"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
-      <menu:menuitem menu:id=".uno:Graphic"/>
+      <menu:menuitem menu:id=".uno:ShowGraphics"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:Gallery"/>
