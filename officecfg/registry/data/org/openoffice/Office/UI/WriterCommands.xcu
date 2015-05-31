@@ -90,6 +90,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Endnote</value>
         </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Endnote</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -109,7 +112,7 @@
       </node>
       <node oor:name=".uno:InsertMultiIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Indexes and Tables...</value>
+          <value xml:lang="en-US">Tables of Contents and ~Indexes...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -146,7 +149,7 @@
       </node>
       <node oor:name=".uno:UpdateAllIndexes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~All Indexes and Tables</value>
+          <value xml:lang="en-US">Indexes and ~Tables</value>
         </prop>
       </node>
       <node oor:name=".uno:UpdateCurIndex" oor:op="replace">
@@ -228,7 +231,7 @@
       </node>
       <node oor:name=".uno:GotoPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">To Page</value>
+          <value xml:lang="en-US">Got~o Page</value>
         </prop>
       </node>
       <node oor:name=".uno:CommentChangeTracking" oor:op="replace">
@@ -269,7 +272,7 @@
       </node>
       <node oor:name=".uno:UpdateCharts" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">All ~Charts</value>
+          <value xml:lang="en-US">~Charts</value>
         </prop>
       </node>
       <node oor:name=".uno:EditHyperlink" oor:op="replace">
@@ -336,7 +339,7 @@
       </node>
       <node oor:name=".uno:InsertFootnoteDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Footnote/Endnote~...</value>
+          <value xml:lang="en-US">Footnote and Endnote~...</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertReferenceField" oor:op="replace">
@@ -369,6 +372,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Page Break</value>
         </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Pa~ge Break</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -391,7 +397,10 @@
       </node>
       <node oor:name=".uno:InsertFrameInteract" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Frame Manually</value>
+          <value xml:lang="en-US">Insert Frame</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Frame</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -399,7 +408,7 @@
       </node>
       <node oor:name=".uno:InsertFrame" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fra~me...</value>
+          <value xml:lang="en-US">F~rame...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -580,6 +589,9 @@
       <node oor:name=".uno:InsertFootnote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Footnote</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Footnote</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -920,7 +932,7 @@
           <value xml:lang="en-US">Frame Properties</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Fra~me/Object...</value>
+          <value xml:lang="en-US">Fra~me and OLE-Object...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -947,7 +959,7 @@
       </node>
       <node oor:name=".uno:FootnoteDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Footnotes/Endnotes...</value>
+          <value xml:lang="en-US">~Footnotes and Endnotes...</value>
         </prop>
       </node>
       <node oor:name=".uno:ResetAttributes" oor:op="replace">
@@ -1102,7 +1114,7 @@
       </node>
       <node oor:name=".uno:HeadingRowsRepeat" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Heading rows repeat</value>
+          <value xml:lang="en-US">Repeat heading rows</value>
         </prop>
       </node>
       <node oor:name=".uno:TableSort" oor:op="replace">
@@ -2330,7 +2342,7 @@
       </node>
       <node oor:name=".uno:TableAutoFitMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">A~utofit</value>
+          <value xml:lang="en-US">Si~ze</value>
         </prop>
       </node>
       <node oor:name=".uno:TableConvertMenu" oor:op="replace">
@@ -2345,7 +2357,7 @@
       </node>
       <node oor:name=".uno:IndexesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Inde~xes and Tables</value>
+          <value xml:lang="en-US">Table of Contents and Inde~xes</value>
         </prop>
       </node>
       <node oor:name=".uno:WordCountDialog" oor:op="replace">
@@ -2442,6 +2454,86 @@
       <node oor:name=".uno:NavigateForward" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Forward</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Horizontal Line&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Horizontal ~Line</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Default</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Title</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Subtitle</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~1</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~2</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~3</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~4</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~5</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~6</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
