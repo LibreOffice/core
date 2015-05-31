@@ -5931,10 +5931,10 @@ void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const S
 
     for (size_t i = 0; pData[i].nLength != -200; ++i)
     {
-        ScDataBarInfo* pInfo = pDatabar->GetDataBarInfo(ScAddress(nCol, i, 0));
-        CPPUNIT_ASSERT(pInfo);
-        ASSERT_DOUBLES_EQUAL(pData[i].nLength, pInfo->mnLength);
-        ASSERT_DOUBLES_EQUAL(nZeroPos, pInfo->mnZero);
+        std::unique_ptr<ScDataBarInfo> xInfo(pDatabar->GetDataBarInfo(ScAddress(nCol, i, 0)));
+        CPPUNIT_ASSERT(xInfo.get());
+        ASSERT_DOUBLES_EQUAL(pData[i].nLength, xInfo->mnLength);
+        ASSERT_DOUBLES_EQUAL(nZeroPos, xInfo->mnZero);
     }
     delete pFormat;
 }
