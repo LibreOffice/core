@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_8bffee33",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 6593,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-31T09:28:18Z",
+      "side": 1,
+      "message": "This needs fixing",
+      "range": {
+        "startLine": 6593,
+        "startChar": 92,
+        "endLine": 6593,
+        "endChar": 103
+      },
+      "revId": "3d832f8adbed73cc20d66042b726bf37063072a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
