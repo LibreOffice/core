@@ -123,7 +123,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rFormat,
                                    sal_uInt16 nRefPoolId, bool bExtRef,
                                    bool bPseudo=true );
 static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
-                                  SwDoc *pDoc, sal_uInt16 nNotes, bool bEndNote );
+                                  SwDoc *pDoc, bool bHasNotes, bool bEndNote );
 static void OutCSS1_SwFormatDropAttrs( SwHTMLWriter& rHWrt,
                                     const SwFormatDrop& rDrop,
                                      const SfxItemSet *pCharFormatItemSet=0 );
@@ -622,17 +622,26 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
             OutCSS1_SwFormat( *this, *pCFormat, &pDoc->getIDocumentStylePoolAccess(), pTemplate );
     }
 
+    bool bHasEndNotes {false};
+    bool bHasFootNotes {false};
     const SwFootnoteIdxs& rIdxs = pDoc->GetFootnoteIdxs();
-    sal_uInt16 nEnd = 0, nFootnote = 0;
     for( auto pIdx : rIdxs )
     {
         if( pIdx->GetFootnote().IsEndNote() )
-            nEnd++;
+        {
+            bHasEndNotes = true;
+            if (bHasFootNotes)
+                break;
+        }
         else
-            nFootnote++;
+        {
+            bHasFootNotes = true;
+            if (bHasEndNotes)
+                break;
+        }
     }
-    OutCSS1_SwFootnoteInfo( *this, pDoc->GetFootnoteInfo(), pDoc, nFootnote, false );
-    OutCSS1_SwFootnoteInfo( *this, pDoc->GetEndNoteInfo(), pDoc, nEnd, true );
+    OutCSS1_SwFootnoteInfo( *this, pDoc->GetFootnoteInfo(), pDoc, bHasFootNotes, false );
+    OutCSS1_SwFootnoteInfo( *this, pDoc->GetEndNoteInfo(), pDoc, bHasEndNotes, true );
 
     if( !bFirstCSS1Rule )
     {
@@ -1775,13 +1784,13 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
 }
 
 static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
-                                  SwDoc *pDoc, sal_uInt16 nNotes, bool bEndNote )
+                                  SwDoc *pDoc, bool bHasNotes, bool bEndNote )
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     OUString aSelector;
 
-    if( nNotes > 0 )
+    if( bHasNotes )
     {
         aSelector = OOO_STRING_SVTOOLS_HTML_anchor "." +
                     ( bEndNote ? OUString(OOO_STRING_SVTOOLS_HTML_sdendnote_anc)
@@ -1804,7 +1813,7 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         // exported, so that Netscape displays the document correctly.
         // Otherwise it is sufficient, to export the differences to the
         // footnote and endnote template.
-        if( nNotes == 0 && rHTMLWrt.pTemplate )
+        if( !bHasNotes && rHTMLWrt.pTemplate )
         {
             SwFormat *pRefFormat = rHTMLWrt.pTemplate->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                         static_cast< sal_uInt16 >(bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE) );
