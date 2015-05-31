@@ -2579,6 +2579,11 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:EditStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Edit Style...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleNewByExample" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">New Style from Selection</value>
@@ -3092,6 +3097,22 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertFrameMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Frame</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertFootnotesMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Footnote and En~dnote</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:FormatImageMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Image</value>
@@ -3102,7 +3123,7 @@
       </node>
       <node oor:name=".uno:FormatTextMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Te~xt</value>
+          <value xml:lang="en-US">~Text</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3111,6 +3132,30 @@
       <node oor:name=".uno:FormatSpacingMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Spacing</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormatBulletsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Lis~ts</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormatStylesMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">St~yles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormatFrameMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Frame and OLE-Ob~ject</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5447,7 +5492,7 @@
       </node>
       <node oor:name=".uno:ObjectAlign" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Alignmen~t</value>
+          <value xml:lang="en-US">Ali~gn</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
