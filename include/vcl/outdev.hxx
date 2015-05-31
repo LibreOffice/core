@@ -613,6 +613,8 @@ protected:
 
     SAL_DLLPRIVATE void         drawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 
+    SAL_DLLPRIVATE void         assert_if_double_buffered_window() const;
+
 private:
 
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);

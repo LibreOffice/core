@@ -29,7 +29,7 @@
 
 void OutputDevice::DrawRect( const Rectangle& rRect )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRectAction( rRect ) );
@@ -68,7 +68,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
 void OutputDevice::DrawRect( const Rectangle& rRect,
                              sal_uLong nHorzRound, sal_uLong nVertRound )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRoundRectAction( rRect, nHorzRound, nVertRound ) );
@@ -128,7 +128,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
 
 void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt32 nLen, Color aStart, Color aEnd)
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     const sal_uInt32 nMaxX(rPos.X() + rSize.Width());
     const sal_uInt32 nMaxY(rPos.Y() + rSize.Height());
@@ -154,7 +154,7 @@ void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt3
 
 void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
     aDstRect.Intersection( rRect );

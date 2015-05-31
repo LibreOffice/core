@@ -941,7 +941,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
                                  FontUnderline eOverline,
                                  bool bUnderlineAbove )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLineAction( rPos, nWidth, eStrikeout, eUnderline, eOverline ) );
@@ -985,7 +985,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
 
 void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;

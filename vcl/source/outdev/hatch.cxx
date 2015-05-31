@@ -44,7 +44,7 @@ extern "C" int SAL_CALL HatchCmpFnc( const void* p1, const void* p2 )
 
 void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     Hatch aHatch( rHatch );
 
@@ -139,7 +139,7 @@ void OutputDevice::AddHatchActions( const tools::PolyPolygon& rPolyPoly, const H
 
 void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if(rPolyPoly.Count())
     {
@@ -322,7 +322,7 @@ void OutputDevice::CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt
 void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, bool bMtf )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     double  fX, fY;
     long    nAdd, nPCounter = 0;

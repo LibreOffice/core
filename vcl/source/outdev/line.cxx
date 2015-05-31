@@ -35,7 +35,7 @@
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( rLineInfo.IsDefault() )
     {
@@ -89,7 +89,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt ) );
