@@ -470,9 +470,12 @@ struct SwXParagraphEnumerationImpl SAL_FINAL : public SwXParagraphEnumeration
     }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return OUString("SwXParagraphEnumeration"); }
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return cppu::supportsService(this, rServiceName); };
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return {"com.sun.star.text.ParagraphEnumeration"}; };
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -492,24 +495,6 @@ SwXParagraphEnumeration* SwXParagraphEnumeration::Create(
     SwTable const*const pTable)
 {
     return new SwXParagraphEnumerationImpl(xParent, pCursor, eType, pStartNode, pTable);
-}
-
-OUString SAL_CALL
-SwXParagraphEnumerationImpl::getImplementationName() throw (uno::RuntimeException, std::exception)
-{
-    return OUString("SwXParagraphEnumeration");
-}
-
-sal_Bool SAL_CALL
-SwXParagraphEnumerationImpl::supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-uno::Sequence< OUString > SAL_CALL
-SwXParagraphEnumerationImpl::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
-{
-    return {"com.sun.star.text.ParagraphEnumeration"};
 }
 
 sal_Bool SAL_CALL
@@ -1473,13 +1458,18 @@ struct SwXTextRangesImpl SAL_FINAL : public SwXTextRanges
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return OUString("SwXTextRanges"); };
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return cppu::supportsService(this, rServiceName); };
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return { "com.sun.star.text.TextRanges" }; };
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return cppu::UnoType<text::XTextRange>::get(); };
+    virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return getCount() > 0; };
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1546,23 +1536,6 @@ SwXTextRangesImpl::getSomething(const uno::Sequence< sal_Int8 >& rId)
  * Up to the first access to a text position, only a SwCursor is stored.
  * Afterwards, an array with uno::Reference<XTextPosition> will be created.
  */
-OUString SAL_CALL SwXTextRangesImpl::getImplementationName()
-    throw (uno::RuntimeException, std::exception)
-{
-    return OUString("SwXTextRanges");
-}
-
-sal_Bool SAL_CALL SwXTextRangesImpl::supportsService(const OUString& rServiceName)
-    throw (uno::RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-uno::Sequence< OUString > SAL_CALL SwXTextRangesImpl::getSupportedServiceNames()
-    throw (uno::RuntimeException, std::exception)
-{
-    return { "com.sun.star.text.TextRanges" };
-}
 
 sal_Int32 SAL_CALL SwXTextRangesImpl::getCount()
     throw (uno::RuntimeException, std::exception)
@@ -1579,16 +1552,6 @@ uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex) throw (lang::I
     uno::Any ret;
     ret <<= (m_Ranges.at(nIndex));
     return ret;
-}
-
-uno::Type SAL_CALL
-SwXTextRangesImpl::getElementType() throw (uno::RuntimeException, std::exception)
-    { return cppu::UnoType<text::XTextRange>::get(); }
-
-sal_Bool SAL_CALL SwXTextRangesImpl::hasElements() throw (uno::RuntimeException, std::exception)
-{
-    // no mutex necessary: getCount() does locking
-    return getCount() > 0;
 }
 
 void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
