@@ -57,7 +57,7 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
 
 void OutputDevice::DrawPixel( const Point& rPt )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPointAction( rPt ) );
@@ -87,7 +87,7 @@ void OutputDevice::DrawPixel( const Point& rPt )
 
 void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     Color aColor = ImplDrawModeToColor( rColor );
 
@@ -116,7 +116,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 
 void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( !pColors )
     {
@@ -163,7 +163,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
 
 void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if( rColor != COL_TRANSPARENT && ! ImplIsRecordLayout() )
     {

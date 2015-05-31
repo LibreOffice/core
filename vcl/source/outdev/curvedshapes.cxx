@@ -25,7 +25,7 @@
 
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaEllipseAction( rRect ) );
@@ -73,7 +73,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
 void OutputDevice::DrawArc( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaArcAction( rRect, rStartPt, rEndPt ) );
@@ -117,7 +117,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
 void OutputDevice::DrawPie( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPieAction( rRect, rStartPt, rEndPt ) );
@@ -168,7 +168,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
 void OutputDevice::DrawChord( const Rectangle& rRect,
                               const Point& rStartPt, const Point& rEndPt )
 {
-    assert(!dynamic_cast<vcl::Window*>(this) || !dynamic_cast<vcl::Window*>(this)->SupportsDoubleBuffering());
+    assert_if_double_buffered_window();
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaChordAction( rRect, rStartPt, rEndPt ) );
