@@ -883,4 +883,10 @@ RangeUnits UnitsImpl::getUnitsForRange(const ScRangeList& rRangeList, ScDocument
     return { aUnitsList, bCompatible };
 }
 
+bool UnitsImpl::isValidUnit(const OUString& rsUnit) {
+    UtUnit aUnit;
+
+    return UtUnit::createUnit(rsUnit, aUnit, mpUnitSystem);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
