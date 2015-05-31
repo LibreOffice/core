@@ -189,7 +189,7 @@ static void SetCharFormatAttrs( SwCharFormat *pCharFormat, SfxItemSet& rItemSet 
     const SfxPoolItem *pItem;
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
                                    RES_CHRATR_CTL_FONTSIZE };
-       for( sal_uInt16 i=0; i<3; i++ )
+       for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
     {
         if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,
                                                    &pItem ) &&
@@ -320,7 +320,7 @@ static void SetTextCollAttrs( SwTextFormatColl *pColl, SfxItemSet& rItemSet,
 
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
                                    RES_CHRATR_CTL_FONTSIZE };
-       for( sal_uInt16 i=0; i<3; i++ )
+       for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
     {
         if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,
                                                    &pItem ) &&
@@ -426,7 +426,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
     {
         static sal_uInt16 aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
                                      RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
-        for( sal_uInt16 i=0; i<4; i++ )
+        for( size_t i=0; i<SAL_N_ELEMENTS(aPoolIds); i++ )
         {
             const SwPageDesc *pPageDesc = GetPageDesc( aPoolIds[i], false );
             if( pPageDesc )
@@ -675,9 +675,9 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
         break;
        }
 
-    for( sal_uInt16 j=0; j < 3; j++ )
+    for( size_t j=0; j < SAL_N_ELEMENTS(aWhichIds); ++j )
     {
-        for( sal_uInt16 i=0; i < 5; i++ )
+        for( size_t i=0; i < SAL_N_ELEMENTS(aWhichIds[0]); ++i )
         {
             sal_uInt16 nWhich = aWhichIds[j][i];
             const SfxPoolItem *pItem;
@@ -1221,14 +1221,14 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( sal_uInt16 nToken2, const OUString& rC
 
 SwTextFormatColl *SwCSS1Parser::GetTextCollFromPool( sal_uInt16 nPoolId ) const
 {
-    sal_uInt16 nOldArrLen = pDoc->GetTextFormatColls()->size();
+    const SwTextFormatColls::size_type nOldArrLen = pDoc->GetTextFormatColls()->size();
 
     SwTextFormatColl *pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nPoolId, false );
 
     if( bIsNewDoc )
     {
-        sal_uInt16 nArrLen = pDoc->GetTextFormatColls()->size();
-        for( sal_uInt16 i=nOldArrLen; i<nArrLen; i++ )
+        const SwTextFormatColls::size_type nArrLen = pDoc->GetTextFormatColls()->size();
+        for( SwTextFormatColls::size_type i=nOldArrLen; i<nArrLen; ++i )
             lcl_swcss1_setEncoding( *(*pDoc->GetTextFormatColls())[i],
                                     GetDfltEncoding() );
     }
@@ -1238,15 +1238,15 @@ SwTextFormatColl *SwCSS1Parser::GetTextCollFromPool( sal_uInt16 nPoolId ) const
 
 SwCharFormat *SwCSS1Parser::GetCharFormatFromPool( sal_uInt16 nPoolId ) const
 {
-    sal_uInt16 nOldArrLen = pDoc->GetCharFormats()->size();
+    const SwCharFormats::size_type nOldArrLen = pDoc->GetCharFormats()->size();
 
     SwCharFormat *pCharFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nPoolId );
 
     if( bIsNewDoc )
     {
-        sal_uInt16 nArrLen = pDoc->GetCharFormats()->size();
+        const SwCharFormats::size_type nArrLen = pDoc->GetCharFormats()->size();
 
-        for( sal_uInt16 i=nOldArrLen; i<nArrLen; i++ )
+        for( SwCharFormats::size_type i=nOldArrLen; i<nArrLen; i++ )
             lcl_swcss1_setEncoding( *(*pDoc->GetCharFormats())[i],
                                     GetDfltEncoding() );
     }
@@ -2133,7 +2133,7 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
 _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit,
                                             bool bRemove )
 {
-    sal_uInt16 nPos = aContexts.size();
+    _HTMLAttrContexts::size_type nPos = aContexts.size();
     if( nPos <= nContextStMin )
         return 0;
 
@@ -2176,7 +2176,7 @@ bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
                                           short& nIndent,
                                           bool bIgnoreTopContext ) const
 {
-    sal_uInt16 nPos = aContexts.size();
+    _HTMLAttrContexts::size_type nPos = aContexts.size();
     if( bIgnoreTopContext )
     {
         if( !nPos )
@@ -2222,7 +2222,7 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
     sal_uInt16 nDfltColl = 0;
     OUString aDfltClass;
 
-    sal_uInt16 nPos = aContexts.size();
+    _HTMLAttrContexts::size_type nPos = aContexts.size();
     while( nPos > nContextStAttrMin )
     {
         const _HTMLAttrContext *pCntxt = aContexts[--nPos];
@@ -2252,10 +2252,8 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
 void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, bool bRemove )
 {
     _HTMLAttrs &rAttrs = pContext->GetAttrs();
-    for( sal_uInt16 i=0; i<rAttrs.size(); i++ )
+    for( auto pAttr : rAttrs )
     {
-        _HTMLAttr *pAttr = rAttrs[i];
-
         if( RES_PARATR_DROP==pAttr->GetItem().Which() )
         {
             // Fuer DropCaps noch die Anzahl der Zeichen anpassen. Wenn
@@ -2311,7 +2309,7 @@ static void lcl_swcss1_setEncoding( SwFormat& rFormat, rtl_TextEncoding eEnc )
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                    RES_CHRATR_CTL_FONT };
     const SfxPoolItem *pItem;
-    for( sal_uInt16 i=0; i<3; i++ )
+    for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
     {
         if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,&pItem ) )
         {
@@ -2336,8 +2334,7 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
             // Set new encoding as pool default
             static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                            RES_CHRATR_CTL_FONT };
-            sal_uInt16 i;
-            for( i=0; i<3; i++ )
+            for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
             {
                 const SvxFontItem& rDfltFont =
                     static_cast<const SvxFontItem&>(pDoc->GetDefault( aWhichIds[i]));
@@ -2350,14 +2347,12 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
             }
 
             // Change all paragraph styles that do specify a font.
-            sal_uInt16 nArrLen = pDoc->GetTextFormatColls()->size();
-            for( i=1; i<nArrLen; i++ )
-                lcl_swcss1_setEncoding( *(*pDoc->GetTextFormatColls())[i], eEnc );
+            for( auto pTextFormatColl : *pDoc->GetTextFormatColls() )
+                lcl_swcss1_setEncoding( *pTextFormatColl, eEnc );
 
             // Change all character styles that do specify a font.
-            nArrLen = pDoc->GetCharFormats()->size();
-            for( i=1; i<nArrLen; i++ )
-                lcl_swcss1_setEncoding( *(*pDoc->GetCharFormats())[i], eEnc );
+            for( auto pCharFormat : *pDoc->GetCharFormats() )
+                lcl_swcss1_setEncoding( *pCharFormat, eEnc );
         }
 
         SvxCSS1Parser::SetDfltEncoding( eEnc );
