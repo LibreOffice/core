@@ -276,7 +276,7 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     {
         nPos = rHTMLWrt.pFootEndNotes ? rHTMLWrt.pFootEndNotes->size() : 0;
         OSL_ENSURE( nPos == static_cast<size_t>(rHTMLWrt.nFootNote + rHTMLWrt.nEndNote),
-                "OutHTML_SwFormatFootnote: Position falsch" );
+                "OutHTML_SwFormatFootnote: wrong position" );
         sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_anc;
         sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote + OUString::number( (sal_Int32)(++rHTMLWrt.nEndNote) );
     }
