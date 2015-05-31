@@ -98,8 +98,26 @@ public:
     bool                mbCalcPix;
 };
 
-ImplSplitItem::ImplSplitItem() :
-    mpSet( NULL )
+ImplSplitItem::ImplSplitItem()
+    : mnSize(0)
+    , mnPixSize(0)
+    , mnLeft(0)
+    , mnTop(0)
+    , mnWidth(0)
+    , mnHeight(0)
+    , mnSplitPos(0)
+    , mnSplitSize(0)
+    , mnOldSplitPos(0)
+    , mnOldSplitSize(0)
+    , mnOldWidth(0)
+    , mnOldHeight(0)
+    , mpSet(0)
+    , mnId(0)
+    , mnBits(SplitWindowItemFlags::NONE)
+    , mbFixed(false)
+    , mbSubSize(false)
+    , mnMinSize(-1)
+    , mnMaxSize(-1)
 {
 }
 
