@@ -31,6 +31,7 @@ interface CellSelection
     SID_DEFINE_COLROWNAMERANGES [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OPENDLG_SOLVE           [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_OPENDLG_OPTSOLVER       [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_UNITSCONVERSION_DIALOG  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OPENDLG_PIVOTTABLE      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_OPENDLG_TABOP           [ ExecMethod = Execute; StateMethod = GetBlockState; ]
     SID_FILTER                  [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]

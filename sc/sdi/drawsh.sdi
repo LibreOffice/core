@@ -27,6 +27,7 @@ interface TableDraw
     SID_DEFINE_COLROWNAMERANGES [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_SOLVE           [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_OPTSOLVER       [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_UNITSCONVERSION_DIALOG  [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_PIVOTTABLE      [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_TABOP           [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_FILTER                  [ StateMethod = StateDisableItems; Export = FALSE; ]

@@ -235,6 +235,7 @@ void ScDLL::Init()
     ScFormulaDlgWrapper         ::RegisterChildWindow(false, pMod);
 
     ScRandomNumberGeneratorDialogWrapper::RegisterChildWindow(false, pMod);
+    ScUnitsConversionDialogWrapper      ::RegisterChildWindow(false, pMod);
     ScSamplingDialogWrapper             ::RegisterChildWindow(false, pMod);
     ScDescriptiveStatisticsDialogWrapper::RegisterChildWindow(false, pMod);
     ScAnalysisOfVarianceDialogWrapper   ::RegisterChildWindow(false, pMod);

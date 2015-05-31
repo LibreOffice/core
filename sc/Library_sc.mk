@@ -487,6 +487,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/miscdlgs/solverutil \
     sc/source/ui/miscdlgs/solvrdlg \
     sc/source/ui/miscdlgs/tabopdlg \
+    sc/source/ui/miscdlgs/unitsconversiondlg \
     sc/source/ui/miscdlgs/warnbox \
     sc/source/ui/namedlg/namedefdlg \
     sc/source/ui/namedlg/namedlg \

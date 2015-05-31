@@ -274,6 +274,7 @@
 #define SID_ZTEST_DIALOG                    (SC_MESSAGE_START + 80)
 #define SID_CHI_SQUARE_TEST_DIALOG          (SC_MESSAGE_START + 81)
 #define SID_SEARCH_RESULTS_DIALOG           (SC_MESSAGE_START + 82)
+#define SID_UNITSCONVERSION_DIALOG          (SC_MESSAGE_START + 83)
 
 // functions
 
