@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_ab82eac6",
+        "filename": "sc/source/ui/src/hdrcont.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-31T06:20:27Z",
+      "side": 1,
+      "message": "i assume this should be \u0027Insert Rows ~Below\u0027",
+      "range": {
+        "startLine": 82,
+        "startChar": 30,
+        "endLine": 82,
+        "endChar": 48
+      },
+      "revId": "cd3001a1125e080f7c9adf939361dcce7613c8b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_cb8726d6",
+        "filename": "sc/source/ui/src/hdrcont.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-31T06:20:27Z",
+      "side": 1,
+      "message": "likely \u0027Insert Columns ~Right\u0027",
+      "range": {
+        "startLine": 157,
+        "startChar": 30,
+        "endLine": 157,
+        "endChar": 51
+      },
+      "revId": "cd3001a1125e080f7c9adf939361dcce7613c8b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
