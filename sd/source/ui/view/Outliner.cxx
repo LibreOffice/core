@@ -903,25 +903,6 @@ void Outliner::RestoreStartPosition()
             SetViewMode (meStartViewMode);
             if (pDrawViewShell.get() != NULL)
                 SetPage (meStartEditMode, mnStartPageIndex);
-
-            if (mpStartEditedObject != NULL)
-            {
-                // Turn on the text toolbar as it is done in FuText so that
-                // undo manager setting/restoring in
-                // sd::View::{Beg,End}TextEdit() works on the same view shell.
-                pViewShell->GetViewShellBase().GetToolBarManager()->SetToolBarShell(
-                    ToolBarManager::TBG_FUNCTION,
-                    RID_DRAW_TEXT_TOOLBOX);
-
-                mpView->SdrBeginTextEdit(mpStartEditedObject);
-                ::Outliner* pOutliner =
-                      static_cast<DrawView*>(mpView)->GetTextEditOutliner();
-                if (pOutliner!=NULL && pOutliner->GetViewCount()>0)
-                {
-                    OutlinerView* pOutlinerView = pOutliner->GetView(0);
-                    pOutlinerView->SetSelection(maStartSelection);
-                }
-            }
         }
         else if (pViewShell->ISA(OutlineViewShell))
         {
