@@ -233,7 +233,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
             {
                 aFormatName = pDlg->GetInputString();
 
-                if ( !aFormatName.isEmpty() && !aFormatName.equals(aStrStandard) )
+                if ( !aFormatName.isEmpty() && !aFormatName.equals(aStrStandard) && pFormat->find(aFormatName) == pFormat->end() )
                 {
                     ScAutoFormatData* pNewData
                         = new ScAutoFormatData( *pSelFmtData );
