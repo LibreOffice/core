@@ -105,3 +105,5 @@ database/linked_text_table.png cmd/sc_dataimport.png
 #cmd/lc_undo.png cmd/he/lc_redo.png
 #cmd/sc_redo.png cmd/he/sc_undo.png
 #cmd/sc_undo.png cmd/he/sc_redo.png
+
+cmd/sc_showgraphics.png cmd/sc_graphic.png

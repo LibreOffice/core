@@ -23,6 +23,6 @@
  <toolbar:toolbaritem xlink:href=".uno:Hyphenate" toolbar:helpid="20605"/>
  <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="20603"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Graphic" toolbar:helpid="20213"/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowGraphics" toolbar:helpid="20213"/>
  <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:helpid="10371"/>
 </toolbar:toolbar>
