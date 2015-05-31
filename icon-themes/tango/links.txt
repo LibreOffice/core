@@ -53,6 +53,7 @@ cmd/lc_zoomplus.png cmd/lc_zoomin.png
 res/lc05303.png cmd/lc_quit.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
 cmd/lc_alignvcenter.png cmd/lc_alignverticalcenter.png
+cmd/sc_alignvcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
 sd/imglst/sc05928.png cmd/sc_autoformat.png
 vcl/source/src/msgbox.png vcl/res/msgbox.png
