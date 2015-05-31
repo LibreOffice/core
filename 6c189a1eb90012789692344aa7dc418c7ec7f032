@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_8e65bce2",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 3158,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-31T22:45:17Z",
+      "side": 1,
+      "message": "OLE-Object must not be hyphenated.",
+      "revId": "6c189a1eb90012789692344aa7dc418c7ec7f032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_2e6288d9",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 5495,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-31T22:45:17Z",
+      "side": 1,
+      "message": "You’re placing the accelerator key in a letter with descender, which is incorrect.",
+      "revId": "6c189a1eb90012789692344aa7dc418c7ec7f032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_4e5fc40e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-31T22:45:17Z",
+      "side": 1,
+      "message": "I hate this name. It’s too long.",
+      "revId": "6c189a1eb90012789692344aa7dc418c7ec7f032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_0ea0ecf3",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-31T22:45:17Z",
+      "side": 1,
+      "message": "The word “Goto” does not exist.",
+      "revId": "6c189a1eb90012789692344aa7dc418c7ec7f032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_aea43808",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-31T22:45:17Z",
+      "side": 1,
+      "message": "You haven’t fixed the accelerator character here. It should be a letter.",
+      "revId": "6c189a1eb90012789692344aa7dc418c7ec7f032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_cea974e1",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-31T22:45:17Z",
+      "side": 1,
+      "message": "Again, don’t put accelerators in letters with descenders.",
+      "revId": "6c189a1eb90012789692344aa7dc418c7ec7f032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_6eaf20e4",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-31T22:45:17Z",
+      "side": 1,
+      "message": "The hyphenation is incorrect.",
+      "revId": "6c189a1eb90012789692344aa7dc418c7ec7f032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_8eacdcee",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-31T22:45:17Z",
+      "side": 1,
+      "message": "Capitalization is wrong.",
+      "revId": "6c189a1eb90012789692344aa7dc418c7ec7f032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
