@@ -34,7 +34,7 @@
 #define SC_CONS_NOTFOUND    -1
 
 // STATIC DATA
-static const OpCode eOpCodeTable[] = {      //  Reihenfolge wie bei enum ScSubTotalFunc
+static const OpCode eOpCodeTable[] = {      //  order as for enum ScSubTotalFunc
         ocBad,                              //  none
         ocAverage,
         ocCount,
@@ -129,14 +129,14 @@ void ScConsData::DeleteData()
     DELETEARR( ppCount, nColCount );
     DELETEARR( ppSum,   nColCount );
     DELETEARR( ppSumSqr,nColCount );
-    DELETEARR( ppUsed,  nColCount );                // erst nach ppRefs !!!
+    DELETEARR( ppUsed,  nColCount );                // only after ppRefs !!!
     DELETEARR( ppTitlePos, nRowCount );
     ::std::vector<OUString>().swap( maColHeaders);
     ::std::vector<OUString>().swap( maRowHeaders);
     ::std::vector<OUString>().swap( maTitles);
     nDataCount = 0;
 
-    if (bColByName) nColCount = 0;                  // sonst stimmt maColHeaders nicht
+    if (bColByName) nColCount = 0;                  // otherwise maColHeaders is wrong
     if (bRowByName) nRowCount = 0;
 
     bCornerUsed = false;
@@ -187,7 +187,7 @@ void ScConsData::InitData()
         }
     }
 
-    //  CornerText: einzelner String
+    //  CornerText: single String
 }
 
 void ScConsData::DoneFields()
@@ -278,7 +278,7 @@ void ScConsData::AddName( const OUString& rName )
 
         for (nArrY=0; nArrY<nRowCount; nArrY++)
         {
-            //  Daten auf gleiche Laenge bringen
+            //  set all data to same length
 
             SCSIZE nMax = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
@@ -295,7 +295,7 @@ void ScConsData::AddName( const OUString& rName )
                 ppRefs[nArrX][nArrY].SetFullSize(nMax);
             }
 
-            //  Positionen eintragen
+            //  store positions
 
             if (ppTitlePos)
                 if (nTitleCount < nDataCount)
@@ -304,8 +304,7 @@ void ScConsData::AddName( const OUString& rName )
     }
 }
 
-                                // rCount < 0 <=> Fehler aufgetreten
-
+// rCount < 0 <=> error
 static void lcl_UpdateArray( ScSubTotalFunc eFunc,
                          double& rCount, double& rSum, double& rSumSqr, double nVal )
 {
@@ -476,7 +475,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     SCCOL nCol;
     SCROW nRow;
 
-    //      Ecke links oben
+    // left top corner
 
     if ( bColByName && bRowByName )
     {
@@ -493,7 +492,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         }
     }
 
-    //      Titel suchen
+    // search title
 
     SCCOL nStartCol = nCol1;
     SCROW nStartRow = nRow1;
@@ -547,7 +546,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     nCol1 = nStartCol;
     nRow1 = nStartRow;
 
-    //      Daten
+    // data
 
     bool bAnyCell = ( eFunction == SUBTOTAL_FUNC_CNT2 );
     for (nCol=nCol1; nCol<=nCol2; nCol++)
@@ -597,7 +596,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     }
 }
 
-//  vorher testen, wieviele Zeilen eingefuegt werden (fuer Undo)
+// check before, how many rows to insert (for Undo)
 
 SCROW ScConsData::GetInsertCount() const
 {
@@ -629,12 +628,12 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
     SCSIZE nArrX;
     SCSIZE nArrY;
 
-    //  Ecke links oben
+    // left top corner
 
     if ( bColByName && bRowByName && !aCornerText.isEmpty() )
         pDestDoc->SetString( nCol, nRow, nTab, aCornerText );
 
-    //  Titel
+    // title
 
     SCCOL nStartCol = nCol;
     SCROW nStartRow = nRow;
@@ -651,9 +650,9 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
     nCol = nStartCol;
     nRow = nStartRow;
 
-    //  Daten
+    // data
 
-    if ( ppCount && ppUsed )                            // Werte direkt einfuegen
+    if ( ppCount && ppUsed )    // insert values directly
     {
         for (nArrX=0; nArrX<nColCount; nArrX++)
             for (nArrY=0; nArrY<nRowCount; nArrY++)
@@ -708,7 +707,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 ScReferenceEntry aRef = rList.GetEntry(nPos);
                                 if (aRef.nTab != SC_CONS_NOTFOUND)
                                 {
-                                    //  Referenz einfuegen (absolut, 3d)
+                                    // insert reference (absolute, 3d)
 
                                     aSRef.SetAddress(ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
 
@@ -722,7 +721,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 }
                             }
 
-                            //  Summe einfuegen (relativ, nicht 3d)
+                            // insert sum (relativ, not 3d)
 
                             ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
                                              sal::static_int_cast<SCROW>(nRow+nArrY+nNeeded), nTab );
@@ -732,7 +731,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                             aCRef.SetRange(aRange, aDest);
 
                             ScTokenArray aArr;
-                            aArr.AddOpCode(eOpCode);            // ausgewaehlte Funktion
+                            aArr.AddOpCode(eOpCode);            // selected function
                             aArr.AddOpCode(ocOpen);
                             aArr.AddDoubleReference(aCRef);
                             aArr.AddOpCode(ocClose);
@@ -742,7 +741,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                         }
                     }
 
-                //  Gliederung einfuegen
+                // insert outline
 
                 ScOutlineArray& rOutArr = pDestDoc->GetOutlineTable( nTab, true )->GetRowArray();
                 SCROW nOutStart = nRow+nArrY;
@@ -754,7 +753,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 pDestDoc->SetDrawPageSize(nTab);
                 pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, false );
 
-                //  Zwischentitel
+                // sub title
 
                 if (ppTitlePos && !maTitles.empty() && !maRowHeaders.empty())
                 {
@@ -765,7 +764,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                         bool bDo = true;
                         if (nPos+1<nDataCount)
                             if (ppTitlePos[nArrY][nPos+1] == nTPos)
-                                bDo = false;                                    // leer
+                                bDo = false;                                    // empty
                         if ( bDo && nTPos < nNeeded )
                         {
                             aString =  maRowHeaders[nArrY];

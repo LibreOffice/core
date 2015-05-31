@@ -1817,42 +1817,42 @@ static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pS
 
 // NextSymbol
 
-// Zerlegt die Formel in einzelne Symbole fuer die weitere
-// Verarbeitung (Turing-Maschine).
+// Parses the formula into separate symbols for further
+// processing (Turing-Machine).
 
-// Ausgangs Zustand = GetChar
+// initial state = GetChar
 
-// Alter Zustand | gelesenes Zeichen | Aktion                | Neuer Zustand
+// old state     | read character    | action                | new state
 //---------------+-------------------+-----------------------+---------------
-// GetChar       | ;()+-*/^=&        | Symbol=Zeichen        | Stop
-//               | <>                | Symbol=Zeichen        | GetBool
-//               | $ Buchstabe       | Symbol=Zeichen        | GetWord
-//               | Ziffer            | Symbol=Zeichen        | GetValue
-//               | "                 | Keine                 | GetString
-//               | Sonst             | Keine                 | GetChar
+// GetChar       | ;()+-*/^=&        | Symbol=char           | Stop
+//               | <>                | Symbol=char           | GetBool
+//               | $ letter          | Symbol=char           | GetWord
+//               | number            | Symbol=char           | GetValue
+//               | "                 | none                  | GetString
+//               | other             | none                  | GetChar
 //---------------+-------------------+-----------------------+---------------
-// GetBool       | =>                | Symbol=Symbol+Zeichen | Stop
-//               | Sonst             | Dec(CharPos)          | Stop
+// GetBool       | =>                | Symbol=Symbol+char    | Stop
+//               | other             | Dec(CharPos)          | Stop
 //---------------+-------------------+-----------------------+---------------
 // GetWord       | SepSymbol         | Dec(CharPos)          | Stop
 //               | ()+-*/^=<>&~      |                       |
-//               | Leerzeichen       | Dec(CharPos)          | Stop
+//               | space             | Dec(CharPos)          | Stop
 //               | $_:.              |                       |
-//               | Buchstabe,Ziffer  | Symbol=Symbol+Zeichen | GetWord
-//               | Sonst             | Fehler                | Stop
+//               | letter, number    | Symbol=Symbol+char    | GetWord
+//               | other             | error                 | Stop
 //---------------+-------------------+-----------------------+---------------
 // GetValue      | ;()*/^=<>&        |                       |
-//               | Leerzeichen       | Dec(CharPos)          | Stop
-//               | Ziffer E+-%,.     | Symbol=Symbol+Zeichen | GetValue
-//               | Sonst             | Fehler                | Stop
+//               | space             | Dec(CharPos)          | Stop
+//               | number E+-%,.     | Symbol=Symbol+char    | GetValue
+//               | other             | error                 | Stop
 //---------------+-------------------+-----------------------+---------------
-// GetString     | "                 | Keine                 | Stop
-//               | Sonst             | Symbol=Symbol+Zeichen | GetString
+// GetString     | "                 | none                  | Stop
+//               | other             | Symbol=Symbol+char    | GetString
 //---------------+-------------------+-----------------------+---------------
 
 sal_Int32 ScCompiler::NextSymbol(bool bInArray)
 {
-    cSymbol[MAXSTRLEN-1] = 0;       // Stopper
+    cSymbol[MAXSTRLEN-1] = 0;       // end
     sal_Unicode* pSym = cSymbol;
     const sal_Unicode* const pStart = aFormula.getStr();
     const sal_Unicode* pSrc = pStart + nSrcPos;
