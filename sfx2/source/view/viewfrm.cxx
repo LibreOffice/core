@@ -3229,8 +3229,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
 
 SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( sal_uInt16 /*nId*/ )
 {
-    SfxWorkWindow* pWork = 0;
-    pWork = GetFrame().GetWorkWindow_Impl();
+    SfxWorkWindow* pWork = GetFrame().GetWorkWindow_Impl();
     return pWork;
 }
 
