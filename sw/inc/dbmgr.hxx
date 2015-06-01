@@ -350,7 +350,7 @@ public:
      the filename returned by a file picker and additional settings dialog.
      In case of success it returns the registered name, otherwise an empty string.
      */
-    static OUString            LoadAndRegisterDataSource();
+    static OUString            LoadAndRegisterDataSource(SwDocShell* pDocShell = 0);
 
     /**
      Loads a data source from file and registers it.
@@ -360,7 +360,8 @@ public:
      */
     static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const ::com::sun::star::uno::Any &rUnoURI,
                                                          const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings,
-                                                         const OUString &rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0);
+                                                         const OUString &rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0,
+                                                         SwDocShell* pDocShell = 0);
     /**
      Loads a data source from file and registers it.
 

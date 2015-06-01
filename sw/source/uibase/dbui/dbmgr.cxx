@@ -141,6 +141,8 @@
 #if ENABLE_CUPS && !defined(MACOSX)
 #include <vcl/printerinfomanager.hxx>
 #endif
+#include <comphelper/propertysequence.hxx>
+#include <officecfg/Office/Common.hxx>
 
 
 using namespace ::osl;
@@ -2397,7 +2399,7 @@ Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
     return xDBContext->getElementNames();
 }
 
-OUString SwDBManager::LoadAndRegisterDataSource()
+OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
 {
     sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
@@ -2449,7 +2451,7 @@ OUString SwDBManager::LoadAndRegisterDataSource()
             if( xSettingsDlg->execute() )
                 aSettings.set( uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ) );
         }
-        sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : 0, aURI );
+        sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : 0, aURI, 0, 0, pDocShell );
     }
     return sFind;
 }
@@ -2511,8 +2513,26 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, Any &
     return type;
 }
 
+/// Returns the URL of this SwDoc.
+OUString lcl_getOwnURL(SwDocShell* pDocShell)
+{
+    OUString aRet;
+
+    // Experimental till load/store of embedded data source definition is not fully implemented.
+    static bool bEmbed = officecfg::Office::Common::Misc::ExperimentalMode::get();
+    if (!bEmbed)
+        return aRet;
+
+    if (!pDocShell)
+        return aRet;
+
+    const INetURLObject& rURLObject = pDocShell->GetMedium()->GetURLObject();
+    aRet = rURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET);
+    return aRet;
+}
+
 OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const Any &aURLAny, const uno::Reference< beans::XPropertySet > *pSettings,
-                                                const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir)
+                                                const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir, SwDocShell* pDocShell)
 {
     INetURLObject aURL( rURI );
     OUString sExt( aURL.GetExtension() );
@@ -2597,14 +2617,33 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
             Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
             Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
             OUString sOutputExt = ".odb";
+            OUString aOwnURL = lcl_getOwnURL(pDocShell);
             OUString sTmpName;
+            uno::Sequence<beans::PropertyValue> aSequence;
+            if (aOwnURL.isEmpty())
             {
+                // Cannot embed, as embedded data source would need the URL of the parent document.
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
                 aTempFile.EnableKillingFile(true);
                 sTmpName = aTempFile.GetURL();
             }
-            xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
+            else
+            {
+                // Embed: construct vnd.sun.star.pkg:// URL for later loading, and TargetStorage/StreamRelPath for storing.
+                OUString aStreamRelPath = "EmbeddedDatabase";
+                sTmpName = "vnd.sun.star.pkg://";
+                sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
+                sTmpName += "/" + aStreamRelPath;
+                uno::Reference<embed::XStorage> xStorage = pDocShell->GetStorage();
+
+                aSequence = comphelper::InitPropertySequence(
+                {
+                    {"TargetStorage", uno::makeAny(xStorage)},
+                    {"StreamRelPath", uno::makeAny(aStreamRelPath)}
+                });
+            }
+            xStore->storeAsURL(sTmpName, aSequence);
         }
         xDBContext->registerObject( sFind, xNewInstance );
     }

@@ -56,6 +56,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/urihelper.hxx>
 #include <dbui.hrc>
+#include <view.hxx>
 
 #include <helpid.h>
 #include <unomid.h>
@@ -345,7 +346,14 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
 
 IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 {
-    const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource();
+    SwMailMergeWizard* pWizard = 0;
+    if (GetParent() && GetParent()->GetParent())
+        pWizard = dynamic_cast<SwMailMergeWizard*>(GetParent()->GetParent());
+    SwView* pView = 0;
+    if (pWizard)
+        pView = pWizard->GetSwView();
+
+    const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(pView ? pView->GetDocShell() : 0);
     if(!sNewSource.isEmpty())
     {
         SvTreeListEntry* pNewSource = m_pListLB->InsertEntry(sNewSource);
