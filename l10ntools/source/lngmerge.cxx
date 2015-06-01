@@ -114,6 +114,7 @@ bool LngParser::CreatePO( const OString &rPOFile )
         else {
             WritePO( aPOStream , Text , sSource , sID );
         }
+        Text.erase("x-comment");
     }
     aPOStream.close();
     return true;
@@ -129,7 +130,7 @@ void LngParser::WritePO(PoOfstream &aPOStream,
     {
         common::writePoEntry(
             "Ulfex", aPOStream, rActFileName, "LngText",
-            rID, OString(), OString(), rText_inout["en-US"]);
+            rID, OString(), rText_inout.count("x-comment") ? rText_inout["x-comment"] : OString(), rText_inout["en-US"]);
    }
 }
 
