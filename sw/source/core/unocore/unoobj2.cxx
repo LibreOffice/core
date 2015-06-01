@@ -1634,12 +1634,11 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
     }
     if (PARAFRAME_PORTION_PARAGRAPH == eParaFrameMode)
     {
-        FrameClientSortList_t frames;
-        ::CollectFrameAtNode(rPaM.GetPoint()->nNode,
-                frames, false);
-        ::std::transform(frames.begin(), frames.end(),
+        FrameClientSortList_t vFrames;
+        ::CollectFrameAtNode(rPaM.GetPoint()->nNode, vFrames, false);
+        ::std::transform(vFrames.begin(), vFrames.end(),
             ::std::back_inserter(m_vFrames),
-            ::boost::bind(&FrameClientSortListEntry::pFrameClient, _1));
+            [] (const FrameClientSortListEntry& rEntry) { return rEntry.pFrameClient; });
     }
     else if (pFormat)
     {
@@ -1651,12 +1650,9 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
         if (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode)
         {
             //get all frames that are bound at paragraph or at character
-            SwPosFlyFrms aFlyFrms(rPaM.GetDoc()->GetAllFlyFormats(GetCursor(), false, true));
-
-            for(SwPosFlyFrms::const_iterator aIter(aFlyFrms.begin()); aIter != aFlyFrms.end(); ++aIter)
+            for(const auto& pFlyFrm : rPaM.GetDoc()->GetAllFlyFormats(GetCursor(), false, true))
             {
-                SwFrameFormat *const pFrameFormat = const_cast<SwFrameFormat*>(&((*aIter)->GetFormat()));
-
+                const auto pFrameFormat = const_cast<SwFrameFormat*>(&pFlyFrm->GetFormat());
                 m_vFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
             }
         }
