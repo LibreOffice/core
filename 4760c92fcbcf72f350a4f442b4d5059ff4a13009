@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_ee2a30e7",
+        "filename": "icon-themes/tango/links.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-06-01T14:13:32Z",
+      "side": 1,
+      "message": "these two lines would need to be removed, as there isnt any graphic uno command any more",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 43
+      },
+      "revId": "4760c92fcbcf72f350a4f442b4d5059ff4a13009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
