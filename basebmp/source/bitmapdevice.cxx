@@ -1789,11 +1789,6 @@ struct StdMasks
 };
 
 
-// Some compilers don't like the nested template wrap_accessor
-// reference in the parameter list - being slightly less type safe,
-// then.
-#ifndef BASEBMP_NO_NESTED_TEMPLATE_PARAMETER
-
 /// Produces a specialized renderer for the given pixel format
 template< class FormatTraits, class MaskTraits >
 BitmapDeviceSharedPtr createRenderer(
@@ -1808,22 +1803,6 @@ BitmapDeviceSharedPtr createRenderer(
     boost::shared_array< sal_uInt8 >                             pMem,
     const PaletteMemorySharedVector&                             pPal,
     const IBitmapDeviceDamageTrackerSharedPtr&                   pDamage )
-#else
-
-template< class FormatTraits, class MaskTraits, class Accessor >
-BitmapDeviceSharedPtr createRenderer(
-    const basegfx::B2IBox&                                       rBounds,
-    const basegfx::B2IVector&                                    rBufferSize,
-    Format                                                       nScanlineFormat,
-    sal_Int32                                                    nScanlineStride,
-    sal_uInt8*                                                   pFirstScanline,
-    typename FormatTraits::raw_accessor_type const&              rRawAccessor,
-    Accessor const&                                              rAccessor,
-    boost::shared_array< sal_uInt8 >                             pMem,
-    const PaletteMemorySharedVector&                             pPal,
-    const IBitmapDeviceDamageTrackerSharedPtr&                   pDamage )
-
-#endif
 {
     typedef typename FormatTraits::iterator_type                Iterator;
     typedef BitmapRenderer< Iterator,
