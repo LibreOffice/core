@@ -1022,7 +1022,7 @@ void Test::checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone,
 
 void Test::testIsNumberFormat()
 {
-    LanguageType eLang = LANGUAGE_THAI;
+    LanguageType eLang = LANGUAGE_ENGLISH_US;
     SvNumberFormatter aFormatter(m_xContext, eLang);
 
     struct NumberFormatData
@@ -1033,16 +1033,16 @@ void Test::testIsNumberFormat()
         { "20.3", true },
         { "2", true },
         { "test", false },
-        { "Jan1", false }
-        // { "Jan1 2000", true },
-        // { "Jan 1", true },
-        // { "Jan 1 2000", true}
+        { "Jan1", false },
+        { "Jan1 2000", true },
+        { "Jan 1", true },
+        { "Jan 1 2000", true}
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {
-        sal_uInt32 nIndex;
-        double nNumber;
+        sal_uInt32 nIndex = 0;
+        double nNumber = 0;
         OUString aString = OUString::createFromAscii(aTests[i].pFormat);
         bool bIsNumber = aFormatter.IsNumberFormat(aString, nIndex, nNumber);
         CPPUNIT_ASSERT_EQUAL(aTests[i].bIsNumber, bIsNumber);
