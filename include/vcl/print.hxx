@@ -375,7 +375,7 @@ public:
 
     // These 3 together are more modular PrintJob(), allowing printing more documents as one print job
     // by repeated calls to ExecutePrintJob(). Used by mailmerge.
-    static void                 PreparePrintJob( boost::shared_ptr<vcl::PrinterController> i_pController,
+    static bool                 PreparePrintJob( boost::shared_ptr<vcl::PrinterController> i_pController,
                                         const JobSetup& i_rInitSetup );
     static bool                 ExecutePrintJob( boost::shared_ptr<vcl::PrinterController> i_pController );
     static void                 FinishPrintJob( boost::shared_ptr<vcl::PrinterController> i_pController );
