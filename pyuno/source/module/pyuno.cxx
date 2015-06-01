@@ -28,10 +28,21 @@
 
 #include <osl/thread.h>
 
+#include <typelib/typedescription.hxx>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/container/XElementAccess.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -41,6 +52,7 @@ using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Type;
 using com::sun::star::uno::TypeClass;
+using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::XComponentContext;
@@ -50,6 +62,15 @@ using com::sun::star::lang::XTypeProvider;
 using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocation2;
 using com::sun::star::beans::XMaterialHolder;
+using com::sun::star::container::XElementAccess;
+using com::sun::star::container::XEnumeration;
+using com::sun::star::container::XEnumerationAccess;
+using com::sun::star::container::XIndexAccess;
+using com::sun::star::container::XIndexContainer;
+using com::sun::star::container::XIndexReplace;
+using com::sun::star::container::XNameAccess;
+using com::sun::star::container::XNameContainer;
+using com::sun::star::container::XNameReplace;
 
 namespace pyuno
 {
@@ -451,6 +472,864 @@ PyObject* PyUNO_dir (PyObject* self)
     return member_list;
 }
 
+Py_ssize_t PyUNO_len( PyObject* self )
+{
+    PyUNO* me = reinterpret_cast<PyUNO*>(self);
+
+    try
+    {
+        // If both XIndexContainer and XNameContainer are implemented, it is
+        // assumed that getCount() gives the same result as the number of names
+        // returned by getElementNames(), or the user may be surprised.
+
+        {
+            PyThreadDetach antiguard;
+
+            // For XIndexContainer
+            Reference< XIndexAccess > xIndexAccess( me->members->wrappedObject, UNO_QUERY );
+            if ( xIndexAccess.is() )
+            {
+                Py_ssize_t nLength = xIndexAccess->getCount();
+                return nLength;
+            }
+
+            // For XNameContainer
+            // Not terribly efficient - get the count of all the names
+            Reference< XNameAccess > xNameAccess( me->members->wrappedObject, UNO_QUERY );
+            if ( xNameAccess.is() )
+            {
+                return xNameAccess->getElementNames().getLength();
+            }
+
+        }
+
+        PyErr_SetString( PyExc_TypeError, "object has no len()" );
+    }
+    catch( const ::com::sun::star::uno::RuntimeException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+
+    return -1;
+}
+
+bool lcl_hasInterfaceByName( Any &object, OUString interfaceName )
+{
+    Reference< XInterface > xInterface( object, UNO_QUERY );
+    TypeDescription typeDesc( interfaceName );
+    Any aInterface = xInterface->queryInterface( typeDesc.get()->pWeakRef );
+
+    return aInterface.hasValue();
+}
+
+void lcl_getRowsColumns( PyUNO* me, Py_ssize_t& nRows, Py_ssize_t& nColumns )
+{
+    Sequence<short> aOutParamIndex;
+    Sequence<Any> aOutParam;
+    Sequence<Any> aParams;
+    Any aRet;
+
+    aRet = me->members->xInvocation->invoke (
+        "getRows", aParams, aOutParamIndex, aOutParam );
+    Reference< XIndexAccess > xIndexAccessRows( aRet, UNO_QUERY );
+    nRows = xIndexAccessRows->getCount();
+    aRet = me->members->xInvocation->invoke (
+        "getColumns", aParams, aOutParamIndex, aOutParam );
+    Reference< XIndexAccess > xIndexAccessCols( aRet, UNO_QUERY );
+    nColumns = xIndexAccessCols->getCount();
+}
+
+
+PyObject* lcl_getitem_XCellRange( PyUNO* me, PyObject* pKey )
+{
+    Runtime runtime;
+
+    Sequence<short> aOutParamIndex;
+    Sequence<Any> aOutParam;
+    Sequence<Any> aParams;
+    Any aRet;
+
+    // Single string key is sugar for getCellRangeByName()
+    if ( PyStr_Check( pKey ) ) {
+
+        aParams.realloc (1);
+        aParams[0] <<= pyString2ustring( pKey );
+        {
+            PyThreadDetach antiguard;
+            aRet = me->members->xInvocation->invoke (
+                "getCellRangeByName", aParams, aOutParamIndex, aOutParam );
+        }
+        PyRef rRet = runtime.any2PyObject ( aRet );
+        return rRet.getAcquired();
+
+    }
+
+    PyRef rKey0, rKey1;
+    if ( PyIndex_Check( pKey ) )
+    {
+        // [0] is equivalent to [0,:]
+        rKey0 = pKey;
+        rKey1 = PySlice_New( NULL, NULL, NULL );
+    }
+    else if ( PyTuple_Check( pKey ) && (PyTuple_Size( pKey ) == 2) )
+    {
+        rKey0 = PyTuple_GetItem( pKey, 0 );
+        rKey1 = PyTuple_GetItem( pKey, 1 );
+    }
+    else
+    {
+        PyErr_SetString( PyExc_KeyError, "invalid subscript" );
+        return NULL;
+    }
+
+    // If both keys are indices, return the corresponding cell
+    if ( PyIndex_Check( rKey0.get() ) && PyIndex_Check( rKey1.get() ))
+    {
+        Py_ssize_t nKey0_s = PyNumber_AsSsize_t ( rKey0.get(), PyExc_IndexError );
+        Py_ssize_t nKey1_s = PyNumber_AsSsize_t ( rKey1.get(), PyExc_IndexError );
+
+        if ( ((nKey0_s == -1) || (nKey1_s == -1)) && PyErr_Occurred() )
+            return NULL;
+
+        aParams.realloc( 2 );
+        aParams[0] <<= nKey1_s;
+        aParams[1] <<= nKey0_s;
+        {
+            PyThreadDetach antiguard;
+            aRet = me->members->xInvocation->invoke (
+                "getCellByPosition", aParams, aOutParamIndex, aOutParam );
+        }
+        PyRef rRet = runtime.any2PyObject( aRet );
+        return rRet.getAcquired();
+    }
+
+    // If either argument is an index, coerce it to a slice
+    if ( PyIndex_Check( rKey0.get() ) )
+    {
+        Py_ssize_t nIndex = PyNumber_AsSsize_t( rKey0.get(), PyExc_IndexError );
+        if (nIndex == -1 && PyErr_Occurred())
+            return NULL;
+        PyRef rStart( PyLong_FromSsize_t( nIndex ), SAL_NO_ACQUIRE );
+        PyRef rStop( PyLong_FromSsize_t( nIndex+1 ), SAL_NO_ACQUIRE );
+        PyRef rStep( PyLong_FromLong( 1 ), SAL_NO_ACQUIRE );
+        rKey0 = PySlice_New( rStart.get(), rStop.get(), rStep.get() );
+    }
+    if ( PyIndex_Check( rKey1.get() ) )
+    {
+        Py_ssize_t nIndex = PyNumber_AsSsize_t( rKey1.get(), PyExc_IndexError );
+        if (nIndex == -1 && PyErr_Occurred())
+            return NULL;
+        PyRef rStart( PyLong_FromSsize_t( nIndex ), SAL_NO_ACQUIRE );
+        PyRef rStop( PyLong_FromSsize_t( nIndex+1 ), SAL_NO_ACQUIRE );
+        PyRef rStep( PyLong_FromLong( 1 ), SAL_NO_ACQUIRE );
+        rKey1 = PySlice_New( rStart.get(), rStop.get(), rStep.get() );
+    }
+
+    // If both arguments are slices, return the corresponding cell range
+    if ( PySlice_Check( rKey0.get() ) && PySlice_Check( rKey1.get() ) )
+    {
+        Py_ssize_t nLen0 = INT_MAX, nLen1 = INT_MAX;
+        Py_ssize_t nStart0 = 0, nStop0 = 0, nStep0 = 0, nSliceLength0 = 0;
+        Py_ssize_t nStart1 = 0, nStop1 = 0, nStep1 = 0, nSliceLength1 = 0;
+
+        {
+            PyThreadDetach antiguard;
+
+            if ( lcl_hasInterfaceByName( me->members->wrappedObject, "com.sun.star.table.XColumnRowRange" ) )
+            {
+                lcl_getRowsColumns (me, nLen0, nLen1);
+            }
+        }
+
+        int nSuccess1 = PySlice_GetIndicesEx( rKey0.get(), nLen0, &nStart0, &nStop0, &nStep0, &nSliceLength0 );
+        int nSuccess2 = PySlice_GetIndicesEx( rKey1.get(), nLen1, &nStart1, &nStop1, &nStep1, &nSliceLength1 );
+        if ( ((nSuccess1 == -1) || (nSuccess2 == -1)) && PyErr_Occurred() )
+            return NULL;
+
+        if ( nSliceLength0 <= 0 || nSliceLength1 <= 0 )
+        {
+            PyErr_SetString( PyExc_KeyError, "invalid number of rows or columns" );
+            return NULL;
+        }
+
+        if ( nStep0 == 1 && nStep1 == 1 )
+        {
+            aParams.realloc (4);
+            aParams[0] <<= nStart1;
+            aParams[1] <<= nStart0;
+            aParams[2] <<= nStop1 - 1;
+            aParams[3] <<= nStop0 - 1;
+            {
+                PyThreadDetach antiguard;
+                aRet = me->members->xInvocation->invoke (
+                    "getCellRangeByPosition", aParams, aOutParamIndex, aOutParam );
+            }
+            PyRef rRet = runtime.any2PyObject( aRet );
+            return rRet.getAcquired();
+        }
+
+        PyErr_SetString( PyExc_KeyError, "step != 1 not supported" );
+        return NULL;
+    }
+
+    PyErr_SetString( PyExc_KeyError, "invalid subscript" );
+    return NULL;
+}
+
+PyObject* lcl_getitem_index( PyUNO *me, PyObject *pKey, Runtime& runtime )
+{
+    Any aRet;
+    Py_ssize_t nIndex;
+
+    nIndex = PyNumber_AsSsize_t( pKey, PyExc_IndexError );
+    if (nIndex == -1 && PyErr_Occurred())
+        return NULL;
+
+    {
+        PyThreadDetach antiguard;
+
+        Reference< XIndexAccess > xIndexAccess( me->members->wrappedObject, UNO_QUERY );
+        if ( xIndexAccess.is() )
+        {
+            if (nIndex < 0)
+                nIndex += xIndexAccess->getCount();
+            aRet = xIndexAccess->getByIndex( nIndex );
+        }
+    }
+    if ( aRet.hasValue() )
+    {
+        PyRef rRet ( runtime.any2PyObject( aRet ) );
+        return rRet.getAcquired();
+    }
+
+    return NULL;
+}
+
+PyObject* lcl_getitem_slice( PyUNO *me, PyObject *pKey )
+{
+    Runtime runtime;
+
+    Reference< XIndexAccess > xIndexAccess;
+    Py_ssize_t nLen;
+
+    {
+        PyThreadDetach antiguard;
+
+        xIndexAccess.set( me->members->wrappedObject, UNO_QUERY );
+        if ( xIndexAccess.is() )
+            nLen = xIndexAccess->getCount();
+    }
+
+    if ( xIndexAccess.is() )
+    {
+        Py_ssize_t nStart = 0, nStop = 0, nStep = 0, nSliceLength = 0;
+        int nSuccess = PySlice_GetIndicesEx(pKey, nLen, &nStart, &nStop, &nStep, &nSliceLength);
+        if ( nSuccess == -1 && PyErr_Occurred() )
+            return NULL;
+
+        PyRef rTuple( PyTuple_New( nSliceLength ), SAL_NO_ACQUIRE, NOT_NULL );
+        Py_ssize_t nCur, i;
+        for ( nCur = nStart, i = 0; i < nSliceLength; nCur += nStep, i++ )
+        {
+            Any aRet;
+
+            {
+                PyThreadDetach antiguard;
+
+                aRet = xIndexAccess->getByIndex( nCur );
+            }
+            PyRef rRet = runtime.any2PyObject( aRet );
+            PyTuple_SetItem( rTuple.get(), i, rRet.getAcquired() );
+        }
+
+        return rTuple.getAcquired();
+    }
+
+    return NULL;
+}
+
+PyObject* lcl_getitem_string( PyUNO *me, PyObject *pKey, Runtime& runtime )
+{
+    OUString sKey = pyString2ustring( pKey );
+    Any aRet;
+
+    {
+        PyThreadDetach antiguard;
+
+        Reference< XNameAccess > xNameAccess( me->members->wrappedObject, UNO_QUERY );
+        if ( xNameAccess.is() )
+        {
+            aRet = xNameAccess->getByName( sKey );
+        }
+    }
+    if ( aRet.hasValue() )
+    {
+        PyRef rRet = runtime.any2PyObject( aRet );
+        return rRet.getAcquired();
+    }
+
+    return NULL;
+}
+
+PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
+{
+    PyUNO* me = reinterpret_cast<PyUNO*>(self);
+    Runtime runtime;
+
+    try
+    {
+        // XIndexAccess access by index
+        if ( PyIndex_Check( pKey ) )
+        {
+            PyObject* pRet = lcl_getitem_index( me, pKey, runtime );
+            if ( pRet != NULL || PyErr_Occurred() )
+                return pRet;
+        }
+
+        // XIndexAccess access by slice
+        if ( PySlice_Check( pKey ) )
+        {
+            PyObject* pRet = lcl_getitem_slice( me, pKey );
+            if ( pRet != NULL || PyErr_Occurred() )
+                return pRet;
+        }
+
+        // XNameAccess access by key
+        if ( PyStr_Check( pKey ) )
+        {
+            PyObject* pRet = lcl_getitem_string( me, pKey, runtime );
+            if ( pRet != NULL )
+                return pRet;
+        }
+
+        // XCellRange/XColumnRowRange specialisation
+        // Uses reflection as we can't have a hard dependency on XCellRange here
+        bool hasXCellRange = false;
+
+        {
+            PyThreadDetach antiguard;
+
+            hasXCellRange = lcl_hasInterfaceByName( me->members->wrappedObject, "com.sun.star.table.XCellRange" );
+        }
+        if ( hasXCellRange )
+        {
+            return lcl_getitem_XCellRange( me, pKey );
+        }
+
+
+        // If the object is an XIndexAccess and/or XNameAccess, but the
+        // key passed wasn't suitable, give a TypeError which specifically
+        // describes this
+        Reference< XIndexAccess > xIndexAccess( me->members->wrappedObject, UNO_QUERY );
+        Reference< XNameAccess > xNameAccess( me->members->wrappedObject, UNO_QUERY );
+        if ( xIndexAccess.is() || xNameAccess.is() )
+        {
+            PyErr_SetString( PyExc_TypeError, "subscription with invalid type" );
+            return NULL;
+        }
+
+        PyErr_SetString( PyExc_TypeError, "object is not subscriptable" );
+    }
+    catch( const ::com::sun::star::lang::IndexOutOfBoundsException &e )
+    {
+        PyErr_SetString( PyExc_IndexError, "index out of range" );
+    }
+    catch( const ::com::sun::star::container::NoSuchElementException &e )
+    {
+        PyErr_SetString( PyExc_KeyError, "key not found" );
+    }
+    catch( const com::sun::star::script::CannotConvertException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const com::sun::star::lang::IllegalArgumentException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const ::com::sun::star::lang::WrappedTargetException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const ::com::sun::star::uno::RuntimeException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+
+    return NULL;
+
+}
+
+int lcl_setitem_index( PyUNO *me, PyObject *pKey, PyObject *pValue )
+{
+    Runtime runtime;
+
+    Reference< XIndexContainer > xIndexContainer;
+    Reference< XIndexReplace > xIndexReplace;
+    Py_ssize_t nIndex = PyNumber_AsSsize_t( pKey, PyExc_IndexError );
+    if ( nIndex == -1 && PyErr_Occurred() )
+        return 0;
+
+    bool isTuple = false;
+
+    Any aValue;
+    if ( pValue != NULL )
+    {
+        isTuple = PyTuple_Check( pValue );
+
+        try
+        {
+            aValue <<= runtime.pyObject2Any( pValue );
+        }
+        catch (const ::com::sun::star::uno::RuntimeException &e)
+        {
+            // TODO pyObject2Any can't convert e.g. dicts but only throws
+            // RuntimeException on failure. Fixing this will require an audit of
+            // all the rest of PyUNO
+            throw ::com::sun::star::script::CannotConvertException();
+        }
+    }
+
+    {
+        PyThreadDetach antiguard;
+
+        xIndexContainer.set( me->members->wrappedObject, UNO_QUERY );
+        if ( xIndexContainer.is() )
+            xIndexReplace.set( xIndexContainer, UNO_QUERY );
+        else
+            xIndexReplace.set( me->members->wrappedObject, UNO_QUERY );
+
+        if ( xIndexReplace.is() && nIndex < 0 )
+            nIndex += xIndexReplace->getCount();
+
+        // XIndexReplace replace by index
+        if ( (pValue != NULL) && xIndexReplace.is() )
+        {
+            if ( isTuple )
+            {
+                // Apply type specialisation to ensure the correct kind of sequence is passed
+                Type aType = xIndexReplace->getElementType();
+                aValue = runtime.getImpl()->cargo->xTypeConverter->convertTo( aValue, aType );
+            }
+
+            xIndexReplace->replaceByIndex( nIndex, aValue );
+            return 0;
+        }
+
+        // XIndexContainer remove by index
+        if ( (pValue == NULL) && xIndexContainer.is() )
+        {
+            xIndexContainer->removeByIndex( nIndex );
+            return 0;
+        }
+    }
+
+    PyErr_SetString( PyExc_TypeError, "cannot assign to object" );
+    return 1;
+}
+
+int lcl_setitem_slice( PyUNO *me, PyObject *pKey, PyObject *pValue )
+{
+    // XIndexContainer insert/remove/replace by slice
+    Runtime runtime;
+
+    Reference< XIndexReplace > xIndexReplace;
+    Reference< XIndexContainer > xIndexContainer;
+    Py_ssize_t nLen;
+
+    {
+        PyThreadDetach antiguard;
+
+        xIndexContainer.set( me->members->wrappedObject, UNO_QUERY );
+        if ( xIndexContainer.is() )
+            xIndexReplace.set( xIndexContainer, UNO_QUERY );
+        else
+            xIndexReplace.set( me->members->wrappedObject, UNO_QUERY );
+
+        if ( xIndexReplace.is() )
+            nLen = xIndexReplace->getCount();
+    }
+
+    if ( xIndexReplace.is() )
+    {
+        Py_ssize_t nStart = 0, nStop = 0, nStep = 0, nSliceLength = 0;
+        int nSuccess = PySlice_GetIndicesEx( pKey, nLen, &nStart, &nStop, &nStep, &nSliceLength );
+        if ( (nSuccess == -1) && PyErr_Occurred() )
+            return 0;
+
+        if ( pValue == NULL )
+        {
+            pValue = PyTuple_New( 0 );
+        }
+
+        if ( !PyTuple_Check (pValue) )
+        {
+            PyErr_SetString( PyExc_TypeError, "value is not a tuple" );
+            return 1;
+        }
+
+        Py_ssize_t nTupleLength = PyTuple_Size( pValue );
+
+        if ( (nTupleLength != nSliceLength) && (nStep != 1) )
+        {
+            PyErr_SetString( PyExc_ValueError, "number of items assigned must be equal" );
+            return 1;
+        }
+
+        if ( (nTupleLength != nSliceLength) && !xIndexContainer.is() )
+        {
+            PyErr_SetString( PyExc_ValueError, "cannot change length" );
+            return 1;
+        }
+
+        Py_ssize_t nCur, i;
+        Py_ssize_t nMax = ::std::max( nSliceLength, nTupleLength );
+        for ( nCur = nStart, i = 0; i < nMax; nCur += nStep, i++ )
+        {
+            if ( i < nTupleLength )
+            {
+                PyRef rItem = PyTuple_GetItem( pValue, i );
+                bool isTuple = PyTuple_Check( rItem.get() );
+
+                Any aItem;
+                try
+                {
+                    aItem <<= runtime.pyObject2Any( rItem.get() );
+                }
+                catch (const ::com::sun::star::uno::RuntimeException &e)
+                {
+                    // TODO pyObject2Any can't convert e.g. dicts but only throws
+                    // RuntimeException on failure. Fixing this will require an audit of
+                    // all the rest of PyUNO
+                    throw ::com::sun::star::script::CannotConvertException();
+                }
+
+                {
+                    PyThreadDetach antiguard;
+
+                    if ( isTuple )
+                    {
+                        // Apply type specialisation to ensure the correct kind of sequence is passed
+                        Type aType = xIndexReplace->getElementType();
+                        aItem = runtime.getImpl()->cargo->xTypeConverter->convertTo( aItem, aType );
+                    }
+
+                    if ( i < nSliceLength )
+                    {
+                        xIndexReplace->replaceByIndex( nCur, aItem );
+                    }
+                    else
+                    {
+                        xIndexContainer->insertByIndex( nCur, aItem );
+                    }
+                }
+            }
+            else
+            {
+                PyThreadDetach antiguard;
+
+                xIndexContainer->removeByIndex( nCur );
+                nCur--;
+            }
+        }
+
+        return 0;
+    }
+
+    PyErr_SetString( PyExc_TypeError, "cannot assign to object" );
+    return 1;
+
+}
+
+int lcl_setitem_string( PyUNO *me, PyObject *pKey, PyObject *pValue )
+{
+    Runtime runtime;
+
+    OUString sKey = pyString2ustring( pKey );
+    bool isTuple = false;
+
+    Any aValue;
+    if ( pValue != NULL)
+    {
+        isTuple = PyTuple_Check( pValue );
+        try
+        {
+            aValue <<= runtime.pyObject2Any( pValue );
+        }
+        catch( const ::com::sun::star::uno::RuntimeException &e )
+        {
+            // TODO pyObject2Any can't convert e.g. dicts but only throws
+            // RuntimeException on failure. Fixing this will require an audit of
+            // all the rest of PyUNO
+            throw ::com::sun::star::script::CannotConvertException();
+        }
+    }
+
+    {
+        PyThreadDetach antiguard;
+
+        Reference< XNameContainer > xNameContainer( me->members->wrappedObject, UNO_QUERY );
+        Reference< XNameReplace > xNameReplace;
+        if ( xNameContainer.is() )
+            xNameReplace.set( xNameContainer, UNO_QUERY );
+        else
+            xNameReplace.set( me->members->wrappedObject, UNO_QUERY );
+
+        if ( xNameReplace.is() )
+        {
+            if ( isTuple && aValue.hasValue() )
+            {
+                // Apply type specialisation to ensure the correct kind of sequence is passed
+                Type aType = xNameReplace->getElementType();
+                aValue = runtime.getImpl()->cargo->xTypeConverter->convertTo( aValue, aType );
+            }
+
+            if ( aValue.hasValue() )
+            {
+                if ( xNameContainer.is() )
+                {
+                    try {
+                        xNameContainer->insertByName( sKey, aValue );
+                        return 0;
+                    }
+                    catch( com::sun::star::container::ElementExistException &e )
+                    {
+                        // Fall through, try replace instead
+                    }
+                }
+
+                xNameReplace->replaceByName( sKey, aValue );
+                return 0;
+            }
+            else if ( xNameContainer.is() )
+            {
+                xNameContainer->removeByName( sKey );
+                return 0;
+            }
+        }
+    }
+
+    PyErr_SetString( PyExc_TypeError, "cannot assign to object" );
+    return 1;
+}
+
+int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
+{
+    PyUNO* me = reinterpret_cast<PyUNO*>(self);
+
+    try
+    {
+        if ( PyIndex_Check( pKey ) )
+        {
+            return lcl_setitem_index( me, pKey, pValue );
+        }
+        else if ( PySlice_Check( pKey ) )
+        {
+            return lcl_setitem_slice( me, pKey, pValue );
+        }
+        else if ( PyStr_Check( pKey ) )
+        {
+            return lcl_setitem_string( me, pKey, pValue );
+        }
+
+        PyErr_SetString( PyExc_TypeError, "list index has invalid type" );
+    }
+    catch( const ::com::sun::star::lang::IndexOutOfBoundsException &e )
+    {
+        PyErr_SetString( PyExc_IndexError, "list index out of range" );
+    }
+    catch( const ::com::sun::star::container::NoSuchElementException &e )
+    {
+        PyErr_SetString( PyExc_KeyError, "key not found" );
+    }
+    catch( const ::com::sun::star::lang::IllegalArgumentException &e )
+    {
+        PyErr_SetString( PyExc_TypeError, "value has invalid type" );
+    }
+    catch( com::sun::star::script::CannotConvertException &e )
+    {
+        PyErr_SetString( PyExc_TypeError, "value has invalid type" );
+    }
+    catch( const ::com::sun::star::container::ElementExistException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const::com::sun::star::lang::WrappedTargetException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const ::com::sun::star::uno::RuntimeException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+
+    return 1;
+}
+
+PyObject* PyUNO_iter( PyObject *self )
+{
+    PyUNO* me = reinterpret_cast<PyUNO*>(self);
+
+    try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess;
+        Reference< XEnumeration > xEnumeration;
+        Reference< XIndexAccess > xIndexAccess;
+        Reference< XNameAccess > xNameAccess;
+
+        {
+            PyThreadDetach antiguard;
+
+            xEnumerationAccess.set( me->members->wrappedObject, UNO_QUERY );
+            if ( xEnumerationAccess.is() )
+                xEnumeration = xEnumerationAccess->createEnumeration();
+            else
+                xEnumeration.set( me->members->wrappedObject, UNO_QUERY );
+
+            if ( !xEnumeration.is() )
+                xIndexAccess.set( me->members->wrappedObject, UNO_QUERY );
+
+            if ( !xIndexAccess.is() )
+                xNameAccess.set( me->members->wrappedObject, UNO_QUERY );
+        }
+
+        // XEnumerationAccess iterator
+        // XEnumeration iterator
+        if (xEnumeration.is())
+        {
+            return PyUNO_iterator_new( xEnumeration );
+        }
+
+        // XIndexAccess iterator
+        if ( xIndexAccess.is() )
+        {
+            // We'd like to be able to use PySeqIter_New() here, but we're not
+            // allowed to because we also implement the mapping protocol
+            return PyUNO_list_iterator_new( xIndexAccess );
+        }
+
+        // XNameAccess iterator
+        if (xNameAccess.is())
+        {
+            // There's no generic mapping iterator, but we can cobble our own
+            // together using PySeqIter_New()
+            Runtime runtime;
+            Any aRet;
+
+            {
+                PyThreadDetach antiguard;
+                aRet <<= xNameAccess->getElementNames();
+            }
+            PyRef rNames = runtime.any2PyObject( aRet );
+            return PySeqIter_New( rNames.getAcquired() );
+        }
+
+        PyErr_SetString ( PyExc_TypeError, "object is not iterable" );
+    }
+    catch( com::sun::star::script::CannotConvertException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( com::sun::star::lang::IllegalArgumentException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const ::com::sun::star::uno::RuntimeException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+
+    return NULL;
+}
+
+int PyUNO_contains( PyObject *self, PyObject *pKey )
+{
+    PyUNO* me = reinterpret_cast<PyUNO*>(self);
+
+    Runtime runtime;
+
+    try
+    {
+        Any aValue;
+        try
+        {
+            aValue <<= runtime.pyObject2Any( pKey );
+        }
+        catch( const ::com::sun::star::uno::RuntimeException &e )
+        {
+            // TODO pyObject2Any can't convert e.g. dicts but only throws
+            // RuntimeException on failure. Fixing this will require an audit of
+            // all the rest of PyUNO
+            throw ::com::sun::star::script::CannotConvertException();
+        }
+
+        // XNameAccess is tried first, because checking key presence is much more
+        // useful for objects which implement both XIndexAccess and XNameAccess
+
+        // For XNameAccess
+        if ( PyStr_Check( pKey ) )
+        {
+            OUString sKey;
+            aValue >>= sKey;
+            Reference< XNameAccess > xNameAccess;
+
+            {
+                PyThreadDetach antiguard;
+
+                xNameAccess.set( me->members->wrappedObject, UNO_QUERY );
+                if ( xNameAccess.is() )
+                {
+                    sal_Bool hasKey = xNameAccess->hasByName( sKey );
+                    return hasKey == sal_True ? 1 : 0;
+                }
+            }
+        }
+
+        // For any other type of PyUNO iterable: Ugly iterative search by
+        // content (XIndexAccess, XEnumerationAccess, XEnumeration)
+        PyRef rIterator( PyUNO_iter( self ), SAL_NO_ACQUIRE );
+        if ( rIterator.is() )
+        {
+            PyObject* pItem;
+            while ( (pItem = PyIter_Next( rIterator.get() )) )
+            {
+                PyRef rItem( pItem, SAL_NO_ACQUIRE );
+                if ( PyObject_RichCompareBool( pKey, rItem.get(), Py_EQ ) == 1 )
+                {
+                    return 1;
+                }
+            }
+            return 0;
+        }
+
+        PyErr_SetString( PyExc_TypeError, "argument is not iterable" );
+    }
+    catch( const com::sun::star::script::CannotConvertException &e )
+    {
+        PyErr_SetString( PyExc_TypeError, "invalid type passed as left argument to 'in'" );
+    }
+    catch( const ::com::sun::star::container::NoSuchElementException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const ::com::sun::star::lang::IndexOutOfBoundsException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const com::sun::star::lang::IllegalArgumentException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const ::com::sun::star::lang::WrappedTargetException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+    catch( const ::com::sun::star::uno::RuntimeException &e )
+    {
+        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+    }
+
+    return -1;
+}
 
 PyObject* PyUNO_getattr (PyObject* self, char* name)
 {
@@ -648,6 +1527,26 @@ static PyMethodDef PyUNOMethods[] =
     {NULL,      NULL,                   0,           NULL}
 };
 
+static PySequenceMethods PyUNOSequenceMethods[] =
+{
+    (lenfunc) 0,                                     /* sq_length */
+    (binaryfunc) 0,                                  /* sq_concat */
+    (ssizeargfunc) 0,                                /* sq_repeat */
+    (ssizeargfunc) 0,                                /* sq_item */
+    0,                                               /* sq_slice */
+    (ssizeobjargproc) 0,                             /* sq_ass_item */
+    0,                                               /* sq_ass_slice */
+    reinterpret_cast<objobjproc>(PyUNO_contains),    /* sq_contains */
+    (binaryfunc) 0,                                  /* sq_inplace_concat */
+    (ssizeargfunc) 0                                 /* sq_inplace_repeat */
+};
+
+static PyMappingMethods PyUNOMappingMethods[] =
+{
+    reinterpret_cast<lenfunc>(PyUNO_len),            /* mp_length */
+    reinterpret_cast<binaryfunc>(PyUNO_getitem),     /* mp_subscript */
+    reinterpret_cast<objobjargproc>(PyUNO_setitem),  /* mp_ass_subscript */
+};
 
 /* Python 2 has a tp_flags value for rich comparisons.  Python 3 does not (on by default) */
 #ifdef Py_TPFLAGS_HAVE_RICHCOMPARE
@@ -669,8 +1568,8 @@ static PyTypeObject PyUNOType =
     /* this type does not exist in Python 3: (cmpfunc) */ 0,
     (reprfunc) PyUNO_repr,
     0,
-    0,
-    0,
+    PyUNOSequenceMethods,
+    PyUNOMappingMethods,
     (hashfunc) 0,
     (ternaryfunc) 0,
     (reprfunc) PyUNO_str,
@@ -683,7 +1582,7 @@ static PyTypeObject PyUNOType =
     (inquiry)0,
     (richcmpfunc) PyUNO_cmp,
     0,
-    (getiterfunc)0,
+    (getiterfunc) PyUNO_iter,
     (iternextfunc)0,
     PyUNOMethods,
     NULL,
