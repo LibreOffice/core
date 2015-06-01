@@ -2863,7 +2863,23 @@ void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument
     // after having carried out further edits on the document (whereby any tab changes/additions/removals
     // could change the number of the tab, with a name change being much more rare), hence having
     // all information (including tab name) could be useful.
-    OUString sTitle = SC_RESSTR( STR_UNITS_ERRORINCELL );
+    OUString sTitle;
+    if (rStatus == FormulaStatus::ERROR_INPUT_SCALING ||
+        rStatus == FormulaStatus::ERROR_INPUT_INCOMPATIBLE)
+    {
+        sTitle = SC_RESSTR( STR_UNITS_ERROR_INPUT );
+    }
+    else if (rStatus == FormulaStatus::ERROR_OUTPUT_SCALING ||
+             rStatus == FormulaStatus::ERROR_OUTPUT_INCOMPATIBLE)
+    {
+        sTitle = SC_RESSTR( STR_UNITS_ERROR_OUTPUT );
+    }
+    else
+    {
+        // We should not be showing a warning bar for any other statuses.
+        assert(false);
+    }
+
     sTitle = sTitle.replaceAll( "$1", rAddress.GetColRowString() );
     OUString sCellAddress = rAddress.Format( SCA_BITS, pDoc );
     SfxInfoBarWindow* pInfoBar = pViewFrame->AppendInfoBar( sCellAddress, sTitle );
