@@ -221,7 +221,7 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetFormula(address, "=A1+A2");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
     // Test that addition of different units fails - incompatible types
     address = ScAddress(0, 6, 0);
@@ -235,14 +235,14 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetFormula(address, "=A1*B1+A2*B2");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
     // Test another combination (i.e. cm/s+'cm/s')
     address = ScAddress(0, 8, 0);
     mpDoc->SetFormula(address, "=A1/C1+D1");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
     // Test that another combination fails (cm*kg/s+'cm/s')
     address = ScAddress(0, 9, 0);
@@ -256,7 +256,7 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetFormula(address, "=A1+100*E1");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
     // 10cm + 100*1m = 110cm
     CPPUNIT_ASSERT_EQUAL(mpDoc->GetValue(address), 110.0);
 
@@ -287,7 +287,7 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetFormula(address, "=SUM(B1:B3)");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
     // SUM("cm"&"kg")
     address.IncRow();
@@ -315,14 +315,14 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetFormula(address, "=SUM(A1:A3)/SUM(C1:C3)+SUM(D1:D3)");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
     // PRODUCT("cm/","s")+"cm"
     address.IncRow();
     mpDoc->SetFormula(address, "=PRODUCT(C1:D1)+A1");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
     // PRODUCT("cm/","s")+"kg"
     address.IncRow();
@@ -337,7 +337,7 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetFormula(address, "=SUM(A1,A2:A3)");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
     // But mixing the columns fails because of mixed units
     // (This test is primarily to ensure that we can handle arbitrary numbers
@@ -358,7 +358,7 @@ void UnitsTest::testUnitVerification() {
         mpDoc->SetFormula(address, "=" + aFunc + "(A1:A2)+A3");
         pCell = mpDoc->GetFormulaCell(address);
         pTokens = pCell->GetCode();
-        CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+        CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
         // FOO(cm) + kg
         address.IncRow();
@@ -376,7 +376,7 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetFormula(address, "=A1");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
 
     // header in [cm], cell with 100*cm
@@ -405,14 +405,14 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetFormula(address, "=100*E1");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
     // header in (cm/s), formula resulting in cm/s
     address = ScAddress(6, 1, 0);
     mpDoc->SetFormula(address, "=A1/C1");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
-    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 }
 
 void UnitsTest::testUnitFromFormatStringExtraction() {

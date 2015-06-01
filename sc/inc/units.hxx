@@ -45,7 +45,7 @@ struct RangeUnits {
  * is used).
  */
 enum class FormulaStatus {
-    VERIFIED,
+    VALID,
     UNKNOWN,
     ERROR_INPUT_SCALING,
     ERROR_INPUT_INCOMPATIBLE,
