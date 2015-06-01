@@ -95,10 +95,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
     if (nOpCode >= SC_OPCODE_START_UN_OP &&
         nOpCode < SC_OPCODE_STOP_UN_OP) {
 
-        if (rStack.size() == 0) {
-            SAL_WARN("sc.units", "Single item opcode failed (no stack items, or range used)");
-            return { UnitsStatus::UNITS_INVALID, boost::none };
-        } else if (rStack.top().type != RAUSItemType::UNITS) {
+        if ((rStack.size() == 0) || (rStack.top().type != RAUSItemType::UNITS)) {
             return { UnitsStatus::UNITS_UNKNOWN, boost::none };
         }
 
@@ -129,12 +126,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
     } else if (nOpCode >= SC_OPCODE_START_BIN_OP &&
         nOpCode < SC_OPCODE_STOP_BIN_OP) {
 
-        if (rStack.size() < 2) {
-            SAL_WARN("sc.units", "less than two items on stack when attempting binary operation");
-            return { UnitsStatus::UNITS_INVALID, boost::none };
-        }
-
-        if (rStack.top().type != RAUSItemType::UNITS) {
+        if ((rStack.size() < 2) || (rStack.top().type != RAUSItemType::UNITS)) {
             return { UnitsStatus::UNITS_UNKNOWN, boost::none };
         }
         UtUnit pSecondUnit = boost::get<UtUnit>(rStack.top().item);
