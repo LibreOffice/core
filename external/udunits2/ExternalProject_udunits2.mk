@@ -25,7 +25,6 @@ $(call gb_ExternalProject_get_state_target,udunits2,build) : $(call gb_ExternalP
 
 $(call gb_ExternalProject_get_state_target,udunits2,configure) :
 	$(call gb_ExternalProject_run,configure,\
-		autoreconf -i && \
 		MAKE=$(MAKE) ./configure \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
 			--build=$(if $(filter WNT,$(OS)),i686-pc-cygwin,$(BUILD_PLATFORM)) \
