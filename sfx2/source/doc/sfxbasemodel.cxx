@@ -148,7 +148,7 @@ class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper1<
 public:
     SfxObjectShell& m_rShell;
 
-    SfxDocInfoListener_Impl( SfxObjectShell& i_rDoc )
+    explicit SfxDocInfoListener_Impl( SfxObjectShell& i_rDoc )
         : m_rShell(i_rDoc)
     { };
 
@@ -319,7 +319,7 @@ class SfxPrintHelperListener_Impl : public ::cppu::WeakImplHelper1< view::XPrint
 {
 public:
     IMPL_SfxBaseModel_DataContainer* m_pData;
-    SfxPrintHelperListener_Impl( IMPL_SfxBaseModel_DataContainer* pData )
+    explicit SfxPrintHelperListener_Impl( IMPL_SfxBaseModel_DataContainer* pData )
         : m_pData( pData )
     {}
 
@@ -351,7 +351,7 @@ class SfxOwnFramesLocker
 
     static vcl::Window* GetVCLWindow( const Reference< frame::XFrame >& xFrame );
 public:
-    SfxOwnFramesLocker( SfxObjectShell* ObjechShell );
+    explicit SfxOwnFramesLocker( SfxObjectShell* ObjechShell );
     ~SfxOwnFramesLocker();
     void UnlockFrames();
 };

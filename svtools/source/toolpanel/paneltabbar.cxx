@@ -105,7 +105,7 @@ namespace svt
     class VCLItemRenderer : public ITabBarRenderer
     {
     public:
-        VCLItemRenderer( OutputDevice& i_rTargetDevice )
+        explicit VCLItemRenderer( OutputDevice& i_rTargetDevice )
             :m_rTargetDevice( i_rTargetDevice )
         {
         }
@@ -180,7 +180,7 @@ namespace svt
     class NWFToolboxItemRenderer : public ITabBarRenderer
     {
     public:
-        NWFToolboxItemRenderer( OutputDevice& i_rTargetDevice )
+        explicit NWFToolboxItemRenderer( OutputDevice& i_rTargetDevice )
             :m_rTargetDevice( i_rTargetDevice )
         {
         }
@@ -257,7 +257,7 @@ namespace svt
     class NWFTabItemRenderer : public ITabBarRenderer
     {
     public:
-        NWFTabItemRenderer( OutputDevice& i_rTargetDevice )
+        explicit NWFTabItemRenderer( OutputDevice& i_rTargetDevice )
             :m_rTargetDevice( i_rTargetDevice )
         {
         }
@@ -479,7 +479,7 @@ namespace svt
         class ClipItemRegion
         {
         public:
-            ClipItemRegion( const PanelTabBar_Impl& i_rImpl )
+            explicit ClipItemRegion( const PanelTabBar_Impl& i_rImpl )
                 :m_rDevice( i_rImpl.m_rTabBar )
             {
                 m_rDevice.Push( PushFlags::CLIPREGION );

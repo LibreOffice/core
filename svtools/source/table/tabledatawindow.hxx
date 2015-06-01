@@ -41,7 +41,7 @@ namespace svt { namespace table
         sal_uLong           m_nTipWindowHandle;
 
     public:
-        TableDataWindow( TableControl_Impl& _rTableControl );
+        explicit TableDataWindow( TableControl_Impl& _rTableControl );
         virtual ~TableDataWindow();
         virtual void dispose() SAL_OVERRIDE;
 

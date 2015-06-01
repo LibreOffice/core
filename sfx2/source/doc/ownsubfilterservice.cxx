@@ -41,7 +41,7 @@ class OwnSubFilterService : public cppu::WeakImplHelper2 < document::XFilter
     SfxObjectShell* m_pObjectShell;
 
 public:
-    OwnSubFilterService(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments)
+    explicit OwnSubFilterService(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments)
         throw (uno::Exception, uno::RuntimeException);
 
     virtual ~OwnSubFilterService();

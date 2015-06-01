@@ -54,7 +54,7 @@ class ODocumentCloser : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::
     bool m_bDisposed;
 
 public:
-    ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments);
+    explicit ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments);
     virtual ~ODocumentCloser();
 
 // XComponent
@@ -73,7 +73,7 @@ class MainThreadFrameCloserRequest
     uno::Reference< frame::XFrame > m_xFrame;
 
     public:
-        MainThreadFrameCloserRequest( const uno::Reference< frame::XFrame >& xFrame )
+        explicit MainThreadFrameCloserRequest( const uno::Reference< frame::XFrame >& xFrame )
         : m_xFrame( xFrame )
         {}
 

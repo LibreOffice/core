@@ -36,7 +36,7 @@ protected:
     virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) SAL_OVERRIDE;
 
 private:
-    AccessibleTitleBar (VCLXWindow* pWindow);
+    explicit AccessibleTitleBar (VCLXWindow* pWindow);
     virtual ~AccessibleTitleBar();
 };
 

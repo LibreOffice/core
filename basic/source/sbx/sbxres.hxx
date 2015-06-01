@@ -48,7 +48,7 @@
 class SbxRes : public OUString
 {
 public:
-    SbxRes( sal_uInt16 );
+    explicit SbxRes( sal_uInt16 );
 };
 
 const char* GetSbxRes( sal_uInt16 );

@@ -284,7 +284,7 @@ struct SourceProviderEntity {
 };
 
 struct SourceProviderScannerData {
-    SourceProviderScannerData(
+    explicit SourceProviderScannerData(
         rtl::Reference<unoidl::Manager> const & theManager):
         manager(theManager),
         sourcePosition(), sourceEnd(),

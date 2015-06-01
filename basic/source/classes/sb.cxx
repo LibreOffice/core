@@ -1179,7 +1179,7 @@ struct ClassModuleRunInitItem
         , m_bProcessing( false )
         , m_bRunInitDone( false )
     {}
-    ClassModuleRunInitItem( SbModule* pModule )
+    explicit ClassModuleRunInitItem( SbModule* pModule )
         : m_pModule( pModule )
         , m_bProcessing( false )
         , m_bRunInitDone( false )

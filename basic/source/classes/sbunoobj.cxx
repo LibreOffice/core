@@ -457,7 +457,7 @@ struct ObjectItem
 {
     SbxObjectRef    m_xNativeObj;
 
-    ObjectItem( SbxObject* pNativeObj )
+    explicit ObjectItem( SbxObject* pNativeObj )
         : m_xNativeObj( pNativeObj )
     {}
 };
@@ -3896,7 +3896,7 @@ public:
     SbxObjectRef    xSbxObj;
     OUString        aPrefixName;
 
-    BasicAllListener_Impl( const OUString& aPrefixName );
+    explicit BasicAllListener_Impl( const OUString& aPrefixName );
     virtual ~BasicAllListener_Impl();
 
     // Methods of XAllListener
@@ -4590,7 +4590,7 @@ struct StarBasicDisposeItem
     SbxArrayRef             m_pRegisteredVariables;
     ComponentRefVector      m_vComImplementsObjects;
 
-    StarBasicDisposeItem( StarBASIC* pBasic )
+    explicit StarBasicDisposeItem( StarBASIC* pBasic )
         : m_pBasic( pBasic )
     {
         m_pRegisteredVariables = new SbxArray();

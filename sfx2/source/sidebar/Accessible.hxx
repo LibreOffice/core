@@ -47,7 +47,7 @@ class Accessible
       public AccessibleInterfaceBase
 {
 public:
-    Accessible (
+    explicit Accessible (
         const css::uno::Reference<css::accessibility::XAccessibleContext>& rxContext);
     virtual ~Accessible();
 

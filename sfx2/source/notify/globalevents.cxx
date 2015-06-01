@@ -94,7 +94,7 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
     GlobalEventConfig* pImp;
 
 public:
-    SfxGlobalEvents_Impl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
+    explicit SfxGlobalEvents_Impl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
     virtual ~SfxGlobalEvents_Impl();
 
     virtual OUString SAL_CALL getImplementationName()

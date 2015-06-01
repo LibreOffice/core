@@ -153,7 +153,7 @@ class FindByPointer : std::unary_function<SvTreeListEntry, bool>
 {
     const SvTreeListEntry* mpEntry;
 public:
-    FindByPointer(const SvTreeListEntry* p) : mpEntry(p) {}
+    explicit FindByPointer(const SvTreeListEntry* p) : mpEntry(p) {}
 
     bool operator() (const SvTreeListEntry& rEntry) const
     {
@@ -1514,7 +1514,7 @@ class SortComparator : public std::binary_function<SvTreeListEntry,SvTreeListEnt
     SvTreeList& mrList;
 public:
 
-    SortComparator( SvTreeList& rList ) : mrList(rList) {}
+    explicit SortComparator( SvTreeList& rList ) : mrList(rList) {}
 
     bool operator() ( const SvTreeListEntry& rLeft, const SvTreeListEntry& rRight ) const
     {

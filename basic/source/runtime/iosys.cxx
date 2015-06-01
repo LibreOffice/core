@@ -413,8 +413,8 @@ class UCBStream : public SvStream
     Reference< XStream >        xS;
     Reference< XSeekable >      xSeek;
 public:
-                        UCBStream( Reference< XInputStream > & xIS );
-                        UCBStream( Reference< XStream > & xS );
+    explicit UCBStream( Reference< XInputStream > & xIS );
+    explicit UCBStream( Reference< XStream > & xS );
                        virtual ~UCBStream();
     virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;

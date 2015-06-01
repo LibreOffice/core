@@ -55,7 +55,7 @@ uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
 class DocumentsEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
 {
 public:
-    DocumentsEnumeration( const uno::Reference< frame::XModel >& rxModel );
+    explicit DocumentsEnumeration( const uno::Reference< frame::XModel >& rxModel );
     virtual sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:

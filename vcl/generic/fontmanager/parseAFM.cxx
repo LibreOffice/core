@@ -97,7 +97,7 @@ class FileInputStream
     unsigned int        m_nPos;
     unsigned int        m_nLen;
     public:
-    FileInputStream( const char* pFilename );
+    explicit FileInputStream( const char* pFilename );
     ~FileInputStream();
 
     int getChar() { return (m_nPos < m_nLen) ? int(m_pMemory[m_nPos++]) : -1; }

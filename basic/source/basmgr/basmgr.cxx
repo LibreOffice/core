@@ -1794,7 +1794,7 @@ class ModuleContainer_Impl : public NameContainerHelper
     StarBASIC* mpLib;
 
 public:
-    ModuleContainer_Impl( StarBASIC* pLib )
+    explicit ModuleContainer_Impl( StarBASIC* pLib )
         :mpLib( pLib ) {}
 
     // Methods XElementAccess
@@ -1945,7 +1945,7 @@ class DialogContainer_Impl : public NameContainerHelper
     StarBASIC* mpLib;
 
 public:
-    DialogContainer_Impl( StarBASIC* pLib )
+    explicit DialogContainer_Impl( StarBASIC* pLib )
         :mpLib( pLib ) {}
 
     // Methods XElementAccess
@@ -2102,7 +2102,7 @@ class LibraryContainer_Impl : public NameContainerHelper
     BasicManager* mpMgr;
 
 public:
-    LibraryContainer_Impl( BasicManager* pMgr )
+    explicit LibraryContainer_Impl( BasicManager* pMgr )
         :mpMgr( pMgr ) {}
 
     // Methods XElementAccess
@@ -2251,7 +2251,7 @@ class StarBasicAccess_Impl : public StarBasicAccessHelper
     uno::Reference< container::XNameContainer > mxLibContainer;
 
 public:
-    StarBasicAccess_Impl( BasicManager* pMgr )
+    explicit StarBasicAccess_Impl( BasicManager* pMgr )
         :mpMgr( pMgr ) {}
 
 public:

@@ -80,7 +80,7 @@ namespace svt
     class TabBarGeometry
     {
     public:
-        TabBarGeometry( const TabItemContent i_eItemContent );
+        explicit TabBarGeometry( const TabItemContent i_eItemContent );
         ~TabBarGeometry();
 
         // retrieves the rectangle to be occupied by the button for scrolling backward through the items

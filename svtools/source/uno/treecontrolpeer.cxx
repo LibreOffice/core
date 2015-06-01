@@ -52,7 +52,7 @@ using namespace ::com::sun::star::graphic;
 struct LockGuard
 {
 public:
-    LockGuard( sal_Int32& rLock )
+    explicit LockGuard( sal_Int32& rLock )
     : mrLock( rLock )
     {
         rLock++;
@@ -108,7 +108,7 @@ private:
 class UnoTreeListItem : public SvLBoxString
 {
 public:
-                    UnoTreeListItem( SvTreeListEntry* );
+    explicit        UnoTreeListItem( SvTreeListEntry* );
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
@@ -611,7 +611,7 @@ sal_Int32 SAL_CALL TreeControlPeer::getSelectionCount() throw (RuntimeException,
 class TreeSelectionEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
 public:
-    TreeSelectionEnumeration( std::list< Any >& rSelection );
+    explicit TreeSelectionEnumeration( std::list< Any >& rSelection );
     virtual sal_Bool SAL_CALL hasMoreElements() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Any SAL_CALL nextElement() throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
 

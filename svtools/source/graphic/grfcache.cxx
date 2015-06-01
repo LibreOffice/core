@@ -48,7 +48,7 @@ private:
 public:
 
 
-                GraphicID( const GraphicObject& rObj );
+                explicit GraphicID( const GraphicObject& rObj );
                 ~GraphicID() {}
 
     bool        operator==( const GraphicID& rID ) const
@@ -161,7 +161,7 @@ private:
 
 public:
 
-                        GraphicCacheEntry( const GraphicObject& rObj );
+                        explicit GraphicCacheEntry( const GraphicObject& rObj );
                         ~GraphicCacheEntry();
 
     const GraphicID&    GetID() const { return maID; }

@@ -72,7 +72,7 @@ sal_Int32               SvtPrintFileOptions::m_nRefCount = 0;
 class SvtPrintOptions_Impl
 {
 public:
-     SvtPrintOptions_Impl( const OUString& rConfigRoot );
+    explicit SvtPrintOptions_Impl( const OUString& rConfigRoot );
     ~SvtPrintOptions_Impl();
 
     bool        IsReduceTransparency() const ;

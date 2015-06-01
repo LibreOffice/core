@@ -95,7 +95,7 @@ class XMLRedlineExport
 
 
 public:
-    XMLRedlineExport(SvXMLExport& rExp);
+    explicit XMLRedlineExport(SvXMLExport& rExp);
 
     ~XMLRedlineExport();
 
