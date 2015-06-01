@@ -45,7 +45,8 @@ namespace test {
 enum class UnitsStatus {
     UNITS_VALID,
     UNITS_UNKNOWN,
-    UNITS_INVALID
+    UNITS_INVALID_SCALING,
+    UNITS_INVALID_INCOMPATIBLE
 };
 
 /**
@@ -91,7 +92,7 @@ public:
     UnitsImpl();
     virtual ~UnitsImpl();
 
-    virtual bool verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) SAL_OVERRIDE;
+    virtual FormulaStatus verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) SAL_OVERRIDE;
     virtual bool splitUnitsFromInputString(const OUString& rInput, OUString& rValue, OUString& rUnit) SAL_OVERRIDE;
     virtual bool isCellConversionRecommended(const ScAddress& rCellAddress,
                                              ScDocument* pDoc,

@@ -105,7 +105,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
         switch (aOpCode) {
         case ocNot:
             if (!pUnit.isDimensionless()) {
-                return { UnitsStatus::UNITS_INVALID, boost::none };
+                return { UnitsStatus::UNITS_INVALID_INCOMPATIBLE, boost::none };
             }
             // We just keep the same unit (in this case no unit) so can
             // fall through.
@@ -147,10 +147,12 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
                 // The two units are identical, hence we can return either.
                 pOut = pFirstUnit;
                 SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit);
+            } else if (pFirstUnit.areConvertibleTo(pSecondUnit)) {
+                return { UnitsStatus::UNITS_INVALID_SCALING, boost::none };
             } else {
-                return { UnitsStatus::UNITS_INVALID, boost::none };
-                // TODO: notify/link UI.
+                return { UnitsStatus::UNITS_INVALID_INCOMPATIBLE, boost::none };
             }
+
             break;
         case ocMul:
             pOut = pFirstUnit * pSecondUnit;
@@ -213,8 +215,13 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
                     aFirstUnit = aUnitsStack.top();
                 } else {
                     UtUnit aCurrentUnit(aUnitsStack.top());
+
                     if (aFirstUnit.get() != aCurrentUnit) {
-                        return { UnitsStatus::UNITS_INVALID, boost::none };
+                        if (aFirstUnit.get().areConvertibleTo(aCurrentUnit)) {
+                            return { UnitsStatus::UNITS_INVALID_SCALING, boost::none };
+                        } else {
+                            return { UnitsStatus::UNITS_INVALID_INCOMPATIBLE, boost::none };
+                        }
                     }
                 }
                 aUnitsStack.pop();
@@ -226,8 +233,13 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
                         aFirstUnit = getUnitForCell(aIt.GetPos(), pDoc);
                     } else {
                         UtUnit aCurrentUnit = getUnitForCell(aIt.GetPos(), pDoc);
+
                         if (aFirstUnit.get() != aCurrentUnit) {
-                            return { UnitsStatus::UNITS_INVALID, boost::none };
+                            if (aFirstUnit.get().areConvertibleTo(aCurrentUnit)) {
+                                return { UnitsStatus::UNITS_INVALID_SCALING, boost::none };
+                            } else {
+                                return { UnitsStatus::UNITS_INVALID_INCOMPATIBLE, boost::none };
+                            }
                         }
                     }
                 } while (aIt.next());
@@ -510,8 +522,7 @@ HeaderUnitDescriptor UnitsImpl::findHeaderUnitForCell(const ScAddress& rCellAddr
     return { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
 }
 
-// getUnitForRef: check format -> if not in format, use more complicated method? (Format overrides header definition)
-bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) {
+FormulaStatus UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) {
 #if DEBUG_FORMULA_COMPILER
     pArray->Dump();
 #endif
@@ -532,7 +543,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
                 // unparseable formulas?
                 // (or even have a "can't be verified" state too?)
                 // see below for more.x
-                return false;
+                return FormulaStatus::UNKNOWN;
             }
 
             aStack.push( { RAUSItemType::UNITS, aUnit } );
@@ -551,11 +562,13 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
             UnitsResult aResult = getOutputUnitsForOpCode(aStack, pToken, pDoc);
 
             switch (aResult.status) {
-            case UnitsStatus::UNITS_INVALID:
-                return false;
+            case UnitsStatus::UNITS_INVALID_SCALING:
+                return FormulaStatus::ERROR_INPUT_SCALING;
+            case UnitsStatus::UNITS_INVALID_INCOMPATIBLE:
+                return FormulaStatus::ERROR_INPUT_INCOMPATIBLE;
             case UnitsStatus::UNITS_UNKNOWN:
                 // Unsupported hence we stop processing.
-                return true;
+                return FormulaStatus::UNKNOWN;
             case UnitsStatus::UNITS_VALID:
                 assert(aResult.units); // ensure that we have the optional unit
                 assert(aResult.units->isValid());
@@ -583,26 +596,30 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
             // was correct.
             // TODO: maybe we should have a "unverified" return state instead?
             SAL_WARN("sc.units", "Unrecognised token type " << pToken->GetType());
-            return true;
+            return FormulaStatus::UNKNOWN;
         }
     }
 
     if (aStack.size() != 1) {
         SAL_WARN("sc.units", "Wrong number of units on stack, should be 1, actual number: " << aStack.size());
-        return false;
+        return FormulaStatus::UNKNOWN;
     } else if (aStack.top().type != RAUSItemType::UNITS) {
         SAL_WARN("sc.units", "End of verification: item on stack does not contain units");
-        return false;
+        return FormulaStatus::UNKNOWN;
     }
 
     HeaderUnitDescriptor aHeader = findHeaderUnitForCell(rFormulaAddress, pDoc);
     UtUnit aResultUnit = boost::get< UtUnit>(aStack.top().item);
 
     if (aHeader.valid && aHeader.unit != aResultUnit) {
-        return false;
+        if (aHeader.unit.areConvertibleTo(aResultUnit)) {
+            return FormulaStatus::ERROR_OUTPUT_SCALING;
+        } else {
+            return FormulaStatus::ERROR_OUTPUT_INCOMPATIBLE;
+        }
     }
 
-    return true;
+    return FormulaStatus::VERIFIED;
 }
 
 bool IsDigit(sal_Unicode c) {
