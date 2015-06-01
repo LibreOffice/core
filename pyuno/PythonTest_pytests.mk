@@ -24,6 +24,7 @@
 $(eval $(call gb_PythonTest_PythonTest,pytests))
 
 $(call gb_PythonTest_get_target,pytests) : \
+    $(call gb_PythonTest_get_target,pyuno_pytests_testcollections) \
     $(call gb_PythonTest_get_target,pyuno_pytests_insertremovecells) \
     $(call gb_PythonTest_get_target,pyuno_pytests_ssl) \
 
