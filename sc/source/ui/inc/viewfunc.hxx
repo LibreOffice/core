@@ -58,6 +58,10 @@ namespace sc {
 
 struct ColRowSpan;
 
+namespace units {
+enum class FormulaStatus;
+}
+
 }
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
@@ -373,7 +377,9 @@ private:
     void            CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                        SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
 
-    void            NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument* pDoc );
+    void            NotifyUnitErrorInFormula( const ScAddress& rAddress,
+                                              ScDocument* pDoc,
+                                              const sc::units::FormulaStatus& rStatus);
     DECL_LINK( EditUnitErrorFormulaHandler, PushButton* );
 
     void            NotifyUnitConversionRecommended( const ScAddress& rCellAddress,
