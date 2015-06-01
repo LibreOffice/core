@@ -1054,6 +1054,7 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
         case ocIndex:
 
         case ocCeil:
+        case ocFloor:
 
         case ocGammaDist:
         case ocFDist_LT:
@@ -1414,10 +1415,11 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
         }
         if (bAdd)
         {
-            if ( pCur->GetOpCode() == ocCeil &&
+            if ( ( pCur->GetOpCode() == ocCeil || pCur->GetOpCode() == ocFloor ) &&
                  rConv.getConvention() == MissingConvention::FORMULA_MISSING_CONVENTION_OOXML )
             {
-                FormulaToken *pToken = new FormulaToken( svByte, ocCeil_Math );
+                FormulaToken *pToken = new FormulaToken( svByte,
+                        ( pCur->GetOpCode() == ocCeil ? ocCeil_Math : ocFloor_Math ) );
                 pNewArr->AddToken( *pToken );
             }
             else

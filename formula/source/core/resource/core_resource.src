@@ -154,8 +154,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_CEIL_MS { Text = "COM.MICROSOFT.CEILING" ; };
     String SC_OPCODE_CEIL_PRECISE { Text = "COM.MICROSOFT.CEILING.PRECISE" ; };
     String SC_OPCODE_CEIL_ISO { Text = "COM.MICROSOFT.ISO.CEILING" ; };
-    String SC_OPCODE_FLOOR_MS { Text = "COM.MICROSOFT.FLOOR.PRECISE" ; };
     String SC_OPCODE_FLOOR { Text = "FLOOR" ; };
+    String SC_OPCODE_FLOOR_MS { Text = "COM.MICROSOFT.FLOOR" ; };
+    String SC_OPCODE_FLOOR_MATH { Text = "COM.MICROSOFT.FLOOR.MATH" ; };
+    String SC_OPCODE_FLOOR_PRECISE { Text = "COM.MICROSOFT.FLOOR.PRECISE" ; };
     String SC_OPCODE_ROUND { Text = "ROUND" ; };
     String SC_OPCODE_ROUND_UP { Text = "ROUNDUP" ; };
     String SC_OPCODE_ROUND_DOWN { Text = "ROUNDDOWN" ; };
@@ -573,8 +575,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_CEIL_MS { Text = "CEILING" ; };
     String SC_OPCODE_CEIL_PRECISE { Text = "_xlfn.CEILING.PRECISE" ; };
     String SC_OPCODE_CEIL_ISO { Text = "ISO.CEILING" ; };
-    String SC_OPCODE_FLOOR_MS { Text = "_xlfn.FLOOR.PRECISE" ; };
-    String SC_OPCODE_FLOOR { Text = "FLOOR" ; };
+    String SC_OPCODE_FLOOR_MS { Text = "FLOOR" ; };
+    String SC_OPCODE_FLOOR_MATH { Text = "_xlfn.FLOOR.MATH" ; };
+    String SC_OPCODE_FLOOR { Text = "_xlfn.FLOOR.MATH" ; };
+    String SC_OPCODE_FLOOR_PRECISE { Text = "_xlfn.FLOOR.PRECISE" ; };
     String SC_OPCODE_ROUND { Text = "ROUND" ; };
     String SC_OPCODE_ROUND_UP { Text = "ROUNDUP" ; };
     String SC_OPCODE_ROUND_DOWN { Text = "ROUNDDOWN" ; };
@@ -994,8 +998,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CEIL_MS { Text = "CEILING.XCL" ; };
     String SC_OPCODE_CEIL_PRECISE { Text = "CEILING.PRECISE" ; };
     String SC_OPCODE_CEIL_ISO { Text = "ISO.CEILING" ; };
-    String SC_OPCODE_FLOOR_MS { Text = "FLOOR.PRECISE" ; };
     String SC_OPCODE_FLOOR { Text = "FLOOR" ; };
+    String SC_OPCODE_FLOOR_MS { Text = "FLOOR.XCL" ; };
+    String SC_OPCODE_FLOOR_MATH { Text = "FLOOR.MATH" ; };
+    String SC_OPCODE_FLOOR_PRECISE { Text = "FLOOR.PRECISE" ; };
     String SC_OPCODE_ROUND { Text = "ROUND" ; };
     String SC_OPCODE_ROUND_UP { Text = "ROUNDUP" ; };
     String SC_OPCODE_ROUND_DOWN { Text = "ROUNDDOWN" ; };
@@ -1747,13 +1753,21 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "ISO.CEILING" ;
     };
-    String SC_OPCODE_FLOOR_MS
-    {
-        Text [ en-US ] = "FLOOR.PRECISE" ;
-    };
     String SC_OPCODE_FLOOR
     {
         Text [ en-US ] = "FLOOR" ;
+    };
+    String SC_OPCODE_FLOOR_MS
+    {
+        Text [ en-US ] = "FLOOR.XCL" ;
+    };
+    String SC_OPCODE_FLOOR_MATH
+    {
+        Text [ en-US ] = "FLOOR.MATH" ;
+    };
+    String SC_OPCODE_FLOOR_PRECISE
+    {
+        Text [ en-US ] = "FLOOR.PRECISE" ;
     };
     String SC_OPCODE_ROUND
     {

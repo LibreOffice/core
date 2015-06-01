@@ -629,5 +629,7 @@
 #define HID_FUNC_AGGREGATE                                      "SC_HID_FUNC_AGGREGATE"
 #define HID_FUNC_ERROR_TYPE_ODF                                 "SC_HID_FUNC_ERROR_TYPE_ODF"
 #define HID_FUNC_CEIL_MATH                                      "SC_HID_FUNC_CEIL_MATH"
+#define HID_FUNC_FLOOR_MATH                                     "SC_HID_FUNC_FLOOR_MATH"
+#define HID_FUNC_FLOOR_PRECISE                                  "SC_HID_FUNC_FLOOR_PRECISE"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

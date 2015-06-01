@@ -4683,7 +4683,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "For negative numbers; if given and not equal to zero then rounds away from zero, else rounds towards zero." ;
         };
     };
-     // -=*# Resource for function UNTERGRENZE #*=-
+     // -=*# Resource for function FLOOR #*=-
     Resource SC_OPCODE_FLOOR
     {
         String 1 // Description
@@ -4695,7 +4695,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
             ID_FUNCTION_GRP_MATH;
             U2S( HID_FUNC_UNTERGRENZE );
-            3;  0;  0;  1;
+            3;  0;  1;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -4720,22 +4720,22 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "If given and not equal to zero then rounded down according to amount when a negative number and significance." ;
+            Text [ en-US ] = "If given and not equal to zero then rounded towards zero with negative number and significance." ;
         };
     };
-     // -=*# Resource for function FLOOR.PRECISE #*=-
+     // -=*# Resource for function FLOOR.XCL #*=-
     Resource SC_OPCODE_FLOOR_MS
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Rounds number down to the nearest multiple of significance, regardless of sign of significance." ;
+            Text [ en-US ] = "Rounds number towards zero to the nearest multiple of absolute value of significance." ;
         };
         ExtraData =
         {
             0;
             ID_FUNCTION_GRP_MATH;
             U2S( HID_FUNC_FLOOR_MS );
-            2;  0;  1;
+            2;  0;  0;
             0;
         };
         String 2 // Name of Parameter 1
@@ -4753,6 +4753,78 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             Text [ en-US ] = "The number to whose multiple the value is to be rounded down." ;
+        };
+    };
+     // -=*# Resource for function FLOOR.MATH #*=-
+    Resource SC_OPCODE_FLOOR_MATH
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Rounds number down to the nearest multiple of significance, regardless of sign of significance." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_FLOOR_MATH );
+            2;  0;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The number to be rounded down." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Significance" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The number to whose multiple the value is to be rounded down." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Mode" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "For negative numbers; if given and not equal to or less than zero rounds towards zero." ;
+        };
+    };
+     // -=*# Resource for function FLOOR.PRECISE #*=-
+    Resource SC_OPCODE_FLOOR_PRECISE
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Rounds number down (towards -∞) to the nearest multiple of significance." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_FLOOR_PRECISE );
+            2;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The number to be rounded down." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Significance" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The number to whose multiple the value is to be rounded down. Sign has no meaning." ;
         };
     };
      // -=*# Resource for function GCD #*=-
