@@ -734,18 +734,78 @@ void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
     rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
     struct OverflowingText {
-        OUString headTxt;
-        OutlinerParaObject *tailParas;
+        OUString mHeadTxt;
+        const OutlinerParaObject *mpMidParas;
+        OUString mTailTxt;
+        // NOTE: mpMidParas and mTailTxt might be empty
+
+        // Constructor
+        OverflowingText(
+            const OUString &headTxt,
+            const OutlinerParaObject *pMidParas = NULL,
+            const OUString &tailTxt = "")
+                : mHeadTxt(headTxt),
+                  mpMidParas(pMidParas),
+                  mTailTxt(tailTxt)
+                { }
     };
 
+    OverflowingText aOverflowingTxt =
+        OverflowingText("headTxt (On its own) ", NULL, "I'm Appended to #");
+
     if (mpOverflowingText) {
-        // get first para of destination box
-        // XXX: Check it exists
+        // XXX: Not sure if necessary
+        rOutliner.Clear();
 
-        // Get other paras of destination box
-        // XXX: Check they exist
+        OutlinerParaObject *pCurTxt = pNextTextObj->GetOutlinerParaObject();
+        rOutliner.SetText(*pCurTxt);
 
+        // Get text of first paragraph of destination box
+        Paragraph *pOldPara0 = rOutliner.GetParagraph(0);
+        OUString aOldPara0Txt;
+        if (pOldPara0)
+            aOldPara0Txt = rOutliner.GetText(pOldPara0);
 
+        // Get other paras of destination box (from second on)
+        OutlinerParaObject *pOldParasTail =
+            rOutliner.CreateParaObject(1);
+
+        // Create ParaObject appending old first para in the dest. box
+        //   to last part of overflowing text
+        Paragraph *pTmpPara0 = NULL;
+        OutlinerParaObject *pJoiningPara = NULL;
+
+        if (pOldPara0) {
+            rOutliner.Clear();
+
+            pTmpPara0 = rOutliner.GetParagraph(0);
+            rOutliner.SetText(aOverflowingTxt.mTailTxt + aOldPara0Txt, pTmpPara0);
+            pJoiningPara = rOutliner.CreateParaObject();
+        }
+
+        // start actual composition
+        rOutliner.Clear();
+
+        // Set headText at the beginning of box
+        Paragraph *pNewPara0 = rOutliner.GetParagraph(0);
+        rOutliner.SetText(aOverflowingTxt.mHeadTxt, pNewPara0);
+
+        // Set all the intermediate Paras
+        if (aOverflowingTxt.mpMidParas)
+            rOutliner.AddText(*aOverflowingTxt.mpMidParas);
+
+        // Append old first para in the destination box to
+        //   last part of overflowing text
+        if (pJoiningPara)
+            rOutliner.AddText(*pJoiningPara);
+
+        // Append all other old paras
+        if (pOldParasTail)
+            rOutliner.AddText(*pOldParasTail);
+
+        // Draw everything
+        OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
+        pNextTextObj->NbcSetOutlinerParaObject(pNewText);
     }
 
 }
