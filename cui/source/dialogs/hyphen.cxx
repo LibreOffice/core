@@ -455,10 +455,11 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     uno::Reference< linguistic2::XHyphenator >  &xHyphen,
     SvxSpellWrapper* pWrapper)
     : SfxModalDialog(pParent, "HyphenateDialog", "cui/ui/hyphenate.ui")
-    , pHyphWrapper(NULL)
+    , pHyphWrapper(pWrapper)
     , xHyphenator(NULL)
     , xPossHyph(NULL)
-    , nActLanguage(LANGUAGE_NONE)
+    , aActWord(rWord)
+    , nActLanguage(nLang)
     , nMaxHyphenationPos(0)
     , nHyphPos(0)
     , nOldPos(0)
@@ -475,10 +476,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     get(m_pCloseBtn, "close");
 
     aLabel = GetText();
-    aActWord = rWord;
-    nActLanguage = nLang;
     xHyphenator = xHyphen;
-    pHyphWrapper = pWrapper;
 
     uno::Reference< linguistic2::XHyphenatedWord >  xHyphWord( pHyphWrapper ?
             pHyphWrapper->GetLast() : NULL, uno::UNO_QUERY );
