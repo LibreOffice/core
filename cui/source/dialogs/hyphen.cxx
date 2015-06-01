@@ -71,11 +71,11 @@ void HyphenEdit::KeyInput( const KeyEvent& rKEvt )
 
 void SvxHyphenWordDialog::EnableLRBtn_Impl()
 {
-    OUString  aTxt( aEditWord );
+    OUString  aTxt( m_aEditWord );
     sal_Int32 nLen = aTxt.getLength();
 
     m_pRightBtn->Disable();
-    for ( sal_Int32 i = nOldPos + 2; i < nLen; ++i )
+    for ( sal_Int32 i = m_nOldPos + 2; i < nLen; ++i )
     {
         if ( aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
         {
@@ -84,11 +84,11 @@ void SvxHyphenWordDialog::EnableLRBtn_Impl()
         }
     }
 
-    DBG_ASSERT(nOldPos < aTxt.getLength(), "nOldPos out of range");
-    if (nOldPos >= aTxt.getLength())
-        nOldPos = aTxt.getLength() - 1;
+    DBG_ASSERT(m_nOldPos < aTxt.getLength(), "nOldPos out of range");
+    if (m_nOldPos >= aTxt.getLength())
+        m_nOldPos = aTxt.getLength() - 1;
     m_pLeftBtn->Disable();
-    for ( sal_Int32 i = nOldPos;  i-- > 0; )
+    for ( sal_Int32 i = m_nOldPos;  i-- > 0; )
     {
         if ( aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
         {
@@ -134,11 +134,11 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
     DBG_ASSERT(rxPossHyph.is(), "missing possible hyphens");
     if (rxPossHyph.is())
     {
-        DBG_ASSERT( aActWord == rxPossHyph->getWord(), "word mismatch"  );
+        DBG_ASSERT( m_aActWord == rxPossHyph->getWord(), "word mismatch"  );
 
         aTxt = rxPossHyph->getPossibleHyphens();
 
-        nHyphenationPositionsOffset = 0;
+        m_nHyphenationPositionsOffset = 0;
         uno::Sequence< sal_Int16 > aHyphenationPositions(
                 rxPossHyph->getHyphenationPositions() );
         sal_Int32 nLen = aHyphenationPositions.getLength();
@@ -194,7 +194,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
                 nPos++;
                 aLeft = aLeft.replaceFirst( aTmp, aEmpty, &nPos );
                 if (nPos != -1)
-                    ++nHyphenationPositionsOffset;
+                    ++m_nHyphenationPositionsOffset;
             }
             aTxt = aTxt.replaceAt( 0, nPos2, aLeft );
         }
@@ -205,18 +205,18 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
 
 void SvxHyphenWordDialog::InitControls_Impl()
 {
-    xPossHyph = NULL;
-    if (xHyphenator.is())
+    m_xPossHyph = NULL;
+    if (m_xHyphenator.is())
     {
-        lang::Locale aLocale( LanguageTag::convertToLocale(nActLanguage) );
-        xPossHyph = xHyphenator->createPossibleHyphens( aActWord, aLocale,
+        lang::Locale aLocale( LanguageTag::convertToLocale(m_nActLanguage) );
+        m_xPossHyph = m_xHyphenator->createPossibleHyphens( m_aActWord, aLocale,
                                                         uno::Sequence< beans::PropertyValue >() );
-        if (xPossHyph.is())
-            aEditWord = EraseUnusableHyphens_Impl( xPossHyph, nMaxHyphenationPos );
+        if (m_xPossHyph.is())
+            m_aEditWord = EraseUnusableHyphens_Impl( m_xPossHyph, m_nMaxHyphenationPos );
     }
-    m_pWordEdit->SetText( aEditWord );
+    m_pWordEdit->SetText( m_aEditWord );
 
-    nOldPos = aEditWord.getLength();
+    m_nOldPos = m_aEditWord.getLength();
     SelLeft();
     EnableLRBtn_Impl();
 }
@@ -224,11 +224,11 @@ void SvxHyphenWordDialog::InitControls_Impl()
 
 void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
 {
-    if ( nInsPos >= 0 && xPossHyph.is() )
+    if ( nInsPos >= 0 && m_xPossHyph.is() )
     {
         if (nInsPos)
         {
-            OUString aTmp( aEditWord );
+            OUString aTmp( m_aEditWord );
             DBG_ASSERT(nInsPos <= aTmp.getLength() - 2, "wrong hyphen position");
 
             sal_Int32 nIdxPos = -1;
@@ -239,37 +239,37 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
             }
             // take the possible hyphenation positions that got removed from the
             // start of the word into account:
-            nIdxPos += nHyphenationPositionsOffset;
+            nIdxPos += m_nHyphenationPositionsOffset;
 
-            uno::Sequence< sal_Int16 > aSeq = xPossHyph->getHyphenationPositions();
+            uno::Sequence< sal_Int16 > aSeq = m_xPossHyph->getHyphenationPositions();
             sal_Int32 nLen = aSeq.getLength();
             DBG_ASSERT(nLen, "empty sequence");
             DBG_ASSERT(0 <= nIdxPos && nIdxPos < nLen, "index out of range");
             if (nLen && 0 <= nIdxPos && nIdxPos < nLen)
             {
                 nInsPos = aSeq.getConstArray()[ nIdxPos ];
-                pHyphWrapper->InsertHyphen( nInsPos );
+                m_pHyphWrapper->InsertHyphen( nInsPos );
             }
         }
         else
         {
             //! calling with 0 as argument will remove hyphens!
-            pHyphWrapper->InsertHyphen( nInsPos );
+            m_pHyphWrapper->InsertHyphen( nInsPos );
         }
     }
 
-    if ( pHyphWrapper->FindSpellError() )
+    if ( m_pHyphWrapper->FindSpellError() )
     {
-        uno::Reference< linguistic2::XHyphenatedWord >  xHyphWord( pHyphWrapper->GetLast(), uno::UNO_QUERY );
+        uno::Reference< linguistic2::XHyphenatedWord >  xHyphWord( m_pHyphWrapper->GetLast(), uno::UNO_QUERY );
 
         // adapt actual word and language to new found hyphenation result
         if(xHyphWord.is())
         {
-            aActWord    = xHyphWord->getWord();
-            nActLanguage = LanguageTag( xHyphWord->getLocale() ).getLanguageType();
-            nMaxHyphenationPos = xHyphWord->getHyphenationPos();
+            m_aActWord = xHyphWord->getWord();
+            m_nActLanguage = LanguageTag( xHyphWord->getLocale() ).getLanguageType();
+            m_nMaxHyphenationPos = xHyphWord->getHyphenationPos();
             InitControls_Impl();
-            SetWindowTitle( nActLanguage );
+            SetWindowTitle( m_nActLanguage );
         }
     }
     else
@@ -296,25 +296,25 @@ sal_uInt16 SvxHyphenWordDialog::GetHyphIndex_Impl()
 
 void SvxHyphenWordDialog::SelLeft()
 {
-    DBG_ASSERT( nOldPos > 0, "invalid hyphenation position" );
-    if (nOldPos > 0)
+    DBG_ASSERT( m_nOldPos > 0, "invalid hyphenation position" );
+    if (m_nOldPos > 0)
     {
-        OUString aTxt( aEditWord );
-        for( sal_Int32 i = nOldPos - 1;  i > 0; --i )
+        OUString aTxt( m_aEditWord );
+        for( sal_Int32 i = m_nOldPos - 1;  i > 0; --i )
         {
             DBG_ASSERT(i <= aTxt.getLength(), "index out of range");
             if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))
             {
                 aTxt = aTxt.replaceAt( i, 1, OUString( CUR_HYPH_POS_CHAR ) );
 
-                nOldPos = i;
+                m_nOldPos = i;
                 m_pWordEdit->SetText( aTxt );
                 m_pWordEdit->GrabFocus();
                 m_pWordEdit->SetSelection( Selection( i, i + 1 ) );
                 break;
             }
         }
-        nHyphPos = GetHyphIndex_Impl();
+        m_nHyphPos = GetHyphIndex_Impl();
         EnableLRBtn_Impl();
     }
 }
@@ -322,32 +322,32 @@ void SvxHyphenWordDialog::SelLeft()
 
 void SvxHyphenWordDialog::SelRight()
 {
-    OUString aTxt( aEditWord );
-    for ( sal_Int32 i = nOldPos + 1;  i < aTxt.getLength();  ++i )
+    OUString aTxt( m_aEditWord );
+    for ( sal_Int32 i = m_nOldPos + 1;  i < aTxt.getLength();  ++i )
     {
         if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))
         {
             aTxt = aTxt.replaceAt( i, 1, OUString( CUR_HYPH_POS_CHAR ) );
 
-            nOldPos = i;
+            m_nOldPos = i;
             m_pWordEdit->SetText( aTxt );
             m_pWordEdit->GrabFocus();
             m_pWordEdit->SetSelection( Selection( i, i + 1 ) );
             break;
         }
     }
-    nHyphPos = GetHyphIndex_Impl();
+    m_nHyphPos = GetHyphIndex_Impl();
     EnableLRBtn_Impl();
 }
 
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, CutHdl_Impl)
 {
-    if( !bBusy )
+    if( !m_bBusy )
     {
-        bBusy = true;
-        ContinueHyph_Impl( /*nHyphPos*/nOldPos );
-        bBusy = false;
+        m_bBusy = true;
+        ContinueHyph_Impl( /*m_nHyphPos*/m_nOldPos );
+        m_bBusy = false;
     }
     return 0;
 }
@@ -355,7 +355,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CutHdl_Impl)
 
 IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, /*pButton*/ )
 {
-    if( !bBusy )
+    if( !m_bBusy )
     {
         try
         {
@@ -363,9 +363,9 @@ IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, /*pButton*/ )
 
             xProp->setIsHyphAuto( sal_True );
 
-            bBusy = true;
-            ContinueHyph_Impl( /*nHyphPos*/nOldPos );
-            bBusy = false;
+            m_bBusy = true;
+            ContinueHyph_Impl( /*m_nHyphPos*/m_nOldPos );
+            m_bBusy = false;
 
             xProp->setIsHyphAuto( sal_False );
         }
@@ -381,11 +381,11 @@ IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, /*pButton*/ )
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, DeleteHdl_Impl)
 {
-    if( !bBusy )
+    if( !m_bBusy )
     {
-        bBusy = true;
+        m_bBusy = true;
         ContinueHyph_Impl( 0 );
-        bBusy = false;
+        m_bBusy = false;
     }
     return 0;
 }
@@ -393,11 +393,11 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, DeleteHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, ContinueHdl_Impl)
 {
-    if( !bBusy )
+    if( !m_bBusy )
     {
-        bBusy = true;
+        m_bBusy = true;
         ContinueHyph_Impl();
-        bBusy = false;
+        m_bBusy = false;
     }
     return 0;
 }
@@ -405,12 +405,12 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, ContinueHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, CancelHdl_Impl)
 {
-    if( !bBusy )
+    if( !m_bBusy )
     {
-        bBusy = true;
-        pHyphWrapper->SpellEnd();
+        m_bBusy = true;
+        m_pHyphWrapper->SpellEnd();
         EndDialog( RET_CANCEL );
-        bBusy = false;
+        m_bBusy = false;
     }
     return 0;
 }
@@ -418,11 +418,11 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CancelHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, Left_Impl)
 {
-    if( !bBusy )
+    if( !m_bBusy )
     {
-        bBusy = true;
+        m_bBusy = true;
         SelLeft();
-        bBusy = false;
+        m_bBusy = false;
     }
     return 0;
 }
@@ -430,11 +430,11 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, Left_Impl)
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, Right_Impl)
 {
-    if( !bBusy )
+    if( !m_bBusy )
     {
-        bBusy = true;
+        m_bBusy = true;
         SelRight();
-        bBusy = false;
+        m_bBusy = false;
     }
     return 0;
 }
@@ -442,7 +442,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, Right_Impl)
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, GetFocusHdl_Impl)
 {
-    m_pWordEdit->SetSelection( Selection( nOldPos, nOldPos + 1 ) );
+    m_pWordEdit->SetSelection( Selection( m_nOldPos, m_nOldPos + 1 ) );
     return 0;
 }
 
@@ -455,16 +455,16 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     uno::Reference< linguistic2::XHyphenator >  &xHyphen,
     SvxSpellWrapper* pWrapper)
     : SfxModalDialog(pParent, "HyphenateDialog", "cui/ui/hyphenate.ui")
-    , pHyphWrapper(pWrapper)
-    , xHyphenator(NULL)
-    , xPossHyph(NULL)
-    , aActWord(rWord)
-    , nActLanguage(nLang)
-    , nMaxHyphenationPos(0)
-    , nHyphPos(0)
-    , nOldPos(0)
-    , nHyphenationPositionsOffset(0)
-    , bBusy(false)
+    , m_pHyphWrapper(pWrapper)
+    , m_xHyphenator(NULL)
+    , m_xPossHyph(NULL)
+    , m_aActWord(rWord)
+    , m_nActLanguage(nLang)
+    , m_nMaxHyphenationPos(0)
+    , m_nHyphPos(0)
+    , m_nOldPos(0)
+    , m_nHyphenationPositionsOffset(0)
+    , m_bBusy(false)
 {
     get(m_pWordEdit, "worded");
     get(m_pLeftBtn, "left");
@@ -475,17 +475,17 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     get(m_pHyphAll, "hyphall");
     get(m_pCloseBtn, "close");
 
-    aLabel = GetText();
-    xHyphenator = xHyphen;
+    m_aLabel = GetText();
+    m_xHyphenator = xHyphen;
 
-    uno::Reference< linguistic2::XHyphenatedWord >  xHyphWord( pHyphWrapper ?
-            pHyphWrapper->GetLast() : NULL, uno::UNO_QUERY );
+    uno::Reference< linguistic2::XHyphenatedWord >  xHyphWord( m_pHyphWrapper ?
+            m_pHyphWrapper->GetLast() : NULL, uno::UNO_QUERY );
     DBG_ASSERT( xHyphWord.is(), "hyphenation result missing" );
     if (xHyphWord.is())
     {
-        DBG_ASSERT( aActWord == xHyphWord->getWord(), "word mismatch" );
-        DBG_ASSERT( nActLanguage == LanguageTag( xHyphWord->getLocale() ).getLanguageType(), "language mismatch" );
-        nMaxHyphenationPos = xHyphWord->getHyphenationPos();
+        DBG_ASSERT( m_aActWord == xHyphWord->getWord(), "word mismatch" );
+        DBG_ASSERT( m_nActLanguage == LanguageTag( xHyphWord->getLocale() ).getLanguageType(), "language mismatch" );
+        m_nMaxHyphenationPos = xHyphWord->getHyphenationPos();
     }
 
     InitControls_Impl();
@@ -503,7 +503,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     SetWindowTitle( nLang );
 
     // disable controls if service is not available
-    if (!xHyphenator.is())
+    if (!m_xHyphenator.is())
         Enable( false );
 }
 
@@ -529,7 +529,7 @@ void SvxHyphenWordDialog::dispose()
 void SvxHyphenWordDialog::SetWindowTitle( LanguageType nLang )
 {
     OUString aLangStr( SvtLanguageTable::GetLanguageString( nLang ) );
-    OUString aTmp( aLabel );
+    OUString aTmp( m_aLabel );
     aTmp += " (";
     aTmp += aLangStr;
     aTmp += ")";

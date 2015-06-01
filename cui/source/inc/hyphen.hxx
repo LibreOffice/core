@@ -50,19 +50,18 @@ class SvxHyphenWordDialog : public SfxModalDialog
     VclPtr<PushButton>         m_pDelBtn;
     VclPtr<PushButton>         m_pHyphAll;
     VclPtr<CloseButton>        m_pCloseBtn;
-    OUString            aLabel;
-    SvxSpellWrapper     *const pHyphWrapper;
-    css::uno::Reference< css::linguistic2::XHyphenator >        xHyphenator;
-    css::uno::Reference< css::linguistic2::XPossibleHyphens >   xPossHyph;
-    OUString            aEditWord;      // aEditWord and aWordEdit.GetText() differ only by the character for the current selected hyphenation position
-    OUString            aActWord;           // actual word to be hyphenated
-    LanguageType        nActLanguage;       // and its language
-    sal_uInt16          nMaxHyphenationPos; // right most valid hyphenation pos
-    sal_uInt16          nHyphPos;
-    sal_Int32           nOldPos;
-    sal_Int32           nHyphenationPositionsOffset;
-    bool            bBusy;
-
+    OUString            m_aLabel;
+    SvxSpellWrapper     *const m_pHyphWrapper;
+    css::uno::Reference< css::linguistic2::XHyphenator >        m_xHyphenator;
+    css::uno::Reference< css::linguistic2::XPossibleHyphens >   m_xPossHyph;
+    OUString            m_aEditWord;      // aEditWord and aWordEdit.GetText() differ only by the character for the current selected hyphenation position
+    OUString            m_aActWord;           // actual word to be hyphenated
+    LanguageType        m_nActLanguage;       // and its language
+    sal_uInt16          m_nMaxHyphenationPos; // right most valid hyphenation pos
+    sal_uInt16          m_nHyphPos;
+    sal_Int32           m_nOldPos;
+    sal_Int32           m_nHyphenationPositionsOffset;
+    bool                m_bBusy;
 
     void            EnableLRBtn_Impl();
     OUString        EraseUnusableHyphens_Impl( css::uno::Reference< css::linguistic2::XPossibleHyphens >  &rxPossHyph, sal_uInt16 nMaxHyphenationPos );
