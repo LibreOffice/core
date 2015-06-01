@@ -2024,29 +2024,15 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 void SwTextNode::CutText( SwTextNode * const pDest,
             const SwIndex & rStart, const sal_Int32 nLen )
 {
-    if(pDest)
-    {
-        SwIndex aDestStt(pDest, pDest->GetText().getLength());
-        CutImpl( pDest, aDestStt, rStart, nLen, false );
-    }
-    else
-    {
-        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
-        assert(false);
-        EraseText( rStart, nLen );
-    }
+    assert(pDest); // Cut requires a destination
+    SwIndex aDestStt(pDest, pDest->GetText().getLength());
+    CutImpl( pDest, aDestStt, rStart, nLen, false );
 }
 
 void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
          const SwIndex & rStart, sal_Int32 nLen, const bool bUpdate )
 {
-    if(!pDest)
-    {
-        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
-        assert(false);
-        EraseText( rStart, nLen );
-        return;
-    }
+    assert(pDest); // Cut requires a destination
 
     // nicht im Dokument verschieben ?
     if( GetDoc() != pDest->GetDoc() )
