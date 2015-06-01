@@ -1610,6 +1610,7 @@ struct SwXParaFrameEnumerationImpl SAL_FINAL : public SwXParaFrameEnumeration
             m_vFrames.erase(iter, m_vFrames.end());
         }
     }
+    void FillFrame();
     bool CreateNextObject();
     uno::Reference< text::XTextContent > m_xNextObject;
     FrameClientList_t m_vFrames;
@@ -1617,23 +1618,6 @@ struct SwXParaFrameEnumerationImpl SAL_FINAL : public SwXParaFrameEnumeration
 };
 
 
-// Search for a FLYCNT text attribute at the cursor point and fill the frame
-// into the array
-static void
-lcl_FillFrame(SwUnoCrsr& rUnoCrsr, FrameClientList_t & rFrames)
-{
-    // search for objects at the cursor - anchored at/as char
-    SwTextAttr const*const pTextAttr = (rUnoCrsr.GetNode().IsTextNode())
-        ? rUnoCrsr.GetNode().GetTextNode()->GetTextAttrForCharAt(
-            rUnoCrsr.GetPoint()->nContent.GetIndex(), RES_TXTATR_FLYCNT)
-        : 0;
-    if (pTextAttr)
-    {
-        const SwFormatFlyCnt& rFlyCnt = pTextAttr->GetFlyCnt();
-        SwFrameFormat * const  pFrameFormat = rFlyCnt.GetFrameFormat();
-        rFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
-    }
-}
 
 SwXParaFrameEnumeration* SwXParaFrameEnumeration::Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat)
     { return new SwXParaFrameEnumerationImpl(rPaM, eParaFrameMode, pFormat); }
@@ -1676,9 +1660,24 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
                 m_vFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
             }
         }
-
-        lcl_FillFrame(*GetCursor(), m_vFrames);
+        FillFrame();
     }
+}
+
+// Search for a FLYCNT text attribute at the cursor point and fill the frame
+// into the array
+void SwXParaFrameEnumerationImpl::FillFrame()
+{
+    if(!m_pUnoCursor->GetNode().IsTextNode())
+        return;
+    // search for objects at the cursor - anchored at/as char
+    const auto pTextAttr = m_pUnoCursor->GetNode().GetTextNode()->GetTextAttrForCharAt(
+            m_pUnoCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FLYCNT);
+    if(!pTextAttr)
+        return;
+    const SwFormatFlyCnt& rFlyCnt = pTextAttr->GetFlyCnt();
+    SwFrameFormat* const pFrameFormat = rFlyCnt.GetFrameFormat();
+    m_vFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
 }
 
 bool SwXParaFrameEnumerationImpl::CreateNextObject()
@@ -1687,7 +1686,7 @@ bool SwXParaFrameEnumerationImpl::CreateNextObject()
         return false;
 
     SwFrameFormat* const pFormat = static_cast<SwFrameFormat*>(const_cast<SwModify*>(
-                m_vFrames.front()->GetRegisteredIn()));
+            m_vFrames.front()->GetRegisteredIn()));
     m_vFrames.pop_front();
     // the format should be valid here, otherwise the client
     // would have been removed by PurgeFrameClients
@@ -1695,11 +1694,9 @@ bool SwXParaFrameEnumerationImpl::CreateNextObject()
     SwDrawContact* const pContact = SwIterator<SwDrawContact,SwFormat>( *pFormat ).First();
     if (pContact)
     {
-        SdrObject * const pSdr = pContact->GetMaster();
+        SdrObject* const pSdr = pContact->GetMaster();
         if (pSdr)
-        {
             m_xNextObject.set(pSdr->getUnoShape(), uno::UNO_QUERY);
-        }
     }
     else
     {
