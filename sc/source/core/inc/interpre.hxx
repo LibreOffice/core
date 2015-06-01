@@ -629,7 +629,7 @@ void ScOdd();
 void ScCeil( bool bODFF );
 void ScCeil_MS();
 void ScCeil_Precise();
-void ScFloor();
+void ScFloor( bool bODFF );
 void ScFloor_MS();
 void ScFloor_Precise();
 void RoundNumber( rtl_math_RoundingMode eMode );

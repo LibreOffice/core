@@ -2519,6 +2519,12 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             // unassigned for import.
             eOp = ocCeil_Math;
         }
+        else if (eOp == ocCeil && mxSymbols->isOOXML())
+        {
+            // Ensure that _xlfn.FLOOR.MATH maps to ocFloor_Math. ocFloor is
+            // unassigned for import.
+            eOp = ocFloor_Math;
+        }
         maRawToken.SetOpCode(eOp);
     }
     else if (mxSymbols->isODFF())
@@ -4087,14 +4093,12 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         }
         if (bOOXML)
         {
-            // Append a parameter for FLOOR and WEEKNUM, all 1.0
+            // Append a parameter for WEEKNUM, all 1.0
             // Function is already closed, parameter count is nSep+1
             size_t nFunc = nFunction + 1;
-            if (eOp == ocClose && (
-                    (pFunctionStack[ nFunc ].eOp == ocFloor &&  // 3rd Excel mode
-                     pFunctionStack[ nFunc ].nSep == 1) ||
+            if (eOp == ocClose &&
                     (pFunctionStack[ nFunc ].eOp == ocWeek &&   // 2nd week start
-                     pFunctionStack[ nFunc ].nSep == 0)))
+                     pFunctionStack[ nFunc ].nSep == 0))
             {
                 if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
                         !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
