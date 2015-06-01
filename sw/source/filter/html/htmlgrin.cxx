@@ -94,23 +94,19 @@ HTMLOptionEnum aHTMLImgVAlignTable[] =
 
 ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 {
-    ImageMap *pMap = 0;
-
     OSL_ENSURE( rName[0] != '#', "FindImageName: Name beginnt mit #!" );
 
     if( pImageMaps )
     {
-        for( sal_uInt16 i=0; i<pImageMaps->size(); i++ )
+        for( auto &rIMap : *pImageMaps )
         {
-            ImageMap *pIMap = &(*pImageMaps)[i];
-            if( rName.equalsIgnoreAsciiCase( pIMap->GetName() ) )
+            if( rName.equalsIgnoreAsciiCase( rIMap.GetName() ) )
             {
-                pMap = pIMap;
-                break;
+                return &rIMap;
             }
         }
     }
-    return pMap;
+    return nullptr;
 }
 
 void SwHTMLParser::ConnectImageMaps()
@@ -779,7 +775,7 @@ IMAGE_SETEVENT:
                 SFX_EVENT_MOUSEOUT_OBJECT,
                 0 };
 
-            for( sal_uInt16 n = 0; aEvents[ n ]; ++n )
+            for( int n = 0; aEvents[ n ]; ++n )
             {
                 const SvxMacro *pMacro = rINetFormat.GetMacro( aEvents[ n ] );
                 if( 0 != pMacro )
@@ -991,7 +987,7 @@ void SwHTMLParser::InsertBodyOptions()
         static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_CJK_FONTSIZE,
                                        RES_CHRATR_CTL_FONTSIZE };
-        for( sal_uInt16 i=0; i<3; i++ )
+        for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
         {
             if( SfxItemState::SET == aItemSet.GetItemState( aWhichIds[i], false,
                                                        &pItem ) &&
@@ -1302,7 +1298,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
     // to check the last bookmark
     if( !bIgnoreStack )
     {
-        for( sal_uInt16 i = aSetAttrTab.size(); i; )
+        for( auto i = aSetAttrTab.size(); i; )
         {
             _HTMLAttr* pAttr = aSetAttrTab[ --i ];
             if( RES_FLTR_BOOKMARK == pAttr->pItem->Which() )
@@ -1354,9 +1350,8 @@ void SwHTMLParser::StripTrailingPara()
 
             const SwFrameFormats& rFrameFormatTable = *pDoc->GetSpzFrameFormats();
 
-            for( sal_uInt16 i=0; i<rFrameFormatTable.size(); i++ )
+            for( auto pFormat : rFrameFormatTable )
             {
-                SwFrameFormat const*const pFormat = rFrameFormatTable[i];
                 SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
                 SwPosition const*const pAPos = pAnchor->GetContentAnchor();
                 if (pAPos &&
