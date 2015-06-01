@@ -1576,22 +1576,23 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
 struct SwXParaFrameEnumerationImpl SAL_FINAL : public SwXParaFrameEnumeration
 {
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return OUString("SwXParaFrameEnumeration"); };
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return cppu::supportsService(this, rServiceName); };
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return {"com.sun.star.util.ContentEnumeration"}; };
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement() throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    SwXParaFrameEnumerationImpl(const SwPaM& rPaM,
-        const enum ParaFrameMode eParaFrameMode, SwFrameFormat *const pFormat = 0);
-    // created by hasMoreElements
-    uno::Reference< text::XTextContent > m_xNextObject;
-    FrameClientList_t m_Frames;
-    ::sw::UnoCursorPointer m_pUnoCursor;
-
-
+    SwXParaFrameEnumerationImpl(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat = nullptr);
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE
+    {
+        SolarMutexGuard g;
+        OWeakObject::release();
+    }
     SwUnoCrsr* GetCursor()
         { return &(*m_pUnoCursor); }
     void PurgeFrameClients()
@@ -1609,6 +1610,10 @@ struct SwXParaFrameEnumerationImpl SAL_FINAL : public SwXParaFrameEnumeration
             m_Frames.erase(iter, m_Frames.end());
         }
     }
+    // created by hasMoreElements
+    uno::Reference< text::XTextContent > m_xNextObject;
+    FrameClientList_t m_Frames;
+    ::sw::UnoCursorPointer m_pUnoCursor;
 };
 
 static bool
@@ -1756,35 +1761,6 @@ throw (container::NoSuchElementException,
     aRet <<= m_xNextObject;
     m_xNextObject = nullptr;
     return aRet;
-}
-
-OUString SAL_CALL
-SwXParaFrameEnumerationImpl::getImplementationName() throw (uno::RuntimeException, std::exception)
-{
-    return OUString("SwXParaFrameEnumeration");
-}
-
-static char const*const g_ServicesParaFrameEnum[] =
-{
-    "com.sun.star.util.ContentEnumeration",
-};
-
-static const size_t g_nServicesParaFrameEnum(
-    sizeof(g_ServicesParaFrameEnum)/sizeof(g_ServicesParaFrameEnum[0]));
-
-sal_Bool SAL_CALL
-SwXParaFrameEnumerationImpl::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-uno::Sequence< OUString > SAL_CALL
-SwXParaFrameEnumerationImpl::getSupportedServiceNames()
-throw (uno::RuntimeException, std::exception)
-{
-    return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesParaFrameEnum, g_ServicesParaFrameEnum);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
