@@ -1087,6 +1087,11 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
                 }
                 break;
+#ifndef ENABLE_CALC_UNITVERIFICATION
+            case SID_UNITSCONVERSION_DIALOG:
+                rSet.DisableItem(nWhich);
+            break;
+#endif
 
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();

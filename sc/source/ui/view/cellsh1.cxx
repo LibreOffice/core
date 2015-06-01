@@ -76,8 +76,11 @@
 #include "markdata.hxx"
 #include "docpool.hxx"
 #include "condformatdlg.hxx"
-#include "unitsconversiondlg.hxx"
 #include "attrib.hxx"
+
+#ifdef ENABLE_CALC_UNITVERIFICATION
+#include "unitsconversiondlg.hxx"
+#endif
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
@@ -128,7 +131,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             case SID_OPENDLG_CONDFRMT:
             case SID_OPENDLG_COLORSCALE:
             case SID_OPENDLG_DATABAR:
+#ifdef ENABLE_CALC_UNITVERIFICATION
             case SID_UNITSCONVERSION_DIALOG:
+#endif
 
             pScMod->InputEnterHandler();
             pTabViewShell->UpdateInputHandler();
@@ -1917,6 +1922,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+#ifdef ENABLE_CALC_UNITVERIFICATION
         case SID_UNITSCONVERSION_DIALOG:
             {
                 sal_uInt16 nId  = ScUnitsConversionDialogWrapper::GetChildWindowId();
@@ -1926,6 +1932,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
+#endif
 
         case SID_OPENDLG_CONDFRMT:
         case SID_OPENDLG_COLORSCALE:

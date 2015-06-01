@@ -181,7 +181,9 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/tpviewpage \
 	sc/uiconfig/scalc/ui/ttestdialog \
 	sc/uiconfig/scalc/ui/ungroupdialog \
-	sc/uiconfig/scalc/ui/unitsconversiondialog \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+		sc/uiconfig/scalc/ui/unitsconversiondialog \
+	) \
 	sc/uiconfig/scalc/ui/validationdialog \
 	sc/uiconfig/scalc/ui/validationcriteriapage \
 	sc/uiconfig/scalc/ui/validationhelptabpage \
