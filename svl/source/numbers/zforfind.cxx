@@ -2102,7 +2102,9 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
         short nTempMonth = GetMonth(rString, nPos);
         if ( nTempMonth )    // month (Jan 1)?
         {
-            if (nPos < rString.getLength())         // Jan1 without separator is not a date
+            // Jan1 without separator is not a date, unless it is followed by a
+            // separator and a (year) number.
+            if (nPos < rString.getLength() || (nAnzStrings >= 4 && nAnzNums >= 2))
             {
                 eScannedType = css::util::NumberFormat::DATE;   // !!! it IS a date !!!
                 nMonth = nTempMonth;
@@ -2145,7 +2147,9 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
                     nTempMonth = GetMonth(rString, nPos);
                     if ( nTempMonth ) // month (Jan 1)?
                     {
-                        if (nPos < rString.getLength())         // Jan1 without separator is not a date
+                        // Jan1 without separator is not a date, unless it is followed by a
+                        // separator and a (year) number.
+                        if (nPos < rString.getLength() || (nAnzStrings >= 4 && nAnzNums >= 2))
                         {
                             nMonth = nTempMonth;
                             nMonthPos = 1; // month a the beginning
