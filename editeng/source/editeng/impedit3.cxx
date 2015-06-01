@@ -604,10 +604,12 @@ void ImpEditEngine::CheckPageOverflow()
     fprintf(stderr, "[OVERFLOW-CHECK] Current MaxAutoPaperSize is %d\n", nBoxHeight);
     fprintf(stderr, "[CONTROL_STATUS] AutoPageSize is %s",  ( aStatus.GetControlWord() & EE_CNTRL_AUTOPAGESIZE ) ? "ON\n" : "OFF\n" );
 
-    if (CalcTextHeight(NULL) > nBoxHeight)
+    sal_uInt32 nTxtHeight = CalcTextHeight(NULL);
+
+    if (nTxtHeight > nBoxHeight)
     {
         // which paragraph is the first to cause higher size of the box?
-        UpdateOverflowingParaNum( nBoxHeight); // XXX: currently only for horizontal text
+        ImplUpdateOverflowingParaNum( nBoxHeight); // XXX: currently only for horizontal text
         aStatus.SetPageOverflow(true);
     } else
     {
@@ -4629,7 +4631,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
     }
 }
 
-void ImpEditEngine::UpdateOverflowingParaNum(sal_uInt32 nPaperHeight)
+void ImpEditEngine::ImplUpdateOverflowingParaNum(sal_uInt32 nPaperHeight)
 {
     sal_uInt32 nY = 0;
     sal_uInt32 nPH;
@@ -4640,11 +4642,39 @@ void ImpEditEngine::UpdateOverflowingParaNum(sal_uInt32 nPaperHeight)
         nY += nPH;
         if ( nY > nPaperHeight /*nCurTextHeight*/ ) // found first paragraph overflowing
         {
-            SetOverflowingParaNum( nPara );
-            fprintf(stderr, "[CHAINING] Setting first overflowing para: %d\n", nPara);
+            mnOverflowingPara = nPara;
+            fprintf(stderr, "[CHAINING] Setting first overflowing #Para#: %d\n", nPara);
+            ImplUpdateOverflowingLineNum( nPaperHeight, nPara, nY-nPH);
             return;
         }
     }
+}
+
+void ImpEditEngine::ImplUpdateOverflowingLineNum(sal_uInt32 nPaperHeight,
+                                             sal_uInt32 nOverflowingPara,
+                                             sal_uInt32 nHeightBeforeOverflowingPara)
+{
+    sal_uInt32 nY = nHeightBeforeOverflowingPara;
+    sal_uInt32 nLH;
+
+    ParaPortion *pPara = GetParaPortions()[nOverflowingPara];
+
+    // Like UpdateOverflowingParaNum but for each line in the first
+    //  overflowing paragraph.
+    for ( sal_Int32 nLine = 0; nLine < pPara->GetLines().Count(); nLine++ ) {
+        EditLine *pLine = pPara->GetLines()[nLine];
+        nLH = pLine->GetHeight();
+        nY += nLH;
+        if ( nY > nPaperHeight ) // found first line overflowing
+        {
+            mnOverflowingLine = nLine;
+            fprintf(stderr, "[CHAINING] Setting first overflowing -Line- to: %d\n", nLine);
+            return;
+        }
+    }
+
+
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

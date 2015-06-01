@@ -751,7 +751,7 @@ void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
     };
 
     OverflowingText aOverflowingTxt =
-        OverflowingText("headTxt (On its own) ", NULL, "I'm Appended to #");
+        OverflowingText("headTxt (On its own)", NULL, "I'm Appended to #");
 
     if (mpOverflowingText) {
         // XXX: Not sure if necessary

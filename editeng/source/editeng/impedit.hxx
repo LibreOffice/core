@@ -476,6 +476,7 @@ private:
 
     // For Chaining
     sal_Int32 mnOverflowingPara = -1;
+    sal_Int32 mnOverflowingLine = -1;
 
     IdleFormattter      aIdleFormatter;
 
@@ -694,6 +695,8 @@ private:
     const ParaPortionList&  GetParaPortions() const { return aParaPortionList; }
     ParaPortionList&        GetParaPortions()       { return aParaPortionList; }
 
+    void ImplUpdateOverflowingParaNum( sal_uInt32 );
+    void ImplUpdateOverflowingLineNum( sal_uInt32, sal_uInt32, sal_uInt32 );
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
@@ -1028,9 +1031,8 @@ public:
     bool            IsFirstWordCapitalization() const   { return bFirstWordCapitalization; }
 
     sal_Int32 GetOverflowingParaNum() const { return mnOverflowingPara; }
-    void SetOverflowingParaNum(sal_Int32 nPara) { mnOverflowingPara = nPara; }
+    sal_Int32 GetOverflowingLineNum() const { return mnOverflowingLine; }
     void ClearOverflowingParaNum() { mnOverflowingPara = -1; }
-    void UpdateOverflowingParaNum( sal_uInt32 );
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
