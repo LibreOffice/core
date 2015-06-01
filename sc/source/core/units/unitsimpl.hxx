@@ -42,20 +42,13 @@ namespace test {
     class UnitsTest;
 }
 
-enum class UnitsStatus {
-    UNITS_VALID,
-    UNITS_UNKNOWN,
-    UNITS_INVALID_SCALING,
-    UNITS_INVALID_INCOMPATIBLE
-};
-
 /**
  * The result for a given units operation.
  * If UNITS_VALID then the resulting unit is also included,
  * otherwise units is empty.
  */
 struct UnitsResult {
-    UnitsStatus status;
+    FormulaStatus status;
     boost::optional<UtUnit> units;
 };
 
