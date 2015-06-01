@@ -51,7 +51,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
     VclPtr<PushButton>         m_pHyphAll;
     VclPtr<CloseButton>        m_pCloseBtn;
     OUString            aLabel;
-    SvxSpellWrapper*    pHyphWrapper;
+    SvxSpellWrapper     *const pHyphWrapper;
     css::uno::Reference< css::linguistic2::XHyphenator >        xHyphenator;
     css::uno::Reference< css::linguistic2::XPossibleHyphens >   xPossHyph;
     OUString            aEditWord;      // aEditWord and aWordEdit.GetText() differ only by the character for the current selected hyphenation position
