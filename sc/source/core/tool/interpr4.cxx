@@ -3999,8 +3999,10 @@ StackVar ScInterpreter::Interpret()
                 case ocCeil_Precise     :
                 case ocCeil_ISO         : ScCeil_Precise();             break;
                 case ocCeil_Math        : ScCeil( false );              break;
-                case ocFloor            : ScFloor();                    break;
+                case ocFloor            : ScFloor( true );              break;
                 case ocFloor_MS         : ScFloor_MS();                 break;
+                case ocFloor_Precise    : ScFloor_Precise();            break;
+                case ocFloor_Math       : ScFloor( false );             break;
                 case ocSumProduct       : ScSumProduct();               break;
                 case ocSumSQ            : ScSumSQ();                    break;
                 case ocSumX2MY2         : ScSumX2MY2();                 break;

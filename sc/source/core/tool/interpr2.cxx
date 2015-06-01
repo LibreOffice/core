@@ -841,7 +841,7 @@ void ScInterpreter::ScRoundUp()
     RoundNumber( rtl_math_RoundingMode_Up );
 }
 
-/** fdo69552 ODFF1.2 function CEILING and Excel function CEILING.MATH
+/** tdf69552 ODFF1.2 function CEILING and Excel function CEILING.MATH
     In essence, the difference between the two is that ODFF-CEILING needs to
     have arguments value and significance of the same sign and with
     CEILING.MATH the sign of argument significance is irrevelevant.
@@ -888,7 +888,6 @@ void ScInterpreter::ScCeil( bool bODFF )
     }
 }
 
-// fdo69552 Excel function CEILING
 void ScInterpreter::ScCeil_MS()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -898,14 +897,15 @@ void ScInterpreter::ScCeil_MS()
         double fVal = GetDouble();
         if ( fVal == 0 || fDec == 0.0 )
             PushInt(0);
-        else if ( fVal > 0.0 && fDec < 0.0 )
-            PushIllegalArgument();
+        else if ( fVal * fDec > 0 )
+            PushDouble(::rtl::math::approxCeil( fVal / fDec ) * fDec );
+        else if ( fVal < 0.0 )
+            PushDouble(::rtl::math::approxFloor( fVal / -fDec ) * -fDec );
         else
-            PushDouble(::rtl::math::approxCeil(fVal/fDec) * fDec);
+            PushIllegalArgument();
     }
 }
 
-// fdo69552 Excel functions CEILING.PRECISE and ISO.CEILING
 void ScInterpreter::ScCeil_Precise()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -929,29 +929,75 @@ void ScInterpreter::ScCeil_Precise()
     }
 }
 
-void ScInterpreter::ScFloor()
+/** tdf69552 ODFF1.2 function FLOOR and Excel function FLOOR.MATH
+    In essence, the difference between the two is that ODFF-FLOOR needs to
+    have arguments value and significance of the same sign and with
+    FLOOR.MATH the sign of argument significance is irrevelevant.
+    This is why ODFF-FLOOR is exported to Excel as FLOOR.MATH and
+    FLOOR.MATH is imported in Calc as FLOOR.MATH
+ */
+void ScInterpreter::ScFloor( bool bODFF )
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 2, 3 ) )
+    if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
-        bool bAbs = nParamCount == 3 && GetBool();
-        double fDec = GetDouble();
-        double fVal = GetDouble();
-        if ( fDec == 0.0 )
-            PushInt(0);
-        else if (fVal*fDec < 0.0)
-            PushIllegalArgument();
+        bool bAbs = ( nParamCount == 3 && GetBool() );
+        double fDec, fVal;
+        if ( nParamCount == 1 )
+        {
+            fVal = GetDouble();
+            fDec = ( fVal < 0 ? -1 : 1 );
+        }
         else
         {
-            if ( !bAbs && fVal < 0.0 )
-                PushDouble(::rtl::math::approxCeil(fVal/fDec) * fDec);
+            bool bArgumentMissing = IsMissing();
+            fDec = GetDouble();
+            fVal = GetDouble();
+            if ( bArgumentMissing )
+                fDec = ( fVal < 0 ? -1 : 1 );
+        }
+        if ( fDec == 0.0 || fVal == 0.0 )
+            PushInt( 0 );
+        else
+        {
+            if ( bODFF && ( fVal * fDec < 0.0 ) )
+                PushIllegalArgument();
             else
-                PushDouble(::rtl::math::approxFloor(fVal/fDec) * fDec);
+            {
+                if ( fVal * fDec < 0.0 )
+                    fDec = -fDec;
+
+                if ( !bAbs && fVal < 0.0 )
+                    PushDouble(::rtl::math::approxCeil( fVal / fDec ) * fDec );
+                else
+                    PushDouble(::rtl::math::approxFloor( fVal / fDec ) * fDec );
+            }
         }
     }
 }
 
 void ScInterpreter::ScFloor_MS()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 2 ) )
+    {
+        double fDec = GetDouble();
+        double fVal = GetDouble();
+
+        if ( fVal == 0 )
+            PushInt( 0 );
+        else if ( fVal * fDec > 0 )
+            PushDouble(::rtl::math::approxFloor( fVal / fDec ) * fDec );
+        else if ( fDec == 0 )
+            PushIllegalArgument();
+        else if ( fVal < 0.0 )
+            PushDouble(::rtl::math::approxCeil( fVal / -fDec ) * -fDec );
+        else
+            PushIllegalArgument();
+    }
+}
+
+void ScInterpreter::ScFloor_Precise()
 {
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
@@ -964,7 +1010,7 @@ void ScInterpreter::ScFloor_MS()
         }
         else
         {
-            fDec = fabs( GetDoubleWithDefault( 1.0 ));
+            fDec = fabs( GetDoubleWithDefault( 1.0 ) );
             fVal = GetDouble();
         }
         if ( fDec == 0.0 || fVal == 0.0 )
