@@ -63,7 +63,7 @@ struct MediaItem::Impl
 
     explicit Impl(AVMediaSetMask nMaskSet)
         : m_nMaskSet( nMaskSet )
-        , m_eState( MEDIASTATE_STOP )
+        , m_eState( MediaState::Stop )
         , m_fTime( 0.0 )
         , m_fDuration( 0.0 )
         , m_nVolumeDB( 0 )

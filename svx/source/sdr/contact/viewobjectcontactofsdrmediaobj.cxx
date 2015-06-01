@@ -97,7 +97,7 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
         mpMediaWindow->updateMediaItem( rItem );
 
         // show/hide is now dependent of play state
-        if(avmedia::MEDIASTATE_STOP == rItem.getState())
+        if(avmedia::MediaState::Stop == rItem.getState())
         {
             mpMediaWindow->hide();
         }

@@ -318,7 +318,7 @@ void MediaControl::implUpdateToolboxes()
         maPlayToolBox->Enable();
         maMuteToolBox->Enable();
 
-        if( MEDIASTATE_PLAY == maItem.getState() )
+        if( MediaState::Play == maItem.getState() )
         {
             maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, true );
             maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
@@ -498,7 +498,7 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
                     else
                     {
                         aExecItem.setURL( aURL, "", ""/*TODO?*/ );
-                        aExecItem.setState( MEDIASTATE_PLAY );
+                        aExecItem.setState( MediaState::Play );
                     }
                 }
             }
@@ -515,7 +515,7 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
 
             case( AVMEDIA_TOOLBOXITEM_PLAY ):
             {
-                aExecItem.setState( MEDIASTATE_PLAY );
+                aExecItem.setState( MediaState::Play );
 
                 if( maItem.getTime() == maItem.getDuration() )
                     aExecItem.setTime( 0.0 );
@@ -526,13 +526,13 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
 
             case( AVMEDIA_TOOLBOXITEM_PAUSE ):
             {
-                aExecItem.setState( MEDIASTATE_PAUSE );
+                aExecItem.setState( MediaState::Pause );
             }
             break;
 
             case( AVMEDIA_TOOLBOXITEM_STOP ):
             {
-                aExecItem.setState( MEDIASTATE_STOP );
+                aExecItem.setState( MediaState::Stop );
                 aExecItem.setTime( 0.0 );
             }
             break;

@@ -325,9 +325,9 @@ bool MediaWindowImpl::start()
 void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
 {
     if( isPlaying() )
-        rItem.setState( MEDIASTATE_PLAY );
+        rItem.setState( MediaState::Play );
     else
-        rItem.setState( ( 0.0 == getMediaTime() ) ? MEDIASTATE_STOP : MEDIASTATE_PAUSE );
+        rItem.setState( ( 0.0 == getMediaTime() ) ? MediaState::Stop : MediaState::Pause );
 
     rItem.setDuration( getDuration() );
     rItem.setTime( getMediaTime() );
@@ -370,21 +370,21 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
     {
         switch (rItem.getState())
         {
-            case MEDIASTATE_PLAY:
+            case MediaState::Play:
             {
                 if (!isPlaying())
                     start();
             }
             break;
 
-            case MEDIASTATE_PAUSE:
+            case MediaState::Pause:
             {
                 if (isPlaying())
                     stop();
             }
             break;
 
-            case MEDIASTATE_STOP:
+            case MediaState::Stop:
             {
                 if (isPlaying())
                 {

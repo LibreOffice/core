@@ -29,6 +29,8 @@
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
+class SvStream;
+
 enum class AVMediaSetMask
 {
     NONE        = 0x000,
@@ -48,24 +50,15 @@ namespace o3tl
     template<> struct typed_flags<AVMediaSetMask> : is_typed_flags<AVMediaSetMask, 0x1ff> {};
 }
 
-class SvStream;
 
 namespace avmedia
 {
 
 
-// - MediaState -
-
-
-enum MediaState
+enum class MediaState
 {
-    MEDIASTATE_STOP = 0,
-    MEDIASTATE_PLAY = 1,
-    MEDIASTATE_PAUSE = 2
+    Stop, Play, Pause
 };
-
-
-// - MediaItem -
 
 
 class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
@@ -80,13 +73,13 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool GetPresentation( SfxItemPresentation ePres,
+    virtual bool            GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreUnit,
                                                  SfxMapUnit ePresUnit,
                                                  OUString&  rText,
                                                  const IntlWrapper *pIntl ) const SAL_OVERRIDE;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     void                    merge( const MediaItem& rMediaItem );
 
@@ -110,19 +103,19 @@ public:
     void                    setVolumeDB( sal_Int16 nDB );
     sal_Int16               getVolumeDB() const;
 
-    void                    setZoom( ::com::sun::star::media::ZoomLevel eZoom );
-    ::com::sun::star::media::ZoomLevel  getZoom() const;
+    void                    setZoom( ::css::media::ZoomLevel eZoom );
+    ::css::media::ZoomLevel getZoom() const;
 
     void                    setURL( const OUString& rURL,
                                     const OUString& rTempURL,
                                     const OUString& rReferer);
-    const OUString&  getURL() const;
+    const OUString&         getURL() const;
 
     void                    setMimeType( const OUString& rMimeType );
     OUString                getMimeType() const;
-    const OUString&  getTempURL() const;
+    const OUString&         getTempURL() const;
 
-    const OUString&  getReferer() const;
+    const OUString&         getReferer() const;
 
 private:
 
@@ -133,15 +126,14 @@ private:
 typedef ::avmedia::MediaItem avmedia_MediaItem;
 
 bool AVMEDIA_DLLPUBLIC EmbedMedia(
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>
-            const& xModel,
-        OUString const& rSourceURL,
+        const ::css::uno::Reference< ::css::frame::XModel>& xModel,
+        const OUString& rSourceURL,
         OUString & o_rEmbeddedURL);
 
 OUString GetFilename(OUString const& rSourceURL);
 
-::com::sun::star::uno::Reference< ::com::sun::star::io::XStream> CreateStream(
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> const& xStorage, OUString const& rFilename);
+::css::uno::Reference< ::css::io::XStream> CreateStream(
+    const ::css::uno::Reference< ::css::embed::XStorage>& xStorage, const OUString& rFilename);
 }
 
 #endif
