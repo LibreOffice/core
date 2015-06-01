@@ -84,6 +84,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
+using namespace sc::units;
+
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
 {
     if( pCondFmt )
@@ -467,8 +469,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
 
 #ifdef ENABLE_CALC_UNITVERIFICATION
-            boost::shared_ptr< sc::units::Units > pUnits = sc::units::Units::GetUnits();
-            if ( pUnits->verifyFormula( pArr, aPos, pDoc ) )
+            boost::shared_ptr< Units > pUnits = Units::GetUnits();
+            FormulaStatus aStatus = pUnits->verifyFormula( pArr, aPos, pDoc );
+            if ( aStatus == FormulaStatus::VERIFIED || aStatus == FormulaStatus::UNKNOWN )
             {
                 SAL_INFO( "sc.units", "verification successful" );
 
@@ -484,7 +487,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             else
             {
                 SAL_INFO( "sc.units", "verification failed" );
-                NotifyUnitErrorInFormula( aPos, pDoc );
+                NotifyUnitErrorInFormula( aPos, pDoc, aStatus );
             }
 #endif
         } while ( bAgain );
@@ -580,7 +583,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
 
 #ifdef ENABLE_CALC_UNITVERIFICATION
-            boost::shared_ptr< sc::units::Units > pUnits = sc::units::Units::GetUnits();
+            boost::shared_ptr< Units > pUnits = Units::GetUnits();
 
             OUString sHeaderUnit, sCellUnit;
             ScAddress aHeaderAddress;
@@ -2844,8 +2847,10 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
     pTabViewShell->AdjustBlockHeight(false, const_cast<ScMarkData*>(&rSel));
 }
 
-void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument* pDoc )
+void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument* pDoc, const FormulaStatus& rStatus )
 {
+    (void) rStatus;
+
     SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
 
     // We use the cell address as the infobar id to allow us to easily get back to the
@@ -2973,7 +2978,7 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
     // Do conversion first, and only then remove the infobar as we need data from the infobar
     // (specifically from the pushbutton) to do the conversion.
 #ifdef ENABLE_CALC_UNITVERIFICATION
-    boost::shared_ptr< sc::units::Units > pUnits = sc::units::Units::GetUnits();
+    boost::shared_ptr< Units > pUnits = Units::GetUnits();
 
     ScDocShellModificator aModificator( *pButton->mpDocSh );
 

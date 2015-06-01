@@ -38,11 +38,26 @@ struct RangeUnits {
     bool compatible;
 };
 
+/**
+ * The unit correctness status for a formula.
+ * UNKNOWN denotes that the units could not be verified
+ * (this can occur if e.g. an unsupported operator or formula
+ * is used).
+ */
+enum class FormulaStatus {
+    VERIFIED,
+    UNKNOWN,
+    ERROR_INPUT_SCALING,
+    ERROR_INPUT_INCOMPATIBLE,
+    ERROR_OUTPUT_SCALING,
+    ERROR_OUTPUT_INCOMPATIBLE
+};
+
 class Units {
 public:
     static ::boost::shared_ptr< Units > GetUnits();
 
-    virtual bool verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) = 0;
+    virtual FormulaStatus verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) = 0;
 
     /*
      * Split the input into value and unit, where rInput == rValue + rUnit.
