@@ -104,8 +104,7 @@ public class RowSet extends TestCase
             {
                 synchronized (failedResultSetMovementStressGuard) {
                     failedResultSetMovementStressMessages
-                        = failedResultSetMovementStressMessages
-                        + "ResultSetMovementStress(" + m_id + ") failed at i="
+                        += "ResultSetMovementStress(" + m_id + ") failed at i="
                         + i + ": " + e + "\n";
                 }
             }
