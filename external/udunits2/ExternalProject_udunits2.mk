@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,udunits2,\
 
 $(call gb_ExternalProject_get_state_target,udunits2,build) : $(call gb_ExternalProject_get_state_target,udunits2,configure)
 	+$(call gb_ExternalProject_run,build,\
-		$(MAKE) \
+		cd lib && $(MAKE) libudunits2.la \
 	)
 
 $(call gb_ExternalProject_get_state_target,udunits2,configure) :
