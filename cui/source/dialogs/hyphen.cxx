@@ -71,26 +71,25 @@ void HyphenEdit::KeyInput( const KeyEvent& rKEvt )
 
 void SvxHyphenWordDialog::EnableLRBtn_Impl()
 {
-    OUString  aTxt( m_aEditWord );
-    sal_Int32 nLen = aTxt.getLength();
+    const sal_Int32 nLen = m_aEditWord.getLength();
 
     m_pRightBtn->Disable();
     for ( sal_Int32 i = m_nOldPos + 2; i < nLen; ++i )
     {
-        if ( aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
+        if ( m_aEditWord[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
         {
             m_pRightBtn->Enable();
             break;
         }
     }
 
-    DBG_ASSERT(m_nOldPos < aTxt.getLength(), "nOldPos out of range");
-    if (m_nOldPos >= aTxt.getLength())
-        m_nOldPos = aTxt.getLength() - 1;
+    DBG_ASSERT(m_nOldPos < nLen, "nOldPos out of range");
+    if (m_nOldPos >= nLen)
+        m_nOldPos = nLen - 1;
     m_pLeftBtn->Disable();
     for ( sal_Int32 i = m_nOldPos;  i-- > 0; )
     {
-        if ( aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
+        if ( m_aEditWord[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
         {
             m_pLeftBtn->Enable();
             break;
@@ -228,13 +227,12 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
     {
         if (nInsPos)
         {
-            OUString aTmp( m_aEditWord );
-            DBG_ASSERT(nInsPos <= aTmp.getLength() - 2, "wrong hyphen position");
+            DBG_ASSERT(nInsPos <= m_aEditWord.getLength() - 2, "wrong hyphen position");
 
             sal_Int32 nIdxPos = -1;
             for (sal_Int32 i = 0; i <= nInsPos; ++i)
             {
-                if (HYPH_POS_CHAR == aTmp[ i ])
+                if (HYPH_POS_CHAR == m_aEditWord[ i ])
                     nIdxPos++;
             }
             // take the possible hyphenation positions that got removed from the
@@ -280,7 +278,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
 sal_uInt16 SvxHyphenWordDialog::GetHyphIndex_Impl()
 {
     sal_uInt16 nPos = 0;
-    OUString aTxt( m_pWordEdit->GetText() );
+    const OUString aTxt( m_pWordEdit->GetText() );
 
     for ( sal_Int32 i=0; i < aTxt.getLength(); ++i )
     {
@@ -528,12 +526,7 @@ void SvxHyphenWordDialog::dispose()
 
 void SvxHyphenWordDialog::SetWindowTitle( LanguageType nLang )
 {
-    OUString aLangStr( SvtLanguageTable::GetLanguageString( nLang ) );
-    OUString aTmp( m_aLabel );
-    aTmp += " (";
-    aTmp += aLangStr;
-    aTmp += ")";
-    SetText( aTmp );
+    SetText( m_aLabel + " (" + SvtLanguageTable::GetLanguageString( nLang ) + ")" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
