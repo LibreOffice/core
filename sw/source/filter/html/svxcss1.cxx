@@ -342,7 +342,7 @@ void SvxCSS1BorderInfo::SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxIte
 
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo()
 {
-    for( sal_uInt16 i=0; i<4; i++ )
+    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
         aBorderInfos[i] = 0;
 
     Clear();
@@ -378,7 +378,7 @@ SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
     ePageBreakAfter( rProp.ePageBreakAfter )
 // /Feature: PrintExt
 {
-    for( sal_uInt16 i=0; i<4; i++ )
+    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
         aBorderInfos[i] = rProp.aBorderInfos[i]
                             ? new SvxCSS1BorderInfo( *rProp.aBorderInfos[i] )
                             : 0;
@@ -391,7 +391,7 @@ SvxCSS1PropertyInfo::~SvxCSS1PropertyInfo()
 
 void SvxCSS1PropertyInfo::DestroyBorderInfos()
 {
-    for( sal_uInt16 i=0; i<4; i++ )
+    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
     {
         delete aBorderInfos[i];
         aBorderInfos[i] = 0;
@@ -443,7 +443,7 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
     if( rProp.bTextIndent )
         bTextIndent = true;
 
-    for( sal_uInt16 i=0; i<4; i++ )
+    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
     {
         if( rProp.aBorderInfos[i] )
         {
@@ -572,9 +572,8 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
                 nBottomBorderDistance != USHRT_MAX ||
                 nLeftBorderDistance != USHRT_MAX ||
                 nRightBorderDistance != USHRT_MAX;
-    sal_uInt16 i;
 
-    for( i = 0; !bChg && i < 4; i++ )
+    for( size_t i=0; !bChg && i<SAL_N_ELEMENTS(aBorderInfos); ++i )
         bChg = aBorderInfos[i]!=0;
 
     if( !bChg )
@@ -600,7 +599,7 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     if( pInfo )
         pInfo->SetBorderLine( SvxBoxItemLine::RIGHT, aBoxItem );
 
-    for( i=0; i<4; i++ )
+    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
     {
         SvxBoxItemLine nLine = SvxBoxItemLine::TOP;
         sal_uInt16 nDist = 0;
@@ -1211,7 +1210,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
     // (wobei nor noch normal | italic und oblique zulaessig sind
 
     // der Wert kann zwei Werte enthalten!
-    for( sal_uInt16 i=0; pExpr && i<2; i++ )
+    for( int i=0; pExpr && i<2; ++i )
     {
         // Auch hier hinterlaesst MS-IEs Parser seine Spuren
         if( (CSS1_IDENT==pExpr->GetType() || CSS1_STRING==pExpr->GetType()) &&
@@ -2254,7 +2253,7 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
     long nMargins[4] = { 0, 0, 0, 0 };
     bool bSetMargins[4] = { false, false, false, false };
 
-    for( sal_uInt16 i=0; pExpr && i<4 && !pExpr->GetOp(); i++ )
+    for( int i=0; pExpr && i<4 && !pExpr->GetOp(); ++i )
     {
         bool bSetThis = false;
         long nMargin = 0;
@@ -2481,7 +2480,7 @@ static void ParseCSS1_padding( const CSS1Expression *pExpr,
                                SvxCSS1PropertyInfo& rPropInfo,
                                const SvxCSS1Parser& rParser )
 {
-    sal_uInt16 n=0;
+    int n=0;
     while( n<4 && pExpr && !pExpr->GetOp() )
     {
         SvxBoxItemLine nLine = n==0 || n==2 ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::LEFT;
@@ -2574,7 +2573,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
         pExpr = pExpr->GetNext();
     }
 
-    for( sal_uInt16 i=0; i<4; i++ )
+    for( int i=0; i<4; ++i )
     {
         SvxBoxItemLine nLine = SvxBoxItemLine::TOP;
         switch( i )
@@ -2897,7 +2896,7 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
                             SvxCSS1PropertyInfo& rPropInfo,
                             const SvxCSS1Parser& /*rParser*/ )
 {
-    sal_uInt16 n=0;
+    int n=0;
     while( n<2 && pExpr && !pExpr->GetOp() )
     {
         switch( pExpr->GetType() )
