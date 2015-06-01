@@ -246,7 +246,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
 
             }
 
-            return { FormulaStatus::VERIFIED, aFirstUnit };
+            return { FormulaStatus::VALID, aFirstUnit };
         }
         case ocProduct:
         {
@@ -269,7 +269,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
                 } while (aIt.next());
             }
 
-            return { FormulaStatus::VERIFIED, aUnit };
+            return { FormulaStatus::VALID, aUnit };
         }
         default:
             return { FormulaStatus::UNKNOWN, boost::none };
@@ -278,7 +278,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
         SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
         return { FormulaStatus::UNKNOWN, boost::none };
     }
-    return { FormulaStatus::VERIFIED, pOut };
+    return { FormulaStatus::VALID, pOut };
 }
 
 OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString) {
@@ -566,7 +566,7 @@ FormulaStatus UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rF
             case FormulaStatus::ERROR_INPUT_INCOMPATIBLE:
             case FormulaStatus::UNKNOWN:
                return aResult.status;
-            case FormulaStatus::VERIFIED:
+            case FormulaStatus::VALID:
                 assert(aResult.units); // ensure that we have the optional unit
                 assert(aResult.units->isValid());
                 aStack.push( { RAUSItemType::UNITS, aResult.units.get() } );
@@ -619,7 +619,7 @@ FormulaStatus UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rF
         }
     }
 
-    return FormulaStatus::VERIFIED;
+    return FormulaStatus::VALID;
 }
 
 bool IsDigit(sal_Unicode c) {
