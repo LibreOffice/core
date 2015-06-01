@@ -31,7 +31,7 @@ class ComEnumerationWrapper : public ::cppu::WeakImplHelper1< ::com::sun::star::
     sal_Int32 m_nCurInd;
 
 public:
-    ComEnumerationWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation >& xInvocation )
+    explicit ComEnumerationWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation >& xInvocation )
     : m_xInvocation( xInvocation )
     , m_nCurInd( 0 )
     {

@@ -136,7 +136,7 @@ public:
     long            m_nDragRowDividerOffset;
 
 public:
-                    BrowserDataWin( BrowseBox* pParent );
+                    explicit BrowserDataWin( BrowseBox* pParent );
     virtual         ~BrowserDataWin();
     virtual void    dispose() SAL_OVERRIDE;
 

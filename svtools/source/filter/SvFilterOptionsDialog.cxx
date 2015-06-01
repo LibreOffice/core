@@ -76,7 +76,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper5
 
 public:
 
-    SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& _rxORB );
+    explicit SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& _rxORB );
     virtual ~SvFilterOptionsDialog();
 
     // XInterface

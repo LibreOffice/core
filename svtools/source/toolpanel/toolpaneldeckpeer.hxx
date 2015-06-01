@@ -36,7 +36,7 @@ namespace svt
     class ToolPanelDeckPeer : public VCLXWindow
     {
     public:
-        ToolPanelDeckPeer( ToolPanelDeck& i_rDeck );
+        explicit ToolPanelDeckPeer( ToolPanelDeck& i_rDeck );
 
     protected:
         virtual ~ToolPanelDeckPeer();

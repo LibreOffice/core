@@ -131,7 +131,7 @@ class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog
 class AbstractApplyTabDialog_Impl : public AbstractTabDialog_Impl, virtual public SfxAbstractApplyTabDialog
 {
 public:
-    AbstractApplyTabDialog_Impl( SfxTabDialog* p)
+    explicit AbstractApplyTabDialog_Impl( SfxTabDialog* p)
         : AbstractTabDialog_Impl(p)
     {
     }
@@ -354,9 +354,9 @@ class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
 
     DECL_LINK( EndDialogHdl, SwMailMergeWizard* );
 public:
-                    AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
-                     : pDlg(p)
-                     {}
+    explicit AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
+     : pDlg(p)
+     {}
     virtual         ~AbstractMailMergeWizard_Impl();
     virtual void    StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
     virtual long    GetResult() SAL_OVERRIDE;

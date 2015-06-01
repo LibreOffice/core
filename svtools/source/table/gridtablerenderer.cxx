@@ -110,7 +110,7 @@ namespace svt { namespace table
         CachedSortIndicator aSortIndicator;
         CellValueConversion aStringConverter;
 
-        GridTableRenderer_Impl( ITableModel& _rModel )
+        explicit GridTableRenderer_Impl( ITableModel& _rModel )
             : rModel( _rModel )
             , nCurrentRow( ROW_INVALID )
             , bUseGridLines( true )

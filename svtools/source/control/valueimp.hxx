@@ -61,7 +61,7 @@ struct ValueSetItem
     bool                mbSelected;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
-    ValueSetItem( ValueSet& rParent );
+    explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

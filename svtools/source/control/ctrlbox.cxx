@@ -66,7 +66,7 @@ public:
     bool        bColor;
 
                 ImplColorListData() : aColor( COL_BLACK ) { bColor = false; }
-                ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = true; }
+                explicit ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = true; }
 };
 
 void ColorListBox::ImplInit()
@@ -592,7 +592,7 @@ class ApplyScale : std::unary_function<double, void>
 {
     double mfScale;
 public:
-    ApplyScale( double fScale ) : mfScale(fScale) {}
+    explicit ApplyScale( double fScale ) : mfScale(fScale) {}
     void operator() ( double& rVal )
     {
         rVal *= mfScale;

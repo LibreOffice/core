@@ -364,7 +364,7 @@ struct SvTreeListBoxImpl
     vcl::MnemonicEngine m_aMnemonicEngine;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
 
-    SvTreeListBoxImpl(SvTreeListBox& _rBox) :
+    explicit SvTreeListBoxImpl(SvTreeListBox& _rBox) :
         m_bIsEmptyTextAllowed(true),
         m_bEntryMnemonicsEnabled(false),
         m_bDoingQuickSelection(false),

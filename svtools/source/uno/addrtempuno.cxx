@@ -51,7 +51,7 @@ namespace {
         OUString                     m_sTable;
 
     public:
-        OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
+        explicit OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
 
         // XTypeProvider
         virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;

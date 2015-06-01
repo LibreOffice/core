@@ -224,7 +224,7 @@ class ResString: public OUString
   public:
     sal_uInt16 GetFlags() const {return nFlags;}
     const OUString & GetString() const {return *this;}
-    ResString( ResId &rId);
+    explicit ResString( ResId &rId);
 };
 
 

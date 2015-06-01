@@ -185,7 +185,7 @@ class FindByPointer : std::unary_function<SvLBoxItem, void>
 {
     const SvLBoxItem* mpItem;
 public:
-    FindByPointer(const SvLBoxItem* p) : mpItem(p) {}
+    explicit FindByPointer(const SvLBoxItem* p) : mpItem(p) {}
     bool operator() (const SvLBoxItem& rItem) const
     {
         return &rItem == mpItem;

@@ -141,7 +141,7 @@ class PasswordContainerInteractionHandler :
                                       com::sun::star::task::XInteractionHandler2 >
 {
 public:
-    PasswordContainerInteractionHandler(
+    explicit PasswordContainerInteractionHandler(
         const com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext >& xContext );
     virtual ~PasswordContainerInteractionHandler();

@@ -153,7 +153,7 @@ namespace svt
     class DoubleNormalization : public StandardFormatNormalizer
     {
     public:
-        DoubleNormalization( Reference< XNumberFormatter > const & i_formatter )
+        explicit DoubleNormalization( Reference< XNumberFormatter > const & i_formatter )
             :StandardFormatNormalizer( i_formatter, NumberFormat::NUMBER )
         {
         }
@@ -175,7 +175,7 @@ namespace svt
     class IntegerNormalization : public StandardFormatNormalizer
     {
     public:
-        IntegerNormalization( Reference< XNumberFormatter > const & i_formatter )
+        explicit IntegerNormalization( Reference< XNumberFormatter > const & i_formatter )
             :StandardFormatNormalizer( i_formatter, NumberFormat::NUMBER )
         {
         }
@@ -196,7 +196,7 @@ namespace svt
     class BooleanNormalization : public StandardFormatNormalizer
     {
     public:
-        BooleanNormalization( Reference< XNumberFormatter > const & i_formatter )
+        explicit BooleanNormalization( Reference< XNumberFormatter > const & i_formatter )
             :StandardFormatNormalizer( i_formatter, NumberFormat::LOGICAL )
         {
         }
@@ -217,7 +217,7 @@ namespace svt
     class DateTimeNormalization : public StandardFormatNormalizer
     {
     public:
-        DateTimeNormalization( Reference< XNumberFormatter > const & i_formatter )
+        explicit DateTimeNormalization( Reference< XNumberFormatter > const & i_formatter )
             :StandardFormatNormalizer( i_formatter, NumberFormat::DATETIME )
         {
         }
@@ -251,7 +251,7 @@ namespace svt
     class DateNormalization : public StandardFormatNormalizer
     {
     public:
-        DateNormalization( Reference< XNumberFormatter > const & i_formatter )
+        explicit DateNormalization( Reference< XNumberFormatter > const & i_formatter )
             :StandardFormatNormalizer( i_formatter, NumberFormat::DATE )
         {
         }
@@ -281,7 +281,7 @@ namespace svt
     class TimeNormalization : public StandardFormatNormalizer
     {
     public:
-        TimeNormalization( Reference< XNumberFormatter > const & i_formatter )
+        explicit TimeNormalization( Reference< XNumberFormatter > const & i_formatter )
             :StandardFormatNormalizer( i_formatter, NumberFormat::TIME )
         {
         }

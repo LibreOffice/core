@@ -2083,7 +2083,7 @@ private:
     VclPtr<FixedLine>   mpFixedLine;
 
 public:
-                    ImplCFieldFloatWin( vcl::Window* pParent );
+                    explicit ImplCFieldFloatWin( vcl::Window* pParent );
     virtual         ~ImplCFieldFloatWin();
     virtual void    dispose() SAL_OVERRIDE;
 

@@ -115,7 +115,7 @@ private:
     SvxIconChoiceCtrl_Impl*         _pOwner;
 
 public:
-                            EntryList_Impl( SvxIconChoiceCtrl_Impl* );
+                            explicit EntryList_Impl( SvxIconChoiceCtrl_Impl* );
                             ~EntryList_Impl();
 
     void                    clear();
@@ -577,7 +577,7 @@ class IcnCursor_Impl
                             );
 
 public:
-                            IcnCursor_Impl( SvxIconChoiceCtrl_Impl* pOwner );
+                            explicit IcnCursor_Impl( SvxIconChoiceCtrl_Impl* pOwner );
                             ~IcnCursor_Impl();
     void                    Clear();
 
@@ -613,7 +613,7 @@ class IcnGridMap_Impl
     void                GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const;
 
 public:
-                        IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView);
+                        explicit IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView);
                         ~IcnGridMap_Impl();
 
     void                Clear();

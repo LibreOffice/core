@@ -65,7 +65,7 @@ public:
     EmbeddedObjectRef*          pObject;
     sal_Int32                   nState;
 
-                                EmbedEventListener_Impl( EmbeddedObjectRef* p ) :
+                                explicit EmbedEventListener_Impl( EmbeddedObjectRef* p ) :
                                     pObject(p)
                                     , nState(-1)
                                 {}

@@ -53,7 +53,7 @@ class SbxDecimal
 public:
     SbxDecimal();
     SbxDecimal( const SbxDecimal& rDec );
-    SbxDecimal( const com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
+    explicit SbxDecimal( const com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
 
     ~SbxDecimal();
 

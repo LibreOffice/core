@@ -576,7 +576,7 @@ ResMgr* implGetResMgr()
 class SbxValueFormatResId : public ResId
 {
 public:
-    SbxValueFormatResId( sal_uInt16 nId )
+    explicit SbxValueFormatResId( sal_uInt16 nId )
         : ResId( nId, *implGetResMgr() )
     {}
 };

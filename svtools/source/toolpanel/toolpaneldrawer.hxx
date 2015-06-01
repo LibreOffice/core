@@ -40,7 +40,7 @@ namespace svt
     class DrawerVisualization : public vcl::Window
     {
     public:
-        DrawerVisualization(ToolPanelDrawer& i_rParent);
+        explicit DrawerVisualization(ToolPanelDrawer& i_rParent);
 
     protected:
         // Window overridables

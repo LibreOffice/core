@@ -158,7 +158,7 @@ namespace svt { namespace table
         inline        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
 
     public:
-        TableControl_Impl( TableControl& _rAntiImpl );
+        explicit TableControl_Impl( TableControl& _rAntiImpl );
         virtual ~TableControl_Impl();
 
         /** to be called when the anti-impl instance has been resized
@@ -473,16 +473,16 @@ namespace svt { namespace table
         RowPos              m_nCurrentRow;
 
     public:
-        TableFunctionSet(TableControl_Impl* _pTableControl);
+        explicit TableFunctionSet(TableControl_Impl* _pTableControl);
         virtual ~TableFunctionSet();
 
-       virtual void BeginDrag() SAL_OVERRIDE;
-       virtual void CreateAnchor() SAL_OVERRIDE;
-       virtual void DestroyAnchor() SAL_OVERRIDE;
-       virtual bool SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor) SAL_OVERRIDE;
-       virtual bool IsSelectionAtPoint( const Point& rPoint ) SAL_OVERRIDE;
-       virtual void DeselectAtPoint( const Point& rPoint ) SAL_OVERRIDE;
-       virtual void DeselectAll() SAL_OVERRIDE;
+        virtual void BeginDrag() SAL_OVERRIDE;
+        virtual void CreateAnchor() SAL_OVERRIDE;
+        virtual void DestroyAnchor() SAL_OVERRIDE;
+        virtual bool SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor) SAL_OVERRIDE;
+        virtual bool IsSelectionAtPoint( const Point& rPoint ) SAL_OVERRIDE;
+        virtual void DeselectAtPoint( const Point& rPoint ) SAL_OVERRIDE;
+        virtual void DeselectAll() SAL_OVERRIDE;
     };
 
 

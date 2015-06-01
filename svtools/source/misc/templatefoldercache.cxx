@@ -139,7 +139,7 @@ namespace svt
         virtual ~TemplateContent();
 
     public:
-        TemplateContent( const INetURLObject& _rURL );
+        explicit TemplateContent( const INetURLObject& _rURL );
 
         // attribute access
         inline OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ); }
@@ -270,7 +270,7 @@ namespace svt
     {
     protected:
         SvStream&   m_rStorage;
-        StorageHelper( SvStream& _rStorage ) : m_rStorage( _rStorage ) { }
+        explicit StorageHelper( SvStream& _rStorage ) : m_rStorage( _rStorage ) { }
     };
 
 
@@ -279,7 +279,7 @@ namespace svt
             :public ::std::unary_function< OUString, void >
             ,public StorageHelper
     {
-        StoreString( SvStream& _rStorage ) : StorageHelper( _rStorage ) { }
+        explicit StoreString( SvStream& _rStorage ) : StorageHelper( _rStorage ) { }
 
         void operator() ( const OUString& _rString ) const
         {
@@ -434,7 +434,7 @@ namespace svt
         bool                            m_bAutoStoreState : 1;
 
     public:
-        TemplateFolderCacheImpl( bool _bAutoStoreState );
+        explicit TemplateFolderCacheImpl( bool _bAutoStoreState );
         ~TemplateFolderCacheImpl( );
 
         bool        needsUpdate( bool _bForceCheck );

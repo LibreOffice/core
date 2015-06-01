@@ -50,7 +50,7 @@ class PluginWindow_Impl : public vcl::Window
 {
 public:
     uno::Reference < awt::XWindow > xWindow;
-    PluginWindow_Impl( vcl::Window* pParent )
+    explicit PluginWindow_Impl(vcl::Window* pParent)
      : Window( pParent, WB_CLIPCHILDREN )
      {}
 

@@ -100,7 +100,7 @@ public:
     bool                m_bPaintInitialized : 1;
 
 public:
-    RoadmapImpl(const ORoadmap& rAntiImpl)
+    explicit RoadmapImpl(const ORoadmap& rAntiImpl)
         : m_rAntiImpl(rAntiImpl)
         , m_iCurItemID(-1)
         , m_bInteractive(true)

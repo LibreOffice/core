@@ -67,7 +67,7 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
     uno::Reference< com::sun::star::view::XPrintJob>     m_xPrintJob;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
 
-    IMPL_PrintListener_DataContainer( ::osl::Mutex& aMutex)
+    explicit IMPL_PrintListener_DataContainer( ::osl::Mutex& aMutex)
             :   m_pObjectShell          ( 0 )
             ,   m_aInterfaceContainer   ( aMutex )
     {
@@ -99,14 +99,14 @@ class SfxPrintJob_Impl : public cppu::WeakImplHelper1
     com::sun::star::view::XPrintJob
 >
 {
-        IMPL_PrintListener_DataContainer* m_pData;
+    IMPL_PrintListener_DataContainer* m_pData;
 
 public:
-        SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData );
-        virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Reference< ::com::sun::star::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL cancelJob() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    explicit SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData );
+    virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< ::com::sun::star::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancelJob() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 SfxPrintJob_Impl::SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData )

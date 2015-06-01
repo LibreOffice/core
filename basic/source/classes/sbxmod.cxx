@@ -99,7 +99,7 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
     OUString mName; // for debugging
 
 public:
-    DocObjectWrapper( SbModule* pMod );
+    explicit DocObjectWrapper( SbModule* pMod );
     virtual ~DocObjectWrapper();
 
     virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;

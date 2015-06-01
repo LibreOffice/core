@@ -36,7 +36,7 @@ namespace svt
     class PanelTabBarPeer : public VCLXWindow
     {
     public:
-        PanelTabBarPeer( PanelTabBar& i_rTabBar );
+        explicit PanelTabBarPeer( PanelTabBar& i_rTabBar );
 
     protected:
         virtual ~PanelTabBarPeer();

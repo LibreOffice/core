@@ -68,7 +68,7 @@ namespace svt { namespace table
         ITableControl&  m_rTable;
 
     public:
-        SuppressCursor( ITableControl& _rTable )
+        explicit SuppressCursor( ITableControl& _rTable )
             :m_rTable( _rTable )
         {
             m_rTable.hideCursor();

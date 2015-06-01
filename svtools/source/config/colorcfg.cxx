@@ -74,7 +74,7 @@ class ColorConfig_Impl : public utl::ConfigItem
     virtual void                    ImplCommit() SAL_OVERRIDE;
 
 public:
-    ColorConfig_Impl(bool bEditMode = false);
+    explicit ColorConfig_Impl(bool bEditMode = false);
     virtual ~ColorConfig_Impl();
 
     void                            Load(const OUString& rScheme);

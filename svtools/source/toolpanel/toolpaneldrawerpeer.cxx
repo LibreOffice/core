@@ -57,7 +57,7 @@ namespace svt
     class ToolPanelDrawerContext : public VCLXAccessibleComponent
     {
     public:
-        ToolPanelDrawerContext( VCLXWindow& i_rWindow )
+        explicit ToolPanelDrawerContext( VCLXWindow& i_rWindow )
             :VCLXAccessibleComponent( &i_rWindow )
         {
         }

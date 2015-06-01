@@ -95,7 +95,7 @@ namespace svt { namespace table
                                     ,public ::boost::noncopyable
     {
     public:
-        ColumnChangeMultiplexer( UnoGridColumnFacade& i_colImpl );
+        explicit ColumnChangeMultiplexer( UnoGridColumnFacade& i_colImpl );
 
         void dispose();
 

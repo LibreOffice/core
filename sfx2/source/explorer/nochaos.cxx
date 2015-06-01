@@ -44,7 +44,7 @@ private:
     inline void Insert( SfxPoolItem* pItem, sal_uInt16 nSID, SfxItemPoolFlags nFlags );
 
 public:
-    CntStaticPoolDefaults_Impl( CntItemPool* pPool );
+    explicit CntStaticPoolDefaults_Impl( CntItemPool* pPool );
     ~CntStaticPoolDefaults_Impl();
 
     SfxPoolItem**      GetDefaults() const  { return m_ppDefaults; }
