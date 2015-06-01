@@ -1641,8 +1641,7 @@ void SvImpLBox::EntrySelected( SvTreeListEntry* pEntry, bool bSelect )
         if( IsLineVisible( nY ) )
         {
             ShowCursor(false);
-            pView->Invalidate();
-            //pView->PaintEntry1(pEntry, nY, SvLBoxTabFlags::ALL); // because of ItemsetBrowser SvLBoxTabFlags::SHOW_SELECTION );
+            InvalidateEntry(pEntry);
             ShowCursor(true);
         }
     }
@@ -1908,10 +1907,7 @@ bool SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pE
             pView->HideFocus();
         pView->CaptureMouse();
         pActiveButton->SetStateHilighted( true );
-        //pView->PaintEntry1( pActiveEntry, nY,
-        //            SvLBoxTabFlags::PUSHABLE | SvLBoxTabFlags::ADJUST_CENTER |
-        //            SvLBoxTabFlags::ADJUST_RIGHT );
-        pView->Invalidate();
+        InvalidateEntry(pActiveEntry);
         return true;
     }
     else
@@ -1930,7 +1926,7 @@ bool SvImpLBox::MouseMoveCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEn
             if( !pActiveButton->IsStateHilighted() )
             {
                 pActiveButton->SetStateHilighted(true );
-                pView->Invalidate();
+                InvalidateEntry(pActiveEntry);
             }
         }
         else
@@ -1938,7 +1934,7 @@ bool SvImpLBox::MouseMoveCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEn
             if( pActiveButton->IsStateHilighted() )
             {
                 pActiveButton->SetStateHilighted(false );
-                pView->Invalidate();
+                InvalidateEntry(pActiveEntry);
             }
         }
         return true;
@@ -1956,7 +1952,7 @@ bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
         long nMouseX = rMEvt.GetPosPixel().X();
         if (pEntry == pActiveEntry && pView->GetItem(pActiveEntry, nMouseX) == pActiveButton)
             pActiveButton->ClickHdl(pView, pActiveEntry);
-        pView->Invalidate();
+        InvalidateEntry(pActiveEntry);
         if (pCursor == pActiveEntry)
             ShowCursor(true);
         pActiveButton = 0;
@@ -2866,8 +2862,7 @@ void SvImpLBox::SelAllDestrAnch(
             {
                 long nY = GetEntryLine( pEntry );
                 if( IsLineVisible( nY ) )
-                    pView->Invalidate();
-                    //pView->PaintEntry1( pEntry, nY ); // because of ItemsetBrowser SvLBoxTabFlags::SHOW_SELECTION );
+                    InvalidateEntry(pEntry);
             }
         }
         pEntry = pTree->Next( pEntry );
