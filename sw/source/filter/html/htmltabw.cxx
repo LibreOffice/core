@@ -151,9 +151,9 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
     else
     {
         const SwTableLines& rLines = rBox.GetTabLines();
-        sal_uInt16 nCount = rLines.size();
+        const SwTableLines::size_type nCount = rLines.size();
         bool bLeftRight = bLeft || bRight;
-        for( sal_uInt16 i=0; !bRet && i<nCount; i++ )
+        for( SwTableLines::size_type i=0; !bRet && i<nCount; ++i )
         {
             bool bT = bTop && 0 == i;
             bool bB = bBottom && nCount-1 == i;
@@ -180,9 +180,9 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     if( !bRet )
     {
         const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
-        sal_uInt16 nCount = rBoxes.size();
+        const SwTableBoxes::size_type nCount = rBoxes.size();
         bool bTopBottom = bTop || bBottom;
-        for( sal_uInt16 i=0; !bRet && i<nCount; i++ )
+        for( SwTableBoxes::size_type i=0; !bRet && i<nCount; ++i )
         {
             bool bL = bLeft && 0 == i;
             bool bR = bRight && nCount-1 == i;
@@ -325,7 +325,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     }
 
     long nWidth = 0;
-    sal_uInt32 nPrcWidth = USHRT_MAX;
+    sal_uInt32 nPrcWidth = SAL_MAX_UINT32;
     if( bOutWidth )
     {
         if( bLayoutExport )
@@ -344,7 +344,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         else
         {
             if( HasRelWidths() )
-                nPrcWidth = (sal_uInt16)GetPrcWidth(nCol,nColSpan);
+                nPrcWidth = GetPrcWidth(nCol, nColSpan);
             else
                 nWidth = GetAbsWidth( nCol, nColSpan );
         }
@@ -372,7 +372,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
             append("=\"");
-        if( nPrcWidth != USHRT_MAX )
+        if( nPrcWidth != SAL_MAX_UINT32 )
         {
             sOut.append(static_cast<sal_Int32>(nPrcWidth)).append('%');
         }
@@ -513,7 +513,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     sal_Int16 eRowVertOri = text::VertOrientation::NONE;
     if( rCells.size() > 1 )
     {
-        for( sal_uInt16 nCell = 0; nCell<rCells.size(); nCell++ )
+        for( SwWriteTableCells::size_type nCell = 0; nCell<rCells.size(); ++nCell )
         {
             sal_Int16 eCellVertOri = rCells[nCell].GetVertOri();
             if( 0==nCell )
@@ -553,8 +553,8 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 
     rWrt.IncIndentLevel(); // Inhalt von <TR>...</TR> einruecken
 
-    for( sal_uInt16 nCell = 0; nCell<rCells.size(); nCell++ )
-        OutTableCell( rWrt, &rCells[nCell], text::VertOrientation::NONE==eRowVertOri );
+    for( const auto &rCell : rCells )
+        OutTableCell( rWrt, &rCell, text::VertOrientation::NONE==eRowVertOri );
 
     rWrt.DecIndentLevel(); // Inhalt von <TR>...</TR> einruecken
 
@@ -567,8 +567,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                             const OUString *pCaption, bool bTopCaption,
                             sal_uInt16 nHSpace, sal_uInt16 nVSpace ) const
 {
-    sal_uInt16 nRow;
-
     // Wert fuer FRAME bestimmen
     sal_uInt16 nFrameMask = 15;
     if( !(aRows.front())->bTopBorder )
@@ -584,7 +582,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     bool bRowsHaveBorder = false;
     bool bRowsHaveBorderOnly = true;
     SwWriteTableRow *pRow = aRows[0];
-    for( nRow=1; nRow < aRows.size(); nRow++ )
+    for( SwWriteTableRows::size_type nRow=1; nRow < aRows.size(); ++nRow )
     {
         SwWriteTableRow *pNextRow = aRows[nRow];
         bool bBorder = ( pRow->bBottomBorder || pNextRow->bTopBorder );
@@ -607,8 +605,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     bool bColsHaveBorder = false;
     bool bColsHaveBorderOnly = true;
     SwWriteTableCol *pCol = aCols[0];
-    sal_uInt16 nCol;
-    for( nCol=1; nCol<aCols.size(); nCol++ )
+    for( SwWriteTableCols::size_type nCol=1; nCol<aCols.size(); ++nCol )
     {
         SwWriteTableCol *pNextCol = aCols[nCol];
         bool bBorder = ( pCol->bRightBorder || pNextCol->bLeftBorder );
@@ -627,7 +624,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_table);
 
-    sal_uInt16 nOldDirection = rWrt.nDirection;
+    const sal_uInt16 nOldDirection = rWrt.nDirection;
     if( pFrameFormat )
         rWrt.nDirection = rWrt.GetHTMLDirection( pFrameFormat->GetAttrSet() );
     if( rWrt.bOutFlyFrame || nOldDirection != rWrt.nDirection )
@@ -737,7 +734,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_caption, false );
     }
 
-    sal_uInt16 nCols = aCols.size();
+    const SwWriteTableCols::size_type nCols = aCols.size();
 
     // <COLGRP>/<COL> ausgeben: Bei Export ueber Layout nur wenn beim
     // Import welche da waren, sonst immer.
@@ -752,7 +749,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             rWrt.IncIndentLevel(); // Inhalt von <COLGRP> einruecken
         }
 
-        for( nCol=0; nCol<nCols; nCol++ )
+        for( SwWriteTableCols::size_type nCol=0; nCol<nCols; ++nCol )
         {
             rWrt.OutNewLine(); // <COL> in neue Zeile
 
@@ -830,7 +827,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         rWrt.IncIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
     }
 
-    for( nRow = 0; nRow < aRows.size(); nRow++ )
+    for( SwWriteTableRows::size_type nRow = 0; nRow < aRows.size(); ++nRow )
     {
         const SwWriteTableRow *pRow2 = aRows[nRow];
 
@@ -838,8 +835,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         if( !nCellSpacing && nRow < aRows.size()-1 && pRow2->bBottomBorder &&
             pRow2->nBottomBorder > DEF_LINE_WIDTH_1 )
         {
-            sal_uInt16 nCnt = (pRow2->nBottomBorder / DEF_LINE_WIDTH_1) - 1;
-            for( ; nCnt; nCnt-- )
+            for( auto nCnt = (pRow2->nBottomBorder / DEF_LINE_WIDTH_1) - 1; nCnt; --nCnt )
             {
                 rWrt.OutNewLine();
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_tablerow,

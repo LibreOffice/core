@@ -603,10 +603,10 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
     // Calculate width.
     sal_uInt8 nPrcWidth = bPrcWidth ? (sal_uInt8)nWidth : 0;
-    sal_uInt16 nTwipWidth = 0;
+    SwTwips nTwipWidth = 0;
     if( !bPrcWidth && nWidth && Application::GetDefaultDevice() )
     {
-        nTwipWidth = (sal_uInt16)Application::GetDefaultDevice()
+        nTwipWidth = Application::GetDefaultDevice()
                              ->PixelToLogic( Size(nWidth, 0),
                                              MapMode(MAP_TWIP) ).Width();
     }
