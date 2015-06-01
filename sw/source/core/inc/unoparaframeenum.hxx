@@ -22,42 +22,49 @@
 
 #include <deque>
 
-#include <boost/shared_ptr.hpp>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
+#include <calbck.hxx>
 #include <unobaseclass.hxx>
+
 
 class SwDepend;
 class SwNodeIndex;
 class SwPaM;
 class SwFrameFormat;
 
-struct FrameDependSortListEntry
+namespace sw
+{
+    struct FrameClient : public SwClient
+    {
+        FrameClient(SwModify* pModify) : SwClient(pModify) {};
+    };
+}
+struct FrameClientSortListEntry
 {
     sal_Int32 nIndex;
     sal_uInt32 nOrder;
-    ::boost::shared_ptr<SwDepend> pFrameDepend;
+    std::shared_ptr<sw::FrameClient> pFrameClient;
 
-    FrameDependSortListEntry (sal_Int32 const i_nIndex,
-                sal_uInt32 const i_nOrder, SwDepend * const i_pDepend)
-        : nIndex(i_nIndex), nOrder(i_nOrder), pFrameDepend(i_pDepend) { }
+    FrameClientSortListEntry (sal_Int32 const i_nIndex,
+                sal_uInt32 const i_nOrder, sw::FrameClient* const i_pClient)
+        : nIndex(i_nIndex), nOrder(i_nOrder), pFrameClient(i_pClient) { }
 };
 
-typedef ::std::deque< FrameDependSortListEntry >
-    FrameDependSortList_t;
+typedef ::std::deque< FrameClientSortListEntry >
+    FrameClientSortList_t;
 
-typedef ::std::deque< ::boost::shared_ptr<SwDepend> >
-    FrameDependList_t;
+typedef ::std::deque< std::shared_ptr<sw::FrameClient> >
+    FrameClientList_t;
 
 // #i28701# - adjust 4th parameter
-void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
-                         FrameDependSortList_t & rFrames,
-                         const bool _bAtCharAnchoredObjs );
+void CollectFrameAtNode( const SwNodeIndex& rIdx,
+                         FrameClientSortList_t& rFrames,
+                         const bool bAtCharAnchoredObjs );
 
 enum ParaFrameMode
 {
