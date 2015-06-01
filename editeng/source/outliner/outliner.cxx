@@ -2126,7 +2126,7 @@ OverflowingText *Outliner::GetOverflowingText() const
     sal_uInt32 nHeadPara = pEditEngine->GetOverflowingParaNum();
     sal_uInt32 nParaCount = GetParagraphCount();
     sal_uInt32 nTailPara = nParaCount-1;
-    sal_uInt32 nMidParas = nTailPara-nHeadPara-1;
+    sal_Int32 nMidParas = nTailPara-nHeadPara-1;
 
     // Set the head text
     // XXX: Is there a proper method to join lines in a single string?
