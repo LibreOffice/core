@@ -2036,6 +2036,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 
     assert(GetDoc() == pDest->GetDoc()); // must be same document
 
+    assert(pDest != this); // destination must be different node
+
     if( !nLen )
     {
         // wurde keine Laenge angegeben, dann Kopiere die Attribute
@@ -2048,305 +2050,188 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     sal_Int32 nDestStart = rDestStart.GetIndex();      // alte Pos merken
     const sal_Int32 nInitSize = pDest->m_Text.getLength();
 
-    // wird in sich selbst verschoben, muss es gesondert behandelt werden !!
-    if( pDest == this )
+    pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
+                        m_Text.copy(nTextStartIdx, nLen));
+    m_Text = m_Text.replaceAt(nTextStartIdx, nLen, "");
+    if (GetSpaceLeft() < 0)
+    {   // FIXME: could only happen when called from SwRangeRedline::Show.
+        // unfortunately can't really do anything here to handle that...
+        abort();
+    }
+    nLen = pDest->m_Text.getLength() - nInitSize; // update w/ current size!
+    if (!nLen)                 // String nicht gewachsen ??
+        return;
+
+    if (bUpdate)
     {
-        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
-        assert(false);
-        OUStringBuffer buf(m_Text);
-        buf.insert(nDestStart, m_Text.copy(nTextStartIdx, nLen));
-        buf.remove(
-            nTextStartIdx + ((nDestStart < nTextStartIdx) ? nLen : 0), nLen);
-        m_Text = buf.makeStringAndClear();
+        // Update aller Indizies
+        pDest->Update( rDestStart, nLen, false, true);
+    }
 
-        const sal_Int32 nEnd = rStart.GetIndex() + nLen;
+    CHECK_SWPHINTS(pDest);
 
-        // dann suche mal alle Attribute zusammen, die im verschobenen
-        // Bereich liegen. Diese werden in das extra Array verschoben,
-        // damit sich die Indizies beim Updaten nicht veraendern !!!
-        SwpHts aArr;
+    const sal_Int32 nEnd = rStart.GetIndex() + nLen;
+    bool const bUndoNodes =
+        GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
-        // 2. Attribute verschieben
-        // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
-        // des Attributs hinter dem zu verschiebenden Bereich liegt
-        size_t nAttrCnt = 0;
-        while ( m_pSwpHints && nAttrCnt < m_pSwpHints->Count() )
+    // harte Absatz umspannende Attribute kopieren
+    if (HasSwAttrSet())
+    {
+        // alle, oder nur die CharAttribute ?
+        if( nInitSize || pDest->HasSwAttrSet() ||
+            nLen != pDest->GetText().getLength())
         {
-            SwTextAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
-            const sal_Int32 nAttrStartIdx = pHt->GetStart();
-            if (!( nAttrStartIdx < nEnd ))
-                break;
-            const sal_Int32 * const pEndIdx = pHt->GetEnd();
-            const sal_uInt16 nWhich = pHt->Which();
-            SwTextAttr *pNewHt = 0;
-
-            if(nAttrStartIdx < nTextStartIdx)
-            {
-                // Anfang liegt vor dem Bereich
-                if ( RES_TXTATR_REFMARK != nWhich && !pHt->HasDummyChar() &&
-                    pEndIdx && *pEndIdx > nTextStartIdx )
-                {
-                    // Attribut mit einem Bereich
-                    // und das Ende des Attribut liegt im Bereich
-                    pNewHt = MakeTextAttr( *GetDoc(), pHt->GetAttr(), 0,
-                                        *pEndIdx > nEnd
-                                            ? nLen
-                                            : *pEndIdx - nTextStartIdx );
-                }
-            }
-            else
-            {
-                // der Anfang liegt vollstaendig im Bereich
-                if( !pEndIdx || *pEndIdx < nEnd )
-                {
-                    // Attribut verschieben
-                    m_pSwpHints->Delete( pHt );
-                    // die Start/End Indicies neu setzen
-                    pHt->GetStart() = nAttrStartIdx - nTextStartIdx;
-                    if( pEndIdx )
-                        *pHt->GetEnd() = *pEndIdx - nTextStartIdx;
-                    aArr.push_back( pHt );
-                    continue;           // while-Schleife weiter, ohne ++ !
-                }
-                    // das Ende liegt dahinter
-                else if (RES_TXTATR_REFMARK != nWhich && !pHt->HasDummyChar())
-                {
-                    pNewHt = MakeTextAttr( *GetDoc(),
-                                          pHt->GetAttr(),
-                                          nAttrStartIdx - nTextStartIdx,
-                                          ( *pEndIdx > nEnd
-                                            ? nLen
-                                            : *pEndIdx - nTextStartIdx ));
-                }
-            }
-            if( pNewHt )
-            {
-                // die Daten kopieren
-                lcl_CopyHint( nWhich, pHt, pNewHt, 0, this );
-                aArr.push_back( pNewHt );
-            }
-            ++nAttrCnt;
-        }
-
-        if( bUpdate )
-        {
-            // Update aller Indizies
-            Update( rDestStart, nLen, false, true );
-        }
-
-        CHECK_SWPHINTS(this);
-
-        Update( rStart, nLen, true, true );
-
-        CHECK_SWPHINTS(this);
-
-        // dann setze die kopierten/geloeschten Attribute in den Node
-        if( nDestStart <= nTextStartIdx )
-        {
-            nTextStartIdx = nTextStartIdx + nLen;
+            SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
+                                RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+                                0 );
+            aCharSet.Put( *GetpSwAttrSet() );
+            if( aCharSet.Count() )
+                pDest->SetAttr( aCharSet, nDestStart, nDestStart + nLen );
         }
         else
         {
-            nDestStart = nDestStart - nLen;
+            GetpSwAttrSet()->CopyToModify( *pDest );
         }
+    }
 
-        for ( size_t n = 0; n < aArr.size(); ++n )
+    // 2. Attribute verschieben
+    // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
+    // des Attributs hinter dem zu verschiebenden Bereich liegt
+    bool bMergePortionsNeeded(false);
+    size_t nAttrCnt = 0;
+    while (m_pSwpHints && (nAttrCnt < m_pSwpHints->Count()))
+    {
+        SwTextAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
+        const sal_Int32 nAttrStartIdx = pHt->GetStart();
+        if (!( nAttrStartIdx < nEnd ))
+            break;
+        const sal_Int32 * const pEndIdx = pHt->GetEnd();
+        const sal_uInt16 nWhich = pHt->Which();
+        SwTextAttr *pNewHt = 0;
+
+        // if the hint has a dummy character, then it must not be split!
+        if(nAttrStartIdx < nTextStartIdx)
         {
-            SwTextAttr *const pNewHt = aArr[n];
-            pNewHt->GetStart() = nDestStart + pNewHt->GetStart();
-            sal_Int32 * const pEndIdx = pNewHt->GetEnd();
-            if ( pEndIdx )
+            // Anfang liegt vor dem Bereich
+            if (!pHt->HasDummyChar() && ( RES_TXTATR_REFMARK != nWhich
+                || bUndoNodes ) && pEndIdx && *pEndIdx > nTextStartIdx)
             {
-                *pEndIdx = nDestStart + *pEndIdx;
+                // Attribut mit einem Bereich
+                // und das Ende des Attribut liegt im Bereich
+                pNewHt = MakeTextAttr( *pDest->GetDoc(), pHt->GetAttr(),
+                                nDestStart,
+                                nDestStart + (
+                                    *pEndIdx > nEnd
+                                        ? nLen
+                                        : *pEndIdx - nTextStartIdx ) );
             }
-            InsertHint( pNewHt, SetAttrMode::NOTXTATRCHR );
+        }
+        else
+        {
+            // der Anfang liegt vollstaendig im Bereich
+            if (!pEndIdx || *pEndIdx < nEnd ||
+                (!bUndoNodes && RES_TXTATR_REFMARK == nWhich)
+                || pHt->HasDummyChar() )
+            {
+                // do not delete note and later add it -> sidebar flickering
+                if (GetDoc()->GetDocShell())
+                {
+                    GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
+                }
+                // Attribut verschieben
+                m_pSwpHints->Delete( pHt );
+                // die Start/End Indicies neu setzen
+                if (pHt->IsFormatIgnoreStart() || pHt->IsFormatIgnoreEnd())
+                {
+                    bMergePortionsNeeded = true;
+                }
+                pHt->GetStart() =
+                        nDestStart + (nAttrStartIdx - nTextStartIdx);
+                if (pEndIdx)
+                {
+                    *pHt->GetEnd() = nDestStart + (
+                                    *pEndIdx > nEnd
+                                        ? nLen
+                                        : *pEndIdx - nTextStartIdx );
+                }
+                pDest->InsertHint( pHt,
+                          SetAttrMode::NOTXTATRCHR
+                        | SetAttrMode::DONTREPLACE );
+                if (GetDoc()->GetDocShell())
+                {
+                    GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
+                }
+                continue;           // while-Schleife weiter, ohne ++ !
+            }
+                // das Ende liegt dahinter
+            else if (RES_TXTATR_REFMARK != nWhich || bUndoNodes)
+            {
+                pNewHt = MakeTextAttr( *GetDoc(), pHt->GetAttr(),
+                              nDestStart + (nAttrStartIdx - nTextStartIdx),
+                              nDestStart + (*pEndIdx > nEnd
+                                             ? nLen
+                                             : *pEndIdx - nTextStartIdx));
+            }
+        }
+        if (pNewHt)
+        {
+            const bool bSuccess( pDest->InsertHint( pNewHt,
+                          SetAttrMode::NOTXTATRCHR
+                        | SetAttrMode::DONTREPLACE
+                        | SetAttrMode::IS_COPY) );
+            if (bSuccess)
+            {
+                lcl_CopyHint( nWhich, pHt, pNewHt, nullptr, pDest );
+            }
+        }
+        ++nAttrCnt;
+    }
+    // sollten jetzt noch leere Attribute rumstehen, dann haben diese
+    // eine hoehere Praezedenz. Also herausholen und das Array updaten.
+    // Die dabei entstehenden leeren Hints werden von den gesicherten
+    // "uebergeplaettet".   (Bug: 6977)
+    if (m_pSwpHints && nAttrCnt < m_pSwpHints->Count())
+    {
+        SwpHts aArr;
+        while (nAttrCnt < m_pSwpHints->Count())
+        {
+            SwTextAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
+            if (nEnd != pHt->GetStart())
+                break;
+            const sal_Int32 * const pEndIdx = pHt->GetEnd();
+            if (pEndIdx && *pEndIdx == nEnd)
+            {
+                aArr.push_back( pHt );
+                m_pSwpHints->Delete( pHt );
+            }
+            else
+            {
+                ++nAttrCnt;
+            }
+        }
+        Update( rStart, nLen, true, true );
+
+        for (size_t n = 0; n < aArr.size(); ++n)
+        {
+            SwTextAttr * const pHt = aArr[ n ];
+            pHt->GetStart() = *pHt->GetEnd() = rStart.GetIndex();
+            InsertHint( pHt );
         }
     }
     else
     {
-        pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
-                            m_Text.copy(nTextStartIdx, nLen));
-        m_Text = m_Text.replaceAt(nTextStartIdx, nLen, "");
-        if (GetSpaceLeft()<0)
-        {   // FIXME: could only happen when called from SwRangeRedline::Show.
-            // unfortunately can't really do anything here to handle that...
-            abort();
-        }
-        nLen = pDest->m_Text.getLength() - nInitSize; // update w/ current size!
-        if( !nLen )                 // String nicht gewachsen ??
-            return;
-
-        if( bUpdate )
-        {
-            // Update aller Indizies
-            pDest->Update( rDestStart, nLen, false, true);
-        }
-
-        CHECK_SWPHINTS(pDest);
-
-        const sal_Int32 nEnd = rStart.GetIndex() + nLen;
-        bool const bUndoNodes =
-            GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
-
-        // harte Absatz umspannende Attribute kopieren
-        if( HasSwAttrSet() )
-        {
-            // alle, oder nur die CharAttribute ?
-            if( nInitSize || pDest->HasSwAttrSet() ||
-                nLen != pDest->GetText().getLength())
-            {
-                SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
-                                    RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                    RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-                                    0 );
-                aCharSet.Put( *GetpSwAttrSet() );
-                if( aCharSet.Count() )
-                    pDest->SetAttr( aCharSet, nDestStart, nDestStart + nLen );
-            }
-            else
-            {
-                GetpSwAttrSet()->CopyToModify( *pDest );
-            }
-        }
-
-        // 2. Attribute verschieben
-        // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
-        // des Attributs hinter dem zu verschiebenden Bereich liegt
-        bool bMergePortionsNeeded(false);
-        size_t nAttrCnt = 0;
-        while ( m_pSwpHints && (nAttrCnt < m_pSwpHints->Count()) )
-        {
-            SwTextAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
-            const sal_Int32 nAttrStartIdx = pHt->GetStart();
-            if (!( nAttrStartIdx < nEnd ))
-                break;
-            const sal_Int32 * const pEndIdx = pHt->GetEnd();
-            const sal_uInt16 nWhich = pHt->Which();
-            SwTextAttr *pNewHt = 0;
-
-            // if the hint has a dummy character, then it must not be split!
-            if(nAttrStartIdx < nTextStartIdx)
-            {
-                // Anfang liegt vor dem Bereich
-                if( !pHt->HasDummyChar() && ( RES_TXTATR_REFMARK != nWhich
-                    || bUndoNodes ) && pEndIdx && *pEndIdx > nTextStartIdx )
-                {
-                    // Attribut mit einem Bereich
-                    // und das Ende des Attribut liegt im Bereich
-                    pNewHt = MakeTextAttr( *pDest->GetDoc(), pHt->GetAttr(),
-                                    nDestStart,
-                                    nDestStart + (
-                                        *pEndIdx > nEnd
-                                            ? nLen
-                                            : *pEndIdx - nTextStartIdx ) );
-                }
-            }
-            else
-            {
-                // der Anfang liegt vollstaendig im Bereich
-                if( !pEndIdx || *pEndIdx < nEnd ||
-                    (!bUndoNodes && RES_TXTATR_REFMARK == nWhich)
-                    || pHt->HasDummyChar() )
-                {
-                    // do not delete note and later add it -> sidebar flickering
-                    if ( GetDoc()->GetDocShell() )
-                    {
-                        GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
-                    }
-                    // Attribut verschieben
-                    m_pSwpHints->Delete( pHt );
-                    // die Start/End Indicies neu setzen
-                    if (pHt->IsFormatIgnoreStart() || pHt->IsFormatIgnoreEnd())
-                    {
-                        bMergePortionsNeeded = true;
-                    }
-                    pHt->GetStart() =
-                            nDestStart + (nAttrStartIdx - nTextStartIdx);
-                    if( pEndIdx )
-                    {
-                        *pHt->GetEnd() = nDestStart + (
-                                        *pEndIdx > nEnd
-                                            ? nLen
-                                            : *pEndIdx - nTextStartIdx );
-                    }
-                    pDest->InsertHint( pHt,
-                              SetAttrMode::NOTXTATRCHR
-                            | SetAttrMode::DONTREPLACE );
-                    if ( GetDoc()->GetDocShell() )
-                    {
-                        GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
-                    }
-                    continue;           // while-Schleife weiter, ohne ++ !
-                }
-                    // das Ende liegt dahinter
-                else if( RES_TXTATR_REFMARK != nWhich || bUndoNodes )
-                {
-                    pNewHt = MakeTextAttr( *GetDoc(), pHt->GetAttr(),
-                                          nDestStart + (nAttrStartIdx - nTextStartIdx),
-                                          nDestStart + ( *pEndIdx > nEnd
-                                                         ? nLen
-                                                         : *pEndIdx - nTextStartIdx ));
-                }
-            }
-            if ( pNewHt )
-            {
-                const bool bSuccess( pDest->InsertHint( pNewHt,
-                              SetAttrMode::NOTXTATRCHR
-                            | SetAttrMode::DONTREPLACE
-                            | SetAttrMode::IS_COPY) );
-                if (bSuccess)
-                {
-                    lcl_CopyHint( nWhich, pHt, pNewHt, nullptr, pDest );
-                }
-            }
-            ++nAttrCnt;
-        }
-        // sollten jetzt noch leere Attribute rumstehen, dann haben diese
-        // eine hoehere Praezedenz. Also herausholen und das Array updaten.
-        // Die dabei entstehenden leeren Hints werden von den gesicherten
-        // "uebergeplaettet".   (Bug: 6977)
-        if( m_pSwpHints && nAttrCnt < m_pSwpHints->Count() )
-        {
-            SwpHts aArr;
-            while ( nAttrCnt < m_pSwpHints->Count() )
-            {
-                SwTextAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
-                if ( nEnd != pHt->GetStart() )
-                    break;
-                const sal_Int32 * const pEndIdx = pHt->GetEnd();
-                if ( pEndIdx && *pEndIdx == nEnd )
-                {
-                    aArr.push_back( pHt );
-                    m_pSwpHints->Delete( pHt );
-                }
-                else
-                {
-                    ++nAttrCnt;
-                }
-            }
-            Update( rStart, nLen, true, true );
-
-            for ( size_t n = 0; n < aArr.size(); ++n )
-            {
-                SwTextAttr * const pHt = aArr[ n ];
-                pHt->GetStart() = *pHt->GetEnd() = rStart.GetIndex();
-                InsertHint( pHt );
-            }
-        }
-        else
-        {
-            Update( rStart, nLen, true, true );
-        }
-
-        if (bMergePortionsNeeded)
-        {
-            m_pSwpHints->MergePortions(*this);
-        }
-
-        CHECK_SWPHINTS(this);
+        Update( rStart, nLen, true, true );
     }
+
+    if (bMergePortionsNeeded)
+    {
+        m_pSwpHints->MergePortions(*this);
+    }
+
+    CHECK_SWPHINTS(this);
 
     TryDeleteSwpHints();
 
