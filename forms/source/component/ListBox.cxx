@@ -943,7 +943,7 @@ namespace frm
                             // the type of i matters! It will be the type of the ORowSetValue pushed to aValueList!
                             for(size_t i=0; i < aDisplayList.size(); ++i)
                             {
-                                aValueList.push_back(static_cast<connectivity::ORowSetValue >(i));
+                                aValueList.push_back(ORowSetValue(sal_Int16(i)));
                             }
                         }
                         else
