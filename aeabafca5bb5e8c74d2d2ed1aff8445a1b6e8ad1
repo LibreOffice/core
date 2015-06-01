@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_2e55a8c5",
+        "filename": "icon-themes/galaxy/links.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-06-01T07:16:08Z",
+      "side": 1,
+      "message": "this would likely have to be pushed in tango and breeze because of bug 90790",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 42
+      },
+      "revId": "aeabafca5bb5e8c74d2d2ed1aff8445a1b6e8ad1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_4e5264df",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2139,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-06-01T07:16:08Z",
+      "side": 1,
+      "message": "this also hides charts, and likely other objects, so not sure what should be added to it.",
+      "range": {
+        "startLine": 2139,
+        "startChar": 34,
+        "endLine": 2139,
+        "endChar": 41
+      },
+      "revId": "aeabafca5bb5e8c74d2d2ed1aff8445a1b6e8ad1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
