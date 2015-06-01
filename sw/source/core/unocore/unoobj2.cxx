@@ -1676,8 +1676,7 @@ lcl_FillFrame(SwUnoCrsr& rUnoCrsr, FrameClientList_t & rFrames)
     {
         const SwFormatFlyCnt& rFlyCnt = pTextAttr->GetFlyCnt();
         SwFrameFormat * const  pFrameFormat = rFlyCnt.GetFrameFormat();
-        sw::FrameClient* const pNewClient = new sw::FrameClient(pFrameFormat);
-        rFrames.push_back( std::shared_ptr<sw::FrameClient>(pNewClient) );
+        rFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
     }
 }
 
@@ -1697,9 +1696,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
     }
     else if (pFormat)
     {
-        // create SwDepend for frame and insert into array
-        sw::FrameClient* const pNewClient = new sw::FrameClient(pFormat);
-        m_pImpl->m_Frames.push_back(std::shared_ptr<sw::FrameClient>(pNewClient));
+        m_pImpl->m_Frames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFormat)));
     }
     else if ((PARAFRAME_PORTION_CHAR == eParaFrameMode) ||
              (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode))
@@ -1713,9 +1710,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
             {
                 SwFrameFormat *const pFrameFormat = const_cast<SwFrameFormat*>(&((*aIter)->GetFormat()));
 
-                // create SwDepend for frame and insert into array
-                sw::FrameClient* const pNewClient = new sw::FrameClient(pFrameFormat);
-                m_pImpl->m_Frames.push_back(std::shared_ptr<sw::FrameClient>(pNewClient));
+                m_pImpl->m_Frames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
             }
         }
 
