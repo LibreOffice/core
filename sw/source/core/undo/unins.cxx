@@ -24,6 +24,7 @@
 #include <sot/storage.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/svdobj.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <docsh.hxx>
 #include <fmtcntnt.hxx>
@@ -513,7 +514,7 @@ public:
 SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
         OUString const& rIns, bool const bRegExp)
     : SwUndo( UNDO_REPLACE )
-    , m_pImpl(new Impl(rPam, rIns, bRegExp))
+    , m_pImpl(o3tl::make_unique<Impl>(rPam, rIns, bRegExp))
 {
 }
 

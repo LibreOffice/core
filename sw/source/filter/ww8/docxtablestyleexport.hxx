@@ -22,7 +22,7 @@ class SwDoc;
 class DocxTableStyleExport
 {
     struct Impl;
-    std::shared_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> m_pImpl;
 public:
     void TableStyles(sal_Int32 nCountStylesToWrite);
 

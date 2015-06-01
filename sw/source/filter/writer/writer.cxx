@@ -25,6 +25,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -117,7 +118,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
  */
 
 Writer::Writer()
-    : m_pImpl(new Writer_Impl)
+    : m_pImpl(o3tl::make_unique<Writer_Impl>())
     , pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
 {
     bWriteAll = bShowProgress = bUCS2_WithStartChar = true;
