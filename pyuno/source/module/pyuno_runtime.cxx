@@ -30,6 +30,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
+#include <list>
 #include <typelib/typedescription.hxx>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -726,6 +727,31 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         {
             s[i] = pyObject2Any (PyTuple_GetItem (o, i), mode );
         }
+        a <<= s;
+    }
+    else if (PyList_Check (o))
+    {
+        Py_ssize_t l = PyList_Size (o);
+        Sequence<Any> s (l);
+        for (int i = 0; i < l; i++)
+        {
+            s[i] = pyObject2Any (PyList_GetItem (o, i), mode );
+        }
+        a <<= s;
+    }
+    else if (PyIter_Check (o))
+    {
+        PyObject *pItem;
+        ::std::list<Any> items;
+        while ((pItem = PyIter_Next (o)))
+        {
+            PyRef rItem (pItem, SAL_NO_ACQUIRE);
+            items.push_back (pyObject2Any (rItem.get()));
+        }
+        Sequence<Any> s (items.size());
+        ::std::list<Any>::iterator it = items.begin();
+        for (int i = 0; it != items.end(); ++it)
+            s[i++] = *it;
         a <<= s;
     }
     else
