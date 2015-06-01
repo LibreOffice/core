@@ -155,20 +155,19 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 
 } // namespace sw
 
-struct FrameDependSortListLess
+struct FrameClientSortListLess
 {
-    bool operator() (FrameDependSortListEntry const& r1,
-                     FrameDependSortListEntry const& r2) const
+    bool operator() (FrameClientSortListEntry const& r1,
+                     FrameClientSortListEntry const& r2) const
     {
         return  (r1.nIndex <  r2.nIndex)
             || ((r1.nIndex == r2.nIndex) && (r1.nOrder < r2.nOrder));
     }
 };
 
-// OD 2004-05-07 #i28701# - adjust 4th parameter
-void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
-                         FrameDependSortList_t & rFrames,
-                         const bool _bAtCharAnchoredObjs )
+void CollectFrameAtNode( const SwNodeIndex& rIdx,
+                         FrameClientSortList_t& rFrames,
+                         const bool bAtCharAnchoredObjs )
 {
     // _bAtCharAnchoredObjs:
     // <true>: at-character anchored objects are collected
@@ -177,7 +176,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     // search all borders, images, and OLEs that are connected to the paragraph
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    const sal_uInt16 nChkType = static_cast< sal_uInt16 >((_bAtCharAnchoredObjs)
+    const sal_uInt16 nChkType = static_cast< sal_uInt16 >((bAtCharAnchoredObjs)
             ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwContentFrm* pCFrm;
     const SwContentNode* pCNd;
@@ -201,14 +200,14 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 if ( rFormat.GetAnchor().GetAnchorId() == nChkType )
                 {
                     // create SwDepend and insert into array
-                    SwDepend* pNewDepend = new SwDepend( &rClnt, &rFormat );
+                    sw::FrameClient* pNewClient = new sw::FrameClient( &rFormat );
                     const sal_Int32 idx =
                         rFormat.GetAnchor().GetContentAnchor()->nContent.GetIndex();
                     sal_uInt32 nOrder = rFormat.GetAnchor().GetOrder();
 
                     // OD 2004-05-07 #i28701# - sorting no longer needed,
                     // because list <SwSortedObjs> is already sorted.
-                    FrameDependSortListEntry entry(idx, nOrder, pNewDepend);
+                    FrameClientSortListEntry entry(idx, nOrder, pNewClient);
                     rFrames.push_back(entry);
                 }
             }
@@ -227,18 +226,18 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 0 != (pAnchorPos = rAnchor.GetContentAnchor()) &&
                     pAnchorPos->nNode == rIdx )
             {
-                SwDepend* pNewDepend = new SwDepend( &rClnt, const_cast<SwFrameFormat*>(pFormat));
+                sw::FrameClient* pNewClient = new sw::FrameClient(const_cast<SwFrameFormat*>(pFormat));
 
                 // OD 2004-05-07 #i28701# - determine insert position for
                 // sorted <rFrameArr>
                 const sal_Int32 nIndex = pAnchorPos->nContent.GetIndex();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
-                FrameDependSortListEntry entry(nIndex, nOrder, pNewDepend);
+                FrameClientSortListEntry entry(nIndex, nOrder, pNewClient);
                 rFrames.push_back(entry);
             }
         }
-        ::std::sort(rFrames.begin(), rFrames.end(), FrameDependSortListLess());
+        ::std::sort(rFrames.begin(), rFrames.end(), FrameClientSortListLess());
     }
 }
 
@@ -1576,19 +1575,16 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
 }
 
-class SwXParaFrameEnumeration::Impl
-    : public SwClient
+struct SwXParaFrameEnumeration::Impl
 {
-public:
     // created by hasMoreElements
     uno::Reference< text::XTextContent > m_xNextObject;
-    FrameDependList_t m_Frames;
-    ::std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
+    FrameClientList_t m_Frames;
+    ::sw::UnoCursorPointer m_pUnoCursor;
 
     explicit Impl(SwPaM const & rPaM)
         : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
     {
-        m_pUnoCursor->Add(this);
         if (rPaM.HasMark())
         {
             GetCursor()->SetMark();
@@ -1596,60 +1592,29 @@ public:
         }
     }
 
-    virtual ~Impl() {
-        if(m_pUnoCursor)
-            m_pUnoCursor->Remove(this);
-        // Impl owns the cursor; delete it here: SolarMutex is locked
+    SwUnoCrsr* GetCursor()
+        { return &(*m_pUnoCursor); }
+    void PurgeFrameClients()
+    {
+        if(!m_pUnoCursor)
+        {
+            m_Frames.clear();
+            m_xNextObject = nullptr;
+        }
+        else
+        {
+            // removing orphaned SwDepends
+            const auto iter = std::remove_if(m_Frames.begin(), m_Frames.end(),
+                    [] (std::shared_ptr<sw::FrameClient>& rEntry) -> bool { return !rEntry->GetRegisteredIn(); });
+            m_Frames.erase(iter, m_Frames.end());
+        }
     }
-
-    SwUnoCrsr * GetCursor() {
-        return static_cast<SwUnoCrsr*>(
-                GetRegisteredIn());
-    }
-
-protected:
-    // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
-
-struct InvalidFrameDepend {
-    bool operator() (::boost::shared_ptr<SwDepend> const & rEntry)
-    { return !rEntry->GetRegisteredIn(); }
-};
-
-void SwXParaFrameEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-    {
-        m_Frames.clear();
-        m_xNextObject = 0;
-    }
-    else
-    {
-        // check if any frame went away...
-        FrameDependList_t::iterator const iter =
-            ::std::remove_if(m_Frames.begin(), m_Frames.end(),
-                    InvalidFrameDepend());
-        m_Frames.erase(iter, m_Frames.end());
-    }
-}
-
-void SwXParaFrameEnumeration::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    SwClient::SwClientNotify(rModify, rHint);
-    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        m_pUnoCursor->Remove(this);
-        m_pUnoCursor.reset();
-    }
-}
 
 static bool
 lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
         uno::Reference<text::XTextContent> & o_rNextObject,
-        FrameDependList_t & i_rFrames)
+        FrameClientList_t & i_rFrames)
 {
     if (!i_rFrames.size())
         return false;
@@ -1700,8 +1665,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
 // Search for a FLYCNT text attribute at the cursor point and fill the frame
 // into the array
 static void
-lcl_FillFrame(SwClient & rEnum, SwUnoCrsr& rUnoCrsr,
-        FrameDependList_t & rFrames)
+lcl_FillFrame(SwUnoCrsr& rUnoCrsr, FrameClientList_t & rFrames)
 {
     // search for objects at the cursor - anchored at/as char
     SwTextAttr const*const pTextAttr = (rUnoCrsr.GetNode().IsTextNode())
@@ -1712,8 +1676,8 @@ lcl_FillFrame(SwClient & rEnum, SwUnoCrsr& rUnoCrsr,
     {
         const SwFormatFlyCnt& rFlyCnt = pTextAttr->GetFlyCnt();
         SwFrameFormat * const  pFrameFormat = rFlyCnt.GetFrameFormat();
-        SwDepend * const pNewDepend = new SwDepend(&rEnum, pFrameFormat);
-        rFrames.push_back( ::boost::shared_ptr<SwDepend>(pNewDepend) );
+        sw::FrameClient* const pNewClient = new sw::FrameClient(pFrameFormat);
+        rFrames.push_back( std::shared_ptr<sw::FrameClient>(pNewClient) );
     }
 }
 
@@ -1724,18 +1688,18 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
 {
     if (PARAFRAME_PORTION_PARAGRAPH == eParaFrameMode)
     {
-        FrameDependSortList_t frames;
-        ::CollectFrameAtNode(*m_pImpl.get(), rPaM.GetPoint()->nNode,
+        FrameClientSortList_t frames;
+        ::CollectFrameAtNode(rPaM.GetPoint()->nNode,
                 frames, false);
         ::std::transform(frames.begin(), frames.end(),
             ::std::back_inserter(m_pImpl->m_Frames),
-            ::boost::bind(&FrameDependSortListEntry::pFrameDepend, _1));
+            ::boost::bind(&FrameClientSortListEntry::pFrameClient, _1));
     }
     else if (pFormat)
     {
         // create SwDepend for frame and insert into array
-        SwDepend *const pNewDepend = new SwDepend(m_pImpl.get(), pFormat);
-        m_pImpl->m_Frames.push_back(::boost::shared_ptr<SwDepend>(pNewDepend));
+        sw::FrameClient* const pNewClient = new sw::FrameClient(pFormat);
+        m_pImpl->m_Frames.push_back(std::shared_ptr<sw::FrameClient>(pNewClient));
     }
     else if ((PARAFRAME_PORTION_CHAR == eParaFrameMode) ||
              (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode))
@@ -1750,12 +1714,12 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
                 SwFrameFormat *const pFrameFormat = const_cast<SwFrameFormat*>(&((*aIter)->GetFormat()));
 
                 // create SwDepend for frame and insert into array
-                SwDepend *const pNewDepend = new SwDepend(m_pImpl.get(), pFrameFormat);
-                m_pImpl->m_Frames.push_back(::boost::shared_ptr<SwDepend>(pNewDepend));
+                sw::FrameClient* const pNewClient = new sw::FrameClient(pFrameFormat);
+                m_pImpl->m_Frames.push_back(std::shared_ptr<sw::FrameClient>(pNewClient));
             }
         }
 
-        lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(), m_pImpl->m_Frames);
+        lcl_FillFrame(*m_pImpl->GetCursor(), m_pImpl->m_Frames);
     }
 }
 
@@ -1767,10 +1731,9 @@ sal_Bool SAL_CALL
 SwXParaFrameEnumeration::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
     if (!m_pImpl->GetCursor())
         throw uno::RuntimeException();
-
+    m_pImpl->PurgeFrameClients();
     return m_pImpl->m_xNextObject.is() ||
         lcl_CreateNextObject(*m_pImpl->GetCursor(),m_pImpl->m_xNextObject, m_pImpl->m_Frames);
 }
@@ -1780,12 +1743,9 @@ throw (container::NoSuchElementException,
         lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
     if (!m_pImpl->GetCursor())
-    {
         throw uno::RuntimeException();
-    }
-
+    m_pImpl->PurgeFrameClients();
     if (!m_pImpl->m_xNextObject.is() && m_pImpl->m_Frames.size())
     {
         lcl_CreateNextObject(*m_pImpl->GetCursor(),

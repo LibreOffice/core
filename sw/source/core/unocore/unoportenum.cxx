@@ -80,7 +80,7 @@ static void lcl_CreatePortions(
     TextRangeList_t & i_rPortions,
     uno::Reference< text::XText > const& i_xParentText,
     SwUnoCrsr* pUnoCrsr,
-    FrameDependSortList_t & i_rFrames,
+    FrameClientSortList_t & i_rFrames,
     const sal_Int32 i_nStartPos, const sal_Int32 i_nEndPos );
 
 namespace
@@ -371,8 +371,8 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
             "start or end value invalid!");
 
     // find all frames, graphics and OLEs that are bound AT character in para
-    FrameDependSortList_t frames;
-    ::CollectFrameAtNode(*this, m_pUnoCrsr->GetPoint()->nNode, frames, true);
+    FrameClientSortList_t frames;
+    ::CollectFrameAtNode(m_pUnoCrsr->GetPoint()->nNode, frames, true);
     lcl_CreatePortions(m_Portions, xParentText, m_pUnoCrsr.get(), frames, nStart, nEnd);
 }
 
@@ -1187,7 +1187,7 @@ static sal_Int32 lcl_ExportFrames(
     TextRangeList_t & rPortions,
     Reference<XText> const & i_xParent,
     SwUnoCrsr * const i_pUnoCrsr,
-    FrameDependSortList_t & i_rFrames,
+    FrameClientSortList_t & i_rFrames,
     sal_Int32 const i_nCurrentIndex)
 {
     // Ignore frames which are not exported, as we are exporting a selection
@@ -1200,7 +1200,7 @@ static sal_Int32 lcl_ExportFrames(
     // do not check for i_nEnd here; this is done implicity by lcl_MoveCursor
     {
         const SwModify * const pFrame =
-            i_rFrames.front().pFrameDepend->GetRegisteredIn();
+            i_rFrames.front().pFrameClient->GetRegisteredIn();
         if (pFrame) // Frame could be disposed
         {
             SwXTextPortion* pPortion = new SwXTextPortion(i_pUnoCrsr, i_xParent,
@@ -1243,7 +1243,7 @@ static void lcl_CreatePortions(
         TextRangeList_t & i_rPortions,
         uno::Reference< text::XText > const & i_xParentText,
         SwUnoCrsr * const pUnoCrsr,
-        FrameDependSortList_t & i_rFrames,
+        FrameClientSortList_t & i_rFrames,
         const sal_Int32 i_nStartPos,
         const sal_Int32 i_nEndPos )
 {
