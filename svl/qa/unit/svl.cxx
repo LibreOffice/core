@@ -60,6 +60,7 @@ public:
     void testFdo60915();
     void testI116701();
     void testDateInput();
+    void testIsNumberFormat();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
@@ -69,6 +70,7 @@ public:
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST(testDateInput);
+    CPPUNIT_TEST(testIsNumberFormat);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1016,6 +1018,36 @@ void Test::checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone,
     Color *pColor;
     rFormatter.GetOutputString( fVal, nIndex, aOutString, &pColor);
     CPPUNIT_ASSERT_EQUAL( aDate, aOutString);
+}
+
+void Test::testIsNumberFormat()
+{
+    LanguageType eLang = LANGUAGE_THAI;
+    SvNumberFormatter aFormatter(m_xContext, eLang);
+
+    struct NumberFormatData
+    {
+        const char* pFormat;
+        bool bIsNumber;
+    } aTests[] = {
+        { "20.3", true },
+        { "2", true },
+        { "test", false },
+        { "Jan1", false }
+        // { "Jan1 2000", true },
+        // { "Jan 1", true },
+        // { "Jan 1 2000", true}
+    };
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    {
+        sal_uInt32 nIndex;
+        double nNumber;
+        OUString aString = OUString::createFromAscii(aTests[i].pFormat);
+        bool bIsNumber = aFormatter.IsNumberFormat(aString, nIndex, nNumber);
+        CPPUNIT_ASSERT_EQUAL(aTests[i].bIsNumber, bIsNumber);
+
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
