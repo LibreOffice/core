@@ -59,6 +59,7 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
+#include <editeng/overflowingtxt.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>

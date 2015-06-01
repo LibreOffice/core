@@ -37,6 +37,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/scripttypeitem.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>

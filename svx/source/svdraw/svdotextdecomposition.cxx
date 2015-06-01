@@ -49,6 +49,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace com::sun::star;
@@ -732,23 +733,6 @@ void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
     SdrOutliner &rOutliner = ImpGetDrawOutliner();
 
     rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
-
-    struct OverflowingText {
-        OUString mHeadTxt;
-        const OutlinerParaObject *mpMidParas;
-        OUString mTailTxt;
-        // NOTE: mpMidParas and mTailTxt might be empty
-
-        // Constructor
-        OverflowingText(
-            const OUString &headTxt,
-            const OutlinerParaObject *pMidParas = NULL,
-            const OUString &tailTxt = "")
-                : mHeadTxt(headTxt),
-                  mpMidParas(pMidParas),
-                  mTailTxt(tailTxt)
-                { }
-    };
 
     OverflowingText aOverflowingTxt =
         OverflowingText("headTxt (On its own)", NULL, "I'm Appended to #");
