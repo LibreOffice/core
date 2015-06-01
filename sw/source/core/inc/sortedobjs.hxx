@@ -51,6 +51,7 @@ class SwSortedObjs
         std::vector< SwAnchoredObject* > maSortedObjLst;
 
     public:
+        typedef std::vector<SwAnchoredObject*>::const_iterator const_iterator;
         SwSortedObjs();
         ~SwSortedObjs();
 
@@ -62,6 +63,10 @@ class SwSortedObjs
             input parameter - index of entry, valid value range [0..size()-1]
         */
         SwAnchoredObject* operator[]( size_t _nIndex ) const;
+        const_iterator begin() const
+            { return maSortedObjLst.cbegin(); };
+        const_iterator end() const
+            { return maSortedObjLst.cend(); };
 
         bool Insert( SwAnchoredObject& _rAnchoredObj );
 

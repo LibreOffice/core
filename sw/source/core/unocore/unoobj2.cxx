@@ -165,6 +165,35 @@ struct FrameClientSortListLess
     }
 };
 
+namespace
+{
+    void lcl_CollectFrameAtNodeWithLayout(SwDoc* pDoc, const SwContentFrm* pCFrm,
+            FrameClientSortList_t& rFrames,
+            const sal_uInt16 nAnchorType)
+    {
+        auto pObjs = pCFrm->GetDrawObjs();
+        if(!pObjs)
+            return;
+        const auto aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+        for(const auto pAnchoredObj : *pObjs)
+        {
+            SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
+            // Filter out textboxes, which are not interesting at an UNO level.
+            if(aTextBoxes.find(&rFormat) != aTextBoxes.end())
+                continue;
+            if(rFormat.GetAnchor().GetAnchorId() == nAnchorType)
+            {
+                const auto nIdx =
+                    rFormat.GetAnchor().GetContentAnchor()->nContent.GetIndex();
+                const auto nOrder = rFormat.GetAnchor().GetOrder();
+                FrameClientSortListEntry entry(nIdx, nOrder, new sw::FrameClient(&rFormat));
+                rFrames.push_back(entry);
+            }
+        }
+    }
+}
+
+
 void CollectFrameAtNode( const SwNodeIndex& rIdx,
                          FrameClientSortList_t& rFrames,
                          const bool bAtCharAnchoredObjs )
@@ -176,7 +205,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
     // search all borders, images, and OLEs that are connected to the paragraph
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    const sal_uInt16 nChkType = static_cast< sal_uInt16 >((bAtCharAnchoredObjs)
+    const auto nChkType = static_cast< sal_uInt16 >((bAtCharAnchoredObjs)
             ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwContentFrm* pCFrm;
     const SwContentNode* pCNd;
@@ -184,34 +213,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
         0 != (pCNd = rIdx.GetNode().GetContentNode()) &&
         0 != (pCFrm = pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())) )
     {
-        const SwSortedObjs *pObjs = pCFrm->GetDrawObjs();
-        if( pObjs )
-        {
-            std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
-            for( size_t i = 0; i < pObjs->size(); ++i )
-            {
-                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-
-                // Filter out textboxes, which are not interesting at an UNO level.
-                if (aTextBoxes.find(&rFormat) != aTextBoxes.end())
-                    continue;
-
-                if ( rFormat.GetAnchor().GetAnchorId() == nChkType )
-                {
-                    // create SwDepend and insert into array
-                    sw::FrameClient* pNewClient = new sw::FrameClient( &rFormat );
-                    const sal_Int32 idx =
-                        rFormat.GetAnchor().GetContentAnchor()->nContent.GetIndex();
-                    sal_uInt32 nOrder = rFormat.GetAnchor().GetOrder();
-
-                    // OD 2004-05-07 #i28701# - sorting no longer needed,
-                    // because list <SwSortedObjs> is already sorted.
-                    FrameClientSortListEntry entry(idx, nOrder, pNewClient);
-                    rFrames.push_back(entry);
-                }
-            }
-        }
+        lcl_CollectFrameAtNodeWithLayout(pDoc, pCFrm, rFrames, nChkType);
     }
     else
     {
