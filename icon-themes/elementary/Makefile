@@ -1,7 +1,8 @@
 SHELL = /bin/sh
 
 TARGET = images_elementary.zip
-PREFIX = /usr
+DESTDIR =
+PREFIX = $(DESTDIR)/usr
 LIBDIR = $(PREFIX)/lib/libreoffice/share/config
 SHAREDIR = $(PREFIX)/share/libreoffice/share/config
 
