@@ -1234,9 +1234,7 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
 
-    const uno::Reference< container::XEnumeration > xRet =
-        new SwXParaFrameEnumeration(*pNewCrsr, PARAFRAME_PORTION_TEXTRANGE);
-    return xRet;
+    return SwXParaFrameEnumeration::Create(*pNewCrsr, PARAFRAME_PORTION_TEXTRANGE);
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
@@ -1575,22 +1573,24 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
 }
 
-struct SwXParaFrameEnumeration::Impl
+struct SwXParaFrameEnumerationImpl SAL_FINAL : public SwXParaFrameEnumeration
 {
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XEnumeration
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Any SAL_CALL nextElement() throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    SwXParaFrameEnumerationImpl(const SwPaM& rPaM,
+        const enum ParaFrameMode eParaFrameMode, SwFrameFormat *const pFormat = 0);
     // created by hasMoreElements
     uno::Reference< text::XTextContent > m_xNextObject;
     FrameClientList_t m_Frames;
     ::sw::UnoCursorPointer m_pUnoCursor;
 
-    explicit Impl(SwPaM const & rPaM)
-        : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
-    {
-        if (rPaM.HasMark())
-        {
-            GetCursor()->SetMark();
-            *GetCursor()->GetMark() = *rPaM.GetMark();
-        }
-    }
 
     SwUnoCrsr* GetCursor()
         { return &(*m_pUnoCursor); }
@@ -1680,23 +1680,31 @@ lcl_FillFrame(SwUnoCrsr& rUnoCrsr, FrameClientList_t & rFrames)
     }
 }
 
-SwXParaFrameEnumeration::SwXParaFrameEnumeration(
+SwXParaFrameEnumeration* SwXParaFrameEnumeration::Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat)
+    { return new SwXParaFrameEnumerationImpl(rPaM, eParaFrameMode, pFormat); }
+
+SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
         const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode,
-        SwFrameFormat *const pFormat)
-    : m_pImpl( new SwXParaFrameEnumeration::Impl(rPaM) )
+        SwFrameFormat* const pFormat)
+    : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
 {
+    if (rPaM.HasMark())
+    {
+        GetCursor()->SetMark();
+        *GetCursor()->GetMark() = *rPaM.GetMark();
+    }
     if (PARAFRAME_PORTION_PARAGRAPH == eParaFrameMode)
     {
         FrameClientSortList_t frames;
         ::CollectFrameAtNode(rPaM.GetPoint()->nNode,
                 frames, false);
         ::std::transform(frames.begin(), frames.end(),
-            ::std::back_inserter(m_pImpl->m_Frames),
+            ::std::back_inserter(m_Frames),
             ::boost::bind(&FrameClientSortListEntry::pFrameClient, _1));
     }
     else if (pFormat)
     {
-        m_pImpl->m_Frames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFormat)));
+        m_Frames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFormat)));
     }
     else if ((PARAFRAME_PORTION_CHAR == eParaFrameMode) ||
              (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode))
@@ -1704,60 +1712,54 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
         if (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode)
         {
             //get all frames that are bound at paragraph or at character
-            SwPosFlyFrms aFlyFrms(rPaM.GetDoc()->GetAllFlyFormats(m_pImpl->GetCursor(), false, true));
+            SwPosFlyFrms aFlyFrms(rPaM.GetDoc()->GetAllFlyFormats(GetCursor(), false, true));
 
             for(SwPosFlyFrms::const_iterator aIter(aFlyFrms.begin()); aIter != aFlyFrms.end(); ++aIter)
             {
                 SwFrameFormat *const pFrameFormat = const_cast<SwFrameFormat*>(&((*aIter)->GetFormat()));
 
-                m_pImpl->m_Frames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
+                m_Frames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
             }
         }
 
-        lcl_FillFrame(*m_pImpl->GetCursor(), m_pImpl->m_Frames);
+        lcl_FillFrame(*GetCursor(), m_Frames);
     }
 }
 
-SwXParaFrameEnumeration::~SwXParaFrameEnumeration()
-{
-}
-
 sal_Bool SAL_CALL
-SwXParaFrameEnumeration::hasMoreElements() throw (uno::RuntimeException, std::exception)
+SwXParaFrameEnumerationImpl::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!m_pImpl->GetCursor())
+    if (!GetCursor())
         throw uno::RuntimeException();
-    m_pImpl->PurgeFrameClients();
-    return m_pImpl->m_xNextObject.is() ||
-        lcl_CreateNextObject(*m_pImpl->GetCursor(),m_pImpl->m_xNextObject, m_pImpl->m_Frames);
+    PurgeFrameClients();
+    return m_xNextObject.is() ||
+        lcl_CreateNextObject(*GetCursor(), m_xNextObject, m_Frames);
 }
 
-uno::Any SAL_CALL SwXParaFrameEnumeration::nextElement()
+uno::Any SAL_CALL SwXParaFrameEnumerationImpl::nextElement()
 throw (container::NoSuchElementException,
         lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!m_pImpl->GetCursor())
+    if (!GetCursor())
         throw uno::RuntimeException();
-    m_pImpl->PurgeFrameClients();
-    if (!m_pImpl->m_xNextObject.is() && m_pImpl->m_Frames.size())
+    PurgeFrameClients();
+    if (!m_xNextObject.is() && m_Frames.size())
     {
-        lcl_CreateNextObject(*m_pImpl->GetCursor(),
-                m_pImpl->m_xNextObject, m_pImpl->m_Frames);
+        lcl_CreateNextObject(*GetCursor(),
+                m_xNextObject, m_Frames);
     }
-    if (!m_pImpl->m_xNextObject.is())
-    {
+    if (!m_xNextObject.is())
         throw container::NoSuchElementException();
-    }
     uno::Any aRet;
-    aRet <<= m_pImpl->m_xNextObject;
-    m_pImpl->m_xNextObject = 0;
+    aRet <<= m_xNextObject;
+    m_xNextObject = nullptr;
     return aRet;
 }
 
 OUString SAL_CALL
-SwXParaFrameEnumeration::getImplementationName() throw (uno::RuntimeException, std::exception)
+SwXParaFrameEnumerationImpl::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXParaFrameEnumeration");
 }
@@ -1771,14 +1773,14 @@ static const size_t g_nServicesParaFrameEnum(
     sizeof(g_ServicesParaFrameEnum)/sizeof(g_ServicesParaFrameEnum[0]));
 
 sal_Bool SAL_CALL
-SwXParaFrameEnumeration::supportsService(const OUString& rServiceName)
+SwXParaFrameEnumerationImpl::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXParaFrameEnumeration::getSupportedServiceNames()
+SwXParaFrameEnumerationImpl::getSupportedServiceNames()
 throw (uno::RuntimeException, std::exception)
 {
     return ::sw::GetSupportedServiceNamesImpl(

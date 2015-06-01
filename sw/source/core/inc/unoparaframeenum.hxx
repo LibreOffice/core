@@ -73,45 +73,10 @@ enum ParaFrameMode
     PARAFRAME_PORTION_TEXTRANGE,
 };
 
-typedef ::cppu::WeakImplHelper
-<   ::com::sun::star::lang::XServiceInfo
-,   ::com::sun::star::container::XEnumeration
-> SwXParaFrameEnumeration_Base;
-
-class SwXParaFrameEnumeration
-    : public SwXParaFrameEnumeration_Base
+struct SwXParaFrameEnumeration
+    : public SwSimpleEnumeration_Base
 {
-
-private:
-
-    class Impl;
-    ::sw::UnoImplPtr<Impl> m_pImpl;
-
-    virtual ~SwXParaFrameEnumeration();
-
-public:
-
-    SwXParaFrameEnumeration(const SwPaM& rPaM,
-        const enum ParaFrameMode eParaFrameMode, SwFrameFormat *const pFormat = 0);
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService(
-            const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
+    static SwXParaFrameEnumeration* Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat = nullptr);
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX

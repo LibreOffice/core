@@ -851,11 +851,7 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
     if(!pUnoCrsr)
         throw uno::RuntimeException();
 
-    uno::Reference< container::XEnumeration >  xRet =
-        new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_CHAR,
-                m_pFrameFormat);
-    return xRet;
-
+    return SwXParaFrameEnumeration::Create(*pUnoCrsr, PARAFRAME_PORTION_CHAR, m_pFrameFormat);
 }
 
 namespace
