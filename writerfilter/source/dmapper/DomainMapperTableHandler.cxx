@@ -1113,12 +1113,19 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             // Also, when the anchor is within a table, then do it here as well,
             // as xStart/xEnd would not point to the start/end at conversion
             // time anyway.
+            // Next exception: it's pointless to delay the conversion if the
+            // table is not in the body text.
             sal_Int32 nTableWidth = 0;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
-            if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1)
+            if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1 && !m_rDMapper_Impl.IsInHeaderFooter())
                 m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, comphelper::containerToSequence(aFrameProperties), nTableWidth));
             else
-                m_xText->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
+            {
+                // m_xText points to the body text, get to current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
+                uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
+                if (xTextAppendAndConvert.is())
+                    xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
+            }
         }
     }
 
