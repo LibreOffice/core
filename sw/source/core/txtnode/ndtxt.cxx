@@ -2034,15 +2034,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 {
     assert(pDest); // Cut requires a destination
 
-    // nicht im Dokument verschieben ?
-    if( GetDoc() != pDest->GetDoc() )
-    {
-        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
-        assert(false);
-        CopyText( pDest, rDestStart, rStart, nLen);
-        EraseText(rStart, nLen);
-        return;
-    }
+    assert(GetDoc() == pDest->GetDoc()); // must be same document
 
     if( !nLen )
     {
@@ -2193,14 +2185,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         CHECK_SWPHINTS(pDest);
 
         const sal_Int32 nEnd = rStart.GetIndex() + nLen;
-        SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc())
-            ? pDest->GetDoc() : 0;
-        bool const bUndoNodes = !pOtherDoc
-            && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
-
-        OSL_ENSURE(!pOtherDoc,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
-        assert(!pOtherDoc);
+        bool const bUndoNodes =
+            GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
         // harte Absatz umspannende Attribute kopieren
         if( HasSwAttrSet() )
@@ -2261,7 +2247,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
             {
                 // der Anfang liegt vollstaendig im Bereich
                 if( !pEndIdx || *pEndIdx < nEnd ||
-                    (!pOtherDoc && !bUndoNodes && RES_TXTATR_REFMARK == nWhich)
+                    (!bUndoNodes && RES_TXTATR_REFMARK == nWhich)
                     || pHt->HasDummyChar() )
                 {
                     // do not delete note and later add it -> sidebar flickering
@@ -2312,7 +2298,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
                             | SetAttrMode::IS_COPY) );
                 if (bSuccess)
                 {
-                    lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
+                    lcl_CopyHint( nWhich, pHt, pNewHt, nullptr, pDest );
                 }
             }
             ++nAttrCnt;
