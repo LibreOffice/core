@@ -88,7 +88,9 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScValidityRefChildWin::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
 
+#ifdef ENABLE_CALC_UNITVERIFICATION
     GetStaticInterface()->RegisterChildWindow(ScUnitsConversionDialogWrapper::GetChildWindowId());
+#endif
     GetStaticInterface()->RegisterChildWindow(ScRandomNumberGeneratorDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScSamplingDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScDescriptiveStatisticsDialogWrapper::GetChildWindowId());

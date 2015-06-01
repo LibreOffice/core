@@ -56,8 +56,11 @@
 #include "markdata.hxx"
 #include "reffact.hxx"
 #include "condformatdlg.hxx"
-#include "unitsconversiondlg.hxx"
 #include "xmlsourcedlg.hxx"
+
+#ifdef ENABLE_CALC_UNITVERIFICATION
+#include "unitsconversiondlg.hxx"
+#endif
 
 #include "RandomNumberGeneratorDialog.hxx"
 #include "SamplingDialog.hxx"
@@ -325,11 +328,13 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
+#ifdef ENABLE_CALC_UNITVERIFICATION
         case SID_UNITSCONVERSION_DIALOG:
         {
             pResult = VclPtr<ScUnitsConversionDialog>::Create( pB, pCW, pParent, &GetViewData() );
         }
         break;
+#endif
 
         case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
         {

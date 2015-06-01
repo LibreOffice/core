@@ -73,12 +73,14 @@ private:
     ScRandomNumberGeneratorDialogWrapper() SAL_DELETED_FUNCTION;
 };
 
+#ifdef ENABLE_CALC_UNITVERIFICATION
 class ScUnitsConversionDialogWrapper :
     public ChildWindowWrapper<SID_UNITSCONVERSION_DIALOG>
 {
 private:
     ScUnitsConversionDialogWrapper() SAL_DELETED_FUNCTION;
 };
+#endif
 
 class ScAnalysisOfVarianceDialogWrapper :
     public ChildWindowWrapper<SID_ANALYSIS_OF_VARIANCE_DIALOG>
