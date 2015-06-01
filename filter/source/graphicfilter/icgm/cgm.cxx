@@ -66,7 +66,6 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > const & rModel )
     , mnElementClass(0)
     , mnElementID(0)
     , mnElementSize(0)
-    , mpVirDev(NULL)
     , mpGDIMetaFile(NULL)
 {
     pElement = new CGMElements( *this );
@@ -80,7 +79,6 @@ CGM::~CGM()
         mpGDIMetaFile->Stop();
         mpGDIMetaFile->SetPrefMapMode( MapMode() );
         mpGDIMetaFile->SetPrefSize( Size( static_cast< long >( mnOutdx ), static_cast< long >( mnOutdy ) ) );
-        mpVirDev.disposeAndClear();
         *mpGraphic = Graphic( *mpGDIMetaFile );
     }
     for( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
