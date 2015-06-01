@@ -71,6 +71,7 @@ endif
 ifneq (,$(filter PythonTest_pytests,$(MAKECMDGOALS)))
 $(eval $(call gb_Module_add_targets,pyuno, \
     PythonTest_pytests \
+    PythonTest_pyuno_pytests_testcollections \
     PythonTest_pyuno_pytests_insertremovecells \
 ))
 endif
