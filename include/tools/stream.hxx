@@ -58,7 +58,7 @@ enum class StreamMode {
 };
 namespace o3tl
 {
-    template<> struct typed_flags<StreamMode> : is_typed_flags<StreamMode, 0x003f> {};
+    template<> struct typed_flags<StreamMode> : is_typed_flags<StreamMode, 0x0f1f> {};
 }
 
 #define STREAM_READWRITEBITS            (StreamMode::READ | StreamMode::WRITE | \
