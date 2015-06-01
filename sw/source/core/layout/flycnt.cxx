@@ -1241,8 +1241,16 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         while ( pCnt->IsFollow() )
         {
             do
-            {   pCnt = pCnt->GetPrevContentFrm();
-            } while ( pCnt->GetFollow() != pFollow );
+            {
+                SwContentFrm* pPrev = pCnt->GetPrevContentFrm();
+                if (!pPrev)
+                {
+                    SAL_WARN("sw.core", "very unexpected missing PrevContentFrm");
+                    break;
+                }
+                pCnt = pPrev;
+            }
+            while ( pCnt->GetFollow() != pFollow );
             pFollow = pCnt;
         }
         SwTwips nDiff = 0;
