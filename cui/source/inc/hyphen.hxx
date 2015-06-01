@@ -64,7 +64,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
     bool                m_bBusy;
 
     void            EnableLRBtn_Impl();
-    OUString        EraseUnusableHyphens_Impl( css::uno::Reference< css::linguistic2::XPossibleHyphens >  &rxPossHyph, sal_uInt16 nMaxHyphenationPos );
+    OUString        EraseUnusableHyphens_Impl();
 
     void            InitControls_Impl();
     void            ContinueHyph_Impl( sal_Int32 nInsPos = -1 ); // continue by default

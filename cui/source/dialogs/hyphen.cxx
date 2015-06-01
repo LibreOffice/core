@@ -98,9 +98,7 @@ void SvxHyphenWordDialog::EnableLRBtn_Impl()
 }
 
 
-OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
-        uno::Reference< linguistic2::XPossibleHyphens >  &rxPossHyph,
-        sal_uInt16 _nMaxHyphenationPos )
+OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
 {
     // returns a String showing only those hyphen positions which will result
     // in a line break if hyphenation is done there
@@ -130,16 +128,16 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
     // even if the user were to select one of them.
 
     OUString aTxt;
-    DBG_ASSERT(rxPossHyph.is(), "missing possible hyphens");
-    if (rxPossHyph.is())
+    DBG_ASSERT(m_xPossHyph.is(), "missing possible hyphens");
+    if (m_xPossHyph.is())
     {
-        DBG_ASSERT( m_aActWord == rxPossHyph->getWord(), "word mismatch"  );
+        DBG_ASSERT( m_aActWord == m_xPossHyph->getWord(), "word mismatch"  );
 
-        aTxt = rxPossHyph->getPossibleHyphens();
+        aTxt = m_xPossHyph->getPossibleHyphens();
 
         m_nHyphenationPositionsOffset = 0;
         uno::Sequence< sal_Int16 > aHyphenationPositions(
-                rxPossHyph->getHyphenationPositions() );
+                m_xPossHyph->getHyphenationPositions() );
         sal_Int32 nLen = aHyphenationPositions.getLength();
         const sal_Int16 *pHyphenationPos = aHyphenationPositions.getConstArray();
 
@@ -151,7 +149,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
             sal_Int32 nStart = 0;
             for (sal_Int32 i = 0;  i < nLen;  ++i)
             {
-                if (pHyphenationPos[i] > _nMaxHyphenationPos)
+                if (pHyphenationPos[i] > m_nMaxHyphenationPos)
                     break;
                 else
                 {
@@ -211,7 +209,7 @@ void SvxHyphenWordDialog::InitControls_Impl()
         m_xPossHyph = m_xHyphenator->createPossibleHyphens( m_aActWord, aLocale,
                                                         uno::Sequence< beans::PropertyValue >() );
         if (m_xPossHyph.is())
-            m_aEditWord = EraseUnusableHyphens_Impl( m_xPossHyph, m_nMaxHyphenationPos );
+            m_aEditWord = EraseUnusableHyphens_Impl();
     }
     m_pWordEdit->SetText( m_aEditWord );
 
