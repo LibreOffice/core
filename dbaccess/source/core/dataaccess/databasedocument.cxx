@@ -91,6 +91,7 @@
 #include <list>
 
 #include <svtools/grfmgr.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -487,6 +488,8 @@ namespace
         { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        {OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        {OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
      };
 }
@@ -1074,7 +1077,15 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         if ( bLocationChanged )
         {
             // create storage for target URL
-            Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( _rURL ) );
+            uno::Reference<embed::XStorage> xTargetStorage;
+            _rArguments.get("TargetStorage") >>= xTargetStorage;
+            if (!xTargetStorage.is())
+                xTargetStorage = impl_createStorageFor_throw(_rURL);
+
+            // In case we got a StreamRelPath, then xTargetStorage should reference that sub-storage.
+            OUString sStreamRelPath = _rArguments.getOrDefault("StreamRelPath", OUString());
+            if (!sStreamRelPath.isEmpty())
+                xTargetStorage = xTargetStorage->openStorageElement(sStreamRelPath, embed::ElementModes::READWRITE);
 
             if ( m_pImpl->isEmbeddedDatabase() )
                 m_pImpl->clearConnections();
@@ -1648,6 +1659,23 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(aSaveOpt.IsPrettyPrinting()));
     if ( aSaveOpt.IsSaveRelFSys() )
         xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rMediaDescriptor.getOrDefault("URL",OUString())));
+
+    // Set TargetStorage, so it doesn't have to be re-constructed based on possibly empty URL.
+    xInfoSet->setPropertyValue("TargetStorage", uno::makeAny(m_pImpl->getRootStorage()));
+
+    // Set StreamRelPath, in case this document is an embedded one.
+    OUString sStreamRelPath;
+    OUString sURL = _rMediaDescriptor.getOrDefault("URL", OUString());
+    if (sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
+    {
+        // In this case the host contains the real path, and the the path is the embedded stream name.
+        INetURLObject aURL(sURL);
+        sStreamRelPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
+        if (sStreamRelPath.startsWith("/"))
+            sStreamRelPath = sStreamRelPath.copy(1);
+    }
+    if (!sStreamRelPath.isEmpty())
+        xInfoSet->setPropertyValue("StreamRelPath", uno::makeAny(sStreamRelPath));
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
