@@ -721,7 +721,9 @@ void SdrTextObj::embedText() const
 
 }
 
-void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
+// A new temporary implementation of impCopyTextInTextObj
+// Should implement the whole logic
+void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
 {
     // prevent copying text in same box
     if ( this ==  pNextTextObj )
@@ -729,23 +731,33 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
 
     SdrOutliner &rOutliner = ImpGetDrawOutliner();
 
-    // append a string in front of everything
-    // NOTE: Trying with set-text first
+    rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
+
+    struct OverflowingText {
+        OUString headTxt;
+        OutlinerParaObject *tailParas;
+    };
 
     if (mpOverflowingText) {
-        // Set text first
+        // get first para of destination box
+        // XXX: Check it exists
 
-        rOutliner.SetText(*mpOverflowingText);
-        Paragraph *pFstPara = rOutliner.GetParagraph(0);
-        OUString aTxtFstPara = rOutliner.GetText(pFstPara);
+        // Get other paras of destination box
+        // XXX: Check they exist
 
-        rOutliner.SetText("X" + aTxtFstPara, pFstPara);
-        // gets the whole thing
-        OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
-        // draws everything - result = "X" ++ overflowingText
-        pNextTextObj->NbcSetOutlinerParaObject(pNewText);
+
     }
 
+}
+
+
+void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
+{
+    // prevent copying text in same box
+    if ( this ==  pNextTextObj )
+        return;
+
+    SdrOutliner &rOutliner = ImpGetDrawOutliner();
 
     /*
     // Code inspired by SvxOutlinerForwarder::AppendTextPortion
@@ -761,9 +773,44 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     }
     * */
 
-   rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
+    rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
-   // Push text through the chain if there's any
+    // Push text through the chain if there's any
+
+    // append a string in front of everything
+    // NOTE: Trying with set-text first
+
+    if (mpOverflowingText) {
+
+        /* Desired behavior:
+         * - take first overflowing word and paragraph from there
+         * - Outliner::GetOverflowingPara should return the second overflowing para
+         * - then these two should pasted together (as below?)
+        */
+
+        /*
+         * The goal is to have UpdateOverflowingParaNum be finer grained and
+         * work at level of lines instead of para-s
+        */
+
+        // Set new text first
+        rOutliner.SetText(*mpOverflowingText);
+
+        /*
+         * We merge new text in front of the first paragraph
+         * so we get a pointer to it and its text.
+        */
+        Paragraph *pFstPara = rOutliner.GetParagraph(0);
+        OUString aTxtFstPara = rOutliner.GetText(pFstPara);
+
+        //
+        rOutliner.SetText("X" + aTxtFstPara, pFstPara);
+        // gets the whole thing
+        OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
+        // draws everything - result = "X" ++ overflowingText
+        pNextTextObj->NbcSetOutlinerParaObject(pNewText);
+    }
+
 
     rOutliner.SetStatusEventHdl1(Link());
 
@@ -1474,7 +1521,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     if (mpOverflowingText != NULL) {
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
         assert (pNextTextObj);
-        impCopyTextInTextObj(pNextTextObj); // XXX: it actually moves the overflowing text currently
+        // NOTE: Commented because we do not need to do this anymore (maybe and for now)
+        //impCopyTextInTextObj(pNextTextObj); // XXX: it actually moves the overflowing text currently
         // Chaining occurred. Let's reset the status
         const_cast<SdrTextObj*>(this)->SetToBeChained( false );
 
