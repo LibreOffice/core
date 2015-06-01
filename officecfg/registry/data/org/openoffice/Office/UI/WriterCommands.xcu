@@ -112,7 +112,7 @@
       </node>
       <node oor:name=".uno:InsertMultiIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Tables of Contents and ~Indexes...</value>
+          <value xml:lang="en-US">~Indexes and Tables...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -231,7 +231,7 @@
       </node>
       <node oor:name=".uno:GotoPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Got~o Page</value>
+          <value xml:lang="en-US">Go t~o Page</value>
         </prop>
       </node>
       <node oor:name=".uno:CommentChangeTracking" oor:op="replace">
@@ -339,7 +339,7 @@
       </node>
       <node oor:name=".uno:InsertFootnoteDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Footnote and Endnote~...</value>
+          <value xml:lang="en-US">F~ootnote and Endnote...</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertReferenceField" oor:op="replace">
@@ -373,7 +373,7 @@
           <value xml:lang="en-US">Insert Page Break</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Pa~ge Break</value>
+          <value xml:lang="en-US">~Page Break</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -932,7 +932,7 @@
           <value xml:lang="en-US">Frame Properties</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Fra~me and OLE-Object...</value>
+          <value xml:lang="en-US">Fra~me and OLE Object...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1114,7 +1114,7 @@
       </node>
       <node oor:name=".uno:HeadingRowsRepeat" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Repeat heading rows</value>
+          <value xml:lang="en-US">Repeat Heading Rows</value>
         </prop>
       </node>
       <node oor:name=".uno:TableSort" oor:op="replace">
