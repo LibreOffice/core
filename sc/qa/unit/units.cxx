@@ -205,6 +205,14 @@ void UnitsTest::testUnitVerification() {
     setNumberFormatUnit(address, "m");
     mpDoc->SetValue(address, 1);
 
+    // 6th column: header annotation for output verification
+    address = ScAddress(5, 0, 0);
+    mpDoc->SetString(address, "foobar [cm]");
+
+    // 7th column: another header annotation
+    address = ScAddress(6, 0, 0);
+    mpDoc->SetString(address, "foobar (cm/s)");
+
     ScFormulaCell* pCell;
     ScTokenArray* pTokens;
 
@@ -359,6 +367,52 @@ void UnitsTest::testUnitVerification() {
         pTokens = pCell->GetCode();
         CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::ERROR_INPUT_INCOMPATIBLE);
     }
+
+
+    // Test output unit verification (i.e. using header annotations)
+
+    // header in [cm], cell with cm
+    address = ScAddress(5, 1, 0);
+    mpDoc->SetFormula(address, "=A1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+
+
+    // header in [cm], cell with 100*cm
+    address.IncRow();
+    mpDoc->SetFormula(address, "=100*A1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::ERROR_OUTPUT_SCALING);
+
+    // header in [cm], cell with kg
+    address.IncRow();
+    mpDoc->SetFormula(address, "=B1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::ERROR_OUTPUT_INCOMPATIBLE);
+
+    // header in [cm], cell with m
+    address.IncRow();
+    mpDoc->SetFormula(address, "=E1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::ERROR_OUTPUT_SCALING);
+
+    // header in [cm], cell with 100*m
+    address.IncRow();
+    mpDoc->SetFormula(address, "=100*E1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
+
+    // header in (cm/s), formula resulting in cm/s
+    address = ScAddress(6, 1, 0);
+    mpDoc->SetFormula(address, "=A1/C1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VERIFIED);
 }
 
 void UnitsTest::testUnitFromFormatStringExtraction() {
