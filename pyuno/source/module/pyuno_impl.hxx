@@ -43,6 +43,8 @@
 
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -211,6 +213,35 @@ typedef struct
     PyObject_HEAD
     PyUNOInternals* members;
 } PyUNO;
+
+PyObject* PyUNO_iterator_new (
+    const com::sun::star::uno::Reference<com::sun::star::container::XEnumeration> xEnumeration);
+
+typedef struct
+{
+    com::sun::star::uno::Reference <com::sun::star::container::XEnumeration> xEnumeration;
+} PyUNO_iterator_Internals;
+
+typedef struct
+{
+        PyObject_HEAD
+        PyUNO_iterator_Internals* members;
+} PyUNO_iterator;
+
+PyObject* PyUNO_list_iterator_new (
+    const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> &xIndexAccess);
+
+typedef struct
+{
+    com::sun::star::uno::Reference <com::sun::star::container::XIndexAccess> xIndexAccess;
+    int index;
+} PyUNO_list_iterator_Internals;
+
+typedef struct
+{
+        PyObject_HEAD
+        PyUNO_list_iterator_Internals* members;
+} PyUNO_list_iterator;
 
 PyRef ustring2PyUnicode( const OUString &source );
 PyRef ustring2PyString( const OUString & source );
