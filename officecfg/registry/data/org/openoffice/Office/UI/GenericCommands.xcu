@@ -3163,7 +3163,7 @@
       </node>
       <node oor:name=".uno:FormatFrameMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Frame and OLE-Ob~ject</value>
+          <value xml:lang="en-US">Frame and OLE Ob~ject</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5500,10 +5500,15 @@
       </node>
       <node oor:name=".uno:ObjectAlign" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Ali~gn</value>
+          <value xml:lang="en-US">Alig~n</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TextAlign" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Alig~n</value>
         </prop>
       </node>
       <node oor:name=".uno:PolyFormen" oor:op="replace">
