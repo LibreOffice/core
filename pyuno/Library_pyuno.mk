@@ -45,6 +45,7 @@ $(eval $(call gb_Library_add_exception_objects,pyuno,\
     pyuno/source/module/pyuno_except \
     pyuno/source/module/pyuno_adapter \
     pyuno/source/module/pyuno_gc \
+    pyuno/source/module/pyuno_iterator \
 ))
 
 # vim:set noet sw=4 ts=4:
