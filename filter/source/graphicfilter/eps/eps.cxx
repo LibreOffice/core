@@ -116,7 +116,7 @@ private:
     SvStream*           mpPS;
     const GDIMetaFile*  pMTF;
     GDIMetaFile*        pAMTF;              // only created if Graphics is not a Metafile
-    ScopedVclPtr<VirtualDevice> pVDev;
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
 
     double              nBoundingX1;        // this represents the bounding box
     double              nBoundingY1;
