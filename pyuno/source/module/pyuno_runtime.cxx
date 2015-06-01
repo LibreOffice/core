@@ -30,6 +30,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
+#include <list>
 #include <typelib/typedescription.hxx>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -620,6 +621,39 @@ lcl_ExceptionMessage(PyObject *const o, OUString const*const pWrapped)
     return buf.makeStringAndClear();
 }
 
+// For Python 2.7 - see https://bugs.python.org/issue24161
+// Fills aSeq and returns true if pObj is a valid iterator
+bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
+{
+    if( !PyIter_Check( pObj ))
+        return false;
+
+    PyObject *pItem = PyIter_Next( pObj );
+    if( !pItem )
+    {
+        if( PyErr_Occurred() )
+        {
+            PyErr_Clear();
+            return false;
+        }
+        return true;
+    }
+
+    ::std::list<Any> items;
+    do
+    {
+        PyRef rItem( pItem, SAL_NO_ACQUIRE );
+        items.push_back( pyObject2Any( rItem.get() ) );
+    }
+    while( (pItem = PyIter_Next( pObj )) );
+    Sequence<Any> aSeq( items.size() );
+    ::std::list<Any>::iterator it = items.begin();
+    for( int i = 0; it != items.end(); ++it )
+        aSeq[i++] = *it;
+    a <<= aSeq;
+    return true;
+}
+
 Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) const
     throw ( com::sun::star::uno::RuntimeException )
 {
@@ -728,7 +762,17 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
         a <<= s;
     }
-    else
+    else if (PyList_Check (o))
+    {
+        Py_ssize_t l = PyList_Size (o);
+        Sequence<Any> s (l);
+        for (int i = 0; i < l; i++)
+        {
+            s[i] = pyObject2Any (PyList_GetItem (o, i), mode );
+        }
+        a <<= s;
+    }
+    else if (!pyIterUnpack (o, a))
     {
         Runtime runtime;
         // should be removed, in case ByteSequence gets derived from String
