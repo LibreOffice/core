@@ -33,6 +33,7 @@ public:
     void testSetGraphicSelection();
     void testResetSelection();
     void testSearch();
+    void testSearchViewArea();
     void testDocumentSizeChanged();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
@@ -43,6 +44,7 @@ public:
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
+    CPPUNIT_TEST(testSearchViewArea);
     CPPUNIT_TEST(testDocumentSizeChanged);
     CPPUNIT_TEST_SUITE_END();
 
@@ -286,6 +288,33 @@ void SwTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
     nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
+#endif
+}
+
+void SwTiledRenderingTest::testSearchViewArea()
+{
+#if !defined(WNT) && !defined(MACOSX)
+    SwXTextDocument* pXTextDocument = createDoc("search.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    // Go to the second page, 1-based.
+    pWrtShell->GotoPage(2, false);
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    // Get the ~top left corner of the second page.
+    Point aPoint = pShellCrsr->GetSttPos();
+
+    // Go back to the first page, search while the cursor is there, but the
+    // visible area is the second page.
+    pWrtShell->GotoPage(1, false);
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("Heading"))},
+        {"SearchItem.Backward", uno::makeAny(false)},
+        {"SearchItem.SearchStartPointX", uno::makeAny(static_cast<sal_Int32>(aPoint.getX()))},
+        {"SearchItem.SearchStartPointY", uno::makeAny(static_cast<sal_Int32>(aPoint.getY()))}
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCrsr->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 #endif
 }
 
