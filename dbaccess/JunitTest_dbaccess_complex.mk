@@ -27,7 +27,6 @@ $(eval $(call gb_JunitTest_set_defs,dbaccess_complex,\
 $(eval $(call gb_JunitTest_add_classes,dbaccess_complex,\
     complex.dbaccess.Beamer \
     complex.dbaccess.PropertyBag \
-    complex.dbaccess.RowSet \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,dbaccess_complex,\
