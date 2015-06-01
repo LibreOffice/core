@@ -473,7 +473,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 #ifdef ENABLE_CALC_UNITVERIFICATION
             boost::shared_ptr< Units > pUnits = Units::GetUnits();
             FormulaStatus aStatus = pUnits->verifyFormula( pArr, aPos, pDoc );
-            if ( aStatus == FormulaStatus::VERIFIED || aStatus == FormulaStatus::UNKNOWN )
+            if ( aStatus == FormulaStatus::VALID || aStatus == FormulaStatus::UNKNOWN )
             {
                 SAL_INFO( "sc.units", "verification successful" );
 
