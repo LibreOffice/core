@@ -94,7 +94,7 @@ HTMLOptionEnum aHTMLImgVAlignTable[] =
 
 ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 {
-    OSL_ENSURE( rName[0] != '#', "FindImageName: Name beginnt mit #!" );
+    OSL_ENSURE( rName[0] != '#', "FindImageMap: name begins with '#'!" );
 
     if( pImageMaps )
     {
@@ -443,7 +443,7 @@ IMAGE_SETEVENT:
         if( pTextNode && ! pTextNode->IsCountedInList())
         {
             OSL_ENSURE( pTextNode->GetActualListLevel() == GetNumInfo().GetLevel(),
-                    "Numerierungs-Ebene stimmt nicht" );
+                    "Numbering level is wrong" );
 
             pTextNode->SetCountedInList( true );
 
@@ -1394,7 +1394,7 @@ void SwHTMLParser::StripTrailingPara()
                     SwContentNode* pNd = SwNodes::GoPrevious(&nNewNdIdx);
                     if(!pNd)
                     {
-                        OSL_ENSURE(false, "Hoppla, wo ist mein Vorgaenger-Node");
+                        OSL_ENSURE(false, "Oops, where is my predecessor node?");
                         return;
                     }
                     // #i81002# - refactoring
