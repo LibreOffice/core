@@ -11,7 +11,7 @@ images_elementary.zip:
 	(cd src; zip -r ../$(TARGET) *)
 
 install: images_elementary.zip
-	install -D $(TARGET) $(SHAREDIR)/$(TARGET)
+	install -m 644 -D $(TARGET) $(SHAREDIR)/$(TARGET)
 	ln -sf $(SHAREDIR)/$(TARGET) $(LIBDIR)/$(TARGET)
 
 uninstall:
