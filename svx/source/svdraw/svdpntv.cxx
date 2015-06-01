@@ -897,8 +897,8 @@ void SdrPaintView::GlueInvalidate() const
             if(mpPageView)
             {
                 const SdrObjList* pOL=mpPageView->GetObjList();
-                const size_t nObjAnz = pOL->GetObjCount();
-                for (size_t nObjNum=0; nObjNum<nObjAnz; ++nObjNum) {
+                const size_t nObjCount = pOL->GetObjCount();
+                for (size_t nObjNum=0; nObjNum<nObjCount; ++nObjNum) {
                     const SdrObject* pObj=pOL->GetObj(nObjNum);
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     if (pGPL!=NULL && pGPL->GetCount()!=0) {

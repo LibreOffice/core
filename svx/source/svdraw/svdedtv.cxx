@@ -153,13 +153,13 @@ bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
 
 void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
 {
-    const size_t nObjAnz(pOL->GetObjCount());
+    const size_t nObjCount(pOL->GetObjCount());
     // make sure OrdNums are correct
     pOL->GetObj(0)->GetOrdNum();
 
     const bool bUndo = GetModel()->IsUndoEnabled();
 
-    for(size_t nObjNum = nObjAnz; nObjNum > 0;)
+    for(size_t nObjNum = nObjCount; nObjNum > 0;)
     {
         nObjNum--;
         SdrObject* pObj = pOL->GetObj(nObjNum);
@@ -223,13 +223,13 @@ void SdrEditView::DeleteLayer(const OUString& rName)
             {
                 // over all pages
                 SdrPage* pPage = (bMaPg) ? pMod->GetMasterPage(nPgNum) : pMod->GetPage(nPgNum);
-                const size_t nObjAnz(pPage->GetObjCount());
+                const size_t nObjCount(pPage->GetObjCount());
 
                 // make sure OrdNums are correct
-                if(nObjAnz)
+                if(nObjCount)
                     pPage->GetObj(0)->GetOrdNum();
 
-                for(size_t nObjNum(nObjAnz); nObjNum > 0;)
+                for(size_t nObjNum(nObjCount); nObjNum > 0;)
                 {
                     nObjNum--;
                     SdrObject* pObj = pPage->GetObj(nObjNum);

@@ -510,8 +510,8 @@ sal_uIntPtr SdrMarkView::GetMarkableObjCount() const
     if(pPV)
     {
         SdrObjList* pOL=pPV->GetObjList();
-        const size_t nObjAnz = pOL->GetObjCount();
-        for (size_t nObjNum=0; nObjNum<nObjAnz; ++nObjNum) {
+        const size_t nObjCount = pOL->GetObjCount();
+        for (size_t nObjNum=0; nObjNum<nObjCount; ++nObjNum) {
             SdrObject* pObj=pOL->GetObj(nObjNum);
             if (IsObjMarkable(pObj,pPV)) {
                 nCount++;
@@ -527,8 +527,8 @@ bool SdrMarkView::HasMarkableObj() const
     if(pPV)
     {
         SdrObjList* pOL=pPV->GetObjList();
-        const size_t nObjAnz = pOL->GetObjCount();
-        for (size_t nObjNum = 0; nObjNum<nObjAnz; ++nObjNum) {
+        const size_t nObjCount = pOL->GetObjCount();
+        for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
             SdrObject* pObj=pOL->GetObj(nObjNum);
             if (IsObjMarkable(pObj,pPV)) {
                 return true;
@@ -1395,10 +1395,10 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
 
     SdrObject* pMarkObj=NULL;
     SdrObjList* pSearchObjList=pPageView->GetObjList();
-    const size_t nObjAnz = pSearchObjList->GetObjCount();
-    if (nObjAnz!=0) {
-        if (nSearchObjNum>nObjAnz) nSearchObjNum=nObjAnz;
-        while (pMarkObj==NULL && ((!bPrev && nSearchObjNum>0) || (bPrev && nSearchObjNum<nObjAnz)))
+    const size_t nObjCount = pSearchObjList->GetObjCount();
+    if (nObjCount!=0) {
+        if (nSearchObjNum>nObjCount) nSearchObjNum=nObjCount;
+        while (pMarkObj==NULL && ((!bPrev && nSearchObjNum>0) || (bPrev && nSearchObjNum<nObjCount)))
         {
             if (!bPrev)
                 nSearchObjNum--;
@@ -1466,7 +1466,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     }
     if (pBtmMarkHit==NULL) { pBtmMarkHit=pTopMarkHit; nBtmMarkHit=nTopMarkHit; }
     SdrObject* pBtmObjHit=pBtmMarkHit->GetMarkedSdrObj();
-    const size_t nObjAnz = pObjList->GetObjCount();
+    const size_t nObjCount = pObjList->GetObjCount();
 
     size_t nSearchBeg = 0;
     E3dScene* pScene = NULL;
@@ -1499,7 +1499,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
 
     size_t no=nSearchBeg;
     SdrObject* pFndObj=NULL;
-    while (pFndObj==NULL && ((!bPrev && no>0) || (bPrev && no<nObjAnz))) {
+    while (pFndObj==NULL && ((!bPrev && no>0) || (bPrev && no<nObjCount))) {
         if (!bPrev) no--;
         SdrObject* pObj;
 
@@ -1544,8 +1544,8 @@ bool SdrMarkView::MarkObj(const Rectangle& rRect, bool bUnmark)
     {
         pObjList=pPV->GetObjList();
         Rectangle aFrm1(aR);
-        const size_t nObjAnz = pObjList->GetObjCount();
-        for (size_t nO=0; nO<nObjAnz; ++nO) {
+        const size_t nObjCount = pObjList->GetObjCount();
+        for (size_t nO=0; nO<nObjCount; ++nO) {
             SdrObject* pObj=pObjList->GetObj(nO);
             Rectangle aRect(pObj->GetCurrentBoundRect());
             if (aFrm1.IsInside(aRect)) {
@@ -1698,9 +1698,9 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
         bool bRemap(pOL->GetOwnerObj() && pOL->GetOwnerObj()->ISA(E3dScene));
         E3dScene* pRemapScene = (bRemap ? static_cast<E3dScene*>(pOL->GetOwnerObj()) : 0L);
 
-        const size_t nObjAnz=pOL->GetObjCount();
-        size_t nObjNum=bBack ? 0 : nObjAnz;
-        while (pRet==NULL && (bBack ? nObjNum<nObjAnz : nObjNum>0)) {
+        const size_t nObjCount=pOL->GetObjCount();
+        size_t nObjNum=bBack ? 0 : nObjCount;
+        while (pRet==NULL && (bBack ? nObjNum<nObjCount : nObjNum>0)) {
             if (!bBack) nObjNum--;
             SdrObject* pObj;
 

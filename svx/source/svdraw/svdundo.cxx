@@ -285,9 +285,9 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     {
         // it's a group object!
         pUndoGroup = new SdrUndoGroup(*pObj->GetModel());
-        const size_t nObjAnz(pOL->GetObjCount());
+        const size_t nObjCount(pOL->GetObjCount());
 
-        for(size_t nObjNum = 0; nObjNum < nObjAnz; ++nObjNum)
+        for(size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
         {
             pUndoGroup->AddAction(
                 new SdrUndoAttrObj(*pOL->GetObj(nObjNum), bStyleSheet1));
@@ -612,8 +612,8 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
         // If this were 3D scene, we'd only add an Undo for the scene itself
         // (which we do elsewhere).
         pUndoGroup=new SdrUndoGroup(*pObj->GetModel());
-        const size_t nObjAnz = pOL->GetObjCount();
-        for (size_t nObjNum = 0; nObjNum<nObjAnz; ++nObjNum) {
+        const size_t nObjCount = pOL->GetObjCount();
+        for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
             pUndoGroup->AddAction(new SdrUndoGeoObj(*pOL->GetObj(nObjNum)));
         }
     }

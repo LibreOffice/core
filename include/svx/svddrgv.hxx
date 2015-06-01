@@ -173,7 +173,7 @@ public:
     // NoDragPolys is (temporarily) activated implicitely.
     // PolyPolygons etc. are regarded as multiple objects respectively.
     // Default=100
-    void  SetDragXorPolyLimit(sal_uIntPtr nObjAnz) { nDragXorPolyLimit=nObjAnz; }
+    void  SetDragXorPolyLimit(sal_uIntPtr nLimit) { nDragXorPolyLimit=nLimit; }
     sal_uIntPtr GetDragXorPolyLimit() const { return nDragXorPolyLimit; }
 
     // Like DragXorPolyLimit, but in respect to the total number of

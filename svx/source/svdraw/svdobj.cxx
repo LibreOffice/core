@@ -590,8 +590,8 @@ void SdrObject::getMergedHierarchyLayerSet(SetOfByte& rSet) const
     rSet.Set(GetLayer());
     SdrObjList* pOL=GetSubList();
     if (pOL!=NULL) {
-        const size_t nObjAnz = pOL->GetObjCount();
-        for (size_t nObjNum = 0; nObjNum<nObjAnz; ++nObjNum) {
+        const size_t nObjCount = pOL->GetObjCount();
+        for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
             pOL->GetObj(nObjNum)->getMergedHierarchyLayerSet(rSet);
         }
     }
