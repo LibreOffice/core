@@ -3360,7 +3360,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     else if( rSrcSh.IsSelFrmMode() || rSrcSh.IsObjSelected() )
     {
         // don't move position-protected objects!
-        if( bMove && rSrcSh.IsSelObjProtected( FLYPROTECT_POS ) )
+        if( bMove && rSrcSh.IsSelObjProtected( FlyProtectFlags::Pos ) != FlyProtectFlags::NONE )
             return false;
 
         bFrmSel = true;

@@ -2343,10 +2343,10 @@ void SwFEShell::MakeSelVisible()
 }
 
 // how is the selected object protected?
-sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
+FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
 {
-    int nChk = 0;
-    const bool bParent = (eType & FLYPROTECT_PARENT);
+    FlyProtectFlags nChk = FlyProtectFlags::NONE;
+    const bool bParent(eType & FlyProtectFlags::Parent);
     if( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
@@ -2355,14 +2355,14 @@ sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
             SdrObject *pObj = rMrkList.GetMark( --i )->GetMarkedSdrObj();
             if( !bParent )
             {
-                nChk |= ( pObj->IsMoveProtect() ? FLYPROTECT_POS : 0 ) |
-                        ( pObj->IsResizeProtect()? FLYPROTECT_SIZE : 0 );
+                nChk |= ( pObj->IsMoveProtect() ? FlyProtectFlags::Pos : FlyProtectFlags::NONE ) |
+                        ( pObj->IsResizeProtect()? FlyProtectFlags::Size : FlyProtectFlags::NONE );
 
                 if( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
-                    if ( (FLYPROTECT_CONTENT & eType) && pFly->GetFormat()->GetProtect().IsContentProtected() )
-                        nChk |= FLYPROTECT_CONTENT;
+                    if ( (FlyProtectFlags::Content & eType) && pFly->GetFormat()->GetProtect().IsContentProtected() )
+                        nChk |= FlyProtectFlags::Content;
 
                     if ( pFly->Lower() && pFly->Lower()->IsNoTextFrm() )
                     {
@@ -2372,24 +2372,24 @@ sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
                         {
                             // TODO/LATER: use correct aspect
                             const bool bNeverResize = (embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ));
-                            if ( ( (FLYPROTECT_CONTENT & eType) || (FLYPROTECT_SIZE & eType) ) && bNeverResize )
+                            if ( ( (FlyProtectFlags::Content & eType) || (FlyProtectFlags::Size & eType) ) && bNeverResize )
                             {
-                                nChk |= FLYPROTECT_SIZE;
-                                nChk |= FLYPROTECT_FIXED;
+                                nChk |= FlyProtectFlags::Size;
+                                nChk |= FlyProtectFlags::Fixed;
                             }
 
-                            // set FLYPROTECT_POS if it is a Math object anchored 'as char' and baseline alignment is activated
+                            // set FlyProtectFlags::Pos if it is a Math object anchored 'as char' and baseline alignment is activated
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
                                     && FLY_AS_CHAR == pFly->GetFormat()->GetAnchor().GetAnchorId()
                                     && mpDoc->GetDocumentSettingManager().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
-                            if ((FLYPROTECT_POS & eType) && bProtectMathPos)
-                                nChk |= FLYPROTECT_POS;
+                            if ((FlyProtectFlags::Pos & eType) && bProtectMathPos)
+                                nChk |= FlyProtectFlags::Pos;
                         }
                     }
                 }
                 nChk &= eType;
                 if( nChk == eType )
-                    return static_cast<sal_uInt8>(eType);
+                    return eType;
             }
             const SwFrm* pAnch;
             if( pObj->ISA(SwVirtFlyDrawObj) )
@@ -2400,10 +2400,10 @@ sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
                 pAnch = pTmp ? pTmp->GetAnchorFrm( pObj ) : NULL;
             }
             if( pAnch && pAnch->IsProtected() )
-                return static_cast<sal_uInt8>(eType);
+                return eType;
         }
     }
-    return static_cast<sal_uInt8>(nChk);
+    return nChk;
 }
 
 bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const

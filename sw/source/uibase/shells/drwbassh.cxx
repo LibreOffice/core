@@ -627,10 +627,10 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
     SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
-    bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
+    bool bProtected = rSh.IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE;
 
     if (!bProtected)    // Look in the parent
-        bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+        bProtected |= rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
     while( nWhich )
     {
@@ -727,7 +727,7 @@ void SwDrawBaseShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
 
 bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
 {
-    bool bDisable = GetShell().IsSelObjProtected(FLYPROTECT_CONTENT);
+    bool bDisable = GetShell().IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE;
 
     if (bDisable)
     {

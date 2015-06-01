@@ -151,7 +151,7 @@ void SwView::ImpSetVerb( int nSelType )
     if ( !GetViewFrame()->GetFrame().IsInPlace() &&
          (nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) & nSelType )
     {
-        if ( !m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT) )
+        if ( m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE )
         {
             if ( nSelType & nsSelectionType::SEL_OLE )
             {

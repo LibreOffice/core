@@ -492,7 +492,7 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
           ( pObj->ISA(SwDrawVirtObj) &&
             static_cast<SwDrawVirtObj*>(pObj)->GetReferencedObj().ISA(SdrTextObj) ) ) &&
 
-        !m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
+        m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE )
     {
         // Refuse to edit editeng text of the shape if it has textbox attached.
         if (!lcl_isTextBox(pObj))

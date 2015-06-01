@@ -648,7 +648,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxItemSet aCoreSet( GetPool(), aNoTextNodeSetRange );
     rSh.GetCurAttr( aCoreSet );
-    bool bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+    bool bParentCntProt = FlyProtectFlags::NONE != rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent );
     bool bIsGrfContent = CNT_GRF == GetShell().GetCntType();
 
     SetGetStateSet( &rSet );
@@ -814,7 +814,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_OBJECT_CROP:
             {
-                bDisable = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+                bDisable = FlyProtectFlags::NONE != rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent );
                 if( rSh.GetGraphicType() == GRAPHIC_NONE )
                     bDisable = true;
             }
@@ -894,7 +894,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
 void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
 {
     SwWrtShell& rShell = GetShell();
-    bool bIsParentContentProtected = 0 != rShell.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+    bool bIsParentContentProtected = FlyProtectFlags::NONE != rShell.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent );
 
     SetGetStateSet( &rSet );
 

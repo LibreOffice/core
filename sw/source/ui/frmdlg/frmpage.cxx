@@ -2161,7 +2161,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
         SwWrtShell* pSh = getFrmDlgParentShell();
 
         // size
-        const bool bSizeFixed = pSh->IsSelObjProtected( FLYPROTECT_FIXED );
+        const bool bSizeFixed = pSh->IsSelObjProtected( FlyProtectFlags::Fixed ) != FlyProtectFlags::NONE;
 
         m_aWidthED .Enable( !bSizeFixed );
         m_aHeightED.Enable( !bSizeFixed );

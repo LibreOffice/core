@@ -401,10 +401,10 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
-    bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
+    bool bProtected = rSh.IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE;
 
     if (!bProtected)    // Check the parent
-        bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+        bProtected |= rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
     while( nWhich )
     {
