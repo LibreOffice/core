@@ -105,7 +105,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
 {
     // returns a String showing only those hyphen positions which will result
     // in a line break if hyphenation is done there
-    // 1) we will need to discard all hyphenation positions at th end that
+    // 1) we will need to discard all hyphenation positions at the end that
     // will not result in a line break where the text to the left still fits
     // on the line.
     // 2) since as from OOo 3.2 '-' are part of a word an thus text like
@@ -115,11 +115,11 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
 
     // Example:
     // If the possible hyphenation position in 'multi-line-editor' are to be marked
-    // by '=' then the text will look like this 'mul=ti-line-ed=it=or'.
+    // by '=' then the text will look like this: 'mul=ti-line-ed=it=or'.
     // If now the first line is only large enough for 'multi-line-edi' we need to discard
-    // the last possible hyphnation point because of 1). The right most valid
+    // the last possible hyphenation point because of 1). The right most valid
     // hyphenation position is "ed=itor". The first '-' left of this position is
-    // "line-ed", thus because of 2) we now need to discard all possible hyphneation
+    // "line-ed", thus because of 2) we now need to discard all possible hyphenation
     // positions to the left of that as well. Thus in the end leaving us with just
     // 'multi-line-ed=itor' as return value for this function. (Just one valid hyphenation
     // position for the user too choose from. However ALL the '-' characters in the word
@@ -156,7 +156,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
                     break;
                 else
                 {
-                    // find corresponding hyphen pos in string
+                    // find corresponding hyphen positions in string
                     nPos = aTxt.indexOf( sal_Unicode( HYPH_POS_CHAR ), nStart );
 
                     if (nPos == -1)
@@ -238,7 +238,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
                     nIdxPos++;
             }
             // take the possible hyphenation positions that got removed from the
-            // start of the wor dinot account:
+            // start of the word into account:
             nIdxPos += nHyphenationPositionsOffset;
 
             uno::Sequence< sal_Int16 > aSeq = xPossHyph->getHyphenationPositions();
