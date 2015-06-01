@@ -171,7 +171,6 @@ namespace
     }
 }
 
-
 static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, const SfxFilter* pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     // TODO/LATER: In future the info should replace the direct hash completely
@@ -220,19 +219,15 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
     return bResult;
 }
 
-
 void SfxViewFrame::SetDowning_Impl()
 {
     pImp->bIsDowning = true;
 }
 
-
 bool SfxViewFrame::IsDowning_Impl() const
 {
     return pImp->bIsDowning;
 }
-
-
 
 class SfxViewNotificatedFrameList_Impl :
     public SfxListener, public SfxViewFrameArr_Impl
@@ -241,7 +236,6 @@ public:
 
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
-
 
 void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
@@ -958,7 +952,6 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
     rReq.Done();
 }
 
-
 void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 {
     // Search for Undo-Manager
@@ -1013,7 +1006,6 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         rSet.DisableItem( SID_REPEAT );
 }
 
-
 void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
 {
     i_rViewShell.PopSubShells_Impl();
@@ -1036,9 +1028,6 @@ void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
 
 }
 
-
-void SfxViewFrame::ReleaseObjectShell_Impl()
-
 /*  [Description]
 
     This method empties the SfxViewFrame, i.e. takes the <SfxObjectShell>
@@ -1055,6 +1044,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
 
     <SfxViewFrame::SetObjectShell(SfxObjectShell&)>
 */
+void SfxViewFrame::ReleaseObjectShell_Impl()
 {
     DBG_ASSERT( xObjSh.Is(), "no SfxObjectShell to release!" );
 
@@ -1106,7 +1096,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     GetDispatcher()->SetDisableFlags( 0 );
 }
 
-
 bool SfxViewFrame::Close()
 {
 
@@ -1129,8 +1118,6 @@ bool SfxViewFrame::Close()
     return true;
 }
 
-
-
 void SfxViewFrame::DoActivate( bool bUI, SfxViewFrame* pOldFrame )
 {
     SfxGetpApp();
@@ -1151,7 +1138,6 @@ void SfxViewFrame::DoActivate( bool bUI, SfxViewFrame* pOldFrame )
     }
 }
 
-
 void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame* pNewFrame )
 {
     SfxGetpApp();
@@ -1171,7 +1157,6 @@ void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame* pNewFrame )
     }
 }
 
-
 void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
 {
     if( pSh && !nAdjustPosPixelLock )
@@ -1188,7 +1173,6 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
         }
     }
 }
-
 
 bool SfxViewFrame::SetBorderPixelImpl
 (
@@ -1232,7 +1216,6 @@ bool SfxViewFrame::SetBorderPixelImpl
     return true;
 }
 
-
 const SvBorder& SfxViewFrame::GetBorderPixelImpl
 (
     const SfxViewShell* /*pSh*/
@@ -1241,7 +1224,6 @@ const SvBorder& SfxViewFrame::GetBorderPixelImpl
 {
     return pImp->aBorder;
 }
-
 
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
@@ -1443,19 +1425,17 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     rViewArr.push_back( this );
 }
 
-SfxViewFrame::SfxViewFrame
-(
-    SfxFrame&           rFrame,
-    SfxObjectShell*     pObjShell
-)
-
 /*  [Description]
 
     Constructor of SfxViewFrame for a <SfxObjectShell> from the Resource.
     The 'nViewId' to the created <SfxViewShell> can be returned.
     (default is the SfxViewShell-Subclass that was registered first).
 */
-
+SfxViewFrame::SfxViewFrame
+(
+    SfxFrame&           rFrame,
+    SfxObjectShell*     pObjShell
+)
     : pImp( new SfxViewFrame_Impl( rFrame ) )
     , pDispatcher(0)
     , pBindings( new SfxBindings )
@@ -1471,7 +1451,6 @@ SfxViewFrame::SfxViewFrame
     rFrame.SetOwnsBindings_Impl( true );
     rFrame.CreateWorkWindow_Impl();
 }
-
 
 SfxViewFrame::~SfxViewFrame()
 {
@@ -1504,11 +1483,8 @@ SfxViewFrame::~SfxViewFrame()
     delete pImp;
 }
 
-
-void SfxViewFrame::KillDispatcher_Impl()
-
 // Remove and delete the Dispatcher.
-
+void SfxViewFrame::KillDispatcher_Impl()
 {
 
     SfxModule* pModule = xObjSh.Is() ? xObjSh->GetModule() : 0;
@@ -1524,12 +1500,10 @@ void SfxViewFrame::KillDispatcher_Impl()
     }
 }
 
-
 SfxViewFrame* SfxViewFrame::Current()
 {
     return SfxApplication::Get() ? SfxGetpApp()->Get_Impl()->pViewFrame : NULL;
 }
-
 
 // returns the first window of spec. type viewing the specified doc.
 SfxViewFrame* SfxViewFrame::GetFirst
@@ -1553,7 +1527,6 @@ SfxViewFrame* SfxViewFrame::GetFirst
 
     return 0;
 }
-
 
 // returns thenext window of spec. type viewing the specified doc.
 SfxViewFrame* SfxViewFrame::GetNext
@@ -1584,13 +1557,11 @@ SfxViewFrame* SfxViewFrame::GetNext
     return 0;
 }
 
-
 SfxProgress* SfxViewFrame::GetProgress() const
 {
     SfxObjectShell *pObjSh = GetObjectShell();
     return pObjSh ? pObjSh->GetProgress() : 0;
 }
-
 
 void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
 (
@@ -1623,13 +1594,11 @@ SfxPoolItem* SfxViewFrameItem::Clone( SfxItemPool *) const
 }
 
 void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
-
 /*  [Description]
 
     Internal Method to set the current <SfxViewShell> Instance,
     that is active int this SfxViewFrame at the moment.
 */
-
 {
     SfxShell::SetViewShell_Impl( pVSh );
 
@@ -1638,18 +1607,15 @@ void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
         pImp->bResizeInToOut = false;
 }
 
-
 /*  [Description]
 
     The ParentViewFrame of the Containers ViewFrame in the internal InPlace
 */
-
 //TODO/LATER: is it still necessary? is there a replacement for GetParentViewFrame_Impl?
 SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl() const
 {
     return NULL;
 }
-
 
 void SfxViewFrame::ForceOuterResize_Impl(bool bOn)
 {
@@ -1657,12 +1623,10 @@ void SfxViewFrame::ForceOuterResize_Impl(bool bOn)
         pImp->bResizeInToOut = !bOn;
 }
 
-
 bool SfxViewFrame::IsResizeInToOut_Impl() const
 {
     return pImp->bResizeInToOut;
 }
-
 
 void SfxViewFrame::GetDocNumber_Impl()
 {
@@ -1670,8 +1634,6 @@ void SfxViewFrame::GetDocNumber_Impl()
     GetObjectShell()->SetNamedVisibility_Impl();
     pImp->nDocViewNo = GetObjectShell()->GetNoSet_Impl().GetFreeIndex()+1;
 }
-
-
 
 void SfxViewFrame::Enable( bool bEnable )
 {
@@ -1711,16 +1673,13 @@ void SfxViewFrame::Enable( bool bEnable )
     }
 }
 
-
-void SfxViewFrame::Show()
-
 /*  [Description]
 
     This method makes the Frame-Window visible and before transmitts the
     window name. In addition, the document is held. In general one can never
     show the window directly!
 */
-
+void SfxViewFrame::Show()
 {
     // First lock the objectShell so that UpdateTitle() is valid:
     // IsVisible() == true (:#)
@@ -1814,14 +1773,10 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
     }
 }
 
-
-
 void SfxViewFrame::SetQuietMode_Impl( bool bOn )
 {
     GetDispatcher()->SetQuietMode_Impl( bOn );
 }
-
-
 
 SfxObjectShell* SfxViewFrame::GetObjectShell()
 {
@@ -1854,7 +1809,6 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
     SfxViewFrame *pViewFrame = pImp->pActiveChild;
     return pViewFrame;
 }
-
 
 SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
                                                    const sal_uInt16 i_nViewId, const bool i_bHidden )
@@ -1926,7 +1880,6 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
     return NULL;
 }
 
-
 SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
                                            const Sequence< PropertyValue >& i_rLoadArgs, const sal_uInt16 i_nViewId,
                                            const bool i_bHidden )
@@ -1956,34 +1909,25 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     return pViewShell;
 }
 
-
-
 SfxViewFrame* SfxViewFrame::LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, Reference< XFrame >(), i_nViewId, true );
 }
-
-
 
 SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, Reference< XFrame >(), i_nViewId, false );
 }
 
-
-
 SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rTargetFrame, const sal_uInt16 i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_rTargetFrame, i_nViewId, false );
 }
 
-
-
 SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_pFrameItem && i_pFrameItem->GetFrame() ? i_pFrameItem->GetFrame()->GetFrameInterface() : NULL, i_nViewId, false );
 }
-
 
 SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const sal_uInt16 i_nViewId )
 {
@@ -1997,8 +1941,6 @@ SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const Sf
         pHiddenItem && pHiddenItem->GetValue()
     );
 }
-
-
 
 SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, const SfxObjectShell* i_pDoc )
 {
@@ -2031,8 +1973,6 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
 
     return pViewFrame;
 }
-
-
 
 void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
 {
@@ -2098,24 +2038,6 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
     }
 }
 
-
-
-bool SfxViewFrame::SwitchToViewShell_Impl
-(
-    sal_uInt16  nViewIdOrNo,    /*  > 0
-                                Registration-Id of the View, to which the
-                                the method should switch, for example the one
-                                that will be created.
-
-                                == 0
-                                First use the Default view. */
-
-    bool        bIsIndex        /*  true
-                                'nViewIdOrNo' is no Registration-Id instead
-                                an Index of <SfxViewFrame> in <SfxObjectShell>.
-                                */
-)
-
 /*  [Description]
 
     Internal Method for switching to another <SfxViewShell> subclass,
@@ -2133,7 +2055,21 @@ bool SfxViewFrame::SwitchToViewShell_Impl
                                 SfxViewShell requested could not be created,
                                 the existing SfxViewShell thus continue to exist
 */
+bool SfxViewFrame::SwitchToViewShell_Impl
+(
+    sal_uInt16  nViewIdOrNo,    /*  > 0
+                                Registration-Id of the View, to which the
+                                the method should switch, for example the one
+                                that will be created.
 
+                                == 0
+                                First use the Default view. */
+
+    bool        bIsIndex        /*  true
+                                'nViewIdOrNo' is no Registration-Id instead
+                                an Index of <SfxViewFrame> in <SfxObjectShell>.
+                                */
+)
 {
     try
     {
@@ -2192,30 +2128,25 @@ bool SfxViewFrame::SwitchToViewShell_Impl
     return true;
 }
 
-
 void SfxViewFrame::SetCurViewId_Impl( const sal_uInt16 i_nID )
 {
     pImp->nCurViewId = i_nID;
 }
-
 
 sal_uInt16 SfxViewFrame::GetCurViewId() const
 {
     return pImp->nCurViewId;
 }
 
-
-void SfxViewFrame::ExecView_Impl
-(
-    SfxRequest& rReq        // The executable <SfxRequest>
-)
-
 /*  [Description]
 
     Internal method to run the slot for the <SfxShell> Subclass in the
     SfxViewFrame <SVIDL> described slots.
 */
-
+void SfxViewFrame::ExecView_Impl
+(
+    SfxRequest& rReq        // The executable <SfxRequest>
+)
 {
 
     // If the Shells are just being replaced...
@@ -2305,7 +2236,6 @@ void SfxViewFrame::ExecView_Impl
     }
 }
 
-
 /* TODO as96863:
         This method try to collect information about the count of currently open documents.
         But the algorithm is implemented very simple ...
@@ -2355,13 +2285,6 @@ bool impl_maxOpenDocCountReached()
     return (nOpenDocs >= nMaxDocs);
 }
 
-
-void SfxViewFrame::StateView_Impl
-(
-    SfxItemSet&     rSet            /*  empty <SfxItemSet> with <Which-Ranges>,
-                                        which describes the Slot Ids */
-)
-
 /*  [Description]
 
     This internal methode returns in 'rSet' the Status for the  <SfxShell>
@@ -2373,7 +2296,11 @@ void SfxViewFrame::StateView_Impl
     Which-IDs are used so that items can be replaced directly with a working
     Core::sun::com::star::script::Engine of the Which-IDs if possible. .
 */
-
+void SfxViewFrame::StateView_Impl
+(
+    SfxItemSet&     rSet            /*  empty <SfxItemSet> with <Which-Ranges>,
+                                        which describes the Slot Ids */
+)
 {
 
     SfxObjectShell *pDocSh = GetObjectShell();
@@ -2436,26 +2363,24 @@ void SfxViewFrame::ToTop()
 }
 
 
-SfxViewFrame* SfxViewFrame::GetParentViewFrame() const
 /*  [Description]
 
     The ParentViewFrame is the ViewFrame of the ParentFrames.
 */
+SfxViewFrame* SfxViewFrame::GetParentViewFrame() const
 {
     SfxFrame *pFrame = GetFrame().GetParentFrame();
     return pFrame ? pFrame->GetCurrentViewFrame() : NULL;
 }
 
-
-SfxFrame& SfxViewFrame::GetFrame() const
 /*  [Description]
 
     GetFrame returns the Frame, in which the ViewFrame is located.
 */
+SfxFrame& SfxViewFrame::GetFrame() const
 {
     return pImp->rFrame;
 }
-
 
 SfxViewFrame* SfxViewFrame::GetTopViewFrame() const
 {
@@ -3054,8 +2979,6 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
     }
 }
 
-void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
-
 /*  [Description]
 
     This method can be included in the Execute method for the on- and off-
@@ -3063,7 +2986,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
     Simply include as 'ExecuteMethod' in the IDL.
 */
-
+void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 {
     // Evaluate Parameter
     sal_uInt16 nSID = rReq.GetSlot();
@@ -3148,10 +3071,6 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     }
 }
 
-
-
-void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
-
 /*  [Description]
 
     This method can be used in the state method for the on and off-state
@@ -3159,7 +3078,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
 
     Just register the IDL as 'StateMethod'.
 */
-
+void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
 {
     SfxWhichIter aIter( rState );
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
@@ -3226,7 +3145,6 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
     }
 }
 
-
 SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( sal_uInt16 /*nId*/ )
 {
     SfxWorkWindow* pWork = GetFrame().GetWorkWindow_Impl();
@@ -3240,8 +3158,6 @@ void SfxViewFrame::SetChildWindow(sal_uInt16 nId, bool bOn, bool bSetFocus )
         pWork->SetChildWindow_Impl( nId, bOn, bSetFocus );
 }
 
-
-
 void SfxViewFrame::ToggleChildWindow(sal_uInt16 nId)
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
@@ -3249,23 +3165,17 @@ void SfxViewFrame::ToggleChildWindow(sal_uInt16 nId)
         pWork->ToggleChildWindow_Impl( nId, true );
 }
 
-
-
 bool SfxViewFrame::HasChildWindow( sal_uInt16 nId )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
     return pWork && pWork->HasChildWindow_Impl(nId);
 }
 
-
-
 bool SfxViewFrame::KnowsChildWindow( sal_uInt16 nId )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
     return pWork && pWork->KnowsChildWindow_Impl(nId);
 }
-
-
 
 void SfxViewFrame::ShowChildWindow( sal_uInt16 nId, bool bVisible )
 {
@@ -3276,8 +3186,6 @@ void SfxViewFrame::ShowChildWindow( sal_uInt16 nId, bool bVisible )
         pWork->ShowChildWindow_Impl(nId, bVisible, true );
     }
 }
-
-
 
 SfxChildWindow* SfxViewFrame::GetChildWindow(sal_uInt16 nId)
 {
@@ -3300,7 +3208,6 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
     SfxGetpApp()->SetViewFrame_Impl( pFrame );
 }
 
-
 void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL )
 {
     SolarMutexGuard aGuard;
@@ -3317,7 +3224,6 @@ void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::
 
     pViewFrame->ActivateToolPanel_Impl( i_rPanelURL );
 }
-
 
 void SfxViewFrame::ActivateToolPanel_Impl( const OUString& i_rPanelURL )
 {
