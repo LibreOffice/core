@@ -1599,73 +1599,23 @@ struct SwXParaFrameEnumerationImpl SAL_FINAL : public SwXParaFrameEnumeration
     {
         if(!m_pUnoCursor)
         {
-            m_Frames.clear();
+            m_vFrames.clear();
             m_xNextObject = nullptr;
         }
         else
         {
             // removing orphaned SwDepends
-            const auto iter = std::remove_if(m_Frames.begin(), m_Frames.end(),
+            const auto iter = std::remove_if(m_vFrames.begin(), m_vFrames.end(),
                     [] (std::shared_ptr<sw::FrameClient>& rEntry) -> bool { return !rEntry->GetRegisteredIn(); });
-            m_Frames.erase(iter, m_Frames.end());
+            m_vFrames.erase(iter, m_vFrames.end());
         }
     }
-    // created by hasMoreElements
+    bool CreateNextObject();
     uno::Reference< text::XTextContent > m_xNextObject;
-    FrameClientList_t m_Frames;
+    FrameClientList_t m_vFrames;
     ::sw::UnoCursorPointer m_pUnoCursor;
 };
 
-static bool
-lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
-        uno::Reference<text::XTextContent> & o_rNextObject,
-        FrameClientList_t & i_rFrames)
-{
-    if (!i_rFrames.size())
-        return false;
-
-    SwFrameFormat *const pFormat = static_cast<SwFrameFormat*>(
-                i_rFrames.front()->GetRegisteredIn());
-    i_rFrames.pop_front();
-    // the format should be valid here, otherwise the client
-    // would have been removed in ::Modify
-    // check for a shape first
-    SwDrawContact* const pContact = SwIterator<SwDrawContact,SwFormat>( *pFormat ).First();
-    if (pContact)
-    {
-        SdrObject * const pSdr = pContact->GetMaster();
-        if (pSdr)
-        {
-            o_rNextObject.set(pSdr->getUnoShape(), uno::UNO_QUERY);
-        }
-    }
-    else
-    {
-        const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-        OSL_ENSURE(pIdx, "where is the index?");
-        SwNode const*const pNd =
-            i_rUnoCrsr.GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
-
-        if (!pNd->IsNoTextNode())
-        {
-            o_rNextObject.set(SwXTextFrame::CreateXTextFrame(
-                        *pFormat->GetDoc(), pFormat));
-        }
-        else if (pNd->IsGrfNode())
-        {
-            o_rNextObject.set(SwXTextGraphicObject::CreateXTextGraphicObject(
-                        *pFormat->GetDoc(), pFormat));
-        }
-        else
-        {
-            assert(pNd->IsOLENode());
-            o_rNextObject.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                        *pFormat->GetDoc(), pFormat));
-        }
-    }
-
-    return o_rNextObject.is();
-}
 
 // Search for a FLYCNT text attribute at the cursor point and fill the frame
 // into the array
@@ -1704,12 +1654,12 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
         ::CollectFrameAtNode(rPaM.GetPoint()->nNode,
                 frames, false);
         ::std::transform(frames.begin(), frames.end(),
-            ::std::back_inserter(m_Frames),
+            ::std::back_inserter(m_vFrames),
             ::boost::bind(&FrameClientSortListEntry::pFrameClient, _1));
     }
     else if (pFormat)
     {
-        m_Frames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFormat)));
+        m_vFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFormat)));
     }
     else if ((PARAFRAME_PORTION_CHAR == eParaFrameMode) ||
              (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode))
@@ -1723,12 +1673,59 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
             {
                 SwFrameFormat *const pFrameFormat = const_cast<SwFrameFormat*>(&((*aIter)->GetFormat()));
 
-                m_Frames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
+                m_vFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
             }
         }
 
-        lcl_FillFrame(*GetCursor(), m_Frames);
+        lcl_FillFrame(*GetCursor(), m_vFrames);
     }
+}
+
+bool SwXParaFrameEnumerationImpl::CreateNextObject()
+{
+    if (!m_vFrames.size())
+        return false;
+
+    SwFrameFormat* const pFormat = static_cast<SwFrameFormat*>(const_cast<SwModify*>(
+                m_vFrames.front()->GetRegisteredIn()));
+    m_vFrames.pop_front();
+    // the format should be valid here, otherwise the client
+    // would have been removed by PurgeFrameClients
+    // check for a shape first
+    SwDrawContact* const pContact = SwIterator<SwDrawContact,SwFormat>( *pFormat ).First();
+    if (pContact)
+    {
+        SdrObject * const pSdr = pContact->GetMaster();
+        if (pSdr)
+        {
+            m_xNextObject.set(pSdr->getUnoShape(), uno::UNO_QUERY);
+        }
+    }
+    else
+    {
+        const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
+        OSL_ENSURE(pIdx, "where is the index?");
+        SwNode const*const pNd =
+            m_pUnoCursor->GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
+
+        if (!pNd->IsNoTextNode())
+        {
+            m_xNextObject.set(SwXTextFrame::CreateXTextFrame(
+                        *pFormat->GetDoc(), pFormat));
+        }
+        else if (pNd->IsGrfNode())
+        {
+            m_xNextObject.set(SwXTextGraphicObject::CreateXTextGraphicObject(
+                        *pFormat->GetDoc(), pFormat));
+        }
+        else
+        {
+            assert(pNd->IsOLENode());
+            m_xNextObject.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                        *pFormat->GetDoc(), pFormat));
+        }
+    }
+    return m_xNextObject.is();
 }
 
 sal_Bool SAL_CALL
@@ -1738,8 +1735,7 @@ SwXParaFrameEnumerationImpl::hasMoreElements() throw (uno::RuntimeException, std
     if (!GetCursor())
         throw uno::RuntimeException();
     PurgeFrameClients();
-    return m_xNextObject.is() ||
-        lcl_CreateNextObject(*GetCursor(), m_xNextObject, m_Frames);
+    return m_xNextObject.is() || CreateNextObject();
 }
 
 uno::Any SAL_CALL SwXParaFrameEnumerationImpl::nextElement()
@@ -1750,11 +1746,8 @@ throw (container::NoSuchElementException,
     if (!GetCursor())
         throw uno::RuntimeException();
     PurgeFrameClients();
-    if (!m_xNextObject.is() && m_Frames.size())
-    {
-        lcl_CreateNextObject(*GetCursor(),
-                m_xNextObject, m_Frames);
-    }
+    if (!m_xNextObject.is() && m_vFrames.size())
+        CreateNextObject();
     if (!m_xNextObject.is())
         throw container::NoSuchElementException();
     uno::Any aRet;
