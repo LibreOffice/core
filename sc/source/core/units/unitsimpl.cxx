@@ -96,7 +96,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
         nOpCode < SC_OPCODE_STOP_UN_OP) {
 
         if ((rStack.size() == 0) || (rStack.top().type != RAUSItemType::UNITS)) {
-            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+            return { FormulaStatus::UNKNOWN, boost::none };
         }
 
         UtUnit pUnit = boost::get<UtUnit>(rStack.top().item);//rStack.top().item.get< UtUnit >();
@@ -105,7 +105,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
         switch (aOpCode) {
         case ocNot:
             if (!pUnit.isDimensionless()) {
-                return { UnitsStatus::UNITS_INVALID_INCOMPATIBLE, boost::none };
+                return { FormulaStatus::ERROR_INPUT_INCOMPATIBLE, boost::none };
             }
             // We just keep the same unit (in this case no unit) so can
             // fall through.
@@ -127,13 +127,13 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
         nOpCode < SC_OPCODE_STOP_BIN_OP) {
 
         if ((rStack.size() < 2) || (rStack.top().type != RAUSItemType::UNITS)) {
-            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+            return { FormulaStatus::UNKNOWN, boost::none };
         }
         UtUnit pSecondUnit = boost::get<UtUnit>(rStack.top().item);
         rStack.pop();
 
         if (rStack.top().type != RAUSItemType::UNITS) {
-            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+            return { FormulaStatus::UNKNOWN, boost::none };
         }
         UtUnit pFirstUnit = boost::get<UtUnit>(rStack.top().item);
         rStack.pop();
@@ -148,9 +148,9 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
                 pOut = pFirstUnit;
                 SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit);
             } else if (pFirstUnit.areConvertibleTo(pSecondUnit)) {
-                return { UnitsStatus::UNITS_INVALID_SCALING, boost::none };
+                return { FormulaStatus::ERROR_INPUT_SCALING, boost::none };
             } else {
-                return { UnitsStatus::UNITS_INVALID_INCOMPATIBLE, boost::none };
+                return { FormulaStatus::ERROR_INPUT_INCOMPATIBLE, boost::none };
             }
 
             break;
@@ -174,7 +174,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
         // (In practice this would probably be nonsensical, but isn't a unit
         //  error per-se.)
         if (nParams == 0) {
-            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+            return { FormulaStatus::UNKNOWN, boost::none };
         }
 
         // This is still quite an ugly solution, even better would maybe be to have
@@ -218,9 +218,9 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
 
                     if (aFirstUnit.get() != aCurrentUnit) {
                         if (aFirstUnit.get().areConvertibleTo(aCurrentUnit)) {
-                            return { UnitsStatus::UNITS_INVALID_SCALING, boost::none };
+                            return { FormulaStatus::ERROR_INPUT_SCALING, boost::none };
                         } else {
-                            return { UnitsStatus::UNITS_INVALID_INCOMPATIBLE, boost::none };
+                            return { FormulaStatus::ERROR_INPUT_INCOMPATIBLE, boost::none };
                         }
                     }
                 }
@@ -236,9 +236,9 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
 
                         if (aFirstUnit.get() != aCurrentUnit) {
                             if (aFirstUnit.get().areConvertibleTo(aCurrentUnit)) {
-                                return { UnitsStatus::UNITS_INVALID_SCALING, boost::none };
+                                return { FormulaStatus::ERROR_INPUT_SCALING, boost::none };
                             } else {
-                                return { UnitsStatus::UNITS_INVALID_INCOMPATIBLE, boost::none };
+                                return { FormulaStatus::ERROR_INPUT_INCOMPATIBLE, boost::none };
                             }
                         }
                     }
@@ -246,7 +246,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
 
             }
 
-            return { UnitsStatus::UNITS_VALID, aFirstUnit };
+            return { FormulaStatus::VERIFIED, aFirstUnit };
         }
         case ocProduct:
         {
@@ -269,16 +269,16 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
                 } while (aIt.next());
             }
 
-            return { UnitsStatus::UNITS_VALID, aUnit };
+            return { FormulaStatus::VERIFIED, aUnit };
         }
         default:
-            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+            return { FormulaStatus::UNKNOWN, boost::none };
         }
     } else {
         SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
-        return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+        return { FormulaStatus::UNKNOWN, boost::none };
     }
-    return { UnitsStatus::UNITS_VALID, pOut };
+    return { FormulaStatus::VERIFIED, pOut };
 }
 
 OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString) {
@@ -562,18 +562,18 @@ FormulaStatus UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rF
             UnitsResult aResult = getOutputUnitsForOpCode(aStack, pToken, pDoc);
 
             switch (aResult.status) {
-            case UnitsStatus::UNITS_INVALID_SCALING:
-                return FormulaStatus::ERROR_INPUT_SCALING;
-            case UnitsStatus::UNITS_INVALID_INCOMPATIBLE:
-                return FormulaStatus::ERROR_INPUT_INCOMPATIBLE;
-            case UnitsStatus::UNITS_UNKNOWN:
-                // Unsupported hence we stop processing.
-                return FormulaStatus::UNKNOWN;
-            case UnitsStatus::UNITS_VALID:
+            case FormulaStatus::ERROR_INPUT_SCALING:
+            case FormulaStatus::ERROR_INPUT_INCOMPATIBLE:
+            case FormulaStatus::UNKNOWN:
+               return aResult.status;
+            case FormulaStatus::VERIFIED:
                 assert(aResult.units); // ensure that we have the optional unit
                 assert(aResult.units->isValid());
                 aStack.push( { RAUSItemType::UNITS, aResult.units.get() } );
                 break;
+            case FormulaStatus::ERROR_OUTPUT_SCALING:
+            case FormulaStatus::ERROR_OUTPUT_INCOMPATIBLE:
+                assert(false);
             }
 
             break;
