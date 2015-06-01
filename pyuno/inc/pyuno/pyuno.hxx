@@ -171,6 +171,12 @@ enum ConversionMode { ACCEPT_UNO_ANY, REJECT_UNO_ANY };
 class LO_DLLPUBLIC_PYUNO Runtime
 {
     RuntimeImpl *impl;
+
+    /**
+        Safely unpacks a Python iterator into a sequence, then
+        stores it in an Any. Used internally by pyObject2Any
+    */
+    bool pyIterUnpack( PyObject *const, com::sun::star::uno::Any & ) const;
 public:
     ~Runtime( );
 

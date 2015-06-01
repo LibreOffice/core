@@ -31,6 +31,17 @@
 #define PyVarObject_HEAD_INIT(type, size)  PyObject_HEAD_INIT(type) size,
 #endif
 
+//Python 3.0 and newer don't have these flags
+#ifndef Py_TPFLAGS_HAVE_ITER
+#  define Py_TPFLAGS_HAVE_ITER 0
+#endif
+#ifndef Py_TPFLAGS_HAVE_RICHCOMPARE
+#  define Py_TPFLAGS_HAVE_RICHCOMPARE 0
+#endif
+#ifndef Py_TPFLAGS_HAVE_SEQUENCE_IN
+#  define Py_TPFLAGS_HAVE_SEQUENCE_IN 0
+#endif
+
 #include <pyuno/pyuno.hxx>
 
 #include <unordered_map>
@@ -43,6 +54,8 @@
 
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -130,6 +143,13 @@ inline PyObject* PyStrBytes_FromStringAndSize(const char *string, Py_ssize_t len
 }
 #endif /* PY_MAJOR_VERSION >= 3 */
 
+// Type of argument to PySlice_GetIndicesEx() changed in Python 3.2
+#if PY_VERSION_HEX >= 0x030200f0
+typedef PyObject PySliceObject_t;
+#else
+typedef PySliceObject PySliceObject_t;
+#endif
+
 namespace pyuno
 {
 
@@ -211,6 +231,35 @@ typedef struct
     PyObject_HEAD
     PyUNOInternals* members;
 } PyUNO;
+
+PyObject* PyUNO_iterator_new (
+    const com::sun::star::uno::Reference<com::sun::star::container::XEnumeration> xEnumeration);
+
+typedef struct
+{
+    com::sun::star::uno::Reference <com::sun::star::container::XEnumeration> xEnumeration;
+} PyUNO_iterator_Internals;
+
+typedef struct
+{
+        PyObject_HEAD
+        PyUNO_iterator_Internals* members;
+} PyUNO_iterator;
+
+PyObject* PyUNO_list_iterator_new (
+    const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> &xIndexAccess);
+
+typedef struct
+{
+    com::sun::star::uno::Reference <com::sun::star::container::XIndexAccess> xIndexAccess;
+    int index;
+} PyUNO_list_iterator_Internals;
+
+typedef struct
+{
+        PyObject_HEAD
+        PyUNO_list_iterator_Internals* members;
+} PyUNO_list_iterator;
 
 PyRef ustring2PyUnicode( const OUString &source );
 PyRef ustring2PyString( const OUString & source );

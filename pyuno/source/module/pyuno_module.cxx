@@ -180,18 +180,22 @@ static void fillStruct(
             inv->setValue( pMemberName, a );
         }
     }
-    for ( int i = 0; i < nMembers ; ++i)
+    if ( PyTuple_Size( initializer ) > 0 )
     {
-        const OUString memberName (pCompType->ppMemberNames[i]);
-        if ( ! state.isInitialised( memberName ) )
+        // Allow partial initialisation when only keyword arguments are given
+        for ( int i = 0; i < nMembers ; ++i)
         {
-            OUStringBuffer buf;
-            buf.appendAscii( "pyuno._createUnoStructHelper: member '");
-            buf.append(memberName);
-            buf.appendAscii( "' of struct type '");
-            buf.append(pCompType->aBase.pTypeName);
-            buf.appendAscii( "' not given a value.");
-            throw RuntimeException(buf.makeStringAndClear());
+            const OUString memberName (pCompType->ppMemberNames[i]);
+            if ( ! state.isInitialised( memberName ) )
+            {
+                OUStringBuffer buf;
+                buf.appendAscii( "pyuno._createUnoStructHelper: member '");
+                buf.append(memberName);
+                buf.appendAscii( "' of struct type '");
+                buf.append(pCompType->aBase.pTypeName);
+                buf.appendAscii( "' not given a value.");
+                throw RuntimeException(buf.makeStringAndClear());
+            }
         }
     }
 }
