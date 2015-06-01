@@ -38,6 +38,7 @@
 
 
 class OutlinerParaObject;
+class OverflowingText;
 class SdrOutliner;
 class SdrTextObj;
 class SdrTextObjTest;
@@ -215,7 +216,7 @@ public:
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
 
     // FIXME(matteocam) // XXX: move as protected
-    OutlinerParaObject *mpOverflowingText = NULL;
+    OverflowingText *mpOverflowingText = NULL;
 
 protected:
 
@@ -612,8 +613,7 @@ public:
         const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 
-    void impCopyTextInTextObj(SdrTextObj *pNextTextObj) const;
-    void impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const;
+    void impMoveChainedTextToNextLink(SdrTextObj *pNextTextObj) const;
 
     // Handler for Chained Text
     DECL_LINK(ImpDecomposeChainedText,EditStatus*);

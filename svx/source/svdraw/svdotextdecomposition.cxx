@@ -722,9 +722,9 @@ void SdrTextObj::embedText() const
 
 }
 
-// A new temporary implementation of impCopyTextInTextObj
+// A new temporary implementation of impMoveChainedTextToNextLink
 // Should implement the whole logic
-void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
+void SdrTextObj::impMoveChainedTextToNextLink(SdrTextObj *pNextTextObj) const
 {
     // prevent copying text in same box
     if ( this ==  pNextTextObj )
@@ -734,10 +734,7 @@ void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
 
     rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
-    OverflowingText aOverflowingTxt =
-        OverflowingText("headTxt (On its own)", NULL, "I'm Appended to #");
-
-    if (mpOverflowingText) {
+    if (mpOverflowingText != NULL) {
         // XXX: Not sure if necessary
         rOutliner.Clear();
 
@@ -751,8 +748,9 @@ void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
             aOldPara0Txt = rOutliner.GetText(pOldPara0);
 
         // Get other paras of destination box (from second on)
-        OutlinerParaObject *pOldParasTail =
-            rOutliner.CreateParaObject(1);
+        OutlinerParaObject *pOldParasTail = NULL;
+        if (rOutliner.GetParagraphCount() > 1)
+            pOldParasTail = rOutliner.CreateParaObject(1);
 
         // Create ParaObject appending old first para in the dest. box
         //   to last part of overflowing text
@@ -763,7 +761,7 @@ void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
             rOutliner.Clear();
 
             pTmpPara0 = rOutliner.GetParagraph(0);
-            rOutliner.SetText(aOverflowingTxt.mTailTxt + aOldPara0Txt, pTmpPara0);
+            rOutliner.SetText(mpOverflowingText->mTailTxt + aOldPara0Txt, pTmpPara0);
             pJoiningPara = rOutliner.CreateParaObject();
         }
 
@@ -772,11 +770,11 @@ void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
 
         // Set headText at the beginning of box
         Paragraph *pNewPara0 = rOutliner.GetParagraph(0);
-        rOutliner.SetText(aOverflowingTxt.mHeadTxt, pNewPara0);
+        rOutliner.SetText(mpOverflowingText->mHeadTxt, pNewPara0);
 
         // Set all the intermediate Paras
-        if (aOverflowingTxt.mpMidParas)
-            rOutliner.AddText(*aOverflowingTxt.mpMidParas);
+        if (mpOverflowingText->mpMidParas)
+            rOutliner.AddText(*mpOverflowingText->mpMidParas);
 
         // Append old first para in the destination box to
         //   last part of overflowing text
@@ -791,70 +789,6 @@ void SdrTextObj::impCopyTextInTextObj2(SdrTextObj *pNextTextObj) const
         OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
         pNextTextObj->NbcSetOutlinerParaObject(pNewText);
     }
-
-}
-
-
-void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
-{
-    // prevent copying text in same box
-    if ( this ==  pNextTextObj )
-        return;
-
-    SdrOutliner &rOutliner = ImpGetDrawOutliner();
-
-    /*
-    // Code inspired by SvxOutlinerForwarder::AppendTextPortion
-    sal_Int32 nLen = 0;
-
-    EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
-    sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
-    DBG_ASSERT( 0 <= nPara && nPara < nParaCount, "paragraph index out of bounds" );
-    if (0 <= nPara && nPara < nParaCount)
-    {
-        nLen = rEditEngine.GetTextLen( nPara );
-        rEditEngine.QuickInsertText( rText, ESelection( nPara, nLen, nPara, nLen ) );
-    }
-    * */
-
-    rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
-
-    // Push text through the chain if there's any
-
-    // append a string in front of everything
-    // NOTE: Trying with set-text first
-
-    if (mpOverflowingText) {
-
-        /* Desired behavior:
-         * - take first overflowing word and paragraph from there
-         * - Outliner::GetOverflowingPara should return the second overflowing para
-         * - then these two should pasted together (as below?)
-        */
-
-        /*
-         * The goal is to have UpdateOverflowingParaNum be finer grained and
-         * work at level of lines instead of para-s
-        */
-
-        // Set new text first
-        rOutliner.SetText(*mpOverflowingText);
-
-        /*
-         * We merge new text in front of the first paragraph
-         * so we get a pointer to it and its text.
-        */
-        Paragraph *pFstPara = rOutliner.GetParagraph(0);
-        OUString aTxtFstPara = rOutliner.GetText(pFstPara);
-
-        //
-        rOutliner.SetText("X" + aTxtFstPara, pFstPara);
-        // gets the whole thing
-        OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
-        // draws everything - result = "X" ++ overflowingText
-        pNextTextObj->NbcSetOutlinerParaObject(pNewText);
-    }
-
 
     rOutliner.SetStatusEventHdl1(Link());
 
@@ -1559,21 +1493,21 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     /* fprintf(stderr, "Object #0 = %p, Object #1 = %p\n",
                     pPage->GetObj(0), pPage->GetObj(1)); */
 
-    //impCopyTextInTextObj(pNextTextObj); // just do it
+    //impMoveChainedTextToNextLink(pNextTextObj); // just do it
 
     // put overflowing text in next text box
     if (mpOverflowingText != NULL) {
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
         assert (pNextTextObj);
         // NOTE: Commented because we do not need to do this anymore (maybe and for now)
-        //impCopyTextInTextObj(pNextTextObj); // XXX: it actually moves the overflowing text currently
+        //impMoveChainedTextToNextLink(pNextTextObj); // XXX: it actually moves the overflowing text currently
         // Chaining occurred. Let's reset the status
         const_cast<SdrTextObj*>(this)->SetToBeChained( false );
 
-        //pNextTextObj->SetOutlinerParaObject( mpOverflowingText );
+
         //SdrOutliner rOutl = pNextTextObj->ImpGetDrawOutliner();
         //pNextTextObj->BegTextEdit( rOutl );
-        // XXX: Also, will all those calls currently in impCopyTextInTextObj be necessary too?
+        // XXX: Also, will all those calls currently in impMoveChainedTextToNextLink be necessary too?
     }
 
     drawinglayer::primitive2d::Primitive2DSequence aRetval(0);

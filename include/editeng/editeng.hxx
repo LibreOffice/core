@@ -603,6 +603,7 @@ public:
     bool Redo(EditView* pView);
 
     sal_Int32 GetOverflowingParaNum() const;
+    sal_Int32 GetOverflowingLineNum() const;
     void ClearOverflowingParaNum();
 };
 

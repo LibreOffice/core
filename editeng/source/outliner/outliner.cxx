@@ -2076,7 +2076,6 @@ OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
     if ( GetParagraphCount() < 1 )
         return NULL;
 
-    sal_Int32 nStartPara = 0;
     // last non-overflowing paragraph is before the first overflowing one
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
     //sal_Int32 nCount = 1;
@@ -2102,48 +2101,59 @@ OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
     } else if (nCount < 0) // No overflowing Text
         nCount = GetParagraphCount();
 
-    // code inspired from Outliner::CreateParaObject
-
-    // we need a paragraph data vector and the actual text
-    ParagraphDataVector aParagraphDataVector(nCount);
-    const sal_Int32 nLastPara(nStartPara + nCount - 1);
-
-    for(sal_Int32 nPara(nStartPara); nPara <= nLastPara; nPara++)
-    {
-        aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
-    }
-
-    EditTextObject* pText = pEditEngine->CreateTextObject( nStartPara, nCount );
-    const bool bIsEditDoc(OUTLINERMODE_TEXTOBJECT == ImplGetOutlinerMode());
-
-    OutlinerParaObject* pPObj = new OutlinerParaObject(*pText, aParagraphDataVector, bIsEditDoc);
-    pPObj->SetOutlinerMode(GetMode());
-
-    delete pText;
-    return pPObj;
+    return CreateParaObject(0, nCount);
 }
-OutlinerParaObject *Outliner::GetOverflowingParaObject() const
+
+OverflowingText *Outliner::GetOverflowingText() const
 {
-    if ( pEditEngine->GetOverflowingParaNum() >= 0) {
-        // Defensive check: oveflowing para index beyond actual # of paragraphs?
-        if ( pEditEngine->GetOverflowingParaNum() > GetParagraphCount()-1) {
-            fprintf(stderr,
-                    "[Overflowing] Ops, trying to retrieve para %d when max index is %d\n",
-                    pEditEngine->GetOverflowingParaNum(),
-                    GetParagraphCount()-1);
-            return NULL;
-    }
-        return CreateParaObject( pEditEngine->GetOverflowingParaNum() );
+    if ( pEditEngine->GetOverflowingParaNum() < 0)
+        return NULL;
+
+
+    // Defensive check: oveflowing para index beyond actual # of paragraphs?
+    if ( pEditEngine->GetOverflowingParaNum() > GetParagraphCount()-1) {
+        fprintf(stderr,
+                "[Overflowing] Ops, trying to retrieve para %d when max index is %d\n",
+                pEditEngine->GetOverflowingParaNum(),
+                GetParagraphCount()-1);
+        return NULL;
     }
 
-    return NULL;
-    /*
-    // XXX: returns second paragraph if there is one, first otherwise
-    if ( GetParagraphCount() >= 2 )
-        return CreateParaObject(1, 1);
-    else
-        return CreateParaObject(0, 1);
-    */
+    OUString aHeadTxt, aTailTxt("");
+    OutlinerParaObject *pMidParas = NULL;
+
+
+    sal_uInt32 nHeadPara = pEditEngine->GetOverflowingParaNum();
+    sal_uInt32 nParaCount = GetParagraphCount();
+    sal_uInt32 nTailPara = nParaCount-1;
+    sal_uInt32 nMidParas = nTailPara-nHeadPara-1;
+
+    // Set the head text
+    // XXX: Is there a proper method to join lines in a single string?
+    OUString aWholeTxtHeadPara = GetText(GetParagraph(nHeadPara));
+    sal_uInt32 nLen = 0;
+    for ( sal_Int32 nLine = 0;
+          nLine < pEditEngine->GetOverflowingLineNum();
+          nLine++) {
+        nLen += GetLineLen(nHeadPara, nLine);
+    }
+    // XXX: Any separator to be included?
+    aHeadTxt = aWholeTxtHeadPara.copy(nLen);
+
+
+    // If there is at least one more paragraph overflowing
+    if (nTailPara > nHeadPara) {
+        // Get text of last paragraph
+        aTailTxt = GetText(GetParagraph(nTailPara));
+    }
+
+    if (nMidParas > 0) {
+        // Get everything between first and last overflowing para
+        pMidParas = CreateParaObject(nHeadPara+1, nMidParas);
+    }
+
+    // XXX: Who deletes this?
+    return new OverflowingText(aHeadTxt, pMidParas, aTailTxt);
 }
 
 void Outliner::ClearOverflowingParaNum()

@@ -59,7 +59,6 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
-#include <editeng/overflowingtxt.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -2757,6 +2756,10 @@ EditPaM EditEngine::InsertLineBreak(const EditSelection& rEditSelection)
 
 sal_Int32 EditEngine::GetOverflowingParaNum() const {
     return pImpEditEngine->GetOverflowingParaNum();
+}
+
+sal_Int32 EditEngine::GetOverflowingLineNum() const {
+    return pImpEditEngine->GetOverflowingLineNum();
 }
 
 void EditEngine::ClearOverflowingParaNum() {
