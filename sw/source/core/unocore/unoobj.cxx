@@ -2984,17 +2984,10 @@ SwXTextCursor::createContentEnumeration(const OUString& rServiceName)
 throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-
     if (rServiceName != "com.sun.star.text.TextContent")
-    {
         throw uno::RuntimeException();
-    }
-
-    SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
-
-    uno::Reference< container::XEnumeration > xRet =
-        new SwXParaFrameEnumeration(rUnoCursor, PARAFRAME_PORTION_TEXTRANGE);
-    return xRet;
+    SwUnoCrsr& rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    return SwXParaFrameEnumeration::Create(rUnoCursor, PARAFRAME_PORTION_TEXTRANGE);
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL

@@ -1438,7 +1438,7 @@ throw (uno::RuntimeException, std::exception)
     SwPosition aPos( rTextNode );
     SwPaM aPam( aPos );
     uno::Reference< container::XEnumeration > xRet =
-        new SwXParaFrameEnumeration(aPam, PARAFRAME_PORTION_PARAGRAPH);
+        SwXParaFrameEnumeration::Create(aPam, PARAFRAME_PORTION_PARAGRAPH);
     return xRet;
 }
 
