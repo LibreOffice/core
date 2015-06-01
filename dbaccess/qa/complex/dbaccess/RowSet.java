@@ -69,6 +69,8 @@ public class RowSet extends TestCase
     XPropertySet m_rowSetProperties;
     XParametersSupplier m_paramsSupplier;
 
+    private final Object failedResultSetMovementStressGuard = new Object();
+    private String failedResultSetMovementStressMessages = "";
 
     private class ResultSetMovementStress implements Runnable
     {
@@ -100,7 +102,12 @@ public class RowSet extends TestCase
             }
             catch (Exception e)
             {
-                fail("ResultSetMovementStress(" + m_id + ") failed at i=" + i + ": " + e);
+                synchronized (failedResultSetMovementStressGuard) {
+                    failedResultSetMovementStressMessages
+                        = failedResultSetMovementStressMessages
+                        + "ResultSetMovementStress(" + m_id + ") failed at i="
+                        + i + ": " + e + "\n";
+                }
             }
         }
     }
@@ -382,6 +389,9 @@ public class RowSet extends TestCase
             for (int i = 0; i < numberOfThreads; ++i)
             {
                 threads[i].join();
+            }
+            synchronized (failedResultSetMovementStressGuard) {
+                assertEquals("", failedResultSetMovementStressMessages);
             }
         }
         catch (Exception e)
