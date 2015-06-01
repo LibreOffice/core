@@ -315,7 +315,7 @@
           <menu:menuitem menu:id=".uno:DecrementIndent"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:ObjectAlign">
+      <menu:menu menu:id=".uno:TextAlign">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:CommonAlignLeft"/>
           <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter"/>
