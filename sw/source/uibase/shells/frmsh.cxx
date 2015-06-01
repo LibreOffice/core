@@ -675,8 +675,8 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             0 );
         rSh.GetFlyFrmAttr( aSet );
 
-        bool bProtect = rSh.IsSelObjProtected(FLYPROTECT_POS);
-        bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+        bool bProtect = rSh.IsSelObjProtected(FlyProtectFlags::Pos) != FlyProtectFlags::NONE;
+        bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
         bProtect |= bParentCntProt;
 
@@ -875,9 +875,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                 case SID_ATTR_TRANSFORM_PROTECT_SIZE:
                 {
-                    const sal_uInt8 eProtection = rSh.IsSelObjProtected( FLYPROTECT_SIZE );
-                    if ( ( eProtection & FLYPROTECT_CONTENT ) ||
-                         ( eProtection & FLYPROTECT_SIZE ) )
+                    const FlyProtectFlags eProtection = rSh.IsSelObjProtected( FlyProtectFlags::Size );
+                    if ( ( eProtection & FlyProtectFlags::Content ) ||
+                         ( eProtection & FlyProtectFlags::Size ) )
                     {
                         rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, true ) );
                     }
@@ -1137,7 +1137,7 @@ static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
 void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
-    bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+    bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
     if (bParentCntProt)
     {

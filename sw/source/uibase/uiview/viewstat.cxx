@@ -80,7 +80,7 @@ void SwView::GetState(SfxItemSet &rSet)
             if( m_pWrtShell->GetLinkManager().GetLinks().empty() )
                 rSet.DisableItem(nWhich);
             else if( m_pWrtShell->IsSelFrmMode() &&
-                m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
+                m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE)
             {
                 rSet.DisableItem(nWhich);
             }
@@ -108,8 +108,8 @@ void SwView::GetState(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                     }
                     else if((m_pWrtShell->IsObjSelected() || m_pWrtShell->IsFrmSelected()) &&
-                        (m_pWrtShell->IsSelObjProtected( FLYPROTECT_PARENT)||
-                        m_pWrtShell->IsSelObjProtected( FLYPROTECT_CONTENT )))
+                        (m_pWrtShell->IsSelObjProtected( FlyProtectFlags::Parent) != FlyProtectFlags::NONE ||
+                        m_pWrtShell->IsSelObjProtected( FlyProtectFlags::Content ) != FlyProtectFlags::NONE))
                     {
                         rSet.DisableItem(nWhich);
                     }

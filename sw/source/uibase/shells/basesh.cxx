@@ -262,7 +262,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 SwTransferable* pTransfer = new SwTransferable( rSh );
 /*??*/          uno::Reference< datatransfer::XTransferable > xRef( pTransfer );
 
-                if ( nId == SID_CUT && !rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) )
+                if ( nId == SID_CUT && FlyProtectFlags::NONE == rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent) )
                     pTransfer->Cut();
                 else
                 {
@@ -417,7 +417,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
         switch(nWhich)
         {
         case SID_CUT:
-            if( 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) )
+            if( FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent ) )
             {
                 rSet.DisableItem( nWhich );
                 break;
@@ -1230,7 +1230,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
         GRAPHIC_NONE != ( nGrfType = rSh.GetGraphicType() ) &&
         !aGrfUpdateSlots.empty() )
     {
-        bool bProtect = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT);
+        bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
         SfxViewFrame* pVFrame = GetView().GetViewFrame();
         sal_uInt16 nSlot;
         std::set<sal_uInt16>::iterator it;
@@ -1404,7 +1404,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 // #i59688#
                 // Improve efficiency:
                 // If selected object is protected, item has to disabled.
-                const bool bProtect = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT);
+                const bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
                 if ( bProtect )
                 {
                     rSet.DisableItem( nWhich );
@@ -1476,7 +1476,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_BACKSPACE:
             case SID_DELETE:
                 if ( ( rSh.HasReadonlySel() && !rSh.CrsrInsideInputField() )
-                     || rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0 )
+                     || rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -1484,7 +1484,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
             case SID_CONTOUR_DLG:
             {
-                bool bParentCntProt = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+                bool bParentCntProt = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent );
 
                 if( bParentCntProt || 0 != (HTMLMODE_ON & ::GetHtmlMode(
                                             GetView().GetDocShell() )) )
@@ -1557,7 +1557,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_TOOL_ANCHOR_FRAME:
             {
                 bool bObj = 0 != rSh.IsObjSelected();
-                bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+                bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
                 if( !bParentCntProt && (bObj || rSh.IsFrmSelected()))
                 {
@@ -1627,7 +1627,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_FRAME_WRAP_RIGHT:
             {
                 bool bObj = 0 != rSh.IsObjSelected();
-                bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+                bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
                 if( !bParentCntProt && (bObj || rSh.IsFrmSelected()))
                 {
@@ -1779,7 +1779,7 @@ void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 
 void SwBaseShell::StateStyle( SfxItemSet &rSet )
 {
-    bool bParentCntProt = GetShell().IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+    bool bParentCntProt = GetShell().IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
     ShellModes eMode = GetView().GetShellMode();
 
     if ( bParentCntProt ||

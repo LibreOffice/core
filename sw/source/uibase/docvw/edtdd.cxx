@@ -404,7 +404,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             }
             // don't more position protected objects!
             else if( DND_ACTION_MOVE == rEvt.mnAction &&
-                     pSrcSh->IsSelObjProtected( FLYPROTECT_POS ) )
+                     pSrcSh->IsSelObjProtected( FlyProtectFlags::Pos ) != FlyProtectFlags::NONE )
             {
                 bCleanup = true;
             }

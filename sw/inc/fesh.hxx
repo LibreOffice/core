@@ -104,12 +104,20 @@ namespace o3tl
 }
 
 //! values can be combined via logical or
-#define FLYPROTECT_CONTENT      (sal_uInt16)  1
-#define FLYPROTECT_SIZE         (sal_uInt16)  2
-#define FLYPROTECT_POS          (sal_uInt16)  4
-#define FLYPROTECT_PARENT       (sal_uInt16)  8     ///< Check only parents.
-#define FLYPROTECT_FIXED        (sal_uInt16) 16     /**< Only protection that cannot be withdrawn
+enum class FlyProtectFlags
+{
+    NONE         = 0,
+    Content      = 1,
+    Size         = 2,
+    Pos          = 4,
+    Parent       = 8,      ///< Check only parents.
+    Fixed        = 16,    /**< Only protection that cannot be withdrawn
                                                     e.g. by OLE-server; also relevant for dialog. */
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FlyProtectFlags> : is_typed_flags<FlyProtectFlags, 31> {};
+}
 
 // For figuring out contents by position (D&D)
 enum ObjCntType
@@ -353,9 +361,8 @@ public:
     /// @return a format too, if the point is over the text of any fly.
     const SwFrameFormat* GetFormatFromAnyObj( const Point& rPt ) const;
 
-    /** Which Protection is set at selected object?
-     returns several flags in sal_uInt8 */
-    sal_uInt8 IsSelObjProtected( sal_uInt16 /*FLYPROTECT_...*/ eType ) const;
+    /** Which Protection is set at selected object? */
+    FlyProtectFlags IsSelObjProtected( FlyProtectFlags eType ) const;
 
     /** Deliver graphic in rName besides graphic name. If graphic is
      linked give name with path. rbLink is TRUE if graphic is linked. */

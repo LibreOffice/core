@@ -489,7 +489,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                             bool bMovable =
                                 (!bNotInSelObj) &&
                                 (rSh.IsObjSelected() || rSh.IsFrmSelected()) &&
-                                (!rSh.IsSelObjProtected(FLYPROTECT_POS));
+                                (rSh.IsSelObjProtected(FlyProtectFlags::Pos) == FlyProtectFlags::NONE);
 
                             SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
                             // Don't update pointer if this is a background image only.
@@ -511,7 +511,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                         // if( rSh.IsObjSelectable(rLPt) ) must always be true:
                         // rLPt is inside a selected object, then obviously
                         // rLPt is over a selectable object.
-                        if (rSh.IsSelObjProtected(FLYPROTECT_SIZE))
+                        if (rSh.IsSelObjProtected(FlyProtectFlags::Size) != FlyProtectFlags::NONE)
                             eStyle = PointerStyle::NotAllowed;
                         else
                             eStyle = PointerStyle::Move;
@@ -530,7 +530,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     }
     if ( bPrefSdrPointer )
     {
-        if (bIsDocReadOnly || (rSh.IsObjSelected() && rSh.IsSelObjProtected(FLYPROTECT_CONTENT)))
+        if (bIsDocReadOnly || (rSh.IsObjSelected() && rSh.IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE))
             SetPointer( PointerStyle::NotAllowed );
         else
         {
@@ -987,7 +987,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
     SwWrtShell &rSh = m_rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
     if( aTmp.HasArea() &&
-        !rSh.IsSelObjProtected( FLYPROTECT_POS ) )
+        rSh.IsSelObjProtected( FlyProtectFlags::Pos ) == FlyProtectFlags::NONE )
     {
         SfxItemSet aSet(rSh.GetAttrPool(),
                         RES_FRM_SIZE, RES_FRM_SIZE,
@@ -1217,7 +1217,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 
     if(0 != nX || 0 != nY)
     {
-        sal_uInt8 nProtect = rSh.IsSelObjProtected( FLYPROTECT_POS|FLYPROTECT_SIZE );
+        FlyProtectFlags nProtect = rSh.IsSelObjProtected( FlyProtectFlags::Pos|FlyProtectFlags::Size );
         Size aSnap( rSh.GetViewOptions()->GetSnapSize() );
         short nDiv = rSh.GetViewOptions()->GetDivisionX();
         if ( nDiv > 0 )
@@ -1247,7 +1247,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
         {
             // now move the selected draw objects
             // if the object's position is not protected
-            if(0 == (nProtect&FLYPROTECT_POS))
+            if(!(nProtect&FlyProtectFlags::Pos))
             {
                 // Check if object is anchored as character and move direction
                 bool bDummy1, bDummy2;
@@ -1271,11 +1271,11 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
                     HDL_ANCHOR_TR == pHdl->GetKind() )
                 {
                     // anchor move cannot be allowed when position is protected
-                    if(0 == (nProtect&FLYPROTECT_POS))
+                    if(!(nProtect&FlyProtectFlags::Pos))
                         rSh.MoveAnchor( nAnchorDir );
                 }
                 //now resize if size is protected
-                else if(0 == (nProtect&FLYPROTECT_SIZE))
+                else if(!(nProtect&FlyProtectFlags::Size))
                 {
                     // now move the Handle (nX, nY)
                     Point aStartPoint(pHdl->GetPos());
@@ -3235,7 +3235,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     {
                         g_bFrmDrag = false;
                         if ( !bHandledFlyClick && !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
-                             0 == rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) )
+                             FlyProtectFlags::NONE == rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) )
                         {
                         /* This is no good: on the one hand GetSelectionType is used as flag field
                          * (take a look into the GetSelectionType method) and on the other hand the
@@ -3255,7 +3255,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                             // double click on OLE object --> OLE-InPlace
                             case nsSelectionType::SEL_OLE:
-                                if (!rSh.IsSelObjProtected(FLYPROTECT_CONTENT))
+                                if (rSh.IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE)
                                 {
                                     RstMBDownFlags();
                                     rSh.LaunchOLEObj();

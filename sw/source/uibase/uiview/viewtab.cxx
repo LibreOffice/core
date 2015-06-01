@@ -2011,12 +2011,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             if(bFrmSelection)
             {
-                sal_uInt8 nProtect = m_pWrtShell->IsSelObjProtected( FLYPROTECT_SIZE|FLYPROTECT_POS|FLYPROTECT_CONTENT );
+                FlyProtectFlags nProtect = m_pWrtShell->IsSelObjProtected( FlyProtectFlags::Size|FlyProtectFlags::Pos|FlyProtectFlags::Content );
 
                 SvxProtectItem aProt(SID_RULER_PROTECT);
-                aProt.SetContentProtect((nProtect & FLYPROTECT_CONTENT)   != 0);
-                aProt.SetSizeProtect ((nProtect & FLYPROTECT_SIZE)      != 0);
-                aProt.SetPosProtect  ((nProtect & FLYPROTECT_POS)       != 0);
+                aProt.SetContentProtect(bool(nProtect & FlyProtectFlags::Content));
+                aProt.SetSizeProtect   (bool(nProtect & FlyProtectFlags::Size));
+                aProt.SetPosProtect    (bool(nProtect & FlyProtectFlags::Pos));
                 rSet.Put(aProt);
             }
             else
