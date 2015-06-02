@@ -284,7 +284,7 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
         pSysEntry->nRscTyp = nRscTyp;
         pSysEntry->nTyp = nConst;
         pSysEntry->nRefId = nId;
-        pSysEntry->aFileName = (const char*)pFileName;
+        pSysEntry->aFileName = pFileName;
         if( bFirst && !bId1 )
         {
             pSysEntry->nKey = 1;
