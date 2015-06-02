@@ -48,6 +48,7 @@
 #include <svx/xflclit.hxx>
 #include <svl/style.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <svl/itemiter.hxx>
 #include <sdr/properties/textproperties.hxx>
 #include <vcl/metaact.hxx>
@@ -1984,6 +1985,10 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
             if ( pEditStatus->IsPageOverflow() ) {
                 mpOverflowingText = pEdtOutl->GetOverflowingText();
                 SdrTextObj *pNextTextObj = GetNextLinkInChain();
+
+                impLeaveOnlyNonOverflowingText();
+
+                // Transfer overflowing text
                 impMoveChainedTextToNextLink(pNextTextObj);
             }
 

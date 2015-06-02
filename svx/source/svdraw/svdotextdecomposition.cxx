@@ -717,13 +717,37 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     rTarget = aConverter.getPrimitive2DSequence();
 }
 
-void SdrTextObj::embedText() const
+void SdrTextObj::impLeaveOnlyNonOverflowingText() const
 {
+    // Cut non overflowing text // FIXME: Move this in separate function
+    NonOverflowingText *pNonOverflowingTxt =
+        pEdtOutl->GetNonOverflowingText();
+    SdrOutliner &rOutliner = ImpGetDrawOutliner();
+    rOutliner.Clear();
 
+    if (pNonOverflowingTxt->mPreOverflowingTxt == "" &&
+        pNonOverflowingTxt->mpHeadParas != NULL) {
+        // Only (possibly empty) paragraphs before overflowing one
+        rOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);
+    } else { // We have to include the non-overflowing lines from the overfl. para
+
+        // first make a ParaObject for the strings
+        Paragraph *pTmpPara0 = rOutliner.GetParagraph(0);
+        rOutliner.SetText(pNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
+        OutlinerParaObject *pPObj = rOutliner.CreateParaObject();
+        rOutliner.Clear();
+
+        if (pNonOverflowingTxt->mpHeadParas != NULL)
+            rOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);
+
+        rOutliner.AddText(*pPObj);
+    }
+
+    OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
+    const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
 }
 
-// A new temporary implementation of impMoveChainedTextToNextLink
-// Should implement the whole logic
+
 void SdrTextObj::impMoveChainedTextToNextLink(SdrTextObj *pNextTextObj) const
 {
     // prevent copying text in same box

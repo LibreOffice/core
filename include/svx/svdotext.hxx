@@ -614,11 +614,10 @@ public:
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 
     void impMoveChainedTextToNextLink(SdrTextObj *pNextTextObj) const;
+    void impLeaveOnlyNonOverflowingText() const;
 
     // Handler for Chained Text
     DECL_LINK(ImpDecomposeChainedText,EditStatus*);
-
-    void embedText() const;
 
     // timing generators
     void impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;

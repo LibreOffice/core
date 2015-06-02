@@ -50,6 +50,7 @@ class EditUndo;
 class ParagraphList;
 class OutlinerParaObject;
 class OverflowingText;
+class NonOverflowingText;
 class SvStream;
 class SvxBulletItem;
 class SvxFont;
@@ -754,7 +755,7 @@ public:
     void            SetParaRemovingHdl(const Link<Outliner*,void>& rLink){aParaRemovingHdl=rLink;}
     Link<Outliner*,void> GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
-    OutlinerParaObject *GetNonOverflowingParaObject() const;
+    NonOverflowingText *GetNonOverflowingText() const;
     OverflowingText *GetOverflowingText() const;
     void ClearOverflowingParaNum();
     void            DepthChangedHdl();

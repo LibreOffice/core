@@ -34,12 +34,29 @@ class OverflowingText {
         // Constructor
         OverflowingText(
             const OUString &headTxt,
-            const OutlinerParaObject *pMidParas = NULL,
-            const OUString &tailTxt = "")
+            const OutlinerParaObject *pMidParas,
+            const OUString &tailTxt)
                 : mHeadTxt(headTxt),
                   mpMidParas(pMidParas),
                   mTailTxt(tailTxt)
                 { }
+};
+
+class NonOverflowingText {
+    public:
+        const OutlinerParaObject *mpHeadParas;
+        OUString mPreOverflowingTxt;
+        // NOTE: mPreOverflowingTxt might be empty
+
+        // Constructor
+        NonOverflowingText(
+            const OutlinerParaObject *pHeadParas,
+            const OUString &preOverflowingTxt)
+                : mpHeadParas(pHeadParas),
+                  mPreOverflowingTxt(preOverflowingTxt)
+                {
+                    DBG_ASSERT( pHeadParas != NULL, "pHeadParas is null?!" );
+                }
 };
 
 #endif

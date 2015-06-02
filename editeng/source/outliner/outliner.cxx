@@ -2066,7 +2066,7 @@ bool Outliner::HasParaFlag( const Paragraph* pPara, ParaFlag nFlag )
     return pPara && pPara->HasFlag( nFlag );
 }
 
-OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
+NonOverflowingText *Outliner::GetNonOverflowingText() const
 {
     /* XXX:
      * nCount should be the number of paragraphs of the non overflowing text
@@ -2078,7 +2078,8 @@ OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
 
     // last non-overflowing paragraph is before the first overflowing one
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
-    //sal_Int32 nCount = 1;
+    sal_Int32 nOverflowLine = pEditEngine->GetOverflowingLineNum();
+    OUString aPreOverflowingTxt("");
 
     // Defensive check: oveflowing para index beyond actual # of paragraphs?
     if ( nCount > GetParagraphCount()-1) {
@@ -2089,19 +2090,44 @@ OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
         return NULL;
     }
 
-    if ( nCount == 0 ) // Only overflowing text, i.e. 1st paragraph overflowing
+    // Only overflowing text, i.e. 1st line of 1st paragraph overflowing
+    if ( nCount == 0 && nOverflowLine == 0)
     {
         EditTextObject *pEmptyText = pEditEngine->GetEmptyTextObject();
         OutlinerParaObject* pPObj = new OutlinerParaObject( *pEmptyText );
         pPObj->SetOutlinerMode(GetMode());
 
         delete pEmptyText;
-        return pPObj;
+        return new NonOverflowingText(pPObj, "");
 
-    } else if (nCount < 0) // No overflowing Text
+    } else if (nCount < 0) { // No overflowing Text: all para-s included
         nCount = GetParagraphCount();
+        // aPreOverflowingText == ""
+    } else { // Get the lines that of the overflowing para fit in the box
 
-    return CreateParaObject(0, nCount);
+        // XXX: Is there a proper method to join lines in a single string?
+        sal_Int32 nOverflowingPara = nCount;
+        OUString aWholeTxtHeadPara = GetText(GetParagraph(nOverflowingPara));
+        sal_uInt32 nLen = 0;
+
+        for ( sal_Int32 nLine = 0;
+              nLine < pEditEngine->GetOverflowingLineNum();
+              nLine++)
+        {
+            nLen += GetLineLen(nOverflowingPara, nLine);
+        }
+
+        // XXX: Any separator to be included?
+        aPreOverflowingTxt = aWholeTxtHeadPara.copy(0, nLen);
+    }
+
+    OutlinerParaObject *pHeadParas;
+    if (nCount == 0) // No text to save expect for the one in the overflowing para (i.e. aPreOverflowingTxt)
+        pHeadParas = NULL;
+    else
+        pHeadParas = CreateParaObject(0, nCount);
+
+    return new NonOverflowingText(pHeadParas, aPreOverflowingTxt);
 }
 
 OverflowingText *Outliner::GetOverflowingText() const
