@@ -15,7 +15,7 @@
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <udunits2.h>
+#include <udunits2/udunits2.h>
 
 namespace sc {
 namespace units {

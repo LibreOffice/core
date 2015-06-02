@@ -9,7 +9,7 @@
  */
 #include "util.hxx"
 
-#include <udunits2.h>
+#include <udunits2/udunits2.h>
 
 namespace sc {
 namespace units {

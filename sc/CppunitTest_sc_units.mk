@@ -29,7 +29,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_units,\
     icu_headers \
     icui18n \
     icuuc \
-	libudunits2 \
+	udunits2 \
 	libxml2 \
 	mdds_headers \
 	orcus \

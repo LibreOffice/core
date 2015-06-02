@@ -35,7 +35,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
     icui18n \
     icuuc \
     $(if $(ENABLE_CALC_UNITVERIFICATION), \
-        libudunits2 \
+        udunits2 \
     ) \
 	libxml2 \
 	mdds_headers \
