@@ -1036,7 +1036,7 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     //get the function jfw_plugin_existJRE
     jfw::VendorSettings aVendorSettings;
     jfw::CJavaInfo aInfo;
-    aInfo = (const ::JavaInfo*) pInfo; //makes a copy of pInfo
+    aInfo = pInfo; //makes a copy of pInfo
     javaPluginError plerr = jfw_plugin_existJRE(pInfo, exist);
 
     javaFrameworkError ret = JFW_E_NONE;
