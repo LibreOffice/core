@@ -671,7 +671,7 @@ bool PrintFontManager::addFontconfigDir( const OString& rDirName )
     const int nVersion = FcGetVersion();
     if( nVersion <= 20400 )
         return false;
-    const char* pDirName = (const char*)rDirName.getStr();
+    const char* pDirName = rDirName.getStr();
     bool bDirOk = (FcConfigAppFontAddDir(FcConfigGetCurrent(), reinterpret_cast<FcChar8 const *>(pDirName) ) == FcTrue);
 
 #if OSL_DEBUG_LEVEL > 1

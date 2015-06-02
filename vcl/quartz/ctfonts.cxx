@@ -249,7 +249,7 @@ int CoreTextFontData::GetFontTable( const char pTagName[5], unsigned char* pResu
     if( pResultBuf && (nByteLength > 0))
     {
         const CFRange aFullRange = CFRangeMake( 0, nByteLength);
-        CFDataGetBytes( pDataRef, aFullRange, (UInt8*)pResultBuf);
+        CFDataGetBytes( pDataRef, aFullRange, reinterpret_cast<UInt8*>(pResultBuf));
     }
 
     CFRelease( pDataRef);

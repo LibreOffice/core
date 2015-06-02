@@ -350,7 +350,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
     {
         pPointAry       = aStackAry1;
         pPointAryAry    = aStackAry2;
-        pFlagAryAry     = (const sal_uInt8**)aStackAry3;
+        pFlagAryAry     = const_cast<const sal_uInt8**>(aStackAry3);
     }
 
     do
