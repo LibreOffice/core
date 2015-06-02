@@ -678,7 +678,7 @@ oslFileError FileHandle_Impl::writeSequence_Impl (
         /* resize sequence */
         rtl_byte_sequence_realloc(ppSequence, nElements);
     }
-    if (*ppSequence != 0)
+    if (*ppSequence != 0 && nBytes != 0)
     {
         /* fill sequence */
         memcpy(&((*ppSequence)->elements[*pnOffset]), pBuffer, nBytes), *pnOffset += nBytes;
