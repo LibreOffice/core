@@ -209,7 +209,7 @@ namespace dbaccess
                                                      )
                                                      throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+        sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     protected:
         OUString impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const;

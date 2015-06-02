@@ -82,9 +82,9 @@ public:
 
     virtual ~LwpParaStyle();
 
-    void Read() SAL_OVERRIDE;
+    void        Read() SAL_OVERRIDE;
 
-    virtual void    Apply(XFParaStyle *pStrm);
+    void        Apply(XFParaStyle *pStrm);
     // 01/26/2005
     static void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
     static void ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks);

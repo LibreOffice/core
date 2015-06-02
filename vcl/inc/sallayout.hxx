@@ -189,7 +189,7 @@ public:
                                    DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
                                    const PhysicalFontFace** pFallbackFonts = NULL ) const = 0;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
-    virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
+    bool            GetBoundRect( SalGraphics&, Rectangle& ) const;
 
     static bool     IsSpacingGlyph( sal_GlyphId );
 
@@ -345,7 +345,7 @@ public:
 
     // used by upper layers
     virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE;
-    virtual Rectangle GetTextRect() const;
+    Rectangle GetTextRect() const;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;

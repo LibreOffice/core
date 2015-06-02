@@ -92,9 +92,6 @@ namespace unotools
             return maPolyPoly;
         }
 
-        /// Called whenever internal polypolygon gets modified
-        virtual void modifying() const {}
-
     private:
         UnoPolyPolygon(const UnoPolyPolygon&) SAL_DELETED_FUNCTION;
         UnoPolyPolygon& operator=(const UnoPolyPolygon&) SAL_DELETED_FUNCTION;

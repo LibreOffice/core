@@ -837,7 +837,7 @@ protected:
         OutputDevice::DrawGradientWallpaper(nX, nY, nWidth, nHeight, rWallpaper);
     }
 
-    virtual void DrawGradientWallpaper(vcl::RenderContext& rRenderContext, long nX, long nY,
+    void DrawGradientWallpaper(vcl::RenderContext& rRenderContext, long nX, long nY,
                                        long nWidth, long nHeight, const Wallpaper& rWallpaper);
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
@@ -863,7 +863,7 @@ public:
     virtual void                        PrePaint(vcl::RenderContext& rRenderContext);
     virtual void                        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
-    virtual void                        Erase(vcl::RenderContext& rRenderContext);
+    void                                Erase(vcl::RenderContext& rRenderContext);
 
     virtual void Erase() SAL_OVERRIDE
     {

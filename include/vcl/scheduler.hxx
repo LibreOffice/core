@@ -73,7 +73,7 @@ public:
     virtual void    Invoke() = 0;
 
     virtual void    Start();
-    virtual void    Stop();
+    void            Stop();
 
     bool            IsActive() const { return mbActive; }
     void            SetInActive() { mbActive = false; }
