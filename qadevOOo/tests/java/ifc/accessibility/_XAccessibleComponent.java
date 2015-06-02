@@ -412,11 +412,13 @@ public class _XAccessibleComponent extends MultiMethodTest {
     public void _getLocation() {
         requiredMethod("getBounds()");
 
-        boolean result = true;
         Point loc = oObj.getLocation();
-
-        result &= ((loc.X == bounds.X) && (loc.Y == bounds.Y));
-
+        boolean result = loc.X == bounds.X && loc.Y == bounds.Y;
+        if (!result) {
+            log.println(
+                "loc.X=" + loc.X + " vs. bounds.X=" + bounds.X + ", loc.Y="
+                + loc.Y + " vs. bounds.Y=" + bounds.Y);
+        }
         tRes.tested("getLocation()", result);
     }
 
