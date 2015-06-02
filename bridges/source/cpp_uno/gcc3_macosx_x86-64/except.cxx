@@ -223,7 +223,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 {
                     // ensure availability of base
                     std::type_info * base_rtti = getRTTI(
-                        (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
+                        pTypeDescr->pBaseTypeDescription );
                     rtti = createFake_si_class_type_info(rttiName, base_rtti);
                 }
                 else

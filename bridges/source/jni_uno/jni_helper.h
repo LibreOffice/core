@@ -45,7 +45,7 @@ inline void jstring_to_ustring(
             rtl_mem::allocate(
                 sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
         rtl_uString * ustr = reinterpret_cast<rtl_uString *>(mem.get());
-        jni->GetStringRegion( jstr, 0, len, (jchar *) ustr->buffer );
+        jni->GetStringRegion( jstr, 0, len, reinterpret_cast<jchar *>(ustr->buffer) );
         jni.ensure_no_exception();
         ustr->refCount = 1;
         ustr->length = len;
@@ -68,7 +68,7 @@ inline OUString jstring_to_oustring(
 inline jstring ustring_to_jstring(
     JNI_context const & jni, rtl_uString const * ustr )
 {
-    jstring jstr = jni->NewString( (jchar const *) ustr->buffer, ustr->length );
+    jstring jstr = jni->NewString( reinterpret_cast<jchar const *>(ustr->buffer), ustr->length );
     jni.ensure_no_exception();
     return jstr;
 }
