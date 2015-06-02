@@ -46,10 +46,12 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(filter IOS,$(OS)),--with-darwinssl) \
 			$(if $(filter MACOSX,$(OS)),\
 				--with-darwinssl) \
-			--without-ssl \
+			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls \
 			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
-			--without-librtmp \
+			--without-librtmp --disable-ldaps --disable-tftp --disable-pop3 \
+			--disable-imap --disable-smtp --disable-manual --without-metalink \
+			--without-nghttp2 \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
