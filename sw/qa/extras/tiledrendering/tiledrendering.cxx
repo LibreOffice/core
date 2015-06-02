@@ -34,6 +34,7 @@ public:
     void testResetSelection();
     void testSearch();
     void testSearchViewArea();
+    void testSearchTextFrame();
     void testDocumentSizeChanged();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
@@ -45,6 +46,7 @@ public:
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchViewArea);
+    CPPUNIT_TEST(testSearchTextFrame);
     CPPUNIT_TEST(testDocumentSizeChanged);
     CPPUNIT_TEST_SUITE_END();
 
@@ -54,6 +56,7 @@ private:
     void callbackImpl(int nType, const char* pPayload);
     Rectangle m_aInvalidation;
     Size m_aDocumentSize;
+    OString m_aTextSelection;
 };
 
 SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
@@ -96,6 +99,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeq.getLength());
         m_aDocumentSize.setWidth(aSeq[0].toInt32());
         m_aDocumentSize.setHeight(aSeq[1].toInt32());
+    }
+    break;
+    case LOK_CALLBACK_TEXT_SELECTION:
+    {
+        m_aTextSelection = pPayload;
     }
     break;
     }
@@ -315,6 +323,22 @@ void SwTiledRenderingTest::testSearchViewArea()
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
     CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCrsr->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+#endif
+}
+
+void SwTiledRenderingTest::testSearchTextFrame()
+{
+#if !defined(WNT) && !defined(MACOSX)
+    SwXTextDocument* pXTextDocument = createDoc("search.odt");
+    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
+        {"SearchItem.Backward", uno::makeAny(false)},
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    // This was empty: nothing was highlighted after searching for 'TextFrame'.
+    CPPUNIT_ASSERT(!m_aTextSelection.isEmpty());
 #endif
 }
 
