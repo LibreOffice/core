@@ -99,7 +99,7 @@ void InitSvpForLibreOfficeKit()
 {
     ImplSVData* pSVData = ImplGetSVData();
     SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
-    pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
+    pSalInstance->setBitCountFormatMapping( 32, ::basebmp::Format::ThirtyTwoBitTcMaskRGBA );
 }
 
 #endif

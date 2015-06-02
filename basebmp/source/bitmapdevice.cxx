@@ -54,6 +54,7 @@
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/enumarray.hxx>
 
 #include <basegfx/tools/tools.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -92,7 +93,7 @@ operator^( RGBValue<Value, RedIndex, GreenIndex, BlueIndex> const& lhs,
 namespace basebmp
 {
 
-static const sal_uInt8 bitsPerPixel[] =
+static const o3tl::enumarray<Format,sal_uInt8> bitsPerPixel =
 {
     0,  // NONE
     1,  // ONE_BIT_MSB_GREY
@@ -1944,8 +1945,8 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 {
     OSL_ASSERT(rSize.getX() > 0 && rSize.getY() > 0);
 
-    if( nScanlineFormat <= FORMAT_NONE ||
-        nScanlineFormat >  FORMAT_MAX )
+    if( nScanlineFormat <= Format::NONE ||
+        nScanlineFormat >  Format::LAST )
         return BitmapDeviceSharedPtr();
 
     sal_uInt8 nBitsPerPixel = bitsPerPixel[nScanlineFormat];
@@ -1996,23 +1997,23 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 
         // one bit formats
 
-        case FORMAT_ONE_BIT_MSB_GREY:
+        case Format::OneBitMsbGrey:
             return createRenderer<PixelFormatTraits_GREY1_MSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_ONE_BIT_LSB_GREY:
+        case Format::OneBitLsbGrey:
             return createRenderer<PixelFormatTraits_GREY1_LSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_ONE_BIT_MSB_PAL:
+        case Format::OneBitMsbPal:
             return createRenderer<PixelFormatTraits_PAL1_MSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
                 bitsPerPixel[nScanlineFormat], rDamage );
 
-        case FORMAT_ONE_BIT_LSB_PAL:
+        case Format::OneBitLsbPal:
             return createRenderer<PixelFormatTraits_PAL1_LSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
@@ -2022,23 +2023,23 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 
         // four bit formats
 
-        case FORMAT_FOUR_BIT_MSB_GREY:
+        case Format::FourBitMsbGrey:
             return createRenderer<PixelFormatTraits_GREY4_MSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_FOUR_BIT_LSB_GREY:
+        case Format::FourBitLsbGrey:
             return createRenderer<PixelFormatTraits_GREY4_LSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_FOUR_BIT_MSB_PAL:
+        case Format::FourBitMsbPal:
             return createRenderer<PixelFormatTraits_PAL4_MSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
                 bitsPerPixel[nScanlineFormat], rDamage );
 
-        case FORMAT_FOUR_BIT_LSB_PAL:
+        case Format::FourBitLsbPal:
             return createRenderer<PixelFormatTraits_PAL4_LSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
@@ -2048,12 +2049,12 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 
         // eight bit formats
 
-        case FORMAT_EIGHT_BIT_GREY:
+        case Format::EightBitGrey:
             return createRenderer<PixelFormatTraits_GREY8,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_EIGHT_BIT_PAL:
+        case Format::EightBitPal:
             return createRenderer<PixelFormatTraits_PAL8,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
@@ -2063,18 +2064,18 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 
         // sixteen bit formats
 
-        case FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
+        case Format::SixteenBitLsbTcMask:
             return createRenderer<PixelFormatTraits_RGB16_565_LSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
+        case Format::SixteenBitMsbTcMask:
             return createRenderer<PixelFormatTraits_RGB16_565_MSB,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
         // twentyfour bit formats
-        case FORMAT_TWENTYFOUR_BIT_TC_MASK:
+        case Format::TwentyFourBitTcMask:
             return createRenderer<PixelFormatTraits_BGR24,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
@@ -2082,27 +2083,27 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
         // thirtytwo bit formats
 
         // 8 red bits, 8 green bits, 8 blue bits, and 8 ignored bits like CAIRO_FORMAT_RGB24
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX:
+        case Format::ThirtyTwoBitTcMaskBGRX:
             return createRenderer<PixelFormatTraits_BGRX32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
+        case Format::ThirtyTwoBitTcMaskBGRA:
             return createRenderer<PixelFormatTraits_BGRA32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
+        case Format::ThirtyTwoBitTcMaskARGB:
             return createRenderer<PixelFormatTraits_ARGB32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
+        case Format::ThirtyTwoBitTcMaskABGR:
             return createRenderer<PixelFormatTraits_ABGR32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
+        case Format::ThirtyTwoBitTcMaskRGBA:
             return createRenderer<PixelFormatTraits_RGBA32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
@@ -2213,8 +2214,8 @@ BitmapDeviceSharedPtr createClipDevice( const basegfx::B2IVector&        rSize )
     BitmapDeviceSharedPtr xClip(
              createBitmapDeviceImpl( rSize,
                                      false, /* bTopDown */
-                                     basebmp::FORMAT_ONE_BIT_MSB_GREY,
-                                     getBitmapDeviceStrideForWidth(basebmp::FORMAT_ONE_BIT_MSB_GREY, rSize.getX()),
+                                     basebmp::Format::OneBitMsbGrey,
+                                     getBitmapDeviceStrideForWidth(basebmp::Format::OneBitMsbGrey, rSize.getX()),
                                      boost::shared_array< sal_uInt8 >(),
                                      PaletteMemorySharedVector(),
                                      NULL,

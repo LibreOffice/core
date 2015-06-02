@@ -47,6 +47,7 @@ class RawBitmap;
 class ServerFont;
 class ServerFontLayout;
 class ServerFontLayoutEngine;
+class SvpGcpHelper;
 
 namespace basegfx { class B2DPolyPolygon; }
 namespace vcl { struct FontCapabilities; }
@@ -131,10 +132,10 @@ private:
 // basebmp::Format and mpData is SvpGcpHelper*
 struct ExtGlyphData
 {
-    int     meInfo;
-    void*   mpData;
+    basebmp::Format  meInfo;
+    SvpGcpHelper*    mpData;
 
-    ExtGlyphData() : meInfo(0), mpData(NULL) {}
+    ExtGlyphData() : meInfo(basebmp::Format::NONE), mpData(NULL) {}
 };
 
 class GlyphData
