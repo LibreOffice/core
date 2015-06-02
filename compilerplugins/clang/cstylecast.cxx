@@ -18,6 +18,63 @@
 
 namespace {
 
+bool areSimilar(QualType type1, QualType type2) {
+    auto t1 = type1.getCanonicalType().getTypePtr();
+    auto t2 = type2.getCanonicalType().getTypePtr();
+    for (;;) {
+        if (t1->isPointerType()) {
+            if (!t2->isPointerType()) {
+                return false;
+            }
+            auto t1a = t1->getAs<PointerType>();
+            auto t2a = t2->getAs<PointerType>();
+            t1 = t1a->getPointeeType().getTypePtr();
+            t2 = t2a->getPointeeType().getTypePtr();
+        } else if (t1->isMemberPointerType()) {
+            if (!t2->isMemberPointerType()) {
+                return false;
+            }
+            auto t1a = t1->getAs<MemberPointerType>();
+            auto t2a = t2->getAs<MemberPointerType>();
+            if (t1a->getClass()->getCanonicalTypeInternal()
+                != t2a->getClass()->getCanonicalTypeInternal())
+            {
+                return false;
+            }
+            t1 = t1a->getPointeeType().getTypePtr();
+            t2 = t2a->getPointeeType().getTypePtr();
+        } else if (t1->isConstantArrayType()) {
+            if (!t2->isConstantArrayType()) {
+                return false;
+            }
+            auto t1a = static_cast<ConstantArrayType const *>(
+                t1->getAsArrayTypeUnsafe());
+            auto t2a = static_cast<ConstantArrayType const *>(
+                t2->getAsArrayTypeUnsafe());
+            if (t1a->getSize() != t2a->getSize()) {
+                return false;
+            }
+            t1 = t1a->getElementType().getTypePtr();
+            t2 = t2a->getElementType().getTypePtr();
+        } else if (t1->isIncompleteArrayType()) {
+            if (!t2->isIncompleteArrayType()) {
+                return false;
+            }
+            auto t1a = static_cast<IncompleteArrayType const *>(
+                t1->getAsArrayTypeUnsafe());
+            auto t2a = static_cast<IncompleteArrayType const *>(
+                t2->getAsArrayTypeUnsafe());
+            t1 = t1a->getElementType().getTypePtr();
+            t2 = t2a->getElementType().getTypePtr();
+        } else {
+            return false;
+        }
+        if (t1 == t2) {
+            return true;
+        }
+    }
+}
+
 bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     return decl->isExternC() || compat::isInExternCContext(*decl);
 }
@@ -48,6 +105,8 @@ public:
     bool VisitCStyleCastExpr(const CStyleCastExpr * expr);
 
 private:
+    bool isConstCast(QualType from, QualType to);
+
     bool externCFunction;
 };
 
@@ -56,7 +115,7 @@ static const char * recommendedFix(clang::CastKind ck) {
         case CK_IntegralToPointer: return "reinterpret_cast";
         case CK_PointerToIntegral: return "reinterpret_cast";
         case CK_BaseToDerived: return "static_cast";
-        default: return "???";
+        default: return nullptr;
     }
 }
 
@@ -88,6 +147,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_IntegralCast ) {
         return true;
     }
+    char const * perf = nullptr;
     if( expr->getCastKind() == CK_NoOp ) {
         QualType t1 = expr->getSubExpr()->getType();
         QualType t2 = expr->getType();
@@ -100,11 +160,17 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         } else {
             return true;
         }
-        if (expr->getSubExprAsWritten()->getType() != expr->getType()
-            && (!t1.isMoreQualifiedThan(t2)
-                || (t1.getUnqualifiedType().getCanonicalType().getTypePtr()
-                    != (t2.getUnqualifiedType().getCanonicalType()
-                        .getTypePtr()))))
+        if (isConstCast(
+                expr->getSubExprAsWritten()->getType(),
+                expr->getTypeAsWritten()))
+        {
+            perf = "const_cast";
+        } else if (expr->getSubExprAsWritten()->getType() != expr->getType()
+                   && (!t1.isMoreQualifiedThan(t2)
+                       || ((t1.getUnqualifiedType().getCanonicalType()
+                            .getTypePtr())
+                           != (t2.getUnqualifiedType().getCanonicalType()
+                               .getTypePtr()))))
         {
             return true;
         }
@@ -130,16 +196,41 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
             return true;
         }
     }
+    if (perf == nullptr) {
+        perf = recommendedFix(expr->getCastKind());
+    }
+    std::string performs;
+    if (perf != nullptr) {
+        performs = std::string(" (performs: ") + perf + ")";
+    }
     report(
-        DiagnosticsEngine::Warning,
-        "c-style cast, type=%0, from=%1%2, to=%3%4, recommendedFix=%5",
+        DiagnosticsEngine::Warning, "%0 C-style cast from %1%2 to %3%4%5",
         expr->getSourceRange().getBegin())
-      << expr->getCastKind()
-      << incompFrom << expr->getSubExprAsWritten()->getType()
-      << incompTo << expr->getType()
-      << recommendedFix(expr->getCastKind())
-      << expr->getSourceRange();
+      << expr->getCastKindName() << incompFrom
+      << expr->getSubExprAsWritten()->getType() << incompTo << expr->getType()
+      << performs << expr->getSourceRange();
     return true;
+}
+
+bool CStyleCast::isConstCast(QualType from, QualType to) {
+    if (to->isReferenceType()
+        && to->getAs<ReferenceType>()->getPointeeType()->isObjectType())
+    {
+        if (!from->isObjectType()) {
+            return false;
+        }
+        from = compiler.getASTContext().getPointerType(from);
+        to = compiler.getASTContext().getPointerType(
+            to->getAs<ReferenceType>()->getPointeeType());
+    } else {
+        if (from->isArrayType()) {
+            from = compiler.getASTContext().getPointerType(
+                from->getAsArrayTypeUnsafe()->getElementType());
+        } else if (from->isFunctionType()) {
+            compiler.getASTContext().getPointerType(from);
+        }
+    }
+    return areSimilar(from, to);
 }
 
 loplugin::Plugin::Registration< CStyleCast > X("cstylecast");
