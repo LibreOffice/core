@@ -1070,7 +1070,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                 // without any length information! without end-identifier!
                 // What does that mean for Unicode?! Choosing conversion to ByteString...
                 OString aByteStr(OUStringToOString(rStr, osl_getThreadTextEncoding()));
-                pStrm->WriteCharPtr( (const char*)aByteStr.getStr() );
+                pStrm->WriteCharPtr( aByteStr.getStr() );
             }
         }
         break;
@@ -1214,7 +1214,7 @@ static bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
             lcl_WriteReadSbxArray(rArr, pStrm, bBinary, nCurDim-1, pOtherDims, bWrite);
         else
         {
-            SbxVariable* pVar = rArr.Get( (const short*)pOtherDims );
+            SbxVariable* pVar = rArr.Get( const_cast<const short*>(pOtherDims) );
             bool bRet;
             if( bWrite )
                 bRet = lcl_WriteSbxVariable(*pVar, pStrm, bBinary, 0, true );
