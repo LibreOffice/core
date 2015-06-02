@@ -127,7 +127,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
 
     for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
     {
-        pFormat = (SwFrameFormat*)rFormats[n];
+        pFormat = rFormats[n];
         pAnchor = &pFormat->GetAnchor();
         const SwPosition* pAPos = pAnchor->GetContentAnchor();
         if (pAPos &&

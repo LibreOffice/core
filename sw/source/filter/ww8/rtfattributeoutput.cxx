@@ -3171,7 +3171,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             eShadowLocation = static_cast<const SvxShadowItem*>(pItem)->GetLocation();
 
         const SvxBoxItemLine* pBrd = aBorders;
-        const sal_Char** pBrdNms = (const sal_Char**)aBorderNames;
+        const sal_Char** pBrdNms = aBorderNames;
         for (int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
         {
             if (const editeng::SvxBorderLine* pLn = rBox.GetLine(*pBrd))

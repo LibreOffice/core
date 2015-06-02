@@ -1867,7 +1867,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
             {
                 SwNodeIndex aEnd( aPos.nNode, 1 );
                 while( aEnd.GetNode().IsEndNode() &&
-                        (const SwNode*)&aEnd.GetNode() !=
+                        &aEnd.GetNode() !=
                         pSectNd->EndOfSectionNode() )
                     ++aEnd;
 

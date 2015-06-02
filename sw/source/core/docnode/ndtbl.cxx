@@ -1671,7 +1671,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     const SwFrameFormats& rFlyArr = *GetDoc()->GetSpzFrameFormats();
     for( auto pFly : rFlyArr )
     {
-        SwFrameFormat *const pFormat = (SwFrameFormat*)pFly;
+        SwFrameFormat *const pFormat = pFly;
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
         SwPosition const*const pAPos = rAnchor.GetContentAnchor();
         if (pAPos &&

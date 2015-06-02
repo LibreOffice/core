@@ -815,7 +815,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
 
     SwTableNumFormatMerge aTNFM( *pCpyDoc, *pDoc );
 
-    SwTableBox *pSttBox = (SwTableBox*)rSelBoxes[0];
+    SwTableBox *pSttBox = rSelBoxes[0];
 
     _FndLine *pFLine, *pInsFLine = 0;
     _FndBox aFndBox( 0, 0 );
@@ -998,7 +998,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
         for (size_t n = 0; n < rSelBoxes.size(); ++n)
         {
             lcl_CpyBox( rCpyTable, pTmpBx, *this,
-                        (SwTableBox*)rSelBoxes[n], true, pUndo );
+                        rSelBoxes[n], true, pUndo );
         }
     }
     else

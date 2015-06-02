@@ -2099,7 +2099,7 @@ void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
         while ( pLine->GetUpper() )
             pLine = pLine->GetUpper()->GetUpper();
         const sal_uInt16 nPos = rTable.GetTabLines().GetPos(
-                    (const SwTableLine*&)pLine ) + 1;
+                    const_cast<const SwTableLine*&>(pLine) ) + 1;
 
         OSL_ENSURE( nPos != USHRT_MAX, "TableLine not found." );
 
@@ -2161,7 +2161,7 @@ void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
     if ( pLineBefore )
     {
         nStPos = rTable.GetTabLines().GetPos(
-                        (const SwTableLine*&)pLineBefore );
+                        const_cast<const SwTableLine*&>(pLineBefore) );
         OSL_ENSURE( nStPos != USHRT_MAX, "The fox stole the line!" );
         ++nStPos;
     }
@@ -2170,7 +2170,7 @@ void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
     if ( pLineBehind )
     {
         nEndPos = rTable.GetTabLines().GetPos(
-                        (const SwTableLine*&)pLineBehind );
+                        const_cast<const SwTableLine*&>(pLineBehind) );
         OSL_ENSURE( nEndPos != USHRT_MAX, "The fox stole the line!" );
         if (nEndPos != 0)
             --nEndPos;
@@ -2320,7 +2320,7 @@ void _FndBox::MakeFrms( SwTable &rTable )
     if ( pLineBefore )
     {
         nStPos = rTable.GetTabLines().GetPos(
-                        (const SwTableLine*&)pLineBefore );
+                        const_cast<const SwTableLine*&>(pLineBefore) );
         OSL_ENSURE( nStPos != USHRT_MAX, "Fox stole the line!" );
         ++nStPos;
 
@@ -2328,7 +2328,7 @@ void _FndBox::MakeFrms( SwTable &rTable )
     if ( pLineBehind )
     {
         nEndPos = rTable.GetTabLines().GetPos(
-                        (const SwTableLine*&)pLineBehind );
+                        const_cast<const SwTableLine*&>(pLineBehind) );
         OSL_ENSURE( nEndPos != USHRT_MAX, "Fox stole the line!" );
         --nEndPos;
     }
@@ -2391,10 +2391,10 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
     // bBehind == true:  before  pLineBehind
     //         == false: after   pLineBefore
     const sal_uInt16 nBfPos = pLineBefore ?
-        rTable.GetTabLines().GetPos( (const SwTableLine*&)pLineBefore ) :
+        rTable.GetTabLines().GetPos( const_cast<const SwTableLine*&>(pLineBefore) ) :
         USHRT_MAX;
     const sal_uInt16 nBhPos = pLineBehind ?
-        rTable.GetTabLines().GetPos( (const SwTableLine*&)pLineBehind ) :
+        rTable.GetTabLines().GetPos( const_cast<const SwTableLine*&>(pLineBehind) ) :
         USHRT_MAX;
 
     //nNumber: how often did we insert
@@ -2534,7 +2534,7 @@ bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
     sal_uInt16 nBfPos;
     if(pLineBefore)
     {
-        const SwTableLine* rLBefore = (const SwTableLine*)pLineBefore;
+        const SwTableLine* rLBefore = const_cast<const SwTableLine*>(pLineBefore);
         nBfPos = rTable.GetTabLines().GetPos( rLBefore );
     }
     else
@@ -2543,7 +2543,7 @@ bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
     sal_uInt16 nBhPos;
     if(pLineBehind)
     {
-        const SwTableLine* rLBehind = (const SwTableLine*)pLineBehind;
+        const SwTableLine* rLBehind = const_cast<const SwTableLine*>(pLineBehind);
         nBhPos = rTable.GetTabLines().GetPos( rLBehind );
     }
     else

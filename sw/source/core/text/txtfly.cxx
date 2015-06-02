@@ -124,7 +124,7 @@ namespace
 SwContourCache::SwContourCache() :
     nPntCnt( 0 ), nObjCnt( 0 )
 {
-    memset( (SdrObject**)pSdrObj, 0, sizeof(pSdrObj) );
+    memset( pSdrObj, 0, sizeof(pSdrObj) );
     memset( pTextRanger, 0, sizeof(pTextRanger) );
 }
 
@@ -140,7 +140,7 @@ void SwContourCache::ClrObject( sal_uInt16 nPos )
     nPntCnt -= pTextRanger[ nPos ]->GetPointCount();
     delete pTextRanger[ nPos ];
     --nObjCnt;
-    memmove( (SdrObject**)pSdrObj + nPos, pSdrObj + nPos + 1,
+    memmove( const_cast<SdrObject**>(pSdrObj) + nPos, pSdrObj + nPos + 1,
              ( nObjCnt - nPos ) * sizeof( SdrObject* ) );
     memmove( pTextRanger + nPos, pTextRanger + nPos + 1,
              ( nObjCnt - nPos ) * sizeof( TextRanger* ) );
@@ -245,7 +245,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         const SvxLRSpaceItem &rLRSpace = pFormat->GetLRSpace();
         const SvxULSpaceItem &rULSpace = pFormat->GetULSpace();
         memmove( pTextRanger + 1, pTextRanger, nObjCnt * sizeof( TextRanger* ) );
-        memmove( (SdrObject**)pSdrObj + 1, pSdrObj, nObjCnt++ * sizeof( SdrObject* ) );
+        memmove( const_cast<SdrObject**>(pSdrObj) + 1, pSdrObj, nObjCnt++ * sizeof( SdrObject* ) );
         pSdrObj[ 0 ] = pObj; // due to #37347 the Object must be entered only
                              // after GetContour()
         pTextRanger[ 0 ] = new TextRanger( aPolyPolygon, pPolyPolygon, 20,
@@ -267,7 +267,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
     {
         const SdrObject* pTmpObj = pSdrObj[ nPos ];
         TextRanger* pTmpRanger = pTextRanger[ nPos ];
-        memmove( (SdrObject**)pSdrObj + 1, pSdrObj, nPos * sizeof( SdrObject* ) );
+        memmove( const_cast<SdrObject**>(pSdrObj) + 1, pSdrObj, nPos * sizeof( SdrObject* ) );
         memmove( pTextRanger + 1, pTextRanger, nPos * sizeof( TextRanger* ) );
         pSdrObj[ 0 ] = pTmpObj;
         pTextRanger[ 0 ] = pTmpRanger;

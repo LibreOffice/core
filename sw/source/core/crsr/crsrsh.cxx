@@ -193,7 +193,7 @@ SwPaM* SwCrsrShell::GetCrsr( bool bMakeTableCrsr ) const
                 0 != ( pCNd = m_pTableCrsr->GetContentNode() ) && pCNd->getLayoutFrm( GetLayout() ) &&
                 0 != ( pCNd = m_pTableCrsr->GetContentNode(false) ) && pCNd->getLayoutFrm( GetLayout() ) )
             {
-                SwShellTableCrsr* pTC = (SwShellTableCrsr*)m_pTableCrsr;
+                SwShellTableCrsr* pTC = m_pTableCrsr;
                 GetLayout()->MakeTableCrsrs( *pTC );
             }
         }

@@ -176,7 +176,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     aCrop.SetBottom( convertMm100ToTwip( aScaledCropedRectangle.Bottom() ));
 
                     Graphic aCompressedGraphic( aDialog->GetCompressedGraphic() );
-                    rSh.ReRead(OUString(), OUString(), (const Graphic*) &aCompressedGraphic);
+                    rSh.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aCompressedGraphic));
 
                     rSh.SetAttrItem(aCrop);
 
@@ -856,7 +856,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     Graphic aGraphic = *rShell.GetGraphic();
     GraphicNativeTransform aTransform(aGraphic);
     aTransform.rotate(aRotation);
-    rShell.ReRead(OUString(), OUString(), (const Graphic*) &aGraphic);
+    rShell.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aGraphic));
 
     SwFlyFrmAttrMgr aManager(false, &rShell, rShell.IsFrmSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
     const long nRotatedWidth = aManager.GetSize().Height();

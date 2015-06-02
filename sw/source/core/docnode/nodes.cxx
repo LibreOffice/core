@@ -156,7 +156,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
                 if (pTextNode->IsOutline())
                 {
-                    const SwNodePtr pSrch = (SwNodePtr)&rNd;
+                    const SwNodePtr pSrch = &rNd;
                     pOutlineNds->erase( pSrch );
                 }
             }
@@ -171,7 +171,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
                 if (bInsOutlineIdx && rTextNd.IsOutline())
                 {
-                    const SwNodePtr pSrch = (SwNodePtr)&rNd;
+                    const SwNodePtr pSrch = &rNd;
                     pOutlineNds->insert( pSrch );
                 }
                 rTextNd.InvalidateNumRule();
@@ -349,7 +349,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
         rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 
     if( bNewFrms )
-        bNewFrms = &GetDoc()->GetNodes() == (const SwNodes*)&rNds &&
+        bNewFrms = &GetDoc()->GetNodes() == &rNds &&
                     GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
 
     if( bNewFrms )

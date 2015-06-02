@@ -95,7 +95,7 @@ void EndProgress( SwDocShell *pDocShell )
         sal_uInt16 i;
         for ( i = 0; i < pProgressContainer->size(); ++i )
         {
-            SwProgress *pTmp = (SwProgress*)(*pProgressContainer)[i];
+            SwProgress *pTmp = (*pProgressContainer)[i];
             if ( pTmp->pDocShell == pDocShell )
             {
                 pProgress = pTmp;

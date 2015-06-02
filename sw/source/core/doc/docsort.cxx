@@ -758,7 +758,7 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
         // Create linear array
         size_t nCount = static_cast<size_t>(nRows) * nCols;
         pArr = new const _FndBox*[nCount];
-        _FndBox** ppTmp = (_FndBox**)pArr;
+        _FndBox** ppTmp = const_cast<_FndBox**>(pArr);
         memset(ppTmp, 0, sizeof(const _FndBox*) * nCount);
 
         FillFlat( rBoxRef );
@@ -767,7 +767,7 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
 
 FlatFndBox::~FlatFndBox()
 {
-    _FndBox** ppTmp = (_FndBox**)pArr;
+    _FndBox** ppTmp = const_cast<_FndBox**>(pArr);
     delete [] ppTmp;
 
     if( ppItemSets )

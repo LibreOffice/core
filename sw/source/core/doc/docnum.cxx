@@ -182,8 +182,8 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
     // calculate the range
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
-    const SwNodePtr pSttNd = (SwNodePtr)&rPam.Start()->nNode.GetNode();
-    const SwNodePtr pEndNd = (SwNodePtr)&rPam.End()->nNode.GetNode();
+    const SwNodePtr pSttNd = &rPam.Start()->nNode.GetNode();
+    const SwNodePtr pEndNd = &rPam.End()->nNode.GetNode();
     sal_uInt16 nSttPos, nEndPos;
 
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&

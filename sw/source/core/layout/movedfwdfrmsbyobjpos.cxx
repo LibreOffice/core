@@ -75,7 +75,7 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
         if ( rEntry.second >= nPageNumOfRow )
         {
             SwIterator<SwTextFrm,SwTextNode> aFrmIter( *rEntry.first );
-            for( SwTextFrm* pTextFrm = aFrmIter.First(); pTextFrm; pTextFrm = (SwTextFrm*)aFrmIter.Next() )
+            for( SwTextFrm* pTextFrm = aFrmIter.First(); pTextFrm; pTextFrm = aFrmIter.Next() )
             {
                 // #115759# - assure that found text frame
                 // is the first one.

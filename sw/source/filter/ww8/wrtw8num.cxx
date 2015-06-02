@@ -860,7 +860,7 @@ void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFormat& rForm
     memcpy( aSprmAnld, aSprmAnldDefault, sizeof( aSprmAnld ) );
     WW8_ANLD* pA = reinterpret_cast<WW8_ANLD*>(aSprmAnld + 2);  // handy pointer
 
-    sal_uInt8* pChars = (sal_uInt8*)(pA->rgchAnld);
+    sal_uInt8* pChars = pA->rgchAnld;
     sal_uInt16 nCharLen = 31;
 
     if( nSwLevel == 11 )
