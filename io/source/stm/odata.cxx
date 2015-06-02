@@ -646,7 +646,7 @@ void ODataOutputStream::writeChar(sal_Unicode Value)
             RuntimeException, std::exception)
 {
     Sequence<sal_Int8> aTmp( 2 );
-    sal_Int8 * pBytes = ( sal_Int8 * ) aTmp.getArray();
+    sal_Int8 * pBytes = aTmp.getArray();
     pBytes[0] = sal_Int8(Value >> 8);
     pBytes[1] = sal_Int8(Value);
     writeBytes( aTmp );
