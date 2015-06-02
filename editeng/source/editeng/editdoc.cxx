@@ -211,7 +211,7 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_OVERLINE, SfxItemPoolFlags::POOLABLE },
         { SID_ATTR_CHAR_CASEMAP, SfxItemPoolFlags::POOLABLE },       // EE_CHAR_CASEMAP
         { SID_ATTR_CHAR_GRABBAG, SfxItemPoolFlags::POOLABLE },       // EE_CHAR_GRABBAG
-        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_CHAR_BKGCOLOR
+        { SID_ATTR_CHAR_BACK_COLOR, SfxItemPoolFlags::POOLABLE },    // EE_CHAR_BKGCOLOR
         { 0, SfxItemPoolFlags::POOLABLE },                           // EE_FEATURE_TAB
         { 0, SfxItemPoolFlags::POOLABLE },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, SfxItemPoolFlags::POOLABLE },  // EE_FEATURE_NOTCONV

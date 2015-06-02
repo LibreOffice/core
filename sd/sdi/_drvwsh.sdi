@@ -2722,6 +2722,11 @@ interface DrawView
         ExecMethod = ExecChar ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_CHAR_BACK_COLOR
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_CHAR_KERNING
     [
         ExecMethod = ExecChar ;
