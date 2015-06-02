@@ -99,7 +99,7 @@ const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
 //    TextCacheItem *pItem = new TextCacheItem(OpenGLHelper::ConvertBitmapExToRGBABuffer(aText), aText.GetSizePixel());
     Bitmap aBitmap (aText.GetBitmap());
     BitmapReadAccess *pAcc = aBitmap.AcquireReadAccess();
-    sal_uInt8 *buf = (sal_uInt8 *)pAcc->GetBuffer();
+    sal_uInt8 *buf = reinterpret_cast<sal_uInt8 *>(pAcc->GetBuffer());
     long nBmpWidth = aText.GetSizePixel().Width();
     long nBmpHeight = aText.GetSizePixel().Height();
     sal_uInt8* pBitmapBuf(new sal_uInt8[3* nBmpWidth * nBmpHeight]);
