@@ -16,7 +16,10 @@
    sodipodi:version="0.32"
    inkscape:version="0.91 r13725"
    sodipodi:docname="lc_bold.svg"
-   version="1.1">
+   version="1.1"
+   inkscape:export-filename="/home/ochosi/Nerdstuff/shimmer/libreoffice-style-elementary/src/cmd/lc_bold.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs1308">
     <linearGradient
@@ -136,19 +139,19 @@
        ry="2.1098666" />
     <path
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient3688);fill-opacity:1;stroke:#000000;stroke-width:0.90304172;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 15.76687,14.960169 -7.2926168,0 -1.1736656,3.58831 -4.8490884,0 6.8828468,-17.0969585 5.560318,0 6.653836,17.0528755 -4.642916,0 -1.138714,-3.544227 m -6.1619714,-2.737959 4.9546184,0 L 12.120562,5.6430437 9.6048986,12.22221"
+       d="m 15.76687,15.5 -7.2926168,0 -1.1736656,3.048479 -4.8490884,0 6.8828468,-17.0969585 5.560318,0 6.653836,17.0528755 -4.642916,0 L 15.76687,15.5 m -6.1619714,-3 4.9546184,0 L 12.120562,5.6430437 9.6048986,12.5"
        id="text1314"
        sodipodi:nodetypes="ccccccccccccc"
        inkscape:connector-curvature="0" />
     <path
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:0.37912089;fill:none;fill-opacity:1;stroke:url(#linearGradient2840);stroke-width:0.88974947;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 16.163911,14.586632 -8.0586807,0 -1.1215253,2.981965 -3.0515835,0 6.0215034,-15.1102506 4.2683121,0 5.820476,15.0067926 -2.792061,0 -1.086441,-2.878507 z"
+       d="m 16.163911,14.5 -8.0586807,0 -1.1215253,3.068597 -3.0515835,0 6.0215034,-15.1102506 4.2683121,0 5.820476,15.0067926 -2.792061,0 z"
        id="path2047"
        sodipodi:nodetypes="ccccccccc"
        inkscape:connector-curvature="0" />
     <path
        style="opacity:0.51098902;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#999999;stroke-width:0.84555662;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 10.00784,13.063345 4.274852,0"
+       d="m 10.00784,13.5 4.274852,0"
        id="path5142"
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0" />
