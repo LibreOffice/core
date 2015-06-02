@@ -1058,6 +1058,9 @@ void DocxAttributeOutput::EndRun()
         {
             StartField_Impl( *pIt );
 
+            if (m_startedHyperlink)
+                ++m_nFieldsInHyperlink;
+
             // Remove the field from the stack if only the start has to be written
             // Unknown fields should be removed too
             if ( !pIt->bClose || ( pIt->eType == ww::eUNKNOWN ) )
@@ -1122,6 +1125,9 @@ void DocxAttributeOutput::EndRun()
         if ( pIt->bOpen && !pIt->pField )
         {
             StartField_Impl( *pIt, true );
+
+            if (m_startedHyperlink)
+                ++m_nFieldsInHyperlink;
 
             // Remove the field if no end needs to be written
             if ( !pIt->bClose ) {
@@ -1412,8 +1418,6 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
 
 void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
 {
-    if ( m_startedHyperlink )
-        ++m_nFieldsInHyperlink;
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
     {
         // Expand unsupported fields
