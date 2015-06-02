@@ -150,7 +150,7 @@ void PngHelper::endChunk( size_t nStart, OutputBuffer& o_rOutputBuf )
     set( nDataLen, o_rOutputBuf, nStart );
 
     // append chunk crc
-    sal_uInt32 nChunkCRC = getCRC( (sal_uInt8*)&o_rOutputBuf[nStart+4], nLen-4 );
+    sal_uInt32 nChunkCRC = getCRC( reinterpret_cast<sal_uInt8*>(&o_rOutputBuf[nStart+4]), nLen-4 );
     append( nChunkCRC, o_rOutputBuf );
 }
 
