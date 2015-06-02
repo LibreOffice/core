@@ -379,7 +379,7 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
         // set lights
         for( size_t a = 0; a < maList.size(); a++)
         {
-            SdXML3DLightContext* pCtx = (SdXML3DLightContext*)maList[ a ];
+            SdXML3DLightContext* pCtx = maList[ a ];
 
             // set anys
             aAny <<= pCtx->GetDiffuseColor();
