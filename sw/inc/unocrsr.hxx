@@ -115,6 +115,13 @@ namespace sw
             {
                 m_pCursor->Add(this);
             }
+            UnoCursorPointer(const UnoCursorPointer& pOther)
+                : SwClient(nullptr)
+                , m_pCursor(pOther.m_pCursor)
+            {
+                if(m_pCursor)
+                    m_pCursor->Add(this);
+            }
             virtual ~UnoCursorPointer() SAL_OVERRIDE
             {
                 if(m_pCursor)
@@ -132,6 +139,13 @@ namespace sw
                 { return *m_pCursor.get(); }
             SwUnoCrsr* operator->() const
                 { return m_pCursor.get(); }
+            UnoCursorPointer& operator=(UnoCursorPointer aOther)
+            {
+                if(aOther.m_pCursor)
+                    aOther.m_pCursor->Add(this);
+                m_pCursor = aOther.m_pCursor;
+                return *this;
+            }
             explicit operator bool() const
                 { return static_cast<bool>(m_pCursor); }
             void reset(std::shared_ptr<SwUnoCrsr> pNew)

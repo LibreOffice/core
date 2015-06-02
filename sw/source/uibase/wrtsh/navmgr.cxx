@@ -162,17 +162,15 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
 
         if (*m_entries.back()->GetPoint() != rPos)
         {
-            std::shared_ptr<SwUnoCrsr> pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr(rPos));
+            sw::UnoCursorPointer pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr(rPos));
             m_entries.push_back(pCursor);
-            pCursor->Add(this);
         }
         bRet = true;
     }
     else {
         if ( (!m_entries.empty() && *m_entries.back()->GetPoint() != rPos) || m_entries.empty() ) {
-            auto pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr(rPos));
+            sw::UnoCursorPointer pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr(rPos));
             m_entries.push_back(pCursor);
-            pCursor->Add(this);
             bRet = true;
         }
         if (m_entries.size() > 1 && *m_entries.back()->GetPoint() == rPos)
@@ -214,16 +212,6 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
     }
 
     return bRet;
-}
-
-void SwNavigationMgr::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    if(typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        m_entries.clear();
-    }
-    else
-        SwClient::SwClientNotify(rModify, rHint);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
