@@ -305,7 +305,11 @@ void RscWriteRc :: PutUTF8( char * pStr )
         n++;
 
     sal_uInt32  nOldLen = IncSize( n );
-    memcpy( GetPointer( nOldLen ), pStr, nStrLen );
+    char * p = GetPointer( nOldLen );
+    if (nStrLen != 0)
+    {
+        memcpy( p, pStr, nStrLen );
+    }
     // 0 terminated
     pMem[ nOldLen + nStrLen ] = '\0';
 }
