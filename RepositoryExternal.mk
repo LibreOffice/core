@@ -151,18 +151,21 @@ ifeq ($(ENABLE_CALC_UNITVERIFICATION),TRUE)
 
 ifneq ($(SYSTEM_UDUNITS2),)
 
-define gb_LinkTarget__use_libudunits2
+define gb_LinkTarget__use_udunits2
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_UDUNITS2 \
+)
 $(call gb_LinkTarget_set_include,$(1),\
 	$(UDUNITS2_CFLAGS) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(UDUNIT2_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(UDUNITS2_LIBS))
 
 endef
 
 else # !SYSTEM_UDUNITS2
 
-define gb_LinkTarget__use_libudunits2
+define gb_LinkTarget__use_udunits2
 $(call gb_LinkTarget_use_package,$(1),udunits2)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -184,7 +187,7 @@ endif # !SYSTEM_UDUNITS2
 
 else # !ENABLE_CALC_UNITVERIFICATION
 
-gb_LinkTarget__use_libudunits2 :=
+gb_LinkTarget__use_udunits2 :=
 
 endif # ENABLE_CALC_UNITVERIFICATION
 

@@ -1744,7 +1744,7 @@ AC_ARG_WITH(system-firebird,
 
 AC_ARG_WITH(system-udunits2,
     AS_HELP_STRING([--with-system-udunits2],
-        [Use udunits libraries already on system, for building calc unit-verification it.]),,
+        [Use udunits libraries already on system, for building calc unit-verification with it.]),,
     [with_system_udunits2="$with_system_libs"])
 
 AC_ARG_WITH(system-hsqldb,
@@ -8692,48 +8692,26 @@ if test "x$enable_calc_unitverification" = "xyes"; then
     if test "$with_system_udunits2" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_UDUNITS2=TRUE
-        AC_PATH_PROG(FIREBIRDCONFIG, [fb_config])
-        if test -z "$FIREBIRDCONFIG"; then
-            AC_MSG_NOTICE([No fb_config -- using pkg-config])
-            PKG_CHECK_MODULES(FIREBIRD, fbembed)
-            FIREBIRD_VERSION=`pkg-config --modversion fbembed`
-        else
-            AC_MSG_NOTICE([fb_config found])
-            FIREBIRD_VERSION=`$FIREBIRDCONFIG --version`
-            AC_MSG_CHECKING([for Firebird Client library])
-            FIREBIRD_CFLAGS=`$FIREBIRDCONFIG --cflags`
-            FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
+
+        PKG_CHECK_MODULES(UDUNITS2, udunits >= 2.2.1, UDUNITS2_PKGCONFIG=yes, UDUNITS2_PKGCONFIG=no)
+
+        if test "x$UDUNITS2_PKGCONFIG" = "xno"; then
+            AC_CHECK_HEADER(udunits2/udunits2.h, [],
+                [AC_MSG_ERROR(udunits2/ududunits2.h not found. install udunits2)], [])
+            AC_CHECK_LIB([udunits2], [ut_read_xml], [:], [AC_MSG_ERROR(udunits2 lib not found or functional)], [])
         fi
-        AC_MSG_RESULT([includes `$FIREBIRD_CFLAGS', libraries `$FIREBIRD_LIBS'])
-        AC_MSG_CHECKING([Firebird version])
-        if test -n "${FIREBIRD_VERSION}"; then
-            FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
-            FIREBIRD_MINOR=`echo $FIREBIRD_VERSION | cut -d"." -f2`
-            if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5"; then
-                AC_MSG_RESULT([OK])
-            else
-                AC_MSG_ERROR([Ensure firebird 2.5.x is installed])
-            fi
-        else
-            __save_CFLAGS="${CFLAGS}"
-            CFLAGS="${CFLAGS} ${FIREBIRD_CFLAGS}"
-            AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <ibase.h>
-#if defined(FB_API_VER) && FB_API_VER == 25
-#else
-#error "Wrong Firebird API version"
-#endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 2.5.x is installed]))
-            CFLAGS="${__save_CFLAGS}"
-        fi
-        ENABLE_FIREBIRD_SDBC="TRUE"
+
+        ENABLE_CALC_UNITVERIFICATION="TRUE"
     else
         AC_MSG_RESULT([internal])
         SYSTEM_UDUNITS2=
         UDUNITS2_CFLAGS="-I${WORKDIR}/UnpackedTarball/udunits2/lib"
-        UDUNITS2_LIBS="-ludunits2"
 
         BUILD_TYPE="$BUILD_TYPE UDUNITS2"
         ENABLE_CALC_UNITVERIFICATION="TRUE"
     fi
+
+    UDUNITS2_LIBS="-ludunits2"
 fi
 AC_SUBST(ENABLE_CALC_UNITVERIFICATION)
 AC_SUBST(SYSTEM_UDUNITS2)
