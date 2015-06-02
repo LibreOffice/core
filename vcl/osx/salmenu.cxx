@@ -439,7 +439,7 @@ void AquaSalMenu::setMainMenu()
         {
             unsetMainMenu();
             // insert our items
-            for( unsigned int i = 0; i < maItems.size(); i++ )
+            for( std::vector<AquaSalMenuItem *>::size_type i = 0; i < maItems.size(); i++ )
             {
                 NSMenuItem* pItem = maItems[i]->mpMenuItem;
                 [mpMenu insertItem: pItem atIndex: i+1];
