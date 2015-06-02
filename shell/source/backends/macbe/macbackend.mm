@@ -184,7 +184,7 @@ rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
 
     CFRelease(sOrig);
 
-    return rtl::OUString::createFromAscii((sal_Char*)sBuffer);
+    return rtl::OUString::createFromAscii(sBuffer);
 }
 
 rtl::OUString GetOUString( NSString* pStr )

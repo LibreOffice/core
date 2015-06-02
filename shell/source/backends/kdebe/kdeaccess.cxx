@@ -53,7 +53,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
             aClientProgram = "kmail";
         else
             aClientProgram = aClientProgram.section(SPACE, 0, 0);
-        sClientProgram = (const sal_Unicode *) aClientProgram.ucs2();
+        sClientProgram = reinterpret_cast<const sal_Unicode *>(aClientProgram.ucs2());
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( sClientProgram ) );
     } else if (id == "SourceViewFontHeight")
@@ -73,7 +73,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
 
         aFixedFont = KGlobalSettings::fixedFont();
         aFontName = aFixedFont.family();
-        sFontName = (const sal_Unicode *) aFontName.ucs2();
+        sFontName = reinterpret_cast<const sal_Unicode *>(aFontName.ucs2());
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( sFontName ) );
     } else if (id == "EnableATToolSupport")
@@ -89,7 +89,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         OUString sDocumentsURL;
         if ( aDocumentsDir.endsWith(QChar('/')) )
             aDocumentsDir.truncate ( aDocumentsDir.length() - 1 );
-        sDocumentsDir = (const sal_Unicode *) aDocumentsDir.ucs2();
+        sDocumentsDir = reinterpret_cast<const sal_Unicode *>(aDocumentsDir.ucs2());
         osl_getFileURLFromSystemPath( sDocumentsDir.pData, &sDocumentsURL.pData );
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( sDocumentsURL ) );
@@ -115,7 +115,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         if ( !aFTPProxy.isEmpty() )
         {
             KURL aProxy(aFTPProxy);
-            OUString sProxy = (const sal_Unicode *) aProxy.host().ucs2();
+            OUString sProxy = reinterpret_cast<const sal_Unicode *>(aProxy.host().ucs2());
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( sProxy ) );
         }
@@ -167,7 +167,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         if ( !aHTTPProxy.isEmpty() )
         {
             KURL aProxy(aHTTPProxy);
-            OUString sProxy = (const sal_Unicode *) aProxy.host().ucs2();
+            OUString sProxy = reinterpret_cast<const sal_Unicode *>(aProxy.host().ucs2());
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( sProxy ) );
         }
@@ -219,7 +219,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         if ( !aHTTPSProxy.isEmpty() )
         {
             KURL aProxy(aHTTPSProxy);
-            OUString sProxy = (const sal_Unicode *) aProxy.host().ucs2();
+            OUString sProxy = reinterpret_cast<const sal_Unicode *>(aProxy.host().ucs2());
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( sProxy ) );
         }
@@ -267,7 +267,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
             OUString sNoProxyFor;
 
             aNoProxyFor = aNoProxyFor.replace( COMMA, SEMI_COLON );
-            sNoProxyFor = (const sal_Unicode *) aNoProxyFor.ucs2();
+            sNoProxyFor = reinterpret_cast<const sal_Unicode *>(aNoProxyFor.ucs2());
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( sNoProxyFor ) );
         }
