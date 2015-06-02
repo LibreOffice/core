@@ -67,11 +67,6 @@ class OOXMLFactory_ns {
 public:
     typedef std::shared_ptr<OOXMLFactory_ns> Pointer_t;
 
-    virtual void startAction(OOXMLFastContextHandler * pHandler);
-    virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);
-    virtual void endAction(OOXMLFastContextHandler * pHandler);
-    virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
-
 protected:
     virtual ~OOXMLFactory_ns();
 
@@ -91,11 +86,6 @@ public:
     static css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromStart(OOXMLFastContextHandler * pHandler, Token_t Element);
 
     static void attributes(OOXMLFastContextHandler * pHandler, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
-
-    static void characters(OOXMLFastContextHandler * pHandler, const OUString & rString);
-
-    static void startAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
-    static void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
 
 private:
     OOXMLFactory() {}
