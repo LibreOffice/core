@@ -619,7 +619,8 @@ namespace connectivity
             try
             {
                 Reference<XFlushable> xCon(i->second.second.first.get(),UNO_QUERY);
-                xCon->flush();
+                if (xCon.is())
+                    xCon->flush();
             }
             catch(Exception&)
             {
