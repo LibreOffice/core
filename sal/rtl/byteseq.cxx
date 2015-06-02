@@ -192,7 +192,7 @@ void SAL_CALL rtl_byte_sequence_constructFromArray(
     SAL_THROW_EXTERN_C()
 {
     rtl_byte_sequence_constructNoDefault( ppSequence , nLength );
-    if ( *ppSequence != 0 )
+    if ( *ppSequence != 0 && nLength != 0 )
         memcpy( (*ppSequence)->elements, pData, nLength );
 }
 
