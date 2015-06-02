@@ -103,16 +103,16 @@ bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
     if (qt1BitWidth < qt2BitWidth) {
         report(
             DiagnosticsEngine::Warning,
-            "loop index type is narrower than length type. " + qt.getAsString() + " < " + qt2.getAsString(),
+            "loop index type %0 is narrower than length type %1",
             stmt->getInit()->getLocStart())
-          << stmt->getInit()->getSourceRange();
+            << qt << qt2 << stmt->getInit()->getSourceRange();
         //stmt->getCond()->dump();
     }
     return true;
 }
 
 
-loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall", false);
+loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall");
 
 }
 
