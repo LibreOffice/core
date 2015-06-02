@@ -163,7 +163,7 @@ inline const char* MzString::c_str() const
     if (Data)
     {
         Data[Length] = '\0';                      // We always leave room for this.
-        return (const char *)Data;
+        return Data;
     } else
     return "";
 }
