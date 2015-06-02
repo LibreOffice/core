@@ -1423,7 +1423,7 @@ extern "C" void SAL_CALL typelib_typedescription_release(
             if( rInit.pWeakMap )
             {
                 MutexGuard aGuard( rInit.getMutex() );
-                WeakMap_Impl::iterator aIt = rInit.pWeakMap->find( (sal_Unicode*)pTD->pTypeName->buffer );
+                WeakMap_Impl::iterator aIt = rInit.pWeakMap->find( pTD->pTypeName->buffer );
                 if( aIt != rInit.pWeakMap->end() && (void *)(*aIt).second == (void *)pTD )
                 {
                     // remove only if it contains the same object
@@ -2183,7 +2183,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_release(
             if( rInit.pWeakMap )
             {
                 MutexGuard aGuard( rInit.getMutex() );
-                WeakMap_Impl::iterator aIt = rInit.pWeakMap->find( (sal_Unicode*)pRef->pTypeName->buffer );
+                WeakMap_Impl::iterator aIt = rInit.pWeakMap->find( pRef->pTypeName->buffer );
                 if( !(aIt == rInit.pWeakMap->end()) && (*aIt).second == pRef )
                 {
                     // remove only if it contains the same object
@@ -2268,7 +2268,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
     if( rInit.pWeakMap )
     {
         MutexGuard aGuard( rInit.getMutex() );
-        WeakMap_Impl::const_iterator aIt = rInit.pWeakMap->find( (sal_Unicode*)pName->buffer );
+        WeakMap_Impl::const_iterator aIt = rInit.pWeakMap->find( pName->buffer );
         if( !(aIt == rInit.pWeakMap->end()) ) // != failed on msc4.2
         {
             sal_Int32 n = osl_atomic_increment( &(*aIt).second->nRefCount );
