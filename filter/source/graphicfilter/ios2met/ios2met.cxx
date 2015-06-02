@@ -1007,7 +1007,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     for (i=0; i<nLen; i++)
         pOS2MET->ReadChar( pChr[i] );
     pChr[nLen] = 0;
-    OUString aStr( (const sal_Char*)pChr.get(), strlen(pChr.get()), osl_getThreadTextEncoding() );
+    OUString aStr( pChr.get(), strlen(pChr.get()), osl_getThreadTextEncoding() );
     SetRasterOp(aAttr.eChrMix);
     if (pVirDev->GetFont()!=aFont)
         pVirDev->SetFont(aFont);
@@ -2264,7 +2264,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                         pOS2MET->SeekRel(1);
                         pOS2MET->Read( &str, 32 );
                         str[ 32 ] = 0;
-                        OUString aStr( (const sal_Char*)str, strlen(str), osl_getThreadTextEncoding() );
+                        OUString aStr( str, strlen(str), osl_getThreadTextEncoding() );
                         if ( aStr.compareToIgnoreAsciiCase( "Helv" ) == 0 )
                             aStr = "Helvetica";
                         pF->aFont.SetName( aStr );

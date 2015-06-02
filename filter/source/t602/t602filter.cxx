@@ -122,7 +122,7 @@ namespace T602ImportFilter {
     mxHandler->endElement(_nam);
 
 #define _Chars(_ch) \
-    mxHandler->characters(OUString::createFromAscii((sal_Char *) _ch) );
+    mxHandler->characters(OUString::createFromAscii(_ch) );
 
 inistruct ini;
 

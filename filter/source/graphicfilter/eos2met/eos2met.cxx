@@ -321,7 +321,7 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
                 size_t nCount = aGDIMetaFile.GetActionSize();
                 size_t i;
                 for ( i = 0; i < nCount; i++ )
-                    if ( ((const MetaAction*)aGDIMetaFile.GetAction( i ))->GetType() == MetaActionType::BMPSCALE )
+                    if ( const_cast<const MetaAction*>(aGDIMetaFile.GetAction( i ))->GetType() == MetaActionType::BMPSCALE )
                         break;
                 if ( i == nCount)
                     break;
