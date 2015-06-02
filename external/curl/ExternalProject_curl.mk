@@ -42,10 +42,9 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 		CPPFLAGS="$(curl_CPPFLAGS)" \
 		LDFLAGS=$(curl_LDFLAGS) \
 		./configure \
-			$(if $(filter IOS MACOSX,$(OS)),,--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
-			$(if $(filter IOS,$(OS)),--with-darwinssl) \
-			$(if $(filter MACOSX,$(OS)),\
-				--with-darwinssl) \
+			$(if $(filter IOS MACOSX,$(OS)),\
+				--with-darwinssl,\
+				--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
 			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls \
 			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
