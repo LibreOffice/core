@@ -48,7 +48,7 @@ $(eval $(call gb_Library_use_externals,sc,\
     icuuc \
     libxml2 \
     $(if $(ENABLE_CALC_UNITVERIFICATION), \
-        libudunits2 \
+        udunits2 \
     ) \
     mdds_headers \
 ))

@@ -55,7 +55,7 @@ UnitsImpl::UnitsImpl() {
     // System udunits will (/should) be able to find it's unit database
     // itself -- however for bundled udunits we always need to find the
     // correct relative path within our LO installation.
-#ifdef USING_SYSTEM_UDUNITS
+#ifdef SYSTEM_UDUNITS2
     const sal_Char* pPath = 0;
 #else
     OUString sDBURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/udunits2/udunits2.xml");

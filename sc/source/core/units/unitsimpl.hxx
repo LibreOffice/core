@@ -19,7 +19,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
-#include <udunits2.h>
+#include <udunits2/udunits2.h>
 
 #include "rangelst.hxx"
 #include "units.hxx"
