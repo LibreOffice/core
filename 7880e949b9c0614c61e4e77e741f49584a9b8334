@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_01d51d42",
+        "filename": "scp2/source/ooo/common_brand.scp",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-02T13:15:30Z",
+      "side": 1,
+      "message": "i think you need to add ENABLE_EXTENSION_UPDATE to SCPDEFS in configure.ac for this to actually work; currently it\u0027s never defined.\n\nor perhaps don\u0027t change scp2 at all - with the code change in the extension manager it won\u0027t matter what the url is?",
+      "revId": "7880e949b9c0614c61e4e77e741f49584a9b8334",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
