@@ -38,7 +38,7 @@ namespace drawinglayer
             // all-text attributes. The SdrText itself and a copy
             // of the OPO
             const SdrText*                      mpSdrText;
-            const OutlinerParaObject*           mpOutlinerParaObject;
+            std::shared_ptr<OutlinerParaObject> mxOutlinerParaObject;
 
             // Set when it's a FormText; contains all FormText attributes
             SdrFormTextAttribute                maSdrFormTextAttribute;
@@ -88,7 +88,7 @@ namespace drawinglayer
                 bool bFixedCellHeight,
                 bool bWrongSpell)
             :   mpSdrText(pSdrText),
-                mpOutlinerParaObject(new OutlinerParaObject(rOutlinerParaObject)),
+                mxOutlinerParaObject(new OutlinerParaObject(rOutlinerParaObject)),
                 maSdrFormTextAttribute(),
                 maTextLeftDistance(aTextLeftDistance),
                 maTextUpperDistance(aTextUpperDistance),
@@ -125,7 +125,6 @@ namespace drawinglayer
 
             ImpSdrTextAttribute()
             :   mpSdrText(0),
-                mpOutlinerParaObject(0),
                 maSdrFormTextAttribute(),
                 maTextLeftDistance(0),
                 maTextUpperDistance(0),
@@ -155,8 +154,8 @@ namespace drawinglayer
 
             const OutlinerParaObject& getOutlinerParaObject() const
             {
-                assert(mpOutlinerParaObject && "Access to OutlinerParaObject of default version of ImpSdrTextAttribute (!)");
-                return *mpOutlinerParaObject;
+                assert(mxOutlinerParaObject && "Access to OutlinerParaObject of default version of ImpSdrTextAttribute (!)");
+                return *mxOutlinerParaObject;
             }
 
             bool isContour() const { return mbContour; }
@@ -180,9 +179,9 @@ namespace drawinglayer
             // compare operator
             bool operator==(const ImpSdrTextAttribute& rCandidate) const
             {
-                if(mpOutlinerParaObject != rCandidate.mpOutlinerParaObject)
+                if (mxOutlinerParaObject.get() != rCandidate.mxOutlinerParaObject.get())
                 {
-                    if(mpOutlinerParaObject && rCandidate.mpOutlinerParaObject)
+                    if (mxOutlinerParaObject && rCandidate.mxOutlinerParaObject)
                     {
                         // compares OPO and it's contents, but traditionally not the RedLining
                         // which is not seen as model, but as temporary information
