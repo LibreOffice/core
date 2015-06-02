@@ -148,23 +148,23 @@ public:
     void setUp() SAL_OVERRIDE
     {
         const basegfx::B2ISize aSize(10,10);
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX());
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX());
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           FORMAT_ONE_BIT_MSB_PAL, nStride );
-        nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX());
+                                           Format::OneBitMsbPal, nStride );
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX());
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
-                                            FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, nStride );
+                                            Format::ThirtyTwoBitTcMaskBGRA, nStride );
 
-        nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX());
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX());
         mpBmp1bpp = createBitmapDevice( aSize,
                                         true,
-                                        FORMAT_ONE_BIT_MSB_PAL, nStride );
-        nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX());
+                                        Format::OneBitMsbPal, nStride );
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX());
         mpBmp32bpp = createBitmapDevice( aSize,
                                          true,
-                                         FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, nStride );
+                                         Format::ThirtyTwoBitTcMaskBGRA, nStride );
 
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 

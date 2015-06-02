@@ -154,10 +154,10 @@ private:
 
     void implTestMaskColorClip(const BitmapDeviceSharedPtr& rDevice)
     {
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_EIGHT_BIT_GREY, rDevice->getSize().getX());
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::EightBitGrey, rDevice->getSize().getX());
         BitmapDeviceSharedPtr pBmp( createBitmapDevice( rDevice->getSize(),
                                                         true,
-                                                        FORMAT_EIGHT_BIT_GREY, nStride ));
+                                                        Format::EightBitGrey, nStride ));
 
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
@@ -189,18 +189,18 @@ public:
     void setUp() SAL_OVERRIDE
     {
         const basegfx::B2ISize aSize(11,11);
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_GREY, aSize.getX());
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbGrey, aSize.getX());
         mpClipMask = createBitmapDevice( aSize,
                                          true,
-                                         FORMAT_ONE_BIT_MSB_GREY, nStride );
-        nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX());
+                                         Format::OneBitMsbGrey, nStride );
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX());
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           FORMAT_ONE_BIT_MSB_PAL, nStride );
-        nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX());
+                                           Format::OneBitMsbPal, nStride );
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX());
         mpDevice32bpp = createBitmapDevice( aSize,
                                            true,
-                                           FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, nStride );
+                                           Format::ThirtyTwoBitTcMaskBGRA, nStride );
 
         OUString aSvg( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;

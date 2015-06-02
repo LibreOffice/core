@@ -93,26 +93,26 @@ public:
         const basegfx::B2ISize aSize(10,10);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           FORMAT_ONE_BIT_MSB_PAL,
-                                           basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX()));
+                                           Format::OneBitMsbPal,
+                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()));
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
-                                            FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
-                                            basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX()));
+                                            Format::ThirtyTwoBitTcMaskBGRA,
+                                            basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX()));
 
         mpMaskBmp1bpp = createBitmapDevice( aSize,
                                             true,
-                                            FORMAT_ONE_BIT_MSB_GREY,
-                                            basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_GREY, aSize.getX()));
+                                            Format::OneBitMsbGrey,
+                                            basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbGrey, aSize.getX()));
 
         mpBmp1bpp = createBitmapDevice( aSize,
                                         true,
-                                        FORMAT_ONE_BIT_MSB_PAL,
-                                        basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX()));
+                                        Format::OneBitMsbPal,
+                                        basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()));
         mpBmp32bpp = createBitmapDevice( aSize,
                                          true,
-                                         FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
-                                         basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX()));
+                                         Format::ThirtyTwoBitTcMaskBGRA,
+                                         basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX()));
 
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 

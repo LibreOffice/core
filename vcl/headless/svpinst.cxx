@@ -427,26 +427,26 @@ Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
     switch( nBitCount )
     {
         case 1:
-            return FORMAT_ONE_BIT_MSB_PAL;
+            return Format::OneBitMsbPal;
         case 4:
-            return FORMAT_FOUR_BIT_MSB_PAL;
+            return Format::FourBitMsbPal;
         case 8:
-            return FORMAT_EIGHT_BIT_PAL;
+            return Format::EightBitPal;
         case 16:
 #ifdef OSL_BIGENDIAN
-            return FORMAT_SIXTEEN_BIT_MSB_TC_MASK;
+            return Format::SixteenBitMsbTcMask;
 #else
-            return FORMAT_SIXTEEN_BIT_LSB_TC_MASK;
+            return Format::SixteenBitLsbTcMask;
 #endif
         case 24:
-            return FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX;
+            return Format::ThirtyTwoBitTcMaskBGRX;
         case 32:
-            return FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA;
+            return Format::ThirtyTwoBitTcMaskBGRA;
         case 0:
 #ifdef ANDROID
-            return FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA;
+            return Format::ThirtyTwoBitTcMaskRGBA;
 #else
-            return FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX;
+            return Format::ThirtyTwoBitTcMaskBGRX;
 #endif
         default:
             return SVP_DEFAULT_BITMAP_FORMAT;

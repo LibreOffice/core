@@ -35,43 +35,43 @@ namespace basebmp
     {
         switch( nScanlineFormat )
         {
-        case FORMAT_NONE:
+        case Format::NONE:
             return "NONE";
-        case FORMAT_ONE_BIT_MSB_GREY:
+        case Format::OneBitMsbGrey:
             return "ONE_BIT_MSB_GREY";
-        case FORMAT_ONE_BIT_LSB_GREY:
+        case Format::OneBitLsbGrey:
             return "ONE_BIT_LSB_GREY";
-        case FORMAT_ONE_BIT_MSB_PAL:
+        case Format::OneBitMsbPal:
             return "ONE_BIT_MSB_PAL";
-        case FORMAT_ONE_BIT_LSB_PAL:
+        case Format::OneBitLsbPal:
             return "ONE_BIT_LSB_PAL";
-        case FORMAT_FOUR_BIT_MSB_GREY:
+        case Format::FourBitMsbGrey:
             return "FOUR_BIT_MSB_GREY";
-        case FORMAT_FOUR_BIT_LSB_GREY:
+        case Format::FourBitLsbGrey:
             return "FOUR_BIT_LSB_GREY";
-        case FORMAT_FOUR_BIT_MSB_PAL:
+        case Format::FourBitMsbPal:
             return "FOUR_BIT_MSB_PAL";
-        case FORMAT_FOUR_BIT_LSB_PAL:
+        case Format::FourBitLsbPal:
             return "FOUR_BIT_LSB_PAL";
-        case FORMAT_EIGHT_BIT_PAL:
+        case Format::EightBitPal:
             return "EIGHT_BIT_PAL";
-        case FORMAT_EIGHT_BIT_GREY:
+        case Format::EightBitGrey:
             return "EIGHT_BIT_GREY";
-        case FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
+        case Format::SixteenBitLsbTcMask:
             return "SIXTEEN_BIT_LSB_TC_MASK";
-        case FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
+        case Format::SixteenBitMsbTcMask:
             return "SIXTEEN_BIT_MSB_TC_MASK";
-        case FORMAT_TWENTYFOUR_BIT_TC_MASK:
+        case Format::TwentyFourBitTcMask:
             return "TWENTYFOUR_BIT_TC_MASK";
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX:
+        case Format::ThirtyTwoBitTcMaskBGRX:
             return "THIRTYTWO_BIT_TC_MASK_BGRX";
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
+        case Format::ThirtyTwoBitTcMaskBGRA:
             return "THIRTYTWO_BIT_TC_MASK_BGRA";
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
+        case Format::ThirtyTwoBitTcMaskARGB:
             return "THIRTYTWO_BIT_TC_MASK_ARGB";
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
+        case Format::ThirtyTwoBitTcMaskABGR:
             return "THIRTYTWO_BIT_TC_MASK_ABGR";
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
+        case Format::ThirtyTwoBitTcMaskRGBA:
             return "THIRTYTWO_BIT_TC_MASK_RGBA";
         default:
             return "<unknown>";

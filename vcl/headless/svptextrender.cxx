@@ -56,12 +56,13 @@ protected:
     virtual void    RemovingFont( ServerFont& ) SAL_OVERRIDE;
     virtual void    RemovingGlyph( GlyphData& ) SAL_OVERRIDE;
 
-    class SvpGcpHelper
-    {
-    public:
-        RawBitmap               maRawBitmap;
-        BitmapDeviceSharedPtr   maBitmapDev;
-    };
+};
+
+class SvpGcpHelper
+{
+public:
+    RawBitmap               maRawBitmap;
+    BitmapDeviceSharedPtr   maBitmapDev;
 };
 
 class SvpGlyphCache : public GlyphCache
@@ -113,8 +114,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
 
     if( rGlyphData.ExtDataRef().meInfo != nBmpFormat )
     {
-        SvpGcpHelper* pGcpHelper = static_cast<SvpGcpHelper*>(
-            rGlyphData.ExtDataRef().mpData);
+        SvpGcpHelper* pGcpHelper = rGlyphData.ExtDataRef().mpData;
         bool bNew = pGcpHelper == 0;
         if( bNew )
             pGcpHelper = new SvpGcpHelper;
@@ -123,16 +123,16 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
         bool bFound = false;
         switch( nBmpFormat )
         {
-            case FORMAT_ONE_BIT_LSB_GREY:
+            case Format::OneBitLsbGrey:
                 bFound = rServerFont.GetGlyphBitmap1( aGlyphId, pGcpHelper->maRawBitmap );
                 break;
-            case FORMAT_EIGHT_BIT_GREY:
+            case Format::EightBitGrey:
                 bFound = rServerFont.GetGlyphBitmap8( aGlyphId, pGcpHelper->maRawBitmap );
                 break;
             default:
                 OSL_FAIL( "SVP GCP::GetGlyphBmp(): illegal scanline format");
                 // fall back to black&white mask
-                nBmpFormat = FORMAT_ONE_BIT_LSB_GREY;
+                nBmpFormat = Format::OneBitLsbGrey;
                 bFound = false;
                 break;
         }
@@ -173,9 +173,8 @@ void SvpGlyphPeer::RemovingFont( ServerFont& )
 
 void SvpGlyphPeer::RemovingGlyph( GlyphData& rGlyphData )
 {
-    SvpGcpHelper* pGcpHelper = static_cast<SvpGcpHelper*>(
-        rGlyphData.ExtDataRef().mpData);
-    rGlyphData.ExtDataRef().meInfo = basebmp::FORMAT_NONE;
+    SvpGcpHelper* pGcpHelper = rGlyphData.ExtDataRef().mpData;
+    rGlyphData.ExtDataRef().meInfo = basebmp::Format::NONE;
     rGlyphData.ExtDataRef().mpData = 0;
     delete pGcpHelper;
 }
@@ -183,7 +182,7 @@ void SvpGlyphPeer::RemovingGlyph( GlyphData& rGlyphData )
 SvpTextRender::SvpTextRender(SvpSalGraphics& rParent)
     : m_rParent(rParent)
     , m_aTextColor(COL_BLACK)
-    , m_eTextFmt(basebmp::FORMAT_EIGHT_BIT_GREY)
+    , m_eTextFmt(basebmp::Format::EightBitGrey)
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
         m_pServerFont[i] = NULL;
@@ -472,22 +471,22 @@ SystemFontData SvpTextRender::GetSysFontData( int nFallbackLevel ) const
 void SvpTextRender::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 {
     // determine matching bitmap format for masks
-    basebmp::Format nDeviceFmt = rDevice ? rDevice->getScanlineFormat() : basebmp::FORMAT_EIGHT_BIT_GREY;
+    basebmp::Format nDeviceFmt = rDevice ? rDevice->getScanlineFormat() : basebmp::Format::EightBitGrey;
     switch( nDeviceFmt )
     {
-        case basebmp::FORMAT_EIGHT_BIT_GREY:
-        case basebmp::FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
-        case basebmp::FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
-        case basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
-            m_eTextFmt = basebmp::FORMAT_EIGHT_BIT_GREY;
+        case basebmp::Format::EightBitGrey:
+        case basebmp::Format::SixteenBitLsbTcMask:
+        case basebmp::Format::SixteenBitMsbTcMask:
+        case basebmp::Format::TwentyFourBitTcMask:
+        case basebmp::Format::ThirtyTwoBitTcMaskBGRX:
+        case basebmp::Format::ThirtyTwoBitTcMaskBGRA:
+        case basebmp::Format::ThirtyTwoBitTcMaskARGB:
+        case basebmp::Format::ThirtyTwoBitTcMaskABGR:
+        case basebmp::Format::ThirtyTwoBitTcMaskRGBA:
+            m_eTextFmt = basebmp::Format::EightBitGrey;
             break;
         default:
-            m_eTextFmt = basebmp::FORMAT_ONE_BIT_LSB_GREY;
+            m_eTextFmt = basebmp::Format::OneBitLsbGrey;
             break;
     }
 }
