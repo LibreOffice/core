@@ -91,7 +91,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName
 
     aEntries[1] = NULL;
 
-    _setPropertyValues( (const PropertyMapEntry**)aEntries, &aValue );
+    _setPropertyValues( aEntries, &aValue );
 }
 
 Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -105,7 +105,7 @@ Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName )
     aEntries[1] = NULL;
 
     Any aAny;
-    _getPropertyValues( (const PropertyMapEntry**)aEntries, &aAny );
+    _getPropertyValues( aEntries, &aAny );
 
     return aAny;
 }
@@ -154,7 +154,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
         }
 
         if( !bUnknown )
-            _setPropertyValues( (const PropertyMapEntry**)pEntries.get(), rValues.getConstArray() );
+            _setPropertyValues( pEntries.get(), rValues.getConstArray() );
 
         if( bUnknown )
             throw RuntimeException( *pNames, static_cast< XPropertySet* >( this ) );
@@ -184,7 +184,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OU
         if( !bUnknown )
         {
             aValues.realloc(nCount);
-            _getPropertyValues( (const PropertyMapEntry**)pEntries.get(), aValues.getArray() );
+            _getPropertyValues( pEntries.get(), aValues.getArray() );
         }
 
         if( bUnknown )
@@ -221,7 +221,7 @@ PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& Prop
     aEntries[1] = NULL;
 
     PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
-    _getPropertyStates( (const PropertyMapEntry**)aEntries, &aState );
+    _getPropertyStates( aEntries, &aState );
 
     return aState;
 }
@@ -250,7 +250,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
         pEntries[nCount] = NULL;
 
         if( !bUnknown )
-            _getPropertyStates( (const PropertyMapEntry**)pEntries.get(), aStates.getArray() );
+            _getPropertyStates( pEntries.get(), aStates.getArray() );
 
         if( bUnknown )
             throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
