@@ -1,0 +1,11 @@
+--- Clp/src/ClpParameters.hpp
++++ Clp/src/ClpParameters.hpp
+@@ -81,7 +81,7 @@
+ template <class T> inline void
+ ClpDisjointCopyN( const T * array, const int size, T * newArray)
+ {
+-     memcpy(reinterpret_cast<void *> (newArray), array, size * sizeof(T));
++     if (size != 0) memcpy(reinterpret_cast<void *> (newArray), array, size * sizeof(T));
+ }
+ /// And set
+ template <class T> inline void

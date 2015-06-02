@@ -26,6 +26,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	) \
 	$(if $(filter MACOSX,$(OS)),external/coinmp/macosx.build.patch.1) \
 	external/coinmp/werror-format-pedantic.patch.0 \
+	external/coinmp/ubsan.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
