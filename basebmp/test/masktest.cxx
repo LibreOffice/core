@@ -61,7 +61,7 @@ private:
         rDevice->setPixel(
             basegfx::B2IPoint(1,1),
             aCol2,
-            DrawMode_PAINT);
+            DrawMode::Paint);
         rDevice->drawMaskedColor(
             aCol2,
             rBmp,
@@ -124,7 +124,7 @@ public:
         mpMask->fillPolyPolygon(
             aPoly,
             aCol,
-            DrawMode_PAINT );
+            DrawMode::Paint );
     }
 
     void testMaskBasics()

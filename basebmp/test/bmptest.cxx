@@ -62,7 +62,7 @@ private:
             rBmp,
             aSourceRect,
             aDestLeftTop,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 8",
                                countPixel( rDevice, aCol ) == 8);
 
@@ -70,7 +70,7 @@ private:
             rBmp,
             aSourceRect,
             aDestRightTop,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 16",
                                countPixel( rDevice, aCol ) == 16);
 
@@ -78,7 +78,7 @@ private:
             rBmp,
             aSourceRect,
             aDestLeftBottom,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 24",
                                countPixel( rDevice, aCol ) == 24);
 
@@ -86,7 +86,7 @@ private:
             rBmp,
             aSourceRect,
             aDestRightBottom,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 32",
                                countPixel( rDevice, aCol ) == 32);
 
@@ -101,7 +101,7 @@ private:
             pClone,
             aSourceOverlap,
             aDestOverlap,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("clobbertest - number of set pixel is not 50",
                                countPixel( rBmp, aCol ) == 50);
 
@@ -123,7 +123,7 @@ private:
             rBmp,
             aSourceRect,
             aDestLeftTop,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 4",
                                countPixel( rDevice, aCol ) == 4);
 
@@ -131,7 +131,7 @@ private:
             rBmp,
             aSourceRect,
             aDestLeftBottom,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 4(c)",
                                countPixel( rDevice, aCol ) == 4);
 
@@ -139,7 +139,7 @@ private:
             rBmp,
             aSourceRect,
             aDestRightBottom,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 8",
                                countPixel( rDevice, aCol ) == 8);
     }
@@ -174,11 +174,11 @@ public:
         mpBmp1bpp->fillPolyPolygon(
             aPoly,
             aCol,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         mpBmp32bpp->fillPolyPolygon(
             aPoly,
             aCol,
-            DrawMode_PAINT );
+            DrawMode::Paint );
     }
 
     void testBmpBasics()

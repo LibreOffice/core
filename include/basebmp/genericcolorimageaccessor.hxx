@@ -40,7 +40,7 @@ namespace basebmp
 
         explicit GenericColorImageAccessor( BitmapDeviceSharedPtr const& rTarget ) :
             mpDevice(rTarget),
-            meDrawMode(DrawMode_PAINT)
+            meDrawMode(DrawMode::Paint)
         {}
 
         GenericColorImageAccessor( BitmapDeviceSharedPtr const& rTarget,

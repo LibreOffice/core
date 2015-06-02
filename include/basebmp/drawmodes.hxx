@@ -24,12 +24,12 @@
 
 namespace basebmp
 {
-    enum DrawMode
+    enum class DrawMode
     {
-        /** Default draw mode, which simply renders pixel in the
+        /** Default draw mode, which simply renders pixels in the
             requested color
          */
-        DrawMode_PAINT,
+        Paint,
 
         /** XOR draw mode, which XORs each existing pixel value with
             the new color.
@@ -37,10 +37,10 @@ namespace basebmp
             The result of this XOR operation strongly depends on the
             underlying pixel format, as it is defined by the bitwise
             XOR of the (potentially palette-looked-up) color value and
-            the existing pixel content (being it true color or a
+            the existing pixel content (be it true color or a
             palette index).
          */
-        DrawMode_XOR
+        XOR
     };
 }
 

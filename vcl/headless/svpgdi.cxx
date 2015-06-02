@@ -101,7 +101,7 @@ SvpSalGraphics::SvpSalGraphics() :
     m_aLineColor( COL_BLACK ),
     m_bUseFillColor( false ),
     m_aFillColor( COL_WHITE ),
-    m_aDrawMode( basebmp::DrawMode_PAINT ),
+    m_aDrawMode( basebmp::DrawMode::Paint ),
     m_bClipSetup( false )
 {
     m_xTextRenderImpl.reset(new SvpTextRender(*this));
@@ -181,7 +181,7 @@ void SvpSalGraphics::ensureClip()
                             aRectIter->Top(),
                             aRectIter->Left() + nW,
                             aRectIter->Top() + nH)));
-                m_aClipMap->fillPolyPolygon(aFull, basebmp::Color(0), basebmp::DrawMode_PAINT);
+                m_aClipMap->fillPolyPolygon(aFull, basebmp::Color(0), basebmp::DrawMode::Paint);
             }
         }
     }
@@ -333,7 +333,7 @@ void SvpSalGraphics::SetFillColor( SalColor nSalColor )
 
 void SvpSalGraphics::SetXORMode( bool bSet, bool )
 {
-    m_aDrawMode = bSet ? basebmp::DrawMode_XOR : basebmp::DrawMode_PAINT;
+    m_aDrawMode = bSet ? basebmp::DrawMode::XOR : basebmp::DrawMode::Paint;
 }
 
 void SvpSalGraphics::SetROPLineColor( SalROPColor nROPColor )
@@ -560,7 +560,7 @@ void SvpSalGraphics::copyArea( long nDestX,
     //         (long)(nSrcWidth * nSrcHeight), m_aClipMap.get() != NULL );
     SvpSalGraphics::ClipUndoHandle aUndo( this );
     if( !isClippedSetup( aDestRect, aUndo ) )
-        m_aDevice->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode_PAINT, m_aClipMap );
+        m_aDevice->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode::Paint, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -581,7 +581,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rPosAry,
 
     SvpSalGraphics::ClipUndoHandle aUndo( this );
     if( !isClippedSetup( aDestRect, aUndo ) )
-        m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode_PAINT, m_aClipMap );
+        m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode::Paint, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -601,7 +601,7 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
 
     SvpSalGraphics::ClipUndoHandle aUndo( this );
     if( !isClippedSetup( aDestRect, aUndo ) )
-        m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, basebmp::DrawMode_PAINT, m_aClipMap );
+        m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, basebmp::DrawMode::Paint, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -627,7 +627,7 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     SvpSalGraphics::ClipUndoHandle aUndo( this );
     if (!isClippedSetup(aDestRect, aUndo) && m_aDevice)
         m_aDevice->drawMaskedBitmap( rSrc.getBitmap(), rSrcTrans.getBitmap(),
-                                     aSrcRect, aDestRect, basebmp::DrawMode_PAINT, m_aClipMap );
+                                     aSrcRect, aDestRect, basebmp::DrawMode::Paint, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -674,7 +674,7 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
         basegfx::B2IBox aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
         basegfx::B2IBox aDestRect( 0, 0, nWidth, nHeight );
 
-        aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode_PAINT );
+        aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode::Paint );
 
         pBitmap->setBitmap( aCopy );
     }
@@ -697,7 +697,7 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
 
     SvpSalGraphics::ClipUndoHandle aUndo( this );
     if( !isClippedSetup( aDestRange, aUndo ) )
-        m_aDevice->fillPolyPolygon( aPolyPoly, basebmp::Color( 0xffffff ), basebmp::DrawMode_XOR, m_aClipMap );
+        m_aDevice->fillPolyPolygon( aPolyPoly, basebmp::Color( 0xffffff ), basebmp::DrawMode::XOR, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -710,7 +710,7 @@ void SvpSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInve
         aPoly.setB2DPoint( i, basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
     aPoly.setClosed( true );
     ensureClip(); // FIXME for ...
-    m_aDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(aPoly), basebmp::Color( 0xffffff ), basebmp::DrawMode_XOR, m_aClipMap );
+    m_aDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(aPoly), basebmp::Color( 0xffffff ), basebmp::DrawMode::XOR, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
