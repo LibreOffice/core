@@ -1479,7 +1479,7 @@ void DrawingML::GetUUID( OStringBuffer& rBuffer )
 {
     Sequence< sal_uInt8 > aSeq( 16 );
     static const char cDigits[17] = "0123456789ABCDEF";
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, true );
+    rtl_createUuid( aSeq.getArray(), 0, true );
     int i;
 
     rBuffer.append( '{' );
