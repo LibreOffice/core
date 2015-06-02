@@ -1806,12 +1806,11 @@ static OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModM
 sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* i_pObjSh )
 {
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
-    sal_Int32 nFilter = -1;
 
     ::comphelper::SequenceAsHashMap aFactoryProps(
         xModuleManager->getByName( getModuleIdentifier( xModuleManager, i_pObjSh ) ) );
     sal_Int32 nDefault = -1;
-    nFilter = aFactoryProps.getUnpackedValueOrDefault( "ooSetupFactoryStyleFilter", nDefault );
+    sal_Int32 nFilter = aFactoryProps.getUnpackedValueOrDefault( "ooSetupFactoryStyleFilter", nDefault );
 
     m_bWantHierarchical =
         (nFilter & SFXSTYLEBIT_HIERARCHY) != 0;
