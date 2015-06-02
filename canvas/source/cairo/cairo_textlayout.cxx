@@ -45,9 +45,7 @@
 #include "cairo_textlayout.hxx"
 #include "cairo_spritecanvas.hxx"
 
-#ifdef CAIRO_HAS_QUARTZ_SURFACE
-#include <cairo-quartz.h>
-#elif defined CAIRO_HAS_WIN32_SURFACE
+#if defined CAIRO_HAS_WIN32_SURFACE
 # include "cairo_win32_cairo.hxx"
 # include <cairo-win32.h>
 #elif defined CAIRO_HAS_FT_FONT
@@ -502,16 +500,7 @@ namespace cairocanvas
              **/
             cairo_font_face_t* font_face = NULL;
 
-#ifdef CAIRO_HAS_QUARTZ_SURFACE
-# ifdef MACOSX
-            // TODO: use cairo_quartz_font_face_create_for_cgfont(cgFont)
-            //       when CGFont (Mac OS X 10.5 API) is provided by the AQUA VCL backend.
-            font_face = cairo_quartz_font_face_create_for_atsu_font_id((ATSUFontID) rSysFontData.aATSUFontID);
-# else // iOS
-            font_face = cairo_quartz_font_face_create_for_cgfont( CTFontCopyGraphicsFont( rSysFontData.rCTFont, NULL ) );
-# endif
-
-#elif defined CAIRO_HAS_WIN32_SURFACE
+#if defined CAIRO_HAS_WIN32_SURFACE
 # if (OSL_DEBUG_LEVEL > 1)
             GetObjectW( rSysFontData.hFont, sizeof(logfont), &logfont );
 # endif

@@ -499,7 +499,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/osx/PictToBmpFlt \
     vcl/osx/clipboard \
     vcl/osx/service_entry \
-    vcl/quartz/cairo_quartz_cairo \
     $(vcl_quartz_code) \
     vcl/quartz/salgdiutils \
     vcl/osx/salnativewidgets \
