@@ -54,10 +54,6 @@
 # error Native API needed.
 #endif
 
-#ifdef IOS
-#include <CoreText/CoreText.h>
-#endif
-
 using namespace ::cairo;
 using namespace ::com::sun::star;
 
