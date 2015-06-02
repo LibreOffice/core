@@ -427,7 +427,7 @@ void SfxItemPool_Impl::readTheItems (
                 {
                     // Loaded Item
                     SfxPoolItem *&rpNewItem =
-                        (SfxPoolItem*&)(*ppArr)->operator[](nNew);
+                        (*ppArr)->operator[](nNew);
 
                     // Unused surrogate?
                     if ( !rpNewItem )
@@ -450,7 +450,7 @@ void SfxItemPool_Impl::readTheItems (
                 if ( !bFound )
                 {
                     if ( nFree != SAL_MAX_UINT32 )
-                        (SfxPoolItem*&)(*ppArr)->operator[](nFree) = pOldItem;
+                        (*ppArr)->operator[](nFree) = pOldItem;
                     else
                         (*ppArr)->push_back( pOldItem );
                 }
