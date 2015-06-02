@@ -161,7 +161,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
             "dlopen(" << pModuleName << ", " << rtld_mode << "): "
                 << dlerror());
 #endif
-        return ((oslModule)(pLib));
+        return pLib;
     }
     return NULL;
 }
@@ -206,7 +206,7 @@ sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *, oslModule *pResult)
 {
 #if !defined(DISABLE_DYNLOADING) || defined(IOS)
-    *pResult = (oslModule) RTLD_DEFAULT;
+    *pResult = static_cast<oslModule>(RTLD_DEFAULT);
 #else
     *pResult = NULL;
 #endif

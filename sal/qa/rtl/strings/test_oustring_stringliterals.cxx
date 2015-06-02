@@ -62,7 +62,7 @@ void test::oustring::StringLiterals::checkCtors()
     const char good1[] = "test";
     CPPUNIT_ASSERT( VALID_CONVERSION( good1 ));
 
-    CPPUNIT_ASSERT( !VALID_CONVERSION( (const char*) "test" ));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( static_cast<const char*>("test") ));
     const char* bad1 = good1;
     CPPUNIT_ASSERT( !VALID_CONVERSION( bad1 ));
     char bad2[] = "test";

@@ -240,7 +240,7 @@ static void ChildStatusProc(void *pData)
 
             // No need to check the return value of execv. If we return from
             // it, an error has occurred.
-            execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
+            execv(data.m_pszArgs[0], const_cast<char **>(data.m_pszArgs));
         }
 
         OSL_TRACE("Failed to exec, errno=%d (%s)", errno, strerror(errno));

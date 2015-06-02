@@ -163,7 +163,7 @@ static void globalMutexInitImpl() {
 oslMutex * SAL_CALL osl_getGlobalMutex()
 {
     /* necessary to get a "oslMutex *" */
-    static oslMutex globalMutex = (oslMutex) &globalMutexImpl;
+    static oslMutex globalMutex = &globalMutexImpl;
 
     static pthread_once_t once = PTHREAD_ONCE_INIT;
     if (pthread_once(&once, &globalMutexInitImpl) != 0) {

@@ -460,7 +460,7 @@ oslSocket __osl_createSocketImpl(int Socket)
 void __osl_destroySocketImpl(oslSocket Socket)
 {
     if ( Socket != NULL)
-        free((struct oslSocketImpl *) Socket);
+        free(Socket);
 #if OSL_DEBUG_LEVEL > 1
     g_nSocketImpl --;
 #endif
@@ -2353,7 +2353,7 @@ oslSocketSet SAL_CALL osl_createSocketSet()
         FD_ZERO(&pSet->m_Set);
     }
 
-    return (oslSocketSet)pSet;
+    return pSet;
 }
 
 void SAL_CALL osl_destroySocketSet(oslSocketSet Set)

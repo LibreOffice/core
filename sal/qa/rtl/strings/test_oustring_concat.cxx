@@ -134,10 +134,10 @@ void test::oustring::StringConcat::checkInvalid()
     CPPUNIT_ASSERT( !INVALID_CONCAT( OUString() + OUString()));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OString( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringBuffer( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + (const char*) "b" ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<const char*>("b") ));
     char d[] = "b";
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + d ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + (char*)d ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<char*>(d) ));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringLiteral( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + 1 ));
     rtl_String* rs = NULL;

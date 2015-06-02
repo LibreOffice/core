@@ -793,9 +793,9 @@ const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eT
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return (char const *) pData->mpBestUnixCharset;
+        return pData->mpBestUnixCharset;
     else if( eTextEncoding == RTL_TEXTENCODING_UNICODE )
-        return (char const *) "iso10646-1";
+        return "iso10646-1";
     else
         return 0;
 }
@@ -814,7 +814,7 @@ const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eT
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return (char const *) pData->mpBestMimeCharset;
+        return pData->mpBestMimeCharset;
     else
         return 0;
 }

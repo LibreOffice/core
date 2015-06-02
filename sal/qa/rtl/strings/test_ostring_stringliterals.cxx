@@ -62,7 +62,7 @@ void test::ostring::StringLiterals::checkCtors()
     const char good1[] = "test";
     CPPUNIT_ASSERT( CONST_CTOR_USED( good1 ));
 
-    CPPUNIT_ASSERT( !CONST_CTOR_USED( (const char*) "test" ));
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( static_cast<const char*>("test") ));
     const char* bad1 = good1;
     CPPUNIT_ASSERT( !CONST_CTOR_USED( bad1 ));
     char bad2[] = "test";
@@ -88,8 +88,8 @@ void test::ostring::StringLiterals::checkCtors()
     CPPUNIT_ASSERT( CONST_CTOR_USED( bad7[ 1 ] ));
 
 // Check that contents are correct and equal to the case when const char* ctor is used.
-    CPPUNIT_ASSERT( rtl::OString( (const char*)"" ) == rtl::OString( "" ));
-    CPPUNIT_ASSERT( rtl::OString( (const char*)"ab" ) == rtl::OString( "ab" ));
+    CPPUNIT_ASSERT( rtl::OString( static_cast<const char*>("") ) == rtl::OString( "" ));
+    CPPUNIT_ASSERT( rtl::OString( static_cast<const char*>("ab") ) == rtl::OString( "ab" ));
 
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_STRINGPARAM is used.
     CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "" )) == rtl::OString( "" ));
@@ -192,33 +192,33 @@ void test::ostring::StringLiterals::checkNonConstUsage()
 
     rtl_string_unittest_const_literal = false; // start checking for OString conversions
     rtl_string_unittest_const_literal_function = false; // and check for const variants
-    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = (const char*)foo_c );
+    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = static_cast<const char*>(foo_c) );
     CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = foo_c );
-    CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( (const char*)fOo_c ));
+    CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( static_cast<const char*>(fOo_c) ));
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( fOo_c ));
-    CPPUNIT_ASSERT( foobarfoo.match( (const char*)bar_c, 3 ));
+    CPPUNIT_ASSERT( foobarfoo.match( static_cast<const char*>(bar_c), 3 ));
     CPPUNIT_ASSERT( foobarfoo.match( bar_c, 3 ));
-    CPPUNIT_ASSERT( foobar.match( (const char*)foo_c ));
+    CPPUNIT_ASSERT( foobar.match( static_cast<const char*>(foo_c) ));
     CPPUNIT_ASSERT( foobar.match( foo_c ));
-    CPPUNIT_ASSERT( FooBaRfoo.matchIgnoreAsciiCase( (const char*)bAr_c, 3 ));
+    CPPUNIT_ASSERT( FooBaRfoo.matchIgnoreAsciiCase( static_cast<const char*>(bAr_c), 3 ));
     CPPUNIT_ASSERT( FooBaRfoo.matchIgnoreAsciiCase( bAr_c, 3 ));
-    CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( (const char*)fOo_c ));
+    CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( static_cast<const char*>(fOo_c) ));
     CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( fOo_c ));
-    CPPUNIT_ASSERT( foobar.startsWith( (const char*)foo_c ));
+    CPPUNIT_ASSERT( foobar.startsWith( static_cast<const char*>(foo_c) ));
     CPPUNIT_ASSERT( foobar.startsWith( foo_c ));
-    CPPUNIT_ASSERT( foobar.endsWith( (const char*)bar_c ));
+    CPPUNIT_ASSERT( foobar.endsWith( static_cast<const char*>(bar_c) ));
     CPPUNIT_ASSERT( foobar.endsWith( bar_c ));
 //    CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( (const char*)bar_c ));
 //    CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( bar_c ));
-    CPPUNIT_ASSERT( foo == (const char*)foo_c );
+    CPPUNIT_ASSERT( foo == static_cast<const char*>(foo_c) );
     CPPUNIT_ASSERT( foo == foo_c );
-    CPPUNIT_ASSERT( (const char*)foo_c == foo );
+    CPPUNIT_ASSERT( static_cast<const char*>(foo_c) == foo );
     CPPUNIT_ASSERT( foo_c == foo );
-    CPPUNIT_ASSERT( foo != (const char*)bar_c );
+    CPPUNIT_ASSERT( foo != static_cast<const char*>(bar_c) );
     CPPUNIT_ASSERT( foo != bar_c );
-    CPPUNIT_ASSERT( (const char*)foo_c != bar );
+    CPPUNIT_ASSERT( static_cast<const char*>(foo_c) != bar );
     CPPUNIT_ASSERT( foo_c != bar );
-    CPPUNIT_ASSERT( foobarfoo.indexOf( (const char*)foo_c, 1 ) == 6 );
+    CPPUNIT_ASSERT( foobarfoo.indexOf( static_cast<const char*>(foo_c), 1 ) == 6 );
     CPPUNIT_ASSERT( foobarfoo.indexOf( foo_c, 1 ) == 6 );
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( (const char*)foo_c ) == 6 );
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( foo_c ) == 6 );
