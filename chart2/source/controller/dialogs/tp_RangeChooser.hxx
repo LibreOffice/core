@@ -89,8 +89,11 @@ protected: //member
     VclPtr<CheckBox>        m_pCB_FirstColumnAsLabel;
     VclPtr<FixedText>       m_pFTTitle;
 
+    VclPtr<FixedLine>       m_pFL_TimeBased;
     VclPtr<CheckBox>        m_pCB_TimeBased;
+    VclPtr<FixedText>       m_pFT_TimeStart;
     VclPtr<Edit>            m_pEd_TimeStart;
+    VclPtr<FixedText>       m_pFT_TimeEnd;
     VclPtr<Edit>            m_pEd_TimeEnd;
 
     sal_Int32       m_nChangingControlCalls;
