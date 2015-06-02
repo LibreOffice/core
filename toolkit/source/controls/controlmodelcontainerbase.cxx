@@ -1684,7 +1684,7 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
         {
             const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
             Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
-            bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
+            bool bOwnModel = xModel.get() == getModel().get();
             if ( ( rEvt.PropertyName == s1 ) ||
                  ( rEvt.PropertyName == s2 ) ||
                  ( rEvt.PropertyName == s3 ) ||

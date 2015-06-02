@@ -659,7 +659,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
     {
         const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
         Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
-        bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
+        bool bOwnModel = xModel.get() == getModel().get();
         if ( bOwnModel && rEvt.PropertyName == "ImageURL" )
         {
             OUString aImageURL;

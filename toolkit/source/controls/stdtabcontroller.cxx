@@ -258,7 +258,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException, std::exception)
     size_t n;
     for ( n = 0; n < nCtrls; n++ )
     {
-        XWindow* pC = (XWindow*)pComponents[n].get();
+        XWindow* pC = pComponents[n].get();
         ComponentEntry* pE = new ComponentEntry;
         pE->pComponent = pC;
         awt::Rectangle aPosSize = pC->getPosSize();
@@ -396,7 +396,7 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
     for ( sal_Int32 n = 0; n < nCtrls; n++ )
     {
         Reference< XControlModel >  xModel(pCtrls[n].is() ? pCtrls[n]->getModel() : Reference< XControlModel > ());
-        if ( (XControlModel*)xModel.get() == (XControlModel*)rxCtrlModel.get() )
+        if ( xModel.get() == rxCtrlModel.get() )
         {
             Reference< XControl >  xCtrl( pCtrls[n] );
             ::comphelper::removeElementAt( rCtrls, n );
