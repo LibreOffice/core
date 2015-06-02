@@ -20,6 +20,17 @@
  
    /* Set the carry bit iff the function uses any sse registers.
       This is clc or stc, together with the first byte of the jmp.  */
+--- Objects/bytearrayobject.c
++++ Objects/bytearrayobject.c
+@@ -294,7 +294,7 @@
+         PyBuffer_Release(&vo);
+         return NULL;
+     }
+-    memcpy(self->ob_bytes + mysize, vo.buf, vo.len);
++    if (vo.len != 0) memcpy(self->ob_bytes + mysize, vo.buf, vo.len);
+     PyBuffer_Release(&vo);
+     Py_INCREF(self);
+     return (PyObject *)self;
 --- Objects/listobject.c
 +++ Objects/listobject.c
 @@ -641,7 +641,7 @@
