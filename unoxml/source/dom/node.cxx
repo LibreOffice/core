@@ -116,7 +116,7 @@ namespace DOM
                        strlen(reinterpret_cast<const char*>(pPrefix)));
 
         OSL_TRACE("getTokenWithPrefix(): prefix %s, name %s",
-                  (const char*)pPrefix, (const char*)pName);
+                  pPrefix, pName);
 
         Context::NamespaceVectorType::value_type::const_iterator aIter;
         if( (aIter=std::find_if(rContext.maNamespaces.back().begin(),
