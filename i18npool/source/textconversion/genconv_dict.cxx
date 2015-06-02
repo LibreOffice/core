@@ -100,7 +100,7 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     while (fgets(Cstr, 1024, sfp)) {
         // input file is in UTF-8 encoding (Hangul:Hanja)
         // don't convert last new line character to Ostr.
-        OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
+        OUString Ostr(Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         const sal_Unicode *Ustr = Ostr.getStr();
         sal_Int32  len = Ostr.getLength();
 
@@ -188,7 +188,7 @@ void make_stc_char(FILE *sfp, FILE *cfp)
     while (fgets(Cstr, 1024, sfp)) {
         // input file is in UTF-8 encoding (SChinese:TChinese)
         // don't convert last new line character to Ostr.
-        OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
+        OUString Ostr(Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         const sal_Unicode *Ustr = Ostr.getStr();
         sal_Int32  len = Ostr.getLength();
         if (Ustr[1] == 'v')
@@ -354,7 +354,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
     while (fgets(Cstr, 1024, sfp)) {
         // input file is in UTF-8 encoding (SChinese:TChinese)
         // don't convert last new line character to Ostr.
-        OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
+        OUString Ostr(Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         sal_Int32  len = Ostr.getLength();
         if (char_total + len + 1 > 0xFFFF) {
             fprintf(stderr, "Word Dictionary stc_word.dic is too big (line %ld)", sal::static_int_cast< long >(line));

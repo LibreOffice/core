@@ -120,7 +120,7 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
     while (fgets(str, 1024, dictionary_fp)) {
         // input file is in UTF-8 encoding
         // don't convert last new line character to Ostr.
-        OUString Ostr((const sal_Char *)str, strlen(str) - 1, RTL_TEXTENCODING_UTF8);
+        OUString Ostr(str, strlen(str) - 1, RTL_TEXTENCODING_UTF8);
         const sal_Unicode *u = Ostr.getStr();
 
         const sal_Int32 len = Ostr.getLength();

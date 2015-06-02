@@ -61,11 +61,11 @@ void TestTextSearch::testICU()
 
     OUString aString( "abcdefgh" );
     OUString aPattern( "e" );
-    IcuUniString aSearchPat( (const UChar*)aPattern.getStr(), aPattern.getLength() );
+    IcuUniString aSearchPat( reinterpret_cast<const UChar*>(aPattern.getStr()), aPattern.getLength() );
 
     pRegexMatcher = new RegexMatcher( aSearchPat, nSearchFlags, nErr );
 
-    IcuUniString aSource( (const UChar*)aString.getStr(), aString.getLength() );
+    IcuUniString aSource( reinterpret_cast<const UChar*>(aString.getStr()), aString.getLength() );
     pRegexMatcher->reset( aSource );
 
     CPPUNIT_ASSERT( pRegexMatcher->find( 0, nErr ) );
@@ -80,10 +80,10 @@ void TestTextSearch::testICU()
     OUString aString2( "acababaabcababadcdaa" );
     OUString aPattern2( "a" );
 
-    IcuUniString aSearchPat2( (const UChar*)aPattern2.getStr(), aPattern2.getLength() );
+    IcuUniString aSearchPat2( reinterpret_cast<const UChar*>(aPattern2.getStr()), aPattern2.getLength() );
     pRegexMatcher = new RegexMatcher( aSearchPat2, nSearchFlags, nErr );
 
-    IcuUniString aSource2( (const UChar*)aString2.getStr(), aString2.getLength() );
+    IcuUniString aSource2( reinterpret_cast<const UChar*>(aString2.getStr()), aString2.getLength() );
     pRegexMatcher->reset( aSource2 );
 
     CPPUNIT_ASSERT( pRegexMatcher->find( 0, nErr ) );

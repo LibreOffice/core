@@ -97,7 +97,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             continue;
 
         // input file is in UTF-8 encoding
-        OUString Ostr = OUString((const sal_Char *)str, len, RTL_TEXTENCODING_UTF8).trim();
+        OUString Ostr = OUString(str, len, RTL_TEXTENCODING_UTF8).trim();
 
         len = Ostr.getLength();
         if (len == 0)
