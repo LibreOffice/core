@@ -36,6 +36,8 @@
 #include <map>
 #include <set>
 
+#include <config_cairo_canvas.h>
+
 class PhysicalFontCollection;
 class SalBitmap;
 class FontSelectPattern;
@@ -49,7 +51,10 @@ class OpenGLContext;
 class OutputDevice;
 class ServerFontLayout;
 struct SystemGraphicsData;
+
+#if ENABLE_CAIRO_CANVAS
 struct SystemFontData;
+#endif // ENABLE_CAIRO_CANVAS
 
 namespace basegfx {
     class B2DVector;
@@ -438,6 +443,8 @@ public:
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 
+#if ENABLE_CAIRO_CANVAS
+
     /// Check whether cairo will work
     virtual bool                SupportsCairo() const = 0;
     /// Create Surface from given cairo surface
@@ -449,6 +456,8 @@ public:
     virtual css::uno::Any       GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const = 0;
 
     virtual SystemFontData      GetSysFontData( int nFallbacklevel ) const = 0;
+
+#endif // ENABLE_CAIRO_CANVAS
 
 protected:
     virtual bool                setClipRegion( const vcl::Region& ) = 0;
