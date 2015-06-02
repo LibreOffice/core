@@ -71,7 +71,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 pAttribs->getAsChar(nToken, pValue);
                 OOXMLValue::Pointer_t xValue(OOXMLBooleanValue::Create(pValue));
                 pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
         case RT_String:
@@ -79,7 +78,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 OUString aValue(pAttribs->getValue(nToken));
                 OOXMLValue::Pointer_t xValue(new OOXMLStringValue(aValue));
                 pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
         case RT_Integer:
@@ -88,7 +86,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 pAttribs->getAsInteger(nToken,nValue);
                 OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
                 pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
         case RT_Hex:
@@ -97,7 +94,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 pAttribs->getAsChar(nToken, pValue);
                 OOXMLValue::Pointer_t xValue(new OOXMLHexValue(pValue));
                 pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
         case RT_UniversalMeasure:
@@ -106,7 +102,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 pAttribs->getAsChar(nToken, pValue);
                 OOXMLValue::Pointer_t xValue(new OOXMLUniversalMeasureValue(pValue));
                 pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
         case RT_List:
@@ -116,7 +111,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 {
                     OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
                     pHandler->newProperty(nId, xValue);
-                    pFactory->attributeAction(pHandler, nToken, xValue);
                 }
             }
             break;
@@ -141,56 +135,6 @@ OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
         ret = createFastChildContextFromFactory(pHandler, pFactory, Element);
 
     return ret;
-}
-
-void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
-                              const OUString & rString)
-{
-    Id nDefine = pHandler->getDefine();
-    OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
-
-    if (pFactory.get() != nullptr)
-    {
-        pFactory->charactersAction(pHandler, rString);
-    }
-}
-
-void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nToken*/)
-{
-    Id nDefine = pHandler->getDefine();
-    OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
-
-    if (pFactory.get() != nullptr)
-    {
-        pFactory->startAction(pHandler);
-    }
-}
-
-void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToken*/)
-{
-    Id nDefine = pHandler->getDefine();
-    OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
-
-    if (pFactory.get() != nullptr)
-    {
-        pFactory->endAction(pHandler);
-    }
-}
-
-void OOXMLFactory_ns::startAction(OOXMLFastContextHandler *)
-{
-}
-
-void OOXMLFactory_ns::endAction(OOXMLFastContextHandler *)
-{
-}
-
-void OOXMLFactory_ns::charactersAction(OOXMLFastContextHandler *, const OUString &)
-{
-}
-
-void OOXMLFactory_ns::attributeAction(OOXMLFastContextHandler *, Token_t, OOXMLValue::Pointer_t)
-{
 }
 
 }
