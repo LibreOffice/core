@@ -535,7 +535,7 @@
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Increase Indent</property>
-                        <property name="action_name">.uno:Promote</property>
+                        <property name="action_name">.uno:IncrementIndent</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -549,7 +549,7 @@
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Decrease Indent</property>
-                        <property name="action_name">.uno:Demote</property>
+                        <property name="action_name">.uno:DecrementIndent</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
