@@ -206,7 +206,7 @@ namespace
 static QRegion XRegionToQRegion( Region xr )
 {
     QRegion qr;
-    for( int i = 0;
+    for( long i = 0;
          i < xr->numRects;
          ++i )
     {
