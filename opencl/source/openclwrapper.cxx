@@ -436,7 +436,7 @@ bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char
         cl_int binary_status;
 
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
-                                           pArryDevsID.get(), length.get(), (const unsigned char**) pBinary.get(),
+                                           pArryDevsID.get(), length.get(), const_cast<const unsigned char**>(pBinary.get()),
                                            &binary_status, &clStatus );
         if(clStatus != CL_SUCCESS)
         {
