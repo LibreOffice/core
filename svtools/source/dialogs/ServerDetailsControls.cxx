@@ -264,31 +264,52 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder, OUStr
     pBuilder->get( m_pEDBinding, "binding" );
     pBuilder->get( m_pLBRepository, "repositories" );
     pBuilder->get( m_pBTRepoRefresh, "repositoriesRefresh" );
-    pBuilder->get( m_pEDPath, "cmisPath" );
 
+    pBuilder->get( m_pEDRoot, "cmisPath" );
 
     show( false );
 }
 
 void CmisDetailsContainer::show( bool bShow )
 {
-    DetailsContainer::show( bShow );
-
     m_pEDBinding->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
     m_pLBRepository->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
     m_pBTRepoRefresh->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
-    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+    m_pEDRoot->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
 
     m_pEDBinding->SetText( m_sBinding );
+
+    if( ( m_sBinding == GDRIVE_BASE_URL )
+            || m_sBinding.startsWith( ALFRESCO_CLOUD_BASE_URL )
+            || ( m_sBinding == ONEDRIVE_BASE_URL ) )
+    {
+        DetailsContainer::show( false );
+    }
+    else
+    {
+        DetailsContainer::show( bShow );
+    }
 }
 
 INetURLObject CmisDetailsContainer::getUrl( )
 {
     OUString sBindingUrl = m_pEDBinding->GetText().trim( );
-    OUString sPath = m_pEDPath->GetText().trim( );
+    OUString sPath = m_pEDRoot->GetText().trim( );
+
+    bool bSkip = true;
+    if( ( m_sBinding == GDRIVE_BASE_URL )
+            || m_sBinding.startsWith( ALFRESCO_CLOUD_BASE_URL )
+            || ( m_sBinding == ONEDRIVE_BASE_URL ) )
+    {
+        bSkip = m_sUsername.isEmpty();
+    }
+    else
+    {
+        bSkip = m_sRepoId.isEmpty();
+    }
 
     OUString sUrl;
-    if ( !sBindingUrl.isEmpty( ) && !m_sRepoId.isEmpty() )
+    if ( !sBindingUrl.isEmpty( ) && !bSkip )
     {
         OUString sEncodedBinding = rtl::Uri::encode(
                 sBindingUrl + "#" + m_sRepoId,
@@ -316,7 +337,7 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
         sRepositoryId = aHostUrl.GetMark( );
 
         m_pEDBinding->SetText( m_sBinding );
-        m_pEDPath->SetText( rUrl.GetURLPath() );
+        m_pEDRoot->SetText( rUrl.GetURLPath() );
     }
     return bSuccess;
 }

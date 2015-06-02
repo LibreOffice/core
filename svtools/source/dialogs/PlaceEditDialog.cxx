@@ -121,24 +121,6 @@ std::shared_ptr<Place> PlaceEditDialog::GetPlace()
 
 void PlaceEditDialog::InitDetails( )
 {
-    // Create WebDAV / FTP / SSH details control
-    std::shared_ptr<DetailsContainer> xDavDetails(std::make_shared<DavDetailsContainer>(this));
-    xDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xDavDetails);
-
-    std::shared_ptr<DetailsContainer> xFtpDetails(std::make_shared<HostDetailsContainer>(this, 21, "ftp"));
-    xFtpDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xFtpDetails);
-
-    std::shared_ptr<DetailsContainer> xSshDetails(std::make_shared<HostDetailsContainer>(this, 22, "ssh"));
-    xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xSshDetails);
-
-    // Create Windows Share control
-    std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
-    xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xSmbDetails);
-
     // Create CMIS controls for each server type
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -163,7 +145,7 @@ void PlaceEditDialog::InitDetails( )
              !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) &&
              !( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
         {
-            m_pLBServerType->InsertEntry( aTypesNamesList[i]);
+            m_pLBServerType->InsertEntry( aTypesNamesList[i], i );
 
             std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
             xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
@@ -172,6 +154,24 @@ void PlaceEditDialog::InitDetails( )
             nPos++;
         }
     }
+
+    // Create WebDAV / FTP / SSH details control
+    std::shared_ptr<DetailsContainer> xDavDetails(std::make_shared<DavDetailsContainer>(this));
+    xDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xDavDetails);
+
+    std::shared_ptr<DetailsContainer> xFtpDetails(std::make_shared<HostDetailsContainer>(this, 21, "ftp"));
+    xFtpDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xFtpDetails);
+
+    std::shared_ptr<DetailsContainer> xSshDetails(std::make_shared<HostDetailsContainer>(this, 22, "ssh"));
+    xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xSshDetails);
+
+    // Create Windows Share control
+    std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
+    xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xSmbDetails);
 
     // Set default to first value
     m_pLBServerType->SelectEntryPos( 0 );
@@ -206,6 +206,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
     {
         ( *it )->setUsername( OUString( m_pEDUsername->GetText() ) );
     }
+    EditHdl(NULL);
     return 1;
 }
 

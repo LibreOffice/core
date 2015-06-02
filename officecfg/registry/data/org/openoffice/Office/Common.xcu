@@ -570,8 +570,10 @@
     </prop>
     <prop oor:name="CmisServersUrls">
       <value>
-        <it>http://&lt;host:port&gt;/alfresco/cmisatom</it>
+        <it>https://www.googleapis.com/drive/v2</it>
+        <it>https://apis.live.net/v5.0</it>
         <it>https://api.alfresco.com/cmis/versions/1.0/atom/</it>
+        <it>http://&lt;host:port&gt;/alfresco/cmisatom</it>
         <it>http://&lt;host&gt;/p8cmis/wsdl</it>
         <it>https://apps.lotuslive.com/files/basic/cmis/my/servicedoc</it>
         <it>http://&lt;host&gt;/servlet/cmis/repository/_P&lt;Quickr place name&gt;_RMain.nsf/servicedoc</it>
@@ -579,15 +581,16 @@
         <it>https://&lt;host&gt;/cmis/atom</it>
         <it>http://ec2-184-72-233-127.compute-1.amazonaws.com/ot-cmis/services/RepositoryService?wsdl</it>
         <it>http://&lt;host&gt;/_vti_bin/CMISSoapwsdl.aspx</it>
-        <it>https://www.googleapis.com/drive/v2</it>
-        <it>https://apis.live.net/v5.0</it>
         <it>http://&lt;host&gt;/_api/Web</it>
+        <it>http://&lt;host&gt;/</it>
       </value>
     </prop>
     <prop oor:name="CmisServersNames">
       <value>
-        <it>Alfresco 4</it>
+        <it>Google Drive</it>
+        <it>OneDrive</it>
         <it>Alfresco Cloud</it>
+        <it>Alfresco 4</it>
         <it>IBM FileNet P8</it>
         <it>Lotus Live Files</it>
         <it>Lotus Quickr Domino</it>
@@ -595,9 +598,8 @@
         <it>OpenDataSpace</it>
         <it>OpenText ELS 10.2.0</it>
         <it>SharePoint 2010</it>
-        <it>Google Drive</it>
-        <it>OneDrive</it>
         <it>SharePoint 2013</it>
+        <it>Other CMIS</it>
       </value>
     </prop>
   </node>

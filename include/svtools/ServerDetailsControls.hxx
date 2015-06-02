@@ -25,7 +25,7 @@ class DetailsContainer
 {
     private:
         Link<> m_aChangeHdl;
-        VclPtr<VclFrame>       m_pFrame;
+        VclPtr<VclGrid>       m_pFrame;
 
     public:
         DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame );
@@ -123,7 +123,7 @@ class CmisDetailsContainer : public DetailsContainer
         VclPtr<Edit>       m_pEDBinding;
         VclPtr<ListBox>    m_pLBRepository;
         VclPtr<Button>     m_pBTRepoRefresh;
-        VclPtr<Edit>       m_pEDPath;
+        VclPtr<Edit>       m_pEDRoot;
 
     public:
         CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString sBinding );
