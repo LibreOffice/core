@@ -22,6 +22,15 @@
       This is clc or stc, together with the first byte of the jmp.  */
 --- Objects/listobject.c
 +++ Objects/listobject.c
+@@ -641,7 +641,7 @@
+             goto Error;
+         }
+     }
+-    memcpy(recycle, &item[ilow], s);
++    if (s != 0) memcpy(recycle, &item[ilow], s);
+ 
+     if (d < 0) { /* Delete -d items */
+         memmove(&item[ihigh+d], &item[ihigh],
 @@ -2036,7 +2036,7 @@
      if (keys != NULL) {
          for (i = 0; i < saved_ob_size; i++)
