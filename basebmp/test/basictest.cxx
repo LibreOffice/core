@@ -131,7 +131,7 @@ public:
                                pDevice->getPixelData(aPt) == 0);
 
         const Color aCol(0xFFFFFFFF);
-        pDevice->setPixel( aPt, aCol, DrawMode_PAINT );
+        pDevice->setPixel( aPt, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #1",
                                pDevice->getPixel(aPt) == aCol);
         CPPUNIT_ASSERT_MESSAGE("getPixelData for white pixel",
@@ -139,28 +139,28 @@ public:
 
         const basegfx::B2IPoint aPt2(0,0);
         const Color aCol2(0xFFFFFFFF);
-        pDevice->setPixel( aPt2, aCol2, DrawMode_PAINT );
+        pDevice->setPixel( aPt2, aCol2, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #2",
                                pDevice->getPixel(aPt2) == aCol2);
 
         const basegfx::B2IPoint aPt3(aSize.getX()-1,aSize.getY()-1);
         const Color aCol3(0x00000000);
-        pDevice->setPixel( aPt3, aCol3, DrawMode_PAINT );
+        pDevice->setPixel( aPt3, aCol3, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #3",
                                pDevice->getPixel(aPt3) == aCol3);
 
-        pDevice->setPixel( aPt3, aCol2, DrawMode_PAINT );
+        pDevice->setPixel( aPt3, aCol2, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #3.5",
                                pDevice->getPixel(aPt3) == aCol2);
 
         const basegfx::B2IPoint aPt4(-100000,-100000);
-        pDevice->setPixel( aPt4, aCol3, DrawMode_PAINT );
+        pDevice->setPixel( aPt4, aCol3, DrawMode::Paint );
         const basegfx::B2IPoint aPt5(100000,100000);
-        pDevice->setPixel( aPt5, aCol3, DrawMode_PAINT );
+        pDevice->setPixel( aPt5, aCol3, DrawMode::Paint );
 
         sal_Int32 nPixel(countPixel(pDevice, aCol2));
         const basegfx::B2IPoint aPt6(aSize.getX(),aSize.getY());
-        pDevice->setPixel( aPt6, aCol2, DrawMode_PAINT );
+        pDevice->setPixel( aPt6, aCol2, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("setPixel clipping",
                                countPixel(pDevice, aCol2) == nPixel);
 
@@ -174,16 +174,16 @@ public:
                                           FORMAT_ONE_BIT_LSB_PAL,
                                           basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_LSB_PAL, aSize.getX()));
 
-            pDevice->setPixel( aPt2, aCol, DrawMode_PAINT );
+            pDevice->setPixel( aPt2, aCol, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #4",
                                    pDevice->getPixel(aPt2) == aCol);
 
             const basegfx::B2IPoint aPt222(1,1);
-            pDevice->setPixel( aPt222, aCol, DrawMode_PAINT );
+            pDevice->setPixel( aPt222, aCol, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #5",
                                    pDevice->getPixel(aPt222) == aCol);
 
-            pDevice->setPixel( aPt3, aCol, DrawMode_PAINT );
+            pDevice->setPixel( aPt3, aCol, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #6",
                                    pDevice->getPixel(aPt3) == aCol);
 
@@ -201,17 +201,17 @@ public:
                                           basebmp::getBitmapDeviceStrideForWidth(FORMAT_EIGHT_BIT_GREY, aSize.getX()));
 
             const Color aCol4(0x010101);
-            pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
+            pDevice->setPixel( aPt, aCol4, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #4",
                                    pDevice->getPixel(aPt) == aCol4);
 
             const Color aCol5(0x0F0F0F);
-            pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
+            pDevice->setPixel( aPt2, aCol5, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #5",
                                    pDevice->getPixel(aPt2) == aCol5);
 
             const Color aCol6(0xFFFFFF);
-            pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
+            pDevice->setPixel( aPt3, aCol6, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #6",
                                    pDevice->getPixel(aPt3) == aCol6);
         }
@@ -226,17 +226,17 @@ public:
             pDevice->clear( aCol7 );
 
             const Color aCol4(0x00101010);
-            pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
+            pDevice->setPixel( aPt, aCol4, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #7",
                                    pDevice->getPixel(aPt) == aCol4);
 
             const Color aCol5(0x00F0F0F0);
-            pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
+            pDevice->setPixel( aPt2, aCol5, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #8",
                                    pDevice->getPixel(aPt2) != aCol7);
 
             const Color aCol6(0x00FFFFFF);
-            pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
+            pDevice->setPixel( aPt3, aCol6, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #9",
                                    pDevice->getPixel(aPt3) == aCol6);
         }
@@ -249,17 +249,17 @@ public:
                                           basebmp::getBitmapDeviceStrideForWidth(FORMAT_TWENTYFOUR_BIT_TC_MASK, aSize.getX()));
 
             const Color aCol4(0x01010101);
-            pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
+            pDevice->setPixel( aPt, aCol4, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #10",
                                    pDevice->getPixel(aPt) == aCol4);
 
             const Color aCol5(0x0F3F2F1F);
-            pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
+            pDevice->setPixel( aPt2, aCol5, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #11",
                                    pDevice->getPixel(aPt2) == aCol5);
 
             const Color aCol6(0xFFFFFFFF);
-            pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
+            pDevice->setPixel( aPt3, aCol6, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #12",
                                    pDevice->getPixel(aPt3) == aCol6);
 
@@ -277,17 +277,17 @@ public:
                                           basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX()));
 
             const Color aCol4(0x01010101);
-            pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
+            pDevice->setPixel( aPt, aCol4, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #13",
                                    pDevice->getPixel(aPt) == aCol4);
 
             const Color aCol5(0x0F0F0F0F);
-            pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
+            pDevice->setPixel( aPt2, aCol5, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #14",
                                    pDevice->getPixel(aPt2) == aCol5);
 
             const Color aCol6(0xFFFFFFFF);
-            pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
+            pDevice->setPixel( aPt3, aCol6, DrawMode::Paint );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #15",
                                    pDevice->getPixel(aPt3) == aCol6);
         }

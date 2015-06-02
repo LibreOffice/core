@@ -46,7 +46,7 @@ private:
         const basegfx::B2IPoint aPt1(1,1);
         const basegfx::B2IPoint aPt2(9,9);
         const Color aCol(0xFFFFFFFF);
-        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("first pixel set",
                                rDevice->getPixel(aPt1) == aCol);
         CPPUNIT_ASSERT_MESSAGE("last pixel set",
@@ -61,7 +61,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 9",
                                countPixel( rDevice, aCol ) == 9);
 
-        rDevice->drawLine( aPt2, aPt1, aCol, DrawMode_PAINT );
+        rDevice->drawLine( aPt2, aPt1, aCol, DrawMode::Paint );
 
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel after "
                                "reversed paint is not 9",
@@ -75,7 +75,7 @@ private:
         const basegfx::B2IPoint aPt1(10,10);
         const basegfx::B2IPoint aPt2(0,10);
         const Color aCol(0xFFFFFFFF);
-        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("first pixel set",
                                rDevice->getPixel(aPt1) == aCol);
         CPPUNIT_ASSERT_MESSAGE("last pixel set",
@@ -84,7 +84,7 @@ private:
                                countPixel( rDevice, aCol ) == 11);
 
         rDevice->clear(Color(0));
-        rDevice->drawLine( aPt2, aPt1, aCol, DrawMode_PAINT );
+        rDevice->drawLine( aPt2, aPt1, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("first pixel set",
                                rDevice->getPixel(aPt1) == aCol);
         CPPUNIT_ASSERT_MESSAGE("last pixel set",
@@ -100,7 +100,7 @@ private:
         const basegfx::B2IPoint aPt1(1,1);
         const basegfx::B2IPoint aPt2(1,9);
         const Color aCol(0xFFFFFFFF);
-        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("first pixel set",
                                rDevice->getPixel(aPt1) == aCol);
         CPPUNIT_ASSERT_MESSAGE("last pixel set",
@@ -125,7 +125,7 @@ private:
         const basegfx::B2IPoint aPt1(1,1);
         const basegfx::B2IPoint aPt2(3,2);
         const Color aCol(0xFFFFFFFF);
-        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("first pixel set",
                                rDevice->getPixel(aPt1) == aCol);
         CPPUNIT_ASSERT_MESSAGE("second pixel set",
@@ -136,7 +136,7 @@ private:
                                "reversed paint is not 3",
                                countPixel( rDevice, aCol ) == 3);
 
-        rDevice->drawLine( aPt2, aPt1, aCol, DrawMode_PAINT );
+        rDevice->drawLine( aPt2, aPt1, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("alternate second pixel set",
                                rDevice->getPixel(basegfx::B2IPoint(2,2)) == aCol);
 
@@ -174,7 +174,7 @@ public:
                                 pDevice->getPixelData(aPt1) == 0);
 
         const Color aCol(0xFFFFFFFF);
-        pDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        pDevice->drawLine( aPt1, aPt2, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("only pixel set",
                                pDevice->getPixelData(aPt1) == 1);
 
@@ -188,7 +188,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("only pixel cleared",
                                 pDevice->getPixelData(aPt1) == 0);
 
-        pDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        pDevice->drawLine( aPt1, aPt2, aCol, DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("only pixel still cleared",
                                pDevice->getPixelData(aPt1) == 0);
     }

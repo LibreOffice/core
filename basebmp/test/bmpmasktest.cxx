@@ -61,7 +61,7 @@ private:
             mpMaskBmp1bpp,
             aSourceRect,
             aDestAll,
-            DrawMode::DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 30",
                                countPixel( rDevice, aCol ) == 30);
     }
@@ -80,7 +80,7 @@ private:
             mpMaskBmp1bpp,
             aSourceRect,
             aDestLeftTop,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 12",
                                countPixel( rDevice, aCol ) == 12);
     }
@@ -121,11 +121,11 @@ public:
         mpBmp1bpp->fillPolyPolygon(
             aPoly,
             aColWhite,
-            DrawMode_PAINT );
+            DrawMode::Paint );
         mpBmp32bpp->fillPolyPolygon(
             aPoly,
             aColWhite,
-            DrawMode_PAINT );
+            DrawMode::Paint );
 
         aSvg = "m 0 0 h6 v10 h-6z" ;
 
@@ -135,7 +135,7 @@ public:
         mpMaskBmp1bpp->fillPolyPolygon(
             aPoly,
             aColBlack,
-            DrawMode_PAINT );
+            DrawMode::Paint );
     }
 
     void testBmpBasics()

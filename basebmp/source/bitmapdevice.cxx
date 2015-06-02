@@ -437,7 +437,7 @@ namespace
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
                                                     rPt.getY()) );
-            if( drawMode == DrawMode_XOR )
+            if( drawMode == DrawMode::XOR )
                 maXorAccessor.set( pixelColor,
                                    pixel );
             else
@@ -461,7 +461,7 @@ namespace
                 maBegin + offset,
                 pMask->maBegin + offset );
 
-            if( drawMode == DrawMode_XOR )
+            if( drawMode == DrawMode::XOR )
                 maMaskedXorAccessor.set( pixelColor,
                                          aIter );
             else
@@ -547,7 +547,7 @@ namespace
                            const XorAcc&            xorAcc,
                            DrawMode                 drawMode )
         {
-            if( drawMode == DrawMode_XOR )
+            if( drawMode == DrawMode::XOR )
                 implRenderLine( rPt1, rPt2, rBounds, col,
                                 begin, maAccessor, xorAcc );
             else
@@ -625,7 +625,7 @@ namespace
                                    Color                      lineColor,
                                    DrawMode                   drawMode ) SAL_OVERRIDE
         {
-            if( drawMode == DrawMode_XOR )
+            if( drawMode == DrawMode::XOR )
                 implDrawPolygon( rPoly, rBounds, lineColor,
                                  maBegin,
                                  maRawXorAccessor );
@@ -641,7 +641,7 @@ namespace
                                    DrawMode                     drawMode,
                                    const BitmapDeviceSharedPtr& rClip ) SAL_OVERRIDE
         {
-            if( drawMode == DrawMode_XOR )
+            if( drawMode == DrawMode::XOR )
                 implDrawPolygon( rPoly, rBounds, lineColor,
                                  getMaskedIter(rClip),
                                  maRawMaskedXorAccessor );
@@ -682,7 +682,7 @@ namespace
                                        DrawMode                       drawMode,
                                        const basegfx::B2IBox&         rBounds ) SAL_OVERRIDE
         {
-            if( drawMode == DrawMode_XOR )
+            if( drawMode == DrawMode::XOR )
                 implFillPolyPolygon( rPoly, fillColor,
                                      maBegin,
                                      maRawXorAccessor,
@@ -700,7 +700,7 @@ namespace
                                        const basegfx::B2IBox&         rBounds,
                                        const BitmapDeviceSharedPtr&   rClip ) SAL_OVERRIDE
         {
-            if( drawMode == DrawMode_XOR )
+            if( drawMode == DrawMode::XOR )
                 implFillPolyPolygon( rPoly, fillColor,
                                      getMaskedIter(rClip),
                                      maRawMaskedXorAccessor,
@@ -810,7 +810,7 @@ namespace
         {
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
-                if( drawMode == DrawMode_XOR )
+                if( drawMode == DrawMode::XOR )
                     implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
                                    maBegin,
                                    maRawXorAccessor);
@@ -825,7 +825,7 @@ namespace
             }
             else
             {
-                if( drawMode == DrawMode_XOR )
+                if( drawMode == DrawMode::XOR )
                     implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
                                           maBegin,
                                           maXorAccessor);
@@ -845,7 +845,7 @@ namespace
         {
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
-                if( drawMode == DrawMode_XOR )
+                if( drawMode == DrawMode::XOR )
                     implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
                                    getMaskedIter(rClip),
                                    maRawMaskedXorAccessor);
@@ -856,7 +856,7 @@ namespace
             }
             else
             {
-                if( drawMode == DrawMode_XOR )
+                if( drawMode == DrawMode::XOR )
                     implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
                                           getMaskedIter(rClip),
                                           maMaskedXorAccessor);
@@ -1054,7 +1054,7 @@ namespace
             if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
             {
-                if( drawMode == DrawMode_XOR )
+                if( drawMode == DrawMode::XOR )
                     implDrawMaskedBitmap(rSrcBitmap, rMask,
                                          rSrcRect, rDstRect,
                                          maBegin,
@@ -1067,7 +1067,7 @@ namespace
             }
             else
             {
-                if( drawMode == DrawMode_XOR )
+                if( drawMode == DrawMode::XOR )
                     implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
                                                 rSrcRect, rDstRect,
                                                 maBegin,
@@ -1091,7 +1091,7 @@ namespace
             if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
             {
-                if( drawMode == DrawMode_XOR )
+                if( drawMode == DrawMode::XOR )
                     implDrawMaskedBitmap(rSrcBitmap, rMask,
                                          rSrcRect, rDstRect,
                                          getMaskedIter(rClip),
@@ -1104,7 +1104,7 @@ namespace
             }
             else
             {
-                if( drawMode == DrawMode_XOR )
+                if( drawMode == DrawMode::XOR )
                     implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
                                                 rSrcRect, rDstRect,
                                                 getMaskedIter(rClip),
@@ -1639,7 +1639,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
             pAlphaCopy->drawBitmap(rAlphaMask,
                                    aSrcRange,
                                    aAlphaRange,
-                                   DrawMode_PAINT);
+                                   DrawMode::Paint);
             drawMaskedColor_i( aSrcColor, pAlphaCopy, aAlphaRange, aDestPoint );
         }
         else
@@ -1691,7 +1691,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                 pAlphaCopy->drawBitmap(rAlphaMask,
                                        aSrcRange,
                                        aAlphaRange,
-                                       DrawMode_PAINT);
+                                       DrawMode::Paint);
                 drawMaskedColor_i( aSrcColor, pAlphaCopy, aAlphaRange, aDestPoint, rClip );
             }
             else
