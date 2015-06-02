@@ -359,7 +359,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         // 10) dummy char check (unfortunately cannot check SwTextNode::m_Text)
         if (pHtThis->HasDummyChar())
         {
-            for ( sal_uInt16 j = 0; j < i; ++j )
+            for ( size_t j = 0; j < i; ++j )
             {
                 SwTextAttr const * const pOther( m_HintStarts[j] );
                 if (pOther->HasDummyChar())

@@ -173,7 +173,7 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
 
 #define CHECKTABLELAYOUT                                            \
     {                                                               \
-        for ( sal_uInt16 i = 0; i < GetTabLines().size(); ++i )        \
+        for ( size_t i = 0; i < GetTabLines().size(); ++i )        \
         {                                                           \
             SwFrameFormat* pFormat = GetTabLines()[i]->GetFrameFormat();  \
             SwIterator<SwRowFrm,SwFormat> aIter( *pFormat );              \

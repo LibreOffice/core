@@ -72,10 +72,10 @@ using namespace com::sun::star;
             const SwRedlineTable& rTable = redlineAccess.GetRedlineTable();
 
             // verify valid redline positions
-            for( sal_uInt16 i = 0; i < rTable.size(); ++i )
+            for( size_t i = 0; i < rTable.size(); ++i )
                 lcl_CheckPam( rTable[ i ] );
 
-            for( sal_uInt16 j = 0; j < rTable.size(); ++j )
+            for( size_t j = 0; j < rTable.size(); ++j )
             {
                 // check for empty redlines
                 OSL_ENSURE( ( *(rTable[j]->GetPoint()) != *(rTable[j]->GetMark()) ) ||
@@ -84,7 +84,7 @@ using namespace com::sun::star;
              }
 
             // verify proper redline sorting
-            for( sal_uInt16 n = 1; n < rTable.size(); ++n )
+            for( size_t n = 1; n < rTable.size(); ++n )
             {
                 const SwRangeRedline* pPrev = rTable[ n-1 ];
                 const SwRangeRedline* pCurrent = rTable[ n ];

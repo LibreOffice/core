@@ -797,7 +797,7 @@ static OUString lcl_dbg_out(SwOutlineNodes & rNodes)
 {
     OUString aStr("[\n");
 
-    for (sal_uInt16 i = 0; i < rNodes.size(); i++)
+    for (size_t i = 0; i < rNodes.size(); i++)
     {
         aStr += lcl_dbg_out(*rNodes[i]);
         aStr += "\n";
