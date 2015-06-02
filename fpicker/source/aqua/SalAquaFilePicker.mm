@@ -337,7 +337,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 
     uno::Sequence< rtl::OUString > aSelectedFiles(nFiles > 1 ? nFiles + 1 : nFiles);
 
-    for(int nIndex = 0; nIndex < nFiles; nIndex += 1)
+    for(long nIndex = 0; nIndex < nFiles; nIndex += 1)
     {
         NSURL *url = [files objectAtIndex:nIndex];
 
