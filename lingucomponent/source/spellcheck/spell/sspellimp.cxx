@@ -454,7 +454,7 @@ Reference< XSpellAlternatives >
             {
                 char ** suglst = NULL;
                 OString aWrd(OU2ENC(nWord,eEnc));
-                int count = pMS->suggest(&suglst, (const char *) aWrd.getStr());
+                int count = pMS->suggest(&suglst, aWrd.getStr());
 
                 if (count)
                 {

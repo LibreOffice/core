@@ -201,7 +201,7 @@ void LangGuess_Impl::SetFingerPrintsDB(
     OString conf_file_path(path);
     conf_file_path += conf_file_name;
 
-    m_aGuesser.SetDBPath((const char*)conf_file_path.getStr(), (const char*)path.getStr());
+    m_aGuesser.SetDBPath(conf_file_path.getStr(), path.getStr());
 }
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
