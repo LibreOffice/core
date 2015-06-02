@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_81e4ad0d",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-02T16:25:33Z",
+      "side": 1,
+      "message": "why check if the nContent \u003d\u003d aIdx?\n\nfor the m_AnchoredFlys it only matters which node it\u0027s anchored to.\n\nhmmm... actually the case where the node is the same is impossible for Cut because Cut requires different nodes, perhaps it\u0027s possible in some Copy path from drag-and-drop, if cloning the format clones the anchor position as well, not sure about that.",
+      "revId": "31b5763fcffd133be68b91aebe8889fd85709d50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
