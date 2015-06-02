@@ -565,8 +565,8 @@ void XPlugin_Impl::loadPlugin()
                  &getNPPInstance(),
                  m_aPluginMode == PluginMode::FULL ? NP_FULL : NP_EMBED,
                  ::sal::static_int_cast< int16_t, int >( m_nArgs ),
-                 (char**)(m_nArgs ? m_pArgn : NULL),
-                 (char**)(m_nArgs ? m_pArgv : NULL),
+                 const_cast<char**>(m_nArgs ? m_pArgn : NULL),
+                 const_cast<char**>(m_nArgs ? m_pArgv : NULL),
                  NULL );
 #ifdef MACOSX
     // m_aNPWindow is set up in the MacPluginComm from the view

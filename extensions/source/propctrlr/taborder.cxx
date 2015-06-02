@@ -277,7 +277,7 @@ namespace pcr
             for( sal_Int32 j=0; j<aControlModels.getLength(); j++ )
             {
                 Reference< XPropertySet >  xSet(pControlModels[j], UNO_QUERY);
-                if ((XPropertySet*)xSet.get() == static_cast<XPropertySet*>(pEntry->GetUserData()))
+                if (xSet.get() == static_cast<XPropertySet*>(pEntry->GetUserData()))
                 {
                     pSortedControlModels[i] = pControlModels[j];
                     break;

@@ -98,7 +98,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
             pToolBar->ClearSourceList();
 
             Sequence<OUString> const * pStringSeq = static_cast<Sequence<OUString> const *>(aState.getValue());
-            const OUString* pStringArray = (const OUString*)pStringSeq->getConstArray();
+            const OUString* pStringArray = pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
             OUString aEntry;
@@ -136,7 +136,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
             pToolBar->ClearFilterMenu();
 
             Sequence<OUString> const * pStringSeq = static_cast<Sequence<OUString> const *>(aState.getValue());
-            const OUString* pStringArray = (const OUString*)pStringSeq->getConstArray();
+            const OUString* pStringArray = pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
             for( sal_uInt32 i=0; i<nCount; i++ )

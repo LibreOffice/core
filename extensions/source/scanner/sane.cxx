@@ -226,7 +226,7 @@ void Sane::Init()
         {
             SANE_Status nStatus = p_init( &nVersion, 0 );
             FAIL_SHUTDOWN_STATE( nStatus, "sane_init", );
-            nStatus = p_get_devices( (const SANE_Device***)&ppDevices,
+            nStatus = p_get_devices( const_cast<const SANE_Device***>(&ppDevices),
                                      SANE_FALSE );
             FAIL_SHUTDOWN_STATE( nStatus, "sane_get_devices", );
             for( nDevices = 0 ; ppDevices[ nDevices ]; nDevices++ ) ;
@@ -286,7 +286,7 @@ void Sane::ReloadOptions()
 
 bool Sane::Open( const char* name )
 {
-    SANE_Status nStatus = p_open( (SANE_String_Const)name, &maHandle );
+    SANE_Status nStatus = p_open( reinterpret_cast<SANE_String_Const>(name), &maHandle );
     FAIL_STATE( nStatus, "sane_open", false );
 
     ReloadOptions();
