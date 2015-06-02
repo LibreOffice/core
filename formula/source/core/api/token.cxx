@@ -1482,7 +1482,7 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
                     nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                 else
                     nJump[ 0 ] = 2;
-                pRet = new FormulaJumpToken( eOp, (short*)nJump );
+                pRet = new FormulaJumpToken( eOp, nJump );
             }
             break;
         default:
