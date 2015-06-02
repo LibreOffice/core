@@ -167,7 +167,7 @@ public class CopyTableWizard extends CRMBasedTestCase
         copyWizard.setCreatePrimaryKey(auto);
         Thread thread = new Thread(new CopyThread(copyWizard));
         thread.start();
-        sleep();
+        util.utils.shortWait();
 
         try
         {
@@ -195,14 +195,9 @@ public class CopyTableWizard extends CRMBasedTestCase
         catch (com.sun.star.lang.IndexOutOfBoundsException indexOutOfBoundsException)
         {
         }
-        sleep();
+        util.utils.shortWait();
 
         thread.join();
-    }
-
-    private void sleep()
-    {
-        util.utils.shortWait();
     }
 
 }
