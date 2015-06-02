@@ -1436,6 +1436,8 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
                 aColor = static_cast<const XLineColorItem*>(pState)->GetColorValue();
             else if ( pState->ISA( XFillColorItem ) )
                 aColor = static_cast<const XFillColorItem*>(pState)->GetColorValue();
+            else if ( pState->ISA( SvxBackgroundColorItem ) )
+                aColor = static_cast<const SvxBackgroundColorItem*>(pState)->GetValue();
         }
 
         if ( aColor == COL_TRANSPARENT )
@@ -2553,6 +2555,11 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
             bSidebarType = false;
             break;
 
+        case SID_ATTR_CHAR_BACK_COLOR:
+            addStatusListener( OUString( ".uno:CharBackColor" ));
+            mPaletteManager.SetLastColor( COL_YELLOW );
+            break;
+
         case SID_FRAME_LINECOLOR:
             addStatusListener( OUString( ".uno:FrameLineColor" ));
             addStatusListener( OUString( ".uno:BorderTLBR" ));
@@ -2614,6 +2621,10 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
 
         case SID_BACKGROUND_COLOR :
             pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
+            break;
+
+        case SID_ATTR_CHAR_BACK_COLOR :
+            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_CHAR_BACK_COLOR ) );
             break;
 
         case SID_FRAME_LINECOLOR:
@@ -2714,6 +2725,11 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
             aParamName  = "BackColor";
             break;
 
+        case SID_ATTR_CHAR_BACK_COLOR :
+            aCommand    = ".uno:CharBackColor";
+            aParamName  = "CharBackColor";
+            break;
+
         case SID_FRAME_LINECOLOR  :
             aCommand    = ".uno:FrameLineColor";
             aParamName  = "FrameLineColor";
@@ -2752,6 +2768,8 @@ void SvxColorToolBoxControl::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod
         SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XLineColorItem), nSlotId ) );
     else if ( nSlotId == SID_ATTR_FILL_COLOR )
         SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XFillColorItem), nSlotId ) );
+    else if ( nSlotId == SID_ATTR_CHAR_BACK_COLOR )
+        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(SvxBackgroundColorItem), nSlotId ) );
     else
         SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(SvxColorItem), nSlotId ) );
 }
