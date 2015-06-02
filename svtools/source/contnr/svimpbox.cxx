@@ -3222,7 +3222,7 @@ SvLBoxTab* SvImpLBox::NextTab( SvLBoxTab* pTab )
     for( int nTab=0; nTab < (nTabCount-1); nTab++)
     {
         if( pView->aTabs[nTab]==pTab )
-            return (SvLBoxTab*)(pView->aTabs[nTab+1]);
+            return pView->aTabs[nTab+1];
     }
     return 0;
 }
