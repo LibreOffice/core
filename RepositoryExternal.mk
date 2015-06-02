@@ -2562,6 +2562,12 @@ gb_LinkTarget__use_telepathy :=
 
 endif # ENABLE_TELEPATHY
 
+ifeq ($(ENABLE_EXTENSION_UPDATE),TRUE)
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DENABLE_EXTENSION_UPDATE \
+)
+endif # ENABLE_EXTENSION_UPDATE
+
 ifneq ($(SYSTEM_LIBPNG),)
 
 define gb_LinkTarget__use_png
