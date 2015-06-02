@@ -1286,14 +1286,13 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 m_pImpl->applyMargins(xGraphicObjectProperties);
             }
 
-            if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
+            if( m_pImpl->eColorMode == drawing::ColorMode_WATERMARK &&
                 m_pImpl->nContrast == -70 &&
                 m_pImpl->nBrightness == 70 )
             {
-                // strange definition of WATERMARK!
+                // watermark filter is already applied at this point, so reset Contrast and Brightness
                 m_pImpl->nContrast = 0;
                 m_pImpl->nBrightness = 0;
-                m_pImpl->eColorMode = drawing::ColorMode_WATERMARK;
             }
 
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ADJUST_CONTRAST ),
