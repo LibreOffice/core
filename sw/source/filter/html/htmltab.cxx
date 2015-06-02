@@ -2984,10 +2984,10 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
 class _SectionSaveStruct : public SwPendingStackData
 {
-    sal_uInt16 nBaseFontStMinSave, nFontStMinSave, nFontStHeadStartSave;
-    sal_uInt16 nDefListDeepSave;
-    size_t nContextStMinSave;
-    size_t nContextStAttrMinSave;
+    sal_uInt16 m_nBaseFontStMinSave, m_nFontStMinSave, m_nFontStHeadStartSave;
+    sal_uInt16 m_nDefListDeepSave;
+    size_t m_nContextStMinSave;
+    size_t m_nContextStAttrMinSave;
 
 public:
 
@@ -2997,32 +2997,32 @@ public:
     virtual ~_SectionSaveStruct();
 
 #if OSL_DEBUG_LEVEL > 0
-    size_t GetContextStAttrMin() const { return nContextStAttrMinSave; }
+    size_t GetContextStAttrMin() const { return m_nContextStAttrMinSave; }
 #endif
     void Restore( SwHTMLParser& rParser );
 };
 
 _SectionSaveStruct::_SectionSaveStruct( SwHTMLParser& rParser ) :
-    nBaseFontStMinSave(0), nFontStMinSave(0), nFontStHeadStartSave(0),
-    nDefListDeepSave(0), nContextStMinSave(0), nContextStAttrMinSave(0),
+    m_nBaseFontStMinSave(0), m_nFontStMinSave(0), m_nFontStHeadStartSave(0),
+    m_nDefListDeepSave(0), m_nContextStMinSave(0), m_nContextStAttrMinSave(0),
     m_pTable( 0 )
 {
     // Font-Stacks einfrieren
-    nBaseFontStMinSave = rParser.nBaseFontStMin;
+    m_nBaseFontStMinSave = rParser.nBaseFontStMin;
     rParser.nBaseFontStMin = rParser.aBaseFontStack.size();
 
-    nFontStMinSave = rParser.nFontStMin;
-    nFontStHeadStartSave = rParser.nFontStHeadStart;
+    m_nFontStMinSave = rParser.nFontStMin;
+    m_nFontStHeadStartSave = rParser.nFontStHeadStart;
     rParser.nFontStMin = rParser.aFontStack.size();
 
     // Kontext-Stack einfrieren
-    nContextStMinSave = rParser.nContextStMin;
-    nContextStAttrMinSave = rParser.nContextStAttrMin;
+    m_nContextStMinSave = rParser.nContextStMin;
+    m_nContextStAttrMinSave = rParser.nContextStAttrMin;
     rParser.nContextStMin = rParser.aContexts.size();
     rParser.nContextStAttrMin = rParser.nContextStMin;
 
     // und noch ein par Zaehler retten
-    nDefListDeepSave = rParser.nDefListDeep;
+    m_nDefListDeepSave = rParser.nDefListDeep;
     rParser.nDefListDeep = 0;
 }
 
@@ -3036,23 +3036,23 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
     if( rParser.aBaseFontStack.size() > nMin )
         rParser.aBaseFontStack.erase( rParser.aBaseFontStack.begin() + nMin,
                 rParser.aBaseFontStack.end() );
-    rParser.nBaseFontStMin = nBaseFontStMinSave;
+    rParser.nBaseFontStMin = m_nBaseFontStMinSave;
 
     nMin = rParser.nFontStMin;
     if( rParser.aFontStack.size() > nMin )
         rParser.aFontStack.erase( rParser.aFontStack.begin() + nMin,
                 rParser.aFontStack.end() );
-    rParser.nFontStMin = nFontStMinSave;
-    rParser.nFontStHeadStart = nFontStHeadStartSave;
+    rParser.nFontStMin = m_nFontStMinSave;
+    rParser.nFontStHeadStart = m_nFontStHeadStartSave;
 
     OSL_ENSURE( rParser.aContexts.size() == rParser.nContextStMin &&
             rParser.aContexts.size() == rParser.nContextStAttrMin,
             "The Context Stack was not cleaned up" );
-    rParser.nContextStMin = nContextStMinSave;
-    rParser.nContextStAttrMin = nContextStAttrMinSave;
+    rParser.nContextStMin = m_nContextStMinSave;
+    rParser.nContextStAttrMin = m_nContextStAttrMinSave;
 
     // und noch ein par Zaehler rekonstruieren
-    rParser.nDefListDeep = nDefListDeepSave;
+    rParser.nDefListDeep = m_nDefListDeepSave;
 
     // und ein par Flags zuruecksetzen
     rParser.bNoParSpace = false;
