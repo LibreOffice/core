@@ -53,6 +53,7 @@
 #include "resource/hsqldb_res.hrc"
 #include "resource/sharedresources.hxx"
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <o3tl/compat_functional.hxx>
 
@@ -622,6 +623,7 @@ namespace connectivity
             }
             catch(Exception&)
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
