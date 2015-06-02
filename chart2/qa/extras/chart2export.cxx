@@ -98,6 +98,7 @@ public:
     void testPlotVisOnlyXLSX();
     void testBarChartVaryColorsXLSX();
     void testMultipleAxisXLSX();
+    void testAxisTitleRotationXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -160,6 +161,7 @@ public:
     CPPUNIT_TEST(testPlotVisOnlyXLSX);
     CPPUNIT_TEST(testBarChartVaryColorsXLSX);
     CPPUNIT_TEST(testMultipleAxisXLSX);
+    CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1460,6 +1462,15 @@ void Chart2ExportTest::testMultipleAxisXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:delete[@val='1']", 1);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:axPos[@val='l']", 1);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:axPos[@val='r']", 1);
+}
+
+void Chart2ExportTest::testAxisTitleRotationXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "axis_title_rotation.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:tx/c:rich/a:bodyPr", "rot", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
