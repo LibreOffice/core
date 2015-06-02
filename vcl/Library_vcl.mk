@@ -499,7 +499,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/osx/PictToBmpFlt \
     vcl/osx/clipboard \
     vcl/osx/service_entry \
-    vcl/quartz/cairo_quartz_cairo \
     $(vcl_quartz_code) \
     vcl/quartz/salgdiutils \
     vcl/osx/salnativewidgets \
@@ -669,7 +668,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/app/salinst \
     vcl/win/source/app/salshl \
     vcl/win/source/app/saltimer \
-    vcl/win/source/gdi/cairo_win32_cairo \
     vcl/win/source/gdi/gdiimpl \
     vcl/win/source/gdi/salbmp \
     vcl/win/source/gdi/salgdi \

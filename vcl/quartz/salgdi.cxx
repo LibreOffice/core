@@ -750,16 +750,6 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
     DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
 }
 
-SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
-{
-    SystemFontData aSysFontData;
-    aSysFontData.nSize = sizeof( SystemFontData );
-
-    aSysFontData.bAntialias = !mbNonAntialiasedText;
-
-    return aSysFontData;
-}
-
 bool AquaSalGraphics::IsFlipped() const
 {
 #ifdef MACOSX

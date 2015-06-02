@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
 
 #include <vcl/vclenum.hxx>
+#include <config_cairo_canvas.h>
 
 #include "fontmanager.hxx"
 #include "salgdi.hxx"
@@ -201,6 +202,8 @@ public:
                                            sal_uInt8 nTransparency ) SAL_OVERRIDE;
 
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
+
+#if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const SAL_OVERRIDE;
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const SAL_OVERRIDE;
     virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const SAL_OVERRIDE;
@@ -208,6 +211,7 @@ public:
     virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const SAL_OVERRIDE;
 
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
+#endif // ENABLE_CAIRO_CANVAS
 
     virtual void BeginPaint() SAL_OVERRIDE { };
     virtual void EndPaint() SAL_OVERRIDE { };
