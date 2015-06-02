@@ -1163,7 +1163,7 @@ SvStream& SvStream::WriteUChar( unsigned char v )
 //SDO
     if(bIoWrite && sizeof(char) <= nBufFree )
     {
-        *(unsigned char*)pBufPos = v;
+        *reinterpret_cast<unsigned char*>(pBufPos) = v;
         pBufPos++; // = sizeof(char);
         nBufActualPos++; // = sizeof(char);
         if( nBufActualPos > nBufActualLen )  // Append ?
