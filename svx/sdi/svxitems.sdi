@@ -320,6 +320,7 @@ item INT16                  SvxCharReliefItem;
 item BOOL                   SvxBlinkItem;
 item BOOL                   SvxAutoKernItem;
 item INT32                  SvxColorItem;
+item INT32                  SvxBackgroundColorItem;
 item BOOL                   SvxContourItem;
 item INT16                  SvxFormatBreakItem;  // enum
 item BOOL                   SvxFormatKeepItem;

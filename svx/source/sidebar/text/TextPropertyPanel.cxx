@@ -97,8 +97,9 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     get(mpToolBoxFont, "fonteffects");
     get(mpToolBoxIncDec, "fontadjust");
     get(mpToolBoxSpacing, "spacingbar");
-    get(mpToolBoxFontColorSw, "colorbar");
-    get(mpToolBoxFontColor, "colorsingle");
+    get(mpToolBoxFontColorSw, "colorbar_writer");
+    get(mpToolBoxFontColor, "colorbar_others");
+    get(mpToolBoxBackgroundColor, "colorbar_background");
 
     //toolbox
     SetupToolboxItems();
@@ -144,15 +145,20 @@ void TextPropertyPanel::HandleContextChange (
     mpToolBoxIncDec->Show(maContext.GetApplication_DI() != sfx2::sidebar::EnumContext::Application_Calc);
 
     bool bWriterText = false;
+    bool bDrawText = false;
+    bool bNeedTextSpacing = false;
+
     switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application_Calc, Context_Cell):
         case CombinedEnumContext(Application_Calc, Context_Pivot):
-            mpToolBoxSpacing->Disable();
+            // bNeedTextSpacing = false;
             break;
 
         case CombinedEnumContext(Application_Calc, Context_EditCell):
         case CombinedEnumContext(Application_Calc, Context_DrawText):
+            bNeedTextSpacing = true;
+
         case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
@@ -162,12 +168,13 @@ void TextPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-            mpToolBoxSpacing->Enable();
+            bNeedTextSpacing = true;
+            bDrawText = true;
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Text):
         case CombinedEnumContext(Application_WriterVariants, Context_Table):
-            mpToolBoxSpacing->Enable();
+            bNeedTextSpacing = true;
             bWriterText = true;
             break;
 
@@ -175,8 +182,10 @@ void TextPropertyPanel::HandleContextChange (
             break;
     }
 
+    mpToolBoxSpacing->Enable(bNeedTextSpacing);
     mpToolBoxFontColor->Show(!bWriterText);
     mpToolBoxFontColorSw->Show(bWriterText);
+    mpToolBoxBackgroundColor->Show(bDrawText);
 }
 
 void TextPropertyPanel::DataChanged (const DataChangedEvent& /*rEvent*/)
