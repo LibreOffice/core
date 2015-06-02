@@ -49,7 +49,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--without-ssl \
 			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
-			--without-rtmp \
+			--without-librtmp \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
