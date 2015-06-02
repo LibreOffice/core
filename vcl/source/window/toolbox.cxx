@@ -3095,7 +3095,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
-        DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), DrawTextFlags::Mnemonic, pVector, pDisplayText );
+        rRenderContext.DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), DrawTextFlags::Mnemonic, pVector, pDisplayText );
         if (bClip)
             rRenderContext.SetClipRegion();
         rRenderContext.SetFont(aOldFont);
@@ -3258,7 +3258,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
-        DrawCtrlText( Point( nTextOffX, nTextOffY ), pItem->maText,
+        rRenderContext.DrawCtrlText( Point( nTextOffX, nTextOffY ), pItem->maText,
                       0, pItem->maText.getLength(), nTextStyle, pVector, pDisplayText );
         if ( bRotate )
             SetFont( aOldFont );
