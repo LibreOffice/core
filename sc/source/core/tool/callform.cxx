@@ -176,13 +176,13 @@ bool InitExternalFunc(const OUString& rModuleName)
     osl::Module* pLib = new osl::Module( aNP );
     if (pLib->is())
     {
-        FARPROC fpGetCount = (FARPROC)pLib->getFunctionSymbol(GETFUNCTIONCOUNT);
-        FARPROC fpGetData = (FARPROC)pLib->getFunctionSymbol(GETFUNCTIONDATA);
+        FARPROC fpGetCount = reinterpret_cast<FARPROC>(pLib->getFunctionSymbol(GETFUNCTIONCOUNT));
+        FARPROC fpGetData = reinterpret_cast<FARPROC>(pLib->getFunctionSymbol(GETFUNCTIONDATA));
         if ((fpGetCount != NULL) && (fpGetData != NULL))
         {
-            FARPROC fpIsAsync = (FARPROC)pLib->getFunctionSymbol(ISASYNC);
-            FARPROC fpAdvice = (FARPROC)pLib->getFunctionSymbol(ADVICE);
-            FARPROC fpSetLanguage = (FARPROC)pLib->getFunctionSymbol(SETLANGUAGE);
+            FARPROC fpIsAsync = reinterpret_cast<FARPROC>(pLib->getFunctionSymbol(ISASYNC));
+            FARPROC fpAdvice = reinterpret_cast<FARPROC>(pLib->getFunctionSymbol(ADVICE));
+            FARPROC fpSetLanguage = reinterpret_cast<FARPROC>(pLib->getFunctionSymbol(SETLANGUAGE));
             if ( fpSetLanguage )
             {
                 LanguageType eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
@@ -257,7 +257,7 @@ bool FuncData::Call(void** ppParam) const
 #else
     bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
-    FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(aFuncName);
+    FARPROC fProc = reinterpret_cast<FARPROC>(pLib->getFunctionSymbol(aFuncName));
     if (fProc != NULL)
     {
         switch (nParamCount)
@@ -355,7 +355,7 @@ bool FuncData::Unadvice( double nHandle )
 #else
     bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
-    FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(UNADVICE);
+    FARPROC fProc = reinterpret_cast<FARPROC>(pLib->getFunctionSymbol(UNADVICE));
     if (fProc != NULL)
     {
         reinterpret_cast< ::Unadvice>(fProc)(nHandle);
@@ -382,7 +382,7 @@ bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam
     if ( nParam <= nParamCount )
     {
         osl::Module* pLib = pModuleData->GetInstance();
-        FARPROC fProc = (FARPROC) pLib->getFunctionSymbol(GETPARAMDESC);
+        FARPROC fProc = reinterpret_cast<FARPROC>(pLib->getFunctionSymbol(GETPARAMDESC));
         if ( fProc != NULL )
         {
             sal_Char pcName[256];

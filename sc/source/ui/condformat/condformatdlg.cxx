@@ -701,7 +701,6 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
 OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, bool bManaged)
 {
     OUString sReturn;
-    sal_Int32 nSize = 0;
 
     OString sTagName;
     OString sTagValue;
@@ -745,7 +744,8 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
 
     xmlAddChild(pXmlRoot, pXmlNode);
 
-    xmlDocDumpMemory(pXmlDoc, &pBuffer, (int*)&nSize);
+    int nSize = 0;
+    xmlDocDumpMemory(pXmlDoc, &pBuffer, &nSize);
 
     sReturn = OUString(reinterpret_cast<char const *>(pBuffer), nSize, RTL_TEXTENCODING_UTF8);
 

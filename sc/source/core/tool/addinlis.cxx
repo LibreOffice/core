@@ -65,7 +65,7 @@ ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xV
 
     for(::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin(); iter != aAllListeners.end(); ++iter)
     {
-        if ( pComp == (sheet::XVolatileResult*)(*iter)->xVolRes.get() )
+        if ( pComp == (*iter)->xVolRes.get() )
         {
             pLst = *iter;
             break;

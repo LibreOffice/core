@@ -5674,7 +5674,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
 
     uno::Reference<beans::XPropertySet> xPropSet( xDescriptor, uno::UNO_QUERY );
     if (xPropSet.is())
-        lcl_CopyProperties( aImpl, *(beans::XPropertySet*)xPropSet.get() );
+        lcl_CopyProperties( aImpl, *xPropSet.get() );
 
     //  ausfuehren...
 
