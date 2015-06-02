@@ -1318,6 +1318,11 @@ AC_ARG_ENABLE(online-update,
          LibreOffice. By default, it is enabled on Windows and Mac, disabled on Linux.]),
 ,)
 
+AC_ARG_ENABLE(extension-update,
+    AS_HELP_STRING([--disable-extension-update],
+        [Disable possibility to update installed extensions.]),
+,)
+
 AC_ARG_ENABLE(release-build,
     AS_HELP_STRING([--enable-release-build],
         [Enable release build.
@@ -11738,6 +11743,22 @@ fi
 AC_SUBST(ENABLE_ONLINE_UPDATE)
 
 dnl ===================================================================
+dnl Test whether to enable extension update
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable extension update])
+ENABLE_EXTENSION_UPDATE=
+if test "x$enable_extension_update" = "xno"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+    ENABLE_EXTENSION_UPDATE="TRUE"
+    AC_DEFINE(ENABLE_EXTENSION_UPDATE)
+    SCPDEFS="$SCPDEFS -DENABLE_EXTENSION_UPDATE"
+fi
+AC_SUBST(ENABLE_EXTENSION_UPDATE)
+
+
+dnl ===================================================================
 dnl Test whether to create MSI with LIMITUI=1 (silent install)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to create MSI with LIMITUI=1 (silent install)])
@@ -12983,6 +13004,7 @@ AC_CONFIG_FILES([config_host.mk
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
+AC_CONFIG_HEADERS([config_host/config_extension_update.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
 AC_CONFIG_HEADERS([config_host/config_cups.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
