@@ -117,7 +117,7 @@ bool KabConditionEqual::eval(const ::KABC::Addressee &aAddressee) const
 
     if (aQtName.isNull()) return false;
 
-    OUString sValue((const sal_Unicode *) aQtName.ucs2());
+    OUString sValue(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
     return sValue == m_sMatchString;
 }
 
@@ -132,7 +132,7 @@ bool KabConditionDifferent::eval(const ::KABC::Addressee &aAddressee) const
 
     if (aQtName.isNull()) return false;
 
-    OUString sValue((const sal_Unicode *) aQtName.ucs2());
+    OUString sValue(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
     return sValue != m_sMatchString;
 }
 
@@ -147,7 +147,7 @@ bool KabConditionSimilar::eval(const ::KABC::Addressee &aAddressee) const
 
     if (aQtName.isNull()) return false;
 
-    OUString sValue((const sal_Unicode *) aQtName.ucs2());
+    OUString sValue(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
     return match(m_sMatchString, sValue, '\0');
 }
 

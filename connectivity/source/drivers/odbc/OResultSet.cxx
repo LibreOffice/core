@@ -1336,7 +1336,7 @@ OUString OResultSet::getCursorName() const
 {
     SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
-    N3SQLGetCursorName(m_aStatementHandle,(SQLCHAR*)pName,256,&nRealLen);
+    N3SQLGetCursorName(m_aStatementHandle,pName,256,&nRealLen);
     return OUString::createFromAscii(reinterpret_cast<char*>(pName));
 }
 

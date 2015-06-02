@@ -245,7 +245,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
 
         if (nBytesRead <= 0)
             return -1;
-        env->SetByteArrayRegion(buffer,off,nBytesRead,(jbyte*) &aData[0]);
+        env->SetByteArrayRegion(buffer,off,nBytesRead,reinterpret_cast<jbyte*>(&aData[0]));
 
 #ifdef HSQLDB_DBG
         if ( logger )
@@ -436,7 +436,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
             OSL_ENSURE(buf,"buf is NULL");
             if ( buf && len > 0 && len <= env->GetArrayLength(buffer))
             {
-                Sequence< ::sal_Int8 > aData((const signed char*) buf + off,len);
+                Sequence< ::sal_Int8 > aData(reinterpret_cast<sal_Int8 *>(buf + off),len);
                 env->ReleaseByteArrayElements(buffer, buf, JNI_ABORT);
                 xOut->writeBytes(aData);
 #ifdef HSQLDB_DBG

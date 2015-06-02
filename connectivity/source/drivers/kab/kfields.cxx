@@ -53,7 +53,7 @@ sal_uInt32 findKabField(const OUString& columnName) throw(SQLException)
     OUString aName;
 
     aQtName = KABC::Addressee::revisionLabel();
-    aName = OUString((const sal_Unicode *) aQtName.ucs2());
+    aName = OUString(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
     if (columnName == aName)
         return KAB_FIELD_REVISION;
 
@@ -66,7 +66,7 @@ sal_uInt32 findKabField(const OUString& columnName) throw(SQLException)
             ++aField, ++nResult)
     {
         aQtName = (*aField)->label();
-        aName = OUString((const sal_Unicode *) aQtName.ucs2());
+        aName = OUString(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
 
         if (columnName == aName)
             return nResult;

@@ -197,7 +197,7 @@ return aRet;
         if (!aQtName.isNull())
         {
             m_bWasNull = false;
-            aRet = OUString((const sal_Unicode *) aQtName.ucs2());
+            aRet = OUString(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
             return aRet;
         }
     }
@@ -797,7 +797,7 @@ Any SAL_CALL KabResultSet::getBookmark() throw( SQLException,  RuntimeException,
         if (m_nRowPos != -1 && m_nRowPos != nAddressees)
         {
                 QString aQtName = m_aKabAddressees[m_nRowPos].uid();
-               OUString sUniqueIdentifier = OUString((const sal_Unicode *) aQtName.ucs2());
+               OUString sUniqueIdentifier = OUString(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
         return makeAny(sUniqueIdentifier);
     }
     return Any();
@@ -814,7 +814,7 @@ sal_Bool SAL_CALL KabResultSet::moveToBookmark(const  Any& bookmark) throw( SQLE
     for (sal_Int32 nRow = 0; nRow < nAddressees; nRow++)
     {
                 QString aQtName = m_aKabAddressees[nRow].uid();
-               OUString sUniqueIdentifier = OUString((const sal_Unicode *) aQtName.ucs2());
+               OUString sUniqueIdentifier = OUString(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
 
         if (sUniqueIdentifier == sBookmark)
         {

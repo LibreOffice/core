@@ -729,7 +729,7 @@ OUString OStatement_Base::getCursorName() const
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
-    SQLRETURN nRetCode = N3SQLGetCursorName(m_aStatementHandle,(SQLCHAR*)pName,256,&nRealLen);
+    SQLRETURN nRetCode = N3SQLGetCursorName(m_aStatementHandle,pName,256,&nRealLen);
     OSL_UNUSED( nRetCode );
     return OUString::createFromAscii(reinterpret_cast<char*>(pName));
 }

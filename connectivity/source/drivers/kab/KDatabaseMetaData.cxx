@@ -880,7 +880,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
         OUString sName;
 
         aQtName = ::KABC::Addressee::revisionLabel();
-        sName = (const sal_Unicode *) aQtName.ucs2();
+        sName = reinterpret_cast<const sal_Unicode *>(aQtName.ucs2());
         if (match(columnNamePattern, sName, '\0'))
         {
             aRow[4] = new ORowSetValueDecorator(sName);
@@ -898,7 +898,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
                 ++aField, ++nPosition)
         {
             aQtName = (*aField)->label();
-            sName = (const sal_Unicode *) aQtName.ucs2();
+            sName = reinterpret_cast<const sal_Unicode *>(aQtName.ucs2());
             if (match(columnNamePattern, sName, '\0'))
             {
                 aRow[4] = new ORowSetValueDecorator(sName);
@@ -993,7 +993,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
     {
         ODatabaseMetaDataResultSet::ORow aRow( 9 );
         QString aQtName = ::KABC::Addressee::revisionLabel();
-        OUString sName = (const sal_Unicode *) aQtName.ucs2();
+        OUString sName = reinterpret_cast<const sal_Unicode *>(aQtName.ucs2());
 
         aRow[0] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[1] = ODatabaseMetaDataResultSet::getEmptyValue();

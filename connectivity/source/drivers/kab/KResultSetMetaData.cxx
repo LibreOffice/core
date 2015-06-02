@@ -91,7 +91,7 @@ OUString SAL_CALL KabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQ
         default:
             aQtName = aFields[nFieldNumber - KAB_DATA_FIELDS]->label();
     }
-    OUString aName((const sal_Unicode *) aQtName.ucs2());
+    OUString aName(reinterpret_cast<const sal_Unicode *>(aQtName.ucs2()));
 
     return aName;
 }

@@ -974,7 +974,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 case DataType::BIT:
                 {
                     bool b;
-                    switch (* ((const char *)pData))
+                    switch (*pData)
                     {
                         case 'T':
                         case 'Y':
@@ -1963,7 +1963,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
                     char cNext = pData[nLen]; // Mark's scratch and replaced by 0
                     pData[nLen] = '\0';       // This is because the buffer is always a sign of greater ...
 
-                    sal_Size nBlockNo = strtol((const char *)pData,NULL,10); // Block number read
+                    sal_Size nBlockNo = strtol(pData,NULL,10); // Block number read
 
                     // Next initial character restore again:
                     pData[nLen] = cNext;

@@ -374,7 +374,7 @@ bool isBookBackend( EBookClient *pBook, const char *backendname)
 {
     if (!pBook)
         return false;
-    ESource *pSource = e_client_get_source ((EClient *) pBook);
+    ESource *pSource = e_client_get_source (reinterpret_cast<EClient *>(pBook));
     return isSourceBackend(pSource, backendname);
 }
 
