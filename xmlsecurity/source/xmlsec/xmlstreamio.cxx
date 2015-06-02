@@ -121,7 +121,7 @@ int xmlStreamRead( void* context, char* buffer, int len )
                 return 0 ;
 
             numbers = xInputStream->readBytes( outSeqs, len ) ;
-            const sal_Int8* readBytes = ( const sal_Int8* )outSeqs.getArray() ;
+            const sal_Int8* readBytes = outSeqs.getArray() ;
             for( int i = 0 ; i < numbers ; i ++ )
                 *( buffer + i ) = *( readBytes + i ) ;
         }

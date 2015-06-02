@@ -561,7 +561,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAs
 {
     OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
     xmlChar* chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), ( int )oscert.getLength() ) ;
-    int certSize = xmlSecBase64Decode( chCert, ( xmlSecByte* )chCert, xmlStrlen( chCert ) ) ;
+    int certSize = xmlSecBase64Decode( chCert, reinterpret_cast<xmlSecByte*>(chCert), xmlStrlen( chCert ) ) ;
     if (certSize > 0)
     {
         Sequence< sal_Int8 > rawCert(certSize) ;

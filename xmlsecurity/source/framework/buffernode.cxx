@@ -367,7 +367,7 @@ const BufferNode* BufferNode::getFirstChild() const
         rc = const_cast<BufferNode*>(m_vChildren.front());
     }
 
-    return (const BufferNode*)rc;
+    return rc;
 }
 
 void BufferNode::addChild(const BufferNode* pChild, sal_Int32 nPosition)
@@ -557,7 +557,7 @@ const BufferNode* BufferNode::getNextSibling() const
         rc = const_cast<BufferNode*>(m_pParent->getNextChild(this));
     }
 
-    return (const BufferNode*)rc;
+    return rc;
 }
 
 const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
@@ -609,7 +609,7 @@ const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
         }
     }
 
-    return (const BufferNode*)rc;
+    return rc;
 }
 
 bool BufferNode::isPrevious(const BufferNode* pFollowing) const
@@ -1065,7 +1065,7 @@ const BufferNode* BufferNode::getNextChild(const BufferNode* pChild) const
         }
     }
 
-    return (const BufferNode*)rc;
+    return rc;
 }
 
 
