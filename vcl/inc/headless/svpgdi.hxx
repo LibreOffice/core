@@ -201,6 +201,8 @@ public:
     virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) SAL_OVERRIDE;
 
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
+
+#if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const SAL_OVERRIDE;
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const SAL_OVERRIDE;
     virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const SAL_OVERRIDE;
@@ -209,7 +211,7 @@ public:
 
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
-#if ENABLE_CAIRO_CANVAS
+
 
     static cairo_t*         createCairoContext(const basebmp::BitmapDeviceSharedPtr& rBuffer);
     void                    clipRegion(cairo_t* cr);

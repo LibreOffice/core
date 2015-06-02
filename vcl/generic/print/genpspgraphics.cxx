@@ -40,6 +40,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
+#include <config_cairo_canvas.h>
 
 #include "fontsubset.hxx"
 #include "generic/geninst.h"
@@ -1246,6 +1247,8 @@ SystemGraphicsData GenPspGraphics::GetGraphicsData() const
     return SystemGraphicsData();
 }
 
+#if ENABLE_CAIRO_CANVAS
+
 bool GenPspGraphics::SupportsCairo() const
 {
     return false;
@@ -1275,6 +1278,8 @@ SystemFontData GenPspGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
     return SystemFontData();
 }
+
+#endif // ENABLE_CAIRO_CANVAS
 
 bool GenPspGraphics::supportsOperation( OutDevSupportType ) const
 {

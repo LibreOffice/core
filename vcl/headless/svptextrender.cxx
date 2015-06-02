@@ -28,6 +28,7 @@
 #include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 #include <vcl/sysdata.hxx>
+#include <config_cairo_canvas.h>
 
 #include "generic/geninst.h"
 #include "generic/genpspgraphics.h"
@@ -443,6 +444,8 @@ void SvpTextRender::SetTextColor( SalColor nSalColor )
     m_aTextColor = basebmp::Color( nSalColor );
 }
 
+#if ENABLE_CAIRO_CANVAS
+
 SystemFontData SvpTextRender::GetSysFontData( int nFallbackLevel ) const
 {
     SystemFontData aSysFontData;
@@ -463,6 +466,8 @@ SystemFontData SvpTextRender::GetSysFontData( int nFallbackLevel ) const
 
     return aSysFontData;
 }
+
+#endif // ENABLE_CAIRO_CANVAS
 
 void SvpTextRender::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 {

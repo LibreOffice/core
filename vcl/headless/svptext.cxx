@@ -20,6 +20,7 @@
 #include <sal/types.h>
 #include <basegfx/range/b2ibox.hxx>
 #include "headless/svpgdi.hxx"
+#include <config_cairo_canvas.h>
 
 sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {
@@ -123,10 +124,14 @@ void SvpSalGraphics::SetTextColor( SalColor nSalColor )
     m_xTextRenderImpl->SetTextColor(nSalColor);
 }
 
+#if ENABLE_CAIRO_CANVAS
+
 SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
 {
     return m_xTextRenderImpl->GetSysFontData(nFallbacklevel);
 }
+
+#endif // ENABLE_CAIRO_CANVAS
 
 void SvpSalGraphics::BlendTextColor(const basebmp::Color &rTextColor, const basebmp::BitmapDeviceSharedPtr &rAlphaMask,
                                     const basegfx::B2IPoint &rDstPoint)
