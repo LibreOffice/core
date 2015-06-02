@@ -307,7 +307,7 @@ namespace cairocanvas
    **/
     bool TextLayout::isCairoRenderable(SystemFontData aSysFontData) const
     {
-#if defined UNX && !defined MACOSX && !defined IOS
+#if defined CAIRO_HAS_FT_FONT
         // is font usable?
         if (!aSysFontData.nFontId)
             return false;
