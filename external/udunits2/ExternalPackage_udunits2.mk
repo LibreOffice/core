@@ -14,7 +14,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,udunits2,udunits2))
 ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/iudunits2.dll,lib/.libs/iudunits2.dll))
 else ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.dylib,lib/.libs/libudunits2.dylib))
+$(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.0.dylib,lib/.libs/libudunits2.0.dylib))
 else
 $(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.so,lib/.libs/libudunits2.so))
 $(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.so.0,lib/.libs/libudunits2.so.0))
