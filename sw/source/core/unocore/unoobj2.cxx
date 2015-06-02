@@ -228,14 +228,13 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
                 0 != (pAnchorPos = rAnchor.GetContentAnchor()) &&
                     pAnchorPos->nNode == rIdx )
             {
-                sw::FrameClient* pNewClient = new sw::FrameClient(const_cast<SwFrameFormat*>(pFormat));
 
                 // OD 2004-05-07 #i28701# - determine insert position for
                 // sorted <rFrameArr>
                 const sal_Int32 nIndex = pAnchorPos->nContent.GetIndex();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
-                FrameClientSortListEntry entry(nIndex, nOrder, pNewClient);
+                FrameClientSortListEntry entry(nIndex, nOrder, new sw::FrameClient(const_cast<SwFrameFormat*>(pFormat)));
                 rFrames.push_back(entry);
             }
         }
