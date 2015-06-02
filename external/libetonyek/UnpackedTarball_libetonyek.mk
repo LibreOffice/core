@@ -15,12 +15,11 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libetonyek,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/assert.patch \
-	external/libetonyek/0001-missing-include.patch.1 \
 	external/libetonyek/win_build.patch.1 \
 	external/libetonyek/ubsan.patch \
-	external/libetonyek/0001-add-missing-breaks.patch.1 \
-	external/libetonyek/0002-remove-surplus-breaks.patch.1 \
 	external/libetonyek/rpath.patch \
+	external/libetonyek/0001-add-missing-include.patch.1 \
+	external/libetonyek/0001-try-to-fix-build-on-Windows.patch.1 \
 ))
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
