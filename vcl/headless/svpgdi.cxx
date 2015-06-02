@@ -106,7 +106,7 @@ namespace
         if (!rBuffer)
             return false;
 
-        if (rBuffer->getScanlineFormat() != basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX)
+        if (rBuffer->getScanlineFormat() != basebmp::Format::ThirtyTwoBitTcMaskBGRX)
             return false;
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
@@ -735,7 +735,7 @@ bool SvpSalGraphics::drawPolyLine(
     // #i101491# Cairo does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation)
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    if (basegfx::B2DLINEJOIN_NONE == eLineJoin && rLineWidths.getX() > 1.3)
+    if (basegfx::B2DLineJoin::NONE == eLineJoin && rLineWidths.getX() > 1.3)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLine case");
         return false;
@@ -757,19 +757,19 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
     switch (eLineJoin)
     {
-        case basegfx::B2DLINEJOIN_NONE:
+        case basegfx::B2DLineJoin::NONE:
             eCairoLineJoin = /*TODO?*/CAIRO_LINE_JOIN_MITER;
             break;
-        case basegfx::B2DLINEJOIN_MIDDLE:
+        case basegfx::B2DLineJoin::Middle:
             eCairoLineJoin = /*TODO?*/CAIRO_LINE_JOIN_MITER;
             break;
-        case basegfx::B2DLINEJOIN_BEVEL:
+        case basegfx::B2DLineJoin::Bevel:
             eCairoLineJoin = CAIRO_LINE_JOIN_BEVEL;
             break;
-        case basegfx::B2DLINEJOIN_MITER:
+        case basegfx::B2DLineJoin::Miter:
             eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
             break;
-        case basegfx::B2DLINEJOIN_ROUND:
+        case basegfx::B2DLineJoin::Round:
             eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
             break;
     }

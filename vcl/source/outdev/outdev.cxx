@@ -324,9 +324,10 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     return mpGraphics->GetGraphicsData();
 }
 
+#if ENABLE_CAIRO_CANVAS
+
 bool OutputDevice::SupportsCairo() const
 {
-#if ENABLE_CAIRO_CANVAS
     if (!mpGraphics)
     {
         if (!AcquireGraphics())
@@ -334,10 +335,6 @@ bool OutputDevice::SupportsCairo() const
     }
 
     return mpGraphics->SupportsCairo();
-#else
-    (void) this; // loplugin:staticmethods
-    return false;
-#endif
 }
 
 cairo::SurfaceSharedPtr OutputDevice::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
@@ -379,6 +376,8 @@ css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSur
     }
     return mpGraphics->GetNativeSurfaceHandle(rSurface, rSize);
 }
+
+#endif // ENABLE_CAIRO_CANVAS
 
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
