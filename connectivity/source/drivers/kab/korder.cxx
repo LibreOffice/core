@@ -56,8 +56,8 @@ KabComplexOrder::KabComplexOrder()
 
 KabComplexOrder::~KabComplexOrder()
 {
-    for (std::vector<KabOrder *>::size_type i = 0; i < m_aOrders.size(); i++)
-        delete m_aOrders[i];
+    for (auto p: m_aOrders)
+        delete p;
 }
 
 void KabComplexOrder::addOrder(KabOrder *pOrder)
@@ -67,10 +67,9 @@ void KabComplexOrder::addOrder(KabOrder *pOrder)
 
 sal_Int32 KabComplexOrder::compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const
 {
-    for (std::vector<KabOrder *>::size_type i = 0; i < m_aOrders.size(); i++)
+    for (auto p: m_aOrders)
     {
-        const KabOrder *pOrder = m_aOrders[i];
-        sal_Int32 result = pOrder->compare(aAddressee1, aAddressee2);
+        sal_Int32 result = p->compare(aAddressee1, aAddressee2);
 
         if (result) return result;
     }
