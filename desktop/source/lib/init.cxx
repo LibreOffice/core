@@ -414,16 +414,16 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         switch (doc_getDocumentType(pThis))
         {
         case LOK_DOCTYPE_SPREADSHEET:
-            pMap = (const ExtensionMap*) aCalcExtensionMap;
+            pMap = aCalcExtensionMap;
             break;
         case LOK_DOCTYPE_PRESENTATION:
-            pMap = (const ExtensionMap*) aImpressExtensionMap;
+            pMap = aImpressExtensionMap;
             break;
         case LOK_DOCTYPE_DRAWING:
-            pMap = (const ExtensionMap*) aDrawExtensionMap;
+            pMap = aDrawExtensionMap;
             break;
         case LOK_DOCTYPE_TEXT:
-            pMap = (const ExtensionMap*) aWriterExtensionMap;
+            pMap = aWriterExtensionMap;
             break;
         case LOK_DOCTYPE_OTHER:
         default:
