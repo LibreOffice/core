@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_613ad1cf",
+        "filename": "sc/inc/conditio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-02T10:47:27Z",
+      "side": 1,
+      "message": "For bool use false instead of 0.\nAlso, per our naming conventions (prefix names of bool variables with b) it would be bTime or bIsTime instead of isTime.",
+      "revId": "ac6cfaa54eff147904f10084ec1b6b596c60ae79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_8137cde2",
+        "filename": "sc/inc/conditio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-02T10:47:27Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "ac6cfaa54eff147904f10084ec1b6b596c60ae79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_0152fd13",
+        "filename": "sc/source/core/data/conditio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-02T10:47:27Z",
+      "side": 1,
+      "message": "Also here, please follow our naming conventions, bTimeWraparound.",
+      "revId": "ac6cfaa54eff147904f10084ec1b6b596c60ae79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_e14c8178",
+        "filename": "sc/source/core/data/conditio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-02T10:47:27Z",
+      "side": 1,
+      "message": "Why?\nThis could even lead to nComp1 not being greater than nComp2 amymore.\nFurthermore, 0.00001157407 is not the exact value of a second, if at all then use 1.0 / 86400",
+      "revId": "ac6cfaa54eff147904f10084ec1b6b596c60ae79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_a1568904",
+        "filename": "sc/source/core/data/conditio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-02T10:47:27Z",
+      "side": 1,
+      "message": "Umm.. this doesn\u0027t look right, it would return true if the condition did not match and timeWraparound was true.",
+      "revId": "ac6cfaa54eff147904f10084ec1b6b596c60ae79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_61417139",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-02T10:47:27Z",
+      "side": 1,
+      "message": "Same as for other nitpicks, use bTime.",
+      "revId": "ac6cfaa54eff147904f10084ec1b6b596c60ae79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_c15b852d",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-02T10:47:27Z",
+      "side": 1,
+      "message": "When falling through to another switch case a comment line is necessary before the next case to signal some static analyzers that this is intended and not a forgotten break; i.e.\n\n // fall through\n\nwould do.",
+      "revId": "ac6cfaa54eff147904f10084ec1b6b596c60ae79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_813eedb6",
+        "filename": "sc/source/ui/view/cellsh2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-02T10:47:27Z",
+      "side": 0,
+      "message": "Why remove this?",
+      "revId": "ecefe7e136fcc29eeae01e60ac276fa884450512",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
