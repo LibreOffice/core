@@ -216,7 +216,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
     }
 
     // insert new recent items
-    for ( sal_uInt32 i = 0; i < m_pRecentFilesItems->size(); i++ )
+    for ( std::vector<RecentMenuEntry>::size_type i = 0; i < m_pRecentFilesItems->size(); i++ )
     {
         rtl::OUString   aMenuTitle;
         INetURLObject   aURL( (*m_pRecentFilesItems)[i].aURL );
