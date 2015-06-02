@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
+#include <svtools/miscopt.hxx>
 
 namespace
 {
@@ -88,8 +89,11 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
     get(m_pCB_FirstRowAsLabel, "CB_FIRST_ROW_ASLABELS");
     get(m_pCB_FirstColumnAsLabel, "CB_FIRST_COLUMN_ASLABELS");
     get(m_pFTTitle, "STR_PAGE_DATA_RANGE");// OH:remove later with dialog title
+    get(m_pFL_TimeBased, "separator1");
     get(m_pCB_TimeBased, "CB_TIME_BASED");
+    get(m_pFT_TimeStart, "label1");
     get(m_pEd_TimeStart, "ED_TIME_BASED_START");
+    get(m_pFT_TimeEnd, "label2");
     get(m_pEd_TimeEnd, "ED_TIME_BASED_END");
 
     m_pFT_Caption->Show(!bHideDescription);
@@ -120,6 +124,17 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
     m_pCB_TimeBased->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pEd_TimeStart->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pEd_TimeEnd->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+
+    SvtMiscOptions aOpts;
+    if ( !aOpts.IsExperimentalMode() )
+    {
+        m_pFL_TimeBased->Hide();
+        m_pCB_TimeBased->Hide();
+        m_pFT_TimeStart->Hide();
+        m_pEd_TimeStart->Hide();
+        m_pFT_TimeEnd->Hide();
+        m_pEd_TimeEnd->Hide();
+    }
 }
 
 RangeChooserTabPage::~RangeChooserTabPage()
@@ -138,8 +153,11 @@ void RangeChooserTabPage::dispose()
     m_pCB_FirstRowAsLabel.clear();
     m_pCB_FirstColumnAsLabel.clear();
     m_pFTTitle.clear();
+    m_pFL_TimeBased.clear();
     m_pCB_TimeBased.clear();
+    m_pFT_TimeStart.clear();
     m_pEd_TimeStart.clear();
+    m_pFT_TimeEnd.clear();
     m_pEd_TimeEnd.clear();
     m_pParentDialog.clear();
     OWizardPage::dispose();
