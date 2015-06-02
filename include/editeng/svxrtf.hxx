@@ -391,7 +391,7 @@ public:
 
 inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 {
-    ColorPtr pColor = (ColorPtr)pDfltColor;
+    ColorPtr pColor = pDfltColor;
     if( nId < aColorTbl.size() )
         pColor = aColorTbl[ nId ];
     return *pColor;
