@@ -227,7 +227,6 @@ namespace basebmp
                 detail::VectorOfVertexPtr::iterator       currVertex( pAET->begin() );
                 detail::VectorOfVertexPtr::iterator const lastVertex( pAET->end()-1 );
                 sal_uInt32                                nCrossedEdges(0);
-                sal_Int32                                 nWindingNumber(0);
                 while( currVertex != lastVertex )
                 {
                     // TODO(P1): might be worth a try to extend the
@@ -236,17 +235,13 @@ namespace basebmp
                     detail::Vertex&       rV1( **currVertex );
                     detail::Vertex const& rV2( **++currVertex );
 
-                    nWindingNumber += -1 + 2*int(rV1.mbDownwards);
-
                     // calc fill status for both rules. might save a
                     // few percent runtime to specialize here...
                     const bool bEvenOddFill(
-                        eFillRule == basegfx::FillRule_EVEN_ODD && !(nCrossedEdges & 0x01) );
-                    const bool bNonZeroWindingFill(
-                        eFillRule == basegfx::FillRule_NONZERO_WINDING_NUMBER && nWindingNumber != 0 );
+                        eFillRule == basegfx::FillRule::EvenOdd && !(nCrossedEdges & 0x01) );
 
                     // is span visible?
-                    if( (bEvenOddFill || bNonZeroWindingFill) &&
+                    if( bEvenOddFill &&
                         y >= nClipY1 &&
                         rV1.mnX < nClipX2_frac &&
                         rV2.mnX > nClipX1_frac )
