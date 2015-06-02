@@ -44,6 +44,12 @@ shell TextObjectBar
         StateMethod = GetAttrState;
     ]
 
+    SID_ATTR_CHAR_BACK_COLOR  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
     SID_ATTR_CHAR_WEIGHT  // ole : ?, status : ?
     [
         ExecMethod = Execute;

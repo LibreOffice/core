@@ -119,6 +119,7 @@
 #define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_SVX_START + 997 )
 #define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_SVX_START + 998 )
 #define SID_ATTR_CHAR_GRABBAG                           ( SID_SVX_START + 1142 )
+#define SID_ATTR_CHAR_BACK_COLOR                        ( SID_SVX_START + 1143 )
 
 // these ID didn't exist prior to the svx split, add new ids here
 #define SID_ATTR_CHAR_OVERLINE                          ( SID_EDIT_START + 68 )
@@ -226,10 +227,11 @@
 #define SID_ATTR_CHAR_LATIN_LANGUAGE                    ( SID_EDIT_START + 92 )
 #define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_EDIT_START + 93 )
 #define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_EDIT_START + 94 )
+#define SID_ATTR_CHAR_BACK_COLOR                        ( SID_EDIT_START + 95 )
 */
 
-#if 94 > (SID_EDIT_END-SID_EDIT_START)
-#error Resource-Ueberlauf in #line, #file
+#if 95 > (SID_EDIT_END-SID_EDIT_START)
+#error Resource-Overflow in #line, #file
 #endif
 
 #define SID_DRAW_TEXT_VERTICAL                            SID_ATTR_CHAR_VERTICAL

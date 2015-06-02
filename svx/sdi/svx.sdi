@@ -2169,6 +2169,31 @@ SvxColorItem Color SID_ATTR_CHAR_COLOR
     GroupId = GID_FORMAT;
 ]
 
+SvxBackgroundColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
 
 SfxBoolItem ColorControl SID_COLOR_CONTROL
 
