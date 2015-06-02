@@ -269,7 +269,7 @@ sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
 
 SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool bInherited)
 {
-    return const_cast<SdrLayer*>(((const SdrLayerAdmin*)this)->GetLayer(rName, bInherited));
+    return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayer(rName, bInherited));
 }
 
 const SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool /*bInherited*/) const

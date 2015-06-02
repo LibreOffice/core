@@ -310,7 +310,7 @@ bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
     if( !pEntryData->ISA(FmFormData) )
         return false;
     FmFormData* pFormData = static_cast<FmFormData*>(pEntryData);
-    if( (XForm*)m_xForm.get() != (XForm*)pFormData->GetFormIface().get() )
+    if( m_xForm.get() != pFormData->GetFormIface().get() )
         return false;
 
     return FmEntryData::IsEqualWithoutChildren( pFormData );
@@ -475,7 +475,7 @@ bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
         return false;
     FmControlData* pControlData = static_cast<FmControlData*>(pEntryData);
 
-    if( (XFormComponent*)m_xFormComponent.get() != (XFormComponent*)pControlData->GetFormComponent().get() )
+    if( m_xFormComponent.get() != pControlData->GetFormComponent().get() )
         return false;
 
     return FmEntryData::IsEqualWithoutChildren( pControlData );

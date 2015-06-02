@@ -2667,7 +2667,7 @@ bool DbListBox::commitControl()
     if (static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryCount())
     {
         aSelectSeq.realloc(1);
-        *(sal_Int16 *)aSelectSeq.getArray() = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryPos();
+        *aSelectSeq.getArray() = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryPos();
     }
     aVal <<= aSelectSeq;
     m_rColumn.getModel()->setPropertyValue(FM_PROP_SELECT_SEQ, aVal);

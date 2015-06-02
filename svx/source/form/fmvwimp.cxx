@@ -279,7 +279,7 @@ Reference< XFormController >  getControllerSearchChildren( const Reference< XInd
         for (sal_Int32 n = xIndex->getCount(); n-- && !xController.is(); )
         {
             xIndex->getByIndex(n) >>= xController;
-            if ((XTabControllerModel*)xModel.get() == (XTabControllerModel*)xController->getModel().get())
+            if (xModel.get() == xController->getModel().get())
                 return xController;
             else
             {
@@ -299,7 +299,7 @@ Reference< XFormController >  FormViewPageWindowAdapter::getController( const Re
     for (::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
          i != m_aControllerList.end(); ++i)
     {
-        if ((XTabControllerModel*)(*i)->getModel().get() == (XTabControllerModel*)xModel.get())
+        if ((*i)->getModel().get() == xModel.get())
             return *i;
 
         // the current-round controller isn't the right one. perhaps one of its children ?

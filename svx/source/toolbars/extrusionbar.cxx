@@ -108,8 +108,8 @@ void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults, const
         Direction3D( -50000, 0, 10000 )
     };
 
-    *pLighting1Defaults = (const Direction3D *)aLighting1Defaults;
-    *pLighting2Defaults = (const Direction3D *)aLighting2Defaults;
+    *pLighting1Defaults = aLighting1Defaults;
+    *pLighting2Defaults = aLighting2Defaults;
 };
 
 static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
@@ -591,7 +591,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
 
                     SvxDoubleItem aItem( fDepth, SID_EXTRUSION_DEPTH );
                     SfxPoolItem* aItems[] = { &aItem, 0 };
-                    rBindings.Execute( SID_EXTRUSION_DEPTH, (const SfxPoolItem**)aItems );
+                    rBindings.Execute( SID_EXTRUSION_DEPTH, const_cast<const SfxPoolItem**>(aItems) );
                 }
             }
             break;

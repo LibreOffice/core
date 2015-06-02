@@ -1799,7 +1799,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
     Sequence< Any> aBookmarks(nSelectedRows);
     if ( nSelectedRows )
     {
-        Any* pBookmarks = (Any*)aBookmarks.getArray();
+        Any* pBookmarks = aBookmarks.getArray();
 
         // (I'm not sure if the problem isn't deeper : The szenario : a large table displayed by a grid with a
         // thread-safe cursor (dBase). On loading the sdb-cursor started a counting thread. While this counting progress

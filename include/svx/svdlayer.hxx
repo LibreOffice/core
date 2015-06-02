@@ -137,7 +137,7 @@ public:
     SdrLayer* GetLayer(const OUString& rName, bool bInherited);
     const SdrLayer* GetLayer(const OUString& rName, bool bInherited) const;
     SdrLayerID GetLayerID(const OUString& rName, bool bInherited) const;
-          SdrLayer*    GetLayerPerID(sal_uInt16 nID)                                     { return const_cast<SdrLayer*>(((const SdrLayerAdmin*)this)->GetLayerPerID(nID)); }
+          SdrLayer*    GetLayerPerID(sal_uInt16 nID)                                     { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
 
     void SetControlLayerName(const OUString& rNewName);

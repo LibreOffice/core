@@ -486,7 +486,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
         Reference< XIndexContainer >  xForm(xContent->getParent(), UNO_QUERY);
         if (xForm.is())
         {
-            Reference< XIndexAccess >  xIndexAccess((XIndexContainer*)xForm.get());
+            Reference< XIndexAccess >  xIndexAccess(xForm.get());
             // Feststellen an welcher Position sich das Kind befunden hat
             const sal_Int32 nPos = getElementPos(xIndexAccess, xContent);
             if (nPos >= 0)

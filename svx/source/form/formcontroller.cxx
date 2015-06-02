@@ -1634,7 +1634,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
         // do we need to keep the locking of the commit
         // we hold the lock as long as the control differs from the current
         // otherwise we disabled the lock
-        m_bCommitLock = m_bCommitLock && (XControl*)xControl.get() != (XControl*)m_xCurrentControl.get();
+        m_bCommitLock = m_bCommitLock && xControl.get() != m_xCurrentControl.get();
         if (m_bCommitLock)
             return;
 
@@ -1972,7 +1972,7 @@ void FormController::addToEventAttacher(const Reference< XControl > & xControl)
         for( ; nPos; )
         {
             m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
-            if ((XFormComponent*)xComp.get() == (XFormComponent*)xTemp.get())
+            if (xComp.get() == xTemp.get())
             {
                 m_xModelAsManager->attach( nPos, Reference<XInterface>( xControl, UNO_QUERY ), makeAny(xControl) );
                 break;
@@ -1999,7 +1999,7 @@ void FormController::removeFromEventAttacher(const Reference< XControl > & xCont
         for( ; nPos; )
         {
             m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
-            if ((XFormComponent*)xComp.get() == (XFormComponent*)xTemp.get())
+            if (xComp.get() == xTemp.get())
             {
                 m_xModelAsManager->detach( nPos, Reference<XInterface>( xControl, UNO_QUERY ) );
                 break;
