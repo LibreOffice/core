@@ -1323,8 +1323,10 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_get_visarea(LOKDocView* pThis, GdkRectangl
 {
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pThis));
     pArea->x = pThis->m_pImpl->pixelToTwip(gtk_adjustment_get_value(pHAdjustment));
+    pArea->width = pThis->m_pImpl->pixelToTwip(gtk_adjustment_get_page_size(pHAdjustment));
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pThis));
     pArea->y = pThis->m_pImpl->pixelToTwip(gtk_adjustment_get_value(pVAdjustment));
+    pArea->height = pThis->m_pImpl->pixelToTwip(gtk_adjustment_get_page_size(pVAdjustment));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
