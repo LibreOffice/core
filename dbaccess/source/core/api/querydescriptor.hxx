@@ -100,7 +100,7 @@ protected:
     */
     virtual void rebuildColumns( );
 
-    virtual void disposeColumns();
+    void disposeColumns();
 
     // IRefreshableColumns overridables
     virtual void refreshColumns() SAL_OVERRIDE;

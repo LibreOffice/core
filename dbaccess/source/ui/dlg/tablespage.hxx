@@ -58,7 +58,7 @@ namespace dbaui
 
         /** will be called when the controls need to be resized.
         */
-        virtual void            resizeControls(const Size& _rDiff);
+        void            resizeControls(const Size& _rDiff);
 
         OTableSubscriptionPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage();
