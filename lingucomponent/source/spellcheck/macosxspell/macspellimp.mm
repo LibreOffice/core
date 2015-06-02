@@ -118,7 +118,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         NSArray *aLocales = [NSLocale availableLocaleIdentifiers];
 
         //Test for existence of the dictionaries
-        for (unsigned int i = 0; i < [aLocales count]; i++)
+        for (NSUInteger i = 0; i < [aLocales count]; i++)
         {
             NSString* pLangStr = (NSString*)[aLocales objectAtIndex:i];
             if( [macSpell setLanguage:pLangStr ] )
