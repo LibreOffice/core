@@ -835,7 +835,7 @@ void Window::ReleaseGraphics( bool bRelease )
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    vcl::Window* pWindow = (vcl::Window*)this;
+    vcl::Window* pWindow = this;
 
     if ( bRelease )
         pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );

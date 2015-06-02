@@ -245,7 +245,7 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
         pBuf->mnHeight          = aSize.getY();
         pBuf->mnScanlineSize    = m_aBitmap->getScanlineStride();
         pBuf->mnBitCount        = nBitCount;
-        pBuf->mpBits            = (sal_uInt8*)m_aBitmap->getBuffer().get();
+        pBuf->mpBits            = m_aBitmap->getBuffer().get();
         if( nBitCount <= 8 )
         {
             if( m_aBitmap->getScanlineFormat() == FORMAT_EIGHT_BIT_GREY ||

@@ -112,7 +112,7 @@ public:
 
     sal_Int32               InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry, bool bSort );
     void                    RemoveEntry( sal_Int32  nPos );
-    const ImplEntryType*    GetEntryPtr( sal_Int32  nPos ) const { return (const ImplEntryType*) GetEntry( nPos ); }
+    const ImplEntryType*    GetEntryPtr( sal_Int32  nPos ) const { return GetEntry( nPos ); }
     ImplEntryType*          GetMutableEntryPtr( sal_Int32  nPos ) const { return GetEntry( nPos ); }
     void                    Clear();
 

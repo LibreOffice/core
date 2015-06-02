@@ -1047,13 +1047,13 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
         SVBT32              aVal32;
 
         UInt32ToSVBT32( rMask.GetRedMask(), aVal32 );
-        rOStm.Write( (sal_uInt8*) aVal32, 4UL );
+        rOStm.Write( aVal32, 4UL );
 
         UInt32ToSVBT32( rMask.GetGreenMask(), aVal32 );
-        rOStm.Write( (sal_uInt8*) aVal32, 4UL );
+        rOStm.Write( aVal32, 4UL );
 
         UInt32ToSVBT32( rMask.GetBlueMask(), aVal32 );
-        rOStm.Write( (sal_uInt8*) aVal32, 4UL );
+        rOStm.Write( aVal32, 4UL );
 
         rImageSize = rOStm.Tell();
 

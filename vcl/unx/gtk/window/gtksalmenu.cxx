@@ -804,7 +804,7 @@ bool GtkSalMenu::IsItemVisible( unsigned nPos )
     bool bVisible = false;
 
     if ( nPos < maItems.size() )
-        bVisible = ( ( GtkSalMenuItem* ) maItems[ nPos ])->mbVisible;
+        bVisible = maItems[ nPos ]->mbVisible;
 
     return bVisible;
 }
@@ -821,7 +821,7 @@ void GtkSalMenu::ShowItem( unsigned nPos, bool bShow )
 {
     SolarMutexGuard aGuard;
     if ( nPos < maItems.size() )
-        ( ( GtkSalMenuItem* ) maItems[ nPos ] )->mbVisible = bShow;
+        maItems[ nPos ]->mbVisible = bShow;
 }
 
 void GtkSalMenu::SetItemText( unsigned, SalMenuItem*, const OUString& )

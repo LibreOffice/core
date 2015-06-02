@@ -2112,7 +2112,7 @@ void PDFWriterImpl::emitComment( const char* pComment )
 {
     OStringBuffer aLine( 64 );
     aLine.append( "% " );
-    aLine.append( (const sal_Char*)pComment );
+    aLine.append( pComment );
     aLine.append( "\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }

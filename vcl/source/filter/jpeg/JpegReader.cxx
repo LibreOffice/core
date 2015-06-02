@@ -327,7 +327,7 @@ void JPEGReader::FillBitmap()
 
             for( long nY = 0L; nY < nHeight; nY++ )
             {
-                pTmp = (sal_uInt8*) mpBuffer + nY * nAlignedWidth;
+                pTmp = mpBuffer + nY * nAlignedWidth;
 
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -351,7 +351,7 @@ void JPEGReader::FillBitmap()
                     // then CopyScanline can use a memcpy to do the data transport. CopyScanline can also
                     // do the needed conversion from BMP_FORMAT_24BIT_TC_RGB (and it works well), but this
                     // is not faster that the old loop below using SetPixel.
-                    sal_uInt8* aSource((sal_uInt8*)mpBuffer + nY * nAlignedWidth);
+                    sal_uInt8* aSource(mpBuffer + nY * nAlignedWidth);
                     sal_uInt8* aEnd(aSource + (nWidth * 3));
 
                     for(sal_uInt8* aTmp(aSource); aTmp < aEnd; aTmp += 3)
@@ -364,7 +364,7 @@ void JPEGReader::FillBitmap()
                 else
                 {
                     // old version: WritePixel
-                    pTmp = (sal_uInt8*) mpBuffer + nY * nAlignedWidth;
+                    pTmp = mpBuffer + nY * nAlignedWidth;
 
                     for( long nX = 0L; nX < nWidth; nX++ )
                     {

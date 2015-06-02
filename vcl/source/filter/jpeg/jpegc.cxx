@@ -184,7 +184,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                 int i;
                 int j;
                 unsigned char *pSLB = pScanLineBuffer.get();
-                jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pSLB, 1 );
+                jpeg_read_scanlines( &cinfo, reinterpret_cast<JSAMPARRAY>(&pSLB), 1 );
                 // convert CMYK to RGB
                 for( i=0, j=0; i < nScanLineBufferComponents; i+=4, j+=3 )
                 {
@@ -199,7 +199,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
             }
             else
             {
-                jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pTmp, 1 );
+                jpeg_read_scanlines( &cinfo, reinterpret_cast<JSAMPARRAY>(&pTmp), 1 );
             }
 
             /* PENDING ??? */

@@ -361,7 +361,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
                 else
                     nMask = static_cast<sal_uInt8>(0xffU >> (nLeftOverBits & 3UL));
 
-                sal_uInt8* pLastBytes = (sal_uInt8*)GetBuffer() + ( nScanSize - nBytes );
+                sal_uInt8* pLastBytes = reinterpret_cast<sal_uInt8*>(GetBuffer()) + ( nScanSize - nBytes );
                 for( sal_uInt32 i = 0; i < nHeight; i++, pLastBytes += nScanSize )
                 {
                     *pLastBytes &= nMask;
@@ -373,7 +373,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
         else if( nBits & 0x1f )
         {
             sal_uInt32  nMask = 0xffffffff << ( ( nScanSize << 3 ) - nBits );
-            sal_uInt8*      pLast4Bytes = (sal_uInt8*) GetBuffer() + ( nScanSize - 4 );
+            sal_uInt8*      pLast4Bytes = reinterpret_cast<sal_uInt8*>(GetBuffer()) + ( nScanSize - 4 );
 
 #ifdef OSL_LITENDIAN
             nMask = OSL_SWAPDWORD( nMask );
