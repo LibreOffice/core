@@ -191,47 +191,6 @@ private:
     bool                        m_bIncludeHiddenCells;
 };
 
-// DataSource
-class ScChart2DataSource : public
-                ::cppu::WeakImplHelper2<
-                    ::com::sun::star::chart2::data::XDataSource,
-                    ::com::sun::star::lang::XServiceInfo>,
-                SfxListener
-{
-public:
-
-    explicit ScChart2DataSource( ScDocument* pDoc);
-    virtual ~ScChart2DataSource();
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
-
-    // XDataSource
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL
-        getDataSequences() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(
-            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual sal_Bool SAL_CALL supportsService( const OUString&
-            rServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() throw(
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // implementation
-
-    void AddLabeledSequence(const com::sun::star::uno::Reference < com::sun::star::chart2::data::XLabeledDataSequence >& xNew);
-
-private:
-
-    ScDocument*                 m_pDocument;
-    typedef std::list < com::sun::star::uno::Reference< com::sun::star::chart2::data::XLabeledDataSequence > >  LabeledList;
-    LabeledList                 m_aLabeledSequences;
-
-};
-
 // DataSequence
 class ScChart2DataSequence : public
                 ::cppu::WeakImplHelper8<

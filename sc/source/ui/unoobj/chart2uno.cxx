@@ -40,6 +40,7 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
+#include "ScChart2DataSource.hxx"
 #include <brdcst.hxx>
 
 #include <formula/opcode.hxx>
@@ -62,8 +63,6 @@
 
 SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, "ScChart2DataProvider",
         "com.sun.star.chart2.data.DataProvider")
-SC_SIMPLE_SERVICE_INFO( ScChart2DataSource, "ScChart2DataSource",
-        "com.sun.star.chart2.data.DataSource")
 SC_SIMPLE_SERVICE_INFO( ScChart2DataSequence, "ScChart2DataSequence",
         "com.sun.star.chart2.data.DataSequence")
 
@@ -2389,58 +2388,6 @@ void SAL_CALL ScChart2DataProvider::removeVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not yet implemented" );
-}
-
-// DataSource ================================================================
-
-ScChart2DataSource::ScChart2DataSource( ScDocument* pDoc)
-    : m_pDocument( pDoc)
-{
-    if ( m_pDocument )
-        m_pDocument->AddUnoObject( *this);
-}
-
-ScChart2DataSource::~ScChart2DataSource()
-{
-    SolarMutexGuard g;
-
-    if ( m_pDocument )
-        m_pDocument->RemoveUnoObject( *this);
-}
-
-void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
-{
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-    {
-        m_pDocument = NULL;
-    }
-}
-
-uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > SAL_CALL
-ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aGuard;
-
-    LabeledList::const_iterator aItr(m_aLabeledSequences.begin());
-    LabeledList::const_iterator aEndItr(m_aLabeledSequences.end());
-
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aRet(m_aLabeledSequences.size());
-
-    sal_Int32 i = 0;
-    while (aItr != aEndItr)
-    {
-        aRet[i] = *aItr;
-        ++i;
-        ++aItr;
-    }
-
-    return aRet;
-}
-
-void ScChart2DataSource::AddLabeledSequence(const uno::Reference < chart2::data::XLabeledDataSequence >& xNew)
-{
-    m_aLabeledSequences.push_back(xNew);
 }
 
 // DataSequence ==============================================================

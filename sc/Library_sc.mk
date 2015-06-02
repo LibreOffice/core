@@ -566,6 +566,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/unoobj/notesuno \
     sc/source/ui/unoobj/optuno \
     sc/source/ui/unoobj/pageuno \
+    sc/source/ui/unoobj/ScChart2DataSource \
     sc/source/ui/unoobj/servuno \
     sc/source/ui/unoobj/shapeuno \
     sc/source/ui/unoobj/srchuno \
