@@ -9,3 +9,14 @@
  
    if (m_value)
    {
+--- src/lib/libetonyek_xml.cpp
++++ src/lib/libetonyek_xml.cpp
+@@ -33,7 +33,7 @@
+     unsigned long bytesRead = 0;
+     const unsigned char *const bytes = input->read(len, bytesRead);
+ 
+-    std::memcpy(buffer, bytes, static_cast<int>(bytesRead));
++    if (bytesRead != 0) std::memcpy(buffer, bytes, static_cast<int>(bytesRead));
+     return static_cast<int>(bytesRead);
+   }
+   catch (...)
