@@ -495,7 +495,13 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
     if( rNewData != maDBData )
     {
         if (maDBData.sEmbeddedName != rNewData.sEmbeddedName && GetDocShell())
-            SwDBManager::LoadAndRegisterEmbeddedDataSource(rNewData, *GetDocShell());
+        {
+            uno::Reference<embed::XStorage> xStorage = GetDocShell()->GetStorage();
+            // It's OK that we don't have the named sub-storage yet, in case
+            // we're in the process of creating it.
+            if (xStorage->hasByName(rNewData.sEmbeddedName))
+                SwDBManager::LoadAndRegisterEmbeddedDataSource(rNewData, *GetDocShell());
+        }
 
         maDBData = rNewData;
         getIDocumentState().SetModified();

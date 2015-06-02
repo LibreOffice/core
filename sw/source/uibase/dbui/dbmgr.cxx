@@ -2642,6 +2642,12 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
                     {"TargetStorage", uno::makeAny(xStorage)},
                     {"StreamRelPath", uno::makeAny(aStreamRelPath)}
                 });
+
+                // Refer to the sub-storage name in the document settings, so
+                // we can load it again next time the file is imported.
+                uno::Reference<lang::XMultiServiceFactory> xFactory(pDocShell->GetModel(), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::makeAny(aStreamRelPath));
             }
             xStore->storeAsURL(sTmpName, aSequence);
         }
