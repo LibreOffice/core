@@ -16,6 +16,23 @@
       "revId": "7880e949b9c0614c61e4e77e741f49584a9b8334",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_c1862513",
+        "filename": "scp2/source/ooo/common_brand.scp",
+        "patchSetId": 2
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-06-02T19:54:12Z",
+      "side": 1,
+      "message": "Still good to excise it here I think, belts \u0026 braces \u0026 all. And it\u0027s visible in the config, therefore also to shared extensions.",
+      "revId": "7880e949b9c0614c61e4e77e741f49584a9b8334",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
