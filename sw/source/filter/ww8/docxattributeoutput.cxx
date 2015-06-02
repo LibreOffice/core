@@ -4246,7 +4246,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         else if (nMode == GRAPHICDRAWMODE_MONO) //black/white has a 0,5 threshold in LibreOffice
             m_pSerializer->singleElementNS (XML_a, XML_biLevel, XML_thresh, OString::number(50000), FSEND);
         else if (nMode == GRAPHICDRAWMODE_WATERMARK) //watermark has a brightness/luminance of 0,5 and contrast of -0.7 in LibreOffice
-            m_pSerializer->singleElementNS( XML_a, XML_lum, XML_bright, OString::number(50000), XML_contrast, OString::number(-70000), FSEND );
+            m_pSerializer->singleElementNS( XML_a, XML_lum, XML_bright, OString::number(70000), XML_contrast, OString::number(-70000), FSEND );
     }
     m_pSerializer->endElementNS( XML_a, XML_blip );
 

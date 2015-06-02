@@ -696,17 +696,29 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
 {
     sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
     sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
+    ColorMode eColorMode = ColorMode_STANDARD;
+
+    switch( maBlipProps.moColorEffect.get( XML_TOKEN_INVALID ) )
+    {
+        case XML_biLevel:   eColorMode = ColorMode_MONO;    break;
+        case XML_grayscl:   eColorMode = ColorMode_GREYS;   break;
+    }
+
     if( maBlipProps.mxGraphic.is() )
     {
         // created transformed graphic
         Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
         xGraphic = lclCheckAndApplyChangeColorTransform( maBlipProps, xGraphic, rGraphicHelper, nPhClr );
-        // MSO uses a different algorithm for contrast+brightness, LO applies contrast before brightness,
-        // while MSO apparently applies half of brightness before contrast and half after. So if only
-        // contrast or brightness need to be altered, the result is the same, but if both are involved,
-        // there's no way to map that, so just force a conversion of the image.
-        if( nBrightness != 0 && nContrast != 0 )
+
+        if (eColorMode == ColorMode_STANDARD && nBrightness == 70 && nContrast == -70)
+            // map MSO 'washout' to our Watermark colormode
+            eColorMode = ColorMode_WATERMARK;
+        else if( nBrightness != 0 && nContrast != 0 )
         {
+            // MSO uses a different algorithm for contrast+brightness, LO applies contrast before brightness,
+            // while MSO apparently applies half of brightness before contrast and half after. So if only
+            // contrast or brightness need to be altered, the result is the same, but if both are involved,
+            // there's no way to map that, so just force a conversion of the image.
             xGraphic = applyBrightnessContrast( xGraphic, nBrightness, nContrast );
             nBrightness = 0;
             nContrast = 0;
@@ -737,14 +749,6 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
             }
         }
-    }
-
-    // color effect
-    ColorMode eColorMode = ColorMode_STANDARD;
-    switch( maBlipProps.moColorEffect.get( XML_TOKEN_INVALID ) )
-    {
-        case XML_biLevel:   eColorMode = ColorMode_MONO;    break;
-        case XML_grayscl:   eColorMode = ColorMode_GREYS;   break;
     }
     rPropMap.setProperty(PROP_GraphicColorMode, eColorMode);
 
