@@ -1771,7 +1771,10 @@ sal_Size SvMemoryStream::GetData( void* pData, sal_Size nCount )
     sal_Size nMaxCount = nEndOfData-nPos;
     if( nCount > nMaxCount )
         nCount = nMaxCount;
-    memcpy( pData, pBuf+nPos, (size_t)nCount );
+    if (nCount != 0)
+    {
+        memcpy( pData, pBuf+nPos, (size_t)nCount );
+    }
     nPos += nCount;
     return nCount;
 }
