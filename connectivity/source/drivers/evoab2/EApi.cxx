@@ -111,7 +111,7 @@ static const ApiMap aClientApiMap38[] =
 template<size_t N> static bool
 tryLink( oslModule &aModule, const char *pName, const ApiMap (&pMap)[N])
 {
-    for (guint i = 0; i < N; ++i)
+    for (size_t i = 0; i < N; ++i)
     {
         SymbolFunc aMethod = reinterpret_cast<SymbolFunc>(osl_getFunctionSymbol
             (aModule, OUString::createFromAscii ( pMap[ i ].sym_name ).pData));

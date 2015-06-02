@@ -215,7 +215,7 @@ void OCommonStatement::orderByAnalysis( const OSQLParseNode* _pOrderByClause, So
     const OSQLParseNode* pOrderList = _pOrderByClause->getByRule( OSQLParseNode::ordering_spec_commalist );
     ENSURE_OR_THROW( pOrderList, "unexpected parse tree structure" );
 
-    for ( sal_uInt32 i=0; i<pOrderList->count(); ++i )
+    for ( size_t i=0; i<pOrderList->count(); ++i )
     {
         const OSQLParseNode* pOrderBy = pOrderList->getChild(i);
         if ( !pOrderBy || !SQL_ISRULE( pOrderBy, ordering_spec ) )
