@@ -31,21 +31,13 @@ namespace basegfx
         The fill rule determines which areas are inside, and which are
         outside the poly-polygon.
      */
-    enum FillRule
+    enum class FillRule
     {
         /** Areas, for which a scanline has crossed an odd number of
             vertices, are regarded 'inside', the remainder 'outside'
             of the poly-polygon.
          */
-        FillRule_EVEN_ODD,
-
-        /** For each edge a scanline crosses, a current winding number
-            is updated. Downward edges count +1, upward edges count
-            -1. If the total accumulated winding number for one area
-            is not zero, this area is regarded 'inside', otherwise,
-            'outside'.
-         */
-        FillRule_NONZERO_WINDING_NUMBER
+        EvenOdd
     };
 }
 

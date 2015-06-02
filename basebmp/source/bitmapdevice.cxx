@@ -669,7 +669,7 @@ namespace
                                                      col),
                                       rBounds,
                                       aPoly,
-                                      basegfx::FillRule_EVEN_ODD );
+                                      basegfx::FillRule::EvenOdd );
 
             if( mpDamage )
             {
