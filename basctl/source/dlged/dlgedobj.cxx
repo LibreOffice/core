@@ -1551,7 +1551,7 @@ void DlgEdForm::UpdateGroups()
                     if ( xCtrl.is() )
                     {
                         Reference< awt::XControlModel > xCtrlModel( xCtrl->getModel() );
-                        if ( (awt::XControlModel*)xCtrlModel.get() == (awt::XControlModel*)pModels[nModel].get() )
+                        if ( xCtrlModel.get() == pModels[nModel].get() )
                         {
                             // get the control peer and insert into the list of peers
                             aSeqPeers.getArray()[ nModel ] = Reference< awt::XWindow >( xCtrl->getPeer(), UNO_QUERY );
