@@ -1110,7 +1110,7 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
 
     pFS->singleElement( FSNS( XML_a, XML_bodyPr ),
             XML_vert, sWritingMode,
-            XML_rot, nRotation == 0 ? NULL : calcRotationValue(nRotation).getStr(),
+            XML_rot, calcRotationValue(nRotation).getStr(),
             FSEND );
     // TODO: lstStyle
     pFS->singleElement( FSNS( XML_a, XML_lstStyle ),
