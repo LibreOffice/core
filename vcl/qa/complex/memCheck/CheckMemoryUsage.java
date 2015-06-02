@@ -37,7 +37,6 @@ import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 
 import util.DesktopTools;
-import util.OSName;
 import util.PropertyName;
 
 import com.sun.star.beans.PropertyValue;
@@ -104,10 +103,9 @@ public class CheckMemoryUsage
 
         // some Tests need the qadevOOo TestParameters, it is like a Hashmap for Properties.
         TestParameters param = new TestParameters();
-        param.put(PropertyName.SERVICE_FACTORY, xMsf); // some qadevOOo functions need the ServiceFactory
 
         // test does definitely not run on Windows.
-        if (param.get(PropertyName.OPERATING_SYSTEM).equals(OSName.WNTMSCI))
+        if (param.get(PropertyName.OPERATING_SYSTEM).equals(PropertyName.WNTMSCI))
         {
             System.out.println("Test can only reasonably be executed with a tool that "
                     + "displays the memory usage of StarOffice.");
