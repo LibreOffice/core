@@ -1,3 +1,14 @@
+--- goo/GooString.cc
++++ goo/GooString.cc
+@@ -161,7 +161,7 @@
+       // assert(s != s1) the roundedSize condition ensures this
+       if (newLength < length) {
+ 	memcpy(s1, s, newLength);
+-      } else {
++      } else if (length != 0) {
+ 	memcpy(s1, s, length);
+       }
+       if (s != sStatic)
 --- poppler/Stream.cc
 +++ poppler/Stream.cc
 @@ -2966,12 +2966,12 @@
