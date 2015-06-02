@@ -318,22 +318,21 @@ public class LocalOfficeConnection
                 aSOffice.startupService();
 
                 // wait until soffice is started
-                long nMaxMillis = System.currentTimeMillis() + 1000L*aSOffice.getStartupTime();
+                long nGiveUpTimeMillis = System.currentTimeMillis() + 1000L*aSOffice.getStartupTime();
                 while ( aInitialObject == null )
                 {
                     try
                     {
                         Thread.currentThread();
                         // try to connect to soffice
-                        Thread.sleep( 500 );
+                        Thread.sleep( 100 );
                         aInitialObject = resolve(xLocalContext, mURL);
                     }
                     catch( com.sun.star.connection.NoConnectException aEx )
                     {
                         // soffice did not start in time
-                        if ( System.currentTimeMillis() > nMaxMillis )
+                        if ( System.currentTimeMillis() > nGiveUpTimeMillis )
                             throw aEx;
-
                     }
                 }
             }
