@@ -54,8 +54,8 @@ MacabComplexOrder::MacabComplexOrder()
 
 MacabComplexOrder::~MacabComplexOrder()
 {
-    for (sal_uInt32 i = 0; i < m_aOrders.size(); i++)
-        delete m_aOrders[i];
+    for (auto p: m_aOrders)
+        delete p;
 }
 
 void MacabComplexOrder::addOrder(MacabOrder *pOrder)
@@ -65,10 +65,9 @@ void MacabComplexOrder::addOrder(MacabOrder *pOrder)
 
 sal_Int32 MacabComplexOrder::compare(const MacabRecord *record1, const MacabRecord *record2) const
 {
-    for (sal_uInt32 i = 0; i < m_aOrders.size(); i++)
+    for (auto p: m_aOrders)
     {
-        const MacabOrder *pOrder = m_aOrders[i];
-        sal_Int32 result = pOrder->compare(record1, record2);
+        sal_Int32 result = p->compare(record1, record2);
 
         if (result) return result;
     }
