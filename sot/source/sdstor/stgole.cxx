@@ -153,7 +153,7 @@ bool StgCompObjStream::Store()
     WriteInt32( -1L );
     WriteClsId( *this, aClsId );             // Class ID
     WriteInt32( aAsciiUserName.getLength() + 1 );
-    WriteCharPtr( (const char *)aAsciiUserName.getStr() );
+    WriteCharPtr( aAsciiUserName.getStr() );
     WriteUChar( 0 );             // string terminator
     WriteClipboardFormat( *this, nCbFormat );
     WriteInt32( 0 );             // terminator
