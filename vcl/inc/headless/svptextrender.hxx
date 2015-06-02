@@ -23,6 +23,7 @@
 #include "textrender.hxx"
 #include <vcl/region.hxx>
 #include <deque>
+#include <config_cairo_canvas.h>
 
 class VCL_DLLPUBLIC SvpTextRender : public TextRenderImpl
 {
@@ -74,7 +75,9 @@ public:
     virtual bool                GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& ) SAL_OVERRIDE;
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) SAL_OVERRIDE;
     virtual void                DrawServerFontLayout( const ServerFontLayout& ) SAL_OVERRIDE;
+#if ENABLE_CAIRO_CANVAS
     virtual SystemFontData      GetSysFontData( int nFallbackLevel ) const SAL_OVERRIDE;
+#endif // ENABLE_CAIRO_CANVAS
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPTEXTRENDER_HXX
