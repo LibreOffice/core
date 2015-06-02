@@ -25,6 +25,7 @@
 #include "saldatabasic.hxx"
 
 #include <vcl/sysdata.hxx>
+#include <config_cairo_canvas.h>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -735,6 +736,8 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 
 #endif
 
+#if ENABLE_CAIRO_CANVAS
+
 bool SvpSalGraphics::SupportsCairo() const
 {
     return false;
@@ -759,5 +762,7 @@ css::uno::Any SvpSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
 {
     return css::uno::Any();
 }
+
+#endif // ENABLE_CAIRO_CANVAS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

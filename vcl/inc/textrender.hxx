@@ -28,6 +28,7 @@
 #include "salgdi.hxx"
 #include "salglyphid.hxx"
 #include "fontsubset.hxx"
+#include <config_cairo_canvas.h>
 
 class PspSalPrinter;
 class PspSalInfoPrinter;
@@ -81,7 +82,9 @@ public:
     virtual bool                    GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& ) = 0;
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
     virtual void                    DrawServerFontLayout( const ServerFontLayout& ) = 0;
+#if ENABLE_CAIRO_CANVAS
     virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const = 0;
+#endif // ENABLE_CAIRO_CANVAS
 };
 
 #endif
