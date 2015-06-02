@@ -280,7 +280,7 @@ void SwShellCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
     rEnd = lcl_getLayoutRect(pCursor->GetEndPos(), *pCursor->End());
 }
 
-void SwSelPaintRects::Show()
+void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
 {
     SdrView *const pView = const_cast<SdrView*>(m_pCursorShell->GetDrawView());
 
@@ -379,7 +379,10 @@ void SwSelPaintRects::Show()
                 ss << rRect.SVRect().toString().getStr();
             }
             OString sRect = ss.str().c_str();
-            GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+            if (!pSelectionRectangles)
+                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+            else
+                pSelectionRectangles->push_back(sRect);
         }
     }
 }
@@ -566,11 +569,31 @@ void SwShellCrsr::FillRects()
 
 void SwShellCrsr::Show()
 {
+    std::vector<OString> aSelectionRectangles;
     for(SwPaM& rPaM : GetRingContainer())
     {
         SwShellCrsr* pShCrsr = dynamic_cast<SwShellCrsr*>(&rPaM);
         if(pShCrsr)
-            pShCrsr->SwSelPaintRects::Show();
+            pShCrsr->SwSelPaintRects::Show(&aSelectionRectangles);
+    }
+
+    if (GetShell()->isTiledRendering())
+    {
+        std::stringstream ss;
+        bool bFirst = true;
+        for (size_t i = 0; i < aSelectionRectangles.size(); ++i)
+        {
+            const OString& rSelectionRectangle = aSelectionRectangles[i];
+            if (rSelectionRectangle.isEmpty())
+                continue;
+            if (bFirst)
+                bFirst = false;
+            else
+                ss << "; ";
+            ss << rSelectionRectangle.getStr();
+        }
+        OString sRect = ss.str().c_str();
+        GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
     }
 }
 

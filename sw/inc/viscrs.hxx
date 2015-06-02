@@ -96,7 +96,7 @@ public:
     // make a complete swap access to m_pCursorOverlay is needed there
     void swapContent(SwSelPaintRects& rSwap);
 
-    void Show();
+    void Show(std::vector<OString>* pSelectionRectangles = 0);
     void Hide();
     void Invalidate( const SwRect& rRect );
 
