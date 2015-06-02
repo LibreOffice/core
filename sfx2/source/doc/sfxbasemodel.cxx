@@ -3320,7 +3320,7 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const Sequence< sal_Int8 >& aIden
         SfxObjectShell *const pObjectShell(GetObjectShell());
         if (pObjectShell)
         {
-            return reinterpret_cast<sal_Int64>((SfxObjectShell*) pObjectShell);
+            return reinterpret_cast<sal_Int64>(pObjectShell);
         }
     }
 

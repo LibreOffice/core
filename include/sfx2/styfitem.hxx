@@ -76,7 +76,7 @@ public:
                         { return aEntryList.size(); }
 
     const SfxStyleFamilyItem* at(size_t nIdx) const
-                        { return (SfxStyleFamilyItem*)(aEntryList.empty() ? NULL : aEntryList[nIdx]); }
+                        { return aEntryList.empty() ? NULL : aEntryList[nIdx]; }
 
     /** updates the images of all single SfxStyleFamilyItems with new images from the given resource
 
