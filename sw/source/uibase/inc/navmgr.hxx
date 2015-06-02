@@ -15,12 +15,13 @@
 #include "swtypes.hxx"
 #include "calbck.hxx"
 #include "unocrsr.hxx"
+#include "vcl/svapp.hxx"
 
 class   SwWrtShell;
 struct  SwPosition;
 class SwUnoCrsr;
 
-class SwNavigationMgr : SwClient
+class SwNavigationMgr
 {
 private:
     /*
@@ -32,7 +33,7 @@ private:
      * (e.g. click a link, or double click an entry from the navigator).
      * Every use of the back/forward buttons results in moving the stack pointer within the navigation history
      */
-    typedef ::std::vector< std::shared_ptr<SwUnoCrsr> > Stack_t;
+    typedef ::std::vector< sw::UnoCursorPointer > Stack_t;
     Stack_t m_entries;
     Stack_t::size_type m_nCurrent; /* Current position within the navigation history */
     SwWrtShell & m_rMyShell; /* The active shell within which the navigation occurs */
@@ -44,11 +45,8 @@ public:
     SwNavigationMgr( SwWrtShell & rShell );
     virtual ~SwNavigationMgr()
     {
-        for(auto pEntry : m_entries)
-        {
-            if(pEntry && GetRegisteredIn() == pEntry.get())
-                pEntry->Remove(this);
-        }
+        SolarMutexGuard g;
+        m_entries.clear();
     }
     /* Can we go back in the history ? */
     bool backEnabled() ;
@@ -60,7 +58,6 @@ public:
     void goForward() ;
     /* The method that adds the position pPos to the navigation history */
     bool addEntry(const SwPosition& rPos);
-    void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
