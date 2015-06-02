@@ -1214,7 +1214,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             sal_Int16   nDepth, nMask, nNumberingRule[ 10 ];
             sal_uInt32  nTextOfs = pPara->nTextOfs;
             sal_uInt32  nTabs = pPara->maTabStop.getLength();
-            const ::com::sun::star::style::TabStop* pTabStop = ( const ::com::sun::star::style::TabStop* )pPara->maTabStop.getConstArray();
+            const ::com::sun::star::style::TabStop* pTabStop = pPara->maTabStop.getConstArray();
 
             for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
             {

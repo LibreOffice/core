@@ -338,7 +338,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                                       )->Execute() == RET_YES )
                     {
                         // implicit transformation into bezier
-                        WaitObject aWait( (Window*)GetActiveWindow() );
+                        WaitObject aWait( GetActiveWindow() );
                         mpDrawView->ConvertMarkedToPathObj(false);
                     }
                 }
@@ -375,7 +375,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                                       )->Execute() == RET_YES )
                     {
                         // implicit transformation into bezier
-                        WaitObject aWait( (Window*)GetActiveWindow() );
+                        WaitObject aWait( GetActiveWindow() );
                         mpDrawView->ConvertMarkedToPathObj(false);
                     }
                 }
@@ -853,7 +853,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_PASTE:
         {
-            WaitObject aWait( (Window*)GetActiveWindow() );
+            WaitObject aWait( GetActiveWindow() );
 
             if(HasCurrentFunction())
             {
@@ -870,7 +870,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_PASTE_UNFORMATTED:
         {
-            WaitObject aWait( (Window*)GetActiveWindow() );
+            WaitObject aWait( GetActiveWindow() );
 
             if(HasCurrentFunction())
             {
@@ -894,7 +894,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
         {
-            WaitObject              aWait( (Window*)GetActiveWindow() );
+            WaitObject              aWait( GetActiveWindow() );
             TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
             const SfxItemSet*       pReqArgs = rReq.GetArgs();
             SotClipboardFormatId    nFormat = SotClipboardFormatId::NONE;

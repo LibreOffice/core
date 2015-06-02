@@ -568,7 +568,7 @@ void incomingCallback( void *userRefCon,
 
     BluetoothServer* pServer = static_cast<BluetoothServer*>(userRefCon);
 
-    IOBluetoothRFCOMMChannel* channel = [IOBluetoothRFCOMMChannel withRFCOMMChannelRef:(IOBluetoothRFCOMMChannelRef)objectRef];
+    IOBluetoothRFCOMMChannel* channel = [IOBluetoothRFCOMMChannel withRFCOMMChannelRef:reinterpret_cast<IOBluetoothRFCOMMChannelRef>(objectRef)];
 
     OSXBluetoothWrapper* socket = new OSXBluetoothWrapper( channel);
     Communicator* pCommunicator = new Communicator( socket );

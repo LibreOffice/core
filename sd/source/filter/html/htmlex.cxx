@@ -3010,7 +3010,7 @@ bool HtmlExport::CreateImageNumberFile()
     sal_uLong nErr = aFile.createStream(aFull, pStr);
     if(nErr == 0)
     {
-        pStr->WriteCharPtr( (const char *)"1" );
+        pStr->WriteCharPtr( "1" );
         nErr = aFile.close();
     }
 

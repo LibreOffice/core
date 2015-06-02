@@ -633,7 +633,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 if( rReq.GetSlot() == SID_CHANGEBEZIER )
                 {
-                    WaitObject aWait( (Window*)GetActiveWindow() );
+                    WaitObject aWait( GetActiveWindow() );
                     mpDrawView->ConvertMarkedToPathObj(false);
                 }
                 else
@@ -644,7 +644,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                     else
                     {
-                        WaitObject aWait( (Window*)GetActiveWindow() );
+                        WaitObject aWait( GetActiveWindow() );
                         mpDrawView->ConvertMarkedToPolyObj(false);
                     }
                 }
@@ -676,7 +676,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->ConvertMarkedToPathObj(true);
 
                 Invalidate(SID_CONVERT_TO_CONTOUR);
@@ -704,7 +704,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
 
                 // create SdrGrafObj from metafile/bitmap
                 Graphic aGraphic;
@@ -2184,7 +2184,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->CombineMarkedObjects(false);
             }
             Cancel();
@@ -2221,7 +2221,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->MergeMarkedObjects(SDR_MERGE_MERGE);
             }
             Cancel();
@@ -2242,7 +2242,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->MergeMarkedObjects(SDR_MERGE_SUBSTRACT);
             }
             Cancel();
@@ -2263,7 +2263,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->MergeMarkedObjects(SDR_MERGE_INTERSECT);
             }
             Cancel();
@@ -2275,7 +2275,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if ( mpDrawView->IsDismantlePossible(false) )
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->DismantleMarkedObjects(false);
             }
             Cancel();
@@ -2292,7 +2292,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->CombineMarkedObjects(true);
             }
             Cancel();
@@ -2309,17 +2309,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if ( mpDrawView->IsBreak3DObjPossible() )
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->Break3DObj();
             }
             else if ( mpDrawView->IsDismantlePossible(true) )
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 mpDrawView->DismantleMarkedObjects(true);
             }
             else if ( mpDrawView->IsImportMtfPossible() )
             {
-                WaitObject aWait( (Window*)GetActiveWindow() );
+                WaitObject aWait( GetActiveWindow() );
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                 const size_t nAnz=rMarkList.GetMarkCount();
 
@@ -2391,7 +2391,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         mpDrawView->SdrEndTextEdit();
                     }
 
-                    WaitObject aWait( (Window*)GetActiveWindow() );
+                    WaitObject aWait( GetActiveWindow() );
                     mpDrawView->ConvertMarkedObjTo3D(true);
                 }
             }
