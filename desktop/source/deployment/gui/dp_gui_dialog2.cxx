@@ -364,7 +364,9 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
 
     PopupMenu aPopup;
 
+#if ENABLE_EXTENSION_UPDATE
     aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
+#endif
 
     if ( ! GetEntryData( nPos )->m_bLocked )
     {
@@ -700,7 +702,6 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     m_pAddBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
     m_pCloseBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCloseBtn ) );
 
-    m_pUpdateBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleUpdateBtn ) );
     m_pGetExtensions->SetClickHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
     m_pCancelBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
 
@@ -714,7 +715,12 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
 
     m_pProgressBar->Hide();
 
+#if ENABLE_EXTENSION_UPDATE
+    m_pUpdateBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleUpdateBtn ) );
     m_pUpdateBtn->Enable(false);
+#else
+    m_pUpdateBtn->Hide();
+#endif
 
     m_aIdle.SetPriority(SchedulerPriority::LOWEST);
     m_aIdle.SetIdleHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
@@ -1075,8 +1081,9 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx)
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn)
 {
+#if ENABLE_EXTENSION_UPDATE
     m_pManager->checkUpdates( false, true );
-
+#endif
     return 1;
 }
 
