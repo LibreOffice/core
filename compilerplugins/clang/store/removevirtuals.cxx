@@ -53,7 +53,7 @@ static size_t getFilesize(const char* filename)
 
 RemoveVirtuals::RemoveVirtuals(InstantiationData const & data): RewritePlugin(data)
 {
-    static const char sInputFile[] = "/home/noel/libo4/result.txt";
+    static const char sInputFile[] = "/home/noel/libo5/result.txt";
     mmapFilesize = getFilesize(sInputFile);
     //Open file
     mmapFD = open(sInputFile, O_RDONLY, 0);
@@ -120,14 +120,26 @@ bool RemoveVirtuals::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
         return true;
     }
     if (functionDecl->isPure()) {
-        removeText(functionDecl->getSourceRange());
+        if (!removeText(functionDecl->getSourceRange())) {
+            report(
+                DiagnosticsEngine::Warning,
+                "Could not remove unused pure virtual method",
+                functionDecl->getLocStart())
+              << functionDecl->getSourceRange();
+        }
     } else {
         std::string aOrigText = rewriter->getRewrittenText(functionDecl->getSourceRange());
         size_t iVirtualTokenIndex = aOrigText.find_first_of("virtual ");
         if (iVirtualTokenIndex == std::string::npos) {
             return true;
         }
-        replaceText(functionDecl->getSourceRange(), aOrigText.replace(iVirtualTokenIndex, strlen("virtual "), ""));
+        if (!replaceText(functionDecl->getSourceRange(), aOrigText.replace(iVirtualTokenIndex, strlen("virtual "), ""))) {
+            report(
+                DiagnosticsEngine::Warning,
+                "Could not remove virtual qualifier from method",
+                functionDecl->getLocStart())
+              << functionDecl->getSourceRange();
+        }
     }
     return true;
 }
