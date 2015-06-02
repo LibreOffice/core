@@ -70,8 +70,6 @@ public:
 
 }; }; // namespace detail, namespace vcl
 
-namespace vcl { class Window; }
-
 /**
  * A thin wrapper around rtl::Reference to implement the acquire and dispose semantics we want for references to vcl::Window subclasses.
  *
