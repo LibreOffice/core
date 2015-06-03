@@ -126,6 +126,7 @@ public:
 
         TBG_PERMANENT = TBG__FIRST,
         TBG_FUNCTION,
+        TBG_COMMON_TASK,
         TBG_MASTER_MODE,
 
         TBG__LAST = TBG_MASTER_MODE
