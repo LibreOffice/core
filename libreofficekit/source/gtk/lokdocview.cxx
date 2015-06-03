@@ -65,6 +65,9 @@ struct LOKDocView_Impl
     GtkWidget* m_pEventBox;
     GtkWidget* m_pTable;
     GtkWidget** m_pCanvas;
+    GtkWidget *darea;
+
+    TileBuffer *mTileBuffer;
 
     float m_fZoom;
 
@@ -140,6 +143,8 @@ struct LOKDocView_Impl
     ~LOKDocView_Impl();
     /// Connected to the destroy signal of LOKDocView, deletes its LOKDocView_Impl.
     static void destroy(LOKDocView* pDocView, gpointer pData);
+    /// Connected to the expose-event of the GtkDrawingArea
+    static void on_exposed(GtkWidget *widget, GdkEvent *event, gpointer user_data);
     /// Converts from screen pixels to document coordinates.
     float pixelToTwip(float fInput);
     /// Converts from document coordinates to screen pixels.
@@ -258,6 +263,7 @@ LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPaylo
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     : m_pDocView(pDocView),
     m_pEventBox(gtk_event_box_new()),
+    darea(gtk_drawing_area_new()),
     m_pTable(0),
     m_pCanvas(0),
     m_fZoom(1),
@@ -305,6 +311,12 @@ void LOKDocView_Impl::destroy(LOKDocView* pDocView, gpointer /*pData*/)
     // We specifically need to destroy the document when closing in order to ensure
     // that lock files etc. are cleaned up.
     delete pDocView->m_pImpl;
+}
+
+void LOKDocView_Impl::on_exposed(GtkWidget *widget, GdkEvent *event, gpointer userdata)
+{
+    LOKDocView *pDocView = LOK_DOCVIEW (userdata);
+    pDocView->m_pImpl->renderDocument(0);
 }
 
 float LOKDocView_Impl::pixelToTwip(float fInput)
@@ -771,40 +783,17 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
 {
     const int nTileSizePixels = 256;
 
+    GdkRectangle visibleArea;
+    lok_docview_get_visarea (m_pDocView, &visibleArea);
+
     long nDocumentWidthPixels = twipToPixel(m_nDocumentWidthTwips);
     long nDocumentHeightPixels = twipToPixel(m_nDocumentHeightTwips);
     // Total number of rows / columns in this document.
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
-    // Set up our table and the tile pointers.
-    if (!m_pTable)
-        pPartial = 0;
-    if (pPartial)
-    {
-        // Same as nRows / nColumns, but from the previous renderDocument() call.
-        guint nOldRows, nOldColumns;
-
-#if GTK_CHECK_VERSION(2,22,0)
-        gtk_table_get_size(GTK_TABLE(m_pTable), &nOldRows, &nOldColumns);
-        if (nOldRows != nRows || nOldColumns != nColumns)
-            // Can't do partial rendering, document size changed.
-            pPartial = 0;
-#else
-        pPartial = 0;
-#endif
-    }
-    if (!pPartial)
-    {
-        if (m_pTable)
-            gtk_container_remove(GTK_CONTAINER(m_pEventBox), m_pTable);
-        m_pTable = gtk_table_new(nRows, nColumns, FALSE);
-        gtk_container_add(GTK_CONTAINER(m_pEventBox), m_pTable);
-        gtk_widget_show(m_pTable);
-        if (m_pCanvas)
-            g_free(m_pCanvas);
-        m_pCanvas = static_cast<GtkWidget**>(g_malloc0(sizeof(GtkWidget*) * nRows * nColumns));
-    }
+    gtk_widget_set_size_request(darea, nDocumentWidthPixels, nDocumentHeightPixels);
+    cairo_t *pcairo = gdk_cairo_create(darea->window);
 
     // Render the tiles.
     for (guint nRow = 0; nRow < nRows; ++nRow)
@@ -830,7 +819,10 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
             aTileRectangleTwips.width = pixelToTwip(aTileRectanglePixels.width);
             aTileRectangleTwips.height = pixelToTwip(aTileRectanglePixels.height);
             if (pPartial && !gdk_rectangle_intersect(pPartial, &aTileRectangleTwips, 0))
-                    bPaint = false;
+                bPaint = false;
+
+            if (!gdk_rectangle_intersect(&visibleArea, &aTileRectangleTwips, 0))
+                bPaint = false;
 
             if (bPaint)
             {
@@ -849,20 +841,15 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
                                                // Size of the tile, depends on the zoom factor and the tile position only.
                                                aTileRectangleTwips.width, aTileRectangleTwips.height);
 
-                if (m_pCanvas[nTile])
-                    gtk_widget_destroy(GTK_WIDGET(m_pCanvas[nTile]));
-                m_pCanvas[nTile] = gtk_image_new();
-                gtk_image_set_from_pixbuf(GTK_IMAGE(m_pCanvas[nTile]), pPixBuf);
-                g_object_unref(G_OBJECT(pPixBuf));
-                gtk_widget_show(m_pCanvas[nTile]);
-                gtk_table_attach(GTK_TABLE(m_pTable),
-                                 m_pCanvas[nTile],
-                                 nColumn, nColumn + 1, nRow, nRow + 1,
-                                 GTK_SHRINK, GTK_SHRINK, 0, 0);
+                gdk_cairo_set_source_pixbuf (pcairo, pPixBuf, twipToPixel(aTileRectangleTwips.x), twipToPixel(aTileRectangleTwips.y));
+                cairo_paint(pcairo);
             }
         }
     }
+
+    cairo_destroy(pcairo);
 }
+
 
 GdkRectangle LOKDocView_Impl::payloadToRectangle(const char* pPayload)
 {
@@ -1167,17 +1154,13 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
 
     pDocView->m_pImpl = new LOKDocView_Impl(pDocView);
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
-                                           pDocView->m_pImpl->m_pEventBox );
+                                           pDocView->m_pImpl->darea );
 
-    gtk_widget_set_events(pDocView->m_pImpl->m_pEventBox, GDK_BUTTON_PRESS_MASK); // So that drag doesn't try to move the whole window.
-    gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "button-press-event", GTK_SIGNAL_FUNC(LOKDocView_Impl::signalButton), pDocView);
-    gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "button-release-event", GTK_SIGNAL_FUNC(LOKDocView_Impl::signalButton), pDocView);
-    gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "motion-notify-event", GTK_SIGNAL_FUNC(LOKDocView_Impl::signalMotion), pDocView);
-
-    gtk_widget_show( pDocView->m_pImpl->m_pEventBox );
+    g_signal_connect(GTK_OBJECT(pDocView->m_pImpl->darea),
+                     "expose-event",
+                     GTK_SIGNAL_FUNC(LOKDocView_Impl::on_exposed), pDocView);
 
     gtk_signal_connect(GTK_OBJECT(pDocView), "destroy", GTK_SIGNAL_FUNC(LOKDocView_Impl::destroy), 0);
-    g_signal_connect_after(pDocView->m_pImpl->m_pEventBox, "expose-event", G_CALLBACK(LOKDocView_Impl::renderOverlay), pDocView);
 }
 
 SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
