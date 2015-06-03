@@ -162,7 +162,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
             break;
         default:
             SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
-            assert(false);
+            return { FormulaStatus::UNKNOWN, boost::none };
         }
     } else if (nOpCode >= SC_OPCODE_START_2_PAR &&
                nOpCode < SC_OPCODE_STOP_2_PAR) {
