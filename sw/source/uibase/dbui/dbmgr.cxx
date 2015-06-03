@@ -2518,11 +2518,6 @@ OUString lcl_getOwnURL(SwDocShell* pDocShell)
 {
     OUString aRet;
 
-    // Experimental till load/store of embedded data source definition is not fully implemented.
-    static bool bEmbed = officecfg::Office::Common::Misc::ExperimentalMode::get();
-    if (!bEmbed)
-        return aRet;
-
     if (!pDocShell)
         return aRet;
 
