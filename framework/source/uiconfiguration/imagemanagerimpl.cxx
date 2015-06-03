@@ -208,8 +208,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
         m_aImageCommandNameVector.resize(aCmdImageSeq.getLength() );
         m_aImageNameVector.resize( aCmdImageSeq.getLength() );
 
-        ::std::copy( aCmdImageSeq.getConstArray(),
-                     aCmdImageSeq.getConstArray()+aCmdImageSeq.getLength(),
+        ::std::copy( aCmdImageSeq.begin(), aCmdImageSeq.end(),
                      m_aImageCommandNameVector.begin() );
 
         // Create a image name vector that must be provided to the vcl imagelist. We also need

@@ -3449,7 +3449,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         // re-create all the views
         ::std::vector< OUString > aViewsToRestore( rInfo.ViewNames.getLength() );
         if ( rInfo.ViewNames.getLength() )
-            ::std::copy( rInfo.ViewNames.getConstArray(), rInfo.ViewNames.getConstArray() + rInfo.ViewNames.getLength(), aViewsToRestore.begin() );
+            ::std::copy( rInfo.ViewNames.begin(), rInfo.ViewNames.end(), aViewsToRestore.begin() );
         // if we don't have views for whatever reason, then create a default-view, at least
         if ( aViewsToRestore.empty() )
             aViewsToRestore.push_back( OUString() );

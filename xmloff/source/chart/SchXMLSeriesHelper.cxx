@@ -54,7 +54,7 @@ using ::com::sun::star::uno::Sequence;
             {
                 Reference< chart2::XDataSeriesContainer > xDSCnt( aChartTypeSeq[j], uno::UNO_QUERY_THROW );
                 Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
-                ::std::copy( aSeriesSeq.getConstArray(), aSeriesSeq.getConstArray() + aSeriesSeq.getLength(),
+                ::std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
                              ::std::back_inserter( aResult ));
             }
         }

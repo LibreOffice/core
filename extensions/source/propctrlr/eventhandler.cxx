@@ -304,8 +304,8 @@ namespace pcr
 
             Sequence< Type > aListeners( xIntrospectionAccess->getSupportedListeners() );
 
-            ::std::copy( aListeners.getConstArray(), aListeners.getConstArray() + aListeners.getLength(),
-                ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
+            ::std::copy( aListeners.begin(), aListeners.end(),
+                         ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
         }
 
         bool operator ==( const ScriptEventDescriptor& _lhs, const ScriptEventDescriptor& _rhs )

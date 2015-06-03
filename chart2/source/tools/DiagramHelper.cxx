@@ -714,7 +714,7 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
             {
                 Reference< XDataSeriesContainer > xDSCnt( aChartTypeSeq[j], uno::UNO_QUERY_THROW );
                 Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
-                ::std::copy( aSeriesSeq.getConstArray(), aSeriesSeq.getConstArray() + aSeriesSeq.getLength(),
+                ::std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
                              ::std::back_inserter( aResult ));
             }
         }
@@ -1226,9 +1226,8 @@ Sequence< Reference< XChartType > >
             {
                 Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
                 Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-                ::std::copy( aChartTypeSeq.getConstArray(),
-                                aChartTypeSeq.getConstArray() + aChartTypeSeq.getLength(),
-                                ::std::back_inserter( aResult ));
+                ::std::copy( aChartTypeSeq.begin(), aChartTypeSeq.end(),
+                             ::std::back_inserter( aResult ));
             }
         }
         catch( const uno::Exception & ex )

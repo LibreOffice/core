@@ -256,7 +256,7 @@ namespace comphelper
     template < typename DstType, typename SrcType >
     inline DstType* sequenceToArray( DstType* io_pArray, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
     {
-        ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), io_pArray );
+        ::std::copy( i_Sequence.begin(), i_Sequence.end(), io_pArray );
         return io_pArray;
     }
 
@@ -327,7 +327,7 @@ namespace comphelper
     inline DstType sequenceToContainer( const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
     {
         DstType result( i_Sequence.getLength() );
-        ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), result.begin() );
+        ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
         return result;
     }
 
@@ -365,7 +365,7 @@ namespace comphelper
     inline DstType& sequenceToContainer( DstType& o_Output, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
     {
         o_Output.resize( i_Sequence.getLength() );
-        ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), o_Output.begin() );
+        ::std::copy( i_Sequence.begin(), i_Sequence.end(), o_Output.begin() );
         return o_Output;
     }
 

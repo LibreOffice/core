@@ -246,8 +246,8 @@ namespace toolkitform
             static const char FM_PROP_STRINGITEMLIST[] = "StringItemList";
             Sequence< OUString > aListEntries;
             OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_STRINGITEMLIST ) >>= aListEntries );
-            ::std::copy( aListEntries.getConstArray(), aListEntries.getConstArray() + aListEntries.getLength(),
-                ::std::back_insert_iterator< ::std::vector< OUString > >( _rVector ) );
+            ::std::copy( aListEntries.begin(), aListEntries.end(),
+                         ::std::back_insert_iterator< ::std::vector< OUString > >( _rVector ) );
         }
     }
 

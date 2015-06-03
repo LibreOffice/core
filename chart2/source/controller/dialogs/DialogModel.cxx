@@ -522,7 +522,7 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
     {
         Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
         const Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
-        ::std::copy( aSeq.getConstArray(), aSeq.getConstArray() + aSeq.getLength(),
+        ::std::copy( aSeq.begin(), aSeq.end(),
                      lcl_RolesWithRangeAppend( &aResult, aRoleOfSequenceForLabel ));
         if( xChartType.is())
         {

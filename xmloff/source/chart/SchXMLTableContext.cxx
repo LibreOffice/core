@@ -205,8 +205,7 @@ template< typename T >
 ::std::vector< T > lcl_SequenceToVector( const uno::Sequence< T > & rSequence )
 {
     ::std::vector< T > aResult( rSequence.getLength());
-    ::std::copy( rSequence.getConstArray(), rSequence.getConstArray() + rSequence.getLength(),
-                 aResult.begin());
+    ::std::copy( rSequence.begin(), rSequence.end(), aResult.begin());
     return aResult;
 }
 
