@@ -180,7 +180,7 @@ struct State
         maDashArray(),
         mnDashOffset(0.0),
         meLineCap(BUTT),
-        meLineJoin(basegfx::B2DLINEJOIN_MITER),
+        meLineJoin(basegfx::B2DLineJoin::Miter),
         mnMiterLimit(4.0),
         mnStrokeWidth(1.0),
         maViewportFillColor(1.0),

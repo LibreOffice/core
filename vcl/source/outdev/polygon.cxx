@@ -95,7 +95,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
                 bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a),
                                                      0.0,
                                                      aB2DLineWidth,
-                                                     basegfx::B2DLINEJOIN_NONE,
+                                                     basegfx::B2DLineJoin::NONE,
                                                      css::drawing::LineCap_BUTT,
                                                      this);
             }
@@ -203,7 +203,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
             bSuccess = mpGraphics->DrawPolyLine( aB2DPolygon,
                                                  0.0,
                                                  aB2DLineWidth,
-                                                 basegfx::B2DLINEJOIN_NONE,
+                                                 basegfx::B2DLineJoin::NONE,
                                                  css::drawing::LineCap_BUTT,
                                                  this);
         }
@@ -305,7 +305,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                 bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a),
                                                      0.0,
                                                      aB2DLineWidth,
-                                                     basegfx::B2DLINEJOIN_NONE,
+                                                     basegfx::B2DLineJoin::NONE,
                                                      css::drawing::LineCap_BUTT,
                                                      this);
             }

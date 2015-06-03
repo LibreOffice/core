@@ -960,10 +960,10 @@ bool AquaSalGraphics::drawPolyLine(
     }
 #endif
 
-    // #i101491# Aqua does not support B2DLINEJOIN_NONE; return false to use
+    // #i101491# Aqua does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation)
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    if( (basegfx::B2DLINEJOIN_NONE == eLineJoin) &&
+    if( (basegfx::B2DLineJoin::NONE == eLineJoin) &&
         (rLineWidths.getX() > 1.3) )
     {
         DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
@@ -974,11 +974,11 @@ bool AquaSalGraphics::drawPolyLine(
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
     switch( eLineJoin )
     {
-    case ::basegfx::B2DLINEJOIN_NONE: aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
-    case ::basegfx::B2DLINEJOIN_MIDDLE: aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
-    case ::basegfx::B2DLINEJOIN_BEVEL: aCGLineJoin = kCGLineJoinBevel; break;
-    case ::basegfx::B2DLINEJOIN_MITER: aCGLineJoin = kCGLineJoinMiter; break;
-    case ::basegfx::B2DLINEJOIN_ROUND: aCGLineJoin = kCGLineJoinRound; break;
+    case ::basegfx::B2DLineJoin::NONE: aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
+    case ::basegfx::B2DLineJoin::Middle: aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
+    case ::basegfx::B2DLineJoin::Bevel: aCGLineJoin = kCGLineJoinBevel; break;
+    case ::basegfx::B2DLineJoin::Miter: aCGLineJoin = kCGLineJoinMiter; break;
+    case ::basegfx::B2DLineJoin::Round: aCGLineJoin = kCGLineJoinRound; break;
     }
 
     // setup cap attribute

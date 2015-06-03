@@ -88,7 +88,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mnLayer(nLay),
     maOldLineColor(),
     mnLineWidth(0),
-    maLineJoin(basegfx::B2DLINEJOIN_NONE),
+    maLineJoin(basegfx::B2DLineJoin::NONE),
     maLineCap(com::sun::star::drawing::LineCap_BUTT),
     maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0),
     mbMov(false),
@@ -355,19 +355,19 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
         switch(maLineJoin)
         {
-            default : // basegfx::B2DLINEJOIN_NONE
+            default : // basegfx::B2DLineJoin::NONE
                 mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
                 break;
-            case basegfx::B2DLINEJOIN_MIDDLE:
+            case basegfx::B2DLineJoin::Middle:
                 mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_MIDDLE));
                 break;
-            case basegfx::B2DLINEJOIN_BEVEL:
+            case basegfx::B2DLineJoin::Bevel:
                 mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
                 break;
-            case basegfx::B2DLINEJOIN_MITER:
+            case basegfx::B2DLineJoin::Miter:
                 mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
                 break;
-            case basegfx::B2DLINEJOIN_ROUND:
+            case basegfx::B2DLineJoin::Round:
                 mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
                 break;
         }
@@ -707,7 +707,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
                 rLineInfo.GetDistance());
             SetAttributes(pPath);
             mnLineWidth = 0;
-            maLineJoin = basegfx::B2DLINEJOIN_NONE;
+            maLineJoin = basegfx::B2DLineJoin::NONE;
             maDash = XDash();
             InsertObj(pPath, false);
         }
@@ -933,7 +933,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
             rLineInfo.GetDistance());
         SetAttributes(pPath);
         mnLineWidth = 0;
-        maLineJoin = basegfx::B2DLINEJOIN_NONE;
+        maLineJoin = basegfx::B2DLineJoin::NONE;
         maDash = XDash();
         InsertObj(pPath, false);
     }

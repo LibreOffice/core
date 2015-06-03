@@ -51,7 +51,7 @@ namespace drawinglayer
             ImpLineAttribute()
             :   maColor(basegfx::BColor()),
                 mfWidth(0.0),
-                meLineJoin(basegfx::B2DLINEJOIN_ROUND),
+                meLineJoin(basegfx::B2DLineJoin::Round),
                 meLineCap(com::sun::star::drawing::LineCap_BUTT)
             {
             }

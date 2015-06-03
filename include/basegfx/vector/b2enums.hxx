@@ -54,13 +54,13 @@ namespace basegfx
 
     /** Descriptor for possible line joins between two line segments
     */
-    enum B2DLineJoin
+    enum class B2DLineJoin
     {
-        B2DLINEJOIN_NONE,       // no rounding
-        B2DLINEJOIN_MIDDLE,     // calc middle value between joints
-        B2DLINEJOIN_BEVEL,      // join edges with line
-        B2DLINEJOIN_MITER,      // extend till cut
-        B2DLINEJOIN_ROUND       // create arc
+        NONE,       // no rounding
+        Middle,     // calc middle value between joints
+        Bevel,      // join edges with line
+        Miter,      // extend till cut
+        Round       // create arc
     };
 
 } // end of namespace basegfx

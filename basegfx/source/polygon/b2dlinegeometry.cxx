@@ -679,7 +679,7 @@ namespace basegfx
             double fMiterMinimumAngle)
         {
             OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForJoin: LineWidth too small (!)");
-            OSL_ENSURE(B2DLINEJOIN_NONE != eJoin, "createAreaGeometryForJoin: B2DLINEJOIN_NONE not allowed (!)");
+            OSL_ENSURE(B2DLineJoin::NONE != eJoin, "createAreaGeometryForJoin: B2DLineJoin::NONE not allowed (!)");
 
             // LineJoin from tangent rPerpendPrev to tangent rPerpendEdge in rPoint
             B2DPolygon aEdgePolygon;
@@ -688,20 +688,20 @@ namespace basegfx
 
             // test if for Miter, the angle is too small and the fallback
             // to bevel needs to be used
-            if(B2DLINEJOIN_MITER == eJoin)
+            if(B2DLineJoin::Miter == eJoin)
             {
                 const double fAngle(fabs(rPerpendPrev.angle(rPerpendEdge)));
 
                 if((F_PI - fAngle) < fMiterMinimumAngle)
                 {
                     // fallback to bevel
-                    eJoin = B2DLINEJOIN_BEVEL;
+                    eJoin = B2DLineJoin::Bevel;
                 }
             }
 
             switch(eJoin)
             {
-                case B2DLINEJOIN_MITER :
+                case B2DLineJoin::Miter :
                 {
                     aEdgePolygon.append(aEndPoint);
                     aEdgePolygon.append(rPoint);
@@ -723,7 +723,7 @@ namespace basegfx
 
                     break;
                 }
-                case B2DLINEJOIN_ROUND :
+                case B2DLineJoin::Round :
                 {
                     // use tooling to add needed EllipseSegment
                     double fAngleStart(atan2(rPerpendPrev.getY(), rPerpendPrev.getX()));
@@ -760,7 +760,7 @@ namespace basegfx
                         // wanted fall-through to default
                     }
                 }
-                default: // B2DLINEJOIN_BEVEL
+                default: // B2DLineJoin::Bevel
                 {
                     aEdgePolygon.append(aEndPoint);
                     aEdgePolygon.append(rPoint);
@@ -835,7 +835,7 @@ namespace basegfx
                     B2DCubicBezier aEdge;
                     B2DCubicBezier aPrev;
 
-                    const bool bEventuallyCreateLineJoin(B2DLINEJOIN_NONE != eJoin);
+                    const bool bEventuallyCreateLineJoin(B2DLineJoin::NONE != eJoin);
                     // prepare edge
                     aEdge.setStartPoint(aCandidate.getB2DPoint(0));
 
