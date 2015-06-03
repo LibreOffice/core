@@ -295,18 +295,17 @@ void ScTable::InsertCol(
 
         if (!maColManualBreaks.empty())
         {
-            std::set<SCCOL>::reverse_iterator rit = maColManualBreaks.rbegin();
-            while (rit != maColManualBreaks.rend())
-            {
-                SCCOL nCol = *rit;
-                if (nCol < nStartCol)
-                    break;  // while
-                else
-                {
-                    maColManualBreaks.erase( (++rit).base());
-                    maColManualBreaks.insert( static_cast<SCCOL>( nCol + nSize));
-                }
-            }
+            // Copy all breaks up to nStartCol (non-inclusive).
+            ::std::set<SCCOL>::iterator itr1 = maColManualBreaks.lower_bound(nStartCol);
+            ::std::set<SCCOL> aNewBreaks(maColManualBreaks.begin(), itr1);
+
+            // Copy all breaks from nStartCol (inclusive) to the last element,
+            // but add nSize to each value.
+            ::std::set<SCCOL>::iterator itr2 = maColManualBreaks.end();
+            for (; itr1 != itr2; ++itr1)
+                aNewBreaks.insert(static_cast<SCCOL>(*itr1 + nSize));
+
+            maColManualBreaks.swap(aNewBreaks);
         }
     }
 
@@ -376,14 +375,21 @@ void ScTable::DeleteCol(
 
         if (!maColManualBreaks.empty())
         {
-            std::set<SCCOL>::iterator it = maColManualBreaks.upper_bound( static_cast<SCCOL>( nStartCol + nSize - 1));
-            maColManualBreaks.erase( maColManualBreaks.lower_bound( nStartCol), it);
-            while (it != maColManualBreaks.end())
-            {
-                SCCOL nCol = *it;
-                maColManualBreaks.erase( it++);
-                maColManualBreaks.insert( static_cast<SCCOL>( nCol - nSize));
-            }
+            // Erase all manual breaks between nStartCol and nStartCol + nSize - 1 (inclusive).
+            std::set<SCCOL>::iterator itr1 = maColManualBreaks.lower_bound(nStartCol);
+            std::set<SCCOL>::iterator itr2 = maColManualBreaks.upper_bound(static_cast<SCCOL>(nStartCol + nSize - 1));
+            maColManualBreaks.erase(itr1, itr2);
+
+            // Copy all breaks from the 1st element up to nStartCol to the new container.
+            itr1 = maColManualBreaks.lower_bound(nStartCol);
+            ::std::set<SCCOL> aNewBreaks(maColManualBreaks.begin(), itr1);
+
+            // Copy all breaks from nStartCol to the last element, but subtract each value by nSize.
+            itr2 = maColManualBreaks.end();
+            for (; itr1 != itr2; ++itr1)
+                aNewBreaks.insert(static_cast<SCCOL>(*itr1 - nSize));
+
+            maColManualBreaks.swap(aNewBreaks);
         }
     }
 
