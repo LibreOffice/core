@@ -554,13 +554,24 @@ bool SwView::SearchAndWrap(bool bApi)
     if (bHasSrchInOther)
     {
         m_pWrtShell->ClearMark();
+        // Select the start or the end of the entire document
         if (bSrchBkwrd)
-            m_pWrtShell->EndDoc();
+            m_pWrtShell->SttEndDoc(false);
         else
-            m_pWrtShell->SttDoc();
+            m_pWrtShell->SttEndDoc(true);
     }
 
     m_bFound = bool(FUNC_Search( aOpts ));
+
+    // If WrapAround found no matches in the body text, search in the special
+    // sections, too.
+    if (!m_bFound && !m_pSrchItem->GetSelection() && !m_bExtra)
+    {
+        m_bExtra = true;
+        if (FUNC_Search(aOpts))
+            m_bFound = true;
+    }
+
     m_pWrtShell->EndAllAction();
     pWait.reset();
 #if HAVE_FEATURE_DESKTOP
