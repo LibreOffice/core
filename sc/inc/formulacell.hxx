@@ -143,6 +143,7 @@ private:
     bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
     bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
     bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
+    sal_Int32       mnExtRefCnt;        // tdf#89972: number of references in ScExternalRefManager
 
                     enum ScInterpretTailParameter
                     {
@@ -426,6 +427,9 @@ public:
     void SyncSharedCode();
 
     bool IsPostponedDirty() const { return mbPostponedDirty;}
+
+    // tdf#89972: number of references in ScExternalRefManager
+    void IncExtRefCnt(bool dec = false) { mnExtRefCnt += dec ? ((mnExtRefCnt > 0) ? -1 : 0) : 1; }
 };
 
 #endif
