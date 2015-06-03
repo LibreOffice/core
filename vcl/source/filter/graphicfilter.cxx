@@ -1455,21 +1455,28 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             else
             {
                 // check if this PNG contains a GIF chunk!
-                const std::vector< vcl::PNGReader::ChunkData >&    rChunkData = aPNGReader.GetChunks();
-                std::vector< vcl::PNGReader::ChunkData >::const_iterator aIter( rChunkData.begin() );
-                std::vector< vcl::PNGReader::ChunkData >::const_iterator aEnd ( rChunkData.end() );
-                while( aIter != aEnd )
+                const std::vector<vcl::PNGReader::ChunkData>& rChunkData = aPNGReader.GetChunks();
+                std::vector<vcl::PNGReader::ChunkData>::const_iterator aIter(rChunkData.begin());
+                std::vector<vcl::PNGReader::ChunkData>::const_iterator aEnd(rChunkData.end());
+
+                while (aIter != aEnd)
                 {
                     // Microsoft Office is storing Animated GIFs in following chunk
-                    if ( aIter->nType == PMGCHUNG_msOG )
+                    if (aIter->nType == PMGCHUNG_msOG)
                     {
                         sal_uInt32 nChunkSize = aIter->aData.size();
-                        if ( nChunkSize > 11 )
+
+                        if (nChunkSize > 11)
                         {
-                            const std::vector< sal_uInt8 >& rData = aIter->aData;
-                            SvMemoryStream aIStrm( (void*)&rData[ 11 ], nChunkSize - 11, StreamMode::READ );
-                            ImportGIF( aIStrm, rGraphic );
-                            eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
+                            const std::vector<sal_uInt8>& rData = aIter->aData;
+                            nGraphicContentSize = nChunkSize - 11;
+                            SvMemoryStream aIStrm(const_cast<sal_uInt8*>(&rData[11]), nGraphicContentSize, StreamMode::READ);
+                            pGraphicContent = new sal_uInt8[nGraphicContentSize];
+                            sal_uInt64 aCurrentPosition = aIStrm.Tell();
+                            aIStrm.Read(pGraphicContent, nGraphicContentSize);
+                            aIStrm.Seek(aCurrentPosition);
+                            ImportGIF(aIStrm, rGraphic);
+                            eLinkType = GFX_LINK_TYPE_NATIVE_GIF;
                             break;
                         }
                     }
@@ -1520,6 +1527,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 rIStream.Seek(nStreamPosition);
                 rIStream.Read(&aTwoBytes[0], 2);
                 rIStream.Seek(nStreamPosition);
+
                 if(aTwoBytes[0] == 0x1F && aTwoBytes[1] == 0x8B)
                 {
                     SvMemoryStream aMemStream;
