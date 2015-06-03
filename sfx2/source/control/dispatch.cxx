@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
+#include <comphelper/lok.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -1168,7 +1169,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
         return;
 
     SfxViewFrame* pTop = xImp->pFrame ? xImp->pFrame->GetTopViewFrame() : NULL;
-    bool bUIActive = pTop && pTop->GetBindings().GetDispatcher() == this;
+    bool bUIActive = pTop && pTop->GetBindings().GetDispatcher() == this && !comphelper::LibreOfficeKit::isActive();
 
     if ( !bUIActive && pTop && GetBindings() == &pTop->GetBindings() )
         // keep own tools internally for collecting
@@ -1232,7 +1233,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     }
 
     _Update_Impl( bUIActive, !bIsIPActive, bIsIPActive, pTaskWin );
-    if ( bUIActive || bIsActive )
+    if ( (bUIActive || bIsActive) && !comphelper::LibreOfficeKit::isActive() )
         pWorkWin->UpdateObjectBars_Impl();
 
     if ( pBindings )
