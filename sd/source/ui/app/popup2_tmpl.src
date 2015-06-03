@@ -35,24 +35,18 @@
     {
         MN_SET_DEFAULT
         SEPARATOR
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
         MN_TEXTATTR
-        MN_TRANSFORM
         MN_FONTWORK
         SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_CONVERT
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -74,25 +68,19 @@
     {
         MN_SET_DEFAULT
         SEPARATOR
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
         MN_TEXTATTR
         MN_OUTLINE_TEXT_AUTOFIT
-        MN_TRANSFORM
         MN_FONTWORK
         SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_CONVERT
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -112,28 +100,23 @@
 {
     ItemList =
     {
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
         MN_TEXTATTR
-        MN_TRANSFORM
+        SEPARATOR
         MN_EDIT_POINTS
         SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_MIRROR
         MNSUB_CONVERT
         SEPARATOR
         MN_LEAVE_GROUP
         MN_DISMANTLE
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -157,8 +140,8 @@
         MN_LINE
         MN_AREA
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_MIRROR
         // #i37263#
@@ -186,23 +169,18 @@
 {
     ItemList =
     {
+        MN_3D_WIN
+        SEPARATOR
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
-        MN_TRANSFORM
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_CONVERT
         SEPARATOR
         MN_ENTER_GROUP
-        MN_3D_WIN
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -222,24 +200,18 @@
 {
     ItemList =
     {
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
-        MN_TRANSFORM
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_CONVERT
         SEPARATOR
         MN_ENTER_GROUP
         MN_LEAVE_GROUP
         MN_3D_WIN
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -259,23 +231,17 @@
 {
     ItemList =
     {
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
-        MN_TRANSFORM
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_CONVERT
         SEPARATOR
         MN_LEAVE_GROUP
         MN_3D_WIN
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -295,24 +261,19 @@
 {
     ItemList =
     {
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
-        MN_TRANSFORM
+        SEPARATOR
         MN_EDIT_POINTS
         SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_MIRROR
         MNSUB_CONVERT
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
         SEPARATOR
         MN_UNGROUP
@@ -335,10 +296,9 @@
     {
         MN_TRANSFORM
         MN_LINE
-        MN_EDIT_POINTS
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_MIRROR
         MNSUB_CONVERT
@@ -369,9 +329,8 @@
         MN_LINE
         MN_CONNECTION
         MN_TRANSFORM
-        MN_EDIT_POINTS
         SEPARATOR
-        MN_CHAR_PARAGRAPH
+        MN_EDIT_POINTS
         SEPARATOR
         MN_POSITION
         MN_OBJECT_ALIGN
@@ -380,12 +339,6 @@
         SEPARATOR
         MN_LEAVE_GROUP
         MN_DISMANTLE
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -549,10 +502,10 @@
 {
     ItemList =
     {
-        MenuItem { ITEM_CHANGE_PICTURE };
-        MenuItem { ITEM_SAVE_GRAPHIC };
-        MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_EXTERNAL_EDIT };
+        MenuItem { ITEM_CHANGE_PICTURE };
+        MenuItem { ITEM_COMPRESS_GRAPHIC };
+        MenuItem { ITEM_SAVE_GRAPHIC };
         SEPARATOR
         MN_CROP
         MN_ORIGINAL_SIZE
@@ -607,12 +560,6 @@
 
         MN_BREAK
 
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
-
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_ACTION
@@ -652,16 +599,10 @@
     {
         MN_TRANSFORM
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MN_BREAK
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -809,13 +750,11 @@
             };
         };
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_CONVERT
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_ACTION
