@@ -65,6 +65,7 @@ public:
 
 class SvxNumberFormatTabPage : public SfxTabPage
 {
+    friend class VclPtr<SvxNumberFormatTabPage>;
     using SfxTabPage::DeactivatePage;
     static const sal_uInt16 pRanges[];
 

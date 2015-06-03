@@ -1372,7 +1372,7 @@ void SwTextFlowPage::dispose()
 VclPtr<SfxTabPage> SwTextFlowPage::Create( vcl::Window* pParent,
                                            const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SfxTabPage>(new SwTextFlowPage(pParent, *rAttrSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwTextFlowPage>::Create(pParent, *rAttrSet);
 }
 
 bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )

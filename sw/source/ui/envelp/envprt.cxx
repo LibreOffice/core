@@ -145,7 +145,7 @@ IMPL_LINK_NOARG_TYPED(SwEnvPrtPage, AlignHdl, ToolBox *, void)
 
 VclPtr<SfxTabPage> SwEnvPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>(new SwEnvPrtPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwEnvPrtPage>::Create(pParent, *rSet);
 }
 
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)

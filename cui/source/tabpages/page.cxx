@@ -166,7 +166,7 @@ bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 
 VclPtr<SfxTabPage> SvxPageDescPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>(new SvxPageDescPage( pParent, *rSet ), SAL_NO_ACQUIRE );
+    return VclPtr<SvxPageDescPage>::Create( pParent, *rSet );
 }
 
 SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
@@ -292,7 +292,7 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     }
     else
     {
-        mpDefPrinter = new Printer;
+        mpDefPrinter = VclPtr<Printer>::Create();
         mbDelPrinter = true;
     }
 

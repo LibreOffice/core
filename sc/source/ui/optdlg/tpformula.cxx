@@ -239,7 +239,7 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Edit*, pEdit )
 
 VclPtr<SfxTabPage> ScTpFormulaOptions::Create(vcl::Window* pParent, const SfxItemSet* rCoreSet)
 {
-    return VclPtr<SfxTabPage>(new ScTpFormulaOptions(pParent, *rCoreSet), SAL_NO_ACQUIRE);
+    return VclPtr<ScTpFormulaOptions>::Create(pParent, *rCoreSet);
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)

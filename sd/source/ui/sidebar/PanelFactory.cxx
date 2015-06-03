@@ -125,9 +125,9 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
 #define EndsWith(s,t) s.endsWithAsciiL(t,strlen(t))
     if (EndsWith(rsUIElementResourceURL, gsResourceNameCustomAnimations))
-        pControl = VclPtr<vcl::Window>(new CustomAnimationPanel(pParentWindow, *pBase, xFrame), SAL_NO_ACQUIRE);
+        pControl = VclPtr<CustomAnimationPanel>::Create(pParentWindow, *pBase, xFrame);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameLayouts))
-        pControl = VclPtr<vcl::Window>(new LayoutMenu(pParentWindow, *pBase, xSidebar), SAL_NO_ACQUIRE);
+        pControl = VclPtr<LayoutMenu>::Create(pParentWindow, *pBase, xSidebar);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameAllMasterPages))
         pControl = AllMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameRecentMasterPages))
@@ -135,11 +135,11 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameUsedMasterPages))
         pControl = CurrentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameSlideTransitions))
-        pControl = VclPtr<vcl::Window>(new SlideTransitionPanel(pParentWindow, *pBase, xFrame), SAL_NO_ACQUIRE);
+        pControl = VclPtr<SlideTransitionPanel>::Create(pParentWindow, *pBase, xFrame);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameTableDesign))
-        pControl = VclPtr<vcl::Window>(new TableDesignPanel(pParentWindow, *pBase), SAL_NO_ACQUIRE);
+        pControl = VclPtr<TableDesignPanel>::Create(pParentWindow, *pBase);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameNavigator))
-        pControl = VclPtr<vcl::Window>(new NavigatorWrapper(pParentWindow, *pBase, pBindings), SAL_NO_ACQUIRE);
+        pControl = VclPtr<NavigatorWrapper>::Create(pParentWindow, *pBase, pBindings);
 #undef EndsWith
 
     if (!pControl)

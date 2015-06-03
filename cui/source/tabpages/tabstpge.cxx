@@ -265,7 +265,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
 
 VclPtr<SfxTabPage> SvxTabulatorTabPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>(new SvxTabulatorTabPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SvxTabulatorTabPage>::Create(pParent, *rSet);
 }
 
 void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)

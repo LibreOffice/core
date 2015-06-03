@@ -861,7 +861,7 @@ void SwFrmPage::setOptimalRelWidth()
 
 VclPtr<SfxTabPage> SwFrmPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SfxTabPage>(new SwFrmPage( pParent, *rSet ), SAL_NO_ACQUIRE);
+    return VclPtr<SwFrmPage>::Create( pParent, *rSet );
 }
 
 void SwFrmPage::EnableGraficMode()
@@ -2423,7 +2423,7 @@ void SwGrfExtPage::dispose()
 
 VclPtr<SfxTabPage> SwGrfExtPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {
-    return VclPtr<SfxTabPage>(new SwGrfExtPage( pParent, *rSet ), SAL_NO_ACQUIRE);
+    return VclPtr<SwGrfExtPage>::Create( pParent, *rSet );
 }
 
 void SwGrfExtPage::Reset(const SfxItemSet *rSet)
@@ -2850,7 +2850,7 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet *rSet)
 
 VclPtr<SfxTabPage> SwFrmURLPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SfxTabPage>(new SwFrmURLPage( pParent, *rSet ), SAL_NO_ACQUIRE);
+    return VclPtr<SwFrmURLPage>::Create( pParent, *rSet );
 }
 
 IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
@@ -2942,7 +2942,7 @@ void SwFrmAddPage::dispose()
 
 VclPtr<SfxTabPage> SwFrmAddPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SfxTabPage>(new SwFrmAddPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwFrmAddPage>::Create(pParent, *rSet);
 }
 
 void SwFrmAddPage::Reset(const SfxItemSet *rSet )

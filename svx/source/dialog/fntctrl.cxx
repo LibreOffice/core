@@ -493,7 +493,7 @@ void SvxFontPrevWindow::Init()
 
     if (!pImpl->mpPrinter)
     {
-        pImpl->mpPrinter = new Printer;
+        pImpl->mpPrinter = VclPtr<Printer>::Create();
         pImpl->mbDelPrinter = true;
     }
     SetMapMode(MapMode(MAP_TWIP));

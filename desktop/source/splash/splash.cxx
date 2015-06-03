@@ -155,7 +155,7 @@ void SplashScreenWindow::Redraw()
 }
 
 SplashScreen::SplashScreen()
-    : pWindow( new SplashScreenWindow (this) )
+    : pWindow( VclPtr<SplashScreenWindow>::Create(this) )
     , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _cProgressBarColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _cProgressTextColor(sal::static_int_cast< ColorData >(NOT_LOADED))

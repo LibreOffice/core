@@ -69,6 +69,7 @@ typedef sal_uInt16 MarginPosition;
 
 class SvxPageDescPage : public SfxTabPage
 {
+    friend class VclPtr<SvxPageDescPage>;
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 

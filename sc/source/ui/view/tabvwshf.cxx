@@ -412,9 +412,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    nRet = MessageDialog(GetDialogParent(),
+                                    nRet = ScopedVclPtr<MessageDialog>::Create(GetDialogParent(),
                                                      aErrMsg
-                                                   ).Execute();
+                                                   )->Execute();
                                 }
                             }
                         }

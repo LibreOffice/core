@@ -514,7 +514,7 @@ void OfaSwAutoFmtOptionsPage::dispose()
 VclPtr<SfxTabPage> OfaSwAutoFmtOptionsPage::Create( vcl::Window* pParent,
                                                     const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SfxTabPage>( new OfaSwAutoFmtOptionsPage(pParent, *rAttrSet), SAL_NO_ACQUIRE );
+    return VclPtr<OfaSwAutoFmtOptionsPage>::Create(pParent, *rAttrSet);
 }
 
 bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
@@ -1906,8 +1906,7 @@ void OfaQuoteTabPage::dispose()
 VclPtr<SfxTabPage> OfaQuoteTabPage::Create( vcl::Window* pParent,
                                             const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SfxTabPage>( new OfaQuoteTabPage(pParent, *rAttrSet),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<OfaQuoteTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
@@ -2247,7 +2246,7 @@ void OfaAutoCompleteTabPage::dispose()
 VclPtr<SfxTabPage> OfaAutoCompleteTabPage::Create( vcl::Window* pParent,
                                                    const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>( new OfaAutoCompleteTabPage( pParent, *rSet ), SAL_NO_ACQUIRE );
+    return VclPtr<OfaAutoCompleteTabPage>::Create( pParent, *rSet );
 }
 
 bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )

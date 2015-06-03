@@ -2267,7 +2267,7 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt1
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo* pInfo )
     : SfxChildWindow( _pParent, nId )
-    , dialog (new SvxSearchDialog (_pParent, this, *pBindings))
+    , dialog (VclPtr<SvxSearchDialog>::Create(_pParent, this, *pBindings))
 {
     pWindow = dialog.get();
     dialog->Initialize( pInfo );

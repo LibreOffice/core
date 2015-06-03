@@ -731,7 +731,7 @@ private:
     short get_response(const vcl::Window *pWindow) const;
     void create_owned_areas();
 
-    friend class VclBuilder;
+    friend class VclPtr<MessageDialog>;
     MessageDialog(vcl::Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
 public:
 

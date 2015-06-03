@@ -422,7 +422,7 @@ public:
 
 IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
 {
-    if (SaveDefaultsQuery(this).Execute() == RET_YES)
+    if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -526,7 +526,7 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 
 IMPL_LINK( SmFontTypeDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
 {
-    if (SaveDefaultsQuery(this).Execute() == RET_YES)
+    if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -723,7 +723,7 @@ IMPL_LINK( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu )
 
 IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
 {
-    if (SaveDefaultsQuery(this).Execute() == RET_YES)
+    if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -1029,7 +1029,7 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
 
 IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
 {
-    if (SaveDefaultsQuery(this).Execute() == RET_YES)
+    if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );

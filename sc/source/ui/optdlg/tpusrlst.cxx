@@ -155,7 +155,7 @@ void ScTpUserLists::Init()
 
 VclPtr<SfxTabPage> ScTpUserLists::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>( new ScTpUserLists( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
+    return VclPtr<ScTpUserLists>::Create( pParent, *rAttrSet );
 }
 
 void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
@@ -361,7 +361,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     if ( (nStartCol != nEndCol) && (nStartRow != nEndRow) )
     {
-        nCellDir = ScColOrRowDlg( this, aStrCopyList, aStrCopyFrom ).Execute();
+        nCellDir = ScopedVclPtr<ScColOrRowDlg>::Create( this, aStrCopyList, aStrCopyFrom )->Execute();
     }
     else if ( nStartCol != nEndCol )
         nCellDir = SCRET_ROWS;
@@ -701,9 +701,9 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         }
         else
         {
-            MessageDialog(this,
+            ScopedVclPtr<MessageDialog>::Create(this,
                       ScGlobal::GetRscString( STR_INVALID_TABREF )
-                    ).Execute();
+                    )->Execute();
             mpEdCopyFrom->GrabFocus();
             mpEdCopyFrom->SetSelection( Selection( 0, SELECTION_MAX ) );
         }

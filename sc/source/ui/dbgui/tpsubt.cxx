@@ -387,15 +387,21 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, void *, pLb )
 
 VclPtr<SfxTabPage> ScTpSubTotalGroup1::Create( vcl::Window*         pParent,
                                                  const SfxItemSet*  rArgSet )
-    { return VclPtr<SfxTabPage>( new ScTpSubTotalGroup1( pParent, *rArgSet ), SAL_NO_ACQUIRE ); }
+{
+    return VclPtr<ScTpSubTotalGroup1>::Create( pParent, *rArgSet );
+}
 
 VclPtr<SfxTabPage> ScTpSubTotalGroup2::Create( vcl::Window*          pParent,
                                        const SfxItemSet*    rArgSet )
-    { return VclPtr<SfxTabPage>( new ScTpSubTotalGroup2( pParent, *rArgSet ), SAL_NO_ACQUIRE ); }
+{
+    return VclPtr<ScTpSubTotalGroup2>::Create( pParent, *rArgSet );
+}
 
 VclPtr<SfxTabPage> ScTpSubTotalGroup3::Create( vcl::Window*          pParent,
                                        const SfxItemSet*    rArgSet )
-    { return VclPtr<SfxTabPage>( new ScTpSubTotalGroup3( pParent, *rArgSet ), SAL_NO_ACQUIRE ); }
+{
+    return VclPtr<ScTpSubTotalGroup3>::Create( pParent, *rArgSet );
+}
 
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
@@ -487,7 +493,7 @@ void ScTpSubTotalOptions::Init()
 VclPtr<SfxTabPage> ScTpSubTotalOptions::Create( vcl::Window* pParent,
                                                 const SfxItemSet* rArgSet )
 {
-    return VclPtr<SfxTabPage>( new ScTpSubTotalOptions( pParent, *rArgSet ), SAL_NO_ACQUIRE );
+    return VclPtr<ScTpSubTotalOptions>::Create( pParent, *rArgSet );
 }
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )

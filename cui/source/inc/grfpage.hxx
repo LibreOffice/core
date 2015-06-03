@@ -52,6 +52,7 @@ public:
 
 class SvxGrfCropPage : public SfxTabPage
 {
+    friend class VclPtr<SvxGrfCropPage>;
     using Window::CalcZoom;
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

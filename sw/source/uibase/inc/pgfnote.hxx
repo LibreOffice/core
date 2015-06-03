@@ -31,6 +31,7 @@
 // footnote settings TabPage
 class SwFootNotePage: public SfxTabPage
 {
+    friend class VclPtr<SwFootNotePage>;
     static const sal_uInt16 aPageRg[];
     SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet);
 public:

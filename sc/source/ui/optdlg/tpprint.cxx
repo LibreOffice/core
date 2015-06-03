@@ -54,7 +54,7 @@ void ScTpPrintOptions::dispose()
 
 VclPtr<SfxTabPage> ScTpPrintOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>(new ScTpPrintOptions( pParent, *rAttrSet ), SAL_NO_ACQUIRE);
+    return VclPtr<ScTpPrintOptions>::Create( pParent, *rAttrSet );
 }
 
 SfxTabPage::sfxpg ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )

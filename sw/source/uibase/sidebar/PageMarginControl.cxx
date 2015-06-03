@@ -49,7 +49,7 @@ PageMarginControl::PageMarginControl(
     const FieldUnit eFUnit,
     const SfxMapUnit eUnit )
     : svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_MARGIN) )
-    , mpMarginValueSet( new svx::sidebar::ValueSetWithTextControl( svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_MARGIN) ) )
+    , mpMarginValueSet( VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_MARGIN) ) )
     , maCustom(VclPtr<FixedText>::Create(this, SW_RES(FT_CUSTOM)))
     , maLeft(VclPtr<FixedText>::Create(this, SW_RES(FT_LEFT)))
     , maInner(VclPtr<FixedText>::Create(this, SW_RES(FT_INNER)))

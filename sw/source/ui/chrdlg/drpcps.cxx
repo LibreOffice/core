@@ -525,7 +525,7 @@ void SwDropCapsPict::_InitPrinter()
 
     if (!mpPrinter)
     {
-        mpPrinter = new Printer;
+        mpPrinter = VclPtr<Printer>::Create();
         mbDelPrinter = true;
     }
 }
@@ -621,7 +621,7 @@ SfxTabPage::sfxpg SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 VclPtr<SfxTabPage> SwDropCapsPage::Create(vcl::Window *pParent,
                                           const SfxItemSet *rSet)
 {
-    return VclPtr<SfxTabPage>(new SwDropCapsPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwDropCapsPage>::Create(pParent, *rSet);
 }
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)

@@ -125,6 +125,7 @@ public:
 
 class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
+    friend class VclPtr<OfaSwAutoFmtOptionsPage>;
     using TabPage::ActivatePage;
 
     VclPtr<OfaACorrCheckListBox>   m_pCheckLB;
@@ -338,6 +339,7 @@ public:
 
 class OfaQuoteTabPage : public SfxTabPage
 {
+    friend class VclPtr<OfaQuoteTabPage>;
     using TabPage::ActivatePage;
 
 private:
@@ -402,6 +404,7 @@ public:
 
 class OfaAutoCompleteTabPage : public SfxTabPage
 {
+    friend class VclPtr<OfaAutoCompleteTabPage>;
 public:
     class AutoCompleteMultiListBox : public MultiListBox
     {

@@ -482,7 +482,7 @@ void SvxBackgroundTabPage::dispose()
 
 VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>( new SvxBackgroundTabPage( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
+    return VclPtr<SvxBackgroundTabPage>::Create( pParent, *rAttrSet );
 }
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )

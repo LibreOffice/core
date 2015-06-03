@@ -81,6 +81,7 @@ public:
 
 class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
+    friend class VclPtr<SwFootNoteOptionPage>;
     SwFootNoteOptionPage( vcl::Window *pParent, const SfxItemSet &rSet );
     virtual ~SwFootNoteOptionPage();
 

@@ -25,6 +25,7 @@
 
 class ScTpPrintOptions : public SfxTabPage
 {
+    friend class VclPtr<ScTpPrintOptions>;
     VclPtr<CheckBox>       m_pSkipEmptyPagesCB;
     VclPtr<CheckBox>       m_pSelectedSheetsCB;
     VclPtr<CheckBox>       m_pForceBreaksCB;

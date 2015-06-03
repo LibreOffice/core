@@ -58,7 +58,7 @@ DocShell::~DocShell()
 SfxPrinter* DocShell::GetPrinter( bool bCreate )
 {
     if ( !pPrinter && bCreate )
-        pPrinter.reset(new SfxPrinter(new SfxItemSet(
+        pPrinter.reset(VclPtr<SfxPrinter>::Create(new SfxItemSet(
             GetPool(), SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN
         )));
 

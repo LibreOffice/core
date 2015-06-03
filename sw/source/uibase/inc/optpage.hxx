@@ -130,6 +130,7 @@ public:
 
 class SwStdFontTabPage : public SfxTabPage
 {
+    friend class VclPtr<SwStdFontTabPage>;
     VclPtr<FixedText>       pLabelFT;
 
     VclPtr<ComboBox>        pStandardBox;

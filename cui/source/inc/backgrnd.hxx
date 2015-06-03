@@ -45,6 +45,7 @@ class SvxBrushItem;
 class SvxBackgroundTabPage : public SvxTabPage
 {
     using TabPage::DeactivatePage;
+    friend class VclPtr<SvxBackgroundTabPage>;
     static const sal_uInt16 pPageRanges[];
 public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );

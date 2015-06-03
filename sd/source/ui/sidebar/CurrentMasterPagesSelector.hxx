@@ -34,6 +34,7 @@ class CurrentMasterPagesSelector
     : public MasterPagesSelector,
       public SfxListener
 {
+    friend class VclPtrInstance<CurrentMasterPagesSelector>;
 public:
     static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,

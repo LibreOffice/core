@@ -3864,7 +3864,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
                            BrowserMode::AUTO_VSCROLL|
                            BrowserMode::HIDECURSOR   )
     , aCellEdit(VclPtr<Edit>::Create(&GetDataWindow(), 0))
-    , aCellCheckBox(new ::svt::CheckBoxControl(&GetDataWindow()))
+    , aCellCheckBox(VclPtr<::svt::CheckBoxControl>::Create(&GetDataWindow()))
     , nCurrentRow(0)
     , bModified(false)
 {

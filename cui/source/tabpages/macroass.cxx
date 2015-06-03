@@ -458,7 +458,7 @@ namespace
 {
     VclPtr<SfxMacroTabPage> CreateSfxMacroTabPage( vcl::Window* pParent, const SfxItemSet& rAttrSet )
     {
-        return VclPtr<SfxMacroTabPage>( new SfxMacroTabPage( pParent, NULL, rAttrSet ), SAL_NO_ACQUIRE );
+        return VclPtr<SfxMacroTabPage>::Create( pParent, nullptr, rAttrSet );
     }
 }
 

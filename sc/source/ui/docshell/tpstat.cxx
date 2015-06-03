@@ -29,7 +29,7 @@
 
 VclPtr<SfxTabPage> ScDocStatPage::Create( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>( new ScDocStatPage ( pParent, *rSet ), SAL_NO_ACQUIRE );
+    return VclPtr<ScDocStatPage>::Create( pParent, *rSet );
 }
 
 ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )

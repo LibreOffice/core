@@ -32,6 +32,7 @@ class ScRangeUtil;
 
 class ScTpUserLists : public SfxTabPage
 {
+    friend class VclPtr<ScTpUserLists>;
 public:
     static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rAttrSet );

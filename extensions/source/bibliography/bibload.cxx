@@ -276,11 +276,11 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     VclPtrInstance<BibBookContainer> pMyWindow( pParent );
     pMyWindow->Show();
 
-    ::bib::BibView* pView = new ::bib::BibView( pMyWindow, m_pDatMan, WB_VSCROLL | WB_HSCROLL | WB_3DLOOK );
+    VclPtrInstance<::bib::BibView> pView( pMyWindow, m_pDatMan, WB_VSCROLL | WB_HSCROLL | WB_3DLOOK );
     pView->Show();
     m_pDatMan->SetView( pView );
 
-    ::bib::BibBeamer* pBeamer = new ::bib::BibBeamer( pMyWindow, m_pDatMan );
+    VclPtrInstance<::bib::BibBeamer> pBeamer( pMyWindow, m_pDatMan );
     pBeamer->Show();
     pMyWindow->createTopFrame(pBeamer);
 

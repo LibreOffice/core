@@ -662,7 +662,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 // create TabPage
 VclPtr<SfxTabPage> SwColumnPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SfxTabPage>(new SwColumnPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwColumnPage>::Create(pParent, *rSet);
 }
 
 // stuff attributes into the Set when OK

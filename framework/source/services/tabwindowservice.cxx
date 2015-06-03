@@ -521,7 +521,7 @@ FwkTabWindow* TabWindowService::mem_TabWin ()
     {
         vcl::Window* pFakeParent = dynamic_cast< vcl::Window* >(Application::GetDefaultDevice ());
 
-        m_pTabWin = new FwkTabWindow (pFakeParent);
+        m_pTabWin = VclPtr<FwkTabWindow>::Create(pFakeParent);
         m_xTabWin = VCLUnoHelper::GetInterface (m_pTabWin);
 
         m_pTabWin->AddEventListener( LINK( this, TabWindowService, EventListener ) );
