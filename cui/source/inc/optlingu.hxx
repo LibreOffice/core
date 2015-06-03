@@ -93,6 +93,7 @@ public:
 
 class SvxLinguTabPage : public SfxTabPage
 {
+    friend class VclPtr<SvxLinguTabPage>;
 private:
     VclPtr<FixedText>          m_pLinguModulesFT;
     VclPtr<SvxCheckListBox>    m_pLinguModulesCLB;

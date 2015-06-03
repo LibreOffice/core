@@ -867,7 +867,9 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( vcl::Window* pParent, const SfxIte
     {}
 
 VclPtr<SfxTabPage> ScRightHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
-    { return VclPtr<SfxTabPage>( new ScRightHeaderEditPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE ); }
+{
+    return VclPtr<ScRightHeaderEditPage>::Create( pParent, *rCoreSet );
+}
 
 // class ScLeftHeaderEditPage
 
@@ -879,7 +881,9 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( vcl::Window* pParent, const SfxItemS
     {}
 
 VclPtr<SfxTabPage> ScLeftHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
-    { return VclPtr<SfxTabPage>( new ScLeftHeaderEditPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE ); };
+{
+    return VclPtr<ScLeftHeaderEditPage>::Create( pParent, *rCoreSet );
+}
 
 // class ScRightFooterEditPage
 
@@ -891,7 +895,9 @@ ScRightFooterEditPage::ScRightFooterEditPage( vcl::Window* pParent, const SfxIte
     {}
 
 VclPtr<SfxTabPage> ScRightFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
-    { return VclPtr<SfxTabPage>( new ScRightFooterEditPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE ); };
+{
+    return VclPtr<ScRightFooterEditPage>::Create( pParent, *rCoreSet );
+}
 
 // class ScLeftFooterEditPage
 
@@ -903,6 +909,8 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( vcl::Window* pParent, const SfxItemS
     {}
 
 VclPtr<SfxTabPage> ScLeftFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
-    { return VclPtr<SfxTabPage>( new ScLeftFooterEditPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE ); };
+{
+    return VclPtr<ScLeftFooterEditPage>::Create( pParent, *rCoreSet );
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -94,12 +94,12 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
             pPanel = NumberFormatPropertyPanel::Create( pParentWindow, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/NavigatorPanel"))
         {
-            pPanel = VclPtr<vcl::Window>(new ScNavigatorDlg(pBindings, NULL, pParentWindow, false), SAL_NO_ACQUIRE);
+            pPanel = VclPtr<ScNavigatorDlg>::Create(pBindings, nullptr, pParentWindow, false);
             nMinimumSize = 0;
         }
         else if (rsResourceURL.endsWith("/FunctionsPanel"))
         {
-            pPanel = VclPtr<vcl::Window>(new ScFunctionDockWin(pBindings, NULL, pParentWindow, ScResId(FID_FUNCTION_BOX)), SAL_NO_ACQUIRE);;
+            pPanel = VclPtr<ScFunctionDockWin>::Create(pBindings, nullptr, pParentWindow, ScResId(FID_FUNCTION_BOX));
             nMinimumSize = 0;
         }
 

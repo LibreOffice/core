@@ -488,7 +488,7 @@ void SwLabFormatPage::ChangeMinMax()
 
 VclPtr<SfxTabPage> SwLabFormatPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>(new SwLabFormatPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwLabFormatPage>::Create(pParent, *rSet);
 }
 
 void SwLabFormatPage::ActivatePage(const SfxItemSet& rSet)

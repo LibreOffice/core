@@ -54,7 +54,7 @@ VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
     if (pBindings == NULL)
         throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(new StylePresetsPanel(pParent, rxFrame, pBindings), SAL_NO_ACQUIRE);
+    return VclPtr<StylePresetsPanel>::Create(pParent, rxFrame, pBindings);
 }
 
 StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,

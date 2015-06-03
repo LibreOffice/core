@@ -29,6 +29,7 @@ namespace sd { namespace sidebar {
 class RecentMasterPagesSelector
     : public MasterPagesSelector
 {
+    friend class VclPtrInstance<RecentMasterPagesSelector>;
 public:
     static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,

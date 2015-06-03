@@ -77,6 +77,7 @@ struct SvxCharNamePage_Impl;
 
 class SvxCharNamePage : public SvxCharBasePage
 {
+    friend class VclPtr<SvxCharNamePage>;
 
 private:
     static const sal_uInt16 pNameRanges[];
@@ -175,6 +176,7 @@ public:
 
 class SvxCharEffectsPage : public SvxCharBasePage
 {
+    friend class VclPtr<SvxCharEffectsPage>;
 
 private:
     static const sal_uInt16 pEffectsRanges[];
@@ -254,6 +256,7 @@ public:
 
 class SvxCharPositionPage : public SvxCharBasePage
 {
+    friend class VclPtr<SvxCharPositionPage>;
     static const sal_uInt16 pPositionRanges[];
 
 private:
@@ -333,6 +336,7 @@ public:
 
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {
+    friend class VclPtr<SvxCharTwoLinesPage>;
 private:
     static const sal_uInt16 pTwoLinesRanges[];
     VclPtr<CheckBox>           m_pTwoLinesBtn;

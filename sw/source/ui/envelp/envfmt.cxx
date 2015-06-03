@@ -461,7 +461,7 @@ void SwEnvFormatPage::SetMinMax()
 
 VclPtr<SfxTabPage> SwEnvFormatPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>(new SwEnvFormatPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwEnvFormatPage>::Create(pParent, *rSet);
 }
 
 void SwEnvFormatPage::ActivatePage(const SfxItemSet& rSet)

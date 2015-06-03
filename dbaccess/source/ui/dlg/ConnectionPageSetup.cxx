@@ -65,27 +65,27 @@ namespace dbaui
 
     VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OGenericAdministrationPage>( new OConnectionTabPageSetup ( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_DBASE_HELPTEXT, STR_DBASE_HEADERTEXT, STR_DBASE_PATH_OR_FILE), SAL_NO_ACQUIRE );
+        return VclPtr<OConnectionTabPageSetup>::Create ( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_DBASE_HELPTEXT, STR_DBASE_HEADERTEXT, STR_DBASE_PATH_OR_FILE );
     }
 
     VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OGenericAdministrationPage>( new OConnectionTabPageSetup( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_MSACCESS_HELPTEXT, STR_MSACCESS_HEADERTEXT, STR_MSACCESS_MDB_FILE), SAL_NO_ACQUIRE );
+        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_MSACCESS_HELPTEXT, STR_MSACCESS_HEADERTEXT, STR_MSACCESS_MDB_FILE );
     }
 
     VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OGenericAdministrationPage>( new OConnectionTabPageSetup( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL), SAL_NO_ACQUIRE );
+        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL );
     }
 
     VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateODBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OGenericAdministrationPage>( new OConnectionTabPageSetup( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_ODBC_HELPTEXT, STR_ODBC_HEADERTEXT, STR_NAME_OF_ODBC_DATASOURCE), SAL_NO_ACQUIRE );
+        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, STR_ODBC_HELPTEXT, STR_ODBC_HEADERTEXT, STR_NAME_OF_ODBC_DATASOURCE );
     }
 
     VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OGenericAdministrationPage>( new OConnectionTabPageSetup( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, USHRT_MAX, USHRT_MAX, STR_COMMONURL), SAL_NO_ACQUIRE );
+        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, USHRT_MAX, USHRT_MAX, STR_COMMONURL );
     }
 
     OConnectionTabPageSetup::OConnectionTabPageSetup(vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)

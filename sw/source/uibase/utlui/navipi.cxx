@@ -426,8 +426,7 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
 void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, vcl::Window *pParent)
 {
     Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
-    SwScrollNaviPopup* pPopup = new
-        SwScrollNaviPopup(FN_SCROLL_NAVIGATION, xFrame, pParent);
+    VclPtrInstance<SwScrollNaviPopup> pPopup(FN_SCROLL_NAVIGATION, xFrame, pParent);
 
     Rectangle aRect(rRect);
     Point aT1 = aRect.TopLeft();

@@ -86,7 +86,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
     {
         // Call printer setup
         if (!pPrinter)
-            pPrinter = new Printer;
+            pPrinter = VclPtr<Printer>::Create();
 
         VclPtrInstance< PrinterSetupDialog > pDlg(this);
         pDlg->SetPrinter(pPrinter);
@@ -110,7 +110,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 
 VclPtr<SfxTabPage> SwLabPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>(new SwLabPrtPage( pParent, *rSet ), SAL_NO_ACQUIRE);
+    return VclPtr<SwLabPrtPage>::Create( pParent, *rSet );
 }
 
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )

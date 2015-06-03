@@ -128,7 +128,7 @@ void ScTpContentOptions::dispose()
 VclPtr<SfxTabPage> ScTpContentOptions::Create( vcl::Window*     pParent,
                                                const SfxItemSet*     rCoreSet )
 {
-    return VclPtr<SfxTabPage>( new ScTpContentOptions (pParent, *rCoreSet), SAL_NO_ACQUIRE );
+    return VclPtr<ScTpContentOptions>::Create(pParent, *rCoreSet);
 }
 
 bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
@@ -460,7 +460,7 @@ void ScTpLayoutOptions::dispose()
 VclPtr<SfxTabPage> ScTpLayoutOptions::Create( vcl::Window*          pParent,
                                               const SfxItemSet*   rCoreSet )
 {
-    VclPtr<ScTpLayoutOptions> pNew( new ScTpLayoutOptions( pParent, *rCoreSet), SAL_NO_ACQUIRE );
+    VclPtrInstance<ScTpLayoutOptions> pNew( pParent, *rCoreSet );
     ScDocShell* pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
 
     if(pDocSh!=NULL)

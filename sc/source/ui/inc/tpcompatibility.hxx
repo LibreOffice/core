@@ -16,6 +16,7 @@
 
 class ScTpCompatOptions : public SfxTabPage
 {
+    friend class VclPtr<ScTpCompatOptions>;
 public:
     using SfxTabPage::DeactivatePage;
 

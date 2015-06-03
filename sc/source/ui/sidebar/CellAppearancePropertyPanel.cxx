@@ -53,7 +53,7 @@ namespace sc { namespace sidebar {
 
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
-    return new CellLineStyleControl(pParent, *this);
+    return VclPtr<CellLineStyleControl>::Create(pParent, *this);
 }
 
 void CellAppearancePropertyPanel::EndCellLineStylePopupMode()
@@ -66,7 +66,7 @@ void CellAppearancePropertyPanel::EndCellLineStylePopupMode()
 
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
-    return new CellBorderStyleControl(pParent, *this);
+    return VclPtr<CellBorderStyleControl>::Create(pParent, *this);
 }
 
 void CellAppearancePropertyPanel::EndCellBorderStylePopupMode()

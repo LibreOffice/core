@@ -423,7 +423,7 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 
 VclPtr<SfxTabPage> SwFootNoteOptionPage::Create(vcl::Window *pParent, const SfxItemSet *rSet )
 {
-    return VclPtr<SfxTabPage>(new SwFootNoteOptionPage( pParent, *rSet ), SAL_NO_ACQUIRE);
+    return VclPtr<SwFootNoteOptionPage>::Create( pParent, *rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

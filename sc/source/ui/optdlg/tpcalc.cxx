@@ -103,7 +103,7 @@ void ScTpCalcOptions::Init()
 
 VclPtr<SfxTabPage> ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>( new ScTpCalcOptions ( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
+    return VclPtr<ScTpCalcOptions>::Create( pParent, *rAttrSet );
 }
 
 void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
@@ -192,9 +192,9 @@ SfxTabPage::sfxpg ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
     if ( nReturn == KEEP_PAGE )
     {
-        MessageDialog( this,
+        ScopedVclPtr<MessageDialog>::Create( this,
                   ScGlobal::GetRscString( STR_INVALID_EPS )
-                ).Execute();
+                )->Execute();
 
         m_pEdEps->GrabFocus();
     }

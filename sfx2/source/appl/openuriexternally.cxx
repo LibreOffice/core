@@ -53,10 +53,10 @@ bool sfx2::openUriExternally(
             throw;
         }
         SolarMutexGuard g;
-        MessageDialog(
+        ScopedVclPtrInstance<MessageDialog> eb(
             SfxGetpApp()->GetTopWindow(),
-            SfxResId(STR_NO_WEBBROWSER_FOUND)).
-            Execute();
+            SfxResId(STR_NO_WEBBROWSER_FOUND));
+        eb->Execute();
     }
     return false;
 }

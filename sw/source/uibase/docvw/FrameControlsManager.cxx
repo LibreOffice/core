@@ -117,7 +117,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
         pControl = lb->second;
     else
     {
-        SwFrameControlPtr pNewControl( new SwHeaderFooterWin( m_pEditWin, pPageFrm, bHeader ) );
+        SwFrameControlPtr pNewControl( VclPtr<SwHeaderFooterWin>::Create( m_pEditWin, pPageFrm, bHeader ).get() );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
         rControls.insert(lb, make_pair(pPageFrm, pNewControl));
@@ -146,7 +146,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
         pControl = lb->second;
     else
     {
-        SwFrameControlPtr pNewControl( new SwPageBreakWin( m_pEditWin, pPageFrm ) );
+        SwFrameControlPtr pNewControl( VclPtr<SwPageBreakWin>::Create( m_pEditWin, pPageFrm ).get() );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
 

@@ -139,7 +139,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/NavigatorPanel"))
     {
-        VclPtr<vcl::Window> pPanel( new SwNavigationPI(pBindings, NULL, pParentWindow), SAL_NO_ACQUIRE );
+        VclPtrInstance<SwNavigationPI> pPanel(pBindings, nullptr, pParentWindow);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
@@ -148,7 +148,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/ManageChangesPanel"))
     {
-        VclPtr<vcl::Window> pPanel( new SwRedlineAcceptPanel(pParentWindow, xFrame), SAL_NO_ACQUIRE );
+        VclPtrInstance<SwRedlineAcceptPanel> pPanel(pParentWindow, xFrame);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,

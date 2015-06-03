@@ -75,7 +75,7 @@ void ScTabPageProtection::dispose()
 
 VclPtr<SfxTabPage> ScTabPageProtection::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>( new ScTabPageProtection( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
+    return VclPtr<ScTabPageProtection>::Create( pParent, *rAttrSet );
 }
 
 void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )

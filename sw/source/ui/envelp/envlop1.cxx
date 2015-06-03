@@ -321,7 +321,7 @@ void SwEnvPage::InitDatabaseBox()
 
 VclPtr<SfxTabPage> SwEnvPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>(new SwEnvPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwEnvPage>::Create(pParent, *rSet);
 }
 
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
