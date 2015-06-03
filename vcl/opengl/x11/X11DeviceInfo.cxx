@@ -42,13 +42,16 @@ const char*
 strspnp_wrapper(const char* aDelims, const char* aStr)
 {
   const char* d;
-  do {
-    for (d = aDelims; *d != '\0'; ++d) {
-      if (*aStr == *d) {
-        ++aStr;
-        break;
+  do
+  {
+      for (d = aDelims; *d != '\0'; ++d)
+      {
+          if (*aStr == *d)
+          {
+              ++aStr;
+              break;
+          }
       }
-    }
   } while (*d);
 
   return aStr;
@@ -56,7 +59,8 @@ strspnp_wrapper(const char* aDelims, const char* aStr)
 
 char* strtok_wrapper(const char* aDelims, char** aStr)
 {
-    if (!*aStr) {
+    if (!*aStr)
+    {
         return nullptr;
     }
 
@@ -141,13 +145,18 @@ void X11OpenGLDeviceInfo::GetData()
     bool wait_for_glxtest_process = true;
     bool waiting_for_glxtest_process_failed = false;
     int waitpid_errno = 0;
-    while(wait_for_glxtest_process) {
+    while(wait_for_glxtest_process)
+    {
         wait_for_glxtest_process = false;
-        if (waitpid(glx::glxtest_pid, &glxtest_status, 0) == -1) {
+        if (waitpid(glx::glxtest_pid, &glxtest_status, 0) == -1)
+        {
             waitpid_errno = errno;
-            if (waitpid_errno == EINTR) {
+            if (waitpid_errno == EINTR)
+            {
                 wait_for_glxtest_process = true;
-            } else {
+            }
+            else
+            {
                 // Bug moz#718629
                 // ECHILD happens when the glxtest process got reaped got reaped after a PR_CreateProcess
                 // as per bug moz#227246. This shouldn't matter, as we still seem to get the data
@@ -168,8 +177,10 @@ void X11OpenGLDeviceInfo::GetData()
     OString textureFromPixmap;
     OString *stringToFill = nullptr;
     char *bufptr = buf;
-    if (!error) {
-        while(true) {
+    if (!error)
+    {
+        while(true)
+        {
             char *line = strtok_wrapper("\n", &bufptr);
             if (!line)
                 break;
@@ -207,7 +218,8 @@ void X11OpenGLDeviceInfo::GetData()
     // the actual driver version numbers should be expected to be found (whereToReadVersionNumbers)
     const char *whereToReadVersionNumbers = nullptr;
     const char *Mesa_in_version_string = strstr(maVersion.getStr(), "Mesa");
-    if (Mesa_in_version_string) {
+    if (Mesa_in_version_string)
+    {
         mbIsMesa = true;
         // with Mesa, the version string contains "Mesa major.minor" and that's all the version information we get:
         // there is no actual driver version info.
@@ -220,7 +232,9 @@ void X11OpenGLDeviceInfo::GetData()
             mbIsLlvmpipe = true;
         if (strcasestr(maRenderer.getStr(), "software rasterizer"))
             mbIsOldSwrast = true;
-    } else if (strstr(maVendor.getStr(), "NVIDIA Corporation")) {
+    }
+    else if (strstr(maVendor.getStr(), "NVIDIA Corporation"))
+    {
         mbIsNVIDIA = true;
         // with the NVIDIA driver, the version string contains "NVIDIA major.minor"
         // note that here the vendor and version strings behave differently, that's why we don't put this above
@@ -228,7 +242,9 @@ void X11OpenGLDeviceInfo::GetData()
         const char *NVIDIA_in_version_string = strstr(maVersion.getStr(), "NVIDIA");
         if (NVIDIA_in_version_string)
             whereToReadVersionNumbers = NVIDIA_in_version_string + strlen("NVIDIA");
-    } else if (strstr(maVendor.getStr(), "ATI Technologies Inc")) {
+    }
+    else if (strstr(maVendor.getStr(), "ATI Technologies Inc"))
+    {
         mbIsFGLRX = true;
         // with the FGLRX driver, the version string only gives a OpenGL version :/ so let's return that.
         // that can at least give a rough idea of how old the driver is.
@@ -236,7 +252,8 @@ void X11OpenGLDeviceInfo::GetData()
     }
 
     // read major.minor version numbers of the driver (not to be confused with the OpenGL version)
-    if (whereToReadVersionNumbers) {
+    if (whereToReadVersionNumbers)
+    {
         // copy into writable buffer, for tokenization
         strncpy(buf, whereToReadVersionNumbers, buf_size-1);
         buf[buf_size-1] = 0;
@@ -245,10 +262,12 @@ void X11OpenGLDeviceInfo::GetData()
         // now try to read major.minor version numbers. In case of failure, gracefully exit: these numbers have
         // been initialized as 0 anyways
         char *token = strtok_wrapper(".", &bufptr);
-        if (token) {
+        if (token)
+        {
             mnMajorVersion = strtol(token, 0, 10);
             token = strtok_wrapper(".", &bufptr);
-            if (token) {
+            if (token)
+            {
                 mnMinorVersion = strtol(token, 0, 10);
                 token = strtok_wrapper(".", &bufptr);
                 if (token)
@@ -270,12 +289,15 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
     SAL_INFO("vcl.opengl", "OS: " << maOS);
     SAL_INFO("vcl.opengl", "OSRelease: " << maOSRelease);
 
-    if (mbIsMesa) {
-        if (mbIsNouveau && version(mnMajorVersion, mnMinorVersion) < version(8,0)) {
+    if (mbIsMesa)
+    {
+        if (mbIsNouveau && version(mnMajorVersion, mnMinorVersion) < version(8,0))
+        {
             SAL_WARN("vcl.opengl", "blocked driver version: old nouveau driver (requires mesa 8.0+)");
             return true;
         }
-        else if (version(mnMajorVersion, mnMinorVersion, mnRevisionVersion) < version(7,10,3)) {
+        else if (version(mnMajorVersion, mnMinorVersion, mnRevisionVersion) < version(7,10,3))
+        {
             SAL_WARN("vcl.opengl", "blocked driver version: requires at least mesa 7.10.3");
             return true;
         }
@@ -284,26 +306,33 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
             SAL_WARN("vcl.opengl", "blocked driver version: my broken intel driver Mesa 9.0.2");
             return true;
         }
-        else if (mbIsOldSwrast) {
+        else if (mbIsOldSwrast)
+        {
             SAL_WARN("vcl.opengl", "blocked driver version: software rasterizer");
             return true;
         }
-        else if (mbIsLlvmpipe && version(mnMajorVersion, mnMinorVersion) < version(9, 1)) {
+        else if (mbIsLlvmpipe && version(mnMajorVersion, mnMinorVersion) < version(9, 1))
+        {
             // bug moz#791905, Mesa bug 57733, fixed in Mesa 9.1 according to
             // https://bugs.freedesktop.org/show_bug.cgi?id=57733#c3
             SAL_WARN("vcl.opengl", "blocked driver version: fdo#57733");
             return true;
         }
-
-    } else if (mbIsNVIDIA) {
-        if (version(mnMajorVersion, mnMinorVersion, mnRevisionVersion) < version(257,21)) {
+    }
+    else if (mbIsNVIDIA)
+    {
+        if (version(mnMajorVersion, mnMinorVersion, mnRevisionVersion) < version(257,21))
+        {
             SAL_WARN("vcl.opengl", "blocked driver version: nvidia requires at least 257.21");
             return true;
         }
-    } else if (mbIsFGLRX) {
+    }
+    else if (mbIsFGLRX)
+    {
         // FGLRX does not report a driver version number, so we have the OpenGL version instead.
         // by requiring OpenGL 3, we effectively require recent drivers.
-        if (version(mnMajorVersion, mnMinorVersion, mnRevisionVersion) < version(3, 0)) {
+        if (version(mnMajorVersion, mnMinorVersion, mnRevisionVersion) < version(3, 0))
+        {
             SAL_WARN("vcl.opengl", "blocked driver version: require at least OpenGL 3 for fglrx");
             return true;
         }
@@ -311,11 +340,14 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
         bool unknownOS = maOS.isEmpty() || maOSRelease.isEmpty();
         bool badOS = maOS.indexOf("Linux") != -1 &&
             maOSRelease.indexOf("2.6.32") != -1;
-        if (unknownOS || badOS) {
+        if (unknownOS || badOS)
+        {
             SAL_WARN("vcl.opengl", "blocked OS version with fglrx");
             return true;
         }
-    } else {
+    }
+    else
+    {
         // like on windows, let's block unknown vendors. Think of virtual machines.
         // Also, this case is hit whenever the GLXtest probe failed to get driver info or crashed.
         SAL_WARN("vcl.opengl", "unknown vendor => blocked");
