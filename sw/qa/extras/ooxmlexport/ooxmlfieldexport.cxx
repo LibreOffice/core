@@ -677,6 +677,13 @@ DECLARE_OOXMLEXPORT_TEST(testOO34469, "ooo34469-1.odt")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "2.9.2.Creating New files|outline");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOO39845, "ooo39845-7.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "Figure4|graphic");
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
