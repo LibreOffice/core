@@ -138,11 +138,11 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         // in SfxItemSets using the Calc SfxItemPool. This is e.g. needed when
         // the PageStyle using SvxBrushItem is visualized and will be potentially
         // used more intense in the future
-        if(xPoolHelper.is())
+        if (xPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
         {
             ScDocumentPool* pLocalPool = xPoolHelper->GetDocPool();
 
-            if(pLocalPool)
+            if (pLocalPool)
             {
                 OSL_ENSURE(!pLocalPool->GetSecondaryPool(), "OOps, already a secondary pool set where the DrawingLayer ItemPool is to be placed (!)");
                 pLocalPool->SetSecondaryPool(&pDrawLayer->GetItemPool());
