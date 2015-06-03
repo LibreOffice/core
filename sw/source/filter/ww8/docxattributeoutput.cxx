@@ -1051,7 +1051,7 @@ void DocxAttributeOutput::EndRun()
     }
 
     // Write field starts
-    for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); )
+    for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin() + nFieldsInPrevHyperlink; pIt != m_Fields.end(); )
     {
         // Add the fields starts for all but hyperlinks and TOCs
         if ( pIt->bOpen && pIt->pField )
@@ -1265,6 +1265,7 @@ void DocxAttributeOutput::EndRun()
                 EndField_Impl( m_Fields.back( ) );
                 m_Fields.pop_back();
             }
+            m_nFieldsInHyperlink = 0;
 
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
@@ -1273,12 +1274,15 @@ void DocxAttributeOutput::EndRun()
         m_closeHyperlinkInThisRun = false;
     }
 
-    if(!m_startedHyperlink)
+    if (!m_startedHyperlink)
+    {
         while ( m_Fields.begin() != m_Fields.end() )
         {
             EndField_Impl( m_Fields.front( ) );
             m_Fields.erase( m_Fields.begin( ) );
         }
+        m_nFieldsInHyperlink = 0;
+    }
 }
 
 void DocxAttributeOutput::DoWriteBookmarks()
