@@ -12,6 +12,9 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sfx2_controlleritem))
 $(eval $(call gb_CppunitTest_add_exception_objects,sfx2_controlleritem, \
     sfx2/qa/cppunit/test_controlleritem \
 ))
+$(eval $(call gb_CppunitTest_use_externals,sfx2_controlleritem, \
+    boost_headers \
+))
 $(eval $(call gb_CppunitTest_use_libraries,sfx2_controlleritem, \
 	cppu \
 	cppuhelper \
