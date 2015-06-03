@@ -81,7 +81,8 @@ SalSystem* ImplGetSalSystem()
 ImplSVData::ImplSVData()
 {
     // init global instance data
-    memset( this, 0, sizeof( ImplSVData ) );
+    memset( this, 0, sizeof( ImplSVData ));
+
     maHelpData.mbAutoHelpId = true;
     maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 }

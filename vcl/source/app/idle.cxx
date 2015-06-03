@@ -40,4 +40,11 @@ Idle::Idle( const Idle& rIdle ) : Scheduler(rIdle)
     maIdleHdl = rIdle.maIdleHdl;
 }
 
+sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
+{
+    // so in this implementation it' only a pass through
+    (void)nTime;
+    return nMinPeriod;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
