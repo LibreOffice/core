@@ -116,9 +116,8 @@ void X11OpenGLDeviceInfo::GetData()
     if (!glx::glxtest_pipe)
        return;
 
-    // to understand this function, see bug 639842. We retrieve the OpenGL driver information in a
+    // to understand this function, see bug moz#639842. We retrieve the OpenGL driver information in a
     // separate process to protect against bad drivers.
-
     enum { buf_size = 1024 };
     char buf[buf_size];
     ssize_t bytesread = read(glx::glxtest_pipe,
@@ -149,9 +148,9 @@ void X11OpenGLDeviceInfo::GetData()
             if (waitpid_errno == EINTR) {
                 wait_for_glxtest_process = true;
             } else {
-                // Bug 718629
+                // Bug moz#718629
                 // ECHILD happens when the glxtest process got reaped got reaped after a PR_CreateProcess
-                // as per bug 227246. This shouldn't matter, as we still seem to get the data
+                // as per bug moz#227246. This shouldn't matter, as we still seem to get the data
                 // from the pipe, and if we didn't, the outcome would be to blacklist anyway.
                 waiting_for_glxtest_process_failed = (waitpid_errno != ECHILD);
             }
@@ -290,7 +289,7 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
             return true;
         }
         else if (mbIsLlvmpipe && version(mnMajorVersion, mnMinorVersion) < version(9, 1)) {
-            // bug 791905, Mesa bug 57733, fixed in Mesa 9.1 according to
+            // bug moz#791905, Mesa bug 57733, fixed in Mesa 9.1 according to
             // https://bugs.freedesktop.org/show_bug.cgi?id=57733#c3
             SAL_WARN("vcl.opengl", "blocked driver version: fdo#57733");
             return true;
@@ -308,7 +307,7 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
             SAL_WARN("vcl.opengl", "blocked driver version: require at least OpenGL 3 for fglrx");
             return true;
         }
-        // Bug 724640: FGLRX + Linux 2.6.32 is a crashy combo
+        // Bug moz#724640: FGLRX + Linux 2.6.32 is a crashy combo
         bool unknownOS = maOS.isEmpty() || maOSRelease.isEmpty();
         bool badOS = maOS.indexOf("Linux") != -1 &&
             maOSRelease.indexOf("2.6.32") != -1;
