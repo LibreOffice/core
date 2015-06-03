@@ -54,6 +54,7 @@ namespace svx {
 class AlignmentTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
+    friend class VclPtr<AlignmentTabPage>;
     static const sal_uInt16 s_pRanges[];
 
 public:

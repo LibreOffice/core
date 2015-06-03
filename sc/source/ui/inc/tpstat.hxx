@@ -26,6 +26,7 @@
 
 class ScDocStatPage: public SfxTabPage
 {
+    friend class VclPtr<ScDocStatPage>;
 public:
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rSet );
     virtual         ~ScDocStatPage();

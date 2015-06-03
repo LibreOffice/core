@@ -33,7 +33,7 @@ PageOrientationControl::PageOrientationControl(
     PagePropertyPanel& rPanel,
     const bool bLandscape )
     : svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_ORIENTATION) )
-    , mpOrientationValueSet( new svx::sidebar::ValueSetWithTextControl( svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_ORIENTATION) ) )
+    , mpOrientationValueSet( VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_ORIENTATION) ) )
     , mbLandscape( bLandscape )
     , mrPagePropPanel(rPanel)
 {

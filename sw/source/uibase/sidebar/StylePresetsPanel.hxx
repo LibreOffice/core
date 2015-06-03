@@ -41,6 +41,7 @@ namespace sw { namespace sidebar {
 class StylePresetsPanel : public PanelLayout,
                        public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
+    friend class VclPtr<StylePresetsPanel>;
 public:
     static VclPtr<vcl::Window> Create(vcl::Window* pParent,
                                   const css::uno::Reference<css::frame::XFrame>& rxFrame,

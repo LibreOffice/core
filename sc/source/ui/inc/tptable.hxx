@@ -27,6 +27,7 @@
 
 class ScTablePage : public SfxTabPage
 {
+    friend class VclPtr<ScTablePage>;
     static const sal_uInt16 pPageTableRanges[];
 public:
     static  VclPtr<SfxTabPage> Create          ( vcl::Window*           pParent,

@@ -182,7 +182,7 @@ void SwTextGridPage::dispose()
 
 VclPtr<SfxTabPage> SwTextGridPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SfxTabPage>(new SwTextGridPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SwTextGridPage>::Create(pParent, *rSet);
 }
 
 bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)

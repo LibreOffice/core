@@ -325,9 +325,7 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
         EndDialog( RET_OK );
     else
     {
-        MessageDialog(this,
-                  aErrMsgInvalidVal
-                ).Execute();
+        ScopedVclPtr<MessageDialog>::Create(this, aErrMsgInvalidVal)->Execute();
         pEdWrong->GrabFocus();
     }
 

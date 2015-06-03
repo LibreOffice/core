@@ -912,7 +912,7 @@ void SvxSecurityTabPage::InitControls()
 
 VclPtr<SfxTabPage> SvxSecurityTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>(new SvxSecurityTabPage(pParent, *rAttrSet), SAL_NO_ACQUIRE);
+    return VclPtr<SvxSecurityTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )

@@ -266,11 +266,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 
                 if ( !bFmtInserted )
                 {
-                    sal_uInt16 nRet = MessageDialog(this,
+                    sal_uInt16 nRet = ScopedVclPtr<MessageDialog>::Create(this,
                                             ScGlobal::GetRscString(STR_INVALID_AFNAME),
                                             VCL_MESSAGE_ERROR,
                                             VCL_BUTTONS_OK_CANCEL
-                                          ).Execute();
+                                          )->Execute();
 
                     bOk = ( nRet == RET_CANCEL );
                 }
@@ -390,11 +390,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
             }
             if( !bFmtRenamed )
             {
-                bOk = RET_CANCEL == MessageDialog( this,
-                                    ScGlobal::GetRscString(STR_INVALID_AFNAME),
-                                    VCL_MESSAGE_ERROR,
-                                    VCL_BUTTONS_OK_CANCEL
-                                    ).Execute();
+                bOk = RET_CANCEL == ScopedVclPtr<MessageDialog>::Create( this,
+                                      ScGlobal::GetRscString(STR_INVALID_AFNAME),
+                                      VCL_MESSAGE_ERROR,
+                                      VCL_BUTTONS_OK_CANCEL
+                                      )->Execute();
             }
         }
         else

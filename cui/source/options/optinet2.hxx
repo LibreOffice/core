@@ -128,7 +128,7 @@ class SvxSecurityTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
-
+    friend class VclPtr<SvxSecurityTabPage>;
 private:
     VclPtr<PushButton>         m_pSecurityOptionsPB;
 

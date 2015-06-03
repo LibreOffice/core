@@ -477,7 +477,7 @@ VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
     if (pBindings == NULL)
         throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(new ThemePanel(pParent, rxFrame, pBindings), SAL_NO_ACQUIRE);
+    return VclPtr<ThemePanel>::Create(pParent, rxFrame, pBindings);
 }
 
 ThemePanel::ThemePanel(vcl::Window* pParent,

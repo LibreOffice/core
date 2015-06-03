@@ -383,7 +383,7 @@ void SvxNumberFormatTabPage::Init_Impl()
 VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( vcl::Window* pParent,
                                                    const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>( new SvxNumberFormatTabPage( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
+    return VclPtr<SvxNumberFormatTabPage>::Create( pParent, *rAttrSet );
 }
 
 

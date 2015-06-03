@@ -391,8 +391,8 @@ The code below would only be part of the solution.
             if(m_pSpellState->m_xStartRange.is())
             {
                 LockFocusNotification( true );
-                sal_uInt16 nRet = MessageDialog(GetWindow(), SW_RES(STR_QUERY_SPELL_CONTINUE),
-                                                VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute();
+                sal_uInt16 nRet = ScopedVclPtr<MessageDialog>::Create(GetWindow(), SW_RES(STR_QUERY_SPELL_CONTINUE),
+                                                VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute();
                 if(RET_YES == nRet)
                 {
                     SwUnoInternalPaM aPam(*pWrtShell->GetDoc());
