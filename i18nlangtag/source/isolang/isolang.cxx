@@ -649,6 +649,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_FRENCH_TOGO,            "fr", "TG", 0     },
     { LANGUAGE_USER_KVEN_FINNISH,          "fkv", "NO", 0     },
     { LANGUAGE_USER_CHURCH_SLAVIC,          "cu", "RU", 0     },
+    { LANGUAGE_USER_VENETIAN,              "vec", "IT", 0     },
     { LANGUAGE_MULTIPLE,                   "mul", ""  , 0     },    // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , 0     },    // undetermined language, language cannot be identified
     { LANGUAGE_NONE,                       "zxx", ""  , 0     },    // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
