@@ -793,7 +793,7 @@ void WinOpenGLDeviceInfo::GetData()
     if (maDeviceID.isEmpty() &&
             maDeviceString == "RDPUDD Chained DD")
     {
-        // TODO: moggi: we need to block RDP as it does not provide OpenGL 2.1+
+        // we need to block RDP as it does not provide OpenGL 2.1+
         mbRDP = true;
         SAL_WARN("vcl.opengl", "RDP => blocked");
         return;
