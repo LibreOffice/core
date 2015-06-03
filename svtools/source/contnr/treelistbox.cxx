@@ -2675,7 +2675,7 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
     {
         pImp->ShowCursor( false );
         SelectListEntry( pEntry, false );
-        Invalidate();
+        pImp->InvalidateEntry(pEntry);
         SelectListEntry( pEntry, true );
         pImp->ShowCursor( true );
     }
