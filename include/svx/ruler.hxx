@@ -80,7 +80,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     friend class SvxRulerItem;
     using Window::Notify;
 
-    SvxRulerItem**      pCtrlItem;
+    std::vector<std::unique_ptr<SvxRulerItem> > pCtrlItems;
+
     std::unique_ptr<SvxLongLRSpaceItem> mxLRSpaceItem;    // left and right edge
     std::unique_ptr<SfxRectangleItem>   mxMinMaxItem;     // maxima for dragging
     std::unique_ptr<SvxLongULSpaceItem> mxULSpaceItem;    // upper and lower edge

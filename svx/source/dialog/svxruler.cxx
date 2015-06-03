@@ -223,7 +223,7 @@ SvxRuler::SvxRuler(
             SfxBindings &rBindings,      // associated Bindings
             WinBits nWinStyle) :         // StarView WinBits
     Ruler(pParent, nWinStyle),
-    pCtrlItem(new SvxRulerItem* [CTRL_ITEM_COUNT]),
+    pCtrlItems(CTRL_ITEM_COUNT),
     pEditWin(pWin),
     mxRulerImpl(new SvxRuler_Impl),
     bAppSetNullOffset(false),  // Is the 0-offset of the ruler set by the application?
@@ -252,42 +252,40 @@ SvxRuler::SvxRuler(
 {
     /* Constructor; Initialize data buffer; controller items are created */
 
-    memset(pCtrlItem, 0, sizeof(SvxRulerItem *) * CTRL_ITEM_COUNT);
-
     rBindings.EnterRegistrations();
 
     // Create Supported Items
     sal_uInt16 i = 0;
 
     // Page edges
-    pCtrlItem[i++] = new SvxRulerItem(SID_RULER_LR_MIN_MAX, *this, rBindings);
+    pCtrlItems[i++].reset(new SvxRulerItem(SID_RULER_LR_MIN_MAX, *this, rBindings));
     if((nWinStyle & WB_VSCROLL) == WB_VSCROLL)
     {
         bHorz = false;
-        pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_LONG_ULSPACE, *this, rBindings);
+        pCtrlItems[i++].reset(new SvxRulerItem(SID_ATTR_LONG_ULSPACE, *this, rBindings));
     }
     else
     {
         bHorz = true;
-        pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_LONG_LRSPACE, *this, rBindings);
+        pCtrlItems[i++].reset(new SvxRulerItem(SID_ATTR_LONG_LRSPACE, *this, rBindings));
     }
 
     // Page Position
-    pCtrlItem[i++] = new SvxRulerItem(SID_RULER_PAGE_POS, *this, rBindings);
+    pCtrlItems[i++].reset(new SvxRulerItem(SID_RULER_PAGE_POS, *this, rBindings));
 
     if(nFlags & SvxRulerSupportFlags::TABS)
     {
         sal_uInt16 nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
-        pCtrlItem[i++] = new SvxRulerItem(nTabStopId, *this, rBindings);
+        pCtrlItems[i++].reset(new SvxRulerItem(nTabStopId, *this, rBindings));
         SetExtraType(RULER_EXTRA_TAB, nDefTabType);
     }
 
     if(nFlags & (SvxRulerSupportFlags::PARAGRAPH_MARGINS |SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL))
     {
         if(bHorz)
-            pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_PARA_LRSPACE, *this, rBindings);
+            pCtrlItems[i++].reset(new SvxRulerItem(SID_ATTR_PARA_LRSPACE, *this, rBindings));
         else
-            pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_PARA_LRSPACE_VERTICAL, *this, rBindings);
+            pCtrlItems[i++].reset(new SvxRulerItem(SID_ATTR_PARA_LRSPACE_VERTICAL, *this, rBindings));
 
         mpIndents.resize(5 + INDENT_GAP);
 
@@ -306,15 +304,15 @@ SvxRuler::SvxRuler(
 
     if( (nFlags & SvxRulerSupportFlags::BORDERS) ==  SvxRulerSupportFlags::BORDERS )
     {
-        pCtrlItem[i++] = new SvxRulerItem(bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL, *this, rBindings);
-        pCtrlItem[i++] = new SvxRulerItem(bHorz ? SID_RULER_ROWS : SID_RULER_ROWS_VERTICAL, *this, rBindings);
+        pCtrlItems[i++].reset(new SvxRulerItem(bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL, *this, rBindings));
+        pCtrlItems[i++].reset(new SvxRulerItem(bHorz ? SID_RULER_ROWS : SID_RULER_ROWS_VERTICAL, *this, rBindings));
     }
 
-    pCtrlItem[i++] = new SvxRulerItem(SID_RULER_TEXT_RIGHT_TO_LEFT, *this, rBindings);
+    pCtrlItems[i++].reset(new SvxRulerItem(SID_RULER_TEXT_RIGHT_TO_LEFT, *this, rBindings));
 
     if( (nFlags & SvxRulerSupportFlags::OBJECT) == SvxRulerSupportFlags::OBJECT )
     {
-        pCtrlItem[i++] = new SvxRulerItem(SID_RULER_OBJECT, *this, rBindings );
+        pCtrlItems[i++].reset(new SvxRulerItem(SID_RULER_OBJECT, *this, rBindings));
         mpObjectBorders.resize(OBJECT_BORDER_COUNT);
         for(sal_uInt16 nBorder = 0; nBorder < OBJECT_BORDER_COUNT; ++nBorder)
         {
@@ -324,8 +322,8 @@ SvxRuler::SvxRuler(
         }
     }
 
-    pCtrlItem[i++] = new SvxRulerItem(SID_RULER_PROTECT, *this, rBindings );
-    pCtrlItem[i++] = new SvxRulerItem(SID_RULER_BORDER_DISTANCE, *this, rBindings);
+    pCtrlItems[i++].reset(new SvxRulerItem(SID_RULER_PROTECT, *this, rBindings));
+    pCtrlItems[i++].reset(new SvxRulerItem(SID_RULER_BORDER_DISTANCE, *this, rBindings));
     mxRulerImpl->nControlerItems=i;
 
     if( (nFlags & SvxRulerSupportFlags::SET_NULLOFFSET) == SvxRulerSupportFlags::SET_NULLOFFSET )
@@ -353,13 +351,7 @@ void SvxRuler::dispose()
 
     pBindings->EnterRegistrations();
 
-    if (pCtrlItem)
-    {
-        for(sal_uInt16 i = 0; i < CTRL_ITEM_COUNT  && pCtrlItem[i]; ++i)
-            delete pCtrlItem[i];
-        delete[] pCtrlItem;
-        pCtrlItem = NULL;
-    }
+    pCtrlItems.clear();
 
     pBindings->LeaveRegistrations();
 
@@ -1768,10 +1760,10 @@ void SvxRuler::SetActive(bool bOn)
         pBindings->EnterRegistrations();
         if(bOn)
             for(sal_uInt16 i=0;i<mxRulerImpl->nControlerItems;i++)
-                pCtrlItem[i]->ReBind();
+                pCtrlItems[i]->ReBind();
         else
             for(sal_uInt16 j=0;j<mxRulerImpl->nControlerItems;j++)
-                pCtrlItem[j]->UnBind();
+                pCtrlItems[j]->UnBind();
         pBindings->LeaveRegistrations();
     }
     bActive = bOn;
@@ -3383,8 +3375,8 @@ void SvxRuler::EndDrag()
     {
         for(sal_uInt16 i = 0; i < mxRulerImpl->nControlerItems; i++)
         {
-            pCtrlItem[i]->ClearCache();
-            pCtrlItem[i]->GetBindings().Invalidate(pCtrlItem[i]->GetId());
+            pCtrlItems[i]->ClearCache();
+            pCtrlItems[i]->GetBindings().Invalidate(pCtrlItems[i]->GetId());
         }
     }
 }
