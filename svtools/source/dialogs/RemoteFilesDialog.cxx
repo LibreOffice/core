@@ -11,6 +11,8 @@
 
 using namespace ::com::sun::star::uno;
 
+#define NO_FILTER "*.*"
+
 RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     : ModalDialog(pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui")
     , m_context(comphelper::getProcessComponentContext())
@@ -20,6 +22,8 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     get(m_pCancel_btn, "cancel");
     get(m_pAddService_btn, "add_service_btn");
     get(m_pServices_lb, "services_lb");
+    get(m_pPath_ed, "path");
+    get(m_pView, "files");
 
     m_eMode = (nBits & WB_SAVEAS) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_bIsUpdated = false;
@@ -40,6 +44,8 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pAddService_btn->SetSelectHdl( LINK( this, RemoteFilesDialog, EditServiceMenuHdl ) );
 
     FillServicesListbox();
+
+    m_pServices_lb->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectServiceHdl ) );
 }
 
 void RemoteFilesDialog::dispose()
@@ -93,13 +99,16 @@ void RemoteFilesDialog::FillServicesListbox()
         m_pServices_lb->Enable(false);
 }
 
-unsigned int RemoteFilesDialog::GetSelectedServicePos()
+int RemoteFilesDialog::GetSelectedServicePos()
 {
     int nSelected = m_pServices_lb->GetSelectEntryPos();
-    unsigned int nPos = 0;
+    int nPos = 0;
     int i = -1;
 
-    while(nPos < m_aServices.size())
+    if(m_aServices.size() == 0)
+        return -1;
+
+    while(nPos < (int)m_aServices.size())
     {
         while(m_aServices[nPos]->IsLocal())
             nPos++;
@@ -139,58 +148,82 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
     return 1;
 }
 
+IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
+{
+    int nPos = GetSelectedServicePos();
+
+    if(nPos > 0)
+    {
+        OUStringList BlackList;
+        OUString sURL = m_aServices[nPos]->GetUrl();
+        FileViewResult eResult = eFailure;
+
+        m_pPath_ed->SetText(sURL);
+
+        eResult = m_pView->Initialize( sURL, NO_FILTER, NULL, BlackList );
+    }
+
+    return 1;
+}
+
 IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
 {
     OString sIdent(pButton->GetCurItemIdent());
     if(sIdent == "edit_service"  && m_pServices_lb->GetEntryCount() > 0)
     {
         unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
-        unsigned int nPos = GetSelectedServicePos();
+        int nPos = GetSelectedServicePos();
 
-        ScopedVclPtrInstance< PlaceEditDialog > aDlg(this, m_aServices[nPos]);
-        short aRetCode = aDlg->Execute();
-
-        switch(aRetCode)
+        if(nPos > 0)
         {
-            case RET_OK :
+            ScopedVclPtrInstance< PlaceEditDialog > aDlg(this, m_aServices[nPos]);
+            short aRetCode = aDlg->Execute();
+
+            switch(aRetCode)
             {
-                ServicePtr pEditedService = aDlg->GetPlace();
+                case RET_OK :
+                {
+                    ServicePtr pEditedService = aDlg->GetPlace();
 
-                m_aServices[nPos] = pEditedService;
-                m_pServices_lb->RemoveEntry(nSelected);
-                m_pServices_lb->InsertEntry(pEditedService->GetName(), nSelected);
-                m_pServices_lb->SelectEntryPos(nSelected);
+                    m_aServices[nPos] = pEditedService;
+                    m_pServices_lb->RemoveEntry(nSelected);
+                    m_pServices_lb->InsertEntry(pEditedService->GetName(), nSelected);
+                    m_pServices_lb->SelectEntryPos(nSelected);
 
-                m_bIsUpdated = true;
-        break;
-            }
-            case RET_CANCEL :
-            default :
-                // Do Nothing
-                break;
-        };
+                    m_bIsUpdated = true;
+                    break;
+                }
+                case RET_CANCEL :
+                default :
+                    // Do Nothing
+                    break;
+            };
+        }
     }
     else if(sIdent == "delete_service"  && m_pServices_lb->GetEntryCount() > 0)
     {
         unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
-        unsigned int nPos = GetSelectedServicePos();
+        int nPos = GetSelectedServicePos();
 
-        // TODO: Confirm dialog
-
-        m_aServices.erase(m_aServices.begin() + nPos);
-        m_pServices_lb->RemoveEntry(nSelected);
-
-        if(m_pServices_lb->GetEntryCount() > 0)
+        if(nPos > 0)
         {
-            m_pServices_lb->SelectEntryPos(0);
-        }
-        else
-        {
-            m_pServices_lb->SetNoSelection();
-            m_pServices_lb->Enable(false);
-        }
+            // TODO: Confirm dialog
 
-        m_bIsUpdated = true;
+            m_aServices.erase(m_aServices.begin() + nPos);
+            m_pServices_lb->RemoveEntry(nSelected);
+
+            if(m_pServices_lb->GetEntryCount() > 0)
+            {
+                m_pServices_lb->SelectEntryPos(0);
+            }
+            else
+            {
+                m_pServices_lb->SetNoSelection();
+                m_pServices_lb->Enable(false);
+            }
+
+            m_bIsUpdated = true;
+        }
     }
 }
 

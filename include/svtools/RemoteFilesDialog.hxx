@@ -20,6 +20,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
 
+#include <svtools/fileview.hxx>
+
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -32,6 +34,7 @@ enum SvtRemoteDlgMode
 };
 
 typedef std::shared_ptr<Place> ServicePtr;
+typedef ::com::sun::star::uno::Sequence<OUString>  OUStringList;
 
 class SVT_DLLPUBLIC RemoteFilesDialog : public ModalDialog
 {
@@ -51,13 +54,18 @@ private:
     VclPtr<CancelButton> m_pCancel_btn;
     VclPtr<MenuButton> m_pAddService_btn;
     VclPtr<ListBox> m_pServices_lb;
+    VclPtr<Edit> m_pPath_ed;
+    VclPtr<SvtFileView> m_pView;
 
     std::vector<ServicePtr> m_aServices;
 
     void FillServicesListbox();
-    unsigned int GetSelectedServicePos();
+
+    /* If failure returns < 0 */
+    int GetSelectedServicePos();
 
     DECL_LINK ( AddServiceHdl, void * );
+    DECL_LINK ( SelectServiceHdl, void * );
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
 };
 
