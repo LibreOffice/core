@@ -896,6 +896,22 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     // LC_FORMAT, not in optional LC_FORMAT_1
     if (mnSection == 0)
     {
+        // At least one abbreviated date acceptance pattern must be present.
+        if (theDateAcceptancePatterns.empty())
+            incError( "No DateAcceptancePattern present.\n");
+        else
+        {
+            bool bHaveAbbr = false;
+            for (::std::vector< OUString >::const_iterator it( theDateAcceptancePatterns.begin());
+                    !bHaveAbbr && it != theDateAcceptancePatterns.end(); ++it)
+            {
+                if ((*it).indexOf('D') > -1 && (*it).indexOf('M') > -1 && (*it).indexOf('Y') <= -1)
+                    bHaveAbbr = true;
+            }
+            if (!bHaveAbbr)
+                incError( "No abbreviated DateAcceptancePattern present. For example M/D or D.M.\n");
+        }
+
         // 0..47 MUST be present, 48,49 MUST NOT be present
         ValueSet::const_iterator aIter( aFormatIndexSet.begin());
         for (sal_Int16 nNext = cssi::NumberFormatIndex::NUMBER_START;
