@@ -86,6 +86,13 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
                     print("assuming " + download + " is up to date")
                     continue
 
+                # prevent re-downloading FDO attachments from TDF
+                if prefix == "tdf" and int(id) < 88776:
+                    fdodownload = download.replace("tdf", "fdo")
+                    if os.path.isfile(fdodownload):
+                        print("assuming FDO " + fdodownload + " is up to date")
+                        continue
+
                 print('downloading as ' + download)
                 f = open(download, 'wb')
                 f.write(base64.b64decode(node.firstChild.nodeValue))
@@ -199,7 +206,7 @@ def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
     print('looking for all bugs having %s attachment(s)' % mimetype)
     process(query, True, get_file_bz_ids(files, prefix))
 
-def get_through_rss_query(queryurl, mimetype, prefix, suffix, startid):
+def get_through_rss_query(queryurl, mimetype, prefix, suffix):
     try:
         os.mkdir(suffix)
     except:
@@ -218,10 +225,7 @@ def get_through_rss_query(queryurl, mimetype, prefix, suffix, startid):
         entries = []
         for entry in d['entries']:
             bugid = entry['id'].split('=')[-1]
-            if (int(bugid) >= startid):
-                entries.append(entry)
-            else:
-                print("Dropping " + bugid + " because < startid of " + str(startid))
+            entries.append(entry)
 
         if full:
             available = set([str(entry['id'].split('=')[-1]) for entry in entries])
@@ -328,20 +332,20 @@ def get_launchpad_bugs(prefix):
                 f.close()
 
 rss_bugzillas = (
-    ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi', 0 ), #added for abiword
-    ( 'fdo', 'http://bugs.libreoffice.org/buglist.cgi', 0 ),
-    ( 'gentoo', 'http://bugs.gentoo.org/buglist.cgi', 0 ),
-    ( 'gnome', 'http://bugzilla.gnome.org/buglist.cgi', 0 ), # added for gnumeric
-    ( 'kde', 'http://bugs.kde.org/buglist.cgi', 0 ), # added for koffice/calligra
-    ( 'mandriva', 'https://qa.mandriva.com/buglist.cgi', 0 ),
-    ( 'moz', 'https://bugzilla.mozilla.org/buglist.cgi', 0 ),
+    ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi' ), #added for abiword
+    ( 'fdo', 'http://bugs.libreoffice.org/buglist.cgi' ),
+    ( 'gentoo', 'http://bugs.gentoo.org/buglist.cgi' ),
+    ( 'gnome', 'http://bugzilla.gnome.org/buglist.cgi' ), # added for gnumeric
+    ( 'kde', 'http://bugs.kde.org/buglist.cgi' ), # added for koffice/calligra
+    ( 'mandriva', 'https://qa.mandriva.com/buglist.cgi' ),
+    ( 'moz', 'https://bugzilla.mozilla.org/buglist.cgi' ),
     # It seems something has changed and it is no longer possible to
     # download any files from there.
     # NOTE: I am leaving it in the list, commented out, just so someone
     # does not add it back immediately .-)
     # 'novell': 'https://bugzilla.novell.com/buglist.cgi',
-    ( 'ooo', 'https://bz.apache.org/ooo/buglist.cgi', 0 ),
-    ( 'tdf', 'http://bugs.documentfoundation.org/buglist.cgi', 88776 ),
+    ( 'ooo', 'https://bz.apache.org/ooo/buglist.cgi' ),
+    ( 'tdf', 'http://bugs.documentfoundation.org/buglist.cgi' ),
 )
 
 redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
@@ -497,9 +501,9 @@ class manage_threads(threading.Thread):
                 # Get job from queue
                 # Use job parameters to call our query
                 # Then let the queue know we are done with this job
-                (uri, mimetype, prefix, extension, startid) = jobs.get(True,6)
+                (uri, mimetype, prefix, extension) = jobs.get(True,6)
                 try:
-                    get_through_rss_query(uri, mimetype, prefix, extension, startid)
+                    get_through_rss_query(uri, mimetype, prefix, extension)
                 finally:
                     jobs.task_done()
             except KeyboardInterrupt:
@@ -508,7 +512,7 @@ class manage_threads(threading.Thread):
                 break
 
 def generate_multi_threading():
-    for (prefix, uri, startid) in rss_bugzillas:
+    for (prefix, uri) in rss_bugzillas:
 
         # Initialize threads
         for i in range(max_threads):
@@ -522,7 +526,7 @@ def generate_multi_threading():
             if mimetype == 'text/html' and prefix == 'moz':
                     continue
 
-            jobs.put([uri, mimetype, prefix, extension, startid], block=True)
+            jobs.put([uri, mimetype, prefix, extension], block=True)
             print("successfully placed a job in the queue searching for " + mimetype + " in bugtracker " + prefix)
 
         # Continue when all mimetypes are done for a bugzilla
