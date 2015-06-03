@@ -177,7 +177,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,udunits2)/lib -ludunits2 \
+	-L$(call gb_UnpackedTarball_get_dir,udunits2)/lib/.libs -ludunits2 \
 )
 endif
 

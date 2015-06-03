@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,udunits2))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,udunits2,$(UDUNITS2_TARBALL)))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_UnpackedTarball_add_patches,udunits2,\
+	external/udunits2/udunits2-macosx.patch.1 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
