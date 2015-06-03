@@ -23,69 +23,82 @@ static float twipToPixel(float fInput, float zoom)
 
 GdkPixbuf* Tile::tile_get_buffer()
 {
-  return m_pBuffer;
+    return m_pBuffer;
 }
 
 void Tile::tile_release()
 {
-  gdk_pixbuf_unref(m_pBuffer);
-  m_pBuffer = NULL;
+    g_object_unref (m_pBuffer);
+    m_pBuffer = NULL;
 }
 
 void TileBuffer::tile_buffer_set_zoom(float newZoomFactor, int rows, int columns)
 {
-  m_fZoomFactor = newZoomFactor;
+    m_fZoomFactor = newZoomFactor;
 
-  tile_buffer_reset_all_tiles();
+    tile_buffer_reset_all_tiles();
 
-  // set new buffer width and height
-  m_nWidth = columns;
-  m_nHeight = rows;
+    // set new buffer width and height
+    m_nWidth = columns;
+    m_nHeight = rows;
 }
 
 void TileBuffer::tile_buffer_reset_all_tiles()
 {
-  std::map<int, Tile>::iterator it = m_mTiles.begin();
-  for (; it != m_mTiles.end(); it++)
-    {
-       it->second.tile_release();
-    }
-  m_mTiles.clear();
+    std::map<int, Tile>::iterator it = m_mTiles.begin();
+    for (; it != m_mTiles.end(); it++)
+        {
+            it->second.tile_release();
+        }
+    m_mTiles.clear();
+}
+
+void TileBuffer::tile_buffer_set_invalid(int x, int y)
+{
+    int index = x * m_nWidth + y;
+    g_info("setting invalid : %d %d",x, y);
+    if (m_mTiles.find(index) != m_mTiles.end())
+        {
+            m_mTiles[index].valid = 0;
+            m_mTiles[index].tile_release();
+            m_mTiles.erase(index);
+        }
 }
 
 Tile& TileBuffer::tile_buffer_get_tile(int x, int y)
 {
-  int index = x * m_nWidth + y;
-  if(m_mTiles.find(index) == m_mTiles.end())
-    {
-      GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, m_nTileSize, m_nTileSize);
-      if (!pPixBuf){
-        g_info ("error allocating memory to pixbuf");
-      }
-      unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
-      GdkRectangle aTileRectangle;
-      aTileRectangle.x = pixelToTwip(m_nTileSize, m_fZoomFactor) * y;
-      aTileRectangle.y = pixelToTwip(m_nTileSize, m_fZoomFactor) * x;
+    int index = x * m_nWidth + y;
+    if(m_mTiles.find(index) == m_mTiles.end() || !m_mTiles[index].valid)
+        {
 
-      g_info ("rendering (%d %d)", x, y);
-      m_pLOKDocument->pClass->paintTile(m_pLOKDocument,
-                                        // Buffer and its size, depends on the position only.
-                                        pBuffer,
-                                        m_nTileSize, m_nTileSize,
-                                        // Position of the tile.
-                                        aTileRectangle.x, aTileRectangle.y,
-                                        // Size of the tile, depends on the zoom factor and the tile position only.
-                                        pixelToTwip(m_nTileSize, m_fZoomFactor), pixelToTwip(m_nTileSize, m_fZoomFactor));
+            GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, m_nTileSize, m_nTileSize);
+            if (!pPixBuf){
+                g_info ("error allocating memory to pixbuf");
+            }
+            unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
+            GdkRectangle aTileRectangle;
+            aTileRectangle.x = pixelToTwip(m_nTileSize, m_fZoomFactor) * y;
+            aTileRectangle.y = pixelToTwip(m_nTileSize, m_fZoomFactor) * x;
 
-      //create a mapping for it
-      m_mTiles[index].tile_set_pixbuf(pPixBuf);
-      m_mTiles[index].valid = 1;
-    }
+            g_info ("rendering (%d %d)", x, y);
+            m_pLOKDocument->pClass->paintTile(m_pLOKDocument,
+                                              // Buffer and its size, depends on the position only.
+                                              pBuffer,
+                                              m_nTileSize, m_nTileSize,
+                                              // Position of the tile.
+                                              aTileRectangle.x, aTileRectangle.y,
+                                              // Size of the tile, depends on the zoom factor and the tile position only.
+                                              pixelToTwip(m_nTileSize, m_fZoomFactor), pixelToTwip(m_nTileSize, m_fZoomFactor));
 
-  return m_mTiles[index];
+            //create a mapping for it
+            m_mTiles[index].tile_set_pixbuf(pPixBuf);
+            m_mTiles[index].valid = 1;
+        }
+
+    return m_mTiles[index];
 }
 
 void Tile::tile_set_pixbuf(GdkPixbuf *buffer)
 {
-  m_pBuffer = buffer;
+    m_pBuffer = buffer;
 }
