@@ -288,8 +288,8 @@ public:
     void check()
     {
         B2DPolyRange aRange;
-        aRange.appendElement(B2DRange(0,0,1,1),ORIENTATION_POSITIVE);
-        aRange.appendElement(B2DRange(2,2,3,3),ORIENTATION_POSITIVE);
+        aRange.appendElement(B2DRange(0,0,1,1),B2VectorOrientation::Positive);
+        aRange.appendElement(B2DRange(2,2,3,3),B2VectorOrientation::Positive);
 
         CPPUNIT_ASSERT_MESSAGE("simple poly range - count",
                                aRange.count() == 2);
@@ -302,7 +302,7 @@ public:
         const B2DRange aRect(0,0,1,1);
         CPPUNIT_ASSERT_MESSAGE("createPolygonFromRect - correct orientation",
                                tools::getOrientation(
-                                   tools::createPolygonFromRect(aRect)) == ORIENTATION_POSITIVE );
+                                   tools::createPolygonFromRect(aRect)) == B2VectorOrientation::Positive );
     }
 
     // Change the following lines only, if you add, remove or rename

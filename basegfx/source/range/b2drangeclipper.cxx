@@ -570,7 +570,7 @@ namespace basegfx
                     SweepLineEvent( rCurrRect.getMinX(),
                                     rCurrRect,
                                     SweepLineEvent::STARTING_EDGE,
-                                    (*aCurrOrientation++) == ORIENTATION_POSITIVE ?
+                                    (*aCurrOrientation++) == B2VectorOrientation::Positive ?
                                     SweepLineEvent::PROCEED_UP : SweepLineEvent::PROCEED_DOWN) );
             }
 
@@ -586,7 +586,7 @@ namespace basegfx
                     SweepLineEvent( rCurrRect.getMaxX(),
                                     rCurrRect,
                                     SweepLineEvent::FINISHING_EDGE,
-                                    (*aCurrOrientationR++) == ORIENTATION_POSITIVE ?
+                                    (*aCurrOrientationR++) == B2VectorOrientation::Positive ?
                                     SweepLineEvent::PROCEED_DOWN : SweepLineEvent::PROCEED_UP ) );
             }
 

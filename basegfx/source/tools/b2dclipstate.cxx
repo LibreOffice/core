@@ -102,7 +102,7 @@ namespace tools
             mePendingOps = eOp;
             maPendingRanges.appendElement(
                 rRange,
-                ORIENTATION_POSITIVE);
+                B2VectorOrientation::Positive);
         }
 
         void addPolyPolygon(B2DPolyPolygon aPoly, Operation eOp)

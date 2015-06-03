@@ -713,7 +713,7 @@ namespace basegfx
             {
                 const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
-                if(ORIENTATION_NEUTRAL != tools::getOrientation(aCandidate))
+                if(B2VectorOrientation::Neutral != tools::getOrientation(aCandidate))
                 {
                     aRetval.append(aCandidate);
                 }
@@ -756,7 +756,7 @@ namespace basegfx
                     pNewHelper->meOrinetation = tools::getOrientation(aCand);
 
                     // initialize with own orientation
-                    pNewHelper->mnDepth = (ORIENTATION_NEGATIVE == pNewHelper->meOrinetation ? -1 : 1);
+                    pNewHelper->mnDepth = (B2VectorOrientation::Negative == pNewHelper->meOrinetation ? -1 : 1);
                 }
 
                 for(a = 0; a < nCount - 1; a++)
@@ -773,7 +773,7 @@ namespace basegfx
                         if(bAInB)
                         {
                             // A is inside B, add orientation of B to A
-                            rHelperA.mnDepth += (ORIENTATION_NEGATIVE == rHelperB.meOrinetation ? -1 : 1);
+                            rHelperA.mnDepth += (B2VectorOrientation::Negative == rHelperB.meOrinetation ? -1 : 1);
                         }
 
                         const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && tools::isInside(aCandA, aCandB, true));
@@ -781,7 +781,7 @@ namespace basegfx
                         if(bBInA)
                         {
                             // B is inside A, add orientation of A to B
-                            rHelperB.mnDepth += (ORIENTATION_NEGATIVE == rHelperA.meOrinetation ? -1 : 1);
+                            rHelperB.mnDepth += (B2VectorOrientation::Negative == rHelperA.meOrinetation ? -1 : 1);
                         }
                     }
                 }
@@ -817,7 +817,7 @@ namespace basegfx
             {
                 if(nCount == 1L)
                 {
-                    if(!bKeepAboveZero && ORIENTATION_POSITIVE == tools::getOrientation(rCandidate.getB2DPolygon(0L)))
+                    if(!bKeepAboveZero && B2VectorOrientation::Positive == tools::getOrientation(rCandidate.getB2DPolygon(0L)))
                     {
                         aRetval = rCandidate;
                     }
@@ -834,7 +834,7 @@ namespace basegfx
                         StripHelper* pNewHelper = &(aHelpers[a]);
                         pNewHelper->maRange = tools::getRange(aCandidate);
                         pNewHelper->meOrinetation = tools::getOrientation(aCandidate);
-                        pNewHelper->mnDepth = (ORIENTATION_NEGATIVE == pNewHelper->meOrinetation ? -1L : 0L);
+                        pNewHelper->mnDepth = (B2VectorOrientation::Negative == pNewHelper->meOrinetation ? -1L : 0L);
                     }
 
                     for(a = 0L; a < nCount - 1L; a++)
@@ -870,7 +870,7 @@ namespace basegfx
                             {
                                 if(bAInB)
                                 {
-                                    if(ORIENTATION_NEGATIVE == rHelperB.meOrinetation)
+                                    if(B2VectorOrientation::Negative == rHelperB.meOrinetation)
                                     {
                                         rHelperA.mnDepth--;
                                     }
@@ -881,7 +881,7 @@ namespace basegfx
                                 }
                                 else if(bBInA)
                                 {
-                                    if(ORIENTATION_NEGATIVE == rHelperA.meOrinetation)
+                                    if(B2VectorOrientation::Negative == rHelperA.meOrinetation)
                                     {
                                         rHelperB.mnDepth--;
                                     }

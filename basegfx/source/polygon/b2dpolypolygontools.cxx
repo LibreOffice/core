@@ -55,9 +55,9 @@ namespace basegfx
                 }
 
                 const bool bShallBeHole(1L == (nDepth & 0x00000001));
-                const bool bIsHole(ORIENTATION_NEGATIVE == aOrientation);
+                const bool bIsHole(B2VectorOrientation::Negative == aOrientation);
 
-                if(bShallBeHole != bIsHole && ORIENTATION_NEUTRAL != aOrientation)
+                if(bShallBeHole != bIsHole && B2VectorOrientation::Neutral != aOrientation)
                 {
                     B2DPolygon aFlipped(aCandidate);
                     aFlipped.flip();

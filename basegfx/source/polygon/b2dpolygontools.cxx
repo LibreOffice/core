@@ -138,7 +138,7 @@ namespace basegfx
 
         B2VectorOrientation getOrientation(const B2DPolygon& rCandidate)
         {
-            B2VectorOrientation eRetval(ORIENTATION_NEUTRAL);
+            B2VectorOrientation eRetval(B2VectorOrientation::Neutral);
 
             if(rCandidate.count() > 2L || rCandidate.areControlPointsUsed())
             {
@@ -146,15 +146,15 @@ namespace basegfx
 
                 if(fTools::equalZero(fSignedArea))
                 {
-                    // ORIENTATION_NEUTRAL, already set
+                    // B2VectorOrientation::Neutral, already set
                 }
                 if(fSignedArea > 0.0)
                 {
-                    eRetval = ORIENTATION_POSITIVE;
+                    eRetval = B2VectorOrientation::Positive;
                 }
                 else if(fSignedArea < 0.0)
                 {
-                    eRetval = ORIENTATION_NEGATIVE;
+                    eRetval = B2VectorOrientation::Negative;
                 }
             }
 
@@ -1981,7 +1981,7 @@ namespace basegfx
                     const B2DVector aNextVec(aNextPoint - aCurrPoint);
                     const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
 
-                    if(ORIENTATION_NEUTRAL == aOrientation)
+                    if(B2VectorOrientation::Neutral == aOrientation)
                     {
                         // current has neutral orientation
                         return true;
@@ -2014,7 +2014,7 @@ namespace basegfx
                     const B2DVector aNextVec(aNextPoint - aCurrPoint);
                     const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
 
-                    if(ORIENTATION_NEUTRAL == aOrientation)
+                    if(B2VectorOrientation::Neutral == aOrientation)
                     {
                         // current has neutral orientation, leave it out and prepare next
                         aCurrPoint = aNextPoint;
@@ -2030,7 +2030,7 @@ namespace basegfx
                     }
                 }
 
-                while(aRetval.count() && ORIENTATION_NEUTRAL == getOrientationForIndex(aRetval, 0L))
+                while(aRetval.count() && B2VectorOrientation::Neutral == getOrientationForIndex(aRetval, 0L))
                 {
                     aRetval.remove(0L);
                 }
@@ -2056,7 +2056,7 @@ namespace basegfx
                 const B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1L));
                 B2DPoint aCurrPoint(rCandidate.getB2DPoint(0L));
                 B2DVector aCurrVec(aPrevPoint - aCurrPoint);
-                B2VectorOrientation aOrientation(ORIENTATION_NEUTRAL);
+                B2VectorOrientation aOrientation(B2VectorOrientation::Neutral);
 
                 for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
@@ -2064,14 +2064,14 @@ namespace basegfx
                     const B2DVector aNextVec(aNextPoint - aCurrPoint);
                     const B2VectorOrientation aCurrentOrientation(getOrientation(aNextVec, aCurrVec));
 
-                    if(ORIENTATION_NEUTRAL == aOrientation)
+                    if(B2VectorOrientation::Neutral == aOrientation)
                     {
                         // set start value, maybe neutral again
                         aOrientation = aCurrentOrientation;
                     }
                     else
                     {
-                        if(ORIENTATION_NEUTRAL != aCurrentOrientation && aCurrentOrientation != aOrientation)
+                        if(B2VectorOrientation::Neutral != aCurrentOrientation && aCurrentOrientation != aOrientation)
                         {
                             // different orientations found, that's it
                             return false;
@@ -2674,7 +2674,7 @@ namespace basegfx
                             aVectorNext.normalize();
                             const B2VectorOrientation aOrientation(getOrientation(aVectorPrev, aVectorNext));
 
-                            if(ORIENTATION_NEUTRAL == aOrientation && aVectorPrev.scalar(aVectorNext) < 0.0)
+                            if(B2VectorOrientation::Neutral == aOrientation && aVectorPrev.scalar(aVectorNext) < 0.0)
                             {
                                 // parallel and opposite direction; check length
                                 if(fTools::equal(fLenPrev, fLenNext))
@@ -2696,7 +2696,7 @@ namespace basegfx
                                 // not parallel or same direction, set vectors and length
                                 const B2DVector aNormalizedPerpendicular(getNormalizedPerpendicular(aVectorPrev + aVectorNext));
 
-                                if(ORIENTATION_POSITIVE == aOrientation)
+                                if(B2VectorOrientation::Positive == aOrientation)
                                 {
                                     rCandidate.setControlPoints(nIndex,
                                         aCurrentPoint - (aNormalizedPerpendicular * fLenPrev),
@@ -2726,7 +2726,7 @@ namespace basegfx
                             aVectorNext.normalize();
                             const B2VectorOrientation aOrientation(getOrientation(aVectorPrev, aVectorNext));
 
-                            if(ORIENTATION_NEUTRAL == aOrientation && aVectorPrev.scalar(aVectorNext) < 0.0)
+                            if(B2VectorOrientation::Neutral == aOrientation && aVectorPrev.scalar(aVectorNext) < 0.0)
                             {
                                 // parallel and opposite direction; set length. Use one direction for better numerical correctness
                                 const B2DVector aScaledDirection(aVectorPrev * fCommonLength);
@@ -2741,7 +2741,7 @@ namespace basegfx
                                 const B2DVector aNormalizedPerpendicular(getNormalizedPerpendicular(aVectorPrev + aVectorNext));
                                 const B2DVector aPerpendicular(aNormalizedPerpendicular * fCommonLength);
 
-                                if(ORIENTATION_POSITIVE == aOrientation)
+                                if(B2VectorOrientation::Positive == aOrientation)
                                 {
                                     rCandidate.setControlPoints(nIndex,
                                         aCurrentPoint - aPerpendicular,

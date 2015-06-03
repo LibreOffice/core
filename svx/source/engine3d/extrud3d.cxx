@@ -159,7 +159,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         aTemp = basegfx::tools::correctOrientations(aTemp);
         const basegfx::B2VectorOrientation aOrient = basegfx::tools::getOrientation(aTemp.getB2DPolygon(0L));
 
-        if(basegfx::ORIENTATION_POSITIVE == aOrient)
+        if(basegfx::B2VectorOrientation::Positive == aOrient)
         {
             aTemp.flip();
         }

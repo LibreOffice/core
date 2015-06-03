@@ -864,7 +864,7 @@ namespace basegfx
                             B2DVector aTangentEdge(aEdge.getTangent(0.0)); aTangentEdge.normalize();
                             B2VectorOrientation aOrientation(getOrientation(aTangentPrev, aTangentEdge));
 
-                            if(ORIENTATION_NEUTRAL == aOrientation)
+                            if(B2VectorOrientation::Neutral == aOrientation)
                             {
                                    // they are parallell or empty; if they are both not zero and point
                                    // in opposite direction, a half-circle is needed
@@ -876,12 +876,12 @@ namespace basegfx
                                     {
                                         // for half-circle production, fallback to positive
                                         // orientation
-                                        aOrientation = ORIENTATION_POSITIVE;
+                                        aOrientation = B2VectorOrientation::Positive;
                                     }
                                 }
                             }
 
-                            if(ORIENTATION_POSITIVE == aOrientation)
+                            if(B2VectorOrientation::Positive == aOrientation)
                             {
                                 const B2DVector aPerpendPrev(getPerpendicular(aTangentPrev) * -fHalfLineWidth);
                                 const B2DVector aPerpendEdge(getPerpendicular(aTangentEdge) * -fHalfLineWidth);
@@ -897,7 +897,7 @@ namespace basegfx
                                         eJoin,
                                         fMiterMinimumAngle));
                             }
-                            else if(ORIENTATION_NEGATIVE == aOrientation)
+                            else if(B2VectorOrientation::Negative == aOrientation)
                             {
                                 const B2DVector aPerpendPrev(getPerpendicular(aTangentPrev) * fHalfLineWidth);
                                 const B2DVector aPerpendEdge(getPerpendicular(aTangentEdge) * fHalfLineWidth);

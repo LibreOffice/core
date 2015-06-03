@@ -129,16 +129,16 @@ namespace basegfx
 
         if(fTools::equalZero(fVal))
         {
-            return ORIENTATION_NEUTRAL;
+            return B2VectorOrientation::Neutral;
         }
 
         if(fVal > 0.0)
         {
-            return ORIENTATION_POSITIVE;
+            return B2VectorOrientation::Positive;
         }
         else
         {
-            return ORIENTATION_NEGATIVE;
+            return B2VectorOrientation::Negative;
         }
     }
 

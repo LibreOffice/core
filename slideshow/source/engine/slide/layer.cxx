@@ -158,7 +158,7 @@ namespace slideshow
             // TODO(Q1): move this to B2DMultiRange
             if( !rUpdateRange.isEmpty() )
                 maUpdateAreas.appendElement( rUpdateRange,
-                                             basegfx::ORIENTATION_POSITIVE );
+                                             basegfx::B2VectorOrientation::Positive );
         }
 
         void Layer::updateBounds( ShapeSharedPtr const& rShape )

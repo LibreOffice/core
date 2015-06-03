@@ -284,7 +284,7 @@ namespace basegfx
                         const B2DVector aLeft(pEdgeA->getEnd() - pEdgeA->getStart());
                         const B2DVector aRight(pEdgeB->getEnd() - pEdgeA->getStart());
 
-                        if(ORIENTATION_NEUTRAL == getOrientation(aLeft, aRight))
+                        if(B2VectorOrientation::Neutral == getOrientation(aLeft, aRight))
                         {
                             // edges are parallel and have different length -> neutral triangle,
                             // delete both edges and handle closing edge

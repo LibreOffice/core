@@ -26,16 +26,16 @@ namespace basegfx
 {
     /** Descriptor for the mathematical orientations of two 2D Vectors
     */
-    enum B2VectorOrientation
+    enum class B2VectorOrientation
     {
         /// mathematically positive oriented
-        ORIENTATION_POSITIVE = 0,
+        Positive = 0,
 
         /// mathematically negative oriented
-        ORIENTATION_NEGATIVE,
+        Negative,
 
         /// mathematically neutral, thus parallel
-        ORIENTATION_NEUTRAL
+        Neutral
     };
 
     /** Descriptor for the mathematical continuity of two 2D Vectors

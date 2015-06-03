@@ -96,58 +96,58 @@ public:
         B2DRange aEast2 (50,  -150, 350,  150);
         B2DRange aWest2 (-50, -150,-350,  150);
 
-        aDisjunctRanges.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aDisjunctRanges.appendElement( aOffside, ORIENTATION_NEGATIVE );
+        aDisjunctRanges.appendElement( aCenter, B2VectorOrientation::Negative );
+        aDisjunctRanges.appendElement( aOffside, B2VectorOrientation::Negative );
 
-        aEqualRanges.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aEqualRanges.appendElement( aCenter, ORIENTATION_NEGATIVE );
+        aEqualRanges.appendElement( aCenter, B2VectorOrientation::Negative );
+        aEqualRanges.appendElement( aCenter, B2VectorOrientation::Negative );
 
-        aIntersectionN.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aIntersectionN.appendElement( aNorth, ORIENTATION_NEGATIVE );
+        aIntersectionN.appendElement( aCenter, B2VectorOrientation::Negative );
+        aIntersectionN.appendElement( aNorth, B2VectorOrientation::Negative );
 
-        aIntersectionE.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aIntersectionE.appendElement( aEast, ORIENTATION_NEGATIVE );
+        aIntersectionE.appendElement( aCenter, B2VectorOrientation::Negative );
+        aIntersectionE.appendElement( aEast, B2VectorOrientation::Negative );
 
-        aIntersectionS.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aIntersectionS.appendElement( aSouth, ORIENTATION_NEGATIVE );
+        aIntersectionS.appendElement( aCenter, B2VectorOrientation::Negative );
+        aIntersectionS.appendElement( aSouth, B2VectorOrientation::Negative );
 
-        aIntersectionW.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aIntersectionW.appendElement( aWest, ORIENTATION_NEGATIVE );
+        aIntersectionW.appendElement( aCenter, B2VectorOrientation::Negative );
+        aIntersectionW.appendElement( aWest, B2VectorOrientation::Negative );
 
-        aIntersectionNE.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aIntersectionNE.appendElement( aNorthEast, ORIENTATION_NEGATIVE );
+        aIntersectionNE.appendElement( aCenter, B2VectorOrientation::Negative );
+        aIntersectionNE.appendElement( aNorthEast, B2VectorOrientation::Negative );
 
-        aIntersectionSE.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aIntersectionSE.appendElement( aSouthEast, ORIENTATION_NEGATIVE );
+        aIntersectionSE.appendElement( aCenter, B2VectorOrientation::Negative );
+        aIntersectionSE.appendElement( aSouthEast, B2VectorOrientation::Negative );
 
-        aIntersectionSW.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aIntersectionSW.appendElement( aSouthWest, ORIENTATION_NEGATIVE );
+        aIntersectionSW.appendElement( aCenter, B2VectorOrientation::Negative );
+        aIntersectionSW.appendElement( aSouthWest, B2VectorOrientation::Negative );
 
-        aIntersectionNW.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aIntersectionNW.appendElement( aNorthWest, ORIENTATION_NEGATIVE );
+        aIntersectionNW.appendElement( aCenter, B2VectorOrientation::Negative );
+        aIntersectionNW.appendElement( aNorthWest, B2VectorOrientation::Negative );
 
-        aRingIntersection.appendElement( aNorth2, ORIENTATION_NEGATIVE );
-        aRingIntersection.appendElement( aEast2, ORIENTATION_NEGATIVE );
-        aRingIntersection.appendElement( aSouth2, ORIENTATION_NEGATIVE );
+        aRingIntersection.appendElement( aNorth2, B2VectorOrientation::Negative );
+        aRingIntersection.appendElement( aEast2, B2VectorOrientation::Negative );
+        aRingIntersection.appendElement( aSouth2, B2VectorOrientation::Negative );
 
         aRingIntersection2 = aRingIntersection;
-        aRingIntersection2.appendElement( aWest2, ORIENTATION_NEGATIVE );
+        aRingIntersection2.appendElement( aWest2, B2VectorOrientation::Negative );
 
         aRingIntersectExtraStrip = aRingIntersection2;
         aRingIntersectExtraStrip.appendElement( B2DRange(0, -25, 200, 25),
-                                                ORIENTATION_NEGATIVE );
+                                                B2VectorOrientation::Negative );
 
-        aComplexIntersections.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aOffside, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aCenter, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aNorth, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aEast, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aSouth, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aWest, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aNorthEast, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aSouthEast, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aSouthWest, ORIENTATION_NEGATIVE );
-        aComplexIntersections.appendElement( aNorthWest, ORIENTATION_NEGATIVE );
+        aComplexIntersections.appendElement( aCenter, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aOffside, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aCenter, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aNorth, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aEast, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aSouth, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aWest, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aNorthEast, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aSouthEast, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aSouthWest, B2VectorOrientation::Negative );
+        aComplexIntersections.appendElement( aNorthWest, B2VectorOrientation::Negative );
 
 #ifdef GENERATE_RANDOM
         for( int i=0; i<800; ++i )
@@ -158,7 +158,7 @@ public:
                 getRandomOrdinal( 1000 ),
                 getRandomOrdinal( 1000 ) );
 
-            aRandomIntersections.appendElement( aRandomRange, ORIENTATION_NEGATIVE );
+            aRandomIntersections.appendElement( aRandomRange, B2VectorOrientation::Negative );
         }
 #else
         const char* randomSvg="m394 783h404v57h-404zm-197-505h571v576h-571zm356-634h75v200h-75zm-40-113h403v588h-403zm93-811h111v494h-111zm-364-619h562v121h-562zm-134-8h292v27h-292zm110 356h621v486h-621zm78-386h228v25h-228zm475-345h201v201h-201zm-2-93h122v126h-122zm-417-243h567v524h-567zm-266-738h863v456h-863zm262-333h315v698h-315zm-328-826h43v393h-43zm830-219h120v664h-120zm-311-636h221v109h-221zm-500 137h628v19h-628zm681-94h211v493h-211zm-366-646h384v355h-384zm-189-199h715v247h-715zm165-459h563v601h-563zm258-479h98v606h-98zm270-517h65v218h-65zm-44-259h96v286h-96zm-599-202h705v468h-705zm216-803h450v494h-450zm-150-22h26v167h-26zm-55-599h50v260h-50zm190-278h490v387h-490zm-290-453h634v392h-634zm257 189h552v300h-552zm-151-690h136v455h-136zm12-597h488v432h-488zm501-459h48v39h-48zm-224-112h429v22h-429zm-281 102h492v621h-492zm519-158h208v17h-208zm-681-563h56v427h-56zm126-451h615v392h-615zm-47-410h598v522h-598zm-32 316h79v110h-79zm-71-129h18v127h-18zm126-993h743v589h-743zm211-430h428v750h-428zm61-554h100v220h-100zm-353-49h658v157h-658zm778-383h115v272h-115zm-249-541h119v712h-119zm203 86h94v40h-94z";
@@ -174,7 +174,7 @@ public:
                           boost::bind(
                  &B2DPolygon::getB2DRange,
                               _1),
-                          ORIENTATION_NEGATIVE,
+                          B2VectorOrientation::Negative,
                           1));
 #endif
     }
@@ -189,7 +189,7 @@ public:
         for( sal_uInt32 i=0; i<rPoly.count(); ++i )
         {
             B2DPolygon aTmp=rPoly.getB2DPolygon(i);
-            if( ORIENTATION_NEGATIVE == tools::getOrientation(aTmp) )
+            if( B2VectorOrientation::Negative == tools::getOrientation(aTmp) )
                 aTmp.flip();
 
             aTmp=tools::removeNeutralPoints(aTmp);
@@ -353,7 +353,7 @@ public:
         for( sal_uInt32 i=0; i<nCount; ++i )
         {
             B2DPolygon aRect=tools::createPolygonFromRect(std::get<0>(rRange.getElement(i)));
-            if( std::get<1>(rRange.getElement(i)) == ORIENTATION_NEGATIVE )
+            if( std::get<1>(rRange.getElement(i)) == B2VectorOrientation::Negative )
                 aRect.flip();
 
             genericClip.append(aRect);
