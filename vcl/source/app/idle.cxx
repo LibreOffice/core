@@ -62,5 +62,4 @@ sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTi
     return 1;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
