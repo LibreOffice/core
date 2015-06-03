@@ -854,8 +854,8 @@ void ChartTypeTemplate::createChartTypes(
                     Sequence< Reference< XDataSeries > > aNewSeriesSeq( xDSCnt->getDataSeries());
                     sal_Int32 nNewStartIndex = aNewSeriesSeq.getLength();
                     aNewSeriesSeq.realloc( nNewStartIndex + aSeriesSeq[nSeriesIdx].getLength() );
-                    ::std::copy( aSeriesSeq[nSeriesIdx].getConstArray(),
-                                 aSeriesSeq[nSeriesIdx].getConstArray() + aSeriesSeq[nSeriesIdx].getLength(),
+                    ::std::copy( aSeriesSeq[nSeriesIdx].begin(),
+                                 aSeriesSeq[nSeriesIdx].end(),
                                  aNewSeriesSeq.getArray() + nNewStartIndex );
                     xDSCnt->setDataSeries( aNewSeriesSeq );
                 }

@@ -320,7 +320,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         if( !xDataSource.is() )
             continue;
         uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-        ::std::copy( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),
+        ::std::copy( aDataSequences.begin(), aDataSequences.end(),
                      ::std::back_inserter( aResult ));
     }
 
@@ -346,7 +346,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         if( !xDataSource.is() )
             continue;
         uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-        ::std::copy( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),
+        ::std::copy( aDataSequences.begin(), aDataSequences.end(),
                      ::std::back_inserter( aResult ));
     }
 

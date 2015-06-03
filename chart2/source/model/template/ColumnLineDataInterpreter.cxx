@@ -74,8 +74,8 @@ InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(
             Sequence< Reference< XDataSeries > > & rColumnDataSeries = aResult.Series[0];
             Sequence< Reference< XDataSeries > > & rLineDataSeries   = aResult.Series[1];
             rLineDataSeries.realloc( nNumOfLines );
-            ::std::copy( rColumnDataSeries.getConstArray() + nNumberOfSeries - nNumOfLines,
-                         rColumnDataSeries.getConstArray() + nNumberOfSeries,
+            ::std::copy( rColumnDataSeries.begin() + nNumberOfSeries - nNumOfLines,
+                         rColumnDataSeries.begin() + nNumberOfSeries,
                          rLineDataSeries.getArray() );
             rColumnDataSeries.realloc( nNumberOfSeries - nNumOfLines );
         }

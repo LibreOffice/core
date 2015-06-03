@@ -308,9 +308,7 @@ namespace pcr
                 {
                     Sequence< OUString > aModelNames = xForms->getElementNames();
                     _rModelNames.resize( aModelNames.getLength() );
-                    ::std::copy( aModelNames.getConstArray(), aModelNames.getConstArray() + aModelNames.getLength(),
-                        _rModelNames.begin()
-                    );
+                    ::std::copy( aModelNames.begin(), aModelNames.end(), _rModelNames.begin() );
                 }
             }
             catch( const Exception& )
@@ -335,7 +333,7 @@ namespace pcr
                 {
                     Sequence< OUString > aNames = xBindings->getElementNames();
                     _rBindingNames.resize( aNames.getLength() );
-                    ::std::copy( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), _rBindingNames.begin() );
+                    ::std::copy( aNames.begin(), aNames.end(), _rBindingNames.begin() );
                 }
             }
         }

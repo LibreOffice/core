@@ -388,7 +388,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         uno::Sequence< beans::PropertyValue > aObjDescr( rArgs.getLength() + 1 );
         aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
-        ::std::copy( rArgs.getConstArray(), rArgs.getConstArray() + rArgs.getLength(), aObjDescr.getArray() + 1 );
+        ::std::copy( rArgs.begin(), rArgs.end(), aObjDescr.getArray() + 1 );
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
                     rClassId, OUString(), pImpl->mxStorage, rNewName,
                     aObjDescr ), uno::UNO_QUERY );

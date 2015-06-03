@@ -1277,7 +1277,7 @@ namespace basctl
 
         Sequence< OUString > aUsedNames( getObjectNames( _eType, _rLibName ) );
         ::std::set< OUString > aUsedNamesCheck;
-        ::std::copy( aUsedNames.getConstArray(), aUsedNames.getConstArray() + aUsedNames.getLength(),
+        ::std::copy( aUsedNames.begin(), aUsedNames.end(),
             ::std::insert_iterator< ::std::set< OUString > >( aUsedNamesCheck, aUsedNamesCheck.begin() ) );
 
         bool bValid = false;

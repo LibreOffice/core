@@ -86,7 +86,7 @@ namespace pcr
                 aElements = xRepository->getElementNames();
 
             _rNames.resize( aElements.getLength() );
-            ::std::copy( aElements.getConstArray(), aElements.getConstArray() + aElements.getLength(), _rNames.begin() );
+            ::std::copy( aElements.begin(), aElements.end(), _rNames.begin() );
         }
         catch( const Exception& )
         {

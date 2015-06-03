@@ -59,8 +59,8 @@ namespace pcr
         template < class BagType >
         void putIntoBag( const Sequence< typename BagType::value_type >& _rArray, BagType& /* [out] */ _rBag )
         {
-            ::std::copy( _rArray.getConstArray(), _rArray.getConstArray() + _rArray.getLength(),
-                ::std::insert_iterator< BagType >( _rBag, _rBag.begin() ) );
+            ::std::copy( _rArray.begin(), _rArray.end(),
+                         ::std::insert_iterator< BagType >( _rBag, _rBag.begin() ) );
         }
 
 

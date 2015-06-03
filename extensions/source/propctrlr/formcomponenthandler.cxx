@@ -1365,8 +1365,7 @@ namespace pcr
                 Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_xContext );
                 Sequence< OUString > aDatasources = xDatabaseContext->getElementNames();
                 aListEntries.resize( aDatasources.getLength() );
-                ::std::copy( aDatasources.getConstArray(), aDatasources.getConstArray() + aDatasources.getLength(),
-                    aListEntries.begin() );
+                ::std::copy( aDatasources.begin(), aDatasources.end(), aListEntries.begin() );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
                     _rxControlFactory, aListEntries, false, true );
             }

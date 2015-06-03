@@ -391,7 +391,7 @@ namespace
 
     void lcl_copyTypes( TypeBag& _out_rTypes, const Sequence< Type >& _rTypes )
     {
-        ::std::copy( _rTypes.getConstArray(), _rTypes.getConstArray() + _rTypes.getLength(),
+        ::std::copy( _rTypes.begin(), _rTypes.end(),
             ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
     }
 }

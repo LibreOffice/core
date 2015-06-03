@@ -54,9 +54,7 @@ namespace basegfx
             maKeyStops(rKeyStops.getLength()),
             mnLastIndex(0)
         {
-            std::copy( rKeyStops.getConstArray(),
-                       rKeyStops.getConstArray()+rKeyStops.getLength(),
-                       maKeyStops.begin() );
+            std::copy( rKeyStops.begin(), rKeyStops.end(), maKeyStops.begin() );
             validateInput(maKeyStops);
         }
 

@@ -69,8 +69,7 @@ template< class Container >
     SequenceToSTLSequenceContainer( const ::com::sun::star::uno::Sequence< typename Container::value_type > & rSeq )
 {
     Container aResult( rSeq.getLength());
-    ::std::copy( rSeq.getConstArray(), rSeq.getConstArray() + rSeq.getLength(),
-                 aResult.begin() );
+    ::std::copy( rSeq.begin(), rSeq.end(), aResult.begin() );
     return aResult;
 }
 
@@ -95,7 +94,7 @@ template< class Container >
     SequenceToSTLContainer( const ::com::sun::star::uno::Sequence< typename Container::value_type > & rSeq )
 {
     Container aResult;
-    ::std::copy( rSeq.getConstArray(), rSeq.getConstArray() + rSeq.getLength(),
+    ::std::copy( rSeq.begin(), rSeq.end(),
                  ::std::inserter< Container >( aResult, aResult.begin()));
     return aResult;
 }

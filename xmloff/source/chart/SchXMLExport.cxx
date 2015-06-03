@@ -308,7 +308,7 @@ template< typename T >
     void lcl_SequenceToVectorAppend( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
 {
     rDestination.reserve( rDestination.size() + rSource.getLength());
-    ::std::copy( rSource.getConstArray(), rSource.getConstArray() + rSource.getLength(),
+    ::std::copy( rSource.begin(), rSource.end(),
                  ::std::back_inserter( rDestination ));
 }
 
@@ -664,8 +664,8 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
         }
     }
 
-    ::std::copy( aValuesSequence.getConstArray(), aValuesSequence.getConstArray() + aValuesSequence.getLength(),
-                     ::std::back_inserter( aResult ));
+    ::std::copy( aValuesSequence.begin(), aValuesSequence.end(),
+                 ::std::back_inserter( aResult ));
     return aResult;
 }
 
