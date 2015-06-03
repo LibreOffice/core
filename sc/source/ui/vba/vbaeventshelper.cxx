@@ -169,7 +169,8 @@ private:
     uno::Reference< frame::XModel > mxModel;
     ScDocShell*         mpDocShell;
     WindowControllerMap maControllers;          /// Maps VCL top windows to their controllers.
-    VclPtr<vcl::Window>            mpActiveWindow;         /// Currently activated window, to prevent multiple (de)activation.
+    std::set< VclPtr<vcl::Window> > maPostedWindows; /// Keeps processWindowResizeEvent windows from being deleted between postWindowResizeEvent and processWindowResizeEvent
+    VclPtr<vcl::Window>            mpActiveWindow; /// Currently activated window, to prevent multiple (de)activation.
     bool                mbWindowResized;        /// True = window resize system event processed.
     bool                mbBorderChanged;        /// True = borders changed system event processed.
     bool                mbDisposed;
@@ -219,7 +220,9 @@ void ScVbaEventListener::startControllerListening( const uno::Reference< frame::
         try { xControllerBorder->addBorderResizeListener( this ); } catch( uno::Exception& ) {}
 
     if( vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow ) )
+    {
         maControllers[ pWindow ] = rxController;
+    }
 }
 
 void ScVbaEventListener::stopControllerListening( const uno::Reference< frame::XController >& rxController )
@@ -468,6 +471,7 @@ void ScVbaEventListener::postWindowResizeEvent( vcl::Window* pWindow )
     {
         mbWindowResized = mbBorderChanged = false;
         acquire();  // ensure we don't get deleted before the timer fires
+        maPostedWindows.insert(pWindow);
         Application::PostUserEvent( LINK( this, ScVbaEventListener, processWindowResizeEvent ), pWindow );
     }
 }
@@ -484,7 +488,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, vcl::Window*, pWindow )
         This is handled via the disposing() function which removes the window
         pointer from the member maControllers. Thus, checking whether
         maControllers contains pWindow ensures that the window is still alive. */
-    if( !mbDisposed && pWindow && (maControllers.count( pWindow ) > 0) )
+    if( !mbDisposed && pWindow && !pWindow->IsDisposed() && (maControllers.count(pWindow) > 0) )
     {
         // do not fire event unless all mouse buttons have been released
         vcl::Window::PointerState aPointerState = pWindow->GetPointerState();
@@ -500,6 +504,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, vcl::Window*, pWindow )
             }
         }
     }
+    maPostedWindows.erase(pWindow);
     release();
     return 0;
 }
