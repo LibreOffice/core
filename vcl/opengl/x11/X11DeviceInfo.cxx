@@ -66,14 +66,17 @@ char* strtok_wrapper(const char* aDelims, char** aStr)
 
     char* ret = const_cast<char*>(strspnp_wrapper(aDelims, *aStr));
 
-    if (!*ret) {
+    if (!*ret)
+    {
         *aStr = ret;
         return nullptr;
     }
 
     char* i = ret;
-    do {
-        for (const char* d = aDelims; *d != '\0'; ++d) {
+    do
+    {
+        for (const char* d = aDelims; *d != '\0'; ++d)
+        {
             if (*i == *d) {
                 *i = '\0';
                 *aStr = ++i;
