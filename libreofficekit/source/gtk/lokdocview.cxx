@@ -23,6 +23,8 @@
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/event.hxx>
 
+#include "tilebuffer.hxx"
+
 #if !GLIB_CHECK_VERSION(2,32,0)
 #define G_SOURCE_REMOVE FALSE
 #define G_SOURCE_CONTINUE TRUE
@@ -38,17 +40,15 @@
 
 // We know that VirtualDevices use a DPI of 96.
 static const int DPI = 96;
+// Lets use a square of side 256 pixels.
+static const int nTileSizePixels = 256;
 
 /// Holds data used by LOKDocView only.
 struct LOKDocView_Impl
 {
     LOKDocView* m_pDocView;
-    GtkWidget* m_pEventBox;
-    GtkWidget* m_pTable;
-    GtkWidget** m_pCanvas;
-    GtkWidget *darea;
-
-    TileBuffer *mTileBuffer;
+    GtkWidget *m_pDrawingArea;
+    TileBuffer *m_pTileBuffer;
 
     float m_fZoom;
 
@@ -247,10 +247,7 @@ LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPaylo
 
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     : m_pDocView(pDocView),
-    m_pEventBox(gtk_event_box_new()),
-    darea(gtk_drawing_area_new()),
-    m_pTable(0),
-    m_pCanvas(0),
+    m_pDrawingArea(gtk_drawing_area_new()),
     m_fZoom(1),
     m_pOffice(0),
     m_pDocument(0),
@@ -298,7 +295,7 @@ void LOKDocView_Impl::destroy(LOKDocView* pDocView, gpointer /*pData*/)
     delete pDocView->m_pImpl;
 }
 
-void LOKDocView_Impl::on_exposed(GtkWidget *widget, GdkEvent *event, gpointer userdata)
+void LOKDocView_Impl::on_exposed(GtkWidget* /*widget*/, GdkEvent* /*event*/, gpointer userdata)
 {
     LOKDocView *pDocView = LOK_DOCVIEW (userdata);
     pDocView->m_pImpl->renderDocument(0);
@@ -758,7 +755,7 @@ gboolean LOKDocView_Impl::handleTimeoutImpl()
             m_bCursorOverlayVisible = false;
         else
             m_bCursorOverlayVisible = true;
-        gtk_widget_queue_draw(GTK_WIDGET(m_pEventBox));
+        gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
     }
 
     return G_SOURCE_CONTINUE;
@@ -766,8 +763,6 @@ gboolean LOKDocView_Impl::handleTimeoutImpl()
 
 void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
 {
-    const int nTileSizePixels = 256;
-
     GdkRectangle visibleArea;
     lok_docview_get_visarea (m_pDocView, &visibleArea);
 
@@ -777,8 +772,8 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
-    gtk_widget_set_size_request(darea, nDocumentWidthPixels, nDocumentHeightPixels);
-    cairo_t *pcairo = gdk_cairo_create(darea->window);
+    gtk_widget_set_size_request(m_pDrawingArea, nDocumentWidthPixels, nDocumentHeightPixels);
+    cairo_t *pcairo = gdk_cairo_create(m_pDrawingArea->window);
 
     // Render the tiles.
     for (guint nRow = 0; nRow < nRows; ++nRow)
@@ -811,20 +806,10 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
 
             if (bPaint)
             {
-                // Index of the current tile.
-                guint nTile = nRow * nColumns + nColumn;
+                g_info("gettile: (%d %d)", nRow, nColumn);
 
-                GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, aTileRectanglePixels.width, aTileRectanglePixels.height);
-                unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
-                g_info("renderDocument: paintTile(%d, %d)", nRow, nColumn);
-                m_pDocument->pClass->paintTile(m_pDocument,
-                                               // Buffer and its size, depends on the position only.
-                                               pBuffer,
-                                               aTileRectanglePixels.width, aTileRectanglePixels.height,
-                                               // Position of the tile.
-                                               aTileRectangleTwips.x, aTileRectangleTwips.y,
-                                               // Size of the tile, depends on the zoom factor and the tile position only.
-                                               aTileRectangleTwips.width, aTileRectangleTwips.height);
+                Tile& currentTile = m_pTileBuffer->tile_buffer_get_tile(nRow, nColumn);
+                GdkPixbuf* pPixBuf = currentTile.tile_get_buffer();
 
                 gdk_cairo_set_source_pixbuf (pcairo, pPixBuf, twipToPixel(aTileRectangleTwips.x), twipToPixel(aTileRectangleTwips.y));
                 cairo_paint(pcairo);
@@ -961,7 +946,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     {
         m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         m_bCursorOverlayVisible = true;
-        gtk_widget_queue_draw(GTK_WIDGET(m_pEventBox));
+        gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION:
@@ -978,7 +963,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         }
         else
             memset(&m_aHandleMiddleRect, 0, sizeof(m_aHandleMiddleRect));
-        gtk_widget_queue_draw(GTK_WIDGET(m_pEventBox));
+        gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION_START:
@@ -1002,7 +987,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
             m_aGraphicSelection = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         else
             memset(&m_aGraphicSelection, 0, sizeof(m_aGraphicSelection));
-        gtk_widget_queue_draw(GTK_WIDGET(m_pEventBox));
+        gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
     }
     break;
     case LOK_CALLBACK_HYPERLINK_CLICKED:
@@ -1184,9 +1169,9 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
 
     pDocView->m_pImpl = new LOKDocView_Impl(pDocView);
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
-                                           pDocView->m_pImpl->darea );
+                                           pDocView->m_pImpl->m_pDrawingArea );
 
-    g_signal_connect(GTK_OBJECT(pDocView->m_pImpl->darea),
+    g_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pDrawingArea),
                      "expose-event",
                      GTK_SIGNAL_FUNC(LOKDocView_Impl::on_exposed), pDocView);
 
@@ -1248,6 +1233,18 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
         pDocView->m_pImpl->m_pDocument->pClass->registerCallback(pDocView->m_pImpl->m_pDocument, &LOKDocView_Impl::callbackWorker, pDocView);
         pDocView->m_pImpl->m_pDocument->pClass->getDocumentSize(pDocView->m_pImpl->m_pDocument, &pDocView->m_pImpl->m_nDocumentWidthTwips, &pDocView->m_pImpl->m_nDocumentHeightTwips);
         g_timeout_add(600, &LOKDocView_Impl::handleTimeout, pDocView);
+
+        long nDocumentWidthTwips = pDocView->m_pImpl->m_nDocumentWidthTwips;
+        long nDocumentHeightTwips = pDocView->m_pImpl->m_nDocumentHeightTwips;
+        long nDocumentWidthPixels = pDocView->m_pImpl->twipToPixel(nDocumentWidthTwips);
+        long nDocumentHeightPixels = pDocView->m_pImpl->twipToPixel(nDocumentHeightTwips);
+        // Total number of rows / columns in this document.
+        guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
+        guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+        pDocView->m_pImpl->m_pTileBuffer = new TileBuffer(pDocView->m_pImpl->m_pDocument,
+                                                          nTileSizePixels,
+                                                          nRows,
+                                                          nColumns);
         pDocView->m_pImpl->renderDocument(0);
     }
 
@@ -1262,6 +1259,13 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKitDocument* lok_docview_get_document(LOKDocView
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZoom )
 {
     pDocView->m_pImpl->m_fZoom = fZoom;
+    long nDocumentWidthPixels = pDocView->m_pImpl->twipToPixel(pDocView->m_pImpl->m_nDocumentWidthTwips);
+    long nDocumentHeightPixels = pDocView->m_pImpl->twipToPixel(pDocView->m_pImpl->m_nDocumentHeightTwips);
+    // Total number of rows / columns in this document.
+    guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
+    guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+
+    pDocView->m_pImpl->m_pTileBuffer->tile_buffer_set_zoom(fZoom, nRows, nColumns);
 
     if ( pDocView->m_pImpl->m_pDocument )
         pDocView->m_pImpl->renderDocument(0);
@@ -1313,7 +1317,7 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
     }
     pDocView->m_pImpl->m_bEdit = bEdit;
     g_signal_emit(pDocView, docview_signals[EDIT_CHANGED], 0, bWasEdit);
-    gtk_widget_queue_draw(GTK_WIDGET(pDocView->m_pImpl->m_pEventBox));
+    gtk_widget_queue_draw(GTK_WIDGET(pDocView->m_pImpl->m_pDrawingArea));
 }
 
 SAL_DLLPUBLIC_EXPORT gboolean lok_docview_get_edit(LOKDocView* pDocView)
