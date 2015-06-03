@@ -363,14 +363,18 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         // view.
         bool bShowMasterViewToolbar (meEditMode == EM_MASTERPAGE
              && GetShellType() != ViewShell::ST_HANDOUT);
+        bool bShowPresentationToolbar (meEditMode != EM_MASTERPAGE
+             && GetShellType() != ViewShell::ST_HANDOUT);
 
         // If the master view toolbar is not shown we hide it before
         // switching the edit mode.
         if (::sd::ViewShell::mpImpl->mbIsInitialized
-            && IsMainViewShell()
-            && ! bShowMasterViewToolbar)
+            && IsMainViewShell())
         {
-            GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::TBG_MASTER_MODE);
+            if ( !bShowMasterViewToolbar )
+                GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::TBG_MASTER_MODE);
+            if ( !bShowPresentationToolbar )
+                GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::TBG_COMMON_TASK);
         }
 
         if (meEditMode == EM_PAGE)
@@ -441,12 +445,16 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         // If the master view toolbar is to be shown we turn it on after the
         // edit mode has been changed.
         if (::sd::ViewShell::mpImpl->mbIsInitialized
-            && IsMainViewShell()
-            && bShowMasterViewToolbar)
+            && IsMainViewShell())
         {
-            GetViewShellBase().GetToolBarManager()->SetToolBar(
-                ToolBarManager::TBG_MASTER_MODE,
-                ToolBarManager::msMasterViewToolBar);
+            if (bShowMasterViewToolbar)
+                GetViewShellBase().GetToolBarManager()->SetToolBar(
+                    ToolBarManager::TBG_MASTER_MODE,
+                    ToolBarManager::msMasterViewToolBar);
+            if (bShowPresentationToolbar)
+                GetViewShellBase().GetToolBarManager()->SetToolBar(
+                    ToolBarManager::TBG_COMMON_TASK,
+                    ToolBarManager::msCommonTaskToolBar);
         }
 
         if ( ! mbIsLayerModeActive)
