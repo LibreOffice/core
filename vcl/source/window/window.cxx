@@ -743,7 +743,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbFill                              = true;
     mbSecondary                         = false;
     mbNonHomogeneous                    = false;
-    mbDoubleBuffering                   = false; // when we are not sure, assume it cannot do double-buffering via RenderContext
+    mbDoubleBuffering                   = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE"); // when we are not sure, assume it cannot do double-buffering via RenderContext
 }
 
 WindowImpl::~WindowImpl()
@@ -3098,7 +3098,6 @@ void Window::Scroll( long nHorzScroll, long nVertScroll, ScrollFlags nFlags )
 void Window::Scroll( long nHorzScroll, long nVertScroll,
                      const Rectangle& rRect, ScrollFlags nFlags )
 {
-
     OutputDevice *pOutDev = GetOutDev();
     Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
     aRect.Intersection( Rectangle( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) ) );
