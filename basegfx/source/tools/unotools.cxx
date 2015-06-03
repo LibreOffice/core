@@ -214,11 +214,11 @@ namespace unotools
                     {
                         const basegfx::B2VectorContinuity eCont(rPoly.getContinuityInPoint(b));
 
-                        if(basegfx::CONTINUITY_C1 == eCont)
+                        if(basegfx::B2VectorContinuity::C1 == eCont)
                         {
                             aFlags[nStartPointIndex] = drawing::PolygonFlags_SMOOTH;
                         }
-                        else if(basegfx::CONTINUITY_C2 == eCont)
+                        else if(basegfx::B2VectorContinuity::C2 == eCont)
                         {
                             aFlags[nStartPointIndex] = drawing::PolygonFlags_SYMMETRIC;
                         }

@@ -168,22 +168,22 @@ namespace basegfx
     {
         if(rBackVector.equalZero() || rForwardVector.equalZero())
         {
-            return CONTINUITY_NONE;
+            return B2VectorContinuity::NONE;
         }
 
         if(fTools::equal(rBackVector.getX(), -rForwardVector.getX()) && fTools::equal(rBackVector.getY(), -rForwardVector.getY()))
         {
             // same direction and same length -> C2
-            return CONTINUITY_C2;
+            return B2VectorContinuity::C2;
         }
 
         if(areParallel(rBackVector, rForwardVector) && rBackVector.scalar(rForwardVector) < 0.0)
         {
             // parallel and opposite direction -> C1
-            return CONTINUITY_C1;
+            return B2VectorContinuity::C1;
         }
 
-        return CONTINUITY_NONE;
+        return B2VectorContinuity::NONE;
     }
 } // end of namespace basegfx
 

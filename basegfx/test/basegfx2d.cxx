@@ -737,7 +737,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("areControlPointsUsed() wrong",
                                aPoly.areControlPointsUsed());
         CPPUNIT_ASSERT_MESSAGE("getContinuityInPoint() wrong",
-                               aPoly.getContinuityInPoint(0) == CONTINUITY_C2);
+                               aPoly.getContinuityInPoint(0) == B2VectorContinuity::C2);
 
         aPoly.resetControlPoints();
         CPPUNIT_ASSERT_MESSAGE("resetControlPoints() did not clear",

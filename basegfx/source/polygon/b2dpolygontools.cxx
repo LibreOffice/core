@@ -2625,7 +2625,7 @@ namespace basegfx
 
                 switch(eContinuity)
                 {
-                    case CONTINUITY_NONE :
+                    case B2VectorContinuity::NONE :
                     {
                         if(rCandidate.isPrevControlPointUsed(nIndex))
                         {
@@ -2661,7 +2661,7 @@ namespace basegfx
 
                         break;
                     }
-                    case CONTINUITY_C1 :
+                    case B2VectorContinuity::C1 :
                     {
                         if(rCandidate.isPrevControlPointUsed(nIndex) && rCandidate.isNextControlPointUsed(nIndex))
                         {
@@ -2714,7 +2714,7 @@ namespace basegfx
                         }
                         break;
                     }
-                    case CONTINUITY_C2 :
+                    case B2VectorContinuity::C2 :
                     {
                         if(rCandidate.isPrevControlPointUsed(nIndex) && rCandidate.isNextControlPointUsed(nIndex))
                         {
@@ -3557,11 +3557,11 @@ namespace basegfx
                             {
                                 const B2VectorContinuity eCont(rPolygon.getContinuityInPoint(a));
 
-                                if(CONTINUITY_C1 == eCont)
+                                if(B2VectorContinuity::C1 == eCont)
                                 {
                                     aCollectFlags[nStartPointIndex] = com::sun::star::drawing::PolygonFlags_SMOOTH;
                                 }
-                                else if(CONTINUITY_C2 == eCont)
+                                else if(B2VectorContinuity::C2 == eCont)
                                 {
                                     aCollectFlags[nStartPointIndex] = com::sun::star::drawing::PolygonFlags_SYMMETRIC;
                                 }

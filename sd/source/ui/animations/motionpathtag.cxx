@@ -869,7 +869,7 @@ void MotionPathTag::CheckPossibilities()
                 bool bCurve(false);
                 bool bSmoothFuz(false);
                 bool bSegmFuz(false);
-                basegfx::B2VectorContinuity eSmooth = basegfx::CONTINUITY_NONE;
+                basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
 
                 mrView.CheckPolyPossibilitiesHelper( mpMark, b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
             }
@@ -1136,15 +1136,15 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
 
     if(SDRPATHSMOOTH_ANGULAR == eKind)
     {
-        eFlags = basegfx::CONTINUITY_NONE;
+        eFlags = basegfx::B2VectorContinuity::NONE;
     }
     else if(SDRPATHSMOOTH_ASYMMETRIC == eKind)
     {
-        eFlags = basegfx::CONTINUITY_C1;
+        eFlags = basegfx::B2VectorContinuity::C1;
     }
     else if(SDRPATHSMOOTH_SYMMETRIC == eKind)
     {
-        eFlags = basegfx::CONTINUITY_C2;
+        eFlags = basegfx::B2VectorContinuity::C2;
     }
     else
     {

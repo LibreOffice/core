@@ -43,13 +43,13 @@ namespace basegfx
     enum B2VectorContinuity
     {
         /// none
-        CONTINUITY_NONE = 0,
+        NONE = 0,
 
         /// mathematically negative oriented
-        CONTINUITY_C1,
+        C1,
 
         /// mathematically neutral, thus parallel
-        CONTINUITY_C2
+        C2
     };
 
     /** Descriptor for possible line joins between two line segments

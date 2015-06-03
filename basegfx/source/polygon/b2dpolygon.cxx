@@ -1336,7 +1336,7 @@ namespace basegfx
         }
         else
         {
-            return CONTINUITY_NONE;
+            return B2VectorContinuity::NONE;
         }
     }
 

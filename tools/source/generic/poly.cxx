@@ -1872,11 +1872,11 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
                 {
                     const basegfx::B2VectorContinuity eCont(rPolygon.getContinuityInPoint(a));
 
-                    if(basegfx::CONTINUITY_C1 == eCont)
+                    if(basegfx::B2VectorContinuity::C1 == eCont)
                     {
                         mpImplPolygon->mpFlagAry[nStartPointIndex] = (sal_uInt8)POLY_SMOOTH;
                     }
-                    else if(basegfx::CONTINUITY_C2 == eCont)
+                    else if(basegfx::B2VectorContinuity::C2 == eCont)
                     {
                         mpImplPolygon->mpFlagAry[nStartPointIndex] = (sal_uInt8)POLY_SYMMTR;
                     }

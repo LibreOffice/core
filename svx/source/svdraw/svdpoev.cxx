@@ -72,7 +72,7 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
         bool bCurve(false);
         bool bSmoothFuz(false);
         bool bSegmFuz(false);
-        basegfx::B2VectorContinuity eSmooth = basegfx::CONTINUITY_NONE;
+        basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
 
         for(size_t nMarkNum = 0; nMarkNum < nMarkCount; ++nMarkNum)
         {
@@ -152,17 +152,17 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
 
             if(!b1stSmooth && !bSmoothFuz)
             {
-                if(basegfx::CONTINUITY_NONE == eSmooth)
+                if(basegfx::B2VectorContinuity::NONE == eSmooth)
                 {
                     eMarkedPointsSmooth = SDRPATHSMOOTH_ANGULAR;
                 }
 
-                if(basegfx::CONTINUITY_C1 == eSmooth)
+                if(basegfx::B2VectorContinuity::C1 == eSmooth)
                 {
                     eMarkedPointsSmooth = SDRPATHSMOOTH_ASYMMETRIC;
                 }
 
-                if(basegfx::CONTINUITY_C2 == eSmooth)
+                if(basegfx::B2VectorContinuity::C2 == eSmooth)
                 {
                     eMarkedPointsSmooth = SDRPATHSMOOTH_SYMMETRIC;
                 }
@@ -182,15 +182,15 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
 
     if(SDRPATHSMOOTH_ANGULAR == eKind)
     {
-        eFlags = basegfx::CONTINUITY_NONE;
+        eFlags = basegfx::B2VectorContinuity::NONE;
     }
     else if(SDRPATHSMOOTH_ASYMMETRIC == eKind)
     {
-        eFlags = basegfx::CONTINUITY_C1;
+        eFlags = basegfx::B2VectorContinuity::C1;
     }
     else if(SDRPATHSMOOTH_SYMMETRIC == eKind)
     {
-        eFlags = basegfx::CONTINUITY_C2;
+        eFlags = basegfx::B2VectorContinuity::C2;
     }
     else
     {

@@ -758,7 +758,7 @@ namespace basegfx
                             // is necessary.
                             const bool bSymmetricAtEdgeStart(
                                 0 != nIndex
-                                && CONTINUITY_C2 == aPolygon.getContinuityInPoint(nIndex));
+                                && B2VectorContinuity::C2 == aPolygon.getContinuityInPoint(nIndex));
 
                             if(bDetectQuadraticBeziers)
                             {
