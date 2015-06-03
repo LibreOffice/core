@@ -1001,7 +1001,7 @@ void WinOpenGLDeviceInfo::GetData()
     mbHasDriverVersionMismatch = false;
     if (maAdapterVendorID == GetDeviceVendor(wgl::VendorIntel))
     {
-        // we've had big crashers (bugs 590373 and 595364) apparently correlated
+        // we've had big crashers (moz#590373 and moz#595364) apparently correlated
         // with bad Intel driver installations where the DriverVersion reported
         // by the registry was not the version of the DLL.
         OUString aDLLFileName("igd10umd32.dll");
@@ -1030,8 +1030,6 @@ void WinOpenGLDeviceInfo::GetData()
         }
     }
 }
-
-
 
 // Macro for assigning a device vendor id to a string.
 #define DECLARE_VENDOR_ID(name, deviceId) \
@@ -1102,7 +1100,7 @@ void WinOpenGLDeviceInfo::FillBlacklist()
             wgl::DRIVER_LESS_THAN, wgl::V(8,62,0,0), "9.6" );
 
     /*
-     * Bug 783517 - crashes in AMD driver on Windows 8
+     * moz#783517 - crashes in AMD driver on Windows 8
      */
     APPEND_TO_DRIVER_BLOCKLIST_RANGE( wgl::DRIVER_OS_WINDOWS_8,
             GetDeviceVendor(wgl::VendorATI), wgl::DriverInfo::allDevices,
@@ -1113,8 +1111,8 @@ void WinOpenGLDeviceInfo::FillBlacklist()
 
     /* OpenGL on any ATI/AMD hardware is discouraged
      * See:
-     *  bug 619773 - WebGL: Crash with blue screen : "NMI: Parity Check / Memory Parity Error"
-     *  bugs 584403, 584404, 620924 - crashes in atioglxx
+     *  bug moz#619773 - WebGL: Crash with blue screen : "NMI: Parity Check / Memory Parity Error"
+     *  bugs moz#584403, moz#584404, moz#620924 - crashes in atioglxx
      *  + many complaints about incorrect rendering
      */
     APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
@@ -1134,7 +1132,7 @@ void WinOpenGLDeviceInfo::FillBlacklist()
      * Intel entries
      */
 
-    /* The driver versions used here come from bug 594877. They might not
+    /* The driver versions used here come from moz#594877. They might not
      * be particularly relevant anymore.
      */
 #define IMPLEMENT_INTEL_DRIVER_BLOCKLIST(winVer, devFamily, driverVer)                                                      \
@@ -1151,7 +1149,7 @@ void WinOpenGLDeviceInfo::FillBlacklist()
 
     // StretchRect seems to suffer from precision issues which leads to artifacting
     // during content drawing starting with at least version 6.14.10.5082
-    // and going until 6.14.10.5218. See bug 919454 and bug 949275 for more info.
+    // and going until 6.14.10.5218. See moz#919454 and mox#949275 for more info.
     APPEND_TO_DRIVER_BLOCKLIST_RANGE(wgl::DRIVER_OS_WINDOWS_XP,
             GetDeviceVendor(wgl::VendorIntel),
             const_cast<wgl::DriverInfo::DeviceFamilyVector*>(wgl::DriverInfo::GetDeviceFamily(wgl::IntelGMAX4500HD)),
@@ -1181,7 +1179,7 @@ void WinOpenGLDeviceInfo::FillBlacklist()
 
     /**
      * Disable acceleration on Intel HD 3000 for graphics drivers <= 8.15.10.2321.
-     * See bug 1018278 and bug 1060736.
+     * See bug moz#1018278 and bug moz#1060736.
      */
     APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_ALL,
             GetDeviceVendor(wgl::VendorIntel), (wgl::DriverInfo::DeviceFamilyVector*) wgl::DriverInfo::GetDeviceFamily(wgl::IntelHD3000),
