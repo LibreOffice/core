@@ -41,7 +41,7 @@ namespace drawinglayer
                 bool bWaveLine(false);
                 bool bBoldLine(false);
                 const int* pDotDashArray(0);
-                basegfx::B2DLineJoin eLineJoin(basegfx::B2DLINEJOIN_NONE);
+                basegfx::B2DLineJoin eLineJoin(basegfx::B2DLineJoin::NONE);
                 double fOffset(getOffset());
                 double fHeight(getHeight());
 
@@ -164,7 +164,7 @@ namespace drawinglayer
 
                 if(bWaveLine)
                 {
-                    eLineJoin = basegfx::B2DLINEJOIN_ROUND;
+                    eLineJoin = basegfx::B2DLineJoin::Round;
                     fHeight *= 0.25;
                 }
 

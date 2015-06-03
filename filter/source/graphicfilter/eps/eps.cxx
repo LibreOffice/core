@@ -753,10 +753,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 const LineInfo& rLineInfo = static_cast<const MetaPolyLineAction*>(pMA)->GetLineInfo();
                 ImplWriteLineInfo( rLineInfo );
 
-                if(basegfx::B2DLINEJOIN_NONE == rLineInfo.GetLineJoin()
+                if(basegfx::B2DLineJoin::NONE == rLineInfo.GetLineJoin()
                     && rLineInfo.GetWidth() > 1)
                 {
-                    // emulate B2DLINEJOIN_NONE by creating single edges
+                    // emulate B2DLineJoin::NONE by creating single edges
                     const sal_uInt16 nPoints(aPoly.GetSize());
                     const bool bCurve(aPoly.HasFlags());
 
@@ -2480,18 +2480,18 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 
     switch(rLineInfo.GetLineJoin())
     {
-        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+        default: // B2DLineJoin::NONE, B2DLineJoin::Middle
             // do NOT use SvtGraphicStroke::joinNone here
             // since it will be written as numerical value directly
             // and is NOT a valid EPS value
             break;
-        case basegfx::B2DLINEJOIN_MITER:
+        case basegfx::B2DLineJoin::Miter:
             aJoinType = SvtGraphicStroke::joinMiter;
             break;
-        case basegfx::B2DLINEJOIN_BEVEL:
+        case basegfx::B2DLineJoin::Bevel:
             aJoinType = SvtGraphicStroke::joinBevel;
             break;
-        case basegfx::B2DLINEJOIN_ROUND:
+        case basegfx::B2DLineJoin::Round:
             aJoinType = SvtGraphicStroke::joinRound;
             break;
     }

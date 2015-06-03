@@ -124,16 +124,16 @@ namespace
 
         switch(rLineInfo.GetLineJoin())
         {
-            default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+            default: // B2DLineJoin::NONE, B2DLineJoin::Middle
                 o_rStrokeAttributes.JoinType = rendering::PathJoinType::NONE;
                 break;
-            case basegfx::B2DLINEJOIN_BEVEL:
+            case basegfx::B2DLineJoin::Bevel:
                 o_rStrokeAttributes.JoinType = rendering::PathJoinType::BEVEL;
                 break;
-            case basegfx::B2DLINEJOIN_MITER:
+            case basegfx::B2DLineJoin::Miter:
                 o_rStrokeAttributes.JoinType = rendering::PathJoinType::MITER;
                 break;
-            case basegfx::B2DLINEJOIN_ROUND:
+            case basegfx::B2DLineJoin::Round:
                 o_rStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
                 break;
         }

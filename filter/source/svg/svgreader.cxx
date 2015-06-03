@@ -665,11 +665,11 @@ struct AnnotatingVisitor
                 aVec *= maCurrState.maCTM;
                 xAttrs->AddAttribute( "svg:stroke-width", OUString::number( pt2mm(aVec.getLength()) )+"mm");
             }
-            if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_MITER )
+            if( maCurrState.meLineJoin == basegfx::B2DLineJoin::Miter )
                 xAttrs->AddAttribute( "draw:stroke-linejoin", "miter");
-            else if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_ROUND )
+            else if( maCurrState.meLineJoin == basegfx::B2DLineJoin::Round )
                 xAttrs->AddAttribute( "draw:stroke-linejoin", "round");
-            else if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_BEVEL )
+            else if( maCurrState.meLineJoin == basegfx::B2DLineJoin::Bevel )
                 xAttrs->AddAttribute( "draw:stroke-linejoin", "bevel");
             if( maCurrState.mnStrokeOpacity*maCurrState.mnOpacity != 1.0 )
                 xAttrs->AddAttribute( "svg:stroke-opacity",
@@ -909,11 +909,11 @@ struct AnnotatingVisitor
             case XML_STROKE_LINEJOIN:
             {
                 if( aValueUtf8 == "miter" )
-                    maCurrState.meLineJoin = basegfx::B2DLINEJOIN_MITER;
+                    maCurrState.meLineJoin = basegfx::B2DLineJoin::Miter;
                 else if( aValueUtf8 == "round" )
-                    maCurrState.meLineJoin = basegfx::B2DLINEJOIN_ROUND;
+                    maCurrState.meLineJoin = basegfx::B2DLineJoin::Round;
                 else if( aValueUtf8 == "bevel" )
-                    maCurrState.meLineJoin = basegfx::B2DLINEJOIN_BEVEL;
+                    maCurrState.meLineJoin = basegfx::B2DLineJoin::Bevel;
                 else if( aValueUtf8 == "inherit" )
                     maCurrState.meLineJoin = maParentStates.back().meLineJoin;
                 break;

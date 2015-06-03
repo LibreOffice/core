@@ -1635,7 +1635,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         }
     }
 
-    if(basegfx::B2DLINEJOIN_NONE != rInfo.GetLineJoin())
+    if(basegfx::B2DLineJoin::NONE != rInfo.GetLineJoin())
     {
         // LineJoin used, ExtLineInfo required
         return false;
@@ -10583,20 +10583,20 @@ void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter
     // add LineJoin
     switch(rIn.GetLineJoin())
     {
-        case basegfx::B2DLINEJOIN_BEVEL :
+        case basegfx::B2DLineJoin::Bevel :
         {
             rOut.m_eJoin = PDFWriter::joinBevel;
             break;
         }
-        default : // basegfx::B2DLINEJOIN_NONE :
+        default : // basegfx::B2DLineJoin::NONE :
         // Pdf has no 'none' lineJoin, default is miter
-        case basegfx::B2DLINEJOIN_MIDDLE :
-        case basegfx::B2DLINEJOIN_MITER :
+        case basegfx::B2DLineJoin::Middle :
+        case basegfx::B2DLineJoin::Miter :
         {
             rOut.m_eJoin = PDFWriter::joinMiter;
             break;
         }
-        case basegfx::B2DLINEJOIN_ROUND :
+        case basegfx::B2DLineJoin::Round :
         {
             rOut.m_eJoin = PDFWriter::joinRound;
             break;

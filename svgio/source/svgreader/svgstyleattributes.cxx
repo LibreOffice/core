@@ -47,14 +47,14 @@ namespace svgio
         {
             if(StrokeLinejoin_round == aStrokeLinejoin)
             {
-                return basegfx::B2DLINEJOIN_ROUND;
+                return basegfx::B2DLineJoin::Round;
             }
             else if(StrokeLinejoin_bevel == aStrokeLinejoin)
             {
-                return basegfx::B2DLINEJOIN_BEVEL;
+                return basegfx::B2DLineJoin::Bevel;
             }
 
-            return basegfx::B2DLINEJOIN_MITER;
+            return basegfx::B2DLineJoin::Miter;
         }
 
         com::sun::star::drawing::LineCap StrokeLinecapToDrawingLineCap(StrokeLinecap aStrokeLinecap)

@@ -133,7 +133,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2DPolyPolygon createAreaGeometry(
             const B2DPolygon& rCandidate,
             double fHalfLineWidth,
-            B2DLineJoin eJoin = B2DLINEJOIN_ROUND,
+            B2DLineJoin eJoin = B2DLineJoin::Round,
             com::sun::star::drawing::LineCap eCap = com::sun::star::drawing::LineCap_BUTT,
             double fMaxAllowedAngle = (12.5 * F_PI180),
             double fMaxPartOfEdge = 0.4,

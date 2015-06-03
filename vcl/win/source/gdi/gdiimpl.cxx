@@ -2077,7 +2077,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
 
         switch(eLineJoin)
         {
-            default : // basegfx::B2DLINEJOIN_NONE :
+            default : // basegfx::B2DLineJoin::NONE :
             {
                 if(basegfx::fTools::more(rLineWidths.getX(), 0.0))
                 {
@@ -2085,20 +2085,20 @@ bool WinSalGraphicsImpl::drawPolyLine(
                 }
                 break;
             }
-            case basegfx::B2DLINEJOIN_BEVEL :
+            case basegfx::B2DLineJoin::Bevel :
             {
                 Gdiplus::DllExports::GdipSetPenLineJoin(pTestPen, Gdiplus::LineJoinBevel);
                 break;
             }
-            case basegfx::B2DLINEJOIN_MIDDLE :
-            case basegfx::B2DLINEJOIN_MITER :
+            case basegfx::B2DLineJoin::Middle :
+            case basegfx::B2DLineJoin::Miter :
             {
                 const Gdiplus::REAL aMiterLimit(15.0);
                 Gdiplus::DllExports::GdipSetPenMiterLimit(pTestPen, aMiterLimit);
                 Gdiplus::DllExports::GdipSetPenLineJoin(pTestPen, Gdiplus::LineJoinMiter);
                 break;
             }
-            case basegfx::B2DLINEJOIN_ROUND :
+            case basegfx::B2DLineJoin::Round :
             {
                 Gdiplus::DllExports::GdipSetPenLineJoin(pTestPen, Gdiplus::LineJoinRound);
                 break;

@@ -70,23 +70,23 @@ namespace vclcanvas
             switch( nJoinType )
             {
                 case rendering::PathJoinType::NONE:
-                    return basegfx::B2DLINEJOIN_NONE;
+                    return basegfx::B2DLineJoin::NONE;
 
                 case rendering::PathJoinType::MITER:
-                    return basegfx::B2DLINEJOIN_MITER;
+                    return basegfx::B2DLineJoin::Miter;
 
                 case rendering::PathJoinType::ROUND:
-                    return basegfx::B2DLINEJOIN_ROUND;
+                    return basegfx::B2DLineJoin::Round;
 
                 case rendering::PathJoinType::BEVEL:
-                    return basegfx::B2DLINEJOIN_BEVEL;
+                    return basegfx::B2DLineJoin::Bevel;
 
                 default:
                     ENSURE_OR_THROW( false,
                                       "b2DJoineFromJoin(): Unexpected join type" );
             }
 
-            return basegfx::B2DLINEJOIN_NONE;
+            return basegfx::B2DLineJoin::NONE;
         }
 
         drawing::LineCap unoCapeFromCap( sal_Int8 nCapType)

@@ -1448,7 +1448,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const MetaLineAction* pAct = static_cast<const MetaLineAction*>(pAction);
                 const LineInfo& rInfo = pAct->GetLineInfo();
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
-                const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
+                const bool bLineJoin(bFatLine && basegfx::B2DLineJoin::Round != rInfo.GetLineJoin());
                 const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
@@ -1461,7 +1461,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     {
                         rOStm.WriteInt16( GDI_LINEJOIN_ACTION );
                         rOStm.WriteInt32( 6 );
-                        rOStm.WriteInt16( rInfo.GetLineJoin() );
+                        rOStm.WriteInt16( static_cast<sal_Int16>(rInfo.GetLineJoin()) );
                     }
 
                     if(bLineCap)
@@ -1604,7 +1604,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const LineInfo& rInfo = pAct->GetLineInfo();
                 const sal_uInt16 nPoints(aSimplePoly.GetSize());
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
-                const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
+                const bool bLineJoin(bFatLine && basegfx::B2DLineJoin::Round != rInfo.GetLineJoin());
                 const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
@@ -1617,7 +1617,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     {
                         rOStm.WriteInt16( GDI_LINEJOIN_ACTION );
                         rOStm.WriteInt32( 6 );
-                        rOStm.WriteInt16( rInfo.GetLineJoin() );
+                        rOStm.WriteInt16( static_cast<sal_Int16>(rInfo.GetLineJoin()) );
                     }
 
                     if(bLineCap)

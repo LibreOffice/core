@@ -118,7 +118,7 @@ namespace PictReaderShape {
     B2DPolygon poly;
     poly.append(B2DPoint(double(orig.X()+decal[0]), double(orig.Y()+decal[1])));
     poly.append(B2DPoint(double(dest.X()+decal[0]), double(dest.Y()+decal[1])));
-    dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLINEJOIN_NONE);
+    dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);
   }
 
   //--------------------  draws a rectangle --------------------
@@ -138,7 +138,7 @@ namespace PictReaderShape {
     poly.append(B2DPoint(X[0], Y[0]));
 
     if (drawFrame)
-      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLINEJOIN_NONE);
+      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);
     else
       dev->DrawPolygon(poly);
   }
@@ -153,7 +153,7 @@ namespace PictReaderShape {
     B2DPoint center(0.5*(X[1]+X[0]), 0.5*(Y[1]+Y[0]));
     B2DPolygon poly = basegfx::tools::createPolygonFromEllipse(center, 0.5*(X[1]-X[0]), 0.5*(Y[1]-Y[0]));
     if (drawFrame)
-      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLINEJOIN_NONE);
+      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);
     else
       dev->DrawPolygon(poly);
   }
@@ -186,7 +186,7 @@ namespace PictReaderShape {
 
     B2DPolygon poly = basegfx::tools::createPolygonFromEllipseSegment(center, 0.5*(X[1]-X[0]), 0.5*(Y[1]-Y[0]), angl1, angl2);
     if (drawFrame)
-      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLINEJOIN_NONE);
+      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);
     else {
       // adds circle's center
       poly.append(center);
@@ -210,7 +210,7 @@ namespace PictReaderShape {
     B2DPolygon poly = basegfx::tools::createPolygonFromRect(rect, (width != 0.0) ? ovalW/width : 0.0, (height != 0.0) ? ovalH/height : 0.0);
 
     if (drawFrame)
-      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLINEJOIN_NONE);
+      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);
     else
       dev->DrawPolygon(poly);
   }
@@ -248,7 +248,7 @@ namespace PictReaderShape {
       poly.append(B2DPoint(x, y));
     }
     if (drawFrame)
-      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLINEJOIN_NONE);
+      dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);
     else
       dev->DrawPolygon(poly);
   }

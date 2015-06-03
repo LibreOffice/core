@@ -37,7 +37,7 @@ ImplLineInfo::ImplLineInfo() :
     mnDotCount  ( 0 ),
     mnDotLen    ( 0 ),
     mnDistance  ( 0 ),
-    meLineJoin  ( basegfx::B2DLINEJOIN_ROUND ),
+    meLineJoin  ( basegfx::B2DLineJoin::Round ),
     meLineCap   ( com::sun::star::drawing::LineCap_BUTT )
 {
 }
@@ -237,7 +237,7 @@ SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo 
     rOStm.WriteInt32( rImplLineInfo.mnDistance );
 
     // since version3
-    rOStm.WriteUInt16( rImplLineInfo.meLineJoin );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rImplLineInfo.meLineJoin) );
 
     // since version4
     rOStm.WriteUInt16( rImplLineInfo.meLineCap );

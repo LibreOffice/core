@@ -58,23 +58,23 @@ namespace
         {
             case com::sun::star::drawing::LineJoint_MIDDLE :
             {
-                return basegfx::B2DLINEJOIN_MIDDLE;
+                return basegfx::B2DLineJoin::Middle;
             }
             case com::sun::star::drawing::LineJoint_BEVEL :
             {
-                return basegfx::B2DLINEJOIN_BEVEL;
+                return basegfx::B2DLineJoin::Bevel;
             }
             case com::sun::star::drawing::LineJoint_MITER :
             {
-                return basegfx::B2DLINEJOIN_MITER;
+                return basegfx::B2DLineJoin::Miter;
             }
             case com::sun::star::drawing::LineJoint_ROUND :
             {
-                return basegfx::B2DLINEJOIN_ROUND;
+                return basegfx::B2DLineJoin::Round;
             }
             default : // com::sun::star::drawing::LineJoint_NONE
             {
-                return basegfx::B2DLINEJOIN_NONE; // XLINEJOINT_NONE
+                return basegfx::B2DLineJoin::NONE; // XLINEJOINT_NONE
             }
         }
     }

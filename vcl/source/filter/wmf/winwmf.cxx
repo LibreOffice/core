@@ -863,16 +863,16 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             switch( nStyle & 0xF000 )
             {
                 case PS_JOIN_ROUND :
-                    aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_ROUND );
+                    aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Round );
                 break;
                 case PS_JOIN_MITER :
-                    aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_MITER );
+                    aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Miter );
                 break;
                 case PS_JOIN_BEVEL :
-                    aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_BEVEL );
+                    aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Bevel );
                 break;
                 default :
-                    aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_NONE );
+                    aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
             }
             pOut->CreateObject( GDI_PEN, new WinMtfLineStyle( ReadColor(), aLineInfo, bTransparent ) );
         }

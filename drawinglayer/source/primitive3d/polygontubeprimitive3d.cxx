@@ -300,7 +300,7 @@ namespace drawinglayer
 
                 if(nVerSeg)
                 {
-                    if(basegfx::B2DLINEJOIN_ROUND == aLineJoin)
+                    if(basegfx::B2DLineJoin::Round == aLineJoin)
                     {
                         // calculate new horizontal segments
                         const sal_uInt32 nHorSeg(basegfx::fround((fAngle / F_2PI) * (double)nSegments));
@@ -321,29 +321,29 @@ namespace drawinglayer
                         else
                         {
                             // fallback to bevel when there is not at least one segment hor and ver
-                            aLineJoin = basegfx::B2DLINEJOIN_BEVEL;
+                            aLineJoin = basegfx::B2DLineJoin::Bevel;
                         }
                     }
 
-                    if(basegfx::B2DLINEJOIN_MIDDLE == aLineJoin
-                        || basegfx::B2DLINEJOIN_BEVEL == aLineJoin
-                        || basegfx::B2DLINEJOIN_MITER == aLineJoin)
+                    if(basegfx::B2DLineJoin::Middle == aLineJoin
+                        || basegfx::B2DLineJoin::Bevel == aLineJoin
+                        || basegfx::B2DLineJoin::Miter == aLineJoin)
                     {
-                        if(basegfx::B2DLINEJOIN_MITER == aLineJoin)
+                        if(basegfx::B2DLineJoin::Miter == aLineJoin)
                         {
                             const double fMiterAngle(fAngle/2.0);
 
                             if(fMiterAngle < fMiterMinimumAngle)
                             {
                                 // fallback to bevel when miter's angle is too small
-                                aLineJoin = basegfx::B2DLINEJOIN_BEVEL;
+                                aLineJoin = basegfx::B2DLineJoin::Bevel;
                             }
                         }
 
                         const double fInc(F_PI / (double)nVerSeg);
                         const double fSin(sin(-fAngle));
                         const double fCos(cos(-fAngle));
-                        const bool bMiter(basegfx::B2DLINEJOIN_MITER == aLineJoin);
+                        const bool bMiter(basegfx::B2DLineJoin::Miter == aLineJoin);
                         const double fMiterSin(bMiter ? sin(-(fAngle/2.0)) : 0.0);
                         const double fMiterCos(bMiter ? cos(-(fAngle/2.0)) : 0.0);
                         double fPos(-F_PI2);
@@ -547,7 +547,7 @@ namespace drawinglayer
                     const attribute::MaterialAttribute3D aMaterial(getBColor());
                     static sal_uInt32 nSegments(8); // default for 3d line segments, for more quality just raise this value (in even steps)
                     const bool bClosed(getB3DPolygon().isClosed());
-                    const bool bNoLineJoin(basegfx::B2DLINEJOIN_NONE == getLineJoin());
+                    const bool bNoLineJoin(basegfx::B2DLineJoin::NONE == getLineJoin());
                     const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1);
                     basegfx::B3DPoint aLast(getB3DPolygon().getB3DPoint(nPointCount - 1));
                     basegfx::B3DPoint aCurr(getB3DPolygon().getB3DPoint(0));

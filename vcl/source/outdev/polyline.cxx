@@ -70,7 +70,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         }
 
         if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth,
-                                     basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
+                                     basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, this))
         {
             return;
         }
@@ -205,7 +205,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         // to avoid optical gaps
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
-            DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, bTryAA );
+            DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, bTryAA );
         }
     }
     else

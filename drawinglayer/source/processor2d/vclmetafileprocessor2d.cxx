@@ -456,25 +456,25 @@ namespace drawinglayer
                     // get Join
                     switch(pLineAttribute->getLineJoin())
                     {
-                        default : // basegfx::B2DLINEJOIN_NONE :
+                        default : // basegfx::B2DLineJoin::NONE :
                         {
                             eJoin = SvtGraphicStroke::joinNone;
                             break;
                         }
-                        case basegfx::B2DLINEJOIN_BEVEL :
+                        case basegfx::B2DLineJoin::Bevel :
                         {
                             eJoin = SvtGraphicStroke::joinBevel;
                             break;
                         }
-                        case basegfx::B2DLINEJOIN_MIDDLE :
-                        case basegfx::B2DLINEJOIN_MITER :
+                        case basegfx::B2DLineJoin::Middle :
+                        case basegfx::B2DLineJoin::Miter :
                         {
                             eJoin = SvtGraphicStroke::joinMiter;
                             // ATM 15 degrees is assumed
                             fMiterLength /= rtl::math::sin(M_PI * (15.0 / 360.0));
                             break;
                         }
-                        case basegfx::B2DLINEJOIN_ROUND :
+                        case basegfx::B2DLineJoin::Round :
                         {
                             eJoin = SvtGraphicStroke::joinRound;
                             break;

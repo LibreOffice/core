@@ -142,7 +142,7 @@ struct SVGShapeDescriptor
         maShapeFillColor( Color( COL_TRANSPARENT ) ),
         maShapeLineColor( Color( COL_TRANSPARENT ) ),
         mnStrokeWidth( 0 ),
-        maLineJoin(basegfx::B2DLINEJOIN_MITER), // miter is Svg 'stroke-linejoin' default
+        maLineJoin(basegfx::B2DLineJoin::Miter), // miter is Svg 'stroke-linejoin' default
         maLineCap(com::sun::star::drawing::LineCap_BUTT) // butt is Svg 'stroke-linecap' default
     {
     }

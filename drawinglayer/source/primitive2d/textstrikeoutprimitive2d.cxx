@@ -204,7 +204,7 @@ namespace drawinglayer
             aStrikeoutLine.transform(aUnscaledTransform);
 
             // add primitive
-            const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLINEJOIN_NONE);
+            const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLineJoin::NONE);
             Primitive2DSequence xRetval(1);
             xRetval[0] = Primitive2DReference(new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute));
 

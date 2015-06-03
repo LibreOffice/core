@@ -99,7 +99,7 @@ SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFont
     , mrFontExport( rFontExport )
     , mpElemFont( NULL )
     , mpElemPaint( NULL )
-    , maLineJoin(basegfx::B2DLINEJOIN_NONE)
+    , maLineJoin(basegfx::B2DLineJoin::NONE)
     , maLineCap(css::drawing::LineCap_BUTT)
 {
 }
@@ -1879,18 +1879,18 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs,
     // support for LineJoint
     switch(rAttrs.GetLineJoin())
     {
-        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
-        case basegfx::B2DLINEJOIN_MITER:
+        default: // B2DLineJoin::NONE, B2DLineJoin::Middle
+        case basegfx::B2DLineJoin::Miter:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
             break;
         }
-        case basegfx::B2DLINEJOIN_BEVEL:
+        case basegfx::B2DLineJoin::Bevel:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
             break;
         }
-        case basegfx::B2DLINEJOIN_ROUND:
+        case basegfx::B2DLineJoin::Round:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
             break;
@@ -1968,20 +1968,20 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, bool bAp
     // support for LineJoin
     switch(rShape.maLineJoin)
     {
-        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
-        case basegfx::B2DLINEJOIN_MITER:
+        default: // B2DLineJoin::NONE, B2DLineJoin::Middle
+        case basegfx::B2DLineJoin::Miter:
         {
             // miter is Svg default, so no need to write until the exporter might write styles.
             // If this happens, activate here
             // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
             break;
         }
-        case basegfx::B2DLINEJOIN_BEVEL:
+        case basegfx::B2DLineJoin::Bevel:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
             break;
         }
-        case basegfx::B2DLINEJOIN_ROUND:
+        case basegfx::B2DLineJoin::Round:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
             break;
@@ -3128,17 +3128,17 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         default: /* SvtGraphicStroke::joinMiter,  SvtGraphicStroke::joinNone */
                         {
-                            mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_MITER;
+                            mapCurShape->maLineJoin = basegfx::B2DLineJoin::Miter;
                             break;
                         }
                         case SvtGraphicStroke::joinRound:
                         {
-                            mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_ROUND;
+                            mapCurShape->maLineJoin = basegfx::B2DLineJoin::Round;
                             break;
                         }
                         case SvtGraphicStroke::joinBevel:
                         {
-                            mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_BEVEL;
+                            mapCurShape->maLineJoin = basegfx::B2DLineJoin::Bevel;
                             break;
                         }
                     }
@@ -3171,7 +3171,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         mapCurShape->maShapeLineColor = Color(COL_TRANSPARENT);
                         mapCurShape->mnStrokeWidth = 0;
                         mapCurShape->maDashArray.clear();
-                        mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_MITER;
+                        mapCurShape->maLineJoin = basegfx::B2DLineJoin::Miter;
                         mapCurShape->maLineCap = com::sun::star::drawing::LineCap_BUTT;
 
                         if(aStartArrow.Count())

@@ -58,7 +58,7 @@ namespace drawinglayer
             }
 
             ImpSdrLineAttribute()
-            :   meJoin(basegfx::B2DLINEJOIN_ROUND),
+            :   meJoin(basegfx::B2DLineJoin::Round),
                 mfWidth(0.0),
                 mfTransparence(0.0),
                 maColor(basegfx::BColor()),

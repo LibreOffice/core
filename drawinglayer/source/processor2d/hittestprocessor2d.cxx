@@ -335,7 +335,7 @@ namespace drawinglayer
 
                         if(basegfx::fTools::more(rLineAttribute.getWidth(), 0.0))
                         {
-                            if(basegfx::B2DLINEJOIN_MITER == rLineAttribute.getLineJoin())
+                            if(basegfx::B2DLineJoin::Miter == rLineAttribute.getLineJoin())
                             {
                                 // if line is mitered, use decomposition since mitered line
                                 // geometry may use more space than the geometry grown by half line width
