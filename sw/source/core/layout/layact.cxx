@@ -1393,6 +1393,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
     if ( pLay->IsFootnoteFrm() ) // no LayFrms as Lower
         return bChanged;
 
+    FlowFrmJoinLockGuard aJoinGuard(pLay);
     SwFrm *pLow = pLay->Lower();
     bool bTabChanged = false;
     while ( pLow && pLow->GetUpper() == pLay )
