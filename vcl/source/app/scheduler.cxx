@@ -21,85 +21,88 @@
 #include <tools/time.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/timer.hxx>
+#include <algorithm>
 #include <saltimer.hxx>
 
-#define MAX_TIMER_PERIOD    SAL_MAX_UINT64
-
-void ImplSchedulerData::Invoke()
+void Scheduler::ImplInvoke(sal_uInt64 nTime)
 {
-    if (mbDelete || mbInScheduler )
+    mnUpdateTime = nTime;
+
+    if (mpSchedulerData->mbDelete || mbInScheduler )
         return;
 
     // prepare Scheduler Object for deletion after handling
-    mpScheduler->SetDeletionFlags();
+    SetDeletionFlags();
 
     // invoke it
     mbInScheduler = true;
-    mpScheduler->Invoke();
+    Invoke();
     mbInScheduler = false;
 }
 
-ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimer )
+Scheduler* Scheduler::ImplGetHighestPrioTask( bool bTimer )
 {
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplSchedulerData *pMostUrgent = NULL;
+    ImplSVData*     pSVData     = ImplGetSVData();
+    Scheduler *     pMostUrgent = NULL;
 
-    for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
+    std::for_each(pSVData->maSchedulers->begin(), pSVData->maSchedulers->end(),
+        [&pSVData, bTimer, &pMostUrgent] (ImplSchedulerData *rScheduler)
     {
-        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete || pSchedulerData->mnUpdateStack >= pSVData->mnUpdateStack
-            || !pSchedulerData->mpScheduler->ReadyForSchedule( bTimer ) || !pSchedulerData->mpScheduler->IsActive())
-            continue;
-        if (!pMostUrgent)
-            pMostUrgent = pSchedulerData;
-        else
+        if ( rScheduler->mpScheduler &&
+            rScheduler->mpScheduler->ImplIsScheduleReady(pSVData->mnUpdateStack) &&
+            rScheduler->mpScheduler->ReadyForSchedule( bTimer ) &&
+            rScheduler->mpScheduler->IsActive() )
         {
-            // Find the highest priority.
-            // If the priority of the current task is higher (numerical value is lower) than
-            // the priority of the most urgent, the current task gets the new most urgent.
-            if ( pSchedulerData->mpScheduler->GetPriority() < pMostUrgent->mpScheduler->GetPriority() )
-                pMostUrgent = pSchedulerData;
+            if (!pMostUrgent)
+                pMostUrgent = rScheduler->mpScheduler;
+            else
+            {
+                // Find the highest priority.
+                // If the priority of the current task is higher (numerical value is lower) than
+                // the priority of the most urgent, the current task gets the new most urgent.
+                if ( rScheduler->mpScheduler->GetPriority() < pMostUrgent->GetPriority() )
+                    pMostUrgent = rScheduler->mpScheduler;
+            }
         }
-    }
+    });
 
     return pMostUrgent;
 }
 
 void Scheduler::SetDeletionFlags()
 {
-    mpSchedulerData->mbDelete = true;
-    mbActive = false;
+    Stop();
 }
 
-void Scheduler::ImplDeInitScheduler()
+void Scheduler::ImplDeInitScheduler(bool bAll /*=true*/)
 {
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplSchedulerData*  pSchedulerData = pSVData->mpFirstSchedulerData;
+    ImplSVData* pSVData = ImplGetSVData();
+
     if (pSVData->mpSalTimer)
     {
         pSVData->mpSalTimer->Stop();
     }
 
-    if ( pSchedulerData )
+    pSVData->maSchedulers->remove_if( [] (ImplSchedulerData *rSchedulerData)
     {
-        do
+        if(rSchedulerData->mpScheduler != NULL)
         {
-            ImplSchedulerData* pTempSchedulerData = pSchedulerData;
-            if ( pSchedulerData->mpScheduler )
-            {
-                pSchedulerData->mpScheduler->mbActive = false;
-                pSchedulerData->mpScheduler->mpSchedulerData = NULL;
-            }
-            pSchedulerData = pSchedulerData->mpNext;
-            delete pTempSchedulerData;
+            rSchedulerData->mpScheduler->ImplDispose();
         }
-        while ( pSchedulerData );
+        else
+            delete rSchedulerData;
 
-        pSVData->mpFirstSchedulerData   = NULL;
-        pSVData->mnTimerPeriod      = 0;
+        return true;
+    });
+
+    if(bAll)
+    {
+        delete pSVData->maSchedulers;
+        pSVData->maSchedulers = NULL;
     }
 
     delete pSVData->mpSalTimer;
-    pSVData->mpSalTimer = 0;
+    pSVData->mpSalTimer  = NULL;
 }
 
 void Scheduler::CallbackTaskScheduling(bool ignore)
@@ -113,52 +116,30 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
 {
     // process all pending Tasks
     // if bTimer True, only handle timer
-    ImplSchedulerData* pSchedulerData = NULL;
-    ImplSchedulerData* pPrevSchedulerData = NULL;
-    ImplSVData*        pSVData = ImplGetSVData();
-    sal_uInt64         nTime = tools::Time::GetSystemTicks();
-    sal_uInt64         nMinPeriod = MAX_TIMER_PERIOD;
+    Scheduler*  pScheduler = NULL;
+    ImplSVData* pSVData = ImplGetSVData();
+    sal_uInt64  nTime = tools::Time::GetSystemTicks();
+    sal_uInt64  nMinPeriod = MAX_TIMER_PERIOD;
+
     pSVData->mnUpdateStack++;
 
     // tdf#91727 - NB. bTimer is ultimately not used
-    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimer)))
-    {
-        pSchedulerData->mnUpdateTime = nTime;
-        pSchedulerData->Invoke();
-    }
+    if ((pScheduler = Scheduler::ImplGetHighestPrioTask(bTimer)) != NULL)
+        pScheduler->ImplInvoke(nTime);
 
-    pSchedulerData = pSVData->mpFirstSchedulerData;
-    while ( pSchedulerData )
+    pSVData->maSchedulers->remove_if( [&nMinPeriod, nTime, pSVData] (ImplSchedulerData *rSchedulerData)
     {
-        if( pSchedulerData->mbInScheduler )
-        {
-            pPrevSchedulerData = pSchedulerData;
-            pSchedulerData = pSchedulerData->mpNext;
-        }
-        // Should Task be released from scheduling?
-        else if ( pSchedulerData->mbDelete )
-        {
-            if ( pPrevSchedulerData )
-                pPrevSchedulerData->mpNext = pSchedulerData->mpNext;
-            else
-                pSVData->mpFirstSchedulerData = pSchedulerData->mpNext;
-            if ( pSchedulerData->mpScheduler )
-                pSchedulerData->mpScheduler->mpSchedulerData = NULL;
-            ImplSchedulerData* pTempSchedulerData = pSchedulerData;
-            pSchedulerData = pSchedulerData->mpNext;
-            delete pTempSchedulerData;
-        }
+        if (rSchedulerData->mpScheduler)
+            return rSchedulerData->mpScheduler->ImplHandleTaskScheduling(nMinPeriod, nTime);
         else
         {
-            pSchedulerData->mnUpdateStack = 0;
-            nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod( nMinPeriod, nTime );
-            pPrevSchedulerData = pSchedulerData;
-            pSchedulerData = pSchedulerData->mpNext;
+            delete rSchedulerData;
+            return true;
         }
-    }
+    });
 
     // delete clock if no more timers available
-    if ( !pSVData->mpFirstSchedulerData )
+    if ( pSVData->maSchedulers->empty() )
     {
         if ( pSVData->mpSalTimer )
             pSVData->mpSalTimer->Stop();
@@ -168,6 +149,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     {
         Timer::ImplStartTimer( pSVData, nMinPeriod );
     }
+
     pSVData->mnUpdateStack--;
 }
 
@@ -178,34 +160,22 @@ void Scheduler::SetPriority( SchedulerPriority ePriority )
 
 void Scheduler::Start()
 {
+    ImplSVData* pSVData = ImplGetSVData();
     // Mark timer active
     mbActive = true;
 
-    ImplSVData* pSVData = ImplGetSVData();
     if ( !mpSchedulerData )
     {
+        mpSchedulerData = new ImplSchedulerData;
+        mpSchedulerData->mpScheduler = this;
         // insert Scheduler
-        mpSchedulerData                = new ImplSchedulerData;
-        mpSchedulerData->mpScheduler   = this;
-        mpSchedulerData->mbInScheduler = false;
-
-        // insert last due to SFX!
-        ImplSchedulerData* pPrev = NULL;
-        ImplSchedulerData* pData = pSVData->mpFirstSchedulerData;
-        while ( pData )
-        {
-            pPrev = pData;
-            pData = pData->mpNext;
-        }
-        mpSchedulerData->mpNext = NULL;
-        if ( pPrev )
-            pPrev->mpNext = mpSchedulerData;
-        else
-            pSVData->mpFirstSchedulerData = mpSchedulerData;
+        mbInScheduler   = false;
+        pSVData->maSchedulers->push_back(mpSchedulerData);
     }
-    mpSchedulerData->mbDelete      = false;
-    mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
-    mpSchedulerData->mnUpdateStack = pSVData->mnUpdateStack;
+
+    mpSchedulerData->mbDelete = false;
+    mnUpdateTime              = tools::Time::GetSystemTicks();
+    mnUpdateStack             = pSVData->mnUpdateStack;
 }
 
 void Scheduler::Stop()
@@ -221,7 +191,7 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
     if ( IsActive() )
         Stop();
 
-    mbActive          = false;
+    mbActive   = false;
     mePriority = rScheduler.mePriority;
 
     if ( rScheduler.IsActive() )
@@ -234,15 +204,17 @@ Scheduler::Scheduler(const sal_Char *pDebugName):
     mpSchedulerData(NULL),
     mpDebugName(pDebugName),
     mePriority(SchedulerPriority::HIGH),
-    mbActive(false)
+    mbActive(false),
+    mnUpdateTime(0)
 {
 }
 
 Scheduler::Scheduler( const Scheduler& rScheduler ):
     mpSchedulerData(NULL),
     mpDebugName(rScheduler.mpDebugName),
-    mePriority(rScheduler.mePriority),
-    mbActive(false)
+    mePriority(SchedulerPriority::HIGH),
+    mbActive(false),
+    mnUpdateTime(0)
 {
     if ( rScheduler.IsActive() )
         Start();
@@ -257,3 +229,44 @@ Scheduler::~Scheduler()
     }
 }
 
+bool Scheduler::ImplIsScheduleReady(sal_uInt32 nUpdateStack)
+{
+    return !mpSchedulerData->mbDelete && (mnUpdateStack <= nUpdateStack);
+}
+
+void Scheduler::ImplDispose()
+{
+    mpSchedulerData->mpScheduler = NULL;
+    delete mpSchedulerData;
+    mpSchedulerData = NULL;
+}
+
+void Scheduler::ImplInitScheduler()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if(pSVData->maSchedulers == NULL)
+        pSVData->maSchedulers = new ImplScheduler_t;
+}
+
+
+bool  Scheduler::ImplHandleTaskScheduling(sal_uInt64 &nMinPeriod, sal_uInt64 nTime)
+{
+    // process all pending Tasks
+    if( !mbInScheduler )
+    {
+        // Should Task be released from scheduling?
+        if ( !mpSchedulerData->mbDelete )
+        {
+            mnUpdateStack = 0;
+            nMinPeriod    = UpdateMinPeriod( nMinPeriod, nTime );
+        }
+        else
+        {
+            ImplDispose();
+            return true;
+        }
+    }
+
+    return false;
+}
