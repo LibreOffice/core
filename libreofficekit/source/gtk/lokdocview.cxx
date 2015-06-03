@@ -821,7 +821,7 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
 
             if (bPaint)
             {
-                g_info("gettile: (%d %d)", nRow, nColumn);
+                //                g_info("gettile: (%d %d)", nRow, nColumn);
 
                 Tile& currentTile = m_pTileBuffer->tile_buffer_get_tile(nRow, nColumn);
                 GdkPixbuf* pPixBuf = currentTile.tile_get_buffer();
@@ -934,17 +934,50 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         if (pCallback->m_aPayload != "EMPTY")
         {
             GdkRectangle aRectangle = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
-            renderDocument(&aRectangle);
+            GdkRectangle aRectanglePixels;
+            aRectanglePixels.x = twipToPixel(aRectangle.x);
+            aRectanglePixels.y = twipToPixel(aRectangle.y);
+            aRectanglePixels.width = twipToPixel(aRectangle.width);
+            aRectanglePixels.height = twipToPixel(aRectangle.height);
+            int rowStart = aRectanglePixels.y / nTileSizePixels;
+            int colStart = aRectanglePixels.x / nTileSizePixels;
+            int rowEnd = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
+            int colEnd = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixels) / nTileSizePixels;
+            int i,j;
+            for (i = rowStart; i < rowEnd; i++) {
+                for (j = colStart; j < colEnd; j++) {
+                    m_pTileBuffer->tile_buffer_set_invalid(i, j);
+                }
+            }
+            renderDocument(0);
         }
         else
+        {
+            m_pTileBuffer->tile_buffer_reset_all_tiles();
             renderDocument(0);
+        }
     }
     break;
     case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
         m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         m_bCursorOverlayVisible = true;
-        gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
+        GdkRectangle aRectanglePixels;
+        aRectanglePixels.x = twipToPixel(m_aVisibleCursor.x);
+        aRectanglePixels.y = twipToPixel(m_aVisibleCursor.y);
+        aRectanglePixels.width = twipToPixel(m_aVisibleCursor.width);
+        aRectanglePixels.height = twipToPixel(m_aVisibleCursor.height);
+        int rowStart = aRectanglePixels.y / nTileSizePixels;
+        int colStart = aRectanglePixels.x / nTileSizePixels;
+        int rowEnd = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
+        int colEnd = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixels) / nTileSizePixels;
+        int i,j;
+        for (i = rowStart; i < rowEnd; i++) {
+            for (j = colStart; j < colEnd; j++) {
+                m_pTileBuffer->tile_buffer_set_invalid(i, j);
+            }
+        }
+        renderDocument(0);
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION:
@@ -961,7 +994,6 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         }
         else
             memset(&m_aHandleMiddleRect, 0, sizeof(m_aHandleMiddleRect));
-        gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION_START:
@@ -1144,6 +1176,16 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
     g_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pDrawingArea),
                      "expose-event",
                      GTK_SIGNAL_FUNC(LOKDocView_Impl::on_exposed), pDocView);
+    g_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pDrawingArea),
+                     "expose-event",
+                     GTK_SIGNAL_FUNC(LOKDocView_Impl::renderOverlay), pDocView);
+    gtk_widget_add_events(pDocView->m_pImpl->m_pDrawingArea,
+                          GDK_BUTTON_PRESS_MASK
+                          | GDK_BUTTON_RELEASE_MASK
+                          | GDK_BUTTON_MOTION_MASK);
+    g_signal_connect(G_OBJECT(pDocView->m_pImpl->m_pDrawingArea), "button-press-event", G_CALLBACK(LOKDocView_Impl::signalButton), pDocView);
+    g_signal_connect(G_OBJECT(pDocView->m_pImpl->m_pDrawingArea), "button-release-event", G_CALLBACK(LOKDocView_Impl::signalButton), pDocView);
+    g_signal_connect(G_OBJECT(pDocView->m_pImpl->m_pDrawingArea), "motion-notify-event", G_CALLBACK(LOKDocView_Impl::signalMotion), pDocView);
 
     gtk_signal_connect(GTK_OBJECT(pDocView), "destroy", GTK_SIGNAL_FUNC(LOKDocView_Impl::destroy), 0);
 }
