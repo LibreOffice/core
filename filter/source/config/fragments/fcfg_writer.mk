@@ -40,7 +40,6 @@ T4_WRITER = \
     writer_T602_Document \
     writer_Text \
     writer_Text_encoded \
-    writer_MIZI_Hwp_97 \
     writer_StarOffice_XML_Writer_Template \
     pdf_Portable_Document_Format\
     writer8_template\
@@ -74,7 +73,6 @@ F4_WRITER = \
     T602Document \
     Text \
     Text__encoded_ \
-    writer_MIZI_Hwp_97 \
     writer_StarOffice_XML_Writer_Template \
     writer_pdf_Export\
     writer8\
