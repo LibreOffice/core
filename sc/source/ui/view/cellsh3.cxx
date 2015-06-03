@@ -835,8 +835,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                 }
                 else
-                    MessageDialog (pDlgParent,
-                              ScGlobal::GetRscString(STR_INVALID_AFAREA) ).Execute();
+                    ScopedVclPtrInstance<MessageDialog>(pDlgParent,
+                              ScGlobal::GetRscString(STR_INVALID_AFAREA) )->Execute();
             }
             break;
 

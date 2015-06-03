@@ -126,8 +126,7 @@ void SwParagraphNumTabPage::dispose()
 VclPtr<SfxTabPage> SwParagraphNumTabPage::Create( vcl::Window* pParent,
                                                   const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>( new SwParagraphNumTabPage(pParent, *rSet),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<SwParagraphNumTabPage>::Create(pParent, *rSet);
 }
 
 bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )

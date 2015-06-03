@@ -1058,7 +1058,7 @@ void OQueryController::impl_initialize()
             m_bGraphicalDesign = false;
             getContainer()->initialize();
             ODataView* pWindow = getView();
-            OSQLMessageBox(pWindow,e).Execute();
+            ScopedVclPtr<OSQLMessageBox>::Create(pWindow,e)->Execute();
         }
         throw;
     }

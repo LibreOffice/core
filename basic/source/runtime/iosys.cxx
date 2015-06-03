@@ -82,7 +82,7 @@ public:
 SbiInputDialog::SbiInputDialog( vcl::Window* pParent, const OUString& rPrompt )
             :ModalDialog( pParent, WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
              aInput( VclPtr<Edit>::Create(this, WB_3DLOOK | WB_LEFT | WB_BORDER) ),
-             aOk( new OKButton(this) ), aCancel( VclPtr<CancelButton>::Create(this) )
+             aOk( VclPtr<OKButton>::Create(this) ), aCancel( VclPtr<CancelButton>::Create(this) )
 {
     SetText( rPrompt );
     aOk->SetClickHdl( LINK( this, SbiInputDialog, Ok ) );

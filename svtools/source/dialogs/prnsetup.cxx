@@ -104,7 +104,7 @@ Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinterIn )
     if ( ! Printer::GetQueueInfo( aPrnName, false ) )
     {
         pTempPrinter.disposeAndClear();
-        pTempPrinter = new Printer;
+        pTempPrinter = VclPtr<Printer>::Create();
     }
 
     return pTempPrinter;

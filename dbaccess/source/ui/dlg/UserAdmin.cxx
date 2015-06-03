@@ -204,7 +204,7 @@ void OUserAdmin::FillUserNames()
 
 VclPtr<SfxTabPage> OUserAdmin::Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
 {
-    return VclPtr<SfxTabPage>(new OUserAdmin( pParent, *_rAttrSet ), SAL_NO_ACQUIRE);
+    return VclPtr<OUserAdmin>::Create( pParent, *_rAttrSet );
 }
 
 IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )

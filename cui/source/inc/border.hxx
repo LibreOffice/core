@@ -40,6 +40,7 @@ namespace editeng
 
 class SvxBorderTabPage : public SfxTabPage
 {
+    friend class VclPtr<SvxBorderTabPage>;
     using TabPage::DeactivatePage;
 
     static const sal_uInt16 pRanges[];

@@ -34,6 +34,7 @@ namespace dbaui
     */
     class OConnectionTabPage : public OConnectionHelper
     {
+        friend class VclPtr<OConnectionTabPage>;
     protected:
         // user authentification
         VclPtr<FixedText>          m_pFL2;

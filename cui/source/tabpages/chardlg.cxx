@@ -1220,8 +1220,7 @@ SfxTabPage::sfxpg SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 
 VclPtr<SfxTabPage> SvxCharNamePage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>( new SvxCharNamePage( pParent, *rSet ),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<SvxCharNamePage>::Create( pParent, *rSet );
 }
 
 
@@ -1786,8 +1785,7 @@ SfxTabPage::sfxpg SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
 
 VclPtr<SfxTabPage> SvxCharEffectsPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>( new SvxCharEffectsPage( pParent, *rSet ),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<SvxCharEffectsPage>::Create( pParent, *rSet );
 }
 
 
@@ -2969,8 +2967,7 @@ SfxTabPage::sfxpg SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
 
 VclPtr<SfxTabPage> SvxCharPositionPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>( new SvxCharPositionPage( pParent, *rSet ),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<SvxCharPositionPage>::Create( pParent, *rSet );
 }
 
 
@@ -3542,8 +3539,7 @@ SfxTabPage::sfxpg SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
 
 VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>( new SvxCharTwoLinesPage( pParent, *rSet ),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<SvxCharTwoLinesPage>::Create( pParent, *rSet );
 }
 
 void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )

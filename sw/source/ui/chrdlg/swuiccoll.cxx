@@ -155,8 +155,7 @@ SfxTabPage::sfxpg SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 
 VclPtr<SfxTabPage> SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SfxTabPage>(new SwCondCollPage(pParent, *rSet),
-                              SAL_NO_ACQUIRE);
+    return VclPtr<SwCondCollPage>::Create(pParent, *rSet);
 }
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)

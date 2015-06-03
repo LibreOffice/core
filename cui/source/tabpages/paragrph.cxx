@@ -196,7 +196,7 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl)
 
 VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>( new SvxStdParagraphTabPage( pParent, *rSet ), SAL_NO_ACQUIRE );
+    return VclPtr<SvxStdParagraphTabPage>::Create( pParent, *rSet );
 }
 
 bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1072,7 +1072,7 @@ SfxTabPage::sfxpg SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 VclPtr<SfxTabPage> SvxParaAlignTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>( new SvxParaAlignTabPage(pParent, *rSet), SAL_NO_ACQUIRE );
+    return VclPtr<SvxParaAlignTabPage>::Create(pParent, *rSet);
 }
 
 bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1346,7 +1346,7 @@ void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
 VclPtr<SfxTabPage> SvxExtParagraphTabPage::Create( vcl::Window* pParent,
                                             const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>( new SvxExtParagraphTabPage( pParent, *rSet ), SAL_NO_ACQUIRE );
+    return VclPtr<SvxExtParagraphTabPage>::Create( pParent, *rSet );
 }
 
 bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -2193,7 +2193,7 @@ void SvxAsianTabPage::dispose()
 
 VclPtr<SfxTabPage> SvxAsianTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>(new SvxAsianTabPage(pParent, *rSet), SAL_NO_ACQUIRE );
+    return VclPtr<SvxAsianTabPage>::Create(pParent, *rSet);
 }
 
 const sal_uInt16*     SvxAsianTabPage::GetRanges()

@@ -407,7 +407,7 @@ void ScTPValidationValue::Init()
 
 VclPtr<SfxTabPage> ScTPValidationValue::Create( vcl::Window* pParent, const SfxItemSet* rArgSet )
 {
-    return VclPtr<SfxTabPage>(new ScTPValidationValue( pParent, *rArgSet ), SAL_NO_ACQUIRE);
+    return VclPtr<ScTPValidationValue>::Create( pParent, *rArgSet );
 }
 
 void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )

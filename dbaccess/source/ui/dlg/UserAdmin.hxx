@@ -40,6 +40,7 @@ namespace dbaui
 
 class OUserAdmin : public OGenericAdministrationPage
 {
+    friend class VclPtr<OUserAdmin>;
 protected:
     VclPtr<ListBox>             m_pUSER;
     VclPtr<PushButton>          m_pNEWUSER;
