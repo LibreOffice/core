@@ -63,7 +63,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
         r = "breeze";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("MacOSX") ) {
-        r = "sifr";
+        r = "breeze";
     }
     else {
         r = FALLBACK_ICON_THEME_ID;
