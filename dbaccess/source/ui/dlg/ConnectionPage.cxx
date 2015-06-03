@@ -83,7 +83,7 @@ namespace dbaui
 
     VclPtr<SfxTabPage> OConnectionTabPage::Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return VclPtr<SfxTabPage>(new OConnectionTabPage( pParent, *_rAttrSet ), SAL_NO_ACQUIRE);
+        return VclPtr<OConnectionTabPage>::Create( pParent, *_rAttrSet );
     }
 
     // OConnectionTabPage

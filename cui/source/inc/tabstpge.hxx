@@ -45,6 +45,7 @@ class TabWin_Impl;
 
 class SvxTabulatorTabPage : public SfxTabPage
 {
+    friend class VclPtr<SvxTabulatorTabPage>;
     using TabPage::DeactivatePage;
     static const sal_uInt16 pRanges[];
 

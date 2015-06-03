@@ -88,14 +88,12 @@ VclPtr<vcl::Window> AllMasterPagesSelector::Create (
 
     ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
-    VclPtr<MasterPagesSelector> pSelector(
-        new AllMasterPagesSelector (
+    VclPtrInstance<AllMasterPagesSelector> pSelector(
             pParent,
             *pDocument,
             rViewShellBase,
             pContainer,
-            rxSidebar),
-        SAL_NO_ACQUIRE);
+            rxSidebar);
     pSelector->LateInit();
     pSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_ALL);
 

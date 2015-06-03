@@ -118,7 +118,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     }
     else if (aServiceName.equalsIgnoreAsciiCase("roadmap") )
     {
-        pWindow = new ::svt::ORoadmap( pParent, WB_TABSTOP );
+        pWindow = VclPtr<::svt::ORoadmap>::Create( pParent, WB_TABSTOP );
         *ppNewComp = new SVTXRoadmap;
     }
     else if ( aServiceName.equalsIgnoreAsciiCase( "ProgressBar" ) )
@@ -157,7 +157,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new ::svt::table::TableControl(pParent, nWinBits);
+            pWindow = VclPtr<::svt::table::TableControl>::Create(pParent, nWinBits);
             *ppNewComp = new SVTXGridControl;
         }
         else

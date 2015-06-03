@@ -430,8 +430,7 @@ void SwAddPrinterTabPage::SetPreview(bool bPrev)
 VclPtr<SfxTabPage> SwAddPrinterTabPage::Create( vcl::Window* pParent,
                                                 const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>(new SwAddPrinterTabPage( pParent, *rAttrSet ),
-                              SAL_NO_ACQUIRE);
+    return VclPtr<SwAddPrinterTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -667,8 +666,7 @@ void SwStdFontTabPage::dispose()
 VclPtr<SfxTabPage> SwStdFontTabPage::Create( vcl::Window* pParent,
                                              const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>(new SwStdFontTabPage(pParent, *rAttrSet),
-                              SAL_NO_ACQUIRE);
+    return VclPtr<SwStdFontTabPage>::Create(pParent, *rAttrSet);
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -1192,8 +1190,7 @@ void SwTableOptionsTabPage::dispose()
 VclPtr<SfxTabPage> SwTableOptionsTabPage::Create( vcl::Window* pParent,
                                                   const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>( new SwTableOptionsTabPage(pParent, *rAttrSet ),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<SwTableOptionsTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1453,7 +1450,7 @@ void SwShdwCrsrOptionsTabPage::dispose()
 
 VclPtr<SfxTabPage> SwShdwCrsrOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SfxTabPage>(new SwShdwCrsrOptionsTabPage( pParent, *rSet ), SAL_NO_ACQUIRE);
+    return VclPtr<SwShdwCrsrOptionsTabPage>::Create( pParent, *rSet );
 }
 
 void SwShdwCrsrOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
@@ -1874,7 +1871,7 @@ void SwRedlineOptionsTabPage::dispose()
 
 VclPtr<SfxTabPage> SwRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>( new SwRedlineOptionsTabPage( pParent, *rSet ), SAL_NO_ACQUIRE );
+    return VclPtr<SwRedlineOptionsTabPage>::Create( pParent, *rSet );
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2388,7 +2385,7 @@ void SwCompareOptionsTabPage::dispose()
 
 VclPtr<SfxTabPage> SwCompareOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>(new SwCompareOptionsTabPage( pParent, *rAttrSet ), SAL_NO_ACQUIRE);
+    return VclPtr<SwCompareOptionsTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )

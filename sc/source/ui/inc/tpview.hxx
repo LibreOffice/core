@@ -31,6 +31,7 @@ class ScViewOptions;
 
 class ScTpContentOptions : public SfxTabPage
 {
+    friend class VclPtr<ScTpContentOptions>;
     VclPtr<ListBox>         pGridLB;
     VclPtr<FixedText>       pColorFT;
     VclPtr<ColorListBox>    pColorLB;
@@ -84,6 +85,7 @@ public:
 class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage
 {
+    friend class VclPtrInstance<ScTpLayoutOptions>;
     VclPtr<ListBox>        m_pUnitLB;
     VclPtr<MetricField>    m_pTabMF;
 

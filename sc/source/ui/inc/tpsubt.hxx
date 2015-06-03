@@ -76,6 +76,7 @@ private:
 
 class ScTpSubTotalGroup1 : public ScTpSubTotalGroup
 {
+    friend class VclPtr<ScTpSubTotalGroup1>;
 protected:
             ScTpSubTotalGroup1( vcl::Window*              pParent,
                                 const SfxItemSet&    rArgSet );
@@ -91,6 +92,7 @@ public:
 
 class ScTpSubTotalGroup2 : public ScTpSubTotalGroup
 {
+    friend class VclPtr<ScTpSubTotalGroup2>;
 protected:
             ScTpSubTotalGroup2( vcl::Window*              pParent,
                                 const SfxItemSet&    rArgSet );
@@ -106,6 +108,7 @@ public:
 
 class ScTpSubTotalGroup3 : public ScTpSubTotalGroup
 {
+    friend class VclPtr<ScTpSubTotalGroup3>;
 protected:
             ScTpSubTotalGroup3( vcl::Window*              pParent,
                                 const SfxItemSet&    rArgSet );
@@ -121,6 +124,7 @@ public:
 
 class ScTpSubTotalOptions : public SfxTabPage
 {
+    friend class VclPtr<ScTpSubTotalOptions>;
 protected:
             ScTpSubTotalOptions( vcl::Window*             pParent,
                                   const SfxItemSet&  rArgSet );

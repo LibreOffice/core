@@ -31,6 +31,7 @@ class ScDocOptions;
 
 class ScTpCalcOptions : public SfxTabPage
 {
+    friend class VclPtr<ScTpCalcOptions>;
 public:
     static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );

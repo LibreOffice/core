@@ -45,6 +45,7 @@ class SvxLineSpacingItem;
 
 class SvxStdParagraphTabPage: public SfxTabPage
 {
+    friend class VclPtr<SvxStdParagraphTabPage>;
     using TabPage::DeactivatePage;
     static const sal_uInt16 pStdRanges[];
 
@@ -124,6 +125,7 @@ public:
 
 class SvxParaAlignTabPage : public SfxTabPage
 {
+    friend class VclPtr<SvxParaAlignTabPage>;
     using TabPage::DeactivatePage;
     static const sal_uInt16 pAlignRanges[];
 
@@ -191,6 +193,7 @@ public:
 
 class SvxExtParagraphTabPage: public SfxTabPage
 {
+    friend class VclPtr<SvxExtParagraphTabPage>;
     using TabPage::DeactivatePage;
     static const sal_uInt16 pExtRanges[];
 
@@ -265,6 +268,7 @@ private:
 
 class SvxAsianTabPage : public SfxTabPage
 {
+    friend class VclPtr<SvxAsianTabPage>;
 
     VclPtr<CheckBox>     m_pForbiddenRulesCB;
     VclPtr<CheckBox>     m_pHangingPunctCB;

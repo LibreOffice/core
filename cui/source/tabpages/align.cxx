@@ -286,8 +286,7 @@ void AlignmentTabPage::dispose()
 
 VclPtr<SfxTabPage> AlignmentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxTabPage>( new AlignmentTabPage( pParent, *rAttrSet ),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<AlignmentTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )

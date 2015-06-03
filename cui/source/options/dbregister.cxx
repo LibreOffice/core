@@ -125,7 +125,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     Size aBoxSize = m_pPathCtrl->GetOutputSizePixel();
 
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new svx::OptHeaderTabListBox( *m_pPathCtrl, nBits );
+    pPathBox = VclPtr<svx::OptHeaderTabListBox>::Create( *m_pPathCtrl, nBits );
 
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
 

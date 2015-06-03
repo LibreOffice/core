@@ -1463,8 +1463,8 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
            || SignatureState::NOTVALIDATED == nDocumentSignatureState
            || SignatureState::PARTIAL_OK == nDocumentSignatureState)
         {
-            if (MessageDialog(NULL, SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE),
-                              VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() != RET_YES)
+            if (ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE),
+                              VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() != RET_YES)
             {
                 // the user has decided not to store the document
                 throw task::ErrorCodeIOException(

@@ -30,6 +30,7 @@
 
 class ScTpFormulaOptions : public SfxTabPage
 {
+    friend class VclPtr<ScTpFormulaOptions>;
 public:
     using SfxTabPage::DeactivatePage;
 

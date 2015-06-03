@@ -711,7 +711,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
 
             }
             else
-                SwPreviewZoomDlg( *pViewWin ).Execute();
+                ScopedVclPtrInstance<SwPreviewZoomDlg>( *pViewWin )->Execute();
 
         }
         break;

@@ -723,7 +723,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox.reset(new MessageDialog( GetParentDialog()
+            pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                         ,"DuplicateNameDialog"
                                         ,"cui/ui/queryduplicatedialog.ui"));
         }

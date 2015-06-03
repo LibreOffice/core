@@ -42,7 +42,7 @@ PageSizeControl::PageSizeControl(
     const bool bLandscape,
     const FieldUnit eFUnit )
     : svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_SIZE) )
-    , mpSizeValueSet( new svx::sidebar::ValueSetWithTextControl( svx::sidebar::ValueSetWithTextControl::TEXT_TEXT, this, SW_RES(VS_SIZE) ) )
+    , mpSizeValueSet( VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( svx::sidebar::ValueSetWithTextControl::TEXT_TEXT, this, SW_RES(VS_SIZE) ) )
     , maMoreButton( VclPtr<PushButton>::Create( this, SW_RES(CB_SIZE_MORE) ) )
     , maWidthHeightField( VclPtr<MetricField>::Create( this, SW_RES(FLD_WIDTH_HEIGHT) ) )
     , mePaper( ePaper )

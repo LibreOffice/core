@@ -100,7 +100,7 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
     aEmptyStr()
 {
     // create bookmark-window
-    mpMarkWnd = new SvxHlinkDlgMarkWnd ( this );
+    mpMarkWnd = VclPtr<SvxHlinkDlgMarkWnd>::Create( this );
 }
 
 SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase()

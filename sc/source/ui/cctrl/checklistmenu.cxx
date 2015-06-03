@@ -873,7 +873,7 @@ void ScCheckListMenuWindow::CancelButton::Click()
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
-    maEdSearch(new Edit (this)),
+    maEdSearch(VclPtr<Edit>::Create(this)),
     maChecks(VclPtr<ScCheckListBox>::Create(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT) ),
     maChkToggleAll(VclPtr<TriStateBox>::Create(this, 0)),
     maBtnSelectSingle(VclPtr<ImageButton>::Create(this, 0)),

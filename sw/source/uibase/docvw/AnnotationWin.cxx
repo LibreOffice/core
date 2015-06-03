@@ -221,7 +221,7 @@ VclPtr<MenuButton> SwAnnotationWin::CreateMenuButton()
     aRewriter.AddRule(UndoArg1,GetAuthor());
     aText = aRewriter.Apply(aText);
     mpButtonPopup->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
-    VclPtr<MenuButton> pMenuButton( new AnnotationMenuButton( *this ), SAL_NO_ACQUIRE );
+    VclPtrInstance<AnnotationMenuButton> pMenuButton( *this );
     pMenuButton->SetPopupMenu( mpButtonPopup );
     pMenuButton->Show();
     return pMenuButton;
