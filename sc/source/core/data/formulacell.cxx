@@ -608,6 +608,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     bNeedListening(false),
     mbNeedsNumberFormat(false),
     mbPostponedDirty(false),
+    mnExtRefCnt(0),
     aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
@@ -638,7 +639,8 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
-    aPos( rPos )
+    mnExtRefCnt(0),
+    aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
 
@@ -672,7 +674,8 @@ ScFormulaCell::ScFormulaCell(
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
-    aPos( rPos )
+    mnExtRefCnt(0),
+    aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
     assert(pArray); // Never pass a NULL pointer here.
@@ -721,7 +724,8 @@ ScFormulaCell::ScFormulaCell(
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
-    aPos( rPos )
+    mnExtRefCnt(0),
+    aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
 
@@ -770,7 +774,8 @@ ScFormulaCell::ScFormulaCell(
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
-    aPos( rPos )
+    mnExtRefCnt(0),
+    aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
 
@@ -801,7 +806,8 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
-    aPos( rPos )
+    mnExtRefCnt(0),
+    aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
 
@@ -1294,6 +1300,9 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
 
                 bSkipCompile = true;
                 pCode = pPreviousCell->pCode;
+                // tdf#89972
+                if (pPreviousCell->mnExtRefCnt > 0)
+                    pDocument->GetExternalRefManager()->insertRefCellAsTmpl(aPreviousCell, aPos);
 
                 SAL_INFO( "sc", "merged '" << aFormula << "' == '" << aShouldBe
                           << "'extend group to " << xGroup->mnLength );

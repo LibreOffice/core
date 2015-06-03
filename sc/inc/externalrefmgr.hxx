@@ -699,6 +699,10 @@ public:
     bool containsUnsavedReferences() const { return !maUnsavedDocShells.empty(); }
 
     void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
+    /**
+    * tdf#89972: Add a cell to reference the same files as the template cell
+    */
+    void insertRefCellAsTmpl(const ScAddress& rCellTmpl, const ScAddress& rCell);
 
     void enableDocTimer( bool bEnable );
 
@@ -788,6 +792,7 @@ private:
      */
     void transformUnsavedRefToSavedRef( SfxObjectShell* pShell );
 
+    void insertRefCell(RefCellMap::iterator& itr, ScFormulaCell* pCell);
 private:
     ScDocument* mpDoc;
 

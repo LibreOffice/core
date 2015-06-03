@@ -159,7 +159,9 @@ public:
     explicit RemoveFormulaCell(ScFormulaCell* p) : mpCell(p) {}
     void operator() (pair<const sal_uInt16, ScExternalRefManager::RefCellSet>& r) const
     {
-        r.second.erase(mpCell);
+        if (r.second.erase(mpCell) != 0)
+            // tdf#89972
+            mpCell->IncExtRefCnt(true);
     }
 private:
     ScFormulaCell* mpCell;
@@ -2038,6 +2040,14 @@ void ScExternalRefManager::refreshAllRefCells(sal_uInt16 nFileId)
     pVShell->PaintGrid();
 }
 
+void ScExternalRefManager::insertRefCell(RefCellMap::iterator& itr, ScFormulaCell* pCell)
+{
+    if (pCell)
+        if (itr->second.insert(pCell).second) // if really inserted
+            // tdf#89972
+            pCell->IncExtRefCnt();
+}
+
 void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell)
 {
     RefCellMap::iterator itr = maRefCells.find(nFileId);
@@ -2053,9 +2063,19 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
         itr = r.first;
     }
 
+    insertRefCell(itr, mpDoc->GetFormulaCell(rCell));
+}
+void ScExternalRefManager::insertRefCellAsTmpl(const ScAddress& rCellTmpl, const ScAddress& rCell)
+{
+    ScFormulaCell* pCellTmpl = mpDoc->GetFormulaCell(rCellTmpl);
     ScFormulaCell* pCell = mpDoc->GetFormulaCell(rCell);
-    if (pCell)
-        itr->second.insert(pCell);
+    if (!pCellTmpl || !pCell)
+        return;
+    for (RefCellMap::iterator itr = maRefCells.begin(); itr != maRefCells.end(); itr++)
+    {
+        if (itr->second.count(pCellTmpl) != 0)
+            insertRefCell(itr, pCell);
+    }
 }
 
 void ScExternalRefManager::enableDocTimer( bool bEnable )
