@@ -376,6 +376,9 @@ public:
     /// Load the embedded data source of the document and also register it.
     void LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);
 
+    /// Unregister a data source.
+    static void RevokeDataSource(const OUString& rName);
+
     /** try to get the data source from the given connection through the XChild interface.
         If this is not possible, the data source will be created through its name.
         @param _xConnection

@@ -540,6 +540,11 @@ SwDoc::~SwDoc()
     mpCharFormatTable->erase( mpCharFormatTable->begin() );
 
 #if HAVE_FEATURE_DBCONNECTIVITY
+    // On load, SwDBManager::setEmbeddedName() may register a data source.
+    // If we have an embedded one, then sDataSoure points to the registered name, so revoke it here.
+    if (!mpDBManager->getEmbeddedName().isEmpty() && !maDBData.sDataSource.isEmpty())
+        SwDBManager::RevokeDataSource(maDBData.sDataSource);
+
     DELETEZ( mpDBManager );
 #endif
 

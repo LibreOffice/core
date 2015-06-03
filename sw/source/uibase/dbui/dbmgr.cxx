@@ -2663,6 +2663,13 @@ OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUSt
     return LoadAndRegisterDataSource( type, aURLAny, pSettings, rURI, pPrefix, pDestDir );
 }
 
+void SwDBManager::RevokeDataSource(const OUString& rName)
+{
+    uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
+    if (xDatabaseContext->hasByName(rName))
+        xDatabaseContext->revokeObject(rName);
+}
+
 void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell)
 {
     uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
@@ -2673,8 +2680,7 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
     if (sDataSource.isEmpty())
         sDataSource = "EmbeddedDatabase";
 
-    if (xDatabaseContext->hasByName(rData.sDataSource))
-        xDatabaseContext->revokeObject(rData.sDataSource);
+    SwDBManager::RevokeDataSource(rData.sDataSource);
 
     // Encode the stream name and the real path into a single URL.
     const INetURLObject& rURLObject = rDocShell.GetMedium()->GetURLObject();
