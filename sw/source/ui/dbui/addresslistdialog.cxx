@@ -346,12 +346,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
 
 IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 {
-    SwMailMergeWizard* pWizard = 0;
-    if (GetParent() && GetParent()->GetParent())
-        pWizard = dynamic_cast<SwMailMergeWizard*>(GetParent()->GetParent());
-    SwView* pView = 0;
-    if (pWizard)
-        pView = pWizard->GetSwView();
+    SwView* pView = m_pAddressPage->GetWizard()->GetSwView();
 
     const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(pView ? pView->GetDocShell() : 0);
     if(!sNewSource.isEmpty())
