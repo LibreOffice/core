@@ -1001,9 +1001,6 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
                 ToolBarManager::msOptionsToolBar);
             mpToolBarManager->AddToolBar(
                 ToolBarManager::TBG_PERMANENT,
-                ToolBarManager::msCommonTaskToolBar);
-            mpToolBarManager->AddToolBar(
-                ToolBarManager::TBG_PERMANENT,
                 ToolBarManager::msViewerToolBar);
             break;
 
@@ -1065,10 +1062,16 @@ void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
             const DrawViewShell* pDrawViewShell
                 = dynamic_cast<const DrawViewShell*>(&rMainViewShell);
             if (pDrawViewShell != NULL)
+            {
                 if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
                     mpToolBarManager->AddToolBar(
                         ToolBarManager::TBG_MASTER_MODE,
                         ToolBarManager::msMasterViewToolBar);
+                else
+                    mpToolBarManager->AddToolBar(
+                        ToolBarManager::TBG_COMMON_TASK,
+                        ToolBarManager::msCommonTaskToolBar);
+            }
             break;
         }
 
