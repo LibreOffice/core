@@ -111,30 +111,16 @@ public class RowSet extends TestCase
         }
     }
 
-    private void createTestCase(boolean _defaultRowSet)
+    private void createTestCase(boolean _defaultRowSet) throws Exception
     {
         if (m_database == null)
         {
-            try
-            {
-                final CRMDatabase database = new CRMDatabase( getMSF(), false );
-                m_database = database.getDatabase();
-                m_dataSource = m_database.getDataSource();
-            }
-            catch (Exception e)
-            {
-                fail("could not create the embedded HSQL database: " + e.getMessage());
-            }
+            final CRMDatabase database = new CRMDatabase( getMSF(), false );
+            m_database = database.getDatabase();
+            m_dataSource = m_database.getDataSource();
         }
 
-        try
-        {
-	    createStructure();
-        }
-        catch (SQLException e)
-        {
-            fail("could not connect to the database/table structure, error message:\n" + e.getMessage());
-        }
+        createStructure();
 
         if (_defaultRowSet)
         {
@@ -151,7 +137,7 @@ public class RowSet extends TestCase
      *  @param execute
      *      determines whether the RowSet should be executed
      */
-    private void createRowSet(String command, int commandType, boolean execute)
+    private void createRowSet(String command, int commandType, boolean execute) throws com.sun.star.uno.Exception
     {
         createRowSet(command, commandType, execute, false);
     }
@@ -167,35 +153,28 @@ public class RowSet extends TestCase
      *  @param limitFetchSize
      *      determines whether the fetch size of the RowSet should be limited to MAX_FETCH_ROWS
      */
-    private void createRowSet(String command, int commandType, boolean execute, boolean limitFetchSize)
+    private void createRowSet(String command, int commandType, boolean execute, boolean limitFetchSize) throws com.sun.star.uno.Exception
     {
-        try
+        m_rowSet = UnoRuntime.queryInterface( XRowSet.class, getMSF().createInstance( "com.sun.star.sdb.RowSet" ) );
+        final XPropertySet rowSetProperties = UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
+        rowSetProperties.setPropertyValue("Command", command);
+        rowSetProperties.setPropertyValue("CommandType", Integer.valueOf(commandType));
+        rowSetProperties.setPropertyValue("ActiveConnection", m_database.defaultConnection().getXConnection());
+        if (limitFetchSize)
         {
-            m_rowSet = UnoRuntime.queryInterface( XRowSet.class, getMSF().createInstance( "com.sun.star.sdb.RowSet" ) );
-            final XPropertySet rowSetProperties = UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
-            rowSetProperties.setPropertyValue("Command", command);
-            rowSetProperties.setPropertyValue("CommandType", Integer.valueOf(commandType));
-            rowSetProperties.setPropertyValue("ActiveConnection", m_database.defaultConnection().getXConnection());
-            if (limitFetchSize)
-            {
-                rowSetProperties.setPropertyValue("FetchSize", Integer.valueOf(MAX_FETCH_ROWS));
-            }
-
-            m_resultSet = UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
-            m_resultSetUpdate = UnoRuntime.queryInterface( XResultSetUpdate.class, m_rowSet );
-            m_row = UnoRuntime.queryInterface( XRow.class, m_rowSet );
-            m_rowLocate = UnoRuntime.queryInterface( XRowLocate.class, m_resultSet );
-            m_rowSetProperties = UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
-            m_paramsSupplier = UnoRuntime.queryInterface( XParametersSupplier.class, m_rowSet );
-
-            if (execute)
-            {
-                m_rowSet.execute();
-            }
+            rowSetProperties.setPropertyValue("FetchSize", Integer.valueOf(MAX_FETCH_ROWS));
         }
-        catch (Exception e)
+
+        m_resultSet = UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
+        m_resultSetUpdate = UnoRuntime.queryInterface( XResultSetUpdate.class, m_rowSet );
+        m_row = UnoRuntime.queryInterface( XRow.class, m_rowSet );
+        m_rowLocate = UnoRuntime.queryInterface( XRowLocate.class, m_resultSet );
+        m_rowSetProperties = UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
+        m_paramsSupplier = UnoRuntime.queryInterface( XParametersSupplier.class, m_rowSet );
+
+        if (execute)
         {
-            fail("caught an exception while creating the RowSet. Type:\n" + e.getClass().toString() + "\nMessage:\n" + e.getMessage());
+            m_rowSet.execute();
         }
     }
 
@@ -262,140 +241,99 @@ public class RowSet extends TestCase
     }
 
 
-    void testSequentialPositining(XResultSet _resultSet, XRow _row)
+    void testSequentialPositining(XResultSet _resultSet, XRow _row) throws com.sun.star.uno.Exception
     {
-        try
+        // 1st test
+        int i = 1;
+        while (_resultSet.next())
         {
-            // 1st test
-            int i = 1;
-            while (_resultSet.next())
+            testPosition(_resultSet, _row, i, "testSequentialPositining");
+            ++i;
+        }
+    }
+
+
+    void testAbsolutePositioning(XResultSet _resultSet, XRow _row) throws com.sun.star.uno.Exception
+    {
+        for (int i = 1; i <= MAX_FETCH_ROWS; ++i)
+        {
+            final int calcPos = (MAX_TABLE_ROWS % i) + 1;
+            assertTrue("testAbsolutePositioning failed", _resultSet.absolute(calcPos));
+            testPosition(_resultSet, _row, calcPos, "testAbsolutePositioning");
+        }
+    }
+
+
+    void testModifyPosition(XResultSet _resultSet, XRow _row) throws com.sun.star.uno.Exception
+    {
+        final int testPos = 3;
+        assertTrue("testModifyPosition wants at least " + (testPos+1) + " rows", MAX_FETCH_ROWS >= testPos+1);
+        assertTrue("testModifyPosition failed on moving to row " + testPos, _resultSet.absolute(testPos));
+        UnoRuntime.queryInterface( XRowUpdate.class, _row ).updateString(2, TEST21);
+        testPosition(_resultSet, _row, testPos, "testModifyPosition");
+        UnoRuntime.queryInterface( XResultSetUpdate.class, _resultSet ).cancelRowUpdates();
+    }
+
+
+    void test3(XResultSet clone, XResultSet _resultSet) throws com.sun.star.uno.Exception
+    {
+        final XRow _row = UnoRuntime.queryInterface( XRow.class, _resultSet );
+        final XRow cloneRow = UnoRuntime.queryInterface( XRow.class, clone );
+        for (int i = 1; i <= MAX_FETCH_ROWS; ++i)
+        {
+            final int calcPos = (MAX_TABLE_ROWS % i) + 1;
+            if (clone.absolute(calcPos))
             {
-                testPosition(_resultSet, _row, i, "testSequentialPositining");
-                ++i;
+                testPosition(clone, cloneRow, calcPos, "test3");
+                testAbsolutePositioning(_resultSet, _row);
+                testAbsolutePositioning(clone, cloneRow);
             }
         }
-        catch (Exception e)
-        {
-            fail("testSequentialPositining failed: " + e);
-        }
     }
 
 
-    void testAbsolutePositioning(XResultSet _resultSet, XRow _row)
+    void test4(XResultSet _resultSet) throws com.sun.star.uno.Exception
     {
-        try
-        {
-            for (int i = 1; i <= MAX_FETCH_ROWS; ++i)
-            {
-                final int calcPos = (MAX_TABLE_ROWS % i) + 1;
-                assertTrue("testAbsolutePositioning failed", _resultSet.absolute(calcPos));
-                testPosition(_resultSet, _row, calcPos, "testAbsolutePositioning");
-            }
-        }
-        catch (Exception e)
-        {
-            fail("testAbsolutePositioning failed: " + e);
-        }
-    }
+        final XRow _row = UnoRuntime.queryInterface( XRow.class, _resultSet );
+        _resultSet.beforeFirst();
 
-
-    void testModifyPosition(XResultSet _resultSet, XRow _row)
-    {
-        try
+        for (int i = 1; i <= MAX_TABLE_ROWS; ++i)
         {
-            final int testPos = 3;
-            assertTrue("testModifyPosition wants at least " + (testPos+1) + " rows", MAX_FETCH_ROWS >= testPos+1);
-            assertTrue("testModifyPosition failed on moving to row " + testPos, _resultSet.absolute(testPos));
-            UnoRuntime.queryInterface( XRowUpdate.class, _row ).updateString(2, TEST21);
-            testPosition(_resultSet, _row, testPos, "testModifyPosition");
-            UnoRuntime.queryInterface( XResultSetUpdate.class, _resultSet ).cancelRowUpdates();
-        }
-        catch (Exception e)
-        {
-            fail("testModifyPosition failed: " + e);
-        }
-    }
-
-
-    void test3(XResultSet clone, XResultSet _resultSet)
-    {
-        try
-        {
-            final XRow _row = UnoRuntime.queryInterface( XRow.class, _resultSet );
+            _resultSet.next();
+            final XResultSet clone = createClone();
             final XRow cloneRow = UnoRuntime.queryInterface( XRow.class, clone );
-            for (int i = 1; i <= MAX_FETCH_ROWS; ++i)
+            final int calcPos = MAX_TABLE_ROWS - 1;
+            if (calcPos != 0 && clone.absolute(calcPos))
             {
-                final int calcPos = (MAX_TABLE_ROWS % i) + 1;
-                if (clone.absolute(calcPos))
-                {
-                    testPosition(clone, cloneRow, calcPos, "test3");
-                    testAbsolutePositioning(_resultSet, _row);
-                    testAbsolutePositioning(clone, cloneRow);
-                }
+                testPosition(clone, cloneRow, calcPos, "test4: clone");
+                testPosition(_resultSet, _row, i, "test4: rowset");
             }
-        }
-        catch (Exception e)
-        {
-            fail("test3 failed: " + e);
         }
     }
 
 
-    void test4(XResultSet _resultSet)
-    {
-        try
-        {
-            final XRow _row = UnoRuntime.queryInterface( XRow.class, _resultSet );
-            _resultSet.beforeFirst();
-
-            for (int i = 1; i <= MAX_TABLE_ROWS; ++i)
-            {
-                _resultSet.next();
-                final XResultSet clone = createClone();
-                final XRow cloneRow = UnoRuntime.queryInterface( XRow.class, clone );
-                final int calcPos = MAX_TABLE_ROWS - 1;
-                if (calcPos != 0 && clone.absolute(calcPos))
-                {
-                    testPosition(clone, cloneRow, calcPos, "test4: clone");
-                    testPosition(_resultSet, _row, i, "test4: rowset");
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            fail("test4 failed: " + e);
-        }
-    }
-
-
-    void testConcurrentAccess(XResultSet _resultSet)
+    void testConcurrentAccess(XResultSet _resultSet) throws Exception
     {
         System.out.println("testing Thread");
-        try
+
+        _resultSet.beforeFirst();
+
+        final int numberOfThreads = 10;
+
+        final Thread threads[] = new Thread[numberOfThreads];
+        for (int i = 0; i < numberOfThreads; ++i)
         {
-            _resultSet.beforeFirst();
-
-            final int numberOfThreads = 10;
-
-            final Thread threads[] = new Thread[numberOfThreads];
-            for (int i = 0; i < numberOfThreads; ++i)
-            {
-                threads[i] = new Thread(new ResultSetMovementStress(createClone(), i));
-                System.out.println("starting thread " + (i + 1) + " of " + (numberOfThreads));
-                threads[i].start();
-            }
-
-            for (int i = 0; i < numberOfThreads; ++i)
-            {
-                threads[i].join();
-            }
-            synchronized (failedResultSetMovementStressGuard) {
-                assertEquals("", failedResultSetMovementStressMessages);
-            }
+            threads[i] = new Thread(new ResultSetMovementStress(createClone(), i));
+            System.out.println("starting thread " + (i + 1) + " of " + (numberOfThreads));
+            threads[i].start();
         }
-        catch (Exception e)
+
+        for (int i = 0; i < numberOfThreads; ++i)
         {
-            fail("testConcurrentAccess failed: " + e);
+            threads[i].join();
+        }
+        synchronized (failedResultSetMovementStressGuard) {
+            assertEquals("", failedResultSetMovementStressMessages);
         }
     }
 
@@ -757,7 +695,7 @@ public class RowSet extends TestCase
      *  on a clone of the RowSet
      */
     @Test
-    public void testCloneMovesPlusDeletions() throws SQLException, UnknownPropertyException, WrappedTargetException
+    public void testCloneMovesPlusDeletions() throws Exception
     {
         createTestCase(true);
         // ensure that all records are known
@@ -826,7 +764,7 @@ public class RowSet extends TestCase
      *  on a clone of the RowSet
      */
     @Test
-    public void testCloneMovesPlusInsertions() throws SQLException, UnknownPropertyException, WrappedTargetException, PropertyVetoException, com.sun.star.lang.IllegalArgumentException
+    public void testCloneMovesPlusInsertions() throws Exception
     {
         createTestCase(true);
         // ensure that all records are known
@@ -866,37 +804,23 @@ public class RowSet extends TestCase
     }
 
 
-    private void testTableParameters()
+    private void testTableParameters() throws com.sun.star.uno.Exception
     {
         // for a row set simply based on a table, there should be not parameters at all
         createRowSet("products", CommandType.TABLE, false);
-        try
-        {
-            verifyParameters(new String[]
-                    {
-                    }, "testTableParameters");
-        }
-        catch (Exception e)
-        {
-            fail("testing the parameters of a table failed" + e.getMessage());
-        }
+        verifyParameters(new String[]
+            {
+            }, "testTableParameters");
     }
 
 
-    private void testParametersAfterNormalExecute()
+    private void testParametersAfterNormalExecute() throws com.sun.star.uno.Exception
     {
-        try
-        {
-            createRowSet("SELECT * FROM \"customers\"", CommandType.COMMAND, true);
-            m_rowSetProperties.setPropertyValue("Command", "SELECT * FROM \"customers\" WHERE \"City\" = :city");
-            final XParameters rowsetParams = UnoRuntime.queryInterface( XParameters.class, m_rowSet );
-            rowsetParams.setString(1, "London");
-            m_rowSet.execute();
-        }
-        catch (Exception e)
-        {
-            fail("testing the parameters of a table failed" + e.getMessage());
-        }
+        createRowSet("SELECT * FROM \"customers\"", CommandType.COMMAND, true);
+        m_rowSetProperties.setPropertyValue("Command", "SELECT * FROM \"customers\" WHERE \"City\" = :city");
+        final XParameters rowsetParams = UnoRuntime.queryInterface( XParameters.class, m_rowSet );
+        rowsetParams.setString(1, "London");
+        m_rowSet.execute();
     }
 
 
@@ -926,93 +850,72 @@ public class RowSet extends TestCase
     }
 
 
-    private void testParametrizedQuery()
+    private void testParametrizedQuery() throws com.sun.star.uno.Exception
     {
-        try
-        {
-            // for a row set based on a parametrized query, those parameters should be properly
-            // recognized
-            m_dataSource.createQuery("products like", "SELECT * FROM \"products\" WHERE \"Name\" LIKE :product_name");
-            createRowSet("products like", CommandType.QUERY, false);
-            verifyParameters(new String[]
-                    {
-                        "product_name"
-                    }, "testParametrizedQuery");
-        }
-        catch (Exception e)
-        {
-            fail("testing the parameters of a parametrized query failed" + e.getMessage());
-        }
-    }
-
-
-    private void testParametersInteraction()
-    {
-        try
-        {
-            createRowSet("products like", CommandType.QUERY, false);
-
-            // let's fill in a parameter value via XParameters, and see whether it is respected by the parameters container
-            final XParameters rowsetParams = UnoRuntime.queryInterface(XParameters.class, m_rowSet);
-            rowsetParams.setString(1, "Apples");
-
-            XIndexAccess params = m_paramsSupplier.getParameters();
-            XPropertySet firstParam = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( 0 ) );
-            Object firstParamValue = firstParam.getPropertyValue("Value");
-
-            assertTrue("XParameters and the parameters container do not properly interact",
-                    "Apples".equals(firstParamValue));
-
-            // let's see whether this also survices an execute of the row set
-            rowsetParams.setString(1, "Oranges");
-            m_rowSet.execute();
+        // for a row set based on a parametrized query, those parameters should be properly
+        // recognized
+        m_dataSource.createQuery("products like", "SELECT * FROM \"products\" WHERE \"Name\" LIKE :product_name");
+        createRowSet("products like", CommandType.QUERY, false);
+        verifyParameters(new String[]
             {
-                // TODO: the following would not be necessary if the parameters container would *survive*
-                // the execution of the row set. It currently doesn't (though the values it represents do).
-                // It would be nice, but not strictly necessary, if it would.
-                params = m_paramsSupplier.getParameters();
-                firstParam = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( 0 ) );
-            }
-            firstParamValue = firstParam.getPropertyValue("Value");
-            assertTrue("XParameters and the parameters container do not properly interact, after the row set has been executed",
-                    "Oranges".equals(firstParamValue));
-        }
-        catch (Exception e)
-        {
-            fail("could not test the relationship between XParameters and XParametersSupplier: " + e.getMessage());
-        }
+                "product_name"
+            }, "testParametrizedQuery");
     }
 
 
-    private void testParametersInFilter()
+    private void testParametersInteraction() throws com.sun.star.uno.Exception
     {
-        try
-        {
-            createRowSet("SELECT * FROM \"customers\"", CommandType.COMMAND, false);
-            m_rowSetProperties.setPropertyValue("Filter", "\"City\" = :city");
+        createRowSet("products like", CommandType.QUERY, false);
 
-            m_rowSetProperties.setPropertyValue("ApplyFilter", Boolean.TRUE);
-            verifyParameters(new String[]
-                    {
-                        "city"
-                    }, "testParametersInFilter");
+        // let's fill in a parameter value via XParameters, and see whether it is respected by the parameters container
+        final XParameters rowsetParams = UnoRuntime.queryInterface(XParameters.class, m_rowSet);
+        rowsetParams.setString(1, "Apples");
 
-            m_rowSetProperties.setPropertyValue("ApplyFilter", Boolean.FALSE);
-            verifyParameters(new String[]
-                    {
-                    }, "testParametersInFilter");
-        }
-        catch (Exception e)
+        XIndexAccess params = m_paramsSupplier.getParameters();
+        XPropertySet firstParam = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( 0 ) );
+        Object firstParamValue = firstParam.getPropertyValue("Value");
+
+        assertTrue("XParameters and the parameters container do not properly interact",
+                   "Apples".equals(firstParamValue));
+
+        // let's see whether this also survices an execute of the row set
+        rowsetParams.setString(1, "Oranges");
+        m_rowSet.execute();
         {
-            fail("testing the parameters within a WHERE clause failed" + e.getMessage());
+            // TODO: the following would not be necessary if the parameters container would *survive*
+            // the execution of the row set. It currently doesn't (though the values it represents do).
+            // It would be nice, but not strictly necessary, if it would.
+            params = m_paramsSupplier.getParameters();
+            firstParam = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( 0 ) );
         }
+        firstParamValue = firstParam.getPropertyValue("Value");
+        assertTrue("XParameters and the parameters container do not properly interact, after the row set has been executed",
+                   "Oranges".equals(firstParamValue));
+    }
+
+
+    private void testParametersInFilter() throws com.sun.star.uno.Exception
+    {
+        createRowSet("SELECT * FROM \"customers\"", CommandType.COMMAND, false);
+        m_rowSetProperties.setPropertyValue("Filter", "\"City\" = :city");
+
+        m_rowSetProperties.setPropertyValue("ApplyFilter", Boolean.TRUE);
+        verifyParameters(new String[]
+            {
+                "city"
+            }, "testParametersInFilter");
+
+        m_rowSetProperties.setPropertyValue("ApplyFilter", Boolean.FALSE);
+        verifyParameters(new String[]
+            {
+            }, "testParametersInFilter");
     }
 
 
     /** checks the XParametersSupplier functionality of a RowSet
      */
     @Test
-    public void testParameters()
+    public void testParameters() throws Exception
     {
         createTestCase(false);
         // use an own RowSet instance, not the one which is also used for the other cases
