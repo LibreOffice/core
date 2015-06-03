@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_81ffcd33",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-06-03T09:14:45Z",
+      "side": 1,
+      "message": "You still did not explain why this is necessary.",
+      "revId": "a4d14e798f976a27ff428b5da264a732424c8525",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
