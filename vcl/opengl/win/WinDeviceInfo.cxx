@@ -86,11 +86,11 @@ void GetDLLVersion(const sal_Unicode* aDLLPath, OUString& aVersion)
 }
 
 /*
-*  * Compute the length of an array with constant length.  (Use of this method
-*   * with a non-array pointer will not compile.)
-*    *
-*     * Beware of the implicit trailing '\0' when using this with string constants.
-*      */
+ * Compute the length of an array with constant length.  (Use of this method
+ * with a non-array pointer will not compile.)
+ *
+ * Beware of the implicit trailing '\0' when using this with string constants.
+*/
 template<typename T, size_t N>
 size_t ArrayLength(T (&aArr)[N])
 {
