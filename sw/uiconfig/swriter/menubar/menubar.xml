@@ -25,13 +25,15 @@
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
-      <menu:menuseparator/>
       <menu:menu menu:id=".uno:TemplateMenu">
           <menu:menupopup>
               <menu:menuitem menu:id=".uno:NewDoc"/>
               <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
           </menu:menupopup>
       </menu:menu>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:Reload"/>
+      <menu:menuitem menu:id=".uno:VersionDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Save"/>
       <menu:menuitem menu:id=".uno:SaveAs"/>
@@ -40,9 +42,6 @@
       <menu:menuitem menu:id=".uno:CheckOut"/>
       <menu:menuitem menu:id=".uno:CancelCheckOut"/>
       <menu:menuitem menu:id=".uno:CheckIn"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Reload"/>
-      <menu:menuitem menu:id=".uno:VersionDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ExportTo"/>
       <menu:menuitem menu:id=".uno:ExportToPDF"/>
@@ -86,14 +85,14 @@
       <menu:menuitem menu:id=".uno:Copy"/>
       <menu:menuitem menu:id=".uno:Paste"/>
       <menu:menuitem menu:id=".uno:PasteSpecial"/>
-      <menu:menuitem menu:id=".uno:SelectTextMode"/>
+      <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menu menu:id=".uno:SelectionModeMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SelectionModeDefault" menu:style="radio"/>
           <menu:menuitem menu:id=".uno:SelectionModeBlock" menu:style="radio"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:SelectAll"/>
+      <menu:menuitem menu:id=".uno:SelectTextMode"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
@@ -145,6 +144,7 @@
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
@@ -197,6 +197,7 @@
           <menu:menuitem menu:id=".uno:InsertObject"/>
           <menu:menuitem menu:id=".uno:InsertPlugin"/>
           <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
+          <menu:menuitem menu:id=".uno:InsertDoc"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:InsertFrameMenu">
@@ -263,8 +264,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertSection"/>
       <menu:menuitem menu:id=".uno:InsertEnvelope"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertDoc"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:FormatMenu">
@@ -537,7 +536,6 @@
       <menu:menuitem menu:id=".uno:InsertFormula"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TableNumberRecognition"/>
-      <menu:menuitem menu:id=".uno:TableBoundaries"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TableDialog"/>
     </menu:menupopup>
