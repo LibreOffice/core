@@ -28,7 +28,8 @@ std::vector<wgl::DriverInfo> WinOpenGLDeviceInfo::maDriverInfo;
     maDriverInfo.push_back(wgl::DriverInfo(os, vendor, devices, driverComparator, driverVersion, true))
 
 #define APPEND_TO_DRIVER_BLOCKLIST_RANGE(os, vendor, devices, driverComparator, driverVersion, driverVersionMax, suggestedVersion) \
-    do { \
+    do \
+    { \
         assert(driverComparator == wgl::DRIVER_BETWEEN_EXCLUSIVE || \
                 driverComparator == wgl::DRIVER_BETWEEN_INCLUSIVE || \
                 driverComparator == wgl::DRIVER_BETWEEN_INCLUSIVE_START); \
@@ -110,21 +111,26 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
     bool retval = true;
 
     result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, keyLocation, 0, KEY_QUERY_VALUE, &key);
-    if (result != ERROR_SUCCESS) {
+    if (result != ERROR_SUCCESS)
+    {
         return false;
     }
 
-    switch (type) {
+    switch (type)
+    {
         case REG_DWORD:
             {
                 // We only use this for vram size
                 dwcbData = sizeof(dValue);
                 result = RegQueryValueExW(key, keyName, nullptr, &resultType,
                         (LPBYTE)&dValue, &dwcbData);
-                if (result == ERROR_SUCCESS && resultType == REG_DWORD) {
+                if (result == ERROR_SUCCESS && resultType == REG_DWORD)
+                {
                     dValue = dValue / 1024 / 1024;
                     destString += OUString::number(int32_t(dValue));
-                } else {
+                }
+                else
+                {
                     retval = false;
                 }
                 break;
@@ -137,17 +143,23 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
 
                 result = RegQueryValueExW(key, keyName, nullptr, &resultType,
                         (LPBYTE)wCharValue, &dwcbData);
-                if (result == ERROR_SUCCESS && resultType == REG_MULTI_SZ) {
+                if (result == ERROR_SUCCESS && resultType == REG_MULTI_SZ)
+                {
                     // This bit here could probably be cleaner.
                     bool isValid = false;
 
                     DWORD strLen = dwcbData/sizeof(wCharValue[0]);
-                    for (DWORD i = 0; i < strLen; i++) {
-                        if (wCharValue[i] == '\0') {
-                            if (i < strLen - 1 && wCharValue[i + 1] == '\0') {
+                    for (DWORD i = 0; i < strLen; i++)
+                    {
+                        if (wCharValue[i] == '\0')
+                        {
+                            if (i < strLen - 1 && wCharValue[i + 1] == '\0')
+                            {
                                 isValid = true;
                                 break;
-                            } else {
+                            }
+                            else
+                            {
                                 wCharValue[i] = ' ';
                             }
                         }
@@ -159,7 +171,9 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
                     if (isValid)
                         destString = OUString(wCharValue);
 
-                } else {
+                }
+                else
+                {
                     retval = false;
                 }
 
@@ -174,10 +188,12 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
 // The driver ID is a string like PCI\VEN_15AD&DEV_0405&SUBSYS_040515AD, possibly
 // followed by &REV_XXXX.  We uppercase the string, and strip the &REV_ part
 // from it, if found.
-void normalizeDriverId(OUString& driverid) {
+void normalizeDriverId(OUString& driverid)
+{
     driverid = driverid.toAsciiUpperCase();
     int32_t rev = driverid.indexOf("&REV_");
-    if (rev != -1) {
+    if (rev != -1)
+    {
         driverid = driverid.copy(0, rev - 1);
     }
 }
@@ -189,7 +205,8 @@ uint32_t ParseIDFromDeviceID(const OUString &key, const char *prefix, int length
     OUString id = key.toAsciiUpperCase();
     OUString aPrefix = OUString::fromUtf8(prefix);
     int32_t start = id.indexOf(aPrefix);
-    if (start != -1) {
+    if (start != -1)
+    {
         id = id.copy(start + aPrefix.getLength(), length);
     }
     return id.toUInt32(16);
@@ -211,7 +228,8 @@ enum {
 
 wgl::OperatingSystem WindowsVersionToOperatingSystem(int32_t aWindowsVersion)
 {
-    switch(aWindowsVersion) {
+    switch(aWindowsVersion)
+    {
         case kWindowsXP:
             return wgl::DRIVER_OS_WINDOWS_XP;
         case kWindowsServer2003:
@@ -237,14 +255,18 @@ int32_t WindowsOSVersion()
 
     OSVERSIONINFO vinfo;
 
-    if (winVersion == kWindowsUnknown) {
+    if (winVersion == kWindowsUnknown)
+    {
         vinfo.dwOSVersionInfoSize = sizeof (vinfo);
 #pragma warning(push)
 #pragma warning(disable:4996)
-        if (!GetVersionEx(&vinfo)) {
+        if (!GetVersionEx(&vinfo))
+        {
 #pragma warning(pop)
             winVersion = kWindowsUnknown;
-        } else {
+        }
+        else
+        {
             winVersion = int32_t(vinfo.dwMajorVersion << 16) + vinfo.dwMinorVersion;
         }
     }
@@ -259,9 +281,12 @@ int32_t WindowsOSVersion()
 // larger than .978 which would become 9780.
 void PadDriverDecimal(char *aString)
 {
-    for (int i = 0; i < 4; i++) {
-        if (!aString[i]) {
-            for (int c = i; c < 4; c++) {
+    for (int i = 0; i < 4; i++)
+    {
+        if (!aString[i])
+        {
+            for (int c = i; c < 4; c++)
+            {
                 aString[c] = '0';
             }
             break;
@@ -279,19 +304,23 @@ bool SplitDriverVersion(const char *aSource, char *aAStr, char *aBStr, char *aCS
     unsigned destIdx = 0;
     unsigned destPos = 0;
 
-    for (int i = 0; i < len; i++) {
-        if (destIdx > ArrayLength(dest)) {
+    for (int i = 0; i < len; i++)
+    {
+        if (destIdx > ArrayLength(dest))
+        {
             // Invalid format found. Ensure we don't access dest beyond bounds.
             return false;
         }
 
-        if (aSource[i] == '.') {
+        if (aSource[i] == '.')
+        {
             dest[destIdx++][destPos] = 0;
             destPos = 0;
             continue;
         }
 
-        if (destPos > 3) {
+        if (destPos > 3)
+        {
             // Ignore more than 4 chars. Ensure we never access dest[destIdx]
             // beyond its bounds.
             continue;
@@ -303,7 +332,8 @@ bool SplitDriverVersion(const char *aSource, char *aAStr, char *aBStr, char *aCS
     // Add last terminator.
     dest[destIdx][destPos] = 0;
 
-    if (destIdx != ArrayLength(dest) - 1) {
+    if (destIdx != ArrayLength(dest) - 1)
+    {
         return false;
     }
     return true;
@@ -416,10 +446,13 @@ DriverInfo::DriverInfo(const DriverInfo& aOrig)
 {
     //If we're managing the lifetime of the device family, we have to make a
     // copy of the original's device family.
-    if (aOrig.mbDeleteDevices && aOrig.mpDevices) {
+    if (aOrig.mbDeleteDevices && aOrig.mpDevices)
+    {
         mpDevices = new DeviceFamilyVector;
         *mpDevices = *aOrig.mpDevices;
-    } else {
+    }
+    else
+    {
         mpDevices = aOrig.mpDevices;
     }
 
@@ -449,7 +482,8 @@ const DriverInfo::DeviceFamilyVector* DriverInfo::GetDeviceFamily(DeviceFamily i
     mpDeviceFamilies[id] = new wgl::DriverInfo::DeviceFamilyVector;
     wgl::DriverInfo::DeviceFamilyVector* deviceFamily = mpDeviceFamilies[id];
 
-    switch (id) {
+    switch (id)
+    {
         case IntelGMA500:
             APPEND_DEVICE(0x8108); /* IntelGMA500_1 */
             APPEND_DEVICE(0x8109); /* IntelGMA500_2 */
@@ -598,37 +632,45 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
     wgl::OperatingSystem eOS = WindowsVersionToOperatingSystem(mnWindowsVersion);
     bool match = false;
     uint32_t i = 0;
-    for (; i < maDriverInfo.size(); i++) {
+    for (; i < maDriverInfo.size(); i++)
+    {
         if (maDriverInfo[i].meOperatingSystem != wgl::DRIVER_OS_ALL &&
                 maDriverInfo[i].meOperatingSystem != eOS)
         {
             continue;
         }
 
-        if (maDriverInfo[i].mnOperatingSystemVersion && maDriverInfo[i].mnOperatingSystemVersion != mnWindowsVersion) {
+        if (maDriverInfo[i].mnOperatingSystemVersion && maDriverInfo[i].mnOperatingSystemVersion != mnWindowsVersion)
+        {
             continue;
         }
 
         if (!maDriverInfo[i].maAdapterVendor.equalsIgnoreAsciiCase(GetDeviceVendor(wgl::VendorAll)) &&
-                !maDriverInfo[i].maAdapterVendor.equalsIgnoreAsciiCase(maAdapterVendorID)) {
+                !maDriverInfo[i].maAdapterVendor.equalsIgnoreAsciiCase(maAdapterVendorID))
+        {
             continue;
         }
 
-        if (maDriverInfo[i].mpDevices != wgl::DriverInfo::allDevices && maDriverInfo[i].mpDevices->size()) {
+        if (maDriverInfo[i].mpDevices != wgl::DriverInfo::allDevices && maDriverInfo[i].mpDevices->size())
+        {
             bool deviceMatches = false;
-            for (uint32_t j = 0; j < maDriverInfo[i].mpDevices->size(); j++) {
-                if ((*maDriverInfo[i].mpDevices)[j].equalsIgnoreAsciiCase(maAdapterDeviceID)) {
+            for (uint32_t j = 0; j < maDriverInfo[i].mpDevices->size(); j++)
+            {
+                if ((*maDriverInfo[i].mpDevices)[j].equalsIgnoreAsciiCase(maAdapterDeviceID))
+                {
                     deviceMatches = true;
                     break;
                 }
             }
 
-            if (!deviceMatches) {
+            if (!deviceMatches)
+            {
                 continue;
             }
         }
 
-        switch (maDriverInfo[i].meComparisonOp) {
+        switch (maDriverInfo[i].meComparisonOp)
+        {
             case wgl::DRIVER_LESS_THAN:
                 match = driverVersion < maDriverInfo[i].mnDriverVersion;
                 break;
@@ -665,7 +707,8 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
                 break;
         }
 
-        if (match || maDriverInfo[i].mnDriverVersion == wgl::DriverInfo::allDriverVersions) {
+        if (match || maDriverInfo[i].mnDriverVersion == wgl::DriverInfo::allDriverVersions)
+        {
             // white listed drivers
             if (maDriverInfo[i].mbWhitelisted)
             {
@@ -697,7 +740,6 @@ bool WinOpenGLDeviceInfo::isDeviceBlocked()
     // the static list after that. This order is used so that we can later escape
     // out of static blocks (i.e. if we were wrong or something was patched, we
     // can back out our static block without doing a release).
-
     if (mbRDP)
     {
         SAL_WARN("vcl.opengl", "all OpenGL blocked for RDP sessions");
@@ -715,8 +757,10 @@ void WinOpenGLDeviceInfo::GetData()
     mnWindowsVersion = WindowsOSVersion();
     int deviceIndex = 0;
 
-    while (EnumDisplayDevicesW(nullptr, deviceIndex, &displayDevice, 0)) {
-        if (displayDevice.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE) {
+    while (EnumDisplayDevicesW(nullptr, deviceIndex, &displayDevice, 0))
+    {
+        if (displayDevice.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
+        {
             break;
         }
         deviceIndex++;
@@ -724,7 +768,8 @@ void WinOpenGLDeviceInfo::GetData()
 
     // make sure the string is nullptr terminated
     if (wcsnlen(displayDevice.DeviceKey, ArrayLength(displayDevice.DeviceKey))
-            == ArrayLength(displayDevice.DeviceKey)) {
+            == ArrayLength(displayDevice.DeviceKey))
+    {
         // we did not find a nullptr
         SAL_WARN("vcl.opengl", "no null pointer");
         return;
@@ -758,7 +803,8 @@ void WinOpenGLDeviceInfo::GetData()
     HDEVINFO devinfo = SetupDiGetClassDevsW(nullptr, maDeviceID.getStr(), nullptr,
             DIGCF_PRESENT | DIGCF_PROFILE | DIGCF_ALLCLASSES);
 
-    if (devinfo != INVALID_HANDLE_VALUE) {
+    if (devinfo != INVALID_HANDLE_VALUE)
+    {
         HKEY key;
         LONG result;
         WCHAR value[255];
@@ -769,7 +815,8 @@ void WinOpenGLDeviceInfo::GetData()
         devinfoData.cbSize = sizeof(devinfoData);
         OUString aDriverKeyPre("System\\CurrentControlSet\\Control\\Class\\");
         /* enumerate device information elements in the device information set */
-        while (SetupDiEnumDeviceInfo(devinfo, memberIndex++, &devinfoData)) {
+        while (SetupDiEnumDeviceInfo(devinfo, memberIndex++, &devinfoData))
+        {
             /* get a string that identifies the device's driver key */
             if (SetupDiGetDeviceRegistryPropertyW(devinfo,
                         &devinfoData,
@@ -777,27 +824,35 @@ void WinOpenGLDeviceInfo::GetData()
                         nullptr,
                         (PBYTE)value,
                         sizeof(value),
-                        nullptr)) {
+                        nullptr))
+            {
                 OUString  driverKey(aDriverKeyPre);
                 driverKey += value;
                 result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, driverKey.getStr(), 0, KEY_QUERY_VALUE, &key);
-                if (result == ERROR_SUCCESS) {
+                if (result == ERROR_SUCCESS)
+                {
                     /* we've found the driver we're looking for */
                     dwcbData = sizeof(value);
                     result = RegQueryValueExW(key, L"DriverVersion", nullptr, nullptr,
                             (LPBYTE)value, &dwcbData);
-                    if (result == ERROR_SUCCESS) {
+                    if (result == ERROR_SUCCESS)
+                    {
                         maDriverVersion = OUString(value);
-                    } else {
+                    }
+                    else
+                    {
                         // If the entry wasn't found, assume the worst (0.0.0.0).
                         maDriverVersion = OUString("0.0.0.0");
                     }
                     dwcbData = sizeof(value);
                     result = RegQueryValueExW(key, L"DriverDate", nullptr, nullptr,
                             (LPBYTE)value, &dwcbData);
-                    if (result == ERROR_SUCCESS) {
+                    if (result == ERROR_SUCCESS)
+                    {
                         maDriverDate = value;
-                    } else {
+                    }
+                    else
+                    {
                         // Again, assume the worst
                         maDriverDate = OUString("01-01-1970");
                     }
@@ -824,12 +879,14 @@ void WinOpenGLDeviceInfo::GetData()
     CLSID GUID_DISPLAY_DEVICE_ARRIVAL;
     HRESULT hresult = CLSIDFromString(L"{1CA05180-A699-450A-9A0C-DE4FBE3DDD89}",
             &GUID_DISPLAY_DEVICE_ARRIVAL);
-    if (hresult == NOERROR) {
+    if (hresult == NOERROR)
+    {
         devinfo = SetupDiGetClassDevsW(&GUID_DISPLAY_DEVICE_ARRIVAL,
                 nullptr, nullptr,
                 DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
 
-        if (devinfo != INVALID_HANDLE_VALUE) {
+        if (devinfo != INVALID_HANDLE_VALUE)
+        {
             HKEY key;
             LONG result;
             WCHAR value[255];
@@ -847,7 +904,8 @@ void WinOpenGLDeviceInfo::GetData()
 
             OUString aDriverKeyPre("System\\CurrentControlSet\\Control\\Class\\");
             /* enumerate device information elements in the device information set */
-            while (SetupDiEnumDeviceInfo(devinfo, memberIndex++, &devinfoData)) {
+            while (SetupDiEnumDeviceInfo(devinfo, memberIndex++, &devinfoData))
+            {
                 /* get a string that identifies the device's driver key */
                 if (SetupDiGetDeviceRegistryPropertyW(devinfo,
                             &devinfoData,
@@ -855,15 +913,18 @@ void WinOpenGLDeviceInfo::GetData()
                             nullptr,
                             (PBYTE)value,
                             sizeof(value),
-                            nullptr)) {
+                            nullptr))
+                {
                     OUString driverKey2(aDriverKeyPre);
                     driverKey2 += value;
                     result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, driverKey2.getStr(), 0, KEY_QUERY_VALUE, &key);
-                    if (result == ERROR_SUCCESS) {
+                    if (result == ERROR_SUCCESS)
+                    {
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"MatchingDeviceId", nullptr,
                                 nullptr, (LPBYTE)value, &dwcbData);
-                        if (result != ERROR_SUCCESS) {
+                        if (result != ERROR_SUCCESS)
+                        {
                             continue;
                         }
                         aDeviceID2 = value;
@@ -874,7 +935,8 @@ void WinOpenGLDeviceInfo::GetData()
                         adapterDeviceID2 = ParseIDFromDeviceID(aDeviceID2, "&DEV_", 4);
                         appendIntegerWithPadding(aAdapterDeviceID2String, adapterDeviceID2, 4);
                         if (maAdapterVendorID == aAdapterVendorID2String &&
-                                maAdapterDeviceID == aAdapterDeviceID2String) {
+                                maAdapterDeviceID == aAdapterDeviceID2String)
+                        {
                             RegCloseKey(key);
                             continue;
                         }
@@ -882,14 +944,16 @@ void WinOpenGLDeviceInfo::GetData()
                         // If this device is missing driver information, it is unlikely to
                         // be a real display adapter.
                         if (!GetKeyValue(driverKey2.getStr(), L"InstalledDisplayDrivers",
-                                        aAdapterDriver2, REG_MULTI_SZ)) {
+                                        aAdapterDriver2, REG_MULTI_SZ))
+                        {
                             RegCloseKey(key);
                             continue;
                         }
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"DriverVersion", nullptr, nullptr,
                                 (LPBYTE)value, &dwcbData);
-                        if (result != ERROR_SUCCESS) {
+                        if (result != ERROR_SUCCESS)
+                        {
                             RegCloseKey(key);
                             continue;
                         }
@@ -897,7 +961,8 @@ void WinOpenGLDeviceInfo::GetData()
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"DriverDate", nullptr, nullptr,
                                 (LPBYTE)value, &dwcbData);
-                        if (result != ERROR_SUCCESS) {
+                        if (result != ERROR_SUCCESS)
+                        {
                             RegCloseKey(key);
                             continue;
                         }
@@ -905,13 +970,15 @@ void WinOpenGLDeviceInfo::GetData()
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"Device Description", nullptr,
                                 nullptr, (LPBYTE)value, &dwcbData);
-                        if (result != ERROR_SUCCESS) {
+                        if (result != ERROR_SUCCESS)
+                        {
                             dwcbData = sizeof(value);
                             result = RegQueryValueExW(key, L"DriverDesc", nullptr, nullptr,
                                     (LPBYTE)value, &dwcbData);
                         }
                         RegCloseKey(key);
-                        if (result == ERROR_SUCCESS) {
+                        if (result == ERROR_SUCCESS)
+                        {
                             mbHasDualGPU = true;
                             maDeviceString2 = value;
                             maDeviceID2 = aDeviceID2;
@@ -932,7 +999,8 @@ void WinOpenGLDeviceInfo::GetData()
     }
 
     mbHasDriverVersionMismatch = false;
-    if (maAdapterVendorID == GetDeviceVendor(wgl::VendorIntel)) {
+    if (maAdapterVendorID == GetDeviceVendor(wgl::VendorIntel))
+    {
         // we've had big crashers (bugs 590373 and 595364) apparently correlated
         // with bad Intel driver installations where the DriverVersion reported
         // by the registry was not the version of the DLL.
@@ -956,7 +1024,8 @@ void WinOpenGLDeviceInfo::GetData()
         if (dllNumericVersion != driverNumericVersion &&
                 dllNumericVersion2 != driverNumericVersion &&
                 (driverNumericVersion < knownSafeMismatchVersion ||
-                 std::max(dllNumericVersion, dllNumericVersion2) < knownSafeMismatchVersion)) {
+                 std::max(dllNumericVersion, dllNumericVersion2) < knownSafeMismatchVersion))
+        {
             mbHasDriverVersionMismatch = true;
         }
     }
@@ -979,7 +1048,8 @@ OUString WinOpenGLDeviceInfo::GetDeviceVendor(wgl::DeviceVendor id)
 
     mpDeviceVendors[id] = new OUString();
 
-    switch (id) {
+    switch (id)
+    {
         DECLARE_VENDOR_ID(wgl::VendorAll, "");
         DECLARE_VENDOR_ID(wgl::VendorIntel, "0x8086");
         DECLARE_VENDOR_ID(wgl::VendorNVIDIA, "0x10de");
@@ -1121,7 +1191,6 @@ void WinOpenGLDeviceInfo::FillBlacklist()
     APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_ALL,
             GetDeviceVendor(wgl::VendorMicrosoft), wgl::DriverInfo::allDevices,
             wgl::DRIVER_LESS_THAN, wgl::V(6,2,0,0), "< 6.2.0.0" );
-
 }
 
 
