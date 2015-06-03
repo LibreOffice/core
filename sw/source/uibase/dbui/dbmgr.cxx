@@ -2667,6 +2667,12 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
 {
     uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
 
+    OUString sDataSource = rData.sDataSource;
+
+    // Fallback, just in case the document would contain an embedded data source, but no DB fields.
+    if (sDataSource.isEmpty())
+        sDataSource = "EmbeddedDatabase";
+
     if (xDatabaseContext->hasByName(rData.sDataSource))
         xDatabaseContext->revokeObject(rData.sDataSource);
 
@@ -2674,7 +2680,7 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
     const INetURLObject& rURLObject = rDocShell.GetMedium()->GetURLObject();
     OUString aURL = "vnd.sun.star.pkg://";
     aURL += INetURLObject::encode(rURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET), INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
-    aURL += "/" + INetURLObject::encode(rData.sEmbeddedName, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL);
+    aURL += "/" + INetURLObject::encode(m_sEmbeddedName, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL);
 
     uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
     xDatabaseContext->registerObject(rData.sDataSource, xDataSource);
@@ -2964,6 +2970,27 @@ uno::Reference<XResultSet> SwDBManager::createCursor(const OUString& _sDataSourc
         SAL_WARN("sw.mailmerge", "Caught exception while creating a new RowSet: " << e.Message);
     }
     return xResultSet;
+}
+
+void SwDBManager::setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell)
+{
+    bool bLoad = m_sEmbeddedName != rEmbeddedName && !rEmbeddedName.isEmpty();
+
+    m_sEmbeddedName = rEmbeddedName;
+
+    if (bLoad)
+    {
+        uno::Reference<embed::XStorage> xStorage = rDocShell.GetStorage();
+        // It's OK that we don't have the named sub-storage yet, in case
+        // we're in the process of creating it.
+        if (xStorage->hasByName(rEmbeddedName))
+            LoadAndRegisterEmbeddedDataSource(rDocShell.GetDoc()->GetDBData(), rDocShell);
+    }
+}
+
+OUString SwDBManager::getEmbeddedName() const
+{
+    return m_sEmbeddedName;
 }
 
 SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwDBManager& rManager)

@@ -199,6 +199,8 @@ friend class SwConnectionDisposedListener_Impl;
     SwDSParamArr        aDataSourceParams;
     SwDBManager_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
+    /// Name of the embedded database that's included in the current document.
+    OUString     m_sEmbeddedName;
 
     SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, bool bCreate);
     SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, bool bCreate);
@@ -372,7 +374,7 @@ public:
                                                          const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings = 0);
 
     /// Load the embedded data source of the document and also register it.
-    static void LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);
+    void LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);
 
     /** try to get the data source from the given connection through the XChild interface.
         If this is not possible, the data source will be created through its name.
@@ -405,6 +407,9 @@ public:
                             sal_Int32 _nCommandType,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                             );
+
+    void setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell);
+    OUString getEmbeddedName() const;
 };
 
 #endif

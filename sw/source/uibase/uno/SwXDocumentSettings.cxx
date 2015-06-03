@@ -46,6 +46,7 @@
 #include "swmodule.hxx"
 #include "cfgitems.hxx"
 #include "prtopt.hxx"
+#include "dbmgr.hxx"
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -508,9 +509,9 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_EMBEDDED_DATABASE_NAME:
         {
-            SwDBData aData = mpDoc->GetDBData();
-            if (rValue >>= aData.sEmbeddedName)
-                mpDoc->ChgDBData(aData);
+            OUString sEmbeddedName;
+            if (rValue >>= sEmbeddedName)
+                mpDoc->GetDBManager()->setEmbeddedName(sEmbeddedName, *mpDocSh);
         }
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
@@ -988,8 +989,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_EMBEDDED_DATABASE_NAME:
         {
-            const SwDBData& rData = mpDoc->GetDBDesc();
-            rValue <<= rData.sEmbeddedName;
+            rValue <<= mpDoc->GetDBManager()->getEmbeddedName();
         }
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:

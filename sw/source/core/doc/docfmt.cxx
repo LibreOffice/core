@@ -1958,7 +1958,6 @@ void SwDBData::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sDataSource"), BAD_CAST(sDataSource.toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sCommand"), BAD_CAST(sCommand.toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nCommandType"), BAD_CAST(OString::number(nCommandType).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sEmbeddedName"), BAD_CAST(sEmbeddedName.toUtf8().getStr()));
 
     xmlTextWriterEndElement(pWriter);
 }
