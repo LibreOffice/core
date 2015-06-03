@@ -172,8 +172,10 @@
 
      For each locale one pattern that matches a full date is automatically
      generated from FormatElement formatIndex="21" and does not need to be
-     defined, for example "M/D/Y" or "D.M.Y", so only if you want abbreviations
-     to be in effect add some patterns.
+     defined, for example "M/D/Y" or "D.M.Y".
+
+     At least one pattern for abbreviated date input must be defined, i.e.
+     contain D and M but not Y.
 
      NOTE: use only single letter D,M,Y. Multiple patterns can be defined.
 -->
