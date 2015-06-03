@@ -53,6 +53,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
+    get( m_pTypeGrid, "TypeGrid" );
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTDelete->SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
@@ -80,6 +81,9 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
                 m_pEDUsername->SetText( rUrl.GetUser( ) );
         }
     }
+
+    // In edit mode user can't change connection type
+    m_pTypeGrid->Hide();
 }
 
 PlaceEditDialog::~PlaceEditDialog()

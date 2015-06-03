@@ -39,6 +39,8 @@ private :
 
     VclPtr<PushButton>   m_pBTDelete;
 
+    VclPtr<VclGrid>      m_pTypeGrid;
+
     /** Vector holding the details UI control for each server type.
 
         The elements in this vector need to match the order in the type listbox, e.g.
