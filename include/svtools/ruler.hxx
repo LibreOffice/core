@@ -663,9 +663,10 @@ private:
 
     SvtRulerAccessible* pAccContext;
 
-    SVT_DLLPRIVATE void ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
-    SVT_DLLPRIVATE void ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
-    SVT_DLLPRIVATE void ImplVDrawText( long nX, long nY, const OUString& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
+    SVT_DLLPRIVATE void ImplVDrawLine(vcl::RenderContext& rRenderContext,  long nX1, long nY1, long nX2, long nY2 );
+    SVT_DLLPRIVATE void ImplVDrawRect(vcl::RenderContext& rRenderContext, long nX1, long nY1, long nX2, long nY2 );
+    SVT_DLLPRIVATE void ImplVDrawText(vcl::RenderContext& rRenderContext, long nX, long nY, const OUString& rText,
+                                      long nMin = LONG_MIN, long nMax = LONG_MAX );
 
     SVT_DLLPRIVATE void ImplDrawTicks(vcl::RenderContext& rRenderContext,
                                       long nMin, long nMax, long nStart, long nVirTop, long nVirBottom);
@@ -701,8 +702,6 @@ private:
     SVT_DLLPRIVATE bool     ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier );
     SVT_DLLPRIVATE void     ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void     ImplEndDrag();
-
-    DECL_DLLPRIVATE_LINK( ImplUpdateHdl, void* );
 
     Ruler (const Ruler &) SAL_DELETED_FUNCTION;
     Ruler& operator= (const Ruler &) SAL_DELETED_FUNCTION;
