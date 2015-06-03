@@ -18,7 +18,7 @@ $(eval $(call gb_CustomTarget_register_targets,i18npool/localedata,\
 define i18npool_LD_RULE
 $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_$(1).cxx : \
 		$(SRCDIR)/i18npool/source/localedata/data/$(1).xml \
-		| $(call gb_Executable_get_runtime_dependencies,saxparser)
+		$(call gb_Executable_get_runtime_dependencies,saxparser)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),SAX,1)
 	$$(call gb_Helper_abbreviate_dirs, \
 		$$(call gb_Helper_execute,saxparser) $(1) $$< $$@.tmp \
