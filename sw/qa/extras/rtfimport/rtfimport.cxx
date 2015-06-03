@@ -2274,20 +2274,24 @@ DECLARE_RTFIMPORT_TEST(testTdf91074, "tdf91074.rtf")
 
 DECLARE_RTFIMPORT_TEST(testTdf90260Nopar, "hello.rtf")
 {
+#if !defined WNT
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("tdf90260-nopar.rtf", xEnd);
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+#endif
 }
 
 DECLARE_RTFIMPORT_TEST(testTdf90260Par, "hello.rtf")
 {
+#if !defined WNT
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("tdf90260-par.rtf", xEnd);
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+#endif
 }
 
 DECLARE_RTFIMPORT_TEST(testTdf86814, "tdf86814.rtf")
