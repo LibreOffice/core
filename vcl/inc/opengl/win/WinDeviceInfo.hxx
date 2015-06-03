@@ -73,6 +73,8 @@ enum DeviceVendor {
     DeviceVendorMax
 };
 
+bool ParseDriverVersion(const OUString& rString, uint64_t& rVersion);
+
 struct DriverInfo
 {
     typedef std::vector<OUString> DeviceFamilyVector;
@@ -114,6 +116,7 @@ struct DriverInfo
     static DeviceFamilyVector* mpDeviceFamilies[DeviceFamilyMax];
 
     OUString maSuggestedVersion;
+    OUString maMsg;
 };
 
 #define GFX_DRIVER_VERSION(a,b,c,d) \
