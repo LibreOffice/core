@@ -56,6 +56,7 @@
     <DateAcceptancePattern>D.M.Y г.</DateAcceptancePattern>
     <DateAcceptancePattern>D.M.Y Г.</DateAcceptancePattern>
     <DateAcceptancePattern>D.M.Y Г.</DateAcceptancePattern>
+    <DateAcceptancePattern>D.M.</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>
     </FormatElement>
