@@ -25,18 +25,17 @@
 */
 class Tile
 {
-public:
-  Tile() : valid(0) {}
-  ~Tile() {
-    tile_release();
-  }
+ public:
+ Tile() : valid(0) {}
+    ~Tile() {
+    }
 
-  GdkPixbuf* tile_get_buffer();
-  void tile_release();
-  void tile_set_pixbuf(GdkPixbuf*);
-  bool valid;
-private:
-  GdkPixbuf *m_pBuffer;
+    GdkPixbuf* tile_get_buffer();
+    void tile_release();
+    void tile_set_pixbuf(GdkPixbuf*);
+    bool valid;
+ private:
+    GdkPixbuf *m_pBuffer;
 };
 
 /*
@@ -45,32 +44,33 @@ private:
 */
 class TileBuffer
 {
-public:
-  TileBuffer(LibreOfficeKitDocument *document,
-             int tileSize,
-             int rows,
-             int columns)
-    : m_pLOKDocument(document)
-    , m_nTileSize(tileSize)
-    , m_fZoomFactor(1)
-    , m_nWidth(columns)
-    , m_nHeight(rows)
+ public:
+ TileBuffer(LibreOfficeKitDocument *document,
+            int tileSize,
+            int rows,
+            int columns)
+     : m_pLOKDocument(document)
+        , m_nTileSize(tileSize)
+        , m_fZoomFactor(1)
+        , m_nWidth(columns)
+        , m_nHeight(rows)
     {  }
 
-  ~TileBuffer() {}
+    ~TileBuffer() {}
 
-  void tile_buffer_set_zoom(float zoomFactor, int rows, int columns);
-  Tile& tile_buffer_get_tile(int x, int y);
-  void tile_buffer_update();
-  void tile_buffer_reset_all_tiles();
-private:
-  LibreOfficeKitDocument *m_pLOKDocument;
-  int m_nTileSize;
-  float m_fZoomFactor;
-  std::map<int, Tile> m_mTiles;
-  //TODO: Also set width and height when document size changes
-  int m_nWidth;
-  int m_nHeight;
+    void tile_buffer_set_zoom(float zoomFactor, int rows, int columns);
+    Tile& tile_buffer_get_tile(int x, int y);
+    void tile_buffer_update();
+    void tile_buffer_reset_all_tiles();
+    void tile_buffer_set_invalid(int x, int y);
+ private:
+    LibreOfficeKitDocument *m_pLOKDocument;
+    int m_nTileSize;
+    float m_fZoomFactor;
+    std::map<int, Tile> m_mTiles;
+    //TODO: Also set width and height when document size changes
+    int m_nWidth;
+    int m_nHeight;
 };
 
 #endif // INCLUDED_TILEBUFFER_HXX
