@@ -430,7 +430,7 @@
         Identifier = SID_OBJECT_ALIGN ; \
         Command = ".uno:AlignObjetMenu" ; \
         HelpId = CMD_SID_OBJECT_ALIGN ; \
-        Text [ en-US ] = "Al~ignment" ; \
+        Text [ en-US ] = "Al~ign" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -653,7 +653,7 @@
     {\
         Identifier = SID_SET_DEFAULT ; \
         HelpId = CMD_SID_SET_DEFAULT ; \
-        Text [ en-US ] = "~Default" ; \
+        Text [ en-US ] = "~Default Formatting" ; \
     };
 
 #define MN_FONTWORK\
@@ -669,14 +669,14 @@
     {\
         Identifier = SID_ORIGINAL_SIZE ; \
         HelpId = CMD_SID_ORIGINAL_SIZE ; \
-        Text [ en-US ] = "~Original Size" ; \
+        Text [ en-US ] = "Restore ~Original Size" ; \
     };
 
 #define MN_CROP\
     MenuItem\
     {\
         Identifier = SID_OBJECT_CROP ; \
-        Text [ en-US ] = "Crop Image" ; \
+        Text [ en-US ] = "Crop I~mage" ; \
     };
 
 #define MN_GLUE_INSERT_POINT\
