@@ -17,6 +17,7 @@ $(eval $(call gb_Library_use_externals,libreofficekitgtk,\
 
 $(eval $(call gb_Library_add_exception_objects,libreofficekitgtk,\
     libreofficekit/source/gtk/lokdocview \
+    libreofficekit/source/gtk/tilebuffer \
 ))
 
 ifeq ($(OS),LINUX)
