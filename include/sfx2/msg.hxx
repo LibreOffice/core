@@ -112,7 +112,7 @@ struct SfxType
 {
     TypeId          aTypeId;
     sal_uInt16          nAttribs;
-    SfxTypeAttrib   aAttrib[16];
+    SfxTypeAttrib   aAttrib[1]; // variable length
 
     const TypeId&   Type() const
                     { return aTypeId; }
