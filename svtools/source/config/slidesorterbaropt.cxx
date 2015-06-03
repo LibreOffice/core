@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <comphelper/lok.hxx>
 #include <rtl/instance.hxx>
 
 using namespace ::utl;
@@ -345,7 +346,7 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
 
 bool SvtSlideSorterBarOptions::GetVisibleImpressView() const
 {
-    return m_pDataContainer->m_bVisibleImpressView;
+    return m_pDataContainer->m_bVisibleImpressView && !comphelper::LibreOfficeKit::isActive();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleImpressView(bool bVisible)
@@ -385,7 +386,7 @@ void SvtSlideSorterBarOptions::SetVisibleHandoutView(bool bVisible)
 
 bool SvtSlideSorterBarOptions::GetVisibleSlideSorterView() const
 {
-    return m_pDataContainer->m_bVisibleSlideSorterView;
+    return m_pDataContainer->m_bVisibleSlideSorterView && !comphelper::LibreOfficeKit::isActive();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleSlideSorterView(bool bVisible)
