@@ -339,9 +339,35 @@ bool SplitDriverVersion(const char *aSource, char *aAStr, char *aBStr, char *aCS
     return true;
 }
 
-bool ParseDriverVersion(const OUString& aVersion, uint64_t *aNumericVersion)
+/* Other interesting places for info:
+ *   IDXGIAdapter::GetDesc()
+ *   IDirectDraw7::GetAvailableVidMem()
+ *   e->GetAvailableTextureMem()
+ * */
+
+template<typename T> void appendIntegerWithPadding(OUString& rString, T value, sal_uInt32 nChars)
 {
-    *aNumericVersion = 0;
+    rString += "0x";
+    OUString aValue = OUString::number(value, 16);
+    sal_Int32 nLength = aValue.getLength();
+    sal_uInt32 nPadLength = nChars - nLength;
+    assert(nPadLength >= 0);
+    OUStringBuffer aBuffer;
+    for (sal_uInt32 i = 0; i < nPadLength; ++i)
+    {
+        aBuffer.append("0");
+    }
+    rString += aBuffer.makeStringAndClear() + aValue;
+}
+
+#define DEVICE_KEY_PREFIX L"\\Registry\\Machine\\"
+}
+
+namespace wgl {
+
+bool ParseDriverVersion(const OUString& aVersion, uint64_t& rNumericVersion)
+{
+    rNumericVersion = 0;
 
 #if defined(WIN32)
     int a, b, c, d;
@@ -380,37 +406,12 @@ bool ParseDriverVersion(const OUString& aVersion, uint64_t *aNumericVersion)
     if (c < 0 || c > 0xffff) return false;
     if (d < 0 || d > 0xffff) return false;
 
-    *aNumericVersion = GFX_DRIVER_VERSION(a, b, c, d);
+    rNumericVersion = GFX_DRIVER_VERSION(a, b, c, d);
     return true;
 #else
     return false;
 #endif
 }
-/* Other interesting places for info:
- *   IDXGIAdapter::GetDesc()
- *   IDirectDraw7::GetAvailableVidMem()
- *   e->GetAvailableTextureMem()
- * */
-
-template<typename T> void appendIntegerWithPadding(OUString& rString, T value, sal_uInt32 nChars)
-{
-    rString += "0x";
-    OUString aValue = OUString::number(value, 16);
-    sal_Int32 nLength = aValue.getLength();
-    sal_uInt32 nPadLength = nChars - nLength;
-    assert(nPadLength >= 0);
-    OUStringBuffer aBuffer;
-    for (sal_uInt32 i = 0; i < nPadLength; ++i)
-    {
-        aBuffer.append("0");
-    }
-    rString += aBuffer.makeStringAndClear() + aValue;
-}
-
-#define DEVICE_KEY_PREFIX L"\\Registry\\Machine\\"
-}
-
-namespace wgl {
 
 uint64_t DriverInfo::allDriverVersions = ~(uint64_t(0));
 DriverInfo::DeviceFamilyVector* const DriverInfo::allDevices = nullptr;
@@ -642,7 +643,7 @@ WinOpenGLDeviceInfo::~WinOpenGLDeviceInfo()
 bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
 {
     uint64_t driverVersion;
-    ParseDriverVersion(maDriverVersion, &driverVersion);
+    wgl::ParseDriverVersion(maDriverVersion, driverVersion);
 
     wgl::OperatingSystem eOS = WindowsVersionToOperatingSystem(mnWindowsVersion);
 
@@ -1045,10 +1046,10 @@ void WinOpenGLDeviceInfo::GetData()
 
         uint64_t dllNumericVersion = 0, dllNumericVersion2 = 0,
                  driverNumericVersion = 0, knownSafeMismatchVersion = 0;
-        ParseDriverVersion(aDLLVersion, &dllNumericVersion);
-        ParseDriverVersion(aDLLVersion2, &dllNumericVersion2);
-        ParseDriverVersion(maDriverVersion, &driverNumericVersion);
-        ParseDriverVersion("9.17.10.0", &knownSafeMismatchVersion);
+        wgl::ParseDriverVersion(aDLLVersion, dllNumericVersion);
+        wgl::ParseDriverVersion(aDLLVersion2, dllNumericVersion2);
+        wgl::ParseDriverVersion(maDriverVersion, driverNumericVersion);
+        wgl::ParseDriverVersion("9.17.10.0", knownSafeMismatchVersion);
 
         // If there's a driver version mismatch, consider this harmful only when
         // the driver version is less than knownSafeMismatchVersion.  See the
