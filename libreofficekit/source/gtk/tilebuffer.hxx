@@ -12,7 +12,7 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <vector>
+#include <map>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
@@ -55,9 +55,7 @@ public:
     , m_fZoomFactor(1)
     , m_nWidth(columns)
     , m_nHeight(rows)
-  {
-    m_aTiles.resize(rows * columns);
-  }
+    {  }
 
   ~TileBuffer() {}
 
@@ -69,7 +67,7 @@ private:
   LibreOfficeKitDocument *m_pLOKDocument;
   int m_nTileSize;
   float m_fZoomFactor;
-  std::vector<Tile> m_aTiles;
+  std::map<int, Tile> m_mTiles;
   //TODO: Also set width and height when document size changes
   int m_nWidth;
   int m_nHeight;
