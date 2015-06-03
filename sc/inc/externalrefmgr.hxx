@@ -699,6 +699,12 @@ public:
     bool containsUnsavedReferences() const { return !maUnsavedDocShells.empty(); }
 
     void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
+    /**
+     * Add a cell to reference the same files as the template cell.
+     */
+    void insertRefCellFromTemplate( ScFormulaCell* pTemplateCell, ScFormulaCell* pCell );
+
+    bool hasCellExternalReference(const ScAddress& rCell);
 
     void enableDocTimer( bool bEnable );
 
@@ -788,6 +794,7 @@ private:
      */
     void transformUnsavedRefToSavedRef( SfxObjectShell* pShell );
 
+    void insertRefCell(RefCellMap::iterator& itr, ScFormulaCell* pCell);
 private:
     ScDocument* mpDoc;
 

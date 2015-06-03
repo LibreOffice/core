@@ -2038,6 +2038,15 @@ void ScExternalRefManager::refreshAllRefCells(sal_uInt16 nFileId)
     pVShell->PaintGrid();
 }
 
+void ScExternalRefManager::insertRefCell(RefCellMap::iterator& itr, ScFormulaCell* pCell)
+{
+    if (pCell)
+    {
+        itr->second.insert(pCell);
+        pCell->SetIsExtRef();
+    }
+}
+
 void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell)
 {
     RefCellMap::iterator itr = maRefCells.find(nFileId);
@@ -2053,9 +2062,33 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
         itr = r.first;
     }
 
+    insertRefCell(itr, mpDoc->GetFormulaCell(rCell));
+}
+
+void ScExternalRefManager::insertRefCellFromTemplate( ScFormulaCell* pTemplateCell, ScFormulaCell* pCell )
+{
+    if (!pTemplateCell || !pCell)
+        return;
+
+    for (RefCellMap::iterator itr = maRefCells.begin(); itr != maRefCells.end(); ++itr)
+    {
+        if (itr->second.find(pTemplateCell) != itr->second.end())
+            insertRefCell(itr, pCell);
+    }
+}
+
+bool ScExternalRefManager::hasCellExternalReference(const ScAddress& rCell)
+{
     ScFormulaCell* pCell = mpDoc->GetFormulaCell(rCell);
+
     if (pCell)
-        itr->second.insert(pCell);
+      for (RefCellMap::iterator itr = maRefCells.begin(); itr != maRefCells.end(); ++itr)
+      {
+          if (itr->second.find(pCell) != itr->second.end())
+              return true;
+      }
+
+    return false;
 }
 
 void ScExternalRefManager::enableDocTimer( bool bEnable )
