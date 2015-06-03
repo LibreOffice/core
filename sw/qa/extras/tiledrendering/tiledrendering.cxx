@@ -26,6 +26,7 @@ static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 class SwTiledRenderingTest : public SwModelTestBase
 {
 public:
+    SwTiledRenderingTest();
     void testRegisterCallback();
     void testPostKeyEvent();
     void testPostMouseEvent();
@@ -35,6 +36,7 @@ public:
     void testSearch();
     void testSearchViewArea();
     void testSearchTextFrame();
+    void testSearchTextFrameWrapAround();
     void testDocumentSizeChanged();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
@@ -47,6 +49,7 @@ public:
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchViewArea);
     CPPUNIT_TEST(testSearchTextFrame);
+    CPPUNIT_TEST(testSearchTextFrameWrapAround);
     CPPUNIT_TEST(testDocumentSizeChanged);
     CPPUNIT_TEST_SUITE_END();
 
@@ -57,7 +60,13 @@ private:
     Rectangle m_aInvalidation;
     Size m_aDocumentSize;
     OString m_aTextSelection;
+    bool m_bFound;
 };
+
+SwTiledRenderingTest::SwTiledRenderingTest()
+    : m_bFound(true)
+{
+}
 
 SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
 {
@@ -104,6 +113,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         m_aTextSelection = pPayload;
+    }
+    break;
+    case LOK_CALLBACK_SEARCH_NOT_FOUND:
+    {
+        m_bFound = false;
     }
     break;
     }
@@ -339,6 +353,24 @@ void SwTiledRenderingTest::testSearchTextFrame()
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was empty: nothing was highlighted after searching for 'TextFrame'.
     CPPUNIT_ASSERT(!m_aTextSelection.isEmpty());
+#endif
+}
+
+void SwTiledRenderingTest::testSearchTextFrameWrapAround()
+{
+#if !defined(WNT) && !defined(MACOSX)
+    SwXTextDocument* pXTextDocument = createDoc("search.odt");
+    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
+        {"SearchItem.Backward", uno::makeAny(false)},
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    CPPUNIT_ASSERT(m_bFound);
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    // This failed, i.e. the second time 'not found' was reported, instead of wrapping around.
+    CPPUNIT_ASSERT(m_bFound);
 #endif
 }
 
