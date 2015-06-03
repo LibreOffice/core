@@ -31,7 +31,11 @@ import re
 import os, os.path
 import stat
 import sys
-import threading, Queue
+import threading
+try:
+    import queue
+except:
+    import Queue as queue
 try:
     from urllib.request import urlopen
 except:
@@ -206,7 +210,7 @@ def get_through_rss_query(queryurl, mimetype, prefix, suffix, startid):
     get_bug_function = get_novell_bug_via_xml if prefix == "novell" else get_from_bug_url_via_xml
 
     def process(query, full, have=[]):
-        url = queryurl + '?' + '&'.join(['='.join(kv) for kv in query.iteritems()])
+        url = queryurl + '?' + '&'.join(['='.join(kv) for kv in query.items()])
         print('url is ' + url)
         d = feedparser.parse(url)
         print(str(len(d['entries'])) + ' bugs to process')
@@ -493,44 +497,40 @@ class manage_threads(threading.Thread):
                 # Get job from queue
                 # Use job parameters to call our query
                 # Then let the queue know we are done with this job
-                job = jobs.get(True,6)
-                get_through_rss_query(job[0], job[1], job[2], job[3], job[4]) # [0] = uri; [1] = mimetype; [2] = prefix; [3] = extension; [4] = startid
-                jobs.task_done()
+                (uri, mimetype, prefix, extension, startid) = jobs.get(True,6)
+                try:
+                    get_through_rss_query(uri, mimetype, prefix, extension, startid)
+                finally:
+                    jobs.task_done()
             except KeyboardInterrupt:
                 raise # Ctrl+C should work
-            except:
+            except queue.Empty:
                 break
 
 def generate_multi_threading():
     for (prefix, uri, startid) in rss_bugzillas:
 
         # Initialize threads
-        for i in xrange(max_threads):
+        for i in range(max_threads):
             manage_threads().start()
 
         # Create a job for every mimetype for a bugzilla
         for (mimetype,extension) in mimetypes.items():
-
-
             # It seems that bugzilla has problems returing that many results
             # (10000 results is probably a limit set somewhere) so we always
             # end processing the complete list.
             if mimetype == 'text/html' and prefix == 'moz':
                     continue
 
-            try:
-                jobs.put([uri, mimetype, prefix, extension, startid], block=True, timeout=3)
-                print("successfully placed a job in the queue searching for " + mimetype + " in bugtracker " + prefix)
-            except KeyboardInterrupt:
-                raise # Ctrl+C should work
-            except:
-                print("Queue full")
+            jobs.put([uri, mimetype, prefix, extension, startid], block=True)
+            print("successfully placed a job in the queue searching for " + mimetype + " in bugtracker " + prefix)
 
         # Continue when all mimetypes are done for a bugzilla
         jobs.join()
+        print("DONE with bugtracker " + prefix)
 
 max_threads = 20 # Number of threads to create, (1 = without multi-threading)
-jobs = Queue.Queue(40)
+jobs = queue.Queue()
 
 generate_multi_threading()
 
