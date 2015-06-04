@@ -108,16 +108,17 @@ namespace sw
     {
         public:
             UnoCursorPointer()
-                : m_pCursor(nullptr)
+                : m_pCursor(nullptr), m_bSectionRestricted(false)
             {}
-            UnoCursorPointer(std::shared_ptr<SwUnoCrsr> pCursor)
-                : m_pCursor(pCursor)
+            UnoCursorPointer(std::shared_ptr<SwUnoCrsr> pCursor, bool bSectionRestricted=false)
+                : m_pCursor(pCursor), m_bSectionRestricted(bSectionRestricted)
             {
                 m_pCursor->Add(this);
             }
-            UnoCursorPointer(const UnoCursorPointer& pOther)
+            UnoCursorPointer(const UnoCursorPointer& rOther)
                 : SwClient(nullptr)
-                , m_pCursor(pOther.m_pCursor)
+                , m_pCursor(rOther.m_pCursor)
+                , m_bSectionRestricted(rOther.m_bSectionRestricted)
             {
                 if(m_pCursor)
                     m_pCursor->Add(this);
@@ -130,8 +131,17 @@ namespace sw
             virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE
             {
                 SwClient::SwClientNotify(rModify, rHint);
-                if(m_pCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
-                    m_pCursor->Remove(this);
+                if(m_pCursor)
+                {
+                    if(typeid(rHint) == typeid(DocDisposingHint))
+                        m_pCursor->Remove(this);
+                    else if(m_bSectionRestricted && typeid(rHint) == typeid(LegacyModifyHint))
+                    {
+                        const auto pLegacyHint = static_cast<const LegacyModifyHint*>(&rHint);
+                        if(pLegacyHint->m_pOld && pLegacyHint->m_pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION)
+                            m_pCursor->Remove(this);
+                    }
+                }
                 if(!GetRegisteredIn())
                     m_pCursor.reset();
             };
@@ -158,6 +168,7 @@ namespace sw
             }
         private:
             std::shared_ptr<SwUnoCrsr> m_pCursor;
+            const bool m_bSectionRestricted;
     };
 }
 #endif
