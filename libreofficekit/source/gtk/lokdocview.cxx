@@ -37,11 +37,6 @@
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
 
-// We know that VirtualDevices use a DPI of 96.
-static const int DPI = 96;
-// Lets use a square of side 256 pixels.
-static const int nTileSizePixels = 256;
-
 namespace {
 
 /// Sets rWidth and rHeight from a "width, height" string.
@@ -145,10 +140,6 @@ struct LOKDocView_Impl
     static void destroy(LOKDocView* pDocView, gpointer pData);
     /// Connected to the expose-event of the GtkDrawingArea
     static void on_exposed(GtkWidget *widget, GdkEvent *event, gpointer user_data);
-    /// Converts from screen pixels to document coordinates.
-    float pixelToTwip(float fInput);
-    /// Converts from document coordinates to screen pixels.
-    float twipToPixel(float fInput);
     /// Receives a key press or release event.
     void signalKey(GdkEventKey* pEvent);
     /**
@@ -316,16 +307,6 @@ void LOKDocView_Impl::on_exposed(GtkWidget* /*widget*/, GdkEvent* /*event*/, gpo
     pDocView->m_pImpl->renderDocument(0);
 }
 
-float LOKDocView_Impl::pixelToTwip(float fInput)
-{
-    return (fInput / DPI / m_fZoom) * 1440.0f;
-}
-
-float LOKDocView_Impl::twipToPixel(float fInput)
-{
-    return fInput / 1440.0f * DPI * m_fZoom;
-}
-
 void LOKDocView_Impl::signalKey(GdkEventKey* pEvent)
 {
     int nCharCode = 0;
@@ -390,7 +371,7 @@ gboolean LOKDocView_Impl::signalButton(GtkWidget* /*pEventBox*/, GdkEventButton*
 /// Receives a button press event.
 gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
 {
-    g_info("LOKDocView_Impl::signalButton: %d, %d (in twips: %d, %d)", (int)pEvent->x, (int)pEvent->y, (int)pixelToTwip(pEvent->x), (int)pixelToTwip(pEvent->y));
+    g_info("LOKDocView_Impl::signalButton: %d, %d (in twips: %d, %d)", (int)pEvent->x, (int)pEvent->y, (int)pixelToTwip(pEvent->x, m_fZoom), (int)pixelToTwip(pEvent->y, m_fZoom));
 
     if (pEvent->type == GDK_BUTTON_RELEASE)
     {
@@ -419,7 +400,7 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
             {
                 g_info("LOKDocView_Impl::signalButton: end of drag graphic handle #%d", i);
                 m_bInDragGraphicHandles[i] = false;
-                m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_END, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+                m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_END, pixelToTwip(pEvent->x, m_fZoom), pixelToTwip(pEvent->y, m_fZoom));
                 return FALSE;
             }
         }
@@ -428,7 +409,7 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
         {
             g_info("LOKDocView_Impl::signalButton: end of drag graphic selection");
             m_bInDragGraphicSelection = false;
-            m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_END, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+            m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_END, pixelToTwip(pEvent->x, m_fZoom), pixelToTwip(pEvent->y, m_fZoom));
             return FALSE;
         }
     }
@@ -469,8 +450,8 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
                     m_bInDragGraphicHandles[i] = true;
                     m_pDocument->pClass->setGraphicSelection(m_pDocument,
                                                              LOK_SETGRAPHICSELECTION_START,
-                                                             pixelToTwip(m_aGraphicHandleRects[i].x + m_aGraphicHandleRects[i].width / 2),
-                                                             pixelToTwip(m_aGraphicHandleRects[i].y + m_aGraphicHandleRects[i].height / 2));
+                                                             pixelToTwip(m_aGraphicHandleRects[i].x + m_aGraphicHandleRects[i].width / 2, m_fZoom),
+                                                             pixelToTwip(m_aGraphicHandleRects[i].y + m_aGraphicHandleRects[i].height / 2, m_fZoom));
                     return FALSE;
                 }
             }
@@ -488,7 +469,7 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
         if ((pEvent->time - m_nLastButtonPressTime) < 250)
             nCount++;
         m_nLastButtonPressTime = pEvent->time;
-        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x, m_fZoom), pixelToTwip(pEvent->y, m_fZoom), nCount);
         break;
     }
     case GDK_BUTTON_RELEASE:
@@ -497,7 +478,7 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
         if ((pEvent->time - m_nLastButtonReleaseTime) < 250)
             nCount++;
         m_nLastButtonReleaseTime = pEvent->time;
-        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x, m_fZoom), pixelToTwip(pEvent->y, m_fZoom), nCount);
         break;
     }
     default:
@@ -534,21 +515,21 @@ gboolean LOKDocView_Impl::signalMotionImpl(GdkEventButton* pEvent)
     {
         g_info("lcl_signalMotion: dragging the middle handle");
         LOKDocView_Impl::getDragPoint(&m_aHandleMiddleRect, pEvent, &aPoint);
-        m_pDocument->pClass->setTextSelection(m_pDocument, LOK_SETTEXTSELECTION_RESET, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
+        m_pDocument->pClass->setTextSelection(m_pDocument, LOK_SETTEXTSELECTION_RESET, pixelToTwip(aPoint.x, m_fZoom), pixelToTwip(aPoint.y, m_fZoom));
         return FALSE;
     }
     if (m_bInDragStartHandle)
     {
         g_info("lcl_signalMotion: dragging the start handle");
         LOKDocView_Impl::getDragPoint(&m_aHandleStartRect, pEvent, &aPoint);
-        m_pDocument->pClass->setTextSelection(m_pDocument, LOK_SETTEXTSELECTION_START, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
+        m_pDocument->pClass->setTextSelection(m_pDocument, LOK_SETTEXTSELECTION_START, pixelToTwip(aPoint.x, m_fZoom), pixelToTwip(aPoint.y, m_fZoom));
         return FALSE;
     }
     if (m_bInDragEndHandle)
     {
         g_info("lcl_signalMotion: dragging the end handle");
         LOKDocView_Impl::getDragPoint(&m_aHandleEndRect, pEvent, &aPoint);
-        m_pDocument->pClass->setTextSelection(m_pDocument, LOK_SETTEXTSELECTION_END, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
+        m_pDocument->pClass->setTextSelection(m_pDocument, LOK_SETTEXTSELECTION_END, pixelToTwip(aPoint.x, m_fZoom), pixelToTwip(aPoint.y, m_fZoom));
         return FALSE;
     }
     for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
@@ -566,20 +547,20 @@ gboolean LOKDocView_Impl::signalMotionImpl(GdkEventButton* pEvent)
     }
 
     GdkRectangle aMotionInTwipsInTwips;
-    aMotionInTwipsInTwips.x = pixelToTwip(pEvent->x);
-    aMotionInTwipsInTwips.y = pixelToTwip(pEvent->y);
+    aMotionInTwipsInTwips.x = pixelToTwip(pEvent->x, m_fZoom);
+    aMotionInTwipsInTwips.y = pixelToTwip(pEvent->y, m_fZoom);
     aMotionInTwipsInTwips.width = 1;
     aMotionInTwipsInTwips.height = 1;
     if (gdk_rectangle_intersect(&aMotionInTwipsInTwips, &m_aGraphicSelection, 0))
     {
         g_info("lcl_signalMotion: start of drag graphic selection");
         m_bInDragGraphicSelection = true;
-        m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_START, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+        m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_START, pixelToTwip(pEvent->x, m_fZoom), pixelToTwip(pEvent->y, m_fZoom));
         return FALSE;
     }
 
     // Otherwise a mouse move, as on the desktop.
-    m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEMOVE, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), 1);
+    m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEMOVE, pixelToTwip(pEvent->x, m_fZoom), pixelToTwip(pEvent->y, m_fZoom), 1);
 
     return FALSE;
 }
@@ -602,10 +583,10 @@ gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
 
         cairo_set_source_rgb(pCairo, 0, 0, 0);
         cairo_rectangle(pCairo,
-                        twipToPixel(m_aVisibleCursor.x),
-                        twipToPixel(m_aVisibleCursor.y),
-                        twipToPixel(m_aVisibleCursor.width),
-                        twipToPixel(m_aVisibleCursor.height));
+                        twipToPixel(m_aVisibleCursor.x, m_fZoom),
+                        twipToPixel(m_aVisibleCursor.y, m_fZoom),
+                        twipToPixel(m_aVisibleCursor.width, m_fZoom),
+                        twipToPixel(m_aVisibleCursor.height, m_fZoom));
         cairo_fill(pCairo);
     }
 
@@ -624,10 +605,10 @@ gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
             // Blue with 75% transparency.
             cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
             cairo_rectangle(pCairo,
-                            twipToPixel(rRectangle.x),
-                            twipToPixel(rRectangle.y),
-                            twipToPixel(rRectangle.width),
-                            twipToPixel(rRectangle.height));
+                            twipToPixel(rRectangle.x, m_fZoom),
+                            twipToPixel(rRectangle.y, m_fZoom),
+                            twipToPixel(rRectangle.width, m_fZoom),
+                            twipToPixel(rRectangle.height, m_fZoom));
             cairo_fill(pCairo);
         }
 
@@ -674,10 +655,10 @@ void LOKDocView_Impl::renderHandle(cairo_t* pCairo, const GdkRectangle& rCursor,
     nHandleWidth = cairo_image_surface_get_width(pHandle);
     nHandleHeight = cairo_image_surface_get_height(pHandle);
     // We want to scale down the handle, so that its height is the same as the cursor caret.
-    fHandleScale = twipToPixel(rCursor.height) / nHandleHeight;
+    fHandleScale = twipToPixel(rCursor.height, m_fZoom) / nHandleHeight;
     // We want the top center of the handle bitmap to be at the bottom center of the cursor rectangle.
-    aCursorBottom.x = twipToPixel(rCursor.x) + twipToPixel(rCursor.width) / 2 - (nHandleWidth * fHandleScale) / 2;
-    aCursorBottom.y = twipToPixel(rCursor.y) + twipToPixel(rCursor.height);
+    aCursorBottom.x = twipToPixel(rCursor.x, m_fZoom) + twipToPixel(rCursor.width, m_fZoom) / 2 - (nHandleWidth * fHandleScale) / 2;
+    aCursorBottom.y = twipToPixel(rCursor.y, m_fZoom) + twipToPixel(rCursor.height, m_fZoom);
     cairo_save(pCairo);
     cairo_translate(pCairo, aCursorBottom.x, aCursorBottom.y);
     cairo_scale(pCairo, fHandleScale, fHandleScale);
@@ -700,10 +681,10 @@ void LOKDocView_Impl::renderGraphicHandle(cairo_t* pCairo, const GdkRectangle& r
     nHandleWidth = cairo_image_surface_get_width(pHandle);
     nHandleHeight = cairo_image_surface_get_height(pHandle);
 
-    aSelection.x = twipToPixel(rSelection.x);
-    aSelection.y = twipToPixel(rSelection.y);
-    aSelection.width = twipToPixel(rSelection.width);
-    aSelection.height = twipToPixel(rSelection.height);
+    aSelection.x = twipToPixel(rSelection.x, m_fZoom);
+    aSelection.y = twipToPixel(rSelection.y, m_fZoom);
+    aSelection.width = twipToPixel(rSelection.width, m_fZoom);
+    aSelection.height = twipToPixel(rSelection.height, m_fZoom);
 
     for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
     {
@@ -781,8 +762,8 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
     GdkRectangle visibleArea;
     lok_docview_get_visarea (m_pDocView, &visibleArea);
 
-    long nDocumentWidthPixels = twipToPixel(m_nDocumentWidthTwips);
-    long nDocumentHeightPixels = twipToPixel(m_nDocumentHeightTwips);
+    long nDocumentWidthPixels = twipToPixel(m_nDocumentWidthTwips, m_fZoom);
+    long nDocumentHeightPixels = twipToPixel(m_nDocumentHeightTwips, m_fZoom);
     // Total number of rows / columns in this document.
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
@@ -809,10 +790,10 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
                 aTileRectanglePixels.height = nTileSizePixels;
 
             // Determine size and position of the tile in document coordinates, so we can decide if we can skip painting for partial rendering.
-            aTileRectangleTwips.x = pixelToTwip(nTileSizePixels) * nColumn;
-            aTileRectangleTwips.y = pixelToTwip(nTileSizePixels) * nRow;
-            aTileRectangleTwips.width = pixelToTwip(aTileRectanglePixels.width);
-            aTileRectangleTwips.height = pixelToTwip(aTileRectanglePixels.height);
+            aTileRectangleTwips.x = pixelToTwip(nTileSizePixels, m_fZoom) * nColumn;
+            aTileRectangleTwips.y = pixelToTwip(nTileSizePixels, m_fZoom) * nRow;
+            aTileRectangleTwips.width = pixelToTwip(aTileRectanglePixels.width, m_fZoom);
+            aTileRectangleTwips.height = pixelToTwip(aTileRectanglePixels.height, m_fZoom);
             if (pPartial && !gdk_rectangle_intersect(pPartial, &aTileRectangleTwips, 0))
                 bPaint = false;
 
@@ -826,7 +807,7 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
                 Tile& currentTile = m_pTileBuffer->tile_buffer_get_tile(nRow, nColumn);
                 GdkPixbuf* pPixBuf = currentTile.tile_get_buffer();
 
-                gdk_cairo_set_source_pixbuf (pcairo, pPixBuf, twipToPixel(aTileRectangleTwips.x), twipToPixel(aTileRectangleTwips.y));
+                gdk_cairo_set_source_pixbuf (pcairo, pPixBuf, twipToPixel(aTileRectangleTwips.x, m_fZoom), twipToPixel(aTileRectangleTwips.y, m_fZoom));
                 cairo_paint(pcairo);
             }
         }
@@ -935,10 +916,10 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         {
             GdkRectangle aRectangle = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
             GdkRectangle aRectanglePixels;
-            aRectanglePixels.x = twipToPixel(aRectangle.x);
-            aRectanglePixels.y = twipToPixel(aRectangle.y);
-            aRectanglePixels.width = twipToPixel(aRectangle.width);
-            aRectanglePixels.height = twipToPixel(aRectangle.height);
+            aRectanglePixels.x = twipToPixel(aRectangle.x, m_fZoom);
+            aRectanglePixels.y = twipToPixel(aRectangle.y, m_fZoom);
+            aRectanglePixels.width = twipToPixel(aRectangle.width, m_fZoom);
+            aRectanglePixels.height = twipToPixel(aRectangle.height, m_fZoom);
             int rowStart = aRectanglePixels.y / nTileSizePixels;
             int colStart = aRectanglePixels.x / nTileSizePixels;
             int rowEnd = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
@@ -963,10 +944,10 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         m_bCursorOverlayVisible = true;
         GdkRectangle aRectanglePixels;
-        aRectanglePixels.x = twipToPixel(m_aVisibleCursor.x);
-        aRectanglePixels.y = twipToPixel(m_aVisibleCursor.y);
-        aRectanglePixels.width = twipToPixel(m_aVisibleCursor.width);
-        aRectanglePixels.height = twipToPixel(m_aVisibleCursor.height);
+        aRectanglePixels.x = twipToPixel(m_aVisibleCursor.x, m_fZoom);
+        aRectanglePixels.y = twipToPixel(m_aVisibleCursor.y, m_fZoom);
+        aRectanglePixels.width = twipToPixel(m_aVisibleCursor.width, m_fZoom);
+        aRectanglePixels.height = twipToPixel(m_aVisibleCursor.height, m_fZoom);
         int rowStart = aRectanglePixels.y / nTileSizePixels;
         int colStart = aRectanglePixels.x / nTileSizePixels;
         int rowEnd = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
@@ -1246,10 +1227,11 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
         pDocView->m_pImpl->m_pDocument->pClass->getDocumentSize(pDocView->m_pImpl->m_pDocument, &pDocView->m_pImpl->m_nDocumentWidthTwips, &pDocView->m_pImpl->m_nDocumentHeightTwips);
         g_timeout_add(600, &LOKDocView_Impl::handleTimeout, pDocView);
 
+        float zoom = pDocView->m_pImpl->m_fZoom;
         long nDocumentWidthTwips = pDocView->m_pImpl->m_nDocumentWidthTwips;
         long nDocumentHeightTwips = pDocView->m_pImpl->m_nDocumentHeightTwips;
-        long nDocumentWidthPixels = pDocView->m_pImpl->twipToPixel(nDocumentWidthTwips);
-        long nDocumentHeightPixels = pDocView->m_pImpl->twipToPixel(nDocumentHeightTwips);
+        long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
+        long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
         // Total number of rows / columns in this document.
         guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
         guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
@@ -1271,8 +1253,8 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKitDocument* lok_docview_get_document(LOKDocView
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZoom )
 {
     pDocView->m_pImpl->m_fZoom = fZoom;
-    long nDocumentWidthPixels = pDocView->m_pImpl->twipToPixel(pDocView->m_pImpl->m_nDocumentWidthTwips);
-    long nDocumentHeightPixels = pDocView->m_pImpl->twipToPixel(pDocView->m_pImpl->m_nDocumentHeightTwips);
+    long nDocumentWidthPixels = twipToPixel(pDocView->m_pImpl->m_nDocumentWidthTwips, fZoom);
+    long nDocumentHeightPixels = twipToPixel(pDocView->m_pImpl->m_nDocumentHeightTwips, fZoom);
     // Total number of rows / columns in this document.
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
@@ -1350,12 +1332,13 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_post_key(GtkWidget* /*pWidget*/, GdkEventK
 
 SAL_DLLPUBLIC_EXPORT void lok_docview_get_visarea(LOKDocView* pThis, GdkRectangle* pArea)
 {
+    float zoom = pThis->m_pImpl->m_fZoom;
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pThis));
-    pArea->x = pThis->m_pImpl->pixelToTwip(gtk_adjustment_get_value(pHAdjustment));
-    pArea->width = pThis->m_pImpl->pixelToTwip(gtk_adjustment_get_page_size(pHAdjustment));
+    pArea->x = pixelToTwip(gtk_adjustment_get_value(pHAdjustment),zoom);
+    pArea->width = pixelToTwip(gtk_adjustment_get_page_size(pHAdjustment), zoom);
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pThis));
-    pArea->y = pThis->m_pImpl->pixelToTwip(gtk_adjustment_get_value(pVAdjustment));
-    pArea->height = pThis->m_pImpl->pixelToTwip(gtk_adjustment_get_page_size(pVAdjustment));
+    pArea->y = pixelToTwip(gtk_adjustment_get_value(pVAdjustment), zoom);
+    pArea->height = pixelToTwip(gtk_adjustment_get_page_size(pVAdjustment), zoom);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,6 +19,15 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 
+// We know that VirtualDevices use a DPI of 96.
+const int DPI = 96;
+// Lets use a square of side 256 pixels for each tile.
+const int nTileSizePixels = 256;
+
+float pixelToTwip(float fInput, float zoom);
+
+float twipToPixel(float fInput, float zoom);
+
 /*
   This class represents a single tile in the tile buffer.
   TODO: Extend it to support features like double buffering
