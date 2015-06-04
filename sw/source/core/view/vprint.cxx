@@ -537,9 +537,10 @@ bool SwViewShell::PrintOrPDFExport(
 
         SwPaintQueue::Repaint();
 
-        if (nPostItMode == POSTITS_INMARGINS)
+        SwPostItMgr *pPostItManager = (nPostItMode == POSTITS_INMARGINS) ?
+            pShell->GetPostItMgr() : NULL;
+        if (pPostItManager)
         {
-            SwPostItMgr *pPostItManager = pShell->GetPostItMgr();
             pPostItManager->CalcRects();
             pPostItManager->LayoutPostIts();
             pPostItManager->DrawNotesForPage(pOutDev, nPage-1);
