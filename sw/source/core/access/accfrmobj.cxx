@@ -262,10 +262,14 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
     }
     else if ( mpWindow )
     {
-        aBox = SwRect( rAccMap.GetShell()->GetWin()->PixelToLogic(
-                                        Rectangle( mpWindow->GetPosPixel(),
-                                                   mpWindow->GetSizePixel() ) ) );
-}
+        vcl::Window *pWin = rAccMap.GetShell()->GetWin();
+        if (pWin)
+        {
+            aBox = SwRect( pWin->PixelToLogic(
+                                            Rectangle( mpWindow->GetPosPixel(),
+                                                       mpWindow->GetSizePixel() ) ) );
+        }
+    }
 
     return aBox;
 }
