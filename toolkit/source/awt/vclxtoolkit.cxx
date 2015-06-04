@@ -44,6 +44,7 @@
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 
+#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -601,7 +602,26 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 {
     osl_setThreadName("VCLXToolkit VCL main thread");
 
-    VCLXToolkit * pTk = (VCLXToolkit *)pArgs;
+    css::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager;
+    try
+    {
+        xServiceManager = ::comphelper::getProcessServiceFactory();
+    }
+    catch (const css::uno::DeploymentException&)
+    {
+    }
+    if (!xServiceManager.is())
+    {
+        css::uno::Reference<css::uno::XComponentContext> xContext =
+            ::cppu::defaultBootstrap_InitialComponentContext();
+
+        xServiceManager = css::uno::Reference<css::lang::XMultiServiceFactory>(
+            xContext->getServiceManager(), css::uno::UNO_QUERY_THROW );
+        // set global process service factory used by unotools config helpers
+        ::comphelper::setProcessServiceFactory( xServiceManager );
+    }
+
+    VCLXToolkit * pTk = static_cast<VCLXToolkit *>(pArgs);
     bInitedByVCLToolkit = InitVCL();
     if( bInitedByVCLToolkit )
     {
