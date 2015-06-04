@@ -729,7 +729,7 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         if (mbVisibleItems)
         {
             for (sal_uInt16 i = 0; i < nItemCount; i++)
-                ImplDrawItem(rRenderContext, true, i, true, true);
+                ImplDrawItem(rRenderContext, false, i, true, true);
         }
     }
 
