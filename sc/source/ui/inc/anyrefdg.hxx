@@ -258,19 +258,19 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
     ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 )
         : ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4)
     {
-        SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
+        SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( TDerived::SLOTID ), this );
     }
 
     template<class T1, class T2, class T3, class T4, class T5>
     ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4, const T5& rt5 )
         : ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4, rt5)
     {
-        SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
+        SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( TDerived::SLOTID ), this );
     }
 
     virtual void dispose() SAL_OVERRIDE
     {
-        SC_MOD()->UnregisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
+        SC_MOD()->UnregisterRefWindow( static_cast<sal_uInt16>( TDerived::SLOTID ), this );
         ScRefHdlrImplBase<TBase, bBindRef >::disposeRefHandler();
         TBase::dispose();
     }
