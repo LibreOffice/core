@@ -1226,43 +1226,54 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     mpColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
     mpRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
 
-    if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
+    switch ( theSlotId )
     {
-        mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
-        mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
-    }
-    else if ( SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId )
-    {
-        SfxPoolItem* pDummy;
-
-        Reference< XDispatchProvider > aDisp( GetFrame()->getController(), UNO_QUERY );
-        SfxQueryStatus aQueryStatus( aDisp,
-                                     SID_ATTR_AUTO_COLOR_INVALID,
-                                     OUString( ".uno:AutoColorInvalid" ));
-        SfxItemState eState = aQueryStatus.QueryState( pDummy );
-        if( (SfxItemState::DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
+        case SID_ATTR_CHAR_COLOR_BACKGROUND:
+        case SID_BACKGROUND_COLOR:
         {
-            mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
-            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ) );
+            mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
+            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
+            break;
         }
-    }
-    else if ( SID_FRAME_LINECOLOR == theSlotId )
-    {
-        mpButtonAutoColor->Hide();
-        mpAutomaticSeparator->Hide();
-        mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
-    }
-    else if ( SID_ATTR_LINE_COLOR == theSlotId )
-    {
-        mpButtonAutoColor->Hide();
-        mpAutomaticSeparator->Hide();
-        mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
-    }
-    else if ( SID_ATTR_FILL_COLOR == theSlotId )
-    {
-        mpButtonAutoColor->Hide();
-        mpAutomaticSeparator->Hide();
-        mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FILLCOLOR ) );
+        case SID_ATTR_CHAR_COLOR:
+        case SID_ATTR_CHAR_COLOR2:
+        case SID_EXTRUSION_3D_COLOR:
+        {
+            SfxPoolItem* pDummy;
+
+            Reference< XDispatchProvider > aDisp( GetFrame()->getController(), UNO_QUERY );
+            SfxQueryStatus aQueryStatus( aDisp,
+                                         SID_ATTR_AUTO_COLOR_INVALID,
+                                         OUString( ".uno:AutoColorInvalid" ));
+            SfxItemState eState = aQueryStatus.QueryState( pDummy );
+            if( (SfxItemState::DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
+            {
+                mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
+                mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ) );
+            }
+            break;
+        }
+        case SID_FRAME_LINECOLOR:
+        {
+            mpButtonAutoColor->Hide();
+            mpAutomaticSeparator->Hide();
+            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
+            break;
+        }
+        case SID_ATTR_LINE_COLOR:
+        {
+            mpButtonAutoColor->Hide();
+            mpAutomaticSeparator->Hide();
+            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
+            break;
+        }
+        case SID_ATTR_FILL_COLOR:
+        {
+            mpButtonAutoColor->Hide();
+            mpAutomaticSeparator->Hide();
+            mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FILLCOLOR ) );
+            break;
+        }
     }
 
     mpPaletteListBox->SetStyle( mpPaletteListBox->GetStyle() | WB_BORDER | WB_AUTOSIZE );
@@ -1365,10 +1376,22 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
 IMPL_LINK_NOARG(SvxColorWindow_Impl, AutoColorClickHdl)
 {
     Color aColor;
-    if (SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId)
-        aColor = COL_TRANSPARENT;
-    else if (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId)
-        aColor = COL_AUTO;
+    switch ( theSlotId )
+    {
+        case SID_ATTR_CHAR_COLOR_BACKGROUND:
+        case SID_BACKGROUND_COLOR:
+        {
+            aColor = COL_TRANSPARENT;
+            break;
+        }
+        case SID_ATTR_CHAR_COLOR:
+        case SID_ATTR_CHAR_COLOR2:
+        case SID_EXTRUSION_3D_COLOR:
+        {
+            aColor = COL_AUTO;
+            break;
+        }
+    }
 
     mpRecentColorSet->SetNoSelection();
 
