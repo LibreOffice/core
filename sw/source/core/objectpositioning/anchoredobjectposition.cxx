@@ -482,13 +482,10 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
             {
                 // shrink textboxes to extend beyond the page bottom
                 SwFrameFormat* pFrameFormat = ::FindFrameFormat(&GetObject());
-                SfxItemSet aTextBoxSet(pFrameFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
                 SwFormatFrmSize aSize(pFormat->GetFrmSize());
                 SwTwips nShrinked = aSize.GetHeight() - (nProposedRelPosY - nAdjustedRelPosY);
                 aSize.SetHeight( nShrinked > 0 ? nShrinked : 0 );
-                aTextBoxSet.Put(aSize);
-                if (aTextBoxSet.Count())
-                    pFrameFormat->GetDoc()->SetFlyFrmAttr(*pFrameFormat, aTextBoxSet);
+                pFrameFormat->SetFormatAttr(aSize);
                 nAdjustedRelPosY = nProposedRelPosY;
             } else if ( SwTextBoxHelper::findTextBox(pFormat) )
                 // when the shape has a textbox, use only the proposed vertical position
