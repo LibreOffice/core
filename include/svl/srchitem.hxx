@@ -63,26 +63,26 @@ class SVL_DLLPUBLIC SvxSearchItem :
         public SfxPoolItem,
         public utl::ConfigItem
 {
-    com::sun::star::util::SearchOptions aSearchOpt;
+    com::sun::star::util::SearchOptions m_aSearchOpt;
 
-    SfxStyleFamily  eFamily;            // style family
+    SfxStyleFamily  m_eFamily;            // style family
 
-    SvxSearchCmd    nCommand;           // command (Search, Search all, Replace, Replace all)
+    SvxSearchCmd    m_nCommand;           // command (Search, Search all, Replace, Replace all)
 
     // Calc-specific
-    SvxSearchCellType nCellType;          // Search in Formulas/Values/Notes
-    SvxSearchApp    nAppFlag;           // application which the dialog is for
-    bool            bRowDirection;      // search direction: row-wise/column-wise
-    bool            bAllTables;         // search in all sheets
-    bool            bSearchFiltered;      // search filtered cells.
+    SvxSearchCellType m_nCellType;          // Search in Formulas/Values/Notes
+    SvxSearchApp    m_nAppFlag;           // application which the dialog is for
+    bool            m_bRowDirection;      // search direction: row-wise/column-wise
+    bool            m_bAllTables;         // search in all sheets
+    bool            m_bSearchFiltered;      // search filtered cells.
 
     // Writer-specific
-    bool            bNotes;
+    bool            m_bNotes;
 
-    bool            bBackward;          // search backwards
-    bool            bPattern;           // search for styles
-    bool            bContent;           // search in content
-    bool            bAsianOptions;      // use asian options?
+    bool            m_bBackward;          // search backwards
+    bool            m_bPattern;           // search for styles
+    bool            m_bContent;           // search in content
+    bool            m_bAsianOptions;      // use asian options?
 
     // Start search at this point (absolute twips).
     sal_Int32       m_nStartPointX;
@@ -109,8 +109,8 @@ public:
     // ConfigItem
     virtual void            Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
 
-            SvxSearchCmd    GetCommand() const { return nCommand; }
-            void            SetCommand(SvxSearchCmd nNewCommand) { nCommand = nNewCommand; }
+            SvxSearchCmd    GetCommand() const { return m_nCommand; }
+            void            SetCommand(SvxSearchCmd nNewCommand) { m_nCommand = nNewCommand; }
 
     inline  const OUString  GetSearchString() const;
     inline  void            SetSearchString(const OUString& rNewString);
@@ -124,8 +124,8 @@ public:
     inline  bool            GetExact() const;
             void            SetExact(bool bNewExact);
 
-            bool            GetBackward() const { return bBackward; }
-            void            SetBackward(bool bNewBackward) { bBackward = bNewBackward; }
+            bool            GetBackward() const { return m_bBackward; }
+            void            SetBackward(bool bNewBackward) { m_bBackward = bNewBackward; }
 
     inline  bool            GetSelection() const;
             void            SetSelection(bool bNewSelection);
@@ -133,33 +133,33 @@ public:
     inline  bool            GetRegExp() const;
             void            SetRegExp( bool bVal );
 
-            bool            GetPattern() const { return bPattern; }
-            void            SetPattern(bool bNewPattern) { bPattern = bNewPattern; }
+            bool            GetPattern() const { return m_bPattern; }
+            void            SetPattern(bool bNewPattern) { m_bPattern = bNewPattern; }
 
-            bool            IsContent() const { return bContent; }
-            void            SetContent( bool bNew ) { bContent = bNew; }
+            bool            IsContent() const { return m_bContent; }
+            void            SetContent( bool bNew ) { m_bContent = bNew; }
 
-            SfxStyleFamily  GetFamily() const { return eFamily; }
+            SfxStyleFamily  GetFamily() const { return m_eFamily; }
             void            SetFamily( SfxStyleFamily eNewFamily )
-                                { eFamily = eNewFamily; }
+                                { m_eFamily = eNewFamily; }
 
-            bool            GetRowDirection() const { return bRowDirection; }
-            void            SetRowDirection(bool bNewRowDirection) { bRowDirection = bNewRowDirection; }
+            bool            GetRowDirection() const { return m_bRowDirection; }
+            void            SetRowDirection(bool bNewRowDirection) { m_bRowDirection = bNewRowDirection; }
 
-            bool            IsAllTables() const { return bAllTables; }
-            void            SetAllTables(bool bNew) { bAllTables = bNew; }
+            bool            IsAllTables() const { return m_bAllTables; }
+            void            SetAllTables(bool bNew) { m_bAllTables = bNew; }
 
-            bool            IsSearchFiltered() const { return bSearchFiltered; }
-            void            SetSearchFiltered(bool b) { bSearchFiltered = b; }
+            bool            IsSearchFiltered() const { return m_bSearchFiltered; }
+            void            SetSearchFiltered(bool b) { m_bSearchFiltered = b; }
 
-            SvxSearchCellType GetCellType() const { return nCellType; }
-            void            SetCellType(SvxSearchCellType nNewCellType) { nCellType = nNewCellType; }
+            SvxSearchCellType GetCellType() const { return m_nCellType; }
+            void            SetCellType(SvxSearchCellType nNewCellType) { m_nCellType = nNewCellType; }
 
-            bool            GetNotes() const { return bNotes; }
-            void            SetNotes(bool bNew) { bNotes = bNew; }
+            bool            GetNotes() const { return m_bNotes; }
+            void            SetNotes(bool bNew) { m_bNotes = bNew; }
 
-            SvxSearchApp    GetAppFlag() const { return nAppFlag; }
-            void            SetAppFlag(SvxSearchApp nNewAppFlag) { nAppFlag = nNewAppFlag; }
+            SvxSearchApp    GetAppFlag() const { return m_nAppFlag; }
+            void            SetAppFlag(SvxSearchApp nNewAppFlag) { m_nAppFlag = nNewAppFlag; }
 
     inline  bool            IsLevenshtein() const;
             void            SetLevenshtein( bool bVal );
@@ -186,8 +186,8 @@ public:
     inline  bool            IsMatchFullHalfWidthForms() const;
     void                    SetMatchFullHalfWidthForms( bool bVal );
 
-    inline  bool            IsUseAsianOptions() const           { return bAsianOptions; }
-    inline  void            SetUseAsianOptions( bool bVal ) { bAsianOptions = bVal; }
+    inline  bool            IsUseAsianOptions() const           { return m_bAsianOptions; }
+    inline  void            SetUseAsianOptions( bool bVal ) { m_bAsianOptions = bVal; }
 
     sal_Int32 GetStartPointX() const;
     sal_Int32 GetStartPointY() const;
@@ -197,106 +197,106 @@ public:
 
 const OUString SvxSearchItem::GetSearchString() const
 {
-    return aSearchOpt.searchString;
+    return m_aSearchOpt.searchString;
 }
 
 void SvxSearchItem::SetSearchString(const OUString& rNewString)
 {
-    aSearchOpt.searchString = rNewString;
+    m_aSearchOpt.searchString = rNewString;
 }
 
 const OUString SvxSearchItem::GetReplaceString() const
 {
-    return aSearchOpt.replaceString;
+    return m_aSearchOpt.replaceString;
 }
 
 void SvxSearchItem::SetReplaceString(const OUString& rNewString)
 {
-    aSearchOpt.replaceString = rNewString;
+    m_aSearchOpt.replaceString = rNewString;
 }
 
 bool SvxSearchItem::GetWordOnly() const
 {
-    return 0 != (aSearchOpt.searchFlag &
+    return 0 != (m_aSearchOpt.searchFlag &
                         com::sun::star::util::SearchFlags::NORM_WORD_ONLY);
 }
 
 bool SvxSearchItem::GetExact() const
 {
-    return 0 == (aSearchOpt.transliterateFlags &
+    return 0 == (m_aSearchOpt.transliterateFlags &
                         com::sun::star::i18n::TransliterationModules_IGNORE_CASE);
 }
 
 bool SvxSearchItem::GetSelection() const
 {
-    return 0 != (aSearchOpt.searchFlag &
+    return 0 != (m_aSearchOpt.searchFlag &
                         com::sun::star::util::SearchFlags::REG_NOT_BEGINOFLINE);
 }
 
 bool SvxSearchItem::GetRegExp() const
 {
-    return aSearchOpt.algorithmType == com::sun::star::util::SearchAlgorithms_REGEXP ;
+    return m_aSearchOpt.algorithmType == com::sun::star::util::SearchAlgorithms_REGEXP ;
 }
 
 bool SvxSearchItem::IsLEVRelaxed() const
 {
-    return 0 != (aSearchOpt.searchFlag &
+    return 0 != (m_aSearchOpt.searchFlag &
                         com::sun::star::util::SearchFlags::LEV_RELAXED);
 }
 
 sal_uInt16 SvxSearchItem::GetLEVOther() const
 {
-    return (sal_Int16) aSearchOpt.changedChars;
+    return (sal_Int16) m_aSearchOpt.changedChars;
 }
 
 void SvxSearchItem::SetLEVOther( sal_uInt16 nVal )
 {
-    aSearchOpt.changedChars = nVal;
+    m_aSearchOpt.changedChars = nVal;
 }
 
 sal_uInt16 SvxSearchItem::GetLEVShorter() const
 {
-    return (sal_Int16) aSearchOpt.insertedChars;
+    return (sal_Int16) m_aSearchOpt.insertedChars;
 }
 
 void SvxSearchItem::SetLEVShorter( sal_uInt16 nVal )
 {
-    aSearchOpt.insertedChars = nVal;
+    m_aSearchOpt.insertedChars = nVal;
 }
 
 sal_uInt16 SvxSearchItem::GetLEVLonger() const
 {
-    return (sal_Int16) aSearchOpt.deletedChars;
+    return (sal_Int16) m_aSearchOpt.deletedChars;
 }
 
 void SvxSearchItem::SetLEVLonger( sal_uInt16 nVal )
 {
-    aSearchOpt.deletedChars = nVal;
+    m_aSearchOpt.deletedChars = nVal;
 }
 
 bool SvxSearchItem::IsLevenshtein() const
 {
-    return aSearchOpt.algorithmType == com::sun::star::util::SearchAlgorithms_APPROXIMATE;
+    return m_aSearchOpt.algorithmType == com::sun::star::util::SearchAlgorithms_APPROXIMATE;
 }
 
 const com::sun::star::util::SearchOptions & SvxSearchItem::GetSearchOptions() const
 {
-    return aSearchOpt;
+    return m_aSearchOpt;
 }
 
 void SvxSearchItem::SetSearchOptions( const com::sun::star::util::SearchOptions &rOpt )
 {
-    aSearchOpt = rOpt;
+    m_aSearchOpt = rOpt;
 }
 
 sal_Int32 SvxSearchItem::GetTransliterationFlags() const
 {
-    return aSearchOpt.transliterateFlags;
+    return m_aSearchOpt.transliterateFlags;
 }
 
 bool SvxSearchItem::IsMatchFullHalfWidthForms() const
 {
-    return 0 != (aSearchOpt.transliterateFlags &
+    return 0 != (m_aSearchOpt.transliterateFlags &
                         com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH);
 }
 
