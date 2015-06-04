@@ -419,7 +419,7 @@ void Application::AcquireSolarMutex( sal_uLong nCount )
 bool Application::IsInMain()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    return pSVData ? pSVData->maAppData.mbInAppMain : false;
+    return pSVData && pSVData->maAppData.mbInAppMain;
 }
 
 bool Application::IsInExecute()
