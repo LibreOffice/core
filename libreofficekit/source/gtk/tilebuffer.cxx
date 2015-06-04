@@ -9,14 +9,12 @@
 
 #include "tilebuffer.hxx"
 
-static const int DPI = 96;
-
-static float pixelToTwip(float fInput, float zoom)
+float pixelToTwip(float fInput, float zoom)
 {
     return (fInput / DPI / zoom) * 1440.0f;
 }
 
-static float twipToPixel(float fInput, float zoom)
+float twipToPixel(float fInput, float zoom)
 {
     return fInput / 1440.0f * DPI * zoom;
 }
