@@ -27,26 +27,40 @@
 
 #include <vector>
 
+#define WB_MULTISELECTION 0x20000000L
+
 enum SvtRemoteDlgMode
 {
     REMOTEDLG_MODE_OPEN = 0,
     REMOTEDLG_MODE_SAVE = 1
 };
 
+enum SvtRemoteDlgType
+{
+    REMOTEDLG_TYPE_FILEDLG = 0,
+    REMOTEDLG_TYPE_PATHDLG = 1
+};
+
 typedef std::shared_ptr<Place> ServicePtr;
 typedef ::com::sun::star::uno::Sequence<OUString>  OUStringList;
+
+class FileViewContainer;
 
 class SVT_DLLPUBLIC RemoteFilesDialog : public ModalDialog
 {
 public:
     RemoteFilesDialog(vcl::Window* pParent, WinBits nBits);
+    ~RemoteFilesDialog();
 
     virtual void dispose() SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
 private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
     SvtRemoteDlgMode m_eMode;
+    SvtRemoteDlgType m_eType;
+    bool m_bMultiselection;
     bool m_bIsUpdated;
 
     VclPtr<PushButton> m_pOpen_btn;
@@ -55,7 +69,8 @@ private:
     VclPtr<MenuButton> m_pAddService_btn;
     VclPtr<ListBox> m_pServices_lb;
     VclPtr<Edit> m_pPath_ed;
-    VclPtr<SvtFileView> m_pView;
+    VclPtr<SvtFileView> m_pFileView;
+    VclPtr<FileViewContainer> m_pContainer;
 
     std::vector<ServicePtr> m_aServices;
 
@@ -64,9 +79,13 @@ private:
     /* If failure returns < 0 */
     int GetSelectedServicePos();
 
+    void OpenURL( OUString sURL );
+
     DECL_LINK ( AddServiceHdl, void * );
     DECL_LINK ( SelectServiceHdl, void * );
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
+
+    DECL_LINK( DoubleClickHdl, void * );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX

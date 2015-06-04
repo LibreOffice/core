@@ -13,9 +13,51 @@ using namespace ::com::sun::star::uno;
 
 #define NO_FILTER "*.*"
 
+class FileViewContainer : public vcl::Window
+{
+    private:
+    VclPtr<SvtFileView> m_pFileView;
+
+    public:
+    FileViewContainer(vcl::Window *pParent)
+        : Window(pParent)
+        , m_pFileView(NULL)
+    {
+    }
+
+    virtual ~FileViewContainer()
+    {
+        disposeOnce();
+    }
+
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pFileView.clear();
+        vcl::Window::dispose();
+    }
+
+    void init(SvtFileView* pFileView)
+    {
+        m_pFileView = pFileView;
+    }
+
+    virtual void Resize() SAL_OVERRIDE
+    {
+        Window::Resize();
+
+        if(!m_pFileView)
+            return;
+
+        Size aSize = GetSizePixel();
+        m_pFileView->SetSizePixel( aSize );
+    }
+};
+
 RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     : ModalDialog(pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui")
     , m_context(comphelper::getProcessComponentContext())
+    , m_pFileView(NULL)
+    , m_pContainer(NULL)
 {
     get(m_pOpen_btn, "open");
     get(m_pSave_btn, "save");
@@ -23,9 +65,10 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     get(m_pAddService_btn, "add_service_btn");
     get(m_pServices_lb, "services_lb");
     get(m_pPath_ed, "path");
-    get(m_pView, "files");
 
     m_eMode = (nBits & WB_SAVEAS) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
+    m_eType = (nBits & WB_PATH) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
+    m_bMultiselection = (nBits & WB_MULTISELECTION) ? true : false;
     m_bIsUpdated = false;
 
     if(m_eMode == REMOTEDLG_MODE_OPEN)
@@ -39,6 +82,22 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
         m_pOpen_btn->Hide();
     }
 
+    m_pContainer = VclPtr<FileViewContainer>::Create( get<vcl::Window>("container") );
+
+    m_pContainer->set_hexpand(true);
+    m_pContainer->set_vexpand(true);
+
+    m_pFileView = VclPtr<SvtFileView>::Create( m_pContainer, WB_BORDER,
+                                       REMOTEDLG_TYPE_PATHDLG == m_eType,
+                                       m_bMultiselection );
+
+    m_pFileView->Show();
+    m_pFileView->EnableAutoResize();
+    m_pFileView->SetDoubleClickHdl( LINK( this, RemoteFilesDialog, DoubleClickHdl ) );
+
+    m_pContainer->init(m_pFileView);
+    m_pContainer->Show();
+
     m_pAddService_btn->SetMenuMode(MENUBUTTON_MENUMODE_TIMED);
     m_pAddService_btn->SetClickHdl( LINK( this, RemoteFilesDialog, AddServiceHdl ) );
     m_pAddService_btn->SetSelectHdl( LINK( this, RemoteFilesDialog, EditServiceMenuHdl ) );
@@ -46,6 +105,11 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     FillServicesListbox();
 
     m_pServices_lb->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectServiceHdl ) );
+}
+
+RemoteFilesDialog::~RemoteFilesDialog()
+{
+    disposeOnce();
 }
 
 void RemoteFilesDialog::dispose()
@@ -70,6 +134,17 @@ void RemoteFilesDialog::dispose()
     }
 
     ModalDialog::dispose();
+}
+
+void RemoteFilesDialog::Resize()
+{
+    ModalDialog::Resize();
+
+    if(m_pFileView && m_pContainer)
+    {
+        Size aSize = m_pContainer->GetSizePixel();
+        m_pFileView->SetSizePixel(aSize);
+    }
 }
 
 void RemoteFilesDialog::FillServicesListbox()
@@ -121,6 +196,19 @@ int RemoteFilesDialog::GetSelectedServicePos()
     return nPos;
 }
 
+void RemoteFilesDialog::OpenURL( OUString sURL )
+{
+    if(m_pFileView)
+    {
+        OUStringList BlackList;
+        FileViewResult eResult = eFailure;
+
+        m_pFileView->EndInplaceEditing( false );
+        m_pPath_ed->SetText( sURL );
+        eResult = m_pFileView->Initialize( sURL, NO_FILTER, NULL, BlackList );
+    }
+}
+
 IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
 {
     ScopedVclPtrInstance< PlaceEditDialog > aDlg(this);
@@ -154,13 +242,9 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
 
     if(nPos > 0)
     {
-        OUStringList BlackList;
         OUString sURL = m_aServices[nPos]->GetUrl();
-        FileViewResult eResult = eFailure;
 
-        m_pPath_ed->SetText(sURL);
-
-        eResult = m_pView->Initialize( sURL, NO_FILTER, NULL, BlackList );
+        OpenURL( sURL );
     }
 
     return 1;
@@ -225,6 +309,15 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
             m_bIsUpdated = true;
         }
     }
+}
+
+IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
+{
+    OUString sURL = m_pFileView->GetCurrentURL();
+
+    OpenURL( sURL );
+
+    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
