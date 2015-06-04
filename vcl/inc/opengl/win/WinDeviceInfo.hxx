@@ -98,6 +98,7 @@ struct DriverInfo
 
     static DeviceFamilyVector* const allDevices;
     DeviceFamilyVector* mpDevices;
+    std::vector<OUString> maDevices;
 
     // Whether the mDevices array should be deleted when this structure is
     // deallocated. False by default.

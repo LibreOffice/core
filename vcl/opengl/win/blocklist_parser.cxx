@@ -147,11 +147,6 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
             OUString aVendor = OStringToOUString(sVendor, RTL_TEXTENCODING_UTF8);
             rDriver.maAdapterVendor = aVendor;
         }
-        else if (name.equals("device"))
-        {
-            name = rReader.getAttributeValue(false);
-            OString sDevice(name.begin, name.length);
-        }
         else if (name.equals("compare"))
         {
             name = rReader.getAttributeValue(false);
@@ -176,6 +171,10 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
             OString sMaxVersion(name.begin, name.length);
             rDriver.mnDriverVersionMax = getVersion(sMaxVersion);
         }
+        else
+        {
+            SAL_WARN("vcl.opengl.win", "unsupported attribute");
+        }
     }
 
     int nLevel = 1;
@@ -197,6 +196,15 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
             if (name.equals("msg"))
             {
                 bInMsg = true;
+            }
+            else if (name.equals("device"))
+            {
+                bool bSuccess = rReader.nextAttribute(&nsId, &name);
+                if (!bSuccess || !name.equals("id"))
+                    throw InvalidFileException();
+
+                OString aDeviceId(name.begin, name.length);
+                rDriver.maDevices.push_back(OStringToOUString(aDeviceId, RTL_TEXTENCODING_UTF8));
             }
             else
                 throw InvalidFileException();
