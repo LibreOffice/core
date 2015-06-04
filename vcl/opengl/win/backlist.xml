@@ -1,8 +1,8 @@
 <root>
     <whitelist>
-        <device os="7" vendor="intel" compare="equal" version="10.18.10.3412">
+        <entry os="7" vendor="intel" compare="equal" version="10.18.10.3412">
             <msg>Moggi's Windows OpenGL driver</msg>
-        </device>
+        </entry>
     </whitelist>
     <blacklist>
 
