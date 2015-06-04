@@ -7458,7 +7458,7 @@ else
         if test -z "$NASM" -a "$build_os" = "cygwin"; then
             if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/nasm"; then
                 NASM="$LODE_HOME/opt/bin/nasm"
-            elif -x "/opt/lo/bin/nasm"; then
+            elif test -x "/opt/lo/bin/nasm"; then
                 NASM="/opt/lo/bin/nasm"
             fi
         fi
