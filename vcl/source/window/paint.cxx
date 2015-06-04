@@ -177,7 +177,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 {
     WindowImpl* pWindowImpl = m_pWindow->ImplGetWindowImpl();
     vcl::Region* pWinChildClipRegion = m_pWindow->ImplGetWinChildClipRegion();
-    if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL)
+    if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL || m_pBuffer)
     {
         pWindowImpl->maInvalidateRegion = *pWinChildClipRegion;
     }
