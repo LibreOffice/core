@@ -746,8 +746,11 @@ bool SwSeqFieldList::SeekEntry( const _SeqFieldLstElem& rNew, size_t* pP ) const
                 sal_Int32 nNum1 = sNum1.toInt32();
                 nCmp = nNum2 - nNum1;
                 if( 0 == nCmp )
-                    nCmp = rCaseColl.compareString( rTmp2.copy( nFndPos2 ),
-                                                    rTmp1.copy( nFndPos1 ));
+                {
+                    OUString aTmp1 = nFndPos1 != -1 ? rTmp1.copy(nFndPos1) : OUString();
+                    OUString aTmp2 = nFndPos2 != -1 ? rTmp2.copy(nFndPos2) : OUString();
+                    nCmp = rCaseColl.compareString(aTmp2, aTmp1);
+                }
             }
             else
                 nCmp = rColl.compareString( rTmp2, rTmp1 );
