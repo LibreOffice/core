@@ -55,12 +55,12 @@ BASIC_DLLPUBLIC void setBasicWatchMode( bool bOn );
 #define SBX_HINT_BASICSTART SFX_HINT_USER04
 #define SBX_HINT_BASICSTOP  SFX_HINT_USER05
 
-enum PropertyMode
+enum class PropertyMode
 {
-    PROPERTY_MODE_NONE,
-    PROPERTY_MODE_GET,
-    PROPERTY_MODE_LET,
-    PROPERTY_MODE_SET
+    NONE,
+    Get,
+    Let,
+    Set
 };
 
 #endif

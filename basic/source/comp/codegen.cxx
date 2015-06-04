@@ -227,15 +227,15 @@ void SbiCodeGen::Save()
                     aProcName = aIfaceProcName;
                 }
                 PropertyMode ePropMode = pProc->getPropertyMode();
-                if( ePropMode != PROPERTY_MODE_NONE )
+                if( ePropMode != PropertyMode::NONE )
                 {
                     SbxDataType ePropType = SbxEMPTY;
                     switch( ePropMode )
                     {
-                    case PROPERTY_MODE_GET:
+                    case PropertyMode::Get:
                         ePropType = pProc->GetType();
                         break;
-                    case PROPERTY_MODE_LET:
+                    case PropertyMode::Let:
                     {
                         // type == type of first parameter
                         ePropType = SbxVARIANT;     // Default
@@ -250,7 +250,7 @@ void SbiCodeGen::Save()
                         }
                         break;
                     }
-                    case PROPERTY_MODE_SET:
+                    case PropertyMode::Set:
                         ePropType = SbxOBJECT;
                         break;
                     default:

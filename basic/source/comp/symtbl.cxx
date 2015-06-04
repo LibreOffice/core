@@ -405,7 +405,7 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const OUString& rName,
     pPool->SetParent( &aParams );
     nLine1  =
     nLine2  = 0;
-    mePropMode = PROPERTY_MODE_NONE;
+    mePropMode = PropertyMode::NONE;
     bPublic = true;
     bCdecl  = false;
     bStatic = false;
@@ -470,7 +470,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
 void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
 {
     mePropMode = ePropMode;
-    if( mePropMode != PROPERTY_MODE_NONE )
+    if( mePropMode != PropertyMode::NONE )
     {
         // Prop name = original scanned procedure name
         maPropName = aName;
@@ -480,10 +480,10 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
         OUString aCompleteProcName = "Property ";
         switch( mePropMode )
         {
-        case PROPERTY_MODE_GET:  aCompleteProcName += "Get "; break;
-        case PROPERTY_MODE_LET:  aCompleteProcName += "Let "; break;
-        case PROPERTY_MODE_SET:  aCompleteProcName += "Set "; break;
-        case PROPERTY_MODE_NONE: OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" ); break;
+        case PropertyMode::Get:  aCompleteProcName += "Get "; break;
+        case PropertyMode::Let:  aCompleteProcName += "Let "; break;
+        case PropertyMode::Set:  aCompleteProcName += "Set "; break;
+        case PropertyMode::NONE: OSL_FAIL( "Illegal PropertyMode PropertyMode::NONE" ); break;
         }
         aCompleteProcName += aName;
         aName = aCompleteProcName;

@@ -1172,21 +1172,21 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     sal_uInt16 l1 = nLine;
     bool bSub = ( eCurTok == SUB );
     bool bProperty = ( eCurTok == PROPERTY );
-    PropertyMode ePropertyMode = PROPERTY_MODE_NONE;
+    PropertyMode ePropertyMode = PropertyMode::NONE;
     if( bProperty )
     {
         Next();
         if( eCurTok == GET )
         {
-            ePropertyMode = PROPERTY_MODE_GET;
+            ePropertyMode = PropertyMode::Get;
         }
         else if( eCurTok == LET )
         {
-            ePropertyMode = PROPERTY_MODE_LET;
+            ePropertyMode = PropertyMode::Let;
         }
         else if( eCurTok == SET )
         {
-            ePropertyMode = PROPERTY_MODE_SET;
+            ePropertyMode = PropertyMode::Set;
         }
         else
         {
@@ -1222,7 +1222,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         else if( pProc->IsUsedForProcDecl() )
         {
             PropertyMode ePropMode = pDef->getPropertyMode();
-            if( ePropMode == PROPERTY_MODE_NONE || ePropMode == pProc->getPropertyMode() )
+            if( ePropMode == PropertyMode::NONE || ePropMode == pProc->getPropertyMode() )
             {
                 Error( SbERR_PROC_DEFINED, pDef->GetName() );
                 delete pDef;
