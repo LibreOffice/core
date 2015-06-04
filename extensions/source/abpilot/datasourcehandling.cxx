@@ -406,6 +406,12 @@ namespace abp
                     });
                     xStorable->storeAsURL(sTmpName, aSequence);
                     m_pImpl->sName = sTmpName;
+
+                    // Refer to the sub-storage name in the document settings, so
+                    // we can load it again next time the file is imported.
+                    uno::Reference<lang::XMultiServiceFactory> xFactory(pObjectShell->GetModel(), uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::makeAny(aStreamRelPath));
                 }
             }
         }
