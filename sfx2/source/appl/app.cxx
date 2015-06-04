@@ -468,14 +468,14 @@ void SfxApplication::Invalidate( sal_uInt16 nId )
 #ifndef DISABLE_DYNLOADING
 
 typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
-typedef void* (SAL_CALL *basicide_macro_organizer)(sal_Int16);
+typedef void (SAL_CALL *basicide_macro_organizer)(sal_Int16);
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
 #else
 
 extern "C" long basicide_handle_basic_error(void*);
-extern "C" void *basicide_macro_organizer(sal_Int16);
+extern "C" void basicide_macro_organizer(sal_Int16);
 
 #endif
 
