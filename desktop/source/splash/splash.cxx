@@ -59,6 +59,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
     // workwindow
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
+    void Redraw();
+
 };
 
 class  SplashScreen
@@ -143,6 +145,15 @@ void SplashScreenWindow::dispose()
     IntroWindow::dispose();
 }
 
+void SplashScreenWindow::Redraw()
+{
+    Invalidate();
+    // Trigger direct painting too - otherwise the splash screen won't be
+    // shown in some cases (when the idle timer won't be hit).
+    Paint(*this, Rectangle());
+    Flush();
+}
+
 SplashScreen::SplashScreen()
     : pWindow( new SplashScreenWindow (this) )
     , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
@@ -194,8 +205,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
         if ( _eBitmapMode == BM_FULLSCREEN )
             pWindow->ShowFullScreenMode( true );
         pWindow->Show();
-        pWindow->Invalidate();
-        pWindow->Flush();
+        pWindow->Redraw();
     }
 }
 
@@ -352,8 +362,7 @@ void SplashScreen::updateStatus()
         return;
     if (!_bPaintProgress)
         _bPaintProgress = true;
-    pWindow->Invalidate();
-    pWindow->Flush();
+    pWindow->Redraw();
 }
 
 // internal private methods
@@ -364,7 +373,7 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
         switch ( inEvent->GetId() )
         {
             case VCLEVENT_WINDOW_SHOW:
-                pWindow->Invalidate();
+                pWindow->Redraw();
                 break;
             default:
                 break;
