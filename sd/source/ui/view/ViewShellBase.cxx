@@ -956,6 +956,13 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
+::rtl::Reference<ViewTabBar> ViewShellBase::GetViewTabBar() const
+{
+    OSL_ASSERT(mpImpl.get()!=NULL);
+
+    return mpImpl->mpViewTabBar;
+}
+
 vcl::Window* ViewShellBase::GetViewWindow()
 {
     OSL_ASSERT(mpImpl.get()!=NULL);

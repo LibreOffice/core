@@ -104,12 +104,11 @@
             <menu:menuitem menu:id=".uno:NotesMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:HandoutMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:DiaMode" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:SlideMasterPage" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:NotesMasterPage" menu:style="radio"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:MasterPageMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:SlideMasterPage" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:NotesMasterPage" menu:style="radio"/>
-                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:MasterLayouts"/>
                 </menu:menupopup>
             </menu:menu>

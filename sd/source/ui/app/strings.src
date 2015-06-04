@@ -128,6 +128,10 @@ String STR_DRAW_MODE
 {
     Text [ en-US ] = "Normal" ;
 };
+String STR_DRAW_MASTER_MODE
+{
+    Text [ en-US ] = "Master Slide" ;
+};
 String STR_OUTLINE_MODE
 {
     Text [ en-US ] = "Outline" ;
@@ -135,6 +139,10 @@ String STR_OUTLINE_MODE
 String STR_NOTES_MODE
 {
     Text [ en-US ] = "Notes" ;
+};
+String STR_NOTES_MASTER_MODE
+{
+    Text [ en-US ] = "Master Notes" ;
 };
 String STR_HANDOUT_MODE
 {

@@ -351,6 +351,11 @@ public:
     */
     LayerTabBar* GetLayerTabControl();
 
+
+    /** Update TabBar buttons in function of the current EditMode.
+     */
+    void UpdateTabBarButtons(EditMode eEMode);
+
     /** Renames the given slide using an SvxNameDialog
 
         @param nPageId the index of the page in the SdTabControl.

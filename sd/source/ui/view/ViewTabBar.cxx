@@ -553,6 +553,35 @@ void ViewTabBar::UpdateTabBarButtons()
     mpTabPage->Hide();
 }
 
+void ViewTabBar::renameButton( const OUString& oldLabel, const OUString& newLabel )
+{
+    for (size_t nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+    {
+        if (maTabBarButtons[nIndex].ButtonLabel == oldLabel)
+        {
+            maTabBarButtons[nIndex].ButtonLabel = newLabel;
+            UpdateTabBarButtons();
+            UpdateActiveButton();
+            break;
+        }
+    }
+}
+
+void ViewTabBar::setButtonEnabled( const OUString& label, const bool enabled )
+{
+    for (size_t nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+    {
+        if (maTabBarButtons[nIndex].ButtonLabel == label)
+        {
+            mpTabControl->EnablePage(nIndex + 1, enabled);
+            UpdateTabBarButtons();
+            UpdateActiveButton();
+            break;
+        }
+    }
+}
+
+
 //===== TabBarControl =========================================================
 
 TabBarControl::TabBarControl (

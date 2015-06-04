@@ -219,6 +219,7 @@ public:
     DrawController& GetDrawController() const;
 
     void SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar);
+    ::rtl::Reference<ViewTabBar> GetViewTabBar() const;
 
     /** Return the window that is used by the main view shell to display its
         view and other UI elements, like scroll bars and rulers.  Ownership
