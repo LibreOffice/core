@@ -128,17 +128,25 @@ String STR_DRAW_MODE
 {
     Text [ en-US ] = "Normal" ;
 };
+String STR_DRAW_MASTER_MODE
+{
+    Text [ en-US ] = "~Slide Master" ;
+};
 String STR_OUTLINE_MODE
 {
     Text [ en-US ] = "Outline" ;
 };
 String STR_NOTES_MODE
 {
-    Text [ en-US ] = "Notes" ;
+    Text [ en-US ] = "Notes ~Page" ;
+};
+String STR_NOTES_MASTER_MODE
+{
+    Text [ en-US ] = "~Notes Master" ;
 };
 String STR_HANDOUT_MODE
 {
-    Text [ en-US ] = "Handout" ;
+    Text [ en-US ] = "~Handout Master" ;
 };
 
 String STR_AUTOLAYOUT_NONE

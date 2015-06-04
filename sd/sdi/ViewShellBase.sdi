@@ -77,6 +77,16 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_SLIDE_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_NOTES_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     SID_WIN_FULLSCREEN
     [
         ExecMethod = Execute;

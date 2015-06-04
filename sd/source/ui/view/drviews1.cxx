@@ -75,6 +75,7 @@
 #include "ToolBarManager.hxx"
 #include "FormShellManager.hxx"
 #include "ViewShellBase.hxx"
+#include "ViewTabBar.hxx"
 #include "LayerTabBar.hxx"
 #include "ViewShellManager.hxx"
 #include "ViewShellHint.hxx"
@@ -316,6 +317,41 @@ bool DrawViewShell::PrepareClose( bool bUI )
     return true;
 }
 
+void DrawViewShell::UpdateTabBarButtons(EditMode eEMode)
+{
+    rtl::Reference<sd::ViewTabBar> rViewTabBar = GetViewShellBase().GetViewTabBar();
+    if (rViewTabBar.is())
+    {
+        bool bMasterMode =
+               eEMode == EM_MASTERPAGE
+            && (mePageKind == PK_STANDARD || mePageKind == PK_NOTES);
+
+        // rename buttons
+        if (bMasterMode) {
+            // Rename
+            rViewTabBar->renameButton(SD_RESSTR(STR_DRAW_MODE), SD_RESSTR(STR_DRAW_MASTER_MODE));
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_DRAW_MASTER_MODE), mePageKind == PK_STANDARD);
+
+            rViewTabBar->renameButton(SD_RESSTR(STR_NOTES_MODE), SD_RESSTR(STR_NOTES_MASTER_MODE));
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_NOTES_MASTER_MODE), mePageKind == PK_NOTES);
+
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_HANDOUT_MODE), false);
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_SLIDE_MODE), false);
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_OUTLINE_MODE), false);
+        } else {
+            rViewTabBar->renameButton(SD_RESSTR(STR_DRAW_MASTER_MODE), SD_RESSTR(STR_DRAW_MODE));
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_DRAW_MODE), true);
+
+            rViewTabBar->renameButton(SD_RESSTR(STR_NOTES_MASTER_MODE), SD_RESSTR(STR_NOTES_MODE));
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_NOTES_MODE), true);
+
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_HANDOUT_MODE), true);
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_SLIDE_MODE), true);
+            rViewTabBar->setButtonEnabled(SD_RESSTR(STR_OUTLINE_MODE), true);
+        }
+    }
+}
+
 /**
  * Set status (enabled/disabled) of menu SfxSlots
  */
@@ -330,6 +366,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         GetViewShellBase().GetDrawController().FireChangeEditMode (eEMode == EM_MASTERPAGE);
         GetViewShellBase().GetDrawController().FireChangeLayerMode (bIsLayerModeActive);
+
+        UpdateTabBarButtons(eEMode);
 
         if ( mpDrawView->IsTextEdit() )
         {
@@ -474,7 +512,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_DELETE_MASTER_PAGE );
         Invalidate( SID_DELETE_PAGE );
         Invalidate( SID_SLIDE_MASTERPAGE );
-        Invalidate( SID_TITLE_MASTERPAGE );
         Invalidate( SID_NOTES_MASTERPAGE );
         Invalidate( SID_HANDOUT_MASTERPAGE );
 

@@ -628,9 +628,11 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
         case SID_NORMAL_MULTI_PANE_GUI:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
         case SID_DRAWINGMODE:
+        case SID_SLIDE_MASTERPAGE:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
         case SID_NOTESMODE:
+        case SID_NOTES_MASTERPAGE:
         case SID_HANDOUTMODE:
             framework::FrameworkHelper::Instance(*this)->HandleModeChangeSlot(nSlotId, rRequest);
             break;
@@ -956,6 +958,13 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
+::rtl::Reference<ViewTabBar> ViewShellBase::GetViewTabBar() const
+{
+    OSL_ASSERT(mpImpl.get()!=NULL);
+
+    return mpImpl->mpViewTabBar;
+}
+
 vcl::Window* ViewShellBase::GetViewWindow()
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
@@ -1218,6 +1227,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:
+                    case SID_SLIDE_MASTERPAGE:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
                             FrameworkHelper::msImpressViewURL,
@@ -1249,6 +1259,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         break;
 
                     case SID_NOTESMODE:
+                    case SID_NOTES_MASTERPAGE:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
                             FrameworkHelper::msNotesViewURL,
@@ -1272,7 +1283,9 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             switch (nItemId)
             {
                 case SID_NORMAL_MULTI_PANE_GUI:
+                case SID_SLIDE_MASTERPAGE:
                 case SID_NOTESMODE:
+                case SID_NOTES_MASTERPAGE:
                 {
                     // Determine the master page mode.
                     ViewShell* pCenterViewShell = FrameworkHelper::Instance(mrBase)->GetViewShell(
@@ -1284,8 +1297,10 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         {
                             bMasterPageMode = true;
                         }
-
-                    bState &= !bMasterPageMode;
+                    if (nItemId == SID_SLIDE_MASTERPAGE || nItemId == SID_NOTES_MASTERPAGE)
+                        bState &= bMasterPageMode;
+                    else
+                        bState &= !bMasterPageMode;
                     break;
                 }
 

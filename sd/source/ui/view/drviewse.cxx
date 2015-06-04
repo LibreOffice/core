@@ -952,6 +952,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_NOTESMODE:
         case SID_HANDOUTMODE:
+        case SID_SLIDE_MASTERPAGE:
+        case SID_NOTES_MASTERPAGE:
+        case SID_HANDOUT_MASTERPAGE:
             // AutoLayouts have to be ready.
             GetDoc()->StopWorkStartupDelay();
             // Fall through to following case statements.
@@ -960,18 +963,17 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
             // Let the sub-shell manager handle the slot handling.
+            SAL_DEBUG("drviewse calling FrameworkHelper");
             framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(
                 nSId,
                 rReq);
             rReq.Ignore ();
             break;
 
+        // sdraw masterpage
         case SID_MASTERPAGE:          // BASIC
-        case SID_SLIDE_MASTERPAGE:    // BASIC
-        case SID_TITLE_MASTERPAGE:    // BASIC
-        case SID_NOTES_MASTERPAGE:    // BASIC
-        case SID_HANDOUT_MASTERPAGE:  // BASIC
         {
+            SAL_DEBUG("drviewse internal handling");
             // AutoLayouts needs to be finished
             GetDoc()->StopWorkStartupDelay();
 
@@ -986,78 +988,31 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
 
-            if (nSId == SID_MASTERPAGE                                       ||
-                (nSId == SID_SLIDE_MASTERPAGE   && mePageKind == PK_STANDARD) ||
-                (nSId == SID_TITLE_MASTERPAGE   && mePageKind == PK_STANDARD) ||
-                (nSId == SID_NOTES_MASTERPAGE   && mePageKind == PK_NOTES)    ||
-                (nSId == SID_HANDOUT_MASTERPAGE && mePageKind == PK_HANDOUT))
+            // Is there a page with the AutoLayout "Title"?
+            bool bFound = false;
+            sal_uInt16 i = 0;
+            sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
+
+            while (i < nCount && !bFound)
             {
-                if (nSId == SID_TITLE_MASTERPAGE ||
-                    nSId == SID_SLIDE_MASTERPAGE)
+                SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
+
+                if (nSId == SID_SLIDE_MASTERPAGE && pPage->GetAutoLayout() != AUTOLAYOUT_TITLE)
                 {
-                    // Is there a page with the AutoLayout "Title"?
-                    bool bFound = false;
-                    sal_uInt16 i = 0;
-                    sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
-
-                    while (i < nCount && !bFound)
-                    {
-                        SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
-
-                        if (nSId == SID_TITLE_MASTERPAGE && pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
-                        {
-                            bFound = true;
-                            SwitchPage((pPage->GetPageNum() - 1) / 2);
-                        }
-                        else if (nSId == SID_SLIDE_MASTERPAGE && pPage->GetAutoLayout() != AUTOLAYOUT_TITLE)
-                        {
-                            bFound = true;
-                            SwitchPage((pPage->GetPageNum() - 1) / 2);
-                        }
-
-                        i++;
-                    }
+                    bFound = true;
+                    SwitchPage((pPage->GetPageNum() - 1) / 2);
                 }
 
-                // turn on default layer of MasterPage
-                mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
-
-                ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
-
-                if(HasCurrentFunction(SID_BEZIER_EDIT))
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+                i++;
             }
-            else
-            {
-                // Switch to requested ViewShell.
-                ::OUString sRequestedView;
-                PageKind ePageKind;
-                switch (nSId)
-                {
-                    case SID_SLIDE_MASTERPAGE:
-                    case SID_TITLE_MASTERPAGE:
-                    default:
-                        sRequestedView = framework::FrameworkHelper::msImpressViewURL;
-                        ePageKind = PK_STANDARD;
-                        break;
 
-                    case SID_NOTES_MASTERPAGE:
-                        sRequestedView = framework::FrameworkHelper::msNotesViewURL;
-                        ePageKind = PK_NOTES;
-                        break;
+            // turn on default layer of MasterPage
+            mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
 
-                    case SID_HANDOUT_MASTERPAGE:
-                        sRequestedView = framework::FrameworkHelper::msHandoutViewURL;
-                        ePageKind = PK_HANDOUT;
-                        break;
-                }
+            ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
 
-                mpFrameView->SetViewShEditMode(EM_MASTERPAGE, ePageKind);
-                mpFrameView->SetLayerMode(mbIsLayerModeActive);
-                framework::FrameworkHelper::Instance(GetViewShellBase())->RequestView(
-                    sRequestedView,
-                    framework::FrameworkHelper::msCenterPaneURL);
-            }
+            if(HasCurrentFunction(SID_BEZIER_EDIT))
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
 

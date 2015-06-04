@@ -529,7 +529,9 @@ void FrameworkHelper::HandleModeChangeSlot (
     switch (nSlotId)
     {
         case SID_DRAWINGMODE:
+        case SID_SLIDE_MASTERPAGE:
         case SID_NOTESMODE:
+        case SID_NOTES_MASTERPAGE:
         case SID_HANDOUTMODE:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
@@ -565,10 +567,12 @@ void FrameworkHelper::HandleModeChangeSlot (
             {
                 case SID_NORMAL_MULTI_PANE_GUI:
                 case SID_DRAWINGMODE:
+                case SID_SLIDE_MASTERPAGE:
                     sRequestedView = FrameworkHelper::msImpressViewURL;
                     break;
 
                 case SID_NOTESMODE:
+                case SID_NOTES_MASTERPAGE:
                     sRequestedView = FrameworkHelper::msNotesViewURL;
                 break;
 
@@ -587,30 +591,34 @@ void FrameworkHelper::HandleModeChangeSlot (
             }
         }
 
-        if (xView.is()
-            && xView->getResourceId()->getResourceURL().equals(sRequestedView))
-        {
-            // We do not have to switch the view shell but maybe the edit mode
-            // has changed.
-            DrawViewShell* pDrawViewShell
-                = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
-            if (pDrawViewShell != NULL)
-            {
-                pCenterViewShell->Broadcast (
-                    ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
-
-                pDrawViewShell->ChangeEditMode (
-                    EM_PAGE, pDrawViewShell->IsLayerModeActive());
-
-                pCenterViewShell->Broadcast (
-                    ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
-            }
-        }
-        else
+        // Ensure we have the expected view shell
+        if (!(xView.is() && xView->getResourceId()->getResourceURL().equals(sRequestedView)))
         {
             mxConfigurationController->requestResourceActivation(
                 CreateResourceId(sRequestedView, msCenterPaneURL),
                 ResourceActivationMode_REPLACE);
+        }
+
+        // Ensure we have the expected edit mode
+        DrawViewShell* pDrawViewShell
+            = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
+        if (pDrawViewShell != NULL)
+        {
+            pCenterViewShell->Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
+
+            EditMode eEMode = EM_PAGE;
+            if (nSlotId == SID_SLIDE_MASTERPAGE
+                || nSlotId == SID_NOTES_MASTERPAGE
+                || nSlotId == SID_HANDOUTMODE)
+                eEMode = EM_MASTERPAGE;
+
+SAL_DEBUG("eEMode:" << eEMode);
+            pDrawViewShell->ChangeEditMode (
+                eEMode, pDrawViewShell->IsLayerModeActive());
+
+            pCenterViewShell->Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
         }
     }
     catch (RuntimeException&)

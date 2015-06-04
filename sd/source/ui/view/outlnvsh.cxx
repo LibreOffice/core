@@ -541,7 +541,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         break;
 
         case SID_DRAWINGMODE:
+        case SID_SLIDE_MASTERPAGE:
         case SID_NOTESMODE:
+        case SID_NOTES_MASTERPAGE:
         case SID_HANDOUTMODE:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
@@ -733,8 +735,10 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     rSet.Put(SfxBoolItem(SID_DIAMODE, false));
     rSet.Put(SfxBoolItem(SID_DRAWINGMODE, false));
+    rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, false));
     rSet.Put(SfxBoolItem(SID_OUTLINEMODE, true));
     rSet.Put(SfxBoolItem(SID_NOTESMODE, false));
+    rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, false));
     rSet.Put(SfxBoolItem(SID_HANDOUTMODE, false));
 
     if (!mpZoomList->IsNextPossible())

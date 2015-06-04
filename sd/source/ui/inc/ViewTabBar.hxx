@@ -71,6 +71,10 @@ public:
 
     bool ActivatePage();
 
+    void renameButton( const OUString& oldLabel, const OUString& newLabel );
+
+    void setButtonEnabled( const OUString& label, const bool enabled = true );
+
     //----- drawing::framework::XConfigurationChangeListener ------------------
 
     virtual void SAL_CALL
