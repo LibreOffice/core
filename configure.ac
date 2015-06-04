@@ -5977,10 +5977,8 @@ if test "$COM" = MSC; then
     AC_MSG_CHECKING([whether $CXX supports C++11])
     AC_MSG_RESULT(yes)
     # MSVC supports (a subset of) CXX11 without any switch
-    CXXFLAGS_CXX11=
 elif test "$GCC" = "yes"; then
     HAVE_CXX11=
-    CXXFLAGS_CXX11=
     AC_MSG_CHECKING([whether $CXX supports C++11])
     for flag in -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
         save_CXXFLAGS=$CXXFLAGS
