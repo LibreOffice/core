@@ -339,7 +339,7 @@ def get_launchpad_bugs(prefix):
 
 rss_bugzillas = (
     ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi' ), #added for abiword
-    ( 'fdo', 'http://bugs.libreoffice.org/buglist.cgi' ),
+    ( 'fdo', 'http://bugs.freedesktop.org/buglist.cgi' ),
     ( 'gentoo', 'http://bugs.gentoo.org/buglist.cgi' ),
     ( 'gnome', 'http://bugzilla.gnome.org/buglist.cgi' ), # added for gnumeric
     ( 'kde', 'http://bugs.kde.org/buglist.cgi' ), # added for koffice/calligra
