@@ -39,6 +39,12 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
 cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
 
+# calc menu entries
+cmd/datapilotmenu.png cmd/sc_datadatapilotrun.png
+cmd/insertrowsmenu.png cmd/sc_insertrows.png
+cmd/insertcolumnsmenu.png cmd/sc_insertcolumns.png
+cmd/functiondialog.png cmd/sc_insertformula.png
+
 # image/object context menu entries
 cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 cmd/sc_alignframemenu.png cmd/sc_objectalign.png
