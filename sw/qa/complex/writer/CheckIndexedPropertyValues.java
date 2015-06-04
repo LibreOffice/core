@@ -53,6 +53,11 @@ public class CheckIndexedPropertyValues {
         prop2[0].Name  = "Horst";
         prop2[0].Value = "BadGuy";
 
+        PropertyValue[] prop3 = new PropertyValue[1];
+        prop3[0] = new PropertyValue();
+        prop3[0].Name  = "Peter";
+        prop3[0].Value = "FamilyGuy";
+
         Type t = xCont.getElementType();
         assertEquals("Initial container is not empty", 0, xCont.getCount());
         xCont.insertByIndex(0, prop1);
@@ -70,6 +75,17 @@ public class CheckIndexedPropertyValues {
         xCont.insertByIndex(1, prop2);
         assertTrue("Did not insert PropertyValue.",
                    xCont.hasElements() && xCont.getCount()==2);
+        try {
+            xCont.removeByIndex(1);
+        }
+        catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            fail("Could not remove last PropertyValue");
+        }
+        xCont.insertByIndex(1, prop2);
+        xCont.insertByIndex(1, prop3);
+        ret = (PropertyValue[])xCont.getByIndex(1);
+        assertEquals(prop3[0].Name, ret[0].Name);
+        assertEquals(prop3[0].Value, ret[0].Value);
 
         try {
             xCont.insertByIndex(25, prop2);
@@ -86,7 +102,7 @@ public class CheckIndexedPropertyValues {
         }
 
         try {
-            xCont.insertByIndex(2, "Example String");
+            xCont.insertByIndex(3, "Example String");
             fail("IllegalArgumentException was not thrown.");
         }
         catch(com.sun.star.lang.IllegalArgumentException e) {

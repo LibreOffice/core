@@ -116,7 +116,7 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
             else
             {
                 aItr = maProperties.end();
-                sal_Int32 i(nSize - 1);
+                sal_Int32 i(nSize);
                 while(i > nIndex)
                 {
                     --i;
@@ -151,7 +151,7 @@ void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
         else
         {
             aItr = maProperties.end();
-            sal_Int32 i(nSize - 1);
+            sal_Int32 i(nSize);
             while(i > nIndex)
             {
                 --i;
