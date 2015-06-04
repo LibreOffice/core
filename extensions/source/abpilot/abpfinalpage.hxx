@@ -38,7 +38,9 @@ namespace abp
         VclPtr< ::svt::OFileURLControl>  m_pLocation;
         VclPtr<PushButton>       m_pBrowse;
         VclPtr<CheckBox>         m_pRegisterName;
+        VclPtr<CheckBox>         m_pEmbed;
         VclPtr<FixedText>        m_pNameLabel;
+        VclPtr<FixedText>        m_pLocationLabel;
         VclPtr<Edit>             m_pName;
         VclPtr<FixedText>        m_pDuplicateNameError;
 
@@ -67,6 +69,7 @@ namespace abp
     private:
         DECL_LINK( OnNameModified, Edit* );
         DECL_LINK(OnRegister, void *);
+        DECL_LINK(OnEmbed, void *);
 
         bool    isValidName() const;
         void        implCheckName();

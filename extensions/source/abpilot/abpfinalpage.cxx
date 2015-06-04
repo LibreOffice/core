@@ -49,7 +49,9 @@ namespace abp
         get(m_pLocation, "location");
         get(m_pBrowse, "browse");
         get(m_pRegisterName, "available");
+        get(m_pEmbed, "embed");
         get(m_pNameLabel, "nameft");
+        get(m_pLocationLabel, "locationft");
         get(m_pName, "name");
         get(m_pDuplicateNameError, "warning");
         m_pLocationController = new svx::DatabaseLocationInputController(_pParent->getORB(),
@@ -59,6 +61,9 @@ namespace abp
         m_pLocation->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_pRegisterName->SetClickHdl( LINK( this, FinalPage, OnRegister ) );
         m_pRegisterName->Check(true);
+        m_pEmbed->SetClickHdl( LINK( this, FinalPage, OnEmbed ) );
+        m_pEmbed->Check(true);
+        OnEmbed(m_pEmbed);
     }
 
     FinalPage::~FinalPage()
@@ -72,7 +77,9 @@ namespace abp
         m_pLocation.clear();
         m_pBrowse.clear();
         m_pRegisterName.clear();
+        m_pEmbed.clear();
         m_pNameLabel.clear();
+        m_pLocationLabel.clear();
         m_pName.clear();
         m_pDuplicateNameError.clear();
         AddressBookSourcePage::dispose();
@@ -216,6 +223,15 @@ namespace abp
         m_pNameLabel->Enable(bEnable);
         m_pName->Enable(bEnable);
         implCheckName();
+        return 0L;
+    }
+
+    IMPL_LINK_NOARG(FinalPage, OnEmbed)
+    {
+        bool bEmbed = m_pEmbed->IsChecked();
+        m_pLocationLabel->Enable(!bEmbed);
+        m_pLocation->Enable(!bEmbed);
+        m_pBrowse->Enable(!bEmbed);
         return 0L;
     }
 
