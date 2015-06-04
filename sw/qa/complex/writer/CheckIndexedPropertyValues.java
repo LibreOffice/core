@@ -70,6 +70,9 @@ public class CheckIndexedPropertyValues {
         xCont.insertByIndex(1, prop2);
         assertTrue("Did not insert PropertyValue.",
                    xCont.hasElements() && xCont.getCount()==2);
+        xCont.removeByIndex(1);
+        assertTrue("Could not remove last PropertyValue.",
+                   xCont.hasElements() && xCont.getCount()==1);
 
         try {
             xCont.insertByIndex(25, prop2);
@@ -86,7 +89,7 @@ public class CheckIndexedPropertyValues {
         }
 
         try {
-            xCont.insertByIndex(2, "Example String");
+            xCont.insertByIndex(1, "Example String");
             fail("IllegalArgumentException was not thrown.");
         }
         catch(com.sun.star.lang.IllegalArgumentException e) {
