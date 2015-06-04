@@ -94,9 +94,11 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
                         continue
 
                 print('downloading as ' + download)
-                f = open(download, 'wb')
+                tmpfile = download + ".tmp"
+                f = open(tmpfile, 'wb')
                 f.write(base64.b64decode(node.firstChild.nodeValue))
                 f.close()
+                os.rename(tmpfile, download)
                 break
 
 def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
@@ -138,9 +140,11 @@ def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
             continue
 
         print('downloading as ' + download)
-        f = open(download, 'wb')
+        tmpfile = download + ".tmp"
+        f = open(tmpfile, 'wb')
         f.write(handle.read())
         f.close()
+        os.rename(tmpfile, download)
 
 def create_query(mimetype):
     query = dict()
@@ -327,9 +331,11 @@ def get_launchpad_bugs(prefix):
 
                 print('mimetype is ' + handle.content_type + ' downloading as ' + download)
 
-                f = open(download, "w")
+                tmpfile = download + ".tmp"
+                f = open(tmpfile, "wb")
                 f.write(handle.read())
                 f.close()
+                os.rename(tmpfile, download)
 
 rss_bugzillas = (
     ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi' ), #added for abiword
