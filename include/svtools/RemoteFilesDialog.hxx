@@ -19,6 +19,8 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/split.hxx>
+#include <vcl/svapp.hxx>
 
 #include <svtools/fileview.hxx>
 #include <svtools/treelistentry.hxx>
@@ -51,7 +53,7 @@ class SVT_DLLPUBLIC RemoteFilesDialog : public ModalDialog
 {
 public:
     RemoteFilesDialog(vcl::Window* pParent, WinBits nBits);
-    ~RemoteFilesDialog();
+    virtual ~RemoteFilesDialog();
 
     virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
@@ -70,6 +72,8 @@ private:
     VclPtr<MenuButton> m_pAddService_btn;
     VclPtr<ListBox> m_pServices_lb;
     VclPtr<Edit> m_pPath_ed;
+    VclPtr<Splitter> m_pSplitter;
+    VclPtr<SvTreeListBox> m_pTreeView;
     VclPtr<SvtFileView> m_pFileView;
     VclPtr<FileViewContainer> m_pContainer;
     VclPtr<ListBox> m_pFilter_lb;
@@ -92,6 +96,8 @@ private:
 
     DECL_LINK( DoubleClickHdl, void * );
     DECL_LINK( SelectHdl, void * );
+
+    DECL_LINK( SplitHdl, void * );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX

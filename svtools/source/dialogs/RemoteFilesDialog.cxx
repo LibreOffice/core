@@ -17,11 +17,15 @@ class FileViewContainer : public vcl::Window
 {
     private:
     VclPtr<SvtFileView> m_pFileView;
+    VclPtr<SvTreeListBox> m_pTreeView;
+    VclPtr<Splitter> m_pSplitter;
 
     public:
     FileViewContainer(vcl::Window *pParent)
         : Window(pParent)
         , m_pFileView(NULL)
+        , m_pTreeView(NULL)
+        , m_pSplitter(NULL)
     {
     }
 
@@ -33,29 +37,51 @@ class FileViewContainer : public vcl::Window
     virtual void dispose() SAL_OVERRIDE
     {
         m_pFileView.clear();
+        m_pSplitter.clear();
         vcl::Window::dispose();
     }
 
-    void init(SvtFileView* pFileView)
+    void init(SvtFileView* pFileView,
+              Splitter* pSplitter,
+              SvTreeListBox* pTreeView)
     {
         m_pFileView = pFileView;
+        m_pTreeView = pTreeView;
+        m_pSplitter = pSplitter;
     }
 
     virtual void Resize() SAL_OVERRIDE
     {
         Window::Resize();
 
-        if(!m_pFileView)
+        if(!m_pFileView || !m_pTreeView)
             return;
 
         Size aSize = GetSizePixel();
-        m_pFileView->SetSizePixel( aSize );
+        Point aPos( m_pFileView->GetPosPixel() );
+        Size aNewSize(aSize.Width() - aPos.X(), aSize.Height());
+
+        m_pFileView->SetSizePixel( aNewSize );
+
+        // Resize the Splitter to fit the height
+        Size splitterNewSize = m_pSplitter->GetSizePixel( );
+        splitterNewSize.Height() = aSize.Height();
+        m_pSplitter->SetSizePixel( splitterNewSize );
+        sal_Int32 nMinX = m_pTreeView->GetPosPixel( ).X( );
+        sal_Int32 nMaxX = m_pFileView->GetPosPixel( ).X( ) + m_pFileView->GetSizePixel( ).Width() - nMinX;
+        m_pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( nMaxX, aSize.Width() ) ) );
+
+        // Resize the tree list box to fit the height of the FileView
+        Size placesNewSize(m_pTreeView->GetSizePixel());
+        placesNewSize.Height() = aSize.Height();
+        m_pTreeView->SetSizePixel( placesNewSize );
     }
 };
 
 RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     : ModalDialog(pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui")
     , m_context(comphelper::getProcessComponentContext())
+    , m_pSplitter(NULL)
     , m_pFileView(NULL)
     , m_pContainer(NULL)
 {
@@ -98,7 +124,24 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pFileView->SetDoubleClickHdl( LINK( this, RemoteFilesDialog, DoubleClickHdl ) );
     m_pFileView->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectHdl ) );
 
-    m_pContainer->init(m_pFileView);
+    m_pSplitter = VclPtr<Splitter>::Create( m_pContainer, WB_HSCROLL );
+    m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
+    m_pSplitter->SetSplitHdl( LINK( this, RemoteFilesDialog, SplitHdl ) );
+    m_pSplitter->Show();
+
+    m_pTreeView = VclPtr<SvTreeListBox>::Create( m_pContainer, WB_BORDER );
+    Size aSize(100, 200);
+    m_pTreeView->set_height_request(aSize.Height());
+    m_pTreeView->set_width_request(aSize.Width());
+    m_pTreeView->SetSizePixel(aSize);
+    m_pTreeView->Show();
+
+    sal_Int32 nPosX = m_pTreeView->GetSizePixel().Width();
+    m_pSplitter->SetPosPixel(Point(nPosX, 0));
+    nPosX += m_pSplitter->GetSizePixel().Width();
+    m_pFileView->SetPosPixel(Point(nPosX, 0));
+
+    m_pContainer->init(m_pFileView, m_pSplitter, m_pTreeView);
     m_pContainer->Show();
 
     m_pAddService_btn->SetMenuMode(MENUBUTTON_MENUMODE_TIMED);
@@ -120,6 +163,8 @@ RemoteFilesDialog::~RemoteFilesDialog()
 
 void RemoteFilesDialog::dispose()
 {
+    m_pFileView->SetSelectHdl( Link<>() );
+
     if(m_bIsUpdated)
     {
         Sequence< OUString > placesUrlsList(m_aServices.size());
@@ -138,6 +183,20 @@ void RemoteFilesDialog::dispose()
         officecfg::Office::Common::Misc::FilePickerPlacesNames::set(placesNamesList, batch);
         batch->commit();
     }
+
+    m_pTreeView.disposeAndClear();
+    m_pFileView.disposeAndClear();
+    m_pSplitter.disposeAndClear();
+    m_pContainer.disposeAndClear();
+
+    m_pOpen_btn.clear();
+    m_pSave_btn.clear();
+    m_pCancel_btn.clear();
+    m_pAddService_btn.clear();
+    m_pServices_lb.clear();
+    m_pPath_ed.clear();
+    m_pFilter_lb.clear();
+    m_pName_ed.clear();
 
     ModalDialog::dispose();
 }
@@ -343,6 +402,30 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
 
     INetURLObject aURL(pData->maURL);
     m_pName_ed->SetText(aURL.GetLastName());
+
+    return 1;
+}
+
+IMPL_LINK_NOARG ( RemoteFilesDialog, SplitHdl )
+{
+    sal_Int32 nSplitPos = m_pSplitter->GetSplitPosPixel();
+
+    // Resize the tree list box
+    sal_Int32 nPlaceX = m_pTreeView->GetPosPixel( ).X();
+    Size placeSize = m_pTreeView->GetSizePixel( );
+    placeSize.Width() = nSplitPos - nPlaceX;
+    m_pTreeView->SetSizePixel( placeSize );
+
+    // Change Pos and size of the fileview
+    Point fileViewPos = m_pFileView->GetPosPixel();
+    sal_Int32 nOldX = fileViewPos.X();
+    sal_Int32 nNewX = nSplitPos + m_pSplitter->GetSizePixel().Width();
+    fileViewPos.X() = nNewX;
+    Size fileViewSize = m_pFileView->GetSizePixel();
+    fileViewSize.Width() -= ( nNewX - nOldX );
+    m_pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
+
+    m_pSplitter->SetPosPixel( Point( placeSize.Width(), m_pSplitter->GetPosPixel().Y() ) );
 
     return 1;
 }
