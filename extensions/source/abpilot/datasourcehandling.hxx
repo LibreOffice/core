@@ -95,6 +95,7 @@ namespace abp
 
     struct ODataSourceImpl;
     struct PackageAccessControl;
+    struct AddressSettings;
     /** a non-UNO wrapper for a data source
         <p>This class allows to access data sources without the need to compile the respective file with
         exception handling enabled (hopefully :).</p>
@@ -159,7 +160,7 @@ namespace abp
         void        disconnect( );
 
         /// stores the database file
-        void        store();
+        void        store(const AddressSettings& rSettings);
 
         /// register the data source under the given name in the configuration
         void        registerDataSource( const OUString& _sRegisteredDataSourceName );

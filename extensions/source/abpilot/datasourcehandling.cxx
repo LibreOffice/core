@@ -22,6 +22,7 @@
 #include "abptypes.hxx"
 #include "componentmodule.hxx"
 #include "datasourcehandling.hxx"
+#include "addresssettings.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -46,7 +47,28 @@
 #include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/stdtext.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <comphelper/propertysequence.hxx>
 
+namespace
+{
+
+/// Returns the URL of this object shell.
+OUString lcl_getOwnURL(SfxObjectShell* pObjectShell)
+{
+    OUString aRet;
+
+    if (!pObjectShell)
+        return aRet;
+
+    const INetURLObject& rURLObject = pObjectShell->GetMedium()->GetURLObject();
+    aRet = rURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET);
+    return aRet;
+}
+
+}
 
 namespace abp
 {
@@ -54,6 +76,7 @@ namespace abp
 
     using namespace ::utl;
     using namespace ::comphelper;
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdb;
@@ -347,8 +370,7 @@ namespace abp
         delete m_pImpl;
     }
 
-
-    void ODataSource::store()
+    void ODataSource::store(const AddressSettings& rSettings)
     {
         if (!isValid())
             // nothing to do
@@ -361,7 +383,31 @@ namespace abp
                 xStorable.set(xDocAccess->getDatabaseDocument(), css::uno::UNO_QUERY);
             OSL_ENSURE( xStorable.is(),"DataSource is no XStorable!" );
             if ( xStorable.is() )
-                xStorable->storeAsURL(m_pImpl->sName,Sequence<PropertyValue>());
+            {
+                SfxObjectShell* pObjectShell = SfxViewFrame::Current()->GetObjectShell();
+                OUString aOwnURL = lcl_getOwnURL(pObjectShell);
+                if (aOwnURL.isEmpty() || !rSettings.bEmbedDataSource)
+                {
+                    // Cannot or should not embed.
+                    xStorable->storeAsURL(m_pImpl->sName,Sequence<PropertyValue>());
+                }
+                else
+                {
+                    // Embed.
+                    OUString aStreamRelPath = "EmbeddedDatabase";
+                    OUString sTmpName = "vnd.sun.star.pkg://";
+                    sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
+                    sTmpName += "/" + aStreamRelPath;
+                    uno::Reference<embed::XStorage> xStorage = pObjectShell->GetStorage();
+                    uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
+                    {
+                        {"TargetStorage", uno::makeAny(xStorage)},
+                        {"StreamRelPath", uno::makeAny(aStreamRelPath)}
+                    });
+                    xStorable->storeAsURL(sTmpName, aSequence);
+                    m_pImpl->sName = sTmpName;
+                }
+            }
         }
         catch(const Exception&)
         {

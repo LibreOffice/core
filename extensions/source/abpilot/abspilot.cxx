@@ -158,7 +158,7 @@ namespace abp
             m_aNewDataSource.rename( m_aSettings.sDataSourceName );
 
         // 1. the data source
-        m_aNewDataSource.store();
+        m_aNewDataSource.store(m_aSettings);
 
         // 2. check if we need to register the data source
         if ( m_aSettings.bRegisterDataSource )
