@@ -123,7 +123,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     // remember WinBits
     mpItemList      = new ImplStatusItemList;
-    mpImplData->mpVirDev        = VclPtr<VirtualDevice>::Create( *this );
+    mpImplData->mpVirDev = VclPtr<VirtualDevice>::Create( *this );
     mnCurItemId     = 0;
     mbFormat        = true;
     mbVisibleItems  = true;
@@ -137,8 +137,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnItemY         = STATUSBAR_OFFSET_Y;
     mnTextY         = STATUSBAR_OFFSET_TEXTY;
 
-    ImplInitSettings( true, true, true );
-    SetLineColor();
+    ImplInitSettings();
 
     SetOutputSizePixel( CalcWindowSizePixel() );
 }
@@ -175,6 +174,8 @@ void StatusBar::AdjustItemWidthsForHiDPI(bool bAdjustHiDPI)
 
 void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)
 {
+    rRenderContext.SetLineColor();
+
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     vcl::Font aFont = rStyleSettings.GetToolFont();
     if (IsControlFont())
@@ -209,56 +210,15 @@ void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void StatusBar::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
+void StatusBar::ImplInitSettings()
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    ApplySettings(*this);
 
-    if (bFont)
-    {
-        vcl::Font aFont = rStyleSettings.GetToolFont();
-        if (IsControlFont())
-            aFont.Merge(GetControlFont());
-        SetZoomedPointFont(*this, aFont);
-    }
-
-    if (bForeground || bFont)
-    {
-        Color aColor;
-        if (IsControlForeground())
-            aColor = GetControlForeground();
-        else if ( GetStyle() & WB_3DLOOK )
-            aColor = rStyleSettings.GetButtonTextColor();
-        else
-            aColor = rStyleSettings.GetWindowTextColor();
-        SetTextColor(aColor);
-        SetTextFillColor();
-
-        mpImplData->mpVirDev->SetFont( GetFont() );
-        mpImplData->mpVirDev->SetTextColor( GetTextColor() );
-        mpImplData->mpVirDev->SetTextAlign( GetTextAlign() );
-        mpImplData->mpVirDev->SetTextFillColor();
-    }
-
-    if ( bBackground )
-    {
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else if ( GetStyle() & WB_3DLOOK )
-            aColor = rStyleSettings.GetFaceColor();
-        else
-            aColor = rStyleSettings.GetWindowColor();
-        SetBackground( aColor );
-        mpImplData->mpVirDev->SetBackground( GetBackground() );
-
-        // NWF background
-        if( ! IsControlBackground() &&
-              IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_WINDOW ) )
-        {
-            ImplGetWindowImpl()->mnNativeBackground = PART_BACKGROUND_WINDOW;
-            EnableChildTransparentMode( true );
-        }
-    }
+    mpImplData->mpVirDev->SetFont(GetFont());
+    mpImplData->mpVirDev->SetTextColor(GetTextColor());
+    mpImplData->mpVirDev->SetTextAlign(GetTextAlign());
+    mpImplData->mpVirDev->SetTextFillColor();
+    mpImplData->mpVirDev->SetBackground(GetBackground());
 }
 
 void StatusBar::ImplFormat()
@@ -745,7 +705,20 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     sal_uInt16 nItemCount = sal_uInt16( mpItemList->size() );
 
     if (mbProgressMode)
+    {
+        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        Color aProgressColor = rStyleSettings.GetHighlightColor();
+        if (aProgressColor == rStyleSettings.GetFaceColor())
+            aProgressColor = rStyleSettings.GetDarkShadowColor();
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(aProgressColor);
+
         ImplDrawProgress(rRenderContext, true, 0, mnPercent);
+
+        rRenderContext.Pop();
+    }
     else
     {
         // draw text
@@ -756,7 +729,7 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         if (mbVisibleItems)
         {
             for (sal_uInt16 i = 0; i < nItemCount; i++)
-                ImplDrawItem(rRenderContext, false, i, true, true);
+                ImplDrawItem(rRenderContext, true, i, true, true);
         }
     }
 
@@ -869,17 +842,17 @@ void StatusBar::StateChanged( StateChangedType nType )
               (nType == StateChangedType::ControlFont) )
     {
         mbFormat = true;
-        ImplInitSettings( true, false, false );
+        ImplInitSettings();
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ImplInitSettings();
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ImplInitSettings();
         Invalidate();
     }
 }
@@ -897,7 +870,7 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
        )
     {
         mbFormat = true;
-        ImplInitSettings( true, true, true );
+        ImplInitSettings();
         long nFudge = GetTextHeight() / 4;
         for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
         {
@@ -1258,7 +1231,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
         {
             Update();
             Rectangle aRect = ImplGetItemRectPos(nPos);
-            Invalidate(aRect);
+            Invalidate(aRect, InvalidateFlags::NoErase);
             Flush();
         }
     }
@@ -1379,12 +1352,6 @@ void StatusBar::StartProgressMode( const OUString& rText )
     ImplCalcProgressRect();
 
     // trigger Paint, which draws text and frame
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    Color aPrgsColor = rStyleSettings.GetHighlightColor();
-    if ( aPrgsColor == rStyleSettings.GetFaceColor() )
-        aPrgsColor = rStyleSettings.GetDarkShadowColor();
-    SetLineColor();
-    SetFillColor( aPrgsColor );
     if ( IsReallyVisible() )
     {
         Invalidate();
@@ -1403,7 +1370,6 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
     &&   (!mnPercent || (mnPercent != nNewPercent)) )
     {
         Update();
-        SetLineColor();
         Invalidate();
         Flush();
     }
@@ -1417,8 +1383,6 @@ void StatusBar::EndProgressMode()
     mbProgressMode = false;
     maPrgsTxt.clear();
 
-    // re-trigger Paint to recreate StatusBar
-    SetFillColor( GetSettings().GetStyleSettings().GetFaceColor() );
     if ( IsReallyVisible() )
     {
         Invalidate();

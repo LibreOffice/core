@@ -96,7 +96,7 @@ private:
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void      ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void      ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    SAL_DLLPRIVATE void      ImplInitSettings();
     SAL_DLLPRIVATE void      ImplFormat();
     SAL_DLLPRIVATE bool      ImplIsItemUpdate();
 
