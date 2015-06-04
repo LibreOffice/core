@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "3a57f1b5_fffe5804",
+        "filename": "sc/inc/externalrefmgr.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-04T21:41:17Z",
+      "side": 1,
+      "message": "Nitpick: please maintain indentation of doxygen comments as seen for other comments.",
+      "revId": "419fa7da99e90704a590b53a879562d2ded5181a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a57f1b5_e4bb2f74",
         "filename": "sc/inc/externalrefmgr.hxx",
         "patchSetId": 3
@@ -122,6 +139,23 @@
     },
     {
       "key": {
+        "uuid": "3a57f1b5_640c1f43",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2067,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-04T21:41:17Z",
+      "side": 1,
+      "message": "Nitpick: one empty line between function bodies is eye pleasing ;)",
+      "revId": "419fa7da99e90704a590b53a879562d2ded5181a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a57f1b5_24aaa71a",
         "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
         "patchSetId": 3
@@ -133,6 +167,29 @@
       "writtenOn": "2015-06-04T19:49:35Z",
       "side": 1,
       "message": "See comment in header file, looking ScFormulaCell* up from the document would be unnecessary if passed in.",
+      "revId": "419fa7da99e90704a590b53a879562d2ded5181a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_24062721",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-04T21:41:17Z",
+      "side": 1,
+      "message": "Use pre-increment instead of post-increment with iterators, unless the previous value is to be obtained and remembered, so ++itr instead of itr++",
+      "range": {
+        "startLine": 2074,
+        "startChar": 81,
+        "endLine": 2074,
+        "endChar": 86
+      },
       "revId": "419fa7da99e90704a590b53a879562d2ded5181a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
