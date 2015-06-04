@@ -11,28 +11,13 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,liborcus))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,liborcus,$(ORCUS_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,0))
-
-liborcus_patches :=
-
-# make config.sub recognize arm-linux-androideabi
-# liborcus_patches += liborcus_0.1.0-configure.patch
-
-# don't use dllimport
-liborcus_patches += liborcus_0.1.0-dllimport.patch
-
-# Any -fvisibility= etc. settings are passed into liborcus' CXXFLAGS via
-# gb_VISIBILITY_FLAGS[_CXX]:
-liborcus_patches += visibility.patch
-
-# <https://gitorious.org/orcus/orcus/merge_requests/2#
-# f60d6eecee72349993a392a9a63ddf3383d3b8c8-
-# f60d6eecee72349993a392a9a63ddf3383d3b8c8@2>:
-
-liborcus_patches += liborcus_0.7.0-configure.gcc5.patch.0
+$(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
-	$(foreach patch,$(liborcus_patches),external/liborcus/$(patch)) \
+	external/liborcus/0001-fix-dllexport-decls.patch \
+	external/liborcus/0001-mark-more-symbols-as-public.patch \
+	external/liborcus/0001-these-functions-are-implemented-in-liborcus.patch \
+	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

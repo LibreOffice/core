@@ -3170,6 +3170,34 @@ public:
         maPropName = MemStr();
         maPropValue = MemStr();
     }
+
+    // new members
+    void simple_selector_type(const char* /*p*/, size_t /*n*/) {}
+
+    void simple_selector_class(const char* /*p*/, size_t /*n*/) {}
+
+    void simple_selector_pseudo_element(orcus::css::pseudo_element_t /*pe*/) {}
+
+    void simple_selector_pseudo_class(orcus::css::pseudo_class_t /*pc*/) {}
+
+    void simple_selector_id(const char* /*p*/, size_t /*n*/) {}
+
+    void end_simple_selector() {}
+
+    void end_selector() {}
+
+    void combinator(orcus::css::combinator_t /*combinator*/) {}
+
+    void rgb(uint8_t /*red*/ , uint8_t /*green*/ , uint8_t /*blue*/ ) {}
+
+    void rgba(uint8_t /*red*/ , uint8_t /*green*/ , uint8_t /*blue*/ , double /*alpha*/ ) {}
+
+    void hsl(uint8_t /*hue*/ , uint8_t /*sat*/ , uint8_t /*light*/ ) {}
+
+    void hsla(uint8_t /*hue*/ , uint8_t /*sat*/ , uint8_t /*light*/ , double /*alpha*/ ) {}
+
+    void url(const char* /*p*/, size_t /*n*/) {}
+
 };
 
 }
@@ -3183,7 +3211,7 @@ void ScHTMLQueryParser::ParseStyle(const OUString& rStrm)
     {
         aParser.parse();
     }
-    catch (const orcus::css_parse_error&)
+    catch (const orcus::css::parse_error&)
     {
         // TODO: Parsing of CSS failed.  Do nothing for now.
     }
