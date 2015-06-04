@@ -212,6 +212,8 @@ struct LOKDocView_Impl
     void searchNotFound(const std::string& rPayload);
     /// LOK decided to change parts, need to update UI.
     void setPart(const std::string& rPayload);
+    /// Sets the tiles enclosed by rRectangle as invalid in m_pTileBuffer
+    void setTilesInvalid(const GdkRectangle& rRectangle);
 };
 
 namespace {
@@ -646,6 +648,26 @@ bool LOKDocView_Impl::isEmptyRectangle(const GdkRectangle& rRectangle)
     return rRectangle.x == 0 && rRectangle.y == 0 && rRectangle.width == 0 && rRectangle.height == 0;
 }
 
+void LOKDocView_Impl::setTilesInvalid(const GdkRectangle& rRectangle)
+{
+    GdkRectangle aRectanglePixels;
+    GdkPoint aStart, aEnd;
+
+    aRectanglePixels.x = twipToPixel(rRectangle.x, m_fZoom);
+    aRectanglePixels.y = twipToPixel(rRectangle.y, m_fZoom);
+    aRectanglePixels.width = twipToPixel(rRectangle.width, m_fZoom);
+    aRectanglePixels.height = twipToPixel(rRectangle.height, m_fZoom);
+
+    aStart.x = aRectanglePixels.y / nTileSizePixels;
+    aStart.y = aRectanglePixels.x / nTileSizePixels;
+    aEnd.x = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
+    aEnd.y = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixels) / nTileSizePixels;
+
+    for (int i = aStart.x; i < aEnd.x; i++)
+        for (int j = aStart.y; j < aEnd.y; j++)
+            m_pTileBuffer->tile_buffer_set_invalid(i, j);
+}
+
 void LOKDocView_Impl::renderHandle(cairo_t* pCairo, const GdkRectangle& rCursor, cairo_surface_t* pHandle, GdkRectangle& rRectangle)
 {
     GdkPoint aCursorBottom;
@@ -915,21 +937,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         if (pCallback->m_aPayload != "EMPTY")
         {
             GdkRectangle aRectangle = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
-            GdkRectangle aRectanglePixels;
-            aRectanglePixels.x = twipToPixel(aRectangle.x, m_fZoom);
-            aRectanglePixels.y = twipToPixel(aRectangle.y, m_fZoom);
-            aRectanglePixels.width = twipToPixel(aRectangle.width, m_fZoom);
-            aRectanglePixels.height = twipToPixel(aRectangle.height, m_fZoom);
-            int rowStart = aRectanglePixels.y / nTileSizePixels;
-            int colStart = aRectanglePixels.x / nTileSizePixels;
-            int rowEnd = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
-            int colEnd = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixels) / nTileSizePixels;
-            int i,j;
-            for (i = rowStart; i < rowEnd; i++) {
-                for (j = colStart; j < colEnd; j++) {
-                    m_pTileBuffer->tile_buffer_set_invalid(i, j);
-                }
-            }
+            setTilesInvalid(aRectangle);
             renderDocument(0);
         }
         else
@@ -943,21 +951,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     {
         m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         m_bCursorOverlayVisible = true;
-        GdkRectangle aRectanglePixels;
-        aRectanglePixels.x = twipToPixel(m_aVisibleCursor.x, m_fZoom);
-        aRectanglePixels.y = twipToPixel(m_aVisibleCursor.y, m_fZoom);
-        aRectanglePixels.width = twipToPixel(m_aVisibleCursor.width, m_fZoom);
-        aRectanglePixels.height = twipToPixel(m_aVisibleCursor.height, m_fZoom);
-        int rowStart = aRectanglePixels.y / nTileSizePixels;
-        int colStart = aRectanglePixels.x / nTileSizePixels;
-        int rowEnd = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
-        int colEnd = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixels) / nTileSizePixels;
-        int i,j;
-        for (i = rowStart; i < rowEnd; i++) {
-            for (j = colStart; j < colEnd; j++) {
-                m_pTileBuffer->tile_buffer_set_invalid(i, j);
-            }
-        }
+        setTilesInvalid(m_aVisibleCursor);
         renderDocument(0);
     }
     break;
