@@ -5579,6 +5579,11 @@
           <value xml:lang="en-US">Track Chan~ges</value>
         </prop>
       </node>
+      <node oor:name=".uno:EditLinksMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Entries</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ToolsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Tools</value>
