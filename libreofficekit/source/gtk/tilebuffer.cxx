@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -9,6 +9,10 @@
 
 #include "tilebuffer.hxx"
 
+/* ------------------
+   Utility functions
+   ------------------
+*/
 float pixelToTwip(float fInput, float zoom)
 {
     return (fInput / DPI / zoom) * 1440.0f;
@@ -19,84 +23,96 @@ float twipToPixel(float fInput, float zoom)
     return fInput / 1440.0f * DPI * zoom;
 }
 
-GdkPixbuf* Tile::tile_get_buffer()
+/* ----------------------------
+   Tile class member functions
+   ----------------------------
+*/
+GdkPixbuf* Tile::getBuffer()
 {
     return m_pBuffer;
 }
 
-void Tile::tile_release()
+void Tile::release()
 {
     g_object_unref (m_pBuffer);
     m_pBuffer = NULL;
 }
 
-void TileBuffer::tile_buffer_set_zoom(float newZoomFactor, int rows, int columns)
+void Tile::setPixbuf(GdkPixbuf *buffer)
+{
+    m_pBuffer = buffer;
+}
+
+/* ----------------------------------
+   TileBuffer class member functions
+   ----------------------------------
+*/
+void TileBuffer::setZoom(float newZoomFactor, int rows, int columns)
 {
     m_fZoomFactor = newZoomFactor;
 
-    tile_buffer_reset_all_tiles();
+    resetAllTiles();
 
     // set new buffer width and height
     m_nWidth = columns;
     m_nHeight = rows;
 }
 
-void TileBuffer::tile_buffer_reset_all_tiles()
+void TileBuffer::resetAllTiles()
 {
     std::map<int, Tile>::iterator it = m_mTiles.begin();
     for (; it != m_mTiles.end(); it++)
-        {
-            it->second.tile_release();
-        }
+    {
+        it->second.release();
+    }
     m_mTiles.clear();
 }
 
-void TileBuffer::tile_buffer_set_invalid(int x, int y)
+void TileBuffer::setInvalid(int x, int y)
 {
     int index = x * m_nWidth + y;
-    g_info("setting invalid : %d %d",x, y);
+    g_info("Setting tile invalid (%d, %d)", x, y);
     if (m_mTiles.find(index) != m_mTiles.end())
-        {
-            m_mTiles[index].valid = 0;
-            m_mTiles[index].tile_release();
-            m_mTiles.erase(index);
-        }
+    {
+        m_mTiles[index].valid = 0;
+        m_mTiles[index].release();
+        m_mTiles.erase(index);
+    }
 }
 
-Tile& TileBuffer::tile_buffer_get_tile(int x, int y)
+Tile& TileBuffer::getTile(int x, int y)
 {
     int index = x * m_nWidth + y;
     if(m_mTiles.find(index) == m_mTiles.end() || !m_mTiles[index].valid)
+    {
+
+        GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, m_nTileSize, m_nTileSize);
+        if (!pPixBuf)
         {
-
-            GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, m_nTileSize, m_nTileSize);
-            if (!pPixBuf){
-                g_info ("error allocating memory to pixbuf");
-            }
-            unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
-            GdkRectangle aTileRectangle;
-            aTileRectangle.x = pixelToTwip(m_nTileSize, m_fZoomFactor) * y;
-            aTileRectangle.y = pixelToTwip(m_nTileSize, m_fZoomFactor) * x;
-
-            g_info ("rendering (%d %d)", x, y);
-            m_pLOKDocument->pClass->paintTile(m_pLOKDocument,
-                                              // Buffer and its size, depends on the position only.
-                                              pBuffer,
-                                              m_nTileSize, m_nTileSize,
-                                              // Position of the tile.
-                                              aTileRectangle.x, aTileRectangle.y,
-                                              // Size of the tile, depends on the zoom factor and the tile position only.
-                                              pixelToTwip(m_nTileSize, m_fZoomFactor), pixelToTwip(m_nTileSize, m_fZoomFactor));
-
-            //create a mapping for it
-            m_mTiles[index].tile_set_pixbuf(pPixBuf);
-            m_mTiles[index].valid = 1;
+            g_info ("Error allocating memory to pixbuf");
+            return m_mTiles[index];
         }
+
+        unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
+        GdkRectangle aTileRectangle;
+        aTileRectangle.x = pixelToTwip(m_nTileSize, m_fZoomFactor) * y;
+        aTileRectangle.y = pixelToTwip(m_nTileSize, m_fZoomFactor) * x;
+
+        g_info ("Rendering (%d, %d)", x, y);
+        m_pLOKDocument->pClass->paintTile(m_pLOKDocument,
+                                          pBuffer,
+                                          m_nTileSize, m_nTileSize,
+                                          aTileRectangle.x, aTileRectangle.y,
+                                          pixelToTwip(m_nTileSize, m_fZoomFactor),
+                                          pixelToTwip(m_nTileSize, m_fZoomFactor));
+
+        //create a mapping for it
+        m_mTiles[index].setPixbuf(pPixBuf);
+        m_mTiles[index].valid = 1;
+    }
 
     return m_mTiles[index];
 }
 
-void Tile::tile_set_pixbuf(GdkPixbuf *buffer)
-{
-    m_pBuffer = buffer;
-}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
