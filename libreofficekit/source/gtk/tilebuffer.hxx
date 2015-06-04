@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -24,32 +24,60 @@ const int DPI = 96;
 // Lets use a square of side 256 pixels for each tile.
 const int nTileSizePixels = 256;
 
+/**
+   Converts the pixel value to zoom independent twip value.
+
+   @param fInput value to convert
+   @param zoom the current zoom level
+
+   @return the pixels value corresponding to given twip value
+*/
 float pixelToTwip(float fInput, float zoom);
 
+/**
+   Converts the zoom independent twip value pixel value.
+
+   @param fInput value to convert
+   @param zoom the current zoom level
+
+   @return the twip value corresponding to given pixel value
+*/
 float twipToPixel(float fInput, float zoom);
 
-/*
-  This class represents a single tile in the tile buffer.
-  TODO: Extend it to support features like double buffering
+/**
+   This class represents a single tile in the tile buffer.
+   It encloses a reference to GdkPixBuf containing the pixel data of the tile.
 */
 class Tile
 {
  public:
- Tile() : valid(0) {}
-    ~Tile() {
-    }
+    Tile() : valid(0) {}
+    ~Tile() { }
 
-    GdkPixbuf* tile_get_buffer();
-    void tile_release();
-    void tile_set_pixbuf(GdkPixbuf*);
+    /**
+       Tells if this tile is valid or not. Initialised to 0 (invalid) during
+       object creation.
+    */
     bool valid;
- private:
+
+    /// Function to get the pointer to enclosing GdkPixbuf
+    GdkPixbuf* getBuffer();
+    /// Destroys the enclosing GdkPixbuf object pointed to by m_pBuffer
+    void release();
+    /// Used to set the pixel buffer of this object
+    void setPixbuf(GdkPixbuf*);
+
+private:
+    /// Pixel buffer data for this tile
     GdkPixbuf *m_pBuffer;
 };
 
-/*
-  TileBuffer is the buffer caching all the recently rendered tiles.
-  The buffer is set to invalid when zoom factor changes.
+/**
+   This class represents the tile buffer which is responsible for managing,
+   reusing and caching all the already rendered tiles. If the given tile is not
+   present in the buffer, call to LOK Document's (m_pLOKDocument) paintTile
+   method is made which fetches the rendered tile from LO core and store it in
+   buffer for future reuse.
 */
 class TileBuffer
 {
@@ -67,19 +95,58 @@ class TileBuffer
 
     ~TileBuffer() {}
 
-    void tile_buffer_set_zoom(float zoomFactor, int rows, int columns);
-    Tile& tile_buffer_get_tile(int x, int y);
-    void tile_buffer_update();
-    void tile_buffer_reset_all_tiles();
-    void tile_buffer_set_invalid(int x, int y);
+    /**
+       Sets the zoom factor (m_fZoomFactor) for this tile buffer. Setting the
+       zoom factor invalidates whole of the tile buffer, destroys all tiles
+       contained within it, and sets new width, height values for tile
+       buffer. The width, height value of tile buffer is the width and height of
+       the table containing all possible tiles (rendered and non-rendered) that
+       this buffer can have.
+
+       @param zoomFactor the new zoom factor value to set
+     */
+    void setZoom(float zoomFactor, int rows, int columns);
+    /**
+       Gets the underlying Tile object for given position. The position (0, 0)
+       points to the left top most tile of the buffer.
+
+       If the tile is not cached by the tile buffer, it makes a paintTile call
+       to LO core asking to render the given tile. It then stores the tile for
+       future reuse.
+
+       @param x the tile along the x-axis of the buffer
+       @param y the tile along the y-axis of the buffer
+
+       @return the tile at the mentioned position (x, y)
+     */
+    Tile& getTile(int x, int y);
+    /// Destroys all the tiles in the tile buffer; also frees the memory allocated
+    /// for all the Tile objects.
+    void resetAllTiles();
+    /**
+       Marks the tile as invalid. The tile (0, 0) is the left topmost tile in
+       the tile buffer.
+
+       @param x the position of tile along x-axis
+       @param y the position of tile along y-axis
+     */
+    void setInvalid(int x, int y);
+
  private:
+    /// Contains the reference to the LOK Document that this tile buffer is for.
     LibreOfficeKitDocument *m_pLOKDocument;
+    /// The side of each squared tile in pixels.
     int m_nTileSize;
+    /// The zoom factor that the tile buffer is currently rendered to.
     float m_fZoomFactor;
+    /// Stores all the tiles cached by this tile buffer.
     std::map<int, Tile> m_mTiles;
-    //TODO: Also set width and height when document size changes
+    /// Width of the current tile buffer (number of columns)
     int m_nWidth;
+    /// Height of the current tile buffer (numbero of rows)
     int m_nHeight;
 };
 
 #endif // INCLUDED_TILEBUFFER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
