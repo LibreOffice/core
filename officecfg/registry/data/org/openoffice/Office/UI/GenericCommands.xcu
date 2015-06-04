@@ -3062,7 +3062,7 @@
       </node>
       <node oor:name=".uno:ClearOutline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Remove</value>
+          <value xml:lang="en-US">~Remove Outline</value>
         </prop>
       </node>
       <node oor:name=".uno:HelplinesMove" oor:op="replace">
