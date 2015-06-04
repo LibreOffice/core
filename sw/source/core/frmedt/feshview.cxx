@@ -1271,8 +1271,8 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
     Point aTopPos(  nTmp, nTmp );
     Point aCurPos;
     Point aPos;
-    bool bNoDraw(GotoObjFlags::DrawAny & eType);
-    bool bNoFly(GotoObjFlags::FlyAny & eType);
+    bool bNoDraw((GotoObjFlags::DrawAny & eType) == GotoObjFlags::NONE);
+    bool bNoFly((GotoObjFlags::FlyAny & eType) == GotoObjFlags::NONE);
 
     if( !bNoFly && bNoDraw )
     {
