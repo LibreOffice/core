@@ -47,22 +47,6 @@ enum VersionComparisonOp {
     DRIVER_COMPARISON_IGNORED
 };
 
-enum DeviceFamily {
-    IntelGMA500,
-    IntelGMA900,
-    IntelGMA950,
-    IntelGMA3150,
-    IntelGMAX3000,
-    IntelGMAX4500HD,
-    IntelHD3000,
-    IntelMobileHDGraphics,
-    NvidiaBlockD3D9Layers,
-    RadeonX1000,
-    Geforce7300GT,
-    Nvidia310M,
-    DeviceFamilyMax
-};
-
 enum DeviceVendor {
     VendorAll,
     VendorIntel,
@@ -77,15 +61,8 @@ bool ParseDriverVersion(const OUString& rString, uint64_t& rVersion);
 
 struct DriverInfo
 {
-    typedef std::vector<OUString> DeviceFamilyVector;
-
-    // If |ownDevices| is true, you are transferring ownership of the devices
-    // array, and it will be deleted when this GfxDriverInfo is destroyed.
-
-    DriverInfo(OperatingSystem os, const OUString& vendor, DeviceFamilyVector* devices,
-            VersionComparisonOp op,
-            uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr,
-            bool ownDevices = false);
+    DriverInfo(OperatingSystem os, const OUString& vendor, VersionComparisonOp op,
+            uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr);
 
     DriverInfo();
     DriverInfo(const DriverInfo&);
@@ -96,8 +73,6 @@ struct DriverInfo
 
     OUString maAdapterVendor;
 
-    static DeviceFamilyVector* const allDevices;
-    DeviceFamilyVector* mpDevices;
     std::vector<OUString> maDevices;
 
     // Whether the mDevices array should be deleted when this structure is
@@ -112,9 +87,6 @@ struct DriverInfo
     uint64_t mnDriverVersion;
     uint64_t mnDriverVersionMax;
     static uint64_t allDriverVersions;
-
-    static const DeviceFamilyVector* GetDeviceFamily(DeviceFamily id);
-    static DeviceFamilyVector* mpDeviceFamilies[DeviceFamilyMax];
 
     OUString maSuggestedVersion;
     OUString maMsg;
