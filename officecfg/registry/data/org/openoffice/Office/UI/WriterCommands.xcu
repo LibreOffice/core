@@ -13,7 +13,7 @@
       </node>
       <node oor:name=".uno:PrintLayout" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Print Layout</value>
+          <value xml:lang="en-US">~Normal</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

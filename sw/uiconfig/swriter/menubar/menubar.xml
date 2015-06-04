@@ -113,6 +113,15 @@
       <menu:menuitem menu:id=".uno:MergeDocuments"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
+      <menu:menu menu:id=".uno:EditLinksMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:FieldDialog"/>
+          <menu:menuitem menu:id=".uno:EditFootnote"/>
+          <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
+          <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
+          <menu:menuitem menu:id=".uno:EditHyperlink"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuitem menu:id=".uno:LinkDialog"/>
       <menu:menuitem menu:id=".uno:PlugInsActive"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
@@ -170,6 +179,7 @@
       <menu:menuitem menu:id=".uno:InsertBreak"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertGraphic"/>
+      <menu:menuitem menu:id=".uno:InsertObjectChart"/>
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Gallery"/>
@@ -191,7 +201,6 @@
           <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:InsertObjectChart"/>
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
