@@ -65,7 +65,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 # Disabled to allow the check tinderbox execute the sd tests
 # CppunitTest_sc_chart_regression_test \
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+#$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     JunitTest_sc_complex \
     JunitTest_sc_unoapi_1 \
     JunitTest_sc_unoapi_2 \
@@ -93,6 +93,11 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_editfieldobj_cell \
     CppunitTest_sc_editfieldobj_header \
     CppunitTest_sc_modelobj \
+    CppunitTest_sc_unosidebarobj \
+))
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+    CppunitTest_sc_unosidebarobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
