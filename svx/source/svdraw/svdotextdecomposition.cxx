@@ -744,8 +744,8 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText() const
     }
 
     OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
-    const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
-    const_cast<SdrTextObj*>(this)->ReformatText();
+    const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
+    //const_cast<SdrTextObj*>(this)->ReformatText();
 }
 
 
