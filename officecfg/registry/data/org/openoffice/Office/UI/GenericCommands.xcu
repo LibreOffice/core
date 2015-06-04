@@ -2472,7 +2472,7 @@
       </node>
       <node oor:name=".uno:BrowseView" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Web Layout</value>
+          <value xml:lang="en-US">~Web</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5577,6 +5577,11 @@
       <node oor:name=".uno:ChangesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Track Chan~ges</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:EditLinksMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Entries</value>
         </prop>
       </node>
       <node oor:name=".uno:ToolsMenu" oor:op="replace">
