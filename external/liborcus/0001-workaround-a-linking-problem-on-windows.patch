@@ -1,0 +1,27 @@
+From 7fbf092c05e703bb4019e1ab27637f0c93c4aad4 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Thu, 4 Jun 2015 16:13:18 +0200
+Subject: [PATCH] workaround a linking problem on windows
+---
+ include/orcus/types.hpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/include/orcus/types.hpp b/include/orcus/types.hpp
+index b6e3f83..8ad149b 100644
+--- a/include/orcus/types.hpp
++++ b/include/orcus/types.hpp
+@@ -26,6 +26,11 @@ ORCUS_PSR_DLLPUBLIC extern const xml_token_t XML_UNKNOWN_TOKEN;
+ ORCUS_PSR_DLLPUBLIC extern const size_t index_not_found;
+ ORCUS_PSR_DLLPUBLIC extern const size_t unspecified;
+ 
++const xmlns_id_t& getXmlnsUnknownId()
++{
++    return XMLNS_UNKNOWN_ID;
++}
++
+ struct xml_name_t
+ {
+     xmlns_id_t ns;
+-- 
+2.4.1
+
