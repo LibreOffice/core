@@ -227,6 +227,7 @@ public:
     void operator() (size_t index)
     {
         orcus::xmlns_id_t nsid = mrNsRepo.get_identifier(index);
+
         if (nsid == orcus::XMLNS_UNKNOWN_ID)
             return;
 
