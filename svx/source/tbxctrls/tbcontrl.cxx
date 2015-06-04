@@ -1230,6 +1230,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     {
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         case SID_BACKGROUND_COLOR:
+        case SID_ATTR_CHAR_BACK_COLOR:
         {
             mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
             mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
@@ -1380,6 +1381,7 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, AutoColorClickHdl)
     {
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         case SID_BACKGROUND_COLOR:
+        case SID_ATTR_CHAR_BACK_COLOR:
         {
             aColor = COL_TRANSPARENT;
             break;
