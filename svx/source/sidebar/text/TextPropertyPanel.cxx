@@ -157,7 +157,6 @@ void TextPropertyPanel::HandleContextChange (
 
         case CombinedEnumContext(Application_Calc, Context_EditCell):
         case CombinedEnumContext(Application_Calc, Context_DrawText):
-            bNeedTextSpacing = true;
 
         case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
