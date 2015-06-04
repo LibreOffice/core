@@ -19,6 +19,10 @@ $(eval $(call gb_Jar_use_jars,ConnectivityTools,\
 	OOoRunner \
 ))
 
+$(eval $(call gb_Jar_use_system_jars,ConnectivityTools, \
+    $(OOO_JUNIT_JAR) \
+))
+
 $(eval $(call gb_Jar_set_packageroot,ConnectivityTools,connectivity))
 
 $(eval $(call gb_Jar_add_sourcefiles,ConnectivityTools,\

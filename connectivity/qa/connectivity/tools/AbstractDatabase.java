@@ -31,6 +31,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import connectivity.tools.sdb.Connection;
 import java.io.File;
+import static org.junit.Assert.*;
 
 public abstract class AbstractDatabase implements DatabaseAccess
 {
@@ -120,7 +121,11 @@ public abstract class AbstractDatabase implements DatabaseAccess
     public void closeAndDelete()
     {
         close();
+        delete();
+    }
 
+    private void delete()
+    {
         if (m_databaseDocumentFile != null)
         {
             final File file = new File(m_databaseDocumentFile);
@@ -184,7 +189,16 @@ public abstract class AbstractDatabase implements DatabaseAccess
     @Override
     protected void finalize() throws Throwable
     {
-        closeAndDelete();
+        // Cannot call close() here, as it accesses UNO objects (that may
+        // already have been finalized):
+        assertNull(
+            "missing call to connectivity.tools.AbstractDatabase.close",
+            m_connection);
+        assertNull(
+            "missing call to connectivity.tools.AbstractDatabase.close",
+            m_databaseDocument);
+
+        delete();
         super.finalize();
     }
 
