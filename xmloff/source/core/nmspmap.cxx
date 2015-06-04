@@ -102,10 +102,12 @@ sal_uInt16 SvXMLNamespaceMap::Add( const OUString& rPrefix, const OUString& rNam
     if( XML_NAMESPACE_UNKNOWN == nKey )
         nKey = GetKeyByName( rName );
 
-    assert(XML_NAMESPACE_NONE != nKey);
-
+#ifdef NDEBUG
     if( XML_NAMESPACE_NONE == nKey )
         return USHRT_MAX;
+#else
+    assert(XML_NAMESPACE_NONE != nKey);
+#endif
 
     if ( aNameHash.find ( rPrefix ) == aNameHash.end() )
         nKey = _Add( rPrefix, rName, nKey );
@@ -117,10 +119,12 @@ sal_uInt16 SvXMLNamespaceMap::AddIfKnown( const OUString& rPrefix, const OUStrin
 {
     sal_uInt16 nKey = GetKeyByName( rName );
 
-    assert(nKey != XML_NAMESPACE_NONE);
-
+#ifdef NDEBUG
     if( XML_NAMESPACE_NONE == nKey )
         return XML_NAMESPACE_UNKNOWN;
+#else
+    assert(nKey != XML_NAMESPACE_NONE);
+#endif
 
     if( XML_NAMESPACE_UNKNOWN != nKey )
     {
