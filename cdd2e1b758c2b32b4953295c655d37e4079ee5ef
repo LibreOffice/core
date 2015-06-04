@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_448d637a",
+        "filename": "dbaccess/source/ui/browser/genericcontroller.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2015-06-04T01:47:22Z",
+      "side": 1,
+      "message": "I would remove this commented code if it is not needed.",
+      "revId": "cdd2e1b758c2b32b4953295c655d37e4079ee5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_e4e80f19",
+        "filename": "include/sfx2/sidebar/DeckDescriptor.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2015-06-04T01:47:22Z",
+      "side": 1,
+      "message": "I don\u0027t see in the changes that this include is needed here? if it is needed only in cxx file then add it there.",
+      "range": {
+        "startLine": 28,
+        "startChar": 22,
+        "endLine": 28,
+        "endChar": 23
+      },
+      "revId": "cdd2e1b758c2b32b4953295c655d37e4079ee5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_04ee8b22",
+        "filename": "include/sfx2/sidebar/SidebarController.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2015-06-04T01:47:22Z",
+      "side": 1,
+      "message": "You added an include to sidebar/Panel - is this forward declaration then still needed?",
+      "range": {
+        "startLine": 71,
+        "startChar": 11,
+        "endLine": 71,
+        "endChar": 12
+      },
+      "revId": "cdd2e1b758c2b32b4953295c655d37e4079ee5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_84da7b77",
+        "filename": "include/sfx2/sidebar/SidebarController.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2015-06-04T01:47:22Z",
+      "side": 1,
+      "message": "this should be named mpResourceManager as it is a member. Probably you want this in a std::unique_ptr so it is deleted automatically when SidebarController is deleted?",
+      "range": {
+        "startLine": 266,
+        "startChar": 21,
+        "endLine": 266,
+        "endChar": 37
+      },
+      "revId": "cdd2e1b758c2b32b4953295c655d37e4079ee5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_a4f21705",
+        "filename": "include/sfx2/sidebar/TitleBar.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2015-06-04T01:47:22Z",
+      "side": 1,
+      "message": "OUString can always be used without ::rtl:: prefix now - I always remove this prefix if I see it.",
+      "range": {
+        "startLine": 55,
+        "startChar": 15,
+        "endLine": 55,
+        "endChar": 17
+      },
+      "revId": "cdd2e1b758c2b32b4953295c655d37e4079ee5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_c4f713f4",
+        "filename": "include/sfx2/sidebar/UnoDecks.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2015-06-04T01:47:22Z",
+      "side": 1,
+      "message": "Please don\u0027t use \"using namespace xy\" in header files.. (please also check other header files). using namespace xy can be freely used in cxx files.. \n\nAlso css is short for com::sun::star - it is better to use css in new code as it makes it more readable.",
+      "range": {
+        "startLine": 30,
+        "startChar": 19,
+        "endLine": 30,
+        "endChar": 20
+      },
+      "revId": "cdd2e1b758c2b32b4953295c655d37e4079ee5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_24e70742",
+        "filename": "sfx2/source/sidebar/SidebarController.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2015-06-04T01:47:22Z",
+      "side": 1,
+      "message": "you should probably already allocate the ResourceManager here (new ResourceManager)",
+      "range": {
+        "startLine": 124,
+        "startChar": 27,
+        "endLine": 124,
+        "endChar": 28
+      },
+      "revId": "cdd2e1b758c2b32b4953295c655d37e4079ee5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_64ddff6f",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2015-06-04T01:47:22Z",
+      "side": 1,
+      "message": "I guess this is some debug code you used.. we probably don\u0027t need this..",
+      "range": {
+        "startLine": 2828,
+        "startChar": 21,
+        "endLine": 2828,
+        "endChar": 22
+      },
+      "revId": "cdd2e1b758c2b32b4953295c655d37e4079ee5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
