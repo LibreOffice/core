@@ -1170,7 +1170,7 @@ void ScTable::FillFormulaVertical(
     if (aSpans.empty())
         return;
 
-    aCol[nCol].DeleteRanges(aSpans, IDF_CONTENTS, false);
+    aCol[nCol].DeleteRanges(aSpans, IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_FORMULA | IDF_OUTLINE, false);
     aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans, NULL);
 
     boost::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
