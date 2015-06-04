@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_3f1dd066",
+        "filename": "sd/source/ui/app/strings.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-06-04T22:00:13Z",
+      "side": 1,
+      "message": "Accelerators arent needed in these strings. :D",
+      "range": {
+        "startLine": 133,
+        "startChar": 22,
+        "endLine": 133,
+        "endChar": 35
+      },
+      "revId": "cadab266405195200440c90f1f59e7099f8aac81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_5f1a0c70",
+        "filename": "sd/source/ui/app/strings.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-06-04T22:00:13Z",
+      "side": 1,
+      "message": "I\u0027m removing the word \u0027Page\u0027 from the menu so i\u0027d stick with the old string.",
+      "range": {
+        "startLine": 141,
+        "startChar": 22,
+        "endLine": 141,
+        "endChar": 33
+      },
+      "revId": "cadab266405195200440c90f1f59e7099f8aac81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
