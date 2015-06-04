@@ -309,8 +309,8 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                                           css::uno::XInterface > >::get())))))
                 {
                     throw css::uno::RuntimeException(
-                        "URP: queryInterface request message with unknown OID"
-                        " received");
+                        "URP: queryInterface request message with unknown OID '"
+                        + oid + "' received");
                 }
             }
             break;
