@@ -231,13 +231,13 @@ void WinBlocklistParser::handleList(xmlreader::XmlReader& rReader)
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
-            if (name.equals("device"))
+            if (name.equals("entry"))
             {
                 wgl::DriverInfo aDriver;
                 handleDevice(aDriver, rReader);
                 mrDriverList.push_back(aDriver);
             }
-            else if (name.equals("deviceRange"))
+            else if (name.equals("entryRange"))
             {
                 wgl::DriverInfo aDriver;
                 handleDevice(aDriver, rReader);
