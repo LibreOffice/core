@@ -54,6 +54,7 @@ namespace abp
         bool                bIgnoreNoTable;
         MapString2String    aFieldMapping;
         bool                bRegisterDataSource;
+        bool                bEmbedDataSource;
     };
 
 

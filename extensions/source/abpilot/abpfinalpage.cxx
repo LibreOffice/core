@@ -158,6 +158,7 @@ namespace abp
         rSettings.bRegisterDataSource = m_pRegisterName->IsChecked();
         if ( rSettings.bRegisterDataSource )
             rSettings.sRegisteredDataSourceName = m_pName->GetText();
+        rSettings.bEmbedDataSource = m_pEmbed->IsChecked();
 
         return true;
     }

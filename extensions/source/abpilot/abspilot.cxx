@@ -113,6 +113,7 @@ namespace abp
 #endif
         m_aSettings.sDataSourceName = ModuleRes(RID_STR_DEFAULT_NAME).toString();
         m_aSettings.bRegisterDataSource = false;
+        m_aSettings.bEmbedDataSource = false;
         m_aSettings.bIgnoreNoTable = false;
 
         defaultButton(WizardButtonFlags::NEXT);
