@@ -55,9 +55,6 @@ namespace basegfx
         // get size of polygon. Control vectors are included in that ranges.
         BASEGFX_DLLPUBLIC B3DRange getRange(const B3DPolygon& rCandidate);
 
-        // get normal vector of polygon
-        BASEGFX_DLLPUBLIC B3DVector getNormal(const B3DPolygon& rCandidate);
-
         // get area of polygon
         BASEGFX_DLLPUBLIC double getArea(const ::basegfx::B3DPolygon& rCandidate);
 
