@@ -711,7 +711,7 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
     return xRet;
 }
 
-std::shared_ptr<SwUnoCrsr> SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
+SwUnoCrsr* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
 {
     getText();
     XText *const pText = xBodyText.get();
@@ -808,7 +808,7 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor()
 
 // Used for findAll/First/Next
 
-std::shared_ptr<SwUnoCrsr>  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
+SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
                                      Reference< XTextCursor > & xCrsr,
                                      bool bAll,
                                      sal_Int32& nResult,
@@ -816,9 +816,9 @@ std::shared_ptr<SwUnoCrsr>  SwXTextDocument::FindAny(const Reference< util::XSea
 {
     Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY);
     if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
-        return 0;
+        return nullptr;
 
-    std::shared_ptr<SwUnoCrsr> pUnoCrsr(CreateCursorForSearch(xCrsr));
+    auto pUnoCrsr(CreateCursorForSearch(xCrsr));
     const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
         xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
 
@@ -847,7 +847,7 @@ std::shared_ptr<SwUnoCrsr>  SwXTextDocument::FindAny(const Reference< util::XSea
                                         SwXTextRange::getUnoTunnelId()));
             }
             if(!pRange)
-                return 0;
+                return nullptr;
             pRange->GetPositions(*pUnoCrsr);
             if(pUnoCrsr->HasMark())
             {
@@ -942,7 +942,7 @@ Reference< XIndexAccess >
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XIndexAccess >  xRet;
-    xRet = SwXTextRanges::Create( (nResult) ? pResultCrsr.get() : nullptr );
+    xRet = SwXTextRanges::Create( (nResult) ? &(*pResultCrsr) : nullptr );
     return xRet;
 }
 

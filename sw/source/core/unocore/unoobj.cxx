@@ -654,14 +654,13 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
 }
 
 class SwXTextCursor::Impl
-    : public SwClient
 {
 
 public:
     const SfxItemPropertySet &  m_rPropSet;
     const enum CursorType       m_eType;
     const uno::Reference< text::XText > m_xParentText;
-    std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
+    sw::UnoCursorPointer m_pUnoCursor;
 
     Impl(   SwDoc & rDoc,
             const enum CursorType eType,
@@ -670,84 +669,36 @@ public:
         : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)
         , m_xParentText(xParent)
-        , m_pUnoCursor(rDoc.CreateUnoCrsr(rPoint, false))
+        , m_pUnoCursor(rDoc.CreateUnoCrsr(rPoint, false), true)
     {
-        m_pUnoCursor->Add(this);
         if (pMark)
         {
-            GetCursor()->SetMark();
-            *GetCursor()->GetMark() = *pMark;
+            m_pUnoCursor->SetMark();
+            *m_pUnoCursor->GetMark() = *pMark;
         }
     }
-    virtual ~Impl()
-    {
-        Invalidate();
-    }
 
-    std::shared_ptr<SwUnoCrsr> GetCursor() {
-        return m_pUnoCursor;
-    }
     SwUnoCrsr& GetCursorOrThrow() {
         if(!m_pUnoCursor)
             throw uno::RuntimeException("SwXTextCursor: disposed or invalid", 0);
-        return *m_pUnoCursor.get();
+        return *m_pUnoCursor;
     }
-
-    void Invalidate() {
-        if(m_pUnoCursor)
-        {
-            if(GetRegisteredIn() == m_pUnoCursor.get())
-                m_pUnoCursor->Remove(this);
-            m_pUnoCursor.reset();
-        }
-    }
-protected:
-    // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
 
-void SwXTextCursor::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-    // if the cursor leaves its designated section, it becomes invalid
-    if (((pOld != NULL) && (pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION)))
-        Invalidate();
-}
-
-void SwXTextCursor::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    SwClient::SwClientNotify(rModify, rHint);
-    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        Invalidate();
-    }
-}
-
-std::shared_ptr<SwUnoCrsr> SwXTextCursor::GetCursor()
-{
-    return m_pImpl->GetCursor();
-}
+SwUnoCrsr*SwXTextCursor::GetCursor()
+    { return &(*m_pImpl->m_pUnoCursor); }
 
 SwPaM const* SwXTextCursor::GetPaM() const
-{
-    return m_pImpl->GetCursor().get();
-}
+    { return &(*m_pImpl->m_pUnoCursor); }
 
-SwPaM * SwXTextCursor::GetPaM()
-{
-    return m_pImpl->GetCursor().get();
-}
+SwPaM* SwXTextCursor::GetPaM()
+    { return &(*m_pImpl->m_pUnoCursor); }
 
 SwDoc const* SwXTextCursor::GetDoc() const
-{
-    return m_pImpl->GetCursor() ? m_pImpl->GetCursor()->GetDoc() : 0;
-}
+    { return m_pImpl->m_pUnoCursor ? m_pImpl->m_pUnoCursor->GetDoc() : nullptr; }
 
-SwDoc * SwXTextCursor::GetDoc()
-{
-    return m_pImpl->GetCursor() ? m_pImpl->GetCursor()->GetDoc() : 0;
-}
+SwDoc* SwXTextCursor::GetDoc()
+    { return m_pImpl->m_pUnoCursor ? m_pImpl->m_pUnoCursor->GetDoc() : nullptr; }
 
 SwXTextCursor::SwXTextCursor(
         SwDoc & rDoc,
@@ -774,7 +725,7 @@ SwXTextCursor::~SwXTextCursor()
 void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         const bool bForceExpandHints)
 {
-    auto pUnoCrsr = m_pImpl->GetCursor();
+    auto pUnoCrsr = static_cast<SwCursor*>(&(*m_pImpl->m_pUnoCursor));
     if(pUnoCrsr)
     {
         // Start/EndAction
@@ -782,7 +733,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         UnoActionContext aAction(pDoc);
         const sal_Int32 nTextLen = rText.getLength();
         pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
-        SwCursor * pCurrent = pUnoCrsr.get();
+        auto pCurrent = static_cast<SwCursor*>(pUnoCrsr);
         do
         {
             if (pCurrent->HasMark())
@@ -801,8 +752,8 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
                 pCurrent->Left(rText.getLength(),
                         CRSR_SKIP_CHARS, false, false);
             }
-            pCurrent = static_cast<SwCursor *>(pCurrent->GetNext());
-        } while (pCurrent != pUnoCrsr.get());
+            pCurrent = static_cast<SwCursor*>(pCurrent->GetNext());
+        } while (pCurrent != pUnoCrsr);
         pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     }
 }
@@ -857,7 +808,7 @@ bool SwXTextCursor::IsAtEndOfMeta() const
 {
     if (CURSOR_META == m_pImpl->m_eType)
     {
-        auto pCursor( m_pImpl->GetCursor() );
+        auto pCursor( m_pImpl->m_pUnoCursor );
         SwXMeta const*const pXMeta(
                 dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get()) );
         OSL_ENSURE(pXMeta, "no meta?");
@@ -971,7 +922,7 @@ sal_Bool SAL_CALL SwXTextCursor::isCollapsed() throw (uno::RuntimeException, std
     SolarMutexGuard aGuard;
 
     bool bRet = true;
-    auto pUnoCrsr(m_pImpl->GetCursor());
+    auto pUnoCrsr(m_pImpl->m_pUnoCursor);
     if(pUnoCrsr && pUnoCrsr->GetMark())
     {
         bRet = (*pUnoCrsr->GetPoint() == *pUnoCrsr->GetMark());
