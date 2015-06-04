@@ -11,7 +11,7 @@
 
 using namespace ::com::sun::star::uno;
 
-#define NO_FILTER "*.*"
+#define FILTER_ALL "*.*"
 
 class FileViewContainer : public vcl::Window
 {
@@ -65,6 +65,8 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     get(m_pAddService_btn, "add_service_btn");
     get(m_pServices_lb, "services_lb");
     get(m_pPath_ed, "path");
+    get(m_pFilter_lb, "filter_lb");
+    get(m_pName_ed, "name_ed");
 
     m_eMode = (nBits & WB_SAVEAS) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = (nBits & WB_PATH) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
@@ -94,6 +96,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pFileView->Show();
     m_pFileView->EnableAutoResize();
     m_pFileView->SetDoubleClickHdl( LINK( this, RemoteFilesDialog, DoubleClickHdl ) );
+    m_pFileView->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectHdl ) );
 
     m_pContainer->init(m_pFileView);
     m_pContainer->Show();
@@ -105,6 +108,9 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     FillServicesListbox();
 
     m_pServices_lb->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectServiceHdl ) );
+
+    m_pFilter_lb->InsertEntry(FILTER_ALL);
+    m_pFilter_lb->SelectEntryPos(0);
 }
 
 RemoteFilesDialog::~RemoteFilesDialog()
@@ -196,16 +202,26 @@ int RemoteFilesDialog::GetSelectedServicePos()
     return nPos;
 }
 
+OUString RemoteFilesDialog::getCurrentFilter()
+{
+    OUString sFilter;
+
+    sFilter = m_pFilter_lb->GetSelectEntry();
+
+    return sFilter;
+}
+
 void RemoteFilesDialog::OpenURL( OUString sURL )
 {
     if(m_pFileView)
     {
         OUStringList BlackList;
         FileViewResult eResult = eFailure;
+        OUString sFilter = getCurrentFilter();
 
         m_pFileView->EndInplaceEditing( false );
         m_pPath_ed->SetText( sURL );
-        eResult = m_pFileView->Initialize( sURL, NO_FILTER, NULL, BlackList );
+        eResult = m_pFileView->Initialize( sURL, sFilter, NULL, BlackList );
     }
 }
 
@@ -316,6 +332,17 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
     OUString sURL = m_pFileView->GetCurrentURL();
 
     OpenURL( sURL );
+
+    return 1;
+}
+
+IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
+{
+    SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
+    SvtContentEntry* pData = static_cast<SvtContentEntry*>(pEntry->GetUserData());
+
+    INetURLObject aURL(pData->maURL);
+    m_pName_ed->SetText(aURL.GetLastName());
 
     return 1;
 }

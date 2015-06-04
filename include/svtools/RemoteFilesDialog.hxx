@@ -21,6 +21,7 @@
 #include <vcl/vclptr.hxx>
 
 #include <svtools/fileview.hxx>
+#include <svtools/treelistentry.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -71,6 +72,8 @@ private:
     VclPtr<Edit> m_pPath_ed;
     VclPtr<SvtFileView> m_pFileView;
     VclPtr<FileViewContainer> m_pContainer;
+    VclPtr<ListBox> m_pFilter_lb;
+    VclPtr<Edit> m_pName_ed;
 
     std::vector<ServicePtr> m_aServices;
 
@@ -79,6 +82,8 @@ private:
     /* If failure returns < 0 */
     int GetSelectedServicePos();
 
+    OUString getCurrentFilter();
+
     void OpenURL( OUString sURL );
 
     DECL_LINK ( AddServiceHdl, void * );
@@ -86,6 +91,7 @@ private:
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
 
     DECL_LINK( DoubleClickHdl, void * );
+    DECL_LINK( SelectHdl, void * );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
