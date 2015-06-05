@@ -4108,6 +4108,32 @@ SfxVoidItem InsertColumnBreak FID_INS_COLBRK
 ]
 
 
+/* 2015/06 Deprecated, use InsertColumnsBefore instead */
+SfxVoidItem InsertColumns FID_INS_COLUMN
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
+
+
 SfxVoidItem InsertColumnsBefore FID_INS_COLUMNS_BEFORE
 ()
 [
@@ -4431,6 +4457,32 @@ SfxVoidItem InsertRowBreak FID_INS_ROWBRK
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
+
+
+/* 2015/06 Deprecated, use InsertRowsBefore instead */
+SfxVoidItem InsertRows FID_INS_ROW
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
 

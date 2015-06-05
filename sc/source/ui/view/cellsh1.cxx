@@ -142,11 +142,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         //  insert / delete cells / rows / columns
 
+        case FID_INS_ROW:
         case FID_INS_ROWS_BEFORE:
             pTabViewShell->InsertCells(INS_INSROWS_BEFORE);
             rReq.Done();
             break;
 
+        case FID_INS_COLUMN:
         case FID_INS_COLUMNS_BEFORE:
             pTabViewShell->InsertCells(INS_INSCOLS_BEFORE);
             rReq.Done();
