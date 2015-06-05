@@ -39,7 +39,7 @@ typedef enum
      * Any tiles which are over the rectangle described in the payload are no
      * longer valid.
      *
-     * Rectangle format: "width, height, x, y", where all numbers are document
+     * Rectangle format: "x, y, width, height", where all numbers are document
      * coordinates, in twips. When all tiles are supposed to be dropped, the
      * format is the "EMPTY" string.
      */
