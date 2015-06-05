@@ -9,6 +9,8 @@
 
 #include "opengl/win/WinDeviceInfo.hxx"
 
+#include "blocklist_parser.hxx"
+
 #include <windows.h>
 #include <setupapi.h>
 #include <algorithm>
@@ -886,8 +888,32 @@ OUString WinOpenGLDeviceInfo::GetDeviceVendor(wgl::DeviceVendor id)
     return *mpDeviceVendors[id];
 }
 
+namespace {
+
+
+OUString getBlacklistFile()
+{
+    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/config/opengl_blacklist_windows.xml");
+    rtl::Bootstrap::expandMacros(url);
+
+    return url;
+}
+
+
+}
+
 void WinOpenGLDeviceInfo::FillBlacklist()
 {
+    OUString aURL = getBlacklistFile();
+    WinBlocklistParser aParser(aURL, maDriverInfo);
+    try {
+        aParser.parse();
+    }
+    catch (...)
+    {
+        SAL_WARN("vcl.opengl.win", "error parsing blacklist");
+        maDriverInfo.clear();
+    }
 }
 
 
