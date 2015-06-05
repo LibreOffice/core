@@ -19,6 +19,7 @@ class InvalidFileException
 
 class WinBlocklistParser
 {
+public:
     WinBlocklistParser(const OUString& rURL, std::vector<wgl::DriverInfo>& rDriverList);
     void parse();
 
