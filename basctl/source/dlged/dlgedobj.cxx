@@ -28,6 +28,7 @@
 
 #include "dlgresid.hrc"
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
@@ -37,6 +38,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
 #include <o3tl/compat_functional.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
@@ -1690,14 +1692,27 @@ bool DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
     Reference< form::binding::XListEntrySink  > xListEntrySink( GetUnoControlModel(), UNO_QUERY );
     if ( xFac.is() )
     {
+        css::table::CellAddress aApiAddress;
+
+        //tdf#90361 CellValueBinding and CellRangeListSource are unusable
+        //without being initialized, so use createInstanceWithArguments with a
+        //dummy BoundCell instead of createInstance. This at least results in
+        //the dialog editor not falling.
+        css::beans::NamedValue aValue;
+        aValue.Name = "BoundCell";
+        aValue.Value <<= aApiAddress;
+
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
         if ( xBindable.is() )
         {
-            Reference< form::binding::XValueBinding > xBinding( xFac->createInstance( "com.sun.star.table.CellValueBinding" ), UNO_QUERY );
+            Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), UNO_QUERY );
             xBindable->setValueBinding( xBinding );
         }
         if ( xListEntrySink.is() )
         {
-            Reference< form::binding::XListEntrySource > xSource( xFac->createInstance( "com.sun.star.table.CellRangeListSource" ), UNO_QUERY );
+            Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", aArgs ), UNO_QUERY );
             xListEntrySink->setListEntrySource( xSource );
         }
         if ( xListEntrySink.is() || xBindable.is() )
