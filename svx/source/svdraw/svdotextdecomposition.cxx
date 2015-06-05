@@ -717,7 +717,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     rTarget = aConverter.getPrimitive2DSequence();
 }
 
-void SdrTextObj::impLeaveOnlyNonOverflowingText() const
+OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject() const
 {
     // Cut non overflowing text
     NonOverflowingText *pNonOverflowingTxt =
@@ -743,7 +743,12 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText() const
         rOutliner.AddText(*pPObj);
     }
 
-    OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
+     return rOutliner.CreateParaObject();
+}
+
+void SdrTextObj::impLeaveOnlyNonOverflowingText() const
+{
+    OutlinerParaObject *pNewText = impGetNonOverflowingParaObject();
     const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
     //const_cast<SdrTextObj*>(this)->ReformatText();
 }
@@ -1526,6 +1531,9 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         assert (pNextTextObj);
         // NOTE: Commented because we do not need to do this anymore (maybe and for now)
         //impMoveChainedTextToNextLink(pNextTextObj); // XXX: it actually moves the overflowing text currently
+
+        // XXX:
+        //const_cast<SdrTextObj*>(this)->impLeaveOnlyNonOverflowingText();
         // Chaining occurred. Let's reset the status
         const_cast<SdrTextObj*>(this)->SetToBeChained( false );
 

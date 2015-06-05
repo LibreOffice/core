@@ -614,6 +614,7 @@ public:
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 
     void impMoveChainedTextToNextLink(SdrTextObj *pNextTextObj) const;
+    OutlinerParaObject *impGetNonOverflowingParaObject() const;
     void impLeaveOnlyNonOverflowingText() const;
 
     // Handler for Chained Text

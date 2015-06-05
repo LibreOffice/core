@@ -280,7 +280,10 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             // for now doing the same as below - probably we don't need
             // any more chain checks here but one single default behavior
             sal_Int32 nParaAnz = rOutl.GetParagraphCount();
-            pNewText = rOutl.CreateParaObject( 0, nParaAnz );
+            // XXX: FRESHLY COMMENTED (5/6/15) // FIXME:matteocam
+            //pNewText = rOutl.CreateParaObject( 0, nParaAnz );
+
+            pNewText = impGetNonOverflowingParaObject();
 
             // set non overflow part of text to current box
 
