@@ -659,6 +659,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     ValueSet aFormatIndexSet;
     NameSet  aDefaultsSet;
     bool bCtypeIsRef = false;
+    bool bHaveEngineering = false;
 
     for (sal_Int32 i = 0; i< getNumberOfChildren() ; i++, formatCount++)
     {
@@ -805,6 +806,20 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                             incErrorInt( "Error: [CURRENCY] replaceTo not found for formatindex=\"%d\".\n", formatindex);
                     }
                     break;
+                default:
+                    if (aUsage == "SCIENTIFIC_NUMBER")
+                    {
+                        // Check for presence of  ##0.00E+00
+                        OUString aCode( n->getValue());
+                        // Simple check without decimal separator (assumed to
+                        // be one UTF-16 character). May be prefixed with
+                        // [NatNum1] or other tags.
+                        sal_Int32 nInt = aCode.indexOf("##0");
+                        sal_Int32 nDec = (nInt < 0 ? -1 : aCode.indexOf("00E+00", nInt));
+                        if (nInt >= 0 && nDec == nInt+4)
+                            bHaveEngineering = true;
+                    }
+                    break;
             }
             if (pCtype)
             {
@@ -947,6 +962,9 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     ;   // nothing
             }
         }
+
+        if (!bHaveEngineering)
+            incError("Engineering notation format not present, e.g. ##0.00E+00 or ##0,00E+00 for usage=\"SCIENTIFIC_NUMBER\"\n");
     }
 
     of.writeAsciiString("\nstatic const sal_Int16 ");
