@@ -228,6 +228,24 @@
       "revId": "419fa7da99e90704a590b53a879562d2ded5181a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_ffe89818",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2076,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-05T09:41:12Z",
+      "side": 1,
+      "message": "It really doesn\u0027t matter with a set, or it\u0027s only a matter of taste. Either use count()!\u003d0 or find()!\u003dend(); personally I prefer find() just to express that it is a check for existence. Change to count() if you want ;)",
+      "parentUuid": "3a57f1b5_ff4c1878",
+      "revId": "419fa7da99e90704a590b53a879562d2ded5181a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
