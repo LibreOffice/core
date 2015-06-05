@@ -939,9 +939,9 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
         {
             if( ! nUserEvent->maDelData.IsDead() )
                 nUserEvent->mpWindow->ImplRemoveDel( &(nUserEvent->maDelData) );
-            nUserEvent->mpWindow = NULL;
+            nUserEvent->mpWindow.clear();
         }
-
+        nUserEvent->mpInstanceRef.clear();
         nUserEvent->mbCall = false;
     }
 }
