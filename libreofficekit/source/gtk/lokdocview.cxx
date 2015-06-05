@@ -171,9 +171,9 @@ struct LOKDocView_Impl
     /// Sets rWidth and rHeight from a "width, height" string.
     static void payloadToSize(const char* pPayload, long& rWidth, long& rHeight);
     /// Returns the GdkRectangle of a x,y,width,height string.
-    static GdkRectangle payloadToRectangle(const char* pPayload);
+    GdkRectangle payloadToRectangle(const char* pPayload);
     /// Returns the GdkRectangles of a x1,y1,w1,h1;x2,y2,w2,h2;... string.
-    static std::vector<GdkRectangle> payloadToRectangles(const char* pPayload);
+    std::vector<GdkRectangle> payloadToRectangles(const char* pPayload);
     /// Returns the string representation of a LibreOfficeKitCallbackType enumeration element.
     static const char* callbackTypeToString(int nType);
     /// Invoked on the main thread if callbackWorker() requests so.
@@ -854,18 +854,26 @@ GdkRectangle LOKDocView_Impl::payloadToRectangle(const char* pPayload)
     if (!*ppCoordinate)
         return aRet;
     aRet.x = atoi(*ppCoordinate);
+    if (aRet.x < 0)
+        aRet.x = 0;
     ++ppCoordinate;
     if (!*ppCoordinate)
         return aRet;
     aRet.y = atoi(*ppCoordinate);
+    if (aRet.y < 0)
+        aRet.y = 0;
     ++ppCoordinate;
     if (!*ppCoordinate)
         return aRet;
     aRet.width = atoi(*ppCoordinate);
+    if (aRet.x + aRet.width > m_nDocumentWidthTwips)
+        aRet.width = m_nDocumentWidthTwips - aRet.x;
     ++ppCoordinate;
     if (!*ppCoordinate)
         return aRet;
     aRet.height = atoi(*ppCoordinate);
+    if (aRet.y + aRet.height > m_nDocumentHeightTwips)
+        aRet.height = m_nDocumentHeightTwips - aRet.y;
     g_strfreev(ppCoordinates);
     return aRet;
 }
