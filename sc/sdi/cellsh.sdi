@@ -116,6 +116,8 @@ interface CellSelection
     SID_DETECTIVE_MARK_SUCC [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_INSERT_CURRENT_DATE     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_INSERT_CURRENT_TIME     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_INS_ROW             [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_INS_COLUMN          [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_INS_ROWS_BEFORE     [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_INS_COLUMNS_BEFORE  [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_INS_ROWS_AFTER      [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
