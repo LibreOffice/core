@@ -202,7 +202,7 @@ struct SystemGlyphData
     int                  fallbacklevel;
 };
 
-#if ENABLE_CAIRO_CANVAS
+#if ENABLE_CAIRO_CANVAS || defined(ANDROID)
 
 struct SystemFontData
 {

@@ -443,7 +443,7 @@ public:
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 
-#if ENABLE_CAIRO_CANVAS
+#if ENABLE_CAIRO_CANVAS || defined(ANDROID)
 
     /// Check whether cairo will work
     virtual bool                SupportsCairo() const = 0;
