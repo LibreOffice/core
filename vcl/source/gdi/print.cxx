@@ -1500,8 +1500,17 @@ bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
 
     const Size aPixSize = LogicToPixel( rSize );
     const Size aPageSize = PixelToLogic( aPixSize, MAP_100TH_MM );
-    bool bNeedToChange(maJobSetup.ImplGetConstData()->mnPaperWidth != aPageSize.Width() ||
-        maJobSetup.ImplGetConstData()->mnPaperHeight != aPageSize.Height());
+
+    long aWidthOld = maJobSetup.ImplGetConstData()->mnPaperWidth;
+    long aHeightOld = maJobSetup.ImplGetConstData()->mnPaperHeight;
+    if ( maJobSetup.ImplGetConstData()->meOrientation == ORIENTATION_LANDSCAPE )
+    {
+        // tdf#91362 Old page orientation was landscape. Swap width and height
+        // for correct comparison with new values
+        std::swap( aWidthOld, aHeightOld );
+    }
+
+    bool bNeedToChange( aWidthOld != aPageSize.Width() || aHeightOld != aPageSize.Height() );
 
     if(!bNeedToChange)
     {
