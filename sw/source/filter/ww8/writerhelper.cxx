@@ -126,7 +126,11 @@ namespace
 
             if (const SwPosition* pAnchor = rEntry.GetAnchor().GetContentAnchor())
             {
-                aRet.push_back(sw::Frame(rEntry, *pAnchor));
+                // the anchor position will be invalidated by SetRedlineMode
+                // so set a dummy position and fix it in UpdateFramePositions
+                SwPosition const dummy(SwNodeIndex(
+                            const_cast<SwNodes&>(pAnchor->nNode.GetNodes())));
+                aRet.push_back(sw::Frame(rEntry, dummy));
             }
             else
             {
@@ -520,6 +524,22 @@ namespace sw
             SwPosFlyFrms aFlys(rDoc.GetAllFlyFormats(pPaM, true));
             sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
             return aRet;
+        }
+
+        void UpdateFramePositions(Frames & rFrames)
+        {
+            for (Frame & rFrame : rFrames)
+            {
+                SwFormatAnchor const& rAnchor = rFrame.GetFrameFormat().GetAnchor();
+                if (SwPosition const*const pAnchor = rAnchor.GetContentAnchor())
+                {
+                    rFrame.SetPosition(*pAnchor);
+                }
+                else
+                {   // these don't need to be corrected, they're not in redlines
+                    assert(FLY_AT_PAGE == rAnchor.GetAnchorId());
+                }
+            }
         }
 
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode)
