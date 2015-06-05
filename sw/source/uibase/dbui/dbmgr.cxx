@@ -2635,7 +2635,8 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
                 aSequence = comphelper::InitPropertySequence(
                 {
                     {"TargetStorage", uno::makeAny(xStorage)},
-                    {"StreamRelPath", uno::makeAny(aStreamRelPath)}
+                    {"StreamRelPath", uno::makeAny(aStreamRelPath)},
+                    {"BaseURI", uno::makeAny(aOwnURL)}
                 });
 
                 // Refer to the sub-storage name in the document settings, so
