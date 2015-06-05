@@ -45,6 +45,57 @@
       "revId": "cadab266405195200440c90f1f59e7099f8aac81",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_dfb83ce8",
+        "filename": "sd/source/ui/view/drviews1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-06-05T16:40:03Z",
+      "side": 1,
+      "message": "I\u0027d rather see this code in ViewTabBar class. \n\nI mean, ViewTabBar doesn\u0027t really need to expose each individual button to the outsiders, it can provide a method to modify the tab bar all at once depending on mode and page kind ... \n\nThat way, it\u0027ll be easier to address some of my comments below",
+      "revId": "cadab266405195200440c90f1f59e7099f8aac81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_3fc87074",
+        "filename": "sd/source/ui/view/drviews1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-06-05T16:40:03Z",
+      "side": 1,
+      "message": "Here you\u0027re searching for a button by name ...",
+      "revId": "cadab266405195200440c90f1f59e7099f8aac81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_5fc52c59",
+        "filename": "sd/source/ui/view/drviews1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-06-05T16:40:03Z",
+      "side": 1,
+      "message": "... and here you\u0027re looking for the very same button (albeit now with the different name). I\u0027d be nice to reduce the number of searches e.g. by finding a button, remembering its position and then doing the modifications (renaming, toggling enable/disable)\n\nThat will be of course easier if those rename, toggle status etc. methods will be internal to ViewTabBar\n\n(ok, ok, it makes very little difference, we\u0027re talking only 5 buttons here, not 20k *grin*)",
+      "revId": "cadab266405195200440c90f1f59e7099f8aac81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

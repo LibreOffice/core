@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_bfb3000a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-06-05T16:40:03Z",
+      "side": 0,
+      "message": "Hm, do we really need to remove this command? The usual reasoning is that one never knows whether there aren\u0027t some extensions out in the wild relying upon it ...",
+      "revId": "849278b952a3886f0196aac32f6fcf0c7ae72806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
