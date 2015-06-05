@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,lcms2,lcms2))
 
 $(eval $(call gb_ExternalPackage_use_external_project,lcms2,lcms2))
 
-ifneq ($(DISABLE_DYNLOADING),TRUE)
+ifeq ($(DISABLE_DYNLOADING),)
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.2.dylib,src/.libs/liblcms2.2.dylib))
 else ifeq ($(OS),WNT)
