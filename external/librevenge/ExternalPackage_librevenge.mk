@@ -15,7 +15,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0.0.dylib,src/lib/.libs/librevenge-0.0.0.dylib))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0.dll,src/lib/.libs/librevenge-0.0.dll))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0.so.0,src/lib/.libs/librevenge-0.0.so.0.0.2))
 endif
 

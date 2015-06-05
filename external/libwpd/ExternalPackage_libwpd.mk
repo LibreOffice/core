@@ -15,7 +15,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10.10.dylib,src/lib/.libs/libwpd-0.10.10.dylib))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10.dll,src/lib/.libs/libwpd-0.10.dll))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10.so.10,src/lib/.libs/libwpd-0.10.so.10.0.0))
 endif
 

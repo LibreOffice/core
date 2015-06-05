@@ -15,7 +15,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3.3.dylib,src/lib/.libs/libmwaw-0.3.3.dylib))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3.dll,src/lib/.libs/libmwaw-0.3.dll))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3.so.3,src/lib/.libs/libmwaw-0.3.so.3.0.$(MWAW_VERSION_MICRO)))
 endif
 

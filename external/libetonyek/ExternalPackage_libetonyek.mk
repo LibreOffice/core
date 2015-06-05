@@ -15,7 +15,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,libetonyek,$(LIBO_LIB_FOLDER)/libetonyek-0.1.1.dylib,src/lib/.libs/libetonyek-0.1.1.dylib))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libetonyek,$(LIBO_LIB_FOLDER)/libetonyek-0.1.dll,src/lib/.libs/libetonyek-0.1.dll))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,libetonyek,$(LIBO_LIB_FOLDER)/libetonyek-0.1.so.1,src/lib/.libs/libetonyek-0.1.so.1.0.$(ETONYEK_VERSION_MICRO)))
 endif
 

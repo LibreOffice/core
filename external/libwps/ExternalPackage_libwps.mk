@@ -15,7 +15,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,libwps,$(LIBO_LIB_FOLDER)/libwps-0.4.4.dylib,src/lib/.libs/libwps-0.4.4.dylib))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libwps,$(LIBO_LIB_FOLDER)/libwps-0.4.dll,src/lib/.libs/libwps-0.4.dll))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,libwps,$(LIBO_LIB_FOLDER)/libwps-0.4.so.4,src/lib/.libs/libwps-0.4.so.4.0.$(WPS_VERSION_MICRO)))
 endif
 
