@@ -2773,4 +2773,19 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
 void WinSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {}
 
+SystemFontData WinSalGraphics::GetSysFontData( int nFallbacklevel ) const
+{
+    SystemFontData aSysFontData;
+
+    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
+    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+
+    aSysFontData.hFont = mhFonts[nFallbacklevel];
+
+    OSL_TRACE("\r\n:WinSalGraphics::GetSysFontData(): FontID: %p, Fallback level: %d",
+              aSysFontData.hFont, nFallbacklevel);
+
+    return aSysFontData;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

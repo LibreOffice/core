@@ -23,8 +23,6 @@
 #include <vector>
 #include <cstddef>
 
-#include <config_cairo_canvas.h>
-
 #ifdef MACOSX
 // predeclare the native classes to avoid header/include problems
 typedef struct CGContext *CGContextRef;
@@ -202,12 +200,13 @@ struct SystemGlyphData
     int                  fallbacklevel;
 };
 
-#if ENABLE_CAIRO_CANVAS
-
 struct SystemFontData
 {
     unsigned long   nSize;          // size in bytes of this structure
-#if defined( UNX )
+#if defined( WNT )
+    HFONT           hFont;          // native font object
+#elif defined( MACOSX )
+#elif defined( UNX )
     void*           nFontId;        // native font id
     int             nFontFlags;     // native font flags
 #endif
@@ -218,7 +217,10 @@ struct SystemFontData
 
     SystemFontData()
         : nSize( sizeof( SystemFontData ) )
-#if defined( UNX )
+#if defined( WNT )
+        , hFont( 0 )
+#elif defined( MACOSX )
+#elif defined( UNX )
         , nFontId( NULL )
         , nFontFlags( 0 )
 #endif
@@ -229,8 +231,6 @@ struct SystemFontData
     {
     }
 };
-
-#endif // ENABLE_CAIRO_CANVAS
 
 typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
 

@@ -26,6 +26,15 @@
 
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
+
+#ifdef WNT
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
+#endif
 #include <vcl/sysdata.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -36,10 +45,19 @@
 #include "cairo_textlayout.hxx"
 #include "cairo_spritecanvas.hxx"
 
-#if defined CAIRO_HAS_FT_FONT
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+#include <cairo-quartz.h>
+#elif defined CAIRO_HAS_WIN32_SURFACE
+# include "cairo_win32_cairo.hxx"
+# include <cairo-win32.h>
+#elif defined CAIRO_HAS_FT_FONT
 # include <cairo-ft.h>
 #else
 # error Native API needed.
+#endif
+
+#ifdef IOS
+#include <CoreText/CoreText.h>
 #endif
 
 using namespace ::cairo;
@@ -291,7 +309,7 @@ namespace cairocanvas
    **/
     bool TextLayout::isCairoRenderable(SystemFontData aSysFontData) const
     {
-#if defined CAIRO_HAS_FT_FONT
+#if defined UNX && !defined MACOSX && !defined IOS
         // is font usable?
         if (!aSysFontData.nFontId)
             return false;
@@ -307,6 +325,46 @@ namespace cairocanvas
         return true;
     }
 
+#ifdef CAIRO_HAS_WIN32_SURFACE
+    namespace
+    {
+        /**
+         * cairo::ucs4toindex: Convert ucs4 char to glyph index
+         * @param ucs4 an ucs4 char
+         * @param hfont current font
+         *
+         * @return true if successful
+         **/
+        unsigned long ucs4toindex(unsigned int ucs4, HFONT hfont)
+        {
+            wchar_t unicode[2];
+            WORD glyph_index;
+            HDC hdc = NULL;
+
+            hdc = CreateCompatibleDC (NULL);
+
+            if (!hdc) return 0;
+            if (!SetGraphicsMode (hdc, GM_ADVANCED))
+            {
+                DeleteDC (hdc);
+                return 0;
+            }
+
+            SelectObject (hdc, hfont);
+            SetMapMode (hdc, MM_TEXT);
+
+            unicode[0] = ucs4;
+            unicode[1] = 0;
+            if (GetGlyphIndicesW (hdc, unicode, 1, &glyph_index, 0) == GDI_ERROR)
+            {
+                glyph_index = 0;
+            }
+
+            DeleteDC (hdc);
+            return glyph_index;
+        }
+    }
+#endif
 
   /**
    * TextLayout::draw
@@ -327,6 +385,9 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         SystemTextLayoutData aSysLayoutData;
+#if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
+        LOGFONTW logfont;
+#endif
         setupLayoutMode( rOutDev, mnTextDirection );
 
         // TODO(P2): cache that
@@ -423,6 +484,11 @@ namespace cairocanvas
 
                 cairo_glyph_t aGlyph;
                 aGlyph.index = systemGlyph.index;
+#ifdef CAIRO_HAS_WIN32_SURFACE
+                // Cairo requires standard glyph indexes (ETO_GLYPH_INDEX), while vcl/win/* uses ucs4 chars.
+                // Convert to standard indexes
+                aGlyph.index = ucs4toindex((unsigned int) aGlyph.index, rSysFontData.hFont);
+#endif
                 aGlyph.x = systemGlyph.x;
                 aGlyph.y = systemGlyph.y;
                 cairo_glyphs.push_back(aGlyph);
@@ -436,7 +502,24 @@ namespace cairocanvas
              **/
             cairo_font_face_t* font_face = NULL;
 
-#if defined CAIRO_HAS_FT_FONT
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+# ifdef MACOSX
+            // TODO: use cairo_quartz_font_face_create_for_cgfont(cgFont)
+            //       when CGFont (Mac OS X 10.5 API) is provided by the AQUA VCL backend.
+            font_face = cairo_quartz_font_face_create_for_atsu_font_id((ATSUFontID) rSysFontData.aATSUFontID);
+# else // iOS
+            font_face = cairo_quartz_font_face_create_for_cgfont( CTFontCopyGraphicsFont( rSysFontData.rCTFont, NULL ) );
+# endif
+
+#elif defined CAIRO_HAS_WIN32_SURFACE
+# if (OSL_DEBUG_LEVEL > 1)
+            GetObjectW( rSysFontData.hFont, sizeof(logfont), &logfont );
+# endif
+            // Note: cairo library uses logfont fallbacks when lfEscapement, lfOrientation and lfWidth are not zero.
+            // VCL always has non-zero value for lfWidth
+            font_face = cairo_win32_font_face_create_for_hfont(rSysFontData.hFont);
+
+#elif defined CAIRO_HAS_FT_FONT
             font_face = cairo_ft_font_face_create_for_ft_face(static_cast<FT_Face>(rSysFontData.nFontId),
                                                               rSysFontData.nFontFlags);
 #else
@@ -484,6 +567,11 @@ namespace cairocanvas
 
             cairo_set_font_matrix(pSCairo.get(), &m);
 
+#if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
+# define TEMP_TRACE_FONT OUString(reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName))
+#else
+# define TEMP_TRACE_FONT aFont.GetName()
+#endif
             SAL_INFO(
                 "canvas.cairo",
                 "Size:(" << aFont.GetWidth() << "," << aFont.GetHeight()
@@ -498,8 +586,9 @@ namespace cairocanvas
                     << (rSysFontData.bAntialias ? "AA " : "")
                     << (rSysFontData.bFakeBold ? "FB " : "")
                     << (rSysFontData.bFakeItalic ? "FI " : "") << " || Name:"
-                    << aFont.GetName() << " - "
+                    << TEMP_TRACE_FONT << " - "
                     << maText.Text.copy(maText.StartPosition, maText.Length));
+#undef TEMP_TRACE_FONT
 
             cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
 

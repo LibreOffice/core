@@ -414,6 +414,12 @@ public:
 
     virtual SystemGraphicsData
                             GetGraphicsData() const SAL_OVERRIDE;
+    virtual bool            SupportsCairo() const SAL_OVERRIDE;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const SAL_OVERRIDE;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const SAL_OVERRIDE;
+    virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const SAL_OVERRIDE;
+    virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const SAL_OVERRIDE;
+    virtual SystemFontData  GetSysFontData( int /* nFallbacklevel */ ) const SAL_OVERRIDE;
 
     virtual void            BeginPaint() SAL_OVERRIDE { };
     virtual void            EndPaint() SAL_OVERRIDE { };
