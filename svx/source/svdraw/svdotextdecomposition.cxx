@@ -1526,7 +1526,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     //impMoveChainedTextToNextLink(pNextTextObj); // just do it
 
     // put overflowing text in next text box
-    if (mpOverflowingText != NULL) {
+    if (IsToBeChained()) {
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
         assert (pNextTextObj);
         // NOTE: Commented because we do not need to do this anymore (maybe and for now)
@@ -1534,9 +1534,9 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
         // XXX:
         //const_cast<SdrTextObj*>(this)->impLeaveOnlyNonOverflowingText();
-        // Chaining occurred. Let's reset the status
+        // Let's reset the status now to prevent infinite loops
         const_cast<SdrTextObj*>(this)->SetToBeChained( false );
-
+        impLeaveOnlyNonOverflowingText();
 
         //SdrOutliner rOutl = pNextTextObj->ImpGetDrawOutliner();
         //pNextTextObj->BegTextEdit( rOutl );
