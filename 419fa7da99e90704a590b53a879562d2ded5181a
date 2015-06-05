@@ -210,6 +210,24 @@
       "revId": "419fa7da99e90704a590b53a879562d2ded5181a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_ff4c1878",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2076,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-06-05T03:10:03Z",
+      "side": 1,
+      "message": "I fail to see why \"find a position of a value in a set; find another special position past last element in the set; compare them\" expresses intention better (or tells more explicitly) than \"see if the value is met more than zero times in the set\", except \"we are used to that idiom\", esp. as the implementation of \"count\" for set is at least as efficient.",
+      "parentUuid": "3a57f1b5_44a7a34f",
+      "revId": "419fa7da99e90704a590b53a879562d2ded5181a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
