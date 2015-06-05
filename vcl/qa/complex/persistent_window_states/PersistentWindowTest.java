@@ -282,37 +282,15 @@ public class PersistentWindowTest
         return docHandle;
     }
 
-    private boolean connect()
+    private boolean connect() throws Exception
     {
-        try
-        {
-            connection.setUp();
-        }
-        catch (InterruptedException e)
-        {
-            fail("can't connect.");
-        }
-        catch (Exception e)
-        {
-            fail("can't connect.");
-        }
+        connection.setUp();
         return true;
     }
 
-    private boolean disconnect()
+    private boolean disconnect() throws Exception
     {
-        try
-        {
-            connection.tearDown();
-        }
-        catch (InterruptedException e)
-        {
-            fail("can't disconnect.");
-        }
-        catch (Exception e)
-        {
-            fail("can't disconnect.");
-        }
+        connection.tearDown();
         return true;
     }
 

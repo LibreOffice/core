@@ -55,7 +55,7 @@ public class PropertyBag extends TestCase
     }
 
     @Test
-    public void checkBasics()
+    public void checkBasics() throws Exception
     {
         createEmptyBag();
         System.out.println("testing the basics");
@@ -115,19 +115,12 @@ public class PropertyBag extends TestCase
         }
 
         // try writing and reading a value for the one property we have so far
-        try
+        final String testValue = "someArbitraryValue";
+        m_set.setPropertyValue(  VALUE , testValue);
+        final String currentValue = (String)m_set.getPropertyValue( VALUE);
+        if ( !currentValue.equals( testValue ) )
         {
-            final String testValue = "someArbitraryValue";
-            m_set.setPropertyValue(  VALUE , testValue);
-            final String currentValue = (String)m_set.getPropertyValue( VALUE);
-            if ( !currentValue.equals( testValue ) )
-            {
-                fail("set property is not remembered");
-            }
-        }
-        catch(com.sun.star.uno.Exception e)
-        {
-            fail( "setting or getting a property value failed" );
+            fail("set property is not remembered");
         }
 
         // try setting an illegal value for the property

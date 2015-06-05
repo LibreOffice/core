@@ -23,7 +23,6 @@ import com.sun.star.sdb.XParametersSupplier;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -36,18 +35,10 @@ public class Parser extends CRMBasedTestCase
 {
 
     @Override
-    protected void createTestCase()
+    protected void createTestCase() throws Exception
     {
-        try
-        {
-            super.createTestCase();
-            m_database.getDatabase().getDataSource().createQuery( "query products", "SELECT * FROM \"products\"" );
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace( System.err );
-            fail( "caught an exception (" + e.getMessage() + ") while creating the test case");
-        }
+        super.createTestCase();
+        m_database.getDatabase().getDataSource().createQuery( "query products", "SELECT * FROM \"products\"" );
     }
 
 

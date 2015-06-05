@@ -31,7 +31,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.XContextMenuInterception;
 import com.sun.star.ui.XContextMenuInterceptor;
@@ -79,7 +78,7 @@ public class CheckContextMenuInterceptor
     }
 
     @After
-    public void after()
+    public void after() throws Exception
     {
         System.out.println("release the popup menu");
         try
@@ -98,116 +97,97 @@ public class CheckContextMenuInterceptor
 
         XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xFrame);
 
-        try
-        {
-            xClose.close(true);
-        }
-        catch (com.sun.star.util.CloseVetoException exVeto)
-        {
-            fail("Test frame couldn't be closed successfully.");
-        }
+        xClose.close(true);
 
         xFrame = null;
-
     }
 
     @Test
-    public void checkContextMenuInterceptor()
+    public void checkContextMenuInterceptor() throws Exception
     {
         System.out.println(" **** Context Menu Interceptor *** ");
 
+        // intialize the test document
+        xDrawDoc = DrawTools.createDrawDoc(xMSF);
+
+        SOfficeFactory SOF = SOfficeFactory.getFactory(xMSF);
+        XShape oShape = SOF.createShape(xDrawDoc, 5000, 5000, 1500, 1000, "GraphicObject");
+        DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc, 0)).add(oShape);
+
+        com.sun.star.frame.XModel xModel =
+                UnoRuntime.queryInterface(com.sun.star.frame.XModel.class, xDrawDoc);
+
+        // get the frame for later usage
+        xFrame = xModel.getCurrentController().getFrame();
+
+        // ensure that the document content is optimal visible
+        DesktopTools.zoomToEntirePage(xDrawDoc);
+
+        XBitmap xBitmap = null;
+
+        // adding graphic as ObjRelation for GraphicObjectShape
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class, oShape);
+        System.out.println("Inserting a shape into the document");
+
         try
         {
-            // intialize the test document
-            xDrawDoc = DrawTools.createDrawDoc(xMSF);
+            String sFile = OfficeFileUrl.getAbsolute(new File("space-metal.jpg"));
+            oShapeProps.setPropertyValue("GraphicURL", sFile);
+            Object oProp = oShapeProps.getPropertyValue("GraphicObjectFillBitmap");
+            xBitmap = (XBitmap) AnyConverter.toObject(new Type(XBitmap.class), oProp);
+        }
+        catch (com.sun.star.lang.WrappedTargetException e)
+        {
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+        }
+        catch (com.sun.star.beans.PropertyVetoException e)
+        {
+        }
+        catch (com.sun.star.beans.UnknownPropertyException e)
+        {
+        }
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory(xMSF);
-            XShape oShape = SOF.createShape(xDrawDoc, 5000, 5000, 1500, 1000, "GraphicObject");
-            DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc, 0)).add(oShape);
+        // reuse the frame
+        com.sun.star.frame.XController xController = xFrame.getController();
+        XContextMenuInterception xContextMenuInterception = null;
+        XContextMenuInterceptor xContextMenuInterceptor = null;
 
-            com.sun.star.frame.XModel xModel =
-                    UnoRuntime.queryInterface(com.sun.star.frame.XModel.class, xDrawDoc);
+        if (xController != null)
+        {
+            System.out.println("Creating context menu interceptor");
 
-            // get the frame for later usage
-            xFrame = xModel.getCurrentController().getFrame();
+            // add our context menu interceptor
+            xContextMenuInterception =
+                    UnoRuntime.queryInterface(XContextMenuInterception.class, xController);
 
-            // ensure that the document content is optimal visible
-            DesktopTools.zoomToEntirePage(xDrawDoc);
-
-            XBitmap xBitmap = null;
-
-            // adding graphic as ObjRelation for GraphicObjectShape
-            XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class, oShape);
-            System.out.println("Inserting a shape into the document");
-
-            try
+            if (xContextMenuInterception != null)
             {
-                String sFile = OfficeFileUrl.getAbsolute(new File("space-metal.jpg"));
-                oShapeProps.setPropertyValue("GraphicURL", sFile);
-                Object oProp = oShapeProps.getPropertyValue("GraphicObjectFillBitmap");
-                xBitmap = (XBitmap) AnyConverter.toObject(new Type(XBitmap.class), oProp);
-            }
-            catch (com.sun.star.lang.WrappedTargetException e)
-            {
-            }
-            catch (com.sun.star.lang.IllegalArgumentException e)
-            {
-            }
-            catch (com.sun.star.beans.PropertyVetoException e)
-            {
-            }
-            catch (com.sun.star.beans.UnknownPropertyException e)
-            {
-            }
+                ContextMenuInterceptor aContextMenuInterceptor = new ContextMenuInterceptor(xBitmap);
+                xContextMenuInterceptor =
+                        UnoRuntime.queryInterface(XContextMenuInterceptor.class, aContextMenuInterceptor);
 
-            // reuse the frame
-            com.sun.star.frame.XController xController = xFrame.getController();
-            XContextMenuInterception xContextMenuInterception = null;
-            XContextMenuInterceptor xContextMenuInterceptor = null;
-
-            if (xController != null)
-            {
-                System.out.println("Creating context menu interceptor");
-
-                // add our context menu interceptor
-                xContextMenuInterception =
-                        UnoRuntime.queryInterface(XContextMenuInterception.class, xController);
-
-                if (xContextMenuInterception != null)
-                {
-                    ContextMenuInterceptor aContextMenuInterceptor = new ContextMenuInterceptor(xBitmap);
-                    xContextMenuInterceptor =
-                            UnoRuntime.queryInterface(XContextMenuInterceptor.class, aContextMenuInterceptor);
-
-                    System.out.println("Register context menu interceptor");
-                    xContextMenuInterception.registerContextMenuInterceptor(xContextMenuInterceptor);
-                }
-            }
-
-            openContextMenu(UnoRuntime.queryInterface(XModel.class, xDrawDoc));
-
-            checkHelpEntry();
-
-            // remove our context menu interceptor
-            if (xContextMenuInterception != null
-                    && xContextMenuInterceptor != null)
-            {
-                System.out.println("Release context menu interceptor");
-                xContextMenuInterception.releaseContextMenuInterceptor(
-                        xContextMenuInterceptor);
+                System.out.println("Register context menu interceptor");
+                xContextMenuInterception.registerContextMenuInterceptor(xContextMenuInterceptor);
             }
         }
-        catch (com.sun.star.uno.RuntimeException ex)
+
+        openContextMenu(UnoRuntime.queryInterface(XModel.class, xDrawDoc));
+
+        checkHelpEntry();
+
+        // remove our context menu interceptor
+        if (xContextMenuInterception != null
+                && xContextMenuInterceptor != null)
         {
-            fail("Runtime exception caught!" + ex.getMessage());
-        }
-        catch (java.lang.Exception ex)
-        {
-            fail("Java lang exception caught!" + ex.getMessage());
+            System.out.println("Release context menu interceptor");
+            xContextMenuInterception.releaseContextMenuInterceptor(
+                    xContextMenuInterceptor);
         }
     }
 
-    private void checkHelpEntry()
+    private void checkHelpEntry() throws Exception
     {
         XInterface toolkit = null;
 
@@ -240,24 +220,14 @@ public class CheckContextMenuInterceptor
         System.out.println("ImplementationName: " + util.utils.getImplName(oPopMenu));
 
         XAccessible xHelp = null;
-        try
-        {
-            System.out.println("Try to get first entry of context menu...");
-            xHelp = oPopMenu.getAccessibleChild(0);
-
-        }
-        catch (IndexOutOfBoundsException e)
-        {
-            fail("Not possible to get first entry of context menu");
-        }
-
+        System.out.println("Try to get first entry of context menu...");
+        xHelp = oPopMenu.getAccessibleChild(0);
         if (xHelp == null)
         {
             fail("first entry of context menu is NULL");
         }
 
         XAccessibleContext xHelpCont = xHelp.getAccessibleContext();
-
         if (xHelpCont == null)
         {
             fail("No able to retrieve accessible context from first entry of context menu");
@@ -270,16 +240,8 @@ public class CheckContextMenuInterceptor
             fail("First entry of context menu is not from context menu interceptor");
         }
 
-        try
-        {
-            System.out.println("try to get first children of Help context...");
-            xHelpCont.getAccessibleChild(0);
-        }
-        catch (IndexOutOfBoundsException e)
-        {
-            fail("not possible to get first children of Help context");
-        }
-
+        System.out.println("try to get first children of Help context...");
+        xHelpCont.getAccessibleChild(0);
     }
 
     private void openContextMenu(XModel aModel)

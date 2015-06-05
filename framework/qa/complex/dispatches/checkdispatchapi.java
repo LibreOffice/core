@@ -68,30 +68,23 @@ public class checkdispatchapi
     @descr  create an empty test frame, where we can load
     different components inside.
      */
-    @Before public void before()
+    @Before public void before() throws Exception
     {
-        try
-        {
-            // get uno service manager from global test environment
-            m_xMSF = getMSF();
+        // get uno service manager from global test environment
+        m_xMSF = getMSF();
 
-            db = new connectivity.tools.HsqlDatabase(m_xMSF);
+        db = new connectivity.tools.HsqlDatabase(m_xMSF);
 
-            // create desktop
-            m_xDesktop = UnoRuntime.queryInterface(XFrame.class, m_xMSF.createInstance("com.sun.star.frame.Desktop"));
+        // create desktop
+        m_xDesktop = UnoRuntime.queryInterface(XFrame.class, m_xMSF.createInstance("com.sun.star.frame.Desktop"));
 
-            m_xFrame = impl_createNewFrame();
-        }
-        catch (java.lang.Throwable ex)
-        {
-            fail("Can't initialize test environment.");
-        }
+        m_xFrame = impl_createNewFrame();
     }
 
 
     /** @short  close the environment.
      */
-    @After public void after()
+    @After public void after() throws Exception
     {
         db.close();
         impl_closeFrame(m_xFrame);
@@ -99,49 +92,49 @@ public class checkdispatchapi
     }
 
 
-    @Test public void checkDispatchInfoOfWriter()
+    @Test public void checkDispatchInfoOfWriter() throws Exception
     {
         impl_checkDispatchInfoOfXXX("private:factory/swriter");
     }
 
 
-    @Test public void checkDispatchInfoOfCalc()
+    @Test public void checkDispatchInfoOfCalc() throws Exception
     {
         impl_checkDispatchInfoOfXXX("private:factory/scalc");
     }
 
 
-    @Test public void checkDispatchInfoOfDraw()
+    @Test public void checkDispatchInfoOfDraw() throws Exception
     {
         impl_checkDispatchInfoOfXXX("private:factory/sdraw");
     }
 
 
-    @Test public void checkDispatchInfoOfImpress()
+    @Test public void checkDispatchInfoOfImpress() throws Exception
     {
         impl_checkDispatchInfoOfXXX("private:factory/simpress");
     }
 
 
-    @Test public void checkDispatchInfoOfChart()
+    @Test public void checkDispatchInfoOfChart() throws Exception
     {
         impl_checkDispatchInfoOfXXX("private:factory/schart");
     }
 
 
-    @Test public void checkDispatchInfoOfMath()
+    @Test public void checkDispatchInfoOfMath() throws Exception
     {
         impl_checkDispatchInfoOfXXX("private:factory/smath");
     }
 
 
-    @Test public void checkDispatchInfoOfDataBase()
+    @Test public void checkDispatchInfoOfDataBase() throws Exception
     {
         impl_checkDispatchInfoOfXXX("private:factory/sdatabase");
     }
 
 
-    @Test public void checkDispatchInfoOfBibliography()
+    @Test public void checkDispatchInfoOfBibliography() throws Exception
     {
         impl_checkDispatchInfoOfXXX(".component:Bibliography/View1");
     }
@@ -153,19 +146,19 @@ public class checkdispatchapi
     }
 
 
-    @Test public void checkDispatchInfoOfTableDesign()
+    @Test public void checkDispatchInfoOfTableDesign() throws Exception
     {
         callDatabaseDispatch(".component:DB/TableDesign");
     }
 
 
-    @Test public void checkDispatchInfoOfFormGridView()
+    @Test public void checkDispatchInfoOfFormGridView() throws Exception
     {
         impl_checkDispatchInfoOfXXX(".component:DB/FormGridView");
     }
 
 
-    @Test public void checkDispatchInfoOfDataSourceBrowser()
+    @Test public void checkDispatchInfoOfDataSourceBrowser() throws Exception
     {
         impl_checkDispatchInfoOfXXX(".component:DB/DataSourceBrowser");
     }
@@ -200,21 +193,21 @@ public class checkdispatchapi
     }
 
 
-    @Test public void checkDispatchInfoOfBasic()
+    @Test public void checkDispatchInfoOfBasic() throws Exception
     {
         Object aComponent = impl_createUNOComponent("com.sun.star.script.BasicIDE");
         impl_checkDispatchInfo(aComponent);
     }
 
 
-    @Test public void checkDispatchInfoOfStartModule()
+    @Test public void checkDispatchInfoOfStartModule() throws Exception
     {
         Object aComponent = impl_createUNOComponent("com.sun.star.frame.StartModule");
         impl_checkDispatchInfo(aComponent);
     }
 
 
-    public void checkInterceptorLifeTime()
+    public void checkInterceptorLifeTime() throws Exception
     {
         // Note: It's important for the following test, that aInterceptor will be hold alive by the uno reference
         // xInterceptor. Otherwhise we can't check some internal states of aInterceptor at the end of this method, because
@@ -249,7 +242,7 @@ public class checkdispatchapi
     }
 
 
-    public void checkInterception()
+    public void checkInterception() throws Exception
     {
         String[] lDisabledURLs = new String[] { ".uno:Open" };
 
@@ -273,7 +266,7 @@ public class checkdispatchapi
     }
 
 
-    private void impl_checkDispatchInfoOfXXX(String sXXX)
+    private void impl_checkDispatchInfoOfXXX(String sXXX) throws Exception
     {
         XFrame xFrame = impl_createNewFrame();
         impl_loadIntoFrame(xFrame, sXXX, null);
@@ -284,7 +277,7 @@ public class checkdispatchapi
 
     /** @short  load an URL into the current test frame.
      */
-    private void impl_loadIntoFrame(XFrame xFrame, String sURL, PropertyValue args[])
+    private void impl_loadIntoFrame(XFrame xFrame, String sURL, PropertyValue args[]) throws Exception
     {
         XComponentLoader xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
         if (xLoader == null)
@@ -292,15 +285,7 @@ public class checkdispatchapi
             fail("Frame does not provide required interface XComponentLoader.");
         }
 
-        XComponent xDoc = null;
-        try
-        {
-            xDoc = xLoader.loadComponentFromURL(sURL, "_self", 0, args);
-        }
-        catch (java.lang.Throwable ex)
-        {
-            xDoc = null;
-        }
+        XComponent xDoc = xLoader.loadComponentFromURL(sURL, "_self", 0, args);
 
         if (xDoc == null)
         {
@@ -334,7 +319,7 @@ public class checkdispatchapi
     /** @short  check the interface XDispatchInformationProvider
     at the specified component.
      */
-    private void impl_checkDispatchInfo(Object aComponent)
+    private void impl_checkDispatchInfo(Object aComponent) throws Exception
     {
         XDispatchInformationProvider xInfoProvider = UnoRuntime.queryInterface(XDispatchInformationProvider.class, aComponent);
         if (xInfoProvider == null)
@@ -344,86 +329,62 @@ public class checkdispatchapi
             return;
         }
 
-        try
+        short[] lGroups = xInfoProvider.getSupportedCommandGroups();
+        int c1 = lGroups.length;
+        int i1 = 0;
+        for (i1 = 0; i1 < c1; ++i1)
         {
-            short[] lGroups = xInfoProvider.getSupportedCommandGroups();
-            int c1 = lGroups.length;
-            int i1 = 0;
-            for (i1 = 0; i1 < c1; ++i1)
+            short nGroup = lGroups[i1];
+            DispatchInformation[] lInfos = xInfoProvider.getConfigurableDispatchInformation(nGroup);
+            int c2 = lInfos.length;
+            int i2 = 0;
+
+            // check for empty lists
+            // Warning
+            if (lInfos.length < 1)
             {
-                short nGroup = lGroups[i1];
-                DispatchInformation[] lInfos = xInfoProvider.getConfigurableDispatchInformation(nGroup);
-                int c2 = lInfos.length;
-                int i2 = 0;
-
-                // check for empty lists
-                // Warning
-                if (lInfos.length < 1)
-                {
-                    System.out.println("Warning:\tCould not get any DispatchInformation for group [" + nGroup + "].");
-                }
-
-                // check for duplicates (and by the way, if the info item match the requested group)
-                HashMap<String, String> aCheckMap = new HashMap<String, String>(c2);
-                for (i2 = 0; i2 < c2; ++i2)
-                {
-                    DispatchInformation aInfo = lInfos[i2];
-                    if (aInfo.GroupId != nGroup)
-                    {
-                        // Error
-                        fail("At least one DispatchInformation item does not match the requested group.\n\trequested group=[" + nGroup
-                                + "] returned groupd=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => dont break this test
-                        continue;
-                    }
-
-                    if (aCheckMap.containsKey(aInfo.Command))
-                    {
-                        // Error
-                        fail("Found a duplicate item: group=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => dont break this test
-                        continue;
-                    }
-
-                    aCheckMap.put(aInfo.Command, aInfo.Command);
-                    System.out.println("\t[" + aInfo.GroupId + "] \"" + aInfo.Command + "\"");
-                }
+                System.out.println("Warning:\tCould not get any DispatchInformation for group [" + nGroup + "].");
             }
-        }
-        catch (java.lang.Throwable ex)
-        {
-            fail("Exception caught during using XDispatchInformationProvider.");
+
+            // check for duplicates (and by the way, if the info item match the requested group)
+            HashMap<String, String> aCheckMap = new HashMap<String, String>(c2);
+            for (i2 = 0; i2 < c2; ++i2)
+            {
+                DispatchInformation aInfo = lInfos[i2];
+                if (aInfo.GroupId != nGroup)
+                {
+                    // Error
+                    fail("At least one DispatchInformation item does not match the requested group.\n\trequested group=[" + nGroup
+                            + "] returned groupd=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => dont break this test
+                    continue;
+                }
+
+                if (aCheckMap.containsKey(aInfo.Command))
+                {
+                    // Error
+                    fail("Found a duplicate item: group=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => dont break this test
+                    continue;
+                }
+
+                aCheckMap.put(aInfo.Command, aInfo.Command);
+                System.out.println("\t[" + aInfo.GroupId + "] \"" + aInfo.Command + "\"");
+            }
         }
     }
 
 
     private synchronized XFrame impl_createNewFrame()
     {
-        XFrame xFrame = null;
-
-        try
-        {
-            xFrame = m_xDesktop.findFrame("_blank", 0);
-            xFrame.getContainerWindow().setVisible(true);
-        }
-        catch (java.lang.Throwable ex)
-        {
-            fail("Could not create the frame instance.");
-        }
-
+        XFrame xFrame = m_xDesktop.findFrame("_blank", 0);
+        xFrame.getContainerWindow().setVisible(true);
         return xFrame;
     }
 
 
-    private synchronized void impl_closeFrame(XFrame xFrame)
+    private synchronized void impl_closeFrame(XFrame xFrame) throws Exception
     {
         XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xFrame);
-        try
-        {
-            xClose.close(false);
-        }
-        catch (com.sun.star.util.CloseVetoException exVeto)
-        {
-            fail("Test frame couldn't be closed successfully.");
-        }
+        xClose.close(false);
     }
 
     private XMultiServiceFactory getMSF()
