@@ -928,6 +928,13 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     else
     {
         pEditView[eWhich] = new EditView( pNewEngine, pWin );
+
+        if (pDoc->GetDrawLayer() && pDoc->GetDrawLayer()->isTiledRendering())
+        {
+            pEditView[eWhich]->registerLibreOfficeKitCallback(pDoc->GetDrawLayer()->getLibreOfficeKitCallback(),
+                                                              pDoc->GetDrawLayer()->getLibreOfficeKitData());
+            pEditView[eWhich]->setTiledRendering(true);
+        }
     }
 
     //  bei IdleFormat wird manchmal ein Cursor gemalt, wenn die View schon weg ist (23576)
