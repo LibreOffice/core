@@ -26,7 +26,7 @@ else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_files,glew,$(LIBO_LIB_FOLDER), \
 	bin/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/$(glew_arch_subdir)/glew32d.dll,Release/$(glew_arch_subdir)/glew32.dll) \
 ))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.so.1.10,lib/libGLEW.so.1.10.0))
 endif
 
