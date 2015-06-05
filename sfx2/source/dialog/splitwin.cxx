@@ -1247,61 +1247,6 @@ void SfxSplitWindow::FadeIn()
     SetFadeIn_Impl( true );
 }
 
-bool SfxSplitWindow::ActivateNextChild_Impl( bool bForward )
-{
-    // If no pActive, go to first and last window (!bForward is first
-    // decremented in the loop)
-    sal_uInt16 nCount = pDockArr->size();
-    sal_uInt16 n = bForward ? 0 : nCount;
-
-    // if Focus is within, then move to a window forward or backwards
-    // if possible
-    if ( pActive )
-    {
-        // Determine the active window
-        for ( n=0; n<nCount; n++ )
-        {
-            const SfxDock_Impl& rD = (*pDockArr)[n];
-            if ( rD.pWin && rD.pWin->HasChildPathFocus() )
-                break;
-        }
-
-        if ( bForward )
-            // up window counter (then when n>nCount, the loop below is
-            // not entered)
-            n++;
-    }
-
-    if ( bForward )
-    {
-        // Search for next window
-        for ( sal_uInt16 nNext=n; nNext<nCount; nNext++ )
-        {
-            const SfxDock_Impl& rD = (*pDockArr)[nNext];
-            if ( rD.pWin )
-            {
-                rD.pWin->GrabFocus();
-                return true;
-            }
-        }
-    }
-    else
-    {
-        // Search for previous window
-        for ( sal_uInt16 nNext=n; nNext--; )
-        {
-            const SfxDock_Impl& rD = (*pDockArr)[nNext];
-            if ( rD.pWin )
-            {
-                rD.pWin->GrabFocus();
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
 void SfxSplitWindow::SetActiveWindow_Impl( SfxDockingWindow* pWin )
 {
     pActive = pWin;
