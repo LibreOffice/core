@@ -1,6 +1,6 @@
-# -*- Mode: Diff -*-
---- firebird.org/builds/posix/darwin.defaults
-+++ firebird/builds/posix/darwin.defaults
+diff -ur firebird.orig/firebird/builds/posix/darwin.defaults firebird/builds/posix/darwin.defaults
+--- firebird.orig/firebird/builds/posix/darwin.defaults	2015-03-27 15:46:38.000000000 +0200
++++ firebird/builds/posix/darwin.defaults	2015-05-27 17:21:47.290883357 +0300
 @@ -32,17 +32,17 @@
  LINK_EMPTY_SYMBOLS=$(LIB_LINK_MAPFILE)$(ROOT)/builds/posix/empty.darwin.vers
  LINK_FIREBIRD_SYMBOLS=$(LIB_LINK_MAPFILE)$(ROOT)/builds/posix/firebird.darwin.vers
@@ -21,15 +21,15 @@
 +PLAT_CLASSIC_POST_TARGET=
  
 -PLAT_SUPER_PRE_TARGET=darwin_setup_framework
--PLAT_SUPER_POST_TRAGET=darwin_finish_ss_framework
+-PLAT_SUPER_POST_TARGET=darwin_finish_ss_framework
 +PLAT_SUPER_PRE_TARGET=
-+PLAT_SUPER_POST_TRAGET=
++PLAT_SUPER_POST_TARGET=
  
  PLATFORM_POSTBUILD_TARGET=darwin_postbuild_target
  
-diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.darwin
---- firebird.org/builds/posix/postfix.darwin	2013-07-12 20:55:46.000000000 +0200
-+++ firebird/builds/posix/postfix.darwin	2013-07-15 12:07:36.000000000 +0200
+diff -ur firebird.orig/firebird/builds/posix/postfix.darwin firebird/builds/posix/postfix.darwin
+--- firebird.orig/firebird/builds/posix/postfix.darwin	2015-03-27 15:46:38.000000000 +0200
++++ firebird/builds/posix/postfix.darwin	2015-05-27 17:34:36.459597201 +0300
 @@ -54,9 +54,9 @@
  	cp -r ../gen/firebird/include $(FB_FW)/Versions/A/Headers
  	cp ../gen/firebird/lib/libfbembed.dylib $(FB_FW)/Versions/A/Firebird
@@ -54,9 +54,10 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  	cp -r ../gen/firebird/help $(FB_FW)/Resources/English.lproj/var/help
  	cp ../gen/firebird/security2.fdb $(FB_FW)/Resources/English.lproj/var
  	mkdir -p $(FB_FW)/Resources/doc
---- firebird.org/builds/posix/prefix.darwin_i386
-+++ firebird/builds/posix/prefix.darwin_i386
-@@ -19,7 +19,7 @@
+diff -ur firebird.orig/firebird/builds/posix/prefix.darwin_i386 firebird/builds/posix/prefix.darwin_i386
+--- firebird.orig/firebird/builds/posix/prefix.darwin_i386      2015-03-27 15:46:38.000000000 +0200
++++ firebird/builds/posix/prefix.darwin_i386    2015-06-05 12:27:04.275374739 +0300
+@@ -24,7 +24,7 @@
  # 4. for  CFLAGS, CXXFLAGS, LDFLAGS export '-m32 -arch i386'
  # 5. export MACOSX_DEPLOYMENT_TARGET=10.6
  
@@ -65,19 +66,22 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  export DYLD_LIBRARY_PATH
  
  MACOSX_DEPLOYMENT_TARGET=10.6
-@@ -32,8 +32,8 @@
+@@ -32,9 +32,9 @@
  
  OS_ServerFiles=inet_server.cpp
  
 -PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common -arch i386 -mmacosx-version-min=10.6
 -DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall -arch i386 -mmacosx-version-min=10.6
+-CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
 +PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common
 +DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall
- CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
++CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden
  EMBED_UTIL_TARGETS=gstat gds_relay gsec fbguard nbackup fb_lock_print fbsvcmgr fbtracemgr
  CLIENT_UTIL_TARGETS=gds_relay gstat gsec fbguard fbmgr_bin nbackup fb_lock_print fbsvcmgr \
---- firebird.org/builds/posix/prefix.darwin_x86_64
-+++ firebird/builds/posix/prefix.darwin_x86_64
+        fbtracemgr
+diff -ur firebird.orig/firebird/builds/posix/prefix.darwin_x86_64 firebird/builds/posix/prefix.darwin_x86_64
+--- firebird.orig/firebird/builds/posix/prefix.darwin_x86_64    2015-03-27 15:46:38.000000000 +0200
++++ firebird/builds/posix/prefix.darwin_x86_64  2015-06-05 12:44:46.968571414 +0300
 @@ -19,7 +19,7 @@
  #
  # Default build from 10.6
@@ -99,4 +103,4 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
 +CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden
  EMBED_UTIL_TARGETS=gstat gds_relay gsec fbguard nbackup fb_lock_print fbsvcmgr fbtracemgr
  CLIENT_UTIL_TARGETS=gds_relay gstat gsec fbguard fbmgr_bin nbackup fb_lock_print fbsvcmgr \
- 	fbtracemgr
+        fbtracemgr
