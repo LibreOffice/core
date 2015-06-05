@@ -3124,13 +3124,6 @@ public:
         // TODO: For now, we ignore at-rule properties.
     }
 
-    void selector_name(const char* p_elem, size_t n_elem, const char* p_class, size_t n_class)
-    {
-        MemStr aElem(p_elem, n_elem), aClass(p_class, n_class);
-        SelectorName aName(aElem, aClass);
-        maSelectorNames.push_back(aName);
-    }
-
     void property_name(const char* p, size_t n)
     {
         maPropName = MemStr(p, n);
