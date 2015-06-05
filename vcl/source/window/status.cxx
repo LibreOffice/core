@@ -728,8 +728,13 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         // draw items
         if (mbVisibleItems)
         {
+            // Do offscreen only when we are not recording layout..
+            bool bOffscreen = !rRenderContext.ImplIsRecordLayout();
+
             for (sal_uInt16 i = 0; i < nItemCount; i++)
-                ImplDrawItem(rRenderContext, false, i, true, true);
+            {
+                ImplDrawItem(rRenderContext, bOffscreen, i, true, true);
+            }
         }
     }
 
