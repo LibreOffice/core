@@ -17,6 +17,8 @@
 #include <vcl/field.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 
 class LifecycleTest : public test::BootstrapFixture
 {
@@ -33,6 +35,7 @@ public:
     void testChildDispose();
     void testPostDispose();
     void testFocus();
+    void testLeakage();
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
     CPPUNIT_TEST(testCast);
@@ -43,6 +46,7 @@ public:
     CPPUNIT_TEST(testChildDispose);
     CPPUNIT_TEST(testPostDispose);
     CPPUNIT_TEST(testFocus);
+    CPPUNIT_TEST(testLeakage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -181,6 +185,104 @@ void LifecycleTest::testFocus()
     Scheduler::ProcessTaskScheduling(false);
     // FIXME: really awful to test focus issues without showing windows.
     // CPPUNIT_ASSERT(xChild->HasFocus());
+}
+
+template <class vcl_type>
+class LeakTestClass : public vcl_type
+{
+    bool &mrDeleted;
+public:
+    template<typename... Arg>
+        LeakTestClass(bool &bDeleted, Arg &&... arg) :
+            vcl_type(std::forward<Arg>(arg)...),
+            mrDeleted(bDeleted)
+    {
+        mrDeleted = false;
+    }
+    ~LeakTestClass()
+    {
+        mrDeleted = true;
+    }
+};
+
+class LeakTestObject
+{
+    bool                mbDeleted;
+    VclPtr<vcl::Window> mxRef;
+    void               *mpRef;
+    LeakTestObject() {}
+public:
+    template<typename vcl_type, typename... Arg> static LeakTestObject *
+        Create(Arg &&... arg)
+    {
+        LeakTestObject *pNew = new LeakTestObject();
+        pNew->mxRef = VclPtr< LeakTestClass< vcl_type > >::Create( pNew->mbDeleted,
+                                                                   std::forward<Arg>(arg)...);
+        pNew->mpRef = reinterpret_cast<void *>(static_cast<vcl::Window *>(pNew->mxRef));
+        return pNew;
+    }
+    VclPtr<vcl::Window> getRef() { return mxRef; }
+    void disposeAndClear()
+    {
+        mxRef.disposeAndClear();
+    }
+    void assertDeleted()
+    {
+        if (!mbDeleted)
+        {
+            OUStringBuffer aMsg = "Type '";
+            vcl::Window *pWin = reinterpret_cast<vcl::Window *>(mpRef);
+            aMsg.appendAscii(typeid(*pWin).name());
+            aMsg.append("' not freed after dispose");
+            CPPUNIT_FAIL(OUStringToOString(aMsg.makeStringAndClear(),
+                                           RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+};
+
+void LifecycleTest::testLeakage()
+{
+    std::vector<LeakTestObject *> aObjects;
+
+    // Create objects
+    aObjects.push_back(LeakTestObject::Create<WorkWindow>(nullptr, WB_APP|WB_STDWORK));
+    VclPtr<vcl::Window> xParent = aObjects.back()->getRef();
+    aObjects.push_back(LeakTestObject::Create<PushButton>(xParent));
+    aObjects.push_back(LeakTestObject::Create<OKButton>(xParent));
+    aObjects.push_back(LeakTestObject::Create<CancelButton>(xParent));
+    aObjects.push_back(LeakTestObject::Create<HelpButton>(xParent));
+    aObjects.push_back(LeakTestObject::Create<CheckBox>(xParent));
+    aObjects.push_back(LeakTestObject::Create<Edit>(xParent));
+    aObjects.push_back(LeakTestObject::Create<ComboBox>(xParent));
+    aObjects.push_back(LeakTestObject::Create<RadioButton>(xParent));
+
+#if 0
+    { // something that looks like a dialog
+        aObjects.push_back(LeakTestObject::Create<Dialog>(xParent,WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEABLE));
+        VclPtr<vcl::Window> xDlgParent = aObjects.back()->getRef();
+
+        aObjects.push_back(LeakTestObject::Create<VclVBox>(xDlgParent));
+        VclPtr<vcl::Window> xVBox = aObjects.back()->getRef();
+
+        aObjects.push_back(LeakTestObject::Create<VclVButtonBox>(xVBox));
+    }
+
+    aObjects.push_back(LeakTestObject::Create<ModelessDialog>(xParent, "PrintProgressDialog", "vcl/ui/printprogressdialog.ui"));
+    aObjects.push_back(LeakTestObject::Create<ModalDialog>(xParent));
+#endif
+    xParent.clear();
+
+    for (auto i = aObjects.rbegin(); i != aObjects.rend(); ++i)
+        (*i)->getRef()->Show();
+
+    for (auto i = aObjects.rbegin(); i != aObjects.rend(); ++i)
+        (*i)->disposeAndClear();
+
+    for (auto i = aObjects.begin(); i != aObjects.end(); ++i)
+        (*i)->assertDeleted();
+
+    for (auto i = aObjects.begin(); i != aObjects.end(); ++i)
+        delete *i;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LifecycleTest);
