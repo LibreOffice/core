@@ -30,7 +30,6 @@ import com.sun.star.sdb.DataAccessDescriptorFactory;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.task.XInteractionHandler;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import connectivity.tools.DbaseDatabase;
@@ -41,7 +40,6 @@ import util.UITools;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 
 /** complex test case for Base's application UI
@@ -55,7 +53,7 @@ public class CopyTableWizard extends CRMBasedTestCase
 
     @After
     @Override
-    public void after()
+    public void after() throws Exception
     {
         dest.store();
         if ( destinationDB != null )
@@ -66,19 +64,12 @@ public class CopyTableWizard extends CRMBasedTestCase
 
     @Before
     @Override
-    public void before()
+    public void before() throws Exception
     {
-        try
-        {
-            createTestCase();
-            source = new DatabaseApplication(m_database.getDatabase());
-            destinationDB = new DbaseDatabase( getMSF() );
-            dest = new DatabaseApplication( destinationDB );
-        }
-        catch (java.lang.Exception ex)
-        {
-            fail("");
-        }
+        createTestCase();
+        source = new DatabaseApplication(m_database.getDatabase());
+        destinationDB = new DbaseDatabase( getMSF() );
+        dest = new DatabaseApplication( destinationDB );
     }
 
 

@@ -18,7 +18,6 @@
 package complex.forms;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -43,7 +42,6 @@ import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
 
 /**
@@ -54,42 +52,28 @@ public class CheckOGroupBoxModel
     private XMultiPropertySet m_xPropSet;
     private XComponent m_xDrawDoc;
 
-    @Before public void before()
+    @Before public void before() throws Exception
     {
         SOfficeFactory SOF = SOfficeFactory.getFactory(getMSF());
 
-        try
-        {
-            System.out.println("creating a draw document");
-            m_xDrawDoc = SOF.createDrawDoc(null);
-        }
-        catch (com.sun.star.uno.Exception e)
-        {
-            fail("Couldn't create document.");
-        }
+        System.out.println("creating a draw document");
+        m_xDrawDoc = SOF.createDrawDoc(null);
 
         String objName = "GroupBox";
         XControlShape shape = FormTools.insertControlShape(m_xDrawDoc, 5000, 7000, 2000, 2000, objName);
         m_xPropSet = UnoRuntime.queryInterface(XMultiPropertySet.class, shape.getControl());
     }
 
-    @After public void after()
+    @After public void after() throws Exception
     {
         XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, m_xDrawDoc);
         if (xClose != null)
         {
-            try
-            {
-                xClose.close(true);
-            }
-            catch (CloseVetoException ex)
-            {
-                fail("Can't close document. Exception caught: " + ex.getMessage());
-                /* ignore! */
-            }
+            xClose.close(true);
         }
     }
-    @Test public void setPropertyValues()
+
+    @Test public void setPropertyValues() throws Exception
     {
         String[] boundPropsToTest = getBoundPropsToTest();
 
@@ -103,22 +87,7 @@ public class CheckOGroupBoxModel
         {
             newValue[i] = ValueChanger.changePValue(gValues[i]);
         }
-        try
-        {
-            m_xPropSet.setPropertyValues(boundPropsToTest, newValue);
-        }
-        catch (com.sun.star.beans.PropertyVetoException e)
-        {
-            fail("Exception occurred while trying to change the properties.");
-        }
-        catch (com.sun.star.lang.IllegalArgumentException e)
-        {
-            fail("Exception occurred while trying to change the properties.");
-        }
-        catch (com.sun.star.lang.WrappedTargetException e)
-        {
-            fail("Exception occurred while trying to change the properties.");
-        } // end of try-catch
+        m_xPropSet.setPropertyValues(boundPropsToTest, newValue);
 
         assertTrue("Listener was not called.", ml.wasListenerCalled());
         m_xPropSet.removePropertiesChangeListener(ml);

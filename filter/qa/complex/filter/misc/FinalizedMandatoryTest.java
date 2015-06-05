@@ -17,25 +17,24 @@
  */
 package complex.filter.misc;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XNameContainer;
-import com.sun.star.container.XNameReplace;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.WrappedTargetRuntimeException;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XFlushable;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameContainer;
+import com.sun.star.container.XNameReplace;
+import com.sun.star.lang.WrappedTargetRuntimeException;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XFlushable;
 
 
 /**
@@ -106,7 +105,7 @@ public class FinalizedMandatoryTest
      * call the function <CODE>checkReadonlySupport</CODE> to test <CODE>com.sun.star.document.FilterFactory</CODE>
      * @see com.sun.star.document.FilterFactory
      */
-    @Test public void checkReadonlySupportFilterFactory()
+    @Test public void checkReadonlySupportFilterFactory() throws Exception
     {
         checkReadonlySupport("com.sun.star.document.FilterFactory");
     }
@@ -115,7 +114,7 @@ public class FinalizedMandatoryTest
      * call the function <CODE>checkReadonlySupport</CODE> to test <CODE>com.sun.star.document.TypeDetection</CODE>
      * @see com.sun.star.document.TypeDetection
      */
-    @Test public void checkReadonlySupportTypeDetection()
+    @Test public void checkReadonlySupportTypeDetection() throws Exception
     {
         checkReadonlySupport("com.sun.star.document.TypeDetection");
     }
@@ -125,21 +124,14 @@ public class FinalizedMandatoryTest
      * For every filter a new instace was created and the tests started.
      * @param serviceName the name of the service to test
      */
-    private void checkReadonlySupport(String serviceName)
+    private void checkReadonlySupport(String serviceName) throws Exception
     {
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("testing service '" + serviceName + "'");
 
         XInterface oObj = null;
-        try
-        {
-            oObj = getTestObject(serviceName);
-            System.out.println("ImplName: " + util.utils.getImplName(oObj));
-        }
-        catch (java.lang.Exception e)
-        {
-            fail("could not get test object");
-        }
+        oObj = getTestObject(serviceName);
+        System.out.println("ImplName: " + util.utils.getImplName(oObj));
 
         boolean mandantoryTrue = false;
         boolean mandantoryFalse = false;
@@ -157,109 +149,76 @@ public class FinalizedMandatoryTest
         for (int i = 0; i < filterNames.length; i++)
         {
             System.out.println("------------------------------------------------");
+            filterName = filterNames[i];
+            System.out.println(filterName);
+
+            // testobject must new created for every test.
+            // We change in a loop the container and try to flush this changes.
+            // If we get an expected exception this container is corrupt. It's
+            // similar to a document which could not be saved because of invalid
+            // contend. While you don't remove the invalid conted you will never
+            // be able to save the document. Same here.
+            oObj = getTestObject(serviceName);
+
+            xNA = UnoRuntime.queryInterface(XNameAccess.class, oObj);
+            XNameContainer xNC = UnoRuntime.queryInterface(XNameContainer.class, oObj);
+            XNameReplace xNR = UnoRuntime.queryInterface(XNameReplace.class, oObj);
+            XFlushable xFlush = UnoRuntime.queryInterface(XFlushable.class, oObj);
+
+            instance = (Object[]) xNA.getByName(filterName);
+            PropertyValue[] props = (PropertyValue[]) instance;
+
+            printPropertyValues(props);
+
+            boolean isMandatory = ((Boolean) getPropertyValueValue(props, "Mandatory")).booleanValue();
+            boolean isFinalized = ((Boolean) getPropertyValueValue(props, "Finalized")).booleanValue();
+
+            // memory if every state is available
+            mandantoryTrue |= isMandatory;
+            mandantoryFalse |= !isMandatory;
+
+            finalizedTrue |= isFinalized;
+            finalizedFalse |= !isFinalized;
+
+            //change the filter
+            setPropertyValueValue((PropertyValue[]) instance, "UIName", "dummy");
+
+            // 1a.) try to change the filter in the container
+            xNR.replaceByName(filterName, instance);
+
+            // 1b.) try to wirte the changed filter to the configuration.
+            // This must result in a exception if the filter is finalized.
+            boolean flushError = false;
             try
             {
-                filterName = filterNames[i];
-                System.out.println(filterName);
-
-                // testobject must new created for every test.
-                // We change in a loop the container and try to flush this changes.
-                // If we get an expected exception this container is corrupt. It's
-                // similar to a document which could not be saved because of invalid
-                // contend. While you don't remove the invalid conted you will never
-                // be able to save the document. Same here.
-                try
-                {
-                    oObj = getTestObject(serviceName);
-                }
-                catch (java.lang.Exception e)
-                {
-                    fail("could not get test object");
-                }
-
-                xNA = UnoRuntime.queryInterface(XNameAccess.class, oObj);
-                XNameContainer xNC = UnoRuntime.queryInterface(XNameContainer.class, oObj);
-                XNameReplace xNR = UnoRuntime.queryInterface(XNameReplace.class, oObj);
-                XFlushable xFlush = UnoRuntime.queryInterface(XFlushable.class, oObj);
-
-                instance = (Object[]) xNA.getByName(filterName);
-                PropertyValue[] props = (PropertyValue[]) instance;
-
-                printPropertyValues(props);
-
-                boolean isMandatory = ((Boolean) getPropertyValueValue(props, "Mandatory")).booleanValue();
-                boolean isFinalized = ((Boolean) getPropertyValueValue(props, "Finalized")).booleanValue();
-
-                // memory if every state is available
-                mandantoryTrue |= isMandatory;
-                mandantoryFalse |= !isMandatory;
-
-                finalizedTrue |= isFinalized;
-                finalizedFalse |= !isFinalized;
-
-                //change the filter
-                setPropertyValueValue((PropertyValue[]) instance, "UIName", "dummy");
-
-                // 1a.) try to change the filter in the container
-                try
-                {
-                    xNR.replaceByName(filterName, instance);
-                }
-                catch (IllegalArgumentException e)
-                {
-                    fail("could not replace filter properties ('" + filterName + "')");
-                }
-
-                // 1b.) try to wirte the changed filter to the configuration.
-                // This must result in a exception if the filter is finalized.
-                boolean flushError = false;
-                try
-                {
-                    xFlush.flush();
-                }
-                catch (WrappedTargetRuntimeException e)
-                {
-                    flushError = true;
-                    assertTrue("Unexpected exception wihle flushing changed filter '" + filterName + "'", isFinalized);
-                }
-                assertTrue("Expected exception was not thorwn while flushing changed filter '" + filterName + "' Finalized:" + isFinalized,
-                        !(flushError ^ isFinalized));
-
-
-
-                // 2a.) try to remove the filter from the container
-                try
-                {
-                    xNC.removeByName(filterName);
-                }
-                catch (NoSuchElementException e)
-                {
-                    fail("could not remove filter from container ('" + filterName + "')");
-                }
-                // 1b.) try to wirte the changed filter to the configuration.
-                // This must result in a exception if the filter is mandatory
-                flushError = false;
-                try
-                {
-                    xFlush.flush();
-                }
-                catch (WrappedTargetRuntimeException e)
-                {
-                    flushError = true;
-                    assertTrue("Unexpected exception wihle flushing removed filter '" + filterName + "'", isMandatory);
-                }
-                assertTrue("Expected exception was not thorwn while flushing removed filter '" + filterName + "' Mandatory:" + isMandatory,
-                        !(flushError ^ isMandatory));
-
+                xFlush.flush();
             }
-            catch (NoSuchElementException e)
+            catch (WrappedTargetRuntimeException e)
             {
-                fail("Couldn't get elements from object");
+                flushError = true;
+                assertTrue("Unexpected exception wihle flushing changed filter '" + filterName + "'", isFinalized);
             }
-            catch (WrappedTargetException e)
+            assertTrue("Expected exception was not thorwn while flushing changed filter '" + filterName + "' Finalized:" + isFinalized,
+                    !(flushError ^ isFinalized));
+
+
+
+            // 2a.) try to remove the filter from the container
+            xNC.removeByName(filterName);
+            // 1b.) try to wirte the changed filter to the configuration.
+            // This must result in a exception if the filter is mandatory
+            flushError = false;
+            try
             {
-                fail("Couldn't get elements from object");
+                xFlush.flush();
             }
+            catch (WrappedTargetRuntimeException e)
+            {
+                flushError = true;
+                assertTrue("Unexpected exception wihle flushing removed filter '" + filterName + "'", isMandatory);
+            }
+            assertTrue("Expected exception was not thorwn while flushing removed filter '" + filterName + "' Mandatory:" + isMandatory,
+                    !(flushError ^ isMandatory));
         }
         String preMsg = "Could not find filter with state ";
         String postMsg = " Please check if such filter is installed!";

@@ -18,8 +18,19 @@
 
 package complex.reportdesign;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import helper.URLHelper;
+
 import java.io.File;
 import java.util.ArrayList;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
@@ -28,27 +39,20 @@ import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
+import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.XReportDocumentsSupplier;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
+import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
 
-import helper.URLHelper;
-
 import convwatch.DB;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
 
 class PropertySetHelper
 {
@@ -137,22 +141,14 @@ public class ReportDesignerTest
     }
 
     private XDesktop m_xDesktop = null;
-    public XDesktop getXDesktop()
+    public XDesktop getXDesktop() throws com.sun.star.uno.Exception
         {
 
             if (m_xDesktop == null)
             {
-                try
-                {
                     XInterface xInterface = (XInterface) getMSF().createInstance( "com.sun.star.frame.Desktop" );
                     m_xDesktop = UnoRuntime.queryInterface(XDesktop.class, xInterface);
                     assertNotNull("Can't get XDesktop", m_xDesktop);
-                }
-                catch (com.sun.star.uno.Exception e)
-                {
-                    System.out.println("ERROR: uno.Exception caught");
-                    System.out.println("Message: " + e.getMessage());
-                }
             }
             return m_xDesktop;
         }
@@ -177,7 +173,7 @@ public class ReportDesignerTest
     private static final int WRITER = 1;
     private static final int CALC = 2;
 
-    @Test public void firsttest()
+    @Test public void firsttest() throws Exception
         {
             // -------------------- preconditions, try to find an office --------------------
 
@@ -206,7 +202,7 @@ public class ReportDesignerTest
         }
 
 
-    private void startTestForFile(String _sDocument, int _nType)
+    private void startTestForFile(String _sDocument, int _nType) throws Exception
         {
             FileURL aFileURL = new FileURL(_sDocument);
             assertTrue("Test File doesn't '" + _sDocument + "'exist.", aFileURL.exists());
@@ -219,55 +215,48 @@ public class ReportDesignerTest
             assertNotNull("Can't load document ", xDocComponent);
 
 
-            try
-            {
-                XInterface x = (XInterface)getMSF().createInstance("com.sun.star.sdb.DatabaseContext");
-                assertNotNull("can't create instance of com.sun.star.sdb.DatabaseContext", x);
-                System.out.println("createInstance com.sun.star.sdb.DatabaseContext done");
+            XInterface x = (XInterface)getMSF().createInstance("com.sun.star.sdb.DatabaseContext");
+            assertNotNull("can't create instance of com.sun.star.sdb.DatabaseContext", x);
+            System.out.println("createInstance com.sun.star.sdb.DatabaseContext done");
 
-                XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, x);
-                showElements(xNameAccess);
-                Object aObj = xNameAccess.getByName(sFileURL);
+            XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, x);
+            showElements(xNameAccess);
+            Object aObj = xNameAccess.getByName(sFileURL);
 
-                XDocumentDataSource xDataSource = UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
-                XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
+            XDocumentDataSource xDataSource = UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
+            XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
 
-                assertNotNull("can't access DatabaseDocument", xOfficeDBDoc);
+            assertNotNull("can't access DatabaseDocument", xOfficeDBDoc);
 
-                XModel xDBSource = UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
-                Object aController = xDBSource.getCurrentController();
-                assertNotNull("Controller of xOfficeDatabaseDocument is empty!", aController);
+            XModel xDBSource = UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
+            Object aController = xDBSource.getCurrentController();
+            assertNotNull("Controller of xOfficeDatabaseDocument is empty!", aController);
 
-                XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
-                /* boolean isConnect = */
-// TODO: throws an exception in DEV300m78
-                aDBDocUI.connect();
-                Object aActiveConnectionObj = aDBDocUI.getActiveConnection();
-                assertNotNull("ActiveConnection is empty", aActiveConnectionObj);
+            XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
+            /* boolean isConnect = */
+            // TODO: throws an exception in DEV300m78
+            aDBDocUI.connect();
+            Object aActiveConnectionObj = aDBDocUI.getActiveConnection();
+            assertNotNull("ActiveConnection is empty", aActiveConnectionObj);
 
-                XReportDocumentsSupplier xSupplier = UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
-                xNameAccess = xSupplier.getReportDocuments();
-                assertNotNull("xOfficeDatabaseDocument returns no Report Document", xNameAccess);
+            XReportDocumentsSupplier xSupplier = UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
+            xNameAccess = xSupplier.getReportDocuments();
+            assertNotNull("xOfficeDatabaseDocument returns no Report Document", xNameAccess);
 
-                showElements(xNameAccess);
+            showElements(xNameAccess);
 
-                ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
+            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
-                PropertyValue aActiveConnection = new PropertyValue();
-                aActiveConnection.Name = "ActiveConnection";
-                aActiveConnection.Value = aActiveConnectionObj;
-                aPropertyList.add(aActiveConnection);
+            PropertyValue aActiveConnection = new PropertyValue();
+            aActiveConnection.Name = "ActiveConnection";
+            aActiveConnection.Value = aActiveConnectionObj;
+            aPropertyList.add(aActiveConnection);
 
-                loadAndStoreReports(xNameAccess, aPropertyList, _nType);
-                createDBEntry();
-            }
-            catch(com.sun.star.uno.Exception e)
-            {
-                fail("ERROR: Exception caught" + e.getMessage());
-            }
+            loadAndStoreReports(xNameAccess, aPropertyList, _nType);
+            createDBEntry();
 
-                // Close the document
-                closeComponent(xDocComponent);
+            // Close the document
+            closeComponent(xDocComponent);
         }
 
     private String getDocumentPoolName(int _nType)
@@ -295,7 +284,7 @@ public class ReportDesignerTest
 //                                          sSpecial);
         }
 
-    private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList<PropertyValue> _aPropertyList, int _nType)
+    private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList<PropertyValue> _aPropertyList, int _nType) throws Exception
         {
             if (_xNameAccess != null)
             {
@@ -365,7 +354,7 @@ public class ReportDesignerTest
     /*
       store given _xComponent under the given Name in DOC_COMPARATOR_INPUTPATH
      */
-    private void storeComponent(String _sName, Object _xComponent, int _nType)
+    private void storeComponent(String _sName, Object _xComponent, int _nType) throws Exception
         {
             String sOutputPath = getOutputPath();
 
@@ -398,59 +387,26 @@ public class ReportDesignerTest
             if (aStorable != null)
             {
                 System.out.println("store document as URL: '" + sOutputURL + "'");
-                try
-                {
-                    aStorable.storeAsURL(sOutputURL, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
-                }
-                catch (com.sun.star.io.IOException e)
-                {
-                    System.out.println("ERROR: Exception caught");
-                    System.out.println("Can't write document URL: '" + sOutputURL + "'");
-                    System.out.println("Message: " + e.getMessage());
-                }
+                aStorable.storeAsURL(sOutputURL, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
             }
         }
 
-    private XComponent loadComponent(String _sName, Object _xComponent, ArrayList<PropertyValue> _aPropertyList)
+    private XComponent loadComponent(String _sName, Object _xComponent, ArrayList<PropertyValue> _aPropertyList) throws RuntimeException, IOException
         {
             XComponent xDocComponent = null;
             XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, _xComponent);
 
-            try
-            {
-                PropertyValue[] aLoadProperties = PropertyHelper.createPropertyValueArrayFormArrayList(_aPropertyList);
-                System.out.println("Load component: '" + _sName + "'");
-                xDocComponent = xComponentLoader.loadComponentFromURL(_sName, "_blank", 0, aLoadProperties);
-            }
-            catch (com.sun.star.io.IOException e)
-            {
-                System.out.println("ERROR: Exception caught");
-                System.out.println("Can't load document '" + _sName + "'");
-                System.out.println("Message: " + e.getMessage());
-            }
-            catch (com.sun.star.lang.IllegalArgumentException e)
-            {
-                System.out.println("ERROR: Exception caught");
-                System.out.println("Illegal Arguments given to loadComponentFromURL.");
-                System.out.println("Message: " + e.getMessage());
-            }
+            PropertyValue[] aLoadProperties = PropertyHelper.createPropertyValueArrayFormArrayList(_aPropertyList);
+            System.out.println("Load component: '" + _sName + "'");
+            xDocComponent = xComponentLoader.loadComponentFromURL(_sName, "_blank", 0, aLoadProperties);
             return xDocComponent;
         }
 
-    private void closeComponent(XComponent _xDoc)
+    private void closeComponent(XComponent _xDoc) throws CloseVetoException
         {
             // Close the document
             XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, _xDoc);
-            try
-            {
-                xCloseable.close(true);
-            }
-            catch (com.sun.star.util.CloseVetoException e)
-            {
-                System.out.println("ERROR: CloseVetoException caught");
-                System.out.println("CloseVetoException occurred. Can't close document.");
-                System.out.println("Message: " + e.getMessage());
-            }
+            xCloseable.close(true);
         }
 
 

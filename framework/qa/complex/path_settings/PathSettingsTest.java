@@ -95,7 +95,7 @@ public class PathSettingsTest
      * This methods sets the 'aPathSettings' and 'xPropertyInfoOfPathSettings' variables.
      */
     @Before
-    public void before()
+    public void before() throws Exception
     {
         try
         {
@@ -126,10 +126,6 @@ public class PathSettingsTest
         {
             System.out.println(e.getClass().getName());
             System.out.println("Message: " + e.getMessage());
-        }
-        catch (Exception e)
-        {
-            fail("What exception?");
         }
     }
 
