@@ -1309,7 +1309,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
             // 0: Expand empty attribute, if at insertion point
             else if ( pAttrib->IsEmpty() )
             {
-                // Do not check Index, a emty one could only be there
+                // Do not check Index, a empty one could only be there
                 // When later checking it anyhow:
                 //   Special caase: Start == 0; AbsLen == 1, nNew = 1
                 // => Expand, because of paragraph break!

@@ -54,7 +54,7 @@ namespace drawinglayer
 #ifdef WNT // Little point in displaying the "broken OLE" graphic on OSes that don't have real OLE, maybe?
             if(GRAPHIC_NONE == aGraphic.GetType())
             {
-                // no source, use fallback resource emty OLE graphic
+                // no source, use fallback resource empty OLE graphic
                 aGraphic = SdrOle2Obj::GetEmptyOLEReplacementGraphic();
                 bScaleContent = true;
             }

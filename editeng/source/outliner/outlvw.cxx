@@ -64,7 +64,7 @@ OutlinerView::~OutlinerView()
 
 void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    // For the first Paint/KeyInput/Drop an emty Outliner is turned into
+    // For the first Paint/KeyInput/Drop an empty Outliner is turned into
     // an Outliner with exactly one paragraph.
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( OUString() );
@@ -74,7 +74,7 @@ void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 
 bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
 {
-    // For the first Paint/KeyInput/Drop an emty Outliner is turned into
+    // For the first Paint/KeyInput/Drop an empty Outliner is turned into
     // an Outliner with exactly one paragraph.
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( OUString() );

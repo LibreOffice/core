@@ -590,7 +590,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 bool bHandsOff =
                     ( pMedium->GetURLObject().GetProtocol() == INetProtocol::File && !xOldObj->IsDocShared() );
 
-                // Emty existing SfxMDIFrames for this Document
+                // Empty existing SfxMDIFrames for this Document
                 // in native format or R/O, open it now for editing?
                 SfxObjectShellLock xNewObj;
 

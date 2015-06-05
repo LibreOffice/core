@@ -1921,7 +1921,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     SCROW nEndRow    = rParam.nRow2;        // will change
     sal_uInt16 i;
 
-    //  Remove emty rows at the end
+    //  Remove empty rows at the end
     //  so that all exceeding (MAXROW) can be found by InsertRow (#35180#)
     //  If sorted, all empty rows are at the end.
     SCSIZE nEmpty = GetEmptyLinesInBlock( nStartCol, nStartRow, nEndCol, nEndRow, DIR_BOTTOM );

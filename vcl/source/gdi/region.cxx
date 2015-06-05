@@ -973,7 +973,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
 
     if(IsEmpty())
     {
-        // local region is empty, cannot get more emty than that. Nothing to do
+        // local region is empty, cannot get more empty than that. Nothing to do
         return true;
     }
 
@@ -984,7 +984,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
 
         if(!aThisPolyPoly.count())
         {
-            // local region is empty, cannot get more emty than that. Nothing to do
+            // local region is empty, cannot get more empty than that. Nothing to do
             return true;
         }
 
@@ -1013,7 +1013,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
 
     if(!pCurrent)
     {
-        // local region is empty, cannot get more emty than that. Nothing to do
+        // local region is empty, cannot get more empty than that. Nothing to do
         return true;
     }
 
