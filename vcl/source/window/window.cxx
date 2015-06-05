@@ -486,12 +486,14 @@ void Window::dispose()
     if ( pSVData->maWinData.mpLastDeacWin == this )
         pSVData->maWinData.mpLastDeacWin = NULL;
 
-    if ( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
+    if ( mpWindowImpl->mpFrameData )
     {
         if ( mpWindowImpl->mpFrameData->mnFocusId )
             Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnFocusId );
+        mpWindowImpl->mpFrameData->mnFocusId = NULL;
         if ( mpWindowImpl->mpFrameData->mnMouseMoveId )
             Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnMouseMoveId );
+        mpWindowImpl->mpFrameData->mnMouseMoveId = NULL;
     }
 
     // release SalGraphics
@@ -558,6 +560,8 @@ void Window::dispose()
         }
         mpWindowImpl->mpFrame->SetCallback( NULL, NULL );
         pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
+        assert (mpWindowImpl->mpFrameData->mnFocusId == NULL);
+        assert (mpWindowImpl->mpFrameData->mnMouseMoveId == NULL);
         delete mpWindowImpl->mpFrameData;
     }
 
