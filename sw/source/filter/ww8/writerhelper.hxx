@@ -126,6 +126,7 @@ namespace sw
             The anchor position of this frame
         */
         const SwPosition &GetPosition() const { return maPos; }
+        void SetPosition(SwPosition const& rPos) { maPos = rPos; }
 
         /** Get the node this frame is anchored into
 
@@ -632,6 +633,9 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM = 0);
+
+        /** fix up frame positions, must be called after SetRedlineMode */
+        void UpdateFramePositions(Frames & rFrames);
 
         /** Get the Frames anchored to a given node
 
