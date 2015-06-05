@@ -35,15 +35,6 @@ void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
     mrDoc.setOriginDate(year, month, day);
 }
 
-void ScOrcusGlobalSettings::set_default_formula_grammar(orcus::spreadsheet::formula_grammar_t /*grammar*/)
-{
-}
-
-orcus::spreadsheet::formula_grammar_t ScOrcusGlobalSettings::get_default_formula_grammar() const
-{
-    return orcus::spreadsheet::formula_grammar_unknown;
-}
-
 ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
     maPos(rPos), mnIndex(nIndex) {}
 
@@ -272,11 +263,6 @@ void ScOrcusSheet::set_format(os::row_t /*row*/, os::col_t /*col*/, size_t /*xf_
 {
 }
 
-void ScOrcusSheet::set_format(os::row_t /*row*/, os::col_t /*col*/,
-        os::row_t /*row_end*/, os::col_t /*col_end*/, size_t /*xf_index*/)
-{
-}
-
 namespace {
 
 formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t grammar )
@@ -284,17 +270,15 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t 
     formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
     switch(grammar)
     {
-        case orcus::spreadsheet::formula_grammar_ods:
+        case orcus::spreadsheet::ods:
             eGrammar = formula::FormulaGrammar::GRAM_ODFF;
             break;
-        case orcus::spreadsheet::formula_grammar_xlsx_2007:
-        case orcus::spreadsheet::formula_grammar_xlsx_2010:
+        case orcus::spreadsheet::xlsx_2007:
+        case orcus::spreadsheet::xlsx_2010:
             eGrammar = formula::FormulaGrammar::GRAM_OOXML;
             break;
-        case orcus::spreadsheet::formula_grammar_gnumeric:
+        case orcus::spreadsheet::gnumeric:
             eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
-            break;
-        case orcus::spreadsheet::formula_grammar_unknown:
             break;
     }
 
@@ -323,19 +307,6 @@ void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* 
     }
     OUString aResult( p, n, RTL_TEXTENCODING_UTF8);
     pCell->SetHybridString(mrDoc.getDoc().GetSharedStringPool().intern(aResult));
-}
-
-void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, double /*val*/)
-{
-    ScFormulaCell* pCell = mrDoc.getDoc().GetFormulaCell(ScAddress(col, row, mnTab));
-    if (!pCell)
-    {
-        SAL_WARN("sc", "trying to set formula result for non formula \
-                cell! Col: " << col << ";Row: " << row << ";Tab: " << mnTab);
-        return;
-    }
-
-    // TODO: FIXME
 }
 
 void ScOrcusSheet::set_shared_formula(
@@ -602,17 +573,6 @@ void ScOrcusStyles::set_cell_xf_count(size_t /*n*/)
 }
 
 size_t ScOrcusStyles::commit_cell_xf()
-{
-    return 0;
-}
-
-// dxf
-
-void ScOrcusStyles::set_dxf_count(size_t /*n*/)
-{
-}
-
-size_t ScOrcusStyles::commit_dxf()
 {
     return 0;
 }

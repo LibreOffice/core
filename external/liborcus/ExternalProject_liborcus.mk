@@ -87,11 +87,8 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		MDDS_LIBS=' ' \
 		MAKE=$(MAKE) ./configure \
 			--with-pic \
-			$(if $(DISABLE_DYNLOADING), \
-				--enable-static --disable-shared \
-			, \
-				--enable-shared --disable-static \
-			) \
+			--enable-static \
+			--disable-shared \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-spreadsheet-model \
 			--without-tools \
