@@ -1,0 +1,200 @@
+diff -ur udunits2.org/configure udunits2/configure
+--- udunits2.org/configure	2015-06-04 07:14:02.996631200 -0700
++++ udunits2/configure	2015-06-04 09:34:57.354053000 -0700
+@@ -4704,12 +4704,12 @@
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_dirname" >&5
+ $as_echo "$ac_cv_search_dirname" >&6; }
+ ac_res=$ac_cv_search_dirname
+-if test "$ac_res" != no; then :
+-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+-
+-else
+-  as_fn_error $? "cannot find function dirname" "$LINENO" 5
+-fi
++#if test "$ac_res" != no; then :
++#  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
++#
++#else
++#  as_fn_error $? "cannot find function dirname" "$LINENO" 5
++#fi
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing log10" >&5
+ $as_echo_n "checking for library containing log10... " >&6; }
+@@ -4762,12 +4762,12 @@
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_log10" >&5
+ $as_echo "$ac_cv_search_log10" >&6; }
+ ac_res=$ac_cv_search_log10
+-if test "$ac_res" != no; then :
+-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+-
+-else
+-  as_fn_error $? "cannot find function log10" "$LINENO" 5
+-fi
++#if test "$ac_res" != no; then :
++#  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
++#
++#else
++#  as_fn_error $? "cannot find function log10" "$LINENO" 5
++#fi
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing XML_StopParser" >&5
+ $as_echo_n "checking for library containing XML_StopParser... " >&6; }
+@@ -8463,7 +8463,7 @@
+         enable_dlopen=no
+ 
+ 
+-  enable_win32_dll=no
++  enable_win32_dll=yes
+ 
+ 
+             # Check whether --enable-shared was given.
+diff -ur udunits2.org/lib/idToUnitMap.c udunits2/lib/idToUnitMap.c
+--- udunits2.org/lib/idToUnitMap.c	2015-06-04 07:14:03.043506200 -0700
++++ udunits2/lib/idToUnitMap.c	2015-06-04 09:34:57.385303000 -0700
+@@ -16,11 +16,11 @@
+ #endif
+ 
+ #include <assert.h>
+-#ifdef _MSC_VER
+-#include "tsearch.h"
+-#else
++//#ifdef _MSC_VER
++//#include "tsearch.h"
++//#else
+ #include <search.h>
+-#endif
++//#endif
+ 
+ #include <stdlib.h>
+ 
+diff -ur udunits2.org/lib/Makefile.in udunits2/lib/Makefile.in
+--- udunits2.org/lib/Makefile.in	2015-06-04 07:14:03.059131200 -0700
++++ udunits2/lib/Makefile.in	2015-06-04 09:37:49.791553000 -0700
+@@ -349,7 +349,7 @@
+ #pdf_DATA = udunits2lib.pdf
+ AM_MAKEINFOFLAGS = -I $(top_srcdir)
+ AM_MAKEINFOHTMLFLAGS = --no-split -I $(top_srcdir)
+-libudunits2_la_LDFLAGS = -version-number 0:1:0
++libudunits2_la_LDFLAGS = -version-number 0:1:0 -no-undefined -win32-dll
+ lex_prefix = ut
+ LFLAGS = -d -P$(lex_prefix)
+ include_HEADERS = udunits2.h converter.h $(am__append_2)
+diff -ur udunits2.org/lib/prefix.c udunits2/lib/prefix.c
+--- udunits2.org/lib/prefix.c	2015-06-04 07:14:03.059131200 -0700
++++ udunits2/lib/prefix.c	2015-06-04 09:34:57.385303000 -0700
+@@ -17,11 +17,11 @@
+ 
+ #include <ctype.h>
+ #include <errno.h>
+-#ifdef _MSC_VER
+-#include "tsearch.h"
+-#else
++//#ifdef _MSC_VER
++//#include "tsearch.h"
++//#else
+ #include <search.h>
+-#endif
++//#endif
+ #include <stdlib.h>
+ 
+ #include <string.h>
+diff -ur udunits2.org/lib/scanner.c udunits2/lib/scanner.c
+--- udunits2.org/lib/scanner.c	2015-06-04 07:14:03.059131200 -0700
++++ udunits2/lib/scanner.c	2015-06-04 09:34:57.385303000 -0700
+@@ -1047,7 +1047,7 @@
+  * The user has a chance to override it with an option.
+  */
+ /* %if-c-only */
+-#include <unistd.h>
++//#include <unistd.h>
+ /* %endif */
+ /* %if-c++-only */
+ /* %endif */
+diff -ur udunits2.org/lib/systemMap.c udunits2/lib/systemMap.c
+--- udunits2.org/lib/systemMap.c	2015-06-04 07:14:03.152881200 -0700
++++ udunits2/lib/systemMap.c	2015-06-04 09:34:57.385303000 -0700
+@@ -17,11 +17,11 @@
+ #   define _XOPEN_SOURCE 500
+ #endif
+ 
+-#ifdef _MSC_VER
+-#include "tsearch.h"
+-#else
++//#ifdef _MSC_VER
++//#include "tsearch.h"
++//#else
+ #include <search.h>
+-#endif
++//#endif
+ #include <stdlib.h>
+ 
+ #include "systemMap.h"
+diff -ur udunits2.org/lib/udunits.h udunits2/lib/udunits.h
+--- udunits2.org/lib/udunits.h	2015-06-04 07:14:03.043506200 -0700
++++ udunits2/lib/udunits.h	2015-06-04 09:34:57.385303000 -0700
+@@ -13,7 +13,7 @@
+ #define UT_UNITS_H_INCLUDED
+ 
+ #ifdef _MSC_VER
+-<io.h>
++#include <io.h>
+ #define snprintf _snprintf
+ #define close _close
+ #define open _open
+diff -ur udunits2.org/lib/udunits-1.c udunits2/lib/udunits-1.c
+--- udunits2.org/lib/udunits-1.c	2015-06-04 07:14:03.059131200 -0700
++++ udunits2/lib/udunits-1.c	2015-06-04 09:34:57.400928000 -0700
+@@ -7,11 +7,11 @@
+  */
+ 
+ #include <errno.h>
+-#ifdef _MSC_VER
+-#include "tsearch.h"
+-#else
++//#ifdef _MSC_VER
++//#include "tsearch.h"
++//#else
+ #include <search.h>
+-#endif
++//#endif
+ #include <stddef.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff -ur udunits2.org/lib/unitcore.c udunits2/lib/unitcore.c
+--- udunits2.org/lib/unitcore.c	2015-06-04 07:14:03.059131200 -0700
++++ udunits2/lib/unitcore.c	2015-06-04 09:34:57.400928000 -0700
+@@ -56,11 +56,11 @@
+ #include <limits.h>
+ #include <math.h>
+ 
+-#ifdef _MSC_VER
+-#include "tsearch.h"
+-#else
++//#ifdef _MSC_VER
++//#include "tsearch.h"
++//#else
+ #include <search.h>
+-#endif
++//#endif
+ 
+ #include <stddef.h>
+ #include <stdio.h>
+diff -ur udunits2.org/lib/unitToIdMap.c udunits2/lib/unitToIdMap.c
+--- udunits2.org/lib/unitToIdMap.c	2015-06-04 07:14:03.059131200 -0700
++++ udunits2/lib/unitToIdMap.c	2015-06-04 09:34:57.400928000 -0700
+@@ -18,11 +18,11 @@
+ #include <assert.h>
+ #include <errno.h>
+ 
+-#ifdef _MSC_VER
+-#include "tsearch.h"
+-#else
++//#ifdef _MSC_VER
++//#include "tsearch.h"
++//#else
+ #include <search.h>
+-#endif
++//#endif
+ 
+ #include <stdlib.h>
+ 
