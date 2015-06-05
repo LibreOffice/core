@@ -135,7 +135,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
 {
     rtl::Reference<LwpObject> newObj;
     m_nNumObjs++;
-    assert(type<300);
+    SAL_WARN_IF(type>=300, "lwp", "invalid type: " << type);
     switch(type)
     {
         case VO_DOCUMENT:
@@ -666,7 +666,6 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
         default:
         {
             //Unknown object type
-            assert(false);
             newObj = NULL;
             break;
         }
