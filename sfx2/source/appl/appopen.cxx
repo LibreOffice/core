@@ -1128,6 +1128,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 void SfxApplication::OpenRemoteExec_Impl( SfxRequest& )
 {
     ScopedVclPtrInstance< RemoteFilesDialog > aDlg((vcl::Window*)NULL, WB_OPEN);
+
+    // Filters for test purposes
+    aDlg->AddFilter("All files", FILTER_ALL);
+    aDlg->AddFilter("ODT files", "*.odt");
+    aDlg->AddFilter("ODS files", "*.ods");
+
     aDlg->Execute();
 }
 

@@ -11,8 +11,6 @@
 
 using namespace ::com::sun::star::uno;
 
-#define FILTER_ALL "*.*"
-
 class FileViewContainer : public vcl::Window
 {
     private:
@@ -99,6 +97,11 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_bMultiselection = (nBits & WB_MULTISELECTION) ? true : false;
     m_bIsUpdated = false;
 
+    m_pOpen_btn->Enable( false );
+    m_pSave_btn->Enable( false );
+    m_pFilter_lb->Enable( false );
+    m_pName_ed->Enable( false );
+
     if(m_eMode == REMOTEDLG_MODE_OPEN)
     {
         m_pSave_btn->Hide();
@@ -143,6 +146,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
 
     m_pContainer->init(m_pFileView, m_pSplitter, m_pTreeView);
     m_pContainer->Show();
+    m_pContainer->Enable( false );
 
     m_pAddService_btn->SetMenuMode(MENUBUTTON_MENUMODE_TIMED);
     m_pAddService_btn->SetClickHdl( LINK( this, RemoteFilesDialog, AddServiceHdl ) );
@@ -152,8 +156,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
 
     m_pServices_lb->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectServiceHdl ) );
 
-    m_pFilter_lb->InsertEntry(FILTER_ALL);
-    m_pFilter_lb->SelectEntryPos(0);
+    m_pFilter_lb->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectFilterHdl ) );
 }
 
 RemoteFilesDialog::~RemoteFilesDialog()
@@ -261,11 +264,25 @@ int RemoteFilesDialog::GetSelectedServicePos()
     return nPos;
 }
 
+void RemoteFilesDialog::AddFilter( OUString sName, OUString sType )
+{
+    m_aFilters.push_back( sType );
+    m_pFilter_lb->InsertEntry( sName );
+
+    if(m_pFilter_lb->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
+        m_pFilter_lb->SelectEntryPos( 0 );
+}
+
 OUString RemoteFilesDialog::getCurrentFilter()
 {
     OUString sFilter;
 
-    sFilter = m_pFilter_lb->GetSelectEntry();
+    int nPos = m_pFilter_lb->GetSelectEntryPos();
+
+    if(nPos != LISTBOX_ENTRY_NOTFOUND)
+        sFilter = m_aFilters[nPos];
+    else
+        sFilter = FILTER_ALL;
 
     return sFilter;
 }
@@ -281,6 +298,13 @@ void RemoteFilesDialog::OpenURL( OUString sURL )
         m_pFileView->EndInplaceEditing( false );
         m_pPath_ed->SetText( sURL );
         eResult = m_pFileView->Initialize( sURL, sFilter, NULL, BlackList );
+
+        if( eResult == eSuccess )
+        {
+            m_pFilter_lb->Enable( true );
+            m_pName_ed->Enable( true );
+            m_pContainer->Enable( true );
+        }
     }
 }
 
@@ -426,6 +450,16 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SplitHdl )
     m_pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     m_pSplitter->SetPosPixel( Point( placeSize.Width(), m_pSplitter->GetPosPixel().Y() ) );
+
+    return 1;
+}
+
+IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )
+{
+    OUString sCurrentURL = m_pFileView->GetViewURL();
+
+    if( !sCurrentURL.isEmpty() )
+        OpenURL( sCurrentURL );
 
     return 1;
 }

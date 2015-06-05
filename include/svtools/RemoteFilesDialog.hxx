@@ -32,6 +32,8 @@
 
 #define WB_MULTISELECTION 0x20000000L
 
+#define FILTER_ALL "*.*"
+
 enum SvtRemoteDlgMode
 {
     REMOTEDLG_MODE_OPEN = 0,
@@ -58,6 +60,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 
+    void AddFilter( OUString sName, OUString sType );
+
 private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
@@ -80,6 +84,7 @@ private:
     VclPtr<Edit> m_pName_ed;
 
     std::vector<ServicePtr> m_aServices;
+    std::vector<OUString> m_aFilters;
 
     void FillServicesListbox();
 
@@ -98,6 +103,8 @@ private:
     DECL_LINK( SelectHdl, void * );
 
     DECL_LINK( SplitHdl, void * );
+
+    DECL_LINK( SelectFilterHdl, void * );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
