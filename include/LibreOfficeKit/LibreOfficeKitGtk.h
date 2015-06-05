@@ -16,10 +16,7 @@
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+G_BEGIN_DECLS
 
 #define LOK_DOCVIEW(obj)          GTK_CHECK_CAST (obj, lok_docview_get_type(), LOKDocView)
 #define LOK_DOCVIEW_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, lok_docview_get_type(), LOKDocViewClass)
@@ -77,9 +74,8 @@ void            lok_docview_post_key    (GtkWidget* pWidget, GdkEventKey* pEvent
 
 /// Get the visible area of the document (in twips).
 void lok_docview_get_visarea(LOKDocView* pThis, GdkRectangle* pArea);
-#ifdef __cplusplus
-}
-#endif
+
+G_END_DECLS
 
 #endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITGTK_H
 
