@@ -17,4 +17,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,udunits2,\
 ))
 endif
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,udunits2,\
+        external/udunits2/udunits2-windows-cygwin.patch.1 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

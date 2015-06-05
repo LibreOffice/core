@@ -13,6 +13,10 @@ $(eval $(call gb_ExternalProject_use_autoconf,udunits2,configure))
 
 $(eval $(call gb_ExternalProject_use_autoconf,udunits2,build))
 
+$(eval $(call gb_ExternalProject_use_externals,udunits2,\
+	expat \
+))
+
 $(eval $(call gb_ExternalProject_register_targets,udunits2,\
 	configure \
 	build \
@@ -28,8 +32,13 @@ $(call gb_ExternalProject_get_state_target,udunits2,build) : $(call gb_ExternalP
 
 $(call gb_ExternalProject_get_state_target,udunits2,configure) :
 	$(call gb_ExternalProject_run,configure,\
-		MAKE=$(MAKE) ./configure \
+		MAKE=$(MAKE) \
+			CFLAGS="$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib)" \
+			LDFLAGS="$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR))" \
+			./configure \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
+			$(ifeq ($(OS),WNT) --enable-shared) \
+			--enable-shared \
 			--build=$(if $(filter WNT,$(OS)),i686-pc-cygwin,$(BUILD_PLATFORM)) \
 	)
 
