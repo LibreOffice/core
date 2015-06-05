@@ -46,6 +46,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -471,8 +472,15 @@ public:
 private:
     virtual void doWork() SAL_OVERRIDE
     {
-        deflateZipEntry(mpEntry, mxInStream);
-        mxInStream.clear();
+        try
+        {
+            deflateZipEntry(mpEntry, mxInStream);
+            mxInStream.clear();
+        }
+        catch (const uno::Exception& rException)
+        {
+            mpEntry->setParallelDeflateException(::cppu::getCaughtException());
+        }
     }
 };
 
