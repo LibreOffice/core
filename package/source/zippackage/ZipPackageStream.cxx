@@ -477,7 +477,7 @@ private:
             deflateZipEntry(mpEntry, mxInStream);
             mxInStream.clear();
         }
-        catch (const uno::Exception& rException)
+        catch (const uno::Exception&)
         {
             mpEntry->setParallelDeflateException(::cppu::getCaughtException());
         }
