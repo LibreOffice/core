@@ -38,7 +38,6 @@
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
 
-
 /// Holds data used by LOKDocView only.
 struct LOKDocView_Impl
 {
@@ -201,6 +200,28 @@ struct LOKDocView_Impl
     /// Sets the tiles enclosed by rRectangle as invalid in m_pTileBuffer
     void setTilesInvalid(const GdkRectangle& rRectangle);
 };
+
+enum
+{
+    EDIT_CHANGED,
+    COMMAND_CHANGED,
+    SEARCH_NOT_FOUND,
+    PART_CHANGED,
+    SIZE_CHANGED,
+    LAST_SIGNAL
+};
+
+
+static guint doc_view_signals[LAST_SIGNAL] = { 0 };
+
+
+G_DEFINE_TYPE(LOKDocView, lok_doc_view, GTK_TYPE_SCROLLED_WINDOW)
+
+
+
+
+
+
 
 namespace {
 
@@ -1081,17 +1102,7 @@ void LOKDocView_Impl::globalCallbackWorkerImpl(int nType, const char* pPayload)
 #endif
 }
 
-enum
-{
-    EDIT_CHANGED,
-    COMMAND_CHANGED,
-    SEARCH_NOT_FOUND,
-    PART_CHANGED,
-    SIZE_CHANGED,
-    LAST_SIGNAL
-};
 
-static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 
 void LOKDocView_Impl::commandChanged(const std::string& rString)
 {
@@ -1121,9 +1132,8 @@ void LOKDocView_Impl::reportError(const std::string& rString)
     gtk_widget_destroy(dialog);
 }
 
-static void lok_doc_view_class_init( gpointer ptr )
+static void lok_doc_view_class_init (LOKDocViewClass* pClass)
 {
-    LOKDocViewClass* pClass = static_cast<LOKDocViewClass *>(ptr);
     GObjectClass *gobject_class = G_OBJECT_CLASS(pClass);
     pClass->edit_changed = NULL;
     doc_view_signals[EDIT_CHANGED] =
@@ -1166,7 +1176,7 @@ static void lok_doc_view_class_init( gpointer ptr )
                      G_TYPE_NONE, 1,
                      G_TYPE_INT);
     pClass->size_changed = 0;
-    docview_signals[SIZE_CHANGED] =
+    doc_view_signals[SIZE_CHANGED] =
         g_signal_new("size-changed",
                      G_TYPE_FROM_CLASS(gobject_class),
                      G_SIGNAL_RUN_FIRST,
@@ -1177,9 +1187,8 @@ static void lok_doc_view_class_init( gpointer ptr )
                      G_TYPE_INT);
 }
 
-static void lok_doc_view_init( GTypeInstance* pInstance, gpointer )
+static void lok_doc_view_init (LOKDocView* pDocView)
 {
-    LOKDocView* pDocView = reinterpret_cast<LOKDocView *>(pInstance);
     // Gtk ScrolledWindow is apparently not fully initialised yet, we specifically
     // have to set the [hv]adjustment to prevent GTK assertions from firing, see
     // https://bugzilla.gnome.org/show_bug.cgi?id=438114 for more info.
@@ -1214,29 +1223,7 @@ static void lok_doc_view_init( GTypeInstance* pInstance, gpointer )
     g_signal_connect(G_OBJECT(pDocView), "destroy", G_CALLBACK(LOKDocView_Impl::destroy), 0);
 }
 
-SAL_DLLPUBLIC_EXPORT guint lok_doc_view_get_type()
-{
-    static guint lok_doc_view_type = 0;
-
-    if (!lok_doc_view_type)
-    {
-        char pName[] = "LokDocView";
-        GtkTypeInfo lok_doc_view_info =
-        {
-            pName,
-            sizeof( LOKDocView ),
-            sizeof( LOKDocViewClass ),
-            lok_doc_view_class_init,
-            lok_doc_view_init,
-            NULL,
-            NULL,
-            nullptr
-        };
-
-        lok_doc_view_type = gtk_type_unique( gtk_scrolled_window_get_type(), &lok_doc_view_info );
-    }
-    return lok_doc_view_type;
-}
+SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new( LibreOfficeKit* pOffice )
 {
