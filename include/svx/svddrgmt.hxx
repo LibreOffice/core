@@ -157,16 +157,16 @@ protected:
 
     // old call forwarders to the SdrDragView
     void               ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0) const;
-    SdrHdl*            GetDragHdl() const              { return getSdrDragView().pDragHdl; }
-    SdrHdlKind         GetDragHdlKind() const          { return getSdrDragView().eDragHdl; }
+    SdrHdl*            GetDragHdl() const              { return getSdrDragView().mpDragHdl; }
+    SdrHdlKind         GetDragHdlKind() const          { return getSdrDragView().meDragHdl; }
     SdrDragStat&       DragStat()                      { return getSdrDragView().aDragStat; }
     const SdrDragStat& DragStat() const                { return getSdrDragView().aDragStat; }
     Point&             Ref1() const                    { return mrSdrDragView.aRef1; }
     Point&             Ref2() const                    { return mrSdrDragView.aRef2; }
     const SdrHdlList&  GetHdlList() const              { return getSdrDragView().GetHdlList(); }
     void               AddUndo(SdrUndoAction* pUndo)   { getSdrDragView().AddUndo(pUndo); }
-    bool               IsDragLimit()                   { return getSdrDragView().bDragLimit; }
-    const Rectangle&   GetDragLimitRect()              { return getSdrDragView().aDragLimit; }
+    bool               IsDragLimit()                   { return getSdrDragView().mbDragLimit; }
+    const Rectangle&   GetDragLimitRect()              { return getSdrDragView().maDragLimit; }
     const SdrMarkList& GetMarkedObjectList()                   { return getSdrDragView().GetMarkedObjectList(); }
     Point              GetSnapPos(const Point& rPt) const { return getSdrDragView().GetSnapPos(rPt,getSdrDragView().pMarkedPV); }
     SdrSnap            SnapPos(Point& rPt) const       { return getSdrDragView().SnapPos(rPt,getSdrDragView().pMarkedPV); }
@@ -217,8 +217,8 @@ public:
 
 inline const Rectangle& SdrDragMethod::GetMarkedRect() const
 {
-    return getSdrDragView().eDragHdl==HDL_POLY ? getSdrDragView().GetMarkedPointsRect() :
-           getSdrDragView().eDragHdl==HDL_GLUE ? getSdrDragView().GetMarkedGluePointsRect() :
+    return getSdrDragView().meDragHdl==HDL_POLY ? getSdrDragView().GetMarkedPointsRect() :
+           getSdrDragView().meDragHdl==HDL_GLUE ? getSdrDragView().GetMarkedGluePointsRect() :
            getSdrDragView().GetMarkedObjRect();
 }
 

@@ -31,38 +31,38 @@ class SVX_DLLPUBLIC SdrDragView: public SdrExchangeView
     friend class                SdrDragMethod;
 
 protected:
-    SdrHdl*                     pDragHdl;
+    SdrHdl*                     mpDragHdl;
     SdrDragMethod*              mpCurrentSdrDragMethod;
-    SdrUndoGeoObj*              pInsPointUndo;
-    Rectangle                   aDragLimit;
-    OUString               aInsPointUndoStr;
-    SdrMarkList                 aFollowingEdges; // If nodes are dragged, all edges should follow as Xor
-    SdrHdlKind                  eDragHdl;
+    SdrUndoGeoObj*              mpInsPointUndo;
+    Rectangle                   maDragLimit;
+    OUString               maInsPointUndoStr;
+    SdrMarkList                 maFollowingEdges; // If nodes are dragged, all edges should follow as Xor
+    SdrHdlKind                  meDragHdl;
 
-    sal_uIntPtr                     nDragXorPolyLimit;
-    sal_uIntPtr                     nDragXorPointLimit;
-    sal_uInt16                      nDetailedEdgeDraggingLimit;
+    sal_uIntPtr                     mnDragXorPolyLimit;
+    sal_uIntPtr                     mnDragXorPointLimit;
+    sal_uInt16                      mnDetailedEdgeDraggingLimit;
 
-    bool                        bFramDrag : 1;        // currently frame dragging
-    bool                        bDragSpecial : 1;     // currently Special Obj-dragging
-    bool                        bMarkedHitMovesAlways : 1; // Persistent
-    bool                        bDragLimit : 1;      // Limit on SnapRect instead of BoundRect
-    bool                        bDragHdl : 1;        // TRUE: RefPt is slid
-    bool                        bDragStripes : 1;    // Persistent
-    bool                        bMirrRefDragObj : 1; // Persistent - During the drag, show the mirror axis of the mirrored objects as Xor
+    bool                        mbFramDrag : 1;        // currently frame dragging
+    bool                        mbDragSpecial : 1;     // currently Special Obj-dragging
+    bool                        mbMarkedHitMovesAlways : 1; // Persistent
+    bool                        mbDragLimit : 1;      // Limit on SnapRect instead of BoundRect
+    bool                        mbDragHdl : 1;        // TRUE: RefPt is slid
+    bool                        mbDragStripes : 1;    // Persistent
+    bool                        mbMirrRefDragObj : 1; // Persistent - During the drag, show the mirror axis of the mirrored objects as Xor
     bool                        mbSolidDragging : 1;  // allow solid create/drag of objects
-    bool                        bMouseHideWhileDraggingPoints : 1;
-    bool                        bResizeAtCenter : 1;
-    bool                        bCrookAtCenter : 1;
-    bool                        bDragWithCopy : 1;
-    bool                        bInsGluePoint : 1;
-    bool                        bInsObjPointMode : 1;
-    bool                        bInsGluePointMode : 1;
-    bool                        bNoDragXorPolys : 1;
-    bool                        bAutoVertexCon : 1;  // automatic generation of connectors at the vertices
-    bool                        bAutoCornerCon : 1;  // automatic geneartion of connectors at the corners
-    bool                        bRubberEdgeDragging : 1;
-    bool                        bDetailedEdgeDragging : 1;
+    bool                        mbMouseHideWhileDraggingPoints : 1;
+    bool                        mbResizeAtCenter : 1;
+    bool                        mbCrookAtCenter : 1;
+    bool                        mbDragWithCopy : 1;
+    bool                        mbInsGluePoint : 1;
+    bool                        mbInsObjPointMode : 1;
+    bool                        mbInsGluePointMode : 1;
+    bool                        mbNoDragXorPolys : 1;
+    bool                        mbAutoVertexCon : 1;  // automatic generation of connectors at the vertices
+    bool                        mbAutoCornerCon : 1;  // automatic geneartion of connectors at the corners
+    bool                        mbRubberEdgeDragging : 1;
+    bool                        mbDetailedEdgeDragging : 1;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
@@ -105,20 +105,20 @@ public:
     void MovDragObj(const Point& rPnt);
     bool EndDragObj(bool bCopy=false);
     void BrkDragObj();
-    bool IsDragObj() const { return mpCurrentSdrDragMethod && !bInsPolyPoint && !bInsGluePoint; }
-    SdrHdl* GetDragHdl() const { return pDragHdl; }
+    bool IsDragObj() const { return mpCurrentSdrDragMethod && !bInsPolyPoint && !mbInsGluePoint; }
+    SdrHdl* GetDragHdl() const { return mpDragHdl; }
     SdrDragMethod* GetDragMethod() const { return mpCurrentSdrDragMethod; }
-    bool IsDraggingPoints() const { return eDragHdl==HDL_POLY; }
-    bool IsDraggingGluePoints() const { return eDragHdl==HDL_GLUE; }
+    bool IsDraggingPoints() const { return meDragHdl==HDL_POLY; }
+    bool IsDraggingGluePoints() const { return meDragHdl==HDL_GLUE; }
 
     // If you want to define that already during BegDrag
     // or in the middle.
     // (Is reset to 'false' on each BegDrag, so set it after BegDrag.)
-    void SetDragWithCopy(bool bOn) { bDragWithCopy = bOn; }
-    bool IsDragWithCopy() const { return bDragWithCopy; }
+    void SetDragWithCopy(bool bOn) { mbDragWithCopy = bOn; }
+    bool IsDragWithCopy() const { return mbDragWithCopy; }
 
-    void SetInsertGluePoint(bool bOn) { bInsGluePoint = bOn; }
-    bool IsInsertGluePoint() const { return bInsGluePoint; }
+    void SetInsertGluePoint(bool bOn) { mbInsGluePoint = bOn; }
+    bool IsInsertGluePoint() const { return mbInsGluePoint; }
 
     // Interactive insertion of a new point. nIdx=0 => in front of the first point
     bool IsInsObjPointPossible() const;
@@ -130,25 +130,25 @@ public:
 
     // For the app to manage the status. GetPreferredPointer() is
     // possibly going to deliver a matching pointer for it.
-    void SetInsObjPointMode(bool bOn) { bInsObjPointMode = bOn; }
-    bool IsInsObjPointMode() const { return bInsObjPointMode; }
+    void SetInsObjPointMode(bool bOn) { mbInsObjPointMode = bOn; }
+    bool IsInsObjPointMode() const { return mbInsObjPointMode; }
 
     bool IsInsGluePointPossible() const;
     bool BegInsGluePoint(const Point& rPnt);
     void MovInsGluePoint(const Point& rPnt) { MovDragObj(rPnt); }
     bool EndInsGluePoint() { return EndDragObj(); }
     void BrkInsGluePoint() { BrkDragObj(); }
-    bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && bInsGluePoint; }
+    bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && mbInsGluePoint; }
 
     // For the app to manage the status. GetPreferredPointer() is
     // possibly going to deliver a matching pointer for it.
-    void SetInsGluePointMode(bool bOn) { bInsGluePointMode = bOn; }
-    bool IsInsGluePointMode() const { return bInsGluePointMode; }
+    void SetInsGluePointMode(bool bOn) { mbInsGluePointMode = bOn; }
+    bool IsInsGluePointMode() const { return mbInsGluePointMode; }
 
     // border lines over the whole win persistent during the
     // whole dragging. Default=FALSE.
     void SetDragStripes(bool bOn);
-    bool IsDragStripes() const { return bDragStripes; }
+    bool IsDragStripes() const { return mbDragStripes; }
 
     // hide handles during dragging
     //HMHvoid SetDragHdlHide(bool bOn);
@@ -156,8 +156,8 @@ public:
 
     // Hide the mouse when dragging polygon points or glue points.
     // Default=false
-    void SetMouseHideWhileDraggingPoints(bool bOn) { bMouseHideWhileDraggingPoints = bOn; }
-    bool IsMouseHideWhileDraggingPoints() const { return bMouseHideWhileDraggingPoints; }
+    void SetMouseHideWhileDraggingPoints(bool bOn) { mbMouseHideWhileDraggingPoints = bOn; }
+    bool IsMouseHideWhileDraggingPoints() const { return mbMouseHideWhileDraggingPoints; }
 
     // As a general rule, the contours of the selected objects
     // are displayed as Xor-polygons. If this flag is set, only one
@@ -167,21 +167,21 @@ public:
     // Also changeable during the dragging.
     // Default=Off
     void SetNoDragXorPolys(bool bOn);
-    bool IsNoDragXorPolys() const { return bNoDragXorPolys; }
+    bool IsNoDragXorPolys() const { return mbNoDragXorPolys; }
 
     // If the number of selected objects exceeds te value set here,
     // NoDragPolys is (temporarily) activated implicitely.
     // PolyPolygons etc. are regarded as multiple objects respectively.
     // Default=100
-    void  SetDragXorPolyLimit(sal_uIntPtr nLimit) { nDragXorPolyLimit=nLimit; }
-    sal_uIntPtr GetDragXorPolyLimit() const { return nDragXorPolyLimit; }
+    void  SetDragXorPolyLimit(sal_uIntPtr nLimit) { mnDragXorPolyLimit=nLimit; }
+    sal_uIntPtr GetDragXorPolyLimit() const { return mnDragXorPolyLimit; }
 
     // Like DragXorPolyLimit, but in respect to the total number of
     // all polygons. Default=500.
     // NoDragPolys is (temporarily) activated, if one of the limits
     // is exceeded.
-    void  SetDragXorPointLimit(sal_uIntPtr nPointCount) { nDragXorPointLimit=nPointCount; }
-    sal_uIntPtr GetDragXorPointLimit() const { return nDragXorPointLimit; }
+    void  SetDragXorPointLimit(sal_uIntPtr nPointCount) { mnDragXorPointLimit=nPointCount; }
+    sal_uIntPtr GetDragXorPointLimit() const { return mnDragXorPointLimit; }
 
     void SetSolidDragging(bool bOn);
     bool IsSolidDragging() const;
@@ -190,13 +190,13 @@ public:
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Stick Connectors to vertices
     // Default=true=Yes
-    void SetAutoVertexConnectors(bool bOn) { bAutoVertexCon = bOn; }
-    bool IsAutoVertexConnectors() const { return bAutoVertexCon; }
+    void SetAutoVertexConnectors(bool bOn) { mbAutoVertexCon = bOn; }
+    bool IsAutoVertexConnectors() const { return mbAutoVertexCon; }
 
     // Stick Connectors to Corners
     // Default=false=No
-    void SetAutoCornerConnectors(bool bOn) { bAutoCornerCon = bOn; }
-    bool IsAutoCornerConnectors() const { return bAutoCornerCon; }
+    void SetAutoCornerConnectors(bool bOn) { mbAutoCornerCon = bOn; }
+    bool IsAutoCornerConnectors() const { return mbAutoCornerCon; }
 
     // Dragging of connected objects (Nodes):
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -205,16 +205,16 @@ public:
     // only rubber bands but total recalculations are visible while
     // dragging. This detailed depiction is only possible in MoveDrag.
     // Default value: 10
-    bool IsDetailedEdgeDragging() const { return bDetailedEdgeDragging; }
+    bool IsDetailedEdgeDragging() const { return mbDetailedEdgeDragging; }
 
-    sal_uInt16 GetDetailedEdgeDraggingLimit() const { return nDetailedEdgeDraggingLimit; }
+    sal_uInt16 GetDetailedEdgeDraggingLimit() const { return mnDetailedEdgeDraggingLimit; }
 
     // EdgeDraggingLimit: If more than nEdgeObjCount edges are affected,
     // they are not shown in the interactive dragging.
     // This here talks about the "rubber bands", which take less computing time
     // than the complete recalculations in the DetailedEdgeDragging.
     // default value: 100
-    bool IsRubberEdgeDragging() const { return bRubberEdgeDragging; }
+    bool IsRubberEdgeDragging() const { return mbRubberEdgeDragging; }
 
     // Connector handling is thus as follows (when using default settings):
     // - If at most 10 Connectors are affected, they are recalculated
@@ -230,25 +230,25 @@ public:
     // object always triggers a Move, independent of the DragMode that is
     // set. This flag is persistent and should be configurable in the app
     // by the user!
-    void SetMarkedHitMovesAlways(bool bOn) { bMarkedHitMovesAlways = bOn; }
-    bool IsMarkedHitMovesAlways() const { return bMarkedHitMovesAlways; }
+    void SetMarkedHitMovesAlways(bool bOn) { mbMarkedHitMovesAlways = bOn; }
+    bool IsMarkedHitMovesAlways() const { return mbMarkedHitMovesAlways; }
 
     // Show the mirror image of the selected objects as Xor while dragging
     // the mirror axis? Persistent. Not yet implemented. Default: true
-    void SetMirrRefDragObj(bool bOn) { bMirrRefDragObj = bOn; }
-    bool IsMirrRefDragObj() const { return bMirrRefDragObj; }
+    void SetMirrRefDragObj(bool bOn) { mbMirrRefDragObj = bOn; }
+    bool IsMirrRefDragObj() const { return mbMirrRefDragObj; }
 
     bool IsOrthoDesired() const;
 
     // center as reference on Resize
     // Default=FALSE.
-    bool IsResizeAtCenter() const { return bResizeAtCenter; }
-    void SetResizeAtCenter(bool bOn) { bResizeAtCenter = bOn; }
+    bool IsResizeAtCenter() const { return mbResizeAtCenter; }
+    void SetResizeAtCenter(bool bOn) { mbResizeAtCenter = bOn; }
 
     // symmetric Crook
     // Default=FALSE.
-    bool IsCrookAtCenter() const { return bCrookAtCenter; }
-    void SetCrookAtCenter(bool bOn) { bCrookAtCenter = bOn; }
+    bool IsCrookAtCenter() const { return mbCrookAtCenter; }
+    void SetCrookAtCenter(bool bOn) { mbCrookAtCenter = bOn; }
 
     // Limitation of the working area. The limitation refers to the View,
     // not to the single PageViews. This limitation is only evaluated by

@@ -575,7 +575,7 @@ void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr
 SdrObject* SdrDragMethod::GetDragObj() const
 {
     SdrObject* pObj=NULL;
-    if (getSdrDragView().pDragHdl!=NULL) pObj=getSdrDragView().pDragHdl->GetObj();
+    if (getSdrDragView().mpDragHdl!=NULL) pObj=getSdrDragView().mpDragHdl->GetObj();
     if (pObj==NULL) pObj=getSdrDragView().pMarkedObj;
     return pObj;
 }
@@ -583,7 +583,7 @@ SdrObject* SdrDragMethod::GetDragObj() const
 SdrPageView* SdrDragMethod::GetDragPV() const
 {
     SdrPageView* pPV=NULL;
-    if (getSdrDragView().pDragHdl!=NULL) pPV=getSdrDragView().pDragHdl->GetPageView();
+    if (getSdrDragView().mpDragHdl!=NULL) pPV=getSdrDragView().mpDragHdl->GetPageView();
     if (pPV==NULL) pPV=getSdrDragView().pMarkedPV;
     return pPV;
 }

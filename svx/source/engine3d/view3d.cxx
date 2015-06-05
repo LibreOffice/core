@@ -1229,13 +1229,13 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
             }
             if( bThereAre3DObjects )
             {
-                eDragHdl = ( pHdl == NULL ? HDL_MOVE : pHdl->GetKind() );
+                meDragHdl = ( pHdl == NULL ? HDL_MOVE : pHdl->GetKind() );
                 switch ( eDragMode )
                 {
                     case SDRDRAG_ROTATE:
                     case SDRDRAG_SHEAR:
                     {
-                        switch ( eDragHdl )
+                        switch ( meDragHdl )
                         {
                             case HDL_LEFT:
                             case HDL_RIGHT:
@@ -1272,7 +1272,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     {
                         if(!bThereAreRootScenes)
                         {
-                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), eDragHdl, eConstraint, IsSolidDragging());
+                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), meDragHdl, eConstraint, IsSolidDragging());
                         }
                     }
                     break;
