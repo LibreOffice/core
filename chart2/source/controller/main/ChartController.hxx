@@ -509,8 +509,8 @@ private:
 
     //view
     VclPtr<ChartWindow> m_pChartWindow;
-    ::com::sun::star::uno::Reference<::com::sun::star::awt::XWindow> m_xViewWindow;
-    ::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface> m_xChartView;
+    css::uno::Reference<css::awt::XWindow> m_xViewWindow;
+    css::uno::Reference<css::uno::XInterface> m_xChartView;
     ::boost::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
     DrawViewWrapper* m_pDrawViewWrapper;
 
