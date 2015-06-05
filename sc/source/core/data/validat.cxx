@@ -517,7 +517,6 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
         case SC_VALID_WHOLE:
         case SC_VALID_DECIMAL:
         case SC_VALID_DATE:         // Date/Time is only formatting
-        case SC_VALID_TIME:
             bOk = bIsVal;
             if ( bOk && eDataMode == SC_VALID_WHOLE )
                 bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // integers
@@ -525,6 +524,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
                 bOk = IsCellValid(rCell, rPos);
             break;
 
+        case SC_VALID_TIME:
         case SC_VALID_CUSTOM:
             //  for Custom, it must be eOp == SC_COND_DIRECT
             //TODO: the value must be in the document !!!
@@ -545,7 +545,54 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             OSL_FAIL("not yet done");
             break;
     }
-
+    if (eDataMode == SC_VALID_TIME) {
+    // consider only time portion (i.e. decimal)
+    double nComp1 = (nVal1 - floor(nVal1));
+    double nComp2 = (nVal2 - floor(nVal2));
+    double nInVal = (nVal  - floor(nVal ));
+    switch (eOp)
+    {
+        case SC_COND_NONE:
+        break;                  // Always sal_False
+        case SC_COND_EQUAL:
+        bOk = ::rtl::math::approxEqual( nInVal, nComp1 );
+        break;
+        case SC_COND_NOTEQUAL:
+        bOk = !::rtl::math::approxEqual( nInVal, nComp1 );
+        break;
+        case SC_COND_GREATER:
+        bOk = ( nInVal > nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp1 );
+        break;
+        case SC_COND_EQGREATER:
+        bOk = ( nInVal >= nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp1 );
+        break;
+        case SC_COND_LESS:
+        bOk = ( nInVal < nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp1 );
+        break;
+        case SC_COND_EQLESS:
+        bOk = ( nInVal <= nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp1 );
+        break;
+        case SC_COND_BETWEEN:
+        if (nComp2 < nComp1) // time wraparound
+            bOk = ( nInVal >= nComp1 || nInVal <= nComp2 ) ||
+                ::rtl::math::approxEqual( nInVal, nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp2 );
+        else
+            bOk = ( nInVal >= nComp1 && nInVal <= nComp2 ) ||
+                ::rtl::math::approxEqual( nInVal, nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp2 );
+        break;
+        case SC_COND_NOTBETWEEN:
+        if (nComp2 < nComp1) // time wraparound
+            bOk = ( nInVal < nComp1 && nInVal > nComp2 ) &&
+                !::rtl::math::approxEqual( nInVal, nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp2 );
+        else
+            bOk = ( nInVal < nComp1 || nInVal > nComp2 ) &&
+                !::rtl::math::approxEqual( nInVal, nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp2 );
+        break;
+        default:
+        SAL_WARN("sc", "unknown operation at ScValidationData::IsDataValid()");
+        break;
+    }
+    }
     return bOk;
 }
 
