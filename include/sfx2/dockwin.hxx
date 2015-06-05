@@ -114,7 +114,6 @@ public:
     SAL_DLLPRIVATE void Reappear_Impl();
     SAL_DLLPRIVATE bool IsAutoHide_Impl() const;
     SAL_DLLPRIVATE void AutoShow_Impl( bool bShow = true );
-    SAL_DLLPRIVATE void Pin_Impl( bool bPinned );
     SAL_DLLPRIVATE void ReleaseChildWindow_Impl();
 };
 
