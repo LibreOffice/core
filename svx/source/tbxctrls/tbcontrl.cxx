@@ -1228,7 +1228,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     mpColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
     mpRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
 
-    if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
+    if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId ||
+         SID_ATTR_CHAR_BACK_COLOR == theSlotId )
     {
         mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
         mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
@@ -1367,7 +1368,8 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
 IMPL_LINK_NOARG(SvxColorWindow_Impl, AutoColorClickHdl)
 {
     Color aColor;
-    if (SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId)
+    if (SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId ||
+        SID_ATTR_CHAR_BACK_COLOR == theSlotId)
         aColor = COL_TRANSPARENT;
     else if (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId)
         aColor = COL_AUTO;
