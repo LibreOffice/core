@@ -2675,7 +2675,7 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
         }
         else
         {
-            // readd the rest to the group again
+            // read the rest to the group again
             while( aIter != aEnd )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter++) );
