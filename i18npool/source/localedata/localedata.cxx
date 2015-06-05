@@ -302,7 +302,8 @@ static const struct {
     { "pui_CO", lcl_DATA_OTHERS },
     { "lgr_SB", lcl_DATA_OTHERS },
     { "mos_BF", lcl_DATA_OTHERS },
-    { "ny_MW",  lcl_DATA_OTHERS }
+    { "ny_MW",  lcl_DATA_OTHERS },
+    { "ti_ET",  lcl_DATA_OTHERS }
 };
 
 #else
