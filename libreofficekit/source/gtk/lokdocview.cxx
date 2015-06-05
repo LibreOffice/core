@@ -170,9 +170,9 @@ struct LOKDocView_Impl
     void renderDocument(GdkRectangle* pPartial);
     /// Sets rWidth and rHeight from a "width, height" string.
     static void payloadToSize(const char* pPayload, long& rWidth, long& rHeight);
-    /// Returns the GdkRectangle of a width,height,x,y string.
+    /// Returns the GdkRectangle of a x,y,width,height string.
     static GdkRectangle payloadToRectangle(const char* pPayload);
-    /// Returns the GdkRectangles of a w,h,x,y;w2,h2,x2,y2;... string.
+    /// Returns the GdkRectangles of a x1,y1,w1,h1;x2,y2,w2,h2;... string.
     static std::vector<GdkRectangle> payloadToRectangles(const char* pPayload);
     /// Returns the string representation of a LibreOfficeKitCallbackType enumeration element.
     static const char* callbackTypeToString(int nType);
