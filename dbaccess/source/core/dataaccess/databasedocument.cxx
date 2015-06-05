@@ -1658,7 +1658,12 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     SvtSaveOptions aSaveOpt;
     xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(aSaveOpt.IsPrettyPrinting()));
     if ( aSaveOpt.IsSaveRelFSys() )
-        xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rMediaDescriptor.getOrDefault("URL",OUString())));
+    {
+        OUString sBaseURI = _rMediaDescriptor.getOrDefault("BaseURI", OUString());
+        if (sBaseURI.isEmpty())
+            sBaseURI = _rMediaDescriptor.getOrDefault("URL",OUString());
+        xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sBaseURI));
+    }
 
     // Set TargetStorage, so it doesn't have to be re-constructed based on possibly empty URL.
     xInfoSet->setPropertyValue("TargetStorage", uno::makeAny(m_pImpl->getRootStorage()));
