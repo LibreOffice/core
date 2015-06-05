@@ -949,21 +949,18 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         {
             GdkRectangle aRectangle = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
             setTilesInvalid(aRectangle);
-            renderDocument(0);
         }
         else
-        {
             m_pTileBuffer->resetAllTiles();
-            renderDocument(0);
-        }
+
+        gtk_widget_queue_draw(m_pDrawingArea);
     }
     break;
     case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
         m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         m_bCursorOverlayVisible = true;
-        setTilesInvalid(m_aVisibleCursor);
-        renderDocument(0);
+        gtk_widget_queue_draw(m_pDrawingArea);
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION:
@@ -1030,7 +1027,6 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         gtk_widget_set_size_request(m_pDrawingArea,
                                     twipToPixel(m_nDocumentWidthTwips, m_fZoom),
                                     twipToPixel(m_nDocumentHeightTwips, m_fZoom));
-        m_pTileBuffer->resetAllTiles();
     }
     break;
     case LOK_CALLBACK_SET_PART:
