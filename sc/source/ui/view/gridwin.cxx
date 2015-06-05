@@ -2415,7 +2415,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         {
             // don't forward the event to an empty cell, causes deselection in
             // case we used the double-click to select the empty cell
-            if (bIsTiledRendering)
+            if (bIsTiledRendering && bDouble)
             {
                 ScRefCellValue aCell;
                 aCell.assign(*pViewData->GetDocument(), ScAddress(nPosX, nPosY, nTab));
