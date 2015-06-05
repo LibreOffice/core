@@ -71,7 +71,7 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 
     if ( pDocView )
     {
-        fCurrentZoom = lok_docview_get_zoom( LOK_DOCVIEW(pDocView) );
+        fCurrentZoom = lok_doc_view_get_zoom( LOK_DOC_VIEW(pDocView) );
     }
 
     if ( strcmp(sName, "gtk-zoom-in") == 0)
@@ -104,7 +104,7 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     {
         if ( pDocView )
         {
-            lok_docview_set_zoom( LOK_DOCVIEW(pDocView), fZoom );
+            lok_doc_view_set_zoom( LOK_DOC_VIEW(pDocView), fZoom );
         }
     }
 }
@@ -112,10 +112,10 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 /// User clicked on the button -> inform LOKDocView.
 static void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
-    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
     bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing));
-    if (bool(lok_docview_get_edit(pLOKDocView)) != bActive)
-        lok_docview_set_edit(pLOKDocView, bActive);
+    if (bool(lok_doc_view_get_edit(pLOKDocView)) != bActive)
+        lok_doc_view_set_edit(pLOKDocView, bActive);
 }
 
 /// Toggle the visibility of the findbar.
@@ -137,11 +137,11 @@ static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 /// Handles the key-press-event of the window.
 static gboolean signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData)
 {
-    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
 #if GTK_CHECK_VERSION(2,18,0) // we need gtk_widget_get_visible()
-    if (!gtk_widget_get_visible(pFindbar) && bool(lok_docview_get_edit(pLOKDocView)))
+    if (!gtk_widget_get_visible(pFindbar) && bool(lok_doc_view_get_edit(pLOKDocView)))
         {
-            lok_docview_post_key(pWidget, pEvent, pData);
+            lok_doc_view_post_key(pWidget, pEvent, pData);
             return TRUE;
         }
 #endif
@@ -159,9 +159,9 @@ static void doSearch(bool bBackwards)
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/value", '/'), bBackwards);
 
-    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
     GdkRectangle aArea;
-    lok_docview_get_visarea(pLOKDocView, &aArea);
+    lok_doc_view_get_visarea(pLOKDocView, &aArea);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/type", '/'), "long");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/value", '/'), aArea.x);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/type", '/'), "long");
@@ -170,7 +170,7 @@ static void doSearch(bool bBackwards)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    lok_docview_post_command(pLOKDocView, ".uno:ExecuteSearch", aStream.str().c_str());
+    lok_doc_view_post_command(pLOKDocView, ".uno:ExecuteSearch", aStream.str().c_str());
 }
 
 /// Click handler for the search next button.
@@ -210,8 +210,8 @@ static gboolean signalFindbar(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpoin
 /// LOKDocView changed edit state -> inform the tool button.
 static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pData*/)
 {
-    gboolean bEdit = lok_docview_get_edit(pLOKDocView);
-    g_info("signalEdit: %d -> %d", bWasEdit, lok_docview_get_edit(pLOKDocView));
+    gboolean bEdit = lok_doc_view_get_edit(pLOKDocView);
+    g_info("signalEdit: %d -> %d", bWasEdit, lok_doc_view_get_edit(pLOKDocView));
     if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing)) != bEdit)
         gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing), bEdit);
 }
@@ -233,7 +233,7 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
             gboolean bEdit = aValue == "true";
             if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
             {
-                // Avoid invoking lok_docview_post_command().
+                // Avoid invoking lok_doc_view_post_command().
                 g_bToolItemBroadcast = false;
                 gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pItem), bEdit);
                 g_bToolItemBroadcast = true;
@@ -262,11 +262,11 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
     if (g_bToolItemBroadcast)
     {
-        LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+        LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
         GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
         const std::string& rString = g_aToolItemCommandNames[pItem];
-        g_info("toggleToolItem: lok_docview_post_command('%s')", rString.c_str());
-        lok_docview_post_command(pLOKDocView, rString.c_str(), 0);
+        g_info("toggleToolItem: lok_doc_view_post_command('%s')", rString.c_str());
+        lok_doc_view_post_command(pLOKDocView, rString.c_str(), 0);
     }
 }
 
@@ -286,10 +286,10 @@ static void populatePartSelector()
     const int nMaxLength = 50;
     char sText[nMaxLength];
 
-    int nParts = lok_docview_get_parts( LOK_DOCVIEW(pDocView) );
+    int nParts = lok_doc_view_get_parts( LOK_DOC_VIEW(pDocView) );
     for ( int i = 0; i < nParts; i++ )
     {
-        char* pName = lok_docview_get_part_name( LOK_DOCVIEW(pDocView), i );
+        char* pName = lok_doc_view_get_part_name( LOK_DOC_VIEW(pDocView), i );
         assert( pName );
         snprintf( sText, nMaxLength, "%i (%s)", i+1, pName );
         free( pName );
@@ -297,7 +297,7 @@ static void populatePartSelector()
         gtk_combo_box_text_append_text( pPartSelector, sText );
     }
     gtk_combo_box_set_active( GTK_COMBO_BOX(pPartSelector),
-                              lok_docview_get_part( LOK_DOCVIEW(pDocView) ) );
+                              lok_doc_view_get_part( LOK_DOC_VIEW(pDocView) ) );
 }
 
 static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
@@ -306,7 +306,7 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 
     if (g_bPartSelectorBroadcast && pDocView)
     {
-        lok_docview_set_part( LOK_DOCVIEW(pDocView), nPart );
+        lok_doc_view_set_part( LOK_DOC_VIEW(pDocView), nPart );
     }
 }
 
@@ -326,7 +326,7 @@ static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
 
     if ( pDocView )
     {
-        lok_docview_set_partmode( LOK_DOCVIEW(pDocView), ePartMode );
+        lok_doc_view_set_partmode( LOK_DOC_VIEW(pDocView), ePartMode );
     }
 }
 #endif
@@ -451,7 +451,7 @@ int main( int argc, char* argv[] )
     gtk_box_pack_end(GTK_BOX(pVBox), pFindbar, FALSE, FALSE, 0);
 
     // Docview
-    pDocView = lok_docview_new( pOffice );
+    pDocView = lok_doc_view_new( pOffice );
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
@@ -467,10 +467,10 @@ int main( int argc, char* argv[] )
     // Hide the findbar by default.
     gtk_widget_hide(pFindbar);
 
-    int bOpened = lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
+    int bOpened = lok_doc_view_open_document( LOK_DOC_VIEW(pDocView), argv[2] );
     if (!bOpened)
-        g_error("main: lok_docview_open_document() failed with '%s'", pOffice->pClass->getError(pOffice));
-    assert(lok_docview_get_document(LOK_DOCVIEW(pDocView)));
+        g_error("main: lok_doc_view_open_document() failed with '%s'", pOffice->pClass->getError(pOffice));
+    assert(lok_doc_view_get_document(LOK_DOC_VIEW(pDocView)));
 
     // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2

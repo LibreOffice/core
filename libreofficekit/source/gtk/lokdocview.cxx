@@ -123,7 +123,7 @@ struct LOKDocView_Impl
     bool m_bInDragGraphicHandles[8];
     ///@}
 
-    /// Callback data, allocated in lok_docview_callback_worker(), released in lok_docview_callback().
+    /// Callback data, allocated in lok_doc_view_callback_worker(), released in lok_doc_view_callback().
     struct CallbackData
     {
         int m_nType;
@@ -305,7 +305,7 @@ void LOKDocView_Impl::destroy(LOKDocView* pDocView, gpointer /*pData*/)
 
 void LOKDocView_Impl::on_exposed(GtkWidget* /*widget*/, GdkEvent* /*event*/, gpointer userdata)
 {
-    LOKDocView *pDocView = LOK_DOCVIEW (userdata);
+    LOKDocView *pDocView = LOK_DOC_VIEW (userdata);
     pDocView->m_pImpl->renderDocument(0);
 }
 
@@ -461,7 +461,7 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
     }
 
     if (!m_bEdit)
-        lok_docview_set_edit(m_pDocView, TRUE);
+        lok_doc_view_set_edit(m_pDocView, TRUE);
 
     switch (pEvent->type)
     {
@@ -782,7 +782,7 @@ gboolean LOKDocView_Impl::handleTimeoutImpl()
 void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
 {
     GdkRectangle visibleArea;
-    lok_docview_get_visarea (m_pDocView, &visibleArea);
+    lok_doc_view_get_visarea (m_pDocView, &visibleArea);
 
     long nDocumentWidthPixels = twipToPixel(m_nDocumentWidthTwips, m_fZoom);
     long nDocumentHeightPixels = twipToPixel(m_nDocumentHeightTwips, m_fZoom);
@@ -1058,7 +1058,7 @@ void LOKDocView_Impl::globalCallbackWorker(int nType, const char* pPayload, void
 void LOKDocView_Impl::callbackWorkerImpl(int nType, const char* pPayload)
 {
     LOKDocView_Impl::CallbackData* pCallback = new LOKDocView_Impl::CallbackData(nType, pPayload ? pPayload : "(nil)", m_pDocView);
-    g_info("lok_docview_callback_worker: %s, '%s'", LOKDocView_Impl::callbackTypeToString(nType), pPayload);
+    g_info("lok_doc_view_callback_worker: %s, '%s'", LOKDocView_Impl::callbackTypeToString(nType), pPayload);
 #if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(LOKDocView_Impl::callback, pCallback);
 #endif
@@ -1082,30 +1082,30 @@ enum
     LAST_SIGNAL
 };
 
-static guint docview_signals[LAST_SIGNAL] = { 0 };
+static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 
 void LOKDocView_Impl::commandChanged(const std::string& rString)
 {
-    g_signal_emit(m_pDocView, docview_signals[COMMAND_CHANGED], 0, rString.c_str());
+    g_signal_emit(m_pDocView, doc_view_signals[COMMAND_CHANGED], 0, rString.c_str());
 }
 
 void LOKDocView_Impl::searchNotFound(const std::string& rString)
 {
-    g_signal_emit(m_pDocView, docview_signals[SEARCH_NOT_FOUND], 0, rString.c_str());
+    g_signal_emit(m_pDocView, doc_view_signals[SEARCH_NOT_FOUND], 0, rString.c_str());
 }
 
 void LOKDocView_Impl::setPart(const std::string& rString)
 {
-    g_signal_emit(m_pDocView, docview_signals[PART_CHANGED], 0, std::stoi(rString));
+    g_signal_emit(m_pDocView, doc_view_signals[PART_CHANGED], 0, std::stoi(rString));
     renderDocument(0);
 }
 
-static void lok_docview_class_init( gpointer ptr )
+static void lok_doc_view_class_init( gpointer ptr )
 {
     LOKDocViewClass* pClass = static_cast<LOKDocViewClass *>(ptr);
     GObjectClass *gobject_class = G_OBJECT_CLASS(pClass);
     pClass->edit_changed = NULL;
-    docview_signals[EDIT_CHANGED] =
+    doc_view_signals[EDIT_CHANGED] =
         g_signal_new("edit-changed",
                      G_TYPE_FROM_CLASS (gobject_class),
                      G_SIGNAL_RUN_FIRST,
@@ -1115,7 +1115,7 @@ static void lok_docview_class_init( gpointer ptr )
                      G_TYPE_NONE, 1,
                      G_TYPE_BOOLEAN);
     pClass->command_changed = NULL;
-    docview_signals[COMMAND_CHANGED] =
+    doc_view_signals[COMMAND_CHANGED] =
         g_signal_new("command-changed",
                      G_TYPE_FROM_CLASS(gobject_class),
                      G_SIGNAL_RUN_FIRST,
@@ -1125,7 +1125,7 @@ static void lok_docview_class_init( gpointer ptr )
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
     pClass->search_not_found = 0;
-    docview_signals[SEARCH_NOT_FOUND] =
+    doc_view_signals[SEARCH_NOT_FOUND] =
         g_signal_new("search-not-found",
                      G_TYPE_FROM_CLASS(gobject_class),
                      G_SIGNAL_RUN_FIRST,
@@ -1135,7 +1135,7 @@ static void lok_docview_class_init( gpointer ptr )
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
     pClass->part_changed = 0;
-    docview_signals[PART_CHANGED] =
+    doc_view_signals[PART_CHANGED] =
         g_signal_new("part-changed",
                      G_TYPE_FROM_CLASS(gobject_class),
                      G_SIGNAL_RUN_FIRST,
@@ -1146,7 +1146,7 @@ static void lok_docview_class_init( gpointer ptr )
                      G_TYPE_INT);
 }
 
-static void lok_docview_init( GTypeInstance* pInstance, gpointer )
+static void lok_doc_view_init( GTypeInstance* pInstance, gpointer )
 {
     LOKDocView* pDocView = reinterpret_cast<LOKDocView *>(pInstance);
     // Gtk ScrolledWindow is apparently not fully initialised yet, we specifically
@@ -1183,38 +1183,38 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
     g_signal_connect(G_OBJECT(pDocView), "destroy", G_CALLBACK(LOKDocView_Impl::destroy), 0);
 }
 
-SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
+SAL_DLLPUBLIC_EXPORT guint lok_doc_view_get_type()
 {
-    static guint lok_docview_type = 0;
+    static guint lok_doc_view_type = 0;
 
-    if (!lok_docview_type)
+    if (!lok_doc_view_type)
     {
         char pName[] = "LokDocView";
-        GtkTypeInfo lok_docview_info =
+        GtkTypeInfo lok_doc_view_info =
         {
             pName,
             sizeof( LOKDocView ),
             sizeof( LOKDocViewClass ),
-            lok_docview_class_init,
-            lok_docview_init,
+            lok_doc_view_class_init,
+            lok_doc_view_init,
             NULL,
             NULL,
             nullptr
         };
 
-        lok_docview_type = gtk_type_unique( gtk_scrolled_window_get_type(), &lok_docview_info );
+        lok_doc_view_type = gtk_type_unique( gtk_scrolled_window_get_type(), &lok_doc_view_info );
     }
-    return lok_docview_type;
+    return lok_doc_view_type;
 }
 
-SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
+SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new( LibreOfficeKit* pOffice )
 {
-    LOKDocView* pDocView = LOK_DOCVIEW(gtk_type_new(lok_docview_get_type()));
+    LOKDocView* pDocView = LOK_DOC_VIEW(gtk_type_new(lok_doc_view_get_type()));
     pDocView->m_pImpl->m_pOffice = pOffice;
     return GTK_WIDGET( pDocView );
 }
 
-SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, char* pPath )
+SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_open_document( LOKDocView* pDocView, char* pPath )
 {
     if ( pDocView->m_pImpl->m_pDocument )
     {
@@ -1260,12 +1260,12 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     return TRUE;
 }
 
-SAL_DLLPUBLIC_EXPORT LibreOfficeKitDocument* lok_docview_get_document(LOKDocView* pDocView)
+SAL_DLLPUBLIC_EXPORT LibreOfficeKitDocument* lok_doc_view_get_document(LOKDocView* pDocView)
 {
     return pDocView->m_pImpl->m_pDocument;
 }
 
-SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZoom )
+SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_zoom ( LOKDocView* pDocView, float fZoom )
 {
     pDocView->m_pImpl->m_fZoom = fZoom;
     long nDocumentWidthPixels = twipToPixel(pDocView->m_pImpl->m_nDocumentWidthTwips, fZoom);
@@ -1283,72 +1283,72 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZo
         pDocView->m_pImpl->renderDocument(0);
 }
 
-SAL_DLLPUBLIC_EXPORT float lok_docview_get_zoom ( LOKDocView* pDocView )
+SAL_DLLPUBLIC_EXPORT float lok_doc_view_get_zoom ( LOKDocView* pDocView )
 {
     return pDocView->m_pImpl->m_fZoom;
 }
 
-SAL_DLLPUBLIC_EXPORT int lok_docview_get_parts( LOKDocView* pDocView )
+SAL_DLLPUBLIC_EXPORT int lok_doc_view_get_parts( LOKDocView* pDocView )
 {
     return pDocView->m_pImpl->m_pDocument->pClass->getParts( pDocView->m_pImpl->m_pDocument );
 }
 
-SAL_DLLPUBLIC_EXPORT int lok_docview_get_part( LOKDocView* pDocView )
+SAL_DLLPUBLIC_EXPORT int lok_doc_view_get_part( LOKDocView* pDocView )
 {
     return pDocView->m_pImpl->m_pDocument->pClass->getPart( pDocView->m_pImpl->m_pDocument );
 }
 
-SAL_DLLPUBLIC_EXPORT void lok_docview_set_part( LOKDocView* pDocView, int nPart)
+SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_part( LOKDocView* pDocView, int nPart)
 {
     pDocView->m_pImpl->m_pDocument->pClass->setPart( pDocView->m_pImpl->m_pDocument, nPart );
 }
 
-SAL_DLLPUBLIC_EXPORT char* lok_docview_get_part_name( LOKDocView* pDocView, int nPart )
+SAL_DLLPUBLIC_EXPORT char* lok_doc_view_get_part_name( LOKDocView* pDocView, int nPart )
 {
     return pDocView->m_pImpl->m_pDocument->pClass->getPartName( pDocView->m_pImpl->m_pDocument, nPart );
 }
 
-SAL_DLLPUBLIC_EXPORT void lok_docview_set_partmode( LOKDocView* pDocView,
+SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_partmode( LOKDocView* pDocView,
                                                     int nPartMode )
 {
     pDocView->m_pImpl->m_pDocument->pClass->setPartMode( pDocView->m_pImpl->m_pDocument, nPartMode );
     pDocView->m_pImpl->renderDocument(0);
 }
 
-SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
+SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_edit( LOKDocView* pDocView,
                                                 gboolean bEdit )
 {
     gboolean bWasEdit = pDocView->m_pImpl->m_bEdit;
 
     if (!pDocView->m_pImpl->m_bEdit && bEdit)
-        g_info("lok_docview_set_edit: entering edit mode");
+        g_info("lok_doc_view_set_edit: entering edit mode");
     else if (pDocView->m_pImpl->m_bEdit && !bEdit)
     {
-        g_info("lok_docview_set_edit: leaving edit mode");
+        g_info("lok_doc_view_set_edit: leaving edit mode");
         pDocView->m_pImpl->m_pDocument->pClass->resetSelection(pDocView->m_pImpl->m_pDocument);
     }
     pDocView->m_pImpl->m_bEdit = bEdit;
-    g_signal_emit(pDocView, docview_signals[EDIT_CHANGED], 0, bWasEdit);
+    g_signal_emit(pDocView, doc_view_signals[EDIT_CHANGED], 0, bWasEdit);
     gtk_widget_queue_draw(GTK_WIDGET(pDocView->m_pImpl->m_pDrawingArea));
 }
 
-SAL_DLLPUBLIC_EXPORT gboolean lok_docview_get_edit(LOKDocView* pDocView)
+SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_get_edit(LOKDocView* pDocView)
 {
     return pDocView->m_pImpl->m_bEdit;
 }
 
-SAL_DLLPUBLIC_EXPORT void lok_docview_post_command(LOKDocView* pDocView, const char* pCommand, const char* pArguments)
+SAL_DLLPUBLIC_EXPORT void lok_doc_view_post_command(LOKDocView* pDocView, const char* pCommand, const char* pArguments)
 {
     pDocView->m_pImpl->m_pDocument->pClass->postUnoCommand(pDocView->m_pImpl->m_pDocument, pCommand, pArguments);
 }
 
-SAL_DLLPUBLIC_EXPORT void lok_docview_post_key(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer pData)
+SAL_DLLPUBLIC_EXPORT void lok_doc_view_post_key(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer pData)
 {
     LOKDocView* pDocView = static_cast<LOKDocView *>(pData);
     pDocView->m_pImpl->signalKey(pEvent);
 }
 
-SAL_DLLPUBLIC_EXPORT void lok_docview_get_visarea(LOKDocView* pThis, GdkRectangle* pArea)
+SAL_DLLPUBLIC_EXPORT void lok_doc_view_get_visarea(LOKDocView* pThis, GdkRectangle* pArea)
 {
     float zoom = pThis->m_pImpl->m_fZoom;
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pThis));
