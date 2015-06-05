@@ -44,17 +44,15 @@ public class TypeDetection6FileFormat
      */
     @Before public void before() throws Exception
     {
-
         xMSF = getMSF();
         assertNotNull("Could not get XMultiServiceFactory", xMSF);
-
     }
 
     /**
      * call the function <CODE>checkFileFormatSupport</CODE> to test <CODE>com.sun.star.document.FilterFactory</CODE>
      * @see com.sun.star.document.FilterFactory
      */
-    @Test public void checkFilterFactory()
+    @Test public void checkFilterFactory() throws Exception
     {
         checkFileFormatSupport("com.sun.star.document.FilterFactory");
     }
@@ -63,10 +61,9 @@ public class TypeDetection6FileFormat
      * call the function <CODE>checkFileFormatSupport</CODE> to test <CODE>com.sun.star.document.TypeDetection</CODE>
      * @see com.sun.star.document.TypeDetection
      */
-    @Test public void checkTypeDetection()
+    @Test public void checkTypeDetection() throws Exception
     {
         checkFileFormatSupport("com.sun.star.document.TypeDetection");
-
     }
 
     /**
@@ -74,27 +71,18 @@ public class TypeDetection6FileFormat
      * The serve was created and the filter 'TypeDetection6FileFormat' was searched
      * @param serviceName the name of the service to test
      */
-    private void checkFileFormatSupport(String serviceName)
+    private void checkFileFormatSupport(String serviceName) throws Exception
     {
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("testing service '" + serviceName + "'");
 
         XInterface oObj = null;
-        try
-        {
-            oObj = getTestObject(serviceName);
-            System.out.println("ImplName: " + utils.getImplName(oObj));
-        }
-        catch (java.lang.Exception e)
-        {
-            fail("could not get test object");
-        }
+        oObj = getTestObject(serviceName);
+        System.out.println("ImplName: " + utils.getImplName(oObj));
         XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, oObj);
         String msg = "Could not find filter 'TypeDetection6FileFormat'!";
         msg += "\nMaybe 'TypeDetection6FileFormat.xcu' is not registered.";
         assertTrue(msg, xNA.hasByName("TypeDetection6FileFormat"));
-
-
     }
 
     /**

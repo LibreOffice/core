@@ -114,33 +114,18 @@ public class CheckXComponentLoader
         @descr  Use either a component loader from desktop or
                 from frame
      */
-    @Before public void before()
+    @Before public void before() throws Exception
     {
         // get uno service manager from global test environment
         /* points to the global uno service manager. */
         XMultiServiceFactory xMSF = getMSF();
 
         // create stream provider
-        try
-        {
-            m_xStreamProvider = UnoRuntime.queryInterface(XSimpleFileAccess.class, xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess"));
-        }
-        catch(java.lang.Throwable ex)
-        {
-            fail("Could not create a stream provider instance.");
-        }
+        m_xStreamProvider = UnoRuntime.queryInterface(XSimpleFileAccess.class, xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess"));
 
         // create desktop instance
         /* provides XComponentLoader interface. */
-        XFrame xDesktop = null;
-        try
-        {
-            xDesktop = UnoRuntime.queryInterface(XFrame.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
-        }
-        catch(java.lang.Throwable ex)
-        {
-            fail("Could not create the desktop instance.");
-        }
+        XFrame xDesktop = UnoRuntime.queryInterface(XFrame.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
 
         // create frame instance
         m_xFrame = xDesktop.findFrame("testFrame_componentLoader",
@@ -162,49 +147,37 @@ public class CheckXComponentLoader
         m_lTestFiles = new ArrayList<String>();
         final String sTestDocURL = OfficeFileUrl.getAbsolute(new File("testdocuments"));
         m_sTestDocPath = graphical.FileHelper.getSystemPathFromFileURL(sTestDocURL);
-        try
+        File           aBaseDir        = new File(m_sTestDocPath);
+        List<File>     lDirContent     = URLHelper.getSystemFilesFromDir(aBaseDir.getPath());
+        Iterator<File> lList           = lDirContent.iterator();
+        int            nBasePathLength = m_sTestDocPath.length();
+        while(lList.hasNext())
         {
-            File           aBaseDir        = new File(m_sTestDocPath);
-            List<File>     lDirContent     = URLHelper.getSystemFilesFromDir(aBaseDir.getPath());
-            Iterator<File> lList           = lDirContent.iterator();
-            int            nBasePathLength = m_sTestDocPath.length();
-            while(lList.hasNext())
+            File aFile = lList.next();
+
+            // ignore broken links and directories at all
+            if (
+                (!aFile.exists()) ||
+                (!aFile.isFile())
+               )
             {
-                File aFile = lList.next();
-
-                // ignore broken links and directories at all
-                if (
-                    (!aFile.exists()) ||
-                    (!aFile.isFile())
-                   )
-                {
-                    continue;
-                }
-
-                String sCompletePath = aFile.getAbsolutePath();
-                String sSubPath      = sCompletePath.substring(nBasePathLength);
-
-                m_lTestFiles.add(sSubPath);
+                continue;
             }
-        }
-        catch(java.lang.Throwable ex)
-        {
-            fail("Couldn't find test documents.");
+
+            String sCompletePath = aFile.getAbsolutePath();
+            String sSubPath      = sCompletePath.substring(nBasePathLength);
+
+            m_lTestFiles.add(sSubPath);
         }
     }
 
 
     /** @short  close the environment.
      */
-    @After public void after()
+    @After public void after() throws Exception
     {
         XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, m_xFrame);
-        try
-        {
-            xClose.close(false);
-        }
-        catch(com.sun.star.util.CloseVetoException exVeto)
-            { fail("Test frame couldn't be closed successfully."); }
+        xClose.close(false);
 
         m_xFrame  = null;
         m_xLoader = null;
@@ -281,7 +254,7 @@ public class CheckXComponentLoader
                                                String           sSourceURL,
                                                String           sTargetURL,
                                                String           sFilter   ,
-                                               String           sPassword )
+                                               String           sPassword ) throws Exception
     {
         PropertyValue[] lLoadProps = new PropertyValue[1];
 
@@ -304,24 +277,17 @@ public class CheckXComponentLoader
         lSaveProps[2].Value = Boolean.TRUE;
 
         XComponent xDoc = null;
-        try
-        {
-            // load it
-            xDoc = xLoader.loadComponentFromURL(sSourceURL, "_blank", 0, lLoadProps);
-            assertNotNull("Could create office document, which should be saved as temp one.", xDoc);
+        // load it
+        xDoc = xLoader.loadComponentFromURL(sSourceURL, "_blank", 0, lLoadProps);
+        assertNotNull("Could create office document, which should be saved as temp one.", xDoc);
 
-            // save it as temp file
-            XStorable xStore = UnoRuntime.queryInterface(XStorable.class, xDoc);
-            xStore.storeAsURL(sTargetURL, lSaveProps);
+        // save it as temp file
+        XStorable xStore = UnoRuntime.queryInterface(XStorable.class, xDoc);
+        xStore.storeAsURL(sTargetURL, lSaveProps);
 
-            // Dont forget to close this file. Otherwise the temp file is locked!
-            XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xDoc);
-            xClose.close(false);
-        }
-        catch(java.lang.Throwable ex)
-        {
-            fail("Could not create temp office document.");
-        }
+        // Dont forget to close this file. Otherwise the temp file is locked!
+        XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xDoc);
+        xClose.close(false);
     }
 
 
@@ -331,7 +297,7 @@ public class CheckXComponentLoader
                 as password for the ftp connection,
                 or - if none given a default one.
      */
-    @Test public void checkLoadingWithPassword()
+    @Test public void checkLoadingWithPassword() throws Exception
     {
         String sTempFile = impl_getTempFileName(m_sTempPath, SUFFIX_PASSWORD_TEMPFILE, PREFIX_PASSWORD_TEMPFILE);
         File   aTestFile = new File(sTempFile);
@@ -363,7 +329,7 @@ public class CheckXComponentLoader
      * Check URL encoding. The first filename that matches "*.sxw"
      * is used as source for several encodings.
      */
-    @Test public void checkURLEncoding() {
+    @Test public void checkURLEncoding() throws Exception {
         PropertyValue[] lProps = new PropertyValue[1];
 
         lProps[0] = new PropertyValue();
@@ -409,28 +375,23 @@ public class CheckXComponentLoader
         };
 
         for (int i = 0; i < sEncoding.length; i = i + 2) {
-            try {
-                String encURL = new String(baURL, sEncoding[i]);
-                System.out.println("ENC[" + sEncoding[i] + "]");
+            String encURL = new String(baURL, sEncoding[i]);
+            System.out.println("ENC[" + sEncoding[i] + "]");
 
-                if (sEncoding[i + 1].equals("TRUE")) {
-                    loadURL(m_xLoader, RESULT_VALID_DOC, encURL, "_blank", 0,
-                            lProps);
-                } else {
-                    //with cws_loadenv01 changed to IllegalArgumentException
-                    loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, encURL, "_blank", 0,
-                            lProps);
-                }
-            } catch (java.io.UnsupportedEncodingException e) {
-                fail("Unsopported Encoding: " + sEncoding[i] +
-                       "\n Not able to test encoding on this platform.");
+            if (sEncoding[i + 1].equals("TRUE")) {
+                loadURL(m_xLoader, RESULT_VALID_DOC, encURL, "_blank", 0,
+                        lProps);
+            } else {
+                //with cws_loadenv01 changed to IllegalArgumentException
+                loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, encURL, "_blank", 0,
+                        lProps);
             }
         }
     }
 
     /** TODo document me
      */
-    @Test public void checkStreamLoading()
+    @Test public void checkStreamLoading() throws Exception
     {
         PropertyValue[] lProps = new PropertyValue[2];
 
@@ -447,19 +408,12 @@ public class CheckXComponentLoader
             File   aFile = new File(m_sTestDocPath, aSnapshot.next());
             String sURL  = URLHelper.getFileURLFromSystemPath(aFile);
 
-            try
-            {
-                XInputStream xStream = m_xStreamProvider.openFileRead(sURL);
-                lProps[1].Value = xStream;
-            }
-            catch(com.sun.star.uno.Exception e)
-            {
-                fail("Could not open test file \""+sURL+"\" for stream test.");
-            }
+            XInputStream xStream = m_xStreamProvider.openFileRead(sURL);
+            lProps[1].Value = xStream;
 
             // check different version of "private:stream" URL!
             loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream" , "_blank", 0, lProps);
-    }
+        }
     }
 
     /**

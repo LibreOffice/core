@@ -19,37 +19,25 @@ package complex.dbaccess;
 
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import connectivity.tools.CRMDatabase;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 // ---------- junit imports -----------------
 import org.junit.After;
 import org.junit.Before;
-import static org.junit.Assert.*;
 
 
 public abstract class CRMBasedTestCase extends TestCase
 {
     protected   CRMDatabase m_database;
 
-
-    protected void createTestCase()
+    protected void createTestCase() throws Exception
     {
-        try
-        {
-            m_database = new CRMDatabase( getMSF(), false );
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace( System.err );
-            fail( "caught an exception (" + e.getMessage() + ") while creating the test case");
-        }
+        m_database = new CRMDatabase( getMSF(), false );
     }
 
 
     @Before
     @Override
-    public void before()
+    public void before() throws Exception
     {
         createTestCase();
     }
@@ -57,18 +45,11 @@ public abstract class CRMBasedTestCase extends TestCase
 
     @After
     @Override
-    public void after()
+    public void after() throws Exception
     {
-        try
+        if ( m_database != null )
         {
-            if ( m_database != null )
-            {
-                m_database.saveAndClose();
-            }
-        }
-        catch ( Exception ex )
-        {
-            Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, null, ex );
+            m_database.saveAndClose();
         }
     }
 

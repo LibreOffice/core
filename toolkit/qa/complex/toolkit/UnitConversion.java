@@ -74,18 +74,11 @@ public class UnitConversion
      */
     private void checkSize(com.sun.star.awt.Size _aSize, short _aMeasureUnit, String _sEinheit)
     {
-        try
-        {
-            com.sun.star.awt.Size aSizeIn = m_xConversion.convertSizeToLogic(_aSize, _aMeasureUnit);
-            System.out.println("Window size:");
-            System.out.println("Width:" + aSizeIn.Width + " " + _sEinheit);
-            System.out.println("Height:" + aSizeIn.Height + " " + _sEinheit);
-            System.out.println("");
-        }
-        catch (com.sun.star.lang.IllegalArgumentException e)
-        {
-            System.out.println("Caught IllegalArgumentException in convertSizeToLogic with '" + _sEinheit + "' " + e.getMessage());
-        }
+        com.sun.star.awt.Size aSizeIn = m_xConversion.convertSizeToLogic(_aSize, _aMeasureUnit);
+        System.out.println("Window size:");
+        System.out.println("Width:" + aSizeIn.Width + " " + _sEinheit);
+        System.out.println("Height:" + aSizeIn.Height + " " + _sEinheit);
+        System.out.println("");
     }
 
     /**
@@ -139,77 +132,56 @@ public class UnitConversion
         m_xConversion = UnoRuntime.queryInterface(XUnitConversion.class, xWindowPeer);
 
         // try to get the position of the window in 1/100mm with the XUnitConversion method
-        try
-        {
-            com.sun.star.awt.Point aPointInMM_100TH = m_xConversion.convertPointToLogic(aPoint, com.sun.star.util.MeasureUnit.MM_100TH);
-            System.out.println("Window position:");
-            System.out.println("X:" + aPointInMM_100TH.X + " 1/100mm");
-            System.out.println("Y:" + aPointInMM_100TH.Y + " 1/100mm");
-            System.out.println("");
-        }
-        catch (com.sun.star.lang.IllegalArgumentException e)
-        {
-            fail("failed: IllegalArgumentException caught in convertPointToLogic " + e.getMessage());
-        }
+        com.sun.star.awt.Point aPointInMM_100TH = m_xConversion.convertPointToLogic(aPoint, com.sun.star.util.MeasureUnit.MM_100TH);
+        System.out.println("Window position:");
+        System.out.println("X:" + aPointInMM_100TH.X + " 1/100mm");
+        System.out.println("Y:" + aPointInMM_100TH.Y + " 1/100mm");
+        System.out.println("");
 
         // try to get the size of the window in 1/100mm with the XUnitConversion method
         com.sun.star.awt.Size aSizeInMM_100TH = null;
         com.sun.star.awt.Size aSizeInMM_10TH = null;
-        try
-        {
-            aSizeInMM_100TH = m_xConversion.convertSizeToLogic(aSize, com.sun.star.util.MeasureUnit.MM_100TH);
-            System.out.println("Window size:");
-            System.out.println("Width:" + aSizeInMM_100TH.Width + " 1/100mm");
-            System.out.println("Height:" + aSizeInMM_100TH.Height + " 1/100mm");
-            System.out.println("");
+        aSizeInMM_100TH = m_xConversion.convertSizeToLogic(aSize, com.sun.star.util.MeasureUnit.MM_100TH);
+        System.out.println("Window size:");
+        System.out.println("Width:" + aSizeInMM_100TH.Width + " 1/100mm");
+        System.out.println("Height:" + aSizeInMM_100TH.Height + " 1/100mm");
+        System.out.println("");
 
-            // try to get the size of the window in 1/10mm with the XUnitConversion method
+        // try to get the size of the window in 1/10mm with the XUnitConversion method
 
-            aSizeInMM_10TH = m_xConversion.convertSizeToLogic(aSize, com.sun.star.util.MeasureUnit.MM_10TH);
-            System.out.println("Window size:");
-            System.out.println("Width:" + aSizeInMM_10TH.Width + " 1/10mm");
-            System.out.println("Height:" + aSizeInMM_10TH.Height + " 1/10mm");
-            System.out.println("");
+        aSizeInMM_10TH = m_xConversion.convertSizeToLogic(aSize, com.sun.star.util.MeasureUnit.MM_10TH);
+        System.out.println("Window size:");
+        System.out.println("Width:" + aSizeInMM_10TH.Width + " 1/10mm");
+        System.out.println("Height:" + aSizeInMM_10TH.Height + " 1/10mm");
+        System.out.println("");
 
-            // check the size with a delta which must be smaller a given difference
-            assertTrue("Size.Width  not correct", delta(aSizeInMM_100TH.Width, aSizeInMM_10TH.Width * 10) < 10);
-            assertTrue("Size.Height not correct", delta(aSizeInMM_100TH.Height, aSizeInMM_10TH.Height * 10) < 10);
+        // check the size with a delta which must be smaller a given difference
+        assertTrue("Size.Width  not correct", delta(aSizeInMM_100TH.Width, aSizeInMM_10TH.Width * 10) < 10);
+        assertTrue("Size.Height not correct", delta(aSizeInMM_100TH.Height, aSizeInMM_10TH.Height * 10) < 10);
 
-            // new
-            checkSize(aSize, com.sun.star.util.MeasureUnit.PIXEL, "pixel");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.APPFONT, "appfont");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.SYSFONT, "sysfont");
+        // new
+        checkSize(aSize, com.sun.star.util.MeasureUnit.PIXEL, "pixel");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.APPFONT, "appfont");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.SYSFONT, "sysfont");
 
-            // simply check some more parameters
-            checkSize(aSize, com.sun.star.util.MeasureUnit.MM, "mm");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.CM, "cm");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.INCH_1000TH, "1/1000inch");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.INCH_100TH, "1/100inch");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.INCH_10TH, "1/10inch");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.INCH, "inch");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.POINT, "point");
-            checkSize(aSize, com.sun.star.util.MeasureUnit.TWIP, "twip");
-        }
-        catch (com.sun.star.lang.IllegalArgumentException e)
-        {
-            fail("failed: IllegalArgumentException caught in convertSizeToLogic " + e.getMessage());
-        }
+        // simply check some more parameters
+        checkSize(aSize, com.sun.star.util.MeasureUnit.MM, "mm");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.CM, "cm");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.INCH_1000TH, "1/1000inch");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.INCH_100TH, "1/100inch");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.INCH_10TH, "1/10inch");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.INCH, "inch");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.POINT, "point");
+        checkSize(aSize, com.sun.star.util.MeasureUnit.TWIP, "twip");
 
         // convert the 1/100mm window size back to pixel
-        try
-        {
-            com.sun.star.awt.Size aNewSize = m_xConversion.convertSizeToPixel(aSizeInMM_100TH, com.sun.star.util.MeasureUnit.MM_100TH);
-            System.out.println("Window size:");
-            System.out.println("Width:" + aNewSize.Width + " pixel");
-            System.out.println("Height:" + aNewSize.Height + " pixel");
+        com.sun.star.awt.Size aNewSize = m_xConversion.convertSizeToPixel(aSizeInMM_100TH, com.sun.star.util.MeasureUnit.MM_100TH);
+        System.out.println("Window size:");
+        System.out.println("Width:" + aNewSize.Width + " pixel");
+        System.out.println("Height:" + aNewSize.Height + " pixel");
 
-            // assure the pixels are the same as we already know
-            assertTrue("failed: Size from pixel to 1/100mm to pixel", aSize.Width == aNewSize.Width && aSize.Height == aNewSize.Height);
-        }
-        catch (com.sun.star.lang.IllegalArgumentException e)
-        {
-            fail("failed: IllegalArgumentException caught in convertSizeToPixel " + e.getMessage());
-        }
+        // assure the pixels are the same as we already know
+        assertTrue("failed: Size from pixel to 1/100mm to pixel", aSize.Width == aNewSize.Width && aSize.Height == aNewSize.Height);
 
         // close the window.
         // IMHO a little bit stupid, but the XWindow doesn't support a XCloseable interface

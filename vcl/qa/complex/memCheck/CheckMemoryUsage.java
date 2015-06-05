@@ -163,7 +163,7 @@ public class CheckMemoryUsage
      * for each given document type.
      */
     @Test
-    public void loadAndSaveDocuments()
+    public void loadAndSaveDocuments() throws Exception
     {
         int nOk = 0;
         int nRunThrough = 0;
@@ -248,7 +248,7 @@ public class CheckMemoryUsage
     /**
      * load and save exact one document
      */
-    private void loadAndSaveNTimesDocument(String _sDocument, int _nCount, String _sStoreExtension)
+    private void loadAndSaveNTimesDocument(String _sDocument, int _nCount, String _sStoreExtension) throws Exception
     {
         System.out.println("Document: " + _sDocument);
         XComponent xComponent = DesktopTools.loadDoc(getMSF(), _sDocument, null);
@@ -277,15 +277,7 @@ public class CheckMemoryUsage
             }
             // close the doc
             XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, xStorable);
-            try
-            {
-                xCloseable.close(true);
-            }
-            catch (com.sun.star.util.CloseVetoException e)
-            {
-                e.printStackTrace();
-                fail("Cannot close document: test is futile, Office will surely use more space.");
-            }
+            xCloseable.close(true);
         }
         else
         {

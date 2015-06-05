@@ -25,7 +25,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
 
 
 /**
@@ -36,19 +35,12 @@ import static org.junit.Assert.*;
 public class GetServiceWhileDisposingOffice
 {
 
-    @Test public void checkServiceWhileDisposing()
+    @Test public void checkServiceWhileDisposing() throws Exception
     {
         XMultiServiceFactory xMSF = getMSF();
         XDesktop xDesktop = null;
 
-        try
-        {
-            xDesktop = UnoRuntime.queryInterface(XDesktop.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
-        }
-        catch (com.sun.star.uno.Exception e)
-        {
-            fail("Could not create a desktop instance.");
-        }
+        xDesktop = UnoRuntime.queryInterface(XDesktop.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
         int step = 0;
         try
         {
@@ -63,11 +55,6 @@ public class GetServiceWhileDisposingOffice
         {
             System.out.println("DisposedException in step: " + step);
         }
-        catch (Exception e)
-        {
-            fail(e.getMessage());
-        }
-
     }
 
 
