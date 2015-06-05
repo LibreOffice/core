@@ -2046,7 +2046,7 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                     Reference<XPropertySet> xPropSet(xDataSeries, UNO_QUERY_THROW);
                     if( GetProperty( xPropSet, "AttachedAxisIndex") )
                     {
-                        sal_Int32 nLocalAttachedAxis;
+                        sal_Int32 nLocalAttachedAxis = 0;
                         mAny >>= nLocalAttachedAxis;
                         rAttachedAxis = translateFromChart2AxisIndexToOox(nLocalAttachedAxis);
                     }
