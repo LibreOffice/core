@@ -109,7 +109,7 @@ public:
     void SetMark(const sw::mark::IMark* pMark);
 };
 
-std::ostream& operator <<(std::ostream& s, const SwIndex& index);
+SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwIndex& index);
 
 class SwIndexReg
 {

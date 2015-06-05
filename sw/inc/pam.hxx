@@ -77,7 +77,7 @@ struct SW_DLLPUBLIC SwPosition
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-std::ostream &operator <<(std::ostream& s, const SwPosition& position);
+SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);
 
 // Result of comparing positions.
 enum SwComparePosition {
@@ -322,7 +322,7 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-std::ostream &operator <<(std::ostream& s, const SwPaM& pam);
+SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPaM& pam);
 
 bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, bool bChkSection );
 
