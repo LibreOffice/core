@@ -122,6 +122,10 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
     {
         rDriver.mbWhitelisted = true;
     }
+    else if (meBlockType == BlockType::BLACKLIST)
+    {
+        rDriver.mbWhitelisted = false;
+    }
     else if (meBlockType == BlockType::UNKNOWN)
     {
         throw InvalidFileException();
@@ -173,7 +177,8 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
         }
         else
         {
-            SAL_WARN("vcl.opengl.win", "unsupported attribute");
+            OString aAttrName(name.begin, name.length);
+            SAL_WARN("vcl.opengl.win", "unsupported attribute: " << aAttrName);
         }
     }
 
@@ -185,7 +190,7 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
         int nsId;
 
         xmlreader::XmlReader::Result res = rReader.nextItem(
-                xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+                xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -203,6 +208,7 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
                 if (!bSuccess || !name.equals("id"))
                     throw InvalidFileException();
 
+                name = rReader.getAttributeValue(false);
                 OString aDeviceId(name.begin, name.length);
                 rDriver.maDevices.push_back(OStringToOUString(aDeviceId, RTL_TEXTENCODING_UTF8));
             }
