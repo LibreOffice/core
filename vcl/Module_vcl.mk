@@ -23,6 +23,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_afm_hash \
     Library_vcl \
 	Package_opengl \
+	Package_opengl_blacklist \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
 		$(if $(ENABLE_HEADLESS),, \
