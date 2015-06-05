@@ -505,8 +505,10 @@ throw ( RuntimeException, std::exception )
 
     if ( !aServiceSpecifier.isEmpty() ) try
     {
-        return Reference< XUIElementFactory >(m_xContext->getServiceManager()->
+        Reference< XUIElementFactory > xFactory(m_xContext->getServiceManager()->
                 createInstanceWithContext(aServiceSpecifier, m_xContext), UNO_QUERY);
+        SAL_WARN_IF(!xFactory.is(), "fwk.uielement", "could not create factory: " << aServiceSpecifier);
+        return xFactory;
     }
     catch ( const css::loader::CannotActivateFactoryException& )
     {
