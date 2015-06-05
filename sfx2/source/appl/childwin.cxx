@@ -177,7 +177,12 @@ void SfxChildWindow::Destroy()
 {
     if ( GetFrame().is() )
     {
-        pImp->pWorkWin = NULL;
+        if (pImp->pWorkWin)
+        {
+            if (pImp->pWorkWin->GetActiveChild_Impl() == pWindow)
+                pImp->pWorkWin->SetActiveChild_Impl(NULL);
+            pImp->pWorkWin = NULL;
+        }
         try
         {
             ::com::sun::star::uno::Reference < ::com::sun::star::util::XCloseable > xClose( GetFrame(), ::com::sun::star::uno::UNO_QUERY );
