@@ -19,6 +19,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
 
 class LifecycleTest : public test::BootstrapFixture
 {
@@ -247,6 +248,7 @@ void LifecycleTest::testLeakage()
     // Create objects
     aObjects.push_back(LeakTestObject::Create<WorkWindow>(nullptr, WB_APP|WB_STDWORK));
     VclPtr<vcl::Window> xParent = aObjects.back()->getRef();
+
     aObjects.push_back(LeakTestObject::Create<PushButton>(xParent));
     aObjects.push_back(LeakTestObject::Create<OKButton>(xParent));
     aObjects.push_back(LeakTestObject::Create<CancelButton>(xParent));
@@ -256,20 +258,18 @@ void LifecycleTest::testLeakage()
     aObjects.push_back(LeakTestObject::Create<ComboBox>(xParent));
     aObjects.push_back(LeakTestObject::Create<RadioButton>(xParent));
 
-#if 0
     { // something that looks like a dialog
         aObjects.push_back(LeakTestObject::Create<Dialog>(xParent,WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEABLE));
         VclPtr<vcl::Window> xDlgParent = aObjects.back()->getRef();
-
         aObjects.push_back(LeakTestObject::Create<VclVBox>(xDlgParent));
         VclPtr<vcl::Window> xVBox = aObjects.back()->getRef();
-
         aObjects.push_back(LeakTestObject::Create<VclVButtonBox>(xVBox));
     }
 
+#if 0 // FIXME - would be good to get internal paths working.
     aObjects.push_back(LeakTestObject::Create<ModelessDialog>(xParent, "PrintProgressDialog", "vcl/ui/printprogressdialog.ui"));
-    aObjects.push_back(LeakTestObject::Create<ModalDialog>(xParent));
 #endif
+    aObjects.push_back(LeakTestObject::Create<ModalDialog>(xParent));
     xParent.clear();
 
     for (auto i = aObjects.rbegin(); i != aObjects.rend(); ++i)
