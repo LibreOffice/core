@@ -17,7 +17,7 @@ else ifeq ($(OS)-$(COM),WNT-GCC)
 $(eval $(call gb_ExternalPackage_add_file,redland,$(LIBO_LIB_FOLDER)/librdf-$(REDLAND_MAJOR).dll,src/.libs/librdf-$(REDLAND_MAJOR).dll))
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,redland,$(LIBO_LIB_FOLDER)/librdf.dll,src/.libs/librdf.dll))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,redland,$(LIBO_LIB_FOLDER)/librdf-lo.so.$(REDLAND_MAJOR),src/.libs/librdf-lo.so.$(REDLAND_MAJOR).0.0))
 endif
 

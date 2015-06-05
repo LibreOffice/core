@@ -60,7 +60,11 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 			--without-postgresql --without-threestone --without-virtuoso \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
+			$(if $(DISABLE_DYNLOADING), \
+				--enable-static --disable-shared \
+			, \
+				--enable-shared --disable-static \
+			) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \

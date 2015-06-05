@@ -17,7 +17,7 @@ else ifeq ($(OS)-$(COM),WNT-GCC)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,$(LIBO_LIB_FOLDER)/librasqal-$(RASQAL_MAJOR).dll,src/.libs/librasqal-$(RASQAL_MAJOR).dll))
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,$(LIBO_LIB_FOLDER)/librasqal.dll,src/.libs/librasqal.dll))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,$(LIBO_LIB_FOLDER)/librasqal-lo.so.$(RASQAL_MAJOR),src/.libs/librasqal-lo.so.$(RASQAL_MAJOR).0.0))
 endif
 

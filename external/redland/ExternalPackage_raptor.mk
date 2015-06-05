@@ -17,7 +17,7 @@ else ifeq ($(OS)-$(COM),WNT-GCC)
 $(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2-$(RAPTOR_MAJOR).dll,src/.libs/libraptor2-$(RAPTOR_MAJOR).dll))
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2.dll,src/.libs/libraptor2.dll))
-else ifeq ($(filter IOS ANDROID,$(OS)),)
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2-lo.so.$(RAPTOR_MAJOR),src/.libs/libraptor2-lo.so.$(RAPTOR_MAJOR).0.0))
 endif
 
