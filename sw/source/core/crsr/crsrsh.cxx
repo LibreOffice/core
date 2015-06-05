@@ -284,6 +284,10 @@ void SwCrsrShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
         }
         return;
     }
+    else
+    {
+        eFlags |= SwCrsrShell::NOCALRECT; // tdf#91602 prevent recursive Action!
+    }
 
     if ( !bIdleEnd )
         eFlags |= SwCrsrShell::SCROLLWIN;
