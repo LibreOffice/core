@@ -15,7 +15,7 @@ ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/ifbembed.dll,gen/firebird/bin/ifbembed.dll))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.dylib,gen/firebird/lib/libfbembed.dylib.2.5.2))
-else
+else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5.2))
 endif
 

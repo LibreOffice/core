@@ -52,7 +52,11 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			--with-system-icu --without-fbsample --without-fbsample-db \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
+			$(if $(DISABLE_DYNLOADING), \
+				--enable-static --disable-shared \
+			, \
+				--enable-shared --disable-static \
+			) \
 		&& $(if $(filter WNT,$(OS)),\
 			   PATH="$(shell cygpath -u $(call gb_UnpackedTarball_get_dir,icu)/source/lib):$$PATH",\
 			   $(gb_Helper_set_ld_path)) \
