@@ -3100,7 +3100,6 @@ class CSSHandler
 
         MemStr() : mp(NULL), mn(0) {}
         MemStr(const char* p, size_t n) : mp(p), mn(n) {}
-        MemStr(const MemStr& r) : mp(r.mp), mn(r.mn) {}
         MemStr& operator=(const MemStr& r)
         {
             mp = r.mp;
