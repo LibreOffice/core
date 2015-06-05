@@ -3251,10 +3251,6 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor() throw( uno
         SwXTextCursor *const pXCursor = new SwXTextCursor(
                  *pFormat->GetDoc(), this, CURSOR_FRAME, *aPam.GetPoint());
         aRef =  static_cast<text::XWordCursor*>(pXCursor);
-#if OSL_DEBUG_LEVEL > 1
-        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
-        (void) pUnoCrsr;
-#endif
     }
     else
         throw uno::RuntimeException();
