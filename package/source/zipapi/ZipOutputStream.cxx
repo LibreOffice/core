@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <comphelper/storagehelper.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
 #include <osl/time.h>
@@ -101,6 +102,11 @@ void ZipOutputStream::finish()
     m_rSharedThreadPool.waitUntilEmpty();
     for (size_t i = 0; i < m_aEntries.size(); i++)
     {
+        //Any exceptions thrown in the threads were caught and stored for now
+        ::css::uno::Any aCaughtException(m_aEntries[i]->getParallelDeflateException());
+        if (aCaughtException.hasValue())
+            ::cppu::throwException(aCaughtException);
+
         writeLOC(m_aEntries[i]->getZipEntry(), m_aEntries[i]->isEncrypt());
 
         sal_Int32 nRead;
