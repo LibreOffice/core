@@ -42,6 +42,7 @@ class ZipOutputEntry
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > m_xDigestContext;
+    ::css::uno::Any m_aParallelDeflateException;
 
     CRC32               m_aCRC;
     ZipEntry            *m_pCurrentEntry;
@@ -61,6 +62,9 @@ public:
     ZipEntry* getZipEntry() { return m_pCurrentEntry; }
     ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
     bool isEncrypt() { return m_bEncryptCurrentEntry; }
+
+    void setParallelDeflateException(const ::css::uno::Any &rAny) { m_aParallelDeflateException = rAny; }
+    ::css::uno::Any getParallelDeflateException() const { return m_aParallelDeflateException; }
 
     void closeEntry();
     void write(const css::uno::Sequence< sal_Int8 >& rBuffer);
