@@ -776,7 +776,6 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
-    gtk_widget_set_size_request(m_pDrawingArea, nDocumentWidthPixels, nDocumentHeightPixels);
     cairo_t *pcairo = gdk_cairo_create(m_pDrawingArea->window);
 
     // Render the tiles.
@@ -812,7 +811,7 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
 
             if (bPaint)
             {
-                g_info("tile_buffer_get_tile (%d, %d)", nRow, nColumn);
+                //g_info("tile_buffer_get_tile (%d, %d)", nRow, nColumn);
 
                 Tile& currentTile = m_pTileBuffer->getTile(nRow, nColumn);
                 GdkPixbuf* pPixBuf = currentTile.getBuffer();
@@ -1031,6 +1030,10 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
         LOKDocView_Impl::payloadToSize(pCallback->m_aPayload.c_str(), m_nDocumentWidthTwips, m_nDocumentHeightTwips);
+        gtk_widget_set_size_request(m_pDrawingArea,
+                                    twipToPixel(m_nDocumentWidthTwips, m_fZoom),
+                                    twipToPixel(m_nDocumentHeightTwips, m_fZoom));
+        m_pTileBuffer->resetAllTiles();
     }
     break;
     case LOK_CALLBACK_SET_PART:
@@ -1283,6 +1286,9 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
                                                           nTileSizePixels,
                                                           nRows,
                                                           nColumns);
+        gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
+                                    nDocumentWidthPixels,
+                                    nDocumentHeightPixels);
         pDocView->m_pImpl->renderDocument(0);
     }
 
@@ -1304,6 +1310,9 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZo
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
     pDocView->m_pImpl->m_pTileBuffer->setZoom(fZoom, nRows, nColumns);
+    gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
+                                nDocumentWidthPixels,
+                                nDocumentHeightPixels);
 
     if ( pDocView->m_pImpl->m_pDocument )
         pDocView->m_pImpl->renderDocument(0);
