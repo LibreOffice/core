@@ -2046,8 +2046,7 @@ static void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
                                  bool& rScriptDependent, bool& rFont,
                                  sal_uInt16& rScriptType )
 {
-    sal_uInt16 nWhich = rAttr.GetItem().Which();
-    switch( nWhich )
+    switch( rAttr.GetItem().Which() )
     {
     case RES_CHRATR_FONT:
         rFont = true;
@@ -2143,7 +2142,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     const SwPosition& rPos = *pPam->GetPoint();
 
     _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
+    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         _HTMLAttr *pAttr = *pHTMLAttributes;
         if( pAttr && pAttr->GetItem().Which() < RES_PARATR_BEGIN )
@@ -2314,23 +2313,23 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
 
             if( RES_CHRATR_CJK_FONT == nWhich || RES_CHRATR_CTL_FONT == nWhich )
             {
-                nIdx = static_cast< sal_uInt16 >(0);
+                nIdx = 0;
             }
             else if( RES_CHRATR_CJK_FONTSIZE == nWhich || RES_CHRATR_CTL_FONTSIZE == nWhich )
             {
-                nIdx = static_cast< sal_uInt16 >(1);
+                nIdx = 1;
             }
             else if( RES_CHRATR_CJK_LANGUAGE == nWhich || RES_CHRATR_CTL_LANGUAGE == nWhich )
             {
-                nIdx = static_cast< sal_uInt16 >(2);
+                nIdx = 2;
             }
             else if( RES_CHRATR_CJK_POSTURE == nWhich || RES_CHRATR_CTL_POSTURE == nWhich )
             {
-                nIdx = static_cast< sal_uInt16 >(3);
+                nIdx = 3;
             }
             else if( RES_CHRATR_CJK_WEIGHT == nWhich || RES_CHRATR_CTL_WEIGHT == nWhich )
             {
-                nIdx = static_cast< sal_uInt16 >(4);
+                nIdx = 4;
             }
             else switch( nWhich )
             {
@@ -2649,11 +2648,10 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
     const sal_Int32 nEndCnt = pPam->GetPoint()->nContent.GetIndex();
     _HTMLAttr* pAttr;
     SwContentNode* pCNd;
-    sal_uInt16 n;
 
     _HTMLAttrs aFields;
 
-    for( n = aSetAttrTab.size(); n; )
+    for( auto n = aSetAttrTab.size(); n; )
     {
         pAttr = aSetAttrTab[ --n ];
         sal_uInt16 nWhich = pAttr->pItem->Which();
@@ -2891,7 +2889,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
         }
     }
 
-    for( n = aMoveFlyFrms.size(); n; )
+    for( auto n = aMoveFlyFrms.size(); n; )
     {
         SwFrameFormat *pFrameFormat = aMoveFlyFrms[ --n ];
 
@@ -3231,7 +3229,7 @@ void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
     _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
     _HTMLAttr** pSaveAttributes = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
 
-    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
+    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
     {
         *pSaveAttributes = *pHTMLAttributes;
 
@@ -3284,7 +3282,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 
         nEndCnt = (bSetAttr ? pCNd->Len() : 0);
     }
-    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
+    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
     {
         _HTMLAttr *pAttr = *pHTMLAttributes;
         *pSaveAttributes = 0;
@@ -3365,7 +3363,7 @@ void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
     _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
     _HTMLAttr** pSaveAttributes = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
 
-    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
+    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
     {
         OSL_ENSURE(!*pHTMLAttributes, "Die Attribut-Tabelle ist nicht leer!");
 
@@ -4561,16 +4559,16 @@ void SwHTMLParser::SetTextCollAttrs( _HTMLAttrContext *pContext )
             bool bSetThis = true;
             switch( nColl )
             {
-            case sal_uInt16(RES_POOLCOLL_HTML_PRE):
+            case RES_POOLCOLL_HTML_PRE:
                 bInPRE = true;
                 break;
-            case sal_uInt16(RES_POOLCOLL_TEXT):
+            case RES_POOLCOLL_TEXT:
                 // <TD><P CLASS=xxx> muss TD.xxx werden
                 if( nDfltColl==RES_POOLCOLL_TABLE ||
                     nDfltColl==RES_POOLCOLL_TABLE_HDLN )
                     nColl = nDfltColl;
                 break;
-            case sal_uInt16(RES_POOLCOLL_HTML_HR):
+            case RES_POOLCOLL_HTML_HR:
                 // <HR> auch in <PRE> als Vorlage setzen, sonst kann man sie
                 // nicht mehr exportieren
                 break;
