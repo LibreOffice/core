@@ -402,7 +402,8 @@ namespace abp
                     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
                     {
                         {"TargetStorage", uno::makeAny(xStorage)},
-                        {"StreamRelPath", uno::makeAny(aStreamRelPath)}
+                        {"StreamRelPath", uno::makeAny(aStreamRelPath)},
+                        {"BaseURI", uno::makeAny(aOwnURL)}
                     });
                     xStorable->storeAsURL(sTmpName, aSequence);
                     m_pImpl->sName = sTmpName;
