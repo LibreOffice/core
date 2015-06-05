@@ -148,6 +148,14 @@ interface BaseTextTable
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    // 2015/06 Deprecated, replaced by INSERT_COL_AFTER
+    FN_TABLE_INSERT_COL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     FN_TABLE_INSERT_COL_AFTER // status(final|play)
     [
         ExecMethod = Execute ;
@@ -170,6 +178,14 @@ interface BaseTextTable
     ]
 
     FN_TABLE_INSERT_ROW_AFTER // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    // 2015/06 Deprecated, replaced by INSERT_ROW_AFTER
+    FN_TABLE_INSERT_ROW // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

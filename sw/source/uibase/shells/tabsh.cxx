@@ -820,13 +820,20 @@ void SwTableShell::Execute(SfxRequest &rReq)
             OSL_ENSURE( false, "function may not be called now." );
             break;
 
+
+        // 2015/06 The following two are deprecated but kept for ascending
+        // compatibility
+        case FN_TABLE_INSERT_COL:
+        case FN_TABLE_INSERT_ROW:
+            // fallback
         case FN_TABLE_INSERT_COL_BEFORE:
         case FN_TABLE_INSERT_ROW_BEFORE:
         case FN_TABLE_INSERT_COL_AFTER:
         case FN_TABLE_INSERT_ROW_AFTER:
         {
             bool bColumn = rReq.GetSlot() == FN_TABLE_INSERT_COL_BEFORE
-                           || rReq.GetSlot() == FN_TABLE_INSERT_COL_AFTER;
+                           || rReq.GetSlot() == FN_TABLE_INSERT_COL_AFTER
+                           || rReq.GetSlot() == FN_TABLE_INSERT_COL;
             sal_uInt16 nCount = 0;
             bool bAfter = true;
             if (pItem)
@@ -860,7 +867,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         nCount = maxY - minY + 1;
                 }
                 bAfter = rReq.GetSlot() == FN_TABLE_INSERT_COL_AFTER
-                         || rReq.GetSlot() == FN_TABLE_INSERT_ROW_AFTER;
+                         || rReq.GetSlot() == FN_TABLE_INSERT_ROW_AFTER
+                         || rReq.GetSlot() == FN_TABLE_INSERT_ROW
+                         || rReq.GetSlot() == FN_TABLE_INSERT_COL;
             }
 
             if( nCount )
@@ -1251,6 +1260,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 }
                 break;
             }
+            case FN_TABLE_INSERT_ROW:
             case FN_TABLE_INSERT_ROW_AFTER:
             case FN_TABLE_INSERT_ROW_DLG:
                 if ( rSh.IsInRepeatedHeadline() )

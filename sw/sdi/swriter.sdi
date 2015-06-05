@@ -3634,6 +3634,31 @@ SfxVoidItem InsertColumnsBefore FN_TABLE_INSERT_COL_BEFORE
     GroupId = GID_TABLE;
 ]
 
+/* 2015/06 Deprecated, replaced by InsertColumsAfter */
+SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TABLE;
+]
+
 SfxVoidItem InsertColumnsAfter FN_TABLE_INSERT_COL_AFTER
 ()
 [
@@ -4381,6 +4406,31 @@ SfxVoidItem InsertRowDialog FN_TABLE_INSERT_ROW_DLG
 ]
 
 SfxVoidItem InsertRowsBefore FN_TABLE_INSERT_ROW_BEFORE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TABLE;
+]
+
+/* 2015/06 Deprecated, replaced by InsertRowsAfter */
+SfxVoidItem InsertRows FN_TABLE_INSERT_ROW
 ()
 [
     /* flags: */
