@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="10128"/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="10128" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
  <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="10464"/>

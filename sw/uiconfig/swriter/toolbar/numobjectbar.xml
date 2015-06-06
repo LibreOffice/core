@@ -18,18 +18,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:IncrementLevel" toolbar:helpid="20131"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementLevel" toolbar:helpid="20130"/>
- <toolbar:toolbaritem xlink:href=".uno:IncrementSubLevels" toolbar:helpid="20140"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementLevel" toolbar:helpid="20131"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementSubLevels" toolbar:helpid="20139"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementSubLevels" toolbar:helpid="20140"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveDown" toolbar:helpid="20135"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveUp" toolbar:helpid="20134"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveDownSubItems" toolbar:helpid="20142"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveUpSubItems" toolbar:helpid="20141"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertNeutralParagraph" toolbar:helpid="20136"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:MoveUp" toolbar:helpid="20134"/>
- <toolbar:toolbaritem xlink:href=".uno:MoveDown" toolbar:helpid="20135"/>
- <toolbar:toolbaritem xlink:href=".uno:MoveUpSubItems" toolbar:helpid="20141"/>
- <toolbar:toolbaritem xlink:href=".uno:MoveDownSubItems" toolbar:helpid="20142"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberingStart" toolbar:helpid="21738"/>
- <toolbar:toolbaritem xlink:href=".uno:BulletsAndNumberingDialog" toolbar:helpid="20121"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BulletsAndNumberingDialog" toolbar:helpid="20121" toolbar:visible="false"/>
 </toolbar:toolbar>
