@@ -25,6 +25,7 @@
 #include <svx/xpool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
+#include <stack>
 
 using namespace com::sun::star;
 
@@ -224,23 +225,41 @@ bool XPropertyList::Load()
     if( mbListDirty )
     {
         mbListDirty = false;
+        std::stack<OUString> aDirs;
 
-        INetURLObject aURL( maPath );
-
-        if( INetProtocol::NotValid == aURL.GetProtocol() )
+        sal_Int32 nIndex = 0;
+        do
         {
-            DBG_ASSERT( maPath.isEmpty(), "invalid URL" );
-            return false;
+            aDirs.push(maPath.getToken(0, ';', nIndex));
         }
+        while (nIndex >= 0);
 
-        aURL.Append( maName );
+        //try all entries palette path list working back to front until one
+        //succeeds
+        while (!aDirs.empty())
+        {
+            OUString aPath(aDirs.top());
+            aDirs.pop();
 
-        if( aURL.getExtension().isEmpty() )
-            aURL.setExtension( GetDefaultExt() );
+            INetURLObject aURL(aPath);
 
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), maReferer,
-                                         uno::Reference < embed::XStorage >(),
-                                         createInstance(), NULL );
+            if( INetProtocol::NotValid == aURL.GetProtocol() )
+            {
+                DBG_ASSERT( aPath.isEmpty(), "invalid URL" );
+                return false;
+            }
+
+            aURL.Append( maName );
+
+            if( aURL.getExtension().isEmpty() )
+                aURL.setExtension( GetDefaultExt() );
+
+            bool bRet = SvxXMLXTableImport::load(aURL.GetMainURL(INetURLObject::NO_DECODE),
+                                             maReferer, uno::Reference < embed::XStorage >(),
+                                             createInstance(), NULL );
+            if (bRet)
+                return bRet;
+        }
     }
     return false;
 }
@@ -256,11 +275,20 @@ bool XPropertyList::LoadFrom( const uno::Reference < embed::XStorage > &xStorage
 
 bool XPropertyList::Save()
 {
-    INetURLObject aURL( maPath );
+    //save to the last path in the palette path list
+    OUString aLastDir;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        aLastDir = maPath.getToken(0, ';', nIndex);
+    }
+    while (nIndex >= 0);
+
+    INetURLObject aURL(aLastDir);
 
     if( INetProtocol::NotValid == aURL.GetProtocol() )
     {
-        DBG_ASSERT( maPath.isEmpty(), "invalid URL" );
+        DBG_ASSERT( aLastDir.isEmpty(), "invalid URL" );
         return false;
     }
 

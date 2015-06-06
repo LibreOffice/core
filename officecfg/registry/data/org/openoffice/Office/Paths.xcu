@@ -124,6 +124,9 @@
       </node>
     </node>
     <node oor:name="Palette" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/palette" oor:op="fuse"/>
+      </node>
       <prop oor:name="WritePath">
         <value>$(userurl)/config</value>
       </prop>

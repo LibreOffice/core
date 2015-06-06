@@ -1642,12 +1642,15 @@
           </info>
           <value>$(progpath)</value>
         </prop>
-        <prop oor:name="Palette" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="Palette" oor:type="oor:string-list" oor:nillable="false">
           <info>
             <desc>Specifies the path to the palette files *.SOB to *.SOF
             containing user-defined colors and patterns.</desc>
           </info>
-          <value>$(userurl)/config</value>
+          <value>
+            <it>$(insturl)/@LIBO_SHARE_FOLDER@/palette</it>
+            <it>$(userurl)/config</it>
+          </value>
         </prop>
         <prop oor:name="Plugin" oor:type="oor:string-list" oor:nillable="false">
           <info>

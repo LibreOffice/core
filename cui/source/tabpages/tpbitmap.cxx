@@ -795,7 +795,16 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
         ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
         OUString aStrFilterType( "*.sob" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
-        INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+        OUString aPalettePath(SvtPathOptions().GetPalettePath());
+        OUString aLastDir;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            aLastDir = aPalettePath.getToken(0, ';', nIndex);
+        }
+        while (nIndex >= 0);
+
+        INetURLObject aFile(aLastDir);
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if ( aDlg.Execute() == ERRCODE_NONE )
@@ -875,7 +884,16 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
     OUString aStrFilterType( "*.sob" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
-    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    OUString aPalettePath(SvtPathOptions().GetPalettePath());
+    OUString aLastDir;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        aLastDir = aPalettePath.getToken(0, ';', nIndex);
+    }
+    while (nIndex >= 0);
+
+    INetURLObject aFile(aLastDir);
     DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     if( !pBitmapList->GetName().isEmpty() )

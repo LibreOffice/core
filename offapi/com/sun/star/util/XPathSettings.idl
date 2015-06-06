@@ -89,7 +89,8 @@ published interface XPathSettings
   [attribute] string Module;
 
   /** This is the path to the palette files *.SOB to *.SOF containing
-      user-defined colors and patterns. */
+      user-defined colors and patterns. The value can be more than
+      one path separated by a semicolon.*/
   [attribute] string Palette;
 
   /** Plugins are saved in these directories. The value can be more than

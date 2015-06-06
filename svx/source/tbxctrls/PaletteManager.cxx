@@ -27,6 +27,8 @@
 #include <svtools/colrdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <stack>
+#include <set>
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
@@ -47,31 +49,52 @@ PaletteManager::~PaletteManager()
 void PaletteManager::LoadPalettes()
 {
     maPalettes.clear();
-    OUString aPalPath = SvtPathOptions().GetPalettePath();
+    OUString aPalPaths = SvtPathOptions().GetPalettePath();
 
-    osl::Directory aDir(aPalPath);
-    osl::DirectoryItem aDirItem;
-    osl::FileStatus aFileStat( osl_FileStatus_Mask_FileName |
-                               osl_FileStatus_Mask_FileURL  |
-                               osl_FileStatus_Mask_Type     );
-    if( aDir.open() == osl::FileBase::E_None )
+    std::stack<OUString> aDirs;
+    sal_Int32 nIndex = 0;
+    do
     {
-        while( aDir.getNextItem(aDirItem) == osl::FileBase::E_None )
-        {
-            aDirItem.getFileStatus(aFileStat);
-            if(aFileStat.isRegular() || aFileStat.isLink())
-            {
-                OUString aFName = aFileStat.getFileName();
-                Palette* pPalette = 0;
-                if( aFName.endsWithIgnoreAsciiCase(".gpl") )
-                    pPalette = new PaletteGPL( aFileStat.getFileURL(), aFName );
-                else if( aFName.endsWithIgnoreAsciiCase(".soc") )
-                    pPalette = new PaletteSOC( aFileStat.getFileURL(), aFName );
-                else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
-                    pPalette = new PaletteASE( aFileStat.getFileURL(), aFName );
+        aDirs.push(aPalPaths.getToken(0, ';', nIndex));
+    }
+    while (nIndex >= 0);
 
-                if( pPalette && pPalette->IsValid() )
-                    maPalettes.push_back( pPalette );
+    std::set<OUString> aNames;
+    //try all entries palette path list user first, then
+    //system, ignoring duplicate file names
+    while (!aDirs.empty())
+    {
+        OUString aPalPath = aDirs.top();
+        aDirs.pop();
+
+        osl::Directory aDir(aPalPath);
+        osl::DirectoryItem aDirItem;
+        osl::FileStatus aFileStat( osl_FileStatus_Mask_FileName |
+                                   osl_FileStatus_Mask_FileURL  |
+                                   osl_FileStatus_Mask_Type     );
+        if( aDir.open() == osl::FileBase::E_None )
+        {
+            while( aDir.getNextItem(aDirItem) == osl::FileBase::E_None )
+            {
+                aDirItem.getFileStatus(aFileStat);
+                if(aFileStat.isRegular() || aFileStat.isLink())
+                {
+                    OUString aFName = aFileStat.getFileName();
+                    if (aNames.find(aFName) == aNames.end())
+                    {
+                        Palette* pPalette = 0;
+                        if( aFName.endsWithIgnoreAsciiCase(".gpl") )
+                            pPalette = new PaletteGPL( aFileStat.getFileURL(), aFName );
+                        else if( aFName.endsWithIgnoreAsciiCase(".soc") )
+                            pPalette = new PaletteSOC( aFileStat.getFileURL(), aFName );
+                        else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
+                            pPalette = new PaletteASE( aFileStat.getFileURL(), aFName );
+
+                        if( pPalette && pPalette->IsValid() )
+                            maPalettes.push_back( pPalette );
+                        aNames.insert(aFName);
+                    }
+                }
             }
         }
     }

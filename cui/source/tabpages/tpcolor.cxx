@@ -142,7 +142,16 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
         OUString aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
-        INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+        OUString aPalettePath(SvtPathOptions().GetPalettePath());
+        OUString aLastDir;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            aLastDir = aPalettePath.getToken(0, ';', nIndex);
+        }
+        while (nIndex >= 0);
+
+        INetURLObject aFile(aLastDir);
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if ( aDlg.Execute() == ERRCODE_NONE )
@@ -202,7 +211,16 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
     OUString aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
-    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    OUString aPalettePath(SvtPathOptions().GetPalettePath());
+    OUString aLastDir;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        aLastDir = aPalettePath.getToken(0, ';', nIndex);
+    }
+    while (nIndex >= 0);
+
+    INetURLObject aFile(aLastDir);
     DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     XPropertyListRef pList = GetList();
