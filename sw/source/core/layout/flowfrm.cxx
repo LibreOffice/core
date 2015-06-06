@@ -111,13 +111,15 @@ bool SwFlowFrm::HasLockedFollow() const
     return false;
 }
 
-bool SwFlowFrm::IsKeepFwdMoveAllowed()
+bool SwFlowFrm::IsKeepFwdMoveAllowed( bool bIgnoreFirstKeepStatus )
 {
     // If all the predecessors up to the first of the chain have
     // the 'keep' attribute set, and the first of the chain's
     // IsFwdMoveAllowed returns false, then we're not allowed to move.
     SwFrm *pFrm = &m_rThis;
     if ( !pFrm->IsInFootnote() )
+        if ( bIgnoreFirstKeepStatus && pFrm->GetIndPrev() )
+            pFrm = pFrm->GetIndPrev();
         do
         {   if ( pFrm->GetAttrSet()->GetKeep().GetValue() )
                 pFrm = pFrm->GetIndPrev();
@@ -1703,13 +1705,13 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
 }
 
 /// Moves the Frm forward if it seems necessary regarding the current conditions and attributes.
-bool SwFlowFrm::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool )
+bool SwFlowFrm::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool, bool bEmulateTableKeep )
 {
     const SwFrm* pNxt = m_rThis.GetIndNext();
 
     if ( bKeep && //!bMovedBwd &&
          ( !pNxt || ( pNxt->IsTextFrm() && static_cast<const SwTextFrm*>(pNxt)->IsEmptyMaster() ) ) &&
-         ( 0 != (pNxt = m_rThis.FindNext()) ) && IsKeepFwdMoveAllowed() )
+         ( 0 != (pNxt = m_rThis.FindNext()) ) && IsKeepFwdMoveAllowed(bEmulateTableKeep) )
     {
         if( pNxt->IsSctFrm() )
         {   // Don't get fooled by empty SectionFrms
