@@ -84,39 +84,22 @@ class UnoActionRemoveContext
 /// helper function for implementing SwClient::Modify
 void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
-#include <boost/utility.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sw {
-
-    /// Smart pointer class ensuring that the pointed object is deleted with a locked SolarMutex.
-    template<typename T> class UnoImplPtr
-        : private ::boost::noncopyable
+    template<typename T>
+    struct UnoImplPtrDeleter
     {
-        private:
-            T * m_p;
-
-        public:
-            UnoImplPtr(T *const i_p)
-                : m_p(i_p)
-            {
-                SAL_WARN_IF(!i_p, "sw", "UnoImplPtr: null");
-            }
-
-            ~UnoImplPtr()
-            {
-                SolarMutexGuard g;
-                delete m_p; // #i105557#: call dtor with locked solar mutex
-                m_p = 0;
-            }
-
-            T & operator * () const { return *m_p; }
-
-            T * operator ->() const { return  m_p; }
-
-            T * get        () const { return  m_p; }
+        void operator()(T* pUnoImpl)
+        {
+            SolarMutexGuard g; // #i105557#: call dtor with locked solar mutex
+            delete pUnoImpl;
+        }
     };
+    /// Smart pointer class ensuring that the pointed object is deleted with a locked SolarMutex.
+    template<typename T>
+    using UnoImplPtr = ::std::unique_ptr<T, UnoImplPtrDeleter<T> >;
 
     template< class C > C *
     UnoTunnelGetImplementation(
