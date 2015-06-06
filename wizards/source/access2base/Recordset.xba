@@ -920,18 +920,15 @@ Dim l As Long, lRow As Long
 				End If
 		End Select
 
-		Select Case True
-			Case .isBeforeFirst()
-				_BOF = True
-				_Move = False
-			Case .isAfterlast()
-				_EOF = True
-				_Move = False
-			Case Else
-				If .rowDeleted() Then Goto Error_RowDeleted
-				If .rowUpdated() Then .refreshRow()
-				_Move = True
-		End Select
+		_BOF = .isBeforeFirst()			&apos;	https://forum.openoffice.org/en/forum/viewtopic.php?f=47&amp;t=76640
+		_EOF = .isAfterlast()
+		If _BOF Or _EOF Then
+			_Move = False
+		Else
+			If .rowDeleted() Then Goto Error_RowDeleted
+			If .rowUpdated() Then .refreshRow()
+			_Move = True
+		End If
 	End With
 
 Exit_Function:
