@@ -29,10 +29,13 @@
  <toolbar:toolbaritem xlink:href=".uno:Underline"/>
  <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
  <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineFont"/>
+ <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
@@ -55,9 +58,9 @@
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SelectAll"/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectAll"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
