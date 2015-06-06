@@ -160,9 +160,13 @@ struct SwGetCurColNumPara
     SwGetCurColNumPara() : pFrameFormat( 0 ), pPrtRect( 0 ), pFrmRect( 0 ) {}
 };
 
-#define SW_PASTESDR_INSERT      1
-#define SW_PASTESDR_REPLACE     2
-#define SW_PASTESDR_SETATTR     3
+enum class SwPasteSdr
+{
+    NONE        = 0,
+    Insert      = 1,
+    Replace     = 2,
+    SetAttr     = 3
+};
 
 #define SW_ADD_SELECT   1
 #define SW_ENTER_GROUP  2
@@ -547,7 +551,7 @@ public:
      Return value indicates if it was converted. */
     bool GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf ) const;
 
-    void Paste( SvStream& rStm, sal_uInt16 nAction, const Point* pPt = 0 );
+    void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt = 0 );
     bool Paste( const Graphic &rGrf, const OUString& rURL );
     bool Paste( SotDataObject& rObj, const Point& rPt );
 

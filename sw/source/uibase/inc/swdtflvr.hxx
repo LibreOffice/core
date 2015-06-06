@@ -37,6 +37,7 @@ class SwWrtShell;
 class SvxClipboardFormatItem;
 class SwFrameShell;
 class SwView_Impl;
+enum class SwPasteSdr;
 
 typedef sal_uInt16 TransferBufferType;
 namespace nsTransferBufferType
@@ -93,17 +94,17 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     static bool _PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                             SotClipboardFormatId nFormat, sal_uInt8 nActionFlags, bool bMsg );
     static bool _PasteTargetURL( TransferableDataHelper& rData, SwWrtShell& rSh,
-                        sal_uInt16 nAction, const Point* pPt, bool bInsertGRF );
+                        SwPasteSdr nAction, const Point* pPt, bool bInsertGRF );
 
     static bool _PasteDDE( TransferableDataHelper& rData, SwWrtShell& rWrtShell,
                             bool bReReadGrf, bool bMsg );
 
     static bool _PasteSdrFormat(  TransferableDataHelper& rData,
-                                    SwWrtShell& rSh, sal_uInt16 nAction,
+                                    SwWrtShell& rSh, SwPasteSdr nAction,
                                     const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste);
 
     static bool _PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
-                                SotClipboardFormatId nFormat, sal_uInt16 nAction, const Point* pPt,
+                                SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
                                 sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste);
 
     static bool _PasteImageMap( TransferableDataHelper& rData,
@@ -113,7 +114,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
                                         SwWrtShell& rSh, SotClipboardFormatId nFormat );
 
     static bool _PasteFileName( TransferableDataHelper& rData,
-                            SwWrtShell& rSh, SotClipboardFormatId nFormat, sal_uInt16 nAction,
+                            SwWrtShell& rSh, SotClipboardFormatId nFormat, SwPasteSdr nAction,
                             const Point* pPt, sal_uInt8 nActionFlags, bool bMsg, bool * graphicInserted );
 
     static bool _PasteDBData( TransferableDataHelper& rData, SwWrtShell& rSh,

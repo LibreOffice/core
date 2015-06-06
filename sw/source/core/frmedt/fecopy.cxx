@@ -1327,7 +1327,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
     }
 }
 
-void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
+void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -1361,12 +1361,12 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
         SdrObject* pClpObj = pModel->GetPage(0)->GetObj(0);
         SdrObject* pOldObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
 
-        if( SW_PASTESDR_SETATTR == nAction && pOldObj->ISA(SwVirtFlyDrawObj) )
-            nAction = SW_PASTESDR_REPLACE;
+        if( SwPasteSdr::SetAttr == nAction && pOldObj->ISA(SwVirtFlyDrawObj) )
+            nAction = SwPasteSdr::Replace;
 
         switch( nAction )
         {
-        case SW_PASTESDR_REPLACE:
+        case SwPasteSdr::Replace:
             {
                 const SwFrameFormat* pFormat(0);
                 const SwFrm* pAnchor(0);
@@ -1382,7 +1382,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                     {
                         // if there is a textframe in the header/footer:
                         // do not replace but insert
-                        nAction = SW_PASTESDR_INSERT;
+                        nAction = SwPasteSdr::Insert;
                         break;
                     }
                 }
@@ -1451,7 +1451,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
             }
             break;
 
-        case SW_PASTESDR_SETATTR:
+        case SwPasteSdr::SetAttr:
             {
                 SfxItemSet aSet( GetAttrPool() );
                 const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pClpObj);
@@ -1496,14 +1496,14 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
             break;
 
         default:
-            nAction = SW_PASTESDR_INSERT;
+            nAction = SwPasteSdr::Insert;
             break;
         }
     }
     else
-        nAction = SW_PASTESDR_INSERT;
+        nAction = SwPasteSdr::Insert;
 
-    if( SW_PASTESDR_INSERT == nAction )
+    if( SwPasteSdr::Insert == nAction )
     {
         ::sw::DrawUndoGuard drawUndoGuard(GetDoc()->GetIDocumentUndoRedo());
 
