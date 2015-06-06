@@ -210,7 +210,6 @@ class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
     ,public SwClient
     ,public OTextCursorHelper
 {
-    SwDepend                aCrsrDepend;
     const SfxItemPropertySet*   m_pPropSet;
 
 public:
@@ -263,7 +262,6 @@ public:
 
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 
     // ITextCursorHelper
     virtual const SwPaM*        GetPaM() const SAL_OVERRIDE;
@@ -273,14 +271,9 @@ public:
 
     const SwUnoCrsr*            GetCrsr() const;
     SwUnoCrsr*                  GetCrsr();
-    std::shared_ptr<SwUnoCrsr> m_pUnoCrsr;
+    sw::UnoCursorPointer m_pUnoCrsr;
     SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
-    virtual ~SwXTextTableCursor()
-    {
-        if(m_pUnoCrsr)
-            m_pUnoCrsr->Remove(&aCrsrDepend);
-    }
-
+    virtual ~SwXTextTableCursor() { };
 };
 
 struct SwRangeDescriptor

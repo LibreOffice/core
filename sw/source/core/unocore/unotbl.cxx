@@ -1403,15 +1403,14 @@ const SwPaM*        SwXTextTableCursor::GetPaM() const  { return GetCrsr(); }
 SwPaM*              SwXTextTableCursor::GetPaM()        { return GetCrsr(); }
 const SwDoc*        SwXTextTableCursor::GetDoc() const  { return GetFrameFormat()->GetDoc(); }
 SwDoc*              SwXTextTableCursor::GetDoc()        { return GetFrameFormat()->GetDoc(); }
-const SwUnoCrsr*    SwXTextTableCursor::GetCrsr() const { return static_cast<const SwUnoCrsr*>(aCrsrDepend.GetRegisteredIn()); }
-SwUnoCrsr*          SwXTextTableCursor::GetCrsr()       { return static_cast<SwUnoCrsr*>(aCrsrDepend.GetRegisteredIn()); }
+const SwUnoCrsr*    SwXTextTableCursor::GetCrsr() const { return &(*m_pUnoCrsr); }
+SwUnoCrsr*          SwXTextTableCursor::GetCrsr()       { return &(*m_pUnoCrsr); }
 
 uno::Sequence<OUString> SwXTextTableCursor::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
     { return {"com.sun.star.text.TextTableCursor"}; }
 
 SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox* pBox) :
     SwClient(pFormat),
-    aCrsrDepend(this, 0),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
     SwDoc* pDoc = pFormat->GetDoc();
@@ -1419,14 +1418,12 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox* pBox)
     SwPosition aPos(*pSttNd);
     m_pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
     m_pUnoCrsr->Move( fnMoveForward, fnGoNode );
-    m_pUnoCrsr->Add(&aCrsrDepend);
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*m_pUnoCrsr.get());
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*m_pUnoCrsr);
     rTableCrsr.MakeBoxSels();
 }
 
 SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat& rTableFormat, const SwTableCursor* pTableSelection) :
     SwClient(&rTableFormat),
-    aCrsrDepend(this, 0),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
     m_pUnoCrsr = pTableSelection->GetDoc()->CreateUnoCrsr(*pTableSelection->GetPoint(), true);
@@ -1439,7 +1436,6 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat& rTableFormat, const SwTabl
     SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*m_pUnoCrsr);
     for(auto pBox : rBoxes)
         rTableCrsr.InsertBox(*pBox);
-    m_pUnoCrsr->Add(&aCrsrDepend);
     rTableCrsr.MakeBoxSels();
 }
 
@@ -1738,16 +1734,6 @@ void SwXTextTableCursor::removeVetoableChangeListener(const OUString& /*rPropert
 
 void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     { ClientModify(this, pOld, pNew); }
-
-void SwXTextTableCursor::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    SwClient::SwClientNotify(rModify, rHint);
-    if(m_pUnoCrsr && typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        m_pUnoCrsr->Remove(&aCrsrDepend);
-        m_pUnoCrsr.reset();
-    }
-}
 
 class SwXTextTable::Impl
 {
