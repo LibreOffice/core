@@ -69,7 +69,6 @@ void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
         m_pUnoCursor->SetMark();
         *m_pUnoCursor->GetMark() = *pPortionCursor->GetMark();
     }
-    m_pUnoCursor->Add(this);
 }
 
 SwXTextPortion::SwXTextPortion(
@@ -138,10 +137,7 @@ SwXTextPortion::SwXTextPortion(
 }
 
 SwXTextPortion::~SwXTextPortion()
-{
-    if(m_pUnoCursor)
-        m_pUnoCursor->Remove(this);
-};
+{ }
 
 uno::Reference< text::XText >  SwXTextPortion::getText()
 throw( uno::RuntimeException, std::exception )
@@ -922,17 +918,7 @@ void SwXTextPortion::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
     if (!m_FrameDepend.GetRegisteredIn())
     {
-        m_pFrameFormat = 0;
-    }
-}
-
-void SwXTextPortion::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    SwClient::SwClientNotify(rModify, rHint);
-    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        m_pUnoCursor->Remove(this);
-        m_pUnoCursor.reset();
+        m_pFrameFormat = nullptr;
     }
 }
 

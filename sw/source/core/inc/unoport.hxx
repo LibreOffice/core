@@ -114,7 +114,7 @@ private:
     ::std::unique_ptr< ::com::sun::star::uno::Any > m_pRubyStyle;
     ::std::unique_ptr< ::com::sun::star::uno::Any > m_pRubyAdjust;
     ::std::unique_ptr< ::com::sun::star::uno::Any > m_pRubyIsAbove;
-    std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
+    sw::UnoCursorPointer m_pUnoCursor;
 
     const SwDepend              m_FrameDepend;
     SwFrameFormat *                  m_pFrameFormat;
@@ -151,8 +151,6 @@ protected:
 
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
-
 
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
@@ -242,7 +240,7 @@ public:
     SwTextPortionType GetTextPortionType() const { return m_ePortionType; }
 
     SwUnoCrsr* GetCursor() const
-    {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
+        { return const_cast<SwUnoCrsr*>(&(*m_pUnoCursor)); }
 };
 
 class SwXTextPortionEnumeration
