@@ -44,11 +44,20 @@
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:TableSort"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Protect" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:UnsetCellsReadOnly" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoSum"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFormula"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TableDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TableDialog"/>
 </toolbar:toolbar>

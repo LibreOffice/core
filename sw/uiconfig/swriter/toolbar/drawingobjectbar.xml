@@ -18,43 +18,45 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:FormatLine"/>
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:style="dropdown"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="10129"/>
- <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:visible="false" toolbar:helpid="27322"/>
- <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false" toolbar:helpid="27154"/>
- <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:visible="false" toolbar:helpid="27153"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="20349"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:visible="false" toolbar:helpid="20472"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapOn" toolbar:visible="false" toolbar:helpid="20473"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:visible="false" toolbar:helpid="20563"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:helpid="20472"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapOn" toolbar:helpid="20473"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:helpid="20563"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:visible="false" toolbar:helpid="20572"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:visible="false" toolbar:helpid="20573"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapThrough" toolbar:visible="false" toolbar:helpid="20474"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapThrough" toolbar:helpid="20474"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapContour" toolbar:visible="false" toolbar:helpid="20584"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground" toolbar:helpid="10283"/>
- <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:helpid="10282"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="10129"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="10130"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="10286"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectForwardOne"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectBackOne"/>
  <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="10287"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="10130"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="20349"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground" toolbar:helpid="10283"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:helpid="10282"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatUngroup" toolbar:helpid="10455"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatGroup" toolbar:helpid="10454"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatUngroup" toolbar:helpid="10455"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:visible="false" toolbar:helpid="27322"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false" toolbar:helpid="27154"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:visible="false" toolbar:helpid="27153"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:visible="false"/>
 </toolbar:toolbar>
