@@ -1920,6 +1920,7 @@ SwChartDataSequence::SwChartDataSequence(
     }
     catch (uno::RuntimeException &)
     {
+        // TODO: shouldnt there be a call to release() here?
         throw;
     }
     catch (uno::Exception &)
@@ -1967,6 +1968,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     }
     catch (uno::RuntimeException &)
     {
+        // TODO: shouldnt there be a call to release() here?
         throw;
     }
     catch (uno::Exception &)
