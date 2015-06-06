@@ -5599,11 +5599,11 @@ void Test::testValidity()
 
     ScRefCellValue aCell;
     aCell.assign(*m_pDoc, ScAddress(0,0,0));
-    CPPUNIT_ASSERT(  pData0->IsCellValid( aCell, ScAddress(0,0,0) ) );
+    CPPUNIT_ASSERT(  pData0->IsDataValid( aCell, ScAddress(0,0,0) ) );
     aCell.assign(*m_pDoc, ScAddress(2,0,0));
-    CPPUNIT_ASSERT( !pData1->IsCellValid( aCell, ScAddress(2,0,0) ) );
+    CPPUNIT_ASSERT( !pData1->IsDataValid( aCell, ScAddress(2,0,0) ) );
     aCell.assign(*m_pDoc, ScAddress(4,0,0));
-    CPPUNIT_ASSERT( !pData2->IsCellValid( aCell, ScAddress(4,0,0) ) );
+    CPPUNIT_ASSERT( !pData2->IsDataValid( aCell, ScAddress(4,0,0) ) );
 }
 
 void Test::testCondFormatInsertDeleteSheets()
