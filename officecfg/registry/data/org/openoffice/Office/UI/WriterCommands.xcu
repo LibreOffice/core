@@ -13,10 +13,10 @@
       </node>
       <node oor:name=".uno:PrintLayout" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Normal</value>
+          <value xml:lang="en-US">~Normal View</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Normal</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertHeader" oor:op="replace">
@@ -1147,7 +1147,7 @@
       <!-- 2015/06 The next one is to be deprecated one day or another -->
       <node oor:name=".uno:InsertRows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Row Below</value>
+          <value xml:lang="en-US">Insert Row</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1186,7 +1186,7 @@
       <!-- 2015/06 The next one is to be deprecated one day or another -->
       <node oor:name=".uno:InsertColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Column Right</value>
+          <value xml:lang="en-US">Insert Column</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1994,7 +1994,7 @@
       </node>
       <node oor:name=".uno:DistributeColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Distribute Columns Equally</value>
+          <value xml:lang="en-US">~Distribute Columns Evenly</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2007,7 +2007,7 @@
       </node>
       <node oor:name=".uno:DistributeRows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Distribute Rows Equally </value>
+          <value xml:lang="en-US">Distribute Rows Evenly</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2041,7 +2041,7 @@
       </node>
       <node oor:name=".uno:RowSplit" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Allow Row to Break Across Pages and Columns</value>
+          <value xml:lang="en-US">~Break Across Pages and Columns</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>8</value>
@@ -2159,7 +2159,7 @@
       </node>
       <node oor:name=".uno:Ruler" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Ruler</value>
+          <value xml:lang="en-US">~Rulers</value>
         </prop>
       </node>
       <node oor:name=".uno:LineNumberingDialog" oor:op="replace">
@@ -2245,7 +2245,7 @@
       </node>
       <node oor:name=".uno:HScroll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Scroll Horizontal</value>
+          <value xml:lang="en-US">Horizontal Scroll Bar</value>
         </prop>
       </node>
       <node oor:name=".uno:ChapterNumberingDialog" oor:op="replace">
@@ -2378,7 +2378,12 @@
       </node>
       <node oor:name=".uno:IndexesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Table of Contents and Inde~xes</value>
+          <value xml:lang="en-US">Table of Contents and Inde~x</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormatAllNotes" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Comments...</value>
         </prop>
       </node>
       <node oor:name=".uno:WordCountDialog" oor:op="replace">
