@@ -8,8 +8,7 @@
  */
 
 #include <svtools/RemoteFilesDialog.hxx>
-
-using namespace ::com::sun::star::uno;
+#include "../contnr/contentenumeration.hxx"
 
 class FileViewContainer : public vcl::Window
 {
@@ -79,6 +78,7 @@ class FileViewContainer : public vcl::Window
 RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     : ModalDialog(pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui")
     , m_context(comphelper::getProcessComponentContext())
+    , m_aFolderImage(SvtResId(IMG_SVT_FOLDER))
     , m_pSplitter(NULL)
     , m_pFileView(NULL)
     , m_pContainer(NULL)
@@ -91,6 +91,11 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     get(m_pPath_ed, "path");
     get(m_pFilter_lb, "filter_lb");
     get(m_pName_ed, "name_ed");
+
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference< XInteractionHandler > xInteractionHandler(
+                    InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
+    m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     m_eMode = (nBits & WB_SAVEAS) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = (nBits & WB_PATH) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
@@ -138,6 +143,11 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pTreeView->set_width_request(aSize.Width());
     m_pTreeView->SetSizePixel(aSize);
     m_pTreeView->Show();
+    m_pTreeView->SetDefaultCollapsedEntryBmp(m_aFolderImage);
+    m_pTreeView->SetDefaultExpandedEntryBmp(m_aFolderImage);
+
+    m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
+    m_pTreeView->SetExpandedHdl( LINK( this, RemoteFilesDialog, TreeExpandHdl ) );
 
     sal_Int32 nPosX = m_pTreeView->GetSizePixel().Width();
     m_pSplitter->SetPosPixel(Point(nPosX, 0));
@@ -287,12 +297,13 @@ OUString RemoteFilesDialog::getCurrentFilter()
     return sFilter;
 }
 
-void RemoteFilesDialog::OpenURL( OUString sURL )
+FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
 {
+    FileViewResult eResult = eFailure;
+
     if(m_pFileView)
     {
         OUStringList BlackList;
-        FileViewResult eResult = eFailure;
         OUString sFilter = getCurrentFilter();
 
         m_pFileView->EndInplaceEditing( false );
@@ -304,6 +315,68 @@ void RemoteFilesDialog::OpenURL( OUString sURL )
             m_pFilter_lb->Enable( true );
             m_pName_ed->Enable( true );
             m_pContainer->Enable( true );
+        }
+    }
+
+    return eResult;
+}
+
+void RemoteFilesDialog::fillTreeEntry( SvTreeListEntry* pParent )
+{
+    if( pParent && m_pTreeView->IsExpanded( pParent ) )
+    {
+        // remove childs
+
+        if ( pParent )
+        {
+            SvTreeList* pModel = m_pTreeView->GetModel();
+
+            if( pModel->HasChildren( pParent ) )
+            {
+                SvTreeListEntries& rEntries = pModel->GetChildList( pParent );
+                rEntries.clear();
+            }
+        }
+
+        // fill with new ones
+
+        ::std::vector< SortingData_Impl* > aContent;
+
+        FileViewContentEnumerator* pContentEnumerator = new FileViewContentEnumerator(
+            m_xEnv, aContent, m_aMutex, NULL );
+
+        OUString* pURL = static_cast< OUString* >( pParent->GetUserData() );
+
+        if( pURL )
+        {
+            FolderDescriptor aFolder( *pURL );
+            Sequence< OUString > aBlackList;
+
+            EnumerationResult eResult =
+                pContentEnumerator->enumerateFolderContentSync( aFolder, aBlackList );
+
+            if ( SUCCESS == eResult )
+            {
+                unsigned int nChilds = 0;
+
+                for( unsigned int i = 0; i < aContent.size(); i++ )
+                {
+                    if( aContent[i]->mbIsFolder )
+                    {
+                        SvTreeListEntry* pEntry = m_pTreeView->InsertEntry( aContent[i]->GetTitle(), pParent, true );
+
+                        OUString* sData = new OUString( aContent[i]->maTargetURL );
+                        pEntry->SetUserData( static_cast< void* >( sData ) );
+
+                        nChilds++;
+                    }
+                }
+
+                if( nChilds == 0 )
+                {
+                    m_pTreeView->Collapse( pParent );
+                }
+            }
         }
     }
 }
@@ -343,7 +416,16 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
     {
         OUString sURL = m_aServices[nPos]->GetUrl();
 
-        OpenURL( sURL );
+        if( OpenURL( sURL ) == eSuccess )
+        {
+            m_pTreeView->Clear();
+
+            SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( m_pServices_lb->GetSelectEntry(), NULL, true );
+            OUString* sData = new OUString( sURL );
+            pRoot->SetUserData( static_cast< void* >( sData ) );
+
+            m_pTreeView->Expand( pRoot );
+        }
     }
 
     return 1;
@@ -460,6 +542,23 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )
 
     if( !sCurrentURL.isEmpty() )
         OpenURL( sCurrentURL );
+
+    return 1;
+}
+
+IMPL_LINK ( RemoteFilesDialog, TreeSelectHdl, SvTreeListBox *, pBox )
+{
+    OUString* sURL = static_cast< OUString* >( pBox->GetHdlEntry()->GetUserData() );
+
+    if( sURL )
+        OpenURL( *sURL );
+
+    return 1;
+}
+
+IMPL_LINK ( RemoteFilesDialog, TreeExpandHdl, SvTreeListBox *, pBox )
+{
+    fillTreeEntry( pBox->GetHdlEntry() );
 
     return 1;
 }

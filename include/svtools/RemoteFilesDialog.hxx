@@ -13,6 +13,8 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtresid.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/menubtn.hxx>
@@ -27,8 +29,19 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <ucbhelper/commandenvironment.hxx>
 
 #include <vector>
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::task;
+using namespace ::comphelper;
+using namespace ::svt;
 
 #define WB_MULTISELECTION 0x20000000L
 
@@ -69,6 +82,10 @@ private:
     SvtRemoteDlgType m_eType;
     bool m_bMultiselection;
     bool m_bIsUpdated;
+    Image m_aFolderImage;
+
+    Reference< XCommandEnvironment > m_xEnv;
+    ::osl::Mutex m_aMutex;
 
     VclPtr<PushButton> m_pOpen_btn;
     VclPtr<PushButton> m_pSave_btn;
@@ -93,7 +110,9 @@ private:
 
     OUString getCurrentFilter();
 
-    void OpenURL( OUString sURL );
+    FileViewResult OpenURL( OUString sURL );
+
+    void fillTreeEntry( SvTreeListEntry* pParent );
 
     DECL_LINK ( AddServiceHdl, void * );
     DECL_LINK ( SelectServiceHdl, void * );
@@ -105,6 +124,9 @@ private:
     DECL_LINK( SplitHdl, void * );
 
     DECL_LINK( SelectFilterHdl, void * );
+
+    DECL_LINK( TreeSelectHdl, SvTreeListBox * );
+    DECL_LINK( TreeExpandHdl, SvTreeListBox * );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
