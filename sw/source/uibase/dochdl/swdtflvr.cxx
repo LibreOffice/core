@@ -1320,7 +1320,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             {
             case SotClipboardFormatId::DRAWING:
                 nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
-                                                SW_PASTESDR_INSERT, pPt,
+                                                SwPasteSdr::Insert, pPt,
                                                 nActionFlags, bNeedToSelectBeforePaste);
                 break;
 
@@ -1359,7 +1359,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::PNG:
             case SotClipboardFormatId::GDIMETAFILE:
                 nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
-                                                SW_PASTESDR_INSERT,pPt,
+                                                SwPasteSdr::Insert,pPt,
                                                 nActionFlags, nDropAction, bNeedToSelectBeforePaste);
                 break;
 
@@ -1375,10 +1375,10 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::SIMPLE_FILE:
                 nRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
                                 ( EXCHG_IN_ACTION_MOVE == nClearedAction
-                                    ? SW_PASTESDR_REPLACE
+                                    ? SwPasteSdr::Replace
                                     : EXCHG_IN_ACTION_LINK == nClearedAction
-                                        ? SW_PASTESDR_SETATTR
-                                        : SW_PASTESDR_INSERT),
+                                        ? SwPasteSdr::SetAttr
+                                        : SwPasteSdr::Insert),
                                 pPt, nActionFlags, bMsg, 0 );
                 break;
 
@@ -1413,7 +1413,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::INET_IMAGE:
             case SotClipboardFormatId::NETSCAPE_IMAGE:
                 nRet = SwTransferable::_PasteTargetURL( rData, rSh,
-                                                        SW_PASTESDR_INSERT,
+                                                        SwPasteSdr::Insert,
                                                         pPt, true );
                 break;
 
@@ -1426,7 +1426,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             {
                 bool graphicInserted;
                 nRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
-                                            SW_PASTESDR_INSERT, pPt,
+                                            SwPasteSdr::Insert, pPt,
                                             nActionFlags, bMsg,
                                             &graphicInserted );
                 if( graphicInserted )
@@ -1483,7 +1483,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             {
             case SotClipboardFormatId::DRAWING:
                 nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
-                                                SW_PASTESDR_SETATTR, pPt,
+                                                SwPasteSdr::SetAttr, pPt,
                                                 nActionFlags, bNeedToSelectBeforePaste);
                 break;
             case SotClipboardFormatId::SVXB:
@@ -1495,7 +1495,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::FILEGRPDESCRIPTOR:
             case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
                 nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
-                                                SW_PASTESDR_SETATTR, pPt,
+                                                SwPasteSdr::SetAttr, pPt,
                                                 nActionFlags, nDropAction, bNeedToSelectBeforePaste);
                 break;
             default:
@@ -1506,7 +1506,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
         case EXCHG_OUT_ACTION_INSERT_DRAWOBJ:
             nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
-                                                SW_PASTESDR_INSERT, pPt,
+                                                SwPasteSdr::Insert, pPt,
                                                 nActionFlags, bNeedToSelectBeforePaste);
             break;
         case EXCHG_OUT_ACTION_INSERT_SVXB:
@@ -1514,13 +1514,13 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_INSERT_BITMAP:
         case EXCHG_OUT_ACTION_INSERT_GRAPH:
             nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
-                                                SW_PASTESDR_INSERT, pPt,
+                                                SwPasteSdr::Insert, pPt,
                                                 nActionFlags, nDropAction, bNeedToSelectBeforePaste);
             break;
 
         case EXCHG_OUT_ACTION_REPLACE_DRAWOBJ:
             nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
-                                                SW_PASTESDR_REPLACE, pPt,
+                                                SwPasteSdr::Replace, pPt,
                                                 nActionFlags, bNeedToSelectBeforePaste);
             break;
 
@@ -1529,7 +1529,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_REPLACE_BITMAP:
         case EXCHG_OUT_ACTION_REPLACE_GRAPH:
             nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
-                                                SW_PASTESDR_REPLACE,pPt,
+                                                SwPasteSdr::Replace,pPt,
                                                 nActionFlags, nDropAction, bNeedToSelectBeforePaste);
             break;
 
@@ -1936,7 +1936,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 
             if( nRet && ( nActionFlags &
                 ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) ))
-                SwTransferable::_PasteTargetURL( rData, rSh, 0, 0, false );
+                SwTransferable::_PasteTargetURL( rData, rSh, SwPasteSdr::NONE, 0, false );
 
             // let the object be unloaded if possible
             SwOLEObj::UnloadObject( xObj, rSh.GetDoc(), embed::Aspects::MSOLE_CONTENT );
@@ -1946,7 +1946,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 }
 
 bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
-                                    SwWrtShell& rSh, sal_uInt16 nAction,
+                                    SwWrtShell& rSh, SwPasteSdr nAction,
                                     const Point* pPt, bool bInsertGRF )
 {
     bool nRet = false;
@@ -1973,12 +1973,12 @@ bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
 
                 switch( nAction )
                 {
-                case SW_PASTESDR_INSERT:
+                case SwPasteSdr::Insert:
                     SwTransferable::SetSelInShell( rSh, false, pPt );
                     rSh.Insert( sURL, aEmptyOUStr, aGraphic );
                     break;
 
-                case SW_PASTESDR_REPLACE:
+                case SwPasteSdr::Replace:
                     if( rSh.IsObjSelected() )
                     {
                         rSh.ReplaceSdrObj( sURL, aEmptyOUStr, &aGraphic );
@@ -1989,7 +1989,7 @@ bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
                         rSh.ReRead( sURL, aEmptyOUStr, &aGraphic );
                     break;
 
-                case SW_PASTESDR_SETATTR:
+                case SwPasteSdr::SetAttr:
                     if( rSh.IsObjSelected() )
                         rSh.Paste( aGraphic, OUString() );
                     else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
@@ -2221,7 +2221,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 }
 
 bool SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
-                                    SwWrtShell& rSh, sal_uInt16 nAction,
+                                    SwWrtShell& rSh, SwPasteSdr nAction,
                                     const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste)
 {
     bool nRet = false;
@@ -2242,13 +2242,13 @@ bool SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
 
         if( nRet && ( nActionFlags &
             ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) ))
-            SwTransferable::_PasteTargetURL( rData, rSh, 0, 0, false );
+            SwTransferable::_PasteTargetURL( rData, rSh, SwPasteSdr::NONE, 0, false );
     }
     return nRet;
 }
 
 bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
-                                SotClipboardFormatId nFormat, sal_uInt16 nAction, const Point* pPt,
+                                SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
                                 sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste)
 {
     bool nRet = false;
@@ -2283,7 +2283,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
         if( ( nRet = rData.GetINetBookmark( nFormat, aBkmk ) ))
         {
-            if( SW_PASTESDR_SETATTR == nAction )
+            if( SwPasteSdr::SetAttr == nAction )
                 nFormat = SotClipboardFormatId::NETSCAPE_BOOKMARK;
             else
                 bCheckForGrf = true;
@@ -2302,7 +2302,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                         URIHelper::SmartRel2Abs(INetURLObject(), sText, Link<OUString *, bool>(), false ),
                         sDesc );
                 bCheckForGrf = true;
-                bCheckForImageMap = SW_PASTESDR_REPLACE == nAction;
+                bCheckForImageMap = SwPasteSdr::Replace == nAction;
             }
         }
         break;
@@ -2319,7 +2319,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyOUStr,
                                             aGraphic, &rFlt );
 
-        if( !nRet && SW_PASTESDR_SETATTR == nAction &&
+        if( !nRet && SwPasteSdr::SetAttr == nAction &&
             SotClipboardFormatId::SIMPLE_FILE == nFormat &&
             // only at frame selection
             rSh.IsFrmSelected() )
@@ -2354,19 +2354,19 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
         switch( nAction )
         {
-            case SW_PASTESDR_INSERT:
+            case SwPasteSdr::Insert:
             {
                 SwTransferable::SetSelInShell( rSh, false, pPt );
                 rSh.Insert( sURL, aEmptyOUStr, aGraphic );
                 break;
             }
 
-            case SW_PASTESDR_REPLACE:
+            case SwPasteSdr::Replace:
             {
                 if( rSh.IsObjSelected() )
                 {
                     // #i123922# for D&D on draw objects, do for now the same for
-                    // SW_PASTESDR_REPLACE (D&D) as for SW_PASTESDR_SETATTR (D&D and
+                    // SwPasteSdr::Replace (D&D) as for SwPasteSdr::SetAttr (D&D and
                     // CTRL+SHIFT). The code below replaces the draw object with
                     // a writer graphic; maybe this is an option later again if wanted
                     rSh.Paste( aGraphic, sURL );
@@ -2384,7 +2384,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                 break;
             }
 
-            case SW_PASTESDR_SETATTR:
+            case SwPasteSdr::SetAttr:
             {
                 if( SotClipboardFormatId::NETSCAPE_BOOKMARK == nFormat )
                 {
@@ -2433,7 +2433,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
         if( nActionFlags &
             ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) )
-            SwTransferable::_PasteTargetURL( rData, rSh, 0, 0, false );
+            SwTransferable::_PasteTargetURL( rData, rSh, SwPasteSdr::NONE, 0, false );
     }
     else if( bCheckForImageMap )
     {
@@ -2532,7 +2532,7 @@ bool SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
 
 bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat,
-                                    sal_uInt16 nAction, const Point* pPt,
+                                    SwPasteSdr nAction, const Point* pPt,
                     sal_uInt8 nActionFlags, bool /* bMsg */,
                     bool * graphicInserted)
 {
@@ -2570,7 +2570,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
 
                 //Own FileFormat? --> insert, not for StarWriter/Web
                 OUString sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link<OUString *, bool>(), false );
-                const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
+                const SfxFilter* pFlt = SwPasteSdr::SetAttr == nAction
                         ? 0 : SwIoSystem::GetFileFilter(sFileURL);
                 if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
                 {
@@ -2585,8 +2585,8 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                                       InsertRegionDialog ), pSect );
                     nRet = true;
                     }
-                else if( SW_PASTESDR_SETATTR == nAction ||
-                        ( bIsURLFile && SW_PASTESDR_INSERT == nAction ))
+                else if( SwPasteSdr::SetAttr == nAction ||
+                        ( bIsURLFile && SwPasteSdr::Insert == nAction ))
                 {
                     //we can insert foreign files as links after all
 
@@ -2731,7 +2731,7 @@ bool SwTransferable::_PasteFileList( TransferableDataHelper& rData,
     if( rData.GetFileList( SotClipboardFormatId::FILE_LIST, aFileList ) &&
         aFileList.Count() )
     {
-        sal_uInt16 nAct = bLink ? SW_PASTESDR_SETATTR : SW_PASTESDR_INSERT;
+        SwPasteSdr nAct = bLink ? SwPasteSdr::SetAttr : SwPasteSdr::Insert;
         OUString sFlyNm;
         // iterate over the filelist
         for( sal_uLong n = 0, nEnd = aFileList.Count(); n < nEnd; ++n )
