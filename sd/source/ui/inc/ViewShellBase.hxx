@@ -198,10 +198,6 @@ public:
     */
     void ShowUIControls (bool bVisible);
 
-    /** this method starts the presentation by
-        executing the slot SID_PRESENTATION asynchronous */
-    void StartPresentation();
-
     /** Return an event multiplexer.  It is a single class that forwards
         events from various sources.  This method must not be called before
         LateInit() has terminated.

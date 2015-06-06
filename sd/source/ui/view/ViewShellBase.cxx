@@ -905,14 +905,6 @@ OUString ViewShellBase::GetInitialViewShellType()
     return sRequestedView;
 }
 
-/** this method starts the presentation by
-    executing the slot SID_PRESENTATION asynchronous */
-void ViewShellBase::StartPresentation()
-{
-    if( GetViewFrame() && GetViewFrame()->GetDispatcher() )
-        GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
-}
-
 ::boost::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer()
 {
     OSL_ASSERT(mpImpl.get()!=NULL);

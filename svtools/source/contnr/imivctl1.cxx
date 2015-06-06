@@ -3597,18 +3597,6 @@ void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame( SvxIconChoiceCtrlEntry* pEn
     }
 }
 
-void SvxIconChoiceCtrl_Impl::HideEntryHighlightFrame()
-{
-    if( !pCurHighlightFrame )
-        return;
-
-    SvxIconChoiceCtrlEntry* pEntry = pCurHighlightFrame;
-    pCurHighlightFrame = nullptr;
-    Rectangle aInvalidationRect(GetEntryBoundRect(pEntry));
-    aInvalidationRect.expand(5);
-    pView->Invalidate(aInvalidationRect);
-}
-
 void SvxIconChoiceCtrl_Impl::CallSelectHandler( SvxIconChoiceCtrlEntry* )
 {
     // When single-click mode is active, the selection handler should be called

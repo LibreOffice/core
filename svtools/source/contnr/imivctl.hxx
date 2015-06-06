@@ -524,7 +524,6 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry,
                             bool bKeepHighlightFlags = false
                         );
-    void                HideEntryHighlightFrame();
     void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide);
     void                StopSelectTimer() { aCallSelectHdlIdle.Stop(); }
 
