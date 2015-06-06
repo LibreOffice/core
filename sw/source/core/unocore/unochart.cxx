@@ -1900,7 +1900,6 @@ SwChartDataSequence::SwChartDataSequence(
     xDataProvider( &rProvider ),
     pDataProvider( &rProvider ),
     pTableCrsr( pTableCursor ),
-    aCursorDepend( this, pTableCursor.get() ),
     _pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
 {
     bDisposed = false;
@@ -1931,7 +1930,7 @@ SwChartDataSequence::SwChartDataSequence(
 #if OSL_DEBUG_LEVEL > 0
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
-    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pTableCrsr.get());
+    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*pTableCrsr));
     OSL_ENSURE(pUnoTableCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
     (void) pUnoTableCrsr;
 #endif
@@ -1947,8 +1946,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     aColLabelText( SW_RES(STR_CHART2_COL_LABEL_TEXT) ),
     xDataProvider( rObj.pDataProvider ),
     pDataProvider( rObj.pDataProvider ),
-    pTableCrsr( dynamic_cast<SwUnoTableCrsr&>(*rObj.pTableCrsr.get()).Clone() ),
-    aCursorDepend( this, pTableCrsr.get() ),
+    pTableCrsr( rObj.pTableCrsr ),
     _pPropSet( rObj._pPropSet )
 {
     bDisposed = false;
@@ -1979,7 +1977,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
 #if OSL_DEBUG_LEVEL > 0
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
-    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pTableCrsr.get());
+    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*pTableCrsr));
     OSL_ENSURE(pUnoTableCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
     (void) pUnoTableCrsr;
 #endif
@@ -2028,11 +2026,7 @@ uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
             SwRangeDescriptor aDesc;
             if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
             {
-                //!! make copy of pTableCrsr (SwUnoCrsr )
-                // keep original cursor and make copy of it that gets handed
-                // over to the SwXCellRange object which takes ownership and
-                // thus will destroy the copy later.
-                SwXCellRange aRange( dynamic_cast<SwUnoTableCrsr&>(*pTableCrsr.get()).Clone(), *pTableFormat, aDesc );
+                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
                 aRange.GetDataSequence( &aRes, 0, 0 );
             }
         }
@@ -2188,11 +2182,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
             SwRangeDescriptor aDesc;
             if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
             {
-                //!! make copy of pTableCrsr (SwUnoCrsr )
-                // keep original cursor and make copy of it that gets handed
-                // over to the SwXCellRange object which takes ownership and
-                // thus will destroy the copy later.
-                SwXCellRange aRange( dynamic_cast<SwUnoTableCrsr&>(*pTableCrsr.get()).Clone(), *pTableFormat, aDesc );
+                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
                 aRange.GetDataSequence( 0, &aRes, 0 );
             }
         }
@@ -2217,11 +2207,7 @@ uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
             SwRangeDescriptor aDesc;
             if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
             {
-                //!! make copy of pTableCrsr (SwUnoCrsr )
-                // keep original cursor and make copy of it that gets handed
-                // over to the SwXCellRange object which takes ownership and
-                // thus will destroy the copy later.
-                SwXCellRange aRange( dynamic_cast<SwUnoTableCrsr&>(*pTableCrsr.get()).Clone(), *pTableFormat, aDesc );
+                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
 
                 // get numerical values and make an effort to return the
                 // numerical value for text formatted cells
@@ -2345,24 +2331,14 @@ void SwChartDataSequence::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
     ClientModify(this, pOld, pNew );
 
     // table was deleted or cursor was deleted
-    if(!GetRegisteredIn() || !aCursorDepend.GetRegisteredIn())
+    if(!GetRegisteredIn() || !pTableCrsr)
     {
-        pTableCrsr.reset();
+        pTableCrsr.reset(nullptr);
         dispose();
     }
     else
     {
         setModified( sal_True );
-    }
-}
-
-void SwChartDataSequence::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    SwClient::SwClientNotify(rModify, rHint);
-    if(typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        pTableCrsr.reset();
-        dispose();
     }
 }
 
@@ -2463,7 +2439,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             if (pLclRegisteredIn && pLclRegisteredIn->HasWriterListeners())
             {
                 pLclRegisteredIn->Remove(this);
-                pTableCrsr = nullptr;
+                pTableCrsr.reset(nullptr);
             }
         }
 
@@ -2629,7 +2605,7 @@ void SwChartDataSequence::FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const
 bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         sal_Int32 nFirstNew, sal_Int32 nCount )
 {
-    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pTableCrsr.get());
+    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*pTableCrsr));
     if (!pUnoTableCrsr)
         return false;
 

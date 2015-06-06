@@ -44,7 +44,6 @@
 #include <tuple>
 #include <unocrsr.hxx>
 
-class SwUnoCrsr;
 class SwTable;
 class SwTableBox;
 class SwTableLine;
@@ -456,14 +455,13 @@ class SwXCellRange : public cppu::WeakImplHelper
 >,
     public SwClient
 {
-    SwDepend                        aCursorDepend; //the cursor is removed after the doc has been removed
     ::osl::Mutex m_Mutex;
     ::cppu::OInterfaceContainerHelper m_ChartListeners;
 
     SwRangeDescriptor           aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;
 
-    std::shared_ptr<SwUnoCrsr> m_pTableCrsr;
+    sw::UnoCursorPointer m_pTableCrsr;
 
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
@@ -472,14 +470,10 @@ class SwXCellRange : public cppu::WeakImplHelper
     void setLabelDescriptions(const css::uno::Sequence<OUString>& rDesc, bool bRow);
 
 public:
-    SwXCellRange(std::shared_ptr<SwUnoCrsr> pCrsr, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
+    SwXCellRange(sw::UnoCursorPointer pCrsr, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
-    virtual ~SwXCellRange()
-    {
-        if(m_pTableCrsr)
-            m_pTableCrsr->Remove(&aCursorDepend);
-    }
+    virtual ~SwXCellRange() {};
     std::vector< css::uno::Reference< css::table::XCell > > getCells();
 
     TYPEINFO_OVERRIDE();
@@ -547,7 +541,6 @@ public:
 
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 
     SwFrameFormat*   GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     sal_uInt16      getRowCount();

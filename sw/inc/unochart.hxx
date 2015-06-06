@@ -50,12 +50,12 @@
 
 #include <calbck.hxx>
 #include <frmfmt.hxx>
+#include <unocrsr.hxx>
 
 class SfxItemPropertySet;
 class SwDoc;
 class SwTable;
 class SwTableBox;
-class SwUnoCrsr;
 struct SwRangeDescriptor;
 class SwSelBoxes;
 class SwFrameFormat;
@@ -265,8 +265,7 @@ class SwChartDataSequence :
     ::com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >    xDataProvider;
     SwChartDataProvider *                   pDataProvider;
 
-    std::shared_ptr<SwUnoCrsr>                  pTableCrsr;   // cursor spanned over cells to use
-    SwDepend                    aCursorDepend; //the cursor is removed after the doc has been removed
+    sw::UnoCursorPointer pTableCrsr;   // cursor spanned over cells to use
 
     const SfxItemPropertySet*   _pPropSet;
 
@@ -278,7 +277,6 @@ class SwChartDataSequence :
 protected:
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,

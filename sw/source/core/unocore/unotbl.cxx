@@ -3138,10 +3138,9 @@ uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames() throw( uno::Run
         "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
-SwXCellRange::SwXCellRange(std::shared_ptr<SwUnoCrsr> pCrsr, SwFrameFormat& rFrameFormat,
+SwXCellRange::SwXCellRange(sw::UnoCursorPointer pCrsr, SwFrameFormat& rFrameFormat,
     SwRangeDescriptor& rDesc)
     : SwClient(&rFrameFormat)
-    , aCursorDepend(this, nullptr)
     , m_ChartListeners(m_Mutex)
     , aRgDesc(rDesc)
     , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_RANGE))
@@ -3149,7 +3148,6 @@ SwXCellRange::SwXCellRange(std::shared_ptr<SwUnoCrsr> pCrsr, SwFrameFormat& rFra
     , m_bFirstRowAsLabel(false)
     , m_bFirstColumnAsLabel(false)
 {
-    m_pTableCrsr->Add(&aCursorDepend);
     aRgDesc.Normalize();
 }
 
@@ -3450,7 +3448,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     // first look at the attributes of the cursor
-                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(m_pTableCrsr.get());
+                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*m_pTableCrsr));
                     SwUnoCursorHelper::GetCrsrAttr(pCrsr->GetSelRing(), aSet);
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
                 }
@@ -3865,38 +3863,21 @@ sal_uInt16 SwXCellRange::getRowCount()
 const SwUnoCrsr* SwXCellRange::GetTableCrsr() const
 {
     SwFrameFormat* pFormat = GetFrameFormat();
-    return pFormat ? m_pTableCrsr.get() : nullptr;
+    return pFormat ? &(*m_pTableCrsr) : nullptr;
 }
 
 void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew );
-    if(!GetRegisteredIn() || !aCursorDepend.GetRegisteredIn())
+    if(!GetRegisteredIn() || !m_pTableCrsr)
     {
-        /*
-         * Not sure if this will cause a memory leak - this pTableCrsr
-         * is deleted in SwDoc and segfaults here when deleted again
-         * if(!aCursorDepend.GetRegisteredIn())
-            delete pTableCrsr;
-         */
-        m_pTableCrsr.reset();
+        m_pTableCrsr.reset(nullptr);
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
         m_ChartListeners.disposeAndClear(ev);
     }
     else
     {
         lcl_SendChartEvent(*this, m_ChartListeners);
-    }
-}
-
-void SwXCellRange::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    //assert(m_pTblCrsr->m_bSaneOwnership);
-    SwClient::SwClientNotify(rModify, rHint);
-    if(m_pTableCrsr && typeid(rHint) == typeid(sw::DocDisposingHint))
-    {
-        m_pTableCrsr->Remove(&aCursorDepend);
-        m_pTableCrsr.reset();
     }
 }
 
