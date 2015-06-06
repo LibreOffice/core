@@ -249,13 +249,12 @@ class SwXTextPortionEnumeration
         , ::com::sun::star::lang::XServiceInfo
         , ::com::sun::star::lang::XUnoTunnel
         >
-   , public SwClient
 {
     TextRangeList_t m_Portions; // contains all portions, filled by ctor
-    std::shared_ptr<SwUnoCrsr>  m_pUnoCrsr;
+    sw::UnoCursorPointer m_pUnoCrsr;
 
-    SwUnoCrsr*          GetCursor() const
-    {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
+    SwUnoCrsr* GetCursor() const
+        {return const_cast<SwUnoCrsr*>(&(*m_pUnoCrsr));}
 
 protected:
     virtual ~SwXTextPortionEnumeration();
@@ -292,10 +291,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 };
 
 class SwXRedlinePortion : public SwXTextPortion
