@@ -596,6 +596,17 @@ DECLARE_ODFIMPORT_TEST(fdo90130_2, "fdo90130-2.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(50), nValue);
 }
 
+DECLARE_ODFIMPORT_TEST(tdf34957, "tdf34957.odt")
+{
+    // table with "keep with next" always started on a new page if it was large,
+    // regardless of whether it was already "kept" with the previous
+    // paragraph, or whether the following paragraph actually fit on the same
+    // page.  (MAB 3.6 - 4.3)
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[2]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[5]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[7]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+}
+
 DECLARE_ODFIMPORT_TEST(testBnc800714, "bnc800714.fodt")
 {
     // Document's second paragraph wants to be together with the third one, but:
