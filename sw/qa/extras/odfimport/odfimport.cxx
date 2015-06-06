@@ -606,6 +606,17 @@ DECLARE_ODFIMPORT_TEST(testBnc800714, "bnc800714.fodt")
     CPPUNIT_ASSERT(getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
 }
 
+DECLARE_ODFIMPORT_TEST(tdf34957, "tdf34957.odt")
+{
+    // table with "keep with next" always started on a new page if it was large,
+    // regardless of whether it was already "kept" with the previous
+    // paragraph, or whether the following paragraph actually fit on the same
+    // page.  (MAB 3.6 - 4.3)
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[2]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[5]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[7]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
