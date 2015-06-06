@@ -412,7 +412,9 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
     pFS->startElementNS( XML_p, XML_bg, FSEND );
     pFS->startElementNS( XML_p, XML_bgPr, FSEND );
 
-    PowerPointShapeExport( pFS, &maShapeMap, this ).WriteFill( rXPropSet );
+    PowerPointShapeExport aDML( pFS, &maShapeMap, this );
+    aDML.SetBackgroundDark(mbIsBackgroundDark);
+    aDML.WriteFill( rXPropSet );
 
     pFS->endElementNS( XML_p, XML_bgPr );
     pFS->endElementNS( XML_p, XML_bg );
@@ -1706,6 +1708,7 @@ void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, bool
     PowerPointShapeExport aDML( pFS, &maShapeMap, this );
     aDML.SetMaster( bMaster );
     aDML.SetPageType( ePageType );
+    aDML.SetBackgroundDark(mbIsBackgroundDark);
     sal_uInt32 nShapes;
 
     pFS->startElementNS( XML_p, XML_spTree, FSEND );
