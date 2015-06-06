@@ -93,6 +93,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:SelectTextMode"/>
+      <menu:menuitem menu:id=".uno:ShadowCursor"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
@@ -122,6 +123,13 @@
           <menu:menuitem menu:id=".uno:EditHyperlink"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menu menu:id=".uno:EditCommentsMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ReplyComment"/>
+          <menu:menuitem menu:id=".uno:DeleteComment"/>
+          <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuitem menu:id=".uno:LinkDialog"/>
       <menu:menuitem menu:id=".uno:PlugInsActive"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
@@ -139,16 +147,28 @@
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
       <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
-      <menu:menuitem menu:id=".uno:Ruler"/>
+      <menu:menu menu:id=".uno:RulerMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:Ruler"/>
+          <menu:menuitem menu:id=".uno:VRuler"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menu menu:id=".uno:ScrollBarMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:HScroll"/>
+          <menu:menuitem menu:id=".uno:VScroll"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewBounds"/>
       <menu:menuitem menu:id=".uno:TableBoundaries"/>
+      <menu:menuitem menu:id=".uno:ShowGraphics"/>
+      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
+      <menu:menuitem menu:id=".uno:ControlCodes"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Marks"/>
       <menu:menuitem menu:id=".uno:Fieldnames"/>
       <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
-      <menu:menuitem menu:id=".uno:ControlCodes"/>
-      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
-      <menu:menuitem menu:id=".uno:ShowGraphics"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:Gallery"/>
@@ -180,6 +200,15 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertGraphic"/>
       <menu:menuitem menu:id=".uno:InsertObjectChart"/>
+      <menu:menu menu:id=".uno:ShapesMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:Line"/>
+          <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
+          <menu:menuitem menu:id=".uno:Rect"/>
+          <menu:menuitem menu:id=".uno:Ellipse"/>
+          <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Gallery"/>
@@ -191,14 +220,6 @@
           </menu:menu>
           <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
           <menu:menuitem menu:id=".uno:InsertAVMedia"/>
-        </menu:menupopup>
-      </menu:menu>
-      <menu:menu menu:id=".uno:ShapesMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Line"/>
-          <menu:menuitem menu:id=".uno:Rect"/>
-          <menu:menuitem menu:id=".uno:Ellipse"/>
-          <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:ObjectMenu">
@@ -325,14 +346,14 @@
       </menu:menu>
       <menu:menu menu:id=".uno:TextAlign">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:CommonAlignLeft"/>
-          <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter"/>
-          <menu:menuitem menu:id=".uno:CommonAlignRight"/>
-          <menu:menuitem menu:id=".uno:CommonAlignJustified"/>
+          <menu:menuitem menu:id=".uno:CommonAlignLeft" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignRight" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignJustified" menu:style="radio"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:CommonAlignTop"/>
-          <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter"/>
-          <menu:menuitem menu:id=".uno:CommonAlignBottom"/>
+          <menu:menuitem menu:id=".uno:CommonAlignTop" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignBottom" menu:style="radio"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:FormatBulletsMenu">
@@ -390,15 +411,34 @@
       <menu:menuitem menu:id=".uno:RubyDialog"/>
       <menu:menuitem menu:id=".uno:FormatColumns"/>
       <menu:menuitem menu:id=".uno:EditRegion"/>
+      <menu:menuitem menu:id=".uno:FormatAllNotes"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:FormatImageMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Crop"/>
+          <menu:menuitem menu:id=".uno:ContourDialog"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:ExternalEdit"/>
           <menu:menuitem menu:id=".uno:ChangePicture"/>
           <menu:menuitem menu:id=".uno:CompressGraphic"/>
           <menu:menuitem menu:id=".uno:SaveGraphic"/>
+          <menu:menuseparator/>
+          <menu:menu menu:id=".uno:FormatImageFilterMenu">
+            <menu:menupopup>
+              <menu:menuitem menu:id=".uno:GraphicFilterSepia"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterSobel"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterInvert"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterMosaic"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterPopart"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterPoster"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterRelief"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterRemoveNoise"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterSharpen"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterSmooth"/>
+              <menu:menuitem menu:id=".uno:GraphicFilterSolarize"/>
+            </menu:menupopup>
+          </menu:menu>
+          <menu:menuitem menu:id=".uno:ColorSettings"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:GraphicDialog"/>
         </menu:menupopup>
@@ -504,22 +544,21 @@
       </menu:menu>
       <menu:menu menu:id=".uno:TableSelectMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:SelectTable"/>
           <menu:menuitem menu:id=".uno:EntireRow"/>
           <menu:menuitem menu:id=".uno:EntireColumn"/>
+          <menu:menuitem menu:id=".uno:SelectTable"/>
           <menu:menuitem menu:id=".uno:EntireCell"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:TableAutoFitMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:SetColumnWidth"/>
-          <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
-          <menu:menuitem menu:id=".uno:DistributeColumns"/>
-          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:SetRowHeight"/>
           <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
           <menu:menuitem menu:id=".uno:DistributeRows"/>
-          <menu:menuitem menu:id=".uno:RowSplit"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:SetColumnWidth"/>
+          <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
+          <menu:menuitem menu:id=".uno:DistributeColumns"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -532,8 +571,10 @@
       <menu:menuitem menu:id=".uno:UnsetCellsReadOnly"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TableNumberFormatDialog"/>
-      <menu:menuitem menu:id=".uno:HeadingRowsRepeat"/>
       <menu:menuitem menu:id=".uno:AutoFormat"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:HeadingRowsRepeat"/>
+      <menu:menuitem menu:id=".uno:RowSplit"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:TableConvertMenu">
         <menu:menupopup>
@@ -554,7 +595,6 @@
       <menu:menuitem menu:id=".uno:SpellingAndGrammarDialog"/>
       <menu:menuitem menu:id=".uno:SpellOnline"/>
       <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
-      <menu:menuitem menu:id=".uno:WordCountDialog"/>
       <menu:menu menu:id=".uno:LanguageMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SetLanguageSelectionMenu"/>
@@ -568,6 +608,7 @@
           <menu:menuitem menu:id=".uno:MoreDictionaries"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:WordCountDialog"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:AutoFormatMenu">
         <menu:menupopup>

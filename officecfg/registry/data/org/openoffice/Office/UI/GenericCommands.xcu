@@ -2472,10 +2472,10 @@
       </node>
       <node oor:name=".uno:BrowseView" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Web</value>
+          <value xml:lang="en-US">~Web View</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Web</value>
         </prop>
       </node>
       <node oor:name=".uno:ProgressBar" oor:op="replace">
@@ -3237,7 +3237,23 @@
       </node>
       <node oor:name=".uno:ShapesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Shapes</value>
+          <value xml:lang="en-US">~Shape</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RulerMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Ruler</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ScrollBarMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Scrollbars</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5584,6 +5600,16 @@
           <value xml:lang="en-US">~Entries</value>
         </prop>
       </node>
+      <node oor:name=".uno:EditCommentsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">C~omment</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormatImageFilterMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Filter</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ToolsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Tools</value>
@@ -5611,7 +5637,7 @@
       </node>
       <node oor:name=".uno:FieldMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fiel~ds</value>
+          <value xml:lang="en-US">Fiel~d</value>
         </prop>
       </node>
       <node oor:name=".uno:FormattingMarkMenu" oor:op="replace">
