@@ -529,6 +529,20 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
     }
 }
 
+DECLARE_WW8EXPORT_TEST(tdf34957, "tdf34957.odt")
+{
+    // table with "keep with next" always started on a new page if it was large,
+    // regardless of whether it was already "kept" with the previous
+    // paragraph, or whether the following paragraph actually fit on the same
+    // page.  (MAB 3.6 - 4.3)
+    // .doc differs from ODT in that MSWord always starts a keep-with-next
+    // table starting on a new page - even if it is too large for one page.
+    // .doc table "keep with next" is emulated by marking each row as keep.
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[2]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[5]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[8]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+}
+
 DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
 {
     //the save must survive without asserting
