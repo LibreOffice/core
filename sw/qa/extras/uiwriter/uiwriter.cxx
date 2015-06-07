@@ -89,6 +89,7 @@ public:
     void testCp1000115();
     void testTdf90003();
     void testSearchWithTransliterate();
+    void testExportToPicture();
     void testTdf90362();
     void testUndoCharAttribute();
     void testTdf86639();
@@ -126,6 +127,7 @@ public:
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
@@ -897,6 +899,27 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testExportToPicture()
+{
+    createDoc();
+    uno::Sequence<beans::PropertyValue> aFilterData =
+    {
+        beans::PropertyValue("PixelWidth", sal_Int32(0), uno::makeAny(sal_Int32(610)), beans::PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("PixelHeight", sal_Int32(0), uno::makeAny(sal_Int32(610)), beans::PropertyState_DIRECT_VALUE)
+        };
+    uno::Sequence<beans::PropertyValue> aDescriptor =
+    {
+        beans::PropertyValue("FilterName", sal_Int32(0), uno::makeAny(OUString("writer_png_Export")), beans::PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("FilterData", sal_Int32(0), uno::makeAny(aFilterData), beans::PropertyState_DIRECT_VALUE)
+    };
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    sal_Bool extchk = aTempFile.IsValid();
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), extchk);
+    aTempFile.EnableKillingFile();
 }
 
 void SwUiWriterTest::testTdf90362()
