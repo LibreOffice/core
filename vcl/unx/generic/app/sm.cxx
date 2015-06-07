@@ -26,8 +26,6 @@
 #include <sys/poll.h>
 #include <fcntl.h>
 
-#include <stdio.h>
-
 #include <rtl/strbuf.hxx>
 
 #include <rtl/process.h>

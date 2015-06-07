@@ -31,7 +31,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <stdio.h>
 
 #include "vcl/window.hxx"
 #include "unx/gtk/gtkframe.hxx"
