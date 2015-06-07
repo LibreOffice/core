@@ -26,27 +26,45 @@
  <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:style="auto"/>
  <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:style="auto"/>
  <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:style="auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
+ <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineFont"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToLower" toolbar:text="lowercase" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToUpper" toolbar:text="UPPERCASE" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Color"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
- <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Color"/>
 </toolbar:toolbar>
