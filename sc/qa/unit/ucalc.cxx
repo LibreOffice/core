@@ -45,6 +45,7 @@
 #include "interpre.hxx"
 #include "columniterator.hxx"
 #include "types.hxx"
+#include "validat.hxx"
 #include "conditio.hxx"
 #include "colorscale.hxx"
 #include "fillinfo.hxx"
@@ -5688,6 +5689,31 @@ void Test::testCondFormatInsertRow()
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,3,5,0)), rRange);
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testValidity()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue( 0, 0, 0, 22.0/24.0 );
+    m_pDoc->SetValue( 2, 0, 0, 23.0/24.0 );
+    m_pDoc->SetValue( 4, 0, 0, 24.0/24.0 );
+
+    // invalid between 2300-0100 hrs
+    ScValidationData* pData0 = new ScValidationData( SC_VALID_TIME, SC_COND_NOTBETWEEN,
+        OUString::number(23.0/24.0), OUString::number(1.0/24.0), m_pDoc, ScAddress(0,0,0) );
+    ScValidationData* pData1 = new ScValidationData( SC_VALID_TIME, SC_COND_NOTBETWEEN,
+        OUString::number(23.0/24.0), OUString::number(1.0/24.0), m_pDoc, ScAddress(2,0,0) );
+    ScValidationData* pData2 = new ScValidationData( SC_VALID_TIME, SC_COND_NOTBETWEEN,
+        OUString::number(23.0/24.0), OUString::number(1.0/24.0), m_pDoc, ScAddress(4,0,0) );
+
+    ScRefCellValue aCell;
+    aCell.assign(*m_pDoc, ScAddress(0,0,0));
+    CPPUNIT_ASSERT(  pData0->IsDataValid( aCell, ScAddress(0,0,0) ) );
+    aCell.assign(*m_pDoc, ScAddress(2,0,0));
+    CPPUNIT_ASSERT( !pData1->IsDataValid( aCell, ScAddress(2,0,0) ) );
+    aCell.assign(*m_pDoc, ScAddress(4,0,0));
+    CPPUNIT_ASSERT( !pData2->IsDataValid( aCell, ScAddress(4,0,0) ) );
 }
 
 void Test::testCondFormatInsertDeleteSheets()

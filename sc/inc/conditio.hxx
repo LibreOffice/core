@@ -154,10 +154,12 @@ public:
 class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
 {
                                         // stored data:
+protected:
     ScConditionMode     eOp;
     sal_uInt16              nOptions;
     double              nVal1;          // input or calculated
     double              nVal2;
+private:
     OUString              aStrVal1;       // input or calculated
     OUString              aStrVal2;
     OUString              aStrNmsp1;      // namespace to be used on (re)compilation, e.g. in XML import
