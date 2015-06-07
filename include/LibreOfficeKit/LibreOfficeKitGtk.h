@@ -45,7 +45,7 @@ struct _LOKDocViewClass
   void (* size_changed) (LOKDocView* pView);
 };
 
-GType                          lok_doc_view_get_type               (void);
+GType                          lok_doc_view_get_type               (void) G_GNUC_CONST;
 GtkWidget*                     lok_doc_view_new                    (LibreOfficeKit* pOffice );
 gboolean                       lok_doc_view_open_document          (LOKDocView* pDocView,
                                                                     char* pPath);
