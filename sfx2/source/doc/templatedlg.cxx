@@ -229,11 +229,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), ToolBoxItemBits::DROPDOWNONLY);
 
     // Set toolbox handlers
-    mpViewBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));
+    mpViewBar->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));
     mpViewBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
-    mpActionBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXActionHdl));
+    mpActionBar->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,TBXActionHdl));
     mpActionBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
-    mpTemplateBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXTemplateHdl));
+    mpTemplateBar->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,TBXTemplateHdl));
     mpTemplateBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
     mpSearchEdit->SetUpdateDataHdl(LINK(this,SfxTemplateManagerDlg,SearchUpdateHdl));
     mpSearchEdit->EnableUpdateData();
