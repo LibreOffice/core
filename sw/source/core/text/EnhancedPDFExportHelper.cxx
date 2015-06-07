@@ -1510,8 +1510,8 @@ SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
 Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrm* pCurrPage,
     const Rectangle& rRectangle) const
 {
-    sal_Int16 nPostItMode = mrPrintData.GetPrintPostIts();
-    if (nPostItMode != POSTITS_INMARGINS)
+    SwPostItMode nPostItMode = mrPrintData.GetPrintPostIts();
+    if (nPostItMode != SwPostItMode::InMargins)
         return rRectangle;
     //the page has been scaled by 75% and vertically centered, so adjust these
     //rectangles equivalently

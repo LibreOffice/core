@@ -465,8 +465,8 @@ bool SwViewShell::PrintOrPDFExport(
     // output to the real outputdevice
     GDIMetaFile *pOrigRecorder(NULL);
     GDIMetaFile *pMetaFile(NULL);
-    sal_Int16 nPostItMode = rPrintData.GetPrintPostIts();
-    if (nPostItMode == POSTITS_INMARGINS)
+    SwPostItMode nPostItMode = rPrintData.GetPrintPostIts();
+    if (nPostItMode == SwPostItMode::InMargins)
     {
         //get and disable the existing recorder
         pOrigRecorder = pOutDev->GetConnectMetaFile();
@@ -537,7 +537,7 @@ bool SwViewShell::PrintOrPDFExport(
 
         SwPaintQueue::Repaint();
 
-        SwPostItMgr *pPostItManager = (nPostItMode == POSTITS_INMARGINS) ?
+        SwPostItMgr *pPostItManager = (nPostItMode == SwPostItMode::InMargins) ?
             pShell->GetPostItMgr() : NULL;
         if (pPostItManager)
         {

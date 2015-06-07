@@ -365,9 +365,10 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_ANNOTATION_MODE:
         {
-            sal_Int16 nVal = 0;
-            rValue >>= nVal;
-            if(nVal <= text::NotePrintMode_PAGE_END)
+            sal_Int16 nTmp = 0;
+            rValue >>= nTmp;
+            SwPostItMode nVal = static_cast<SwPostItMode>(nTmp);
+            if(nVal <= SwPostItMode::EndPage)
                 mpPrtOpt->SetPrintPostIts(nVal);
             else
                 throw lang::IllegalArgumentException();

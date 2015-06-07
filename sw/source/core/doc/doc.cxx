@@ -736,12 +736,12 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
     sal_Int32 nDocPageCount )
 {
 
-    sal_Int16 nPostItMode = (sal_Int16) rOptions.getIntValue( "PrintAnnotationMode", 0 );
-    OSL_ENSURE(nPostItMode == POSTITS_NONE || rData.HasPostItData(),
+    SwPostItMode nPostItMode = static_cast<SwPostItMode>( rOptions.getIntValue( "PrintAnnotationMode", 0 ) );
+    OSL_ENSURE(nPostItMode == SwPostItMode::NONE || rData.HasPostItData(),
             "print post-its without post-it data?" );
     const _SetGetExpFields::size_type nPostItCount =
         rData.HasPostItData() ? rData.m_pPostItFields->size() : 0;
-    if (nPostItMode != POSTITS_NONE && nPostItCount > 0)
+    if (nPostItMode != SwPostItMode::NONE && nPostItCount > 0)
     {
         SET_CURR_SHELL( rData.m_pPostItShell.get() );
 
@@ -755,7 +755,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 
         const StringRangeEnumerator aRangeEnum( rData.GetPageRange(), 1, nDocPageCount, 0 );
 
-        // For mode POSTITS_ENDPAGE:
+        // For mode SwPostItMode::EndPage:
         // maps a physical page number to the page number in post-it document that holds
         // the first post-it for that physical page . Needed to relate the correct start frames
         // from the post-it doc to the physical page of the document
@@ -776,16 +776,16 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             if (nPhyPageNum)
             {
                 // need to insert a page break?
-                // In POSTITS_ENDPAGE mode for each document page the following
+                // In SwPostItMode::EndPage mode for each document page the following
                 // post-it page needs to start on a new page
-                const bool bNewPage = nPostItMode == POSTITS_ENDPAGE &&
+                const bool bNewPage = nPostItMode == SwPostItMode::EndPage &&
                         !bIsFirstPostIt && nPhyPageNum != nLastPageNum;
 
                 lcl_FormatPostIt( &rData.m_pPostItShell->GetDoc()->getIDocumentContentOperations(), aPam,
                         rPostIt.GetPostIt(), bNewPage, bIsFirstPostIt, nVirtPg, nLineNo );
                 bIsFirstPostIt = false;
 
-                if (nPostItMode == POSTITS_ENDPAGE)
+                if (nPostItMode == SwPostItMode::EndPage)
                 {
                     // get the correct number of current pages for the post-it document
                     rData.m_pPostItShell->CalcLayout();
@@ -799,12 +799,12 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         rData.m_pPostItShell->CalcLayout();
         const sal_Int32 nPostItDocPageCount = rData.m_pPostItShell->GetPageCount();
 
-        if (nPostItMode == POSTITS_ONLY || nPostItMode == POSTITS_ENDDOC)
+        if (nPostItMode == SwPostItMode::Only || nPostItMode == SwPostItMode::EndDoc)
         {
             // now add those post-it pages to the vector of pages to print
             // or replace them if only post-its should be printed
 
-            if (nPostItMode == POSTITS_ONLY)
+            if (nPostItMode == SwPostItMode::Only)
             {
                 // no document page to be printed
                 rData.GetPagesToPrint().clear();
@@ -825,7 +825,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             }
             OSL_ENSURE( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
         }
-        else if (nPostItMode == POSTITS_ENDPAGE)
+        else if (nPostItMode == SwPostItMode::EndPage)
         {
             // the next step is to find all the pages from the post-it
             // document that should be printed for a given physical page

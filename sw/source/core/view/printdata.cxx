@@ -312,7 +312,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                           aLocalizedStrings.GetString(12),
                                                           OUString(), aContentsOpt);
     // create a list box for notes content
-    const sal_Int16 nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
+    const SwPostItMode nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
     aChoices.realloc( 5 );
     aChoices[0] = aLocalizedStrings.GetString( 13 );
     aChoices[1] = aLocalizedStrings.GetString( 14 );
@@ -329,7 +329,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            aHelpIds,
                                                            "PrintAnnotationMode",
                                                            aChoices,
-                                                           nPrintPostIts,
+                                                           static_cast<sal_uInt16>(nPrintPostIts),
                                                            uno::Sequence< sal_Bool >(),
                                                            aAnnotOpt);
 

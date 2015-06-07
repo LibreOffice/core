@@ -2628,8 +2628,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         }
         else
         {
-            const sal_Int16 nPostItMode = (sal_Int16) m_pPrintUIOptions->getIntValue( "PrintAnnotationMode", 0 );
-            if (nPostItMode != POSTITS_NONE)
+            const SwPostItMode nPostItMode = static_cast<SwPostItMode>( m_pPrintUIOptions->getIntValue( "PrintAnnotationMode", 0 ) );
+            if (nPostItMode != SwPostItMode::NONE)
             {
                 VclPtr< OutputDevice > pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
                 m_pRenderData->CreatePostItData( pDoc, pViewShell->GetViewOptions(), pOutDev );
@@ -2639,7 +2639,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // and their start frames
             SwDoc::CalculatePagesForPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
 
-            if (nPostItMode != POSTITS_NONE)
+            if (nPostItMode != SwPostItMode::NONE)
             {
                 SwDoc::UpdatePagesForPrintingWithPostItData( *m_pRenderData,
                         *m_pPrintUIOptions, bIsPDFExport, nPageCount );

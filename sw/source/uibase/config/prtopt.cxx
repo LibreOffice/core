@@ -94,7 +94,7 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
                     {
                         sal_Int32 nTmp = 0;
                         pValues[nProp] >>=  nTmp;
-                        nPrintPostIts = (sal_Int16)nTmp;
+                        nPrintPostIts = static_cast<SwPostItMode>(nTmp);
                     }
                     break;
                     case  6: bPrintReverse      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;

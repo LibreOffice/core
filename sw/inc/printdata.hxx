@@ -44,6 +44,17 @@ class SfxViewShell;
 class SwPrintUIOptions;
 class SwRenderData;
 
+/** this must match the definitions in css::text::NotePrintMode */
+enum class SwPostItMode
+{
+    NONE    = 0,
+    Only    = 1,
+    EndDoc  = 2,
+    EndPage = 3,
+    InMargins = 4
+};
+
+
 class SwPrintData
 {
     const SwPrintUIOptions *    m_pPrintUIOptions;  // not owner
@@ -65,7 +76,7 @@ public:
              bUpdateFieldsInPrinting,
              bModified;
 
-    sal_Int16           nPrintPostIts;
+    SwPostItMode    nPrintPostIts;
     OUString       sFaxName;
 
     SwPrintData()
@@ -93,7 +104,7 @@ public:
         bPrintHiddenText        =
         bPrintTextPlaceholder   = false;
 
-        nPrintPostIts           = 0;
+        nPrintPostIts           = SwPostItMode::NONE;
     }
 
     virtual ~SwPrintData() {}
@@ -143,7 +154,7 @@ public:
     bool IsPrintPageBackground() const      { return bPrintPageBackground; }
     bool IsPrintBlackFont() const           { return bPrintBlackFont; }
     bool IsPrintSingleJobs() const          { return bPrintSingleJobs; }
-    sal_Int16 GetPrintPostIts() const           { return nPrintPostIts; }
+    SwPostItMode GetPrintPostIts() const           { return nPrintPostIts; }
     const OUString GetFaxName() const      { return sFaxName; }
     bool IsPrintHiddenText() const          { return bPrintHiddenText; }
     bool IsPrintTextPlaceholder() const     { return bPrintTextPlaceholder; }
@@ -157,13 +168,13 @@ public:
     void SetPrintReverse( bool b )              { doSetModified(); bPrintReverse = b; }
     void SetPaperFromSetup( bool b )            { doSetModified(); bPaperFromSetup = b; }
     void SetPrintEmptyPages( bool b )           { doSetModified(); bPrintEmptyPages = b; }
-    void SetPrintPostIts( sal_Int16 n )             { doSetModified(); nPrintPostIts = n; }
+    void SetPrintPostIts( SwPostItMode n )      { doSetModified(); nPrintPostIts = n; }
     void SetPrintProspect( bool b )             { doSetModified(); bPrintProspect = b; }
     void SetPrintProspect_RTL( bool b )         { doSetModified(); bPrintProspectRTL = b; }
     void SetPrintPageBackground( bool b )       { doSetModified(); bPrintPageBackground = b; }
     void SetPrintBlackFont( bool b )            { doSetModified(); bPrintBlackFont = b; }
     void SetPrintSingleJobs( bool b )           { doSetModified(); bPrintSingleJobs = b; }
-    void SetFaxName( const OUString& rSet )    { sFaxName = rSet; }
+    void SetFaxName( const OUString& rSet )     { sFaxName = rSet; }
     void SetPrintHiddenText( bool b )           { doSetModified(); bPrintHiddenText = b; }
     void SetPrintTextPlaceholder( bool b )      { doSetModified(); bPrintTextPlaceholder = b; }
 
@@ -188,7 +199,7 @@ public:
     bool IsPrintTextPlaceholders() const        { return getBoolValue( "PrintTextPlaceholder", m_rDefaultPrintData.bPrintTextPlaceholder ); }
     bool IsPrintHiddenText() const              { return getBoolValue( "PrintHiddenText",      m_rDefaultPrintData.bPrintHiddenText ); }
     bool IsPrintWithBlackTextColor() const      { return getBoolValue( "PrintBlackFonts",      m_rDefaultPrintData.bPrintBlackFont ); }
-    sal_Int16 GetPrintPostItsType() const       { return static_cast< sal_Int16 >(getIntValue( "PrintAnnotationMode", m_rDefaultPrintData.nPrintPostIts )); }
+    SwPostItMode GetPrintPostItsType() const       { return static_cast< SwPostItMode >(getIntValue( "PrintAnnotationMode", static_cast<sal_uInt16>(m_rDefaultPrintData.nPrintPostIts) )); }
     bool IsPaperFromSetup() const               { return getBoolValue( "PrintPaperFromSetup",  m_rDefaultPrintData.bPaperFromSetup ); }
 
     bool IsPrintLeftPages() const;
@@ -284,13 +295,6 @@ public:
     OUString   GetPageRange() const                            { return m_aPageRange; }
     void            SetPageRange( const OUString &rRange )     { m_aPageRange = rRange; }
 };
-
-/// last remnants of swprtopt.hxx:
-#define POSTITS_NONE    0
-#define POSTITS_ONLY    1
-#define POSTITS_ENDDOC  2
-#define POSTITS_ENDPAGE 3
-#define POSTITS_INMARGINS 4
 
 namespace sw {
 
