@@ -456,67 +456,6 @@ sal_uInt16 ChildAlignValue(SfxChildAlignment eAlign)
     return ret;
 }
 
-sal_uInt16 ChildTravelValue( SfxChildAlignment eAlign )
-{
-    sal_uInt16 ret = 17;
-
-    switch (eAlign)
-    {
-        case SfxChildAlignment::FIRSTLEFT:
-            ret = 1;
-            break;
-        case SfxChildAlignment::LEFT:
-            ret = 2;
-            break;
-        case SfxChildAlignment::LASTLEFT:
-            ret = 3;
-            break;
-        case SfxChildAlignment::TOOLBOXLEFT:
-            ret = 4;
-            break;
-        case SfxChildAlignment::HIGHESTTOP:
-            ret = 5;
-            break;
-        case SfxChildAlignment::TOP:
-            ret = 6;
-            break;
-        case SfxChildAlignment::TOOLBOXTOP:
-            ret = 7;
-            break;
-        case SfxChildAlignment::LOWESTTOP:
-            ret = 8;
-            break;
-        case SfxChildAlignment::HIGHESTBOTTOM:
-            ret = 9;
-            break;
-        case SfxChildAlignment::TOOLBOXBOTTOM:
-            ret = 10;
-            break;
-        case SfxChildAlignment::BOTTOM:
-            ret = 11;
-            break;
-        case SfxChildAlignment::LOWESTBOTTOM:
-            ret = 12;
-            break;
-        case SfxChildAlignment::TOOLBOXRIGHT:
-            ret = 13;
-            break;
-        case SfxChildAlignment::FIRSTRIGHT:
-            ret = 14;
-            break;
-        case SfxChildAlignment::RIGHT:
-            ret = 15;
-            break;
-        case SfxChildAlignment::LASTRIGHT:
-            ret = 16;
-            break;
-        case SfxChildAlignment::NOALIGNMENT:
-            break;  // -Wall not handled.
-    }
-
-    return ret;
-}
-
 void SfxWorkWindow::Sort_Impl()
 {
     aSortedList.clear();
