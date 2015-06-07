@@ -38,10 +38,8 @@
 |*
 ***************************************************************************/
 
-SbiStringPool::SbiStringPool( SbiParser* p )
-{
-    pParser = p;
-}
+SbiStringPool::SbiStringPool( )
+{}
 
 SbiStringPool::~SbiStringPool()
 {}
@@ -89,9 +87,8 @@ short SbiStringPool::Add( double n, SbxDataType t )
 |*
 ***************************************************************************/
 
-SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s ) : rStrings( r )
+SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s, SbiParser* pP ) : rStrings( r ), pParser( pP )
 {
-    pParser  = r.GetParser();
     eScope   = s;
     pParent  = NULL;
     nCur     =
@@ -375,7 +372,7 @@ SbiSymPool& SbiSymDef::GetPool()
 {
     if( !pPool )
     {
-        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   // is dumped
+        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL, pIn->pParser );   // is dumped
     }
     return *pPool;
 }
@@ -396,12 +393,12 @@ SbiSymScope SbiSymDef::GetScope() const
 SbiProcDef::SbiProcDef( SbiParser* pParser, const OUString& rName,
                         bool bProcDecl )
          : SbiSymDef( rName )
-         , aParams( pParser->aGblStrings, SbPARAM )  // is dumped
-         , aLabels( pParser->aLclStrings, SbLOCAL )  // is not dumped
+         , aParams( pParser->aGblStrings, SbPARAM, pParser )  // is dumped
+         , aLabels( pParser->aLclStrings, SbLOCAL, pParser )  // is not dumped
          , mbProcDecl( bProcDecl )
 {
     aParams.SetParent( &pParser->aPublics );
-    pPool = new SbiSymPool( pParser->aGblStrings, SbLOCAL );
+    pPool = new SbiSymPool( pParser->aGblStrings, SbLOCAL, pParser );
     pPool->SetParent( &aParams );
     nLine1  =
     nLine2  = 0;
