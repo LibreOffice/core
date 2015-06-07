@@ -1127,14 +1127,23 @@ Size DockingWindow::GetOptimalSize() const
     return Window::CalcWindowSize(aSize);
 }
 
-void DockingWindow::queue_resize(StateChangedType /*eReason*/)
+void DockingWindow::queue_resize(StateChangedType eReason)
 {
+    bool bTriggerLayout = true;
     if (hasPendingLayout() || isCalculatingInitialLayoutSize())
-        return;
+    {
+        bTriggerLayout = false;
+    }
     if (!isLayoutEnabled())
-        return;
-    InvalidateSizeCache();
-    maLayoutIdle.Start();
+    {
+        bTriggerLayout = false;
+    }
+    if (bTriggerLayout)
+    {
+        InvalidateSizeCache();
+        maLayoutIdle.Start();
+    }
+    vcl::Window::queue_resize(eReason);
 }
 
 IMPL_LINK_NOARG_TYPED(DockingWindow, ImplHandleLayoutTimerHdl, Idle*, void)
