@@ -57,7 +57,6 @@
  * @file
  * Util functions for xml filter.
  ************************************************************************/
-#include <stdio.h>
 #include "xfutil.hxx"
 #include "xfparagraph.hxx"
 #include "xfcontentcontainer.hxx"

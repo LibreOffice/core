@@ -44,9 +44,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <stdio.h>
-
-
 using namespace css;
 using namespace css::uno;
 

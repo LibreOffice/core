@@ -61,7 +61,6 @@
  * Change History
  Feb 2005           Created
  ************************************************************************/
-#include <stdio.h>
 #include <tools/stream.hxx>
 #include "lwpglobalmgr.hxx"
 #include "lwpoleobject.hxx"

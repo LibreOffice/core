@@ -1,6 +1,4 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#include <stdio.h>
-
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>

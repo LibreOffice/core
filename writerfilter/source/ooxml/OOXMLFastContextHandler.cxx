@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <iostream>
 #include <set>
 #include <comphelper/servicehelper.hxx>
