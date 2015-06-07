@@ -151,7 +151,7 @@ public:
     bool IsPrintTextPlaceholder() const { return bPrintTextPlaceholder; }
 
     bool IsPrintSingleJobs() const { return bPrintSingleJobs; }
-    sal_uLong GetPrintPostIts () const { return nPrintPostIts; }
+    SwPostItMode GetPrintPostIts () const { return nPrintPostIts; }
 
 };
 

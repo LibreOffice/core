@@ -457,15 +457,15 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
         aAddPrinterAttr.bPrintSingleJobs    = true; // handled by vcl in new print dialog since CWS printerpullpages /*aSingleJobsCB.IsChecked()*/;
 
         if (m_pNoRB->IsChecked())  aAddPrinterAttr.nPrintPostIts =
-                                                        POSTITS_NONE;
+                                                        SwPostItMode::NONE;
         if (m_pOnlyRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
-                                                        POSTITS_ONLY;
+                                                        SwPostItMode::Only;
         if (m_pEndRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
-                                                        POSTITS_ENDDOC;
+                                                        SwPostItMode::EndDoc;
         if (m_pEndPageRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
-                                                        POSTITS_ENDPAGE;
+                                                        SwPostItMode::EndPage;
         if (m_pInMarginsRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
-                                                        POSTITS_INMARGINS;
+                                                        SwPostItMode::InMargins;
 
         const OUString sFax = m_pFaxLB->GetSelectEntry();
         aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
@@ -495,11 +495,11 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         m_pProspectCB->Check(      pAddPrinterAttr->bPrintProspect);
         m_pProspectCB_RTL->Check(      pAddPrinterAttr->bPrintProspectRTL);
 
-        m_pNoRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_NONE ) ;
-        m_pOnlyRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ONLY ) ;
-        m_pEndRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDDOC ) ;
-        m_pEndPageRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDPAGE ) ;
-        m_pInMarginsRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_INMARGINS ) ;
+        m_pNoRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::NONE ) ;
+        m_pOnlyRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::Only ) ;
+        m_pEndRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::EndDoc ) ;
+        m_pEndPageRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::EndPage ) ;
+        m_pInMarginsRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::InMargins ) ;
         m_pFaxLB->SelectEntry( pAddPrinterAttr->sFaxName );
     }
     if (m_pProspectCB->IsChecked())
