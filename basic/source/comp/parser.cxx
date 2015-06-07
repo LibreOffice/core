@@ -111,11 +111,9 @@ static const SbiStatement StmntTable [] = {
 
 SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
         : SbiTokenizer( pm->GetSource32(), pb ),
-          aGblStrings( this ),
-          aLclStrings( this ),
-          aGlobals( aGblStrings, SbGLOBAL ),
-          aPublics( aGblStrings, SbPUBLIC ),
-          aRtlSyms( aGblStrings, SbRTL ),
+          aGlobals( aGblStrings, SbGLOBAL, this ),
+          aPublics( aGblStrings, SbPUBLIC, this ),
+          aRtlSyms( aGblStrings, SbRTL, this ),
           aGen( *pm, this, 1024 )
 {
     pBasic   = pb;

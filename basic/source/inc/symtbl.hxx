@@ -37,9 +37,8 @@ enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
 class SbiStringPool {
     const OUString aEmpty;
     std::vector<OUString> aData;
-    SbiParser* pParser;
 public:
-    SbiStringPool( SbiParser* );
+    SbiStringPool();
    ~SbiStringPool();
     sal_uInt32 GetSize() const { return aData.size(); }
     // From 8.4.1999: default changed to true because of #64236 -
@@ -47,7 +46,6 @@ public:
     short Add( const OUString&, bool=true );
     short Add( double, SbxDataType );
     const OUString& Find( sal_uInt32 ) const;
-    SbiParser* GetParser() { return pParser; }
 };
 
 
@@ -65,7 +63,7 @@ protected:
     sal_uInt16     nProcId;             // for STATIC-variable
     sal_uInt16     nCur;                // iterator
 public:
-    SbiSymPool( SbiStringPool&, SbiSymScope );
+    SbiSymPool( SbiStringPool&, SbiSymScope, SbiParser* pParser_ );
    ~SbiSymPool();
 
     void   SetParent( SbiSymPool* p )   { pParent = p;      }
