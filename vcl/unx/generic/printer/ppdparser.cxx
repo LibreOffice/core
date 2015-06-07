@@ -18,7 +18,6 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #include <comphelper/string.hxx>
 #include "vcl/ppdparser.hxx"

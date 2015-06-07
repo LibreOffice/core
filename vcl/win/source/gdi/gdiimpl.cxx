@@ -21,7 +21,6 @@
 
 #include "gdiimpl.hxx"
 
-#include <stdio.h>
 #include <string.h>
 #include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>

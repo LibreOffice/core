@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include "stdio.h"
 #include "jpeg.h"
 #include <jpeglib.h>
 #include <jerror.h>
