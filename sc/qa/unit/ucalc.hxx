@@ -433,6 +433,7 @@ public:
     void testCondFormatINSDEL();
     void testCondFormatInsertRow();
     void testCondFormatInsertCol();
+    void testValidity();
     void testCondFormatInsertDeleteSheets();
     void testCondCopyPaste();
     void testCondCopyPasteSingleCell(); //e.g. fdo#82503
@@ -669,6 +670,7 @@ public:
     CPPUNIT_TEST(testCondFormatINSDEL);
     CPPUNIT_TEST(testCondFormatInsertRow);
     CPPUNIT_TEST(testCondFormatInsertCol);
+    CPPUNIT_TEST(testValidity);
     CPPUNIT_TEST(testCondFormatInsertDeleteSheets);
     CPPUNIT_TEST(testCondCopyPaste);
     CPPUNIT_TEST(testCondCopyPasteSingleCell);
