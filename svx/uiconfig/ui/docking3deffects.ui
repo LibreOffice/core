@@ -842,7 +842,7 @@
                         <items>
                           <item translatable="yes">Flat</item>
                           <item translatable="yes">Phong</item>
-                          <item translatable="yes">Gourand</item>
+                          <item translatable="yes">Gouraud</item>
                         </items>
                       </object>
                       <packing>
