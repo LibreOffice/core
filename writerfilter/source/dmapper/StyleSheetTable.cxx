@@ -38,7 +38,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <map>
 #include <set>
-#include <stdio.h>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>

@@ -21,7 +21,6 @@
 #include <ooxml/resourceids.hxx>
 #include <vector>
 #include <osl/file.hxx>
-#include <stdio.h>
 #include <rtl/tencinfo.h>
 #include <vcl/embeddedfontshelper.hxx>
 #include <unotools/fontdefs.hxx>
