@@ -20,7 +20,6 @@
 #include <sal/types.h>
 
 #include <string.h>
-#include <stdio.h>
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>

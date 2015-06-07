@@ -19,7 +19,6 @@
 
 #include "gdiimpl.hxx"
 
-#include <stdio.h>
 #include <string.h>
 #include <svsys.h>
 #include <rtl/strbuf.hxx>

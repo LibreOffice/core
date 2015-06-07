@@ -55,7 +55,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 #endif
-#include <stdio.h>
 
 #include <sal/types.h>
 

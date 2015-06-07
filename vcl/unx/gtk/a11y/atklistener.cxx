@@ -35,7 +35,6 @@
 #include "vcl/svapp.hxx"
 
 #include <rtl/ref.hxx>
-#include <stdio.h>
 
 using namespace com::sun::star;
 
