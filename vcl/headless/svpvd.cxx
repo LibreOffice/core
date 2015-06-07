@@ -26,7 +26,7 @@
 #include "headless/svpvd.hxx"
 #include "headless/svpgdi.hxx"
 
-#include <basegfx/vector/b2ivector.hxx>
+#include <glm/glm.hpp>
 #include <basebmp/scanlineformats.hxx>
 
 using namespace basegfx;
@@ -59,17 +59,17 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
                                               const basebmp::RawMemorySharedArray &pBuffer,
                                               const bool bTopDown )
 {
-    B2IVector aDevSize( nNewDX, nNewDY );
-    if( aDevSize.getX() == 0 )
-        aDevSize.setX( 1 );
-    if( aDevSize.getY() == 0 )
-        aDevSize.setY( 1 );
-    if( ! m_aDevice.get() || m_aDevice->getSize() != aDevSize )
+    glm::ivec2 aDevSize(nNewDX, nNewDY);
+    if ( aDevSize.x == 0 )
+        aDevSize.x = 1;
+    if ( aDevSize.y == 0 )
+        aDevSize.y = 1;
+    if ( ! m_aDevice.get() || m_aDevice->getSize() != aDevSize )
     {
         SvpSalInstance* pInst = SvpSalInstance::s_pDefaultInstance;
         assert( pInst );
         basebmp::Format nFormat = pInst->getFormatForBitCount( m_nBitCount );
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(nFormat, aDevSize.getX());
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(nFormat, aDevSize.x);
 
         if ( m_nBitCount == 1 )
         {

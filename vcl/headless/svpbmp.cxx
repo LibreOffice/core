@@ -47,12 +47,12 @@ bool SvpSalBitmap::Create( const Size& rSize,
     assert( pInst );
     basebmp::Format nFormat = pInst->getFormatForBitCount( nBitCount );
 
-    B2IVector aSize( rSize.Width(), rSize.Height() );
-    if( aSize.getX() == 0 )
-        aSize.setX( 1 );
-    if( aSize.getY() == 0 )
-        aSize.setY( 1 );
-    sal_Int32 nStride = getBitmapDeviceStrideForWidth(nFormat, aSize.getX());
+    glm::ivec2 aSize( rSize.Width(), rSize.Height() );
+    if( aSize.x == 0 )
+        aSize.x = 1;
+    if( aSize.y == 0 )
+        aSize.y = 1;
+    sal_Int32 nStride = getBitmapDeviceStrideForWidth(nFormat, aSize.x);
     if( nBitCount > 8 )
         m_aBitmap = createBitmapDevice( aSize, false, nFormat, nStride );
     else
@@ -81,9 +81,9 @@ bool SvpSalBitmap::Create( const SalBitmap& rSalBmp )
     const BitmapDeviceSharedPtr& rSrcBmp = rSrc.getBitmap();
     if( rSrcBmp.get() )
     {
-        B2IVector aSize = rSrcBmp->getSize();
+        glm::ivec2 aSize = rSrcBmp->getSize();
         m_aBitmap = cloneBitmapDevice( aSize, rSrcBmp );
-        B2IBox aRect( 0, 0, aSize.getX(), aSize.getY() );
+        B2IBox aRect( 0, 0, aSize.x, aSize.y );
         m_aBitmap->drawBitmap( rSrcBmp, aRect, aRect, DrawMode::Paint );
     }
     else
@@ -119,8 +119,8 @@ Size SvpSalBitmap::GetSize() const
     Size aSize;
     if( m_aBitmap.get() )
     {
-        B2IVector aVec( m_aBitmap->getSize() );
-        aSize = Size( aVec.getX(), aVec.getY() );
+        glm::ivec2 aVec( m_aBitmap->getSize() );
+        aSize = Size( aVec.x, aVec.y );
     }
 
     return aSize;
@@ -240,9 +240,9 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
         if( m_aBitmap->isTopDown() )
             pBuf->mnFormat |= BMP_FORMAT_TOP_DOWN;
 
-        B2IVector aSize = m_aBitmap->getSize();
-        pBuf->mnWidth           = aSize.getX();
-        pBuf->mnHeight          = aSize.getY();
+        glm::ivec2 aSize = m_aBitmap->getSize();
+        pBuf->mnWidth           = aSize.x;
+        pBuf->mnHeight          = aSize.y;
         pBuf->mnScanlineSize    = m_aBitmap->getScanlineStride();
         pBuf->mnBitCount        = nBitCount;
         pBuf->mpBits            = m_aBitmap->getBuffer().get();

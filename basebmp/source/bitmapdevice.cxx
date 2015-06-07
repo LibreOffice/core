@@ -310,7 +310,7 @@ namespace
 
 
         BitmapRenderer( const basegfx::B2IBox&                     rBounds,
-                        const basegfx::B2IVector&                  rBufferSize,
+                        const glm::ivec2&                          rBufferSize,
                         Format                                     nScanlineFormat,
                         sal_Int32                                  nScanlineStride,
                         sal_uInt8*                                 pFirstScanline,
@@ -774,21 +774,22 @@ namespace
 
             if (dstBuf == srcBuf && nSrcY < nDestY) // reverse copy order to avoid overlapping
             {
-                nSrcY = getBufferSize().getY() - nSrcY - nSrcHeight;
-                nDestY = getBufferSize().getY() - nDestY - nSrcHeight;
+                glm::ivec2 bufferSize(getBufferSize());
+                nSrcY = bufferSize.y - nSrcY - nSrcHeight;
+                nDestY = bufferSize.y - nDestY - nSrcHeight;
                 srcTopDown = !srcTopDown;
                 dstTopDown = !dstTopDown;
             }
 
             if (!dstTopDown)
             {
-                dstBuf += dstStride * (getBufferSize().getY() - 1);
+                dstBuf += dstStride * (getBufferSize().y - 1);
                 dstStride = -dstStride;
             }
 
             if (!srcTopDown)
             {
-                srcBuf += srcStride * (rSrcBitmap->getBufferSize().getY() - 1);
+                srcBuf += srcStride * (rSrcBitmap->getBufferSize().y - 1);
                 srcStride = -srcStride;
             }
 
@@ -1151,7 +1152,7 @@ struct ImplBitmapDevice
     basegfx::B2IBox           maBounds;
 
     //// Size of the actual frame buffer
-    basegfx::B2IVector        maBufferSize;
+    glm::ivec2                maBufferSize;
 
     /// Scanline format, as provided at the constructor
     Format                    mnScanlineFormat;
@@ -1181,7 +1182,7 @@ struct ImplBitmapDevice
 
 
 BitmapDevice::BitmapDevice( const basegfx::B2IBox&           rBounds,
-                            const basegfx::B2IVector&        rBufferSize,
+                            const glm::ivec2&                rBufferSize,
                             Format                           nScanlineFormat,
                             sal_Int32                        nScanlineStride,
                             sal_uInt8*                       pFirstScanline,
@@ -1204,9 +1205,9 @@ BitmapDevice::~BitmapDevice()
     SAL_INFO( "basebmp.bitmapdevice", "~BitmapDevice(" << this << ")" );
 }
 
-basegfx::B2IVector BitmapDevice::getSize() const
+glm::ivec2 BitmapDevice::getSize() const
 {
-    return basegfx::B2IVector(
+    return glm::ivec2(
         mpImpl->maBounds.getMaxX() - mpImpl->maBounds.getMinX(),
         mpImpl->maBounds.getMaxY() - mpImpl->maBounds.getMinY() );
 }
@@ -1216,7 +1217,7 @@ bool BitmapDevice::isTopDown() const
     return mpImpl->mnScanlineStride >= 0;
 }
 
-basegfx::B2IVector BitmapDevice::getBufferSize() const
+glm::ivec2 BitmapDevice::getBufferSize() const
 {
     return mpImpl->maBufferSize;
 }
@@ -1553,8 +1554,8 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                const basegfx::B2IBox&       rDstRect,
                                DrawMode                     drawMode )
 {
-    const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    const glm::ivec2&         rSrcSize( rSrcBitmap->getSize() );
+    const basegfx::B2IBox     aSrcBounds( 0, 0, rSrcSize.x, rSrcSize.y );
     basegfx::B2IBox           aSrcRange( rSrcRect );
     basegfx::B2IBox           aDestRange( rDstRect );
 
@@ -1582,8 +1583,8 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         return;
     }
 
-    const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    const glm::ivec2&         rSrcSize( rSrcBitmap->getSize() );
+    const basegfx::B2IBox     aSrcBounds( 0, 0, rSrcSize.x, rSrcSize.y );
     basegfx::B2IBox           aSrcRange( rSrcRect );
     basegfx::B2IBox           aDestRange( rDstRect );
 
@@ -1612,8 +1613,8 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                                     const basegfx::B2IBox&       rSrcRect,
                                     const basegfx::B2IPoint&     rDstPoint )
 {
-    const basegfx::B2IVector& rSrcSize( rAlphaMask->getSize() );
-    const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    const glm::ivec2&         rSrcSize( rAlphaMask->getSize() );
+    const basegfx::B2IBox     aSrcBounds( 0, 0, rSrcSize.x, rSrcSize.y );
     basegfx::B2IBox           aSrcRange( rSrcRect );
     basegfx::B2IPoint         aDestPoint( rDstPoint );
 
@@ -1630,13 +1631,13 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
             // src == dest, copy rAlphaMask beforehand
 
 
-            const basegfx::B2ITuple aSize( aSrcRange.getWidth(),
-                                           aSrcRange.getHeight() );
+            const glm::ivec2 aSize( aSrcRange.getWidth(),
+                                    aSrcRange.getHeight() );
             BitmapDeviceSharedPtr pAlphaCopy(
                 cloneBitmapDevice( aSize,
                                    shared_from_this()) );
             const basegfx::B2IBox aAlphaRange( basegfx::B2ITuple(),
-                                               aSize );
+                                               basegfx::B2ITuple(aSize.x, aSize.y) );
             pAlphaCopy->drawBitmap(rAlphaMask,
                                    aSrcRange,
                                    aAlphaRange,
@@ -1662,8 +1663,8 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         return;
     }
 
-    const basegfx::B2IVector& rSrcSize( rAlphaMask->getSize() );
-    const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    const glm::ivec2&         rSrcSize( rAlphaMask->getSize() );
+    const basegfx::B2IBox     aSrcBounds( 0, 0, rSrcSize.x, rSrcSize.y );
     basegfx::B2IBox           aSrcRange( rSrcRect );
     basegfx::B2IPoint         aDestPoint( rDstPoint );
 
@@ -1682,13 +1683,13 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                 // src == dest, copy rAlphaMask beforehand
 
 
-                const basegfx::B2ITuple aSize( aSrcRange.getWidth(),
-                                               aSrcRange.getHeight() );
+                const glm::ivec2 aSize( aSrcRange.getWidth(),
+                                        aSrcRange.getHeight() );
                 BitmapDeviceSharedPtr pAlphaCopy(
                     cloneBitmapDevice( aSize,
                                        shared_from_this()) );
                 const basegfx::B2IBox aAlphaRange( basegfx::B2ITuple(),
-                                                   aSize );
+                                                   basegfx::B2ITuple(aSize.x, aSize.y) );
                 pAlphaCopy->drawBitmap(rAlphaMask,
                                        aSrcRange,
                                        aAlphaRange,
@@ -1716,8 +1717,8 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
 {
     OSL_ASSERT( rMask->getSize() == rSrcBitmap->getSize() );
 
-    const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    const glm::ivec2&         rSrcSize( rSrcBitmap->getSize() );
+    const basegfx::B2IBox     aSrcBounds( 0, 0, rSrcSize.x, rSrcSize.y );
     basegfx::B2IBox           aSrcRange( rSrcRect );
     basegfx::B2IBox           aDestRange( rDstRect );
 
@@ -1748,8 +1749,8 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
 
     OSL_ASSERT( rMask->getSize() == rSrcBitmap->getSize() );
 
-    const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    const glm::ivec2&         rSrcSize( rSrcBitmap->getSize() );
+    const basegfx::B2IBox     aSrcBounds( 0, 0, rSrcSize.x, rSrcSize.y );
     basegfx::B2IBox           aSrcRange( rSrcRect );
     basegfx::B2IBox           aDestRange( rDstRect );
 
@@ -1794,7 +1795,7 @@ struct StdMasks
 template< class FormatTraits, class MaskTraits >
 BitmapDeviceSharedPtr createRenderer(
     const basegfx::B2IBox&                                       rBounds,
-    const basegfx::B2IVector&                                    rBufferSize,
+    const glm::ivec2&                                            rBufferSize,
     Format                                                       nScanlineFormat,
     sal_Int32                                                    nScanlineStride,
     sal_uInt8*                                                   pFirstScanline,
@@ -1852,7 +1853,7 @@ PaletteMemorySharedVector createStandardPalette(
 template< class FormatTraits, class MaskTraits >
 BitmapDeviceSharedPtr createRenderer(
     const basegfx::B2IBox&                     rBounds,
-    const basegfx::B2IVector&                  rBufferSize,
+    const glm::ivec2&                          rBufferSize,
     Format                                     nScanlineFormat,
     sal_Int32                                  nScanlineStride,
     sal_uInt8*                                 pFirstScanline,
@@ -1878,7 +1879,7 @@ BitmapDeviceSharedPtr createRenderer(
 template< class FormatTraits, class MaskTraits >
 BitmapDeviceSharedPtr createRenderer(
     const basegfx::B2IBox&                     rBounds,
-    const basegfx::B2IVector&                  rBufferSize,
+    const glm::ivec2&                          rBufferSize,
     Format                                     nScanlineFormat,
     sal_Int32                                  nScanlineStride,
     sal_uInt8*                                 pFirstScanline,
@@ -1933,7 +1934,7 @@ inline sal_uInt32 nextPow2( sal_uInt32 x )
 
 namespace
 {
-BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&                  rSize,
+BitmapDeviceSharedPtr createBitmapDeviceImplInner( const glm::ivec2&                          rSize,
                                                    bool                                       bTopDown,
                                                    Format                                     nScanlineFormat,
                                                    sal_Int32                                  nScanlineStride,
@@ -1943,17 +1944,17 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                                                    const IBitmapDeviceDamageTrackerSharedPtr& rDamage,
                                                    bool bBlack = true)
 {
-    OSL_ASSERT(rSize.getX() > 0 && rSize.getY() > 0);
+    OSL_ASSERT(rSize.x > 0 && rSize.y > 0);
 
     if( nScanlineFormat <= Format::NONE ||
         nScanlineFormat >  Format::LAST )
         return BitmapDeviceSharedPtr();
 
     sal_uInt8 nBitsPerPixel = bitsPerPixel[nScanlineFormat];
-    if (rSize.getX() > (SAL_MAX_INT32-7) / nBitsPerPixel)
+    if (rSize.x > (SAL_MAX_INT32-7) / nBitsPerPixel)
     {
         SAL_WARN("basebmp", "suspicious bitmap width " <<
-                 rSize.getX() << " for depth " << nBitsPerPixel);
+                 rSize.x << " for depth " << nBitsPerPixel);
         return BitmapDeviceSharedPtr();
     }
 
@@ -1961,7 +1962,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
     nScanlineStride *= bTopDown ? 1 : -1;
 
     const sal_uInt32 nWidth(nScanlineStride < 0 ? -nScanlineStride : nScanlineStride);
-    const sal_uInt32 nHeight(rSize.getY());
+    const sal_uInt32 nHeight(rSize.y);
 
     if (nHeight && nWidth && nWidth > SAL_MAX_INT32 / nHeight)
     {
@@ -1988,7 +1989,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
         pMem.get() + nMemSize + nScanlineStride : pMem.get();
 
     // shrink render area to given subset, if given
-    basegfx::B2IBox aBounds(0,0,rSize.getX(),rSize.getY());
+    basegfx::B2IBox aBounds(0, 0, rSize.x, rSize.y);
     if( pSubset )
         aBounds.intersect( *pSubset );
 
@@ -2116,7 +2117,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
     return BitmapDeviceSharedPtr();
 }
 
-BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&                  rSize,
+BitmapDeviceSharedPtr createBitmapDeviceImpl( const glm::ivec2&                          rSize,
                                               bool                                       bTopDown,
                                               Format                                     nScanlineFormat,
                                               sal_Int32                                  nScanlineStride,
@@ -2136,7 +2137,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
 
     SAL_INFO( "basebmp.bitmapdevice",
               "createBitmapDevice: "
-              << rSize.getX() << "x" << rSize.getY()
+              << rSize.x << "x" << rSize.y
               << (bTopDown ? " top-down " : " bottom-up ")
               << formatName(nScanlineFormat)
               << subset.str()
@@ -2161,7 +2162,7 @@ sal_Int32 getBitmapDeviceStrideForWidth(Format nScanlineFormat, sal_Int32 nWidth
     return nScanlineStride;
 }
 
-BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
+BitmapDeviceSharedPtr createBitmapDevice( const glm::ivec2&         rSize,
                                           bool                      bTopDown,
                                           Format                    nScanlineFormat,
                                           sal_Int32                 nScanlineStride )
@@ -2176,7 +2177,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                    IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
-BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
+BitmapDeviceSharedPtr createBitmapDevice( const glm::ivec2&                rSize,
                                           bool                             bTopDown,
                                           Format                           nScanlineFormat,
                                           sal_Int32                        nScanlineStride,
@@ -2192,7 +2193,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
-BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
+BitmapDeviceSharedPtr createBitmapDevice( const glm::ivec2&                rSize,
                                           bool                             bTopDown,
                                           Format                           nScanlineFormat,
                                           sal_Int32                        nScanlineStride,
@@ -2209,13 +2210,13 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
-BitmapDeviceSharedPtr createClipDevice( const basegfx::B2IVector&        rSize )
+BitmapDeviceSharedPtr createClipDevice( const glm::ivec2& rSize )
 {
     BitmapDeviceSharedPtr xClip(
              createBitmapDeviceImpl( rSize,
                                      false, /* bTopDown */
                                      basebmp::Format::OneBitMsbGrey,
-                                     getBitmapDeviceStrideForWidth(basebmp::Format::OneBitMsbGrey, rSize.getX()),
+                                     getBitmapDeviceStrideForWidth(basebmp::Format::OneBitMsbGrey, rSize.x),
                                      boost::shared_array< sal_uInt8 >(),
                                      PaletteMemorySharedVector(),
                                      NULL,
@@ -2238,7 +2239,7 @@ BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
                                    rProto->getDamageTracker() );
 }
 
-BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
+BitmapDeviceSharedPtr cloneBitmapDevice( const glm::ivec2&            rSize,
                                          const BitmapDeviceSharedPtr& rProto )
 {
     return createBitmapDeviceImpl( rSize,

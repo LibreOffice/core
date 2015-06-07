@@ -148,25 +148,25 @@ private:
 public:
     void setUp() SAL_OVERRIDE
     {
-        const basegfx::B2ISize aSize(11,11);
+        const glm::ivec2 aSize(11,11);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::OneBitMsbPal,
-                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()) );
+                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.x) );
         mpDevice32bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::ThirtyTwoBitTcMaskBGRA,
-                                           basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX()) );
+                                           basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.x) );
     }
 
     void testCornerCases()
     {
-        const basegfx::B2ISize aSize(1,1);
+        const glm::ivec2 aSize(1,1);
         BitmapDeviceSharedPtr pDevice = createBitmapDevice(
             aSize,
             true,
             Format::OneBitMsbPal,
-            basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()) );
+            basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.x) );
 
         const basegfx::B2IPoint aPt1(0,0);
         const basegfx::B2IPoint aPt2(10,10);
@@ -178,12 +178,12 @@ public:
         CPPUNIT_ASSERT_MESSAGE("only pixel set",
                                pDevice->getPixelData(aPt1) == 1);
 
-        const basegfx::B2ISize aSize2(1,0);
+        const glm::ivec2 aSize2(1,0);
         pDevice = createBitmapDevice(
             aSize2,
             true,
             Format::OneBitMsbPal,
-            basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()));
+            basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.x));
 
         CPPUNIT_ASSERT_MESSAGE("only pixel cleared",
                                 pDevice->getPixelData(aPt1) == 0);

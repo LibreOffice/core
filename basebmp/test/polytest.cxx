@@ -170,7 +170,7 @@ private:
             subsetBitmapDevice( rDevice,
                                 basegfx::B2IBox(3,3,5,8) ));
         CPPUNIT_ASSERT_MESSAGE("size of subsetted device is not (2,5)",
-                               pClippedDevice->getSize() == basegfx::B2IVector(2,5));
+                               pClippedDevice->getSize() == glm::ivec2(2,5));
 
         rDevice->clear(aBgCol);
         pClippedDevice->fillPolyPolygon(
@@ -293,15 +293,15 @@ private:
 public:
     void setUp() SAL_OVERRIDE
     {
-        const basegfx::B2ISize aSize(10,10);
+        const glm::ivec2 aSize(10,10);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::OneBitMsbPal,
-                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()));
+                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.x));
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
                                             Format::ThirtyTwoBitTcMaskBGRA,
-                                            basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX()));
+                                            basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.x));
     }
 
     void testEmpty()

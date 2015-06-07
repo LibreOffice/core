@@ -147,21 +147,21 @@ private:
 public:
     void setUp() SAL_OVERRIDE
     {
-        const basegfx::B2ISize aSize(10,10);
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX());
+        const glm::ivec2 aSize(10,10);
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.x);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::OneBitMsbPal, nStride );
-        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX());
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.x);
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
                                             Format::ThirtyTwoBitTcMaskBGRA, nStride );
 
-        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX());
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.x);
         mpBmp1bpp = createBitmapDevice( aSize,
                                         true,
                                         Format::OneBitMsbPal, nStride );
-        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX());
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.x);
         mpBmp32bpp = createBitmapDevice( aSize,
                                          true,
                                          Format::ThirtyTwoBitTcMaskBGRA, nStride );

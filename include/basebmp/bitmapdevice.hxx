@@ -29,6 +29,7 @@
 #include <boost/shared_array.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/noncopyable.hpp>
+#include <glm/glm.hpp>
 #include <memory>
 #include <vector>
 
@@ -36,7 +37,6 @@ namespace basegfx
 {
     class B2IPoint;
     class B2DPoint;
-    class B2IVector;
     class B2IBox;
     class B2DPolygon;
     class B2DPolyPolygon;
@@ -82,7 +82,7 @@ class BASEBMP_DLLPUBLIC BitmapDevice : public boost::enable_shared_from_this<Bit
 public:
     /** Query size of device in pixel columns (X) and rows (Y, "scanlines")
      */
-    basegfx::B2IVector getSize() const;
+    glm::ivec2 getSize() const;
 
     /** Query whether buffer starts with 0th scanline
 
@@ -98,7 +98,7 @@ public:
         @ return the size of the whole frame buffer, the same as
         getSize() unless this is a "subset" device.
     */
-    basegfx::B2IVector getBufferSize() const;
+    glm::ivec2 getBufferSize() const;
 
     /** Query type of scanline memory format
      */
@@ -556,7 +556,7 @@ public:
 
 protected:
     BASEBMP_DLLPRIVATE BitmapDevice( const basegfx::B2IBox&           rBounds,
-                                     const basegfx::B2IVector&        rBufferSize,
+                                     const glm::ivec2&        rBufferSize,
                                      Format                           nScanlineFormat,
                                      sal_Int32                        nScanlineStride,
                                      sal_uInt8*                       pFirstScanline,
@@ -666,7 +666,7 @@ sal_Int32 BASEBMP_DLLPUBLIC getBitmapDeviceStrideForWidth(Format nScanlineFormat
 
 /** Function to create a BitmapDevice for given scanline format
  */
-BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector& rSize,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const glm::ivec2&         rSize,
                                                             bool                      bTopDown,
                                                             Format                    nScanlineFormat,
                                                             sal_Int32                 nScanlineStride );
@@ -678,7 +678,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
     lookups for the whole range of pixel values from the specified
     format.
  */
-BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const glm::ivec2&                rSize,
                                                             bool                             bTopDown,
                                                             Format                           nScanlineFormat,
                                                             sal_Int32                        nScanlineStride,
@@ -690,7 +690,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
     Note: the provided memory must have sufficient size, to store the
     image of the specified area and format.
  */
-BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const glm::ivec2&                rSize,
                                                             bool                             bTopDown,
                                                             Format                           nScanlineFormat,
                                                             sal_Int32                        nScanlineStride,
@@ -700,7 +700,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
 
 /** Function to create a 1 bit grey clipping mask initialized to white.
  */
-BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createClipDevice( const basegfx::B2IVector&        rSize );
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createClipDevice( const glm::ivec2&        rSize );
 
 /** Function to retrieve a subsetted BitmapDevice to the same
     memory.
@@ -725,7 +725,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC subsetBitmapDevice( const BitmapDeviceSh
     copied, only the size can be varied. Note that the prototype's
     bitmap content is <em>not</em> copied, only a palette (if any).
  */
-BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC cloneBitmapDevice( const basegfx::B2IVector&    rSize,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC cloneBitmapDevice( const glm::ivec2&    rSize,
                                                            const BitmapDeviceSharedPtr& rProto );
 
 }

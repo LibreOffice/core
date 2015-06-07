@@ -285,14 +285,14 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             maGeometry.nHeight = m_nMinHeight;
     }
 #ifndef IOS
-    B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
+    glm::ivec2 aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
     if( ! m_aFrame.get() || m_aFrame->getSize() != aFrameSize )
     {
-        if( aFrameSize.getX() == 0 )
-            aFrameSize.setX( 1 );
-        if( aFrameSize.getY() == 0 )
-            aFrameSize.setY( 1 );
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(m_nScanlineFormat, aFrameSize.getX());
+        if( aFrameSize.x == 0 )
+            aFrameSize.x = 1;
+        if( aFrameSize.y == 0 )
+            aFrameSize.y = 1;
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(m_nScanlineFormat, aFrameSize.x);
         m_aFrame = createBitmapDevice( aFrameSize, m_bTopDown, m_nScanlineFormat, nStride );
         if (m_bDamageTracking)
             m_aFrame->setDamageTracker(

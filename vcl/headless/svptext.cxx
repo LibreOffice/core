@@ -132,8 +132,9 @@ void SvpSalGraphics::BlendTextColor(const basebmp::Color &rTextColor, const base
                                     const basegfx::B2IPoint &rDstPoint)
 {
     // blend text color into target using the glyph's mask
-    const basegfx::B2IBox aSrcRect(basegfx::B2ITuple(0,0), rAlphaMask->getSize());
-    const basegfx::B2IBox aClipRect(rDstPoint, rAlphaMask->getSize());
+    const glm::ivec2 maskSize = rAlphaMask->getSize();
+    const basegfx::B2IBox aSrcRect(basegfx::B2ITuple(0,0), basegfx::B2ITuple(maskSize.x, maskSize.y));
+    const basegfx::B2IBox aClipRect(rDstPoint, basegfx::B2ITuple(maskSize.x, maskSize.y));
 
     SvpSalGraphics::ClipUndoHandle aUndo(this);
     if (isClippedSetup(aClipRect, aUndo))

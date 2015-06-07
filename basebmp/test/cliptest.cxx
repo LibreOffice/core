@@ -130,7 +130,7 @@ private:
     void implTestBmpClip(const BitmapDeviceSharedPtr& rDevice)
     {
         BitmapDeviceSharedPtr pBmp( cloneBitmapDevice(
-                                        basegfx::B2IVector(3,3),
+                                        glm::ivec2(3,3),
                                         rDevice ));
         Color aCol1(0);
         Color aCol2(0xFFFFFFFF);
@@ -154,7 +154,7 @@ private:
 
     void implTestMaskColorClip(const BitmapDeviceSharedPtr& rDevice)
     {
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::EightBitGrey, rDevice->getSize().getX());
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::EightBitGrey, rDevice->getSize().x);
         BitmapDeviceSharedPtr pBmp( createBitmapDevice( rDevice->getSize(),
                                                         true,
                                                         Format::EightBitGrey, nStride ));
@@ -188,16 +188,16 @@ private:
 public:
     void setUp() SAL_OVERRIDE
     {
-        const basegfx::B2ISize aSize(11,11);
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbGrey, aSize.getX());
+        const glm::ivec2 aSize(11,11);
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbGrey, aSize.x);
         mpClipMask = createBitmapDevice( aSize,
                                          true,
                                          Format::OneBitMsbGrey, nStride );
-        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX());
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.x);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::OneBitMsbPal, nStride );
-        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX());
+        nStride = basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.x);
         mpDevice32bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::ThirtyTwoBitTcMaskBGRA, nStride );

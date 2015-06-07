@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 		nss3 \
 		plc4) \
 	libeot \
+	glm_headers \
 ))
 
 $(eval $(call gb_Library_use_libraries,vcl,\

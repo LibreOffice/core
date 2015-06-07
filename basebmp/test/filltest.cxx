@@ -208,15 +208,15 @@ private:
 public:
     void setUp() SAL_OVERRIDE
     {
-        const basegfx::B2ISize aSize(11,11);
+        const glm::ivec2 aSize(11,11);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::OneBitMsbPal,
-                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()));
+                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.x));
         mpDevice32bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::ThirtyTwoBitTcMaskBGRA,
-                                           basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX()));
+                                           basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.x));
     }
 
     void testRectFill()

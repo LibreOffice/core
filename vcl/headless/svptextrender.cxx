@@ -148,11 +148,11 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
         // construct alpha mask from raw bitmap
         if (pGcpHelper->maRawBitmap.mnScanlineSize && pGcpHelper->maRawBitmap.mnHeight)
         {
-            const B2IVector aSize(
+            const glm::ivec2 aSize(
                 pGcpHelper->maRawBitmap.mnScanlineSize,
                 pGcpHelper->maRawBitmap.mnHeight );
             static PaletteMemorySharedVector aDummyPAL;
-            pGcpHelper->maBitmapDev = createBitmapDevice( aSize, true, nBmpFormat, aSize.getX(), pGcpHelper->maRawBitmap.mpBits, aDummyPAL );
+            pGcpHelper->maBitmapDev = createBitmapDevice( aSize, true, nBmpFormat, aSize.x, pGcpHelper->maRawBitmap.mpBits, aDummyPAL );
         }
 
         rGlyphData.ExtDataRef().meInfo = nBmpFormat;

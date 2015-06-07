@@ -136,8 +136,8 @@ long SvpSalGraphics::GetGraphicsWidth() const
 {
     if( m_aDevice.get() )
     {
-        basegfx::B2IVector aSize = m_aOrigDevice->getSize();
-        return aSize.getX();
+        glm::ivec2 aSize = m_aOrigDevice->getSize();
+        return aSize.x;
     }
     return 0;
 }
@@ -157,7 +157,7 @@ void SvpSalGraphics::ensureClip()
         return;
 
     m_aDevice = m_aOrigDevice;
-    basegfx::B2IVector aSize = m_aDevice->getSize();
+    glm::ivec2 aSize = m_aDevice->getSize();
     m_aClipMap = basebmp::createClipDevice( aSize );
 
     RectangleVector aRectangles;
@@ -645,7 +645,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
     // 255==opaque. drawMask() semantic is the other way
     // around. Therefore, invert mask.
     basebmp::BitmapDeviceSharedPtr aCopy =
-        cloneBitmapDevice( basegfx::B2IVector( rPosAry.mnSrcWidth, rPosAry.mnSrcHeight ),
+        cloneBitmapDevice( glm::ivec2( rPosAry.mnSrcWidth, rPosAry.mnSrcHeight ),
                            rSrc.getBitmap() );
     basebmp::Color aBgColor( COL_WHITE );
     aCopy->clear(aBgColor);
@@ -669,7 +669,7 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     if (m_aDevice)
     {
         basebmp::BitmapDeviceSharedPtr aCopy;
-        aCopy = cloneBitmapDevice(basegfx::B2IVector(nWidth, nHeight),
+        aCopy = cloneBitmapDevice(glm::ivec2(nWidth, nHeight),
                                    m_aDevice);
         basegfx::B2IBox aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
         basegfx::B2IBox aDestRect( 0, 0, nWidth, nHeight );

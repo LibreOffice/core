@@ -13,6 +13,7 @@ $(eval $(call gb_Library_use_sdk_api,basebmp))
 
 $(eval $(call gb_Library_use_externals,basebmp,\
 	boost_headers \
+	glm_headers \
 	vigra_headers \
 ))
 
@@ -29,7 +30,7 @@ $(eval $(call gb_Library_add_defs,basebmp,\
 # TODO(davido): This is failing only in release mode with:
 #
 # Compilation of bitmapdevice.cxx is failing in release mode:
-# 
+#
 # Fatal Error C1128: number of sections exceeded object file
 # format limit : compile with /bigobj
 #
