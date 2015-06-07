@@ -18,21 +18,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="10143"/>
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:helpid="10301"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="10143" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:style="dropdown" toolbar:helpid="10172"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:helpid="10301"/>
  <toolbar:toolbaritem xlink:href=".uno:XLineStyle" toolbar:helpid="10169"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineWidth" toolbar:helpid="10171"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:style="dropdown" toolbar:helpid="10172"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:helpid="10142"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:helpid="10164"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="10129"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="26412"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="10129"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="10130"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="10286"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectForwardOne"/>
@@ -46,5 +49,4 @@
  <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false" toolbar:helpid="27154"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:visible="false" toolbar:helpid="27153"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="10130"/>
 </toolbar:toolbar>

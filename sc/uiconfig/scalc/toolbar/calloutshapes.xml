@@ -22,6 +22,7 @@
  <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.round-rectangular-callout"/>
  <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.round-callout"/>
  <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.cloud-callout"/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-1"/>
  <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-2"/>
  <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-3"/>
