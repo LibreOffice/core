@@ -22,25 +22,27 @@
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.round-rectangle"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.quadrat"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.round-quadrat"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.parallelogram"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.trapezoid"/>
  <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle-pie"/>
+ <toolbar:toolbaritem xlink:href=".uno:CircleCut"/>
+ <toolbar:toolbaritem xlink:href=".uno:Arc"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.block-arc"/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.isosceles-triangle"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.right-triangle"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.trapezoid"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.diamond"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.parallelogram"/>
- <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.pentagon"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.hexagon"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.octagon"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ring"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.block-arc"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.can"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cube"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.paper"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.frame"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ring"/>
 </toolbar:toolbar>

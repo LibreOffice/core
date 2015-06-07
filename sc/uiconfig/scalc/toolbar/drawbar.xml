@@ -18,7 +18,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="10128"/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="10128" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="10464"/>
+ <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:helpid="10397"/>
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:helpid="10395"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
  <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="10104" toolbar:visible="false"/>
@@ -34,21 +38,15 @@
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.isosceles-triangle"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.right-triangle" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="10464"/>
- <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:helpid="10397"/>
- <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:helpid="10395"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="11003"/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="11004"/>
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="11005"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="11007"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="11006"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DrawCaption" toolbar:helpid="10254"/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalCaption" toolbar:helpid="10906"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:helpid="10253"/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:helpid="10905"/>
@@ -56,5 +54,6 @@
  <toolbar:toolbaritem xlink:href=".uno:Text_Marquee" toolbar:visible="false" toolbar:helpid="10465"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
 </toolbar:toolbar>
