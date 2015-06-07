@@ -480,7 +480,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
     // Read configuration
     OUString sUrl(officecfg::Office::Impress::Pictures::Path::get());
 
-    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     if (!sUrl.isEmpty())
         aDlg.SetDisplayDirectory(sUrl);
     else

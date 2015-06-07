@@ -157,7 +157,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
     bIsLoading = true;
     SfxMapUnit      eOldCoreUnit=eCoreUnit;
     eCoreUnit = SFX_MAPUNIT_100TH_MM;
-    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
     std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
     if( xIStm ) {
@@ -196,7 +196,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
     if (bIsLoading) return;
     SfxMapUnit      eOldCoreUnit=eCoreUnit;
     eCoreUnit = SFX_MAPUNIT_100TH_MM;
-    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
     std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
     if( xOStm ) {
