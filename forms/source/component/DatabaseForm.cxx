@@ -3217,7 +3217,7 @@ void SAL_CALL ODatabaseForm::addRowSetApproveListener(const Reference<XRowSetApp
         Reference<XRowSetApproveBroadcaster>  xBroadcaster;
         if (query_aggregation( m_xAggregate, xBroadcaster))
         {
-            Reference<XRowSetApproveListener>  xListener((XRowSetApproveListener*)this);
+            Reference<XRowSetApproveListener>  xListener(static_cast<XRowSetApproveListener*>(this));
             xBroadcaster->addRowSetApproveListener(xListener);
         }
     }
@@ -3234,7 +3234,7 @@ void SAL_CALL ODatabaseForm::removeRowSetApproveListener(const Reference<XRowSet
         Reference<XRowSetApproveBroadcaster>  xBroadcaster;
         if (query_aggregation( m_xAggregate, xBroadcaster))
         {
-            Reference<XRowSetApproveListener>  xListener((XRowSetApproveListener*)this);
+            Reference<XRowSetApproveListener>  xListener(static_cast<XRowSetApproveListener*>(this));
             xBroadcaster->removeRowSetApproveListener(xListener);
         }
     }
