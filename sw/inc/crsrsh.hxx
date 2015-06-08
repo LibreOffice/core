@@ -156,8 +156,7 @@ public:
         UPDOWN      = (1 << 0),     ///< keep Up/Down on columns
         SCROLLWIN   = (1 << 1),     ///< scroll window
         CHKRANGE    = (1 << 2),     ///< check overlapping PaMs
-        NOCALRECT   = (1 << 3),     ///< don't recalculate CharRect
-        READONLY    = (1 << 4)      ///< make visible in spite of Readonly
+        READONLY    = (1 << 3)      ///< make visible in spite of Readonly
     };
 
 private:

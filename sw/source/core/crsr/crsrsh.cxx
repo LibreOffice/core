@@ -1724,44 +1724,36 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
             }
         } while( bAgainst );
 
-        if( !( eFlags & SwCrsrShell::NOCALRECT ))
+        SwCrsrMoveState aTmpState( m_eMvState );
+        aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+        aTmpState.bRealHeight = true;
+        aTmpState.bRealWidth = IsOverwriteCrsr();
+        aTmpState.nCursorBidiLevel = pShellCrsr->GetCrsrBidiLevel();
+
+        // #i27615#,#i30453#
+        SwSpecialPos aSpecialPos;
+        aSpecialPos.nExtendRange = SwSPExtendRange::BEFORE;
+        if (pShellCrsr->IsInFrontOfLabel())
         {
-            SwCrsrMoveState aTmpState( m_eMvState );
-            aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
-            aTmpState.bRealHeight = true;
-            aTmpState.bRealWidth = IsOverwriteCrsr();
-            aTmpState.nCursorBidiLevel = pShellCrsr->GetCrsrBidiLevel();
-
-            // #i27615#,#i30453#
-            SwSpecialPos aSpecialPos;
-            aSpecialPos.nExtendRange = SwSPExtendRange::BEFORE;
-            if (pShellCrsr->IsInFrontOfLabel())
-            {
-                aTmpState.pSpecialPos = &aSpecialPos;
-            }
-
-            ++mnStartAction; // tdf#91602 prevent recursive Action!
-            if( !pFrm->GetCharRect( m_aCharRect, *pShellCrsr->GetPoint(), &aTmpState ) )
-            {
-                Point& rPt = pShellCrsr->GetPtPos();
-                rPt = m_aCharRect.Center();
-                pFrm->GetCrsrOfst( pShellCrsr->GetPoint(), rPt, &aTmpState );
-            }
-            --mnStartAction;
-
-            if( !pShellCrsr->HasMark() )
-                m_aCrsrHeight = aTmpState.aRealHeight;
-            else
-            {
-                m_aCrsrHeight.setX(0);
-                m_aCrsrHeight.setY(aTmpState.aRealHeight.getY() < 0 ?
-                                  -m_aCharRect.Width() : m_aCharRect.Height());
-            }
+            aTmpState.pSpecialPos = &aSpecialPos;
         }
+
+        ++mnStartAction; // tdf#91602 prevent recursive Action!
+        if( !pFrm->GetCharRect( m_aCharRect, *pShellCrsr->GetPoint(), &aTmpState ) )
+        {
+            Point& rPt = pShellCrsr->GetPtPos();
+            rPt = m_aCharRect.Center();
+            pFrm->GetCrsrOfst( pShellCrsr->GetPoint(), rPt, &aTmpState );
+        }
+        --mnStartAction;
+
+        if( !pShellCrsr->HasMark() )
+            m_aCrsrHeight = aTmpState.aRealHeight;
         else
         {
             m_aCrsrHeight.setX(0);
-            m_aCrsrHeight.setY(m_aCharRect.Height());
+            m_aCrsrHeight.setY(aTmpState.aRealHeight.getY() < 0 ?
+                              -m_aCharRect.Width() : m_aCharRect.Height());
         }
 
         if( !bFirst && aOld == m_aCharRect )
