@@ -472,7 +472,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
     aEvent.FeatureURL.Complete = _rFeature;
     if (m_xUrlTransformer.is())
         m_xUrlTransformer->parseStrict(aEvent.FeatureURL);
-    aEvent.Source       = (XDispatch*)this;
+    aEvent.Source       = static_cast<XDispatch*>(this);
     aEvent.IsEnabled    = aFeatState.bEnabled;
 
     // collect all states to be notified

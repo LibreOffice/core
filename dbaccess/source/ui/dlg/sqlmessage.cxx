@@ -239,7 +239,7 @@ namespace
             SQLExceptionInfo aCurrentElement;
             iter.next( aCurrentElement );
 
-            const SQLException* pCurrentError = (const SQLException*)aCurrentElement;
+            const SQLException* pCurrentError = static_cast<const SQLException*>(aCurrentElement);
             OSL_ENSURE( pCurrentError, "lcl_buildExceptionChain: iterator failure!" );
                 // hasMoreElements should not have returned <TRUE/> in this case
 
@@ -265,7 +265,7 @@ namespace
 
             if ( aCurrentElement.getType() == SQLExceptionInfo::SQL_CONTEXT )
             {
-                const SQLContext* pContext = (const SQLContext*)aCurrentElement;
+                const SQLContext* pContext = static_cast<const SQLContext*>(aCurrentElement);
                 if ( !pContext->Details.isEmpty() )
                 {
                     ExceptionDisplayInfo aSubInfo( aCurrentElement.getType() );

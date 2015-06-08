@@ -54,7 +54,7 @@ public:
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
     inline operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () const
-        { return (::com::sun::star::uno::XWeak *)this; }
+        { return static_cast<com::sun::star::uno::XWeak *>(const_cast<OSubComponent *>(this)); }
 
 };
 

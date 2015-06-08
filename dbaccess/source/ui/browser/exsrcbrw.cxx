@@ -53,8 +53,8 @@ Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType) throw 
     Any aRet = SbaXDataBrowserController::queryInterface(_rType);
     if(!aRet.hasValue())
         aRet = ::cppu::queryInterface(_rType,
-                                (::com::sun::star::util::XModifyBroadcaster*)this,
-                                (::com::sun::star::form::XLoadListener*)this);
+                                static_cast<com::sun::star::util::XModifyBroadcaster*>(this),
+                                static_cast<com::sun::star::form::XLoadListener*>(this));
 
     return aRet;
 }
@@ -253,7 +253,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
         ||  ( aURL.Complete == ".uno:FormSlots/ClearView" )
             // clear the grid
         )
-        xReturn = (::com::sun::star::frame::XDispatch*)this;
+        xReturn = static_cast<com::sun::star::frame::XDispatch*>(this);
 
     if  (   !xReturn.is()
         &&  (   (aURL.Complete == ".uno:FormSlots/moveToFirst" ) ||  (aURL.Complete == ".uno:FormSlots/moveToPrev" )
@@ -295,7 +295,7 @@ void SAL_CALL SbaExternalSourceBrowser::disposing()
 {
     // say our modify listeners goodbye
     ::com::sun::star::lang::EventObject aEvt;
-    aEvt.Source = (XWeak*) this;
+    aEvt.Source = static_cast<XWeak*>(this);
     m_aModifyListeners.disposeAndClear(aEvt);
 
     stopListening();
@@ -422,7 +422,7 @@ void SbaExternalSourceBrowser::startListening()
     if (m_pDataSourceImpl && m_pDataSourceImpl->getAttachedForm().is())
     {
         Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_pDataSourceImpl->getAttachedForm(), UNO_QUERY);
-        xLoadable->addLoadListener((::com::sun::star::form::XLoadListener*)this);
+        xLoadable->addLoadListener(static_cast<com::sun::star::form::XLoadListener*>(this));
     }
 }
 
@@ -431,7 +431,7 @@ void SbaExternalSourceBrowser::stopListening()
     if (m_pDataSourceImpl && m_pDataSourceImpl->getAttachedForm().is())
     {
         Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_pDataSourceImpl->getAttachedForm(), UNO_QUERY);
-        xLoadable->removeLoadListener((::com::sun::star::form::XLoadListener*)this);
+        xLoadable->removeLoadListener(static_cast<com::sun::star::form::XLoadListener*>(this));
     }
 }
 

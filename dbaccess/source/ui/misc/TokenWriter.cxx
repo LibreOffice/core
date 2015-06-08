@@ -154,7 +154,7 @@ void ODatabaseImportExport::dispose()
     Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
     if (xComponent.is())
     {
-        Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+        Reference< XEventListener> xEvt(static_cast<cppu::OWeakObject*>(this),UNO_QUERY);
         xComponent->removeEventListener(xEvt);
     }
     m_xConnection.clear();
@@ -197,7 +197,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         {
             Reference< XConnection > xPureConn( _aDataDescriptor[daConnection], UNO_QUERY );
             m_xConnection.reset( xPureConn, SharedConnection::NoTakeOwnership );
-            Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+            Reference< XEventListener> xEvt(static_cast<cppu::OWeakObject*>(this),UNO_QUERY);
             Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
             if (xComponent.is() && xEvt.is())
                 xComponent->addEventListener(xEvt);
@@ -255,7 +255,7 @@ void ODatabaseImportExport::initialize()
     {   // we need a connection
         OSL_ENSURE(!m_sDataSourceName.isEmpty(),"There must be a datsource name!");
         Reference<XNameAccess> xDatabaseContext( DatabaseContext::create(m_xContext), UNO_QUERY_THROW);
-        Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+        Reference< XEventListener> xEvt(static_cast<cppu::OWeakObject*>(this),UNO_QUERY);
 
         Reference< XConnection > xConnection;
         SQLExceptionInfo aInfo = ::dbaui::createConnection( m_sDataSourceName, xDatabaseContext, m_xContext, xEvt, xConnection );

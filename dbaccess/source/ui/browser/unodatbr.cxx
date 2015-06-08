@@ -319,7 +319,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     // check out from all the objects we are listening
     // the frame
     if (m_xCurrentFrameParent.is())
-        m_xCurrentFrameParent->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+        m_xCurrentFrameParent->removeFrameActionListener(static_cast<com::sun::star::frame::XFrameActionListener*>(this));
     SbaXDataBrowserController::disposing();
 }
 
@@ -1358,7 +1358,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const com::sun::star::lang::Event
     // our frame ?
     Reference< ::com::sun::star::frame::XFrame >  xSourceFrame(_rSource.Source, UNO_QUERY);
     if (m_xCurrentFrameParent.is() && (xSourceFrame == m_xCurrentFrameParent))
-        m_xCurrentFrameParent->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+        m_xCurrentFrameParent->removeFrameActionListener(static_cast<com::sun::star::frame::XFrameActionListener*>(this));
     else
     {
         // search the external dispatcher causing this call in our map
@@ -1504,7 +1504,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
     implRemoveStatusListeners();
 
     if (m_xCurrentFrameParent.is())
-        m_xCurrentFrameParent->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+        m_xCurrentFrameParent->removeFrameActionListener(static_cast<com::sun::star::frame::XFrameActionListener*>(this));
 
     SbaXDataBrowserController::attachFrame(_xFrame);
 
@@ -1513,7 +1513,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
     {
         m_xCurrentFrameParent = xCurrentFrame->findFrame(OUString("_parent"),FrameSearchFlag::PARENT);
         if ( m_xCurrentFrameParent.is() )
-            m_xCurrentFrameParent->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+            m_xCurrentFrameParent->addFrameActionListener(static_cast<com::sun::star::frame::XFrameActionListener*>(this));
 
         // obtain our toolbox
         try

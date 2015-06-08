@@ -327,7 +327,7 @@ Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& _URL,con
     for(;pIter != pEnd;++pIter)
     {
         if ( _URL.Complete == *pIter )
-            return (XDispatch*)this;
+            return static_cast<XDispatch*>(this);
     }
 
     if(m_xSlaveDispatchProvider.is())
@@ -353,7 +353,7 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
         {
             if ( Requests[i].FeatureURL.Complete == *pIter )
             {
-                aRet[i] = (XDispatch*) this;
+                aRet[i] = static_cast<XDispatch*>(this);
                 break;
             }
         }

@@ -117,7 +117,7 @@ void SbaXFormAdapter::StopListening()
     // log off ourself
     Reference< ::com::sun::star::lang::XComponent >  xComp(m_xMainForm, UNO_QUERY);
     if (xComp.is())
-        xComp->removeEventListener((::com::sun::star::lang::XEventListener*)(::com::sun::star::beans::XPropertyChangeListener*)this);
+        xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
 }
 
 void SbaXFormAdapter::StartListening()
@@ -150,7 +150,7 @@ void SbaXFormAdapter::StartListening()
     // log off ourself
     Reference< ::com::sun::star::lang::XComponent >  xComp(m_xMainForm, UNO_QUERY);
     if (xComp.is())
-        xComp->addEventListener((::com::sun::star::lang::XEventListener*)(::com::sun::star::beans::XPropertyChangeListener*)this);
+        xComp->addEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
 }
 
 void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSet >& xNewMaster)
@@ -1094,7 +1094,7 @@ void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException, std::exception
     {
         Reference< ::com::sun::star::beans::XPropertySet >  xSet(*aIter, UNO_QUERY);
         if (xSet.is())
-            xSet->removePropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
+            xSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
 
         Reference< ::com::sun::star::container::XChild >  xChild(*aIter, UNO_QUERY);
         if (xChild.is())
@@ -1413,10 +1413,10 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     m_aChildNames.insert(m_aChildNames.begin() + nIndex, sName);
 
     // listen for a changes of the name
-    xElementSet->addPropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
+    xElementSet->addPropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
 
     // we are now the parent of the new element
-    xElement->setParent((::com::sun::star::container::XContainer*)this);
+    xElement->setParent(static_cast<com::sun::star::container::XContainer*>(this));
 
     // notify the container listeners
     ::com::sun::star::container::ContainerEvent aEvt;
@@ -1519,7 +1519,7 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( ::com::su
 
     // no need to listen anymore
     Reference< ::com::sun::star::beans::XPropertySet >  xAffectedSet(xAffected, UNO_QUERY);
-    xAffectedSet->removePropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
+    xAffectedSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
 
     // we are no longer the parent
     xAffected->setParent(Reference< XInterface > ());
@@ -1577,12 +1577,12 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
 
     // correct property change listening
     Reference< ::com::sun::star::beans::XPropertySet >  xOldSet(xOld, UNO_QUERY);
-    xOldSet->removePropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
-    xElementSet->addPropertyChangeListener(PROPERTY_NAME, (::com::sun::star::beans::XPropertyChangeListener*)this);
+    xOldSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
+    xElementSet->addPropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
 
     // parent reset
     xOld->setParent(Reference< XInterface > ());
-    xElement->setParent((::com::sun::star::container::XContainer*)this);
+    xElement->setParent(static_cast<com::sun::star::container::XContainer*>(this));
 
     // notify container listeners
     ::com::sun::star::container::ContainerEvent aEvt;

@@ -1355,7 +1355,7 @@ void OQueryController::executeQuery()
                 {
                     OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == getContainer()->getPreviewFrame().get(),
                         "OQueryController::executeQuery: oops ... which window do I have here?");
-                    Reference< XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                    Reference< XEventListener> xEvtL(static_cast<cppu::OWeakObject*>(this),UNO_QUERY);
                     xComponent->addEventListener(xEvtL);
                 }
             }

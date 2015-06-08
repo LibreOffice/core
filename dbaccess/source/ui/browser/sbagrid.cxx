@@ -174,7 +174,7 @@ FmXGridPeer* SbaXGridControl::imp_CreatePeer(vcl::Window* pParent)
 Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
 {
     Any aRet = FmXGridControl::queryInterface(_rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(_rType,static_cast<com::sun::star::frame::XDispatch*>(this));
 }
 
 Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  ) throw (RuntimeException, std::exception)
@@ -343,7 +343,7 @@ void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl,
 
 Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
 {
-    Any aRet = ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
+    Any aRet = ::cppu::queryInterface(_rType,static_cast<com::sun::star::frame::XDispatch*>(this));
     if(aRet.hasValue())
         return aRet;
     return FmXGridPeer::queryInterface(_rType);
@@ -355,7 +355,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDis
         ||  ( aURL.Complete == ".uno:GridSlots/ColumnAttribs" )  || ( aURL.Complete == ".uno:GridSlots/ColumnWidth" )
         )
     {
-        return (::com::sun::star::frame::XDispatch*)this;
+        return static_cast<com::sun::star::frame::XDispatch*>(this);
     }
 
     return FmXGridPeer::queryDispatch(aURL, aTargetFrameName, nSearchFlags);
@@ -1331,7 +1331,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         try
         {
             // assume that text can be dropped into a field if the column has a ::com::sun::star::awt::XTextComponent interface
-            Reference< XIndexAccess >  xColumnControls((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
+            Reference< XIndexAccess >  xColumnControls(static_cast<com::sun::star::form::XGridPeer*>(GetPeer()), UNO_QUERY);
             if (xColumnControls.is())
             {
                 Reference< ::com::sun::star::awt::XTextComponent >  xColControl(

@@ -617,7 +617,7 @@ void SbaXDataBrowserController::impl_checkForCannotSelectUnfiltered( const SQLEx
 {
     ::connectivity::SQLError aError( getORB() );
     ::connectivity::ErrorCode nErrorCode( connectivity::SQLError::getErrorCode( sdb::ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED ) );
-    if ( ((const SQLException*)_rError)->ErrorCode == nErrorCode )
+    if ( static_cast<const SQLException*>(_rError)->ErrorCode == nErrorCode )
     {
         m_bCannotSelectUnfiltered = true;
         InvalidateFeature( ID_BROWSER_FILTERCRIT );
@@ -817,14 +817,14 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
     }
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
-        xFormError->addSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
+        xFormError->addSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
 
     if (m_xLoadable.is())
         m_xLoadable->addLoadListener(this);
 
     Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
     if (xFormParameter.is())
-        xFormParameter->addParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
+        xFormParameter->addParameterListener(static_cast<com::sun::star::form::XDatabaseParameterListener*>(this));
 
     addModelListeners(getControlModel());
     addControlListeners(getBrowserView()->getGridControl());
@@ -870,11 +870,11 @@ void SbaXDataBrowserController::addModelListeners(const Reference< ::com::sun::s
     // (we are interested in all columns the grid has (and only in these) so we have to listen to the container, too)
     Reference< ::com::sun::star::container::XContainer >  xColContainer(_xGridControlModel, UNO_QUERY);
     if (xColContainer.is())
-        xColContainer->addContainerListener((::com::sun::star::container::XContainerListener*)this);
+        xColContainer->addContainerListener(static_cast<com::sun::star::container::XContainerListener*>(this));
 
     Reference< ::com::sun::star::form::XReset >  xReset(_xGridControlModel, UNO_QUERY);
     if (xReset.is())
-        xReset->addResetListener((::com::sun::star::form::XResetListener*)this);
+        xReset->addResetListener(static_cast<com::sun::star::form::XResetListener*>(this));
 }
 
 void SbaXDataBrowserController::removeModelListeners(const Reference< XControlModel > & _xGridControlModel)
@@ -1002,14 +1002,14 @@ void SbaXDataBrowserController::disposingFormModel(const ::com::sun::star::lang:
 
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(Source.Source, UNO_QUERY);
     if (xFormError.is())
-        xFormError->removeSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
+        xFormError->removeSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
 
     if (m_xLoadable.is())
         m_xLoadable->removeLoadListener(this);
 
     Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(Source.Source, UNO_QUERY);
     if (xFormParameter.is())
-        xFormParameter->removeParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
+        xFormParameter->removeParameterListener(static_cast<com::sun::star::form::XDatabaseParameterListener*>(this));
 }
 
 void SbaXDataBrowserController::disposingColumnModel(const ::com::sun::star::lang::EventObject& Source)
@@ -1185,14 +1185,14 @@ void SbaXDataBrowserController::disposing()
 
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
-        xFormError->removeSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
+        xFormError->removeSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
 
     if (m_xLoadable.is())
         m_xLoadable->removeLoadListener(this);
 
     Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
     if (xFormParameter.is())
-        xFormParameter->removeParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
+        xFormParameter->removeParameterListener(static_cast<com::sun::star::form::XDatabaseParameterListener*>(this));
 
     removeModelListeners(getControlModel());
 
@@ -2625,14 +2625,14 @@ void SbaXDataBrowserController::BeforeDrop()
 {
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
-        xFormError->removeSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
+        xFormError->removeSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
 }
 
 void SbaXDataBrowserController::AfterDrop()
 {
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
-        xFormError->addSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
+        xFormError->addSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
 }
 
 void SbaXDataBrowserController::addColumnListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)

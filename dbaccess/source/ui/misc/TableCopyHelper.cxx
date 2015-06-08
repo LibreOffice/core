@@ -242,7 +242,7 @@ bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, bo
         pImport = new ORTFImportExport(_xConnection,getNumberFormatter(_xConnection, m_pController->getORB()),m_pController->getORB());
 
     xEvt = pImport;
-    SvStream* pStream = (SvStream*)(SotStorageStream*)_rDesc.aHtmlRtfStorage;
+    SvStream* pStream = static_cast<SvStream*>(static_cast<SotStorageStream*>(_rDesc.aHtmlRtfStorage));
     if ( _bCheck )
         pImport->enableCheckOnly();
 
