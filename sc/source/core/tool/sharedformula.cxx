@@ -52,24 +52,25 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
         xGroup2->mpCode = xGroup->mpCode->Clone();
     }
 
+    xGroup->mnLength = nRow - xGroup->mpTopCell->aPos.Row();
+    ScFormulaCell& rPrevTop = *sc::formula_block::at(*aPos.first->data, aPos.second - xGroup->mnLength);
+
 #if USE_FORMULA_GROUP_LISTENER
     // At least group area listeners will have to be adapted. As long as
     // there's no update mechanism and no separated handling of group area and
     // other listeners, all listeners of this group's top cell are to be reset.
     if (nLength2)
     {
-        rTop.EndListeningTo( rTop.GetDocument(), NULL, ScAddress( ScAddress::UNINITIALIZED));
-        rTop.SetNeedsListening(true);
+        rPrevTop.EndListeningTo( rPrevTop.GetDocument(), NULL, ScAddress( ScAddress::UNINITIALIZED));
+        rPrevTop.SetNeedsListening(true);
     }
 #endif
 
-    xGroup->mnLength = nRow - xGroup->mpTopCell->aPos.Row();
     if (xGroup->mnLength == 1)
     {
         // The top group consists of only one cell. Ungroup this.
         ScFormulaCellGroupRef xNone;
-        ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
-        rPrev.SetCellGroup(xNone);
+        rPrevTop.SetCellGroup(xNone);
     }
 
     // Apply the lower group object to the lower cells.
