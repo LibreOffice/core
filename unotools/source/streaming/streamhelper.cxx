@@ -45,7 +45,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
     aData.realloc(nBytesToRead);
 
     sal_Size nRead(0);
-    ErrCode nError = m_xLockBytes->ReadAt(m_nActPos, (void*)aData.getArray(), nBytesToRead, &nRead);
+    ErrCode nError = m_xLockBytes->ReadAt(m_nActPos, static_cast<void*>(aData.getArray()), nBytesToRead, &nRead);
     m_nActPos += nRead;
 
     if (nError != ERRCODE_NONE)

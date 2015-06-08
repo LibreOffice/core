@@ -105,7 +105,7 @@ namespace utl
                     bool bSuccess = uno_type_assignData(
                         _rAccessor.getLocation(), _rAccessor.getDataType().getTypeLibType(),
                         const_cast< void* >( _rData.getValue() ), _rData.getValueType().getTypeLibType(),
-                        (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release
+                        cpp_queryInterface, cpp_acquire, cpp_release
                     );
                     SAL_WARN_IF(!bSuccess, "unotools.config",
                         "::utl::lcl_copyData( Accessor, Any ): could not assign the data (node path: \"" << _rAccessor.getPath() << "\"");

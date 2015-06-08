@@ -1485,7 +1485,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
             pCvt = &aImplStarSymbolCvt;
     }
 
-    return (FontToSubsFontConverter)pCvt;
+    return const_cast<ConvertChar *>(pCvt);
 }
 
 void DestroyFontToSubsFontConverter(

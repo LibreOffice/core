@@ -546,12 +546,12 @@ Moderator::Moderator(
     Reference < XActiveDataSink > xActiveSink(*pxSink,UNO_QUERY);
     if(xActiveSink.is())
         *pxSink = Reference<XInterface>(
-            (cppu::OWeakObject*)new ModeratorsActiveDataSink(*this));
+            static_cast<cppu::OWeakObject*>(new ModeratorsActiveDataSink(*this)));
 
     Reference<XActiveDataStreamer> xStreamer( *pxSink, UNO_QUERY );
     if ( xStreamer.is() )
         *pxSink = Reference<XInterface>(
-            (cppu::OWeakObject*)new ModeratorsActiveDataStreamer(*this));
+            static_cast<cppu::OWeakObject*>(new ModeratorsActiveDataStreamer(*this)));
 
     if(dec == 0)
         m_aArg.Argument <<= aPostArg;
@@ -1407,9 +1407,9 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     xLockBytes->SetSynchronMode( !pHandler );
     Reference< XActiveDataControl > xSink;
     if ( eOpenMode & StreamMode::WRITE )
-        xSink = (XActiveDataControl*) new UcbStreamer_Impl( xLockBytes );
+        xSink = static_cast<XActiveDataControl*>(new UcbStreamer_Impl( xLockBytes ));
     else
-        xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
+        xSink = static_cast<XActiveDataControl*>(new UcbDataSink_Impl( xLockBytes ));
 
     if ( rProps.getLength() )
     {
