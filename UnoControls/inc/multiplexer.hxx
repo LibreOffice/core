@@ -134,7 +134,7 @@ public:
     /**_______________________________________________________________________________________________________
     */
 
-    operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() const { return ((OWeakObject*)this);}
+    operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() const { return (static_cast<OWeakObject*>(const_cast<OMRCListenerMultiplexerHelper *>(this)));}
 
     /**_______________________________________________________________________________________________________
     */

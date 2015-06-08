@@ -361,7 +361,7 @@ Reference< XView > SAL_CALL BaseControl::getView() throw( RuntimeException, std:
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    return Reference< XView >( (OWeakObject*)this, UNO_QUERY );
+    return Reference< XView >( static_cast<OWeakObject*>(this), UNO_QUERY );
 }
 
 //  XControl
@@ -787,8 +787,8 @@ OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()
 {
     if ( m_pMultiplexer == NULL )
     {
-        m_pMultiplexer = new OMRCListenerMultiplexerHelper( (XWindow*)this, m_xPeerWindow );
-        m_xMultiplexer = Reference< XInterface >( (OWeakObject*)m_pMultiplexer, UNO_QUERY );
+        m_pMultiplexer = new OMRCListenerMultiplexerHelper( static_cast<XWindow*>(this), m_xPeerWindow );
+        m_xMultiplexer = Reference< XInterface >( static_cast<OWeakObject*>(m_pMultiplexer), UNO_QUERY );
     }
 
     return m_pMultiplexer;

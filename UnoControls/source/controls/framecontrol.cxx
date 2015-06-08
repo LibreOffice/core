@@ -382,13 +382,13 @@ Reference< XPropertySetInfo > SAL_CALL FrameControl::getPropertySetInfo() throw(
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static Reference< XPropertySetInfo >* pInfo = (Reference< XPropertySetInfo >*)0;
-    if ( pInfo == (Reference< XPropertySetInfo >*)0 )
+    static Reference< XPropertySetInfo >* pInfo = nullptr;
+    if ( pInfo == nullptr )
     {
         // Ready for multithreading
         MutexGuard aGuard ( Mutex::getGlobalMutex () );
         // Control this pointer again, another instance can be faster then these!
-        if ( pInfo == (Reference< XPropertySetInfo >*)0 )
+        if ( pInfo == nullptr )
         {
             // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
             // (Use method "getInfoHelper()".)

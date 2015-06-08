@@ -179,7 +179,7 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException, std::exce
     // remove listeners
     EventObject aObject;
 
-    aObject.Source = Reference< XComponent > ( (XControlContainer*)this, UNO_QUERY );
+    aObject.Source = Reference< XComponent > ( static_cast<XControlContainer*>(this), UNO_QUERY );
     m_aListeners.disposeAndClear( aObject );
 
     // remove controls
@@ -236,7 +236,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     maControlInfoList.push_back( pNewControl );
 
     // initialize new control
-    pNewControl->xControl->setContext       ( (OWeakObject*)this    );
+    pNewControl->xControl->setContext       ( static_cast<OWeakObject*>(this)    );
     pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
 
     // when container has a peer ...
