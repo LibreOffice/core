@@ -126,7 +126,7 @@ storeError SAL_CALL store_createMemoryFile (
 
     xManager->acquire();
 
-    *phFile = (storeFileHandle)&(*xManager);
+    *phFile = static_cast<storeFileHandle>(&(*xManager));
     return store_E_None;
 }
 
@@ -164,7 +164,7 @@ storeError SAL_CALL store_openFile (
 
     xManager->acquire();
 
-    *phFile = (storeFileHandle)&(*xManager);
+    *phFile = static_cast<storeFileHandle>(&(*xManager));
     return store_E_None;
 }
 
@@ -312,7 +312,7 @@ storeError SAL_CALL store_openDirectory (
 
     xDirectory->acquire();
 
-    *phDirectory = (storeDirectoryHandle)&(*xDirectory);
+    *phDirectory = static_cast<storeDirectoryHandle>(&(*xDirectory));
     return store_E_None;
 }
 
@@ -422,7 +422,7 @@ storeError SAL_CALL store_openStream (
 
     xLockBytes->acquire();
 
-    *phStream = (storeStreamHandle)&(*xLockBytes);
+    *phStream = static_cast<storeStreamHandle>(&(*xLockBytes));
     return store_E_None;
 }
 
