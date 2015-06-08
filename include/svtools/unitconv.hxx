@@ -37,8 +37,8 @@ SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit, bool bA
 SVT_DLLPUBLIC long      CalcToUnit( float nIn, SfxMapUnit eUnit );
 SVT_DLLPUBLIC long      CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFactor );
 
-SVT_DLLPUBLIC long      ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl );
-SVT_DLLPUBLIC long      ControlToItem( long nIn, SfxFieldUnit eCtrl, SfxMapUnit eItem );
+SVT_DLLPUBLIC long      ItemToControl( long nIn, SfxMapUnit eItem, FieldUnit eCtrl );
+SVT_DLLPUBLIC long      ControlToItem( long nIn, FieldUnit eCtrl, SfxMapUnit eItem );
 
 SVT_DLLPUBLIC FieldUnit MapToFieldUnit( const SfxMapUnit eUnit );
 
