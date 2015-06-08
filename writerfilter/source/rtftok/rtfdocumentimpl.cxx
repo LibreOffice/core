@@ -21,7 +21,6 @@
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <vcl/wmf.hxx>
-#include <vcl/settings.hxx>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/string.hxx>
 #include <tools/globname.hxx>

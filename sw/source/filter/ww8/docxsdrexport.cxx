@@ -15,7 +15,6 @@
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <svx/svdogrp.hxx>
-#include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/properties.hxx>
 #include <textboxhelper.hxx>

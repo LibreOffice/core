@@ -10,7 +10,6 @@
 #include <rtftokenizer.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtfskipdestination.hxx>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>

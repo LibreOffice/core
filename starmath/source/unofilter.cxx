@@ -9,12 +9,6 @@
 
 #include <memory>
 
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <sot/storage.hxx>
-#include <tools/stream.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
