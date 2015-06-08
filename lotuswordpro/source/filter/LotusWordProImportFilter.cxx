@@ -147,7 +147,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     Sequence< ::sal_Int8 > aData;
     sal_Int32 nLen = SAL_N_ELEMENTS( header );
     if ( !( ( nLen == xInputStream->readBytes( aData, nLen ) )
-                && ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 ) ) )
+                && ( memcmp( static_cast<void const *>(header), static_cast<void const *>(aData.getConstArray()), nLen ) == 0 ) ) )
         sTypeName.clear();
 
     return sTypeName;
@@ -193,7 +193,7 @@ Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(
 uno::Reference< XInterface > SAL_CALL LotusWordProImportFilter_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new LotusWordProImportFilter( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new LotusWordProImportFilter( comphelper::getComponentContext(rSMgr) ));
 }
 
 // XServiceInfo
