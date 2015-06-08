@@ -122,7 +122,7 @@ namespace accessibility
                     bool bNeedFocus = false;
                     if (pBox)
                     {
-                        vcl::Window* pParent = ((vcl::Window*)pBox)->GetParent();
+                        vcl::Window* pParent = static_cast<vcl::Window*>(pBox)->GetParent();
                         if (pParent && pParent->GetType() == WINDOW_FLOATINGWINDOW)
                         {
                             // MT: ImplGetAppSVData shouldn't be exported from VCL.
