@@ -502,7 +502,10 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
     lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterCreationArgs );
 
      uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
-    xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rResource.getOrDefault("URL",OUString())));
+    OUString sBaseURI = _rResource.getOrDefault("BaseURI", OUString());
+    if (sBaseURI.isEmpty())
+        sBaseURI = _rResource.getOrDefault("URL",OUString());
+    xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sBaseURI));
     xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
 
     const sal_Int32 nCount = aFilterCreationArgs.getLength();

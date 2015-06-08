@@ -317,10 +317,10 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     if ( aURL.GetProtocol() == INetProtocol::NotValid )
         throw NoSuchElementException( _rName, *this );
 
+    bool bEmbeddedDataSource = _sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:");
     try
     {
         ::ucbhelper::Content aContent( _sURL, NULL, comphelper::getProcessComponentContext() );
-        bool bEmbeddedDataSource = _sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:");
         if ( !aContent.isDocument() && !bEmbeddedDataSource )
             throw InteractiveIOException(
                 _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE
@@ -363,6 +363,12 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
         aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext, 0) );
+        if (bEmbeddedDataSource)
+        {
+            // In this case the host contains the real path, and the the path is the embedded stream name.
+            OUString sBaseURI = aURL.GetHost(INetURLObject::DECODE_WITH_CHARSET) + aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
+            aArgs.put("BaseURI", sBaseURI);
+        }
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );
