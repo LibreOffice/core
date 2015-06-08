@@ -1137,7 +1137,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
             "reportdesign",
             "X:" << aNewPos.X() << " Y:" << aNewPos.Y() << " on View#"
                 << nViewCount++);
-        rReportSection.getSectionView().BegDragObj(aNewPos, (OutputDevice*)NULL, pHdl, nDrgLog, NULL);
+        rReportSection.getSectionView().BegDragObj(aNewPos, nullptr, pHdl, nDrgLog, NULL);
 
         const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aNewPos.Y() -= nSectionHeight;
