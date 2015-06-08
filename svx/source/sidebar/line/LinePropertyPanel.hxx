@@ -151,6 +151,7 @@ private:
     void FillLineStyleList();
     void SelectEndStyle(bool bStart);
     void SelectLineStyle();
+    void ActivateControls();
 
     DECL_LINK(ImplWidthPopupModeEndHdl, FloatingWindow* );
     DECL_LINK(ChangeLineStyleHdl, void*);
