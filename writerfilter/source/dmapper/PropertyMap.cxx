@@ -1029,6 +1029,16 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     for (size_t i = 0; i < rPendingFloatingTables.size(); ++i)
     {
         FloatingTableInfo& rInfo = rPendingFloatingTables[i];
+
+        // Count the layout width of the table.
+        sal_Int32 nTableWidth = rInfo.m_nTableWidth;
+        sal_Int32 nLeftMargin = 0;
+        if (rInfo.getPropertyValue("LeftMargin") >>= nLeftMargin)
+            nTableWidth += nLeftMargin;
+        sal_Int32 nRightMargin = 0;
+        if (rInfo.getPropertyValue("RightMargin") >>= nRightMargin)
+            nTableWidth += nRightMargin;
+
         // If the table is wider than the text area, then don't create a fly
         // for the table: no wrapping will be performed anyway, but multi-page
         // tables will be broken.
@@ -1037,7 +1047,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         // If there are columns, always create the fly, otherwise the columns would
         // restrict geometry of the table.
         if ( ( rInfo.getPropertyValue("HoriOrientRelation") == text::RelOrientation::PAGE_FRAME ) ||
-             ( rInfo.m_nTableWidth < nTextAreaWidth ) || ColumnCount() + 1 >= 2 )
+             nTableWidth < nTextAreaWidth || ColumnCount() + 1 >= 2 )
             xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties);
     }
     rPendingFloatingTables.clear();

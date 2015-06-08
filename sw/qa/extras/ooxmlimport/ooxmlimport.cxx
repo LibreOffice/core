@@ -2707,6 +2707,15 @@ DECLARE_OOXMLIMPORT_TEST(mathtype, "mathtype.docx")
     CPPUNIT_ASSERT(xModel->supportsService("com.sun.star.formula.FormulaProperties"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf8255, "tdf8255.docx")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // This was 1: a full-page-wide multi-page floating table was imported as a TextFrame.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
