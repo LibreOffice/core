@@ -1724,7 +1724,7 @@ void OStorage_Impl::CreateRelStorage()
             throw uno::RuntimeException( THROW_WHERE );
 
         OStorage* pResultStorage = new OStorage( m_pRelStorElement->m_pStorage, false );
-        m_xRelStorage = uno::Reference< embed::XStorage >( (embed::XStorage*) pResultStorage );
+        m_xRelStorage = uno::Reference< embed::XStorage >( static_cast<embed::XStorage*>(pResultStorage) );
     }
 }
 
@@ -2578,7 +2578,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
 
         bool bReadOnlyWrap = ( ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE );
         OStorage* pResultStorage = new OStorage( pElement->m_pStorage, bReadOnlyWrap );
-        xResult = uno::Reference< embed::XStorage >( (embed::XStorage*) pResultStorage );
+        xResult = uno::Reference< embed::XStorage >( static_cast<embed::XStorage*>(pResultStorage) );
 
         if ( bReadOnlyWrap )
         {
@@ -3951,7 +3951,7 @@ void SAL_CALL OStorage::commit()
 
         // when the storage is committed the parent is modified
         if ( m_pImpl->m_pParent && m_pImpl->m_pParent->m_pAntiImpl )
-            xParentModif = (util::XModifiable*)m_pImpl->m_pParent->m_pAntiImpl;
+            xParentModif = static_cast<util::XModifiable*>(m_pImpl->m_pParent->m_pAntiImpl);
     }
     catch( const io::IOException& rIOException )
     {
