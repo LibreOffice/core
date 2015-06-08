@@ -1648,6 +1648,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(aSaveOpt.IsPrettyPrinting()));
     if ( aSaveOpt.IsSaveRelFSys() )
         xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rMediaDescriptor.getOrDefault("URL",OUString())));
+        // In this case the host contains the real path, and the the path is the embedded stream name.
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
@@ -1766,7 +1767,7 @@ Sequence< OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNames(  )
 
 void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference< XStorage >& _rxNewRootStorage )
 {
-    Reference< XInterface > xMe( *const_cast< ODatabaseDocument* >( this ) );
+    Reference< XInterface > xMe( *this );
 
     m_aStorageListeners.forEach< XStorageChangeListener >(
         boost::bind( &XStorageChangeListener::notifyStorageChange, _1, boost::cref( xMe ), boost::cref( _rxNewRootStorage ) ) );

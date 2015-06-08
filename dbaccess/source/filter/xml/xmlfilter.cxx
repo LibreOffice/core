@@ -456,7 +456,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             OUString sStreamRelPath;
             if (sFileName.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
             {
-                // In this case the host contains the real path, and the the path is the embedded stream name.
+                // In this case the host contains the real path, and the path is the embedded stream name.
                 INetURLObject aURL(sFileName);
                 sFileName = aURL.GetHost(INetURLObject::DECODE_WITH_CHARSET);
                 sStreamRelPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
