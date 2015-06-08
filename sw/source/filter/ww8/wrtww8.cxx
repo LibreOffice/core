@@ -2531,11 +2531,51 @@ void WW8Export::SectionBreaksAndFrames( const SwTextNode& rNode )
         OutWW6FlyFrmsInContent( rNode );
 }
 
+class TrackContentToExport
+{
+private:
+    SwPaM *m_pCurPam;
+    SwPaM m_aOrigPam;
+public:
+    TrackContentToExport(SwPaM *pCurPam)
+        : m_pCurPam(pCurPam)
+        , m_aOrigPam(*pCurPam, NULL)
+    {
+    }
+
+    bool contentRemainsToExport(ww8::WW8TableInfo *pTableInfo)
+    {
+        bool bSimpleContentRemains = m_pCurPam->GetPoint()->nNode < m_pCurPam->GetMark()->nNode ||
+            (m_pCurPam->GetPoint()->nNode == m_pCurPam->GetMark()->nNode &&
+              m_pCurPam->GetPoint()->nContent.GetIndex() <= m_pCurPam->GetMark()->nContent.GetIndex());
+        if (bSimpleContentRemains)
+            return true;
+
+        if (!pTableInfo)
+            return false;
+
+        //An old-school table where one cell may points back to a previous node as the next cell
+        //so if this node is the last node in the range, we may need to jump back to a previously
+        //skipped cell to output it in a sane sequence. See ooo47778-3.sxw for one of these
+        //horrors. So if we are at the end of the selection, but this end point is a table
+        //cell whose next cell is in the selection allow jumping back to it
+        const SwNode* pCurrentNode = &m_pCurPam->GetPoint()->nNode.GetNode();
+        const SwNode* pNextNode = pTableInfo->getNextNode(pCurrentNode);
+
+        if (pNextNode && pCurrentNode != pNextNode)
+        {
+            return pNextNode->GetIndex() >= m_aOrigPam.GetPoint()->nNode.GetIndex() &&
+                   pNextNode->GetIndex() < m_aOrigPam.GetMark()->nNode.GetIndex();
+        }
+
+        return false;
+    }
+};
+
 void MSWordExportBase::WriteText()
 {
-    while( m_pCurPam->GetPoint()->nNode < m_pCurPam->GetMark()->nNode ||
-           ( m_pCurPam->GetPoint()->nNode == m_pCurPam->GetMark()->nNode &&
-             m_pCurPam->GetPoint()->nContent.GetIndex() <= m_pCurPam->GetMark()->nContent.GetIndex() ) )
+    TrackContentToExport aContentTracking(m_pCurPam);
+    while (aContentTracking.contentRemainsToExport(m_pTableInfo.get()))
     {
         SwNode& rNd = m_pCurPam->GetNode();
 
