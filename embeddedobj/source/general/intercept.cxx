@@ -250,17 +250,17 @@ Interceptor::queryDispatch(
 {
     osl::MutexGuard aGuard(m_aMutex);
     if(URL.Complete == m_aInterceptedURL[0])
-        return (frame::XDispatch*)this;
+        return static_cast<frame::XDispatch*>(this);
     else if(URL.Complete == m_aInterceptedURL[1])
-        return (frame::XDispatch*)0   ;
+        return nullptr   ;
     else if(URL.Complete == m_aInterceptedURL[2])
-        return (frame::XDispatch*)this;
+        return static_cast<frame::XDispatch*>(this);
     else if(URL.Complete == m_aInterceptedURL[3])
-        return (frame::XDispatch*)this;
+        return static_cast<frame::XDispatch*>(this);
     else if(URL.Complete == m_aInterceptedURL[4])
-        return (frame::XDispatch*)this;
+        return static_cast<frame::XDispatch*>(this);
     else if(URL.Complete == m_aInterceptedURL[5])
-        return (frame::XDispatch*)this;
+        return static_cast<frame::XDispatch*>(this);
     else {
         if(m_xSlaveDispatchProvider.is())
             return m_xSlaveDispatchProvider->queryDispatch(
@@ -286,17 +286,17 @@ Interceptor::queryDispatches(
 
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
         if(m_aInterceptedURL[0] == Requests[i].FeatureURL.Complete)
-            aRet[i] = (frame::XDispatch*) this;
+            aRet[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[1] == Requests[i].FeatureURL.Complete)
-            aRet[i] = (frame::XDispatch*) 0;
+            aRet[i] = nullptr;
         else if(m_aInterceptedURL[2] == Requests[i].FeatureURL.Complete)
-            aRet[i] = (frame::XDispatch*) this;
+            aRet[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[3] == Requests[i].FeatureURL.Complete)
-            aRet[i] = (frame::XDispatch*) this;
+            aRet[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[4] == Requests[i].FeatureURL.Complete)
-            aRet[i] = (frame::XDispatch*) this;
+            aRet[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[5] == Requests[i].FeatureURL.Complete)
-            aRet[i] = (frame::XDispatch*) this;
+            aRet[i] = static_cast<frame::XDispatch*>(this);
 
     return aRet;
 }

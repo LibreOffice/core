@@ -218,7 +218,7 @@ void DocumentHolder::CloseFrame()
 {
     uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );
     if ( xCloseBroadcaster.is() )
-        xCloseBroadcaster->removeCloseListener( ( util::XCloseListener* )this );
+        xCloseBroadcaster->removeCloseListener( static_cast<util::XCloseListener*>(this) );
 
     uno::Reference<util::XCloseable> xCloseable(
         m_xFrame,uno::UNO_QUERY );
@@ -277,14 +277,14 @@ void DocumentHolder::CloseDocument( bool bDeliverOwnership, bool bWaitForClose )
     {
         uno::Reference< document::XEventBroadcaster > xEventBroadcaster( m_xComponent, uno::UNO_QUERY );
         if ( xEventBroadcaster.is() )
-            xEventBroadcaster->removeEventListener( ( document::XEventListener* )this );
+            xEventBroadcaster->removeEventListener( static_cast<document::XEventListener*>(this) );
         else
         {
             // the object does not support document::XEventBroadcaster interface
             // use the workaround, register for modified events
             uno::Reference< util::XModifyBroadcaster > xModifyBroadcaster( m_xComponent, uno::UNO_QUERY );
             if ( xModifyBroadcaster.is() )
-                xModifyBroadcaster->removeModifyListener( ( util::XModifyListener* )this );
+                xModifyBroadcaster->removeModifyListener( static_cast<util::XModifyListener*>(this) );
         }
 
         uno::Reference< util::XCloseable > xCloseable( xBroadcaster, uno::UNO_QUERY );
@@ -483,7 +483,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
 
         uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );
         if ( xCloseBroadcaster.is() )
-            xCloseBroadcaster->addCloseListener( ( util::XCloseListener* )this );
+            xCloseBroadcaster->addCloseListener( static_cast<util::XCloseListener*>(this) );
 
         // TODO: some listeners to the frame and the window ( resize for example )
     }
@@ -500,7 +500,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         if ( xControllerBorder.is() )
         {
             m_aBorderWidths = xControllerBorder->getBorder();
-            xControllerBorder->addBorderResizeListener( (frame::XBorderResizeListener*)this );
+            xControllerBorder->addBorderResizeListener( static_cast<frame::XBorderResizeListener*>(this) );
         }
 
         PlaceFrame( aRectangleToShow );
@@ -852,7 +852,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 
         uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );
         if ( xCloseBroadcaster.is() )
-            xCloseBroadcaster->addCloseListener( ( util::XCloseListener* )this );
+            xCloseBroadcaster->addCloseListener( static_cast<util::XCloseListener*>(this) );
     }
 
     if ( m_xComponent.is() )
@@ -935,18 +935,18 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
 
     uno::Reference< util::XCloseBroadcaster > xBroadcaster( m_xComponent, uno::UNO_QUERY );
     if ( xBroadcaster.is() )
-        xBroadcaster->addCloseListener( ( util::XCloseListener* )this );
+        xBroadcaster->addCloseListener( static_cast<util::XCloseListener*>(this) );
 
     uno::Reference< document::XEventBroadcaster > xEventBroadcaster( m_xComponent, uno::UNO_QUERY );
     if ( xEventBroadcaster.is() )
-        xEventBroadcaster->addEventListener( ( document::XEventListener* )this );
+        xEventBroadcaster->addEventListener( static_cast<document::XEventListener*>(this) );
     else
     {
         // the object does not support document::XEventBroadcaster interface
         // use the workaround, register for modified events
         uno::Reference< util::XModifyBroadcaster > xModifyBroadcaster( m_xComponent, uno::UNO_QUERY );
         if ( xModifyBroadcaster.is() )
-            xModifyBroadcaster->addModifyListener( ( util::XModifyListener* )this );
+            xModifyBroadcaster->addModifyListener( static_cast<util::XModifyListener*>(this) );
     }
 
     if ( m_xFrame.is() )
@@ -1163,7 +1163,7 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
     uno::Reference< frame::XDesktop > xDesktop( aSource.Source, uno::UNO_QUERY );
     m_bDesktopTerminated = true;
     if ( xDesktop.is() )
-        xDesktop->removeTerminateListener( ( frame::XTerminateListener* )this );
+        xDesktop->removeTerminateListener( static_cast<frame::XTerminateListener*>(this) );
 }
 
 
