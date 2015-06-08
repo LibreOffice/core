@@ -1424,7 +1424,7 @@ extern "C" void SAL_CALL typelib_typedescription_release(
             {
                 MutexGuard aGuard( rInit.getMutex() );
                 WeakMap_Impl::iterator aIt = rInit.pWeakMap->find( pTD->pTypeName->buffer );
-                if( aIt != rInit.pWeakMap->end() && (void *)(*aIt).second == (void *)pTD )
+                if( aIt != rInit.pWeakMap->end() && static_cast<void *>((*aIt).second) == static_cast<void *>(pTD) )
                 {
                     // remove only if it contains the same object
                     rInit.pWeakMap->erase( aIt );
@@ -1513,7 +1513,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
             }
             // !reallyWeak
 
-            if (((void *)pTDR != (void *)*ppNewDescription) && // if different
+            if ((static_cast<void *>(pTDR) != static_cast<void *>(*ppNewDescription)) && // if different
                 (!pTDR->pType->pWeakRef || // uninit: ref data only set
                  // new one is complete:
                  (!pTDR->pType->bComplete && (*ppNewDescription)->bComplete) ||
@@ -1585,7 +1585,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
 
         // description is the weak itself, so register it
         (*rInit.pWeakMap)[pTDR->pTypeName->buffer] = pTDR;
-        OSL_ASSERT( (void *)*ppNewDescription == (void *)pTDR );
+        OSL_ASSERT( static_cast<void *>(*ppNewDescription) == static_cast<void *>(pTDR) );
     }
 
     // By default this reference is not really weak. The reference hold the description

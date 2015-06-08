@@ -244,7 +244,7 @@ static void SAL_CALL defenv_registerInterface(
 
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
-        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, (ObjectEntry*)0 ) ) );
+        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, nullptr ) ) );
     if (insertion.second)
     {
         ObjectEntry * pOEntry = new ObjectEntry( rOId );
@@ -292,7 +292,7 @@ static void SAL_CALL defenv_registerProxyInterface(
 
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
-        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, (ObjectEntry*)0 ) ) );
+        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, nullptr ) ) );
     if (insertion.second)
     {
         ObjectEntry * pOEntry = new ObjectEntry( rOId );

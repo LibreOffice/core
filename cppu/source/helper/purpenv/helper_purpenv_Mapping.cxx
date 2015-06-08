@@ -132,7 +132,7 @@ Mapping::Mapping(uno_Environment                 * pFrom,
 
     uno_Mapping::acquire      = s_acquire;
     uno_Mapping::release      = s_release;
-    uno_Mapping::mapInterface = (uno_MapInterfaceFunc)s_mapInterface;
+    uno_Mapping::mapInterface = s_mapInterface;
 }
 
 Mapping::~Mapping()
