@@ -93,7 +93,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     aNew.SetNumOffset( oPageNumOffset );
 
     if ( pFlow->IsInTab() )
-        GetDoc()->SetAttr( aNew, *(SwFormat*)pFlow->FindTabFrm()->GetFormat() );
+        GetDoc()->SetAttr( aNew, *const_cast<SwFormat*>(static_cast<SwFormat const *>(pFlow->FindTabFrm()->GetFormat())) );
     else
     {
         SwPaM aPaM( *static_cast<const SwContentFrm*>(pFlow)->GetNode() );

@@ -504,7 +504,7 @@ void SwNoTextFrm::Format( const SwBorderAttrs * )
 bool SwNoTextFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
                               SwCrsrMoveState *pCMS ) const
 {
-    if ( &rPos.nNode.GetNode() != (SwNode*)GetNode() )
+    if ( &rPos.nNode.GetNode() != static_cast<SwNode const *>(GetNode()) )
         return false;
 
     Calc();

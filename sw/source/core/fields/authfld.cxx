@@ -88,7 +88,7 @@ void    SwAuthorityFieldType::RemoveField(sal_IntPtr nHandle)
     for(SwAuthDataArr::size_type j = 0; j < m_DataArr.size(); ++j)
     {
         SwAuthEntry* pTemp = &m_DataArr[j];
-        sal_IntPtr nRet = reinterpret_cast<sal_IntPtr>((void*)pTemp);
+        sal_IntPtr nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(pTemp));
         if(nRet == nHandle)
         {
             pTemp->RemoveRef();
@@ -117,14 +117,14 @@ sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
         if(rTemp == *pEntry)
         {
             delete pEntry;
-            nRet = reinterpret_cast<sal_IntPtr>((void*)&rTemp);
+            nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(&rTemp));
             rTemp.AddRef();
             return nRet;
         }
     }
 
     //if it is a new Entry - insert
-    nRet = reinterpret_cast<sal_IntPtr>((void*)pEntry);
+    nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(pEntry));
     pEntry->AddRef();
     m_DataArr.push_back(pEntry);
     //re-generate positions of the fields
@@ -136,7 +136,7 @@ bool SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
 {
     for(auto &rTemp : m_DataArr)
     {
-        sal_IntPtr nTmp = reinterpret_cast<sal_IntPtr>((void*)&rTemp);
+        sal_IntPtr nTmp = reinterpret_cast<sal_IntPtr>(static_cast<void*>(&rTemp));
         if( nTmp == nHandle )
         {
             rTemp.AddRef();
@@ -153,7 +153,7 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(sal_IntPtr nHandle) c
 {
     for(auto &rTemp : m_DataArr)
     {
-        sal_IntPtr nTmp = reinterpret_cast<sal_IntPtr>((void*)&rTemp);
+        sal_IntPtr nTmp = reinterpret_cast<sal_IntPtr>(static_cast<void const *>(&rTemp));
         if( nTmp == nHandle )
         {
             return &rTemp;
@@ -224,7 +224,7 @@ sal_IntPtr SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
     if( nPos < m_DataArr.size() )
     {
         SwAuthEntry* pTemp = &m_DataArr[nPos];
-        return reinterpret_cast<sal_IntPtr>((void*)pTemp);
+        return reinterpret_cast<sal_IntPtr>(static_cast<void*>(pTemp));
     }
     return 0;
 }

@@ -1450,9 +1450,9 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     {
         const bool bFootnotePage = pBoss->IsPageFrm() && static_cast<const SwPageFrm*>(pBoss)->IsFootnotePage();
         if ( bFootnotePage && !IsFootnoteContFrm() )
-            pFrm = (SwFrm*)pBoss->FindFootnoteCont();
+            pFrm = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoss->FindFootnoteCont()));
         if ( !pFrm )
-            pFrm = (SwFrm*)pBoss->FindBodyCont();
+            pFrm = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoss->FindBodyCont()));
 
         if ( !pFrm )
             return 0;

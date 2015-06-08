@@ -1088,7 +1088,7 @@ SwFrm *SwFrm::_FindPrev()
                             (bFootnote   && pPrvCnt->IsInFootnote()) )
                     {
                         pRet = pPrvCnt->IsInTab() ? pPrvCnt->FindTabFrm()
-                                                  : (SwFrm*)pPrvCnt;
+                                                  : static_cast<SwFrm*>(pPrvCnt);
                         return pRet;
                     }
                     pPrvCnt = pPrvCnt->GetPrevContentFrm();
@@ -1097,7 +1097,7 @@ SwFrm *SwFrm::_FindPrev()
             else if ( pThis->IsInFly() )
             {
                 pRet = pPrvCnt->IsInTab() ? pPrvCnt->FindTabFrm()
-                                            : (SwFrm*)pPrvCnt;
+                                            : static_cast<SwFrm*>(pPrvCnt);
                 return pRet;
             }
             else // footer or header or Fly
@@ -1112,7 +1112,7 @@ SwFrm *SwFrm::_FindPrev()
                 if ( pCntUp == pUp )
                 {
                     pRet = pPrvCnt->IsInTab() ? pPrvCnt->FindTabFrm()
-                                                : (SwFrm*)pPrvCnt;
+                                                : static_cast<SwFrm*>(pPrvCnt);
                     return pRet;
                 }
             }

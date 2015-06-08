@@ -491,7 +491,7 @@ bool SwCrsrShell::bColumnChange()
         if(pParent!=NULL)
         {
             pCurrCol=static_cast<SwFrm*>(pParent)->FindColFrm();
-            pCurrFrm = (SwFrm*)pParent;
+            pCurrFrm = static_cast<SwFrm*>(pParent);
         }
         else
         {
@@ -2163,7 +2163,7 @@ void SwCrsrShell::ShGetFcs( bool bUpdate )
 /** Get current frame in which the cursor is positioned. */
 SwContentFrm *SwCrsrShell::GetCurrFrm( const bool bCalcFrm ) const
 {
-    SET_CURR_SHELL( (SwViewShell*)this );
+    SET_CURR_SHELL( static_cast<SwViewShell*>(const_cast<SwCrsrShell *>(this)) );
     SwContentFrm *pRet = 0;
     SwContentNode *pNd = m_pCurCrsr->GetContentNode();
     if ( pNd )

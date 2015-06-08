@@ -197,7 +197,7 @@ void SwFlyFrm::InsertCnt()
         OSL_ENSURE( rContent.GetContentIdx(), ":-( no content prepared." );
         sal_uLong nIndex = rContent.GetContentIdx()->GetIndex();
         // Lower() means SwColumnFrm; the Content then needs to be inserted into the (Column)BodyFrm
-        ::_InsertCnt( Lower() ? static_cast<SwLayoutFrm*>(static_cast<SwLayoutFrm*>(Lower())->Lower()) : (SwLayoutFrm*)this,
+        ::_InsertCnt( Lower() ? static_cast<SwLayoutFrm*>(static_cast<SwLayoutFrm*>(Lower())->Lower()) : static_cast<SwLayoutFrm*>(this),
                       GetFormat()->GetDoc(), nIndex );
 
         // NoText always have a fixed height.

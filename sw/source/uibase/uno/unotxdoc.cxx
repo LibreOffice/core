@@ -433,7 +433,7 @@ SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
     if(!xPropertyHelper.is())
     {
         pPropertyHelper = new SwXDocumentPropertyHelper(*pDocShell->GetDoc());
-        xPropertyHelper = (cppu::OWeakObject*)pPropertyHelper;
+        xPropertyHelper = static_cast<cppu::OWeakObject*>(pPropertyHelper);
     }
     return pPropertyHelper;
 }
@@ -452,7 +452,7 @@ void SwXTextDocument::GetNumberFormatter()
                 xNumFormatAgg = Reference< XAggregation >(xTmp, UNO_QUERY);
             }
             if(xNumFormatAgg.is())
-                xNumFormatAgg->setDelegator((cppu::OWeakObject*)(SwXTextDocumentBaseClass*)this);
+                xNumFormatAgg->setDelegator(static_cast<cppu::OWeakObject*>(static_cast<SwXTextDocumentBaseClass*>(this)));
         }
         else
         {
@@ -4071,7 +4071,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
             break;
             case  SW_CREATE_DRAW_DEFAULTS:
                 if(!xDrawDefaults.is())
-                    xDrawDefaults = (cppu::OWeakObject*)new SwSvxUnoDrawPool(m_pDoc);
+                    xDrawDefaults = static_cast<cppu::OWeakObject*>(new SwSvxUnoDrawPool(m_pDoc));
                 xRet = xDrawDefaults;
             break;
 #if OSL_DEBUG_LEVEL > 0

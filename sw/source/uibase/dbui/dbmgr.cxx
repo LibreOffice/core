@@ -618,7 +618,7 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
             for(long i = 0; i < aTables.getLength(); i++)
             {
                 sal_uInt16 nEntry = pListBox->InsertEntry(pTables[i]);
-                pListBox->SetEntryData(nEntry, (void*)0);
+                pListBox->SetEntryData(nEntry, nullptr);
             }
         }
         uno::Reference<sdb::XQueriesSupplier> xQSupplier = uno::Reference<sdb::XQueriesSupplier>(xConnection, uno::UNO_QUERY);
@@ -1132,7 +1132,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
                         if(pEvtSrc)
                         {
-                            uno::Reference< uno::XInterface > xRef( (text::XMailMergeBroadcaster *) pEvtSrc );
+                            uno::Reference< uno::XInterface > xRef( const_cast<text::XMailMergeBroadcaster *>(static_cast<text::XMailMergeBroadcaster const *>(pEvtSrc)) );
                             text::MailMergeEvent aEvt( xRef, xWorkDocSh->GetModel() );
                             pEvtSrc->LaunchMailMergeEvent( aEvt );
                         }

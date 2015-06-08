@@ -423,14 +423,14 @@ SwHTMLImageWatcher::SwHTMLImageWatcher(
 
     // Als Event-Listener am Shape anmelden, damit wir es beim dispose
     // loslassen ko"onnen ...
-    uno::Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
+    uno::Reference< XEventListener > xEvtLstnr = static_cast<XEventListener *>(this);
     uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
     xComp->addEventListener( xEvtLstnr );
 
     // Zum Schluss halten wir noch eine Referenz auf uns selbst, damit
     // wir am Leben bleiben ... (eigentlich sollte das nicht neotig sein,
     // weil wir ja noch an diversen anderen Stellen angemeldet sind)
-    xThis = (awt::XImageConsumer *)this;
+    xThis = static_cast<awt::XImageConsumer *>(this);
 
     // und am ImageProducer anmelden, um die Groesse zu erehalten ...
     xSrc->getImageProducer()->addConsumer( xThis );
@@ -443,7 +443,7 @@ SwHTMLImageWatcher::~SwHTMLImageWatcher()
 void SwHTMLImageWatcher::clear()
 {
     // Am Shape als Event-Listener abmelden
-    uno::Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
+    uno::Reference< XEventListener > xEvtLstnr = static_cast<XEventListener *>(this);
     uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
     xComp->removeEventListener( xEvtLstnr );
 
@@ -548,7 +548,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 
     // uns selbst abmelden und loeschen
     clear();
-    uno::Reference< awt::XImageConsumer >  xTmp = (awt::XImageConsumer*)this;
+    uno::Reference< awt::XImageConsumer >  xTmp = static_cast<awt::XImageConsumer*>(this);
     xThis = 0;
 }
 
@@ -581,7 +581,7 @@ void SwHTMLImageWatcher::complete( sal_Int32 Status,
     {
         // uns selbst abmelden und loeschen
         clear();
-        uno::Reference< awt::XImageConsumer > xTmp = (awt::XImageConsumer*)this;
+        uno::Reference< awt::XImageConsumer > xTmp = static_cast<awt::XImageConsumer*>(this);
         xThis = 0;
     }
 }
@@ -595,7 +595,7 @@ void SwHTMLImageWatcher::disposing(const lang::EventObject& evt) throw ( uno::Ru
     if( evt.Source == xShape )
     {
         clear();
-        xTmp = (awt::XImageConsumer*)this;
+        xTmp = static_cast<awt::XImageConsumer*>(this);
         xThis = 0;
     }
 }

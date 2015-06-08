@@ -2400,7 +2400,7 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_Int32 nLength,
             {
                 // insert dummy span covering the gap
                 o_rSpanMap.insert(AttrSpanMap_t::value_type(
-                    AttrSpan_t(nLastEnd, aSpan.first), (const SwTextAttr *)0));
+                    AttrSpan_t(nLastEnd, aSpan.first), nullptr));
             }
 
             nLastEnd = aSpan.second;
@@ -2411,7 +2411,7 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_Int32 nLength,
     if (nLastEnd != nLength && nLength != 0)
     {
         o_rSpanMap.insert(
-            AttrSpanMap_t::value_type(AttrSpan_t(nLastEnd, nLength), (const SwTextAttr *)0));
+            AttrSpanMap_t::value_type(AttrSpan_t(nLastEnd, nLength), nullptr));
     }
 }
 

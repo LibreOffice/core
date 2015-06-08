@@ -985,7 +985,7 @@ bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         }
     }
 
-    SET_CURR_SHELL( (SwViewShell*)this );
+    SET_CURR_SHELL( const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
 
     if( !rSet.Set( pFly->GetFormat()->GetAttrSet(), true ) )
         return false;
@@ -1823,8 +1823,8 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
     StartAction();
 
     SwFormatChain rChain = rFormat.GetChain();
-    SwFrameFormat * pOldChainNext = (SwFrameFormat *) rChain.GetNext();
-    SwFrameFormat * pOldChainPrev = (SwFrameFormat *) rChain.GetPrev();
+    SwFrameFormat * pOldChainNext = static_cast<SwFrameFormat *>(rChain.GetNext());
+    SwFrameFormat * pOldChainPrev = static_cast<SwFrameFormat *>(rChain.GetPrev());
 
     if (pOldChainNext)
         mpDoc->Unchain(rFormat);

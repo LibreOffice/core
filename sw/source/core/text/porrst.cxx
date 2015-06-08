@@ -210,7 +210,7 @@ SwTwips SwTextFrm::EmptyHeight() const
         if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
             SwCrsrShell *pCrSh = static_cast<SwCrsrShell*>(pSh);
             SwContentFrm *pCurrFrm=pCrSh->GetCurrFrm();
-            if (pCurrFrm==(SwContentFrm*)this) {
+            if (pCurrFrm==static_cast<SwContentFrm const *>(this)) {
                 // do nothing
             } else {
                 return 1;

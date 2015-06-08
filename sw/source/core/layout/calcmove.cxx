@@ -1314,7 +1314,7 @@ void SwContentFrm::MakeAll()
             {
                 // In this Prepare, an _InvalidateSize() might happen.
                 // mbValidSize becomes false and Format() gets called.
-                Prepare( PREP_POS_CHGD, (const void*)&bFormatted, false );
+                Prepare( PREP_POS_CHGD, static_cast<const void*>(&bFormatted), false );
                 if ( bWidow && GetFollow() )
                 {
                     Prepare( PREP_WIDOWS_ORPHANS, 0, false );
@@ -1370,7 +1370,7 @@ void SwContentFrm::MakeAll()
                 MakePos();
                 if( aOldPos != (Frm().*fnRect->fnGetPos)() )
                 {
-                    Prepare( PREP_POS_CHGD, (const void*)&bFormatted, false );
+                    Prepare( PREP_POS_CHGD, static_cast<const void*>(&bFormatted), false );
                     if ( !mbValidSize )
                     {
                         (Frm().*fnRect->fnSetWidth)( (GetUpper()->
@@ -1801,7 +1801,7 @@ bool SwContentFrm::_WouldFit( SwTwips nSpace,
             // Within footnotes, we may even need to put the SwFootnoteFrm somewhere else, if
             // there's no SwFootnoteFrm there.
             SwFrm* pTmpFrm = pFrm->IsInFootnote() && !pNewUpper->FindFootnoteFrm() ?
-                             (SwFrm*)pFrm->FindFootnoteFrm() : pFrm;
+                             static_cast<SwFrm*>(pFrm->FindFootnoteFrm()) : pFrm;
             SwLayoutFrm *pUp = pTmpFrm->GetUpper();
             SwFrm *pOldNext = pTmpFrm->GetNext();
             pTmpFrm->RemoveFromLayout();

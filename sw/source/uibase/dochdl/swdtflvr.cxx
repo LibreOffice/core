@@ -451,7 +451,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
-        pTmpDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
+        pTmpDoc->SetTmpDocShell( nullptr );
 
         if( nSelectionType & nsSelectionType::SEL_TXT && !pWrtShell->HasMark() )
         {
@@ -902,7 +902,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
-        pTmpDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
+        pTmpDoc->SetTmpDocShell( nullptr );
 
         if( pWrtShell->IsObjSelected() )
             eBufferType = TRNSFR_DRAWING;
@@ -1062,7 +1062,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
     aDocShellRef = pCDoc->GetTmpDocShell();
     if( aDocShellRef.Is() )
         SwTransferable::InitOle( aDocShellRef, *pCDoc );
-    pCDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
+    pCDoc->SetTmpDocShell( nullptr );
 
     eBufferType = TRNSFR_DOCUMENT;
 
@@ -1645,7 +1645,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
             pRead = ReadAscii;
             if( rData.GetString( nFormat, sData ) )
             {
-                pStream = new SvMemoryStream( (void*)sData.getStr(),
+                pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
                             sData.getLength() * sizeof( sal_Unicode ),
                             StreamMode::READ );
 #ifdef OSL_BIGENDIAN

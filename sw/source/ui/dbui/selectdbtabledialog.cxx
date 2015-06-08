@@ -125,7 +125,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
             sEntry += "\t";
             sEntry += m_sTable;
             SvTreeListEntry* pEntry = m_pTable->InsertEntry(sEntry);
-            pEntry->SetUserData((void*)0);
+            pEntry->SetUserData(nullptr);
         }
     }
     Reference<XQueriesSupplier> xQSupplier(m_xConnection, UNO_QUERY);

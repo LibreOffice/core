@@ -158,7 +158,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             SwNodeIndex aStt( pGDoc->GetNodes().GetEndOfExtras(), 1 );
             SwContentNode* pContentNd = pGDoc->GetNodes().GoNext( &aStt );
             const SwTableNode* pTableNd = pContentNd->FindTableNode();
-            SwPaM aCpyPam( pTableNd ? *(SwNode*)pTableNd : *(SwNode*)pContentNd );
+            SwPaM aCpyPam( pTableNd ? *const_cast<SwNode*>(static_cast<SwNode const *>(pTableNd)) : *static_cast<SwNode*>(pContentNd) );
             aCpyPam.SetMark();
 
             // till the nodes array's end

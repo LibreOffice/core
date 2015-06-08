@@ -190,7 +190,7 @@ public:
 
 inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
 {
-    *(SwPosSize*)this = rPortion;
+    *static_cast<SwPosSize*>(this) = rPortion;
     nLineLength = rPortion.nLineLength;
     nAscent = rPortion.nAscent;
     nWhichPor = rPortion.nWhichPor;

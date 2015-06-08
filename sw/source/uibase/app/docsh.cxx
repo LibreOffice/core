@@ -957,7 +957,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         break;
         case SID_SOURCEVIEW:
         {
-            SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
+            SfxViewShell* pCurrView = GetView() ? static_cast<SfxViewShell*>(GetView())
                                         : SfxViewShell::Current();
             bool bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
             rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));

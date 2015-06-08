@@ -553,7 +553,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
                 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
             SwNodeIndex aUpdIdx( *pIdx );
-            getIDocumentContentOperations().DeleteSection( (SwNode*)pSectNd );
+            getIDocumentContentOperations().DeleteSection( const_cast<SwNode*>(static_cast<SwNode const *>(pSectNd)) );
             if( pFootnoteEndAtTextEnd )
                 GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
             getIDocumentState().SetModified();

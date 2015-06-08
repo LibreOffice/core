@@ -1024,7 +1024,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
 
         if (bChanged)
         {
-            PropertyChangeEvent aChgEvt( (XPropertySet *) this, rPropertyName,
+            PropertyChangeEvent aChgEvt( static_cast<XPropertySet *>(this), rPropertyName,
                     sal_False, pCur->nWID, aOld, rValue );
             launchEvent( aChgEvt );
         }
@@ -1144,7 +1144,7 @@ void SAL_CALL SwXMailMerge::dispose()
     {
         bDisposing = true;
 
-        EventObject aEvtObj( (XPropertySet *) this );
+        EventObject aEvtObj( static_cast<XPropertySet *>(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
         aMergeListeners.disposeAndClear( aEvtObj );
         aPropListeners.disposeAndClear( aEvtObj );

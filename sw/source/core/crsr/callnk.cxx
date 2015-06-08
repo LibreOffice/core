@@ -225,7 +225,7 @@ SwCallLink::~SwCallLink()
 
         if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > nNode ||
             nNode > rStNd.EndOfSectionIndex() )
-            rShell.GetFlyMacroLnk().Call( (void*)pFlyFrm->GetFormat() );
+            rShell.GetFlyMacroLnk().Call( const_cast<SwFlyFrameFormat *>(pFlyFrm->GetFormat()) );
     }
 }
 

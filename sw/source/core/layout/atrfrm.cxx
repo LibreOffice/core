@@ -159,7 +159,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
                     pNode = & aIdx.GetNode();
                 }
             }
-            rCnt.SetNewContentIdx( (const SwNodeIndex*)0 );
+            rCnt.SetNewContentIdx( nullptr );
 
             // When deleting a header/footer-format, we ALWAYS need to disable
             // the undo function (Bug 31069)
@@ -2696,7 +2696,7 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
     else
     {
         const sal_uInt16 nFrmType = RES_FLYFRMFMT == Which() ? FRM_FLY : USHRT_MAX;
-        pFrm = ::GetFrmOfModify( 0, *(SwModify*)this, nFrmType, pPoint,
+        pFrm = ::GetFrmOfModify( 0, *const_cast<SwModify*>(static_cast<SwModify const *>(this)), nFrmType, pPoint,
                                     0, bCalcFrm );
     }
 
@@ -3049,7 +3049,7 @@ void SwFlyFrameFormat::MakeFrms()
 
 SwFlyFrm* SwFlyFrameFormat::GetFrm( const Point* pPoint, const bool bCalcFrm ) const
 {
-    return static_cast<SwFlyFrm*>(::GetFrmOfModify( 0, *(SwModify*)this, FRM_FLY,
+    return static_cast<SwFlyFrm*>(::GetFrmOfModify( 0, *const_cast<SwModify*>(static_cast<SwModify const *>(this)), FRM_FLY,
                                             pPoint, 0, bCalcFrm ));
 }
 

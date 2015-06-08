@@ -163,7 +163,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
     if( pNd )
     {
         if( pNd->IsContentNode() )
-            pMod = (SwModify*)pNd->GetContentNode();
+            pMod = const_cast<SwModify*>(static_cast<SwModify const *>(pNd->GetContentNode()));
         else
         {
             OSL_ENSURE( pNd->IsTableNode(), "For Tablenodes only" );

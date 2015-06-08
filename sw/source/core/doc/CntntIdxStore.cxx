@@ -371,7 +371,7 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAu
         else if( bAuto )
         {
             SwFrameFormat *pFrameFormat = (*pSpz)[ aEntry.m_nIdx ];
-            SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrameFormat->GetAnchor();
+            SfxPoolItem const *pAnchor = static_cast<SfxPoolItem const *>(&pFrameFormat->GetAnchor());
             pFrameFormat->NotifyClients( pAnchor, pAnchor );
         }
     }

@@ -168,7 +168,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         OSL_ENSURE( rContent.GetContentIdx(), "Fly ohne Inhalt" );
 
         SaveSection( *rContent.GetContentIdx() );
-        const_cast<SwFormatContent&>(rContent).SetNewContentIdx( (const SwNodeIndex*)0 );
+        const_cast<SwFormatContent&>(rContent).SetNewContentIdx( nullptr );
     }
     // OD 02.07.2003 #108784# - remove 'master' drawing object from drawing page
     else if ( RES_DRAWFRMFMT == pFrameFormat->Which() )

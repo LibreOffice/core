@@ -187,7 +187,7 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
     if ( eHint == PREP_FLY_ATTR_CHG )
         AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG );
     else
-        AnchorFrm()->Prepare( eHint, (void*)&rRect );
+        AnchorFrm()->Prepare( eHint, static_cast<void const *>(&rRect) );
 }
 
 const Point SwFlyInCntFrm::GetRelPos() const

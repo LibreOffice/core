@@ -111,7 +111,7 @@ static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrm* pOldSelFly)
                         (!pOldSelFly || pOldSelFly->GetFormat() != pFlyFormat) )
     {
         // now call set macro if applicable
-        pSh->GetFlyMacroLnk().Call( (void*)pFlyFormat );
+        pSh->GetFlyMacroLnk().Call( const_cast<void*>(static_cast<void const *>(pFlyFormat)) );
 extern bool g_bNoInterrupt;       // in swmodule.cxx
         // if a dialog was started inside a macro, then
         // MouseButtonUp arrives at macro and not to us. Therefore
@@ -552,7 +552,7 @@ FrmTypeFlags SwFEShell::GetSelFrmType() const
     {
         // obtain marked item as fly frame; if no fly frame, it must
         // be a draw object
-        const SwFlyFrm* pFly = ::GetFlyFromMarked(pMarkList, (SwViewShell*)this);
+        const SwFlyFrm* pFly = ::GetFlyFromMarked(pMarkList, const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)));
         if ( pFly != NULL )
         {
             if( pFly->IsFlyLayFrm() )
@@ -978,7 +978,7 @@ bool SwFEShell::IsFrmSelected() const
         return false;
     else
         return 0 != ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
-                                        (SwViewShell*)this );
+                                        const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
 }
 
 bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const

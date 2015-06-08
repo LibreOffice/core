@@ -298,7 +298,7 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
             const SwFlyFrm *pFly = pAnch->FindFlyFrm();
             if ( pFly )
             {
-                SdrObject *pRet = (SdrObject*)pFly->GetVirtDrawObj();
+                SdrObject *pRet = const_cast<SdrObject*>(static_cast<SdrObject const *>(pFly->GetVirtDrawObj()));
                 return pRet != pObj ? pRet : 0;
             }
         }

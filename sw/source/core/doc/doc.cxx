@@ -946,7 +946,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 
     // just one page is special ...
     if ( 1 == aVec.size() )
-        aVec.insert( aVec.begin() + 1, (SwPageFrm *)0 ); // insert a second empty page
+        aVec.insert( aVec.begin() + 1, nullptr ); // insert a second empty page
     else
     {
         // now extend the number of pages to fit a multiple of 4

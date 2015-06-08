@@ -22,7 +22,7 @@
 #include "porlay.hxx"
 
 SwTextLine::SwTextLine( SwTextFrm *pFrm, SwParaPortion *pNew ) :
-    SwCacheObj( (void*)pFrm ),
+    SwCacheObj( static_cast<void*>(pFrm) ),
     pLine( pNew )
 {
 }

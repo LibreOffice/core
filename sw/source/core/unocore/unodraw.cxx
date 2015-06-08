@@ -286,7 +286,7 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
         SwXShape* pxShape = SwIterator<SwXShape,SwFormat>( *pFormat ).First();
         if(pxShape)
         {
-            xShape =  *(cppu::OWeakObject*)pxShape;
+            xShape =  *static_cast<cppu::OWeakObject*>(pxShape);
         }
         else
             xShape = pObj->getUnoShape();
@@ -861,7 +861,7 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
                 xPageAgg = *static_cast<uno::Reference< uno::XAggregation > const *>(aAgg.getValue());
         }
         if( xPageAgg.is() )
-            xPageAgg->setDelegator( (cppu::OWeakObject*)this );
+            xPageAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
     }
     return pDrawPage;
 }
@@ -949,7 +949,7 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
         xShape = 0;
         m_refCount++;
         if( xShapeAgg.is() )
-            xShapeAgg->setDelegator( (cppu::OWeakObject*)this );
+            xShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
         m_refCount--;
 
         uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
@@ -2139,7 +2139,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
                 uno::Any aPos;
                 aPos <<= xTextRange;
                 setPropertyValue("TextRange", aPos);
-                uno::Reference< drawing::XShape > xTemp( (cppu::OWeakObject*) this, uno::UNO_QUERY );
+                uno::Reference< drawing::XShape > xTemp( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
                 xDP->add( xTemp );
             }
         }

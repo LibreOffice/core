@@ -215,7 +215,7 @@ SwTableNode* SwDoc::IsIdxInTable(const SwNodeIndex& rIdx)
     SwTableNode* pTableNd = 0;
     sal_uLong nIndex = rIdx.GetIndex();
     do {
-        SwNode* pNd = (SwNode*)GetNodes()[ nIndex ]->StartOfSectionNode();
+        SwNode* pNd = static_cast<SwNode*>(GetNodes()[ nIndex ]->StartOfSectionNode());
         if( 0 != ( pTableNd = pNd->GetTableNode() ) )
             break;
 
@@ -1907,7 +1907,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
         if( pCNd )
         {
             // Change the Shell's Cursor or the one passed?
-            SwPaM* pPam = (SwPaM*)&rCursor;
+            SwPaM* pPam = const_cast<SwPaM*>(static_cast<SwPaM const *>(&rCursor));
             pPam->GetPoint()->nNode = aIdx;
             pPam->GetPoint()->nContent.Assign( pCNd, 0 );
             pPam->SetMark(); // Both want a part of it
@@ -2492,7 +2492,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
 
     if( pBoxFrm )
     {
-        pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
+        pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
         pBox = pBoxFrm->GetTabBox();
     }
     else if( pCrsr )
@@ -2512,7 +2512,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
         } while ( !pTmpFrm->IsCellFrm() );
 
         pBoxFrm = static_cast<const SwCellFrm*>(pTmpFrm);
-        pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
+        pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
         pBox = pBoxFrm->GetTabBox();
     }
     else if( !pCrsr && !pBoxFrm )
@@ -2706,7 +2706,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
 
     if( pBoxFrm )
     {
-        pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
+        pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
         pBox = pBoxFrm->GetTabBox();
     }
     else if( pCrsr )
@@ -2726,7 +2726,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
         } while ( !pTmpFrm->IsCellFrm() );
 
         pBoxFrm = static_cast<const SwCellFrm*>(pTmpFrm);
-        pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
+        pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
         pBox = pBoxFrm->GetTabBox();
     }
     else if( !pCrsr && !pBoxFrm )
@@ -2781,7 +2781,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*
 
     OSL_ENSURE( pBoxFrm, "SetTabRows called without pBoxFrm" );
 
-    pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
+    pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
 
     // If the Table is still using relative values (USHRT_MAX)
     // we need to switch to absolute ones.

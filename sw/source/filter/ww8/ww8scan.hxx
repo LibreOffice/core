@@ -228,7 +228,7 @@ public:
     const void* GetData( long nInIdx ) const
     {
         return ( nInIdx >= nIMax ) ? 0
-            : (const void*)&pPLCF_Contents[nInIdx * nStru];
+            : static_cast<const void*>(&pPLCF_Contents[nInIdx * nStru]);
     }
     sal_Int32 GetPos( long nInIdx ) const
         { return ( nInIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nInIdx]; }
@@ -313,7 +313,7 @@ public:
     const void* GetData( sal_Int32 nInIdx ) const
     {
         return ( nInIdx >= nIMax ) ? 0 :
-            (const void*)&pPLCF_Contents[nInIdx * nStru];
+            static_cast<const void*>(&pPLCF_Contents[nInIdx * nStru]);
     }
 };
 

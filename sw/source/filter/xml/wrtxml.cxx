@@ -458,8 +458,8 @@ sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const OUString* pFileName )
 {
     return IsStgWriter()
-            ? ((StgWriter *)this)->Write( rPaM, rMed.GetOutputStorage(), pFileName, &rMed )
-            : ((Writer *)this)->Write( rPaM, *rMed.GetOutStream(), pFileName );
+            ? static_cast<StgWriter *>(this)->Write( rPaM, rMed.GetOutputStorage(), pFileName, &rMed )
+            : static_cast<Writer *>(this)->Write( rPaM, *rMed.GetOutStream(), pFileName );
 }
 
 bool SwXMLWriter::WriteThroughComponent(

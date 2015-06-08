@@ -153,7 +153,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
 
     if( !aAnchor.GetContentAnchor() ||
         !aAnchor.GetContentAnchor()->nNode.GetNode().GetNodes().IsDocNodes() ||
-        &aAnchor.GetContentAnchor()->nNode.GetNode() != (SwNode*)pNode )
+        &aAnchor.GetContentAnchor()->nNode.GetNode() != static_cast<SwNode const *>(pNode) )
         aPos.nNode = *pNode;
     else
         aPos.nNode = aAnchor.GetContentAnchor()->nNode;

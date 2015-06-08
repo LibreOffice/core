@@ -466,7 +466,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrm *pFrame, SwTextMargin &rLine )
             return false;
     }
 
-    pMaster->Prepare( PREP_WIDOWS, (void*)&nNeed );
+    pMaster->Prepare( PREP_WIDOWS, static_cast<void*>(&nNeed) );
     return true;
 }
 

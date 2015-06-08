@@ -780,7 +780,7 @@ SwLayoutFrm *SwFrm::GetPrevFootnoteLeaf( MakePageType eMakeFootnote )
         const SwFootnoteBossFrm* pNewBoss = pRet->FindFootnoteBossFrm();
         bool bJump = false;
         if( pOldBoss->IsColumnFrm() && pOldBoss->GetPrev() ) // a previous column exists
-            bJump = pOldBoss->GetPrev() != (SwFrm*)pNewBoss; // did we chose it?
+            bJump = pOldBoss->GetPrev() != static_cast<SwFrm const *>(pNewBoss); // did we chose it?
         else if( pNewBoss->IsColumnFrm() && pNewBoss->GetNext() )
             bJump = true; // there is another column after the boss (not the old boss)
         else
@@ -846,7 +846,7 @@ void sw_RemoveFootnotes( SwFootnoteBossFrm* pBoss, bool bPageOnly, bool bEndNote
                 if ( !pFootnote->GetAttr()->GetFootnote().IsEndNote() ||
                         bEndNotes )
                 {
-                    pFootnote->GetRef()->Prepare( PREP_FTN, (void*)pFootnote->GetAttr() );
+                    pFootnote->GetRef()->Prepare( PREP_FTN, static_cast<void*>(pFootnote->GetAttr()) );
                     if ( bPageOnly && !pNxt )
                         pNxt = pFootnote->GetFollow();
                     pFootnote->Cut();

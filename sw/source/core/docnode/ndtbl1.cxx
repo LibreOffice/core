@@ -1470,7 +1470,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
 
     // It's more robust if we calculate the minimum values for the whole Table
     const SwTabFrm *pTab = pStart->ImplFindTabFrm();
-    pStart = (SwLayoutFrm*)pTab->FirstCell();
+    pStart = const_cast<SwLayoutFrm*>(static_cast<SwLayoutFrm const *>(pTab->FirstCell()));
     pEnd   = const_cast<SwLayoutFrm*>(pTab->FindLastContent()->GetUpper());
     while( !pEnd->IsCellFrm() )
         pEnd = pEnd->GetUpper();

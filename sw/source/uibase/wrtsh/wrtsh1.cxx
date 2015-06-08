@@ -1616,7 +1616,7 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, vcl::Window *_pWin, SwView &rShell )
     BITFLD_INI_LIST
     SET_CURR_SHELL( this );
 
-    SetSfxViewShell( (SfxViewShell *)&rShell );
+    SetSfxViewShell( static_cast<SfxViewShell *>(&rShell) );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
 
     // place the cursor on the first field...
@@ -1633,7 +1633,7 @@ SwWrtShell::SwWrtShell( SwDoc& rDoc, vcl::Window *_pWin, SwView &rShell,
 {
     BITFLD_INI_LIST
     SET_CURR_SHELL( this );
-    SetSfxViewShell( (SfxViewShell *)&rShell );
+    SetSfxViewShell( static_cast<SfxViewShell *>(&rShell) );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
 
     // place the cursor on the first field...

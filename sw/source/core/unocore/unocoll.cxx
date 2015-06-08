@@ -568,7 +568,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         {
             SwVbaObjectForCodeNameProvider* pObjProv =
                 new SwVbaObjectForCodeNameProvider(rDoc.GetDocShell());
-            xRet =  (cppu::OWeakObject*)pObjProv;
+            xRet =  static_cast<cppu::OWeakObject*>(pObjProv);
         }
 #endif
         break;
@@ -578,7 +578,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
             if (rDoc.GetDocShell() && ooo::vba::isAlienWordDoc(*rDoc.GetDocShell()))
             {
                 SwVbaCodeNameProvider* pObjProv = new SwVbaCodeNameProvider(rDoc.GetDocShell());
-                xRet =  (cppu::OWeakObject*)pObjProv;
+                xRet =  static_cast<cppu::OWeakObject*>(pObjProv);
             }
         }
 #endif
@@ -702,7 +702,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
                 : (eFamily == SFX_STYLE_FAMILY_FRAME)
                     ? new SwXFrameStyle(&rDoc)
                     : new SwXStyle(&rDoc, eFamily, nObjectType == SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE);
-            xRet = (cppu::OWeakObject*)pNewStyle;
+            xRet = static_cast<cppu::OWeakObject*>(pNewStyle);
         }
         break;
         case SW_SERVICE_FIELDTYPE_DATETIME:
@@ -794,13 +794,13 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
             xRet = SwXParagraph::CreateXParagraph(rDoc, 0);
         break;
         case SW_SERVICE_NUMBERING_RULES :
-            xRet = (cppu::OWeakObject*)new SwXNumberingRules(rDoc);
+            xRet = static_cast<cppu::OWeakObject*>(new SwXNumberingRules(rDoc));
         break;
         case SW_SERVICE_TEXT_COLUMNS :
-            xRet = (cppu::OWeakObject*)new SwXTextColumns(0);
+            xRet = static_cast<cppu::OWeakObject*>(new SwXTextColumns(0));
         break;
         case SW_SERVICE_DEFAULTS:
-            xRet = (cppu::OWeakObject*)new SwXTextDefaults(&rDoc);
+            xRet = static_cast<cppu::OWeakObject*>(new SwXTextDefaults(&rDoc));
         break;
         case SW_SERVICE_IMAP_RECTANGLE :
             xRet = SvUnoImageMapRectangleObject_createInstance( sw_GetSupportedMacroItems() );
@@ -817,7 +817,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
             // This should not happen during copy/paste, as this will unlink
             // charts using table data.
             if (rDoc.GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED)
-                xRet = (cppu::OWeakObject*) rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ );
+                xRet = static_cast<cppu::OWeakObject*>(rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ ));
             else
                 SAL_WARN("sw.uno",
                     "not creating chart data provider for embedded object");

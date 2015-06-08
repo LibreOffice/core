@@ -305,7 +305,7 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
     const SwTable* pTable = rDoc.InsertTable( aInsTableOpts, aPos, nRows, nCols,
                                             nAdjust,
                                             pAutoFormat, pColWidth );
-    ((SwFrameFormat*)pTable->GetFrameFormat())->SetName( sTableNm );
+    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
     SwTableNode* pTableNode = rDoc.GetNodes()[nSttNode]->GetTableNode();
 
     if( pDDEFieldType )
@@ -793,7 +793,7 @@ void SwUndoTextToTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwTable const*const pTable = rContext.GetDoc().TextToTable(
                 aInsTableOpts, rPam, cTrenner, nAdjust, pAutoFormat );
-    ((SwFrameFormat*)pTable->GetFrameFormat())->SetName( sTableNm );
+    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
 }
 
 void SwUndoTextToTable::RepeatImpl(::sw::RepeatContext & rContext)

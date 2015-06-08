@@ -1191,7 +1191,7 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
     uno::Any aRet;
     if ( rType == cppu::UnoType<XAccessibleText>::get())
     {
-        uno::Reference<XAccessibleText> aAccText = (XAccessibleText *) *this; // resolve ambiguity
+        uno::Reference<XAccessibleText> aAccText = static_cast<XAccessibleText *>(*this); // resolve ambiguity
         aRet <<= aAccText;
     }
     else if ( rType == cppu::UnoType<XAccessibleEditableText>::get())

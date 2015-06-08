@@ -549,7 +549,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 {
     if ( !pNew->GetVirtDrawObj()->IsInserted() )
         getRootFrm()->GetDrawPage()->InsertObject(
-                (SdrObject*)pNew->GetVirtDrawObj(),
+                static_cast<SdrObject*>(pNew->GetVirtDrawObj()),
                 pNew->GetVirtDrawObj()->GetReferencedObj().GetOrdNumDirect() );
 
     InvalidateSpelling();

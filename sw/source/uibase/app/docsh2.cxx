@@ -587,7 +587,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             case SID_SOURCEVIEW:
             {
                 SfxViewShell* pViewShell = GetView()
-                                            ? (SfxViewShell*)GetView()
+                                            ? static_cast<SfxViewShell*>(GetView())
                                             : SfxViewShell::Current();
                 SfxViewFrame*  pViewFrm = pViewShell->GetViewFrame();
                 SwSrcView* pSrcView = dynamic_cast< SwSrcView *>( pViewShell );
@@ -1339,7 +1339,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     // The HTML template still has to be set
     SetHTMLTemplate( *GetDoc() );   //Styles from HTML.vor
 
-    SfxViewShell* pViewShell = GetView() ? (SfxViewShell*)GetView()
+    SfxViewShell* pViewShell = GetView() ? static_cast<SfxViewShell*>(GetView())
                                          : SfxViewShell::Current();
     SfxViewFrame*  pViewFrm = pViewShell->GetViewFrame();
     pViewFrm->GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON );
@@ -1573,7 +1573,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             // If the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
             SwDocShell *const pNew(new SwDocShell(SfxObjectCreateMode::INTERNAL));
             xLockRef = pNew;
-            xDocSh = (SfxObjectShell*)xLockRef;
+            xDocSh = static_cast<SfxObjectShell*>(xLockRef);
             if( xDocSh->DoLoad( pMed ) )
             {
                 SwDoc const& rDoc(*pNew->GetDoc());

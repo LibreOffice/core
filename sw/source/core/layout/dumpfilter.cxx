@@ -104,7 +104,7 @@ namespace sw
 
             // Dump the layout XML into the XOutputStream
             xmlOutputBufferPtr outBuffer = xmlOutputBufferCreateIO(
-                    writeCallback, closeCallback, ( void* ) xOut.get(), NULL );
+                    writeCallback, closeCallback, static_cast<void*>(xOut.get()), NULL );
 
             xmlTextWriterPtr writer = xmlNewTextWriter( outBuffer );
             xmlTextWriterSetIndent(writer, 1);

@@ -156,7 +156,7 @@ bool SwDDETable::NoDDETable()
     if( aLines.empty() )
         return false;
     OSL_ENSURE( !GetTabSortBoxes().empty(), "Table without content?" );
-    SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
+    SwNode* pNd = const_cast<SwNode*>(static_cast<SwNode const *>(GetTabSortBoxes()[0]->GetSttNd()));
     if( !pNd->GetNodes().IsDocNodes() )
         return false;
 

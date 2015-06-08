@@ -178,8 +178,8 @@ _CalcOp* FindOperator( const OUString& rSrch )
     aSrch.pUName = &rSrch;
     aSrch.eOp = CALC_NAME;
 
-    return static_cast<_CalcOp*>(bsearch( (void*) &aSrch,
-                              (void*) aOpTable,
+    return static_cast<_CalcOp*>(bsearch( static_cast<void*>(&aSrch),
+                              static_cast<void const *>(aOpTable),
                               sizeof( aOpTable ) / sizeof( _CalcOp ),
                               sizeof( _CalcOp ),
                               OperatorCompare ));

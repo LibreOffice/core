@@ -1075,7 +1075,7 @@ static void* lcl_GetOutlineKey( SwContentTree* pTree, SwOutlineContent* pContent
         SwWrtShell* pShell = pTree->GetWrtShell();
         sal_Int32 nPos = pContent->GetYPos();
 
-        key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
+        key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
 
     }
     return key;
@@ -1322,12 +1322,12 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                         if(sEntry.isEmpty())
                             sEntry = sSpace;
                         if(!pChild || (nLevel == 0))
-                            pChild = InsertEntry(sEntry, pParent, false, TREELIST_APPEND,(void*)pCnt);
+                            pChild = InsertEntry(sEntry, pParent, false, TREELIST_APPEND,const_cast<SwContent *>(pCnt));
                         else
                         {
                             //back search parent.
                             if(static_cast<const SwOutlineContent*>(pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
-                                pChild = InsertEntry(sEntry, pChild, false, TREELIST_APPEND, (void*)pCnt);
+                                pChild = InsertEntry(sEntry, pChild, false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
                             else
                             {
                                 pChild = Prev(pChild);
@@ -1340,7 +1340,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                 }
                                 if(pChild)
                                     pChild = InsertEntry(sEntry, pChild,
-                                                false, TREELIST_APPEND, (void*)pCnt);
+                                                false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
                             }
                         }
                     }
@@ -1357,7 +1357,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                         OUString sEntry = pCnt->GetName();
                         if (sEntry.isEmpty())
                             sEntry = sSpace;
-                        pChild = InsertEntry(sEntry, pParent, false, TREELIST_APPEND, (void*)pCnt);
+                        pChild = InsertEntry(sEntry, pParent, false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
                     }
                     if (pChild)
                     {
@@ -1449,7 +1449,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                     if(pChild->HasChildren())
                     {
                         sal_Int32 nPos = static_cast<SwContent*>(pChild->GetUserData())->GetYPos();
-                        void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
+                        void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
                         mCurrOutLineNodeMap.insert(std::map<void*, bool>::value_type( key, false ) );
                         std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
                         if( iter != mOutLineNodeMap.end() && mOutLineNodeMap[key])
@@ -1469,7 +1469,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
         {
             SwWrtShell* pShell = GetWrtShell();
             sal_Int32 nPos = static_cast<SwContent*>(pParent->GetUserData())->GetYPos();
-            void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
+            void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
             mOutLineNodeMap[key] = true;
         }
     }
@@ -1501,7 +1501,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
         {
             SwWrtShell* pShell = GetWrtShell();
             sal_Int32 nPos = static_cast<SwContent*>(pParent->GetUserData())->GetYPos();
-            void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
+            void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
             mOutLineNodeMap[key] = false;
         }
     }
@@ -1683,7 +1683,7 @@ void SwContentTree::Display( bool bActive )
                         if(sEntry.isEmpty())
                             sEntry = sSpace;
                         InsertEntry( sEntry, pParent,
-                            false, TREELIST_APPEND, (void*)pCnt);
+                            false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
                     }
                 }
             }
@@ -1988,7 +1988,7 @@ bool SwContentTree::HasContentChanged()
 
                 pArrType->Init(&bInvalidate);
                 pArrType->FillMemberList();
-                pEntry->SetUserData((void*)pArrType);
+                pEntry->SetUserData(static_cast<void*>(pArrType));
                 if(!bRepaint)
                 {
                     if(GetChildCount(pEntry) != pArrType->GetMemberCount())
@@ -2000,7 +2000,7 @@ bool SwContentTree::HasContentChanged()
                         {
                             pEntry = Next(pEntry);
                             const SwContent* pCnt = pArrType->GetMember(j);
-                            pEntry->SetUserData((void*)pCnt);
+                            pEntry->SetUserData(const_cast<SwContent *>(pCnt));
                             OUString sEntryText = GetEntryText(pEntry);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
@@ -2046,7 +2046,7 @@ bool SwContentTree::HasContentChanged()
             else
             {
                 pArrType->Init(&bInvalidate);
-                pEntry->SetUserData((void*)pArrType);
+                pEntry->SetUserData(static_cast<void*>(pArrType));
                 if(IsExpanded(pEntry))
                 {
                     bool bLevelOrVisibiblityChanged = false;
@@ -2069,7 +2069,7 @@ bool SwContentTree::HasContentChanged()
                             pEntry = Next(pEntry);
                             bNext = false;
                             const SwContent* pCnt = pArrType->GetMember(j);
-                            pEntry->SetUserData((void*)pCnt);
+                            pEntry->SetUserData(const_cast<SwContent *>(pCnt));
                             OUString sEntryText = GetEntryText(pEntry);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
@@ -2100,7 +2100,7 @@ bool SwContentTree::HasContentChanged()
                         for(size_t j = 0; j < nChildCount; ++j)
                         {
                             const SwContent* pCnt = pArrType->GetMember(j);
-                            pChild->SetUserData((void*)pCnt);
+                            pChild->SetUserData(const_cast<SwContent *>(pCnt));
                             OUString sEntryText = GetEntryText(pChild);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
@@ -2759,7 +2759,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                     pActiveShell->GetView().GetEditWin();
                                 vcl::KeyCode tempKeycode( KEY_ESCAPE );
                                 KeyEvent rKEvt( 0 , tempKeycode );
-                                ((vcl::Window*)&pEditWindow)->KeyInput( rKEvt );
+                                static_cast<vcl::Window*>(&pEditWindow)->KeyInput( rKEvt );
                                 //rView.GetEditWin().GrabFocus();
                             }
                         }
@@ -3223,7 +3223,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
                 case EDIT_MODE_EDIT:
                     if(pBase)
                     {
-                        SwPtrItem aPtrItem( FN_INSERT_MULTI_TOX, (void*)pBase);
+                        SwPtrItem aPtrItem( FN_INSERT_MULTI_TOX, const_cast<SwTOXBase *>(pBase));
                         pActiveShell->GetView().GetViewFrame()->
                             GetDispatcher()->Execute(FN_INSERT_MULTI_TOX,
                                             SfxCallMode::ASYNCHRON, &aPtrItem, 0L);

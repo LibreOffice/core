@@ -454,7 +454,7 @@ const SwContentFrm* SwTextFly::_GetMaster()
 {
     pMaster = pCurrFrm;
     while( pMaster && pMaster->IsFollow() )
-        pMaster = (SwContentFrm*)pMaster->FindMaster();
+        pMaster = static_cast<SwContentFrm*>(pMaster->FindMaster());
     return pMaster;
 }
 

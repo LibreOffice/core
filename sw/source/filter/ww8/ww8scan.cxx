@@ -2091,7 +2091,7 @@ bool WW8PLCFspecial::GetData(long nInIdx, WW8_CP& rPos, void*& rpValue) const
         return false;
     }
     rPos = pPLCF_PosArray[nInIdx];
-    rpValue = pPLCF_Contents ? (void*)&pPLCF_Contents[nInIdx * nStru] : 0;
+    rpValue = pPLCF_Contents ? static_cast<void*>(&pPLCF_Contents[nInIdx * nStru]) : 0;
     return true;
 }
 
@@ -2291,7 +2291,7 @@ bool WW8PLCF::Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const
     }
     rStart = pPLCF_PosArray[ nIdx ];
     rEnd   = pPLCF_PosArray[ nIdx + 1 ];
-    rpValue = (void*)&pPLCF_Contents[nIdx * nStru];
+    rpValue = static_cast<void*>(&pPLCF_Contents[nIdx * nStru]);
     return true;
 }
 
@@ -2385,7 +2385,7 @@ bool WW8PLCFpcd_Iter::Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const
     }
     rStart = rPLCF.pPLCF_PosArray[nIdx];
     rEnd = rPLCF.pPLCF_PosArray[nIdx + 1];
-    rpValue = (void*)&rPLCF.pPLCF_Contents[nIdx * rPLCF.nStru];
+    rpValue = static_cast<void*>(&rPLCF.pPLCF_Contents[nIdx * rPLCF.nStru]);
     return true;
 }
 

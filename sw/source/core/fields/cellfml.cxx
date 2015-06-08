@@ -548,7 +548,7 @@ void SwTableFormula::PtrToBoxNm( const SwTable* pTable )
     case EXTRNL_NAME:
         return;
     }
-    m_sFormula = ScanString( fnFormula, *pTable, (void*)pNd );
+    m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
     m_eNmType = EXTRNL_NAME;
 }
 
@@ -573,7 +573,7 @@ void SwTableFormula::BoxNmToPtr( const SwTable* pTable )
     case INTRNL_NAME:
         return;
     }
-    m_sFormula = ScanString( fnFormula, *pTable, (void*)pNd );
+    m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
     m_eNmType = INTRNL_NAME;
 }
 
@@ -595,7 +595,7 @@ void SwTableFormula::ToRelBoxNm( const SwTable* pTable )
     case REL_NAME:
         return;
     }
-    m_sFormula = ScanString( fnFormula, *pTable, (void*)pNd );
+    m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
     m_eNmType = REL_NAME;
 }
 
@@ -1196,7 +1196,7 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFormulaUpdate& rTableUpd )
     else
         pTable = rTableUpd.pTable;
 
-    m_sFormula = ScanString( &SwTableFormula::_SplitMergeBoxNm, *pTable, (void*)&rTableUpd );
+    m_sFormula = ScanString( &SwTableFormula::_SplitMergeBoxNm, *pTable, static_cast<void*>(&rTableUpd) );
     m_eNmType = INTRNL_NAME;
 }
 

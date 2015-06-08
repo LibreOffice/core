@@ -370,7 +370,7 @@ void AbstractSwFieldDlg_Impl::ActivateDatabasePage()
 
 vcl::Window* AbstractSwFieldDlg_Impl::GetWindow()
 {
-    return (vcl::Window*)pDlg;
+    return static_cast<vcl::Window*>(pDlg);
 }
 
 void AbstractSwFieldDlg_Impl::ShowReferencePage()
@@ -565,7 +565,7 @@ void AbstractIndexMarkFloatDlg_Impl::ReInitDlg(SwWrtShell& rWrtShell)
 
 vcl::Window* AbstractIndexMarkFloatDlg_Impl::GetWindow()
 {
-    return (vcl::Window*)pDlg;
+    return static_cast<vcl::Window*>(pDlg);
 }
 
 void AbstractAuthMarkFloatDlg_Impl::ReInitDlg(SwWrtShell& rWrtShell)
@@ -575,12 +575,12 @@ void AbstractAuthMarkFloatDlg_Impl::ReInitDlg(SwWrtShell& rWrtShell)
 
 vcl::Window* AbstractAuthMarkFloatDlg_Impl::GetWindow()
 {
-    return (vcl::Window*)pDlg;
+    return static_cast<vcl::Window*>(pDlg);
 }
 
 vcl::Window* AbstractSwWordCountFloatDlg_Impl::GetWindow()
 {
-    return (vcl::Window*)pDlg;
+    return static_cast<vcl::Window*>(pDlg);
 }
 
 void AbstractSwWordCountFloatDlg_Impl::UpdateCounts()

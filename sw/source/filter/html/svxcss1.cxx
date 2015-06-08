@@ -3169,7 +3169,7 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
 
     if( !bSortedPropFns )
     {
-        qsort( (void*) aCSS1PropFnTab,
+        qsort( static_cast<void*>(aCSS1PropFnTab),
                 sizeof( aCSS1PropFnTab ) / sizeof( CSS1PropEntry ),
                 sizeof( CSS1PropEntry ),
                 CSS1PropEntryCompare );
@@ -3184,7 +3184,7 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
 
     void* pFound;
     if( 0 != ( pFound = bsearch( &aSrch,
-                        (void*) aCSS1PropFnTab,
+                        static_cast<void*>(aCSS1PropFnTab),
                         sizeof( aCSS1PropFnTab ) / sizeof( CSS1PropEntry ),
                         sizeof( CSS1PropEntry ),
                         CSS1PropEntryCompare )))

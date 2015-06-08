@@ -105,7 +105,7 @@ uno::Sequence< OUString > SAL_CALL DocxExport_getSupportedServiceNames() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*) new DocxExportFilter( xCtx );
+    return static_cast<cppu::OWeakObject*>(new DocxExportFilter( xCtx ));
 }
 
 extern "C"

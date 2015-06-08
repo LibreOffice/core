@@ -143,7 +143,7 @@ sal_uInt16 SwTextFormatter::GetFrmRstHeight() const
 
     // GetFrmRstHeight() is being called with Footnote.
     // Wrong: const SwFrm *pUpper = pFrm->GetUpper();
-    const SwFrm *pPage = (const SwFrm*)pFrm->FindPageFrm();
+    const SwFrm *pPage = static_cast<const SwFrm*>(pFrm->FindPageFrm());
     const SwTwips nHeight = pPage->Frm().Top()
                           + pPage->Prt().Top()
                           + pPage->Prt().Height() - Y();
@@ -279,7 +279,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
         if( pPor->InTextGrp() && !pPor->InExpGrp() )
         {
             const sal_uInt16 nOldWhich = pCurr->GetWhichPor();
-            *(SwLinePortion*)pCurr = *pPor;
+            *static_cast<SwLinePortion*>(pCurr) = *pPor;
             pCurr->SetPortion( pPor->GetPortion() );
             pCurr->SetWhichPor( nOldWhich );
             pPor->SetPortion( 0 );
@@ -1031,7 +1031,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         if( !rInf.IsErgoDone() )
         {
             if( pFrm->IsInFootnote() && !pFrm->GetIndPrev() )
-                pPor = (SwLinePortion*)NewErgoSumPortion( rInf );
+                pPor = static_cast<SwLinePortion*>(NewErgoSumPortion( rInf ));
             rInf.SetErgoDone( true );
         }
 
@@ -1076,7 +1076,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
             const bool bFootnoteNum = pFrm->IsFootnoteNumFrm();
             rInf.GetParaPortion()->SetFootnoteNum( bFootnoteNum );
             if( bFootnoteNum )
-                pPor = (SwLinePortion*)NewFootnoteNumPortion( rInf );
+                pPor = static_cast<SwLinePortion*>(NewFootnoteNumPortion( rInf ));
             rInf.SetFootnoteDone( true );
         }
 
@@ -1085,7 +1085,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         if( !rInf.IsErgoDone() && !pPor && ! rInf.IsMulti() )
         {
             if( pFrm->IsInFootnote() && !pFrm->GetIndPrev() )
-                pPor = (SwLinePortion*)NewErgoSumPortion( rInf );
+                pPor = static_cast<SwLinePortion*>(NewErgoSumPortion( rInf ));
             rInf.SetErgoDone( true );
         }
 
@@ -1097,12 +1097,12 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
 
             // If we're in the follow, then of course not
             if( GetTextFrm()->GetTextNode()->GetNumRule() )
-                pPor = (SwLinePortion*)NewNumberPortion( rInf );
+                pPor = static_cast<SwLinePortion*>(NewNumberPortion( rInf ));
             rInf.SetNumDone( true );
         }
         // 8. The DropCaps
         if( !pPor && GetDropFormat() && ! rInf.IsMulti() )
-            pPor = (SwLinePortion*)NewDropPortion( rInf );
+            pPor = static_cast<SwLinePortion*>(NewDropPortion( rInf ));
 
         // 9. Kerning portions at beginning of line in grid mode
         if ( !pPor && !pCurr->GetPortion() )
@@ -2476,7 +2476,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
                                                    SwTextAttr *pHint ) const
 {
     SwFlyCntPortion *pRet = 0;
-    const SwFrm *pFrame = (SwFrm*)pFrm;
+    const SwFrm *pFrame = static_cast<SwFrm*>(pFrm);
 
     SwFlyInCntFrm *pFly;
     SwFrameFormat* pFrameFormat = static_cast<SwTextFlyCnt*>(pHint)->GetFlyCnt().GetFrameFormat();

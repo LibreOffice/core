@@ -538,7 +538,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {
                     const SwTableNode* pTableNode = pSttNode->FindTableNode();
-                    SwFrameFormat* pTableFormat = (SwFrameFormat*)pTableNode->GetTable().GetFrameFormat();
+                    SwFrameFormat* pTableFormat = static_cast<SwFrameFormat*>(pTableNode->GetTable().GetFrameFormat());
                     //SwTable& rTable = static_cast<SwTableNode*>(pSttNode)->GetTable();
                     if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {

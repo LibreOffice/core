@@ -207,20 +207,20 @@ void* lcl_GetKeyFromFrame( const SwFrm& rFrm )
     void* pKey = 0;
 
     if ( rFrm.IsPageFrm() )
-        pKey = (void*)static_cast<const SwPageFrm&>(rFrm).GetFormat()->getIDocumentSettingAccess();
+        pKey = const_cast<void*>(static_cast<void const *>((static_cast<const SwPageFrm&>(rFrm).GetFormat()->getIDocumentSettingAccess())));
     else if ( rFrm.IsTextFrm() )
-        pKey = (void*)static_cast<const SwTextFrm&>(rFrm).GetTextNode();
+        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwTextFrm&>(rFrm).GetTextNode()));
     else if ( rFrm.IsSctFrm() )
-        pKey = (void*)static_cast<const SwSectionFrm&>(rFrm).GetSection();
+        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwSectionFrm&>(rFrm).GetSection()));
     else if ( rFrm.IsTabFrm() )
-        pKey = (void*)static_cast<const SwTabFrm&>(rFrm).GetTable();
+        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwTabFrm&>(rFrm).GetTable()));
     else if ( rFrm.IsRowFrm() )
-        pKey = (void*)static_cast<const SwRowFrm&>(rFrm).GetTabLine();
+        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwRowFrm&>(rFrm).GetTabLine()));
     else if ( rFrm.IsCellFrm() )
     {
         const SwTabFrm* pTabFrm = rFrm.FindTabFrm();
         const SwTable* pTable = pTabFrm->GetTable();
-        pKey = (void*) & static_cast<const SwCellFrm&>(rFrm).GetTabBox()->FindStartOfRowSpan( *pTable );
+        pKey = const_cast<void*>(static_cast<void const *>(& static_cast<const SwCellFrm&>(rFrm).GetTabBox()->FindStartOfRowSpan( *pTable )));
     }
 
     return pKey;
@@ -235,7 +235,7 @@ bool lcl_HasPreviousParaSameNumRule( const SwTextNode& rNode )
     const SwNode* pNode = &rNode;
     const SwNumRule* pNumRule = rNode.GetNumRule();
 
-    while (! (pNode == rNodes.DocumentSectionStartNode((SwNode*)&rNode) ) )
+    while (! (pNode == rNodes.DocumentSectionStartNode(const_cast<SwNode*>(static_cast<SwNode const *>(&rNode))) ) )
     {
         --aIdx;
 

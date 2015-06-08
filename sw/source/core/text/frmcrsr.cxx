@@ -192,7 +192,7 @@ bool SwTextFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     SwTextFrm *pFrm = GetAdjFrmAtPos( const_cast<SwTextFrm*>(this), rPos, bRightMargin,
                                      bNoScroll );
     pFrm->GetFormatted();
-    const SwFrm* pTmpFrm = (SwFrm*)pFrm->GetUpper();
+    const SwFrm* pTmpFrm = static_cast<SwFrm*>(pFrm->GetUpper());
 
     SWRECTFN ( pFrm )
     const SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();
@@ -362,7 +362,7 @@ bool SwTextFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     SwTextFrm* pFrm = &(const_cast<SwTextFrm*>(this)->GetFrmAtOfst( nOffset ));
 
     pFrm->GetFormatted();
-    const SwFrm* pTmpFrm = (SwFrm*)pFrm->GetUpper();
+    const SwFrm* pTmpFrm = static_cast<SwFrm*>(pFrm->GetUpper());
 
     SWRECTFN( pTmpFrm )
     SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();

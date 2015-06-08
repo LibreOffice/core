@@ -812,7 +812,7 @@ void SwSectionFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     case RES_OBJECTDYING:
         if( !GetDoc()->IsInDtor() && pOld &&
-            static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject == (void*)GetRegisteredIn() )
+            static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject == static_cast<void*>(GetRegisteredIn()) )
         {
             // My Parents will be destroyed, so get the Parent's Parent
             // and update
@@ -824,7 +824,7 @@ void SwSectionFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     case RES_FMT_CHG:
         if( !GetDoc()->IsInDtor() &&
-            static_cast<const SwFormatChg*>(pNew)->pChangedFormat == (void*)GetRegisteredIn() &&
+            static_cast<const SwFormatChg*>(pNew)->pChangedFormat == static_cast<void*>(GetRegisteredIn()) &&
             static_cast<const SwFormatChg*>(pNew)->pChangedFormat->IsA( TYPE( SwSectionFormat )) )
         {
             // My Parent will be changed, thus I need to update
@@ -977,16 +977,16 @@ void SwSectionFormat::UpdateParent()
             if (!pProtect->IsContentProtected() !=
                 !pSection->IsProtectFlag())
             {
-                pLast->ModifyNotification( (SfxPoolItem*)pProtect,
-                                (SfxPoolItem*)pProtect );
+                pLast->ModifyNotification( static_cast<SfxPoolItem const *>(pProtect),
+                                static_cast<SfxPoolItem const *>(pProtect) );
             }
 
             // edit in readonly sections
             if (!pEditInReadonly->GetValue() !=
                 !pSection->IsEditInReadonlyFlag())
             {
-                pLast->ModifyNotification( (SfxPoolItem*)pEditInReadonly,
-                                (SfxPoolItem*)pEditInReadonly );
+                pLast->ModifyNotification( static_cast<SfxPoolItem const *>(pEditInReadonly),
+                                static_cast<SfxPoolItem const *>(pEditInReadonly) );
             }
 
             if( bIsHidden == pSection->IsHiddenFlag() )
@@ -1414,7 +1414,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             pPam = pCrsr;
         }
 
-        SvMemoryStream aStrm( (void*)aSeq.getConstArray(), aSeq.getLength(),
+        SvMemoryStream aStrm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
                                 StreamMode::READ );
         aStrm.Seek( 0 );
 

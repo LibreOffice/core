@@ -1281,7 +1281,7 @@ static void lcl_CreatePortions(
     lcl_FillAnnotationStartArray( *pDoc, *pUnoCrsr, AnnotationStarts );
 
     PortionStack_t PortionStack;
-    PortionStack.push( PortionList_t(&i_rPortions, (const SwTextAttr *)0) );
+    PortionStack.push( PortionList_t(&i_rPortions, nullptr) );
 
     std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pUnoCrsr->GetNode());
 

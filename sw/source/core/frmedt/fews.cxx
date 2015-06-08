@@ -70,7 +70,7 @@ void SwFEShell::EndAllActionAndCall()
 // Determine the Content's nearest to the point
 Point SwFEShell::GetContentPos( const Point& rPoint, bool bNext ) const
 {
-    SET_CURR_SHELL( (SwViewShell*)this );
+    SET_CURR_SHELL( const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
     return GetLayout()->GetNextPrevContentPos( rPoint, bNext );
 }
 
@@ -79,7 +79,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
 {
     const SwFrm *pFrm = Imp()->HasDrawView()
                 ? ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
-                                      (SwViewShell*)this)
+                                      const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)))
                 : 0;
 
     if( !pFrm )
@@ -597,8 +597,8 @@ sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
     OSL_ENSURE( pFrm, "Crsr parked?" );
     if( pFrm )
     {
-        pFrm = pFrm->IsInTab() ? (SwFrm*)pFrm->FindTabFrm()
-                               : (SwFrm*)pFrm->FindSctFrm();
+        pFrm = pFrm->IsInTab() ? static_cast<SwFrm*>(pFrm->FindTabFrm())
+                               : static_cast<SwFrm*>(pFrm->FindSctFrm());
         OSL_ENSURE( pFrm, "No Tab, no Sect" );
         if( pFrm )
             nRet = _GetCurColNum( pFrm, pPara );

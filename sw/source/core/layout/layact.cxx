@@ -1094,7 +1094,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
                 if ( pContent->IsInSct() )
                 {
-                    const SwSectionFrm *pSct = ((SwFrm*)pContent)->ImplFindSctFrm();
+                    const SwSectionFrm *pSct = const_cast<SwFrm*>(static_cast<SwFrm const *>(pContent))->ImplFindSctFrm();
                     if ( !pSct->IsValid() )
                     {
                         pSct->Calc();
@@ -1120,7 +1120,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
                 if ( !bPageChg && pContent->IsInTab() )
                 {
-                    const SwTabFrm *pTab = ((SwFrm*)pContent)->ImplFindTabFrm();
+                    const SwTabFrm *pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pContent))->ImplFindTabFrm();
                     if ( !pTab->IsValid() )
                     {
                         pTab->Calc();
@@ -1135,7 +1135,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
                 if ( !bPageChg && pContent->IsInSct() )
                 {
-                    const SwSectionFrm *pSct = ((SwFrm*)pContent)->ImplFindSctFrm();
+                    const SwSectionFrm *pSct = const_cast<SwFrm*>(static_cast<SwFrm const *>(pContent))->ImplFindSctFrm();
                     if ( !pSct->IsValid() )
                     {
                         pSct->Calc();

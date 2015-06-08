@@ -1115,7 +1115,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
         OSL_ENSURE( pHint && pHint->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
         OSL_ENSURE( pHint && pHint->GetFlyCnt().
-                    GetFrameFormat() == (SwFrameFormat*)pOldFormat,
+                    GetFrameFormat() == static_cast<SwFrameFormat*>(pOldFormat),
                     "Wrong TextFlyCnt-Hint." );
 #endif
         const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt()).SetFlyFormat( pNewFormat );

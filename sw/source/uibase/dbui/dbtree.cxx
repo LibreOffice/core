@@ -378,7 +378,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                             sTableName = pTableNames[i];
                             SvTreeListEntry* pTableEntry = InsertEntry(sTableName, aImg, aImg, pParent, bShowColumns);
                             //to discriminate between queries and tables the user data of table entries is set
-                            pTableEntry->SetUserData((void*)0);
+                            pTableEntry->SetUserData(nullptr);
                         }
                     }
 

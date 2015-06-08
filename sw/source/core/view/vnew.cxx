@@ -155,8 +155,8 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
-                  : pWindow ? (OutputDevice*)pWindow
-                            : (OutputDevice*)rDocument.getIDocumentDeviceAccess().getPrinter( true )),
+                  : pWindow ? static_cast<OutputDevice*>(pWindow)
+                            : static_cast<OutputDevice*>(rDocument.getIDocumentDeviceAccess().getPrinter( true ))),
     mpTmpRef( 0 ),
     mpOpt( 0 ),
     mpAccOptions( new SwAccessibilityOptions ),
@@ -231,8 +231,8 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
-                  : pWindow ? (OutputDevice*)pWindow
-                            : (OutputDevice*)rShell.GetDoc()->getIDocumentDeviceAccess().getPrinter( true )),
+                  : pWindow ? static_cast<OutputDevice*>(pWindow)
+                            : static_cast<OutputDevice*>(rShell.GetDoc()->getIDocumentDeviceAccess().getPrinter( true ))),
     mpTmpRef( 0 ),
     mpOpt( 0 ),
     mpAccOptions( new SwAccessibilityOptions ),

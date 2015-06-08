@@ -2098,7 +2098,7 @@ void SwTabFrm::MakeAll()
                         }
 
                         if ( nOld != (Frm().*fnRect->fnGetHeight)() )
-                            lcl_RecalcTable( *this, (SwLayoutFrm*)pRow, aNotify );
+                            lcl_RecalcTable( *this, static_cast<SwLayoutFrm*>(pRow), aNotify );
 
                         continue;
                     }
@@ -2394,7 +2394,7 @@ void SwTabFrm::MakeAll()
 
                             if ( !GetFollow()->GetFollow() )
                             {
-                                SwFrm* pNxt = ((SwFrm*)GetFollow())->FindNext();
+                                SwFrm* pNxt = static_cast<SwFrm*>(GetFollow())->FindNext();
                                 if ( pNxt )
                                 {
                                     // #i18103# - no formatting of found next

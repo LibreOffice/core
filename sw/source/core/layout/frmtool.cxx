@@ -2207,11 +2207,11 @@ void SwBorderAttrs::_GetBottomLine( const SwFrm& _rFrm )
 SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrm *pFrm ) :
     SwCacheAccess( rCach,
                    (pFrm->IsContentFrm() ?
-                      (void*)static_cast<const SwContentFrm*>(pFrm)->GetNode() :
-                      (void*)static_cast<const SwLayoutFrm*>(pFrm)->GetFormat()),
+                      const_cast<void*>(static_cast<void const *>(static_cast<const SwContentFrm*>(pFrm)->GetNode())) :
+                      const_cast<void*>(static_cast<void const *>(static_cast<const SwLayoutFrm*>(pFrm)->GetFormat()))),
                    (pFrm->IsContentFrm() ?
-                      ((SwModify*)static_cast<const SwContentFrm*>(pFrm)->GetNode())->IsInCache() :
-                      ((SwModify*)static_cast<const SwLayoutFrm*>(pFrm)->GetFormat())->IsInCache()) ),
+                      static_cast<SwModify const *>(static_cast<const SwContentFrm*>(pFrm)->GetNode())->IsInCache() :
+                      static_cast<SwModify const *>(static_cast<const SwLayoutFrm*>(pFrm)->GetFormat())->IsInCache()) ),
     pConstructor( pFrm )
 {
 }
@@ -2886,7 +2886,7 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrm *pCnt,
         // #i23129# - only invalidate, if the text frame
         // printing area overlaps with the given rectangle.
         else if ( aCntPrt.IsOver( rRect ) )
-            pCnt->Prepare( eHint, (void*)&aCntPrt._Intersection( rRect ) );
+            pCnt->Prepare( eHint, static_cast<void*>(&aCntPrt._Intersection( rRect )) );
         if ( pCnt->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();

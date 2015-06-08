@@ -574,14 +574,14 @@ sfx2::LinkManager& SwEditShell::GetLinkManager()
 void *SwEditShell::GetIMapInventor() const
 {
     // The node on which the cursor points should be sufficient as a unique identifier
-    return (void*)&(GetCrsr()->GetNode());
+    return static_cast<void*>(&(GetCrsr()->GetNode()));
 }
 
 // #i73788#
 Graphic SwEditShell::GetIMapGraphic() const
 {
     // returns always a graphic if the cursor is in a Fly
-    SET_CURR_SHELL( (SwViewShell*)this );
+    SET_CURR_SHELL( const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
     Graphic aRet;
     SwPaM* pCrsr = GetCrsr();
     if ( !pCrsr->HasMark() )

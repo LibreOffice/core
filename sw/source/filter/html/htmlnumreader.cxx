@@ -507,7 +507,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     }
 
     SwTextNode* pTextNode = pPam->GetNode().GetTextNode();
-    ((SwContentNode *)pTextNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
+    static_cast<SwContentNode *>(pTextNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
     pTextNode->SetAttrListLevel(nLevel);
     // #i57656# - <IsCounted()> state of text node has to be adjusted accordingly.
     if ( nLevel < MAXLEVEL )
@@ -604,7 +604,7 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 
     OSL_ENSURE( GetNumInfo().GetNumRule(), "Kein Numerierungs-Regel" );
     const OUString& rName = GetNumInfo().GetNumRule()->GetName();
-    ((SwContentNode *)pTextNode)->SetAttr( SwNumRuleItem(rName) );
+    static_cast<SwContentNode *>(pTextNode)->SetAttr( SwNumRuleItem(rName) );
 
     pTextNode->SetAttrListLevel( nLevel );
     pTextNode->SetCountedInList( bCountedInList );

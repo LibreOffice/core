@@ -859,7 +859,7 @@ void SwXAutoTextEntry::removeTextContent(
 uno::Reference< text::XText >  SwXAutoTextEntry::getText() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XText >  xRet =  (text::XText*)this;
+    uno::Reference< text::XText >  xRet =  static_cast<text::XText*>(this);
     return xRet;
 }
 

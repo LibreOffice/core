@@ -114,7 +114,7 @@ uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< uno::XComponentContext >& xCtx) throw(uno::Exception)
 {
-    return (cppu::OWeakObject*) new RtfExportFilter(xCtx);
+    return static_cast<cppu::OWeakObject*>(new RtfExportFilter(xCtx));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

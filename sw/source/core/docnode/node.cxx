@@ -516,7 +516,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                 const SwFrameFormat* pFrameFormat = rFormats[ n ];
                 const SwFormatContent& rContent = pFrameFormat->GetContent();
                 if( rContent.GetContentIdx() &&
-                    &rContent.GetContentIdx()->GetNode() == (SwNode*)pSttNd )
+                    &rContent.GetContentIdx()->GetNode() == static_cast<SwNode const *>(pSttNd) )
                 {
                     pFormat = pFrameFormat;
                     break;
@@ -618,7 +618,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                                 const SwFormatContent& rContent = pHdFtFormat->GetContent();
                                 if( rContent.GetContentIdx() &&
                                     &rContent.GetContentIdx()->GetNode() ==
-                                    (SwNode*)pSttNd )
+                                    static_cast<SwNode const *>(pSttNd) )
                                 {
                                     pPgDesc = &rPgDsc;
                                     break;
@@ -638,7 +638,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                     const SwFootnoteIdxs& rFootnoteArr = pDoc->GetFootnoteIdxs();
                     for( size_t n = 0; n < rFootnoteArr.size(); ++n )
                         if( 0 != ( pTextFootnote = rFootnoteArr[ n ])->GetStartNode() &&
-                            (SwNode*)pSttNd ==
+                            static_cast<SwNode const *>(pSttNd) ==
                             &pTextFootnote->GetStartNode()->GetNode() )
                         {
                             pNd = &pTextFootnote->GetTextNode();
@@ -1111,7 +1111,7 @@ bool SwContentNode::InvalidateNumRule()
 SwContentFrm *SwContentNode::getLayoutFrm( const SwRootFrm* _pRoot,
     const Point* pPoint, const SwPosition *pPos, const bool bCalcFrm ) const
 {
-    return static_cast<SwContentFrm*>( ::GetFrmOfModify( _pRoot, *(SwModify*)this, FRM_CNTNT,
+    return static_cast<SwContentFrm*>( ::GetFrmOfModify( _pRoot, *const_cast<SwModify*>(static_cast<SwModify const *>(this)), FRM_CNTNT,
                                             pPoint, pPos, bCalcFrm ));
 }
 
@@ -1119,7 +1119,7 @@ SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
                                     const bool bCalcFrm ) const
 {
     SwRect aRet;
-    SwContentFrm* pFrm = static_cast<SwContentFrm*>( ::GetFrmOfModify( 0, *(SwModify*)this,
+    SwContentFrm* pFrm = static_cast<SwContentFrm*>( ::GetFrmOfModify( 0, *const_cast<SwModify*>(static_cast<SwModify const *>(this)),
                                             FRM_CNTNT, pPoint, 0, bCalcFrm ) );
     if( pFrm )
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();
@@ -1130,7 +1130,7 @@ SwRect SwContentNode::FindPageFrmRect( const bool bPrtArea, const Point* pPoint,
                                     const bool bCalcFrm ) const
 {
     SwRect aRet;
-    SwFrm* pFrm = ::GetFrmOfModify( 0, *(SwModify*)this,
+    SwFrm* pFrm = ::GetFrmOfModify( 0, *const_cast<SwModify*>(static_cast<SwModify const *>(this)),
                                             FRM_CNTNT, pPoint, 0, bCalcFrm );
     if( pFrm && 0 != ( pFrm = pFrm->FindPageFrm() ))
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();

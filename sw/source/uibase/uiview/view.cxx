@@ -595,7 +595,7 @@ void SwView::_CheckReadonlyState()
         static bool bFirst = true;
         if ( bFirst )
         {
-            qsort( (void*)aROIds, sizeof(aROIds)/sizeof(sal_uInt16), sizeof(sal_uInt16), lcl_CmpIds );
+            qsort( static_cast<void*>(aROIds), sizeof(aROIds)/sizeof(sal_uInt16), sizeof(sal_uInt16), lcl_CmpIds );
             bFirst = false;
         }
         if ( SfxItemState::DISABLED == eStateRO )
@@ -612,7 +612,7 @@ void SwView::_CheckReadonlyState()
             static bool bAllProtFirst = true;
             if ( bAllProtFirst )
             {
-                qsort( (void*)aAllProtIds, sizeof(aAllProtIds)/sizeof(sal_uInt16), sizeof(sal_uInt16), lcl_CmpIds );
+                qsort( static_cast<void*>(aAllProtIds), sizeof(aAllProtIds)/sizeof(sal_uInt16), sizeof(sal_uInt16), lcl_CmpIds );
                 bAllProtFirst = false;
             }
             rDis.SetSlotFilter( SfxSlotFilterState::ENABLED_READONLY,

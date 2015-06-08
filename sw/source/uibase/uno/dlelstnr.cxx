@@ -52,14 +52,14 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
         xDesktop->addTerminateListener( this );
 
         xLngSvcMgr = LinguServiceManager::create(xContext);
-        xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
+        xLngSvcMgr->addLinguServiceManagerListener( static_cast<XLinguServiceEventListener *>(this) );
 
         if (SvtLinguConfig().HasGrammarChecker())
         {
             xGCIterator = sw::proofreadingiterator::get(xContext);
             Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
             if (xBC.is())
-                xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
+                xBC->addLinguServiceEventListener( static_cast<XLinguServiceEventListener *>(this) );
         }
     }
     catch (const uno::Exception&)

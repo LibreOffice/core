@@ -520,7 +520,7 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
 
     bool bRet = false;
     bInSwapIn = true;
-    SwBaseLink* pLink = static_cast<SwBaseLink*>((::sfx2::SvBaseLink*) refLink);
+    SwBaseLink* pLink = static_cast<SwBaseLink*>(static_cast<sfx2::SvBaseLink*>(refLink));
 
     if( pLink )
     {
@@ -737,7 +737,7 @@ void SwGrfNode::ReleaseLink()
 
         {
             bInSwapIn = true;
-            SwBaseLink* pLink = static_cast<SwBaseLink*>((::sfx2::SvBaseLink*) refLink);
+            SwBaseLink* pLink = static_cast<SwBaseLink*>(static_cast<sfx2::SvBaseLink*>(refLink));
             pLink->SwapIn( true, true );
             bInSwapIn = false;
         }

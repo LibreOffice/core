@@ -47,12 +47,12 @@ SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     if(m_xIntercepted.is())
     {
         m_refCount++;
-        m_xIntercepted->registerDispatchProviderInterceptor((frame::XDispatchProviderInterceptor*)this);
+        m_xIntercepted->registerDispatchProviderInterceptor(static_cast<frame::XDispatchProviderInterceptor*>(this));
         // this should make us the top-level dispatch-provider for the component, via a call to our
         // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fulfill
         uno::Reference< lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
         if (xInterceptedComponent.is())
-            xInterceptedComponent->addEventListener((lang::XEventListener*)this);
+            xInterceptedComponent->addEventListener(static_cast<lang::XEventListener*>(this));
         m_refCount--;
     }
 }
@@ -137,10 +137,10 @@ void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
     DispatchMutexLock_Impl aLock(*this);
     if (m_xIntercepted.is())
     {
-        m_xIntercepted->releaseDispatchProviderInterceptor((frame::XDispatchProviderInterceptor*)this);
+        m_xIntercepted->releaseDispatchProviderInterceptor(static_cast<frame::XDispatchProviderInterceptor*>(this));
         uno::Reference< lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
         if (xInterceptedComponent.is())
-            xInterceptedComponent->removeEventListener((lang::XEventListener*)this);
+            xInterceptedComponent->removeEventListener(static_cast<lang::XEventListener*>(this));
         m_xDispatch       = 0;
     }
     m_xIntercepted = NULL;
@@ -174,10 +174,10 @@ void    SwXDispatchProviderInterceptor::Invalidate()
     DispatchMutexLock_Impl aLock(*this);
     if (m_xIntercepted.is())
     {
-        m_xIntercepted->releaseDispatchProviderInterceptor((frame::XDispatchProviderInterceptor*)this);
+        m_xIntercepted->releaseDispatchProviderInterceptor(static_cast<frame::XDispatchProviderInterceptor*>(this));
         uno::Reference< lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
         if (xInterceptedComponent.is())
-            xInterceptedComponent->removeEventListener((lang::XEventListener*)this);
+            xInterceptedComponent->removeEventListener(static_cast<lang::XEventListener*>(this));
         m_xDispatch       = 0;
     }
     m_xIntercepted = NULL;
@@ -242,7 +242,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     {
         frame::FeatureStateEvent aEvent;
         aEvent.IsEnabled = sal_True;
-        aEvent.Source = *(cppu::OWeakObject*)this;
+        aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
 
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
         svx::ODataAccessDescriptor aDescriptor;
@@ -283,7 +283,7 @@ void SwXDispatch::addStatusListener(
     m_bOldEnable = bEnable;
     frame::FeatureStateEvent aEvent;
     aEvent.IsEnabled = bEnable;
-    aEvent.Source = *(cppu::OWeakObject*)this;
+    aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
     aEvent.FeatureURL = aURL;
 
     // one of the URLs requires a special state ....
@@ -351,7 +351,7 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::Runti
         m_bOldEnable = bEnable;
         frame::FeatureStateEvent aEvent;
         aEvent.IsEnabled = bEnable;
-        aEvent.Source = *(cppu::OWeakObject*)this;
+        aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
 
         StatusListenerList::iterator aListIter = m_aListenerList.begin();
         for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
@@ -373,7 +373,7 @@ void SwXDispatch::disposing( const lang::EventObject& rSource ) throw(uno::Runti
     m_bListenerAdded = false;
 
     lang::EventObject aObject;
-    aObject.Source = (cppu::OWeakObject*)this;
+    aObject.Source = static_cast<cppu::OWeakObject*>(this);
     StatusListenerList::iterator aListIter = m_aListenerList.begin();
     for(; aListIter != m_aListenerList.end(); ++aListIter)
     {

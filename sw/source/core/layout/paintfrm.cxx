@@ -1663,7 +1663,7 @@ static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
                )
             {
                 SwRect aRect;
-                SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFly );
+                SwBorderAttrAccess aAccess( SwFrm::GetCache(), static_cast<SwFrm const *>(pFly) );
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
                 ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true, rProperties );
                 rRegion -= aRect;
@@ -1680,7 +1680,7 @@ static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             //So the border won't get dismantled by the background of the other
             //Fly.
             SwRect aRect;
-            SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFly );
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), static_cast<SwFrm const *>(pFly) );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true, rProperties );
             rRegion -= aRect;
@@ -3202,7 +3202,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     gProp.pSGlobalShell = pSh;
 
     if( !pSh->GetWin() )
-        gProp.pSProgress = SfxProgress::GetActiveProgress( (SfxObjectShell*) pSh->GetDoc()->GetDocShell() );
+        gProp.pSProgress = SfxProgress::GetActiveProgress( static_cast<SfxObjectShell*>(pSh->GetDoc()->GetDocShell()) );
 
     ::SwCalcPixStatics( pSh->GetOut() );
     aGlobalRetoucheColor = pSh->Imp()->GetRetoucheColor();
@@ -4246,7 +4246,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
             pPage = FindPageFrm();
 
-            SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)this );
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), static_cast<SwFrm const *>(this) );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
 
             // paint background
@@ -4376,7 +4376,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         // #i29550#
         if ( IsCollapsingBorders() )
         {
-            SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)this );
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), static_cast<SwFrm const *>(this) );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
 
             // paint shadow

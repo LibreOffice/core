@@ -111,7 +111,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 // Drag handle
                 g_bNoInterrupt = true;
-                bReturn = pSdrView->BegDragObj(m_aStartPos, (OutputDevice*) NULL, aVEvt.pHdl);
+                bReturn = pSdrView->BegDragObj(m_aStartPos, nullptr, aVEvt.pHdl);
                 m_pWin->SetDrawAction(true);
             }
             else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)

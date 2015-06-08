@@ -914,9 +914,9 @@ static void lcl_ColumnRefresh( SwSectionFrm* pSect, bool bFollow )
             do
             {   pCol->_InvalidateSize();
                 pCol->_InvalidatePos();
-                ((SwLayoutFrm*)pCol)->Lower()->_InvalidateSize();
+                static_cast<SwLayoutFrm*>(pCol)->Lower()->_InvalidateSize();
                 pCol->Calc();   // calculation of column and
-                ((SwLayoutFrm*)pCol)->Lower()->Calc();  // body
+                static_cast<SwLayoutFrm*>(pCol)->Lower()->Calc();  // body
                 pCol = static_cast<SwColumnFrm*>(pCol->GetNext());
             } while ( pCol );
         }
@@ -1859,7 +1859,7 @@ bool SwSectionFrm::Growable() const
         (Frm().*fnRect->fnGetBottom)() ) > 0 )
         return true;
 
-    return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX, true ) );
+    return ( GetUpper() && const_cast<SwFrm*>(static_cast<SwFrm const *>(GetUpper()))->Grow( LONG_MAX, true ) );
 }
 
 SwTwips SwSectionFrm::_Grow( SwTwips nDist, bool bTst )
@@ -2124,7 +2124,7 @@ bool SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
     if( IsInTab() || ( !IsInDocBody() && FindFooterOrHeader() ) )
         return false; // It doesn't work in tables/headers/footers
     if( IsInFly() ) // In column based or chained frames
-        return 0 != ((SwFrm*)GetUpper())->GetNextLeaf( MAKEPAGE_NONE );
+        return 0 != const_cast<SwFrm*>(static_cast<SwFrm const *>(GetUpper()))->GetNextLeaf( MAKEPAGE_NONE );
     return true;
 }
 

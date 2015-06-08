@@ -2648,7 +2648,7 @@ void SwXTextField::Impl::Modify(
     {
     case RES_REMOVE_UNO_OBJECT:
     case RES_OBJECTDYING:
-        if( (void*)GetRegisteredIn() == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
+        if( static_cast<void*>(GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
             Invalidate();
         break;
 

@@ -3061,7 +3061,7 @@ sal_uInt16 SwXTextTable::getColumnCount()
 void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
-        (void*)GetRegisteredIn() == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
+        static_cast<void*>(GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
             GetRegisteredIn()->Remove(this);
     else
         ClientModify(this, pOld, pNew);
@@ -3946,7 +3946,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     pFrameFormat->CallSwClientNotify(aHint);
     if(!aHint.m_pResult)
         aHint.m_pResult = new SwXTextTableRow(pFrameFormat, pLine);
-    uno::Reference<beans::XPropertySet> xRet = (beans::XPropertySet*)aHint.m_pResult;
+    uno::Reference<beans::XPropertySet> xRet = static_cast<beans::XPropertySet*>(aHint.m_pResult);
     return uno::makeAny(xRet);
 }
 

@@ -306,7 +306,7 @@ SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_LINE aLine;
 
-    if( !ReadGrafStart( (void*)&aLine, sizeof( aLine ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&aLine), sizeof( aLine ), pHd, rSet ) )
         return 0;
 
     Point aP[2];
@@ -338,7 +338,7 @@ SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_RECT aRect;
 
-    if( !ReadGrafStart( (void*)&aRect, sizeof( aRect ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&aRect), sizeof( aRect ), pHd, rSet ) )
         return 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) + m_nDrawXOfs2,
@@ -359,7 +359,7 @@ SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_ELIPSE aElipse;
 
-    if( !ReadGrafStart( (void*)&aElipse, sizeof( aElipse ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&aElipse), sizeof( aElipse ), pHd, rSet ) )
         return 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) + m_nDrawXOfs2,
@@ -380,7 +380,7 @@ SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_ARC aArc;
 
-    if( !ReadGrafStart( (void*)&aArc, sizeof( aArc ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&aArc), sizeof( aArc ), pHd, rSet ) )
         return 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) + m_nDrawXOfs2,
@@ -413,7 +413,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_POLYLINE aPoly;
 
-    if( !ReadGrafStart( (void*)&aPoly, sizeof( aPoly ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&aPoly), sizeof( aPoly ), pHd, rSet ) )
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aPoly.aBits1 ) >> 1 & 0x7fff;
@@ -1158,7 +1158,7 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     bool bDummy;
     WW8_DP_TXTBOX aTextB;
 
-    if( !ReadGrafStart( (void*)&aTextB, sizeof( aTextB ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&aTextB), sizeof( aTextB ), pHd, rSet ) )
         return 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) + m_nDrawXOfs2,
@@ -1199,7 +1199,7 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 
     WW8_DP_CALLOUT_TXTBOX aCallB;
 
-    if( !ReadGrafStart( (void*)&aCallB, sizeof( aCallB ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&aCallB), sizeof( aCallB ), pHd, rSet ) )
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aCallB.dpPolyLine.aBits1 ) >> 1 & 0x7fff;
@@ -1252,7 +1252,7 @@ SdrObject *SwWW8ImplReader::ReadGroup(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     sal_Int16 nGrouped;
 
-    if( !ReadGrafStart( (void*)&nGrouped, sizeof( nGrouped ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&nGrouped), sizeof( nGrouped ), pHd, rSet ) )
         return 0;
 
 #ifdef OSL_BIGENDIAN

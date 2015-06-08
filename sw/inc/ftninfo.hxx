@@ -54,11 +54,11 @@ public:
 
     SwCharFormat* GetCharFormat(SwDoc &rDoc) const;
     void SetCharFormat( SwCharFormat* );
-    SwClient   *GetCharFormatDep() const { return (SwClient*)&aCharFormatDep; }
+    SwClient   *GetCharFormatDep() const { return const_cast<SwClient*>(static_cast<SwClient const *>(&aCharFormatDep)); }
 
     SwCharFormat* GetAnchorCharFormat(SwDoc &rDoc) const;
     void SetAnchorCharFormat( SwCharFormat* );
-    SwClient   *GetAnchorCharFormatDep() const { return (SwClient*)&aAnchorCharFormatDep; }
+    SwClient   *GetAnchorCharFormatDep() const { return const_cast<SwClient*>(static_cast<SwClient const *>(&aAnchorCharFormatDep)); }
 
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
     bool operator==( const SwEndNoteInfo &rInf ) const;

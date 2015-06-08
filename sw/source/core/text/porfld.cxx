@@ -656,7 +656,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
     // follow field portions
     if ( ! IsFollow() )
     {
-        SwLinePortion *pThis = (SwLinePortion*)this;
+        SwLinePortion *pThis = const_cast<SwLinePortion*>(static_cast<SwLinePortion const *>(this));
         pThis->Width( nSumWidth );
         rInf.DrawViewOpt( *this, POR_NUMBER );
         pThis->Width( nOldWidth );
@@ -682,7 +682,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
         else
         {
             // logical const: reset width
-            SwLinePortion *pThis = (SwLinePortion*)this;
+            SwLinePortion *pThis = const_cast<SwLinePortion*>(static_cast<SwLinePortion const *>(this));
             bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
             sal_uInt16 nSpaceOffs = nFixWidth;
             pThis->Width( nFixWidth );

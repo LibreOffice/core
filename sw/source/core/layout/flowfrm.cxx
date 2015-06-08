@@ -2482,7 +2482,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
         SwPageFrm *pNewPage = m_rThis.FindPageFrm();
         if( pNewPage != pOldPage )
         {
-            m_rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, false );
+            m_rThis.Prepare( PREP_BOSS_CHGD, static_cast<const void*>(pOldPage), false );
             SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFields() )
                 pSh->GetDoc()->getIDocumentFieldsAccess().SetNewFieldLst(true);  // Will be done by CalcLayout() later on
