@@ -118,7 +118,7 @@ PropertyHelper_Thesaurus& Thesaurus::GetPropHelper_Impl()
     {
         Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Thesaurus( (XThesaurus *) this, xPropSet );
+        pPropHelper = new PropertyHelper_Thesaurus( static_cast<XThesaurus *>(this), xPropSet );
         pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *pPropHelper;
@@ -515,7 +515,7 @@ Reference< XInterface > SAL_CALL Thesaurus_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
-    Reference< XInterface > xService = (cppu::OWeakObject*) new Thesaurus;
+    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new Thesaurus);
     return xService;
 }
 
@@ -543,7 +543,7 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is not longer used.
-            pPropHelper = new PropertyHelper_Thesaurus( (XThesaurus *) this, xPropSet );
+            pPropHelper = new PropertyHelper_Thesaurus( static_cast<XThesaurus *>(this), xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else
@@ -590,7 +590,7 @@ void SAL_CALL Thesaurus::dispose()
     if (!bDisposing)
     {
         bDisposing = true;
-        EventObject aEvtObj( (XThesaurus *) this );
+        EventObject aEvtObj( static_cast<XThesaurus *>(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
         if (pPropHelper)
         {

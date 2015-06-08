@@ -86,7 +86,7 @@ PropertyHelper_Spell & MacSpellChecker::GetPropHelper_Impl()
     {
         Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
+        pPropHelper = new PropertyHelper_Spell( static_cast<XSpellChecker *>(this), xPropSet );
         xPropHelper = pPropHelper;
         pPropHelper->AddAsPropListener();   //! after a reference is established
     }
@@ -407,7 +407,7 @@ Reference< XInterface > SAL_CALL MacSpellChecker_CreateInstance(
         throw(Exception)
 {
 
-    Reference< XInterface > xService = (cppu::OWeakObject*) new MacSpellChecker;
+    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new MacSpellChecker);
     return xService;
 }
 
@@ -473,7 +473,7 @@ void SAL_CALL
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is not longer used.
-            pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
+            pPropHelper = new PropertyHelper_Spell( static_cast<XSpellChecker *>(this), xPropSet );
             xPropHelper = pPropHelper;
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
@@ -493,7 +493,7 @@ void SAL_CALL
     if (!bDisposing)
     {
         bDisposing = true;
-        EventObject aEvtObj( (XSpellChecker *) this );
+        EventObject aEvtObj( static_cast<XSpellChecker *>(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
 }

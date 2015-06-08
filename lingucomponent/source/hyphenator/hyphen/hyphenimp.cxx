@@ -101,7 +101,7 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
     {
         Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Hyphenation ((XHyphenator *) this, xPropSet );
+        pPropHelper = new PropertyHelper_Hyphenation (static_cast<XHyphenator *>(this), xPropSet );
         pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *pPropHelper;
@@ -744,7 +744,7 @@ Reference< XInterface > SAL_CALL Hyphenator_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
-    Reference< XInterface > xService = (cppu::OWeakObject*) new Hyphenator;
+    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new Hyphenator);
     return xService;
 }
 
@@ -801,7 +801,7 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is not longer used.
-            pPropHelper = new PropertyHelper_Hyphenation( (XHyphenator *) this, xPropSet );
+            pPropHelper = new PropertyHelper_Hyphenation( static_cast<XHyphenator *>(this), xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else {
@@ -818,7 +818,7 @@ void SAL_CALL Hyphenator::dispose()
     if (!bDisposing)
     {
         bDisposing = true;
-        EventObject aEvtObj( (XHyphenator *) this );
+        EventObject aEvtObj( static_cast<XHyphenator *>(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
         if (pPropHelper)
         {
