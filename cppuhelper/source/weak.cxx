@@ -350,7 +350,7 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt)
 
         if (m_XWeakConnectionPoint.is())
         {
-            m_XWeakConnectionPoint->addReference((XReference*)this);
+            m_XWeakConnectionPoint->addReference(static_cast<XReference*>(this));
         }
     }
     }
@@ -365,7 +365,7 @@ OWeakRefListener::~OWeakRefListener()
     if (m_XWeakConnectionPoint.is())
     {
         acquire(); // dont die again
-        m_XWeakConnectionPoint->removeReference((XReference*)this);
+        m_XWeakConnectionPoint->removeReference(static_cast<XReference*>(this));
     }
     }
     catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
@@ -405,7 +405,7 @@ void SAL_CALL OWeakRefListener::dispose()
     }
 
     if( xAdp.is() )
-        xAdp->removeReference((XReference*)this);
+        xAdp->removeReference(static_cast<XReference*>(this));
 }
 
 
@@ -441,7 +441,7 @@ void WeakReferenceHelper::clear()
             if (m_pImpl->m_XWeakConnectionPoint.is())
             {
                 m_pImpl->m_XWeakConnectionPoint->removeReference(
-                        (XReference*)m_pImpl);
+                        static_cast<XReference*>(m_pImpl));
                 m_pImpl->m_XWeakConnectionPoint.clear();
             }
             m_pImpl->release();

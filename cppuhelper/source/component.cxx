@@ -168,7 +168,7 @@ void OComponentHelper::dispose()
             try
             {
                 Reference<XInterface > xSource(
-                    Reference<XInterface >::query( (XComponent *)this ) );
+                    Reference<XInterface >::query( static_cast<XComponent *>(this) ) );
                 EventObject aEvt;
                 aEvt.Source = xSource;
                 // inform all listeners to release this object
@@ -218,7 +218,7 @@ void OComponentHelper::addEventListener(
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         aGuard.clear();
-        Reference< XInterface > x( (XComponent *)this, UNO_QUERY );
+        Reference< XInterface > x( static_cast<XComponent *>(this), UNO_QUERY );
         rxListener->disposing( EventObject( x ) );
     }
     else

@@ -648,7 +648,7 @@ void OPropertySetHelper::fire
         // create the event sequence of all changed properties
         Sequence< PropertyChangeEvent > aEvts( nHandles );
         PropertyChangeEvent * pEvts = aEvts.getArray();
-        Reference < XInterface > xSource( (XPropertySet *)this, UNO_QUERY );
+        Reference < XInterface > xSource( static_cast<XPropertySet *>(this), UNO_QUERY );
         sal_Int32 i;
         sal_Int32 nChangesLen = 0;
         // Loop over all changed properties to fill the event struct
@@ -975,7 +975,7 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     {
     // must lock the mutex outside the loop. So all values are consistent.
     MutexGuard aGuard( rBHelper.rMutex );
-    Reference < XInterface > xSource( (XPropertySet *)this, UNO_QUERY );
+    Reference < XInterface > xSource( static_cast<XPropertySet *>(this), UNO_QUERY );
     sal_Int32 nFirePos = 0;
     for( i = 0; i < nLen; i++ )
     {
