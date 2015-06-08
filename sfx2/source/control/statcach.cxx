@@ -67,7 +67,7 @@ void SAL_CALL BindDispatch_Impl::disposing( const ::com::sun::star::lang::EventO
 {
     if ( xDisp.is() )
     {
-        xDisp->removeStatusListener( (::com::sun::star::frame::XStatusListener*) this, aURL );
+        xDisp->removeStatusListener( static_cast<com::sun::star::frame::XStatusListener*>(this), aURL );
         xDisp = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
     }
 }
@@ -78,7 +78,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
     if ( !pCache )
         return;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef( static_cast<cppu::OWeakObject*>(this), ::com::sun::star::uno::UNO_QUERY );
     if ( aStatus.Requery )
         pCache->Invalidate( true );
     else
@@ -153,7 +153,7 @@ void BindDispatch_Impl::Release()
 {
     if ( xDisp.is() )
     {
-        xDisp->removeStatusListener( (::com::sun::star::frame::XStatusListener*) this, aURL );
+        xDisp->removeStatusListener( static_cast<com::sun::star::frame::XStatusListener*>(this), aURL );
         xDisp = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
     }
 

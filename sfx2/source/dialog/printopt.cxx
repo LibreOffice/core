@@ -122,9 +122,9 @@ VclPtr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create( vcl::Window* pParent, c
 
 vcl::Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const vcl::Window* pWindow ) const
 {
-    if ( pWindow == (vcl::Window *)m_pReduceGradientsStepCountNF )
+    if ( pWindow == static_cast<vcl::Window *>(m_pReduceGradientsStepCountNF) )
         return m_pReduceGradientsStripesRB;
-    else if ( pWindow == (vcl::Window *)m_pReduceBitmapsResolutionLB )
+    else if ( pWindow == static_cast<vcl::Window *>(m_pReduceBitmapsResolutionLB) )
         return m_pReduceBitmapsResolutionRB;
     else
         return SfxTabPage::GetParentLabeledBy( pWindow );
@@ -132,9 +132,9 @@ vcl::Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const vcl::Window
 
 vcl::Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const vcl::Window* pWindow ) const
 {
-    if ( pWindow == (vcl::Window *)m_pReduceGradientsStripesRB )
+    if ( pWindow == static_cast<vcl::Window *>(m_pReduceGradientsStripesRB) )
         return m_pReduceGradientsStepCountNF;
-    else if ( pWindow == (vcl::Window *)m_pReduceBitmapsResolutionRB )
+    else if ( pWindow == static_cast<vcl::Window *>(m_pReduceBitmapsResolutionRB) )
         return m_pReduceBitmapsResolutionLB;
     else
         return SfxTabPage::GetParentLabelFor( pWindow );

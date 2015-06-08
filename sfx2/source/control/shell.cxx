@@ -408,14 +408,14 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 
 sal_IntPtr ShellCall_Impl( void* pObj, void* pArg )
 {
-    static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg), (SfxInterface*)0L );
+    static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg), nullptr );
     return 0;
 }
 
 const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
 {
     if( !bAsync )
-        return ExecuteSlot( rReq, (SfxInterface*)0L );
+        return ExecuteSlot( rReq, nullptr );
     else
     {
         if( !pImp->pExecuter )

@@ -772,7 +772,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException, std::exception)
         m_pData->m_pDocumentUndoManager = NULL;
     }
 
-    lang::EventObject aEvent( (frame::XModel *)this );
+    lang::EventObject aEvent( static_cast<frame::XModel *>(this) );
     m_pData->m_aInterfaceContainer.disposeAndClear( aEvent );
 
     m_pData->m_xDocumentProperties.clear();
@@ -2850,7 +2850,7 @@ void SfxBaseModel::NotifyModifyListeners_Impl() const
     ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XModifyListener>::get());
     if ( pIC )
     {
-        lang::EventObject aEvent( (frame::XModel *)this );
+        lang::EventObject aEvent( static_cast<frame::XModel *>(const_cast<SfxBaseModel *>(this)) );
         pIC->notifyEach( &util::XModifyListener::modified, aEvent );
     }
 
@@ -2876,7 +2876,7 @@ void SfxBaseModel::changing()
 
 SfxObjectShell* SfxBaseModel::GetObjectShell() const
 {
-    return m_pData ? (SfxObjectShell*) m_pData->m_pObjectShell : 0;
+    return m_pData ? static_cast<SfxObjectShell*>(m_pData->m_pObjectShell) : 0;
 }
 
 
@@ -3181,7 +3181,7 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
     {
         SAL_INFO("sfx.doc", "SfxDocumentEvent: " + aName);
 
-        document::DocumentEvent aDocumentEvent( (frame::XModel*)this, aName, xController, Any() );
+        document::DocumentEvent aDocumentEvent( static_cast<frame::XModel*>(this), aName, xController, Any() );
 
         pIC->forEach< document::XDocumentEventListener, NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent > >(
             NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent >(
@@ -3194,7 +3194,7 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
     {
         SAL_INFO("sfx.doc", "SfxEvent: " + aName);
 
-        document::EventObject aEvent( (frame::XModel*)this, aName );
+        document::EventObject aEvent( static_cast<frame::XModel*>(this), aName );
 
         pIC->forEach< document::XEventListener, NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject > >(
             NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject >(

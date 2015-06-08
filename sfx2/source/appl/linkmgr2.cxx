@@ -523,7 +523,7 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if( rValue.hasValue() && ( rValue >>= aSeq ) )
     {
-        SvMemoryStream aMemStm( (void*)aSeq.getConstArray(), aSeq.getLength(),
+        SvMemoryStream aMemStm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
                                 StreamMode::READ );
         aMemStm.Seek( 0 );
 

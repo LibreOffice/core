@@ -95,7 +95,7 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
         URL aURL;
         aURL.Complete = rURL;
         aEvent.FeatureURL = aURL;
-        aEvent.Source = (::com::sun::star::frame::XDispatch*)this;
+        aEvent.Source = static_cast<com::sun::star::frame::XDispatch*>(this);
         m_xListener->statusChanged( aEvent );
     }
 
@@ -109,7 +109,7 @@ void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
     m_xIntercepted = Reference< XDispatchProviderInterception>( xFrame, UNO_QUERY );
 
     if ( m_xIntercepted.is() )
-        m_xIntercepted->registerDispatchProviderInterceptor( (XDispatchProviderInterceptor*)this );
+        m_xIntercepted->registerDispatchProviderInterceptor( static_cast<XDispatchProviderInterceptor*>(this) );
 }
 
 

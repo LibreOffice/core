@@ -242,7 +242,7 @@ bool SfxApplication::Initialize_Impl()
     SfxPickList::ensure();
 
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
-    pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);
+    pAppData_Impl->pAppDispat = new SfxDispatcher(static_cast<SfxDispatcher*>(nullptr));
     pAppData_Impl->pSlotPool = new SfxSlotPool;
     pAppData_Impl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
     pAppData_Impl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;

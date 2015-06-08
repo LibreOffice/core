@@ -1067,7 +1067,7 @@ bool SfxSplitWindow::CursorIsOverRect( bool bForceAdding ) const
         aRect = aRect.GetUnion( aVisRect );
     }
 
-    if ( aRect.IsInside( OutputToScreenPixel( ((vcl::Window*)this)->GetPointerPosPixel() ) ) )
+    if ( aRect.IsInside( OutputToScreenPixel( static_cast<vcl::Window*>(const_cast<SfxSplitWindow *>(this))->GetPointerPosPixel() ) ) )
         return true;
     return false;
 }

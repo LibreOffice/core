@@ -123,7 +123,7 @@ void SfxUnoControllerItem::UnBind()
 {
     // connection to SfxControllerItem is lost
     pCtrlItem = NULL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( static_cast<cppu::OWeakObject*>(this), ::com::sun::star::uno::UNO_QUERY );
     ReleaseDispatch();
 }
 
@@ -137,7 +137,7 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
         // Error can only happen if the old Dispatch is implemented incorrectly
         // i.e. removeStatusListener did not work. But such things can happen...
         // So protect before ReleaseDispatch from release!
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY  );
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( static_cast<cppu::OWeakObject*>(this), ::com::sun::star::uno::UNO_QUERY  );
         ReleaseDispatch();
         if ( pCtrlItem )
             GetNewDispatch();           // asynchronous ??
@@ -186,7 +186,7 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
 
 void  SAL_CALL SfxUnoControllerItem::disposing( const ::com::sun::star::lang::EventObject& ) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( static_cast<cppu::OWeakObject*>(this), ::com::sun::star::uno::UNO_QUERY );
     ReleaseDispatch();
 }
 
@@ -194,7 +194,7 @@ void SfxUnoControllerItem::ReleaseDispatch()
 {
     if ( xDispatch.is() )
     {
-        xDispatch->removeStatusListener( (::com::sun::star::frame::XStatusListener*) this, aCommand );
+        xDispatch->removeStatusListener( static_cast<com::sun::star::frame::XStatusListener*>(this), aCommand );
         xDispatch = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
     }
 }
@@ -231,7 +231,7 @@ void SfxUnoControllerItem::GetNewDispatch()
     }
 
     if ( xDispatch.is() )
-        xDispatch->addStatusListener( (::com::sun::star::frame::XStatusListener*) this, aCommand );
+        xDispatch->addStatusListener( static_cast<com::sun::star::frame::XStatusListener*>(this), aCommand );
     else if ( pCtrlItem )
         pCtrlItem->StateChanged( pCtrlItem->GetId(), SfxItemState::DISABLED, NULL );
 }
@@ -250,7 +250,7 @@ void SfxUnoControllerItem::GetNewDispatch()
 void SfxUnoControllerItem::ReleaseBindings()
 {
     // connection to binding is lost; so forget the binding and the dispatch
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( static_cast<cppu::OWeakObject*>(this), ::com::sun::star::uno::UNO_QUERY );
     ReleaseDispatch();
     if ( pBindings )
         pBindings->ReleaseUnoController_Impl( this );
@@ -260,7 +260,7 @@ void SfxUnoControllerItem::ReleaseBindings()
 void SfxStatusDispatcher::ReleaseAll()
 {
     ::com::sun::star::lang::EventObject aObject;
-    aObject.Source = (::cppu::OWeakObject*) this;
+    aObject.Source = static_cast<cppu::OWeakObject*>(this);
     aListeners.disposeAndClear( aObject );
 }
 
@@ -287,7 +287,7 @@ void SAL_CALL SfxStatusDispatcher::addStatusListener(const ::com::sun::star::uno
     {
         ::com::sun::star::frame::FeatureStateEvent aEvent;
         aEvent.FeatureURL = aURL;
-        aEvent.Source = (::com::sun::star::frame::XDispatch*) this;
+        aEvent.Source = static_cast<com::sun::star::frame::XDispatch*>(this);
         aEvent.IsEnabled = sal_True;
         aEvent.Requery = sal_False;
         aListener->statusChanged( aEvent );
@@ -471,7 +471,7 @@ SfxDispatchController_Impl::~SfxDispatchController_Impl()
 
         // force all listeners to release the dispatch object
         ::com::sun::star::lang::EventObject aObject;
-        aObject.Source = (::cppu::OWeakObject*) pDispatch;
+        aObject.Source = static_cast<cppu::OWeakObject*>(pDispatch);
         pDispatch->GetListeners().disposeAndClear( aObject );
     }
 }
@@ -881,7 +881,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             else
                 aEvent.State = com::sun::star::frame::DispatchResultState::FAILURE;
 
-            aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
+            aEvent.Source = static_cast<com::sun::star::frame::XDispatch*>(pDispatch);
             if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )
             {
                 sal_uInt16 nSubId( 0 );
@@ -924,7 +924,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
 
     ::com::sun::star::frame::FeatureStateEvent  aEvent;
     aEvent.FeatureURL = aURL;
-    aEvent.Source     = (::com::sun::star::frame::XDispatch*) pDispatch;
+    aEvent.Source     = static_cast<com::sun::star::frame::XDispatch*>(pDispatch);
     aEvent.Requery    = sal_False;
     if ( bVisible )
     {
@@ -1012,7 +1012,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
         ::com::sun::star::frame::FeatureStateEvent aEvent;
         aEvent.FeatureURL = aDispatchURL;
-        aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
+        aEvent.Source = static_cast<com::sun::star::frame::XDispatch*>(pDispatch);
         aEvent.IsEnabled = eState != SfxItemState::DISABLED;
         aEvent.Requery = sal_False;
         aEvent.State = aState;

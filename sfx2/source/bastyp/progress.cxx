@@ -75,7 +75,7 @@ struct SfxProgress_Impl
 
 void SfxProgress_Impl::Enable_Impl( bool bEnable )
 {
-    SfxObjectShell* pDoc = bAllDocs ? NULL : (SfxObjectShell*) xObjSh;
+    SfxObjectShell* pDoc = bAllDocs ? NULL : static_cast<SfxObjectShell*>(xObjSh);
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
     while ( pFrame )
     {

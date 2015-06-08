@@ -2071,7 +2071,7 @@ void SfxBindings::InvalidateUnoControllers_Impl()
         for ( sal_uInt16 n=nCount; n>0; n-- )
         {
             SfxUnoControllerItem *pCtrl = (*pImp->pUnoCtrlArr)[n-1];
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef( (::cppu::OWeakObject*)pCtrl, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef( static_cast<cppu::OWeakObject*>(pCtrl), ::com::sun::star::uno::UNO_QUERY );
             pCtrl->ReleaseDispatch();
             pCtrl->GetNewDispatch();
         }
