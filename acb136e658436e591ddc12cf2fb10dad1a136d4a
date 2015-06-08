@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_3a6cfe9b",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-06-08T08:28:11Z",
+      "side": 1,
+      "message": "Numeric limits are preferably defined in .ui file as adjustments (in Glade select spin button, general tab -\u003e spin button attributes -\u003e adjustment. Add a new one and set limits there)\n\nSimilar git commit e.g. here:http://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d64992cc56e0e8a480e33b847d3a327f8229535d2",
+      "revId": "acb136e658436e591ddc12cf2fb10dad1a136d4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
