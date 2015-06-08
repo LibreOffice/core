@@ -274,7 +274,7 @@ MenuManager::~MenuManager()
         MenuItemHandler* pItemHandler = *p;
         pItemHandler->xMenuItemDispatch.clear();
         if ( pItemHandler->pSubMenuManager )
-            (static_cast< XInterface* >((OWeakObject*)pItemHandler->pSubMenuManager))->release();
+            (static_cast< XInterface* >(static_cast<OWeakObject*>(pItemHandler->pSubMenuManager)))->release();
         delete pItemHandler;
     }
 

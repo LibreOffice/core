@@ -523,7 +523,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 // XEventListener
 void SAL_CALL ToolbarsMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
 {
-    Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
+    Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
@@ -533,7 +533,7 @@ void SAL_CALL ToolbarsMenuController::disposing( const EventObject& ) throw ( Ru
     m_xContext.clear();
 
     if ( m_xPopupMenu.is() )
-        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
+        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
     m_xPopupMenu.clear();
 }
 
@@ -802,7 +802,7 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
         SolarMutexGuard aSolarMutexGuard;
 
         m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
+        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( static_cast<OWeakObject*>(this), UNO_QUERY ));
         fillPopupMenu( m_xPopupMenu );
     }
 }

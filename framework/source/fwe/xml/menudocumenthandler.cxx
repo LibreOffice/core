@@ -733,7 +733,7 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     m_xWriteDocumentHandler( rDocumentHandler )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
+    m_xEmptyList = Reference< XAttributeList >( static_cast<XAttributeList *>(pList), UNO_QUERY );
     m_aAttributeType = ATTRIBUTE_TYPE_CDATA;
 }
 
@@ -745,7 +745,7 @@ void OWriteMenuDocumentHandler::WriteMenuDocument()
 throw ( SAXException, RuntimeException )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > rList( (XAttributeList *) pList , UNO_QUERY );
+    Reference< XAttributeList > rList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
     m_xWriteDocumentHandler->startDocument();
 
@@ -808,7 +808,7 @@ throw ( SAXException, RuntimeException )
                 else if ( !aCommandURL.isEmpty() && !AddonPopupMenu::IsCommandURLPrefix( aCommandURL ))
                 {
                     ::comphelper::AttributeList* pListMenu = new ::comphelper::AttributeList;
-                    Reference< XAttributeList > xListMenu( (XAttributeList *)pListMenu , UNO_QUERY );
+                    Reference< XAttributeList > xListMenu( static_cast<XAttributeList *>(pListMenu) , UNO_QUERY );
 
                     pListMenu->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
                                             m_aAttributeType,
@@ -859,7 +859,7 @@ throw ( SAXException, RuntimeException )
 void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
+    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
     pList->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
                                 m_aAttributeType,

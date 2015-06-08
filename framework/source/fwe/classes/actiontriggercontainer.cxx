@@ -74,13 +74,13 @@ Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const O
 throw ( ::com::sun::star::uno::Exception, RuntimeException, std::exception)
 {
     if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGER )
-        return (OWeakObject *)( new ActionTriggerPropertySet());
+        return static_cast<OWeakObject *>( new ActionTriggerPropertySet());
     else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERCONTAINER )
-        return (OWeakObject *)( new ActionTriggerContainer());
+        return static_cast<OWeakObject *>( new ActionTriggerContainer());
     else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERSEPARATOR )
-        return (OWeakObject *)( new ActionTriggerSeparatorPropertySet());
+        return static_cast<OWeakObject *>( new ActionTriggerSeparatorPropertySet());
     else
-        throw com::sun::star::uno::RuntimeException("Unknown service specifier!", (OWeakObject *)this );
+        throw com::sun::star::uno::RuntimeException("Unknown service specifier!", static_cast<OWeakObject *>(this) );
 }
 
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )

@@ -74,7 +74,7 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
     SAL_WARN_IF( !( xContext.is() && xOwner.is() ), "fwk", "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!" );
 
     m_bActivateListener = true;
-    xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
+    xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( static_cast<OWeakObject *>(this), UNO_QUERY ));
 }
 
 //  destructor
@@ -172,7 +172,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
             uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
             if ( xFrame.is() )
             {
-                xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
+                xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( static_cast<OWeakObject *>(this), UNO_QUERY ));
                 m_bActivateListener = false;
                 if ( m_pMenuManager )
                 {
@@ -199,7 +199,7 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
         sal_uInt16     nId    = pMenu->GetItemId(nPos);
         ::PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
         if ( pPopup )
-            impl_setAccelerators( (Menu *)pPopup, aAccel );
+            impl_setAccelerators( static_cast<Menu *>(pPopup), aAccel );
         else if ( nId && !pMenu->GetPopupMenu(nId))
         {
             vcl::KeyCode aCode = aAccel.GetKeyCode( nId );
@@ -231,13 +231,13 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
             if ( m_pMenuManager )
             {
                 // remove old menu from our system window if it was set before
-                if ( m_pMenuManager->GetMenu() == (Menu *)pSysWindow->GetMenuBar() )
+                if ( m_pMenuManager->GetMenu() == static_cast<Menu *>(pSysWindow->GetMenuBar()) )
                     pSysWindow->SetMenuBar( NULL );
 
                 // remove listener before we destruct ourself, so we cannot be called back afterwards
                 m_pMenuManager->RemoveListener();
 
-                (static_cast< ::com::sun::star::uno::XInterface* >((OWeakObject*)m_pMenuManager))->release();
+                (static_cast< ::com::sun::star::uno::XInterface* >(static_cast<OWeakObject*>(m_pMenuManager)))->release();
 
                 m_pMenuManager = 0;
             }

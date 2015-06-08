@@ -215,7 +215,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
         SolarMutexGuard aGuard;
         AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xContext );
-        xToolBar = Reference< ::com::sun::star::ui::XUIElement >( (OWeakObject *)pToolBarWrapper, UNO_QUERY );
+        xToolBar = Reference< ::com::sun::star::ui::XUIElement >( static_cast<OWeakObject *>(pToolBarWrapper), UNO_QUERY );
         Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
         xInit->initialize( aPropSeq );
     }

@@ -184,14 +184,14 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
 // XEventListener
 void SAL_CALL HeaderMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
 {
-    Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
+    Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
 
     if ( m_xPopupMenu.is() )
-        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
+        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
     m_xPopupMenu.clear();
 }
 

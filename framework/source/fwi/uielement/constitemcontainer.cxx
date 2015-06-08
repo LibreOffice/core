@@ -278,7 +278,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
     if ( sal_Int32( m_aItemVector.size()) > Index )
         return makeAny( m_aItemVector[Index] );
     else
-        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
 // XPropertySet

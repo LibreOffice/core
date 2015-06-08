@@ -99,11 +99,11 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com:
         {
             throw IllegalArgumentException(
                 WRONG_TYPE_EXCEPTION,
-                (OWeakObject *)this, 2 );
+                static_cast<OWeakObject *>(this), 2 );
         }
     }
     else
-        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
 void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
@@ -116,7 +116,7 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
         m_aPropertySetVector.erase(m_aPropertySetVector.begin() +  nIndex);
     }
     else
-        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
 // XIndexReplace
@@ -135,11 +135,11 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com
         {
             throw IllegalArgumentException(
                 WRONG_TYPE_EXCEPTION,
-                (OWeakObject *)this, 2 );
+                static_cast<OWeakObject *>(this), 2 );
         }
     }
     else
-        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
 // XIndexAccess
@@ -164,7 +164,7 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
         return a;
     }
     else
-        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
 // XElementAccess

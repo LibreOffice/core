@@ -541,7 +541,7 @@ throw (css::uno::RuntimeException, std::exception)
 void SAL_CALL TabWindow::windowClosing( const css::lang::EventObject& )
 throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Reference< css::lang::XComponent > xComponent( (OWeakObject *)this, css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XComponent > xComponent( static_cast<OWeakObject *>(this), css::uno::UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();
 }

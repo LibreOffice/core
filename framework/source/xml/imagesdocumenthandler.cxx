@@ -601,7 +601,7 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList            = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
+    m_xEmptyList            = Reference< XAttributeList >( static_cast<XAttributeList *>(pList), UNO_QUERY );
     m_aAttributeType        = ATTRIBUTE_TYPE_CDATA;
     m_aXMLImageNS           = XMLNS_IMAGE_PREFIX;
     m_aXMLXlinkNS           = XMLNS_XLINK_PREFIX;
@@ -629,7 +629,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     }
 
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
+    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
     pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_IMAGE),
                          m_aAttributeType,
@@ -670,7 +670,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
 ( SAXException, RuntimeException )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
+    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
     // save required attributes
     pList->AddAttribute( m_aAttributeXlinkType,
@@ -740,7 +740,7 @@ void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage 
 ( SAXException, RuntimeException )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
+    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
     pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_BITMAPINDEX,
                          m_aAttributeType,
@@ -778,7 +778,7 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
 ( SAXException, RuntimeException )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
+    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
     // save required attributes
     pList->AddAttribute( m_aAttributeXlinkType,

@@ -1052,7 +1052,7 @@ throw ( NoSuchElementException, RuntimeException )
             if ( bSubstRequired )
             {
                 OUString aMsg( "Endless recursion detected. Cannot substitute variables!" );
-                throw NoSuchElementException( aMsg, (cppu::OWeakObject *)this );
+                throw NoSuchElementException( aMsg, static_cast<cppu::OWeakObject *>(this) );
             }
             else
                 aResult = rText;
@@ -1063,7 +1063,7 @@ throw ( NoSuchElementException, RuntimeException )
             if ( bSubstRequired )
             {
                 OUString aMsg( "Unknown variable found!" );
-                throw NoSuchElementException( aMsg, (cppu::OWeakObject *)this );
+                throw NoSuchElementException( aMsg, static_cast<cppu::OWeakObject *>(this) );
             }
             else
                 aResult = aWorkText;
@@ -1201,7 +1201,7 @@ throw ( NoSuchElementException, RuntimeException )
             else
             {
                 OUString aExceptionText("Unknown variable!");
-                throw NoSuchElementException(aExceptionText, (cppu::OWeakObject *)this);
+                throw NoSuchElementException(aExceptionText, static_cast<cppu::OWeakObject *>(this));
             }
         }
         else
@@ -1216,7 +1216,7 @@ throw ( NoSuchElementException, RuntimeException )
         }
 
         OUString aExceptionText("Unknown variable!");
-        throw NoSuchElementException(aExceptionText, (cppu::OWeakObject *)this);
+        throw NoSuchElementException(aExceptionText, static_cast<cppu::OWeakObject *>(this));
     }
 }
 

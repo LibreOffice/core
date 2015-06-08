@@ -177,7 +177,7 @@ Any SAL_CALL MenuBarManager::queryInterface( const Type & rType ) throw ( Runtim
                 (static_cast< ::com::sun::star::frame::XStatusListener* >(this)),
                 (static_cast< ::com::sun::star::frame::XFrameActionListener* >(this)),
                 (static_cast< ::com::sun::star::ui::XUIConfigurationListener* >(this)),
-                (static_cast< XEventListener* >((XStatusListener *)this)),
+                (static_cast< XEventListener* >(static_cast<XStatusListener *>(this))),
                 (static_cast< XComponent* >(this)),
                 (static_cast< ::com::sun::star::awt::XSystemDependentMenuPeer* >(this)));
 
@@ -547,7 +547,7 @@ void MenuBarManager::RemoveListener()
                 if ( xEventListener.is() )
                 {
                     EventObject aEventObject;
-                    aEventObject.Source = (OWeakObject *)this;
+                    aEventObject.Source = static_cast<OWeakObject *>(this);
                     xEventListener->disposing( aEventObject );
                 }
 
@@ -1205,7 +1205,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pNewPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( nItemId, pNewPopupMenu );
-                pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( (OWeakObject *)pVCLXPopupMenu, UNO_QUERY );
+                pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( pItemHandler );
                 delete pPopup;
@@ -1335,7 +1335,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
-                pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( (OWeakObject *)pVCLXPopupMenu, UNO_QUERY );
+                pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
 
                 if ( bAccessibilityEnabled && CreatePopupMenuController( pItemHandler ) )
                 {
@@ -1939,7 +1939,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
                         VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                         PopupMenu* pCtlPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                         pAddonMenu->SetPopupMenu( pMenuItemHandler->nItemId, pCtlPopupMenu );
-                        pMenuItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( (OWeakObject *)pVCLXPopupMenu, UNO_QUERY );
+                        pMenuItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
 
                     }
                 }

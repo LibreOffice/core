@@ -93,13 +93,13 @@ Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( con
 throw ( Exception,  RuntimeException, std::exception )
 {
     if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGER )
-        return (OWeakObject *)( new ActionTriggerPropertySet());
+        return static_cast<OWeakObject *>( new ActionTriggerPropertySet());
     else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERCONTAINER )
-        return (OWeakObject *)( new ActionTriggerContainer());
+        return static_cast<OWeakObject *>( new ActionTriggerContainer());
     else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERSEPARATOR )
-        return (OWeakObject *)( new ActionTriggerSeparatorPropertySet());
+        return static_cast<OWeakObject *>( new ActionTriggerSeparatorPropertySet());
     else
-        throw com::sun::star::uno::RuntimeException("Unknown service specifier!", (OWeakObject *)this );
+        throw com::sun::star::uno::RuntimeException("Unknown service specifier!", static_cast<OWeakObject *>(this) );
 }
 
 Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
@@ -287,7 +287,7 @@ void RootActionTriggerContainer::FillContainer()
 {
     m_bContainerCreated = true;
     m_bInContainerCreation = true;
-    Reference<XIndexContainer> xXIndexContainer( (OWeakObject *)this, UNO_QUERY );
+    Reference<XIndexContainer> xXIndexContainer( static_cast<OWeakObject *>(this), UNO_QUERY );
     ActionTriggerHelper::FillActionTriggerContainerFromMenu(
         xXIndexContainer,
         m_pMenu );

@@ -151,7 +151,7 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw 
         AddonsToolBarManager* pToolBarManager = static_cast< AddonsToolBarManager *>( m_xToolBarManager.get() );
         if ( pToolBarManager )
         {
-            vcl::Window* pWindow = (vcl::Window *)pToolBarManager->GetToolBar();
+            vcl::Window* pWindow = static_cast<vcl::Window *>(pToolBarManager->GetToolBar());
             return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
         }
     }

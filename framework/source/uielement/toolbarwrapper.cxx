@@ -259,7 +259,7 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::c
         ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
         if ( pToolBarManager )
         {
-            vcl::Window* pWindow = (vcl::Window *)pToolBarManager->GetToolBar();
+            vcl::Window* pWindow = static_cast<vcl::Window *>(pToolBarManager->GetToolBar());
             return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
         }
     }

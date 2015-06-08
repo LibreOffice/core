@@ -96,7 +96,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
 // XEventListener
 void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
 {
-    Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
+    Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
     osl::MutexGuard aLock( m_aMutex );
     OSL_TRACE("disposing");
@@ -106,7 +106,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
 
     if ( m_xPopupMenu.is() )
     {
-        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
+        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
         OSL_TRACE("removed listener");
     }
     m_xPopupMenu.clear();

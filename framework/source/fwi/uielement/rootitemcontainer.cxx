@@ -187,7 +187,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
     if ( sal_Int32( m_aItemVector.size()) > Index )
         return makeAny( m_aItemVector[Index] );
     else
-        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
 // XIndexContainer
@@ -207,10 +207,10 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
             m_aItemVector.insert( aIter, aSeq );
         }
         else
-            throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+            throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
     }
     else
-        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, (OWeakObject *)this, 2 );
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, static_cast<OWeakObject *>(this), 2 );
 }
 
 void SAL_CALL RootItemContainer::removeByIndex( sal_Int32 nIndex )
@@ -222,7 +222,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
         m_aItemVector.erase(m_aItemVector.begin() + nIndex);
     }
     else
-        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
 void SAL_CALL RootItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
@@ -235,22 +235,22 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
         if ( sal_Int32( m_aItemVector.size()) > Index )
             m_aItemVector[Index] = aSeq;
         else
-            throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+            throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
     }
     else
-        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, (OWeakObject *)this, 2 );
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, static_cast<OWeakObject *>(this), 2 );
 }
 
 Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithContext( const Reference< XComponentContext >& )
 throw ( Exception, RuntimeException, std::exception)
 {
-    return (OWeakObject *)(new ItemContainer( m_aShareMutex ));
+    return static_cast<OWeakObject *>(new ItemContainer( m_aShareMutex ));
 }
 
 Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithArgumentsAndContext( const Sequence< Any >&, const Reference< XComponentContext >& )
 throw (Exception, RuntimeException, std::exception)
 {
-    return (OWeakObject *)(new ItemContainer( m_aShareMutex ));
+    return static_cast<OWeakObject *>(new ItemContainer( m_aShareMutex ));
 }
 
 // XPropertySet helper

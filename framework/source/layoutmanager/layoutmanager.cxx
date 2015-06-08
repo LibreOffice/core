@@ -1170,7 +1170,7 @@ throw (uno::RuntimeException)
                 pSysWindow->SetMenuBar(pMenuBar, m_xFrame);
 
             m_bInplaceMenuSet = true;
-            m_xInplaceMenuBar = Reference< XComponent >( (OWeakObject *)m_pInplaceMenuBar, UNO_QUERY );
+            m_xInplaceMenuBar = Reference< XComponent >( static_cast<OWeakObject *>(m_pInplaceMenuBar), UNO_QUERY );
         }
 
         aWriteLock.clear();

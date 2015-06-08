@@ -488,7 +488,7 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
+    m_xEmptyList        = Reference< XAttributeList >( static_cast<XAttributeList *>(pList), UNO_QUERY );
     m_aAttributeType    = ATTRIBUTE_TYPE_CDATA;
     m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
     m_aXMLStatusBarNS   = XMLNS_STATUSBAR_PREFIX;
@@ -514,7 +514,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     }
 
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
+    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
     pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_STATUSBAR ),
                          m_aAttributeType,
@@ -572,7 +572,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
 throw ( SAXException, RuntimeException )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
+    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
     if (m_aAttributeURL.isEmpty() )
     {
