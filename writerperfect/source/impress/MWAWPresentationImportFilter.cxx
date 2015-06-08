@@ -158,7 +158,7 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL MWAWPresentationImportFilter_createInstance(const Reference< XComponentContext > &rContext)
 throw(Exception)
 {
-    return (cppu::OWeakObject *) new MWAWPresentationImportFilter(rContext);
+    return static_cast<cppu::OWeakObject *>(new MWAWPresentationImportFilter(rContext));
 }
 
 // XServiceInfo

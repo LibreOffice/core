@@ -61,7 +61,7 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL AbiWordImportFilter_createInstance(const Reference< XComponentContext > &rContext)
 throw(Exception)
 {
-    return (cppu::OWeakObject *) new AbiWordImportFilter(rContext);
+    return static_cast<cppu::OWeakObject *>(new AbiWordImportFilter(rContext));
 }
 
 // XServiceInfo

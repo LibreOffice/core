@@ -60,7 +60,7 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL PageMakerImportFilter_createInstance(const Reference< XComponentContext > &rContext)
 throw(Exception)
 {
-    return (cppu::OWeakObject *) new PageMakerImportFilter(rContext);
+    return static_cast<cppu::OWeakObject *>(new PageMakerImportFilter(rContext));
 }
 
 // XServiceInfo

@@ -106,7 +106,7 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL MSWorksImportFilter_createInstance(const Reference< XComponentContext > &rContext)
 throw(Exception)
 {
-    return (cppu::OWeakObject *) new MSWorksImportFilter(rContext);
+    return static_cast<cppu::OWeakObject *>(new MSWorksImportFilter(rContext));
 }
 
 // XServiceInfo
