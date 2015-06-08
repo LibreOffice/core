@@ -64,16 +64,16 @@ namespace connectivity
         const OUString& getErrorMessage() const {return m_sErrorMessage;}
         OString getStatement() const { return m_sStatement; }
 
-        sal_Int32 SQLlex();
+        static sal_Int32 SQLlex();
         // set this as scanner for flex
         void setScanner(bool _bNull=false);
         // rules settings
         void SetRule(sal_Int32 nRule) {m_nRule = nRule;}
-        sal_Int32   GetGERRule() const;
-        sal_Int32   GetENGRule() const;
-        sal_Int32   GetSQLRule() const;
-        sal_Int32   GetDATERule() const;
-        sal_Int32   GetSTRINGRule() const;
+        static sal_Int32 GetGERRule();
+        static sal_Int32 GetENGRule();
+        static sal_Int32 GetSQLRule();
+        static sal_Int32 GetDATERule();
+        static sal_Int32 GetSTRINGRule();
         inline sal_Int32 GetCurrentPos() const { return m_nCurrentPos; }
     };
 }
