@@ -171,7 +171,7 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
 uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
-    return (cppu::OWeakObject*) new ScaPricingAddIn();
+    return static_cast<cppu::OWeakObject*>(new ScaPricingAddIn());
 }
 
 extern "C" {

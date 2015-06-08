@@ -166,7 +166,7 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
 uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
-    return (cppu::OWeakObject*) new ScaDateAddIn();
+    return static_cast<cppu::OWeakObject*>(new ScaDateAddIn());
 }
 
 extern "C" {

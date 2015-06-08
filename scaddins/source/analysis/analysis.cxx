@@ -226,7 +226,7 @@ uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
 uno::Reference< uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& xServiceFact )
 {
-    return (cppu::OWeakObject*) new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) );
+    return static_cast<cppu::OWeakObject*>(new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) ));
 }
 
 // XServiceName
