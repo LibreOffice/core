@@ -237,7 +237,7 @@ Class##_CreateInstance( const com::sun::star::uno::Reference<               \
     throw( com::sun::star::uno::Exception )                                 \
 {                                                                           \
     com::sun::star::lang::XServiceInfo* pX =                                \
-                (com::sun::star::lang::XServiceInfo*)new Class( rSMgr );    \
+                static_cast<com::sun::star::lang::XServiceInfo*>(new Class( rSMgr ));    \
     return com::sun::star::uno::Reference<                                  \
                             com::sun::star::uno::XInterface >::query( pX ); \
 }
@@ -250,7 +250,7 @@ Class##_CreateInstance( const com::sun::star::uno::Reference<               \
     throw( com::sun::star::uno::Exception )                                 \
 {                                                                           \
     com::sun::star::lang::XServiceInfo* pX =                                \
-                (com::sun::star::lang::XServiceInfo*)new Class( ucbhelper::getComponentContext(rSMgr) );    \
+                static_cast<com::sun::star::lang::XServiceInfo*>(new Class( ucbhelper::getComponentContext(rSMgr) ));    \
     return com::sun::star::uno::Reference<                                  \
                             com::sun::star::uno::XInterface >::query( pX ); \
 }
