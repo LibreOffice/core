@@ -51,17 +51,6 @@ void Tile::setPixbuf(GdkPixbuf *buffer)
    TileBuffer class member functions
    ----------------------------------
 */
-void TileBuffer::setZoom(float newZoomFactor, int rows, int columns)
-{
-    m_fZoomFactor = newZoomFactor;
-
-    resetAllTiles();
-
-    // set new buffer width and height
-    m_nWidth = columns;
-    m_nHeight = rows;
-}
-
 void TileBuffer::resetAllTiles()
 {
     std::map<int, Tile>::iterator it = m_mTiles.begin();
@@ -84,7 +73,7 @@ void TileBuffer::setInvalid(int x, int y)
     }
 }
 
-Tile& TileBuffer::getTile(int x, int y)
+Tile& TileBuffer::getTile(int x, int y, float aZoom)
 {
     int index = x * m_nWidth + y;
     if(m_mTiles.find(index) == m_mTiles.end() || !m_mTiles[index].valid)
@@ -99,16 +88,16 @@ Tile& TileBuffer::getTile(int x, int y)
 
         unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
         GdkRectangle aTileRectangle;
-        aTileRectangle.x = pixelToTwip(m_nTileSize, m_fZoomFactor) * y;
-        aTileRectangle.y = pixelToTwip(m_nTileSize, m_fZoomFactor) * x;
+        aTileRectangle.x = pixelToTwip(m_nTileSize, aZoom) * y;
+        aTileRectangle.y = pixelToTwip(m_nTileSize, aZoom) * x;
 
         g_info ("Rendering (%d, %d)", x, y);
         m_pLOKDocument->pClass->paintTile(m_pLOKDocument,
                                           pBuffer,
                                           m_nTileSize, m_nTileSize,
                                           aTileRectangle.x, aTileRectangle.y,
-                                          pixelToTwip(m_nTileSize, m_fZoomFactor),
-                                          pixelToTwip(m_nTileSize, m_fZoomFactor));
+                                          pixelToTwip(m_nTileSize, aZoom),
+                                          pixelToTwip(m_nTileSize, aZoom));
 
         //create a mapping for it
         m_mTiles[index].setPixbuf(pPixBuf);
