@@ -2648,7 +2648,7 @@ namespace cppcanvas
             class ActionRenderer
             {
             public:
-                ActionRenderer( const ::basegfx::B2DHomMatrix& rTransformation ) :
+                explicit ActionRenderer( const ::basegfx::B2DHomMatrix& rTransformation ) :
                     maTransformation( rTransformation ),
                     mbRet( true )
                 {
@@ -2683,7 +2683,7 @@ namespace cppcanvas
             class AreaQuery
             {
             public:
-                AreaQuery( const ::basegfx::B2DHomMatrix& rTransformation ) :
+                explicit AreaQuery( const ::basegfx::B2DHomMatrix& rTransformation ) :
                     maTransformation( rTransformation ),
                     maBounds()
                 {

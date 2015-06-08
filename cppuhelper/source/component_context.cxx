@@ -285,16 +285,16 @@ static inline void try_dispose( Reference< lang::XComponent > const & xComp )
     }
 }
 
-
-
 class DisposingForwarder
     : public WeakImplHelper1< lang::XEventListener >
 {
     Reference< lang::XComponent > m_xTarget;
 
-    inline DisposingForwarder( Reference< lang::XComponent > const & xTarget )
+    explicit DisposingForwarder( Reference< lang::XComponent > const & xTarget )
         : m_xTarget( xTarget )
-        { OSL_ASSERT( m_xTarget.is() ); }
+    {
+        OSL_ASSERT( m_xTarget.is() );
+    }
 public:
     // listens at source for disposing, then disposes target
     static inline void listen(

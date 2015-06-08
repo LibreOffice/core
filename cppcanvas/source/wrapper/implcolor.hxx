@@ -37,7 +37,7 @@ namespace cppcanvas
         class ImplColor : public Color
         {
         public:
-            ImplColor( const ::com::sun::star::uno::Reference<
+            explicit ImplColor( const ::com::sun::star::uno::Reference<
                                ::com::sun::star::rendering::XGraphicDevice >& rDevice );
             virtual ~ImplColor();
 

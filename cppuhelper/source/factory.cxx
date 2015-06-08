@@ -877,7 +877,7 @@ class OFactoryProxyHelper : public WeakImplHelper< XServiceInfo, XSingleServiceF
 
 public:
 
-    OFactoryProxyHelper( const Reference<XSingleServiceFactory > & rFactory )
+    explicit OFactoryProxyHelper( const Reference<XSingleServiceFactory > & rFactory )
         : xFactory( rFactory )
         {}
 

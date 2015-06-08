@@ -82,7 +82,7 @@ struct ObjectEntry
     ::std::vector< InterfaceEntry > aInterfaces;
     bool mixedObject;
 
-    inline ObjectEntry( const OUString & rOId_ );
+    explicit inline ObjectEntry( const OUString & rOId_ );
 
     inline void append(
         uno_DefaultEnvironment * pEnv,

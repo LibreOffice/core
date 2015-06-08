@@ -33,7 +33,7 @@ struct IdentityMapping : public uno_Mapping
     sal_Int32        m_nRef;
     uno::Environment m_env;
 
-    IdentityMapping(uno::Environment const & rEnv);
+    explicit IdentityMapping(uno::Environment const & rEnv);
 };
 
 extern "C"

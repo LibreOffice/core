@@ -90,7 +90,7 @@ class InnerThread : public osl::Thread
     AffineBridge * m_pAffineBridge;
 
 public:
-    InnerThread(AffineBridge * threadEnvironment)
+    explicit InnerThread(AffineBridge * threadEnvironment)
         : m_pAffineBridge(threadEnvironment)
         {
             create();
@@ -113,7 +113,7 @@ class OuterThread : public osl::Thread
     AffineBridge * m_pAffineBridge;
 
 public:
-    OuterThread(AffineBridge * threadEnvironment);
+    explicit OuterThread(AffineBridge * threadEnvironment);
 };
 
 OuterThread::OuterThread(AffineBridge * threadEnvironment)

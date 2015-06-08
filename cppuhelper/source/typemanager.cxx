@@ -136,7 +136,7 @@ class PublishableDescription:
     public cppu::WeakImplHelper1< css::reflection::XPublished >
 {
 protected:
-    PublishableDescription(bool published): published_(published) {}
+    explicit PublishableDescription(bool published): published_(published) {}
 
     virtual ~PublishableDescription() {}
 
@@ -847,7 +847,7 @@ MethodDescription::getExceptions() throw (css::uno::RuntimeException, std::excep
 
 class BaseOffset: private boost::noncopyable {
 public:
-    BaseOffset(
+    explicit BaseOffset(
         css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >
             const & description);
 

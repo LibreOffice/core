@@ -76,7 +76,7 @@ class OPropertySetHelperInfo_Impl
     Sequence < Property > aInfos;
 
 public:
-    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
+    explicit OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
 
     // XPropertySetInfo-methods
     virtual Sequence< Property > SAL_CALL getProperties() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

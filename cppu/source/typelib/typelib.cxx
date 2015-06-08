@@ -920,7 +920,7 @@ public:
 
     typedef std::vector< Entry > List;
 
-    BaseList(typelib_InterfaceTypeDescription const * desc);
+    explicit BaseList(typelib_InterfaceTypeDescription const * desc);
 
     List const & getList() const { return list; }
 

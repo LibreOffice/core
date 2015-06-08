@@ -50,7 +50,7 @@ namespace cppcanvas
         class ImplCanvas : public virtual Canvas
         {
         public:
-            ImplCanvas( const ::com::sun::star::uno::Reference<
+            explicit ImplCanvas( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::rendering::XCanvas >& rCanvas );
             virtual ~ImplCanvas();
 

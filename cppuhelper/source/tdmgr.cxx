@@ -618,7 +618,7 @@ class EventListenerImpl
     Reference< container::XHierarchicalNameAccess > m_xTDMgr;
 
 public:
-    inline EventListenerImpl(
+    explicit EventListenerImpl(
         Reference< container::XHierarchicalNameAccess > const & xTDMgr )
         : m_xTDMgr( xTDMgr )
         {}

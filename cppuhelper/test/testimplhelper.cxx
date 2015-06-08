@@ -175,7 +175,7 @@ struct TestWeakImpl : public WeakImplHelper4< CA, DBA, FE, G >
         { return OUString("g"); }
 
 protected:
-    TestWeakImpl(int) {}
+    explicit TestWeakImpl(int) {}
 
     TestWeakImpl(int, int) {}
 

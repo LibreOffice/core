@@ -151,7 +151,7 @@ SAL_WNOUNREACHABLE_CODE_PUSH
 struct SAL_DLLPUBLIC_EXPORT ClassDataBase {
     ClassDataBase();
 
-    ClassDataBase(sal_Int32);
+    explicit ClassDataBase(sal_Int32);
 
     ~ClassDataBase();
 };

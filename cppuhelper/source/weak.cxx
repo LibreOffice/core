@@ -51,7 +51,7 @@ public:
     /**
         Hold the weak object without an acquire (only the pointer).
      */
-    OWeakConnectionPoint( OWeakObject* pObj )
+    explicit OWeakConnectionPoint( OWeakObject* pObj )
         : m_aRefCount( 0 )
         , m_pObject(pObj)
         , m_aReferences( getWeakMutex() )
@@ -320,7 +320,7 @@ namespace uno
 class OWeakRefListener: public XReference, private boost::noncopyable
 {
 public:
-    OWeakRefListener(const Reference< XInterface >& xInt);
+    explicit OWeakRefListener(const Reference< XInterface >& xInt);
     virtual ~OWeakRefListener();
 
     // XInterface

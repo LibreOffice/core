@@ -38,7 +38,7 @@ namespace cppcanvas
         class ImplBitmapCanvas : public virtual BitmapCanvas, protected virtual ImplCanvas
         {
         public:
-            ImplBitmapCanvas( const ::com::sun::star::uno::Reference<
+            explicit ImplBitmapCanvas( const ::com::sun::star::uno::Reference<
                                   ::com::sun::star::rendering::XBitmapCanvas >& rCanvas );
             virtual ~ImplBitmapCanvas();
 

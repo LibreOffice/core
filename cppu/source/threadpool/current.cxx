@@ -106,41 +106,35 @@ class ThreadKey
     oslThreadKeyCallbackFunction _pCallback;
 
 public:
-    inline oslThreadKey getThreadKey();
-
-    inline ThreadKey( oslThreadKeyCallbackFunction pCallback );
-    inline ~ThreadKey();
-};
-
-inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback )
-    : _bInit( false )
-    , _hThreadKey( 0 )
-    , _pCallback( pCallback )
-{
-}
-
-inline ThreadKey::~ThreadKey()
-{
-    if (_bInit)
+    oslThreadKey getThreadKey()
     {
-        ::osl_destroyThreadKey( _hThreadKey );
-    }
-}
-
-inline oslThreadKey ThreadKey::getThreadKey()
-{
-    if (! _bInit)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
         if (! _bInit)
         {
-            _hThreadKey = ::osl_createThreadKey( _pCallback );
-            _bInit = true;
+            MutexGuard aGuard( Mutex::getGlobalMutex() );
+            if (! _bInit)
+            {
+                _hThreadKey = ::osl_createThreadKey( _pCallback );
+                _bInit = true;
+            }
+        }
+        return _hThreadKey;
+    }
+
+    explicit ThreadKey( oslThreadKeyCallbackFunction pCallback )
+        : _bInit(false)
+        , _hThreadKey(0)
+        , _pCallback(pCallback)
+    {
+    }
+
+    ~ThreadKey()
+    {
+        if (_bInit)
+        {
+            ::osl_destroyThreadKey( _hThreadKey );
         }
     }
-    return _hThreadKey;
-}
-
+};
 
 extern "C" void SAL_CALL delete_IdContainer( void * p )
 {

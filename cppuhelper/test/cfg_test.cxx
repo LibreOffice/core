@@ -79,7 +79,7 @@ class ServiceImpl0
     Reference< XComponentContext > m_xContext;
 
 public:
-    ServiceImpl0( Reference< XComponentContext > const & xContext );
+    explicit ServiceImpl0( Reference< XComponentContext > const & xContext );
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& rArgs ) throw (Exception, RuntimeException);
@@ -150,9 +150,10 @@ sal_Bool ServiceImpl0::supportsService( const OUString & rServiceName )
 class ServiceImpl1 : public ServiceImpl0
 {
 public:
-    inline ServiceImpl1( Reference< XComponentContext > const & xContext )
+    explicit ServiceImpl1( Reference< XComponentContext > const & xContext )
         : ServiceImpl0( xContext )
-        {}
+    {
+    }
 
     // XServiceInfo
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
