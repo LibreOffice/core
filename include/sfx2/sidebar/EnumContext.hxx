@@ -68,6 +68,7 @@ public:
         Context_Cell,
         Context_Chart,
         Context_Draw,
+        Context_DrawLine,
         Context_DrawPage,
         Context_DrawText,
         Context_EditCell,
