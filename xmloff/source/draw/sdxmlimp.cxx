@@ -264,7 +264,7 @@ OUString SAL_CALL classname##_getImplementationName() throw()\
 }\
 uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
 {\
-    return (cppu::OWeakObject*)new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags ); \
+    return static_cast<cppu::OWeakObject*>(new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags )); \
 }
 
 SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", false, SvXMLImportFlags::ALL )

@@ -129,7 +129,7 @@ void XMLPropertyBackpatcher<A>::SetProperty(
         {
             // create backpatch list for this name
             BackpatchListType* pTmp = new BackpatchListType() ;
-            aBackpatchListMap[sName] = (void*)pTmp;
+            aBackpatchListMap[sName] = static_cast<void*>(pTmp);
         }
 
         // insert footnote

@@ -122,7 +122,7 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventImport( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new XMLAutoTextEventImport( comphelper::getComponentContext(rSMgr) ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

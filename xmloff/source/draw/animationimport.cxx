@@ -1431,7 +1431,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
 
 Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
-    return (cppu::OWeakObject*)new xmloff::AnimationsImport( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new xmloff::AnimationsImport( comphelper::getComponentContext(rSMgr) ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

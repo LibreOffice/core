@@ -1590,7 +1590,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 }
             }
 
-            GetTextListHelper().SetListItem( (XMLTextListItemContext *)0 );
+            GetTextListHelper().SetListItem( nullptr );
         }
         else
         {

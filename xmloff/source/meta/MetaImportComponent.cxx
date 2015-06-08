@@ -92,7 +92,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance
     throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new XMLMetaImportComponent( comphelper::getComponentContext(rSMgr));
+    return static_cast<cppu::OWeakObject*>(new XMLMetaImportComponent( comphelper::getComponentContext(rSMgr)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

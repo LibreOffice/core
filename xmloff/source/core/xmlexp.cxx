@@ -403,7 +403,7 @@ void SvXMLExport::_InitCtor()
             GetXMLToken(XML_NP_CSS3TEXT), GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
     }
 
-    mxAttrList = (xml::sax::XAttributeList*)mpAttrList;
+    mxAttrList = static_cast<xml::sax::XAttributeList*>(mpAttrList);
 
     msGraphicObjectProtocol = "vnd.sun.star.GraphicObject:";
     msEmbeddedObjectProtocol = "vnd.sun.star.EmbeddedObject:";

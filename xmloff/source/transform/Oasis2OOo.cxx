@@ -2038,7 +2038,7 @@ Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
     throw( Exception )
 {
     SAL_INFO("xmloff.transform", "Creating Oasis2OOoTransformer");
-    return (cppu::OWeakObject*)new Oasis2OOoTransformer;
+    return static_cast<cppu::OWeakObject*>(new Oasis2OOoTransformer);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

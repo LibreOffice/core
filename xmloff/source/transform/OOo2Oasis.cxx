@@ -2071,7 +2071,7 @@ Reference< XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
         const Reference< XMultiServiceFactory > & )
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new OOo2OasisTransformer();
+    return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer());
 }
 
 #define OOO_IMPORTER( className, implName, subServiceName )             \
@@ -2091,8 +2091,8 @@ Reference< XInterface > SAL_CALL className##_createInstance(            \
         const Reference< XMultiServiceFactory > & )                     \
     throw( Exception )                                                  \
 {                                                                       \
-    return (cppu::OWeakObject*)new OOo2OasisTransformer( implName,      \
-                                         subServiceName );              \
+    return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer( implName,      \
+                                         subServiceName ));              \
 }
 
 OOO_IMPORTER( XMLWriterImportOOO,
