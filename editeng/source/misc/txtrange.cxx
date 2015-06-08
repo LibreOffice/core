@@ -531,8 +531,8 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
         }
         else if( bSubtract ) // Subtract, if necessary separate
         {
-            long nOld;
-            if( nLeft > ( nOld = (*pOld)[ nLeftPos - 1 ] ) )
+            const long nOld = (*pOld)[nLeftPos - 1];
+            if (nLeft > nOld)
             {   // Now we split the left part...
                 if( nLeft - 1 > nOld )
                 {
@@ -544,7 +544,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
             }
             if( nRightPos - nLeftPos > 1 )
                 pOld->erase( pOld->begin() + nLeftPos, pOld->begin() + nRightPos - 1 );
-            if( ++nRight >= ( nOld = (*pOld)[ nLeftPos ] ) )
+            if (++nRight >= (*pOld)[nLeftPos])
                 pOld->erase( pOld->begin() + nLeftPos - 1, pOld->begin() + nLeftPos + 1 );
             else
                 (*pOld)[ nLeftPos - 1 ] = nRight;
