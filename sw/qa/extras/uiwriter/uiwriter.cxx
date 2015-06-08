@@ -51,6 +51,7 @@
 #include "com/sun/star/util/SearchAlgorithms.hpp"
 #include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
 #include "com/sun/star/sdbcx/XTablesSupplier.hpp"
+#include <osl/file.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -90,6 +91,7 @@ public:
     void testTdf68183();
     void testCp1000115();
     void testTdf90003();
+    void testExportToPicture();
     void testSearchWithTransliterate();
     void testTableBackgroundColor();
     void testTdf90362();
@@ -130,6 +132,7 @@ public:
     CPPUNIT_TEST(testTdf68183);
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
+    CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf90362);
@@ -870,6 +873,32 @@ void SwUiWriterTest::testTdf90003()
     // This was 1: an unexpected fly portion was created, resulting in too
     // large x position for the empty paragraph marker.
     assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 0);
+}
+
+void SwUiWriterTest::testExportToPicture()
+{
+    createDoc();
+    uno::Sequence<beans::PropertyValue> aFilterData =
+    {
+        beans::PropertyValue("PixelWidth", sal_Int32(0), uno::makeAny(sal_Int32(610)), beans::PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("PixelHeight", sal_Int32(0), uno::makeAny(sal_Int32(610)), beans::PropertyState_DIRECT_VALUE)
+    };
+    uno::Sequence<beans::PropertyValue> aDescriptor =
+    {
+        beans::PropertyValue("FilterName", sal_Int32(0), uno::makeAny(OUString("writer_png_Export")), beans::PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("FilterData", sal_Int32(0), uno::makeAny(aFilterData), beans::PropertyState_DIRECT_VALUE)
+    };
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    sal_Bool extchk = aTempFile.IsValid();
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), extchk);
+    osl::File tmpFile(aTempFile.GetURL());
+    tmpFile.open(sal_uInt32(osl_File_OpenFlag_Read));
+    sal_uInt64 val;
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
+    CPPUNIT_ASSERT(val > 100);
+    aTempFile.EnableKillingFile();
 }
 
 void SwUiWriterTest::testSearchWithTransliterate()
