@@ -1787,28 +1787,36 @@ void ScDocument::DeleteArea(
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
 
-    // Record the positions of top and/or bottom formula groups that intersect
-    // the area borders.
     std::vector<ScAddress> aGroupPos;
-    sc::EndListeningContext aCxt(*this);
-    ScRange aRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
-    for (size_t i = 0; i < maTabs.size(); ++i)
+    // Destroy and reconstruct listeners only if content is affected.
+    bool bDelContent = ((nDelFlag & ~IDF_CONTENTS) != nDelFlag);
+    if (bDelContent)
     {
-        aRange.aStart.SetTab(i);
-        aRange.aEnd.SetTab(i);
+        // Record the positions of top and/or bottom formula groups that intersect
+        // the area borders.
+        sc::EndListeningContext aCxt(*this);
+        ScRange aRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+        for (size_t i = 0; i < maTabs.size(); ++i)
+        {
+            aRange.aStart.SetTab(i);
+            aRange.aEnd.SetTab(i);
 
-        EndListeningIntersectedGroups(aCxt, aRange, &aGroupPos);
+            EndListeningIntersectedGroups(aCxt, aRange, &aGroupPos);
+        }
+        aCxt.purgeEmptyBroadcasters();
     }
-    aCxt.purgeEmptyBroadcasters();
 
     for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
             if ( rMark.GetTableSelect(i) || bIsUndo )
                 maTabs[i]->DeleteArea(nCol1, nRow1, nCol2, nRow2, nDelFlag, bBroadcast, pBroadcastSpans);
 
-    // Re-start listeners on those top bottom groups that have been split.
-    SetNeedsListeningGroups(aGroupPos);
-    StartNeededListeners();
+    if (bDelContent)
+    {
+        // Re-start listeners on those top bottom groups that have been split.
+        SetNeedsListeningGroups(aGroupPos);
+        StartNeededListeners();
+    }
 }
 
 void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,
