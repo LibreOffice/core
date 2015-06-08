@@ -206,7 +206,7 @@ void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
     if ( IsFormatted() )
     {
         FormatFullDoc();
-        UpdateViews( (EditView*) 0);
+        UpdateViews( nullptr);
     }
 }
 
@@ -227,7 +227,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
     if ( IsFormatted() )
     {
         FormatFullDoc();
-        UpdateViews( (EditView*) 0);
+        UpdateViews( nullptr);
     }
 }
 

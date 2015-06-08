@@ -90,35 +90,35 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
     {
         SvxFontHeightItem aFontHeightItem( 0, 100, EE_CHAR_FONTHEIGHT );
         aTemp <<= (float)rDesc.Height;
-        ((SfxPoolItem*)&aFontHeightItem)->PutValue( aTemp, MID_FONTHEIGHT|CONVERT_TWIPS );
+        static_cast<SfxPoolItem*>(&aFontHeightItem)->PutValue( aTemp, MID_FONTHEIGHT|CONVERT_TWIPS );
         rSet.Put(aFontHeightItem);
     }
 
     {
         SvxPostureItem aPostureItem( (FontItalic)0, EE_CHAR_ITALIC );
         aTemp <<= rDesc.Slant;
-        ((SfxPoolItem*)&aPostureItem)->PutValue( aTemp, MID_POSTURE );
+        static_cast<SfxPoolItem*>(&aPostureItem)->PutValue( aTemp, MID_POSTURE );
         rSet.Put(aPostureItem);
     }
 
     {
         SvxUnderlineItem aUnderlineItem( (FontUnderline)0, EE_CHAR_UNDERLINE );
         aTemp <<= (sal_Int16)rDesc.Underline;
-        ((SfxPoolItem*)&aUnderlineItem)->PutValue( aTemp, MID_TL_STYLE );
+        static_cast<SfxPoolItem*>(&aUnderlineItem)->PutValue( aTemp, MID_TL_STYLE );
         rSet.Put( aUnderlineItem );
     }
 
     {
         SvxWeightItem aWeightItem( (FontWeight)0, EE_CHAR_WEIGHT );
         aTemp <<= rDesc.Weight;
-        ((SfxPoolItem*)&aWeightItem)->PutValue( aTemp, MID_WEIGHT );
+        static_cast<SfxPoolItem*>(&aWeightItem)->PutValue( aTemp, MID_WEIGHT );
         rSet.Put( aWeightItem );
     }
 
     {
         SvxCrossedOutItem aCrossedOutItem( (FontStrikeout)0, EE_CHAR_STRIKEOUT );
         aTemp <<= rDesc.Strikeout;
-        ((SfxPoolItem*)&aCrossedOutItem)->PutValue( aTemp, MID_CROSS_OUT );
+        static_cast<SfxPoolItem*>(&aCrossedOutItem)->PutValue( aTemp, MID_CROSS_OUT );
         rSet.Put( aCrossedOutItem );
     }
 

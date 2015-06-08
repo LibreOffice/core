@@ -388,7 +388,7 @@ void EditEngine::SetDefTab( sal_uInt16 nDefTab )
     if ( pImpEditEngine->IsFormatted() )
     {
         pImpEditEngine->FormatFullDoc();
-        pImpEditEngine->UpdateViews( (EditView*) 0 );
+        pImpEditEngine->UpdateViews( nullptr );
     }
 }
 

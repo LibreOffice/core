@@ -234,7 +234,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
         || aServiceSpecifier == "com.sun.star.text.TextField.DateTime"
        )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::DATE );
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::DATE ));
     }
 
     return SvxUnoTextCreateTextField( aServiceSpecifier );
@@ -371,7 +371,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ESelection& rSel,
     const OUString& rFileName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler)
-:   SvXMLExport( xContext, "", rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), FUNIT_CM ),
+:   SvXMLExport( xContext, "", rFileName, xHandler, (static_cast<frame::XModel*>(new SvxSimpleUnoModel())), FUNIT_CM ),
     maSelection( rSel )
 {
     SvxEditEngineSource aEditSource( pEditEngine );

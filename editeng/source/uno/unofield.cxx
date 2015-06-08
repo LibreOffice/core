@@ -934,7 +934,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUSt
         }
 
         if (nId != text::textfield::Type::UNSPECIFIED)
-            xRet = (::cppu::OWeakObject * )new SvxUnoTextField( nId );
+            xRet = static_cast<cppu::OWeakObject *>(new SvxUnoTextField( nId ));
     }
 
     return xRet;

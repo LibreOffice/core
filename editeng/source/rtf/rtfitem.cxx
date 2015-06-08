@@ -1516,7 +1516,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 break;
 
         case RTF_BRDRSH:        // Shadowed border
-                rSet.Put( SvxShadowItem( aPardMap.nShadow, (Color*) 0, 60 /*3pt*/,
+                rSet.Put( SvxShadowItem( aPardMap.nShadow, nullptr, 60 /*3pt*/,
                                         SVX_SHADOW_BOTTOMRIGHT ) );
                 break;
 

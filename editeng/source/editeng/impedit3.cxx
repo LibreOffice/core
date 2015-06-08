@@ -4179,7 +4179,7 @@ void ImpEditEngine::SetFlatMode( bool bFlat )
     aEditDoc.CreateDefFont( !bFlat );
 
     FormatFullDoc();
-    UpdateViews( (EditView*) 0);
+    UpdateViews( nullptr);
     if ( pActiveView )
         pActiveView->ShowCursor();
 }

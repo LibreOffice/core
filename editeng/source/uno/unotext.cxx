@@ -1557,7 +1557,7 @@ SvxUnoTextRange::SvxUnoTextRange( const SvxUnoTextBase& rParent, bool bPortion /
 :SvxUnoTextRangeBase( rParent.GetEditSource(), bPortion ? ImplGetSvxTextPortionSvxPropertySet() : rParent.getPropertySet() ),
  mbPortion( bPortion )
 {
-    xParentText =  (text::XText*)&rParent;
+    xParentText =  static_cast<text::XText*>(const_cast<SvxUnoTextBase *>(&rParent));
 }
 
 SvxUnoTextRange::~SvxUnoTextRange() throw()
@@ -1696,7 +1696,7 @@ uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
     QUERYINT( text::XText );
     QUERYINT( text::XSimpleText );
     if( rType == cppu::UnoType<text::XTextRange>::get())
-        return uno::makeAny(uno::Reference< text::XTextRange >((text::XText*)(this)));
+        return uno::makeAny(uno::Reference< text::XTextRange >(static_cast<text::XText*>(this)));
     QUERYINT(container::XEnumerationAccess );
     QUERYINT( container::XElementAccess );
     QUERYINT( beans::XMultiPropertyStates );
@@ -1976,7 +1976,7 @@ uno::Reference< text::XText > SAL_CALL SvxUnoTextBase::getText()
         SetSelection( aSelection );
     }
 
-    return (text::XText*)this;
+    return static_cast<text::XText*>(this);
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::getStart()
@@ -2012,7 +2012,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumera
     ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
     SetSelection( aSelection );
 
-    uno::Reference< container::XEnumeration > xEnum( (container::XEnumeration*) new SvxUnoTextContentEnumeration( *this ) );
+    uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>(new SvxUnoTextContentEnumeration( *this )) );
     return xEnum;
 }
 

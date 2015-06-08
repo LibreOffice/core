@@ -540,7 +540,7 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     {
         EditSelection aSel( aStartPaM, aEndPaM );
         ImportInfo aImportInfo(HTMLIMP_SETATTR, this, mpEditEngine->CreateESelection(aSel));
-        aImportInfo.pAttrs = (void*)&rItems;
+        aImportInfo.pAttrs = const_cast<SfxItemSet *>(&rItems);
         mpEditEngine->CallImportHandler(aImportInfo);
     }
 

@@ -254,7 +254,7 @@ sal_Int32 SAL_CALL
                 if (xChild.is())
                 {
                     uno::Reference<XAccessibleContext> xChildContext = xChild->getAccessibleContext();
-                    if (xChildContext == (XAccessibleContext*)this)
+                    if (xChildContext == static_cast<XAccessibleContext*>(this))
                         return i;
                 }
             }
@@ -414,7 +414,7 @@ void SAL_CALL AccessibleContextBase::addAccessibleEventListener (
     {
         if (rBHelper.bDisposed || rBHelper.bInDispose)
         {
-            uno::Reference<uno::XInterface> x ((lang::XComponent *)this, uno::UNO_QUERY);
+            uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
             rxListener->disposing (lang::EventObject (x));
         }
         else

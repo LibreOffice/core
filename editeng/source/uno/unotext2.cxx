@@ -239,7 +239,7 @@ void SAL_CALL SvxUnoTextContent::dispose()
     mbDisposing = true;
 
     lang::EventObject aEvt;
-    aEvt.Source = *(OWeakAggObject*) this;
+    aEvt.Source = *static_cast<OWeakAggObject*>(this);
     maDisposeListeners.disposeAndClear(aEvt);
 
     if( mxParentText.is() )

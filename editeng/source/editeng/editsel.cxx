@@ -82,7 +82,7 @@ void EditSelFunctionSet::DeselectAll()
 
 //  class EditSelectionEngine
 
-EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (vcl::Window*)0 )
+EditSelectionEngine::EditSelectionEngine() : SelectionEngine( nullptr )
 {
     SetSelectionMode( RANGE_SELECTION );
     EnableDrag( true );
@@ -96,7 +96,7 @@ void EditSelectionEngine::SetCurView( EditView* pNewView )
     if ( pNewView )
         SetWindow( pNewView->GetWindow() );
     else
-        SetWindow( (vcl::Window*)0 );
+        SetWindow( nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
