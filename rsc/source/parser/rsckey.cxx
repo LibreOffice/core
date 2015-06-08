@@ -64,7 +64,7 @@ void RscNameTable::SetSort( bool bSorted )
     if( bSort && pTable)
     {
         // Schluesselwort Feld sortieren
-        qsort( (void *)pTable, nEntries,
+        qsort( static_cast<void *>(pTable), nEntries,
                sizeof( KEY_STRUCT ), KeyCompare );
     }
 };
@@ -73,7 +73,7 @@ Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, sal_IntPtr nValue )
 {
     if( pTable )
         pTable = static_cast<KEY_STRUCT *>(
-                 rtl_reallocateMemory( (void *)pTable,
+                 rtl_reallocateMemory( static_cast<void *>(pTable),
                  ((nEntries +1) * sizeof( KEY_STRUCT )) ));
     else
         pTable = static_cast<KEY_STRUCT *>(

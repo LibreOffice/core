@@ -47,7 +47,7 @@ public:
     bool        Insert( ObjNode* pTN ) //< insert a new node in the b-tree
 
                     {
-                        return IdNode::Insert( (IdNode *)pTN );
+                        return IdNode::Insert( static_cast<IdNode *>(pTN) );
                     }
     CLASS_DATA  GetRscObj() //< get the Object from this Node
 
@@ -76,7 +76,7 @@ public:
                     }
     bool        Insert( RefNode* pTN ) //< insert a new node in the b-tree
                     {
-                        return IdNode::Insert( (IdNode *)pTN );
+                        return IdNode::Insert( static_cast<IdNode *>(pTN) );
                     }
     bool        PutObjNode( ObjNode * pPutObject );
 

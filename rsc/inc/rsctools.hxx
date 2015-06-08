@@ -74,7 +74,7 @@ public:
                     ~RscPtrPtr();
     void            Reset();
     sal_uInt32      Append( void * );
-    sal_uInt32      Append( char * pStr ) { return Append( (void *)pStr ); }
+    sal_uInt32      Append( char * pStr ) { return Append( static_cast<void *>(pStr) ); }
     sal_uInt32      GetCount() { return nCount; }
     void *          GetEntry( sal_uInt32 nEle );
     void **         GetBlock() { return pMem; }

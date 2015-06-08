@@ -36,7 +36,7 @@ RscConst::RscConst( Atom nId, sal_uInt32 nTypeId )
 RscConst::~RscConst()
 {
     if( pVarArray )
-        rtl_freeMemory( (void *)pVarArray );
+        rtl_freeMemory( static_cast<void *>(pVarArray) );
 }
 
 RSCCLASS_TYPE RscConst::GetClassType() const
@@ -47,7 +47,7 @@ RSCCLASS_TYPE RscConst::GetClassType() const
 ERRTYPE RscConst::SetConstant( Atom nVarName, sal_Int32 lValue )
 {
     if( pVarArray )
-        pVarArray = static_cast<VarEle *>(rtl_reallocateMemory( (void *)pVarArray,
+        pVarArray = static_cast<VarEle *>(rtl_reallocateMemory( static_cast<void *>(pVarArray),
                                                      ((nEntries +1) * sizeof( VarEle )) ));
     else
         pVarArray = static_cast<VarEle *>(rtl_allocateMemory( ((nEntries +1) * sizeof( VarEle )) ));

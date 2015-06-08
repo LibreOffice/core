@@ -187,7 +187,7 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
         else
             ppCmd->Append( rsc_strdup( *(ppArgv +i) ) );
     }
-    ppCmd->Append( (void *)0 );
+    ppCmd->Append( static_cast<void *>(nullptr) );
     return NULL;
 }
 
@@ -214,7 +214,7 @@ void RscPtrPtr :: Reset()
             if( pMem[ i ] )
                rtl_freeMemory( pMem[ i ] );
         }
-        rtl_freeMemory( (void *)pMem );
+        rtl_freeMemory( static_cast<void *>(pMem) );
     };
     nCount = 0;
     pMem = NULL;
@@ -225,7 +225,7 @@ sal_uInt32 RscPtrPtr :: Append( void * pBuffer )
     if( !pMem )
         pMem = static_cast<void **>(rtl_allocateMemory( (nCount +1) * sizeof( void * ) ));
     else
-        pMem = static_cast<void **>(rtl_reallocateMemory( (void *)pMem,
+        pMem = static_cast<void **>(rtl_reallocateMemory( static_cast<void *>(pMem),
                          ((nCount +1) * sizeof( void * )
                        ) ));
     pMem[ nCount ] = pBuffer;

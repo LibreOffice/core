@@ -59,7 +59,7 @@ void RscClass::Pre_dtor()
 RscClass::~RscClass()
 {
     if( pVarTypeList )
-        rtl_freeMemory( (void *)pVarTypeList );
+        rtl_freeMemory( static_cast<void *>(pVarTypeList) );
 }
 
 RSCCLASS_TYPE RscClass::GetClassType() const
@@ -234,7 +234,7 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
 {
     if( pVarTypeList )
     {
-        pVarTypeList = static_cast<VARTYPE_STRUCT *>(rtl_reallocateMemory( (void *)pVarTypeList,
+        pVarTypeList = static_cast<VARTYPE_STRUCT *>(rtl_reallocateMemory( static_cast<void *>(pVarTypeList),
                                                                 ((nEntries +1) * sizeof( VARTYPE_STRUCT )) ));
     }
     else

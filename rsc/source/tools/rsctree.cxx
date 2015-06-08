@@ -69,15 +69,15 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
         }
         else
         {
-            pList = (BiNode *)0;
+            pList = nullptr;
         }
         if( NULL != (pTmp = pMiddle->Left()) )  // rechten Zeiger auf Null
-            pTmp->pRight = (BiNode *)0;
+            pTmp->pRight = nullptr;
 
         // linken Zeiger auf Null
         BiNode * pRightNode = pMiddle->Right();
         if (pRightNode)
-            pRightNode->pLeft = (BiNode *)0;
+            pRightNode->pLeft = nullptr;
 
         pMiddle->pLeft = ChangeDLListBTree( pList );
         pMiddle->pRight = ChangeDLListBTree( pRightNode );
@@ -198,7 +198,7 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const
             return Right()->SearchParent( pSearch );
         }
     }
-    return (NameNode *)NULL;
+    return nullptr;
 }
 
 // search for a node.
@@ -327,7 +327,7 @@ void NameNode::SubOrderTree( NameNode * pOrderNode )
 
 IdNode * IdNode::Search( sal_uInt32 nTypeName ) const
 {
-    return static_cast<IdNode *>(NameNode::Search( (const void *)&nTypeName ));
+    return static_cast<IdNode *>(NameNode::Search( static_cast<const void *>(&nTypeName) ));
 }
 
 COMPARE IdNode::Compare( const NameNode * pSearch ) const
@@ -358,7 +358,7 @@ sal_uInt32 IdNode::GetId() const
 
 StringNode * StringNode::Search( const char * pSearch ) const
 {
-    return static_cast<StringNode *>(NameNode::Search( (const void *)pSearch ));
+    return static_cast<StringNode *>(NameNode::Search( static_cast<const void *>(pSearch) ));
 }
 
 COMPARE StringNode::Compare( const NameNode * pSearch ) const

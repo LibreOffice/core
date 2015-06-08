@@ -96,7 +96,7 @@ static bool CallPrePro( const OString& rInput,
 
     aNewCmdL.Append( rsc_strdup( rInput.getStr() ) );
     aNewCmdL.Append( rsc_strdup( rOutput.getStr() ) );
-    aNewCmdL.Append( (void *)0 );
+    aNewCmdL.Append( static_cast<void *>(nullptr) );
 
     if ( bVerbose )
     {
@@ -115,7 +115,7 @@ static bool CallPrePro( const OString& rInput,
         OStringBuffer aTmpStr;
         aTmpStr.append('@').append(aRspFileName);
         aRespCmdL.Append( rsc_strdup( aTmpStr.getStr() ) );
-        aRespCmdL.Append( (void *)0 );
+        aRespCmdL.Append( static_cast<void *>(nullptr) );
 
         pCmdL = &aRespCmdL;
         for( i = 0; i < (int)(aNewCmdL.GetCount() -1); i++ )
