@@ -42,7 +42,7 @@ struct LOKDocView_Impl
 {
     LOKDocView* m_pDocView;
     GtkWidget *m_pDrawingArea;
-    TileBuffer *m_pTileBuffer;
+    TileBuffer m_aTileBuffer;
 
     float m_fZoom;
 
@@ -192,7 +192,7 @@ struct LOKDocView_Impl
     void searchNotFound(const std::string& rPayload);
     /// LOK decided to change parts, need to update UI.
     void setPart(const std::string& rPayload);
-    /// Sets the tiles enclosed by rRectangle as invalid in m_pTileBuffer
+    /// Sets the tiles enclosed by rRectangle as invalid in m_aTileBuffer
     void setTilesInvalid(const GdkRectangle& rRectangle);
 };
 
@@ -273,35 +273,36 @@ LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPaylo
 
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     : m_pDocView(pDocView),
-    m_pDrawingArea(gtk_drawing_area_new()),
-    m_fZoom(1),
-    m_pOffice(0),
-    m_pDocument(0),
-    m_nDocumentWidthTwips(0),
-    m_nDocumentHeightTwips(0),
-    m_bEdit(false),
-    m_aVisibleCursor({0, 0, 0, 0}),
-    m_bCursorOverlayVisible(false),
-    m_bCursorVisible(true),
-    m_nLastButtonPressTime(0),
-    m_nLastButtonReleaseTime(0),
-    m_aTextSelectionStart({0, 0, 0, 0}),
-    m_aTextSelectionEnd({0, 0, 0, 0}),
-    m_aGraphicSelection({0, 0, 0, 0}),
-    m_bInDragGraphicSelection(false),
+      m_pDrawingArea(gtk_drawing_area_new()),
+      m_aTileBuffer(TileBuffer(0,0,0,0)),
+      m_fZoom(1),
+      m_pOffice(0),
+      m_pDocument(0),
+      m_nDocumentWidthTwips(0),
+      m_nDocumentHeightTwips(0),
+      m_bEdit(false),
+      m_aVisibleCursor({0, 0, 0, 0}),
+      m_bCursorOverlayVisible(false),
+      m_bCursorVisible(true),
+      m_nLastButtonPressTime(0),
+      m_nLastButtonReleaseTime(0),
+      m_aTextSelectionStart({0, 0, 0, 0}),
+      m_aTextSelectionEnd({0, 0, 0, 0}),
+      m_aGraphicSelection({0, 0, 0, 0}),
+      m_bInDragGraphicSelection(false),
 
-    // Start/middle/end handle.
-    m_pHandleStart(0),
-    m_aHandleStartRect({0, 0, 0, 0}),
-    m_bInDragStartHandle(false),
-    m_pHandleMiddle(0),
-    m_aHandleMiddleRect({0, 0, 0, 0}),
-    m_bInDragMiddleHandle(false),
-    m_pHandleEnd(0),
-    m_aHandleEndRect({0, 0, 0, 0}),
-    m_bInDragEndHandle(false),
+      // Start/middle/end handle.
+      m_pHandleStart(0),
+      m_aHandleStartRect({0, 0, 0, 0}),
+      m_bInDragStartHandle(false),
+      m_pHandleMiddle(0),
+      m_aHandleMiddleRect({0, 0, 0, 0}),
+      m_bInDragMiddleHandle(false),
+      m_pHandleEnd(0),
+      m_aHandleEndRect({0, 0, 0, 0}),
+      m_bInDragEndHandle(false),
 
-    m_pGraphicHandle(0)
+      m_pGraphicHandle(0)
 {
     memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
     memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
@@ -683,7 +684,7 @@ void LOKDocView_Impl::setTilesInvalid(const GdkRectangle& rRectangle)
 
     for (int i = aStart.x; i < aEnd.x; i++)
         for (int j = aStart.y; j < aEnd.y; j++)
-            m_pTileBuffer->setInvalid(i, j);
+            m_aTileBuffer.setInvalid(i, j);
 }
 
 void LOKDocView_Impl::renderHandle(cairo_t* pCairo, const GdkRectangle& rCursor, cairo_surface_t* pHandle, GdkRectangle& rRectangle)
@@ -845,7 +846,7 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
             {
                 //g_info("tile_buffer_get_tile (%d, %d)", nRow, nColumn);
 
-                Tile& currentTile = m_pTileBuffer->getTile(nRow, nColumn);
+                Tile& currentTile = m_aTileBuffer.getTile(nRow, nColumn);
                 GdkPixbuf* pPixBuf = currentTile.getBuffer();
 
                 gdk_cairo_set_source_pixbuf (pcairo, pPixBuf,
@@ -969,7 +970,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
             setTilesInvalid(aRectangle);
         }
         else
-            m_pTileBuffer->resetAllTiles();
+            m_aTileBuffer.resetAllTiles();
 
         gtk_widget_queue_draw(m_pDrawingArea);
     }
@@ -1232,10 +1233,12 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_open_document( LOKDocView* pDocView, 
         // Total number of rows / columns in this document.
         guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
         guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
-        pDocView->m_pImpl->m_pTileBuffer = new TileBuffer(pDocView->m_pImpl->m_pDocument,
-                                                          nTileSizePixels,
-                                                          nRows,
-                                                          nColumns);
+
+
+        pDocView->m_pImpl->m_aTileBuffer = TileBuffer(pDocView->m_pImpl->m_pDocument,
+                                                      nTileSizePixels,
+                                                      nRows,
+                                                      nColumns);
         gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
                                     nDocumentWidthPixels,
                                     nDocumentHeightPixels);
@@ -1259,7 +1262,7 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_zoom ( LOKDocView* pDocView, float fZ
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
-    pDocView->m_pImpl->m_pTileBuffer->setZoom(fZoom, nRows, nColumns);
+    pDocView->m_pImpl->m_aTileBuffer.setZoom(fZoom, nRows, nColumns);
     gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
