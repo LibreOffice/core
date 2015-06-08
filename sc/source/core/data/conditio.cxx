@@ -1026,6 +1026,9 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
     {
         case SC_COND_NONE:
             break;                  // Always sal_False
+        case SC_COND_ANY:
+            bValid = true;
+            break;                  // Always sal_True
         case SC_COND_EQUAL:
             bValid = ::rtl::math::approxEqual( nArg, nComp1 );
             break;

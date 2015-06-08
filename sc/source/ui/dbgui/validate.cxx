@@ -63,14 +63,15 @@
 /*  Position indexes for "Data" list box.
     They do not map directly to ScConditionMode and can safely be modified to
     change the order of the list box entries. */
-#define SC_VALIDDLG_DATA_EQUAL        0
-#define SC_VALIDDLG_DATA_LESS         1
-#define SC_VALIDDLG_DATA_GREATER      2
-#define SC_VALIDDLG_DATA_EQLESS       3
-#define SC_VALIDDLG_DATA_EQGREATER    4
-#define SC_VALIDDLG_DATA_NOTEQUAL     5
-#define SC_VALIDDLG_DATA_VALIDRANGE   6
-#define SC_VALIDDLG_DATA_INVALIDRANGE 7
+#define SC_VALIDDLG_DATA_ANY          0
+#define SC_VALIDDLG_DATA_EQUAL        1
+#define SC_VALIDDLG_DATA_LESS         2
+#define SC_VALIDDLG_DATA_GREATER      3
+#define SC_VALIDDLG_DATA_EQLESS       4
+#define SC_VALIDDLG_DATA_EQGREATER    5
+#define SC_VALIDDLG_DATA_NOTEQUAL     6
+#define SC_VALIDDLG_DATA_VALIDRANGE   7
+#define SC_VALIDDLG_DATA_INVALIDRANGE 8
 
 namespace ValidListType = css::sheet::TableValidationVisibility;
 
@@ -227,14 +228,15 @@ sal_uInt16 lclGetPosFromCondMode( ScConditionMode eCondMode )
     switch( eCondMode )
     {
         case SC_COND_NONE:          // may occur in old XML files after Excel import
+        case SC_COND_ANY:           nLbPos = SC_VALIDDLG_DATA_ANY;          break;
         case SC_COND_EQUAL:         nLbPos = SC_VALIDDLG_DATA_EQUAL;        break;
         case SC_COND_LESS:          nLbPos = SC_VALIDDLG_DATA_LESS;         break;
         case SC_COND_GREATER:       nLbPos = SC_VALIDDLG_DATA_GREATER;      break;
         case SC_COND_EQLESS:        nLbPos = SC_VALIDDLG_DATA_EQLESS;       break;
         case SC_COND_EQGREATER:     nLbPos = SC_VALIDDLG_DATA_EQGREATER;    break;
         case SC_COND_NOTEQUAL:      nLbPos = SC_VALIDDLG_DATA_NOTEQUAL;     break;
-        case SC_COND_BETWEEN:       nLbPos = SC_VALIDDLG_DATA_VALIDRANGE;      break;
-        case SC_COND_NOTBETWEEN:    nLbPos = SC_VALIDDLG_DATA_INVALIDRANGE;   break;
+        case SC_COND_BETWEEN:       nLbPos = SC_VALIDDLG_DATA_VALIDRANGE;   break;
+        case SC_COND_NOTBETWEEN:    nLbPos = SC_VALIDDLG_DATA_INVALIDRANGE; break;
         default:    OSL_FAIL( "lclGetPosFromCondMode - unknown condition mode" );
     }
     return nLbPos;
@@ -246,14 +248,15 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
     ScConditionMode eCondMode = SC_COND_EQUAL;
     switch( nLbPos )
     {
+        case SC_VALIDDLG_DATA_ANY:          eCondMode = SC_COND_ANY;        break;
         case SC_VALIDDLG_DATA_EQUAL:        eCondMode = SC_COND_EQUAL;      break;
         case SC_VALIDDLG_DATA_LESS:         eCondMode = SC_COND_LESS;       break;
         case SC_VALIDDLG_DATA_GREATER:      eCondMode = SC_COND_GREATER;    break;
         case SC_VALIDDLG_DATA_EQLESS:       eCondMode = SC_COND_EQLESS;     break;
         case SC_VALIDDLG_DATA_EQGREATER:    eCondMode = SC_COND_EQGREATER;  break;
         case SC_VALIDDLG_DATA_NOTEQUAL:     eCondMode = SC_COND_NOTEQUAL;   break;
-        case SC_VALIDDLG_DATA_VALIDRANGE:      eCondMode = SC_COND_BETWEEN;    break;
-        case SC_VALIDDLG_DATA_INVALIDRANGE:   eCondMode = SC_COND_NOTBETWEEN; break;
+        case SC_VALIDDLG_DATA_VALIDRANGE:   eCondMode = SC_COND_BETWEEN;    break;
+        case SC_VALIDDLG_DATA_INVALIDRANGE: eCondMode = SC_COND_NOTBETWEEN; break;
         default:    OSL_FAIL( "lclGetCondModeFromPos - invalid list box position" );
     }
     return eCondMode;
@@ -605,17 +608,18 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
 {
     sal_uInt16 nLbPos = m_pLbAllow->GetSelectEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
+    bool bValEnable = (m_pLbValue->GetSelectEntryPos() != SC_VALIDDLG_DATA_ANY);
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);
 
     m_pCbAllow->Enable( bEnable );   // Empty cell
     m_pFtValue->Enable( bEnable );
     m_pLbValue->Enable( bEnable );
-    m_pFtMin->Enable( bEnable );
-    m_pEdMin->Enable( bEnable );
-    m_pEdList->Enable( bEnable );
-    m_pFtMax->Enable( bEnable );
-    m_pEdMax->Enable( bEnable );
+    m_pFtMin->Enable( bEnable & bValEnable );
+    m_pEdMin->Enable( bEnable & bValEnable );
+    m_pEdList->Enable( bEnable & bValEnable );
+    m_pFtMax->Enable( bEnable & bValEnable );
+    m_pEdMax->Enable( bEnable & bValEnable );
 
     bool bShowMax = false;
     if( bRange )
@@ -626,6 +630,8 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
     {
         switch( m_pLbValue->GetSelectEntryPos() )
         {
+            case SC_VALIDDLG_DATA_ANY:          break;
+
             case SC_VALIDDLG_DATA_EQUAL:
             case SC_VALIDDLG_DATA_NOTEQUAL:     m_pFtMin->SetText( maStrValue );  break;
 

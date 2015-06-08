@@ -5596,6 +5596,8 @@ void Test::testValidity()
         OUString::number(23.0/24.0), OUString::number(1.0/24.0), m_pDoc, ScAddress(2,0,0) );
     ScValidationData* pData2 = new ScValidationData( SC_VALID_TIME, SC_COND_NOTBETWEEN,
         OUString::number(23.0/24.0), OUString::number(1.0/24.0), m_pDoc, ScAddress(4,0,0) );
+    ScValidationData* pData3 = new ScValidationData( SC_VALID_TIME, SC_COND_ANY,
+        OUString::number(23.0/24.0), OUString::number(1.0/24.0), m_pDoc, ScAddress(6,0,0) );
 
     ScRefCellValue aCell;
     aCell.assign(*m_pDoc, ScAddress(0,0,0));
@@ -5604,6 +5606,8 @@ void Test::testValidity()
     CPPUNIT_ASSERT( !pData1->IsDataValid( aCell, ScAddress(2,0,0) ) );
     aCell.assign(*m_pDoc, ScAddress(4,0,0));
     CPPUNIT_ASSERT( !pData2->IsDataValid( aCell, ScAddress(4,0,0) ) );
+    aCell.assign(*m_pDoc, ScAddress(6,0,0));
+    CPPUNIT_ASSERT(  pData3->IsDataValid( aCell, ScAddress(6,0,0) ) );
 }
 
 void Test::testCondFormatInsertDeleteSheets()
