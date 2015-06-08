@@ -258,7 +258,7 @@ namespace vclcanvas
             Bitmap::ScopedReadAccess pReadAccess( aSrcBitmap );
             Bitmap::ScopedReadAccess pAlphaReadAccess( rBitmap.IsTransparent() ?
                                                      aSrcAlpha.AcquireReadAccess() :
-                                                     (BitmapReadAccess*)NULL,
+                                                     nullptr,
                                                      aSrcAlpha );
 
             if( pReadAccess.get() == NULL ||

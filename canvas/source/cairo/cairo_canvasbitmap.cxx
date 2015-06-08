@@ -113,7 +113,7 @@ namespace cairocanvas
         {
             case 0:
             {
-                aRV = uno::Any( reinterpret_cast<sal_Int64>( (BitmapEx *) NULL ) );
+                aRV = uno::Any( reinterpret_cast<sal_Int64>( nullptr ) );
                 if ( !mbHasAlpha )
                     break;
 

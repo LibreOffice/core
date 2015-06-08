@@ -139,7 +139,7 @@ namespace vclcanvas
 
         Bitmap::ScopedReadAccess pReadAccess( aBitmap );
         Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
-                                                 (BitmapReadAccess*)NULL : aAlpha.AcquireReadAccess(),
+                                                 nullptr : aAlpha.AcquireReadAccess(),
                                                  aAlpha );
 
         ENSURE_OR_THROW( pReadAccess.get() != NULL,
@@ -218,7 +218,7 @@ namespace vclcanvas
         {
             Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
             Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
-                                                       (BitmapWriteAccess*)NULL : aAlpha.AcquireWriteAccess(),
+                                                       nullptr : aAlpha.AcquireWriteAccess(),
                                                        aAlpha );
 
             if( pAlphaWriteAccess.get() )
@@ -459,7 +459,7 @@ namespace vclcanvas
         {
             Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
             Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
-                                                       (BitmapWriteAccess*)NULL : aAlpha.AcquireWriteAccess(),
+                                                       nullptr : aAlpha.AcquireWriteAccess(),
                                                        aAlpha );
 
             ENSURE_OR_THROW( pWriteAccess.get() != NULL,
@@ -512,7 +512,7 @@ namespace vclcanvas
 
         Bitmap::ScopedReadAccess pReadAccess( aBitmap );
         Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
-                                                 (BitmapReadAccess*)NULL : aAlpha.AcquireReadAccess(),
+                                                 nullptr : aAlpha.AcquireReadAccess(),
                                                  aAlpha );
         ENSURE_OR_THROW( pReadAccess.get() != NULL,
                          "Could not acquire read access to bitmap" );
