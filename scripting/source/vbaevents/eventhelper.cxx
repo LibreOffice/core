@@ -227,14 +227,14 @@ TypeList listBoxList = {&typeXListBox, 1};
 //this array stores the OO event to VBA event translation info
 static TranslatePropMap aTranslatePropMap_Impl[] =
 {
-    { OUString("actionPerformed"), { OUString("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },
+    { OUString("actionPerformed"), { OUString("_Change"), NULL, DenyType, static_cast<void*>(&radioButtonList) } },
     // actionPerformed ooo event
     { OUString("actionPerformed"), { OUString("_Click"), NULL, ApproveAll, NULL } },
-    { OUString("itemStateChanged"), { OUString("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } },
+    { OUString("itemStateChanged"), { OUString("_Change"), NULL, ApproveType, static_cast<void*>(&radioButtonList) } },
     // itemStateChanged ooo event
-    { OUString("itemStateChanged"), { OUString("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },
+    { OUString("itemStateChanged"), { OUString("_Click"), NULL, ApproveType, static_cast<void*>(&comboBoxList) } },
 
-    { OUString("itemStateChanged"), { OUString("_Click"), NULL, ApproveType, (void*)(&listBoxList) } },
+    { OUString("itemStateChanged"), { OUString("_Click"), NULL, ApproveType, static_cast<void*>(&listBoxList) } },
     // changed ooo event
     { OUString("changed"), { OUString("_Change"), NULL, ApproveAll, NULL } },
 
@@ -243,7 +243,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
     // focusLost ooo event
     { OUString("focusLost"), { OUString("_LostFocus"), NULL, ApproveAll, NULL } },
-    { OUString("focusLost"), { OUString("_Exit"), NULL, ApproveType, (void*)(&textCompList) } }, // support VBA TextBox_Exit event
+    { OUString("focusLost"), { OUString("_Exit"), NULL, ApproveType, static_cast<void*>(&textCompList) } }, // support VBA TextBox_Exit event
 
     // adjustmentValueChanged ooo event
     { OUString("adjustmentValueChanged"), { OUString("_Scroll"), NULL, ApproveAll, NULL } },
@@ -256,7 +256,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
     { OUString("keyReleased"), { OUString("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
 
     // mouseReleased ooo event
-    { OUString("mouseReleased"), { OUString("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, (void*)(&fixedTextList) } },
+    { OUString("mouseReleased"), { OUString("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, static_cast<void*>(&fixedTextList) } },
     { OUString("mouseReleased"), { OUString("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
 
     // mousePressed ooo event

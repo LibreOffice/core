@@ -394,7 +394,7 @@ namespace dlgprov
     void DialogAllListenerImpl::firing_impl( const AllEventObject& Event, Any* pRet )
     {
         ScriptEvent aScriptEvent;
-        aScriptEvent.Source         = (OWeakObject *)this;  // get correct XInterface
+        aScriptEvent.Source         = static_cast<OWeakObject *>(this);  // get correct XInterface
         aScriptEvent.ListenerType   = Event.ListenerType;
         aScriptEvent.MethodName     = Event.MethodName;
         aScriptEvent.Arguments      = Event.Arguments;

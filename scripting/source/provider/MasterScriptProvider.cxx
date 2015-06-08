@@ -810,7 +810,7 @@ namespace scripting_runtimemgr
 Reference< XInterface > SAL_CALL sp_create(
     const Reference< XComponentContext > & xCompC )
 {
-    return ( cppu::OWeakObject * ) new ::func_provider::MasterScriptProvider( xCompC );
+    return static_cast<cppu::OWeakObject *>(new ::func_provider::MasterScriptProvider( xCompC ));
 }
 
 
@@ -835,8 +835,8 @@ OUString sp_getImplementationName( )
 Reference< XInterface > SAL_CALL urihelper_create(
     const Reference< XComponentContext > & xCompC )
 {
-    return ( cppu::OWeakObject * )
-        new ::func_provider::ScriptingFrameworkURIHelper( xCompC );
+    return static_cast<cppu::OWeakObject *>(
+        new ::func_provider::ScriptingFrameworkURIHelper( xCompC ));
 }
 
 Sequence< OUString > urihelper_getSupportedServiceNames( )

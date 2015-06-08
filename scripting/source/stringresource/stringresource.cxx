@@ -700,7 +700,7 @@ void StringResourceImpl::implModified()
 void StringResourceImpl::implNotifyListeners()
 {
     EventObject aEvent;
-    aEvent.Source = static_cast< XInterface* >( (OWeakObject*)this );
+    aEvent.Source = static_cast< XInterface* >( static_cast<OWeakObject*>(this) );
 
     ::cppu::OInterfaceIteratorHelper it( m_aListenerContainer );
     while( it.hasMoreElements() )
