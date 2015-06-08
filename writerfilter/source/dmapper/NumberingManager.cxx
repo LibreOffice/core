@@ -33,8 +33,8 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;
 
@@ -573,11 +573,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 ListLevel::Pointer pLevel = GetLevel( nLevel );
 
                 // Get the merged level properties
-                uno::Sequence< beans::PropertyValue > aLvlProps = aProps[sal_Int32( nLevel )];
-
-#ifdef DEBUG_WRITERFILTER
-                lcl_printProperties( aLvlProps );
-#endif
+                auto aLvlProps = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aProps[sal_Int32(nLevel)]);
 
                 // Get the char style
                 uno::Sequence< beans::PropertyValue > aAbsCharStyleProps = pAbsLevel->GetCharStyleProperties( );
@@ -602,9 +598,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     //create (or find) a character style containing the character
                     // attributes of the symbol and apply it to the numbering level
                     OUString sStyle = rDMapper.getOrCreateCharStyle( aStyleProps );
-                    aLvlProps.realloc( aLvlProps.getLength() + 1);
-                    aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1].Name = aPropNameSupplier.GetName( PROP_CHAR_STYLE_NAME );
-                    aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1].Value <<= sStyle;
+                    aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_CHAR_STYLE_NAME), sStyle));
                 }
 
                 // Get the prefix / suffix / Parent numbering
@@ -621,31 +615,29 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 sal_Int16 nParentNum = ListLevel::GetParentNumbering(
                        sText, nLevel, rPrefix, rSuffix );
 
-                aLvlProps.realloc( aLvlProps.getLength( ) + 4 );
-                aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 4] = MAKE_PROPVAL( PROP_PREFIX, rPrefix );
+                aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_PREFIX), rPrefix));
 
                 if (sText.isEmpty())
                 {
                     // Empty <w:lvlText>? Then put a Unicode "zero width space" as a suffix, so LabelFollowedBy is still shown, as in Word.
                     // With empty suffix, Writer does not show LabelFollowedBy, either.
-                    comphelper::SequenceAsHashMap aMap(aLvlProps);
-                    if (aMap.find("NumberingType") != aMap.end())
+                    auto it = std::find_if(aLvlProps.begin(), aLvlProps.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "NumberingType"; });
+                    if (it != aLvlProps.end())
                     {
-                        sal_Int16 nNumberFormat = aMap["NumberingType"].get<sal_Int16>();
+                        sal_Int16 nNumberFormat = it->Value.get<sal_Int16>();
                         if (nNumberFormat == style::NumberingType::NUMBER_NONE)
                             rSuffix = OUString(static_cast<sal_Unicode>(0x200B));
                     }
                 }
 
-                aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 3] = MAKE_PROPVAL( PROP_SUFFIX, rSuffix );
-                aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 2] = MAKE_PROPVAL( PROP_PARENT_NUMBERING, nParentNum );
+                aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_SUFFIX), rSuffix));
+                aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_PARENT_NUMBERING), nParentNum));
 
-                aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1] = MAKE_PROPVAL( PROP_POSITION_AND_SPACE_MODE,
-                            sal_Int16( text::PositionAndSpaceMode::LABEL_ALIGNMENT ) );
+                aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 
 
                 // Replace the numbering rules for the level
-                m_xNumRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
+                m_xNumRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
 
                 // Handle the outline level here
                 if ( pAbsLevel->isOutlineNumbering())
@@ -656,11 +648,9 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                         xOutlines->getChapterNumberingRules( );
 
                     StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
-                    aLvlProps.realloc( aLvlProps.getLength() + 1 );
-                    aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1] = MAKE_PROPVAL( PROP_HEADING_STYLE_NAME,
-                        pParaStyle->sConvertedStyleName );
+                    aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
 
-                    xOutlineRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
+                    xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
                 }
 
                 nLevel++;
