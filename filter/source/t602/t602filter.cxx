@@ -875,7 +875,7 @@ Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
 Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new T602ImportFilter( rSMgr );
+    return static_cast<cppu::OWeakObject*>(new T602ImportFilter( rSMgr ));
 }
 
 T602ImportFilterDialog::T602ImportFilterDialog(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r ) :
@@ -1164,7 +1164,7 @@ Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  
 Reference< XInterface > SAL_CALL T602ImportFilterDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new T602ImportFilterDialog( rSMgr );
+    return static_cast<cppu::OWeakObject*>(new T602ImportFilterDialog( rSMgr ));
 }
 
 }

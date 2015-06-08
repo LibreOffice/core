@@ -203,7 +203,7 @@ Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames(
 
 Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw ( Exception )
 {
-    return (OWeakObject*)new XMLFilterDialogComponent( comphelper::getComponentContext(rSMgr) );
+    return static_cast<OWeakObject*>(new XMLFilterDialogComponent( comphelper::getComponentContext(rSMgr) ));
 }
 
 OUString SAL_CALL XMLFilterDialogComponent::getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception)

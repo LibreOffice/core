@@ -76,7 +76,7 @@ Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  )
 
 Reference< XInterface > SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & ) throw( Exception )
 {
-    return (cppu::OWeakObject*) new PDFInteractionHandler;
+    return static_cast<cppu::OWeakObject*>(new PDFInteractionHandler);
 }
 
 OUString SAL_CALL PDFInteractionHandler::getImplementationName()

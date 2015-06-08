@@ -222,14 +222,14 @@ void PCDReader::ReadImage()
     if ( pL0 == NULL || pL1 == NULL || pCb == NULL || pCr == NULL ||
         pL0N == NULL || pL1N == NULL || pCbN == NULL || pCrN == NULL)
     {
-        rtl_freeMemory((void*)pL0 );
-        rtl_freeMemory((void*)pL1 );
-        rtl_freeMemory((void*)pCb );
-        rtl_freeMemory((void*)pCr );
-        rtl_freeMemory((void*)pL0N);
-        rtl_freeMemory((void*)pL1N);
-        rtl_freeMemory((void*)pCbN);
-        rtl_freeMemory((void*)pCrN);
+        rtl_freeMemory(static_cast<void*>(pL0) );
+        rtl_freeMemory(static_cast<void*>(pL1) );
+        rtl_freeMemory(static_cast<void*>(pCb) );
+        rtl_freeMemory(static_cast<void*>(pCr) );
+        rtl_freeMemory(static_cast<void*>(pL0N));
+        rtl_freeMemory(static_cast<void*>(pL1N));
+        rtl_freeMemory(static_cast<void*>(pCbN));
+        rtl_freeMemory(static_cast<void*>(pCrN));
         bStatus = false;
         return;
     }
@@ -353,14 +353,14 @@ void PCDReader::ReadImage()
         if ( !bStatus )
             break;
     }
-    rtl_freeMemory((void*)pL0 );
-    rtl_freeMemory((void*)pL1 );
-    rtl_freeMemory((void*)pCb );
-    rtl_freeMemory((void*)pCr );
-    rtl_freeMemory((void*)pL0N);
-    rtl_freeMemory((void*)pL1N);
-    rtl_freeMemory((void*)pCbN);
-    rtl_freeMemory((void*)pCrN);
+    rtl_freeMemory(static_cast<void*>(pL0) );
+    rtl_freeMemory(static_cast<void*>(pL1) );
+    rtl_freeMemory(static_cast<void*>(pCb) );
+    rtl_freeMemory(static_cast<void*>(pCr) );
+    rtl_freeMemory(static_cast<void*>(pL0N));
+    rtl_freeMemory(static_cast<void*>(pL1N));
+    rtl_freeMemory(static_cast<void*>(pCbN));
+    rtl_freeMemory(static_cast<void*>(pCrN));
 }
 
 //================== GraphicImport - the exported Function ================

@@ -557,13 +557,13 @@ namespace XSLT
     static css::uno::Reference<XInterface> SAL_CALL
     CreateTransformerInstance(const css::uno::Reference<XMultiServiceFactory> &r)
     {
-        return css::uno::Reference<XInterface> ((OWeakObject *) new LibXSLTTransformer( comphelper::getComponentContext(r) ));
+        return css::uno::Reference<XInterface> (static_cast<OWeakObject *>(new LibXSLTTransformer( comphelper::getComponentContext(r) )));
     }
 
     static css::uno::Reference<XInterface> SAL_CALL
     CreateFilterInstance(const css::uno::Reference<XMultiServiceFactory> &r)
     {
-        return css::uno::Reference<XInterface> ((OWeakObject *) new XSLTFilter( comphelper::getComponentContext(r) ));
+        return css::uno::Reference<XInterface> (static_cast<OWeakObject *>(new XSLTFilter( comphelper::getComponentContext(r) )));
     }
 
 }

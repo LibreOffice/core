@@ -237,7 +237,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
         for ( np = 0; np < nPlanes; np++)
         {
             if ( nEncoding == 0)
-                m_rPCX.Read( (void *)pPlane[ np ], nBytesPerPlaneLin );
+                m_rPCX.Read( static_cast<void *>(pPlane[ np ]), nBytesPerPlaneLin );
             else
             {
                 pDest = pPlane[ np ];

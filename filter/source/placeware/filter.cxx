@@ -160,7 +160,7 @@ Sequence< OUString > SAL_CALL PlaceWareExportFilter_getSupportedServiceNames(  )
 Reference< XInterface > SAL_CALL PlaceWareExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new PlaceWareExportFilter( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new PlaceWareExportFilter( comphelper::getComponentContext(rSMgr) ));
 }
 
 // XServiceInfo

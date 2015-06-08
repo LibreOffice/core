@@ -58,7 +58,7 @@ Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
 Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new PDFDialog( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new PDFDialog( comphelper::getComponentContext(rSMgr) ));
 }
 
 

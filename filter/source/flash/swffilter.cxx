@@ -518,7 +518,7 @@ Sequence< OUString > SAL_CALL FlashExportFilter_getSupportedServiceNames(  )
 Reference< XInterface > SAL_CALL FlashExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new FlashExportFilter( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new FlashExportFilter( comphelper::getComponentContext(rSMgr) ));
 }
 
 // XServiceInfo

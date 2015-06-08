@@ -213,7 +213,7 @@ Sequence< OUString > OdfFlatXml::impl_getSupportedServiceNames()
 
 Reference< XInterface > SAL_CALL OdfFlatXml::impl_createInstance(const Reference< XMultiServiceFactory >& fact)
 {
-    return Reference<XInterface> ((OWeakObject *) new OdfFlatXml( comphelper::getComponentContext(fact) ));
+    return Reference<XInterface> (static_cast<OWeakObject *>(new OdfFlatXml( comphelper::getComponentContext(fact) )));
 
 }
 

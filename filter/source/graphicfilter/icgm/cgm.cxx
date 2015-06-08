@@ -221,12 +221,12 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     {
         if ( nRealSize == 4 )
         {
-            memcpy( (void*)&fFloatBuf, pPtr, 4 );
+            memcpy( static_cast<void*>(&fFloatBuf), pPtr, 4 );
             nRetValue = (double)fFloatBuf;
         }
         else
         {
-            memcpy( (void*)&fDoubleBuf, pPtr, 8 );
+            memcpy( static_cast<void*>(&fDoubleBuf), pPtr, 8 );
             nRetValue = fDoubleBuf;
         }
     }

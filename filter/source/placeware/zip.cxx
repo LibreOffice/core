@@ -94,7 +94,7 @@ void PlacewareZipFile::copyAndCRC(ZipEntry *e, osl::File& rFile)
         if( !isError() )
         {
             sal_uInt32 nTemp = static_cast<sal_uInt32>(n);
-            e->crc = rtl_crc32( e->crc, (const void *) buf, nTemp );
+            e->crc = rtl_crc32( e->crc, static_cast<const void *>(buf), nTemp );
             mnRC = mrFile.write( buf, n, nWritten );
             OSL_ASSERT( n == nWritten );
         }

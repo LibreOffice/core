@@ -208,7 +208,7 @@ Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  ) throw (Runt
 
 Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
-    return (cppu::OWeakObject*) new PDFFilter( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new PDFFilter( comphelper::getComponentContext(rSMgr) ));
 }
 
 

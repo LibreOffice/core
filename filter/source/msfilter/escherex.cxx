@@ -1457,7 +1457,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             if ( pAry && nAryLen )
             {
                 Graphic         aGraphic;
-                SvMemoryStream  aTemp( (void*)pAry, nAryLen, StreamMode::READ );
+                SvMemoryStream  aTemp( const_cast<sal_uInt8 *>(pAry), nAryLen, StreamMode::READ );
                 sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, ConvertDataFormat::WMF );
                 if ( nErrCode == ERRCODE_NONE )
                 {

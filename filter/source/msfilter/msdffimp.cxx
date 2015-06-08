@@ -2909,13 +2909,13 @@ DffRecordList::~DffRecordList()
 
 DffRecordManager::DffRecordManager() :
     DffRecordList   ( NULL ),
-    pCList          ( (DffRecordList*)this )
+    pCList          ( static_cast<DffRecordList*>(this) )
 {
 }
 
 DffRecordManager::DffRecordManager( SvStream& rIn ) :
     DffRecordList   ( NULL ),
-    pCList          ( (DffRecordList*)this )
+    pCList          ( static_cast<DffRecordList*>(this) )
 {
     Consume( rIn );
 }
@@ -2934,7 +2934,7 @@ void DffRecordManager::Consume( SvStream& rIn, bool bAppend, sal_uInt32 nStOfs )
     }
     if ( nStOfs )
     {
-        pCList = (DffRecordList*)this;
+        pCList = static_cast<DffRecordList*>(this);
         while ( pCList->pNext )
             pCList = pCList->pNext;
         while ( ( rIn.GetError() == 0 ) && ( ( rIn.Tell() + 8 ) <=  nStOfs ) )
@@ -2952,7 +2952,7 @@ void DffRecordManager::Consume( SvStream& rIn, bool bAppend, sal_uInt32 nStOfs )
 
 void DffRecordManager::Clear()
 {
-    pCList = (DffRecordList*)this;
+    pCList = static_cast<DffRecordList*>(this);
     delete pNext, pNext = NULL;
     nCurrent = 0;
     nCount = 0;
@@ -2969,7 +2969,7 @@ DffRecordHeader* DffRecordManager::Current()
 DffRecordHeader* DffRecordManager::First()
 {
     DffRecordHeader* pRet = NULL;
-    pCList = (DffRecordList*)this;
+    pCList = static_cast<DffRecordList*>(this);
     if ( pCList->nCount )
     {
         pCList->nCurrent = 0;
@@ -4190,7 +4190,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     else
     {
         InitializePropSet( DFF_msofbtOPT ); // get the default PropSet
-        ( (DffPropertyReader*) this )->mnFix16Angle = 0;
+        static_cast<DffPropertyReader*>(this)->mnFix16Angle = 0;
     }
 
     aObjData.bOpt2 = maShapeRecords.SeekToContent( rSt, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART );
