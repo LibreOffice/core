@@ -117,7 +117,9 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
         pControl = lb->second;
     else
     {
-        SwFrameControlPtr pNewControl( new SwHeaderFooterWin( m_pEditWin, pPageFrm, bHeader ) );
+        SwFrameControlPtr pNewControl(
+                new SwFrameControl( VclPtr<SwHeaderFooterWin>::Create(
+                                        m_pEditWin, pPageFrm, bHeader ).get() ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
         rControls.insert(lb, make_pair(pPageFrm, pNewControl));
@@ -146,7 +148,8 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
         pControl = lb->second;
     else
     {
-        SwFrameControlPtr pNewControl( new SwPageBreakWin( m_pEditWin, pPageFrm ) );
+        SwFrameControlPtr pNewControl( new SwFrameControl(
+                VclPtr<SwPageBreakWin>::Create( m_pEditWin, pPageFrm ).get() ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
 
@@ -159,6 +162,42 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
     rWin.UpdatePosition();
     if (!rWin.IsVisible())
         pControl->ShowAll( true );
+}
+
+SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrm* pFrm ) :
+    MenuButton( pEditWin, WB_DIALOGCONTROL ),
+    m_pEditWin( pEditWin ),
+    m_pFrm( pFrm )
+{
+}
+
+const SwPageFrm* SwFrameMenuButtonBase::GetPageFrame()
+{
+    return static_cast< const SwPageFrm * >( m_pFrm );
+}
+
+void SwFrameMenuButtonBase::dispose()
+{
+    m_pEditWin.clear();
+    m_pFrm = NULL;
+    MenuButton::dispose();
+}
+
+SwFrameControl::SwFrameControl( const VclPtr<vcl::Window> &pWindow )
+{
+    assert( pWindow != NULL );
+    mxWindow.reset( pWindow );
+    mpIFace = dynamic_cast<ISwFrameControl *>( pWindow.get() );
+}
+
+SwFrameControl::~SwFrameControl()
+{
+    mpIFace = NULL;
+    mxWindow.disposeAndClear();
+}
+
+ISwFrameControl::~ISwFrameControl()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

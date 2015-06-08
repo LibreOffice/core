@@ -18,7 +18,7 @@
     This control is showing the header / footer style name and provides
     a few useful actions to the user.
   */
-class SwHeaderFooterWin : public MenuButton, public SwFrameControl
+class SwHeaderFooterWin : public SwFrameMenuButtonBase
 {
     OUString              m_sLabel;
     bool                  m_bIsHeader;
@@ -29,7 +29,7 @@ class SwHeaderFooterWin : public MenuButton, public SwFrameControl
     Timer                 m_aFadeTimer;
 
 public:
-    SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader );
+    SwHeaderFooterWin( SwEditWin *pEditWin, const SwFrm *pFrm, bool bHeader );
     virtual ~SwHeaderFooterWin( );
     virtual void dispose() SAL_OVERRIDE;
 
@@ -44,7 +44,6 @@ public:
 
     bool IsHeader() { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( );
-    const SwPageFrm* GetPageFrame( );
 
     void ExecuteCommand(sal_uInt16 nSlot);
 
