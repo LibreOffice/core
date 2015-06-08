@@ -285,7 +285,7 @@ void SAXHelper::startElement(
             attrs[i] = NULL ;
         }
 
-        xmlFree( ( void* ) attrs ) ;
+        xmlFree( static_cast<void*>(attrs) ) ;
         attrs = NULL ;
     }
 }

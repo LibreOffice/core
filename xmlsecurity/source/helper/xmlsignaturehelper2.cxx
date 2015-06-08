@@ -87,7 +87,7 @@ void SAL_CALL ImplXMLSignatureListener::startElement( const OUString& aName, con
 {
     if ( aName == "Signature" )
     {
-            maStartVerifySignatureElementListener.Call( (void*)&xAttribs );
+            maStartVerifySignatureElementListener.Call( const_cast<css::uno::Reference<css::xml::sax::XAttributeList> *>(&xAttribs) );
     }
 
     if (m_xNextHandler.is())

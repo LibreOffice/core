@@ -130,7 +130,7 @@ uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceName
 uno::Reference< uno::XInterface > SAL_CALL SEInitializer_NssImpl_createInstance( const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*) new SEInitializer_NssImpl(comphelper::getComponentContext(rxMSF));
+    return static_cast<cppu::OWeakObject*>(new SEInitializer_NssImpl(comphelper::getComponentContext(rxMSF)));
 }
 
 /* XServiceInfo */

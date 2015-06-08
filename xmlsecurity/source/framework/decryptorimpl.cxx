@@ -196,7 +196,7 @@ cssu::Sequence< OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  )
 cssu::Reference< cssu::XInterface > SAL_CALL DecryptorImpl_createInstance( const cssu::Reference< cssl::XMultiServiceFactory >& xMSF)
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new DecryptorImpl( comphelper::getComponentContext( xMSF ) );
+    return static_cast<cppu::OWeakObject*>(new DecryptorImpl( comphelper::getComponentContext( xMSF ) ));
 }
 
 /* XServiceInfo */

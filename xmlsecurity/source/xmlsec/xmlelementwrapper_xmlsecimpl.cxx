@@ -91,7 +91,7 @@ cssu::Reference< cssu::XInterface > SAL_CALL
         const cssu::Reference< cssu::XComponentContext > &)
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new XMLElementWrapper_XmlSecImpl(NULL);
+    return static_cast<cppu::OWeakObject*>(new XMLElementWrapper_XmlSecImpl(NULL));
 }
 
 /* XServiceInfo */

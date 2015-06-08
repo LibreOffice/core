@@ -445,7 +445,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
             return NULL; // no need for exception cf. i40394
         }
 
-        derIssuer = SEC_ASN1EncodeItem( arena, NULL, ( void* )nmIssuer, SEC_ASN1_GET( CERT_NameTemplate ) ) ;
+        derIssuer = SEC_ASN1EncodeItem( arena, NULL, static_cast<void*>(nmIssuer), SEC_ASN1_GET( CERT_NameTemplate ) ) ;
         if( derIssuer == NULL ) {
             PL_strfree( chIssuer ) ;
             CERT_DestroyName( nmIssuer ) ;

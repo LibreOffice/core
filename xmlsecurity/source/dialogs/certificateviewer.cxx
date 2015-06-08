@@ -208,7 +208,7 @@ void CertificateViewerDetailsTP::InsertElement( const OUString& _rField, const O
 {
     SvTreeListEntry*    pEntry = m_pElementsLB->InsertEntry( _rField );
     m_pElementsLB->SetEntryText( _rValue, pEntry, 1 );
-    pEntry->SetUserData( ( void* ) new Details_UserDatat( _rDetails, _bFixedWidthFont ) );
+    pEntry->SetUserData( static_cast<void*>(new Details_UserDatat( _rDetails, _bFixedWidthFont )) );
 }
 
 CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, CertificateViewer* _pDlg )
@@ -472,7 +472,7 @@ SvTreeListEntry* CertificateViewerCertPathTP::InsertCert(
 {
     Image aImage = bValid ? maCertImage : maCertNotValidatedImage;
     SvTreeListEntry* pEntry = mpCertPathLB->InsertEntry( _rName, aImage, aImage, _pParent );
-    pEntry->SetUserData( ( void* ) new CertPath_UserData( rxCert, bValid ) );
+    pEntry->SetUserData( static_cast<void*>(new CertPath_UserData( rxCert, bValid )) );
 
     return pEntry;
 }

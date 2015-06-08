@@ -231,7 +231,7 @@ Reference< XInterface > SAL_CALL EncryptorImpl_createInstance(
     const Reference< cssl::XMultiServiceFactory >& xMSF)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new EncryptorImpl( comphelper::getComponentContext( xMSF ) );
+    return static_cast<cppu::OWeakObject*>(new EncryptorImpl( comphelper::getComponentContext( xMSF ) ));
 }
 
 /* XServiceInfo */

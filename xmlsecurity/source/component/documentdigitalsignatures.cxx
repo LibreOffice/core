@@ -512,7 +512,7 @@ Sequence< OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw
 Reference< XInterface > DocumentDigitalSignatures_CreateInstance(
     const Reference< XComponentContext >& rCtx) throw ( Exception )
 {
-    return (cppu::OWeakObject*) new DocumentDigitalSignatures( rCtx );
+    return static_cast<cppu::OWeakObject*>(new DocumentDigitalSignatures( rCtx ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

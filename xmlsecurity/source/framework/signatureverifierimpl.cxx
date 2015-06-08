@@ -191,7 +191,7 @@ cssu::Reference< cssu::XInterface > SAL_CALL SignatureVerifierImpl_createInstanc
     const cssu::Reference< cssl::XMultiServiceFactory >& rSMgr)
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new SignatureVerifierImpl( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new SignatureVerifierImpl( comphelper::getComponentContext(rSMgr) ));
 }
 
 /* XServiceInfo */

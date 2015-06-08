@@ -329,7 +329,7 @@ IMPL_LINK( XMLSignatureHelper, SignatureVerifyResultListener, XMLSignatureVerify
 
 IMPL_LINK( XMLSignatureHelper, StartVerifySignatureElement, const uno::Reference< com::sun::star::xml::sax::XAttributeList >*, pAttrs )
 {
-    if ( !maStartVerifySignatureHdl.IsSet() || maStartVerifySignatureHdl.Call( (void*)pAttrs ) )
+    if ( !maStartVerifySignatureHdl.IsSet() || maStartVerifySignatureHdl.Call( const_cast<css::uno::Reference<css::xml::sax::XAttributeList> *>(pAttrs) ) )
     {
         sal_Int32 nSignatureId = mpXSecController->getNewSecurityId();
         mpXSecController->addSignature( nSignatureId );

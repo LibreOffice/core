@@ -245,7 +245,7 @@ cssu::Reference< cssu::XInterface > SAL_CALL SignatureCreatorImpl_createInstance
     const cssu::Reference< cssl::XMultiServiceFactory >& xMSF )
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new SignatureCreatorImpl( comphelper::getComponentContext( xMSF ) );
+    return static_cast<cppu::OWeakObject*>(new SignatureCreatorImpl( comphelper::getComponentContext( xMSF ) ));
 }
 
 /* XServiceInfo */

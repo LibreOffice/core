@@ -1074,7 +1074,7 @@ cssu::Reference< cssu::XInterface > SAL_CALL XMLDocumentWrapper_XmlSecImpl_creat
     const cssu::Reference< cssu::XComponentContext > &)
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new XMLDocumentWrapper_XmlSecImpl( );
+    return static_cast<cppu::OWeakObject*>(new XMLDocumentWrapper_XmlSecImpl( ));
 }
 
 /* XServiceInfo */

@@ -162,7 +162,7 @@ void EncryptionEngine::clearUp( ) const
 
     xReferenceResolvedBroadcaster->removeReferenceResolvedListener(
         m_nIdOfTemplateEC,
-        static_cast<const Reference < cssxc::sax::XReferenceResolvedListener > >((SecurityEngine *)this));
+        static_cast<const Reference < cssxc::sax::XReferenceResolvedListener > >(static_cast<SecurityEngine *>(const_cast<EncryptionEngine *>(this))));
 
     m_xSAXEventKeeper->removeElementCollector(m_nIdOfTemplateEC);
 

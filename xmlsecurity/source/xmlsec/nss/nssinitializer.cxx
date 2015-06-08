@@ -481,7 +481,7 @@ cssu::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
 cssu::Reference< cssu::XInterface > SAL_CALL ONSSInitializer_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new ONSSInitializer( comphelper::getComponentContext(rSMgr) );
+    return static_cast<cppu::OWeakObject*>(new ONSSInitializer( comphelper::getComponentContext(rSMgr) ));
 }
 
 /* XServiceInfo */

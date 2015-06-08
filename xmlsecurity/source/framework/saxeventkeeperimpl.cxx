@@ -1378,7 +1378,7 @@ cssu::Reference< cssu::XInterface > SAL_CALL SAXEventKeeperImpl_createInstance(
     const cssu::Reference< cssl::XMultiServiceFactory > &)
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new SAXEventKeeperImpl();
+    return static_cast<cppu::OWeakObject*>(new SAXEventKeeperImpl());
 }
 
 /* XServiceInfo */

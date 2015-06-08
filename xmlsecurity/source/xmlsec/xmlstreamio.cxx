@@ -98,7 +98,7 @@ void* xmlStreamOpen( const char* uri )
             ::com::sun::star::io::XInputStream* pInputStream ;
             pInputStream = xInputStream.get() ;
             pInputStream->acquire() ;
-            return ( void* )pInputStream ;
+            return static_cast<void*>(pInputStream) ;
         }
     }
 
