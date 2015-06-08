@@ -559,7 +559,7 @@ void SalDisplay::Init()
     for( Cursor & aCsr : aPointerCache_ )
         aCsr = None;
 
-    mpFactory           = (AttributeProvider*)NULL;
+    mpFactory           = nullptr;
     m_bXinerama         = false;
 
     int nDisplayScreens = ScreenCount( pDisp_ );
@@ -2354,7 +2354,7 @@ SalVisual::SalVisual()
 
 SalVisual::SalVisual( const XVisualInfo* pXVI )
 {
-    *(XVisualInfo*)this = *pXVI;
+    *static_cast<XVisualInfo*>(this) = *pXVI;
     if( GetClass() == TrueColor )
     {
         nRedShift_      = sal_Shift( red_mask );

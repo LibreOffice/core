@@ -122,7 +122,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
             GTK_FILE_CHOOSER_ACTION_OPEN,
             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
             GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-            (char *)NULL );
+            nullptr );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 
@@ -240,7 +240,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         cell = gtk_cell_renderer_text_new ();
         gtk_tree_view_column_set_expand (column, true);
         gtk_tree_view_column_pack_start (column, cell, false);
-        gtk_tree_view_column_set_attributes (column, cell, "text", i, (char *)NULL);
+        gtk_tree_view_column_set_attributes (column, cell, "text", i, nullptr);
         gtk_tree_view_append_column (GTK_TREE_VIEW(m_pFilterView), column);
     }
 
@@ -272,7 +272,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     pango_layout_get_pixel_extents (layout, NULL, &row_height);
     g_object_unref (layout);
 
-    g_object_get (cell, "ypad", &ypad, (char *)NULL);
+    g_object_get (cell, "ypad", &ypad, nullptr);
     guint height = (row_height.height + 2*ypad) * 5;
     gtk_widget_set_size_request (m_pFilterView, -1, height);
     gtk_widget_set_size_request (m_pPreview, 1, height);
@@ -896,11 +896,11 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
 
     mnHID_FolderChange =
         g_signal_connect( GTK_FILE_CHOOSER( m_pDialog ), "current-folder-changed",
-            G_CALLBACK( folder_changed_cb ), ( gpointer )this );
+            G_CALLBACK( folder_changed_cb ), static_cast<gpointer>(this) );
 
     mnHID_SelectionChange =
         g_signal_connect( GTK_FILE_CHOOSER( m_pDialog ), "selection-changed",
-            G_CALLBACK( selection_changed_cb ), ( gpointer )this );
+            G_CALLBACK( selection_changed_cb ), static_cast<gpointer>(this) );
 
     int btn = GTK_RESPONSE_NO;
 
@@ -1352,7 +1352,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
     }
     else if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         g_object_set( pWidget, "label", aTxt.getStr(),
-                      "use_underline", true, (char *)NULL );
+                      "use_underline", true, nullptr );
     else
         OSL_TRACE("Can't set label on list");
 }
@@ -1535,7 +1535,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState ) throw( u
             {
                 mHID_Preview = g_signal_connect(
                     GTK_FILE_CHOOSER( m_pDialog ), "update-preview",
-                    G_CALLBACK( update_preview_cb ), ( gpointer )this );
+                    G_CALLBACK( update_preview_cb ), static_cast<gpointer>(this) );
             }
             gtk_widget_show( m_pPreview );
         }
@@ -1823,7 +1823,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,
                     g_strdup( OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() ),
-                    (GDestroyNotify) g_free );
+                    g_free );
 
                 OSL_TRACE( "fustering with %s", OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ).getStr());
             }

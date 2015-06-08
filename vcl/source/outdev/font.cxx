@@ -610,7 +610,7 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
             if ( pFrame->AcquireGraphics() )
             {
                 // Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler
-                OutputDevice *pDevice = (OutputDevice*)pFrame;
+                OutputDevice *pDevice = static_cast<OutputDevice*>(pFrame);
                 pDevice->mpGraphics->ClearDevFontCache();
                 pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mpFontCollection);
             }

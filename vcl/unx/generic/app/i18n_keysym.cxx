@@ -307,11 +307,11 @@ const keymap_t* p_keymap[INITIAL_KEYMAPS] = {
     &keymap00, &keymap01, &keymap02, &keymap03,                         /* 00 -- 03 */
     &keymap04, &keymap05, &keymap06, &keymap07,                         /* 04 -- 07 */
     &keymap08, &keymap09, &keymap10, &keymap11,                         /* 08 -- 11 */
-    &keymap12, &keymap13, &keymap14, (keymap_t*)NULL,                   /* 12 -- 15 */
-    (keymap_t*)NULL, (keymap_t*)NULL, (keymap_t*)NULL, &keymap19,       /* 16 -- 19 */
-    (keymap_t*)NULL, (keymap_t*)NULL, (keymap_t*)NULL, (keymap_t*)NULL, /* 20 -- 23 */
-    (keymap_t*)NULL, (keymap_t*)NULL, (keymap_t*)NULL, (keymap_t*)NULL, /* 24 -- 27 */
-    (keymap_t*)NULL, (keymap_t*)NULL, (keymap_t*)NULL, (keymap_t*)NULL, /* 28 -- 31 */
+    &keymap12, &keymap13, &keymap14, nullptr,                   /* 12 -- 15 */
+    nullptr, nullptr, nullptr, &keymap19,       /* 16 -- 19 */
+    nullptr, nullptr, nullptr, nullptr, /* 20 -- 23 */
+    nullptr, nullptr, nullptr, nullptr, /* 24 -- 27 */
+    nullptr, nullptr, nullptr, nullptr, /* 28 -- 31 */
     &keymap32                                                           /* 32 */
 };
 

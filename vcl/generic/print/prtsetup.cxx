@@ -45,22 +45,22 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
 
         if( m_aJobData.m_aContext.checkConstraints( pKey, pValue ) )
         {
-            if( rBox.GetEntryPos( (void*)pValue ) == LISTBOX_ENTRY_NOTFOUND )
+            if( rBox.GetEntryPos( static_cast<void const *>(pValue) ) == LISTBOX_ENTRY_NOTFOUND )
             {
                 nPos = rBox.InsertEntry( aOptionText, LISTBOX_APPEND );
-                    rBox.SetEntryData( nPos, (void*)pValue );
+                    rBox.SetEntryData( nPos, const_cast<PPDValue *>(pValue) );
             }
         }
         else
         {
-            if( ( nPos = rBox.GetEntryPos( (void*)pValue ) ) != LISTBOX_ENTRY_NOTFOUND )
+            if( ( nPos = rBox.GetEntryPos( static_cast<void const *>(pValue) ) ) != LISTBOX_ENTRY_NOTFOUND )
                 rBox.RemoveEntry( nPos );
         }
     }
     pValue = m_aJobData.m_aContext.getValue( pKey );
     if (pValue && !pValue->m_bCustomOption)
     {
-        if( ( nPos = rBox.GetEntryPos( (void*)pValue ) ) != LISTBOX_ENTRY_NOTFOUND )
+        if( ( nPos = rBox.GetEntryPos( static_cast<void const *>(pValue) ) ) != LISTBOX_ENTRY_NOTFOUND )
             rBox.SelectEntryPos( nPos );
     }
     else
@@ -370,7 +370,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
             {
                 OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
                 sal_uInt16 nPos = m_pPPDKeyBox->InsertEntry( aEntry );
-                m_pPPDKeyBox->SetEntryData( nPos, (void*)pKey );
+                m_pPPDKeyBox->SetEntryData( nPos, const_cast<PPDKey *>(pKey) );
             }
         }
     }
@@ -485,11 +485,11 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
             else
                 aEntry = OUString(m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption));
             sal_uInt16 nPos = m_pPPDValueBox->InsertEntry( aEntry );
-            m_pPPDValueBox->SetEntryData( nPos, (void*)pValue );
+            m_pPPDValueBox->SetEntryData( nPos, const_cast<PPDValue *>(pValue) );
         }
     }
     pValue = m_pParent->m_aJobData.m_aContext.getValue( pKey );
-    m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( (void*)pValue ) );
+    m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( static_cast<void const *>(pValue) ) );
     if (pValue->m_bCustomOption)
     {
         m_pCustomValue = pValue;

@@ -198,7 +198,7 @@ Point XIMStatusWindow::updatePosition()
         const SystemEnvData* pParentEnvData = m_pLastParent->GetSystemData();
 
         SalExtTextInputPosEvent aPosEvent;
-        m_pLastParent->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
+        m_pLastParent->CallCallback( SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent) );
         int x, y;
         ::Window aChild;
         XTranslateCoordinates( static_cast<Display*>(pParentEnvData->pDisplay),

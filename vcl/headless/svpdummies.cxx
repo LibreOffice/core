@@ -26,7 +26,7 @@
 SvpSalObject::SvpSalObject()
 {
     // fast and easy cross-platform wiping of the data
-    memset( (void *)&m_aSystemChildData, 0, sizeof( SystemEnvData ) );
+    memset( static_cast<void *>(&m_aSystemChildData), 0, sizeof( SystemEnvData ) );
     m_aSystemChildData.nSize = sizeof( SystemEnvData );
 }
 

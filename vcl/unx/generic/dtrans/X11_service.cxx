@@ -85,12 +85,12 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
 
 css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
 {
-    return css::uno::Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
+    return css::uno::Reference < XInterface >( static_cast<OWeakObject *>(new SelectionManagerHolder()) );
 }
 
 css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
 {
-    return css::uno::Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
+    return css::uno::Reference < XInterface >( static_cast<OWeakObject *>(new DropTarget()) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

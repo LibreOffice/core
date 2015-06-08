@@ -701,7 +701,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFon
             if (pFile->setPos(osl_Pos_Current, -1) == osl::FileBase::E_None)
             {
                 sal_uInt64 uBytes(1);
-                pFile->read((void *)(&lastchar), uBytes, uBytes);
+                pFile->read(static_cast<void *>(&lastchar), uBytes, uBytes);
             }
 
             if (lastchar != '\n')

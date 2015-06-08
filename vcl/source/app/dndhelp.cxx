@@ -74,7 +74,7 @@ vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper()
 uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                            (static_cast< ::com::sun::star::lang::XEventListener* >( (::com::sun::star::datatransfer::dnd::XDragGestureListener*)this) ),
+                            (static_cast< ::com::sun::star::lang::XEventListener* >( static_cast<com::sun::star::datatransfer::dnd::XDragGestureListener*>(this)) ),
                             (static_cast< ::com::sun::star::datatransfer::dnd::XDragGestureListener* >(this)),
                             (static_cast< ::com::sun::star::datatransfer::dnd::XDragSourceListener* >(this)),
                             (static_cast< ::com::sun::star::datatransfer::dnd::XDropTargetListener* >(this)) );

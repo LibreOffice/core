@@ -964,7 +964,7 @@ void GtkData::PostUserEvent()
         g_source_set_priority (m_pUserEvent, G_PRIORITY_HIGH);
         g_source_set_can_recurse (m_pUserEvent, TRUE);
         g_source_set_callback (m_pUserEvent, call_userEventFn,
-                               (gpointer) this, NULL);
+                               static_cast<gpointer>(this), NULL);
         g_source_attach (m_pUserEvent, g_main_context_default ());
     }
 }

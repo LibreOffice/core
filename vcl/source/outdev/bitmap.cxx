@@ -430,7 +430,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
                 if ( aVDev->SetOutputSizePixel( aRect.GetSize() ) )
                 {
-                    if ( ((OutputDevice*)aVDev.get())->mpGraphics || ((OutputDevice*)aVDev.get())->AcquireGraphics() )
+                    if ( static_cast<OutputDevice*>(aVDev.get())->mpGraphics || static_cast<OutputDevice*>(aVDev.get())->AcquireGraphics() )
                     {
                         if ( (nWidth > 0) && (nHeight > 0) )
                         {
@@ -438,7 +438,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                                               (aRect.Left() < mnOutOffX) ? (mnOutOffX - aRect.Left()) : 0L,
                                               (aRect.Top() < mnOutOffY) ? (mnOutOffY - aRect.Top()) : 0L,
                                               nWidth, nHeight);
-                            (((OutputDevice*)aVDev.get())->mpGraphics)->CopyBits( aPosAry, mpGraphics, this, this );
+                            (static_cast<OutputDevice*>(aVDev.get())->mpGraphics)->CopyBits( aPosAry, mpGraphics, this, this );
                         }
                         else
                         {

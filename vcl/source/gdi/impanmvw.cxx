@@ -308,7 +308,7 @@ AInfo* ImplAnimView::createAInfo() const
     pAInfo->aStartOrg = maPt;
     pAInfo->aStartSize = maSz;
     pAInfo->pOutDev = mpOut;
-    pAInfo->pViewData = (void*) this;
+    pAInfo->pViewData = const_cast<ImplAnimView *>(this);
     pAInfo->nExtraData = mnExtraData;
     pAInfo->bPause = mbPause;
 

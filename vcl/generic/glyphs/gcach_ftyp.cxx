@@ -1581,7 +1581,7 @@ bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     aFuncs.cubic_to = &FT_cubic_to;
     aFuncs.shift    = 0;
     aFuncs.delta    = 0;
-    rc = FT_Outline_Decompose( &rOutline, &aFuncs, (void*)&aPolyArg );
+    rc = FT_Outline_Decompose( &rOutline, &aFuncs, static_cast<void*>(&aPolyArg) );
     aPolyArg.ClosePolygon();    // close last polygon
     FT_Done_Glyph( pGlyphFT );
 

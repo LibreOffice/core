@@ -173,7 +173,7 @@ hyper_link_get_type()
 
         static const GInterfaceInfo atk_action_info = {
             reinterpret_cast<GInterfaceInitFunc>(actionIfaceInit),
-            (GInterfaceFinalizeFunc) NULL,
+            nullptr,
             NULL
         };
 

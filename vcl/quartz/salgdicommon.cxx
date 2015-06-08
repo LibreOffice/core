@@ -226,7 +226,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // prepare data for psprint's font subsetter
     TrueTypeFont* pSftFont = NULL;
-    int nRC = ::OpenTTFontBuffer( (void*)&aBuffer[0], aBuffer.size(), 0, &pSftFont);
+    int nRC = ::OpenTTFontBuffer( static_cast<void*>(&aBuffer[0]), aBuffer.size(), 0, &pSftFont);
     if( nRC != SF_OK )
         return false;
 

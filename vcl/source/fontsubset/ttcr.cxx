@@ -925,7 +925,7 @@ TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
     PutUInt16(fontDirectionHint, ptr, 48, 1);
     PutUInt16(0, ptr, 52, 1);                     /* glyph data format: 0 */
 
-    table->data = (void *) ptr;
+    table->data = static_cast<void *>(ptr);
     table->tag = T_head;
     table->rawdata = 0;
 
@@ -954,7 +954,7 @@ TrueTypeTable *TrueTypeTableNew_hhea(sal_Int16  ascender,
     PutUInt16(0, ptr, 30, 1);                     /* reserved 5 */
     PutUInt16(0, ptr, 32, 1);                     /* metricDataFormat */
 
-    table->data = (void *) ptr;
+    table->data = static_cast<void *>(ptr);
     table->tag = T_hhea;
     table->rawdata = 0;
 
@@ -997,7 +997,7 @@ TrueTypeTable *TrueTypeTableNew_glyf()
 
     assert(l != 0);
 
-    listSetElementDtor(l, (list_destructor)FreeGlyphData);
+    listSetElementDtor(l, FreeGlyphData);
 
     table->data = l;
     table->rawdata = 0;
@@ -1054,7 +1054,7 @@ TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord *nr)
 
     assert(l != 0);
 
-    listSetElementDtor(l, (list_destructor)DisposeNameRecord);
+    listSetElementDtor(l, DisposeNameRecord);
 
     if (n != 0) {
         int i;

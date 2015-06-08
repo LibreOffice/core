@@ -1196,7 +1196,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                         {
                             if ( pCommentAct->GetDataSize() )
                             {
-                                SvMemoryStream aMemStm( (void*)pCommentAct->GetData(), pCommentAct->GetDataSize(), StreamMode::READ );
+                                SvMemoryStream aMemStm( const_cast<sal_uInt8 *>(pCommentAct->GetData()), pCommentAct->GetDataSize(), StreamMode::READ );
                                 SvMemoryStream aDest;
                                 if ( bPathStroke )
                                 {

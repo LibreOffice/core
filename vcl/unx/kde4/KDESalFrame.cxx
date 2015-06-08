@@ -72,7 +72,7 @@ static Color toColor( const QColor &rColor )
 */
 static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
 {
-    return OUString::createFromAscii( (const char *) pGroup->readEntryUntranslated( pKey ).toAscii() );
+    return OUString::createFromAscii( static_cast<const char *>(pGroup->readEntryUntranslated( pKey ).toAscii()) );
 }
 
 /** Helper function to add information to Font from QFont.
@@ -85,7 +85,7 @@ static vcl::Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Loca
     QFontInfo qFontInfo( rQFont );
 
     // set family name
-    aInfo.m_aFamilyName = OUString( (const char *) rQFont.family().toUtf8(), strlen( (const char *) rQFont.family().toUtf8() ), RTL_TEXTENCODING_UTF8 );
+    aInfo.m_aFamilyName = OUString( static_cast<const char *>(rQFont.family().toUtf8()), strlen( static_cast<const char *>(rQFont.family().toUtf8()) ), RTL_TEXTENCODING_UTF8 );
 
     // set italic
     aInfo.m_eItalic = ( qFontInfo.italic()? ITALIC_NORMAL: ITALIC_NONE );

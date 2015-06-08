@@ -676,7 +676,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
 
         // use the font subsetter to get the widths
         TrueTypeFont* pSftFont = NULL;
-        int nRC = ::OpenTTFontBuffer( (void*)&aBuffer[0], aBuffer.size(), 0, &pSftFont);
+        int nRC = ::OpenTTFontBuffer( static_cast<void*>(&aBuffer[0]), aBuffer.size(), 0, &pSftFont);
         if( nRC != SF_OK )
             return;
 
@@ -694,7 +694,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
             {
                 for( int i = 0; i < nGlyphCount; ++i )
                     rGlyphWidths[i] = pGlyphMetrics[i].adv;
-                free( (void*)pGlyphMetrics );
+                free( const_cast<TTSimpleGlyphMetrics *>(pGlyphMetrics) );
             }
 
             FontCharMapPtr pMap = mpFontData->GetFontCharMap();

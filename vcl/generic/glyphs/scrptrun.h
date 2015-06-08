@@ -88,7 +88,7 @@ public:
     UBool next();
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+s     * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @stable ICU 2.2
      */
@@ -99,7 +99,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID() { return static_cast<UClassID>(const_cast<char *>(&fgClassID)); }
 
 private:
 

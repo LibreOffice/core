@@ -988,7 +988,7 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
             if( ret )
             {
                 gchar * old_tab_str = ret;
-                ret = g_strconcat(old_tab_str, " ", tab_str, (const char*)NULL);
+                ret = g_strconcat(old_tab_str, " ", tab_str, nullptr);
                 g_free( old_tab_str );
             }
             else

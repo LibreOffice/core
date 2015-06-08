@@ -1639,13 +1639,13 @@ private:
         aInputEvent.maText = aInsertString;
         aInputEvent.mnCursorPos = selRange.location;
         aInputEvent.mpTextAttr = &aInputFlags[0];
-        mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void *)&aInputEvent );
+        mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void *>(&aInputEvent) );
     } else {
         aInputEvent.maText.clear();
         aInputEvent.mnCursorPos = 0;
         aInputEvent.mnCursorFlags = 0;
         aInputEvent.mpTextAttr = 0;
-        mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void *)&aInputEvent );
+        mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void *>(&aInputEvent) );
         mpFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, 0 );
     }
     mbKeyHandled= true;
@@ -1712,7 +1712,7 @@ private:
     YIELD_GUARD;
 
     SalExtTextInputPosEvent aPosEvent;
-    mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void *)&aPosEvent );
+    mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, static_cast<void *>(&aPosEvent) );
 
     NSRect rect;
 

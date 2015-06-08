@@ -904,7 +904,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             nStyle |= WB_BORDER;
         }
         VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
-        ((vcl::Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
+        static_cast<vcl::Window*>(pBorderWin)->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
         pParent = mpWindowImpl->mpBorderWindow;
@@ -2001,7 +2001,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 
 void Window::Command( const CommandEvent& rCEvt )
 {
-    CallEventListeners( VCLEVENT_WINDOW_COMMAND, (void*)&rCEvt );
+    CallEventListeners( VCLEVENT_WINDOW_COMMAND, const_cast<CommandEvent *>(&rCEvt) );
 
     NotifyEvent aNEvt( MouseNotifyEvent::COMMAND, this, &rCEvt );
     if ( !CompatNotify( aNEvt ) )

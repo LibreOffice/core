@@ -54,7 +54,7 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentCon
     m_pDialog = gtk_file_chooser_dialog_new(
         OUStringToOString( getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
         NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-        GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, (char *)NULL );
+        GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, nullptr );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 #if ENABLE_GNOME_VFS || ENABLE_GIO

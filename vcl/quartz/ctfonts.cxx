@@ -208,7 +208,7 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
 
     GgoData aGgoData;
     aGgoData.mpPolyPoly = &rResult;
-    CGPathApply( xPath, (void*)&aGgoData, MyCGPathApplierFunc );
+    CGPathApply( xPath, static_cast<void*>(&aGgoData), MyCGPathApplierFunc );
 #if 0 // TODO: does OSX ensure that the last polygon is always closed?
     const CGPathElement aClosingElement = { kCGPathElementCloseSubpath, NULL };
     MyCGPathApplierFunc( (void*)&aGgoData, &aClosingElement );

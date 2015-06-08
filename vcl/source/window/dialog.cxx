@@ -1089,7 +1089,7 @@ void Dialog::GrabFocusToFirstControl()
 
 void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder, sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
-    ScopedVclPtrInstance<ImplBorderWindow> aImplWin( (vcl::Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
+    ScopedVclPtrInstance<ImplBorderWindow> aImplWin( static_cast<vcl::Window*>(const_cast<Dialog *>(this)), WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
     aImplWin->GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
 

@@ -550,7 +550,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         const sal_uInt8* pData = pA->GetData();
                         if ( pData )
                         {
-                            SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), StreamMode::READ );
+                            SvMemoryStream  aMemStm( const_cast<sal_uInt8 *>(pData), pA->GetDataSize(), StreamMode::READ );
                             bool            bSkipSequence = false;
                             OString sSeqEnd;
 

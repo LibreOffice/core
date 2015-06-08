@@ -3008,8 +3008,8 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
         // The number also cannot be calculated by List/Combobox, as for
         // this the presence of the vertical Scrollbar has to be known.
         mpImplLB->SetSizePixel( GetOutputSizePixel() );
-        ((vcl::Window*)mpImplLB)->Resize();
-        ((vcl::Window*)mpImplLB->GetMainWindow())->Resize();
+        static_cast<vcl::Window*>(mpImplLB)->Resize();
+        static_cast<vcl::Window*>(mpImplLB->GetMainWindow())->Resize();
     }
 }
 

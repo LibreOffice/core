@@ -1315,7 +1315,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     if( vi )
     {
         SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
-        aWinData.pVisual = (void*)(vi->visual);
+        aWinData.pVisual = static_cast<void*>(vi->visual);
     }
 #endif
 

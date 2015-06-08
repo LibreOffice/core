@@ -293,14 +293,14 @@ ooo_window_wrapper_get_type()
         static const GTypeInfo typeInfo =
         {
             static_cast<guint16>(type_query.class_size),
-            (GBaseInitFunc) NULL,
-            (GBaseFinalizeFunc) NULL,
+            nullptr,
+            nullptr,
             reinterpret_cast<GClassInitFunc>(ooo_window_wrapper_class_init),
-            (GClassFinalizeFunc) NULL,
+            nullptr,
             NULL,
             static_cast<guint16>(type_query.instance_size),
             0,
-            (GInstanceInitFunc) NULL,
+            nullptr,
             NULL
         } ;
 

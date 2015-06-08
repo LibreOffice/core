@@ -32,7 +32,7 @@ bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
 {
     (void) eInFormat; // Really not needed? Weird.
 
-    NSData* pData = [NSData dataWithBytesNoCopy: (void*)rImgData.getConstArray() length: rImgData.getLength() freeWhenDone: 0];
+    NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8 *>(rImgData.getConstArray()) length: rImgData.getLength() freeWhenDone: 0];
     if( !pData)
         return false;
 

@@ -307,7 +307,7 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
             if( !aSubstVector.empty() )
             {
                 GlyphSubstitution* pGSubstitution = new GlyphSubstitution;
-                pTTFile->pGSubstitution = (void*)pGSubstitution;
+                pTTFile->pGSubstitution = static_cast<void*>(pGSubstitution);
                 for( subst_it = aSubstVector.begin(); subst_it != aSubstVector.end(); ++subst_it )
                     (*pGSubstitution)[ (*subst_it).first ] =  (*subst_it).second;
             }

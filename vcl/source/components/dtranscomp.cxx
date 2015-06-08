@@ -514,17 +514,17 @@ Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMu
 */
 Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& )
 {
-    return Reference< XInterface >( ( cppu::OWeakObject * )new vcl::GenericClipboard() );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard()) );
 }
 
 Reference< XInterface > SalInstance::CreateDragSource()
 {
-    return Reference< XInterface >( ( cppu::OWeakObject * )new vcl::GenericDragSource() );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericDragSource()) );
 }
 
 Reference< XInterface > SalInstance::CreateDropTarget()
 {
-    return Reference< XInterface >( ( cppu::OWeakObject * )new vcl::GenericDropTarget() );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericDropTarget()) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

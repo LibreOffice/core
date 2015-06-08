@@ -255,7 +255,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // draw text into upper left corner
     rSalLayout.DrawBase() -= aBoundRect.TopLeft();
-    rSalLayout.DrawText( *((OutputDevice*)pVDev)->mpGraphics );
+    rSalLayout.DrawText( *static_cast<OutputDevice*>(pVDev)->mpGraphics );
 
     Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
     if ( !aBmp || !aBmp.Rotate( mpFontEntry->mnOwnOrientation, COL_WHITE ) )
@@ -2817,8 +2817,8 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                     {
                         Point& rPt = rPoly[k];
                         rPt -= aOffset;
-                        int nPixelX = rPt.X() - ((OutputDevice*)aVDev.get())->mnTextOffX + nXOffset;
-                        int nPixelY = rPt.Y() - ((OutputDevice*)aVDev.get())->mnTextOffY;
+                        int nPixelX = rPt.X() - static_cast<OutputDevice*>(aVDev.get())->mnTextOffX + nXOffset;
+                        int nPixelY = rPt.Y() - static_cast<OutputDevice*>(aVDev.get())->mnTextOffY;
                         rPt.X() = ImplDevicePixelToLogicWidth( nPixelX );
                         rPt.Y() = ImplDevicePixelToLogicHeight( nPixelY );
                     }

@@ -245,11 +245,11 @@ SalI18N_InputMethod::PosixLocale()
 
 SalI18N_InputMethod::SalI18N_InputMethod( )
     : mbUseable( bUseInputMethodDefault )
-    , maMethod( (XIM)NULL )
-    , mpStyles( (XIMStyles*)NULL )
+    , maMethod( nullptr )
+    , mpStyles( nullptr )
 {
-    maDestroyCallback.callback = (XIMProc)NULL;
-    maDestroyCallback.client_data = (XPointer)NULL;
+    maDestroyCallback.callback = nullptr;
+    maDestroyCallback.client_data = nullptr;
     const char *pUseInputMethod = getenv( "SAL_USEINPUTMETHOD" );
     if ( pUseInputMethod != NULL )
         mbUseable = pUseInputMethod[0] != '\0' ;
@@ -338,7 +338,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
     {
         maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
 
-        if ((maMethod == (XIM)NULL) && (getenv("XMODIFIERS") != NULL))
+        if ((maMethod == nullptr) && (getenv("XMODIFIERS") != NULL))
         {
                 OUString envVar("XMODIFIERS");
                 osl_clearEnvironment(envVar.pData);
@@ -346,7 +346,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
                 maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
         }
 
-        if ( maMethod != (XIM)NULL )
+        if ( maMethod != nullptr )
         {
             if (   XGetIMValues(maMethod, XNQueryInputStyle, &mpStyles, NULL)
                 != NULL)
@@ -367,7 +367,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         fprintf(stderr, "input method creation failed\n");
     #endif
 
-    maDestroyCallback.callback    = (XIMProc)IM_IMDestroyCallback;
+    maDestroyCallback.callback    = static_cast<XIMProc>(IM_IMDestroyCallback);
     maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
     if (mbUseable && maMethod != NULL)
         XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, NULL);

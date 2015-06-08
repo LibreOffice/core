@@ -1051,7 +1051,7 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    ((vcl::Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
+    static_cast<vcl::Window*>(const_cast<ComboBox *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
     {
@@ -1367,7 +1367,7 @@ void ComboBox::SetNoSelection()
 Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
-    Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( (vcl::Window*)this );
+    Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
     aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
     return aRect;
 }

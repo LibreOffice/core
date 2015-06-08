@@ -1757,7 +1757,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_pCodec( NULL ),
         m_pMemStream(NULL),
         m_aDocDigest( rtl_digest_createMD5() ),
-        m_aCipher( (rtlCipher)NULL ),
+        m_aCipher( nullptr ),
         m_aDigest( NULL ),
         m_nKeyLength(0),
         m_nRC4KeyLength(0),
@@ -6631,7 +6631,7 @@ my_NSS_CMSAttributeArray_AddAttr(PLArenaPool *poolp, NSSCMSAttribute ***attrs, N
         goto loser; /* XXX or would it be better to replace it? */
 
     /* no, shove it in */
-    if (my_NSS_CMSArray_Add(poolp, reinterpret_cast<void ***>(attrs), (void *)attr) != SECSuccess)
+    if (my_NSS_CMSArray_Add(poolp, reinterpret_cast<void ***>(attrs), static_cast<void *>(attr)) != SECSuccess)
         goto loser;
 
     PORT_ArenaUnmark(poolp, mark);

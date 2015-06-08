@@ -665,10 +665,10 @@ atk_object_wrapper_get_type()
       static const GTypeInfo typeInfo =
       {
         sizeof (AtkObjectWrapperClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
+        nullptr,
+        nullptr,
         reinterpret_cast<GClassInitFunc>(atk_object_wrapper_class_init),
-        (GClassFinalizeFunc) NULL,
+        nullptr,
         NULL,
         sizeof (AtkObjectWrapper),
         0,
