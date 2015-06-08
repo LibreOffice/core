@@ -492,24 +492,9 @@ void ImpEditEngine::FormatDoc()
     CallStatusHdl();    // If Modified...
 
     //FIXME(matteocam)
-    CallStatusHdlChaining(); // XXX: hard coded for chaining
+    CallChainingEventHdl(); // For chaining
 
     LeaveBlockNotifications();
-}
-
-void ImpEditEngine::CallStatusHdlChaining()
-{
-    // only if it's the right ImpEditEngine (with right info on changes in text)
-    if ( aStatusHdlLinkChaining.IsSet() /* && aStatus.GetStatusWord() */)
-    {
-        CheckPageOverflow();
-        // The Status has to be reset before the Call,
-        // since other Flags might be set in the handler...
-        EditStatus aTmpStatus( aStatus );
-        aStatus.Clear();
-        aStatusHdlLinkChaining.Call( &aTmpStatus );
-        aStatusTimer.Stop();    // If called by hand ...
-    }
 }
 
 bool ImpEditEngine::ImpCheckRefMapMode()
@@ -611,10 +596,12 @@ void ImpEditEngine::CheckPageOverflow()
         // which paragraph is the first to cause higher size of the box?
         ImplUpdateOverflowingParaNum( nBoxHeight); // XXX: currently only for horizontal text
         aStatus.SetPageOverflow(true);
+        mbNeedsChainingHandling = true;
     } else
     {
         // No overflow if withing box boundaries
         aStatus.SetPageOverflow(false);
+        mbNeedsChainingHandling = false;
     }
 
 }
@@ -4089,6 +4076,18 @@ void ImpEditEngine::CallStatusHdl()
         aStatusTimer.Stop();    // If called by hand ...
     }
 }
+
+void ImpEditEngine::CallChainingEventHdl()
+{
+    // only if it's the right ImpEditEngine (with right info on changes in text)
+    if ( aChainingHdlLink.IsSet() /* && aStatus.GetStatusWord() */)
+    {
+        CheckPageOverflow();
+        aChainingHdlLink.Call( &mbNeedsChainingHandling );
+
+    }
+}
+
 
 ContentNode* ImpEditEngine::GetPrevVisNode( ContentNode* pCurNode )
 {

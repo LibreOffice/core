@@ -719,12 +719,18 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 
 OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject() const
 {
+    NonOverflowingText *pNonOverflowingTxt;
     // Cut non overflowing text
-    NonOverflowingText *pNonOverflowingTxt =
-        pEdtOutl->GetNonOverflowingText();
+    if (pEdtOutl != NULL)
+        pNonOverflowingTxt =
+            pEdtOutl->GetNonOverflowingText();
+    else
+        pNonOverflowingTxt =
+            ImpGetDrawOutliner().GetNonOverflowingText();
+
     SdrOutliner &rOutliner = ImpGetDrawOutliner();
     rOutliner.Clear();
-    rOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
+    //rOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
     if (pNonOverflowingTxt->mPreOverflowingTxt == "" &&
         pNonOverflowingTxt->mpHeadParas != NULL) {
@@ -737,7 +743,7 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject() const
         rOutliner.SetText(pNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
         OutlinerParaObject *pPObj = rOutliner.CreateParaObject();
         rOutliner.Clear();
-        rOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
+        //rOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
         if (pNonOverflowingTxt->mpHeadParas != NULL)
             rOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);

@@ -477,6 +477,7 @@ private:
     // For Chaining
     sal_Int32 mnOverflowingPara = -1;
     sal_Int32 mnOverflowingLine = -1;
+    bool mbNeedsChainingHandling = false;
 
     IdleFormattter      aIdleFormatter;
 
@@ -486,7 +487,7 @@ private:
     // this should not happen immediately (critical section):
     Timer               aStatusTimer;
     Link<>              aStatusHdlLink;
-    Link<>              aStatusHdlLinkChaining;
+    Link<>              aChainingHdlLink;
     Link<>              aNotifyHdl;
     Link<>              aImportHdl;
     Link<>              aBeginMovingParagraphsHdl;
@@ -543,6 +544,7 @@ private:
     void                GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     EditTextObject* GetEmptyTextObject();
+
     EditTextObject*     CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
     EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
@@ -852,7 +854,7 @@ public:
     void            SetStatusEventHdl( const Link<>& rLink ) { aStatusHdlLink = rLink; }
     Link<>          GetStatusEventHdl() const               { return aStatusHdlLink; }
 
-    SetChainingEventHdl( const Link<>& rLink )  { aStatusHdlLinkChaining = rLink; }
+    void            SetChainingEventHdl( const Link<>& rLink )  { aChainingHdlLink = rLink; }
 
     void            SetNotifyHdl( const Link<>& rLink )     { aNotifyHdl = rLink; }
     Link<>          GetNotifyHdl() const            { return aNotifyHdl; }
@@ -890,7 +892,7 @@ public:
 
     InternalEditStatus& GetStatus() { return aStatus; }
     void                CallStatusHdl();
-    void                CallStatusHdlChaining();
+    void                CallChainingEventHdl();
     void                DelayedCallStatusHdl()  { aStatusTimer.Start(); }
 
     void                CallNotify( EENotify& rNotify );

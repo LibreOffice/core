@@ -2072,10 +2072,9 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
 
 }
 
-IMPL_LINK(SdrTextObj,ImpDecomposeChainedText,EditStatus*,pEditStat)
+IMPL_LINK(SdrTextObj,ImpDecomposeChainedText,bool*,bIsPageOverflow)
 {
-    // XXX: Check on the outliner here?
-    onEditOutlinerStatusEvent( pEditStat );
+    onOverflowStatusEvent( *bIsPageOverflow );
     return 0;
 }
 
