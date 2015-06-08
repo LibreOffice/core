@@ -79,7 +79,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
     for(sal_uInt32 j= 0; j < nCategoryCount; ++j)
     {
         const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(j);
-        m_pLbCategory->SetEntryData(m_pLbCategory->InsertEntry(pCategory->getName()),(void*)pCategory);
+        m_pLbCategory->SetEntryData(m_pLbCategory->InsertEntry(pCategory->getName()),const_cast<IFunctionCategory *>(pCategory));
     }
 
     m_pLbCategory->SelectEntryPos(1);
@@ -108,7 +108,7 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
     {
         TFunctionDesc pDesc(_pCategory->getFunction(i));
         m_pLbFunction->SetEntryData(
-            m_pLbFunction->InsertEntry(pDesc->getFunctionName() ),(void*)pDesc );
+            m_pLbFunction->InsertEntry(pDesc->getFunctionName() ),const_cast<IFunctionDescription *>(pDesc) );
     }
 }
 
@@ -147,7 +147,7 @@ void FuncPage::UpdateFunctionList()
             if (pDesc)  // may be null if a function is no longer available
             {
                 m_pLbFunction->SetEntryData(
-                    m_pLbFunction->InsertEntry( pDesc->getFunctionName() ), (void*)pDesc );
+                    m_pLbFunction->InsertEntry( pDesc->getFunctionName() ), const_cast<IFunctionDescription *>(pDesc) );
             }
         }
     }

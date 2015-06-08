@@ -458,8 +458,8 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
             OUString aString;
             aArgInput[i].SetArgVal(aString);
             aArgInput[i].GetArgEdPtr()->Init(
-                (i==0)               ? (ArgEdit *)NULL : aArgInput[i-1].GetArgEdPtr(),
-                (i==3 || i==nArgs-1) ? (ArgEdit *)NULL : aArgInput[i+1].GetArgEdPtr(),
+                (i==0)               ? nullptr : aArgInput[i-1].GetArgEdPtr(),
+                (i==3 || i==nArgs-1) ? nullptr : aArgInput[i+1].GetArgEdPtr(),
                                        *m_pSlider, nArgs );
         }
     }
