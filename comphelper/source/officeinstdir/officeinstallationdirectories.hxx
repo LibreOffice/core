@@ -43,7 +43,7 @@ struct mutex_holder
 class OfficeInstallationDirectories : public mutex_holder, public UnoImplBase
 {
 public:
-    OfficeInstallationDirectories(
+    explicit OfficeInstallationDirectories(
         const com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext > & xCtx );
     virtual ~OfficeInstallationDirectories();

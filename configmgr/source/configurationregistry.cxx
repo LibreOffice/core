@@ -73,7 +73,7 @@ class Service:
         css::util::XFlushable >
 {
 public:
-    Service(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit Service(css::uno::Reference< css::uno::XComponentContext > const & context);
 
 private:
     Service(const Service&) SAL_DELETED_FUNCTION;

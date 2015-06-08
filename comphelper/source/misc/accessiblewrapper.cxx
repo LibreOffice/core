@@ -40,7 +40,7 @@ namespace comphelper
         Reference< XEventListener > m_xListener;
 
     public:
-        RemoveEventListener( const Reference< XEventListener >& _rxListener )
+        explicit RemoveEventListener( const Reference< XEventListener >& _rxListener )
             :m_xListener( _rxListener  )
         {
         }

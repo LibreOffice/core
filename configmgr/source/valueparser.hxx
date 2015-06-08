@@ -44,7 +44,7 @@ class Node;
 
 class ValueParser {
 public:
-    ValueParser(int layer);
+    explicit ValueParser(int layer);
 
     ~ValueParser();
 

@@ -40,7 +40,7 @@ namespace comphelper
     class NameContainer : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameContainer >, private NameContainerImpl
     {
     public:
-        NameContainer( ::com::sun::star::uno::Type aType );
+        explicit NameContainer( ::com::sun::star::uno::Type aType );
         virtual ~NameContainer();
 
         // XNameContainer

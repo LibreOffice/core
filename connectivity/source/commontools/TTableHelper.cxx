@@ -62,7 +62,7 @@ class OTableContainerListener:
 protected:
     virtual ~OTableContainerListener(){}
 public:
-    OTableContainerListener(OTableHelper* _pComponent) : m_pComponent(_pComponent){}
+    explicit OTableContainerListener(OTableHelper* _pComponent) : m_pComponent(_pComponent){}
     virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
     }
@@ -114,7 +114,7 @@ namespace connectivity
         Reference< ::com::sun::star::sdbc::XConnection >            m_xConnection;
         rtl::Reference<OTableContainerListener> m_xTablePropertyListener;
         ::std::vector< ColumnDesc > m_aColumnDesc;
-        OTableHelperImpl(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection)
+        explicit OTableHelperImpl(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection)
             : m_xConnection(_xConnection)
         {
             try

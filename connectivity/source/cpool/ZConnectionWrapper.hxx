@@ -45,7 +45,7 @@ namespace connectivity
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
         virtual ~OConnectionWeakWrapper();
     public:
-        OConnectionWeakWrapper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _xConnection);
+        explicit OConnectionWeakWrapper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _xConnection);
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();

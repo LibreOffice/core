@@ -426,7 +426,7 @@ public:
             com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    Access(Components & components);
+    explicit Access(Components & components);
 
     virtual ~Access();
 

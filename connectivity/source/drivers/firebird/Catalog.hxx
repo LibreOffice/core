@@ -23,7 +23,7 @@ namespace connectivity
                 m_xConnection;
 
         public:
-            Catalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& rConnection);
+            explicit Catalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& rConnection);
 
             // OCatalog
             virtual void refreshTables() SAL_OVERRIDE;

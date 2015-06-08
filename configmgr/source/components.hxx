@@ -112,7 +112,7 @@ private:
         OUString const &, int, Data &, Partial const *, Modifications *,
         Additions *);
 public:
-    Components(
+    explicit Components(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context);
 

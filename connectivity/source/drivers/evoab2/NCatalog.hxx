@@ -32,7 +32,7 @@ namespace connectivity
             OEvoabConnection *m_pConnection;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
         public:
-            OEvoabCatalog(OEvoabConnection *_pCon);
+            explicit OEvoabCatalog(OEvoabConnection *_pCon);
             inline OEvoabConnection* getConnection() const { return m_pConnection; }
             virtual void refreshTables() SAL_OVERRIDE;
             virtual void refreshViews() SAL_OVERRIDE {}

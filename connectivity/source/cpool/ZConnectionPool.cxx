@@ -117,7 +117,7 @@ struct TConnectionPoolFunctor : ::std::unary_function<TConnectionMap::value_type
 {
     OConnectionPool* m_pConnectionPool;
 
-    TConnectionPoolFunctor(OConnectionPool* _pConnectionPool)
+    explicit TConnectionPoolFunctor(OConnectionPool* _pConnectionPool)
         : m_pConnectionPool(_pConnectionPool)
     {
         OSL_ENSURE(m_pConnectionPool,"No connection pool!");

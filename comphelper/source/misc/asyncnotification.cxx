@@ -61,7 +61,7 @@ namespace comphelper
     struct EqualProcessor : public ::std::unary_function< ProcessableEvent, bool >
     {
         const ::rtl::Reference< IEventProcessor >&  rProcessor;
-        EqualProcessor( const ::rtl::Reference< IEventProcessor >& _rProcessor ) :rProcessor( _rProcessor ) { }
+        explicit EqualProcessor( const ::rtl::Reference< IEventProcessor >& _rProcessor ) :rProcessor( _rProcessor ) { }
 
         bool operator()( const ProcessableEvent& _rEvent )
         {

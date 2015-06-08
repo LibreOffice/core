@@ -50,7 +50,7 @@ namespace connectivity
     class OColumnsHelperImpl
     {
     public:
-        OColumnsHelperImpl(bool _bCase)
+        explicit OColumnsHelperImpl(bool _bCase)
             : m_aColumnInfo(_bCase)
         {
         }

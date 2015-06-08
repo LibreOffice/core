@@ -356,7 +356,7 @@ namespace internal
         sal_Int32                       m_nCurrentlyForwarding;
 
     public:
-        PropertyForwarder( OPropertySetAggregationHelper& _rAggregationHelper );
+        explicit PropertyForwarder( OPropertySetAggregationHelper& _rAggregationHelper );
         ~PropertyForwarder();
 
         /** declares that the forwarder should be responsible for the given property

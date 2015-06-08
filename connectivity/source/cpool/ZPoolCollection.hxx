@@ -80,7 +80,7 @@ namespace connectivity
         OPoolCollection(const OPoolCollection&) SAL_DELETED_FUNCTION;
         int operator= (const OPoolCollection&) SAL_DELETED_FUNCTION;
 
-        OPoolCollection(
+        explicit OPoolCollection(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
         // some configuration helper methods

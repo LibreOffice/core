@@ -2200,7 +2200,7 @@ namespace detail
     class ColumnValue : public IValueSource
     {
     public:
-        ColumnValue( const Reference< XColumn >& _rxColumn )
+        explicit ColumnValue( const Reference< XColumn >& _rxColumn )
             :m_xColumn( _rxColumn )
         {
         }

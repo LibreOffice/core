@@ -33,7 +33,7 @@ class AutoOGuardArray
     std::unique_ptr< osl::Guard< comphelper::SolarMutex > > *  mpGuardArray;
 
 public:
-    AutoOGuardArray( sal_Int32 nNumElements );
+    explicit AutoOGuardArray( sal_Int32 nNumElements );
     ~AutoOGuardArray();
 
     std::unique_ptr< osl::Guard< comphelper::SolarMutex > > &  operator[] ( sal_Int32 i ) { return mpGuardArray[i]; }

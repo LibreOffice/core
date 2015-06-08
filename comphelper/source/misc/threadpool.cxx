@@ -23,7 +23,7 @@ class ThreadPool::ThreadWorker : public salhelper::Thread
     bool           mbWorking;
 public:
 
-    ThreadWorker( ThreadPool *pPool ) :
+    explicit ThreadWorker( ThreadPool *pPool ) :
         salhelper::Thread("thread-pool"),
         mpPool( pPool ),
         mbWorking( false )

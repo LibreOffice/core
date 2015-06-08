@@ -60,7 +60,7 @@ class Service:
     public cppu::WeakImplHelper1< css::configuration::XUpdate >
 {
 public:
-    Service(css::uno::Reference< css::uno::XComponentContext > const context):
+    explicit Service(css::uno::Reference< css::uno::XComponentContext > const context):
         context_(context)
     {
         assert(context.is());

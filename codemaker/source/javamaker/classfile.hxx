@@ -133,7 +133,7 @@ public:
         Code(Code &) SAL_DELETED_FUNCTION;
         void operator =(const Code&) SAL_DELETED_FUNCTION;
 
-        Code(ClassFile & classFile);
+        explicit Code(ClassFile & classFile);
 
         void ldc(sal_uInt16 index);
 

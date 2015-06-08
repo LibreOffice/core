@@ -91,7 +91,7 @@ class Service:
     private cppu::BaseMutex, public ServiceBase
 {
 public:
-    Service(
+    explicit Service(
         css::uno::Reference< css::uno::XComponentContext > const context):
         ServiceBase(m_aMutex), context_(context), default_(true)
     {

@@ -87,7 +87,7 @@ namespace connectivity
         public:
             inline OEvoabConnection* getOwnConnection() const { return m_pConnection; }
 
-            OEvoabDatabaseMetaData(OEvoabConnection* _pCon);
+            explicit OEvoabDatabaseMetaData(OEvoabConnection* _pCon);
 
             // as I mentioned before this interface is really BIG
             // XDatabaseMetaData

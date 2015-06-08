@@ -64,7 +64,7 @@ namespace connectivity
             virtual ~OEvoabConnection();
 
         public:
-            OEvoabConnection( OEvoabDriver& _rDriver );
+            explicit OEvoabConnection( OEvoabDriver& _rDriver );
             virtual void construct(const OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
 
             inline OString getPassword() { return m_aPassword; }

@@ -30,7 +30,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
 {
     OSortIndex* pIndex;
 
-    TKeyValueFunc(OSortIndex* _pIndex) : pIndex(_pIndex)
+    explicit TKeyValueFunc(OSortIndex* _pIndex) : pIndex(_pIndex)
     {
     }
     // return false if compared values are equal otherwise true

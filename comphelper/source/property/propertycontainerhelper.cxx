@@ -52,7 +52,7 @@ namespace
     struct PropertyDescriptionNameMatch : public ::std::unary_function< PropertyDescription, bool >
     {
         OUString m_rCompare;
-        PropertyDescriptionNameMatch( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
+        explicit PropertyDescriptionNameMatch( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
 
         bool operator() (const PropertyDescription& x ) const
         {

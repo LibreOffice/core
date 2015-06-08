@@ -58,7 +58,7 @@ class ConstantValueExpression : public ExpressionNode
 
 public:
 
-    ConstantValueExpression( ORowSetValueDecoratorRef rValue ) :
+    explicit ConstantValueExpression( ORowSetValueDecoratorRef rValue ) :
         maValue( rValue )
     {
     }
@@ -171,7 +171,7 @@ class ConstantFunctor
 
 public:
 
-    ConstantFunctor( const ParserContextSharedPtr& rContext ) :
+    explicit ConstantFunctor( const ParserContextSharedPtr& rContext ) :
         mpContext( rContext )
     {
     }
@@ -189,7 +189,7 @@ class IntConstantFunctor
     ParserContextSharedPtr  mpContext;
 
 public:
-    IntConstantFunctor( const ParserContextSharedPtr& rContext ) :
+    explicit IntConstantFunctor( const ParserContextSharedPtr& rContext ) :
         mpContext( rContext )
     {
     }
@@ -326,7 +326,7 @@ public:
         @param rParserContext
         Contains context info for the parser
         */
-    ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
+    explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
         mpParserContext( rParserContext )
     {
     }
@@ -335,7 +335,7 @@ public:
     {
     public:
         // grammar definition
-        definition( const ExpressionGrammar& self )
+        explicit definition( const ExpressionGrammar& self )
         {
             using ::boost::spirit::str_p;
             using ::boost::spirit::space_p;

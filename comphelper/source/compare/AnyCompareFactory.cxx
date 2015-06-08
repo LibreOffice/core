@@ -61,7 +61,7 @@ class AnyCompareFactory : public cppu::WeakImplHelper3< XAnyCompareFactory, XIni
     Locale                              m_Locale;
 
 public:
-    AnyCompareFactory( Reference< XComponentContext > xContext ) : m_xContext( xContext )
+    explicit AnyCompareFactory( Reference< XComponentContext > xContext ) : m_xContext( xContext )
     {}
 
     // XAnyCompareFactory

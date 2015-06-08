@@ -273,7 +273,7 @@ class SyntaxHighlighter::Tokenizer
 public:
     HighlighterLanguage const aLanguage;
 
-    Tokenizer( HighlighterLanguage aLang );
+    explicit Tokenizer( HighlighterLanguage aLang );
     ~Tokenizer();
 
     void getHighlightPortions(const OUString& rLine,

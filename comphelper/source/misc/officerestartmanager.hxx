@@ -42,7 +42,7 @@ class OOfficeRestartManager : public ::cppu::WeakImplHelper3< ::com::sun::star::
     bool m_bRestartRequested;
 
 public:
-    OOfficeRestartManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+    explicit OOfficeRestartManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
     , m_bOfficeInitialized( false )
     , m_bRestartRequested( false )

@@ -73,7 +73,7 @@ namespace connectivity
             virtual ~OEvoabPreparedStatement();
 
         public:
-            OEvoabPreparedStatement( OEvoabConnection* _pConnection );
+            explicit OEvoabPreparedStatement( OEvoabConnection* _pConnection );
 
             void construct( const OUString& _sql );
 

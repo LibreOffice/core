@@ -56,7 +56,7 @@ namespace connectivity
     class SQLError_Impl
     {
     public:
-        SQLError_Impl( const Reference<XComponentContext> & _rxContext );
+        explicit SQLError_Impl( const Reference<XComponentContext> & _rxContext );
         ~SQLError_Impl();
 
         // versions of the public SQLError methods which are just delegated to this impl-class

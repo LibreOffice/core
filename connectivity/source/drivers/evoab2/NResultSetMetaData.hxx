@@ -42,7 +42,7 @@ namespace connectivity
         protected:
             virtual ~OEvoabResultSetMetaData();
         public:
-          OEvoabResultSetMetaData(const OUString& _aTableName);
+          explicit OEvoabResultSetMetaData(const OUString& _aTableName);
           void setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
           inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
                         { return m_aEvoabFields[columnIndex - 1]; }

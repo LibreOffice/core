@@ -189,7 +189,7 @@ namespace connectivity
             using OCommonStatement_IBase::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
         protected:
-            OCommonStatement( OEvoabConnection* _pConnection );
+            explicit OCommonStatement( OEvoabConnection* _pConnection );
 
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -242,7 +242,7 @@ namespace connectivity
             virtual ~OStatement(){}
 
         public:
-            OStatement( OEvoabConnection* _pConnection)
+            explicit OStatement( OEvoabConnection* _pConnection)
                 :OCommonStatement( _pConnection)
             {
             }

@@ -55,7 +55,7 @@ class OInstanceLocker : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::
     bool m_bInitialized;
 
 public:
-    OInstanceLocker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+    explicit OInstanceLocker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
     virtual ~OInstanceLocker();
 
     static ::com::sun::star::uno::Sequence< OUString > SAL_CALL

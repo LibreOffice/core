@@ -64,7 +64,7 @@ namespace comphelper
         virtual void _getPropertyValues( const PropertyMapEntry** ppEntries,  Any* pValue ) throw( UnknownPropertyException,  WrappedTargetException ) SAL_OVERRIDE;
 
     public:
-        GenericPropertySet( PropertySetInfo* pInfo ) throw();
+        explicit GenericPropertySet( PropertySetInfo* pInfo ) throw();
         virtual ~GenericPropertySet() throw();
 
         // XInterface

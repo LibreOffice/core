@@ -64,7 +64,7 @@ namespace dbtools
         bool                                    bComposerDirty;
         bool                                    bDisposeComposer;
 
-        StatementComposer_Data( const Reference< XConnection >& _rxConnection )
+        explicit StatementComposer_Data( const Reference< XConnection >& _rxConnection )
             :xConnection( _rxConnection )
             ,sCommand()
             ,sFilter()
