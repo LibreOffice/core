@@ -564,6 +564,7 @@ bool SvxSearchDialog::Close()
     aOpt.SetNotes                   ( m_pNotesBtn->IsChecked() );
     aOpt.SetIgnoreDiacritics_CTL    ( m_pIgnoreDiacritics->IsChecked() );
     aOpt.SetIgnoreKashida_CTL       ( m_pIgnoreKashida->IsChecked() );
+    aOpt.Commit();
 
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SfxCallMode::SLOT, ppArgs );
@@ -2218,6 +2219,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     SvtSearchOptions aOpt;
     aOpt.SetIgnoreDiacritics_CTL(GetCheckBoxValue(m_pIgnoreDiacritics));
     aOpt.SetIgnoreKashida_CTL(GetCheckBoxValue(m_pIgnoreKashida));
+    aOpt.Commit();
 
     sal_Int32 nFlags = GetTransliterationFlags();
     if( !pSearchItem->IsUseAsianOptions())

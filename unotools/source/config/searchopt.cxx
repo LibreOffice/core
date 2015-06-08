@@ -248,6 +248,11 @@ SvtSearchOptions::~SvtSearchOptions()
     delete pImpl;
 }
 
+void SvtSearchOptions::Commit()
+{
+    pImpl->Commit();
+}
+
 sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
 {
     sal_Int32 nRes = 0;
