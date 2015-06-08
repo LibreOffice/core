@@ -72,7 +72,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpchelp1,\
     xmlhelp/source/cxxhelp/provider/services \
     xmlhelp/source/cxxhelp/provider/urlparameter \
     xmlhelp/source/cxxhelp/qe/DocGenerator \
-    xmlhelp/source/cxxhelp/util/Decompressor \
     xmlhelp/source/treeview/tvfactory \
     xmlhelp/source/treeview/tvread \
 ))
