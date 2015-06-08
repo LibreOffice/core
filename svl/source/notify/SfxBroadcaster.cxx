@@ -19,6 +19,7 @@
 
 #include <svl/SfxBroadcaster.hxx>
 
+#include <sal/log.hxx>
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/lstner.hxx>
@@ -26,6 +27,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <unordered_map>
 #include <vector>
 
 TYPEINIT0(SfxBroadcaster);
@@ -37,6 +39,10 @@ struct SfxBroadcaster::Impl
     /** Contains the positions of removed listeners. */
     std::vector<size_t>     m_RemovedPositions;
     SfxListenerArr_Impl     m_Listeners;
+
+    /** Contains for each listener the position(s) in the vector m_Listeners.
+     * This is a multimap because the same listener may be added twice. */
+    std::unordered_multimap<SfxListener*, size_t> m_PositionsByListener;
 };
 
 // broadcast immediately
@@ -95,10 +101,16 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC ) : mpImpl(new Impl)
 
 void SfxBroadcaster::AddListener( SfxListener& rListener )
 {
+    size_t positionOfAddedListener;
     DBG_TESTSOLARMUTEX();
+    auto it = mpImpl->m_PositionsByListener.equal_range(&rListener);
+    if (it.first != mpImpl->m_PositionsByListener.end() && it.second != mpImpl->m_PositionsByListener.end()) {
+        SAL_WARN("svl", "Adding the same listener twice to the same SfxBroadcaster.");
+    }
     if (mpImpl->m_RemovedPositions.empty())
     {
         mpImpl->m_Listeners.push_back(&rListener);
+        positionOfAddedListener = mpImpl->m_Listeners.size() - 1;
     }
     else
     {
@@ -106,7 +118,9 @@ void SfxBroadcaster::AddListener( SfxListener& rListener )
         mpImpl->m_RemovedPositions.pop_back();
         assert(mpImpl->m_Listeners[targetPosition] == NULL);
         mpImpl->m_Listeners[targetPosition] = &rListener;
+        positionOfAddedListener = targetPosition;
     }
+    mpImpl->m_PositionsByListener.insert(it.second, std::make_pair<>(&rListener, positionOfAddedListener));
 }
 
 
@@ -128,13 +142,14 @@ void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
     DBG_TESTSOLARMUTEX();
-    SfxListenerArr_Impl::iterator aIter = std::find(
-            mpImpl->m_Listeners.begin(), mpImpl->m_Listeners.end(), &rListener);
-    assert(aIter != mpImpl->m_Listeners.end()); // "RemoveListener: Listener unknown"
+    auto it = mpImpl->m_PositionsByListener.find(&rListener);
+    assert(it != mpImpl->m_PositionsByListener.end()); // "RemoveListener: Listener unknown"
+
+    size_t positionOfRemovedElement = it->second;
     // DO NOT erase the listener, set the pointer to 0
     // because the current continuation may contain this->Broadcast
-    *aIter = 0;
-    size_t positionOfRemovedElement = std::distance(mpImpl->m_Listeners.begin(), aIter);
+    mpImpl->m_PositionsByListener.erase(it);
+    mpImpl->m_Listeners[positionOfRemovedElement] = NULL;
     mpImpl->m_RemovedPositions.push_back(positionOfRemovedElement);
 }
 
