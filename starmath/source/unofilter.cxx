@@ -30,7 +30,7 @@ class MathTypeFilter : public cppu::WeakImplHelper
     uno::Reference<lang::XComponent> m_xDstDoc;
 
 public:
-    MathTypeFilter(const uno::Reference<uno::XComponentContext>& xContext);
+    explicit MathTypeFilter(const uno::Reference<uno::XComponentContext>& xContext);
     virtual ~MathTypeFilter();
 
     // XFilter
