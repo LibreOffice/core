@@ -66,7 +66,7 @@ inline DbgData* DbgGetData()
 
 inline void DbgSaveData( const DbgData& rData )
 {
-    DbgFunc( DBG_FUNC_SAVEDATA, (void*)&rData );
+    DbgFunc( DBG_FUNC_SAVEDATA, const_cast<DbgData *>(&rData) );
 }
 
 inline bool DbgIsResource()

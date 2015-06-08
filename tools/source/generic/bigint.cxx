@@ -45,7 +45,7 @@ void BigInt::MakeBigInt( const BigInt& rVal )
 {
     if ( rVal.bIsBig )
     {
-        memcpy( (void*)this, (const void*)&rVal, sizeof( BigInt ) );
+        memcpy( static_cast<void*>(this), static_cast<const void*>(&rVal), sizeof( BigInt ) );
         while ( nLen > 1 && nNum[nLen-1] == 0 )
             nLen--;
     }
@@ -476,7 +476,7 @@ BigInt::BigInt( const BigInt& rBigInt )
     , bIsNeg(false)
 {
     if ( rBigInt.bIsBig )
-        memcpy( (void*)this, (const void*)&rBigInt, sizeof( BigInt ) );
+        memcpy( static_cast<void*>(this), static_cast<const void*>(&rBigInt), sizeof( BigInt ) );
     else
     {
         bIsSet = rBigInt.bIsSet;
@@ -647,7 +647,7 @@ BigInt& BigInt::operator=( const BigInt& rBigInt )
         return *this;
 
     if ( rBigInt.bIsBig )
-        memcpy( (void*)this, (const void*)&rBigInt, sizeof( BigInt ) );
+        memcpy( static_cast<void*>(this), static_cast<const void*>(&rBigInt), sizeof( BigInt ) );
     else
     {
         bIsSet = rBigInt.bIsSet;

@@ -72,9 +72,9 @@ void ZCodec::BeginCompression( int nCompressLevel, bool updateCrc, bool gzLib )
     mnCompressLevel = nCompressLevel;
     mbUpdateCrc = updateCrc;
     mbGzLib = gzLib;
-    PZSTREAM->zalloc = ( alloc_func )0;
-    PZSTREAM->zfree = ( free_func )0;
-    PZSTREAM->opaque = ( voidpf )0;
+    PZSTREAM->zalloc = nullptr;
+    PZSTREAM->zfree = nullptr;
+    PZSTREAM->opaque = nullptr;
     PZSTREAM->avail_out = PZSTREAM->avail_in = 0;
 }
 

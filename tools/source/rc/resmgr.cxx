@@ -704,7 +704,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
 static void RscException_Impl()
 {
-    switch ( osl_raiseSignal( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
+    switch ( osl_raiseSignal( OSL_SIGNAL_USER_RESOURCEFAILURE, const_cast<char *>("") ) )
     {
     case osl_Signal_ActCallNextHdl:
         abort();

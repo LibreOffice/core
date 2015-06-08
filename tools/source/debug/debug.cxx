@@ -258,7 +258,7 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
     DebugData* pDebugData = ImplGetDebugData();
 
     if ( nAction == DBG_FUNC_GETDATA )
-        return (void*)&(pDebugData->aDbgData);
+        return static_cast<void*>(&(pDebugData->aDbgData));
     else
     {
         switch ( nAction )
