@@ -320,11 +320,14 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     bool bEmbeddedDataSource = _sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:");
     try
     {
-        ::ucbhelper::Content aContent( _sURL, NULL, comphelper::getProcessComponentContext() );
-        if ( !aContent.isDocument() && !bEmbeddedDataSource )
-            throw InteractiveIOException(
-                _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE
-            );
+        if (!bEmbeddedDataSource)
+        {
+            ::ucbhelper::Content aContent( _sURL, NULL, comphelper::getProcessComponentContext() );
+            if ( !aContent.isDocument() )
+                throw InteractiveIOException(
+                    _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE
+                );
+        }
     }
     catch ( const InteractiveIOException& e )
     {
