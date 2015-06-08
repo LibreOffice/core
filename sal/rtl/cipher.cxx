@@ -112,7 +112,7 @@ rtlCipher SAL_CALL rtl_cipher_create (
     rtlCipherAlgorithm Algorithm,
     rtlCipherMode      Mode) SAL_THROW_EXTERN_C()
 {
-    rtlCipher Cipher = (rtlCipher)NULL;
+    rtlCipher Cipher = nullptr;
     switch (Algorithm)
     {
         case rtl_Cipher_AlgorithmBF:
@@ -1005,10 +1005,10 @@ static sal_uInt32 __rtl_cipherBF (CipherKeyBF *key, sal_uInt32 x)
  */
 rtlCipher SAL_CALL rtl_cipher_createBF (rtlCipherMode Mode) SAL_THROW_EXTERN_C()
 {
-    CipherBF_Impl *pImpl = (CipherBF_Impl*)NULL;
+    CipherBF_Impl *pImpl = nullptr;
 
     if (Mode == rtl_Cipher_ModeInvalid)
-        return ((rtlCipher)NULL);
+        return (nullptr);
 
     pImpl = static_cast<CipherBF_Impl*>(rtl_allocateZeroMemory (sizeof (CipherBF_Impl)));
     if (pImpl)
@@ -1022,7 +1022,7 @@ rtlCipher SAL_CALL rtl_cipher_createBF (rtlCipherMode Mode) SAL_THROW_EXTERN_C()
         pImpl->m_cipher.m_decode    = rtl_cipher_decodeBF;
         pImpl->m_cipher.m_delete    = rtl_cipher_destroyBF;
     }
-    return ((rtlCipher)pImpl);
+    return (static_cast<rtlCipher>(pImpl));
 }
 
 /*
@@ -1241,10 +1241,10 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
 rtlCipher SAL_CALL rtl_cipher_createARCFOUR (rtlCipherMode Mode)
     SAL_THROW_EXTERN_C()
 {
-    CipherARCFOUR_Impl *pImpl = (CipherARCFOUR_Impl*)NULL;
+    CipherARCFOUR_Impl *pImpl = nullptr;
 
     if (!(Mode == rtl_Cipher_ModeStream))
-        return ((rtlCipher)NULL);
+        return (nullptr);
 
     pImpl = static_cast<CipherARCFOUR_Impl*>(rtl_allocateZeroMemory (sizeof (CipherARCFOUR_Impl)));
     if (pImpl)
@@ -1258,7 +1258,7 @@ rtlCipher SAL_CALL rtl_cipher_createARCFOUR (rtlCipherMode Mode)
         pImpl->m_cipher.m_decode    = rtl_cipher_decodeARCFOUR;
         pImpl->m_cipher.m_delete    = rtl_cipher_destroyARCFOUR;
     }
-    return ((rtlCipher)pImpl);
+    return (static_cast<rtlCipher>(pImpl));
 }
 
 /*

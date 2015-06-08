@@ -93,7 +93,7 @@ static void __rtl_digest_swapLong (sal_uInt32 *pData, sal_uInt32 nDatLen)
 rtlDigest SAL_CALL rtl_digest_create (rtlDigestAlgorithm Algorithm)
     SAL_THROW_EXTERN_C()
 {
-    rtlDigest Digest = (rtlDigest)NULL;
+    rtlDigest Digest = nullptr;
     switch (Algorithm)
     {
         case rtl_Digest_AlgorithmMD2:
@@ -390,14 +390,14 @@ rtlDigestError SAL_CALL rtl_digest_MD2 (
  */
 rtlDigest SAL_CALL rtl_digest_createMD2() SAL_THROW_EXTERN_C()
 {
-    DigestMD2_Impl *pImpl = (DigestMD2_Impl*)NULL;
+    DigestMD2_Impl *pImpl = nullptr;
     pImpl = RTL_DIGEST_CREATE(DigestMD2_Impl);
     if (pImpl)
     {
         pImpl->m_digest = __rtl_digest_MD2;
         __rtl_digest_initMD2 (&(pImpl->m_context));
     }
-    return (rtlDigest)pImpl;
+    return static_cast<rtlDigest>(pImpl);
 }
 
 /*
@@ -761,14 +761,14 @@ rtlDigestError SAL_CALL rtl_digest_MD5 (
  */
 rtlDigest SAL_CALL rtl_digest_createMD5() SAL_THROW_EXTERN_C()
 {
-    DigestMD5_Impl *pImpl = (DigestMD5_Impl*)NULL;
+    DigestMD5_Impl *pImpl = nullptr;
     pImpl = RTL_DIGEST_CREATE(DigestMD5_Impl);
     if (pImpl)
     {
         pImpl->m_digest = __rtl_digest_MD5;
         __rtl_digest_initMD5 (&(pImpl->m_context));
     }
-    return (rtlDigest)pImpl;
+    return static_cast<rtlDigest>(pImpl);
 }
 
 /*
@@ -1245,14 +1245,14 @@ rtlDigestError SAL_CALL rtl_digest_SHA (
  */
 rtlDigest SAL_CALL rtl_digest_createSHA() SAL_THROW_EXTERN_C()
 {
-    DigestSHA_Impl *pImpl = (DigestSHA_Impl*)NULL;
+    DigestSHA_Impl *pImpl = nullptr;
     pImpl = RTL_DIGEST_CREATE(DigestSHA_Impl);
     if (pImpl)
     {
         pImpl->m_digest = __rtl_digest_SHA_0;
         __rtl_digest_initSHA (&(pImpl->m_context), __rtl_digest_updateSHA_0);
     }
-    return (rtlDigest)pImpl;
+    return static_cast<rtlDigest>(pImpl);
 }
 
 /*
@@ -1435,14 +1435,14 @@ rtlDigestError SAL_CALL rtl_digest_SHA1 (
  */
 rtlDigest SAL_CALL rtl_digest_createSHA1() SAL_THROW_EXTERN_C()
 {
-    DigestSHA_Impl *pImpl = (DigestSHA_Impl*)NULL;
+    DigestSHA_Impl *pImpl = nullptr;
     pImpl = RTL_DIGEST_CREATE(DigestSHA_Impl);
     if (pImpl)
     {
         pImpl->m_digest = __rtl_digest_SHA_1;
         __rtl_digest_initSHA (&(pImpl->m_context), __rtl_digest_updateSHA_1);
     }
-    return (rtlDigest)pImpl;
+    return static_cast<rtlDigest>(pImpl);
 }
 
 /*
@@ -1678,14 +1678,14 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
  */
 rtlDigest SAL_CALL rtl_digest_createHMAC_MD5() SAL_THROW_EXTERN_C()
 {
-    DigestHMAC_MD5_Impl *pImpl = (DigestHMAC_MD5_Impl*)NULL;
+    DigestHMAC_MD5_Impl *pImpl = nullptr;
     pImpl = RTL_DIGEST_CREATE(DigestHMAC_MD5_Impl);
     if (pImpl)
     {
         pImpl->m_digest = __rtl_digest_HMAC_MD5;
         __rtl_digest_initHMAC_MD5 (&(pImpl->m_context));
     }
-    return (rtlDigest)pImpl;
+    return static_cast<rtlDigest>(pImpl);
 }
 
 /*
@@ -1910,14 +1910,14 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
  */
 rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1() SAL_THROW_EXTERN_C()
 {
-    DigestHMAC_SHA1_Impl *pImpl = (DigestHMAC_SHA1_Impl*)NULL;
+    DigestHMAC_SHA1_Impl *pImpl = nullptr;
     pImpl = RTL_DIGEST_CREATE(DigestHMAC_SHA1_Impl);
     if (pImpl)
     {
         pImpl->m_digest = __rtl_digest_HMAC_SHA1;
         __rtl_digest_initHMAC_SHA1 (&(pImpl->m_context));
     }
-    return (rtlDigest)pImpl;
+    return static_cast<rtlDigest>(pImpl);
 }
 
 /*

@@ -652,14 +652,14 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     osl_destroyCondition(Data.m_started);
 
     for (i = 0; Data.m_pszArgs[i] != NULL; i++)
-          free((void *)Data.m_pszArgs[i]);
+          free(const_cast<char *>(Data.m_pszArgs[i]));
 
     for (i = 0; Data.m_pszEnv[i] != NULL; i++)
-          free((void *)Data.m_pszEnv[i]);
+          free(Data.m_pszEnv[i]);
 
     if ( Data.m_pszDir != 0 )
     {
-        free((void *)Data.m_pszDir);
+        free(const_cast<char *>(Data.m_pszDir));
     }
 
     osl_destroyThread(hThread);

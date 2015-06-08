@@ -73,7 +73,7 @@ oslCondition SAL_CALL osl_createCondition()
 
     SAL_INFO( "sal.osl.condition", "osl_createCondition(): " << pCond );
 
-    return (oslCondition)pCond;
+    return static_cast<oslCondition>(pCond);
 }
 
 void SAL_CALL osl_destroyCondition(oslCondition Condition)

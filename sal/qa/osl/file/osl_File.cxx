@@ -3546,7 +3546,7 @@ namespace osl_File
 
             char buffer[50000];
             sal_uInt64 written = 0;
-            nError1 = tmp_file.write((void*)buffer, sizeof(buffer), written);
+            nError1 = tmp_file.write(static_cast<void*>(buffer), sizeof(buffer), written);
             CPPUNIT_ASSERT_MESSAGE("write failed!", nError1 == FileBase::E_None);
 
             //set the file to readonly

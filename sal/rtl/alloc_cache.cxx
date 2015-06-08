@@ -1338,7 +1338,7 @@ rtl_cache_wsupdate_init()
             &(g_cache_list.m_update_thread), NULL, rtl_cache_wsupdate_all, reinterpret_cast<void*>(10)) != 0)
     {
         /* failure */
-        g_cache_list.m_update_thread = (pthread_t)(0);
+        g_cache_list.m_update_thread = pthread_t();
     }
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 }
@@ -1370,7 +1370,7 @@ rtl_cache_wsupdate_fini()
     pthread_cond_signal (&(g_cache_list.m_update_cond));
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
-    if (g_cache_list.m_update_thread != (pthread_t)(0))
+    if (g_cache_list.m_update_thread != pthread_t())
         pthread_join (g_cache_list.m_update_thread, NULL);
 }
 

@@ -628,7 +628,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
         else
         {
             /* No broadcast in class D */
-            return (oslSocketAddr)NULL;
+            return nullptr;
         }
         nAddr = htonl(nAddr);
     }
@@ -785,21 +785,21 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     sal_Char        *cn;
 
     if ((he == NULL) || (he->h_name == NULL) || (he->h_addr_list[0] == NULL))
-        return (oslHostAddr)NULL;
+        return nullptr;
 
     if (_osl_isFullQualifiedDomainName(he->h_name))
     {
         cn= strdup(he->h_name);
         SAL_WARN_IF( !cn, "sal.osl", "insufficient memory" );
         if (cn == NULL)
-            return (oslHostAddr)NULL;
+            return nullptr;
     }
     else
     {
         cn =_osl_getFullQualifiedDomainName (he->h_name);
         SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
         if (cn == NULL)
-            return (oslHostAddr)NULL;
+            return nullptr;
     }
 
     pSockAddr = __osl_createSocketAddr();
@@ -807,7 +807,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     if (pSockAddr == NULL)
     {
         free(cn);
-        return (oslHostAddr)NULL;
+        return nullptr;
     }
 
     pSockAddr->m_sockaddr.sa_family= he->h_addrtype;
@@ -828,7 +828,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
 
         __osl_destroySocketAddr( pSockAddr );
         free (cn);
-        return (oslHostAddr)NULL;
+        return nullptr;
     }
 
     pAddr= static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
@@ -837,7 +837,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     {
         __osl_destroySocketAddr( pSockAddr );
         free (cn);
-        return (oslHostAddr)NULL;
+        return nullptr;
     }
 
     pAddr->pHostName= cn;
@@ -884,19 +884,19 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
     SAL_WARN_IF( !pszHostname, "sal.osl", "undefined hostname" );
     SAL_WARN_IF( !pAddr, "sal.osl", "undefined address" );
     if ((pszHostname == NULL) || (pAddr == NULL))
-        return (oslHostAddr)NULL;
+        return nullptr;
 
     cn = strdup(pszHostname);
     SAL_WARN_IF( !cn, "sal.osl", "insufficient memory" );
     if (cn == NULL)
-        return (oslHostAddr)NULL;
+        return nullptr;
 
     pHostAddr= static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
     SAL_WARN_IF( !pHostAddr, "sal.osl", "allocation error" );
     if (pHostAddr == NULL)
     {
         free (cn);
-        return (oslHostAddr)NULL;
+        return nullptr;
     }
 
     pHostAddr->pHostName= cn;
@@ -951,7 +951,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
     SAL_WARN_IF( !pAddr, "sal.osl", "undefined address" );
 
     if (pAddr == NULL)
-        return (oslHostAddr)NULL;
+        return nullptr;
 
     if (pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
     {
@@ -959,7 +959,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         struct hostent *he;
 
         if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
-            return (oslHostAddr)NULL;
+            return nullptr;
 
         char const * addr = reinterpret_cast<char const *>(&sin->sin_addr);
             // at least some Androids apparently have a gethostbyaddr with char*
@@ -970,7 +970,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         return _osl_hostentToHostAddr (he);
     }
 
-    return (oslHostAddr)NULL;
+    return nullptr;
 }
 
 oslHostAddr SAL_CALL osl_copyHostAddr (const oslHostAddr pAddr)
@@ -980,7 +980,7 @@ oslHostAddr SAL_CALL osl_copyHostAddr (const oslHostAddr pAddr)
     if (pAddr)
         return osl_psz_createHostAddr (pAddr->pHostName, pAddr->pSockAddr);
     else
-        return (oslHostAddr)NULL;
+        return nullptr;
 }
 
 void SAL_CALL osl_getHostnameOfHostAddr (
@@ -1132,7 +1132,7 @@ oslSocketAddr SAL_CALL osl_psz_resolveHostname(const sal_Char* pszHostname)
         return SockAddr;
     }
 
-    return (oslSocketAddr)NULL;
+    return nullptr;
 }
 
 sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString *ustrProtocol)
@@ -1463,12 +1463,12 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
     oslSocketAddr  pAddr;
 
     if (pSocket == NULL) /* ENOTSOCK */
-        return (oslSocketAddr)NULL;
+        return nullptr;
 
     AddrLen= sizeof(struct sockaddr);
 
     if (getsockname(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
-        return (oslSocketAddr)NULL;
+        return nullptr;
 
     pAddr = __osl_createSocketAddrFromSystem( &Addr );
     return pAddr;

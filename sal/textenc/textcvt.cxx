@@ -106,7 +106,7 @@ rtl_TextToUnicodeConverter SAL_CALL rtl_createTextToUnicodeConverter( rtl_TextEn
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return (rtl_TextToUnicodeConverter) &pData->maConverter;
+        return static_cast<rtl_TextToUnicodeConverter>(const_cast<ImplTextConverter *>(&pData->maConverter));
     else
         return 0;
 }
@@ -184,7 +184,7 @@ rtl_UnicodeToTextConverter SAL_CALL rtl_createUnicodeToTextConverter( rtl_TextEn
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return (rtl_TextToUnicodeConverter) &pData->maConverter;
+        return static_cast<rtl_TextToUnicodeConverter>(const_cast<ImplTextConverter *>(&pData->maConverter));
     else
         return 0;
 }

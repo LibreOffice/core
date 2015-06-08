@@ -54,7 +54,7 @@ public:
 
         char buffer[1];
         sal_uInt64 written = 0;
-        err = tmp_file.write((void*)buffer, sizeof(buffer), written);
+        err = tmp_file.write(static_cast<void*>(buffer), sizeof(buffer), written);
         CPPUNIT_ASSERT_MESSAGE("write on unconnected file should fail",
             err != osl::FileBase::E_None && written == 0);
 

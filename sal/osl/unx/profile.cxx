@@ -1845,7 +1845,7 @@ static bool releaseProfile(osl_TProfileImpl* pProfile)
 
     if (pProfile->m_Flags & FLG_AUTOOPEN)
     {
-        return osl_closeProfile((oslProfile)pProfile);
+        return osl_closeProfile(static_cast<oslProfile>(pProfile));
     }
     else
     {

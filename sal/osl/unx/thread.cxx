@@ -296,7 +296,7 @@ static oslThread osl_thread_create_Impl (
         PTHREAD_ATTR_DEFAULT,
 #endif
         osl_thread_start_Impl,
-        (void*)(pImpl))) != 0)
+        static_cast<void*>(pImpl))) != 0)
     {
         SAL_WARN(
             "sal.osl",
@@ -322,7 +322,7 @@ static oslThread osl_thread_create_Impl (
 
     pthread_mutex_unlock (&(pImpl->m_Lock));
 
-    return (oslThread)pImpl;
+    return static_cast<oslThread>(pImpl);
 }
 
 oslThread osl_createThread (
@@ -953,7 +953,7 @@ oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallbac
         }
     }
 
-    return (oslThreadKey)pKey;
+    return static_cast<oslThreadKey>(pKey);
 }
 
 void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)

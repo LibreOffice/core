@@ -268,17 +268,17 @@ static void __rtl_random_readPool (
  */
 rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl = (RandomPool_Impl*)NULL;
+    RandomPool_Impl *pImpl = nullptr;
     pImpl = static_cast<RandomPool_Impl*>(rtl_allocateZeroMemory (sizeof(RandomPool_Impl)));
     if (pImpl)
     {
         if (!__rtl_random_initPool (pImpl))
         {
             rtl_freeZeroMemory (pImpl, sizeof(RandomPool_Impl));
-            pImpl = (RandomPool_Impl*)NULL;
+            pImpl = nullptr;
         }
     }
-    return (rtlRandomPool)pImpl;
+    return static_cast<rtlRandomPool>(pImpl);
 }
 
 /*

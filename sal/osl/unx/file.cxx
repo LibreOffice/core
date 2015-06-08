@@ -729,7 +729,7 @@ oslFileHandle osl::detail::createFileHandleFromFD( int fd )
     }
 
     SAL_INFO("sal.file", "osl::detail::createFileHandleFromFD(" << pImpl->m_fd << ", writeable) => " << pImpl->m_strFilePath);
-    return (oslFileHandle)pImpl;
+    return static_cast<oslFileHandle>(pImpl);
 }
 
 static int osl_file_adjustLockFlags (const char * path, int flags)
@@ -998,7 +998,7 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
 
     SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << ") => " << pImpl->m_fd);
 
-    *pHandle = (oslFileHandle)(pImpl);
+    *pHandle = static_cast<oslFileHandle>(pImpl);
     return osl_File_E_None;
 }
 

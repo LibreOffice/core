@@ -287,10 +287,10 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod;
-            bRes = ( (oslModule)aMod == NULL );
+            bRes = ( static_cast<oslModule>(aMod) == NULL );
 
             aMod.load( getDllURL( ) );
-            bRes1 = (oslModule)aMod != NULL;
+            bRes1 = static_cast<oslModule>(aMod) != NULL;
 
             aMod.unload( );
 
@@ -306,7 +306,7 @@ namespace osl_Module
             ::osl::Module aMod( getDllURL( ) );
             ::rtl::OUString funcName( "firstfunc" );
 
-            FuncPtr pFunc = reinterpret_cast<FuncPtr>(osl_getSymbol( (oslModule)aMod, funcName.pData ));
+            FuncPtr pFunc = reinterpret_cast<FuncPtr>(osl_getSymbol( static_cast<oslModule>(aMod), funcName.pData ));
             bRes = false;
             if ( pFunc )
                 bRes = pFunc( bRes );

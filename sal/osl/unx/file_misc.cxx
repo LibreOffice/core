@@ -204,7 +204,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 #ifdef ANDROID
                     pDirImpl->eKind = oslDirectoryImpl::KIND_DIRENT;
 #endif
-                    *pDirectory = (oslDirectory) pDirImpl;
+                    *pDirectory = static_cast<oslDirectory>(pDirImpl);
                     return osl_File_E_None;
                 }
                 else
