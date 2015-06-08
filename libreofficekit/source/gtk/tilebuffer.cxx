@@ -79,7 +79,7 @@ Tile& TileBuffer::getTile(int x, int y, float aZoom)
     if(m_mTiles.find(index) == m_mTiles.end() || !m_mTiles[index].valid)
     {
 
-        GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, m_nTileSize, m_nTileSize);
+        GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
         if (!pPixBuf)
         {
             g_info ("Error allocating memory to pixbuf");
@@ -88,16 +88,16 @@ Tile& TileBuffer::getTile(int x, int y, float aZoom)
 
         unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
         GdkRectangle aTileRectangle;
-        aTileRectangle.x = pixelToTwip(m_nTileSize, aZoom) * y;
-        aTileRectangle.y = pixelToTwip(m_nTileSize, aZoom) * x;
+        aTileRectangle.x = pixelToTwip(nTileSizePixels, aZoom) * y;
+        aTileRectangle.y = pixelToTwip(nTileSizePixels, aZoom) * x;
 
         g_info ("Rendering (%d, %d)", x, y);
         m_pLOKDocument->pClass->paintTile(m_pLOKDocument,
                                           pBuffer,
-                                          m_nTileSize, m_nTileSize,
+                                          nTileSizePixels, nTileSizePixels,
                                           aTileRectangle.x, aTileRectangle.y,
-                                          pixelToTwip(m_nTileSize, aZoom),
-                                          pixelToTwip(m_nTileSize, aZoom));
+                                          pixelToTwip(nTileSizePixels, aZoom),
+                                          pixelToTwip(nTileSizePixels, aZoom));
 
         //create a mapping for it
         m_mTiles[index].setPixbuf(pPixBuf);

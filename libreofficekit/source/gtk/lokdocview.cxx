@@ -274,7 +274,7 @@ LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPaylo
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     : m_pDocView(pDocView),
       m_pDrawingArea(gtk_drawing_area_new()),
-      m_aTileBuffer(TileBuffer(0,0,0,0)),
+      m_aTileBuffer(TileBuffer(0,0,0)),
       m_fZoom(1),
       m_pOffice(0),
       m_pDocument(0),
@@ -1236,7 +1236,6 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_open_document( LOKDocView* pDocView, 
 
 
         pDocView->m_pImpl->m_aTileBuffer = TileBuffer(pDocView->m_pImpl->m_pDocument,
-                                                      nTileSizePixels,
                                                       nRows,
                                                       nColumns);
         gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
@@ -1263,7 +1262,6 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_zoom ( LOKDocView* pDocView, float fZ
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
     pDocView->m_pImpl->m_aTileBuffer = TileBuffer(pDocView->m_pImpl->m_pDocument,
-                                                  nTileSizePixels,
                                                   nRows,
                                                   nColumns);
     gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
