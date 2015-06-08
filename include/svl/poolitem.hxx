@@ -80,12 +80,6 @@ inline ::com::sun::star::uno::Any Bool2Any( bool bValue )
     return ::com::sun::star::uno::Any( &bValue, cppu::UnoType<bool>::get() );
 }
 
-
-enum SfxFieldUnit
-{
-    SFX_FUNIT_NONE, SFX_FUNIT_TWIP
-};
-
 enum SfxMapUnit
 {
     SFX_MAPUNIT_100TH_MM,
