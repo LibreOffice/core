@@ -672,7 +672,7 @@ void DialogHelper::PostUserEvent( const Link<>& rLink, void* pCaller, bool bRefe
 //                             ExtMgrDialog
 ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag)
     : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/extensionmanager.ui", eFlag)
-    , DialogHelper(pManager->getContext(), (Dialog*) this)
+    , DialogHelper(pManager->getContext(), static_cast<Dialog*>(this))
     , m_sAddPackages(getResourceString(RID_STR_ADD_PACKAGES))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
@@ -1183,7 +1183,7 @@ bool ExtMgrDialog::Close()
 //UpdateRequiredDialog
 UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionManager *pManager)
     : ModalDialog(pParent, "UpdateRequiredDialog", "desktop/ui/updaterequireddialog.ui")
-    , DialogHelper(pManager->getContext(), (Dialog*) this)
+    , DialogHelper(pManager->getContext(), static_cast<Dialog*>(this))
     , m_sAddPackages(getResourceString(RID_STR_ADD_PACKAGES))
     , m_sCloseText(getResourceString(RID_STR_CLOSE_BTN))
     , m_bHasProgress(false)

@@ -148,7 +148,7 @@ uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference<
     {
         osl::MutexGuard guard( m_aMutex );
         if ( !m_xINSTANCE.is() )
-            m_xINSTANCE = (cppu::OWeakObject*) new UnxSplashScreen( xCtx );
+            m_xINSTANCE = static_cast<cppu::OWeakObject*>(new UnxSplashScreen( xCtx ));
     }
 
     return m_xINSTANCE;
