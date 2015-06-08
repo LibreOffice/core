@@ -825,10 +825,10 @@ SimpleXMLParser::SimpleXMLParser()
 {
     m_aParser = XML_ParserCreate( NULL );
     XML_SetUserData( m_aParser, this );
-    XML_SetElementHandler( m_aParser, (XML_StartElementHandler) StartElementHandler, (XML_EndElementHandler) EndElementHandler );
-    XML_SetCharacterDataHandler( m_aParser, (XML_CharacterDataHandler) CharacterDataHandler );
-    XML_SetCommentHandler( m_aParser, (XML_CommentHandler) CommentHandler );
-    XML_SetDefaultHandler( m_aParser, (XML_DefaultHandler) DefaultHandler );
+    XML_SetElementHandler( m_aParser, reinterpret_cast<XML_StartElementHandler>(StartElementHandler), reinterpret_cast<XML_EndElementHandler>(EndElementHandler) );
+    XML_SetCharacterDataHandler( m_aParser, reinterpret_cast<XML_CharacterDataHandler>(CharacterDataHandler) );
+    XML_SetCommentHandler( m_aParser, reinterpret_cast<XML_CommentHandler>(CommentHandler) );
+    XML_SetDefaultHandler( m_aParser, reinterpret_cast<XML_DefaultHandler>(DefaultHandler) );
 }
 
 SimpleXMLParser::~SimpleXMLParser()
