@@ -2293,58 +2293,65 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
             SwTextAttr *pHt = rHints.GetTextHint( i );
             sal_uInt16 nWhich = pHt->Which();
             sal_Int16 nIdx = -1;
-            //In 'hintids.hxx', the following five attributes don't follow
-            //each other in the Latin attributes as they do among CJK and
-            //CTL attributes, so the old code just made a mess, IMHO.
-            //E.g. 29-22=7, which should be LANGUAGE, but it's FONT.
-            //Moreover, it should occur between 0 and 4.
-            //Since it would be too risky to change the attribute codes,
-            //I repaired the following source code the 'brute force' way.
-
-            //Old code:
-            /*
-            if( RES_CHRATR_CJK_FONT <= nWhich &&
-                    nWhich <= RES_CHRATR_CTL_WEIGHT )
+            bool bFont = false;
+            switch( nWhich )
             {
-                nIdx = static_cast< sal_uInt16 >(nWhich - RES_CHRATR_CJK_FONT + 5);
-            }
-            else switch...
-            */
-
-            if( RES_CHRATR_CJK_FONT == nWhich || RES_CHRATR_CTL_FONT == nWhich )
-            {
-                nIdx = 0;
-            }
-            else if( RES_CHRATR_CJK_FONTSIZE == nWhich || RES_CHRATR_CTL_FONTSIZE == nWhich )
-            {
-                nIdx = 1;
-            }
-            else if( RES_CHRATR_CJK_LANGUAGE == nWhich || RES_CHRATR_CTL_LANGUAGE == nWhich )
-            {
-                nIdx = 2;
-            }
-            else if( RES_CHRATR_CJK_POSTURE == nWhich || RES_CHRATR_CTL_POSTURE == nWhich )
-            {
-                nIdx = 3;
-            }
-            else if( RES_CHRATR_CJK_WEIGHT == nWhich || RES_CHRATR_CTL_WEIGHT == nWhich )
-            {
-                nIdx = 4;
-            }
-            else switch( nWhich )
-            {
-            case RES_CHRATR_FONT:       nIdx = 0;   break;
-            case RES_CHRATR_FONTSIZE:   nIdx = 1;   break;
-            case RES_CHRATR_LANGUAGE:   nIdx = 2;   break;
-            case RES_CHRATR_POSTURE:    nIdx = 3;   break;
-            case RES_CHRATR_WEIGHT:     nIdx = 4;   break;
+                case RES_CHRATR_FONT:
+                    nIdx = 0;
+                    bFont = true;
+                    break;
+                case RES_CHRATR_FONTSIZE:
+                    nIdx = 1;
+                    break;
+                case RES_CHRATR_LANGUAGE:
+                    nIdx = 2;
+                    break;
+                case RES_CHRATR_POSTURE:
+                    nIdx = 3;
+                    break;
+                case RES_CHRATR_WEIGHT:
+                    nIdx = 4;
+                    break;
+                case RES_CHRATR_CJK_FONT:
+                    nIdx = 5;
+                    bFont = true;
+                    break;
+                case RES_CHRATR_CJK_FONTSIZE:
+                    nIdx = 6;
+                    break;
+                case RES_CHRATR_CJK_LANGUAGE:
+                    nIdx = 7;
+                    break;
+                case RES_CHRATR_CJK_POSTURE:
+                    nIdx = 8;
+                    break;
+                case RES_CHRATR_CJK_WEIGHT:
+                    nIdx = 9;
+                    break;
+                case RES_CHRATR_CTL_FONT:
+                    nIdx = 10;
+                    bFont = true;
+                    break;
+                case RES_CHRATR_CTL_FONTSIZE:
+                    nIdx = 11;
+                    break;
+                case RES_CHRATR_CTL_LANGUAGE:
+                    nIdx = 12;
+                    break;
+                case RES_CHRATR_CTL_POSTURE:
+                    nIdx = 13;
+                    break;
+                case RES_CHRATR_CTL_WEIGHT:
+                    nIdx = 14;
+                    break;
+                default:
+                    break;
             }
             if( nIdx != -1 )
             {
                 sal_Int32 nStt = pHt->GetStart();
                 if( nStt >= aEndPos[nIdx] )
                 {
-                    bool bFont = (nIdx % 5) == 0;
                     const SfxPoolItem& rItem =
                         static_cast<const SwContentNode *>(pTextNd)->GetAttr( nWhich );
                     if( bFont ? swhtml_css1atr_equalFontItems(rItem,pHt->GetAttr())
