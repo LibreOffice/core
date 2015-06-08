@@ -285,6 +285,8 @@ void LinePropertyPanel::Initialize()
     aLink = LINK( this, LinePropertyPanel, ChangeCapStyleHdl );
     mpLBCapStyle->SetSelectHdl( aLink );
     mpLBCapStyle->SetAccessibleName(OUString("Cap Style"));
+
+    ActivateControls();
 }
 
 void LinePropertyPanel::SetupIcons()
@@ -624,6 +626,7 @@ void LinePropertyPanel::NotifyItemUpdate(
             break;
         }
     }
+    ActivateControls();
 }
 
 IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
@@ -660,7 +663,7 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_DASH, SfxCallMode::RECORD, &aItemB, 0L);
         }
     }
-
+    ActivateControls();
     return 0;
 }
 
@@ -784,6 +787,39 @@ IMPL_LINK_NOARG( LinePropertyPanel, ChangeTransparentHdl )
 VclPtr<PopupControl> LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pParent)
 {
     return VclPtrInstance<LineWidthControl>(pParent, *this);
+}
+
+void LinePropertyPanel::ActivateControls()
+{
+    const sal_Int32 nPos(mpLBStyle->GetSelectEntryPos());
+    if( 0 == nPos )
+    {
+        mpFTWidth->Disable();
+        mpTBWidth->Disable();
+        mpFTTransparency->Disable();
+        mpMFTransparent->Disable();
+        mpFTArrow->Disable();
+        mpLBStart->Disable();
+        mpLBEnd->Disable();
+        mpFTEdgeStyle->Disable();
+        mpLBEdgeStyle->Disable();
+        mpFTCapStyle->Disable();
+        mpLBCapStyle->Disable();
+    }
+    else
+    {
+        mpFTWidth->Enable();
+        mpTBWidth->Enable();
+        mpFTTransparency->Enable();
+        mpMFTransparent->Enable();
+        mpFTArrow->Enable();
+        mpLBStart->Enable();
+        mpLBEnd->Enable();
+        mpFTEdgeStyle->Enable();
+        mpLBEdgeStyle->Enable();
+        mpFTCapStyle->Enable();
+        mpLBCapStyle->Enable();
+    }
 }
 
 void LinePropertyPanel::EndLineWidthPopupMode()
