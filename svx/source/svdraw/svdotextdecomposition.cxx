@@ -751,10 +751,11 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject() const
 void SdrTextObj::impLeaveOnlyNonOverflowingText() const
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject();
-    // for while we are in editing mode
-    pEdtOutl->SetText(*pNewText);
+    // we need this when we are in editing mode
+    if (pEdtOutl != NULL)
+        pEdtOutl->SetText(*pNewText);
+
     const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
-    //const_cast<SdrTextObj*>(this)->ReformatText();
 }
 
 
