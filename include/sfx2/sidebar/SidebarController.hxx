@@ -154,6 +154,8 @@ public:
     ResourceManager::DeckContextDescriptorContainer GetMatchingDecks();
     ResourceManager::PanelContextDescriptorContainer GetMatchingPanels( const ::rtl::OUString& rDeckId);
 
+    void notifyDeckTitle(const OUString& targetDeckId);
+
 private:
     typedef ::std::map<
         const css::uno::Reference<css::frame::XFrame>,

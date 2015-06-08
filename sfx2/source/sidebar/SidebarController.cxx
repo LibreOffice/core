@@ -249,6 +249,8 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     {
         maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
+        // TODO: this call is redundant but mandatory for unit test to update context on document loading
+        UpdateConfigurations();
     }
 }
 
@@ -708,6 +710,16 @@ void SidebarController::SwitchToDeck (
 
     mpTabBar->UpdateFocusManager(maFocusManager);
     UpdateTitleBarIcons();
+}
+
+void SidebarController::notifyDeckTitle(const OUString& targetDeckId)
+{
+    if (msCurrentDeckId == targetDeckId)
+    {
+        maFocusManager.SetDeckTitle(mpCurrentDeck->GetTitleBar());
+        mpTabBar->UpdateFocusManager(maFocusManager);
+        UpdateTitleBarIcons();
+    }
 }
 
 VclPtr<Panel> SidebarController::CreatePanel (

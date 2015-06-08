@@ -71,6 +71,11 @@ void SAL_CALL SfxUnoDeck::setTitle( const OUString& newTitle )
 
     DeckTitleBar* pTitleBar = pDeck->GetTitleBar();
     pTitleBar->SetTitle(newTitle);
+
+    // update the ResourceManager
+    pSidebarController->GetResourceManager()->SetDeckTitle(mDeckId, newTitle);
+    pSidebarController->notifyDeckTitle(mDeckId);
+
 }
 
 sal_Bool SAL_CALL SfxUnoDeck::isActive()
@@ -94,6 +99,9 @@ void SAL_CALL SfxUnoDeck::activate( const sal_Bool bActivate )
         pSidebarController->SwitchToDeck(mDeckId);
     else
         pSidebarController->SwitchToDefaultDeck();
+
+    // update the sidebar
+    pSidebarController->NotifyResize();
 }
 
 uno::Reference<ui::XPanels> SAL_CALL SfxUnoDeck::getPanels()
@@ -123,6 +131,7 @@ void SAL_CALL SfxUnoDeck::setOrderIndex( const sal_Int32 newOrderIndex )
 
     pSidebarController->GetResourceManager()->SetDeckOrderIndex(mDeckId, newOrderIndex);
 
+    // update the sidebar
     pSidebarController->NotifyResize();
 }
 
