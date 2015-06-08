@@ -477,7 +477,7 @@ Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance(
     throw( Exception)
 {
     ODataInputStream *p = new ODataInputStream;
-    return Reference< XInterface > ( (OWeakObject * ) p );
+    return Reference< XInterface > ( static_cast<OWeakObject *>(p) );
 }
 
 OUString ODataInputStream_getImplementationName()

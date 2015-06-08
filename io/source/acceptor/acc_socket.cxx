@@ -391,7 +391,7 @@ namespace io_acceptor {
                                        sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
         }
 
-        return Reference < XConnection > ( (XConnection * ) pConn );
+        return Reference < XConnection > ( static_cast<XConnection *>(pConn) );
     }
 
     void SocketAcceptor::stopAccepting()

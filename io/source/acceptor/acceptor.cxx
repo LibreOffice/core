@@ -274,7 +274,7 @@ namespace io_acceptor
 
     Reference< XInterface > SAL_CALL acceptor_CreateInstance( const Reference< XComponentContext > & xCtx)
     {
-        return Reference < XInterface >( ( OWeakObject * ) new OAcceptor(xCtx) );
+        return Reference < XInterface >( static_cast<OWeakObject *>(new OAcceptor(xCtx)) );
     }
 
     Sequence< OUString > acceptor_getSupportedServiceNames()

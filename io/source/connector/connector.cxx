@@ -94,7 +94,7 @@ namespace stoc_connector
 
                 if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
                 {
-                    r = Reference < XConnection > ( (XConnection * ) pConn );
+                    r = Reference < XConnection > ( static_cast<XConnection *>(pConn) );
                 }
                 else
                 {
@@ -141,7 +141,7 @@ namespace stoc_connector
                                                sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
                 }
                 pConn->completeConnectionString();
-                r = Reference< XConnection > ( (XConnection * ) pConn );
+                r = Reference< XConnection > ( static_cast<XConnection *>(pConn) );
             }
             else
             {
@@ -204,7 +204,7 @@ namespace stoc_connector
 
     Reference< XInterface > SAL_CALL connector_CreateInstance( const Reference< XComponentContext > & xCtx)
     {
-        return Reference < XInterface >( ( OWeakObject * ) new OConnector(xCtx) );
+        return Reference < XInterface >( static_cast<OWeakObject *>(new OConnector(xCtx)) );
     }
 
 

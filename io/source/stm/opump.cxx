@@ -263,14 +263,14 @@ void Pump::run()
 
             if( ! rInput.is() )
             {
-                throw NotConnectedException( "no input stream set", (OWeakObject*)this );
+                throw NotConnectedException( "no input stream set", static_cast<OWeakObject*>(this) );
             }
             Sequence< sal_Int8 > aData;
             while( rInput->readSomeBytes( aData, 65536 ) )
             {
                 if( ! rOutput.is() )
                 {
-                    throw NotConnectedException( "no output stream set", (OWeakObject*)this );
+                    throw NotConnectedException( "no output stream set", static_cast<OWeakObject*>(this) );
                 }
                 rOutput->writeBytes( aData );
                 osl_yieldThread();
@@ -359,7 +359,7 @@ void Pump::removeListener( const Reference< XStreamListener >& xListener ) throw
 void Pump::start() throw( RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
-    m_aThread = osl_createSuspendedThread((oslWorkerFunction)Pump::static_run,this);
+    m_aThread = osl_createSuspendedThread(Pump::static_run,this);
     if( m_aThread )
     {
         // will be released by OPump::static_run

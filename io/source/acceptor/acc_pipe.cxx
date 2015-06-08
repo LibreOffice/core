@@ -189,7 +189,7 @@ namespace io_acceptor
         }
         else if( osl_Pipe_E_None == status )
         {
-            return Reference < XConnection > ( (XConnection * ) pConn );
+            return Reference < XConnection > ( static_cast<XConnection *>(pConn) );
         }
         else
         {

@@ -451,7 +451,7 @@ Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance(
 {
     OMarkableOutputStream *p = new OMarkableOutputStream( );
 
-    return Reference < XInterface > ( ( OWeakObject * ) p );
+    return Reference < XInterface > ( static_cast<OWeakObject *>(p) );
 }
 
 OUString    OMarkableOutputStream_getImplementationName()
@@ -966,7 +966,7 @@ Reference < XInterface > SAL_CALL OMarkableInputStream_CreateInstance(
     throw(Exception)
 {
     OMarkableInputStream *p = new OMarkableInputStream( );
-    return Reference< XInterface > ( (OWeakObject * ) p );
+    return Reference< XInterface > ( static_cast<OWeakObject *>(p) );
 }
 
 OUString    OMarkableInputStream_getImplementationName()
