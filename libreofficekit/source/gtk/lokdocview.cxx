@@ -1196,7 +1196,7 @@ SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
             lok_docview_init,
             NULL,
             NULL,
-            (GtkClassInitFunc) NULL
+            nullptr
         };
 
         lok_docview_type = gtk_type_unique( gtk_scrolled_window_get_type(), &lok_docview_info );
