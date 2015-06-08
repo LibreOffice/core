@@ -97,7 +97,7 @@ Reference< XInterface > createAllListenerAdapter
     if( xInvocationAdapterFactory.is() && xListenerType.is() && xListener.is() )
     {
        Reference< XInvocation > xInvocationToAllListenerMapper =
-            (XInvocation*)new InvocationToAllListenerMapper( xListenerType, xListener, Helper );
+            static_cast<XInvocation*>(new InvocationToAllListenerMapper( xListenerType, xListener, Helper ));
         Type aListenerType( xListenerType->getTypeClass(), xListenerType->getName());
         Sequence<Type> arg2(1);
         arg2[0] = aListenerType;
@@ -163,7 +163,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
     }
 
     AllEventObject aAllEvent;
-    aAllEvent.Source = (OWeakObject*) this;
+    aAllEvent.Source = static_cast<OWeakObject*>(this);
     aAllEvent.Helper = m_Helper;
     aAllEvent.ListenerType = Type(m_xListenerType->getTypeClass(), m_xListenerType->getName());
     aAllEvent.MethodName = FunctionName;
@@ -296,7 +296,7 @@ EventAttacherImpl::~EventAttacherImpl()
 
 Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( Exception )
 {
-    XEventAttacher *pEventAttacher = (XEventAttacher*) new EventAttacherImpl( comphelper::getComponentContext(rSMgr) );
+    XEventAttacher *pEventAttacher = static_cast<XEventAttacher*>(new EventAttacherImpl( comphelper::getComponentContext(rSMgr) ));
 
     Reference< XInterface > xRet = Reference<XInterface>::query(pEventAttacher);
 
@@ -762,8 +762,8 @@ Reference< XEventListener > EventAttacherImpl::attachSingleEventListener
     throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception )
 {
     // Subscribe FilterListener
-    Reference< XAllListener > aFilterListener = (XAllListener*)
-        new FilterAllListenerImpl( this, EventMethod, AllListener );
+    Reference< XAllListener > aFilterListener = static_cast<XAllListener*>(
+        new FilterAllListenerImpl( this, EventMethod, AllListener ));
     return attachListener( xObject, aFilterListener, Helper, ListenerType, AddListenerParam);
 }
 
@@ -880,8 +880,8 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventList
     Sequence< Reference<XAllListener> > aFilterListeners(nCount);
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        aFilterListeners[i] = (XAllListener*)
-            new FilterAllListenerImpl(this, aListeners[i].EventMethod, aListeners[i].AllListener);
+        aFilterListeners[i] = static_cast<XAllListener*>(
+            new FilterAllListenerImpl(this, aListeners[i].EventMethod, aListeners[i].AllListener));
     }
 
     return attachListeners(xObject, aFilterListeners, aListeners);
