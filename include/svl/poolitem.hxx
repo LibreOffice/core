@@ -85,7 +85,9 @@ inline ::com::sun::star::uno::Any Bool2Any( bool bValue )
 //! Notloesung!!!
 enum SfxFieldUnit
 {
-    SFX_FUNIT_NONE, SFX_FUNIT_TWIP
+    SFX_FUNIT_NONE, SFX_FUNIT_MM, SFX_FUNIT_CM, SFX_FUNIT_M, SFX_FUNIT_KM,
+    SFX_FUNIT_TWIP, SFX_FUNIT_POINT, SFX_FUNIT_PICA,
+    SFX_FUNIT_INCH, SFX_FUNIT_FOOT, SFX_FUNIT_MILE, SFX_FUNIT_CHAR, SFX_FUNIT_LINE, SFX_FUNIT_CUSTOM
 };
 
 enum SfxMapUnit
