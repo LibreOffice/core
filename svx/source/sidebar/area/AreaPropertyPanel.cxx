@@ -181,6 +181,7 @@ void AreaPropertyPanel::Initialize()
     mpLBTransType->SetAccessibleName(OUString( "Transparency"));    //wj acc
 
     mpMTRTransparent->SetValue( 50 );
+    mpMTRTransparent->SetMax(100 );
     mpMTRTransparent->SetModifyHdl(LINK(this, AreaPropertyPanel, ModifyTransparentHdl_Impl));
     mpMTRTransparent->SetAccessibleName(OUString( "Transparency"));    //wj acc
 
