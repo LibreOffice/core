@@ -985,8 +985,7 @@ void SwUiWriterTest::testTdf90883TableBoxGetCoordinates()
 
 void SwUiWriterTest::testEmbeddedDataSource()
 {
-    // breaks windows and osx
-#if 0
+#if !defined(WNT) && !defined(MACOSX)
     // Initially no data source.
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(xComponentContext);
