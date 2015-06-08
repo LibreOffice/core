@@ -39,7 +39,7 @@ struct DdeItemImpData
     sal_uLong nHCnv;
     sal_uInt16 nCnt;
 
-    expliit DdeItemImpData( sal_uLong nH ) : nHCnv( nH ), nCnt( 1 ) {}
+    explicit DdeItemImpData( sal_uLong nH ) : nHCnv( nH ), nCnt( 1 ) {}
 };
 
 class DdeItemImp {
