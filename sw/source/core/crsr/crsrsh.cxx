@@ -284,10 +284,6 @@ void SwCrsrShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
         }
         return;
     }
-    else
-    {
-        eFlags |= SwCrsrShell::NOCALRECT; // tdf#91602 prevent recursive Action!
-    }
 
     if ( !bIdleEnd )
         eFlags |= SwCrsrShell::SCROLLWIN;
@@ -1744,12 +1740,14 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
                 aTmpState.pSpecialPos = &aSpecialPos;
             }
 
+            ++mnStartAction; // tdf#91602 prevent recursive Action!
             if( !pFrm->GetCharRect( m_aCharRect, *pShellCrsr->GetPoint(), &aTmpState ) )
             {
                 Point& rPt = pShellCrsr->GetPtPos();
                 rPt = m_aCharRect.Center();
                 pFrm->GetCrsrOfst( pShellCrsr->GetPoint(), rPt, &aTmpState );
             }
+            --mnStartAction;
 
             if( !pShellCrsr->HasMark() )
                 m_aCrsrHeight = aTmpState.aRealHeight;
