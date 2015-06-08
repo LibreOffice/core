@@ -54,6 +54,7 @@ struct RefUpdateMoveTabContext;
 
 enum ScConditionMode
 {
+    SC_COND_ANY,
     SC_COND_EQUAL,
     SC_COND_LESS,
     SC_COND_GREATER,
