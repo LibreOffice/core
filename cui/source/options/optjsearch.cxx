@@ -380,10 +380,10 @@ bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet* )
         bModified = true;
     }
 
+    if (bModified)
+        aOpt.Commit();
+
     return bModified;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

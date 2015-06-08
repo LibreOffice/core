@@ -35,6 +35,8 @@ public:
     SvtSearchOptions();
     ~SvtSearchOptions();
 
+    void Commit();
+
     sal_Int32   GetTransliterationFlags() const;
 
     // General Options
