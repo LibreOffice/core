@@ -124,10 +124,8 @@ namespace
     }
 }
 
-SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader ) :
-    MenuButton( pEditWin, WB_DIALOGCONTROL ),
-    SwFrameControl( pEditWin, pPageFrm ),
-    m_sLabel( ),
+SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrm *pFrm, bool bHeader ) :
+    SwFrameMenuButtonBase( pEditWin, pFrm ),
     m_bIsHeader( bHeader ),
     m_pPopupMenu( NULL ),
     m_pLine( NULL ),
@@ -175,12 +173,7 @@ void SwHeaderFooterWin::dispose()
 {
     delete m_pPopupMenu;
     m_pLine.disposeAndClear();
-    MenuButton::dispose();
-}
-
-const SwPageFrm* SwHeaderFooterWin::GetPageFrame( )
-{
-    return static_cast< const SwPageFrm * >( GetFrame( ) );
+    SwFrameMenuButtonBase::dispose();
 }
 
 void SwHeaderFooterWin::SetOffset(Point aOffset, long nXLineStart, long nXLineEnd)

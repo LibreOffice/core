@@ -20,7 +20,7 @@ class SwPageFrm;
     This control shows a line indicating a manual page break and a
     button providing a few actions on that page break.
   */
-class SwPageBreakWin : public MenuButton, public SwFrameControl
+class SwPageBreakWin : public SwFrameMenuButtonBase
 {
     PopupMenu*            m_pPopupMenu;
     VclPtr<vcl::Window>   m_pLine;
@@ -33,8 +33,8 @@ class SwPageBreakWin : public MenuButton, public SwFrameControl
     const Point*          m_pMousePt;
 
 public:
-    SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm );
-    virtual ~SwPageBreakWin( );
+    SwPageBreakWin( SwEditWin* pEditWin, const SwFrm *pFrm );
+    virtual ~SwPageBreakWin();
     virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
@@ -46,8 +46,6 @@ public:
 
     virtual void ShowAll( bool bShow ) SAL_OVERRIDE;
     virtual bool Contains( const Point &rDocPt ) const SAL_OVERRIDE;
-
-    const SwPageFrm* GetPageFrame( );
 
     void SetReadonly( bool bReadonly ) SAL_OVERRIDE;
 

@@ -90,9 +90,8 @@ namespace
     }
 }
 
-SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm ) :
-    MenuButton( pEditWin, WB_DIALOGCONTROL ),
-    SwFrameControl( pEditWin, pPageFrm ),
+SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrm *pFrm ) :
+    SwFrameMenuButtonBase( pEditWin, pFrm ),
     m_pPopupMenu( NULL ),
     m_pLine( NULL ),
     m_bIsAppearing( false ),
@@ -132,7 +131,7 @@ void SwPageBreakWin::dispose()
     delete m_pMousePt;
     m_pMousePt = NULL;
 
-    MenuButton::dispose();
+    SwFrameMenuButtonBase::dispose();
 }
 
 void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
@@ -410,11 +409,6 @@ bool SwPageBreakWin::Contains( const Point &rDocPt ) const
         return true;
 
     return false;
-}
-
-const SwPageFrm* SwPageBreakWin::GetPageFrame( )
-{
-    return static_cast< const SwPageFrm * >( GetFrame( ) );
 }
 
 void SwPageBreakWin::SetReadonly( bool bReadonly )
