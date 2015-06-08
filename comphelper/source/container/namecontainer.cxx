@@ -199,7 +199,7 @@ Type SAL_CALL NameContainer::getElementType()
 
 Reference< XNameContainer > comphelper::NameContainer_createInstance( Type aType )
 {
-    return (XNameContainer*) new NameContainer( aType );
+    return static_cast<XNameContainer*>(new NameContainer( aType ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

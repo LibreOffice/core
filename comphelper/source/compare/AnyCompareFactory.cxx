@@ -150,7 +150,7 @@ Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames_static
 Reference< XInterface > SAL_CALL AnyCompareFactory::Create(
                 const Reference< XComponentContext >& rxContext )
 {
-    return (cppu::OWeakObject*)new AnyCompareFactory( rxContext );
+    return static_cast<cppu::OWeakObject*>(new AnyCompareFactory( rxContext ));
 }
 
 void createRegistryInfo_AnyCompareFactory()

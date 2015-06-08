@@ -51,7 +51,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8
     aData.realloc(nBytesToRead);
 
     sal_uInt64 nRead = 0;
-    FileBase::RC eError = m_pFile->read((void*)aData.getArray(), nBytesToRead, nRead);
+    FileBase::RC eError = m_pFile->read(static_cast<void*>(aData.getArray()), nBytesToRead, nRead);
     if (eError != FileBase::E_None)
         throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 

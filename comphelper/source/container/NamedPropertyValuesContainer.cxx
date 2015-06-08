@@ -216,7 +216,7 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString&
 uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer::Create(
                 SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >&)
 {
-    return (cppu::OWeakObject*)new NamedPropertyValuesContainer();
+    return static_cast<cppu::OWeakObject*>(new NamedPropertyValuesContainer());
 }
 
 void createRegistryInfo_NamedPropertyValuesContainer()

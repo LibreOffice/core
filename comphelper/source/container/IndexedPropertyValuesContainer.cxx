@@ -247,7 +247,7 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUStrin
 uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer::Create(
                 SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >&)
 {
-    return (cppu::OWeakObject*)new IndexedPropertyValuesContainer();
+    return static_cast<cppu::OWeakObject*>(new IndexedPropertyValuesContainer());
 }
 
 void createRegistryInfo_IndexedPropertyValuesContainer()

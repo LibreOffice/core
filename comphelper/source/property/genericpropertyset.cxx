@@ -265,7 +265,7 @@ Sequence< OUString > SAL_CALL GenericPropertySet::getSupportedServiceNames(  )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > comphelper::GenericPropertySet_CreateInstance( comphelper::PropertySetInfo* pInfo )
 {
-    return (XPropertySet*)new GenericPropertySet( pInfo );
+    return static_cast<XPropertySet*>(new GenericPropertySet( pInfo ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

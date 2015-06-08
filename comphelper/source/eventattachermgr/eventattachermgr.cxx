@@ -185,7 +185,7 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     throw( RuntimeException, std::exception )
 {
     ScriptEvent aScriptEvent;
-    aScriptEvent.Source         = (OWeakObject *)mpManager; // get correct XInterface
+    aScriptEvent.Source         = static_cast<OWeakObject *>(mpManager); // get correct XInterface
     aScriptEvent.ListenerType   = Event.ListenerType;
     aScriptEvent.MethodName     = Event.MethodName;
     aScriptEvent.Arguments      = Event.Arguments;
@@ -250,7 +250,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
     throw( InvocationTargetException, RuntimeException, std::exception )
 {
     ScriptEvent aScriptEvent;
-    aScriptEvent.Source         = (OWeakObject *)mpManager; // get correct XInterface
+    aScriptEvent.Source         = static_cast<OWeakObject *>(mpManager); // get correct XInterface
     aScriptEvent.ListenerType   = Event.ListenerType;
     aScriptEvent.MethodName     = Event.MethodName;
     aScriptEvent.Arguments      = Event.Arguments;

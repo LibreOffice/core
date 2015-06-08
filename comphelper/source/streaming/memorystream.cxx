@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_
     {
         sal_Int8* pData = static_cast<sal_Int8*>(&(*maData.begin()));
         sal_Int8* pCursor = &((pData)[mnCursor]);
-        memcpy( (void*)aData.getArray(), (void*)pCursor, nBytesToRead );
+        memcpy( static_cast<void*>(aData.getArray()), static_cast<void*>(pCursor), nBytesToRead );
 
         mnCursor += nBytesToRead;
     }
@@ -190,7 +190,7 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData ) t
 
         sal_Int8* pData = static_cast<sal_Int8*>(&(*maData.begin()));
         sal_Int8* pCursor = &(pData[mnCursor]);
-        memcpy( (void*)pCursor, (void*)aData.getConstArray(), nBytesToWrite );
+        memcpy( pCursor, aData.getConstArray(), nBytesToWrite );
 
         mnCursor += nBytesToWrite;
     }
