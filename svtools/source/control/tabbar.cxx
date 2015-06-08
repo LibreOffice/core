@@ -290,7 +290,7 @@ void ImplTabButton::Command(const CommandEvent& rCommandEvent)
     if (rCommandEvent.GetCommand() == CommandEventId::ContextMenu)
     {
         TabBar* pParent = GetParent();
-        pParent->maScrollAreaContextHdl.Call((void*)&rCommandEvent);
+        pParent->maScrollAreaContextHdl.Call(const_cast<CommandEvent *>(&rCommandEvent));
     }
     PushButton::Command(rCommandEvent);
 }
@@ -1811,7 +1811,7 @@ void TabBar::MovePage(sal_uInt16 nPageId, sal_uInt16 nNewPos)
         if (IsReallyVisible() && IsUpdateMode())
             Invalidate();
 
-        CallEventListeners( VCLEVENT_TABBAR_PAGEMOVED, (void*) &aPair );
+        CallEventListeners( VCLEVENT_TABBAR_PAGEMOVED, static_cast<void*>(&aPair) );
     }
 }
 

@@ -738,27 +738,27 @@ bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
 
 Reference< XInterface > SvUnoImageMapRectangleObject_createInstance( const SvEventDescription* pSupportedMacroItems )
 {
-    return (XWeak*)new SvUnoImageMapObject( IMAP_OBJ_RECTANGLE, pSupportedMacroItems );
+    return static_cast<XWeak*>(new SvUnoImageMapObject( IMAP_OBJ_RECTANGLE, pSupportedMacroItems ));
 }
 
 Reference< XInterface > SvUnoImageMapCircleObject_createInstance( const SvEventDescription* pSupportedMacroItems )
 {
-    return (XWeak*)new SvUnoImageMapObject( IMAP_OBJ_CIRCLE, pSupportedMacroItems );
+    return static_cast<XWeak*>(new SvUnoImageMapObject( IMAP_OBJ_CIRCLE, pSupportedMacroItems ));
 }
 
 Reference< XInterface > SvUnoImageMapPolygonObject_createInstance( const SvEventDescription* pSupportedMacroItems )
 {
-    return (XWeak*)new SvUnoImageMapObject( IMAP_OBJ_POLYGON, pSupportedMacroItems );
+    return static_cast<XWeak*>(new SvUnoImageMapObject( IMAP_OBJ_POLYGON, pSupportedMacroItems ));
 }
 
 Reference< XInterface > SvUnoImageMap_createInstance( const SvEventDescription* pSupportedMacroItems )
 {
-    return (XWeak*)new SvUnoImageMap( pSupportedMacroItems );
+    return static_cast<XWeak*>(new SvUnoImageMap( pSupportedMacroItems ));
 }
 
 Reference< XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems )
 {
-    return (XWeak*)new SvUnoImageMap( rMap, pSupportedMacroItems );
+    return static_cast<XWeak*>(new SvUnoImageMap( rMap, pSupportedMacroItems ));
 }
 
 bool SvUnoImageMap_fillImageMap( Reference< XInterface > xImageMap, ImageMap& rMap )

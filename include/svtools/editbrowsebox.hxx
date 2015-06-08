@@ -503,7 +503,7 @@ namespace svt
 
         bool isGetCellFocusPending() const { return nStartEvent != 0; }
         void cancelGetCellFocus() { if (nStartEvent) Application::RemoveUserEvent(nStartEvent); nStartEvent = 0; }
-        void forceGetCellFocus() { cancelGetCellFocus(); LINK(this, EditBrowseBox, StartEditHdl).Call((void*)NULL); }
+        void forceGetCellFocus() { cancelGetCellFocus(); LINK(this, EditBrowseBox, StartEditHdl).Call(nullptr); }
 
         BrowserMouseEventPtr& getMouseEvent() { return aMouseEvent; }
 

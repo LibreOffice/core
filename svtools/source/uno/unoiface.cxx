@@ -114,7 +114,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
         static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( true );
         SVTXDateField * newComp = new SVTXDateField;
         *ppNewComp = newComp;
-        newComp->SetFormatter( (FormatterBase*)static_cast<DateField*>(pWindow) );
+        newComp->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pWindow)) );
     }
     else if (aServiceName.equalsIgnoreAsciiCase("roadmap") )
     {
@@ -396,7 +396,7 @@ void VCLXMultiLineEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
             if ( maTextListeners.getLength() )
             {
                 ::com::sun::star::awt::TextEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 maTextListeners.textChanged( aEvent );
             }
         }
@@ -725,7 +725,7 @@ sal_Int16 VCLXFileControl::getMaxTextLen() throw(::com::sun::star::uno::RuntimeE
 IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
 {
     ::com::sun::star::awt::TextEvent aEvent;
-    aEvent.Source = (::cppu::OWeakObject*)this;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
     maTextListeners.textChanged( aEvent );
 
     return 1;
@@ -1368,7 +1368,7 @@ void SVTXFormattedField::NotifyTextListeners()
     if ( GetTextListeners().getLength() )
     {
         ::com::sun::star::awt::TextEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
+        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
         GetTextListeners().textChanged( aEvent );
     }
 }

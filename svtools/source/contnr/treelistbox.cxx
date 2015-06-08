@@ -2026,7 +2026,7 @@ void SvTreeListBox::CheckButtonHdl()
 {
     aCheckButtonHdl.Call( this );
     if ( pCheckButtonData )
-        pImp->CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pCheckButtonData->GetActEntry() );
+        pImp->CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, static_cast<void*>(pCheckButtonData->GetActEntry()) );
 }
 
 

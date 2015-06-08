@@ -353,7 +353,7 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
         SolarMutexGuard aSolarMutexGuard;
 
         m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
+        m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >( static_cast<OWeakObject*>(this), UNO_QUERY ));
 
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 

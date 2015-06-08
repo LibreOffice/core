@@ -770,7 +770,7 @@ sal_Bool SAL_CALL SVTXGridControl::isRowSelected( ::sal_Int32 index ) throw (Run
 void SVTXGridControl::dispose() throw(RuntimeException, std::exception)
 {
     EventObject aObj;
-    aObj.Source = (::cppu::OWeakObject*)this;
+    aObj.Source = static_cast<cppu::OWeakObject*>(this);
     m_aSelectionListeners.disposeAndClear( aObj );
     VCLXWindow::dispose();
 }
@@ -876,7 +876,7 @@ void SVTXGridControl::ImplCallItemListeners()
     if ( m_aSelectionListeners.getLength() )
     {
         GridSelectionEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
+        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
 
         sal_Int32 const nSelectedRowCount( pTable->GetSelectedRowCount() );
         aEvent.SelectedRowIndexes.realloc( nSelectedRowCount );

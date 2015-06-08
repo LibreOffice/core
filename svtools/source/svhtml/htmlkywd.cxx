@@ -191,7 +191,7 @@ int GetHTMLToken( const OUString& rName )
 {
     if( !bSortKeyWords )
     {
-        qsort( (void*) aHTMLTokenTab,
+        qsort( static_cast<void*>(aHTMLTokenTab),
                 sizeof( aHTMLTokenTab ) / sizeof( HTML_TokenEntry ),
                 sizeof( HTML_TokenEntry ),
                 HTMLKeyCompare );
@@ -209,7 +209,7 @@ int GetHTMLToken( const OUString& rName )
     aSrch.nToken = -1;
 
     pFound = bsearch( &aSrch,
-                      (void*) aHTMLTokenTab,
+                      static_cast<void*>(aHTMLTokenTab),
                       sizeof( aHTMLTokenTab ) / sizeof( HTML_TokenEntry ),
                       sizeof( HTML_TokenEntry ),
                       HTMLKeyCompare );
@@ -528,7 +528,7 @@ sal_Unicode GetHTMLCharName( const OUString& rName )
 {
     if( !bSortCharKeyWords )
     {
-        qsort( (void*) aHTMLCharNameTab,
+        qsort( static_cast<void*>(aHTMLCharNameTab),
                 sizeof( aHTMLCharNameTab ) / sizeof( HTML_CharEntry ),
                 sizeof( HTML_CharEntry ),
                 HTMLCharNameCompare );
@@ -542,7 +542,7 @@ sal_Unicode GetHTMLCharName( const OUString& rName )
     aSrch.cChar = USHRT_MAX;
 
     if( 0 != ( pFound = bsearch( &aSrch,
-                        (void*) aHTMLCharNameTab,
+                        static_cast<void*>(aHTMLCharNameTab),
                         sizeof( aHTMLCharNameTab) / sizeof( HTML_CharEntry ),
                         sizeof( HTML_CharEntry ),
                         HTMLCharNameCompare )))
@@ -711,7 +711,7 @@ int GetHTMLOption( const OUString& rName )
 {
     if( !bSortOptionKeyWords )
     {
-        qsort( (void*) aHTMLOptionTab,
+        qsort( static_cast<void*>(aHTMLOptionTab),
                 sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
                 sizeof( HTML_TokenEntry ),
                 HTMLKeyCompare );
@@ -725,7 +725,7 @@ int GetHTMLOption( const OUString& rName )
     aSrch.nToken = -1;
 
     if( 0 != ( pFound = bsearch( &aSrch,
-                        (void*) aHTMLOptionTab,
+                        static_cast<void*>(aHTMLOptionTab),
                         sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
                         sizeof( HTML_TokenEntry ),
                         HTMLKeyCompare )))
@@ -927,7 +927,7 @@ sal_uInt32 GetHTMLColor( const OUString& rName )
 {
     if( !bSortColorKeyWords )
     {
-        qsort( (void*) aHTMLColorNameTab,
+        qsort( static_cast<void*>(aHTMLColorNameTab),
                 sizeof( aHTMLColorNameTab ) / sizeof( HTML_ColorEntry ),
                 sizeof( HTML_ColorEntry ),
                 HTMLColorNameCompare );
@@ -943,7 +943,7 @@ sal_uInt32 GetHTMLColor( const OUString& rName )
     aSrch.nColor = HTML_NO_COLOR;
 
     if( 0 != ( pFound = bsearch( &aSrch,
-                        (void*) aHTMLColorNameTab,
+                        static_cast<void*>(aHTMLColorNameTab),
                         sizeof( aHTMLColorNameTab) / sizeof( HTML_ColorEntry ),
                         sizeof( HTML_ColorEntry ),
                         HTMLColorNameCompare )))

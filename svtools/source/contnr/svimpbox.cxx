@@ -51,7 +51,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     , aHorSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_HSCROLL))
     , aScrBarBox(VclPtr<ScrollBarBox>::Create(pLBView))
     , aOutputSize(0, 0)
-    , aSelEng(pLBView, (FunctionSet*)0)
+    , aSelEng(pLBView, nullptr)
     , aFctSet(this, &aSelEng, pLBView)
     , nNextVerVisSize(0)
     , nExtendedWinBits(0)
@@ -61,7 +61,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     osl_atomic_increment(&s_nImageRefCount);
     pView = pLBView;
     pTree = pLBTree;
-    aSelEng.SetFunctionSet( (FunctionSet*)&aFctSet );
+    aSelEng.SetFunctionSet( static_cast<FunctionSet*>(&aFctSet) );
     aSelEng.ExpandSelectionOnMouseMove( false );
     SetStyle( nWinStyle );
     SetSelectionMode( SINGLE_SELECTION );
@@ -3331,7 +3331,7 @@ void SvImpLBox::NotifyTabsChanged()
     if( GetUpdateMode() && !(nFlags & F_IGNORE_CHANGED_TABS ) &&
         nCurUserEvent == 0 )
     {
-        nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent),(void*)0);
+        nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent),nullptr);
     }
 }
 

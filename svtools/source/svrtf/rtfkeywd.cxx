@@ -1209,7 +1209,7 @@ int GetRTFToken( const OUString& rSearch )
 {
     if( !bSortKeyWords )
     {
-        qsort( (void*) aRTFTokenTab,
+        qsort( static_cast<void*>(aRTFTokenTab),
                 sizeof( aRTFTokenTab ) / sizeof( RTF_TokenEntry ),
                 sizeof( RTF_TokenEntry ),
                 RTFKeyCompare );
@@ -1223,7 +1223,7 @@ int GetRTFToken( const OUString& rSearch )
     aSrch.nToken = -1;
 
     if( 0 != ( pFound = bsearch( &aSrch,
-                        (void*) aRTFTokenTab,
+                        static_cast<void*>(aRTFTokenTab),
                         sizeof( aRTFTokenTab ) / sizeof( RTF_TokenEntry ),
                         sizeof( RTF_TokenEntry ),
                         RTFKeyCompare )))

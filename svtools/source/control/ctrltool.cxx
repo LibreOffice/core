@@ -302,7 +302,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
                                  (pNewInfo->GetCharSet() == eSystemEncoding) )
                             {
                                 ImplFontListFontInfo* pTemp2 = pTemp->mpNext;
-                                *((vcl::FontInfo*)pTemp) = *((vcl::FontInfo*)pNewInfo);
+                                *static_cast<vcl::FontInfo*>(pTemp) = *static_cast<vcl::FontInfo*>(pNewInfo);
                                 pTemp->mpNext = pTemp2;
                             }
                             delete pNewInfo;
@@ -708,15 +708,15 @@ sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
     if ( !pData )
-        return (sal_Handle)NULL;
+        return nullptr;
     else
-        return (sal_Handle)pData->mpFirst;
+        return static_cast<sal_Handle>(pData->mpFirst);
 }
 
 sal_Handle FontList::GetNextFontInfo( sal_Handle hFontInfo )
 {
     ImplFontListFontInfo* pInfo = static_cast<ImplFontListFontInfo*>(hFontInfo);
-    return (sal_Handle)(pInfo->mpNext);
+    return static_cast<sal_Handle>(pInfo->mpNext);
 }
 
 const vcl::FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo )
