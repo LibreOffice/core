@@ -594,7 +594,7 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
             {
                 sal_uInt16 nEntryPos = aSaveAsLB->InsertEntry(pUIFilters[i]);
                 if ( pImpl->aODFArr[nData][i] )
-                    aSaveAsLB->SetEntryData( nEntryPos, (void*)pImpl );
+                    aSaveAsLB->SetEntryData( nEntryPos, static_cast<void*>(pImpl) );
                 if(pFilters[i] == pImpl->aDefaultArr[nData])
                     sSelect = pUIFilters[i];
             }

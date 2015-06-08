@@ -452,7 +452,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
             SvTreeListEntry* pEntry = GetEntry( nSelPos );
             bool bIsChecked = ( GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED );
             CheckEntryPos( nSelPos, nCol, !bIsChecked );
-            CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pEntry );
+            CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, static_cast<void*>(pEntry) );
         }
         else
         {

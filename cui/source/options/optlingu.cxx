@@ -1399,7 +1399,7 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
             const ServiceInfo_Impl &rInfo = rAllDispSrvcArr[i];
             m_pLinguModulesCLB->InsertEntry( rInfo.sDisplayName, TREELIST_APPEND );
             SvTreeListEntry* pEntry = m_pLinguModulesCLB->GetEntry(i);
-            pEntry->SetUserData( (void *) &rInfo );
+            pEntry->SetUserData( const_cast<ServiceInfo_Impl *>(&rInfo) );
             m_pLinguModulesCLB->CheckEntryPos( i, rInfo.bConfigured );
         }
         m_pLinguModulesEditPB->Enable( nDispSrvcCount > 0 );
@@ -2099,7 +2099,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         SvTreeListEntry* pEntry = CreateEntry( sSpell,  CBCOL_SECOND );
         ModuleUserData_Impl* pUserData = new ModuleUserData_Impl(
                                          OUString(), true, false, TYPE_SPELL, 0 );
-        pEntry->SetUserData( (void *)pUserData );
+        pEntry->SetUserData( static_cast<void *>(pUserData) );
         pModel->Insert( pEntry );
 
         Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
@@ -2133,7 +2133,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, false,
                                         bCheck, TYPE_SPELL, (sal_uInt8)nLocalIndex++ );
-                pNewEntry->SetUserData( (void *)pUserData );
+                pNewEntry->SetUserData( static_cast<void *>(pUserData) );
                 pModel->Insert( pNewEntry );
             }
         }
@@ -2143,7 +2143,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 
         pEntry = CreateEntry( sGrammar,    CBCOL_SECOND );
         pUserData = new ModuleUserData_Impl( OUString(), true, false, TYPE_GRAMMAR, 0 );
-        pEntry->SetUserData( (void *)pUserData );
+        pEntry->SetUserData( static_cast<void *>(pUserData) );
         pModel->Insert( pEntry );
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
@@ -2177,7 +2177,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, false,
                                         bCheck, TYPE_GRAMMAR, (sal_uInt8)nLocalIndex++ );
-                pNewEntry->SetUserData( (void *)pUserData );
+                pNewEntry->SetUserData( static_cast<void *>(pUserData) );
                 pModel->Insert( pNewEntry );
             }
         }
@@ -2187,7 +2187,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 
         pEntry = CreateEntry( sHyph,    CBCOL_SECOND );
         pUserData = new ModuleUserData_Impl( OUString(), true, false, TYPE_HYPH, 0 );
-        pEntry->SetUserData( (void *)pUserData );
+        pEntry->SetUserData( static_cast<void *>(pUserData) );
         pModel->Insert( pEntry );
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
@@ -2221,7 +2221,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, false,
                                         bCheck, TYPE_HYPH, (sal_uInt8)nLocalIndex++ );
-                pNewEntry->SetUserData( (void *)pUserData );
+                pNewEntry->SetUserData( static_cast<void *>(pUserData) );
                 pModel->Insert( pNewEntry );
             }
         }
@@ -2231,7 +2231,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 
         pEntry = CreateEntry( sThes,    CBCOL_SECOND );
         pUserData = new ModuleUserData_Impl( OUString(), true, false, TYPE_THES, 0 );
-        pEntry->SetUserData( (void *)pUserData );
+        pEntry->SetUserData( static_cast<void *>(pUserData) );
         pModel->Insert( pEntry );
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
@@ -2265,7 +2265,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, false,
                                         bCheck, TYPE_THES, (sal_uInt8)nLocalIndex++ );
-                pNewEntry->SetUserData( (void *)pUserData );
+                pNewEntry->SetUserData( static_cast<void *>(pUserData) );
                 pModel->Insert( pNewEntry );
             }
         }
@@ -2288,7 +2288,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
         ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
         OUString aStr(m_pModulesCLB->GetEntryText(pEntry));
         SvTreeListEntry* pToInsert = CreateEntry( aStr, CBCOL_FIRST );
-        pToInsert->SetUserData( (void *)pData);
+        pToInsert->SetUserData( static_cast<void *>(pData));
         bool bIsChecked = m_pModulesCLB->IsChecked(nCurPos);
 
         pModel->Remove(pEntry);

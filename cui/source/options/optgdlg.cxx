@@ -1216,7 +1216,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
                 aTwoSpace +
                 ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( pCurr->GetLanguage() ) );
         sal_uInt16 nPos = m_pCurrencyLB->InsertEntry( aStr_ );
-        m_pCurrencyLB->SetEntryData( nPos, (void*) pCurr );
+        m_pCurrencyLB->SetEntryData( nPos, const_cast<NfCurrencyEntry *>(pCurr) );
     }
 
     m_pLocaleSettingLB->SetSelectHdl( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
@@ -1570,7 +1570,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }
     // if pCurr==NULL the SYSTEM entry is selected
-    sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( (void*) pCurr );
+    sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( static_cast<void const *>(pCurr) );
     m_pCurrencyLB->SelectEntryPos( nPos );
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_CURRENCY);
     m_pCurrencyLB->Enable(!bReadonly);
@@ -1760,7 +1760,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 
     const NfCurrencyEntry* pCurr = &SvNumberFormatter::GetCurrencyEntry(
             ((eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang));
-    sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( (void*) NULL );
+    sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( nullptr );
     if (pCurr)
     {
         // Update the "Default ..." currency.

@@ -848,7 +848,7 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
         if ( nCol < 2 )
         {
             CheckEntryPos( nSelPos, nCol, !IsChecked( nSelPos, nCol ) );
-            CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)GetEntry( nSelPos ) );
+            CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, static_cast<void*>(GetEntry( nSelPos )) );
         }
         else
         {
@@ -2338,7 +2338,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
             const OUString* pStr =
                 &(*m_pAutoCompleteList)[n]->GetAutoCompleteString();
             sal_Int32 nPos = m_pLBEntries->InsertEntry( *pStr );
-            m_pLBEntries->SetEntryData( nPos, (void*)pStr );
+            m_pLBEntries->SetEntryData( nPos, const_cast<OUString *>(pStr) );
         }
     }
     else
@@ -2412,7 +2412,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
             sData.append(aLineEnd);
         }
         pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
-        pCntnr->CopyToClipboard( (vcl::Window*)this );
+        pCntnr->CopyToClipboard( static_cast<vcl::Window*>(const_cast<OfaAutoCompleteTabPage *>(this)) );
     }
 }
 

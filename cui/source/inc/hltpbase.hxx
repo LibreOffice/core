@@ -135,7 +135,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-    bool IsMarkWndVisible ()      { return ((vcl::Window*)mpMarkWnd)->IsVisible(); }
+    bool IsMarkWndVisible ()      { return static_cast<vcl::Window*>(mpMarkWnd)->IsVisible(); }
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
     bool MoveToExtraWnd ( Point aNewPos, bool bDisConnectDlg = false );
 
@@ -148,8 +148,8 @@ protected:
     virtual void SetMarkWndShouldOpen(bool bOpen);
 
     void ShowMarkWnd ();
-    void HideMarkWnd ()           { ( ( vcl::Window* ) mpMarkWnd )->Hide(); }
-    void InvalidateMarkWnd ()     { ( ( vcl::Window* ) mpMarkWnd )->Invalidate(); }
+    void HideMarkWnd ()           { static_cast<vcl::Window*>(mpMarkWnd)->Hide(); }
+    void InvalidateMarkWnd ()     { static_cast<vcl::Window*>(mpMarkWnd)->Invalidate(); }
 
     SfxDispatcher* GetDispatcher() const;
 

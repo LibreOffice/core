@@ -115,7 +115,7 @@ void SvxEventConfigPage::dispose()
     {
         OUString const * pEventName = static_cast<OUString const *>(pE->GetUserData());
         delete pEventName;
-        pE->SetUserData((void*)0);
+        pE->SetUserData(nullptr);
         pE = SvTreeListBox::NextSibling( pE );
     }
     m_pSaveInListBox.clear();

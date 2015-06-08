@@ -298,7 +298,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
 
     sal_uInt16 *pId = new sal_uInt16 ( nId );
     SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->InsertEntry( rIconText, rChoiceIcon );
-    pEntry->SetUserData ( (void*) pId );
+    pEntry->SetUserData ( static_cast<void*>(pId) );
     return pEntry;
 }
 

@@ -553,7 +553,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 
         SvTreeListEntry*    _pE = rListBox.InsertEntry( displayName );
         OUString* pEventName = new OUString( sEventName );
-        _pE->SetUserData( (void*)pEventName );
+        _pE->SetUserData( static_cast<void*>(pEventName) );
         OUString sNew( eventURL );
         _pE->ReplaceItem( new IconLBoxString( _pE, 0, sNew,
             &mpImpl->aMacroImg, &mpImpl->aComponentImg ), LB_MACROS_ITEMPOS );

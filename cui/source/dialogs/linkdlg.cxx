@@ -671,7 +671,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
     aEntry += ImplGetStateStr( rLink );
 
     SvTreeListEntry * pE = m_pTbLinks->InsertEntryToColumn( aEntry, nPos );
-    pE->SetUserData( (void*)&rLink );
+    pE->SetUserData( const_cast<SvBaseLink *>(&rLink) );
     if(bSelect)
         m_pTbLinks->Select(pE);
 }

@@ -459,7 +459,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
         while( NULL != (s = pSubsetMap->GetNextSubset( bFirst ))  )
         {
             sal_uInt16 nPos_ = m_pSubsetLB->InsertEntry( s->GetName() );
-            m_pSubsetLB->SetEntryData( nPos_, (void*)s );
+            m_pSubsetLB->SetEntryData( nPos_, const_cast<Subset *>(s) );
             // NOTE: subset must live at least as long as the selected font
             if( bFirst )
                 m_pSubsetLB->SelectEntryPos( nPos_ );

@@ -459,7 +459,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                                                         aBmp, aBmp,
                                                         pParentEntry,
                                                         false, TREELIST_APPEND,
-                                                        (void*)pData );
+                                                        static_cast<void*>(pData) );
                         nEntries++;
                     }
                     else
@@ -468,7 +468,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                         pParentEntry,
                                                         false, TREELIST_APPEND,
-                                                        (void*)pData );
+                                                        static_cast<void*>(pData) );
                         nEntries++;
                     }
                 }
@@ -478,7 +478,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                     pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                     pParentEntry,
                                                     false, TREELIST_APPEND,
-                                                    (void*)pData );
+                                                    static_cast<void*>(pData) );
                     nEntries++;
                 }
 

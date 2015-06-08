@@ -535,7 +535,7 @@ OUString AbstractURLDlg_Impl::GetName() const
 
 void AbstractSvxHlinkDlgMarkWnd_Impl::Hide()
 {
-    ((vcl::Window*)pDlg)->Hide();
+    static_cast<vcl::Window*>(pDlg)->Hide();
 }
 
 void AbstractSvxHlinkDlgMarkWnd_Impl::SetSizePixel( const Size& rNewSize )
@@ -550,12 +550,12 @@ Size AbstractSvxHlinkDlgMarkWnd_Impl::GetSizePixel() const
 
 bool AbstractSvxHlinkDlgMarkWnd_Impl::IsVisible( ) const
 {
-    return (( vcl::Window* )pDlg)->IsVisible();
+    return static_cast<vcl::Window*>(pDlg)->IsVisible();
 }
 
 void AbstractSvxHlinkDlgMarkWnd_Impl::Invalidate( InvalidateFlags nFlags )
 {
-    (( vcl::Window* )pDlg)->Invalidate(nFlags);
+    static_cast<vcl::Window*>(pDlg)->Invalidate(nFlags);
 }
 
 bool AbstractSvxHlinkDlgMarkWnd_Impl::MoveTo( Point aNewPos )const
@@ -810,7 +810,7 @@ void AbstractSvxPathSelectDialog_Impl::SetTitle( const OUString& rNewTitle )
 
 vcl::Window * AbstractSvxHpLinkDlg_Impl::GetWindow()
 {
-    return (vcl::Window *)pDlg;
+    return static_cast<vcl::Window *>(pDlg);
 }
 
 bool AbstractSvxHpLinkDlg_Impl::QueryClose()
@@ -942,7 +942,7 @@ IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, PrevHdl)
 }
 vcl::Window * AbstractSvxPostItDialog_Impl::GetWindow()
 {
-    return (vcl::Window *)pDlg;
+    return static_cast<vcl::Window *>(pDlg);
 }
 
 OUString AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToOpen() const

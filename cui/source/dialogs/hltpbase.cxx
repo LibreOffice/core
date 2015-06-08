@@ -190,7 +190,7 @@ bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, bool bDisConnectDlg
 // Show Extra-Window
 void SvxHyperlinkTabPageBase::ShowMarkWnd ()
 {
-    ( ( vcl::Window* ) mpMarkWnd )->Show();
+    static_cast<vcl::Window*>(mpMarkWnd)->Show();
 
     // Size of dialog-window in screen pixels
     Rectangle aDlgRect( mpDialog->GetWindowExtentsRelative( NULL ) );
