@@ -82,7 +82,7 @@ void ScrollableWrapper<T>::setScrollVisibility( ScrollBarVisibility rVisState )
 template< class T>
 ScrollableWrapper<T>::~ScrollableWrapper()
 {
-    dispose();
+    T::disposeOnce();
 }
 
 template< class T>
