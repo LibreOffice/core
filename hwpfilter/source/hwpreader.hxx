@@ -189,7 +189,7 @@ Reference< XInterface > HwpImportFilter_CreateInstance(
 {
     HwpImportFilter *p = new HwpImportFilter( rSMgr );
 
-    return Reference< XInterface > ( (OWeakObject* )p );
+    return Reference< XInterface > ( static_cast<OWeakObject*>(p) );
 }
 
 Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()

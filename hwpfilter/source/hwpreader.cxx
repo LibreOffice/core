@@ -112,7 +112,7 @@ struct HwpReaderPrivate
 HwpReader::HwpReader()
 {
     pList = new AttributeListImpl;
-    rList = (XAttributeList *) pList;
+    rList = static_cast<XAttributeList *>(pList);
     d = new HwpReaderPrivate;
 }
 

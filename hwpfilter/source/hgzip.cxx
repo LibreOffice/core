@@ -61,9 +61,9 @@ gz_stream *gz_open(HStream & _stream)
     s = static_cast<gz_stream *>(ALLOC(sizeof(gz_stream)));
     if (!s)
         return Z_NULL;
-    s->stream.zalloc = (alloc_func) 0;
-    s->stream.zfree = (free_func) 0;
-    s->stream.opaque = (voidpf) 0;
+    s->stream.zalloc = nullptr;
+    s->stream.zfree = nullptr;
+    s->stream.opaque = nullptr;
     s->stream.next_in = s->inbuf = Z_NULL;
     s->stream.next_out = s->outbuf = Z_NULL;
     s->stream.avail_in = s->stream.avail_out = 0;

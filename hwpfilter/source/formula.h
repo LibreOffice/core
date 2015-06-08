@@ -53,7 +53,7 @@ public:
     void setAttributeListImpl( AttributeListImpl *p )
     {
         pList = p;
-        rList = (XAttributeList *) pList;
+        rList = static_cast<XAttributeList *>(pList);
     }
     int parse();
 private:

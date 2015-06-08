@@ -203,7 +203,7 @@ static int yy_n_chars;      /* number of characters read into yy_ch_buf */
 int yyleng;
 
 /* Points to current character in buffer. */
-static char *yy_c_buf_p = (char *) 0;
+static char *yy_c_buf_p = nullptr;
 static int yy_init = 1;     /* whether we need to initialize */
 static int yy_start = 0;    /* start state number */
 
@@ -230,7 +230,7 @@ static void *yy_flex_realloc YY_PROTO(( void *, yy_size_t ));
 static void yy_flex_free YY_PROTO(( void * ));
 
 typedef unsigned char YY_CHAR;
-FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;
+FILE *yyin = nullptr, *yyout = nullptr;
 typedef int yy_state_type;
 extern char *yytext;
 #define yytext_ptr yytext
@@ -1590,7 +1590,7 @@ static int yy_get_next_buffer()
 
                 b->yy_ch_buf = static_cast<char *>(
                     /* Include room in for 2 EOB chars. */
-                    yy_flex_realloc( (void *) b->yy_ch_buf,
+                    yy_flex_realloc( static_cast<void *>(b->yy_ch_buf),
                              b->yy_buf_size + 2 ));
                 }
             else
@@ -1811,12 +1811,12 @@ YY_BUFFER_STATE b;
         return;
 
     if ( b == yy_current_buffer )
-        yy_current_buffer = (YY_BUFFER_STATE) 0;
+        yy_current_buffer = nullptr;
 
     if ( b->yy_is_our_buffer )
-        yy_flex_free( (void *) b->yy_ch_buf );
+        yy_flex_free( static_cast<void *>(b->yy_ch_buf) );
 
-    yy_flex_free( (void *) b );
+    yy_flex_free( static_cast<void *>(b) );
     }
 
 
