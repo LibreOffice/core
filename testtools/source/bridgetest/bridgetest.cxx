@@ -385,7 +385,7 @@ static bool performTest(
         bRet &= check(aData.Any == xI, "### unexpected any!");
         bRet &= check(!(aData.Any != xI), "### unexpected any!");
         aData.Sequence.realloc(2);
-        aData.Sequence[0] = *(TestElement const *) &aData;
+        aData.Sequence[0] = *static_cast<TestElement const *>(&aData);
         // aData.Sequence[1] is empty
         // aSetData is a manually copy of aData for first setting:
         TestData aSetData;
@@ -395,7 +395,7 @@ static bool performTest(
             aData.UHyper, aData.Float, aData.Double, aData.Enum, aData.String,
             xI, Any(&xI, cppu::UnoType<XInterface>::get()));
         aSetData.Sequence.realloc(2);
-        aSetData.Sequence[0] = *(TestElement const *) &aSetData;
+        aSetData.Sequence[0] = *static_cast<TestElement const *>(&aSetData);
         // aSetData.Sequence[1] is empty
         xLBT->setValues(
             aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short,
@@ -1063,7 +1063,7 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
     }
     default:
         uno_type_sequence_construct(
-            &retSeq, type.getTypeLibType(), (void*) val->elements,
+            &retSeq, type.getTypeLibType(), const_cast<char *>(val->elements),
             val->nElements, reinterpret_cast< uno_AcquireFunc >(cpp_acquire));
         break;
     }

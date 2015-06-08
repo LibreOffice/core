@@ -1170,7 +1170,7 @@ Sequence< OUString > Test_Impl::getSupportedServiceNames()
 static Reference< XInterface > SAL_CALL Test_Impl_create(
     SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
 {
-    return Reference< XInterface >( (XBridgeTest *)new Test_Impl() );
+    return Reference< XInterface >( static_cast<XBridgeTest *>(new Test_Impl()) );
 }
 
 }
