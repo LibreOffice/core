@@ -262,7 +262,8 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     // die HTML-Vorlage holen
     bool bOldHTMLMode = false;
-    sal_uInt16 nOldTextFormatCollCnt = 0, nOldCharFormatCnt = 0;
+    SwTextFormatColls::size_type nOldTextFormatCollCnt = 0;
+    SwCharFormats::size_type nOldCharFormatCnt = 0;
 
     OSL_ENSURE( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
     pTemplate = static_cast<HTMLReader*>(ReadHTML)->GetTemplateDoc();
@@ -437,7 +438,6 @@ sal_uLong SwHTMLWriter::WriteStream()
     }
 
     // loesche die Tabelle mit den freifliegenden Rahmen
-    sal_uInt16 i;
     OSL_ENSURE( !pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
     if( pHTMLPosFlyFrms )
     {
@@ -484,7 +484,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     ClearNextNumInfo();
 
-    for( i=0; i<MAXLEVEL; i++ )
+    for( int i=0; i<MAXLEVEL; ++i )
         aBulletGrfs[i].clear();
 
     aNonConvertableCharacters.clear();
@@ -496,13 +496,13 @@ sal_uLong SwHTMLWriter::WriteStream()
     {
         // Waehrend des Exports angelegte Zeichen- und Abastzvorlagen
         // loeschen
-        sal_uInt16 nTextFormatCollCnt = pTemplate->GetTextFormatColls()->size();
+        auto nTextFormatCollCnt = pTemplate->GetTextFormatColls()->size();
         while( nTextFormatCollCnt > nOldTextFormatCollCnt )
             pTemplate->DelTextFormatColl( --nTextFormatCollCnt );
         OSL_ENSURE( pTemplate->GetTextFormatColls()->size() == nOldTextFormatCollCnt,
                 "falsche Anzahl TextFormatColls geloescht" );
 
-        sal_uInt16 nCharFormatCnt = pTemplate->GetCharFormats()->size();
+        auto nCharFormatCnt = pTemplate->GetCharFormats()->size();
         while( nCharFormatCnt > nOldCharFormatCnt )
             pTemplate->DelCharFormat( --nCharFormatCnt );
         OSL_ENSURE( pTemplate->GetCharFormats()->size() == nOldCharFormatCnt,
