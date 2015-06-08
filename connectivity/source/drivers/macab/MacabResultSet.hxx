@@ -95,7 +95,7 @@ namespace connectivity
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
-                return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*(MacabResultSet_BASE*) this);
+                return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*static_cast<MacabResultSet_BASE*>(this));
             }
 
             void allMacabRecords();

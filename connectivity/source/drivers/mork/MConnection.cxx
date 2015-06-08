@@ -47,7 +47,7 @@ static const int defaultScope = 0x80;
 
 
 OConnection::OConnection(MorkDriver* _pDriver)
-    :OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+    :OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
     ,m_pDriver(_pDriver)
     ,m_aColumnAlias( _pDriver->getFactory() )
 {

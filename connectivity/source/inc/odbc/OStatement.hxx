@@ -210,7 +210,7 @@ namespace connectivity
             friend class OSubComponent<OStatement_BASE2, OStatement_BASE>;
         public:
             OStatement_BASE2(OConnection* _pConnection ) :  OStatement_Base(_pConnection ),
-                                    ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this){}
+                                    ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>(static_cast<cppu::OWeakObject*>(_pConnection), this){}
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface

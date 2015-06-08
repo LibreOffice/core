@@ -138,7 +138,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
-                return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*(ODatabaseMetaDataResultSet_BASE*)this);
+                return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*static_cast<ODatabaseMetaDataResultSet_BASE*>(this));
             }
             // XResultSet
             virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

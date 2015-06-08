@@ -79,7 +79,7 @@ const OUString Connection::our_sDBLocation( "firebird.fdb" );
 
 Connection::Connection(FirebirdDriver*    _pDriver)
     : Connection_BASE(m_aMutex)
-    , OSubComponent<Connection, Connection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+    , OSubComponent<Connection, Connection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
     , m_xDriver(_pDriver)
     , m_sConnectionURL()
     , m_sFirebirdURL()

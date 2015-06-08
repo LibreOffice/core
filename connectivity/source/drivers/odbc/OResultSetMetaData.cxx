@@ -42,7 +42,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
     SQLRETURN nRet = N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
                                     (SQLUSMALLINT)ident,
-                                    (SQLPOINTER)pName,
+                                    static_cast<SQLPOINTER>(pName),
                                     BUFFER_LEN,
                                     &nRealLen,
                                     NULL
@@ -62,7 +62,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
         nRet = N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
                                     (SQLUSMALLINT)ident,
-                                    (SQLPOINTER)pName,
+                                    static_cast<SQLPOINTER>(pName),
                                     nRealLen,
                                     &nRealLen,
                                     NULL

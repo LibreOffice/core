@@ -259,7 +259,7 @@ jclass java_sql_Connection::theClass = 0;
 
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     :java_lang_Object()
-    ,OSubComponent<java_sql_Connection, java_sql_Connection_BASE>((::cppu::OWeakObject*)(&_rDriver), this)
+    ,OSubComponent<java_sql_Connection, java_sql_Connection_BASE>(static_cast<cppu::OWeakObject*>(const_cast<java_sql_Driver *>(&_rDriver)), this)
     ,m_xContext( _rDriver.getContext() )
     ,m_pDriver( &_rDriver )
     ,m_pDriverobject(NULL)

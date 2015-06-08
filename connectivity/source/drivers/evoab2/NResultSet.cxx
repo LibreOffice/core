@@ -1038,7 +1038,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  ) throw(SQLExce
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-::com::sun::star::uno::WeakReferenceHelper      aStatement((OWeakObject*)m_pStatement);
+::com::sun::star::uno::WeakReferenceHelper      aStatement(static_cast<OWeakObject*>(m_pStatement));
     return aStatement.get();
 }
 

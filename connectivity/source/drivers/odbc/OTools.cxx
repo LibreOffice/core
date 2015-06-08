@@ -198,7 +198,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
 
                     // Pointer on Char*
-                    _pData = (void*)aString.getStr();
+                    _pData = const_cast<char *>(aString.getStr());
                 }   break;
                 case SQL_BIGINT:
                     *static_cast<sal_Int64*>(_pData) = *static_cast<sal_Int64 const *>(_pValue);
@@ -212,7 +212,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     *pLen = _nMaxLen;
                     *static_cast<OString*>(_pData) = aString;
                     // Pointer on Char*
-                    _pData = (void*)static_cast<OString*>(_pData)->getStr();
+                    _pData = const_cast<char *>(static_cast<OString*>(_pData)->getStr());
                 }   break;
                 case SQL_BIT:
                 case SQL_TINYINT:
@@ -240,7 +240,7 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_BINARY:
                 case SQL_VARBINARY:
                     {
-                        _pData = (void*)static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getConstArray();
+                        _pData = const_cast<sal_Int8 *>(static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getConstArray());
                         *pLen = static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getLength();
                     }   break;
                 case SQL_LONGVARBINARY:
@@ -371,7 +371,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                    _aStatementHandle,
                                    (SQLUSMALLINT)columnIndex,
                                    _fSqlType,
-                                   (SQLPOINTER)aCharArray,
+                                   static_cast<SQLPOINTER>(aCharArray),
                                    nMaxLen,
                                    &pcbValue),
                                _aStatementHandle,SQL_HANDLE_STMT,_xInterface);

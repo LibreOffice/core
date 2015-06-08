@@ -38,7 +38,7 @@ using namespace com::sun::star::sdbcx;
 IMPLEMENT_SERVICE_INFO(MacabConnection, "com.sun.star.sdbc.drivers.MacabConnection", "com.sun.star.sdbc.Connection")
 
 MacabConnection::MacabConnection(MacabDriver*   _pDriver)
-         : OSubComponent<MacabConnection, MacabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
+         : OSubComponent<MacabConnection, MacabConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this),
          m_pAddressBook(NULL),
          m_pDriver(_pDriver)
 {

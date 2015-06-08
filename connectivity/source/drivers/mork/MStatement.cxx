@@ -77,7 +77,7 @@ OStatement::OStatement( OConnection* _pConnection) : OCommonStatement( _pConnect
 OCommonStatement::OCommonStatement(OConnection* _pConnection )
     :OCommonStatement_IBASE(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBASE::rBHelper)
-    ,OCommonStatement_SBASE((::cppu::OWeakObject*)_pConnection, this)
+    ,OCommonStatement_SBASE(static_cast<cppu::OWeakObject*>(_pConnection), this)
     ,m_pTable(NULL)
     ,m_pConnection(_pConnection)
     ,m_aParser( comphelper::getComponentContext(_pConnection->getDriver()->getFactory()) )

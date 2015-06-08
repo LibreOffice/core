@@ -41,7 +41,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 OEvoabConnection::OEvoabConnection(OEvoabDriver& _rDriver)
-    : OSubComponent<OEvoabConnection, OConnection_BASE>( (::cppu::OWeakObject*)(&_rDriver), this )
+    : OSubComponent<OEvoabConnection, OConnection_BASE>( static_cast<cppu::OWeakObject*>(&_rDriver), this )
     , m_rDriver(_rDriver)
     , m_eSDBCAddressType(SDBCAddress::EVO_LOCAL)
     , m_xCatalog(NULL)

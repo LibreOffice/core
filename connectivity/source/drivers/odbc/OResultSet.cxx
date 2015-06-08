@@ -1033,7 +1033,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 
     m_aBindVector.push_back(allocBindColumn(DataType::CHAR,columnIndex));
     void* pData = reinterpret_cast<void*>(m_aBindVector.rbegin()->first);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,(sal_Int8*)NULL,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,nullptr,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 
 
@@ -1081,7 +1081,7 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x
     m_aRow[columnIndex] = x;
     m_aRow[columnIndex].setTypeKind(nType); // OJ: otherwise longvarchar will be recognized by fillNeededData
     m_aRow[columnIndex].setBound(true);
-    updateValue(columnIndex,nOdbcType,(void*)&x);
+    updateValue(columnIndex,nOdbcType,const_cast<OUString *>(&x));
 }
 
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException, std::exception)
@@ -1091,7 +1091,7 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
     m_aRow[columnIndex] = x;
     m_aRow[columnIndex].setTypeKind(nType); // OJ: otherwise longvarbinary will be recognized by fillNeededData
     m_aRow[columnIndex].setBound(true);
-    updateValue(columnIndex,nOdbcType,(void*)&x);
+    updateValue(columnIndex,nOdbcType,const_cast<css::uno::Sequence<sal_Int8> *>(&x));
 }
 
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) throw(SQLException, RuntimeException, std::exception)
@@ -1810,7 +1810,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                 {
                     OUString sRet;
                     sRet = m_aRow[nColumnIndex].getString();
-                    nRet = N3SQLPutData (m_aStatementHandle, (SQLPOINTER)sRet.getStr(), sizeof(sal_Unicode)*sRet.getLength());
+                    nRet = N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<sal_Unicode *>(sRet.getStr())), sizeof(sal_Unicode)*sRet.getLength());
                     break;
                 }
                 case DataType::LONGVARCHAR:
@@ -1819,7 +1819,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     OUString sRet;
                     sRet = m_aRow[nColumnIndex].getString();
                     OString aString(OUStringToOString(sRet,m_nTextEncoding));
-                    nRet = N3SQLPutData (m_aStatementHandle, (SQLPOINTER)aString.getStr(), aString.getLength());
+                    nRet = N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<char *>(aString.getStr())), aString.getLength());
                     break;
                 }
                 default:

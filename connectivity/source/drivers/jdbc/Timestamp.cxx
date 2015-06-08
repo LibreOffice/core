@@ -29,7 +29,7 @@ using namespace connectivity;
 
 
 jclass java_sql_Date::theClass = 0;
-java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date( NULL, (jobject)NULL )
+java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date( NULL, nullptr )
 {
     SDBThreadAttach t;
     if( !t.pEnv )
@@ -97,7 +97,7 @@ jclass java_sql_Time::st_getMyClass()
         theClass = findMyClass("java/sql/Time");
     return theClass;
 }
-java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_util_Date( NULL, (jobject)NULL )
+java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_util_Date( NULL, nullptr )
 {
     SDBThreadAttach t;
     if( !t.pEnv )
@@ -153,7 +153,7 @@ jclass java_sql_Timestamp::st_getMyClass()
 }
 
 java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _rOut)
-                   :java_util_Date( NULL, (jobject)NULL )
+                   :java_util_Date( NULL, nullptr )
 {
         SDBThreadAttach t;
     if( !t.pEnv )

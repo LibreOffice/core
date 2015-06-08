@@ -71,7 +71,7 @@ EBookQuery * createTest( const OUString &aColumnName,
 OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     : OCommonStatement_IBase(m_aMutex)
     , ::comphelper::OPropertyContainer(OCommonStatement_IBase::rBHelper)
-    , OStatement_CBase( (::cppu::OWeakObject*)_pConnection, this )
+    , OStatement_CBase( static_cast<cppu::OWeakObject*>(_pConnection), this )
     , m_xResultSet(NULL)
     , m_pConnection(_pConnection)
     , m_aParser(_pConnection->getDriver().getComponentContext())
