@@ -1238,24 +1238,24 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
             case DataType::DATE:
             case DataType::TIME:
             case DataType::TIMESTAMP:
-                s_pScanner->SetRule(s_pScanner->GetDATERule());
+                s_pScanner->SetRule(OSQLScanner::GetDATERule());
                 break;
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
             case DataType::CLOB:
-                s_pScanner->SetRule(s_pScanner->GetSTRINGRule());
+                s_pScanner->SetRule(OSQLScanner::GetSTRINGRule());
                 break;
             default:
                 if ( s_xLocaleData->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
-                    s_pScanner->SetRule(s_pScanner->GetGERRule());
+                    s_pScanner->SetRule(OSQLScanner::GetGERRule());
                 else
-                    s_pScanner->SetRule(s_pScanner->GetENGRule());
+                    s_pScanner->SetRule(OSQLScanner::GetENGRule());
         }
 
     }
     else
-        s_pScanner->SetRule(s_pScanner->GetSQLRule());
+        s_pScanner->SetRule(OSQLScanner::GetSQLRule());
 
     s_pScanner->prepareScan(rStatement, m_pContext, true);
 
