@@ -117,7 +117,7 @@ bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
         mpWindow->CaptureMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+        mpView->BegCreateObj(aPnt, nullptr, nDrgLog);
 
         SdrObject* pObj = mpView->GetCreateObj();
         if ( pObj )

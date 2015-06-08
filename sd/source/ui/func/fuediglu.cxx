@@ -115,7 +115,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             if (pHdl)
             {
                 // drag handle
-                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
             }
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && mpView->IsInsGluePointMode())
@@ -134,7 +134,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
             // move object
-            mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
+            mpView->BegDragObj(aMDPos, nullptr, NULL, nDrgLog);
         }
         else if (eHit == SDRHIT_GLUEPOINT)
         {
@@ -147,7 +147,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
             if (pHdl)
             {
-                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
             }
         }
         else
@@ -176,7 +176,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
             {
                 // move object
-                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
             }
             else if (mpView->AreObjectsMarked())
             {

@@ -340,7 +340,7 @@ void SAL_CALL AccessibleSlideSorterView::addAccessibleEventListener(
 
         if (IsDisposed())
         {
-            uno::Reference<uno::XInterface> x ((lang::XComponent *)this, uno::UNO_QUERY);
+            uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
             rxListener->disposing (lang::EventObject (x));
         }
         else

@@ -343,7 +343,7 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 
     WaitObject* pWait = NULL;
     if( mpViewShell )
-        pWait = new WaitObject( (vcl::Window*) mpViewShell->GetActiveWindow() );
+        pWait = new WaitObject( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
 
     mpDoc->NewOrLoadCompleted( NEW_DOC );
     mpDoc->CreateFirstPages();

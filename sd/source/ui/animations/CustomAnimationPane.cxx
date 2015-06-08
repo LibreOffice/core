@@ -113,19 +113,19 @@ void fillDurationComboBox( ListBox* pBox )
     static const double gdVeryFast = 0.5;
 
     OUString aVerySlow( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_VERY_SLOW ) );
-    pBox->SetEntryData( pBox->InsertEntry( aVerySlow ), (void*)&gdVerySlow );
+    pBox->SetEntryData( pBox->InsertEntry( aVerySlow ), const_cast<double *>(&gdVerySlow) );
 
     OUString aSlow( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_SLOW ) );
-    pBox->SetEntryData( pBox->InsertEntry( aSlow ), (void*)&gdSlow );
+    pBox->SetEntryData( pBox->InsertEntry( aSlow ), const_cast<double *>(&gdSlow) );
 
     OUString aNormal( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_NORMAL ) );
-    pBox->SetEntryData( pBox->InsertEntry( aNormal ), (void*)&gdNormal );
+    pBox->SetEntryData( pBox->InsertEntry( aNormal ), const_cast<double *>(&gdNormal) );
 
     OUString aFast( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_FAST ) );
-    pBox->SetEntryData( pBox->InsertEntry( aFast ), (void*)&gdFast );
+    pBox->SetEntryData( pBox->InsertEntry( aFast ), const_cast<double *>(&gdFast) );
 
     OUString aVeryFast( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_VERY_FAST ) );
-    pBox->SetEntryData( pBox->InsertEntry( aVeryFast ), (void*)&gdVeryFast );
+    pBox->SetEntryData( pBox->InsertEntry( aVeryFast ), const_cast<double *>(&gdVeryFast) );
 }
 
 void fillRepeatComboBox( ListBox* pBox )

@@ -500,7 +500,7 @@ CustomAnimationPresetPtr CustomAnimationPresets::getEffectDescriptor( const OUSt
     }
     else
     {
-        return CustomAnimationPresetPtr((CustomAnimationPreset*)0);
+        return CustomAnimationPresetPtr(nullptr);
     }
 }
 

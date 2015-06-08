@@ -86,7 +86,7 @@ void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEnt
 
 uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel )
 {
-    return (uno::XAggregation*)new SdUnoDrawPool( pDrawModel );
+    return static_cast<uno::XAggregation*>(new SdUnoDrawPool( pDrawModel ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

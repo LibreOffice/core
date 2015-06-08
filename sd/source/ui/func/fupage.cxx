@@ -384,7 +384,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
 
             if( mbMasterPage )
             {
-                StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, (SfxStyleSheet*)pStyleSheet, &(*pTempSet.get()));
+                StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), &(*pTempSet.get()));
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                 pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
                 sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
@@ -406,7 +406,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                     SdStyleSheet *pStyle =
                         pMasterPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
                     StyleSheetUndoAction* pAction =
-                        new StyleSheetUndoAction(mpDoc, (SfxStyleSheet*)pStyle, &(*pTempSet.get()));
+                        new StyleSheetUndoAction(mpDoc, static_cast<SfxStyleSheet*>(pStyle), &(*pTempSet.get()));
                     pUndoGroup->AddAction(pAction);
                     pStyle->GetItemSet().Put( *(pTempSet.get()) );
                     sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );

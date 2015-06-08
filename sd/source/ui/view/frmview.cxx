@@ -51,7 +51,7 @@ using namespace ::std;
 namespace sd {
 
 FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK */)
-  : SdrView(pDrawDoc, (OutputDevice*) NULL),
+  : SdrView(pDrawDoc, nullptr),
     mnRefCount(0),
     mnPresViewShellId(SID_VIEWSHELL0),
     mnSlotId(SID_OBJECT_SELECT),

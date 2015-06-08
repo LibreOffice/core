@@ -312,7 +312,7 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 
         E3dCompoundObject* p3DObj = NULL;
 
-        WaitObject aWait( (vcl::Window*)mpViewShell->GetActiveWindow() );
+        WaitObject aWait( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
 
         p3DObj = ImpCreateBasic3DShape();
         E3dScene* pScene = mpView->SetCurrent3DObj(p3DObj);

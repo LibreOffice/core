@@ -742,7 +742,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                         CommandWheelData aWheelData( pData->GetDelta(),pData->GetNotchDelta(),
                             nScrollLines,pData->GetMode(),pData->GetModifier(),pData->IsHorz() );
                         CommandEvent aReWrite( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),
-                            rCEvt.IsMouseEvent(),(const void *) &aWheelData );
+                            rCEvt.IsMouseEvent(),static_cast<const void *>(&aWheelData) );
                         bDone = pWin->HandleScrollCommand( aReWrite,
                             mpHorizontalScrollBar.get(),
                             mpVerticalScrollBar.get());

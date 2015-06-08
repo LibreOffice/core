@@ -524,7 +524,7 @@ sal_Int32 OSXBluetoothWrapper::write( const void* pBuffer, sal_uInt32 n )
         toWrite = toWrite <= mnMTU ? toWrite : mnMTU;
         if ( [mpChannel writeSync:const_cast<char *>(ptr) length:toWrite] != kIOReturnSuccess )
         {
-            SAL_INFO( "sdremote.bluetooth", "  [mpChannel writeSync:" << (void *) ptr << " length:" << toWrite << "] returned error, total written " << nBytesWritten );
+            SAL_INFO( "sdremote.bluetooth", "  [mpChannel writeSync:" << static_cast<void const *>(ptr) << " length:" << toWrite << "] returned error, total written " << nBytesWritten );
             return nBytesWritten;
         }
         ptr += toWrite;

@@ -233,7 +233,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
 
             if ( ! rMEvt.IsRight())
-                if (mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog))
+                if (mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog))
                     mpView->GetDragMethod()->SetShiftPressed( rMEvt.IsShift() );
             bReturn = true;
         }
@@ -408,7 +408,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                             pHdl=mpView->PickHandle(aMDPos);
                             if ( ! rMEvt.IsRight())
-                                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                                mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
                         }
                         else
                         {
@@ -446,7 +446,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * Drag Handle
             ******************************************************************/
             if ( ! rMEvt.IsRight())
-                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
         {
@@ -472,7 +472,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * Move object
             ******************************************************************/
             if ( ! rMEvt.IsRight())
-                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, NULL, nDrgLog);
         }
         else if (eHit == SDRHIT_HANDLE)
         {
@@ -503,7 +503,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     mpView->MarkPoint(*pHdl);
                     if ( ! rMEvt.IsRight())
-                        mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                        mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
 
                 }
             }
@@ -514,7 +514,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 pHdl = mpView->PickHandle(aMDPos);
                 if(pHdl)
                     if ( ! rMEvt.IsRight())
-                        mpView->BegDragObj(aMDPos, (OutputDevice*)NULL, pHdl, nDrgLog);
+                        mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
             }
         }
         else
@@ -546,7 +546,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 // Move object
                 if ( ! rMEvt.IsRight())
-                    mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                    mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
             }
             else if (mpView->AreObjectsMarked())
             {

@@ -89,7 +89,7 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pHdl != NULL || mpView->IsMarkedHit(aMDPos, nHitLog) )
         {
             sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-            mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+            mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
             bReturn = true;
         }
         else if ( mpView->AreObjectsMarked() )

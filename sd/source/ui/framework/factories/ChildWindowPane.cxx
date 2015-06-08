@@ -41,7 +41,7 @@ ChildWindowPane::ChildWindowPane (
     sal_uInt16 nChildWindowId,
     ViewShellBase& rViewShellBase,
     ::std::unique_ptr<SfxShell> && pShell)
-    : ChildWindowPaneInterfaceBase(rxPaneId,(vcl::Window*)NULL),
+    : ChildWindowPaneInterfaceBase(rxPaneId,nullptr),
       mnChildWindowId(nChildWindowId),
       mrViewShellBase(rViewShellBase),
       mpShell(std::move(pShell)),

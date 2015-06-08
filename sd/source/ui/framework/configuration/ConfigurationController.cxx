@@ -136,7 +136,7 @@ void SAL_CALL ConfigurationController::disposing()
 
     // Release the listeners.
     lang::EventObject aEvent;
-    aEvent.Source = uno::Reference<uno::XInterface>((cppu::OWeakObject*)this);
+    aEvent.Source = uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(this));
 
     {
         const SolarMutexGuard aSolarGuard;

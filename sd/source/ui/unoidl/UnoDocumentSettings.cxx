@@ -126,7 +126,7 @@ namespace sd
         throw ()
     {
         DBG_ASSERT( pModel, "I need a model for the DocumentSettings!" );
-        return (XWeak*)new DocumentSettings( pModel );
+        return static_cast<XWeak*>(new DocumentSettings( pModel ));
     }
 
 enum SdDocumentSettingsPropertyHandles

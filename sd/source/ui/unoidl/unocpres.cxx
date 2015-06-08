@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
 {
-    return (cppu::OWeakObject*)new SdXCustomPresentation( pShow, NULL );
+    return static_cast<cppu::OWeakObject*>(new SdXCustomPresentation( pShow, NULL ));
 }
 
 SdXCustomPresentation::SdXCustomPresentation() throw()
@@ -200,7 +200,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
         throw lang::IndexOutOfBoundsException();
 
     uno::Any aAny;
-    SdrPage* pPage = (SdrPage*)mpSdCustomShow->PagesVector()[Index];
+    SdrPage * pPage = static_cast<SdrPage*>(const_cast<SdPage *>(mpSdCustomShow->PagesVector()[Index]));
 
     if( pPage )
     {
@@ -248,7 +248,7 @@ void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException, std:
 
     bDisposing = true;
 
-    uno::Reference< uno::XInterface > xSource( (cppu::OWeakObject*)this );
+    uno::Reference< uno::XInterface > xSource( static_cast<cppu::OWeakObject*>(this) );
 
     lang::EventObject aEvt;
     aEvt.Source = xSource;
@@ -311,7 +311,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServ
 uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstance()
     throw(uno::Exception, uno::RuntimeException, std::exception)
 {
-    uno::Reference< uno::XInterface >  xRef( (::cppu::OWeakObject*)new SdXCustomPresentation() );
+    uno::Reference< uno::XInterface >  xRef( static_cast<cppu::OWeakObject*>(new SdXCustomPresentation()) );
     return xRef;
 }
 

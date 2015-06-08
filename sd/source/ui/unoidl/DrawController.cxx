@@ -374,7 +374,7 @@ void DrawController::FireSelectionChangeListener() throw()
         m_aSelectionTypeIdentifier);
     if( pLC )
     {
-        Reference< XInterface > xSource( (XWeak*)this );
+        Reference< XInterface > xSource( static_cast<XWeak*>(this) );
         const lang::EventObject aEvent( xSource );
 
         // iterate over all listeners and send events

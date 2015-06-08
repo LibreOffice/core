@@ -281,7 +281,7 @@ bool AbstractSdInsertPasteDlg_Impl::IsInsertBefore() const
 
 vcl::Window* AbstractSdInsertPagesObjsDlg_Impl::GetWindow()
 {
-    return (vcl::Window*)pDlg;
+    return static_cast<vcl::Window*>(pDlg);
 }
 
 std::vector<OUString> AbstractSdInsertPagesObjsDlg_Impl::GetList(const sal_uInt16 nType)

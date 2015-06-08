@@ -720,7 +720,7 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getDrawPages(
     if( !xDrawPages.is() )
     {
         initializeDocument();
-        mxDrawPagesAccess = xDrawPages = (drawing::XDrawPages*)new SdDrawPagesAccess(*this);
+        mxDrawPagesAccess = xDrawPages = static_cast<drawing::XDrawPages*>(new SdDrawPagesAccess(*this));
     }
 
     return xDrawPages;
@@ -910,31 +910,31 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     if( aServiceSpecifier == "com.sun.star.text.TextField.DateTime" ||
         aServiceSpecifier == "com.sun.star.text.textfield.DateTime" )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::DATE );
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::DATE ));
     }
 
     if( aServiceSpecifier == "com.sun.star.presentation.TextField.Header" ||
         aServiceSpecifier == "com.sun.star.presentation.textfield.Header" )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::PRESENTATION_HEADER );
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::PRESENTATION_HEADER ));
     }
 
     if( aServiceSpecifier == "com.sun.star.presentation.TextField.Footer" ||
         aServiceSpecifier == "com.sun.star.presentation.textfield.Footer" )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::PRESENTATION_FOOTER );
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::PRESENTATION_FOOTER ));
     }
 
     if( aServiceSpecifier == "com.sun.star.presentation.TextField.DateTime" ||
         aServiceSpecifier == "com.sun.star.presentation.textfield.DateTime" )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::PRESENTATION_DATE_TIME );
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::PRESENTATION_DATE_TIME ));
     }
 
     if( aServiceSpecifier == "com.sun.star.text.TextField.PageName" ||
         aServiceSpecifier == "com.sun.star.text.textfield.PageName" )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::PAGE_NAME );
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::PAGE_NAME ));
     }
 
     if( aServiceSpecifier == "com.sun.star.xml.NamespaceMap" )
@@ -947,12 +947,12 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
     if( aServiceSpecifier == "com.sun.star.document.ExportGraphicObjectResolver" )
     {
-        return (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE );
+        return static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
     }
 
     if( aServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
     {
-        return (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ );
+        return static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ ));
     }
 
     if( aServiceSpecifier == "com.sun.star.document.ExportEmbeddedObjectResolver" )
@@ -961,7 +961,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         if( NULL == pPersist )
             throw lang::DisposedException();
 
-        return (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE );
+        return static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
     }
 
     if( aServiceSpecifier == "com.sun.star.document.ImportEmbeddedObjectResolver" )
@@ -970,7 +970,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         if( NULL == pPersist )
             throw lang::DisposedException();
 
-        return (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ );
+        return static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ ));
     }
 
     uno::Reference< uno::XInterface > xRet;
@@ -1062,7 +1062,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
-        xRet = (uno::XWeak*)pShape;
+        xRet = static_cast<uno::XWeak*>(pShape);
     }
     else if ( aServiceSpecifier == "com.sun.star.drawing.TableShape" )
     {
@@ -1070,7 +1070,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
-        xRet = (uno::XWeak*)pShape;
+        xRet = static_cast<uno::XWeak*>(pShape);
     }
     else
     {

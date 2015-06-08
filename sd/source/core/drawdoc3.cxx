@@ -996,7 +996,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
 
     if (rBookmarkList.empty())
     {
-        pBMView = new ::sd::View(*pBookmarkDoc, (OutputDevice*) NULL);
+        pBMView = new ::sd::View(*pBookmarkDoc, nullptr);
         pBMView->EndListening(*pBookmarkDoc);
         pBMView->MarkAll();
     }
@@ -1023,7 +1023,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
                 if (!pBMView)
                 {
                     // Create View for the first time
-                    pBMView = new ::sd::View(*pBookmarkDoc, (OutputDevice*) NULL);
+                    pBMView = new ::sd::View(*pBookmarkDoc, nullptr);
                     pBMView->EndListening(*pBookmarkDoc);
                 }
 
@@ -1048,7 +1048,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
     if (pBMView)
     {
         // Insert selected objects
-        ::sd::View* pView = new ::sd::View(*this, (OutputDevice*) NULL);
+        ::sd::View* pView = new ::sd::View(*this, nullptr);
         pView->EndListening(*this);
 
         // Look for the page into which the objects are supposed to be inserted

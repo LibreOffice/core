@@ -79,7 +79,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     bool    bUnique = false;
     sal_Int16   nDepth, nTmp;
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) mpWindow );
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( static_cast<Window*>(mpWindow) );
     ::Outliner* pOutl = pOutlinerView->GetOutliner();
 
     std::vector<Paragraph*> aSelList;

@@ -340,7 +340,7 @@ sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const ::com::sun::star::uno:
 }
 
 SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPage, const SvxItemPropertySet* _pSet ) throw()
-:       SvxFmDrawPage( (SdrPage*) pInPage ),
+:       SvxFmDrawPage( static_cast<SdrPage*>(pInPage) ),
         SdUnoSearchReplaceShape(this),
         mpModel     ( _pModel ),
         mpSdrModel(0),
@@ -1115,8 +1115,8 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                     {
                         Point   aPoint;
                         Size    aSize( GetPage()->GetSize() );
-                        xMetaFile->AddAction( (MetaAction*) new MetaFillColorAction( COL_WHITE, true ), 0 );
-                        xMetaFile->AddAction( (MetaAction*) new MetaRectAction( Rectangle( aPoint, aSize ) ), 1 );
+                        xMetaFile->AddAction( static_cast<MetaAction*>(new MetaFillColorAction( COL_WHITE, true )), 0 );
+                        xMetaFile->AddAction( static_cast<MetaAction*>(new MetaRectAction( Rectangle( aPoint, aSize ) )), 1 );
                         xMetaFile->SetPrefMapMode( MAP_100TH_MM );
                         xMetaFile->SetPrefSize( aSize );
 
@@ -2512,7 +2512,7 @@ void SdDrawPage::setBackground( const Any& rValue )
         SdUnoPageBackground* pBackground = new SdUnoPageBackground();
 
         Reference< beans::XPropertySetInfo >  xSetInfo( xSet->getPropertySetInfo() );
-        Reference< beans::XPropertySet >  xDestSet( (beans::XPropertySet*)pBackground );
+        Reference< beans::XPropertySet >  xDestSet( static_cast<beans::XPropertySet*>(pBackground) );
         Reference< beans::XPropertySetInfo >  xDestSetInfo( xDestSet->getPropertySetInfo() );
 
         Sequence< beans::Property > aProperties( xDestSetInfo->getProperties() );
@@ -2700,9 +2700,9 @@ Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
     uno::Any aAny;
 
     if( rType == cppu::UnoType<container::XIndexAccess>::get() )
-        aAny <<= Reference< container::XIndexAccess >((presentation::XPresentationPage*)(this));
+        aAny <<= Reference< container::XIndexAccess >(static_cast<presentation::XPresentationPage*>(this));
     else if( rType == cppu::UnoType<container::XElementAccess>::get() )
-        aAny <<=  Reference< container::XElementAccess >((presentation::XPresentationPage*)(this));
+        aAny <<=  Reference< container::XElementAccess >(static_cast<presentation::XPresentationPage*>(this));
     else if( rType == cppu::UnoType<container::XNamed>::get() )
         aAny <<=  Reference< container::XNamed >(this);
     else if( rType == cppu::UnoType<presentation::XPresentationPage>::get() &&
@@ -2904,7 +2904,7 @@ void SdMasterPage::setBackground( const Any& rValue )
                 SdUnoPageBackground* pBackground = new SdUnoPageBackground();
 
                 Reference< beans::XPropertySetInfo > xInputSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
-                Reference< beans::XPropertySet > xDestSet( (beans::XPropertySet*)pBackground );
+                Reference< beans::XPropertySet > xDestSet( static_cast<beans::XPropertySet*>(pBackground) );
                 Reference< beans::XPropertySetInfo > xDestSetInfo( xDestSet->getPropertySetInfo(), UNO_QUERY_THROW );
 
                 uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
@@ -3130,11 +3130,11 @@ Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
         {
             if( pPage->IsMasterPage() )
             {
-                xPage = (::cppu::OWeakObject*)new SdMasterPage( pModel, pPage );
+                xPage = static_cast<cppu::OWeakObject*>(new SdMasterPage( pModel, pPage ));
             }
             else
             {
-                xPage = (::cppu::OWeakObject*)new SdDrawPage( pModel, pPage );
+                xPage = static_cast<cppu::OWeakObject*>(new SdDrawPage( pModel, pPage ));
             }
         }
     }

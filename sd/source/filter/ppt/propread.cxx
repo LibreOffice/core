@@ -28,7 +28,7 @@ PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize
     mnTextEnc   ( nTextEnc ),
     mpBuf       ( new sal_uInt8[ nBufSize ] )
 {
-    memcpy( (void*)mpBuf, (void*)pBuf, nBufSize );
+    memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(pBuf), nBufSize );
 };
 
 PropEntry::PropEntry( const PropEntry& rProp ) :
@@ -37,7 +37,7 @@ PropEntry::PropEntry( const PropEntry& rProp ) :
     mnTextEnc   ( rProp.mnTextEnc ),
     mpBuf       ( new sal_uInt8[ mnSize ] )
 {
-    memcpy( (void*)mpBuf, (void*)rProp.mpBuf, mnSize );
+    memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(rProp.mpBuf), mnSize );
 };
 
 PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
@@ -49,7 +49,7 @@ PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
         mnSize = rPropEntry.mnSize;
         mnTextEnc = rPropEntry.mnTextEnc;
         mpBuf = new sal_uInt8[ mnSize ];
-        memcpy( (void*)mpBuf, (void*)rPropEntry.mpBuf, mnSize );
+        memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(rPropEntry.mpBuf), mnSize );
     }
     return *this;
 }
@@ -493,7 +493,7 @@ Section& Section::operator=( const Section& rSection )
 {
     if ( this != &rSection )
     {
-        memcpy( (void*)aFMTID, (void*)rSection.aFMTID, 16 );
+        memcpy( static_cast<void*>(aFMTID), static_cast<void const *>(rSection.aFMTID), 16 );
 
         maEntries = rSection.maEntries.clone();
     }

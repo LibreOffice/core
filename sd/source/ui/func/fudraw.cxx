@@ -376,7 +376,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                         pIPClient->SetSdrGrafObj(NULL);
 
                     // wait-mousepointer while deleting object
-                    WaitObject aWait( (vcl::Window*)mpViewShell->GetActiveWindow() );
+                    WaitObject aWait( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
                     // delete object
                     mpView->DeleteMarked();
                 }
@@ -944,9 +944,9 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                               mpWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
 
         if (Help::IsBalloonHelpEnabled())
-            Help::ShowBalloon( (vcl::Window*)mpWindow, rPosPixel, aScreenRect, aHelpText);
+            Help::ShowBalloon( static_cast<vcl::Window*>(mpWindow), rPosPixel, aScreenRect, aHelpText);
         else if (Help::IsQuickHelpEnabled())
-            Help::ShowQuickHelp( (vcl::Window*)mpWindow, aScreenRect, aHelpText);
+            Help::ShowQuickHelp( static_cast<vcl::Window*>(mpWindow), aScreenRect, aHelpText);
     }
 
     return bSet;

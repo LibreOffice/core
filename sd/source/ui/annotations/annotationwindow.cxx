@@ -724,7 +724,7 @@ void AnnotationWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         // context menu
         Rectangle aRect(LogicToPixel(maRectMetaButton.BottomLeft()),LogicToPixel(maRectMetaButton.BottomLeft()));
-        mrManager.ExecuteAnnotationContextMenu( mxAnnotation, (vcl::Window*)this, aRect, true );
+        mrManager.ExecuteAnnotationContextMenu( mxAnnotation, static_cast<vcl::Window*>(this), aRect, true );
     }
 }
 

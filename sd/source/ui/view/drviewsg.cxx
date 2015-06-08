@@ -56,7 +56,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
             SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
             SvxIMapDlg* pDlg = ViewShell::Implementation::GetImageMapDialog();
 
-            if ( pDlg->GetEditingObject() == (void*) pSdrObj )
+            if ( pDlg->GetEditingObject() == static_cast<void*>(pSdrObj) )
             {
                 const ImageMap& rImageMap = pDlg->GetImageMap();
                 SdIMapInfo*     pIMapInfo = GetDoc()->GetIMapInfo( pSdrObj );
@@ -87,7 +87,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
             SvxIMapDlg* pImageMapDialog = ViewShell::Implementation::GetImageMapDialog();
             if ( ( pObj->ISA( SdrGrafObj ) /*|| pObj->ISA( SdrOle2Obj )*/ )
                 && pImageMapDialog!=NULL
-                && ( pImageMapDialog->GetEditingObject() == (void*) pObj ) )
+                && ( pImageMapDialog->GetEditingObject() == static_cast<void const *>(pObj) ) )
             {
                 bDisable = false;
             }

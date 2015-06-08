@@ -404,7 +404,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
                             {
                                 sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-                                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                                mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
                             }
                         }
                         bReturn = true;
@@ -417,7 +417,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     mpView->SetCurrentObj(OBJ_TEXT);
                     mpView->SetEditMode(SDREDITMODE_CREATE);
                     sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-                    mpView->BegCreateObj(aMDPos, (OutputDevice*) NULL, nDrgLog);
+                    mpView->BegCreateObj(aMDPos, nullptr, nDrgLog);
                 }
                 else
                 {
@@ -759,7 +759,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             mpView->SetCurrentObj(OBJ_TEXT);
             mpView->SetEditMode(SDREDITMODE_CREATE);
             sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-            mpView->BegCreateObj(aMDPos, (OutputDevice*) NULL, nDrgLog);
+            mpView->BegCreateObj(aMDPos, nullptr, nDrgLog);
 
             bool bSnapEnabled = mpView->IsSnapEnabled();
 
@@ -1188,11 +1188,11 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
 
             if (Help::IsBalloonHelpEnabled())
             {
-                bReturn = Help::ShowBalloon( (vcl::Window*)mpWindow, rHEvt.GetMousePosPixel(), aScreenRect, aHelpText);
+                bReturn = Help::ShowBalloon( static_cast<vcl::Window*>(mpWindow), rHEvt.GetMousePosPixel(), aScreenRect, aHelpText);
             }
             else if (Help::IsQuickHelpEnabled())
             {
-                bReturn = Help::ShowQuickHelp( (vcl::Window*)mpWindow, aScreenRect, aHelpText);
+                bReturn = Help::ShowQuickHelp( static_cast<vcl::Window*>(mpWindow), aScreenRect, aHelpText);
             }
         }
     }

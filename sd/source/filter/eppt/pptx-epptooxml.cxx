@@ -2159,7 +2159,7 @@ uno::Sequence< OUString > SAL_CALL PowerPointExport_getSupportedServiceNames() t
 
 uno::Reference< uno::XInterface > SAL_CALL PowerPointExport_createInstance(const uno::Reference< XComponentContext > & rxCtxt ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new PowerPointExport( rxCtxt );
+    return static_cast<cppu::OWeakObject*>(new PowerPointExport( rxCtxt ));
 }
 
 OUString PowerPointExport::getImplementationName() throw (css::uno::RuntimeException, std::exception)

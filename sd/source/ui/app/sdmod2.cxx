@@ -500,7 +500,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     sal_Int32  nY;
     if( pDocSh )
     {
-        SdrPage* pPage = (SdrPage*) pDoc->GetSdPage(0, PK_STANDARD);
+        SdrPage* pPage = static_cast<SdrPage*>(pDoc->GetSdPage(0, PK_STANDARD));
         Size aSize(pPage->GetSize());
         nW = aSize.Width();
         nH = aSize.Height();

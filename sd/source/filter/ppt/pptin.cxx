@@ -562,7 +562,7 @@ bool ImplSdPPTImport::Import()
                     ePgKind = PK_HANDOUT;
 
                 pPage->SetPageKind( ePgKind );
-                pSdrModel->InsertMasterPage( (SdrPage*)pPage );
+                pSdrModel->InsertMasterPage( static_cast<SdrPage*>(pPage) );
                 if ( bNotesMaster && bStarDrawFiller )
                     pPage->SetAutoLayout( AUTOLAYOUT_NOTES, true );
                 if ( nMasterNum )
@@ -773,7 +773,7 @@ bool ImplSdPPTImport::Import()
                                                     {
                                                         Rectangle aEmpty;
                                                         aHd2.SeekToBegOfRecord( rStCtrl );
-                                                        SdrObject* pImpObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                                                        SdrObject* pImpObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aEmpty, aEmpty );
                                                         if ( pImpObj )
                                                         {
                                                             pImpObj->SetLayer( mnBackgroundObjectsLayerID );
@@ -1391,7 +1391,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                     bVisible = false;
                     rStCtrl.Seek( nPosition );
                     ProcessData aProcessData( rSlidePersist, SdPageCapsule(pPage) );
-                    SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                    SdrObject* pObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aEmpty, aEmpty );
                     if ( pObj )
                         pPage->NbcInsertObject( pObj, 0 );
                 }
@@ -2157,7 +2157,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
+                static_cast<SdrAttrObj*>(pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
         }
         break;
@@ -2165,7 +2165,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
+                static_cast<SdrAttrObj*>(pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for subtitleobject (SJ)" );
         }
         break;
@@ -2185,7 +2185,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             }
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for outlinerobject (SJ)" );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
+                static_cast<SdrAttrObj*>(pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
             ppStyleSheetAry = &pStyleSheetAry[ 0 ];
         }
         break;
@@ -2196,7 +2196,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
                 if ( pSheet )
-                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
+                    static_cast<SdrAttrObj*>(pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
                 DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
             }
             else
@@ -2204,7 +2204,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_NOTES );
                 DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for notesobj (SJ)" );
                 if ( pSheet )
-                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
+                    static_cast<SdrAttrObj*>(pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
             }
         }
         break;

@@ -192,11 +192,11 @@ bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
         {
             Size aCaptionSize(846, 846);    // (4x2)cm
             bReturn = mpView->BegCreateCaptionObj(aPnt, aCaptionSize,
-                                                (OutputDevice*) NULL, nDrgLog);
+                                                nullptr, nDrgLog);
         }
         else
         {
-            mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+            mpView->BegCreateObj(aPnt, nullptr, nDrgLog);
         }
 
         SdrObject* pObj = mpView->GetCreateObj();
