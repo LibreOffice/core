@@ -63,7 +63,7 @@ public:
         @param rSortedPoints  the points for which splines shall be calculated,
                they need to be sorted in x values. First and last y value must be equal
      */
-    lcl_SplineCalculation( const tPointVecType & rSortedPoints);
+    explicit lcl_SplineCalculation( const tPointVecType & rSortedPoints);
 
     /** @descr this function corresponds to the function splint in [1].
 

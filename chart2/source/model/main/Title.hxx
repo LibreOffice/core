@@ -49,7 +49,7 @@ class Title :
     public ::property::OPropertySet
 {
 public:
-    Title( ::com::sun::star::uno::Reference<
+    explicit Title( ::com::sun::star::uno::Reference<
            ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~Title();
 

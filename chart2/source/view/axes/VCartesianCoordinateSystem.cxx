@@ -36,7 +36,7 @@ class TextualDataProvider : public ::cppu::WeakImplHelper1<
         >
 {
 public:
-    TextualDataProvider( const uno::Sequence< OUString >& rTextSequence )
+    explicit TextualDataProvider( const uno::Sequence< OUString >& rTextSequence )
         : m_aTextSequence( rTextSequence )
     {
     }

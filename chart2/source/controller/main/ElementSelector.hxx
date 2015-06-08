@@ -72,7 +72,7 @@ class ElementSelectorToolbarController : public ::svt::ToolboxController
                                                 , ElementSelectorToolbarController_BASE
 {
 public:
-    ElementSelectorToolbarController( ::com::sun::star::uno::Reference<
+    explicit ElementSelectorToolbarController( ::com::sun::star::uno::Reference<
                ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~ElementSelectorToolbarController();
 

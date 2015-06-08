@@ -29,7 +29,7 @@ namespace chart
 class VCartesianCoordinateSystem : public VCoordinateSystem
 {
 public:
-    VCartesianCoordinateSystem( const ::com::sun::star::uno::Reference<
+    explicit VCartesianCoordinateSystem( const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
     virtual ~VCartesianCoordinateSystem();
 

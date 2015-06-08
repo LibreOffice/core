@@ -541,7 +541,7 @@ namespace oglcanvas
             }
 
         public:
-            BufferContextImpl(const ::basegfx::B2IVector& rSize) :
+            explicit BufferContextImpl(const ::basegfx::B2IVector& rSize) :
                 maSize(rSize),
                 mnFrambufferId(0),
                 mnDepthId(0),

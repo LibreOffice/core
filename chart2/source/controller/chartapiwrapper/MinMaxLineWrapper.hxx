@@ -55,7 +55,7 @@ class MinMaxLineWrapper : public MutexContainer
                         >
 {
 public:
-    MinMaxLineWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit MinMaxLineWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~MinMaxLineWrapper();
 
     /// XServiceInfo declarations

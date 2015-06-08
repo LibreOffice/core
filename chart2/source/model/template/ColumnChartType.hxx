@@ -27,7 +27,7 @@ namespace chart
 class ColumnChartType : public ChartType
 {
 public:
-    ColumnChartType(
+    explicit ColumnChartType(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~ColumnChartType();

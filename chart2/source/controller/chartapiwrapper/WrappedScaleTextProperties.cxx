@@ -37,7 +37,7 @@ namespace wrapper
 class WrappedScaleTextProperty : public WrappedProperty
 {
 public:
-    WrappedScaleTextProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedScaleTextProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedScaleTextProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const

@@ -34,7 +34,7 @@ namespace
 class lcl_Escape : public ::std::unary_function< sal_Unicode, void >
 {
 public:
-    lcl_Escape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
+    explicit lcl_Escape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
     void operator() ( sal_Unicode aChar )
     {
         static const sal_Unicode m_aQuote( '\'' );
@@ -57,7 +57,7 @@ private:
 class lcl_UnEscape : public ::std::unary_function< sal_Unicode, void >
 {
 public:
-    lcl_UnEscape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
+    explicit lcl_UnEscape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
     void operator() ( sal_Unicode aChar )
     {
         static const sal_Unicode m_aBackslash( '\\' );

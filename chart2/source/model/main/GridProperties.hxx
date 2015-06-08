@@ -51,7 +51,7 @@ class GridProperties :
         public ::property::OPropertySet
 {
 public:
-    GridProperties( ::com::sun::star::uno::Reference<
+    explicit GridProperties( ::com::sun::star::uno::Reference<
           ::com::sun::star::uno::XComponentContext > const & xContext );
     explicit GridProperties();
     virtual ~GridProperties();

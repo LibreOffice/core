@@ -21,7 +21,7 @@ namespace chart {
 class GL3DBarChartType : public ChartType
 {
 public:
-    GL3DBarChartType( const css::uno::Reference<css::uno::XComponentContext>& xContext );
+    explicit GL3DBarChartType( const css::uno::Reference<css::uno::XComponentContext>& xContext );
     virtual ~GL3DBarChartType();
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL

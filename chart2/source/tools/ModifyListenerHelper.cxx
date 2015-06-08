@@ -66,7 +66,7 @@ struct lcl_weakReferenceToSame : public ::std::unary_function<
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > >,
         bool >
 {
-    lcl_weakReferenceToSame( const Reference< util::XModifyListener > & xModListener ) :
+    explicit lcl_weakReferenceToSame( const Reference< util::XModifyListener > & xModListener ) :
             m_xHardRef( xModListener )
     {}
 

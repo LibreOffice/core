@@ -32,7 +32,7 @@ class SvNumberFormatter;
 class ImpSvNumberInputScan
 {
 public:
-    ImpSvNumberInputScan( SvNumberFormatter* pFormatter );
+    explicit ImpSvNumberInputScan( SvNumberFormatter* pFormatter );
     ~ImpSvNumberInputScan();
 
 /*!*/   void ChangeIntl();                      // MUST be called if language changes

@@ -42,7 +42,7 @@ namespace canvas
     class Page
     {
     public:
-        Page( const IRenderModuleSharedPtr& rRenderModule );
+        explicit Page( const IRenderModuleSharedPtr& rRenderModule );
 
         FragmentSharedPtr        allocateSpace( const ::basegfx::B2ISize& rSize );
         bool                     nakedFragment( const FragmentSharedPtr& pFragment );
@@ -80,7 +80,7 @@ namespace canvas
         }
 
         /// Creates a 'naked' fragment.
-        PageFragment( const ::basegfx::B2ISize& rSize ) :
+        explicit PageFragment( const ::basegfx::B2ISize& rSize ) :
             mpPage(NULL),
             maRect(rSize),
             mpBuffer(),

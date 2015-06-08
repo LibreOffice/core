@@ -412,7 +412,7 @@ namespace vclcanvas
         class OffsetTransformer
         {
         public:
-            OffsetTransformer( const ::basegfx::B2DHomMatrix& rMat ) :
+            explicit OffsetTransformer( const ::basegfx::B2DHomMatrix& rMat ) :
                 maMatrix( rMat )
             {
             }

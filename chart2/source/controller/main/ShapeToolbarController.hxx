@@ -53,7 +53,7 @@ class ShapeToolbarController : public ::svt::ToolboxController
     void operator =( const ShapeToolbarController& ) SAL_DELETED_FUNCTION;
 
 public:
-    ShapeToolbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ShapeToolbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~ShapeToolbarController();
 
     // ::com::sun::star::uno::XInterface

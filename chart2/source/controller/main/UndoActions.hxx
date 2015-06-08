@@ -94,7 +94,7 @@ class ShapeUndoElement  :public ShapeUndoElement_MBase
                         ,public ShapeUndoElement_TBase
 {
 public:
-    ShapeUndoElement( SdrUndoAction& i_sdrUndoAction );
+    explicit ShapeUndoElement( SdrUndoAction& i_sdrUndoAction );
 
     // XUndoAction
     virtual OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

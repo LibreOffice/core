@@ -51,7 +51,7 @@ class DataPoint :
         public ::property::OPropertySet
 {
 public:
-    DataPoint( const ::com::sun::star::uno::Reference<
+    explicit DataPoint( const ::com::sun::star::uno::Reference<
                    ::com::sun::star::beans::XPropertySet > & rParentProperties );
     virtual ~DataPoint();
 

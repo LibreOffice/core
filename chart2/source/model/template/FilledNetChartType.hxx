@@ -27,7 +27,7 @@ namespace chart
 class FilledNetChartType : public NetChartType_Base
 {
 public:
-    FilledNetChartType( ::com::sun::star::uno::Reference<
+    explicit FilledNetChartType( ::com::sun::star::uno::Reference<
                       ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~FilledNetChartType();
 

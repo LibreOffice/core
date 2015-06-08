@@ -142,7 +142,7 @@ namespace chart
         class UndoManagerMethodGuard : public ::framework::IMutexGuard
         {
         public:
-            UndoManagerMethodGuard( UndoManager_Impl& i_impl )
+            explicit UndoManagerMethodGuard( UndoManager_Impl& i_impl )
             {
                 ::osl::MutexGuard aGuard( i_impl.getMutex() );
                 // throw if the instance is already disposed

@@ -45,7 +45,7 @@ using namespace ::com::sun::star::chart2;
 class Dim3DLookResourceGroup : public ChangingResource
 {
 public:
-    Dim3DLookResourceGroup(VclBuilderContainer* pWindow);
+    explicit Dim3DLookResourceGroup(VclBuilderContainer* pWindow);
 
     void showControls( bool bShow );
 
@@ -119,7 +119,7 @@ IMPL_LINK_NOARG(Dim3DLookResourceGroup, SelectSchemeHdl)
 class SortByXValuesResourceGroup : public ChangingResource
 {
 public:
-    SortByXValuesResourceGroup(VclBuilderContainer* pWindow);
+    explicit SortByXValuesResourceGroup(VclBuilderContainer* pWindow);
 
     void showControls( bool bShow );
 
@@ -165,7 +165,7 @@ IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl)
 class StackingResourceGroup : public ChangingResource
 {
 public:
-    StackingResourceGroup(VclBuilderContainer* pWindow);
+    explicit StackingResourceGroup(VclBuilderContainer* pWindow);
 
     void showControls( bool bShow, bool bShowDeepStacking );
 
@@ -270,7 +270,7 @@ IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl)
 class GL3DResourceGroup : public ChangingResource
 {
 public:
-    GL3DResourceGroup( VclBuilderContainer* pWindow );
+    explicit GL3DResourceGroup( VclBuilderContainer* pWindow );
 
     void showControls( bool bShow );
     void fillControls( const ChartTypeParameter& rParam );
@@ -313,7 +313,7 @@ IMPL_LINK_NOARG( GL3DResourceGroup, SettingChangedHdl )
 class SplinePropertiesDialog : public ModalDialog
 {
 public:
-    SplinePropertiesDialog( vcl::Window* pParent );
+    explicit SplinePropertiesDialog( vcl::Window* pParent );
     virtual ~SplinePropertiesDialog() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
 
@@ -406,7 +406,7 @@ IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl)
 class SteppedPropertiesDialog : public ModalDialog
 {
 public:
-    SteppedPropertiesDialog( vcl::Window* pParent );
+    explicit SteppedPropertiesDialog( vcl::Window* pParent );
     virtual ~SteppedPropertiesDialog() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
 
@@ -488,7 +488,7 @@ void SteppedPropertiesDialog::fillParameter( ChartTypeParameter& rParameter, boo
 class SplineResourceGroup : public ChangingResource
 {
 public:
-    SplineResourceGroup(VclBuilderContainer* pWindow);
+    explicit SplineResourceGroup(VclBuilderContainer* pWindow);
 
     void showControls( bool bShow );
 
@@ -641,7 +641,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl)
 class GeometryResourceGroup : public ChangingResource
 {
 public:
-    GeometryResourceGroup(VclBuilderContainer* pWindow);
+    explicit GeometryResourceGroup(VclBuilderContainer* pWindow);
 
     void showControls( bool bShow );
 

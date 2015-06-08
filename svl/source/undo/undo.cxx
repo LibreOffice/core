@@ -150,7 +150,7 @@ struct MarkedUndoAction
     SfxUndoAction*                  pAction;
     ::std::vector< UndoStackMark >  aMarks;
 
-    MarkedUndoAction( SfxUndoAction* i_action )
+    explicit MarkedUndoAction( SfxUndoAction* i_action )
         :pAction( i_action )
         ,aMarks()
     {
@@ -239,7 +239,7 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
 
     UndoListeners   aListeners;
 
-    SfxUndoManager_Data( size_t i_nMaxUndoActionCount )
+    explicit SfxUndoManager_Data( size_t i_nMaxUndoActionCount )
         :pUndoArray( new SfxUndoArray( i_nMaxUndoActionCount ) )
         ,pActUndoArray( NULL )
         ,pFatherUndoArray( NULL )
@@ -264,7 +264,7 @@ namespace svl { namespace undo { namespace impl
     class SVL_DLLPRIVATE LockGuard
     {
     public:
-        LockGuard( SfxUndoManager& i_manager )
+        explicit LockGuard( SfxUndoManager& i_manager )
             :m_manager( i_manager )
         {
             m_manager.ImplEnableUndo_Lock( false );
@@ -284,7 +284,7 @@ namespace svl { namespace undo { namespace impl
 
     struct SVL_DLLPRIVATE NotifyUndoListener : public ::std::unary_function< SfxUndoListener*, void >
     {
-        NotifyUndoListener( UndoListenerVoidMethod i_notificationMethod )
+        explicit NotifyUndoListener( UndoListenerVoidMethod i_notificationMethod )
             :m_notificationMethod( i_notificationMethod )
             ,m_altNotificationMethod( NULL )
             ,m_sActionComment()
@@ -325,7 +325,7 @@ namespace svl { namespace undo { namespace impl
     class SVL_DLLPRIVATE UndoManagerGuard
     {
     public:
-        UndoManagerGuard( SfxUndoManager_Data& i_managerData )
+        explicit UndoManagerGuard( SfxUndoManager_Data& i_managerData )
             :m_rManagerData( i_managerData )
             ,m_aGuard( i_managerData.aMutex )
             ,m_notifiers()

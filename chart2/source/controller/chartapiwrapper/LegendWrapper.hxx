@@ -50,7 +50,7 @@ class LegendWrapper : public ::cppu::ImplInheritanceHelper3<
                     , public ReferenceSizePropertyProvider
 {
 public:
-    LegendWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit LegendWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~LegendWrapper();
 
     /// XServiceInfo declarations

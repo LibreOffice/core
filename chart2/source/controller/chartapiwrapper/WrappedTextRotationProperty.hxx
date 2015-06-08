@@ -27,7 +27,7 @@ namespace chart
 class WrappedTextRotationProperty : public WrappedProperty
 {
 public:
-    WrappedTextRotationProperty( bool bDirectState=false );
+    explicit WrappedTextRotationProperty( bool bDirectState=false );
     virtual ~WrappedTextRotationProperty();
 
     virtual ::com::sun::star::beans::PropertyState getPropertyState( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const

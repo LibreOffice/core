@@ -57,7 +57,7 @@ struct SharedStringPool::Impl
     StrStoreType maStrStore;
     const CharClass* mpCharClass;
 
-    Impl( const CharClass* pCharClass ) : mpCharClass(pCharClass) {}
+    explicit Impl( const CharClass* pCharClass ) : mpCharClass(pCharClass) {}
 };
 
 SharedStringPool::SharedStringPool( const CharClass* pCharClass ) :

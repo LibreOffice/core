@@ -51,7 +51,7 @@ class Legend :
     public ::property::OPropertySet
 {
 public:
-    Legend( ::com::sun::star::uno::Reference<
+    explicit Legend( ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~Legend();
 

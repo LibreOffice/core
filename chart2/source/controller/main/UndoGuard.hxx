@@ -102,7 +102,7 @@ public:
 class HiddenUndoContext
 {
 public:
-    HiddenUndoContext(
+    explicit HiddenUndoContext(
         const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
     );
     ~HiddenUndoContext();

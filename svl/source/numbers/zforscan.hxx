@@ -40,7 +40,7 @@ class ImpSvNumberformatScan
 {
 public:
 
-    ImpSvNumberformatScan( SvNumberFormatter* pFormatter );
+    explicit ImpSvNumberformatScan( SvNumberFormatter* pFormatter );
     ~ImpSvNumberformatScan();
     void ChangeIntl(); // Replaces Keywords
 

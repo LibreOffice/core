@@ -27,7 +27,7 @@ namespace chart
 class BarChartType : public ChartType
 {
 public:
-    BarChartType(
+    explicit BarChartType(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~BarChartType();

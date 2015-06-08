@@ -47,7 +47,7 @@ class AreaWrapper : public ::cppu::ImplInheritanceHelper3<
                     >
 {
 public:
-    AreaWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit AreaWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~AreaWrapper();
 
     /// XServiceInfo declarations

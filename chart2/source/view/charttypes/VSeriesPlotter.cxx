@@ -1992,7 +1992,7 @@ namespace
 {
 struct lcl_setRefSizeAtSeriesGroup : public ::std::unary_function< VDataSeriesGroup, void >
 {
-    lcl_setRefSizeAtSeriesGroup( awt::Size aRefSize ) : m_aRefSize( aRefSize ) {}
+    explicit lcl_setRefSizeAtSeriesGroup( awt::Size aRefSize ) : m_aRefSize( aRefSize ) {}
     void operator()( VDataSeriesGroup & rGroup )
     {
         ::std::vector< VDataSeries* >::iterator aIt( rGroup.m_aSeriesVector.begin());

@@ -183,7 +183,7 @@ private:
     OUString aDir;
 
 public:
-    CheckForChartName( const OUString& rDir ):
+    explicit CheckForChartName( const OUString& rDir ):
         aDir(rDir) {}
 
     bool operator()(const OUString& rName)

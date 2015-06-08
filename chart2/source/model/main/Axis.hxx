@@ -54,7 +54,7 @@ class Axis :
     public ::property::OPropertySet
 {
 public:
-    Axis( ::com::sun::star::uno::Reference<
+    explicit Axis( ::com::sun::star::uno::Reference<
           ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~Axis();
 

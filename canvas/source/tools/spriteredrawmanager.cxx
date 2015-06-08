@@ -45,7 +45,7 @@ namespace canvas
         class SpriteTracer
         {
         public:
-            SpriteTracer( const Sprite::Reference& rAffectedSprite ) :
+            explicit SpriteTracer( const Sprite::Reference& rAffectedSprite ) :
                 mpAffectedSprite(rAffectedSprite),
                 maMoveStartArea(),
                 maMoveEndArea(),

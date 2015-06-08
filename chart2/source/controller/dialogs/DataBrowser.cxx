@@ -101,7 +101,7 @@ namespace impl
 class SeriesHeaderEdit : public Edit
 {
 public:
-    SeriesHeaderEdit( vcl::Window * pParent );
+    explicit SeriesHeaderEdit( vcl::Window * pParent );
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void setStartColumn( sal_Int32 nStartColumn );

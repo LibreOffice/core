@@ -102,7 +102,7 @@ public:
                     , const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel >& xChartModel );
 
-    SelectionHelper( SdrObject* pSelectedObj );
+    explicit SelectionHelper( SdrObject* pSelectedObj );
     virtual ~SelectionHelper();
 
     //MarkHandleProvider:

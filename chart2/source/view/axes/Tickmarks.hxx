@@ -45,7 +45,7 @@ struct TickInfo
     sal_Int32 nFactorForLimitedTextWidth;//categories in higher levels of complex categories can have more place than a single simple category
 
 //methods:
-    TickInfo( const css::uno::Reference<css::chart2::XScaling>& xInverse );
+    explicit TickInfo( const css::uno::Reference<css::chart2::XScaling>& xInverse );
 
     /**
      * Return a value associated with the tick mark. It's normally an original
@@ -72,7 +72,7 @@ public:
 class PureTickIter : public TickIter
 {
 public:
-    PureTickIter( TickInfoArrayType& rTickInfoVector );
+    explicit PureTickIter( TickInfoArrayType& rTickInfoVector );
     virtual ~PureTickIter();
     virtual TickInfo* firstInfo() SAL_OVERRIDE;
     virtual TickInfo* nextInfo() SAL_OVERRIDE;

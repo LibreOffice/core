@@ -27,7 +27,7 @@ namespace chart
 class CandleStickChartType : public ChartType
 {
 public:
-    CandleStickChartType(
+    explicit CandleStickChartType(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~CandleStickChartType();

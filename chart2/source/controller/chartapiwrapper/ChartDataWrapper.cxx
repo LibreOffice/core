@@ -129,7 +129,7 @@ struct lcl_Operator
 
 struct lcl_AllOperator : public lcl_Operator
 {
-    lcl_AllOperator( const Reference< XChartData >& xDataToApply )
+    explicit lcl_AllOperator( const Reference< XChartData >& xDataToApply )
         : lcl_Operator()
         , m_xDataToApply( xDataToApply )
     {
@@ -176,7 +176,7 @@ struct lcl_AllOperator : public lcl_Operator
 
 struct lcl_DataOperator : public lcl_Operator
 {
-    lcl_DataOperator( const Sequence< Sequence< double > >& rData )
+    explicit lcl_DataOperator( const Sequence< Sequence< double > >& rData )
         : lcl_Operator()
         , m_rData( rData )
     {
@@ -257,7 +257,7 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 
 struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
 {
-    lcl_AnyRowDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyRowDescriptions )
+    explicit lcl_AnyRowDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyRowDescriptions )
         : lcl_Operator()
         , m_rAnyRowDescriptions( rAnyRowDescriptions )
     {
@@ -343,7 +343,7 @@ struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 
 struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 {
-    lcl_AnyColumnDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyColumnDescriptions )
+    explicit lcl_AnyColumnDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyColumnDescriptions )
         : lcl_Operator()
         , m_rAnyColumnDescriptions( rAnyColumnDescriptions )
     {
@@ -365,7 +365,7 @@ struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 
 struct lcl_DateCategoriesOperator : public lcl_Operator
 {
-    lcl_DateCategoriesOperator( const Sequence< double >& rDates )
+    explicit lcl_DateCategoriesOperator( const Sequence< double >& rDates )
         : lcl_Operator()
         , m_rDates( rDates )
     {

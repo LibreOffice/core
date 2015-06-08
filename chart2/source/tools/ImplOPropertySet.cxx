@@ -37,7 +37,7 @@ namespace
 struct lcl_getPropertyStateByHandle :
         public ::std::unary_function< sal_Int32,  beans::PropertyState >
 {
-    lcl_getPropertyStateByHandle(
+    explicit lcl_getPropertyStateByHandle(
         const ::property::impl::ImplOPropertySet::tPropertyMap & rMap )
             : m_rMap( rMap )
     {}
@@ -57,7 +57,7 @@ template< typename K, typename V >
 struct lcl_eraseMapEntry :
         public ::std::unary_function< K, void >
 {
-    lcl_eraseMapEntry( ::std::map< K, V > & rMap )
+    explicit lcl_eraseMapEntry( ::std::map< K, V > & rMap )
             : m_rMap( rMap )
     {}
 

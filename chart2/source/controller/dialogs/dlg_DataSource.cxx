@@ -44,7 +44,7 @@ namespace chart
 class DocumentChartTypeTemplateProvider : public ChartTypeTemplateProvider
 {
 public:
-    DocumentChartTypeTemplateProvider(
+    explicit DocumentChartTypeTemplateProvider(
         const Reference< chart2::XChartDocument > & xDoc );
     virtual ~DocumentChartTypeTemplateProvider();
 
@@ -84,7 +84,7 @@ Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCu
 class DataSourceTabControl : public TabControl
 {
 public:
-    DataSourceTabControl(vcl::Window* pParent);
+    explicit DataSourceTabControl(vcl::Window* pParent);
 
     virtual bool DeactivatePage() SAL_OVERRIDE;
 

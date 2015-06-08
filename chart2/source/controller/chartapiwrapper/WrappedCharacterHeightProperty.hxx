@@ -59,7 +59,7 @@ protected:
 class WrappedCharacterHeightProperty : public WrappedCharacterHeightProperty_Base
 {
 public:
-    WrappedCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider );
+    explicit WrappedCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider );
     virtual ~WrappedCharacterHeightProperty();
 
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList, ReferenceSizePropertyProvider* pRefSizePropProvider );
@@ -68,14 +68,14 @@ public:
 class WrappedAsianCharacterHeightProperty : public WrappedCharacterHeightProperty_Base
 {
 public:
-    WrappedAsianCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider );
+    explicit WrappedAsianCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider );
     virtual ~WrappedAsianCharacterHeightProperty();
 };
 
 class WrappedComplexCharacterHeightProperty : public WrappedCharacterHeightProperty_Base
 {
 public:
-    WrappedComplexCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider );
+    explicit WrappedComplexCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider );
     virtual ~WrappedComplexCharacterHeightProperty();
 };
 

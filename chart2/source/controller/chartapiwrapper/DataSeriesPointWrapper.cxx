@@ -253,7 +253,7 @@ struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 {
 public:
-    WrappedAttachedAxisProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedAttachedAxisProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAttachedAxisProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -367,7 +367,7 @@ Any WrappedSegmentOffsetProperty::convertOuterToInnerValue( const Any& rOuterVal
 class WrappedLineColorProperty : public WrappedSeriesAreaOrLineProperty
 {
 public:
-    WrappedLineColorProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
+    explicit WrappedLineColorProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
     virtual ~WrappedLineColorProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -428,7 +428,7 @@ Any WrappedLineColorProperty::getPropertyDefault( const Reference< beans::XPrope
 class WrappedLineStyleProperty : public WrappedSeriesAreaOrLineProperty
 {
 public:
-    WrappedLineStyleProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
+    explicit WrappedLineStyleProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
     virtual ~WrappedLineStyleProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const

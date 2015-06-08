@@ -221,7 +221,7 @@ namespace
 
 struct lcl_LabeledSequenceEquals : public std::unary_function< Reference< data::XLabeledDataSequence >, bool >
 {
-    lcl_LabeledSequenceEquals( const Reference< data::XLabeledDataSequence > & xLSeqToCmp ) :
+    explicit lcl_LabeledSequenceEquals( const Reference< data::XLabeledDataSequence > & xLSeqToCmp ) :
             m_bHasLabels ( false ),
             m_bHasValues ( false )
     {

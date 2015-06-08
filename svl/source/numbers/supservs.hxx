@@ -43,7 +43,7 @@ protected:
                         m_xORB;
 
 public:
-    SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+    explicit SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
     virtual ~SvNumberFormatsSupplierServiceObject();
 
     // XInterface

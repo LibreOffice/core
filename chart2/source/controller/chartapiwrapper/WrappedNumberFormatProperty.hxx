@@ -34,7 +34,7 @@ class WrappedLinkNumberFormatProperty;
 class WrappedNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
-    WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedNumberFormatProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -54,7 +54,7 @@ private:
 class WrappedLinkNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
-    WrappedLinkNumberFormatProperty( const boost::shared_ptr<Chart2ModelContact>& pChart2ModelContact );
+    explicit WrappedLinkNumberFormatProperty( const boost::shared_ptr<Chart2ModelContact>& pChart2ModelContact );
     virtual ~WrappedLinkNumberFormatProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const

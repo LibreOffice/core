@@ -28,7 +28,7 @@ namespace chart
 class BubbleChartType : public ChartType
 {
 public:
-    BubbleChartType(
+    explicit BubbleChartType(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~BubbleChartType();

@@ -36,7 +36,7 @@ template< class Map >
     struct lcl_DisposeAndClearAndDeleteMapElement :
         public ::std::unary_function< typename Map::value_type, void >
     {
-        lcl_DisposeAndClearAndDeleteMapElement( const Reference< uno::XInterface > & xEventSource ) :
+        explicit lcl_DisposeAndClearAndDeleteMapElement( const Reference< uno::XInterface > & xEventSource ) :
                 m_aEvent( xEventSource )
         {}
         void operator() ( typename Map::value_type & rElement )

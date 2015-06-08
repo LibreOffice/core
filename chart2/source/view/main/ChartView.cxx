@@ -258,7 +258,7 @@ typedef boost::ptr_vector<VSeriesPlotter> SeriesPlottersType;
 class SeriesPlotterContainer
 {
 public:
-    SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList );
+    explicit SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList );
     ~SeriesPlotterContainer();
 
     /** It is used to set coordinate systems (`m_rVCooSysList`), this method
@@ -1077,7 +1077,7 @@ struct CreateShapeParam2D
 class GL2DRenderer : public IRenderer
 {
 public:
-    GL2DRenderer(ChartView* pView);
+    explicit GL2DRenderer(ChartView* pView);
     virtual ~GL2DRenderer();
 
     virtual void update() SAL_OVERRIDE;

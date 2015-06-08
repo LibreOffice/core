@@ -81,7 +81,7 @@ class DummyPropertySetInfo : public cppu::WeakImplHelper1<
                                 com::sun::star::beans::XPropertySetInfo >
 {
 public:
-    DummyPropertySetInfo(const std::map<OUString, uno::Any>& rProps ):
+    explicit DummyPropertySetInfo(const std::map<OUString, uno::Any>& rProps ):
         mrProperties(rProps) {}
 
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& rName )
@@ -764,7 +764,7 @@ namespace {
 
 struct FontAttribSetter
 {
-    FontAttribSetter(vcl::Font& rFont):
+    explicit FontAttribSetter(vcl::Font& rFont):
         mrFont(rFont) {}
 
     void operator()(const std::pair<OUString, uno::Any>& rProp)

@@ -71,7 +71,7 @@ class DiagramWrapper : public cppu::ImplInheritanceHelper<
                     >
 {
 public:
-    DiagramWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit DiagramWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~DiagramWrapper();
 
     /// XServiceInfo declarations

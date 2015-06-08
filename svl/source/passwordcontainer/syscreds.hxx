@@ -32,7 +32,7 @@ class SysCredentialsConfig;
 class SysCredentialsConfigItem : public utl::ConfigItem
 {
     public:
-        SysCredentialsConfigItem( SysCredentialsConfig * pOwner );
+        explicit SysCredentialsConfigItem( SysCredentialsConfig * pOwner );
         //virtual ~SysCredentialsConfigItem();
 
         virtual void Notify(

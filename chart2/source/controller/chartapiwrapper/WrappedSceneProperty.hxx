@@ -40,7 +40,7 @@ public:
 class WrappedD3DTransformMatrixProperty : public WrappedProperty
 {
 public:
-    WrappedD3DTransformMatrixProperty(
+    explicit WrappedD3DTransformMatrixProperty(
         ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedD3DTransformMatrixProperty();
 

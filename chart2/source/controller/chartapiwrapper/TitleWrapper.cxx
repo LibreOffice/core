@@ -51,7 +51,7 @@ namespace chart
 class WrappedTitleStringProperty : public WrappedProperty
 {
 public:
-    WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext );
+    explicit WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext );
     virtual ~WrappedTitleStringProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const

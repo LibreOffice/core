@@ -32,7 +32,7 @@ namespace canvas
     class PageManager
     {
     public:
-        PageManager(const canvas::IRenderModuleSharedPtr& rRenderModule)
+        explicit PageManager(const canvas::IRenderModuleSharedPtr& rRenderModule)
             : mpRenderModule(rRenderModule)
         {
         }

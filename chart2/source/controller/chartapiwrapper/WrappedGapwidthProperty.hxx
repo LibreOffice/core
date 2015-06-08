@@ -61,14 +61,14 @@ protected:
 class WrappedGapwidthProperty : public WrappedBarPositionProperty_Base
 {
 public:
-    WrappedGapwidthProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedGapwidthProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedGapwidthProperty();
 };
 
 class WrappedBarOverlapProperty : public WrappedBarPositionProperty_Base
 {
 public:
-    WrappedBarOverlapProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedBarOverlapProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedBarOverlapProperty();
 };
 

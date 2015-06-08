@@ -70,7 +70,7 @@ namespace
 struct lcl_InsertMeanValueLine
 {
 public:
-    lcl_InsertMeanValueLine( const uno::Reference< uno::XComponentContext > & xContext ) :
+    explicit lcl_InsertMeanValueLine( const uno::Reference< uno::XComponentContext > & xContext ) :
             m_xContext( xContext )
     {}
 

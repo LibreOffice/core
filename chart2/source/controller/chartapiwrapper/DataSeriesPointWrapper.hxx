@@ -60,7 +60,7 @@ public:
     };
 
     //this constructor needs an initialize call afterwards
-    DataSeriesPointWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit DataSeriesPointWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 
     DataSeriesPointWrapper( eType eType
             , sal_Int32 nSeriesIndexInNewAPI

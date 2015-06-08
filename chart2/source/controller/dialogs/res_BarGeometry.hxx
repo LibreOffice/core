@@ -29,7 +29,7 @@ namespace chart
 class BarGeometryResources
 {
 public:
-    BarGeometryResources(VclBuilderContainer* pParent);
+    explicit BarGeometryResources(VclBuilderContainer* pParent);
 
     void Show( bool bShow );
     void Enable( bool bEnable );

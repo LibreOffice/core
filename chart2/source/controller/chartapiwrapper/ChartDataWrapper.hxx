@@ -48,7 +48,7 @@ class ChartDataWrapper : public MutexContainer, public
     com::sun::star::lang::XComponent >
 {
 public:
-    ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
         , const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartData >& xNewData );
     virtual ~ChartDataWrapper();

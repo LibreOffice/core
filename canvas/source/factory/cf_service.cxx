@@ -84,7 +84,7 @@ class CanvasFactory
 
 public:
     virtual ~CanvasFactory();
-    CanvasFactory( Reference<XComponentContext> const & xContext );
+    explicit CanvasFactory( Reference<XComponentContext> const & xContext );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;

@@ -29,7 +29,7 @@ namespace chart
 class AccStatisticsObject : public AccessibleChartElement
 {
 public:
-    AccStatisticsObject( const AccessibleElementInfo& rAccInfo );
+    explicit AccStatisticsObject( const AccessibleElementInfo& rAccInfo );
 
     virtual ~AccStatisticsObject();
 

@@ -32,7 +32,7 @@ namespace chart
 class BarPositionHelper : public CategoryPositionHelper, public PlottingPositionHelper
 {
 public:
-    BarPositionHelper( bool bSwapXAndY=true );
+    explicit BarPositionHelper( bool bSwapXAndY=true );
     BarPositionHelper( const BarPositionHelper& rSource );
     virtual ~BarPositionHelper();
 

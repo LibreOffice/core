@@ -29,7 +29,7 @@ namespace chart
 class VPolarCoordinateSystem : public VCoordinateSystem
 {
 public:
-    VPolarCoordinateSystem( const ::com::sun::star::uno::Reference<
+    explicit VPolarCoordinateSystem( const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
     virtual ~VPolarCoordinateSystem();
 

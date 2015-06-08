@@ -50,7 +50,7 @@ struct FeatureState
 class FeatureCommandDispatchBase: public CommandDispatch
 {
 public:
-    FeatureCommandDispatchBase( const ::com::sun::star::uno::Reference<
+    explicit FeatureCommandDispatchBase( const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~FeatureCommandDispatchBase();
 

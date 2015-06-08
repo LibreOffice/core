@@ -106,7 +106,7 @@ public:
 class RenderThread : public salhelper::Thread
 {
 public:
-    RenderThread(GL3DBarChart* pChart);
+    explicit RenderThread(GL3DBarChart* pChart);
 
 protected:
 
@@ -136,7 +136,7 @@ void RenderThread::renderFrame()
 class RenderOneFrameThread : public RenderThread
 {
 public:
-    RenderOneFrameThread(GL3DBarChart* pChart):
+    explicit RenderOneFrameThread(GL3DBarChart* pChart):
         RenderThread(pChart)
     {}
 
@@ -194,7 +194,7 @@ void RenderAnimationThread::execute()
 class RenderBenchMarkThread : public RenderThread
 {
 public:
-    RenderBenchMarkThread(GL3DBarChart * pChart)
+    explicit RenderBenchMarkThread(GL3DBarChart * pChart)
         : RenderThread(pChart)
         , mbAutoFlyExecuting(false)
         , mbExecuting(false)

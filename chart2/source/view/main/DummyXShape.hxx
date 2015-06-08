@@ -251,7 +251,7 @@ private:
 class DummyArea3D : public DummyXShape
 {
 public:
-    DummyArea3D(const css::drawing::PolyPolygonShape3D& rShape);
+    explicit DummyArea3D(const css::drawing::PolyPolygonShape3D& rShape);
 
 private:
     css::drawing::PolyPolygonShape3D maShapes;
@@ -260,7 +260,7 @@ private:
 class DummyArea2D : public DummyXShape
 {
 public:
-    DummyArea2D(const css::drawing::PointSequenceSequence& rShape);
+    explicit DummyArea2D(const css::drawing::PointSequenceSequence& rShape);
 
     virtual void render() SAL_OVERRIDE;
 
@@ -324,7 +324,7 @@ class DummyRectangle : public DummyXShape
 {
 public:
     DummyRectangle();
-    DummyRectangle(const css::awt::Size& rSize);
+    explicit DummyRectangle(const css::awt::Size& rSize);
     DummyRectangle(const css::awt::Size& rSize, const css::awt::Point& rPoint, const tNameSequence& rNames,
             const tAnySequence& rValues );
 
@@ -413,7 +413,7 @@ public:
 class DummyGroup2D : public DummyXShapes
 {
 public:
-    DummyGroup2D(const OUString& rName);
+    explicit DummyGroup2D(const OUString& rName);
 
     virtual ::com::sun::star::awt::Point SAL_CALL getPosition() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::awt::Size SAL_CALL getSize() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -424,7 +424,7 @@ public:
 class DummyGroup3D : public DummyXShapes
 {
 public:
-    DummyGroup3D(const OUString& rName);
+    explicit DummyGroup3D(const OUString& rName);
 };
 
 }

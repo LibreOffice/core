@@ -36,7 +36,7 @@ namespace chart
 class LightButton : public ImageButton
 {
 public:
-    LightButton( vcl::Window* pParent);
+    explicit LightButton( vcl::Window* pParent);
 
     void switchLightOn(bool bOn);
     bool isLightOn() const { return m_bLightOn;}

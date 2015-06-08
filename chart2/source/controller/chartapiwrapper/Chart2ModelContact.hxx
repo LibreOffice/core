@@ -46,7 +46,7 @@ namespace wrapper
 class Chart2ModelContact
 {
 public:
-    Chart2ModelContact( const ::com::sun::star::uno::Reference<
+    explicit Chart2ModelContact( const ::com::sun::star::uno::Reference<
                       ::com::sun::star::uno::XComponentContext >& xContext );
     virtual ~Chart2ModelContact();
 

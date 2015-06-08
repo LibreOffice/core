@@ -49,7 +49,7 @@ class FormattedString :
     public ::property::OPropertySet
 {
 public:
-    FormattedString( css::uno::Reference<
+    explicit FormattedString( css::uno::Reference<
            css::uno::XComponentContext > const & xContext );
     virtual ~FormattedString();
 

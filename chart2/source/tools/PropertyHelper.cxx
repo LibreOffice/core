@@ -65,7 +65,7 @@ private:
 
 struct lcl_StringMatches : public ::std::unary_function< OUString ,bool >
 {
-    lcl_StringMatches( const OUString & rCmpStr ) :
+    explicit lcl_StringMatches( const OUString & rCmpStr ) :
             m_aCmpStr( rCmpStr )
     {}
 
@@ -80,7 +80,7 @@ private:
 
 struct lcl_OUStringRestToInt32 : public ::std::unary_function< OUString, sal_Int32 >
 {
-    lcl_OUStringRestToInt32( sal_Int32 nPrefixLength ) :
+    explicit lcl_OUStringRestToInt32( sal_Int32 nPrefixLength ) :
             m_nPrefixLength( nPrefixLength )
     {}
     sal_Int32 operator() ( const OUString & rStr )

@@ -33,7 +33,7 @@ public:
     SvNumberFormatter*                  pFormatter;
     mutable ::comphelper::SharedMutex   aMutex;
 
-    SvNumFmtSuppl_Impl(SvNumberFormatter* p) :
+    explicit SvNumFmtSuppl_Impl(SvNumberFormatter* p) :
         pFormatter(p) {}
 };
 

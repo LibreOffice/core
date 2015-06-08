@@ -30,7 +30,7 @@ namespace wrapper
 class WrappedAddInProperty : public WrappedProperty
 {
 public:
-    WrappedAddInProperty( ChartDocumentWrapper& rChartDocumentWrapper );
+    explicit WrappedAddInProperty( ChartDocumentWrapper& rChartDocumentWrapper );
     virtual ~WrappedAddInProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -46,7 +46,7 @@ private:
 class WrappedBaseDiagramProperty : public WrappedProperty
 {
 public:
-    WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper );
+    explicit WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper );
     virtual ~WrappedBaseDiagramProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -62,7 +62,7 @@ private:
 class WrappedAdditionalShapesProperty : public WrappedProperty
 {
 public:
-    WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper );
+    explicit WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper );
     virtual ~WrappedAdditionalShapesProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -78,7 +78,7 @@ private:
 class WrappedRefreshAddInAllowedProperty : public WrappedProperty
 {
 public:
-    WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper );
+    explicit WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper );
     virtual ~WrappedRefreshAddInAllowedProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const

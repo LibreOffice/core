@@ -32,7 +32,7 @@ namespace chart
 class VTitle
 {
 public:
-    VTitle( const ::com::sun::star::uno::Reference<
+    explicit VTitle( const ::com::sun::star::uno::Reference<
                   ::com::sun::star::chart2::XTitle > & xTitle );
     virtual ~VTitle();
 

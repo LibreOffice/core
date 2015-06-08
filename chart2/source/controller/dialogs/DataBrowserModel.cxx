@@ -178,7 +178,7 @@ sal_Int32 lcl_getValuesRepresentationIndex(
 
 struct lcl_RepresentationsOfLSeqMatch : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
-    lcl_RepresentationsOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
+    explicit lcl_RepresentationsOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
             m_aValuesRep( xLSeq.is() ?
                           (xLSeq->getValues().is() ? xLSeq->getValues()->getSourceRangeRepresentation() : OUString())
                           : OUString() )
@@ -196,7 +196,7 @@ private:
 
 struct lcl_RolesOfLSeqMatch : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
-    lcl_RolesOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
+    explicit lcl_RolesOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
         m_aRole(DataSeriesHelper::getRole(xLSeq)) {}
 
     bool operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
@@ -273,7 +273,7 @@ namespace
 {
 struct lcl_DataSeriesOfHeaderMatches : public ::std::unary_function< ::chart::DataBrowserModel::tDataHeader, bool >
 {
-    lcl_DataSeriesOfHeaderMatches(
+    explicit lcl_DataSeriesOfHeaderMatches(
         const Reference< chart2::XDataSeries > & xSeriesToCompareWith ) :
             m_xSeries( xSeriesToCompareWith )
     {}

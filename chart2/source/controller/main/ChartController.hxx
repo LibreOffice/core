@@ -145,7 +145,7 @@ class ChartController   : public ::cppu::WeakImplHelper12 <
 
 public:
     //no default constructor
-    ChartController(::com::sun::star::uno::Reference<
+    explicit ChartController(::com::sun::star::uno::Reference<
                ::com::sun::star::uno::XComponentContext > const & xContext);
     virtual ~ChartController();
 
@@ -458,7 +458,7 @@ private:
     class TheModel : public RefCountable
     {
         public:
-            TheModel( const ::com::sun::star::uno::Reference<
+            explicit TheModel( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel > & xModel );
 
             virtual ~TheModel();

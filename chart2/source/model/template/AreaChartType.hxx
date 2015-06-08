@@ -27,7 +27,7 @@ namespace chart
 class AreaChartType : public ChartType
 {
 public:
-    AreaChartType(
+    explicit AreaChartType(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~AreaChartType();

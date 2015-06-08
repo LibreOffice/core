@@ -47,7 +47,7 @@ private:
     //no default constructor
     ChartFrameLoader(){}
 public:
-    ChartFrameLoader(::com::sun::star::uno::Reference<
+    explicit ChartFrameLoader(::com::sun::star::uno::Reference<
                ::com::sun::star::uno::XComponentContext > const & xContext);
     virtual ~ChartFrameLoader();
 

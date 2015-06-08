@@ -108,7 +108,7 @@ namespace vclcanvas
             }
 
             /// To be compatible with CanvasBase mutex concept
-            LocalGuard( const ::osl::Mutex& ) :
+            explicit LocalGuard( const ::osl::Mutex& ) :
                 aSolarGuard()
             {
             }

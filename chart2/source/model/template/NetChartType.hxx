@@ -27,7 +27,7 @@ namespace chart
 class NetChartType_Base : public ChartType
 {
 public:
-    NetChartType_Base( ::com::sun::star::uno::Reference<
+    explicit NetChartType_Base( ::com::sun::star::uno::Reference<
                       ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~NetChartType_Base();
 
@@ -55,7 +55,7 @@ protected:
 class NetChartType : public NetChartType_Base
 {
 public:
-    NetChartType( ::com::sun::star::uno::Reference<
+    explicit NetChartType( ::com::sun::star::uno::Reference<
                       ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~NetChartType();
 

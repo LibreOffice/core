@@ -174,7 +174,7 @@ class FindByType : std::unary_function<SvLBoxItem, void>
 {
     sal_uInt16 mnId;
 public:
-    FindByType(sal_uInt16 nId) : mnId(nId) {}
+    explicit FindByType(sal_uInt16 nId) : mnId(nId) {}
     bool operator() (const SvLBoxItem& rItem) const
     {
         return rItem.GetType() == mnId;

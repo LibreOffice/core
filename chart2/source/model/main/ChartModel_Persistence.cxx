@@ -64,7 +64,7 @@ namespace
 {
 struct lcl_PropNameEquals : public ::std::unary_function< beans::PropertyValue, bool >
 {
-    lcl_PropNameEquals( const OUString & rStrToCompareWith ) :
+    explicit lcl_PropNameEquals( const OUString & rStrToCompareWith ) :
             m_aStr( rStrToCompareWith )
     {}
     bool operator() ( const beans::PropertyValue & rProp )
