@@ -114,6 +114,22 @@ void ResourceManager::SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsE
     }
 }
 
+void ResourceManager::SetDeckTitle(const OUString& rsDeckId, const OUString& sTitle)
+{
+    DeckContainer::iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iDeck->msId.equals(rsDeckId))
+        {
+            iDeck->msTitle = sTitle;
+            iDeck->msHelpText = sTitle;
+            return;
+        }
+    }
+}
+
 void ResourceManager::SetDeckToDescriptor(const OUString& rsDeckId, VclPtr<Deck> aDeck)
 {
     DeckContainer::iterator iDeck;

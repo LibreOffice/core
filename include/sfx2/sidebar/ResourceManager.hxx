@@ -58,6 +58,8 @@ public:
     */
     void SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsEnabled);
 
+    void SetDeckTitle(const OUString& rsDeckId, const OUString& sTitle);
+
     void SetDeckToDescriptor(const OUString& rsDeckId, VclPtr<Deck> aDeck);
 
     void SetDeckOrderIndex(const OUString& rsDeckId, const sal_Int32 orderIndex);
