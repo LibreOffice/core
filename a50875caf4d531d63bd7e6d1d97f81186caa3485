@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_3aadde88",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-08T13:24:00Z",
+      "side": 1,
+      "message": "Please declare variables in as small scope as necessary. Ideally at the point where they can be initialized. This is not C.",
+      "revId": "a50875caf4d531d63bd7e6d1d97f81186caa3485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_9aa09292",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-08T13:24:00Z",
+      "side": 1,
+      "message": "The cast is unnecessary.",
+      "revId": "a50875caf4d531d63bd7e6d1d97f81186caa3485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_5aaa1a72",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-08T13:24:00Z",
+      "side": 1,
+      "message": "Use OStringBuffer to construct the string. Or at least drop the 2 useless intermediate string vars.",
+      "revId": "a50875caf4d531d63bd7e6d1d97f81186caa3485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_fab506d0",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-08T13:24:00Z",
+      "side": 1,
+      "message": "sMflaCellRange cannot be empty. It will always contain at least \u0027:\u0027.",
+      "revId": "a50875caf4d531d63bd7e6d1d97f81186caa3485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
