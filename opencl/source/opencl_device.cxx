@@ -200,7 +200,7 @@ void populateInput(LibreOfficeDeviceEvaluationIO* testData)
 ds_status serializeScore(ds_device* device, void** serializedScore, unsigned int* serializedScoreSize)
 {
     *serializedScoreSize = sizeof(LibreOfficeDeviceScore);
-    *serializedScore = (void*)new unsigned char[*serializedScoreSize];
+    *serializedScore = static_cast<void*>(new unsigned char[*serializedScoreSize]);
     memcpy(*serializedScore, device->score, *serializedScoreSize);
     return DS_SUCCESS;
 }
@@ -269,7 +269,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         if (!bKhrFp64Flag && !bAmdFp64Flag)
         {
             /* No 64-bit float support */
-            device->score = (void*)new LibreOfficeDeviceScore;
+            device->score = static_cast<void*>(new LibreOfficeDeviceScore);
             static_cast<LibreOfficeDeviceScore*>(device->score)->fTime = DBL_MAX;
             static_cast<LibreOfficeDeviceScore*>(device->score)->bNoCLErrors = true;
             SAL_INFO("opencl.device", "... no fp64 support");
@@ -300,7 +300,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
                 SAL_INFO("opencl.device", "Build Errors:\n" << buildLog);
                 free(buildLog);
 
-                device->score = (void*)new LibreOfficeDeviceScore;
+                device->score = static_cast<void*>(new LibreOfficeDeviceScore);
                 static_cast<LibreOfficeDeviceScore*>(device->score)->fTime = DBL_MAX;
                 static_cast<LibreOfficeDeviceScore*>(device->score)->bNoCLErrors = false;
             }
@@ -324,15 +324,15 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateBuffer::clInput2");
                 cl_mem clInput3 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  &testData->input3[0], &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateBuffer::clInput3");
-                clStatus = clSetKernelArg(clKernel, 0, sizeof(cl_mem), (void*)&clResult);
+                clStatus = clSetKernelArg(clKernel, 0, sizeof(cl_mem), static_cast<void*>(&clResult));
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clSetKernelArg::clResult");
-                clStatus = clSetKernelArg(clKernel, 1, sizeof(cl_mem), (void*)&clInput0);
+                clStatus = clSetKernelArg(clKernel, 1, sizeof(cl_mem), static_cast<void*>(&clInput0));
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clSetKernelArg::clInput0");
-                clStatus = clSetKernelArg(clKernel, 2, sizeof(cl_mem), (void*)&clInput1);
+                clStatus = clSetKernelArg(clKernel, 2, sizeof(cl_mem), static_cast<void*>(&clInput1));
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clSetKernelArg::clInput1");
-                clStatus = clSetKernelArg(clKernel, 3, sizeof(cl_mem), (void*)&clInput2);
+                clStatus = clSetKernelArg(clKernel, 3, sizeof(cl_mem), static_cast<void*>(&clInput2));
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clSetKernelArg::clInput2");
-                clStatus = clSetKernelArg(clKernel, 4, sizeof(cl_mem), (void*)&clInput3);
+                clStatus = clSetKernelArg(clKernel, 4, sizeof(cl_mem), static_cast<void*>(&clInput3));
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clSetKernelArg::clInput3");
                 size_t globalWS[1] = { testData->outputSize };
                 size_t localSize[1] = { 64 };
@@ -346,7 +346,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
                 clReleaseMemObject(clResult);
                 clReleaseKernel(clKernel);
 
-                device->score = (void*)new LibreOfficeDeviceScore;
+                device->score = static_cast<void*>(new LibreOfficeDeviceScore);
                 static_cast<LibreOfficeDeviceScore*>(device->score)->fTime = timerCurrent(&kernelTime);
                 static_cast<LibreOfficeDeviceScore*>(device->score)->bNoCLErrors = true;
             }
@@ -385,7 +385,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         // slower than the above.
         float fInterpretTailFactor = 10.0;
 
-        device->score = (void*)new LibreOfficeDeviceScore;
+        device->score = static_cast<void*>(new LibreOfficeDeviceScore);
         static_cast<LibreOfficeDeviceScore*>(device->score)->fTime = timerCurrent(&kernelTime);
         static_cast<LibreOfficeDeviceScore*>(device->score)->bNoCLErrors = true;
 
@@ -529,7 +529,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
 
             /* Perform evaluations */
             unsigned int numUpdates;
-            status = profileDevices(profile, DS_EVALUATE_ALL, evaluateScoreForDevice, (void*)testData.get(), &numUpdates);
+            status = profileDevices(profile, DS_EVALUATE_ALL, evaluateScoreForDevice, static_cast<void*>(testData.get()), &numUpdates);
 
             if (DS_SUCCESS == status)
             {
