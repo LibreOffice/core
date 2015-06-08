@@ -621,7 +621,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         {
             throw IllegalArgumentException(
                 "incorrect number of parameters passed invoking function " + FunctionName,
-                (OWeakObject *) this, (sal_Int16) 1 );
+                static_cast<OWeakObject *>(this), (sal_Int16) 1 );
         }
 
         // IN Parameter
@@ -905,7 +905,7 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
     {
         throw IllegalArgumentException(
             OUString( "Unknown name, getExactName() failed!" ),
-            (XWeak *)(OWeakObject *)this, 0 );
+            static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
     }
     return aRetInfo;
 }

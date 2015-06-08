@@ -198,7 +198,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
     }
     throw IllegalArgumentException(
         "illegal object given!",
-        (XWeak *)(OWeakObject *)this, 0 );
+        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
 void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
@@ -227,14 +227,14 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
             {
                 throw IllegalArgumentException(
                     "illegal value given!",
-                    (XWeak *)(OWeakObject *)this, 1 );
+                    static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
             }
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
         "illegal object given!",
-        (XWeak *)(OWeakObject *)this, 0 );
+        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
 
@@ -264,14 +264,14 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
             {
                 throw IllegalArgumentException(
                     "illegal value given!",
-                    (XWeak *)(OWeakObject *)this, 1 );
+                    static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
             }
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
         "illegal object given!",
-        (XWeak *)(OWeakObject *)this, 0 );
+        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
 

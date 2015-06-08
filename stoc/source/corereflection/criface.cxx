@@ -201,7 +201,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
     }
     throw IllegalArgumentException(
         "illegal object given!",
-        (XWeak *)(OWeakObject *)this, 0 );
+        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
 void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
@@ -211,7 +211,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
     {
         throw IllegalAccessException(
             "cannot set readonly attribute!",
-            (XWeak *)(OWeakObject *)this );
+            static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
     }
 
     uno_Interface * pUnoI = getReflection()->mapToUno(
@@ -291,7 +291,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
     }
     throw IllegalArgumentException(
         "illegal destination object given!",
-        (XWeak *)(OWeakObject *)this, 0 );
+        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
 void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
@@ -759,7 +759,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
     }
     throw IllegalArgumentException(
         "illegal destination object given!",
-        (XWeak *)(OWeakObject *)this, 0 );
+        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
 

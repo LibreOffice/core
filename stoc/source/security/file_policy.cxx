@@ -402,7 +402,7 @@ void FilePolicy::refresh()
     {
         throw RuntimeException(
             "name of policy file unknown!",
-            (OWeakObject *)this );
+            static_cast<OWeakObject *>(this) );
     }
 
     PolicyReader reader( fileName, m_ac );

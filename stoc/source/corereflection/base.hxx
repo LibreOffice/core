@@ -416,7 +416,7 @@ inline bool coerce_assign(
     {
         return uno_assignData(
             pDest, pTD,
-            (void *)&rSource, pTD,
+            const_cast<css::uno::Any *>(&rSource), pTD,
             reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
             reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
             reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );

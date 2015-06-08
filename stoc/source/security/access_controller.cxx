@@ -411,7 +411,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
                 throw RuntimeException(
                     "expected a user id in component context entry "
                     "\"/services/" SERVICE_NAME "/single-user-id\"!",
-                    (OWeakObject *)this );
+                    static_cast<OWeakObject *>(this) );
             }
             m_mode = SINGLE_USER;
         }
@@ -458,14 +458,14 @@ void AccessController::initialize(
     if (SINGLE_USER != m_mode) // only if in single-user mode
     {
         throw RuntimeException(
-            "invalid call: ac must be in \"single-user\" mode!", (OWeakObject *)this );
+            "invalid call: ac must be in \"single-user\" mode!", static_cast<OWeakObject *>(this) );
     }
     OUString userId;
     arguments[ 0 ] >>= userId;
     if ( userId.isEmpty() )
     {
         throw RuntimeException(
-            "expected a user-id as first argument!", (OWeakObject *)this );
+            "expected a user-id as first argument!", static_cast<OWeakObject *>(this) );
     }
     // assured that no sync is necessary: no check happens at this forking time
     m_singleUserId = userId;
@@ -492,7 +492,7 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
         else
         {
             throw SecurityException(
-                "cannot get policy singleton!", (OWeakObject *)this );
+                "cannot get policy singleton!", static_cast<OWeakObject *>(this) );
         }
     }
     return m_xPolicy;
@@ -629,7 +629,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         if ( userId.isEmpty() )
         {
             throw SecurityException(
-                "cannot determine current user in multi-user ac!", (OWeakObject *)this );
+                "cannot determine current user in multi-user ac!", static_cast<OWeakObject *>(this) );
         }
 
         // lookup policy for user
@@ -784,7 +784,7 @@ void AccessController::checkPermission(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "checkPermission() call on disposed AccessController!", (OWeakObject *)this );
+            "checkPermission() call on disposed AccessController!", static_cast<OWeakObject *>(this) );
     }
 
     if (OFF == m_mode)
@@ -814,7 +814,7 @@ Any AccessController::doRestricted(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "doRestricted() call on disposed AccessController!", (OWeakObject *)this );
+            "doRestricted() call on disposed AccessController!", static_cast<OWeakObject *>(this) );
     }
 
     if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
@@ -847,7 +847,7 @@ Any AccessController::doPrivileged(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "doPrivileged() call on disposed AccessController!", (OWeakObject *)this );
+            "doPrivileged() call on disposed AccessController!", static_cast<OWeakObject *>(this) );
     }
 
     if (OFF == m_mode) // no dynamic check will be performed
@@ -882,7 +882,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "getContext() call on disposed AccessController!", (OWeakObject *)this );
+            "getContext() call on disposed AccessController!", static_cast<OWeakObject *>(this) );
     }
 
     if (OFF == m_mode) // optimize this way, because no dynamic check will be performed

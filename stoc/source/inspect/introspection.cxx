@@ -921,7 +921,7 @@ Any SAL_CALL ImplIntrospectionAdapter::queryInterface( const Type& rType )
 Reference<XPropertySetInfo> ImplIntrospectionAdapter::getPropertySetInfo()
     throw( RuntimeException, std::exception )
 {
-    return (XPropertySetInfo *)this;
+    return static_cast<XPropertySetInfo *>(this);
 }
 
 void ImplIntrospectionAdapter::setPropertyValue(const OUString& aPropertyName, const Any& aValue)

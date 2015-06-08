@@ -481,7 +481,7 @@ inline void OServiceManager::check_undisposed() const
     {
         throw lang::DisposedException(
             "service manager instance has already been disposed!",
-            (OWeakObject *)this );
+            static_cast<OWeakObject *>(const_cast<OServiceManager *>(this)) );
     }
 }
 
@@ -609,7 +609,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
         {
             throw IllegalArgumentException(
                 "no XComponentContext given!",
-                (OWeakObject *)this, 1 );
+                static_cast<OWeakObject *>(this), 1 );
         }
     }
     else
@@ -771,14 +771,14 @@ void OServiceManager::setPropertyValue(
         {
             throw IllegalArgumentException(
                 "no XComponentContext given!",
-                (OWeakObject *)this, 1 );
+                static_cast<OWeakObject *>(this), 1 );
         }
     }
     else
     {
         throw UnknownPropertyException(
             "unknown property " + PropertyName,
-            (OWeakObject *)this );
+            static_cast<OWeakObject *>(this) );
     }
 }
 

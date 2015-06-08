@@ -679,7 +679,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::openKey( const OUString& aKeyN
 
     if ( localKey.is() || defaultKey.is() )
     {
-        return ((XRegistryKey*)new NestedKeyImpl(m_pRegistry, localKey, defaultKey));
+        return static_cast<XRegistryKey*>(new NestedKeyImpl(m_pRegistry, localKey, defaultKey));
     }
     else
     {
@@ -717,7 +717,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::createKey( const OUString& aKe
 
             m_state = m_pRegistry->m_state++;
 
-            return ((XRegistryKey*)new NestedKeyImpl(m_pRegistry, localKey, defaultKey));
+            return (static_cast<XRegistryKey*>(new NestedKeyImpl(m_pRegistry, localKey, defaultKey)));
         }
     }
     else
@@ -737,7 +737,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::createKey( const OUString& aKe
 
                 m_state = m_pRegistry->m_state++;
 
-                return ((XRegistryKey*)new NestedKeyImpl(m_pRegistry, localKey, defaultKey));
+                return (static_cast<XRegistryKey*>(new NestedKeyImpl(m_pRegistry, localKey, defaultKey)));
             }
         }
     }
@@ -831,7 +831,7 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
         lastIndex = name.lastIndexOf('/');
         name = name.copy(lastIndex);
         retSeq.getArray()[i] =
-            (XRegistryKey*)new NestedKeyImpl(name, this);
+            static_cast<XRegistryKey*>(new NestedKeyImpl(name, this));
     }
 
     sal_uInt32 k = local;
@@ -855,7 +855,7 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
             lastIndex = name.lastIndexOf('/');
             name = name.copy(lastIndex);
             retSeq.getArray()[k++] =
-                (XRegistryKey*)new NestedKeyImpl(name, this);
+                static_cast<XRegistryKey*>(new NestedKeyImpl(name, this));
         }
     }
 
@@ -1302,7 +1302,7 @@ Reference< XRegistryKey > SAL_CALL NestedRegistryImpl::getRootKey(  )
                 defaultKey = m_defaultReg->getRootKey();
             }
 
-            return ((XRegistryKey*)new NestedKeyImpl(this, localKey, defaultKey));
+            return (static_cast<XRegistryKey*>(new NestedKeyImpl(this, localKey, defaultKey)));
         }
     }
     else

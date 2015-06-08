@@ -353,7 +353,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
     }
     throw RuntimeException(
         "IdlReflectionServiceImpl::forType() failed!",
-        (XWeak *)(OWeakObject *)this );
+        static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
 }
 
 
@@ -373,7 +373,7 @@ const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
             {
                 throw RuntimeException(
                     "cannot get c++ to uno mapping!",
-                    (XWeak *)(OWeakObject *)this );
+                    static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
             }
         }
     }
@@ -396,7 +396,7 @@ const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
             {
                 throw RuntimeException(
                     "cannot get uno to c++ mapping!",
-                    (XWeak *)(OWeakObject *)this );
+                    static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
             }
         }
     }
@@ -413,7 +413,7 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
 
     throw RuntimeException(
         "illegal object given!",
-        (XWeak *)(OWeakObject *)this );
+        static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
 }
 
 
@@ -421,7 +421,7 @@ Reference< XInterface > SAL_CALL IdlReflectionServiceImpl_create(
     const Reference< XComponentContext > & xContext )
     throw(css::uno::Exception)
 {
-    return Reference< XInterface >( (XWeak *)(OWeakObject *)new IdlReflectionServiceImpl( xContext ) );
+    return Reference< XInterface >( static_cast<XWeak *>(static_cast<OWeakObject *>(new IdlReflectionServiceImpl( xContext ))) );
 }
 
 }
