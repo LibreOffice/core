@@ -1972,27 +1972,39 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
             ImpAutoFitText(*pEdtOutl);
             mbInDownScale = false;
         }
-        else if ( GetNextLinkInChain() != NULL ) // is this a chainable object?
-        {
-            // set whether there is need for chaining
-            // (used in EndTextEdit to crop the overflowing part)
-            // XXX: might be removed later when we remove text in real time
-            SetToBeChained( pEditStatus->IsPageOverflow() );
-            fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
-                pEditStatus->IsPageOverflow() ? "TRUE" : "FALSE");
+    }
+}
 
-            // Pushes text in next link on the fly
-            if ( pEditStatus->IsPageOverflow() ) {
+void SdrTextObj::onOverflowStatusEvent( bool bIsPageOverflow )
+{
+    // FIXME: Should have a IsChainable or something.
+    if (IsAutoGrowWidth() || IsAutoGrowHeight() || IsAutoFit())
+        return;
+
+    if ( GetNextLinkInChain() != NULL ) // is this a chainable object?
+    {
+        // set whether there is need for chaining
+        // (used in EndTextEdit to crop the overflowing part)
+        // XXX: might be removed later when we remove text in real time
+        SetToBeChained( bIsPageOverflow );
+        fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
+            bIsPageOverflow ? "TRUE" : "FALSE");
+
+        // Pushes text in next link on the fly
+        if ( bIsPageOverflow ) {
+            if (pEdtOutl != NULL)
                 mpOverflowingText = pEdtOutl->GetOverflowingText();
-                SdrTextObj *pNextTextObj = GetNextLinkInChain();
+            else
+                mpOverflowingText = ImpGetDrawOutliner().GetOverflowingText();
 
-                impLeaveOnlyNonOverflowingText();
+            SdrTextObj *pNextTextObj = GetNextLinkInChain();
 
-                // Transfer overflowing text
-                impMoveChainedTextToNextLink(pNextTextObj);
-            }
+            impLeaveOnlyNonOverflowingText();
 
+            // Transfer overflowing text
+            impMoveChainedTextToNextLink(pNextTextObj);
         }
+
     }
 }
 

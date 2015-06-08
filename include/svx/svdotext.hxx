@@ -549,6 +549,8 @@ public:
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
 
+    virtual void onOverflowStatusEvent( bool bIsPageOverflow );
+
 
 
     // transformation interface for StarOfficeAPI. This implements support for
@@ -618,7 +620,7 @@ public:
     void impLeaveOnlyNonOverflowingText() const;
 
     // Handler for Chained Text
-    DECL_LINK(ImpDecomposeChainedText,EditStatus*);
+    DECL_LINK(ImpDecomposeChainedText,bool);
 
     // timing generators
     void impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;

@@ -499,7 +499,7 @@ namespace drawinglayer
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
 
-        SdrTextPrimitive2D* SdrChainedTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
+        SdrTextPrimitive2D* SdrChainedTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& ) const
         {
             //FIXME(matteocam)
             assert(0);

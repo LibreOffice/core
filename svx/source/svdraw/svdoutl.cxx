@@ -61,6 +61,9 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         SetMaxAutoPaperSize( aMaxSize );
         SetPaperSize( aMaxSize );
         ClearPolygon();
+
+        // FIXME(matteoca)
+        SetChainingEventHdl( LINK(pObj,SdrTextObj,ImpDecomposeChainedText) );
     }
 
     mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );

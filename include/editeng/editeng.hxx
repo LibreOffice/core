@@ -368,9 +368,9 @@ public:
     sal_uLong       Write( SvStream& rOutput, EETextFormat );
 
     void            SetStatusEventHdl( const Link<>& rLink );
-    Link<>          GetStatusEventHdl() const;
+    Link<>            GetStatusEventHdl() const;
 
-    void            SetStatusEventHdl1( const Link<>& rLink ); // for chaining
+    void            SetChainingEventHdl( const Link<>& rLink );
 
     void            SetNotifyHdl( const Link<>& rLink );
     Link<>          GetNotifyHdl() const;

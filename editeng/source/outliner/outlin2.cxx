@@ -118,6 +118,12 @@ Link<> Outliner::GetModifyHdl() const
     return pEditEngine->GetModifyHdl();
 }
 
+void Outliner::SetChainingEventHdl( const Link<>& rLink )
+{
+    pEditEngine->SetChainingEventHdl( rLink );
+}
+
+
 void Outliner::SetNotifyHdl( const Link<>& rLink )
 {
     pEditEngine->aOutlinerNotifyHdl = rLink;
