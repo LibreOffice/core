@@ -353,7 +353,7 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
 
 void SvMetaClass::WriteSlotStubs( const OString& rShellName,
                                 SvSlotElementList & rSlotList,
-                                ByteStringList & rList,
+                                ByteStringVector & rList,
                                 SvStream & rOutStm )
 {
     // write all attributes
@@ -410,7 +410,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
     rOutStm.WriteCharPtr( "};" ) << endl << endl;
 
-    ByteStringList aStringList;
+    ByteStringVector aStringList;
     WriteSlotStubs( GetName().getString(), aSlotList, aStringList, rOutStm );
     for ( size_t i = 0, n = aStringList.size(); i < n; ++i )
         delete aStringList[ i ];

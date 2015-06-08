@@ -26,7 +26,7 @@
 #include <canvas/rendering/irendermodule.hxx>
 #include <canvas/rendering/isurface.hxx>
 
-#include <list>
+#include <vector>
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include "surfacerect.hxx"
@@ -52,7 +52,7 @@ namespace canvas
         void                     validate();
 
     private:
-        typedef std::list<FragmentSharedPtr> FragmentContainer_t;
+        typedef std::vector<FragmentSharedPtr> FragmentContainer_t;
 
         IRenderModuleSharedPtr  mpRenderModule;
         ISurfaceSharedPtr       mpSurface;

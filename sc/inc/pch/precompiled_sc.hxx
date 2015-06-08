@@ -529,7 +529,7 @@
 #include <iostream>
 #include <limits.h>
 #include <limits>
-#include <list>
+#include <vector>
 #include <map>
 #include <math.h>
 #include <mdds/flat_segment_tree.hpp>

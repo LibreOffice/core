@@ -1068,7 +1068,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
                 nIndex(nTempIndex), aItemSet(rItemSet) {}
         };
 
-        typedef ::std::list<ScMyRememberItem*> ScMyRememberItemList;
+        typedef ::std::vector<ScMyRememberItem*> ScMyRememberItemList;
 
 bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {

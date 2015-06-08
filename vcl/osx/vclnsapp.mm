@@ -232,8 +232,8 @@
 -(void)cycleFrameForward: (AquaSalFrame*)pCurFrame
 {
     // find current frame in list
-    std::list< AquaSalFrame* >& rFrames( GetSalData()->maFrames );
-    std::list< AquaSalFrame* >::iterator it = rFrames.begin();
+    std::vector< AquaSalFrame* >& rFrames( GetSalData()->maFrames );
+    std::vector< AquaSalFrame* >::iterator it = rFrames.begin();
     for( ; it != rFrames.end() && *it != pCurFrame; ++it )
         ;
     if( it != rFrames.end() )
@@ -272,8 +272,8 @@
     // do the same as cycleFrameForward only with a reverse iterator
 
     // find current frame in list
-    std::list< AquaSalFrame* >& rFrames( GetSalData()->maFrames );
-    std::list< AquaSalFrame* >::reverse_iterator it = rFrames.rbegin();
+    std::vector< AquaSalFrame* >& rFrames( GetSalData()->maFrames );
+    std::vector< AquaSalFrame* >::reverse_iterator it = rFrames.rbegin();
     for( ; it != rFrames.rend() && *it != pCurFrame; ++it )
         ;
     if( it != rFrames.rend() )
@@ -434,7 +434,7 @@
     YIELD_GUARD;
 
     SalData* pSalData = GetSalData();
-    std::list< AquaSalFrame* >::iterator it;
+    std::vector< AquaSalFrame* >::iterator it;
     for( it = pSalData->maFrames.begin(); it != pSalData->maFrames.end(); ++it )
     {
         (*it)->screenParametersChanged();
@@ -490,7 +490,7 @@
         NSLog(@"Apple Remote will become active - Using remote controls");
 #endif
     }
-    for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
+    for( std::vector< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
          it != pSalData->maPresentationFrames.end(); ++it )
     {
         NSWindow* pNSWindow = (*it)->getNSWindow();
@@ -518,7 +518,7 @@
         NSLog(@"Apple Remote will resign active - Releasing remote controls");
 #endif
     }
-    for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
+    for( std::vector< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
          it != pSalData->maPresentationFrames.end(); ++it )
     {
         [(*it)->getNSWindow() setLevel: NSNormalWindowLevel];

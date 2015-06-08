@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_DPSAVE_HXX
 #define INCLUDED_SC_INC_DPSAVE_HXX
 
-#include <list>
+#include <vector>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -118,7 +118,7 @@ private:
 public:
     typedef std::unordered_set<OUString, OUStringHash> MemberSetType;
     typedef std::unordered_map <OUString, ScDPSaveMember*, OUStringHash> MemberHash;
-    typedef std::list <ScDPSaveMember*> MemberList;
+    typedef std::vector <ScDPSaveMember*> MemberList;
 
 private:
     MemberHash maMemberHash;

@@ -119,7 +119,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cstddef>
-#include <list>
+#include <vector>
 #include <memory>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

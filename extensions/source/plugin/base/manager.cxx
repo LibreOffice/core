@@ -145,7 +145,7 @@ XPluginManager_Impl::~XPluginManager_Impl()
 
 XPlugin_Impl* XPluginManager_Impl::getXPluginFromNPP( NPP instance )
 {
-    ::std::list<XPlugin_Impl*>::iterator iter;
+    ::std::vector<XPlugin_Impl*>::iterator iter;
     for( iter = PluginManager::get().getPlugins().begin();
          iter != PluginManager::get().getPlugins().end(); ++iter )
     {
@@ -158,7 +158,7 @@ XPlugin_Impl* XPluginManager_Impl::getXPluginFromNPP( NPP instance )
 
 XPlugin_Impl* XPluginManager_Impl::getPluginImplementation( const Reference< ::com::sun::star::plugin::XPlugin >& plugin )
 {
-    ::std::list<XPlugin_Impl*>::iterator iter;
+    ::std::vector<XPlugin_Impl*>::iterator iter;
     for( iter = PluginManager::get().getPlugins().begin();
          iter != PluginManager::get().getPlugins().end(); ++iter )
     {

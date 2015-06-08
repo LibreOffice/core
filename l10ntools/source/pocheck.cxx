@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <map>
-#include <list>
+#include <vector>
 #include <vector>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -21,7 +21,7 @@ static void checkStyleNames(const OString& aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedStyleNames;
     std::map<OString,sal_uInt16> aLocalizedNumStyleNames;
-    std::list<PoEntry> repeatedEntries;
+    std::vector<PoEntry> repeatedEntries;
 
     OString aPoPath = OString(getenv("SRC_ROOT")) +
                       "/translations/source/" +
@@ -106,7 +106,7 @@ static void checkStyleNames(const OString& aLanguage)
         aPoInput.readEntry(aPoEntry);
         if( aPoInput.eof() )
             break;
-        for ( std::list<PoEntry>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it) {
+        for ( std::vector<PoEntry>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it) {
             if (it->getMsgId() == aPoEntry.getMsgId() && it->getGroupId() == aPoEntry.getGroupId()) {
                 bError = true;
                 break;
@@ -135,7 +135,7 @@ static void checkFunctionNames(const OString& aLanguage)
     std::map<OString,sal_uInt16> aLocalizedFunctionNames;
     std::map<OString,sal_uInt16> aLocalizedCoreFunctionNames;
 
-    std::list<PoEntry> repeatedEntries;
+    std::vector<PoEntry> repeatedEntries;
 
     OString aPoPaths[4];
     OUString aPoPathURL;
@@ -324,7 +324,7 @@ static void checkFunctionNames(const OString& aLanguage)
             aPoInput.readEntry(aPoEntry);
             if( aPoInput.eof() )
                 break;
-            for ( std::list<PoEntry>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it)
+            for ( std::vector<PoEntry>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it)
             {
                 if (it->getMsgId() == aPoEntry.getMsgId() && it->getGroupId() == aPoEntry.getGroupId())
                 {

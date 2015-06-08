@@ -711,7 +711,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
     if( pClpDoc->IsColumnSelection() && !IsTableMode() )
     {
         // Creation of the list of insert positions
-        std::list< Insertion > aCopyList;
+        std::vector< Insertion > aCopyList;
         // The number of text portions of the rectangular selection
         const sal_uInt32 nSelCount = aCpyPam.GetPoint()->nNode.GetIndex()
                        - aCpyPam.GetMark()->nNode.GetIndex();
@@ -781,8 +781,8 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                 aIdx = aClpIdx; // Start of clipboard content
             }
         }
-        std::list< Insertion >::const_iterator pCurr = aCopyList.begin();
-        std::list< Insertion >::const_iterator pEnd = aCopyList.end();
+        std::vector< Insertion >::const_iterator pCurr = aCopyList.begin();
+        std::vector< Insertion >::const_iterator pEnd = aCopyList.end();
         while( pCurr != pEnd )
         {
             SwPosition& rInsPos = *pCurr->second;

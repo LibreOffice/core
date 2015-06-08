@@ -54,8 +54,8 @@ SalFrame *IosSalInstance::getFocusFrame() const
 {
     SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
     if (!pFocus) {
-        const std::list< SalFrame* >& rFrames( getFrames() );
-        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+        const std::vector< SalFrame* >& rFrames( getFrames() );
+        for( std::vector< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
             SvpSalFrame *pFrame = const_cast<SvpSalFrame*>(static_cast<const SvpSalFrame*>(*it));
             if( pFrame->IsVisible() )
@@ -108,7 +108,7 @@ public:
     virtual ~IosSalSystem() {}
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::list< OUString >& rButtons,
+                                  const std::vector< OUString >& rButtons,
                                   int nDefButton );
 };
 
@@ -224,7 +224,7 @@ void DestroySalInstance( SalInstance *pInst )
 
 int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
                                     const OUString& rMessage,
-                                    const std::list< OUString >& rButtons,
+                                    const std::vector< OUString >& rButtons,
                                     int nDefButton )
 {
     (void)rButtons;

@@ -113,7 +113,7 @@
 #include <libxml/xmlwriter.h>
 #include <limits.h>
 #include <limits>
-#include <list>
+#include <vector>
 #include <map>
 #include <math.h>
 #include <mdds/multi_type_matrix.hpp>

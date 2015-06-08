@@ -345,7 +345,7 @@
 #include <functional>
 #include <i18nlangtag/mslangid.hxx>
 #include <limits>
-#include <list>
+#include <vector>
 #include <map>
 #include <math.h>
 #include <memory>

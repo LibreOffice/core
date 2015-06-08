@@ -1112,7 +1112,7 @@ void SwTextNode::Update(
 
         // at-char anchored flys shouldn't be moved, either.
 #if OSL_DEBUG_LEVEL > 0
-        std::list<SwFrameFormat*> checkFormats;
+        std::vector<SwFrameFormat*> checkFormats;
         const SwFrameFormats& rFormats = *GetDoc()->GetSpzFrameFormats();
         for (SwFrameFormats::const_iterator pFormat = rFormats.begin(); pFormat != rFormats.end(); ++pFormat)
         {
@@ -1148,7 +1148,7 @@ void SwTextNode::Update(
                     // The anchor position is exactly our insert position.
                     rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
 #if OSL_DEBUG_LEVEL > 0
-                    std::list<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
+                    std::vector<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
                     assert( checkPos != checkFormats.end());
                     checkFormats.erase( checkPos );
 #endif

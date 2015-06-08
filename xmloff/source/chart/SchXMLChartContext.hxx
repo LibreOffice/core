@@ -28,7 +28,7 @@
 
 #include "transporttypes.hxx"
 
-#include <list>
+#include <vector>
 
 class SchXMLImportHelper;
 
@@ -70,8 +70,8 @@ struct SeriesDefaultsAndStyles
     ::com::sun::star::uno::Any    maLinesOnProperty;
 
     //styles for series and datapoints
-    ::std::list< DataRowPointStyle > maSeriesStyleList;
-    ::std::list< RegressionStyle >   maRegressionStyleList;
+    ::std::vector< DataRowPointStyle > maSeriesStyleList;
+    ::std::vector< RegressionStyle >   maRegressionStyleList;
 };
 
 class SchXMLChartContext : public SvXMLImportContext

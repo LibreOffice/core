@@ -26,7 +26,7 @@
 
 #include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase4.hxx>
-#include <list>
+#include <vector>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -58,7 +58,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>               m_aBatchList;
+            ::std::vector< ::rtl::OUString>               m_aBatchList;
 
             ::rtl::Reference<Connection>                m_pConnection;
 

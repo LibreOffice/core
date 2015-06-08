@@ -256,7 +256,7 @@ createSpoolDir ()
 
 PrinterJob::~PrinterJob ()
 {
-    std::list< osl::File* >::iterator pPage;
+    std::vector< osl::File* >::iterator pPage;
     for (pPage = maPageList.begin(); pPage != maPageList.end(); ++pPage)
     {
         //(*pPage)->remove();
@@ -502,8 +502,8 @@ PrinterJob::EndJob()
     mpJobHeader->close();
 
     bool bSuccess = true;
-    std::list< osl::File* >::iterator pPageBody;
-    std::list< osl::File* >::iterator pPageHead;
+    std::vector< osl::File* >::iterator pPageBody;
+    std::vector< osl::File* >::iterator pPageHead;
     for (pPageBody  = maPageList.begin(), pPageHead  = maHeaderList.begin();
          pPageBody != maPageList.end() && pPageHead != maHeaderList.end();
          ++pPageBody, ++pPageHead)
@@ -980,12 +980,12 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     WritePS (pFile, "%%BeginSetup\n%\n");
 
     // download fonts
-    std::list< OString > aFonts;
+    std::vector< OString > aFonts;
     m_pGraphics->writeResources( pFile, aFonts );
 
     if( !aFonts.empty() )
     {
-        std::list< OString >::const_iterator it = aFonts.begin();
+        std::vector< OString >::const_iterator it = aFonts.begin();
         OStringBuffer aLine( 256 );
         aLine.append( "%%DocumentSuppliedResources: font " );
         aLine.append( *it );

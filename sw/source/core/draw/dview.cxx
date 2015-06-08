@@ -343,7 +343,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                     const std::vector<SdrObject*>& _rMovedChildObjs ) const
 {
     // determine 'repeated' objects of already moved object <_rMovedAnchoredObj>
-    std::list<SwAnchoredObject*> aAnchoredObjs;
+    std::vector<SwAnchoredObject*> aAnchoredObjs;
     {
         const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
         assert(pContact && "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash.");

@@ -165,7 +165,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <iostream>
 #include <iterator>
-#include <list>
+#include <vector>
 #include <map>
 #include <math.h>
 #include <oox/drawingml/drawingmltypes.hxx>

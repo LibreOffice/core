@@ -22,7 +22,7 @@
 
 #include "customcontrol.hxx"
 
-#include <list>
+#include <vector>
 
 
 // A container for custom controls
@@ -44,7 +44,7 @@ public:
     virtual void SAL_CALL RemoveAllControls();
 
 private:
-    typedef std::list<CCustomControl*> ControlContainer_t;
+    typedef std::vector<CCustomControl*> ControlContainer_t;
 
     ControlContainer_t  m_ControlContainer;
 };

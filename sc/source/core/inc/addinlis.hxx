@@ -38,7 +38,7 @@ private:
     com::sun::star::uno::Any aResult;
     ScAddInDocs* pDocs; // documents where this is used
 
-    static ::std::list<ScAddInListener*> aAllListeners;
+    static ::std::vector<ScAddInListener*> aAllListeners;
 
     // always allocated via CreateListener
     ScAddInListener( com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVR,

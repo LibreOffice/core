@@ -28,7 +28,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_PLCOM_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_PLCOM_HXX
 
-#include <list>
+#include <vector>
 
 class XPlugin_Impl;
 
@@ -37,7 +37,7 @@ class PluginComm
 protected:
     int                         m_nRefCount;
     OString                     m_aLibName;
-    std::list< OUString >       m_aFilesToDelete;
+    std::vector< OUString >       m_aFilesToDelete;
 public:
     PluginComm( const OString& rLibName, bool bReusable = true );
     virtual ~PluginComm();

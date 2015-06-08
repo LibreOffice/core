@@ -1005,7 +1005,7 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
 {
     (void) pTable;
 #if OSL_DEBUG_LEVEL > 0
-    std::list<SwFrameFormat*> checkFormats;
+    std::vector<SwFrameFormat*> checkFormats;
     for ( size_t i = 0; i < pTable->size(); ++i )
     {
         SwFrameFormat *pFormat = (*pTable)[i];
@@ -1029,7 +1029,7 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
              (rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex) )
         {
 #if OSL_DEBUG_LEVEL > 0
-            std::list<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
+            std::vector<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
             assert( checkPos != checkFormats.end());
             checkFormats.erase( checkPos );
 #endif

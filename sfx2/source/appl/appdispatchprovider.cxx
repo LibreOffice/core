@@ -181,7 +181,7 @@ throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    std::list< sal_Int16 > aGroupList;
+    std::vector< sal_Int16 > aGroupList;
     SfxSlotPool* pAppSlotPool = &SfxGetpApp()->GetAppSlotPool_Impl();
 
     const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
@@ -204,7 +204,7 @@ throw (uno::RuntimeException, std::exception)
     }
 
     uno::Sequence< sal_Int16 > aSeq =
-        comphelper::containerToSequence< sal_Int16, std::list< sal_Int16 > >( aGroupList );
+        comphelper::containerToSequence< sal_Int16, std::vector< sal_Int16 > >( aGroupList );
 
     return aSeq;
 }
@@ -212,7 +212,7 @@ throw (uno::RuntimeException, std::exception)
 Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
 throw (uno::RuntimeException, std::exception)
 {
-    std::list< frame::DispatchInformation > aCmdList;
+    std::vector< frame::DispatchInformation > aCmdList;
 
     SolarMutexGuard aGuard;
     SfxSlotPool* pAppSlotPool = &SfxGetpApp()->GetAppSlotPool_Impl();
@@ -251,7 +251,7 @@ throw (uno::RuntimeException, std::exception)
     }
 
     uno::Sequence< frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< frame::DispatchInformation, std::list< frame::DispatchInformation > >( aCmdList );
+        comphelper::containerToSequence< frame::DispatchInformation, std::vector< frame::DispatchInformation > >( aCmdList );
 
     return aSeq;
 }

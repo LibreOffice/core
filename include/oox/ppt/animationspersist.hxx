@@ -21,7 +21,7 @@
 #ifndef INCLUDED_OOX_PPT_ANIMATIONSPERSIST_HXX
 #define INCLUDED_OOX_PPT_ANIMATIONSPERSIST_HXX
 
-#include <list>
+#include <vector>
 #include <memory>
 #include <boost/array.hpp>
 
@@ -88,7 +88,7 @@ namespace oox { namespace ppt {
 
     struct AnimationCondition;
 
-    typedef std::list< AnimationCondition > AnimationConditionList;
+    typedef std::vector< AnimationCondition > AnimationConditionList;
 
     /** data for CT_TLTimeCondition */
     struct AnimationCondition
@@ -116,7 +116,7 @@ namespace oox { namespace ppt {
         ::com::sun::star::uno::Any maValue;
     };
 
-    typedef ::std::list< TimeAnimationValue > TimeAnimationValueList;
+    typedef ::std::vector< TimeAnimationValue > TimeAnimationValueList;
 
 } }
 

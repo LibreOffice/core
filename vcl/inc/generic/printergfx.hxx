@@ -202,7 +202,7 @@ private:
        glyph in one of the subfonts, the mapping from unicode to the
        glyph has to be remembered */
 
-    std::list< sal_Int32 > maPS1Font;
+    std::vector< sal_Int32 > maPS1Font;
     std::list< GlyphSet > maPS3Font;
 
     sal_Int32       mnFontID;
@@ -294,7 +294,7 @@ public:
                                     sal_Int16 nLen, const sal_Int32* pDeltaArray);
 
     void            OnEndJob ();
-    void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
+    void            writeResources( osl::File* pFile, std::vector< OString >& rSuppliedFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
     bool            drawVerticalizedText (const Point& rPoint,

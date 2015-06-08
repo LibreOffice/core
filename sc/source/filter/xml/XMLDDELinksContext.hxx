@@ -22,7 +22,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
-#include <list>
+#include <vector>
 
 class ScXMLDDELinksContext : public SvXMLImportContext
 {
@@ -52,7 +52,7 @@ struct ScDDELinkCell
     bool bEmpty;
 };
 
-typedef std::list<ScDDELinkCell> ScDDELinkCells;
+typedef std::vector<ScDDELinkCell> ScDDELinkCells;
 
 class ScXMLDDELinkContext : public SvXMLImportContext
 {

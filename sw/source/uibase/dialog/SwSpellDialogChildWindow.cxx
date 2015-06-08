@@ -92,7 +92,7 @@ struct SpellState
     ESelection          m_aESelection;
 
     // iterating over draw text objects
-    std::list<SdrTextObj*> m_aTextObjects;
+    std::vector<SdrTextObj*> m_aTextObjects;
     bool                m_bTextObjectsCollected;
 
     SpellState() :
@@ -747,20 +747,21 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     if(!m_pSpellState->m_bTextObjectsCollected )
     {
         m_pSpellState->m_bTextObjectsCollected = true;
-        std::list<SdrTextObj*> aTextObjs;
+        std::vector<SdrTextObj*> aTextObjs;
         SwDrawContact::GetTextObjectsFromFormat( aTextObjs, pDoc );
         if(pCurrentTextObj)
         {
-            m_pSpellState->m_aTextObjects.remove(pCurrentTextObj);
+            auto & rTO = m_pSpellState->m_aTextObjects;
+            rTO.erase( std::remove(rTO.begin(), rTO.end(), pCurrentTextObj), rTO.end() );
             m_pSpellState->m_aTextObjects.push_back(pCurrentTextObj);
-                                }
-                            }
+        }
+    }
     if(m_pSpellState->m_aTextObjects.size())
     {
         Reference< XSpellChecker1 >  xSpell( GetSpellChecker() );
         while(!bNextDoc && m_pSpellState->m_aTextObjects.size())
         {
-            std::list<SdrTextObj*>::iterator aStart = m_pSpellState->m_aTextObjects.begin();
+            std::vector<SdrTextObj*>::iterator aStart = m_pSpellState->m_aTextObjects.begin();
             SdrTextObj* pTextObj = *aStart;
             if(m_pSpellState->m_pStartDrawing == pTextObj)
                 m_pSpellState->m_bRestartDrawing = true;

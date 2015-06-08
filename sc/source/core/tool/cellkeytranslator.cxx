@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
 using ::com::sun::star::uno::Sequence;
-using ::std::list;
+using ::std::vector;
 
 using namespace ::com::sun::star;
 
@@ -97,9 +97,8 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
     bool bOpCodeMatched = false;
 
-    list<ScCellKeyword>::const_iterator itrListEnd = itr->second.end();
-    list<ScCellKeyword>::const_iterator itrList = itr->second.begin();
-    for ( ; itrList != itrListEnd; ++itrList )
+    vector<ScCellKeyword>::const_iterator itrList = itr->second.begin();
+    for ( ; itrList != itr->second.end(); ++itrList )
     {
         if ( eOpCode != ocNone && pLocale )
         {
@@ -212,7 +211,7 @@ void ScCellKeywordTranslator::addToMap(const OUString& rKey, const sal_Char* pNa
     if ( itr == itrEnd )
     {
         // New keyword.
-        list<ScCellKeyword> aList;
+        vector<ScCellKeyword> aList;
         aList.push_back(aKeyItem);
         maStringNameMap.insert( ScCellKeywordHashMap::value_type(rKey, aList) );
     }

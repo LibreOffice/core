@@ -66,7 +66,7 @@
 #include <unotools/confignode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <list>
+#include <vector>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
@@ -98,7 +98,7 @@ namespace dbaccess
         {
         private:
             Reference< XDesktop2 >               m_xDesktop;
-            ::std::list< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
+            ::std::vector< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
 
         public:
             DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext);
@@ -107,7 +107,10 @@ namespace dbaccess
             {
                 m_aDatabaseDocuments.push_back(&_rModelImpl);
             }
-            inline void remove(const ODatabaseModelImpl& _rModelImpl) { m_aDatabaseDocuments.remove(&_rModelImpl); }
+            inline void remove(const ODatabaseModelImpl& _rModelImpl)
+            {
+                m_aDatabaseDocuments.erase( std::remove(m_aDatabaseDocuments.begin(), m_aDatabaseDocuments.end(), &_rModelImpl), m_aDatabaseDocuments.end() );
+            }
 
         private:
             // XTerminateListener
@@ -153,7 +156,7 @@ namespace dbaccess
 
         void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
         {
-            ::std::list< const ODatabaseModelImpl* > aCopy(m_aDatabaseDocuments);
+            ::std::vector< const ODatabaseModelImpl* > aCopy(m_aDatabaseDocuments);
             ::std::for_each(aCopy.begin(),aCopy.end(),TerminateFunctor());
         }
 

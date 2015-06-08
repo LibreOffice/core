@@ -2186,7 +2186,7 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
 
 bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
 {
-    std::list<VclPtr<vcl::Window> > & rlRefWindow = m_mapRefWindow[nSlotId];
+    std::vector<VclPtr<vcl::Window> > & rlRefWindow = m_mapRefWindow[nSlotId];
 
     if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
     {
@@ -2204,7 +2204,7 @@ bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
     if( iSlot == m_mapRefWindow.end() )
         return false;
 
-    std::list<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
+    std::vector<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
 
     auto i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
 
@@ -2229,7 +2229,7 @@ vcl::Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAn
     if( iSlot == m_mapRefWindow.end() )
         return NULL;
 
-    std::list<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
+    std::vector<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
 
     while( vcl::Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
 

@@ -26,7 +26,7 @@
 #include "detdata.hxx"
 #include "xmlimprt.hxx"
 
-#include <list>
+#include <vector>
 
 struct ScMyImpDetectiveObj
 {
@@ -54,7 +54,7 @@ struct ScMyImpDetectiveOp
     bool operator<(const ScMyImpDetectiveOp& rDetOp) const;
 };
 
-typedef ::std::list< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
+typedef ::std::vector< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
 
 class ScMyImpDetectiveOpArray
 {

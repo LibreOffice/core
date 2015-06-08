@@ -55,14 +55,14 @@
 
 #include <utility>
 #include <vector>
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-typedef std::list< uno::Reference< XAccessible > > ScXAccList;
+typedef std::vector< uno::Reference< XAccessible > > ScXAccList;
 
 struct ScAccNote
 {

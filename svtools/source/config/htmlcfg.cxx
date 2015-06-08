@@ -26,7 +26,7 @@
 #include <tools/link.hxx>
 #include <sal/macros.h>
 #include <rtl/instance.hxx>
-#include <list>
+#include <vector>
 
 
 #define HTMLCFG_UNKNOWN_TAGS            0x01
@@ -45,7 +45,7 @@ using namespace com::sun::star::uno;
 
 struct HtmlOptions_Impl
 {
-    ::std::list<Link<>> aList;
+    ::std::vector<Link<>> aList;
     sal_Int32   nFlags;
     sal_Int32   nExportMode;
     sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
@@ -244,7 +244,7 @@ void    SvxHtmlOptions::ImplCommit()
 
 void SvxHtmlOptions::CallListeners()
 {
-    for ( ::std::list<Link<>>::const_iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
+    for ( ::std::vector<Link<>>::const_iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
         iter->Call( this );
 }
 

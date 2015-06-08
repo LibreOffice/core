@@ -78,7 +78,7 @@ struct FastPrintFontInfo
     // font attributes
     OUString                       m_aFamilyName;
     OUString                       m_aStyleName;
-    std::list< OUString >          m_aAliases;
+    std::vector< OUString >        m_aAliases;
     FontFamily                     m_eFamilyStyle;
     FontItalic                     m_eItalic;
     FontWidth                      m_eWidth;
@@ -180,7 +180,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
         // font attributes
         int                                         m_nFamilyName;  // atom
-        std::list< int >                            m_aAliases;
+        std::vector< int >                            m_aAliases;
         int                                         m_nPSName;      // atom
         OUString                               m_aStyleName;
         FontItalic                                  m_eItalic;
@@ -244,34 +244,34 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     };
 
     fontID                                      m_nNextFontID;
-    std::unordered_map< fontID, PrintFont* >       m_aFonts;
-    std::unordered_map< int, FontFamily >        m_aFamilyTypes;
-    std::list< OUString >              m_aPrinterDrivers;
-    std::list< OString >               m_aFontDirectories;
-    std::list< int >                            m_aPrivateFontDirectories;
-    utl::MultiAtomProvider*                   m_pAtoms;
+    std::unordered_map< fontID, PrintFont* >    m_aFonts;
+    std::unordered_map< int, FontFamily >       m_aFamilyTypes;
+    std::vector< OUString >                     m_aPrinterDrivers;
+    std::vector< OString >                      m_aFontDirectories;
+    std::vector< int >                          m_aPrivateFontDirectories;
+    utl::MultiAtomProvider*                     m_pAtoms;
     // for speeding up findFontFileID
     std::unordered_map< OString, std::set< fontID >, OStringHash >
                                                 m_aFontFileToFontID;
 
     std::unordered_map< OString, int, OStringHash >
-    m_aDirToAtom;
-    std::unordered_map< int, OString >     m_aAtomToDir;
+                                               m_aDirToAtom;
+    std::unordered_map< int, OString >         m_aAtomToDir;
     int                                        m_nNextDirAtom;
 
     std::unordered_multimap< OString, sal_Unicode, OStringHash >
-        m_aAdobenameToUnicode;
+                                               m_aAdobenameToUnicode;
     std::unordered_multimap< sal_Unicode, OString >
-        m_aUnicodeToAdobename;
+                                               m_aUnicodeToAdobename;
     std::unordered_multimap< sal_Unicode, sal_uInt8 > m_aUnicodeToAdobecode;
     std::unordered_multimap< sal_uInt8, sal_Unicode > m_aAdobecodeToUnicode;
 
-    mutable FontCache*                                                        m_pFontCache;
+    mutable FontCache*                         m_pFontCache;
 
     OString getAfmFile( PrintFont* pFont ) const;
     OString getFontFile( PrintFont* pFont ) const;
 
-    bool analyzeFontFile( int nDirID, const OString& rFileName, std::list< PrintFont* >& rNewFonts, const char *pFormat=NULL ) const;
+    bool analyzeFontFile( int nDirID, const OString& rFileName, std::vector< PrintFont* >& rNewFonts, const char *pFormat=NULL ) const;
     static OUString convertTrueTypeName( void* pNameRecord ); // actually a NameRecord* formt font subsetting code
     static void analyzeTrueTypeFamilyName( void* pTTFont, std::list< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
@@ -344,7 +344,7 @@ public:
     int getFontCount() const { return m_aFonts.size(); }
 
     // returns the ids of all managed fonts.
-    void getFontList( std::list< fontID >& rFontIDs );
+    void getFontList( std::vector< fontID >& rFontIDs );
 
     // get font info for a specific font
     bool getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const;
@@ -451,7 +451,7 @@ public:
     bool isFontDownloadingAllowedForPrinting( fontID nFont ) const;
 
     // helper for type 1 fonts
-    std::list< OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;
+    std::vector< OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;
 
     std::pair< std::unordered_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
                std::unordered_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
@@ -459,7 +459,7 @@ public:
     {
         return m_aUnicodeToAdobecode.equal_range( aChar );
     }
-    std::list< sal_Unicode >  getUnicodeFromAdobeName( const OString& rName ) const;
+    std::vector< sal_Unicode >  getUnicodeFromAdobeName( const OString& rName ) const;
     std::pair< std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
                  std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
     getUnicodeFromAdobeCode( sal_uInt8 aChar ) const

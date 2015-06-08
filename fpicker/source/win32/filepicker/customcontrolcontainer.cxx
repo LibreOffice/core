@@ -114,7 +114,7 @@ void SAL_CALL CCustomControlContainer::RemoveControl(CCustomControl* aCustomCont
     if (iter != iter_end)
     {
         delete *iter;
-        m_ControlContainer.remove(aCustomControl);
+        m_ControlContainer.erase(std::remove(m_ControlContainer.begin(), m_ControlContainer.end(), aCustomControl), m_ControlContainer.end());
     }
 }
 

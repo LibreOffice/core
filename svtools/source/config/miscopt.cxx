@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <list>
+#include <vector>
 
 using namespace ::utl                   ;
 using namespace ::osl                   ;
@@ -70,7 +70,7 @@ using namespace ::com::sun::star;
 class SvtMiscOptions_Impl : public ConfigItem
 {
     private:
-    ::std::list<Link<>> aList;
+    ::std::vector<Link<>> aList;
     bool        m_bUseSystemFileDialog;
     bool        m_bIsUseSystemFileDialogRO;
     bool        m_bPluginsEnabled;
@@ -478,7 +478,7 @@ void SvtMiscOptions_Impl::AddListenerLink( const Link<>& rLink )
 
 void SvtMiscOptions_Impl::RemoveListenerLink( const Link<>& rLink )
 {
-    for ( ::std::list<Link<>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::vector<Link<>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
         if ( *iter == rLink )
         {
@@ -490,7 +490,7 @@ void SvtMiscOptions_Impl::RemoveListenerLink( const Link<>& rLink )
 
 void SvtMiscOptions_Impl::CallListeners()
 {
-    for ( ::std::list<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::vector<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
         iter->Call( this );
 }
 

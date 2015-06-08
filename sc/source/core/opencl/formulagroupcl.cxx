@@ -81,7 +81,7 @@ const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 #endif
 #endif
 
-#include <list>
+#include <vector>
 #include <map>
 #include <iostream>
 #include <sstream>
@@ -1196,7 +1196,7 @@ class SymbolTable
 public:
     typedef std::map<const formula::FormulaToken*, DynamicKernelArgumentRef> ArgumentMap;
     // This avoids instability caused by using pointer as the key type
-    typedef std::list<DynamicKernelArgumentRef> ArgumentList;
+    typedef std::vector<DynamicKernelArgumentRef> ArgumentList;
     SymbolTable() : mCurId(0) { }
     template<class T>
     const DynamicKernelArgument* DeclRefArg( const ScCalcConfig& config, FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen, int nResultSize );
@@ -3990,7 +3990,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
 {
     // Constructing "AST"
     FormulaTokenIterator aCode(rCode);
-    std::list<FormulaToken*> aTokenList;
+    std::vector<FormulaToken*> aTokenList;
     std::map<FormulaToken*, FormulaTreeNodeRef> aHashMap;
     FormulaToken*  pCur;
     while ((pCur = const_cast<FormulaToken*>(aCode.Next())) != NULL)

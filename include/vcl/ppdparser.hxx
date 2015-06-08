@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VCL_PPDPARSER_HXX
 #define INCLUDED_VCL_PPDPARSER_HXX
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include <vector>
 
@@ -143,7 +143,7 @@ public:
 private:
     hash_type                                   m_aKeys;
     value_type                                  m_aOrderedKeys;
-    ::std::list< PPDConstraint >                m_aConstraints;
+    ::std::vector< PPDConstraint >                m_aConstraints;
 
     // some identifying fields
     OUString                                    m_aPrinterName;
@@ -186,7 +186,7 @@ private:
     void parseOrderDependency(const OString& rLine);
     void parseOpenUI(const OString& rLine);
     void parseConstraint(const OString& rLine);
-    void parse( std::list< OString >& rLines );
+    void parse( std::vector< OString >& rLines );
 
     OUString handleTranslation(const OString& i_rString, bool i_bIsGlobalized);
 
@@ -204,7 +204,7 @@ public:
     int             getKeys() const { return m_aKeys.size(); }
     bool            hasKey( const PPDKey* ) const;
 
-    const ::std::list< PPDConstraint >& getConstraints() const { return m_aConstraints; }
+    const ::std::vector< PPDConstraint >& getConstraints() const { return m_aConstraints; }
 
     const OUString& getPrinterName() const
     { return m_aPrinterName.isEmpty() ? m_aNickName : m_aPrinterName; }

@@ -58,7 +58,7 @@
 #include <shellres.hxx>
 #include <viewsh.hxx>
 #include <redline.hxx>
-#include <list>
+#include <vector>
 #include <calbck.hxx>
 
 #ifdef DBG_UTIL
@@ -1033,7 +1033,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
 }
 
 typedef std::pair<sal_uInt16, sal_uInt16> ColChange;
-typedef std::list< ColChange > ChangeList;
+typedef std::vector< ColChange > ChangeList;
 
 static void lcl_AdjustWidthsInLine( SwTableLine* pLine, ChangeList& rOldNew,
     Parm& rParm, sal_uInt16 nColFuzzy )
@@ -1084,7 +1084,7 @@ static void lcl_AdjustWidthsInLine( SwTableLine* pLine, ChangeList& rOldNew,
     }
 }
 
-static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rChanges,
+static void lcl_CalcNewWidths( std::vector<sal_uInt16> &rSpanPos, ChangeList& rChanges,
     SwTableLine* pLine, long nWish, long nWidth, bool bTop )
 {
     if( rChanges.empty() )
@@ -1097,11 +1097,11 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
         rChanges.clear();
         return;
     }
-    std::list<sal_uInt16> aNewSpanPos;
+    std::vector<sal_uInt16> aNewSpanPos;
     ChangeList aNewChanges;
     ChangeList::iterator pCurr = rChanges.begin();
     aNewChanges.push_back( *pCurr ); // Nullposition
-    std::list<sal_uInt16>::iterator pSpan = rSpanPos.begin();
+    std::vector<sal_uInt16>::iterator pSpan = rSpanPos.begin();
     sal_uInt16 nCurr = 0;
     SwTwips nOrgSum = 0;
     bool bRowSpan = false;
@@ -1209,7 +1209,7 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
     while( pCopy != aNewChanges.end() )
         rChanges.push_back( *pCopy++ );
     rSpanPos.clear();
-    std::list<sal_uInt16>::iterator pSpCopy = aNewSpanPos.begin();
+    std::vector<sal_uInt16>::iterator pSpCopy = aNewSpanPos.begin();
     while( pSpCopy != aNewSpanPos.end() )
         rSpanPos.push_back( *pSpCopy++ );
 }
@@ -1262,8 +1262,8 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             return;
 
         ColChange aChg( 0, 0 );
-        aOldNew.push_front( aChg );
-        std::list<sal_uInt16> aRowSpanPos;
+        aOldNew.insert( aOldNew.begin(), aChg );
+        std::vector<sal_uInt16> aRowSpanPos;
         if( nCurr )
         {
             ChangeList aCopy;

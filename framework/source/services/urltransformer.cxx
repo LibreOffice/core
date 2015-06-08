@@ -160,7 +160,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
         }
         else
         {
-            // Minmal support for unknown protocols. This is mandatory to support the "Protocol Handlers" implemented
+            // Minimal support for unknown protocols. This is mandatory to support the "Protocol Handlers" implemented
             // in framework!
             aURL.Protocol   = aProtocol;
             aURL.Main       = aURL.Complete;

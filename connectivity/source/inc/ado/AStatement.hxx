@@ -32,7 +32,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include "ado/AConnection.hxx"
-#include <list>
+#include <vector>
 #include "ado/Awrapado.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -62,7 +62,7 @@ namespace connectivity
             ::com::sun::star::sdbc::SQLWarning          m_aLastWarning;
 
         protected:
-            ::std::list< OUString>               m_aBatchList;
+            ::std::vector< OUString>               m_aBatchList;
 
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
                                                                         //  for this Statement

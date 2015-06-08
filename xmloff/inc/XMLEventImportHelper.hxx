@@ -24,7 +24,7 @@
 #include <xmloff/xmlevent.hxx>
 
 #include <map>
-#include <list>
+#include <vector>
 
 
 namespace com { namespace sun { namespace star {
@@ -36,7 +36,7 @@ struct XMLEventNameTranslation;
 
 typedef ::std::map< OUString, XMLEventContextFactory* > FactoryMap;
 typedef ::std::map< XMLEventName, OUString > NameMap;
-typedef ::std::list< NameMap* > NameMapList;
+typedef ::std::vector< NameMap* > NameMapList;
 
 
 /**

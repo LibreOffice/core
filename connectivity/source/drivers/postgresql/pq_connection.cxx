@@ -34,7 +34,7 @@
  *
  ************************************************************************/
 
-#include <list>
+#include <vector>
 #include <time.h>
 #include <string.h>
 
@@ -212,9 +212,9 @@ Connection::~Connection()
         m_settings.logFile = 0;
     }
 }
-typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XCloseable > > CloseableList;
+typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XCloseable > > CloseableList;
 
-typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > DisposeableList;
+typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > DisposeableList;
 
 void Connection::close() throw ( SQLException, RuntimeException, std::exception )
 {

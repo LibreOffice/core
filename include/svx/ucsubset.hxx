@@ -26,7 +26,7 @@
 #include <vcl/metric.hxx>
 #include "tools/rc.hxx"
 
-#include <list>
+#include <vector>
 
 class FontCharMap;
 
@@ -58,7 +58,7 @@ inline bool operator<(const Subset &rLHS, const Subset &rRHS)
     return rLHS.GetRangeMin() < rRHS.GetRangeMin();
 }
 
-typedef ::std::list<Subset> SubsetList;
+typedef ::std::vector<Subset> SubsetList;
 
 class SVX_DLLPUBLIC SubsetMap : private Resource
 {

@@ -590,12 +590,12 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
     static sal_Bool bHavePlugins = sal_False;
     if( ! bHavePlugins )
     {
-        std::list<PluginDescription*> aPlugins;
+        std::vector<PluginDescription*> aPlugins;
 
         static const char* pNPXPluginPath = getenv( "MOZ_PLUGIN_PATH" );
 
         // get directories
-        std::list< rtl::OUString > aPaths;
+        std::vector< rtl::OUString > aPaths;
         if( pNPXPluginPath )
         {
             CFMutableStringRef xMutableString = CFStringCreateMutable( NULL, 0 );
@@ -623,7 +623,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             aPaths.push_back( getURLFromPath( rPaths.getConstArray()[i] ) );
         }
 
-        for( std::list< rtl::OUString >::const_iterator it = aPaths.begin(); it != aPaths.end(); ++it )
+        for( std::vector< rtl::OUString >::const_iterator it = aPaths.begin(); it != aPaths.end(); ++it )
         {
             rtl::OUString aPath( *it );
 #if OSL_DEBUG_LEVEL > 1

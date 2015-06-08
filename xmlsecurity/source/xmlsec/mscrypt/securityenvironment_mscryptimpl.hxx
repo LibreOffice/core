@@ -44,7 +44,7 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <list>
+#include <vector>
 #include "xmlsecurity/xmlsec-wrapper.h"
 
 #include <sal/types.h>
@@ -76,9 +76,9 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
         sal_Bool                            m_bEnableDefault ;
 
         //External keys
-        std::list< HCRYPTKEY >              m_tSymKeyList ;
-        std::list< HCRYPTKEY >              m_tPubKeyList ;
-        std::list< HCRYPTKEY >              m_tPriKeyList ;
+        std::vector< HCRYPTKEY >              m_tSymKeyList ;
+        std::vector< HCRYPTKEY >              m_tPubKeyList ;
+        std::vector< HCRYPTKEY >              m_tPriKeyList ;
 
         //Service manager
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;

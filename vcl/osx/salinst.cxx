@@ -89,7 +89,7 @@ class AquaDelayedSettingsChanged : public Idle
 
         if( mbInvalidate )
         {
-            for( std::list< AquaSalFrame* >::iterator it = pSalData->maFrames.begin();
+            for( std::vector< AquaSalFrame* >::iterator it = pSalData->maFrames.begin();
                 it != pSalData->maFrames.end(); ++it )
             {
                 if( (*it)->mbShown )
@@ -482,7 +482,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         SalData* pSalData = GetSalData();
         bool bIsFullScreenMode = false;
 
-        std::list<AquaSalFrame*>::iterator it = pSalData->maFrames.begin();
+        std::vector<AquaSalFrame*>::iterator it = pSalData->maFrames.begin();
         while( it != pSalData->maFrames.end() )
         {
             if ( (*it) && (*it)->mbFullScreen )
@@ -662,8 +662,8 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         mbWaitingYield = bOldWaitingYield;
 
         // collect update rectangles
-        const std::list< AquaSalFrame* > rFrames( GetSalData()->maFrames );
-        for( std::list< AquaSalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+        const std::vector< AquaSalFrame* > rFrames( GetSalData()->maFrames );
+        for( std::vector< AquaSalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
             if( (*it)->mbShown && ! (*it)->maInvalidRect.IsEmpty() )
             {

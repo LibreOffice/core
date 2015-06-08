@@ -29,6 +29,7 @@
 #include <plugin/model.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <algorithm>
 
 using namespace com::sun::star::uno;
 
@@ -166,7 +167,7 @@ void PluginModel::addEventListener( const Reference< ::com::sun::star::lang::XEv
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
 void PluginModel::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw(std::exception)
 {
-    m_aDisposeListeners.remove( l );
+    m_aDisposeListeners.erase( std::remove(m_aDisposeListeners.begin(), m_aDisposeListeners.end(), l), m_aDisposeListeners.end() );
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
@@ -175,8 +176,8 @@ void PluginModel::dispose() throw(std::exception)
     // send disposing events
     ::com::sun::star::lang::EventObject aEvt;
     aEvt.Source = static_cast<cppu::OWeakObject*>(this);
-    ::std::list< Reference< ::com::sun::star::lang::XEventListener > > aLocalListeners = m_aDisposeListeners;
-    for( ::std::list< Reference< ::com::sun::star::lang::XEventListener > >::iterator it = aLocalListeners.begin();
+    ::std::vector< Reference< ::com::sun::star::lang::XEventListener > > aLocalListeners = m_aDisposeListeners;
+    for( ::std::vector< Reference< ::com::sun::star::lang::XEventListener > >::iterator it = aLocalListeners.begin();
          it != aLocalListeners.end(); ++it )
         (*it)->disposing( aEvt );
 

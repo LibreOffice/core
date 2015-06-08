@@ -29,7 +29,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <list>
+#include <vector>
 #include <vector>
 
 class Menu;
@@ -264,19 +264,19 @@ public:
     void addListener( const Link<>& rListener );
     void removeListener( const Link<>& rListener );
 private:
-    std::list<Link<>> m_aListeners;
+    std::vector<Link<>> m_aListeners;
 };
 
 class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
 {
-    std::list< Link<> >                             m_aListeners;
+    std::vector< Link<> >                             m_aListeners;
 
     struct ListenerIt
     {
-        std::list< Link<> >::iterator   m_aIt;
+        std::vector< Link<> >::iterator   m_aIt;
         bool                            m_bWasInvalidated;
 
-        ListenerIt(const std::list<Link<>>::iterator& rIt)
+        ListenerIt(const std::vector<Link<>>::iterator& rIt)
             : m_aIt(rIt)
             , m_bWasInvalidated( false )
         {}

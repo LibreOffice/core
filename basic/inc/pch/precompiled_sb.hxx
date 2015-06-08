@@ -39,7 +39,7 @@
 #include <float.h>
 #include <i18nlangtag/lang.h>
 #include <iomanip>
-#include <list>
+#include <vector>
 #include <math.h>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <osl/file.hxx>

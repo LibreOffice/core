@@ -35,7 +35,7 @@
 
 #include <boost/functional/hash.hpp>
 
-#include <list>
+#include <vector>
 #include <map>
 #include <unordered_set>
 #include <vector>
@@ -74,7 +74,7 @@ public:
     AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
     std::list<AquaSalFrame*>                      maFrames;         // list of all frames
     std::unordered_set<const AquaSalFrame*,FrameHash>  maFrameCheck;// for fast check of frame existence
-    std::list<AquaSalFrame*>                      maPresentationFrames;  // list of frames in presentation mode
+    std::vector<AquaSalFrame*>                    maPresentationFrames;  // list of frames in presentation mode
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
     SalPrinter                                   *mpFirstPrinter;   // first printing printer

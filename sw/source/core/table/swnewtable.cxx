@@ -34,7 +34,7 @@
 #include <cstdlib>
 #include <vector>
 #include <set>
-#include <list>
+#include <vector>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <editeng/boxitem.hxx>
@@ -371,7 +371,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     long nMid = ( nMin + nMax ) / 2;
 
     SwBoxSelection* pRet = new SwBoxSelection();
-    std::list< std::pair< SwTableBox*, long > > aNewWidthList;
+    std::vector< std::pair< SwTableBox*, long > > aNewWidthList;
     size_t nCheckBottom = nBottom;
     long nLeftSpan = 0;
     long nRightSpan = 0;
@@ -566,7 +566,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
         bOkay = false;
     if( bOkay )
     {
-        std::list< std::pair< SwTableBox*, long > >::iterator
+        std::vector< std::pair< SwTableBox*, long > >::iterator
             pCurr = aNewWidthList.begin();
         while( pCurr != aNewWidthList.end() )
         {
@@ -1186,7 +1186,7 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
 }
 
 typedef std::pair< sal_uInt16, sal_uInt16 > SwLineOffset;
-typedef std::list< SwLineOffset > SwLineOffsetArray;
+typedef std::vector< SwLineOffset > SwLineOffsetArray;
 
 /*
 * When a couple of table boxes has to be split,
@@ -1202,7 +1202,7 @@ typedef std::list< SwLineOffset > SwLineOffsetArray;
 static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
     const SwTable& rTable, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {
-    std::list< SwLineOffset > aBoxes;
+    std::vector< SwLineOffset > aBoxes;
     SwLineOffset aLnOfs( USHRT_MAX, USHRT_MAX );
     for (size_t i = 0; i < rBoxes.size(); ++i)
     {   // Collect all end line indices and the row spans
@@ -1230,7 +1230,7 @@ static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
     {
         // I. step:
         // Looking for the "smallest" line end with the smallest row span
-        std::list< SwLineOffset >::iterator pCurr = aBoxes.begin();
+        std::vector< SwLineOffset >::iterator pCurr = aBoxes.begin();
         aLnOfs = *pCurr; // the line end and row span of the first box
         while( ++pCurr != aBoxes.end() )
         {
@@ -1257,9 +1257,7 @@ static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
             if( pCurr->first == aLnOfs.first )
             {   // These boxes can be removed because the last insertion
                 // of rows will expand their row span above the needed value
-                std::list< SwLineOffset >::iterator pDel = pCurr;
-                ++pCurr;
-                aBoxes.erase( pDel );
+                pCurr = aBoxes.erase( pCurr );
             }
             else
             {
@@ -1274,9 +1272,7 @@ static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
                     if( pCurr->second >= nCnt )
                     {   // if the row span is bigger than the split factor
                         // this box is done
-                        std::list< SwLineOffset >::iterator pDel = pCurr;
-                        ++pCurr;
-                        aBoxes.erase( pDel );
+                        pCurr = aBoxes.erase( pCurr );
                     }
                     else
                         ++pCurr;
@@ -1299,7 +1295,7 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
 {
     if( nCnt < 2 )
         return 0;
-    std::list< SwLineOffset > aBoxes;
+    std::vector< SwLineOffset > aBoxes;
     SwLineOffset aLnOfs( USHRT_MAX, USHRT_MAX );
     sal_uInt16 nFirst = USHRT_MAX; // becomes the index of the first line
     sal_uInt16 nLast = 0; // becomes the index of the last line of the splitting
@@ -1338,7 +1334,7 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
         rCurr.insert( rCurr.end(), nHeight );
         pLines[ i - nFirst ] = nHeight;
     }
-    std::list< SwLineOffset >::iterator pSplit = aBoxes.begin();
+    std::vector< SwLineOffset >::iterator pSplit = aBoxes.begin();
     while( pSplit != aBoxes.end() )
     {
         SwTwips nBase = pSplit->first <= nFirst ? 0 :

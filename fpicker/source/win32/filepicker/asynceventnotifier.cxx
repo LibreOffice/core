@@ -243,7 +243,7 @@ CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
 void SAL_CALL CAsyncEventNotifier::removeNextEventRecord()
 {
     osl::MutexGuard aGuard(m_Mutex);
-    m_EventList.pop_front();
+    m_EventList.erase(m_EventList.begin());
 }
 
 

@@ -327,7 +327,7 @@
 #include <i18nutil/unicode.hxx>
 #include <limits.h>
 #include <limits>
-#include <list>
+#include <vector>
 #include <map>
 #include <math.h>
 #include <memory>

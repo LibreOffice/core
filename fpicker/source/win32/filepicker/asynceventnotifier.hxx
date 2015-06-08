@@ -32,7 +32,7 @@
 #pragma warning(pop)
 #endif
 
-#include <list>
+#include <vector>
 #include <utility>
 #include "eventnotification.hxx"
 
@@ -78,7 +78,7 @@ private:
     static unsigned int WINAPI ThreadProc(LPVOID pParam);
 
 private:
-    std::list<CEventNotification*>  m_EventList;
+    std::vector<CEventNotification*>  m_EventList;
     HANDLE                          m_hThread;
     bool                            m_bRun;
     unsigned                        m_ThreadId;

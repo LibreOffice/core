@@ -598,7 +598,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // TODO: when UNO ViewFactories are available for SFX-based documents, the below code should
                 // be UNOized, too
                 typedef ::std::pair< Reference< XFrame >, sal_uInt16 >  ViewDescriptor;
-                ::std::list< ViewDescriptor > aViewFrames;
+                ::std::vector< ViewDescriptor > aViewFrames;
                 SfxViewFrame *pView = GetFirst( xOldObj );
                 while ( pView )
                 {
@@ -794,23 +794,23 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     try
                     {
-                        while ( !aViewFrames.empty() )
+                        for ( auto & vf : aViewFrames )
                         {
-                            LoadViewIntoFrame_Impl( *xNewObj, aViewFrames.front().first, aLoadArgs, aViewFrames.front().second, false );
-                            aViewFrames.pop_front();
+                            LoadViewIntoFrame_Impl( *xNewObj, vf.first, aLoadArgs, vf.second, false );
                         }
+                        aViewFrames.clear();
                     }
                     catch( const Exception& )
                     {
                         // close the remaining frames
                         // Don't catch exceptions herein, if this fails, then we're left in an indetermined state, and
                         // crashing is better than trying to proceed
-                        while ( !aViewFrames.empty() )
+                        for ( auto & vf : aViewFrames )
                         {
-                            Reference< util::XCloseable > xClose( aViewFrames.front().first, UNO_QUERY_THROW );
+                            Reference< util::XCloseable > xClose( vf.first, UNO_QUERY_THROW );
                             xClose->close( true );
-                            aViewFrames.pop_front();
                         }
+                        aViewFrames.clear();
                     }
 
                     // Propagate document closure.

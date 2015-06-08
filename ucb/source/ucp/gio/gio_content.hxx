@@ -29,7 +29,7 @@
 #include <ucbhelper/contenthelper.hxx>
 #include <gio/gio.h>
 
-#include <list>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -81,7 +81,7 @@ private:
             const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 private:
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
 
     void queryChildren( ContentRefList& rChildren );
 

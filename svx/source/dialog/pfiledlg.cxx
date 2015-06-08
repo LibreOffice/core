@@ -29,7 +29,7 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/dialmgr.hxx>
-#include <list>
+#include <vector>
 
 using namespace ::com::sun::star;
 
@@ -74,11 +74,8 @@ SvxPluginFileDlg::SvxPluginFileDlg (vcl::Window *, sal_uInt16 nKind )
     const plugin::PluginDescription* pDescription = aSeq.getConstArray();
     sal_Int32 nAnzahlPlugins = rPluginManager->getPluginDescriptions().getLength();
 
-    std::list< OUString > aPlugNames;
-    std::list< OUString > aPlugExtensions;
-    std::list< OUString >::iterator j;
-    std::list< OUString >::iterator k;
-    std::list< OUString >::const_iterator end;
+    std::vector< OUString > aPlugNames;
+    std::vector< OUString > aPlugExtensions;
 
     for ( int i = 0; i < nAnzahlPlugins; i++ )
     {
@@ -94,7 +91,7 @@ SvxPluginFileDlg::SvxPluginFileDlg (vcl::Window *, sal_uInt16 nKind )
         {
             // extension already in the filterlist of the filedlg ?
             bool bAlreadyExist = false;
-            for ( j = aPlugExtensions.begin(), end = aPlugExtensions.end(); j != end && !bAlreadyExist; ++j )
+            for ( auto j = aPlugExtensions.begin(); j != aPlugExtensions.end() && !bAlreadyExist; ++j )
             {
                 bAlreadyExist = (j->indexOf( aStrPlugExtension ) != -1 );
             }
@@ -104,10 +101,8 @@ SvxPluginFileDlg::SvxPluginFileDlg (vcl::Window *, sal_uInt16 nKind )
                 // filterdescription already there?
                 // (then append the new extension to the existing filter)
                 int nfound = -1;
-                 for ( j = aPlugNames.begin(),
-                          k = aPlugExtensions.begin(),
-                          end = aPlugNames.end();
-                      j != end && nfound != 0;  )
+                 for ( auto j = aPlugNames.begin(), k = aPlugExtensions.begin();
+                      j != aPlugNames.end() && nfound != 0;  )
                 {
                     if ( ( nfound = j->indexOf( aStrPlugName ) ) == 0 )
                     {
@@ -116,11 +111,8 @@ SvxPluginFileDlg::SvxPluginFileDlg (vcl::Window *, sal_uInt16 nKind )
                         aStrPlugExtension += *k;
 
                         // remove old entry, increment (iterators are invalid thereafter, thus the postincrement)
-                        aPlugNames.erase(j++);
-                        aPlugExtensions.erase(k++);
-
-                        // update end iterator (which may be invalid, too!)
-                        end = aPlugNames.end();
+                        j = aPlugNames.erase(j);
+                        k = aPlugExtensions.erase(k);
                     }
                     else
                     {
@@ -158,10 +150,9 @@ SvxPluginFileDlg::SvxPluginFileDlg (vcl::Window *, sal_uInt16 nKind )
     }
 
     // add filter to dialog
-    for ( j = aPlugNames.begin(),
-              k = aPlugExtensions.begin(),
-              end = aPlugNames.end();
-          j != end; ++j, ++k )
+    for ( auto j = aPlugNames.begin(),
+               k = aPlugExtensions.begin();
+          j != aPlugNames.end(); ++j, ++k )
     {
         maFileDlg.AddFilter( *j, *k );
     }

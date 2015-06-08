@@ -139,7 +139,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
     {
         // Get and remove the first entry from the queue.
         Reference<XConfigurationChangeRequest> xRequest (maQueue.front());
-        maQueue.pop_front();
+        maQueue.erase(maQueue.begin());
 
         // Execute the change request.
         if (xRequest.is())

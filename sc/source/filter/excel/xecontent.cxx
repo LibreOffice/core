@@ -19,7 +19,7 @@
 
 #include "xecontent.hxx"
 
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -93,11 +93,11 @@ public:
     void                SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    typedef ::std::list< XclExpStringRef >      XclExpStringList;
+    typedef ::std::vector< XclExpStringRef >      XclExpStringVec;
     typedef ::std::vector< XclExpHashEntry >    XclExpHashVec;
     typedef ::std::vector< XclExpHashVec >      XclExpHashTab;
 
-    XclExpStringList    maStringList;   /// List of unique strings (in SST ID order).
+    XclExpStringVec    maStringList;   /// List of unique strings (in SST ID order).
     XclExpHashTab       maHashTab;      /// Hashed table that manages string pointers.
     sal_uInt32          mnTotal;        /// Total count of strings (including doubles).
     sal_uInt32          mnSize;         /// Size of the SST (count of unique strings).
@@ -162,7 +162,7 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
     rStrm.StartRecord( EXC_ID_SST, 8 );
 
     rStrm << mnTotal << mnSize;
-    for( XclExpStringList::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
+    for( XclExpStringVec::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
     {
         if( !nBucketIndex )
         {
@@ -213,7 +213,7 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
             XML_uniqueCount, OString::number(  mnSize ).getStr(),
             FSEND );
 
-    for( XclExpStringList::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
+    for( XclExpStringVec::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
     {
         pSst->startElement( XML_si, FSEND );
         (*aIt)->WriteXml( rStrm );

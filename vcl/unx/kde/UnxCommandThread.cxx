@@ -31,9 +31,9 @@ using namespace ::com::sun::star;
 
 namespace {
 
-::std::list< OUString > tokenize( const OUString &rCommand )
+::std::vector< OUString > tokenize( const OUString &rCommand )
 {
-    ::std::list< OUString > aList;
+    ::std::vector< OUString > aList;
     OUStringBuffer aBuffer( 1024 );
 
     const sal_Unicode *pUnicode = rCommand.getStr();
@@ -121,7 +121,7 @@ uno::Sequence< OUString > SAL_CALL UnxFilePickerCommandThread::getFiles()
         ++nLastSlash;
 
         sal_Int32 nIdx = 1;
-        for ( ::std::list< OUString >::const_iterator it = m_aGetFiles.begin();
+        for ( ::std::vector< OUString >::const_iterator it = m_aGetFiles.begin();
                 it != m_aGetFiles.end(); ++it, ++nIdx )
         {
             sal_Int32 nLength = (*it).getLength() - nLastSlash;
@@ -209,7 +209,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
         OUStringToOString( rCommand, RTL_TEXTENCODING_ASCII_US ).getStr() << "\"" << ::std::endl;
 #endif
 
-    ::std::list< OUString > aList = tokenize( rCommand );
+    ::std::vector< OUString > aList = tokenize( rCommand );
 
     if ( aList.empty() )
         return;
@@ -275,7 +275,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
         {
             uno::Sequence< OUString > aSequence( aList.size() );
             sal_Int32 nIdx = 0;
-            for ( ::std::list< OUString >::const_iterator it = aList.begin(); it != aList.end(); ++it, ++nIdx )
+            for ( ::std::vector< OUString >::const_iterator it = aList.begin(); it != aList.end(); ++it, ++nIdx )
                 aSequence[nIdx] = (*it);
 
             m_aGetValue <<= aSequence;

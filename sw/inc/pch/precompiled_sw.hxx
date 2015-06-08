@@ -619,7 +619,7 @@
 #include <limits>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
-#include <list>
+#include <vector>
 #include <map>
 #include <math.h>
 #include <memory>

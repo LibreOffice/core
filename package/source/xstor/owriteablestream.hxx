@@ -46,7 +46,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 
-#include <list>
+#include <vector>
 #include <memory>
 
 #include "ocompinstream.hxx"
@@ -72,7 +72,7 @@ namespace package {
 
 struct WSInternalData_Impl;
 
-typedef ::std::list< OInputCompStream* > InputStreamsList_Impl;
+typedef ::std::vector< OInputCompStream* > InputStreamsList_Impl;
 
 struct OStorage_Impl;
 class OWriteStream;

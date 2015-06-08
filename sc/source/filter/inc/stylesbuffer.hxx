@@ -36,7 +36,7 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
 #include "attarray.hxx"
-#include <list>
+#include <vector>
 
 class ScMarkData;
 namespace com { namespace sun { namespace star {
@@ -639,7 +639,7 @@ class Xf : public WorkbookHelper
 public:
     struct AttrList
     {
-        std::list<ScAttrEntry> maAttrs;
+        std::vector<ScAttrEntry> maAttrs;
         bool mbLatinNumFmtOnly;
 
         AttrList();

@@ -337,7 +337,7 @@ struct ImplSVData
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxAccessBridge;
     vcl::SettingsConfigItem* mpSettingsConfigItem;
-    std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList;
+    std::vector< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList;
     std::unordered_map< int, OUString >* mpPaperNames;
 
     Link<> maDeInitHook;

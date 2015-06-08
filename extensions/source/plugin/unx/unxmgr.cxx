@@ -50,7 +50,7 @@ using namespace com::sun::star::plugin;
 
 
 // Unix specific implementation
-static bool CheckPlugin( const OString& rPath, list< PluginDescription* >& rDescriptions )
+static bool CheckPlugin( const OString& rPath, vector< PluginDescription* >& rDescriptions )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Trying plugin %s ... ", rPath.getStr() );
@@ -184,7 +184,7 @@ union maxDirent
     struct dirent asDirent;
 };
 
-static void CheckPluginRegistryFiles( const OString& rPath, list< PluginDescription* >& rDescriptions )
+static void CheckPluginRegistryFiles( const OString& rPath, vector< PluginDescription* >& rDescriptions )
 {
     OStringBuffer aPath( 1024 );
     aPath.append( rPath );
@@ -241,7 +241,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
     if( ! bHavePlugins )
     {
         rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-        list<PluginDescription*> aPlugins;
+        vector<PluginDescription*> aPlugins;
         int i;
 
         // unix: search for plugins in /usr/lib/netscape/plugins,
@@ -304,7 +304,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found %" SAL_PRI_SIZET "u plugins\n", aPlugins.size() );
 #endif
-        list<PluginDescription*>::iterator iter;
+        vector<PluginDescription*>::iterator iter;
         for( iter = aPlugins.begin(), i=0; iter != aPlugins.end(); ++iter ,i++ )
         {
             aDescriptions.getArray()[ i ] = **iter;

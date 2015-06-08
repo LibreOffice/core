@@ -267,14 +267,14 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
                 RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    typedef ::std::vector<OUString> StringList;
-    StringList aNewMasterPages;
-    StringList aRemovedMasterPages;
+    typedef ::std::vector<OUString> StringVector;
+    StringVector aNewMasterPages;
+    StringVector aRemovedMasterPages;
     MasterPageContainer::iterator aOldMasterPagesDescriptor (
         maUsedMasterPages.find(&rDocument));
     if (aOldMasterPagesDescriptor != maUsedMasterPages.end())
     {
-        StringList::iterator I;
+        StringVector::iterator I;
 
         ::std::set<OUString>::iterator J;
         int i=0;
@@ -292,7 +292,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
             aCurrentMasterPages.end(),
             aOldMasterPagesDescriptor->second.begin(),
             aOldMasterPagesDescriptor->second.end(),
-            ::std::back_insert_iterator<StringList>(aNewMasterPages));
+            ::std::back_insert_iterator<StringVector>(aNewMasterPages));
         for (I=aNewMasterPages.begin(); I!=aNewMasterPages.end(); ++I)
         {
             OSL_TRACE("    added master page %s",
@@ -312,7 +312,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
             aOldMasterPagesDescriptor->second.end(),
             aCurrentMasterPages.begin(),
             aCurrentMasterPages.end(),
-            ::std::back_insert_iterator<StringList>(aRemovedMasterPages));
+            ::std::back_insert_iterator<StringVector>(aRemovedMasterPages));
         for (I=aRemovedMasterPages.begin(); I!=aRemovedMasterPages.end(); ++I)
         {
             OSL_TRACE("    removed master page %s",

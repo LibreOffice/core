@@ -48,7 +48,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include <list>
+#include <vector>
 #include <unordered_set>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -227,7 +227,7 @@ public:
 private:
 
     ScDocument*                 m_pDocument;
-    typedef std::list < com::sun::star::uno::Reference< com::sun::star::chart2::data::XLabeledDataSequence > >  LabeledList;
+    typedef std::vector < com::sun::star::uno::Reference< com::sun::star::chart2::data::XLabeledDataSequence > >  LabeledList;
     LabeledList                 m_aLabeledSequences;
 
 };
@@ -433,7 +433,7 @@ private:
         ScChart2DataSequence& mrParent;
     };
 
-    ::std::list<Item>           m_aDataArray;
+    ::std::vector<Item>           m_aDataArray;
 
     /**
      * Cached data for getData.  We may also need to cache data for the

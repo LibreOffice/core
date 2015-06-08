@@ -157,9 +157,9 @@ void CustomAnimationPreset::add( CustomAnimationEffectPtr pEffect )
     maSubTypes[ pEffect->getPresetSubType() ] = pEffect;
 }
 
-UStringList CustomAnimationPreset::getSubTypes()
+UStringVector CustomAnimationPreset::getSubTypes()
 {
-    UStringList aSubTypes;
+    UStringVector aSubTypes;
 
     if( maSubTypes.size() > 1 )
     {
@@ -197,12 +197,12 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const OUString& rstrS
     return xNode;
 }
 
-UStringList CustomAnimationPreset::getProperties() const
+UStringVector CustomAnimationPreset::getProperties() const
 {
     OUString aProperties( maProperty );
     sal_uInt16 nTokens = comphelper::string::getTokenCount(aProperties, ';');
     sal_uInt16 nToken;
-    UStringList aPropertyList;
+    UStringVector aPropertyList;
     for( nToken = 0; nToken < nTokens; nToken++ )
         aPropertyList.push_back( aProperties.getToken( nToken, ';' ) );
 
@@ -586,7 +586,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
             CustomAnimationPresetPtr pPreset = pCategory->maEffects[nDescriptor];
             if( pPreset.get() )
             {
-                UStringList aSubTypes = pPreset->getSubTypes();
+                UStringVector aSubTypes = pPreset->getSubTypes();
 
                 OUString aSubType;
                 if( !aSubTypes.empty() )

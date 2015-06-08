@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <svx/unopage.hxx>
 
 #include "drawingml/colorchoicecontext.hxx"
@@ -137,14 +138,9 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     else
         rPropertyMap.setProperty( PROP_ParaLineSpacing, ::com::sun::star::style::LineSpacing( ::com::sun::star::style::LineSpacingMode::PROP, 100 ));
 
-    ::std::list< TabStop >::size_type nTabCount = maTabList.size();
-    if( nTabCount != 0 )
+    if( !maTabList.empty() )
     {
-        Sequence< TabStop > aSeq( nTabCount );
-        TabStop * aArray = aSeq.getArray();
-        OSL_ENSURE( aArray != NULL, "sequence array is NULL" );
-        ::std::copy( maTabList.begin(), maTabList.end(), aArray );
-        rPropertyMap.setProperty( PROP_ParaTabStops, aSeq);
+        rPropertyMap.setProperty( PROP_ParaTabStops, comphelper::containerToSequence(maTabList));
     }
 
     if ( mxBlipProps.get() && mxBlipProps->mxGraphic.is() )

@@ -843,7 +843,7 @@ void GraphicCache::AddGraphicObject(
           && !maGraphicCache.empty()
         )
         {
-            GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+            GraphicCacheEntryVec::iterator it = maGraphicCache.begin();
             while(  !bInserted
                  && ( it != maGraphicCache.end() )
                  )
@@ -862,7 +862,7 @@ void GraphicCache::AddGraphicObject(
 
         if( !bInserted )
         {
-            GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+            GraphicCacheEntryVec::iterator it = maGraphicCache.begin();
             boost::scoped_ptr< GraphicID > apID;
 
             if( !pID )
@@ -885,7 +885,7 @@ void GraphicCache::AddGraphicObject(
                         // since pEntry->TryToSwapIn can modify our current list, we have to
                         // iterate from beginning to add a reference to the appropriate
                         // CacheEntry object; after this, quickly jump out of the outer iteration
-                        for( GraphicCacheEntryList::iterator jt = maGraphicCache.begin();
+                        for( GraphicCacheEntryVec::iterator jt = maGraphicCache.begin();
                              !bInserted && jt != maGraphicCache.end();
                              ++jt
                         )
@@ -929,7 +929,7 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 {
     // Release cached object
     bool    bRemoved = false;
-    GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+    GraphicCacheEntryVec::iterator it = maGraphicCache.begin();
     while (!bRemoved && it != maGraphicCache.end())
     {
         bRemoved = (*it)->ReleaseGraphicObjectReference( rObj );
@@ -938,7 +938,7 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
         {
             // if graphic cache entry has no more references,
             // the corresponding display cache object can be removed
-            GraphicDisplayCacheEntryList::iterator it2 = maDisplayCache.begin();
+            GraphicDisplayCacheEntryVec::iterator it2 = maDisplayCache.begin();
             while( it2 != maDisplayCache.end() )
             {
                 GraphicDisplayCacheEntry* pDisplayEntry = *it2;
@@ -1005,7 +1005,7 @@ void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize, bool bDe
 
     if( bDestroy )
     {
-        GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
+        GraphicDisplayCacheEntryVec::iterator it = maDisplayCache.begin();
         while( it != maDisplayCache.end() )
         {
             GraphicDisplayCacheEntry* pCacheObj = *it;
@@ -1033,7 +1033,7 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
             aReleaseTime.addTime( ::salhelper::TTimeValue( nTimeoutSeconds, 0 ) );
         }
 
-        for( GraphicDisplayCacheEntryList::const_iterator it = maDisplayCache.begin();
+        for( GraphicDisplayCacheEntryVec::const_iterator it = maDisplayCache.begin();
              it != maDisplayCache.end(); ++it )
         {
             (*it)->SetReleaseTime( aReleaseTime );
@@ -1058,7 +1058,7 @@ bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const
 
     if( pCacheEntry )
     {
-        for( GraphicDisplayCacheEntryList::const_iterator it = maDisplayCache.begin();
+        for( GraphicDisplayCacheEntryVec::const_iterator it = maDisplayCache.begin();
              !bFound && ( it != maDisplayCache.end() ); ++it )
         {
             if( (*it)->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
@@ -1158,7 +1158,7 @@ bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, co
     const Size                  aSzPixel( pOut->LogicToPixel( rSz ) );
     const GraphicCacheEntry*    pCacheEntry = ImplGetCacheEntry( rObj );
     GraphicDisplayCacheEntry*   pDisplayCacheEntry = NULL;
-    GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
+    GraphicDisplayCacheEntryVec::iterator it = maDisplayCache.begin();
     bool                    bRet = false;
 
     while( !bRet && it != maDisplayCache.end() )
@@ -1197,7 +1197,7 @@ bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
 
     if( nSizeToFree )
     {
-        GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
+        GraphicDisplayCacheEntryVec::iterator it = maDisplayCache.begin();
 
         if( nSizeToFree > mnUsedDisplaySize )
             nSizeToFree = mnUsedDisplaySize;
@@ -1224,7 +1224,7 @@ GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
     GraphicCacheEntry* pRet = NULL;
 
     for(
-        GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+        GraphicCacheEntryVec::iterator it = maGraphicCache.begin();
         !pRet && it != maGraphicCache.end();
         ++it
     ) {
@@ -1241,7 +1241,7 @@ IMPL_LINK_TYPED( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer, void )
     pTimer->Stop();
 
     ::salhelper::TTimeValue           aCurTime;
-    GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
+    GraphicDisplayCacheEntryVec::iterator it = maDisplayCache.begin();
 
     osl_getSystemTime( &aCurTime );
 

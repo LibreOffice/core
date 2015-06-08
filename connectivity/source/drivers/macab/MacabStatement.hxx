@@ -22,7 +22,7 @@
 
 #include "MacabConnection.hxx"
 #include "MacabHeader.hxx"
-#include <list>
+#include <vector>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
@@ -53,7 +53,7 @@ namespace connectivity
             ::com::sun::star::sdbc::SQLWarning  m_aLastWarning;
 
         protected:
-            ::std::list< OUString>       m_aBatchList;
+            ::std::vector< OUString>       m_aBatchList;
             connectivity::OSQLParser            m_aParser;
             connectivity::OSQLParseTreeIterator m_aSQLIterator;
             connectivity::OSQLParseNode*        m_pParseTree;

@@ -104,7 +104,8 @@ AquaSalFrame::~AquaSalFrame()
     SalData* pSalData = GetSalData();
     pSalData->maFrames.remove( this );
     pSalData->maFrameCheck.erase( this );
-    pSalData->maPresentationFrames.remove( this );
+    auto & rPF = pSalData->maPresentationFrames;
+    rPF.erase( std::remove(rPF.begin(), rPF.end(), this), rPF.end() );
 
     DBG_ASSERT( this != s_pCaptureFrame, "capture frame destroyed" );
     if( this == s_pCaptureFrame )
@@ -771,7 +772,8 @@ void AquaSalFrame::StartPresentation( bool bStart )
     }
     else
     {
-        GetSalData()->maPresentationFrames.remove( this );
+        auto & rPF = GetSalData()->maPresentationFrames;
+        rPF.erase( std::remove(rPF.begin(), rPF.end(), this), rPF.end() );
         IOPMAssertionRelease(mnAssertionID);
         [mpNSWindow setLevel: NSNormalWindowLevel];
     }

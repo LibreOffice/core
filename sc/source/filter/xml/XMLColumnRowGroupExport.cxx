@@ -170,8 +170,8 @@ sal_Int32 ScMyOpenCloseColumnRowGroup::GetLast()
 
 void ScMyOpenCloseColumnRowGroup::Sort()
 {
-    aTableStart.sort();
-    aTableEnd.sort();
+    std::sort(aTableStart.begin(), aTableStart.end());
+    std::sort(aTableEnd.begin(), aTableEnd.end());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

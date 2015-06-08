@@ -25,9 +25,9 @@
 #include "mapping.h"
 #include "hwpeq.h"
 #include <iostream>
-#include <list>
+#include <vector>
 
-extern std::list<Node*> nodelist;
+extern std::vector<Node*> nodelist;
 
 #ifndef DEBUG
 
@@ -621,12 +621,10 @@ int Formula::parse()
      if( res ){
           makeMathML( res );
      }
-     int count = nodelist.size();
-     for( int i = 0 ; i < count ; i++ ){
-         const Node *tmpNode = nodelist.front();
-         nodelist.pop_front();
+     for( const Node *tmpNode : nodelist ){
          delete tmpNode;
      }
+     nodelist.clear();
 
      return 0;
 }

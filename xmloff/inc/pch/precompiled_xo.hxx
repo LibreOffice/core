@@ -510,7 +510,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <iterator>
 #include <limits.h>
-#include <list>
+#include <vector>
 #include <map>
 #include <numeric>
 #include <o3tl/sorted_vector.hxx>

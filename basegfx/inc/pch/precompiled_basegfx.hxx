@@ -51,7 +51,7 @@
 #include <deque>
 #include <functional>
 #include <limits>
-#include <list>
+#include <vector>
 #include <numeric>
 #include <o3tl/vector_pool.hxx>
 #include <osl/diagnose.h>

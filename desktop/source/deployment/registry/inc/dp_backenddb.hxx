@@ -21,7 +21,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_INC_DP_BACKENDDB_HXX
 
 #include <rtl/ustring.hxx>
-#include <list>
+#include <vector>
 #include <vector>
 
 namespace com { namespace sun { namespace star {
@@ -70,7 +70,7 @@ protected:
         OUString const & url);
 
     void writeSimpleList(
-        ::std::list< OUString> const & list,
+        ::std::vector< OUString> const & list,
         OUString const & sListTagName,
         OUString const & sMemberTagName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
@@ -102,14 +102,14 @@ protected:
         OUString const & sFirstTagName,
         OUString const & sSecondTagName);
 
-    ::std::list< OUString> readList(
+    ::std::vector< OUString> readList(
         css::uno::Reference<css::xml::dom::XNode> const & parent,
         OUString const & sListTagName,
         OUString const & sMemberTagName);
 
     /* returns the values of one particularly child element of all key elements.
      */
-    ::std::list< OUString> getOneChildFromAllEntries(
+    ::std::vector< OUString> getOneChildFromAllEntries(
         OUString const & sElementName);
 
 

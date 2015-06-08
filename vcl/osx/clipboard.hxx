@@ -37,7 +37,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 #include <boost/utility.hpp>
-#include <list>
+#include <vector>
 
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
@@ -149,7 +149,7 @@ private:
 
 private:
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory > mrXMimeCntFactory;
-  ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > mClipboardListeners;
+  ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > mClipboardListeners;
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > mXClipboardContent;
   com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner > mXClipboardOwner;
   DataFlavorMapperPtr_t mpDataFlavorMapper;

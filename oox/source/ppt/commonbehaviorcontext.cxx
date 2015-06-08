@@ -63,7 +63,7 @@ namespace oox { namespace ppt {
             if( !maAttributes.empty() )
             {
                 OUStringBuffer sAttributes;
-                std::list< Attribute >::const_iterator iter;
+                std::vector< Attribute >::const_iterator iter;
                 for(iter = maAttributes.begin(); iter != maAttributes.end(); ++iter)
                 {
                     if( !sAttributes.isEmpty() )

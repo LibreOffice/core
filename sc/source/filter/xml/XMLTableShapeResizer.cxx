@@ -124,12 +124,11 @@ void ScMyOLEFixer::FixupOLEs()
     {
         OUString sPersistName ("PersistName");
         ScMyToFixupOLEs::iterator aItr(aShapes.begin());
-        ScMyToFixupOLEs::iterator aEndItr(aShapes.end());
         ScDocument* pDoc(rImport.GetDocument());
 
         ScXMLImport::MutexGuard aGuard(rImport);
 
-        while (aItr != aEndItr)
+        while (aItr != aShapes.end())
         {
             // #i78086# also call CreateChartListener for invalid position (anchored to sheet)
             if (!IsOLE(aItr->xShape))

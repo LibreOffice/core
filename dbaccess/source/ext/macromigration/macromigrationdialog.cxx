@@ -45,7 +45,7 @@
 #include <ucbhelper/content.hxx>
 #include <vcl/layout.hxx>
 
-#include <list>
+#include <vector>
 
 namespace dbmm
 {
@@ -91,7 +91,7 @@ namespace dbmm
 
     // helper
     static void lcl_getControllers_throw(const Reference< XModel2 >& _rxDocument,
-        ::std::list< Reference< XController2 > >& _out_rControllers )
+        ::std::vector< Reference< XController2 > >& _out_rControllers )
     {
         _out_rControllers.clear();
         Reference< XEnumeration > xControllerEnum( _rxDocument->getControllers(), UNO_SET_THROW );
@@ -332,11 +332,11 @@ namespace dbmm
         try
         {
             // collect all controllers of our document
-            ::std::list< Reference< XController2 > > aControllers;
+            ::std::vector< Reference< XController2 > > aControllers;
             lcl_getControllers_throw( m_pData->xDocumentModel, aControllers );
 
             // close all sub documents of all controllers
-            for (   ::std::list< Reference< XController2 > >::const_iterator pos = aControllers.begin();
+            for (   ::std::vector< Reference< XController2 > >::const_iterator pos = aControllers.begin();
                     pos != aControllers.end() && bSuccess;
                     ++pos
                 )
@@ -444,7 +444,7 @@ namespace dbmm
     void MacroMigrationDialog::impl_reloadDocument_nothrow( bool _bMigrationSuccess )
     {
         typedef ::std::pair< Reference< XFrame >, OUString > ViewDescriptor;
-        ::std::list< ViewDescriptor > aViews;
+        ::std::vector< ViewDescriptor > aViews;
 
         try
         {
@@ -470,15 +470,13 @@ namespace dbmm
             aDocumentArgs.remove( "URL" );
 
             // collect all controllers of our document
-            ::std::list< Reference< XController2 > > aControllers;
+            ::std::vector< Reference< XController2 > > aControllers;
             lcl_getControllers_throw( m_pData->xDocumentModel, aControllers );
 
             // close all those controllers
-            while ( !aControllers.empty() )
+            for ( auto & ac : aControllers )
             {
-                Reference< XController2 > xController( aControllers.front(), UNO_SET_THROW );
-                aControllers.pop_front();
-
+                Reference< XController2 > xController( ac, UNO_SET_THROW );
                 Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
                 OUString sViewName( xController->getViewControllerName() );
 
@@ -495,6 +493,7 @@ namespace dbmm
                 xFrame->setComponent( NULL, NULL );
                 xController->dispose();
             }
+            aControllers.clear();
 
             // Note the document is closed now - disconnecting the last controller
             // closes it automatically.
@@ -502,10 +501,9 @@ namespace dbmm
             Reference< XOfficeDatabaseDocument > xNewDocument;
 
             // re-create the views
-            while ( !aViews.empty() )
+            for ( auto & v : aViews )
             {
-                ViewDescriptor aView( aViews.front() );
-                aViews.pop_front();
+                ViewDescriptor aView( v );
 
                 // load the document into this frame
                 Reference< XComponentLoader > xLoader( aView.first, UNO_QUERY_THROW );
@@ -535,6 +533,7 @@ namespace dbmm
                 }
                 #endif
             }
+            aViews.clear();
 
             m_pData->xDocument = xNewDocument;
             m_pData->xDocumentModel.set( xNewDocument, UNO_QUERY );
@@ -558,10 +557,9 @@ namespace dbmm
 
         // close all frames from aViews - the respective controllers have been closed, but
         // reloading didn't work, so the frames are zombies now.
-        while ( !aViews.empty() )
+        for ( auto & v : aViews )
         {
-            ViewDescriptor aView( aViews.front() );
-            aViews.pop_front();
+            ViewDescriptor aView( v );
             try
             {
                 Reference< XCloseable > xFrameClose( aView.first, UNO_QUERY_THROW );
@@ -572,6 +570,7 @@ namespace dbmm
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
+        aViews.clear();
     }
 
 } // namespace dbmm

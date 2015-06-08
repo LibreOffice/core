@@ -43,7 +43,7 @@ namespace x11 {
 
         SelectionManager&                                       m_rSelectionManager;
         css::uno::Reference< css::lang::XInitialization >   m_xSelectionManager;
-        ::std::list< css::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
+        ::std::vector< css::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
         Atom                                                    m_aSelection;
 
         X11Clipboard( SelectionManager& rManager, Atom aSelection );

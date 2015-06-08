@@ -522,7 +522,7 @@ void SAL_CALL VCLXMultiLineEdit::setFocus(  ) throw(::com::sun::star::uno::Runti
         GetWindow()->GrabFocus();
 }
 
-void VCLXMultiLineEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXMultiLineEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      // FIXME: elide duplication ?
@@ -793,7 +793,7 @@ void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) 
         nCols = pControl->GetEdit().GetMaxVisChars();
 }
 
-void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXFileControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      // FIXME: elide duplication ?
@@ -1373,7 +1373,7 @@ void SVTXFormattedField::NotifyTextListeners()
     }
 }
 
-void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void SVTXFormattedField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      // FIXME: elide duplication ?
@@ -1643,7 +1643,7 @@ void SVTXRoadmap::ImplSetNewImage()
     pButton->SetRoadmapBitmap( GetImage().GetBitmapEx() );
 }
 
-void SVTXRoadmap::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void SVTXRoadmap::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_COMPLETE,
@@ -1817,7 +1817,7 @@ sal_Bool SVTXNumericField::isStrictFormat() throw(::com::sun::star::uno::Runtime
     return pField ? pField->IsStrictFormat() : sal_False;
 }
 
-void SVTXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void SVTXNumericField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     SVTXFormattedField::ImplGetPropertyIds( rIds );
 }
@@ -2045,7 +2045,7 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
     return SVTXFormattedField::getProperty(PropertyName);
 }
 
-void SVTXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void SVTXCurrencyField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_CURRENCYSYMBOL,
@@ -2291,7 +2291,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::su
     return aProp;
 }
 
-void VCLXProgressBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXProgressBar::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_PROGRESSVALUE,
@@ -2339,7 +2339,7 @@ void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const ::
     }
 }
 
-void SVTXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void SVTXDateField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_TEXTLINECOLOR,

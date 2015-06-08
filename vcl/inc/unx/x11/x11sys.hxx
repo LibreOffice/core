@@ -39,7 +39,7 @@ public:
     virtual OUString GetDisplayScreenName( unsigned int nScreen ) SAL_OVERRIDE;
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::list< OUString >& rButtons,
+                                  const std::vector< OUString >& rButtons,
                                   int nDefButton ) SAL_OVERRIDE;
 };
 

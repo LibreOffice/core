@@ -105,7 +105,7 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <txtlists.hxx>
 #include <com/sun/star/rdf/XMetadatable.hpp>
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
@@ -131,7 +131,7 @@ namespace
     {
         public:
             typedef Reference<XTextContent> text_content_ref_t;
-            typedef list<text_content_ref_t> contents_t;
+            typedef vector<text_content_ref_t> contents_t;
             typedef back_insert_iterator<contents_t> inserter_t;
             typedef contents_t::const_iterator const_iterator_t;
 

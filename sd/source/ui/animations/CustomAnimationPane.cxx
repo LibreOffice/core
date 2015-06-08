@@ -532,7 +532,7 @@ void CustomAnimationPane::updateControls()
 
             Any aValue;
 
-            UStringList aProperties( pDescriptor->getProperties() );
+            UStringVector aProperties( pDescriptor->getProperties() );
             if( aProperties.size() >= 1 )
             {
                 mnPropertyType = getPropertyType( aProperties.front() );
@@ -752,8 +752,8 @@ void CustomAnimationPane::updateMotionPathTags()
     {
         bChanges = updateMotionPathImpl( *this, *pView, mpMainSequence->getBegin(), mpMainSequence->getEnd(), aTags, maMotionPathTags );
 
-        const InteractiveSequenceList& rISL = mpMainSequence->getInteractiveSequenceList();
-        InteractiveSequenceList::const_iterator aISI( rISL.begin() );
+        const InteractiveSequenceVec& rISL = mpMainSequence->getInteractiveSequenceVec();
+        InteractiveSequenceVec::const_iterator aISI( rISL.begin() );
         while( aISI != rISL.end() )
         {
             InteractiveSequencePtr pIS( (*aISI++) );
@@ -1136,7 +1136,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         {
             sal_Int32 nType = nPropertyTypeNone;
 
-            UStringList aProperties( pDescriptor->getProperties() );
+            UStringVector aProperties( pDescriptor->getProperties() );
             if( aProperties.size() >= 1 )
                 nType = getPropertyType( aProperties.front() );
 
@@ -1605,7 +1605,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
 }
 
-bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::list< sal_Int16 >& rParaList )
+bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::vector< sal_Int16 >& rParaList )
 {
     Reference< XTextRange > xSelectedText;
     rSelection >>= xSelectedText;
@@ -1712,13 +1712,13 @@ void CustomAnimationPane::onChange( bool bCreate )
         else if ( maViewSelection.getValueType() == cppu::UnoType<XTextCursor>::get())
         {
             Reference< XShape > xShape;
-            std::list< sal_Int16 > aParaList;
+            std::vector< sal_Int16 > aParaList;
             if( getTextSelection( maViewSelection, xShape, aParaList ) )
             {
                 ParagraphTarget aParaTarget;
                 aParaTarget.Shape = xShape;
 
-                std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
+                std::vector< sal_Int16 >::iterator aIter( aParaList.begin() );
                 for( ; aIter != aParaList.end(); ++aIter )
                 {
                     aParaTarget.Paragraph = (*aIter);
@@ -2103,7 +2103,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
                 }
                 else
                 {
-                    rEffectSequence.push_front( pEffect );
+                    rEffectSequence.insert( rEffectSequence.begin(), pEffect );
                 }
                 bChanged = true;
             }

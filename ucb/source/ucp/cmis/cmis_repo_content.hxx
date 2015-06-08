@@ -23,7 +23,7 @@
 #include <libcmis/libcmis.hxx>
 
 #include <vector>
-#include <list>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -126,7 +126,7 @@ public:
     virtual void SAL_CALL abort( sal_Int32 CommandId )
             throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) SAL_OVERRIDE;
+    virtual std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) SAL_OVERRIDE;
 };
 
 }

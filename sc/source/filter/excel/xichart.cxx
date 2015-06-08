@@ -1914,7 +1914,7 @@ void XclImpChSeries::FinalizeDataFormats()
         }
 
         // copy series formatting to child objects
-        for( XclImpChSerTrendLineList::iterator aLIt = maTrendLines.begin(), aLEnd = maTrendLines.end(); aLIt != aLEnd; ++aLIt )
+        for( XclImpChSerTrendLineVec::iterator aLIt = maTrendLines.begin(), aLEnd = maTrendLines.end(); aLIt != aLEnd; ++aLIt )
         {
             (*aLIt)->SetDataFormat(mxSeriesFmt);
             if (mxTitleLink->HasString())
@@ -2159,7 +2159,7 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) c
     Reference< XRegressionCurveContainer > xRegCurveCont( xDataSeries, UNO_QUERY );
     if( xRegCurveCont.is() )
     {
-        for( XclImpChSerTrendLineList::const_iterator aIt = maTrendLines.begin(), aEnd = maTrendLines.end(); aIt != aEnd; ++aIt )
+        for( XclImpChSerTrendLineVec::const_iterator aIt = maTrendLines.begin(), aEnd = maTrendLines.end(); aIt != aEnd; ++aIt )
         {
             try
             {

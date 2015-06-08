@@ -60,7 +60,7 @@ SalInstance::~SalInstance()
 {
 }
 
-void SalInstance::FillFontPathList( std::list< OString >& )
+void SalInstance::FillFontPathList( std::vector< OString >& )
 {
     // do nothing
 }

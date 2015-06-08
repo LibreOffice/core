@@ -23,7 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 
 namespace com { namespace sun { namespace star {
@@ -37,14 +37,14 @@ namespace sd {
 
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
-typedef std::list< TransitionPresetPtr > TransitionPresetList;
+typedef std::vector< TransitionPresetPtr > TransitionPresetVec;
 typedef std::unordered_map< OUString, OUString, OUStringHash > UStringMap;
 
 class TransitionPreset
 {
 public:
-    static const TransitionPresetList& getTransitionPresetList();
-    static bool importTransitionPresetList( TransitionPresetList& rList );
+    static const TransitionPresetVec& getTransitionPresetVec();
+    static bool importTransitionPresetVec( TransitionPresetVec& rList );
 
     void apply( SdPage* pSlide ) const;
 
@@ -66,7 +66,7 @@ private:
     OUString maPresetId;
     OUString maUIName;
 
-    static bool importTransitionsFile( TransitionPresetList& rList,
+    static bool importTransitionsFile( TransitionPresetVec& rList,
                                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
                                        UStringMap& rTransitionNameMape,
                                        const OUString& aFilename );

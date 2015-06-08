@@ -36,7 +36,7 @@ class VCL_PLUGIN_PUBLIC FontCache
     struct FontFile;
     friend struct FontFile;
 
-    typedef std::list< PrintFontManager::PrintFont* > FontCacheEntry;
+    typedef std::vector< PrintFontManager::PrintFont* > FontCacheEntry;
     struct FontFile
     {
         FontCacheEntry      m_aEntry;
@@ -70,12 +70,12 @@ public:
     FontCache();
     ~FontCache();
 
-    bool getFontCacheFile( int nDirID, const OString& rFile, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
+    bool getFontCacheFile( int nDirID, const OString& rFile, std::vector< PrintFontManager::PrintFont* >& rNewFonts ) const;
     void updateFontCacheEntry( const PrintFontManager::PrintFont*, bool bFlush );
 
     // returns false for non cached directory
     // a cached but empty directory will return true but not append anything
-    bool listDirectory( const OString& rDir, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
+    bool listDirectory( const OString& rDir, std::vector< PrintFontManager::PrintFont* >& rNewFonts ) const;
     // returns true for directoris that contain only user overridden fonts
     bool scanAdditionalFiles( const OString& rDir );
 

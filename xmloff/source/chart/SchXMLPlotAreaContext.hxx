@@ -145,7 +145,7 @@ private:
 class SchXMLDataPointContext : public SvXMLImportContext
 {
 private:
-    ::std::list< DataRowPointStyle >& mrStyleList;
+    ::std::vector< DataRowPointStyle >& mrStyleList;
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries > m_xSeries;
     sal_Int32& mrIndex;
@@ -153,7 +153,7 @@ private:
 
 public:
     SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
-                             ::std::list< DataRowPointStyle >& rStyleList,
+                             ::std::vector< DataRowPointStyle >& rStyleList,
                              const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XDataSeries >& xSeries, sal_Int32& rIndex,
                                 bool bSymbolSizeForSeriesIsMissingInFile );
@@ -243,7 +243,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString &rSeriesStyleName,
-        ::std::list< DataRowPointStyle >& rStyleList,
+        ::std::vector< DataRowPointStyle >& rStyleList,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
         ContextType eContextType,
@@ -260,7 +260,7 @@ public:
 
 private:
     SchXMLImportHelper &                           mrImportHelper;
-    ::std::list< DataRowPointStyle > &             mrStyleList;
+    ::std::vector< DataRowPointStyle > &             mrStyleList;
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries > m_xSeries;
     ContextType                                    meContextType;

@@ -408,11 +408,8 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     FmFormPage::lateInit(rSrcPage);
 
     // use shape list directly to preserve constness of rSrcPage
-    const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
-    for( std::list< SdrObject* >::const_iterator aIter = rShapeList.begin();
-         aIter != rShapeList.end(); ++aIter )
+    for( SdrObject* pObj : rSrcPage.maPresentationShapeList.getList())
     {
-        SdrObject* pObj = *aIter;
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
     }
 

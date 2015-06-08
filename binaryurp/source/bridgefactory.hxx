@@ -23,7 +23,7 @@
 #include "sal/config.h"
 
 #include <exception>
-#include <list>
+#include <vector>
 #include <map>
 
 #include "com/sun/star/bridge/XBridgeFactory2.hpp"
@@ -119,7 +119,7 @@ private:
     void SAL_CALL disposing() SAL_OVERRIDE;
 
     typedef
-        std::list<
+        std::vector<
             com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >
         BridgeList;
 

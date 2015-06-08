@@ -23,7 +23,7 @@
 
 #include <memory>
 #include <vector>
-#include <list>
+#include <vector>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -39,7 +39,7 @@ namespace oox { namespace ppt {
     class SlideTransition;
 
     typedef std::shared_ptr< TimeNode > TimeNodePtr;
-    typedef std::list< TimeNodePtr > TimeNodePtrList;
+    typedef std::vector< TimeNodePtr > TimeNodePtrList;
 
     class TimeNode
     {

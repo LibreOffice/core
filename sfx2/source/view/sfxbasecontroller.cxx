@@ -1132,7 +1132,7 @@ throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    std::list< sal_Int16 > aGroupList;
+    std::vector< sal_Int16 > aGroupList;
     SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
     SfxSlotPool*  pPool = &SfxSlotPool::GetSlotPool( pViewFrame );
 
@@ -1164,7 +1164,7 @@ throw (RuntimeException, std::exception)
 uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
 throw (RuntimeException, std::exception)
 {
-    std::list< frame::DispatchInformation > aCmdList;
+    std::vector< frame::DispatchInformation > aCmdList;
 
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
@@ -1204,7 +1204,7 @@ throw (RuntimeException, std::exception)
     }
 
     uno::Sequence< frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< frame::DispatchInformation, std::list< frame::DispatchInformation > >( aCmdList );
+        comphelper::containerToSequence< frame::DispatchInformation, std::vector< frame::DispatchInformation > >( aCmdList );
 
     return aSeq;
 }

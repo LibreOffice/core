@@ -115,7 +115,7 @@
 #include <cstddef>
 #include <functional>
 #include <i18nlangtag/languagetag.hxx>
-#include <list>
+#include <vector>
 #include <map>
 #include <memory>
 #include <osl/conditn.hxx>

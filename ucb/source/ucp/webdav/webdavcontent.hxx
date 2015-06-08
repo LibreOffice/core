@@ -23,7 +23,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVCONTENT_HXX
 
 #include <memory>
-#include <list>
+#include <vector>
 #include <boost/scoped_ptr.hpp>
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -115,7 +115,7 @@ private:
         throw ( ::com::sun::star::uno::Exception );
 
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren);
 
     bool

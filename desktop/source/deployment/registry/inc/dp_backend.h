@@ -33,7 +33,7 @@
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include "dp_registry.hrc"
 
@@ -329,7 +329,7 @@ protected:
      */
     void deleteUnusedFolders(
         OUString const & relUrl,
-        ::std::list< OUString> const & usedFolders);
+        ::std::vector< OUString> const & usedFolders);
     /* deletes one folder with a "temporary" name and the corresponding
        tmp file, which was used to derive the folder name.
     */

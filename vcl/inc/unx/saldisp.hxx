@@ -31,7 +31,7 @@ class   SalXLib;
 #include <vcl/ptrstyle.hxx>
 #include <sal/types.h>
 #include <osl/mutex.h>
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include <vector>
 #include <tools/gen.hxx>
@@ -259,7 +259,7 @@ protected:
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
     std::vector< int > m_aXineramaScreenIndexMap;
-    std::list<SalObject*> m_aSalObjects;
+    std::vector<SalObject*> m_aSalObjects;
 
     bool            m_bUseRandRWrapper; // don't use randr on gtk, use gdk signals there
 
@@ -360,7 +360,7 @@ public:
     const std::list< SalFrame* >& getFrames() const { return m_aFrames; }
     bool            IsNumLockFromXS() const { return bNumLockFromXS_; }
 
-    std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
+    std::vector< SalObject* >& getSalObjects() { return m_aSalObjects; }
 
     virtual void    PostUserEvent() SAL_OVERRIDE = 0;
 };

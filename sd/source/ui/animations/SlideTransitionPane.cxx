@@ -275,9 +275,9 @@ sal_Int32 lcl_getTransitionEffectIndex(
     if( pDoc )
     {
         sal_Int32 nCurrentIndex = 0;
-        const ::sd::TransitionPresetList & rPresetList = ::sd::TransitionPreset::getTransitionPresetList();
-        ::sd::TransitionPresetList::const_iterator aIt( rPresetList.begin());
-        const ::sd::TransitionPresetList::const_iterator aEndIt( rPresetList.end());
+        const ::sd::TransitionPresetVec & rPresetList = ::sd::TransitionPreset::getTransitionPresetVec();
+        ::sd::TransitionPresetVec::const_iterator aIt( rPresetList.begin());
+        const ::sd::TransitionPresetVec::const_iterator aEndIt( rPresetList.end());
         for( ; aIt != aEndIt; ++aIt, ++nCurrentIndex )
         {
             if( rTransition.operator==( *(*aIt) ))
@@ -298,9 +298,9 @@ sal_Int32 lcl_getTransitionEffectIndex(
     ::sd::TransitionPresetPtr pResult;
     if( pDoc )
     {
-        const ::sd::TransitionPresetList& rPresetList = ::sd::TransitionPreset::getTransitionPresetList();
-        ::sd::TransitionPresetList::const_iterator aIter( rPresetList.begin() );
-        const ::sd::TransitionPresetList::const_iterator aEnd( rPresetList.end() );
+        const ::sd::TransitionPresetVec& rPresetList = ::sd::TransitionPreset::getTransitionPresetVec();
+        ::sd::TransitionPresetVec::const_iterator aIter( rPresetList.begin() );
+        const ::sd::TransitionPresetVec::const_iterator aEnd( rPresetList.end() );
         for( ; aIter != aEnd; ++aIter )
         {
             if( (*aIter)->getUIName().equals( rUIName ))
@@ -1060,9 +1060,9 @@ IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked)
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
 {
-    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
-    TransitionPresetList::const_iterator aIter( rPresetList.begin() );
-    const TransitionPresetList::const_iterator aEnd( rPresetList.end() );
+    const TransitionPresetVec& rPresetList = TransitionPreset::getTransitionPresetVec();
+    TransitionPresetVec::const_iterator aIter( rPresetList.begin() );
+    const TransitionPresetVec::const_iterator aEnd( rPresetList.end() );
     sal_uInt16 nIndex = 0;
     ::std::size_t nUIIndex = 0;
     while( aIter != aEnd )

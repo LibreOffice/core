@@ -29,7 +29,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include <vector>
 
@@ -49,7 +49,7 @@ typedef std::unordered_map< OUString,
                          eqFunc > OHierarchyElementList_Impl;
 
 typedef ::std::vector< OUString > OStringList_Impl;
-typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XExtendedStorageStream > >
+typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XExtendedStorageStream > >
                         OWeakStorRefList_Impl;
 
 struct OHierarchyElement_Impl : public cppu::WeakImplHelper1< ::com::sun::star::embed::XTransactionListener >

@@ -25,7 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
-#include <list>
+#include <vector>
 
 namespace utl
 {
@@ -37,7 +37,7 @@ namespace utl
     namespace
     {
 
-        typedef ::std::list< ITerminationListener* > Listeners;
+        typedef ::std::vector< ITerminationListener* > Listeners;
 
         struct ListenerAdminData
         {

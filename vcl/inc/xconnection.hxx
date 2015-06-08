@@ -26,7 +26,7 @@
 
 #include "displayconnectiondispatch.hxx"
 
-#include <list>
+#include <vector>
 
 namespace vcl {
 
@@ -34,9 +34,9 @@ namespace vcl {
         public DisplayConnectionDispatch
     {
         ::osl::Mutex                    m_aMutex;
-        ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
                                         m_aHandlers;
-        ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
                                         m_aErrorHandlers;
         ::com::sun::star::uno::Any      m_aAny;
     public:

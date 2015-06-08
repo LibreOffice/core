@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <list>
+#include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <sal/types.h>
@@ -80,7 +80,7 @@ private:
 
     void doStoreConfigItems();
 
-    std::list< ConfigItem * > items_;
+    std::vector< ConfigItem * > items_;
 };
 
 }

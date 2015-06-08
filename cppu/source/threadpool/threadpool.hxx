@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
 #define INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
 
+#include <vector>
 #include <list>
 #include <unordered_map>
 
@@ -65,7 +66,7 @@ namespace cppu_threadpool {
         EqualThreadId
     > ThreadIdHashMap;
 
-    typedef ::std::list < sal_Int64 > DisposedCallerList;
+    typedef ::std::vector < sal_Int64 > DisposedCallerList;
 
 
     struct WaitingThread

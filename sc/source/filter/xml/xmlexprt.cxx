@@ -3469,9 +3469,9 @@ void ScXMLExport::WriteTableShapes()
     {
         OSL_ENSURE(pTableShapes->size() > static_cast<size_t>(nCurrentTable), "wrong Table");
         SvXMLElementExport aShapesElem(*this, XML_NAMESPACE_TABLE, XML_SHAPES, true, false);
-        ScMyTableXShapes::iterator aItr((*pTableShapes)[nCurrentTable].begin());
-        ScMyTableXShapes::iterator aEndItr((*pTableShapes)[nCurrentTable].end());
-        while (aItr != aEndItr)
+        ScMyTableXShapes& rXShapes = (*pTableShapes)[nCurrentTable];
+        ScMyTableXShapes::iterator aItr(rXShapes.begin());
+        while (aItr != rXShapes.end())
         {
             if (aItr->is())
             {
@@ -3486,7 +3486,7 @@ void ScXMLExport::WriteTableShapes()
                 else
                     ExportShape(*aItr, NULL);
             }
-            aItr = (*pTableShapes)[nCurrentTable].erase(aItr);
+            aItr = rXShapes.erase(aItr);
         }
     }
 }

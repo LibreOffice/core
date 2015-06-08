@@ -25,7 +25,7 @@
 #include <ucbhelper/contenthelper.hxx>
 #include <libcmis/libcmis.hxx>
 
-#include <list>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -84,7 +84,7 @@ private:
 
 private:
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
 
     com::sun::star::uno::Any open(const com::sun::star::ucb::OpenCommandArgument2 & rArg,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
@@ -204,7 +204,7 @@ public:
         queryCreatableContentsInfo( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
                 throw( com::sun::star::uno::RuntimeException );
 
-    virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) SAL_OVERRIDE;
+    virtual std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) SAL_OVERRIDE;
 
     libcmis::ObjectPtr getObject( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception);
 };

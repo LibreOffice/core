@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCHANGETRACKINGIMPORTHELPER_HXX
 
 #include "chgtrack.hxx"
-#include <list>
+#include <vector>
 #include <com/sun/star/util/DateTime.hpp>
 
 class ScDocument;
@@ -66,7 +66,7 @@ struct ScMyDeleted
     ~ScMyDeleted();
 };
 
-typedef std::list<ScMyDeleted*> ScMyDeletedList;
+typedef std::vector<ScMyDeleted*> ScMyDeletedList;
 
 struct ScMyGenerated
 {
@@ -78,7 +78,7 @@ struct ScMyGenerated
     ~ScMyGenerated();
 };
 
-typedef std::list<ScMyGenerated*> ScMyGeneratedList;
+typedef std::vector<ScMyGenerated*> ScMyGeneratedList;
 
 struct ScMyInsertionCutOff
 {
@@ -99,7 +99,7 @@ struct ScMyMoveCutOff
             nID(nTempID), nStartPosition(nStartPos), nEndPosition(nEndPos) {}
 };
 
-typedef std::list<ScMyMoveCutOff> ScMyMoveCutOffs;
+typedef std::vector<ScMyMoveCutOff> ScMyMoveCutOffs;
 
 struct ScMyMoveRanges
 {
@@ -110,7 +110,7 @@ struct ScMyMoveRanges
             aSourceRange(rSource), aTargetRange(rTarget) {}
 };
 
-typedef std::list<sal_uInt32> ScMyDependencies;
+typedef std::vector<sal_uInt32> ScMyDependencies;
 
 struct ScMyBaseAction
 {
@@ -168,7 +168,7 @@ struct ScMyRejAction : public ScMyBaseAction
     virtual ~ScMyRejAction();
 };
 
-typedef std::list<ScMyBaseAction*> ScMyActions;
+typedef std::vector<ScMyBaseAction*> ScMyActions;
 
 class ScXMLChangeTrackingImportHelper
 {
@@ -211,7 +211,7 @@ public:
     void SetBigRange(const ScBigRange& aBigRange) { pCurrentAction->aBigRange = aBigRange; }
     void SetPreviousChange(const sal_uInt32 nPreviousAction, ScMyCellInfo* pCellInfo);
     void SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable);
-    void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependencies.push_front(nID); }
+    void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependencies.insert(pCurrentAction->aDependencies.begin(), nID); }
     void AddDeleted(const sal_uInt32 nID);
     void AddDeleted(const sal_uInt32 nID, ScMyCellInfo* pCellInfo);
     void SetMultiSpanned(const sal_Int16 nMultiSpanned);

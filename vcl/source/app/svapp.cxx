@@ -179,7 +179,7 @@ struct ImplPostEventData
 
 typedef ::std::pair< VclPtr<vcl::Window>, ImplPostEventData* > ImplPostEventPair;
 
-static ::std::list< ImplPostEventPair > aPostedEventList;
+static ::std::vector< ImplPostEventPair > aPostedEventList;
 
 Application* GetpApp()
 {
@@ -860,7 +860,7 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData )
         ImplWindowFrameProc( pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get(), NULL, (sal_uInt16) nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
-    ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
+    ::std::vector< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
 
     while( aIter != aPostedEventList.end() )
     {
@@ -881,7 +881,7 @@ void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
     const SolarMutexGuard aGuard;
 
     // remove all events for specific window, watch for destruction of internal data
-    ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
+    ::std::vector< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
 
     while( aIter != aPostedEventList.end() )
     {

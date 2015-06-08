@@ -303,7 +303,7 @@
 #include <lcms2.h>
 #include <limits.h>
 #include <limits>
-#include <list>
+#include <vector>
 #include <map>
 #include <math.h>
 #include <memory>

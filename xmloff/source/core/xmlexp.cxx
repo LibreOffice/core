@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <stack>
+#include <list>
 #include <string.h>
 
 #include <officecfg/Office/Common.hxx>

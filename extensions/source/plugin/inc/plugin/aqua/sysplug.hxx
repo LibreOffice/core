@@ -30,7 +30,7 @@
 
 #include <unistd.h>
 
-#include <list>
+#include <vector>
 #include <map>
 #include <algorithm>
 #include "premac.h"
@@ -150,7 +150,7 @@ private:
 
     // timer for sending nullEvents
     AutoTimer*                      m_pNullTimer;
-    std::list< XPlugin_Impl* >      m_aNullEventClients;
+    std::vector< XPlugin_Impl* >      m_aNullEventClients;
 };
 
 #endif

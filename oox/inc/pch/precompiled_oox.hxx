@@ -367,7 +367,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <iostream>
 #include <iterator>
-#include <list>
+#include <vector>
 #include <map>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <list>
+#include <vector>
 
 #include <boost/noncopyable.hpp>
 #include <cppuhelper/queryinterface.hxx>
@@ -667,7 +667,7 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
 static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
                                         const Reference < XRegistryKey >& xSource,
                                         const OUString& locationUrl,
-                                        std::list<OUString> & implNames)
+                                        std::vector<OUString> & implNames)
     // throw (InvalidRegistryException, RuntimeException)
 {
     Sequence < Reference < XRegistryKey > > subKeys = xSource->openKeys();
@@ -753,7 +753,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
 
 static void delete_all_singleton_entries(
     Reference < registry::XRegistryKey > const & xSingletons_section,
-    ::std::list< OUString > const & impl_names )
+    ::std::vector< OUString > const & impl_names )
     // throw (InvalidRegistryException, RuntimeException)
 {
     Sequence< Reference< registry::XRegistryKey > > singletons( xSingletons_section->openKeys() );
@@ -780,11 +780,9 @@ static void delete_all_singleton_entries(
             {
                 OUString const & registered_implname = p[ n ];
 
-                ::std::list< OUString >::const_iterator iPos( impl_names.begin() );
-                ::std::list< OUString >::const_iterator const iEnd( impl_names.end() );
-                for ( ; iPos != iEnd; ++iPos )
+                for ( const OUString & aImplName : impl_names )
                 {
-                    if (iPos->equals( registered_implname ))
+                    if (aImplName.equals( registered_implname ))
                     {
                         registered_implnames[ n ] = p[ nNewLength -1 ];
                         --nNewLength;
@@ -1147,7 +1145,7 @@ static void prepareRegistry(
 
 
 static void findImplementations(    const Reference < XRegistryKey > & xSource,
-                                    std::list <OUString>& implNames)
+                                    std::vector <OUString>& implNames)
 {
     bool isImplKey = false;
 
@@ -1631,13 +1629,13 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
                     }
                     if (xAct->writeRegistryInfo(xImpl, implementationLoaderUrl, locationUrl))
                     {
-                        std::list <OUString> implNames;
+                        std::vector <OUString> implNames;
 
                         findImplementations(xImpl, implNames);
 
                         if (!implNames.empty())
                         {
-                            std::list<OUString>::const_iterator iter = implNames.begin();
+                            std::vector<OUString>::const_iterator iter = implNames.begin();
 
                             Sequence<OUString> seqImpl(implNames.size());
                             OUString *pImplNames = seqImpl.getArray();
@@ -1691,7 +1689,7 @@ void ImplementationRegistration::doRevoke(
 {
     if( xDest.is() )
     {
-        std::list<OUString> aNames;
+        std::vector<OUString> aNames;
 
         const StringPool &pool = spool();
         Reference < XRegistryKey > xRootKey( xDest->getRootKey() );
@@ -1706,7 +1704,7 @@ void ImplementationRegistration::doRevoke(
         xKey = xRootKey->openKey( pool.slash_SERVICES );
         if (xKey.is())
         {
-            std::list<OUString>::const_iterator iter = aNames.begin();
+            std::vector<OUString>::const_iterator iter = aNames.begin();
 
             while (iter != aNames.end())
             {

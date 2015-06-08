@@ -86,7 +86,7 @@ TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::co
     mnFadeColor = xTransition->getFadeColor();
 }
 
-bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
+bool TransitionPreset::importTransitionsFile( TransitionPresetVec& rList,
                                               Reference< XMultiServiceFactory >& xServiceFactory,
                                               UStringMap& rTransitionNameMape,
                                               const OUString& aURL )
@@ -121,7 +121,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             }
             else
                 {
-                    OSL_FAIL( "sd::TransitionPreset::importTransitionPresetList(), malformed xml configuration file, giving up!" );
+                    OSL_FAIL( "sd::TransitionPreset::importTransitionPresetVec(), malformed xml configuration file, giving up!" );
                     break;
                 }
         }
@@ -132,7 +132,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
     return true;
 }
 
-bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
+bool TransitionPreset::importTransitionPresetVec( TransitionPresetVec& rList )
 {
     bool bRet = false;
 
@@ -190,32 +190,32 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
 namespace
 {
-    class ImportedTransitionPresetList
+    class ImportedTransitionPresetVec
     {
     private:
-        sd::TransitionPresetList m_aTransitionPresetList;
+        sd::TransitionPresetVec m_aTransitionPresetVec;
     public:
-        ImportedTransitionPresetList()
+        ImportedTransitionPresetVec()
         {
-            sd::TransitionPreset::importTransitionPresetList(
-                m_aTransitionPresetList);
+            sd::TransitionPreset::importTransitionPresetVec(
+                m_aTransitionPresetVec);
         }
-        const sd::TransitionPresetList& getList() const
+        const sd::TransitionPresetVec& getList() const
         {
-            return m_aTransitionPresetList;
+            return m_aTransitionPresetVec;
         }
     };
 
-    class theTransitionPresetList :
-        public rtl::Static<ImportedTransitionPresetList,
-                           theTransitionPresetList>
+    class theTransitionPresetVec :
+        public rtl::Static<ImportedTransitionPresetVec,
+                           theTransitionPresetVec>
     {
     };
 }
 
-const TransitionPresetList& TransitionPreset::getTransitionPresetList()
+const TransitionPresetVec& TransitionPreset::getTransitionPresetVec()
 {
-    return theTransitionPresetList::get().getList();
+    return theTransitionPresetVec::get().getList();
 }
 
 void TransitionPreset::apply( SdPage* pSlide ) const

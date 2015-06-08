@@ -32,7 +32,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <list>
+#include <vector>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>
@@ -554,7 +554,7 @@ public:
 private:
     OUString maName;
 
-    std::list< SvUnoImageMapObject* > maObjectList;
+    std::vector< SvUnoImageMapObject* > maObjectList;
 };
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMap );
@@ -579,8 +579,8 @@ SvUnoImageMap::SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pS
 
 SvUnoImageMap::~SvUnoImageMap()
 {
-    std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
-    const std::list< SvUnoImageMapObject* >::iterator aEnd = maObjectList.end();
+    std::vector< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
+    const std::vector< SvUnoImageMapObject* >::iterator aEnd = maObjectList.end();
     while( aIter != aEnd )
     {
         (*aIter++)->release();
@@ -615,7 +615,7 @@ void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 Index, const Any& Element 
         maObjectList.push_back( pObject );
     else
     {
-        std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
+        std::vector< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
         for( sal_Int32 n = 0; n < Index; n++ )
             ++aIter;
 
@@ -636,7 +636,7 @@ void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 nIndex ) throw(IndexOutOfB
     }
     else
     {
-        std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
+        std::vector< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
         std::advance(aIter, nIndex);
 
         (*aIter)->release();
@@ -652,7 +652,7 @@ void SAL_CALL SvUnoImageMap::replaceByIndex( sal_Int32 Index, const Any& Element
     if( NULL == pObject || Index >= nCount )
         throw IndexOutOfBoundsException();
 
-    std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
+    std::vector< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
     for( sal_Int32 n = 0; n < Index; n++ )
         ++aIter;
 
@@ -673,7 +673,7 @@ Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
     if( Index >= nCount )
         throw IndexOutOfBoundsException();
 
-    std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
+    std::vector< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
     for( sal_Int32 n = 0; n < Index; n++ )
         ++aIter;
 
@@ -718,15 +718,11 @@ bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
 
     rMap.SetName( maName );
 
-    std::list< SvUnoImageMapObject* >::const_iterator aIter = maObjectList.begin();
-    const std::list< SvUnoImageMapObject* >::const_iterator aEnd = maObjectList.end();
-    while( aIter != aEnd )
+    for( const SvUnoImageMapObject* p : maObjectList )
     {
-        IMapObject* pNewMapObject = (*aIter)->createIMapObject();
+        IMapObject* pNewMapObject = p->createIMapObject();
         rMap.InsertIMapObject( *pNewMapObject );
         delete pNewMapObject;
-
-        ++aIter;
     }
 
     return true;

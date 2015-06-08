@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <string>
 #include <list>
+#include <vector>
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <rtl/ustring.hxx>
@@ -26,19 +27,20 @@ class LibXmlTreeWalker;
 //!Tagger class.
 class L10N_DLLPUBLIC BasicCodeTagger
 {
-  private:
-    xmlDocPtr             m_pDocument;
-    std::list<xmlNodePtr> m_BasicCodeContainerTags;
-    LibXmlTreeWalker   *m_pXmlTreeWalker;
-    std::list<std::string>  m_BasicCodeStringList;
-    SyntaxHighlighter     m_Highlighter;
-    bool m_bTaggingCompleted;
+private:
+    xmlDocPtr                 m_pDocument;
+    std::list<xmlNodePtr>     m_BasicCodeContainerTags;
+    LibXmlTreeWalker         *m_pXmlTreeWalker;
+    std::vector<std::string>  m_BasicCodeStringList;
+    SyntaxHighlighter         m_Highlighter;
+    bool                      m_bTaggingCompleted;
+
     void tagParagraph( xmlNodePtr paragraph );
     static xmlChar* getTypeString( TokenTypes tokenType );
     void getBasicCodeContainerNodes();
     void tagBasCodeParagraphs();
 
-  public:
+public:
     enum TaggerException { FILE_WRITING, NULL_DOCUMENT, EMPTY_DOCUMENT };
     BasicCodeTagger( xmlDocPtr rootDoc );
     ~BasicCodeTagger();

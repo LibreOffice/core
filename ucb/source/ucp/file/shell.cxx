@@ -58,6 +58,7 @@
 #include "shell.hxx"
 #include "prov.hxx"
 #include "bc.hxx"
+#include <algorithm>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -422,9 +423,9 @@ shell::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
     if( ! it->second.notifier )
         it->second.notifier = new NotifierList();
 
-    std::list< Notifier* >& nlist = *( it->second.notifier );
+    std::vector< Notifier* >& nlist = *( it->second.notifier );
 
-    std::list<Notifier*>::iterator it1 = nlist.begin();
+    std::vector<Notifier*>::iterator it1 = nlist.begin();
     while( it1 != nlist.end() )               // Every "Notifier" only once
     {
         if( *it1 == pNotifier ) return;
@@ -436,7 +437,7 @@ shell::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 
 
 void SAL_CALL
-shell::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
+shell::deregisterNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -444,7 +445,9 @@ shell::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
     if( it == m_aContent.end() )
         return;
 
-    it->second.notifier->remove( pNotifier );
+    auto v = it->second.notifier;
+    v->erase( std::remove(v->begin(), v->end(), pNotifier), v->end() );
+
 
     if( ! it->second.notifier->size() )
         m_aContent.erase( it );
@@ -2558,18 +2561,18 @@ shell::getv(
 // EventListener
 
 
-std::list< ContentEventNotifier* >* SAL_CALL
+std::vector< ContentEventNotifier* >* SAL_CALL
 shell::getContentEventListeners( const OUString& aName )
 {
-    std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
-    std::list< ContentEventNotifier* >& listeners = *p;
+    std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
+    std::vector< ContentEventNotifier* >& listeners = *p;
     {
         osl::MutexGuard aGuard( m_aMutex );
         shell::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
-            std::list<Notifier*>& listOfNotifiers = *( it->second.notifier );
-            std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
+            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            std::vector<Notifier*>::iterator it1 = listOfNotifiers.begin();
             while( it1 != listOfNotifiers.end() )
             {
                 Notifier* pointer = *it1;
@@ -2585,18 +2588,18 @@ shell::getContentEventListeners( const OUString& aName )
 
 
 
-std::list< ContentEventNotifier* >* SAL_CALL
+std::vector< ContentEventNotifier* >* SAL_CALL
 shell::getContentDeletedEventListeners( const OUString& aName )
 {
-    std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
-    std::list< ContentEventNotifier* >& listeners = *p;
+    std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
+    std::vector< ContentEventNotifier* >& listeners = *p;
     {
         osl::MutexGuard aGuard( m_aMutex );
         shell::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
-            std::list<Notifier*>& listOfNotifiers = *( it->second.notifier );
-            std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
+            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            std::vector<Notifier*>::iterator it1 = listOfNotifiers.begin();
             while( it1 != listOfNotifiers.end() )
             {
                 Notifier* pointer = *it1;
@@ -2612,9 +2615,9 @@ shell::getContentDeletedEventListeners( const OUString& aName )
 
 
 void SAL_CALL
-shell::notifyInsert( std::list< ContentEventNotifier* >* listeners,const OUString& aChildName )
+shell::notifyInsert( std::vector< ContentEventNotifier* >* listeners,const OUString& aChildName )
 {
-    std::list< ContentEventNotifier* >::iterator it = listeners->begin();
+    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyChildInserted( aChildName );
@@ -2626,9 +2629,9 @@ shell::notifyInsert( std::list< ContentEventNotifier* >* listeners,const OUStrin
 
 
 void SAL_CALL
-shell::notifyContentDeleted( std::list< ContentEventNotifier* >* listeners )
+shell::notifyContentDeleted( std::vector< ContentEventNotifier* >* listeners )
 {
-    std::list< ContentEventNotifier* >::iterator it = listeners->begin();
+    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyDeleted();
@@ -2640,10 +2643,10 @@ shell::notifyContentDeleted( std::list< ContentEventNotifier* >* listeners )
 
 
 void SAL_CALL
-shell::notifyContentRemoved( std::list< ContentEventNotifier* >* listeners,
+shell::notifyContentRemoved( std::vector< ContentEventNotifier* >* listeners,
                              const OUString& aChildName )
 {
-    std::list< ContentEventNotifier* >::iterator it = listeners->begin();
+    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyRemoved( aChildName );
@@ -2656,18 +2659,18 @@ shell::notifyContentRemoved( std::list< ContentEventNotifier* >* listeners,
 
 
 
-std::list< PropertySetInfoChangeNotifier* >* SAL_CALL
+std::vector< PropertySetInfoChangeNotifier* >* SAL_CALL
 shell::getPropertySetListeners( const OUString& aName )
 {
-    std::list< PropertySetInfoChangeNotifier* >* p = new std::list< PropertySetInfoChangeNotifier* >;
-    std::list< PropertySetInfoChangeNotifier* >& listeners = *p;
+    std::vector< PropertySetInfoChangeNotifier* >* p = new std::vector< PropertySetInfoChangeNotifier* >;
+    std::vector< PropertySetInfoChangeNotifier* >& listeners = *p;
     {
         osl::MutexGuard aGuard( m_aMutex );
         shell::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
-            std::list<Notifier*>& listOfNotifiers = *( it->second.notifier );
-            std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
+            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            std::vector<Notifier*>::iterator it1 = listOfNotifiers.begin();
             while( it1 != listOfNotifiers.end() )
             {
                 Notifier* pointer = *it1;
@@ -2683,10 +2686,10 @@ shell::getPropertySetListeners( const OUString& aName )
 
 
 void SAL_CALL
-shell::notifyPropertyAdded( std::list< PropertySetInfoChangeNotifier* >* listeners,
+shell::notifyPropertyAdded( std::vector< PropertySetInfoChangeNotifier* >* listeners,
                             const OUString& aPropertyName )
 {
-    std::list< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
+    std::vector< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyAdded( aPropertyName );
@@ -2698,10 +2701,10 @@ shell::notifyPropertyAdded( std::list< PropertySetInfoChangeNotifier* >* listene
 
 
 void SAL_CALL
-shell::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* listeners,
+shell::notifyPropertyRemoved( std::vector< PropertySetInfoChangeNotifier* >* listeners,
                               const OUString& aPropertyName )
 {
-    std::list< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
+    std::vector< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyRemoved( aPropertyName );
@@ -2713,15 +2716,15 @@ shell::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* liste
 
 
 
-std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
+std::vector< std::vector< ContentEventNotifier* >* >* SAL_CALL
 shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
                                           const OUString& aNewPrefix,
                                           bool withChildren )
 {
 
-    std::vector< std::list< ContentEventNotifier* >* >* aVectorOnHeap =
-        new std::vector< std::list< ContentEventNotifier* >* >;
-    std::vector< std::list< ContentEventNotifier* >* >&  aVector = *aVectorOnHeap;
+    std::vector< std::vector< ContentEventNotifier* >* >* aVectorOnHeap =
+        new std::vector< std::vector< ContentEventNotifier* >* >;
+    std::vector< std::vector< ContentEventNotifier* >* >&  aVector = *aVectorOnHeap;
 
     sal_Int32 count;
     OUString aOldName;
@@ -2754,8 +2757,8 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
         for( sal_Int32 j = 0; j < count; ++j )
         {
-            std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
-            std::list< ContentEventNotifier* >& listeners = *p;
+            std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
+            std::vector< ContentEventNotifier* >& listeners = *p;
 
             if( withChildren )
             {
@@ -2775,7 +2778,7 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
                 itold->second.properties = 0;
 
                 // copy existing list
-                std::list< Notifier* >* copyList = itnew->second.notifier;
+                std::vector< Notifier* >* copyList = itnew->second.notifier;
                 itnew->second.notifier = itold->second.notifier;
                 itold->second.notifier = 0;
 
@@ -2783,8 +2786,8 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
                 if( itnew != m_aContent.end() && itnew->second.notifier )
                 {
-                    std::list<Notifier*>& listOfNotifiers = *( itnew->second.notifier );
-                    std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
+                    std::vector<Notifier*>& listOfNotifiers = *( itnew->second.notifier );
+                    std::vector<Notifier*>::iterator it1 = listOfNotifiers.begin();
                     while( it1 != listOfNotifiers.end() )
                     {
                         Notifier* pointer = *it1;
@@ -2799,7 +2802,7 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
                 // However, these may be in status BaseContent::Deleted
                 if( copyList != 0 )
                 {
-                    std::list< Notifier* >::iterator copyIt = copyList->begin();
+                    std::vector< Notifier* >::iterator copyIt = copyList->begin();
                     while( copyIt != copyList->end() )
                     {
                         itnew->second.notifier->push_back( *copyIt );
@@ -2818,13 +2821,13 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
 
 void SAL_CALL
-shell::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* >* listeners_vec )
+shell::notifyContentExchanged( std::vector< std::vector< ContentEventNotifier* >* >* listeners_vec )
 {
-    std::list< ContentEventNotifier* >* listeners;
+    std::vector< ContentEventNotifier* >* listeners;
     for( size_t i = 0; i < listeners_vec->size(); ++i )
     {
         listeners = (*listeners_vec)[i];
-        std::list< ContentEventNotifier* >::iterator it = listeners->begin();
+        std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
         while( it != listeners->end() )
         {
             (*it)->notifyExchanged();
@@ -2838,18 +2841,18 @@ shell::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* 
 
 
 
-std::list< PropertyChangeNotifier* >* SAL_CALL
+std::vector< PropertyChangeNotifier* >* SAL_CALL
 shell::getPropertyChangeNotifier( const OUString& aName )
 {
-    std::list< PropertyChangeNotifier* >* p = new std::list< PropertyChangeNotifier* >;
-    std::list< PropertyChangeNotifier* >& listeners = *p;
+    std::vector< PropertyChangeNotifier* >* p = new std::vector< PropertyChangeNotifier* >;
+    std::vector< PropertyChangeNotifier* >& listeners = *p;
     {
         osl::MutexGuard aGuard( m_aMutex );
         shell::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
-            std::list<Notifier*>& listOfNotifiers = *( it->second.notifier );
-            std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
+            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            std::vector<Notifier*>::iterator it1 = listOfNotifiers.begin();
             while( it1 != listOfNotifiers.end() )
             {
                 Notifier* pointer = *it1;
@@ -2864,10 +2867,10 @@ shell::getPropertyChangeNotifier( const OUString& aName )
 }
 
 
-void SAL_CALL shell::notifyPropertyChanges( std::list< PropertyChangeNotifier* >* listeners,
+void SAL_CALL shell::notifyPropertyChanges( std::vector< PropertyChangeNotifier* >* listeners,
                                             const uno::Sequence< beans::PropertyChangeEvent >& seqChanged )
 {
-    std::list< PropertyChangeNotifier* >::iterator it = listeners->begin();
+    std::vector< PropertyChangeNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyChanged( seqChanged );

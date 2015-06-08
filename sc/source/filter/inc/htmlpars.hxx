@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_HTMLPARS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_HTMLPARS_HXX
 
-#include <list>
+#include <vector>
 #include <memory>
 #include <map>
 #include <stack>
@@ -467,7 +467,7 @@ private:
     typedef ::std::unique_ptr< ScHTMLTableMap >         ScHTMLTableMapPtr;
     typedef ::std::unique_ptr< SfxItemSet >             SfxItemSetPtr;
     typedef ::std::vector< SCCOLROW >                   ScSizeVec;
-    typedef ::std::list< ScHTMLEntry* >                 ScHTMLEntryList;
+    typedef ::std::vector< ScHTMLEntry* >               ScHTMLEntryList;
     typedef ::std::map< ScHTMLPos, ScHTMLEntryList >    ScHTMLEntryMap;
     typedef ::std::unique_ptr< ScHTMLEntry >            ScHTMLEntryPtr;
 

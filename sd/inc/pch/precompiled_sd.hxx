@@ -467,7 +467,7 @@
 #include <iterator>
 #include <limits.h>
 #include <linguistic/lngprops.hxx>
-#include <list>
+#include <vector>
 #include <map>
 #include <math.h>
 #include <memory>

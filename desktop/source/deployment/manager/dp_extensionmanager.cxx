@@ -53,7 +53,7 @@
 #include "dp_properties.hxx"
 #include <boost/bind.hpp>
 
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <set>
 
@@ -244,7 +244,7 @@ void ExtensionManager::addExtensionsToMap(
 {
     //Determine the index in the vector where these extensions are to be
     //added.
-    ::std::list<OUString>::const_iterator citNames =
+    ::std::vector<OUString>::const_iterator citNames =
         m_repositoryNames.begin();
     int index = 0;
     for (;citNames != m_repositoryNames.end(); ++citNames, ++index)
@@ -283,13 +283,13 @@ void ExtensionManager::addExtensionsToMap(
    The number of elements is always three, unless the number of repository
    changes.
  */
-::std::list<Reference<css::deployment::XPackage> >
+::std::vector<Reference<css::deployment::XPackage> >
     ExtensionManager::getExtensionsWithSameId(
         OUString const & identifier, OUString const & fileName,
         Reference< ucb::XCommandEnvironment> const & /*xCmdEnv*/)
 
 {
-    ::std::list<Reference<css::deployment::XPackage> > extensionList;
+    ::std::vector<Reference<css::deployment::XPackage> > extensionList;
     Reference<css::deployment::XPackageManager> lRepos[] = {
           getUserRepository(), getSharedRepository(), getBundledRepository() };
     for (int i(0); i != SAL_N_ELEMENTS(lRepos); ++i)
@@ -323,13 +323,13 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 {
     try
     {
-        ::std::list<Reference<css::deployment::XPackage> > listExtensions =
+        ::std::vector<Reference<css::deployment::XPackage> > listExtensions =
             getExtensionsWithSameId(
                 identifier, fileName, xCmdEnv);
         bool bHasExtension = false;
 
         //throw an IllegalArgumentException if there is no extension at all.
-        typedef  ::std::list<Reference<css::deployment::XPackage> >::const_iterator CIT;
+        typedef  ::std::vector<Reference<css::deployment::XPackage> >::const_iterator CIT;
         for (CIT i = listExtensions.begin(); i != listExtensions.end(); ++i)
             bHasExtension |= i->is();
         if (!bHasExtension)
@@ -339,7 +339,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 
         return comphelper::containerToSequence<
             Reference<css::deployment::XPackage>,
-            ::std::list<Reference<css::deployment::XPackage> >
+            ::std::vector<Reference<css::deployment::XPackage> >
             > (listExtensions);
     }
     catch ( const css::deployment::DeploymentException & )
@@ -366,7 +366,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 bool ExtensionManager::isUserDisabled(
     OUString const & identifier, OUString const & fileName)
 {
-    ::std::list<Reference<css::deployment::XPackage> > listExtensions;
+    ::std::vector<Reference<css::deployment::XPackage> > listExtensions;
 
     try {
         listExtensions = getExtensionsWithSameId(identifier, fileName);
@@ -376,7 +376,7 @@ bool ExtensionManager::isUserDisabled(
 
     return isUserDisabled( ::comphelper::containerToSequence<
                            Reference<css::deployment::XPackage>,
-                           ::std::list<Reference<css::deployment::XPackage> >
+                           ::std::vector<Reference<css::deployment::XPackage> >
                            > (listExtensions));
 }
 
@@ -422,7 +422,7 @@ void ExtensionManager::activateExtension(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
-    ::std::list<Reference<css::deployment::XPackage> > listExtensions;
+    ::std::vector<Reference<css::deployment::XPackage> > listExtensions;
     try {
         listExtensions = getExtensionsWithSameId(identifier, fileName);
     } catch (const lang::IllegalArgumentException &) {
@@ -432,7 +432,7 @@ void ExtensionManager::activateExtension(
     activateExtension(
         ::comphelper::containerToSequence<
         Reference<css::deployment::XPackage>,
-        ::std::list<Reference<css::deployment::XPackage> >
+        ::std::vector<Reference<css::deployment::XPackage> >
         > (listExtensions),
         bUserDisabled, bStartup, xAbortChannel, xCmdEnv);
 

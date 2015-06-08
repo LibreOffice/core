@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <vector>
-#include <list>
+#include <vector>
 
 struct ScMyDrawPage
 {
@@ -34,7 +34,7 @@ struct ScMyDrawPage
     ScMyDrawPage() : bHasForms(false) {}
 };
 
-typedef std::list< com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > ScMyTableXShapes;
+typedef std::vector< com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > ScMyTableXShapes;
 typedef std::vector<ScMyTableXShapes> ScMyTableShapes;
 typedef std::vector<ScMyDrawPage> ScMyDrawPages;
 

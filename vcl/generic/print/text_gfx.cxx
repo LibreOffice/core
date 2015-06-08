@@ -85,7 +85,7 @@ static int getVerticalDeltaAngle( sal_Unicode nChar )
 void
 PrinterGfx::PSUploadPS1Font (sal_Int32 nFontID)
 {
-    std::list< sal_Int32 >::iterator aFont;
+    std::vector< sal_Int32 >::iterator aFont;
     // already in the document header ?
     for (aFont = maPS1Font.begin(); aFont != maPS1Font.end(); ++aFont )
         if( nFontID == *aFont )
@@ -669,10 +669,10 @@ PrinterGfx::OnEndJob ()
 }
 
 void
-PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts )
+PrinterGfx::writeResources( osl::File* pFile, std::vector< OString >& rSuppliedFonts )
 {
     // write all type 1 fonts
-    std::list< sal_Int32 >::iterator aFont;
+    std::vector< sal_Int32 >::iterator aFont;
     // already in the document header ?
     for (aFont = maPS1Font.begin(); aFont != maPS1Font.end(); ++aFont)
     {

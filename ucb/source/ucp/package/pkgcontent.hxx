@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGCONTENT_HXX
 #define INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGCONTENT_HXX
 
-#include <list>
+#include <vector>
 #include <rtl/ref.hxx>
 
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
@@ -199,7 +199,7 @@ private:
     flushData();
 
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren );
 
     bool

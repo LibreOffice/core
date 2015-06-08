@@ -415,9 +415,9 @@ struct NewDonutSeries
             m_aPointStyles[nPointIndex]=rStyleName;
     }
 
-    ::std::list< DataRowPointStyle > creatStyleList()
+    ::std::vector< DataRowPointStyle > creatStyleList()
     {
-        ::std::list< DataRowPointStyle > aRet;
+        ::std::vector< DataRowPointStyle > aRet;
 
         DataRowPointStyle aSeriesStyle( DataRowPointStyle::DATA_SERIES
             , m_xSeries, -1, 1, msStyleName, mnAttachedAxis );
@@ -445,12 +445,12 @@ struct NewDonutSeries
     }
 };
 
-void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle >& rStyleList
+void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::vector< DataRowPointStyle >& rStyleList
         , const ::std::map< ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries> , sal_Int32 >& rSeriesMap )
 {
-    ::std::list< DataRowPointStyle >::iterator aIt(rStyleList.begin());
-    ::std::list< DataRowPointStyle >::iterator aEnd(rStyleList.end());
+    ::std::vector< DataRowPointStyle >::iterator aIt(rStyleList.begin());
+    ::std::vector< DataRowPointStyle >::iterator aEnd(rStyleList.end());
 
     //detect old series count
     //and add old series to aSeriesMap
@@ -559,7 +559,7 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
     ::std::vector< NewDonutSeries >::iterator aNewSeriesEnd( aNewSeriesVector.end() );
     for( ;aNewSeriesIt!=aNewSeriesEnd; ++aNewSeriesIt)
     {
-        ::std::list< DataRowPointStyle > aList( aNewSeriesIt->creatStyleList() );
+        ::std::vector< DataRowPointStyle > aList( aNewSeriesIt->creatStyleList() );
         rStyleList.insert(rStyleList.end(),aList.begin(),aList.end());
     }
 }

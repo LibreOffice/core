@@ -398,9 +398,9 @@ namespace cmis
         return aFolderCollection.getTypes();
     }
 
-    list< uno::Reference< ucb::XContent > > RepoContent::getChildren( )
+    vector< uno::Reference< ucb::XContent > > RepoContent::getChildren( )
     {
-        list< uno::Reference< ucb::XContent > > result;
+        vector< uno::Reference< ucb::XContent > > result;
 
         // TODO Cache the results somehow
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::getChildren" );

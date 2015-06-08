@@ -20,7 +20,7 @@
 #include <sfx2/itemconnect.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <list>
+#include <vector>
 #include <svl/itempool.hxx>
 
 
@@ -295,10 +295,10 @@ public:
 
 private:
     typedef boost::shared_ptr< ItemConnectionBase > ItemConnectionRef;
-    typedef std::list< ItemConnectionRef >          ItemConnectionList;
-    typedef ItemConnectionList::iterator            ItemConnectionListIt;
+    typedef std::vector< ItemConnectionRef >        ItemConnectionVec;
+    typedef ItemConnectionVec::iterator             ItemConnectionVecIt;
 
-    ItemConnectionList          maList;
+    ItemConnectionVec          maList;
 };
 
 void ItemConnectionArrayImpl::Append( ItemConnectionBase* pConnection )
@@ -309,20 +309,20 @@ void ItemConnectionArrayImpl::Append( ItemConnectionBase* pConnection )
 
 void ItemConnectionArrayImpl::ApplyFlags( const SfxItemSet& rItemSet )
 {
-    for( ItemConnectionListIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
+    for( ItemConnectionVecIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
         (*aIt)->DoApplyFlags( rItemSet );
 }
 
 void ItemConnectionArrayImpl::Reset( const SfxItemSet& rItemSet )
 {
-    for( ItemConnectionListIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
+    for( ItemConnectionVecIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
         (*aIt)->DoReset( rItemSet );
 }
 
 bool ItemConnectionArrayImpl::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
 {
     bool bChanged = false;
-    for( ItemConnectionListIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
+    for( ItemConnectionVecIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
         bChanged |= (*aIt)->DoFillItemSet( rDestSet, rOldSet );
     return bChanged;
 }

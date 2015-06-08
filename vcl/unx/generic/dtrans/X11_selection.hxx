@@ -34,6 +34,7 @@
 
 #include <osl/conditn.hxx>
 
+#include <vector>
 #include <list>
 #include <unordered_map>
 
@@ -79,7 +80,7 @@ namespace x11 {
         class SelectionManager*     m_pSelectionManager;
         css::uno::Reference< css::datatransfer::dnd::XDragSource >
                                     m_xSelectionManager;
-        ::std::list< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
+        ::std::vector< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
                             m_aListeners;
 
         DropTarget();

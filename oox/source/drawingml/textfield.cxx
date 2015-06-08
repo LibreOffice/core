@@ -19,7 +19,7 @@
 
 #include "drawingml/textfield.hxx"
 
-#include <list>
+#include <vector>
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
@@ -55,7 +55,7 @@ namespace {
  * @param xModel the model
  * @param sType the OpenXML field type.
  */
-void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
+void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
                                                             const Reference< XModel > & xModel, const OUString & sType )
 {
     Reference< XInterface > xIface;
@@ -152,12 +152,12 @@ sal_Int32 TextField::insertAt(
             nCharHeight = aTextCharacterProps.moHeight.get();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
-        std::list< Reference< XTextField > > fields;
+        std::vector< Reference< XTextField > > fields;
         lclCreateTextFields( fields, rFilterBase.getModel(), msType );
         if( !fields.empty() )
         {
             bool bFirst = true;
-            for( std::list< Reference< XTextField > >::iterator iter = fields.begin();
+            for( std::vector< Reference< XTextField > >::iterator iter = fields.begin();
                      iter != fields.end(); ++iter )
             {
                 if( iter->is() )

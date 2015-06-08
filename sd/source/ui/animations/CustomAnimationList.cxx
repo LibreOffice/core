@@ -546,8 +546,8 @@ void CustomAnimationList::update()
 
     CustomAnimationListEntry* pEntry = 0;
 
-    std::list< CustomAnimationEffectPtr > aExpanded;
-    std::list< CustomAnimationEffectPtr > aSelected;
+    std::vector< CustomAnimationEffectPtr > aExpanded;
+    std::vector< CustomAnimationEffectPtr > aSelected;
 
     CustomAnimationEffectPtr pFirstSelEffect;
     CustomAnimationEffectPtr pLastSelEffect;
@@ -609,10 +609,10 @@ void CustomAnimationList::update()
         std::for_each( mpMainSequence->getBegin(), mpMainSequence->getEnd(), stl_append_effect_func( *this ) );
         mpLastParentEntry = 0;
 
-        const InteractiveSequenceList& rISL = mpMainSequence->getInteractiveSequenceList();
+        const InteractiveSequenceVec& rISL = mpMainSequence->getInteractiveSequenceVec();
 
-        InteractiveSequenceList::const_iterator aIter( rISL.begin() );
-        const InteractiveSequenceList::const_iterator aEnd( rISL.end() );
+        InteractiveSequenceVec::const_iterator aIter( rISL.begin() );
+        const InteractiveSequenceVec::const_iterator aEnd( rISL.end() );
         while( aIter != aEnd )
         {
             InteractiveSequencePtr pIS( (*aIter++) );

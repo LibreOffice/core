@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_POSTITMGR_HXX
 #define INCLUDED_SW_INC_POSTITMGR_HXX
 
-#include <list>
 #include <vector>
 #include <editeng/outlobj.hxx>
 #include <rtl/ustring.hxx>
@@ -65,8 +64,8 @@ struct ImplSVEvent;
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
 
-typedef std::list<SwSidebarItem*> SwSidebarItem_list;
-typedef std::list<SwSidebarItem*>::iterator SwSidebarItem_iterator;
+typedef std::vector<SwSidebarItem*> SwSidebarItem_list;
+typedef std::vector<SwSidebarItem*>::iterator SwSidebarItem_iterator;
 
 struct SwPostItPageItem
 {
@@ -142,7 +141,7 @@ class SwPostItMgr: public SfxListener
         SwView*                         mpView;
         SwWrtShell*                     mpWrtShell;
         VclPtr<SwEditWin>               mpEditWin;
-        std::list< SwSidebarItem*>      mvPostItFields;
+        std::vector<SwSidebarItem*>     mvPostItFields;
         std::vector<SwPostItPageItem*>  mPages;
         ImplSVEvent *                   mnEventId;
         bool                            mbWaitingForCalcRects;
@@ -159,7 +158,7 @@ class SwPostItMgr: public SfxListener
         // data structure to collect the <SwSidebarWin> instances for certain <SwFrm> instances.
         sw::sidebarwindows::SwFrmSidebarWinContainer* mpFrmSidebarWinContainer;
 
-        typedef std::list<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
+        typedef std::vector<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
 
         void            AddPostIts(bool bCheckExistance = true,bool bFocus = true);
         void            RemoveSidebarWin();
@@ -167,7 +166,7 @@ class SwPostItMgr: public SfxListener
         void            Scroll(const long lScroll,const unsigned long aPage );
         void            AutoScroll(const sw::sidebarwindows::SwSidebarWin* pPostIt,const unsigned long aPage );
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
-        bool            LayoutByPage( std::list<sw::sidebarwindows::SwSidebarWin*> &aVisiblePostItList,
+        bool            LayoutByPage( std::vector<sw::sidebarwindows::SwSidebarWin*> &aVisiblePostItList,
                                       const Rectangle& rBorder,
                                       long lNeededHeight);
         void            CheckForRemovedPostIts();
@@ -193,7 +192,7 @@ class SwPostItMgr: public SfxListener
             SwPostItMgr(SwView* aDoc);
             virtual ~SwPostItMgr();
 
-            typedef std::list< SwSidebarItem* >::const_iterator const_iterator;
+            typedef std::vector< SwSidebarItem* >::const_iterator const_iterator;
             const_iterator begin()  const { return mvPostItFields.begin(); }
             const_iterator end()    const { return mvPostItFields.end();  }
 

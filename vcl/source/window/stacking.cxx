@@ -1118,8 +1118,8 @@ vcl::Window* Window::GetWindow( GetWindowType nType ) const
         {
             if ( !mpWindowImpl->mpRealParent )
                 return NULL;
-            const ::std::list< VclPtr<vcl::Window> >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
-            ::std::list< VclPtr<vcl::Window> >::const_iterator myPos =
+            const ::std::vector< VclPtr<vcl::Window> >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
+            ::std::vector< VclPtr<vcl::Window> >::const_iterator myPos =
                 ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
             if ( myPos == rTopWindows.end() )
                 return NULL;
@@ -1132,8 +1132,8 @@ vcl::Window* Window::GetWindow( GetWindowType nType ) const
         {
             if ( !mpWindowImpl->mpRealParent )
                 return NULL;
-            const ::std::list< VclPtr<vcl::Window> >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
-            ::std::list< VclPtr<vcl::Window> >::const_iterator myPos =
+            const ::std::vector< VclPtr<vcl::Window> >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
+            ::std::vector< VclPtr<vcl::Window> >::const_iterator myPos =
                 ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
             if ( ( myPos == rTopWindows.end() ) || ( ++myPos == rTopWindows.end() ) )
                 return NULL;

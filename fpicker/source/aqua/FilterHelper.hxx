@@ -27,7 +27,7 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include <list>
+#include <vector>
 #include <vector>
 
 #include <premac.h>
@@ -36,8 +36,8 @@
 
 typedef ::com::sun::star::beans::StringPair UnoFilterEntry;
 typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
-typedef ::std::list<NSString *> NSStringList;
-typedef ::std::list<OUString> OUStringList;
+typedef ::std::vector<NSString *> NSStringList;
+typedef ::std::vector<OUString> OUStringList;
 
 struct FilterEntry
 {

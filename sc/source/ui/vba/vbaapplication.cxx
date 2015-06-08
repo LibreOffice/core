@@ -919,10 +919,10 @@ ScVbaApplication::getPathSeparator() throw (uno::RuntimeException, std::exceptio
 
 namespace {
 
-typedef ::std::list< ScRange > ListOfScRange;
+typedef ::std::vector< ScRange > ScRangeVec;
 
 /** Appends all ranges of a VBA Range object in the passed Any to the list of ranges. */
-void lclAddToListOfScRange( ListOfScRange& rList, const uno::Any& rArg )
+void lclAddToScRangeVec( ScRangeVec& rList, const uno::Any& rArg )
         throw (script::BasicErrorException, uno::RuntimeException)
 {
     if( rArg.hasValue() )
@@ -996,13 +996,13 @@ bool lclTryJoin( ScRange& r1, const ScRange& r2 )
 
 /** Strips out ranges that are contained by other ranges, joins ranges that can be joined
     together (aligned borders, e.g. A4:D10 and B4:E10 would be combined to A4:E10. */
-void lclJoinRanges( ListOfScRange& rList )
+void lclJoinRanges( ScRangeVec& rList )
 {
-    ListOfScRange::iterator aOuterIt = rList.begin();
+    ScRangeVec::iterator aOuterIt = rList.begin();
     while( aOuterIt != rList.end() )
     {
         bool bAnyErased = false;    // true = any range erased from rList
-        ListOfScRange::iterator aInnerIt = rList.begin();
+        ScRangeVec::iterator aInnerIt = rList.begin();
         while( aInnerIt != rList.end() )
         {
             bool bInnerErased = false;   // true = aInnerIt erased from rList
@@ -1025,24 +1025,24 @@ void lclJoinRanges( ListOfScRange& rList )
 }
 
 /** Intersects the passed list with all ranges of a VBA Range object in the passed Any. */
-void lclIntersectRanges( ListOfScRange& rList, const uno::Any& rArg )
+void lclIntersectRanges( ScRangeVec& rList, const uno::Any& rArg )
         throw (script::BasicErrorException, uno::RuntimeException)
 {
     // extract the ranges from the passed argument, will throw on invalid data
-    ListOfScRange aList2;
-    lclAddToListOfScRange( aList2, rArg );
+    ScRangeVec aList2;
+    lclAddToScRangeVec( aList2, rArg );
     // do nothing, if the passed list is already empty
     if( !rList.empty() && !aList2.empty() )
     {
         // save original list in a local
-        ListOfScRange aList1;
+        ScRangeVec aList1;
         aList1.swap( rList );
         // join ranges from passed argument
         lclJoinRanges( aList2 );
         // calculate intersection of the ranges in both lists
-        for( ListOfScRange::const_iterator aOuterIt = aList1.begin(), aOuterEnd = aList1.end(); aOuterIt != aOuterEnd; ++aOuterIt )
+        for( ScRangeVec::const_iterator aOuterIt = aList1.begin(), aOuterEnd = aList1.end(); aOuterIt != aOuterEnd; ++aOuterIt )
         {
-            for( ListOfScRange::const_iterator aInnerIt = aList2.begin(), aInnerEnd = aList2.end(); aInnerIt != aInnerEnd; ++aInnerIt )
+            for( ScRangeVec::const_iterator aInnerIt = aList2.begin(), aInnerEnd = aList2.end(); aInnerIt != aInnerEnd; ++aInnerIt )
             {
                 if( aOuterIt->Intersects( *aInnerIt ) )
                 {
@@ -1066,13 +1066,13 @@ void lclIntersectRanges( ListOfScRange& rList, const uno::Any& rArg )
 uno::Reference< excel::XRange > lclCreateVbaRange(
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
-        const ListOfScRange& rList ) throw (uno::RuntimeException)
+        const ScRangeVec& rList ) throw (uno::RuntimeException)
 {
     ScDocShell* pDocShell = excel::getDocShell( rxModel );
     if( !pDocShell ) throw uno::RuntimeException();
 
     ScRangeList aCellRanges;
-    for( ListOfScRange::const_iterator aIt = rList.begin(), aEnd = rList.end(); aIt != aEnd; ++aIt )
+    for( ScRangeVec::const_iterator aIt = rList.begin(), aEnd = rList.end(); aIt != aEnd; ++aIt )
         aCellRanges.Append( *aIt );
 
     if( aCellRanges.size() == 1 )
@@ -1105,8 +1105,8 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Intersect(
         DebugHelper::basicexception( SbERR_BAD_PARAMETER, OUString() );
 
     // initialize the result list with 1st parameter, join its ranges together
-    ListOfScRange aList;
-    lclAddToListOfScRange( aList, uno::Any( rArg1 ) );
+    ScRangeVec aList;
+    lclAddToScRangeVec( aList, uno::Any( rArg1 ) );
     lclJoinRanges( aList );
 
     // process all other parameters, this updates the list with intersection
@@ -1158,37 +1158,37 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Union(
     if( !rArg1.is() || !rArg2.is() )
         DebugHelper::basicexception( SbERR_BAD_PARAMETER, OUString() );
 
-    ListOfScRange aList;
-    lclAddToListOfScRange( aList, uno::Any( rArg1 ) );
-    lclAddToListOfScRange( aList, uno::Any( rArg2 ) );
-    lclAddToListOfScRange( aList, rArg3 );
-    lclAddToListOfScRange( aList, rArg4 );
-    lclAddToListOfScRange( aList, rArg5 );
-    lclAddToListOfScRange( aList, rArg6 );
-    lclAddToListOfScRange( aList, rArg7 );
-    lclAddToListOfScRange( aList, rArg8 );
-    lclAddToListOfScRange( aList, rArg9 );
-    lclAddToListOfScRange( aList, rArg10 );
-    lclAddToListOfScRange( aList, rArg11 );
-    lclAddToListOfScRange( aList, rArg12 );
-    lclAddToListOfScRange( aList, rArg13 );
-    lclAddToListOfScRange( aList, rArg14 );
-    lclAddToListOfScRange( aList, rArg15 );
-    lclAddToListOfScRange( aList, rArg16 );
-    lclAddToListOfScRange( aList, rArg17 );
-    lclAddToListOfScRange( aList, rArg18 );
-    lclAddToListOfScRange( aList, rArg19 );
-    lclAddToListOfScRange( aList, rArg20 );
-    lclAddToListOfScRange( aList, rArg21 );
-    lclAddToListOfScRange( aList, rArg22 );
-    lclAddToListOfScRange( aList, rArg23 );
-    lclAddToListOfScRange( aList, rArg24 );
-    lclAddToListOfScRange( aList, rArg25 );
-    lclAddToListOfScRange( aList, rArg26 );
-    lclAddToListOfScRange( aList, rArg27 );
-    lclAddToListOfScRange( aList, rArg28 );
-    lclAddToListOfScRange( aList, rArg29 );
-    lclAddToListOfScRange( aList, rArg30 );
+    ScRangeVec aList;
+    lclAddToScRangeVec( aList, uno::Any( rArg1 ) );
+    lclAddToScRangeVec( aList, uno::Any( rArg2 ) );
+    lclAddToScRangeVec( aList, rArg3 );
+    lclAddToScRangeVec( aList, rArg4 );
+    lclAddToScRangeVec( aList, rArg5 );
+    lclAddToScRangeVec( aList, rArg6 );
+    lclAddToScRangeVec( aList, rArg7 );
+    lclAddToScRangeVec( aList, rArg8 );
+    lclAddToScRangeVec( aList, rArg9 );
+    lclAddToScRangeVec( aList, rArg10 );
+    lclAddToScRangeVec( aList, rArg11 );
+    lclAddToScRangeVec( aList, rArg12 );
+    lclAddToScRangeVec( aList, rArg13 );
+    lclAddToScRangeVec( aList, rArg14 );
+    lclAddToScRangeVec( aList, rArg15 );
+    lclAddToScRangeVec( aList, rArg16 );
+    lclAddToScRangeVec( aList, rArg17 );
+    lclAddToScRangeVec( aList, rArg18 );
+    lclAddToScRangeVec( aList, rArg19 );
+    lclAddToScRangeVec( aList, rArg20 );
+    lclAddToScRangeVec( aList, rArg21 );
+    lclAddToScRangeVec( aList, rArg22 );
+    lclAddToScRangeVec( aList, rArg23 );
+    lclAddToScRangeVec( aList, rArg24 );
+    lclAddToScRangeVec( aList, rArg25 );
+    lclAddToScRangeVec( aList, rArg26 );
+    lclAddToScRangeVec( aList, rArg27 );
+    lclAddToScRangeVec( aList, rArg28 );
+    lclAddToScRangeVec( aList, rArg29 );
+    lclAddToScRangeVec( aList, rArg30 );
 
     // simply join together all ranges as much as possible, strip out covered ranges etc.
     lclJoinRanges( aList );

@@ -56,8 +56,8 @@ void FadeEffectLB::Fill()
     InsertEntry( SD_RESSTR( STR_EFFECT_NONE ) );
     mpImpl->maPresets.push_back( pPreset );
 
-    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
-    TransitionPresetList::const_iterator aIter;
+    const TransitionPresetVec& rPresetList = TransitionPreset::getTransitionPresetVec();
+    TransitionPresetVec::const_iterator aIter;
     for( aIter = rPresetList.begin(); aIter != rPresetList.end(); ++aIter )
     {
         pPreset = (*aIter);

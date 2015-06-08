@@ -1883,8 +1883,8 @@ void SwCrsrShell::RefreshBlockCursor()
             pNxt = static_cast<SwCursor*>(m_pCurCrsr->GetNext());
         }
 
-        std::list<SwPaM*>::iterator pStart = aSelList.getStart();
-        std::list<SwPaM*>::iterator pPam = aSelList.getEnd();
+        std::vector<SwPaM*>::iterator pStart = aSelList.getStart();
+        std::vector<SwPaM*>::iterator pPam = aSelList.getEnd();
         OSL_ENSURE( pPam != pStart, "FillSelection should deliver at least one PaM" );
         m_pCurCrsr->SetMark();
         --pPam;

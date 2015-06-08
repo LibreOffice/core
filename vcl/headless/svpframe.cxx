@@ -113,12 +113,12 @@ SvpSalFrame::~SvpSalFrame()
     if( m_pInstance )
         m_pInstance->deregisterFrame( this );
 
-    std::list<SvpSalFrame*> Children = m_aChildren;
-    for( std::list<SvpSalFrame*>::iterator it = Children.begin();
+    std::vector<SvpSalFrame*> Children = m_aChildren;
+    for( std::vector<SvpSalFrame*>::iterator it = Children.begin();
          it != Children.end(); ++it )
          (*it)->SetParent( m_pParent );
     if( m_pParent )
-        m_pParent->m_aChildren.remove( this );
+        m_pParent->m_aChildren.erase( std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end() );
 
     if( s_pFocusFrame == this )
     {
@@ -187,7 +187,8 @@ SalGraphics* SvpSalFrame::AcquireGraphics()
 void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
     SvpSalGraphics* pSvpGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
-    m_aGraphics.remove( pSvpGraphics );
+    m_aGraphics.erase( std::remove(m_aGraphics.begin(), m_aGraphics.end(), pSvpGraphics), m_aGraphics.end() );
+
     delete pSvpGraphics;
 }
 
@@ -298,7 +299,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             m_aFrame->setDamageTracker(
                 basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
         // update device in existing graphics
-        for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
+        for( std::vector< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
         {
              (*it)->setDevice( m_aFrame );
@@ -470,7 +471,7 @@ void SvpSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
 void SvpSalFrame::SetParent( SalFrame* pNewParent )
 {
     if( m_pParent )
-        m_pParent->m_aChildren.remove( this );
+        m_pParent->m_aChildren.erase( std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end() );
     m_pParent = static_cast<SvpSalFrame*>(pNewParent);
 }
 

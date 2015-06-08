@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
-using ::std::list;
+using ::std::vector;
 
 void ScMyStyleNumberFormats::AddStyleNumberFormat(const OUString& rStyleName, const sal_Int32 nNumberFormat)
 {
@@ -161,11 +161,11 @@ void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDo
     }
 }
 
-void ScMyStyleRanges::SetStylesToRanges(const list<ScRange>& rRanges,
+void ScMyStyleRanges::SetStylesToRanges(const vector<ScRange>& rRanges,
     const OUString* pStyleName, const sal_Int16 nCellType,
     const OUString* pCurrency, ScXMLImport& rImport)
 {
-    list<ScRange>::const_iterator itr = rRanges.begin(), itrEnd = rRanges.end();
+    vector<ScRange>::const_iterator itr = rRanges.begin(), itrEnd = rRanges.end();
     for (; itr != itrEnd; ++itr)
         rImport.SetStyleToRange(*itr, pStyleName, nCellType, pCurrency);
 }
@@ -174,49 +174,49 @@ void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport&
 {
     if (mpNumberList)
     {
-        list<ScRange> aList;
+        vector<ScRange> aList;
         mpNumberList->getRangeList(aList);
         SetStylesToRanges(aList, pStyleName, util::NumberFormat::NUMBER, NULL, rImport);
         mpNumberList->clear();
     }
     if (mpTextList)
     {
-        list<ScRange> aList;
+        vector<ScRange> aList;
         mpTextList->getRangeList(aList);
         SetStylesToRanges(aList, pStyleName, util::NumberFormat::TEXT, NULL, rImport);
         mpTextList->clear();
     }
     if (mpTimeList)
     {
-        list<ScRange> aList;
+        vector<ScRange> aList;
         mpTimeList->getRangeList(aList);
         SetStylesToRanges(aList, pStyleName, util::NumberFormat::TIME, NULL, rImport);
         mpTimeList->clear();
     }
     if (mpDateTimeList)
     {
-        list<ScRange> aList;
+        vector<ScRange> aList;
         mpDateTimeList->getRangeList(aList);
         SetStylesToRanges(aList, pStyleName, util::NumberFormat::DATETIME, NULL, rImport);
         mpDateTimeList->clear();
     }
     if (mpPercentList)
     {
-        list<ScRange> aList;
+        vector<ScRange> aList;
         mpPercentList->getRangeList(aList);
         SetStylesToRanges(aList, pStyleName, util::NumberFormat::PERCENT, NULL, rImport);
         mpPercentList->clear();
     }
     if (mpLogicalList)
     {
-        list<ScRange> aList;
+        vector<ScRange> aList;
         mpLogicalList->getRangeList(aList);
         SetStylesToRanges(aList, pStyleName, util::NumberFormat::LOGICAL, NULL, rImport);
         mpLogicalList->clear();
     }
     if (mpUndefinedList)
     {
-        list<ScRange> aList;
+        vector<ScRange> aList;
         mpUndefinedList->getRangeList(aList);
         SetStylesToRanges(aList, pStyleName, util::NumberFormat::UNDEFINED, NULL, rImport);
         mpUndefinedList->clear();
@@ -227,7 +227,7 @@ void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport&
         ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
         while (aItr != aEndItr)
         {
-            list<ScRange> aList;
+            vector<ScRange> aList;
             aItr->mpRanges->getRangeList(aList);
             SetStylesToRanges(aList, pStyleName, util::NumberFormat::CURRENCY, &aItr->sCurrency, rImport);
             ++aItr;

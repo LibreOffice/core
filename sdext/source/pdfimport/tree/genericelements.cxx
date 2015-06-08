@@ -38,11 +38,9 @@ ElementFactory::~ElementFactory()
 
 Element::~Element()
 {
-    while( !Children.empty() )
+    for( Element* pCurr : Children )
     {
-        Element* pCurr( Children.front() );
         delete pCurr;
-        Children.pop_front();
     }
 }
 

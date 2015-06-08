@@ -538,7 +538,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 
             // see if this font is already cached
             // update attributes
-            std::list< PrintFont* > aFonts;
+            std::vector< PrintFont* > aFonts;
             OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
             splitPath( aOrgPath, aDir, aBase );
 
@@ -574,14 +574,14 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 
             int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( reinterpret_cast<char*>(family) ), RTL_TEXTENCODING_UTF8 ), true );
             PrintFont* pUpdate = aFonts.front();
-            std::list<PrintFont*>::const_iterator second_font = aFonts.begin();
+            std::vector<PrintFont*>::const_iterator second_font = aFonts.begin();
             ++second_font;
             if( second_font != aFonts.end() ) // more than one font
             {
                 // a collection entry, get the correct index
                 if( eIndexRes == FcResultMatch && nCollectionEntry != -1 )
                 {
-                    for( std::list< PrintFont* >::iterator it = aFonts.begin(); it != aFonts.end(); ++it )
+                    for( std::vector< PrintFont* >::iterator it = aFonts.begin(); it != aFonts.end(); ++it )
                     {
                         if( (*it)->m_eType == fonttype::TrueType &&
                             static_cast<TrueTypeFontFile*>(*it)->m_nCollectionEntry == nCollectionEntry )
@@ -642,7 +642,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 #endif
             }
             // clean up the fonts we did not put into the list
-            for( std::list< PrintFont* >::iterator it = aFonts.begin(); it != aFonts.end(); ++it )
+            for( std::vector< PrintFont* >::iterator it = aFonts.begin(); it != aFonts.end(); ++it )
             {
                 if( *it != pUpdate )
                 {
