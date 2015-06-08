@@ -186,6 +186,20 @@ class UnoInProcess:
         assert(self.xDoc)
         return self.xDoc
 
+    def openEmptyCalcDoc(self):
+        self.xDoc = self.openEmptyDoc("private:factory/scalc")
+        return self.xDoc
+
+    def openEmptyDoc(self, url, bHidden = True, bReadOnly = False):
+        assert(self.xContext)
+        smgr = self.getContext().ServiceManager
+        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
+        props = [("Hidden", bHidden), ("ReadOnly", bReadOnly)]
+        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
+        self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
+        assert(self.xDoc)
+        return self.xDoc
+
     def openWriterTemplateDoc(self, file):
         assert(self.xContext)
         smgr = self.getContext().ServiceManager
