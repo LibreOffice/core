@@ -721,7 +721,7 @@ void SAL_CALL UnoMultiPageControl::disposing(const EventObject&) throw (RuntimeE
 void SAL_CALL UnoMultiPageControl::dispose() throw (RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     maTabListeners.disposeAndClear( aEvt );
     ControlContainerBase::dispose();
 }

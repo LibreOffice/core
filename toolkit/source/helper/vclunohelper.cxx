@@ -193,7 +193,7 @@ Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequence< sal_
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > x = pContainer;
 
     UnoControlModel* pContainerModel = new UnoControlContainerModel( ::comphelper::getProcessComponentContext() );
-    pContainer->setModel( (::com::sun::star::awt::XControlModel*)pContainerModel );
+    pContainer->setModel( static_cast<com::sun::star::awt::XControlModel*>(pContainerModel) );
 
     return x;
 }

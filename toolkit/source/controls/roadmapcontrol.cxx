@@ -130,7 +130,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstance(  ) throw (Exception, ::com::sun::star::uno::RuntimeException, std::exception)
     {
         ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
-        Reference< XInterface > xNewRoadmapItem = (::cppu::OWeakObject*)pRoadmapItem;
+        Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem);
         return xNewRoadmapItem;
     }
 
@@ -139,7 +139,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     {
         // Todo: implementation of the arguments handling
         ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
-        Reference< XInterface > xNewRoadmapItem = (::cppu::OWeakObject*)pRoadmapItem;
+        Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem);
         return xNewRoadmapItem;
     }
 
@@ -289,7 +289,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         maRoadmapItems.insert( maRoadmapItems.begin() + Index, xRoadmapItem);
         ContainerEvent aEvent = GetContainerEvent(Index, xRoadmapItem);
         maContainerListeners.elementInserted( aEvent );
-        Reference< XPropertySet > xPropertySet( (XAggregation*) (::cppu::OWeakAggObject*)this, UNO_QUERY );
+        Reference< XPropertySet > xPropertySet( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
         sal_Int16 n_CurrentItemID = GetCurrentItemID( xPropertySet );
         if ( Index <= n_CurrentItemID )
         {
@@ -310,7 +310,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
         ContainerEvent aEvent = GetContainerEvent(Index, xRoadmapItem);
         maContainerListeners.elementRemoved( aEvent );
-        Reference< XPropertySet > xPropertySet( (XAggregation*) (::cppu::OWeakAggObject*)this, UNO_QUERY );
+        Reference< XPropertySet > xPropertySet( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
         sal_Int16 n_CurrentItemID = GetCurrentItemID( xPropertySet );
         Any aAny;
         if ( Index <= n_CurrentItemID )
@@ -412,7 +412,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     void UnoRoadmapControl::dispose() throw(RuntimeException, std::exception)
     {
         EventObject aEvt;
-        aEvt.Source = (::cppu::OWeakObject*)this;
+        aEvt.Source = static_cast<cppu::OWeakObject*>(this);
         maItemListeners.disposeAndClear( aEvt );
         UnoControl::dispose();
     }

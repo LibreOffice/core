@@ -96,7 +96,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                     if ( maMenuListeners.getLength() )
                     {
                         css::awt::MenuEvent aEvent;
-                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                         aEvent.MenuId = mpMenu->GetCurItemId();
                         maMenuListeners.itemSelected( aEvent );
                     }
@@ -112,7 +112,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                     if ( maMenuListeners.getLength() )
                     {
                         css::awt::MenuEvent aEvent;
-                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                         aEvent.MenuId = mpMenu->GetCurItemId();
                         maMenuListeners.itemHighlighted( aEvent );
                     }
@@ -123,7 +123,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                     if ( maMenuListeners.getLength() )
                     {
                         css::awt::MenuEvent aEvent;
-                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                         aEvent.MenuId = mpMenu->GetCurItemId();
                         maMenuListeners.itemActivated( aEvent );
                     }
@@ -134,7 +134,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                     if ( maMenuListeners.getLength() )
                     {
                         css::awt::MenuEvent aEvent;
-                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                         aEvent.MenuId = mpMenu->GetCurItemId();
                         maMenuListeners.itemDeactivated( aEvent );
                     }
@@ -216,14 +216,14 @@ throw(css::uno::RuntimeException, std::exception)
 
     if ( bIsPopupMenu )
         aRet = ::cppu::queryInterface(  rType,
-                                        (static_cast< css::awt::XMenu* >((css::awt::XMenuBar*) this) ),
+                                        (static_cast< css::awt::XMenu* >(static_cast<css::awt::XMenuBar*>(this)) ),
                                         (static_cast< css::awt::XPopupMenu* >(this)),
                                         (static_cast< css::lang::XTypeProvider* >(this)),
                                         (static_cast< css::lang::XServiceInfo* >(this)),
                                         (static_cast< css::lang::XUnoTunnel* >(this)) );
     else
         aRet = ::cppu::queryInterface(  rType,
-                                        (static_cast< css::awt::XMenu* >((css::awt::XMenuBar*) this) ),
+                                        (static_cast< css::awt::XMenu* >(static_cast<css::awt::XMenuBar*>(this)) ),
                                         (static_cast< css::awt::XMenuBar* >(this)),
                                         (static_cast< css::lang::XTypeProvider* >(this)),
                                         (static_cast< css::lang::XServiceInfo* >(this)),
@@ -895,7 +895,7 @@ VCLXMenuBar::VCLXMenuBar()
     ImplCreateMenu( false );
 }
 
-VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
+VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( static_cast<Menu *>(pMenuBar) )
 {
 }
 
@@ -912,7 +912,7 @@ VCLXPopupMenu::VCLXPopupMenu()
     ImplCreateMenu( true );
 }
 
-VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( (Menu *)pPopMenu )
+VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( static_cast<Menu *>(pPopMenu) )
 {
 }
 

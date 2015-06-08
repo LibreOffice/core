@@ -443,7 +443,7 @@ namespace
 
 void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis( (::cppu::OWeakObject*)this );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis( static_cast<cppu::OWeakObject*>(this) );
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -464,7 +464,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getPaintListeners().getLength() )
             {
                 ::com::sun::star::awt::PaintEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 aEvent.UpdateRect = AWTRectangle( *static_cast<Rectangle*>(rVclWindowEvent.GetData()) );
                 aEvent.Count = 0;
                 mpImpl->getPaintListeners().windowPaint( aEvent );
@@ -476,7 +476,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getWindowListeners().getLength() )
             {
                 ::com::sun::star::awt::WindowEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowMoved( aEvent );
             }
@@ -487,7 +487,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getWindowListeners().getLength() )
             {
                 ::com::sun::star::awt::WindowEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowResized( aEvent );
             }
@@ -498,7 +498,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getWindowListeners().getLength() )
             {
                 ::com::sun::star::awt::WindowEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowShown( aEvent );
             }
@@ -507,7 +507,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowOpened( aEvent );
             }
         }
@@ -517,7 +517,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getWindowListeners().getLength() )
             {
                 ::com::sun::star::awt::WindowEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowHidden( aEvent );
             }
@@ -526,7 +526,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowClosed( aEvent );
             }
         }
@@ -536,7 +536,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowActivated( aEvent );
             }
         }
@@ -546,7 +546,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
             }
         }
@@ -556,13 +556,13 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::closed, aEvent );
             }
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowClosing( aEvent );
             }
         }
@@ -581,7 +581,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if ( mpImpl->getFocusListeners().getLength() )
                 {
                     ::com::sun::star::awt::FocusEvent aEvent;
-                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
                     aEvent.Temporary = sal_False;
                     mpImpl->getFocusListeners().focusGained( aEvent );
@@ -603,7 +603,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if ( mpImpl->getFocusListeners().getLength() )
                 {
                     ::com::sun::star::awt::FocusEvent aEvent;
-                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
                     aEvent.Temporary = sal_False;
 
@@ -618,7 +618,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                             pNext = pNextC;
 
                         pNext->GetComponentInterface( true );
-                        aEvent.NextFocus = (::cppu::OWeakObject*)pNext->GetWindowPeer();
+                        aEvent.NextFocus = static_cast<cppu::OWeakObject*>(pNext->GetWindowPeer());
                     }
                     mpImpl->getFocusListeners().focusLost( aEvent );
                 }
@@ -630,7 +630,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowMinimized( aEvent );
             }
         }
@@ -640,7 +640,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowNormalized( aEvent );
             }
         }
@@ -758,7 +758,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pData )
                 {
                     ::com::sun::star::awt::DockingEvent aEvent;
-                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
                     aEvent.MousePos.X = pData->maMousePos.X();
                     aEvent.MousePos.Y = pData->maMousePos.Y();
@@ -779,7 +779,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pData )
                 {
                     ::com::sun::star::awt::DockingEvent aEvent;
-                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
                     aEvent.MousePos.X = pData->maMousePos.X();
                     aEvent.MousePos.Y = pData->maMousePos.Y();
@@ -810,7 +810,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pData )
                 {
                     ::com::sun::star::awt::EndDockingEvent aEvent;
-                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.WindowRectangle = AWTRectangle( pData->maWindowRect );
                     aEvent.bFloating = pData->mbFloating;
                     aEvent.bCancelled = pData->mbCancelled;
@@ -826,7 +826,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 sal_Bool *p_bFloating = static_cast<sal_Bool*>(rVclWindowEvent.GetData());
 
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
 
                 Reference< XDockableWindowListener > xFirstListener;
                 ::cppu::OInterfaceIteratorHelper aIter( mpImpl->getDockableWindowListeners() );
@@ -844,7 +844,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::toggleFloatingMode, aEvent );
             }
        }
@@ -858,7 +858,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pData )
                 {
                     ::com::sun::star::awt::EndPopupModeEvent aEvent;
-                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.FloatingPosition.X = pData->maFloatingPos.X();
                     aEvent.FloatingPosition.Y = pData->maFloatingPos.Y();
                     aEvent.bTearoff = pData->mbTearoff;

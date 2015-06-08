@@ -573,7 +573,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         }
 
         Reference< XWindow >    xParent = getParentPeer();
-        Reference< XControl > xThis( (XAggregation*)(::cppu::OWeakAggObject*)this, UNO_QUERY );
+        Reference< XControl > xThis( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
         // call createPeer via a interface got from queryInterface, so the aggregating class can intercept it
 
         DBG_ASSERT( !bNeedNewPeer || xParent.is(), "Need new peer, but don't have a parent!" );
@@ -1083,7 +1083,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     {
         RuntimeException aException;
         aException.Message = "createPeer: no model!";
-        aException.Context = (XAggregation*)(::cppu::OWeakAggObject*)this;
+        aException.Context = static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this));
         throw( aException );
     }
 

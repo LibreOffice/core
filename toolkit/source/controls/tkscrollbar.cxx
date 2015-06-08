@@ -133,7 +133,7 @@ namespace toolkit
     void UnoScrollBarControl::dispose() throw(uno::RuntimeException, std::exception)
     {
         lang::EventObject aEvt;
-        aEvt.Source = (::cppu::OWeakObject*)this;
+        aEvt.Source = static_cast<cppu::OWeakObject*>(this);
         maAdjustmentListeners.disposeAndClear( aEvt );
         UnoControl::dispose();
     }

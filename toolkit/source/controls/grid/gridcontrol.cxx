@@ -294,7 +294,7 @@ OUString UnoGridControl::GetComponentServiceName()
 void SAL_CALL UnoGridControl::dispose(  ) throw(RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     m_aSelectionListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }

@@ -432,7 +432,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::cppu:
 uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     UnoControlModel* pClone = Clone();
-    uno::Reference< util::XCloneable > xClone( (::cppu::OWeakObject*) pClone, uno::UNO_QUERY );
+    uno::Reference< util::XCloneable > xClone( static_cast<cppu::OWeakObject*>(pClone), uno::UNO_QUERY );
     return xClone;
 }
 
@@ -442,7 +442,7 @@ void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException,
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::lang::EventObject aEvt;
-    aEvt.Source = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
+    aEvt.Source = static_cast<com::sun::star::uno::XAggregation*>(static_cast<cppu::OWeakAggObject*>(this));
     maDisposeListeners.disposeAndClear( aEvt );
 
     BrdcstHelper.aLC.disposeAndClear( aEvt );

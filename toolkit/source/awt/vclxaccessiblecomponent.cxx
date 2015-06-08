@@ -587,7 +587,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
                             if ( xChild.is() )
                             {
                                 uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                                if ( xChildContext == (accessibility::XAccessibleContext*) this )
+                                if ( xChildContext == static_cast<accessibility::XAccessibleContext*>(this) )
                                 {
                                     nIndex = i;
                                     break;

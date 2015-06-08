@@ -491,7 +491,7 @@ sal_uInt16 ImplGetComponentType( const OUString& rServiceName )
     static bool bSorted = false;
     if( !bSorted )
     {
-        qsort(  (void*) aComponentInfos,
+        qsort(  static_cast<void*>(aComponentInfos),
                 sizeof( aComponentInfos ) / sizeof( ComponentInfo ),
                 sizeof( ComponentInfo ),
                 ComponentInfoCompare );
@@ -507,7 +507,7 @@ sal_uInt16 ImplGetComponentType( const OUString& rServiceName )
         aSearch.pName = "window";
 
     ComponentInfo* pInf = static_cast<ComponentInfo*>(bsearch( &aSearch,
-                        (void*) aComponentInfos,
+                        static_cast<void*>(aComponentInfos),
                         sizeof( aComponentInfos ) / sizeof( ComponentInfo ),
                         sizeof( ComponentInfo ),
                         ComponentInfoCompare ));
@@ -839,7 +839,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<CurrencyField>::Create( pParent, nWinBits );
                 static_cast<CurrencyField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<CurrencyField*>(pNewWindow) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<CurrencyField*>(pNewWindow)) );
             break;
             case WINDOW_DATEBOX:
                 pNewWindow = VclPtr<DateBox>::Create( pParent, nWinBits );
@@ -848,7 +848,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<DateField>::Create( pParent, nWinBits );
                 static_cast<DateField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXDateField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<DateField*>(pNewWindow) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow)) );
             break;
             case WINDOW_DOCKINGAREA:
                 pNewWindow = VclPtr<DockingAreaWindow>::Create( pParent );
@@ -913,7 +913,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_LONGCURRENCYFIELD:
                 pNewWindow = VclPtr<LongCurrencyField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXCurrencyField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<LongCurrencyField*>(pNewWindow) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<LongCurrencyField*>(pNewWindow)) );
             break;
             case WINDOW_MENUBUTTON:
                 pNewWindow = VclPtr<MenuButton>::Create( pParent, nWinBits );
@@ -929,7 +929,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_METRICFIELD:
                 pNewWindow = VclPtr<MetricField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXMetricField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<MetricField*>(pNewWindow) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<MetricField*>(pNewWindow)) );
             break;
             case WINDOW_DIALOG:
             case WINDOW_MODALDIALOG:
@@ -965,7 +965,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<NumericField>::Create( pParent, nWinBits );
                 static_cast<NumericField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<NumericField*>(pNewWindow) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<NumericField*>(pNewWindow)) );
             break;
             case WINDOW_OKBUTTON:
                 pNewWindow = VclPtr<OKButton>::Create( pParent, nWinBits );
@@ -977,7 +977,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_PATTERNFIELD:
                 pNewWindow = VclPtr<PatternField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXPatternField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<PatternField*>(pNewWindow) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<PatternField*>(pNewWindow)) );
             break;
             case WINDOW_PUSHBUTTON:
                 pNewWindow = VclPtr<PushButton>::Create( pParent, nWinBits );
@@ -1050,7 +1050,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<TimeField>::Create( pParent, nWinBits );
                 static_cast<TimeField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXTimeField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<TimeField*>(pNewWindow) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<TimeField*>(pNewWindow)) );
             break;
             case WINDOW_TOOLBOX:
                 pNewWindow = VclPtr<ToolBox>::Create( pParent, nWinBits );

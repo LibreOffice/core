@@ -420,7 +420,7 @@
     Reference< XNameContainer > SAL_CALL OGeometryControlModel_Base::getEvents() throw(RuntimeException, std::exception)
     {
         if( !mxEventContainer.is() )
-            mxEventContainer = (XNameContainer*)new toolkit::ScriptEventContainer();
+            mxEventContainer = static_cast<XNameContainer*>(new toolkit::ScriptEventContainer());
         return mxEventContainer;
     }
 

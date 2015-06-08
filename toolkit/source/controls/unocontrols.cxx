@@ -825,7 +825,7 @@ OUString UnoButtonControl::GetComponentServiceName()
 void UnoButtonControl::dispose() throw(uno::RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     maActionListeners.disposeAndClear( aEvt );
     maItemListeners.disposeAndClear( aEvt );
     UnoControlBase::dispose();
@@ -1078,7 +1078,7 @@ OUString UnoImageControlControl::GetComponentServiceName()
 void UnoImageControlControl::dispose() throw(uno::RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     maActionListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }
@@ -1220,7 +1220,7 @@ OUString UnoRadioButtonControl::GetComponentServiceName()
 void UnoRadioButtonControl::dispose() throw(uno::RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     maItemListeners.disposeAndClear( aEvt );
     UnoControlBase::dispose();
 }
@@ -1475,7 +1475,7 @@ OUString UnoCheckBoxControl::GetComponentServiceName()
 void UnoCheckBoxControl::dispose() throw(uno::RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     maItemListeners.disposeAndClear( aEvt );
     UnoControlBase::dispose();
 }
@@ -1778,7 +1778,7 @@ awt::Size UnoFixedHyperlinkControl::calcAdjustedSize( const awt::Size& rNewSize 
 void UnoFixedHyperlinkControl::dispose() throw(uno::RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     maActionListeners.disposeAndClear( aEvt );
     UnoControlBase::dispose();
 }
@@ -2725,7 +2725,7 @@ css::uno::Sequence<OUString> UnoListBoxControl::getSupportedServiceNames()
 void UnoListBoxControl::dispose() throw(uno::RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     maActionListeners.disposeAndClear( aEvt );
     maItemListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
@@ -3270,7 +3270,7 @@ OUString UnoComboBoxControl::GetComponentServiceName()
 void UnoComboBoxControl::dispose() throw(uno::RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     maActionListeners.disposeAndClear( aEvt );
     maItemListeners.disposeAndClear( aEvt );
     UnoControl::dispose();

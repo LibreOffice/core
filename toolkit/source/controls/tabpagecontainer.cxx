@@ -159,7 +159,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
             m_aTabPageVector.insert( aIter, xTabPageModel );
         }
         else
-            throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+            throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
         ContainerEvent aEvent;
         aEvent.Source = *this;
         aEvent.Element <<= aElement;
@@ -167,7 +167,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
         maContainerListeners.elementInserted( aEvent );
     }
     else
-        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, (OWeakObject *)this, 2 );
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, static_cast<OWeakObject *>(this), 2 );
 }
 
 void SAL_CALL UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
@@ -232,7 +232,7 @@ OUString UnoControlTabPageContainer::GetComponentServiceName()
 void SAL_CALL UnoControlTabPageContainer::dispose(  ) throw(RuntimeException, std::exception)
 {
     lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     m_aTabPageListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }

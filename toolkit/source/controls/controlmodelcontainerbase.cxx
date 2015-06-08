@@ -409,7 +409,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
         }
     }
 
-    Reference< XInterface > xNewModel = (::cppu::OWeakObject*)pNewModel;
+    Reference< XInterface > xNewModel = static_cast<cppu::OWeakObject*>(pNewModel);
     return xNewModel;
 }
 
@@ -1695,7 +1695,7 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
                     if ( !mbPosModified && !mbSizeModified )
                     {
                         // Don't set new pos/size if we get new values from window listener
-                        Reference< XControl > xThis( (XAggregation*)(::cppu::OWeakAggObject*)this, UNO_QUERY );
+                        Reference< XControl > xThis( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
                         ImplSetPosSize( xThis );
                     }
                 }
