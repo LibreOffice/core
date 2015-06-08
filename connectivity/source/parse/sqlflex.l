@@ -788,11 +788,11 @@ IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const s
     return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken) ) : IParseContext::KEY_NONE;
 }
 // -------------------------------------------------------------------------
-sal_Int32	OSQLScanner::GetGERRule()		{ return PREDICATE_GER; }
-sal_Int32	OSQLScanner::GetENGRule()		{ return PREDICATE_ENG; }
-sal_Int32	OSQLScanner::GetSQLRule()		{ return SQL; }
-sal_Int32	OSQLScanner::GetDATERule()	{ return DATE; }
-sal_Int32	OSQLScanner::GetSTRINGRule()	{ return STRING; }
+sal_Int32	OSQLScanner::GetGERRule() const		{ return PREDICATE_GER; }
+sal_Int32	OSQLScanner::GetENGRule() const		{ return PREDICATE_ENG; }
+sal_Int32	OSQLScanner::GetSQLRule() const		{ return SQL; }
+sal_Int32	OSQLScanner::GetDATERule() const	{ return DATE; }
+sal_Int32	OSQLScanner::GetSTRINGRule() const	{ return STRING; }
 // -------------------------------------------------------------------------
 void OSQLScanner::setScanner(bool _bNull)
 {
