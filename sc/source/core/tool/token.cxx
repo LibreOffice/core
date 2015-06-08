@@ -119,6 +119,7 @@ namespace
         FormulaToken**  mpStart;
         FormulaToken**  mpStop;
 
+        TokenPointerRange() : mpStart(NULL), mpStop(NULL) {}
         TokenPointerRange( FormulaToken** p, sal_uInt16 n ) :
             mpStart(p), mpStop( p + static_cast<size_t>(n)) {}
     };
@@ -126,8 +127,11 @@ namespace
     {
         TokenPointerRange maPointerRange[2];
 
-        TokenPointers( FormulaToken** pCode, sal_uInt16 nLen, FormulaToken** pRPN, sal_uInt16 nRPN ) :
-            maPointerRange{ TokenPointerRange( pCode, nLen), TokenPointerRange( pRPN, nRPN)} {}
+        TokenPointers( FormulaToken** pCode, sal_uInt16 nLen, FormulaToken** pRPN, sal_uInt16 nRPN )
+        {
+            maPointerRange[0] = TokenPointerRange( pCode, nLen);
+            maPointerRange[1] = TokenPointerRange( pRPN, nRPN);
+        }
 
         static bool skipToken( size_t i, const FormulaToken* const * pp )
         {
