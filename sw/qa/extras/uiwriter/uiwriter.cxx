@@ -91,6 +91,7 @@ public:
     void testCp1000115();
     void testTdf90003();
     void testSearchWithTransliterate();
+    void testTableBackgroundColor();
     void testTdf90362();
     void testUndoCharAttribute();
     void testTdf86639();
@@ -130,6 +131,7 @@ public:
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
@@ -902,6 +904,44 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTableBackgroundColor()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    pWrtShell->InsertTable(TableOpt, 3, 3); //Inserting Table
+    //Checking Rows and Columns of Inserted Table
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+    pWrtShell->SttDoc();
+    pWrtShell->SelTableRow(); //Selecting First Row
+    pWrtShell->ClearMark();
+    //Modifying the color of Table Box
+    Color colour = sal_Int32(0xFF00FF);
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    //Checking cells for background color only A1 should be modified
+    uno::Reference<table::XCell> xCell;
+   xCell = xTable->getCellByName("A1");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("A2");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("A3");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("B1");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("B2");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("B3");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("C1");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("C2");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("C3");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
 void SwUiWriterTest::testTdf90362()
