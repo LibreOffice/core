@@ -32,9 +32,14 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 			--disable-tools \
 			--disable-debug \
 			--disable-werror \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(gb_Package_SOURCEDIR_libwpg)/src/lib/.libs/libwpg-0.3.3.dylib \
+		) \
 	)
 
 # vim: set noet sw=4 ts=4:

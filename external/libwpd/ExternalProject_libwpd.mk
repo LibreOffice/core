@@ -30,11 +30,17 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 			--without-docs \
 			--disable-tools \
 			--disable-debug \
-			$(if $(filter MACOSX,$(OS)),--disable-werror) \
+			$(if $(filter MACOSX,$(OS)), \
+				--disable-werror \
+				--prefix=/@.__________________________________________________OOO) \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(gb_COMPILEROPTFLAGS)") \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(gb_Package_SOURCEDIR_libwpd)/src/lib/.libs/libwpd-0.10.10.dylib \
+		) \
 	)
 
 # vim: set noet sw=4 ts=4:
