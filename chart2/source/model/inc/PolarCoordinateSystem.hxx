@@ -70,7 +70,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new PolarCoordinateSystem2d( xContext );
+        return static_cast<cppu::OWeakObject *>(new PolarCoordinateSystem2d( xContext ));
     }
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()
@@ -96,7 +96,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new PolarCoordinateSystem3d( xContext );
+        return static_cast<cppu::OWeakObject *>(new PolarCoordinateSystem3d( xContext ));
     }
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()

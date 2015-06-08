@@ -50,7 +50,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new PieChartType( xContext );
+        return static_cast<cppu::OWeakObject *>(new PieChartType( xContext ));
     }
 
 protected:

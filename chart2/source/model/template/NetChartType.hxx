@@ -76,7 +76,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new NetChartType( xContext );
+        return static_cast<cppu::OWeakObject *>(new NetChartType( xContext ));
     }
 
 protected:

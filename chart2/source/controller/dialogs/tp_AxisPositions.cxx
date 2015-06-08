@@ -198,7 +198,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
 
         if( nPos < m_pLB_CrossesAt->GetEntryCount() )
             m_pLB_CrossesAt->SelectEntryPos( nPos );
-        CrossesAtSelectHdl( (void*)0 );
+        CrossesAtSelectHdl( nullptr );
 
         if( rInAttrs->GetItemState(SCHATTR_AXIS_POSITION_VALUE,true, &pPoolItem)== SfxItemState::SET || bZero )
         {
@@ -231,7 +231,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
     }
     else
         m_pLB_PlaceLabels->SetNoSelection();
-    PlaceLabelsSelectHdl( (void*)0 );
+    PlaceLabelsSelectHdl( nullptr );
 
     // Tick marks
     long nTicks = 0, nMinorTicks = 0;
@@ -324,7 +324,7 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl)
     if( 0 == m_pED_CrossesAtCategory->GetSelectEntryCount() )
         m_pED_CrossesAtCategory->SelectEntryPos(0);
 
-    PlaceLabelsSelectHdl( (void*)0 );
+    PlaceLabelsSelectHdl( nullptr );
     return 0;
 }
 

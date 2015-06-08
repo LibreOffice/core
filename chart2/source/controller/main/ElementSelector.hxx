@@ -89,7 +89,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new ElementSelectorToolbarController( xContext );
+        return static_cast<cppu::OWeakObject *>(new ElementSelectorToolbarController( xContext ));
     }
 
     // XInterface

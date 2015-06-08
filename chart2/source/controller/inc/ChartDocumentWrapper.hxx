@@ -76,7 +76,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new ChartDocumentWrapper( xContext );
+        return static_cast<cppu::OWeakObject *>(new ChartDocumentWrapper( xContext ));
     }
 
     void setAddIn( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable >& xAddIn );

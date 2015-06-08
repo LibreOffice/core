@@ -1049,7 +1049,7 @@ void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAdd
     if( xInit.is() )
     {
         uno::Any aParam;
-        uno::Reference< XChartDocument > xDoc( (XChartDocument*)this, uno::UNO_QUERY );
+        uno::Reference< XChartDocument > xDoc( static_cast<XChartDocument*>(this), uno::UNO_QUERY );
         aParam <<= xDoc;
         uno::Sequence< uno::Any > aSeq( &aParam, 1 );
         xInit->initialize( aSeq );

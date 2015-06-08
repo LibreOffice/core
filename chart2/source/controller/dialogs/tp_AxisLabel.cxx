@@ -274,7 +274,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
         }
     }
 
-    ToggleShowLabel( (void*)0 );
+    ToggleShowLabel( nullptr );
 }
 
 void SchAxisLabelTabPage::ShowStaggeringControls( bool bShowStaggeringControls )

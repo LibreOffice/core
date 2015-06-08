@@ -50,7 +50,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new LogarithmicScaling( xContext );
+        return static_cast<cppu::OWeakObject *>(new LogarithmicScaling( xContext ));
     }
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
@@ -101,7 +101,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new ExponentialScaling( xContext );
+        return static_cast<cppu::OWeakObject *>(new ExponentialScaling( xContext ));
     }
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
@@ -152,7 +152,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new LinearScaling( xContext );
+        return static_cast<cppu::OWeakObject *>(new LinearScaling( xContext ));
     }
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
@@ -202,7 +202,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new PowerScaling( xContext );
+        return static_cast<cppu::OWeakObject *>(new PowerScaling( xContext ));
     }
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

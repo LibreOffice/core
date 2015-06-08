@@ -887,7 +887,7 @@ void OpenGL3DRenderer::RenderLine3D(const Polygon3DInfo& polygon)
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
                                 0,                  // stride
-                                (void*)0            // array buffer offset
+                                nullptr            // array buffer offset
                                 );
 
         CHECK_GL_ERROR();
@@ -1017,7 +1017,7 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
                                 0,                  // stride
-                                (void*)0            // array buffer offset
+                                nullptr            // array buffer offset
                                 );
         CHECK_GL_ERROR();
         if(!mbPickingMode)
@@ -1032,7 +1032,7 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
                     GL_FLOAT,           // type
                     GL_FALSE,           // normalized?
                     0,                  // stride
-                    (void*)0            // array buffer offset
+                    nullptr            // array buffer offset
                     );
         }
         CHECK_GL_ERROR();
@@ -1665,7 +1665,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
                                 0,                  // stride
-                                (void*)0            // array buffer offset
+                                nullptr            // array buffer offset
                                 );
 
         if(!mbPickingMode)
@@ -1678,7 +1678,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
                     GL_FLOAT,           // type
                     GL_FALSE,           // normalized?
                     0,                  // stride
-                    (void*)0            // array buffer offset
+                    nullptr            // array buffer offset
                     );
         }
         if(!mbPickingMode)
@@ -1975,7 +1975,7 @@ void OpenGL3DRenderer::RenderScreenTextShape()
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         //tex coord
         CHECK_GL_ERROR();
@@ -1987,7 +1987,7 @@ void OpenGL3DRenderer::RenderScreenTextShape()
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         //texture
         CHECK_GL_ERROR();
@@ -2032,7 +2032,7 @@ void OpenGL3DRenderer::RenderTextShapeBatch()
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
         0,                  // stride
-        (void*)0            // array buffer offset
+        nullptr            // array buffer offset
         );
     //tex coord
     CHECK_GL_ERROR();
@@ -2045,7 +2045,7 @@ void OpenGL3DRenderer::RenderTextShapeBatch()
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
         0,                  // stride
-        (void*)0            // array buffer offset
+        nullptr            // array buffer offset
         );
     //use texture array to get the vertex
     for (size_t i = 0; i < m_TextInfoBatch.texture.size(); i++)
@@ -2101,7 +2101,7 @@ void OpenGL3DRenderer::RenderTextShape()
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         //tex coord
         CHECK_GL_ERROR();
@@ -2113,7 +2113,7 @@ void OpenGL3DRenderer::RenderTextShape()
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         //texture
         CHECK_GL_ERROR();
@@ -2537,7 +2537,7 @@ void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           0,                  // stride
-                          (void*)0            // array buffer offset
+                          nullptr            // array buffer offset
                           );
     //normal
     glEnableVertexAttribArray(maResources.m_3DBatchNormalID);
@@ -2547,7 +2547,7 @@ void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
                             GL_FLOAT,           // type
                             GL_FALSE,           // normalized?
                             0,                  // stride
-                            (void*)0            // array buffer offset
+                            nullptr            // array buffer offset
                             );
 
     for (unsigned int i = 0; i < 4 ; i++)

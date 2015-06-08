@@ -223,7 +223,7 @@ int OpenGLRender::RenderLine2FBO(int)
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         glEnableVertexAttribArray(m_2DVertexID);
         glDrawArrays(GL_LINE_STRIP, 0, pointList.size()/3); // 12*3 indices starting at 0 -> 12 triangles
@@ -450,7 +450,7 @@ int OpenGLRender::RenderBubble2FBO(int)
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         glDrawArrays(GL_TRIANGLE_FAN, 0, m_Bubble2DCircle.size() / 2);
         glDisableVertexAttribArray(m_2DVertexID);
@@ -471,7 +471,7 @@ int OpenGLRender::RenderBubble2FBO(int)
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         glDrawArrays(GL_LINE_STRIP, 0, (m_Bubble2DCircle.size() * sizeof(GLfloat) -2) / sizeof(float) / 2);
         glDisableVertexAttribArray(m_2DVertexID);
@@ -548,7 +548,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
                     GL_FLOAT,           // type
                     GL_FALSE,           // normalized?
                     0,                  // stride
-                    (void*)0            // array buffer offset
+                    nullptr            // array buffer offset
                     );
 
             // 2nd attribute buffer : color
@@ -560,7 +560,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
                     GL_FLOAT,           // type
                     GL_FALSE,           // normalized?
                     0,                  // stride
-                    (void*)0            // array buffer offset
+                    nullptr            // array buffer offset
                     );
             //TODO: moggi: get rid of GL_QUADS
             glDrawArrays(GL_QUADS, 0, 4);
@@ -593,7 +593,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
                     GL_FLOAT,           // type
                     GL_FALSE,           // normalized?
                     0,                  // stride
-                    (void*)0            // array buffer offset
+                    nullptr            // array buffer offset
                     );
 
             // 2nd attribute buffer : color
@@ -605,7 +605,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
                     GL_FLOAT,           // type
                     GL_FALSE,           // normalized?
                     0,                  // stride
-                    (void*)0            // array buffer offset
+                    nullptr            // array buffer offset
                     );
             glDrawArrays(GL_LINE_LOOP, 0, 4);
             glDisableVertexAttribArray(m_BackgroundVertexID);
@@ -754,7 +754,7 @@ int OpenGLRender::RenderTextShape()
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         //tex coord
         CHECK_GL_ERROR();
@@ -766,7 +766,7 @@ int OpenGLRender::RenderTextShape()
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         //texture
         CHECK_GL_ERROR();
@@ -871,7 +871,7 @@ int OpenGLRender::RenderArea2DShape()
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         // TODO: moggi: remove deprecated GL_POLYGON
         glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
@@ -1001,7 +1001,7 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
         glDrawArrays(GL_TRIANGLE_STRIP, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
         glDisableVertexAttribArray(m_2DVertexID);
@@ -1055,7 +1055,7 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int3
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
-            (void*)0            // array buffer offset
+            nullptr            // array buffer offset
             );
 
     glDrawArrays(GL_POINTS, 0, 1);

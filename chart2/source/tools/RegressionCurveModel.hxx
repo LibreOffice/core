@@ -169,7 +169,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new MeanValueRegressionCurve( xContext );
+        return static_cast<cppu::OWeakObject *>(new MeanValueRegressionCurve( xContext ));
     }
 };
 
@@ -201,7 +201,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new LinearRegressionCurve( xContext );
+        return static_cast<cppu::OWeakObject *>(new LinearRegressionCurve( xContext ));
     }
 };
 
@@ -233,7 +233,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new LogarithmicRegressionCurve( xContext );
+        return static_cast<cppu::OWeakObject *>(new LogarithmicRegressionCurve( xContext ));
     }
 };
 
@@ -265,7 +265,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new ExponentialRegressionCurve( xContext );
+        return static_cast<cppu::OWeakObject *>(new ExponentialRegressionCurve( xContext ));
     }
 };
 
@@ -297,7 +297,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new PotentialRegressionCurve( xContext );
+        return static_cast<cppu::OWeakObject *>(new PotentialRegressionCurve( xContext ));
     }
 };
 
@@ -329,7 +329,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new PolynomialRegressionCurve( xContext );
+        return static_cast<cppu::OWeakObject *>(new PolynomialRegressionCurve( xContext ));
     }
 };
 
@@ -361,7 +361,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new MovingAverageRegressionCurve( xContext );
+        return static_cast<cppu::OWeakObject *>(new MovingAverageRegressionCurve( xContext ));
     }
 };
 

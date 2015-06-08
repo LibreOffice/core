@@ -66,7 +66,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new XMLFilter( xContext );
+        return static_cast<cppu::OWeakObject *>(new XMLFilter( xContext ));
     }
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
@@ -185,7 +185,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL   create(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext) throw(::com::sun::star::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new XMLReportFilterHelper( xContext );
+        return static_cast<cppu::OWeakObject *>(new XMLReportFilterHelper( xContext ));
     }
     static OUString getImplementationName_Static()
     {
