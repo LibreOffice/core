@@ -20,7 +20,7 @@ void main() {
     texel2 = texture2D(alpha, alpha_coord);
     gl_FragColor = texel0;
 
-    /* Only blend if the the alpha texture wasn't fully transparent */
+    /* Only blend if the alpha texture wasn't fully transparent */
     gl_FragColor.a = 1.0 - (1.0 - floor(texel2.r)) * texel1.r;
 }
 

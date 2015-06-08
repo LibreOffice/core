@@ -289,7 +289,7 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
 
 void ScGridWindow::DrawAfterScroll()
 {
-    Update(); // always, so the the behaviour with and without DrawingLayer is the same
+    Update(); // always, so the behaviour with and without DrawingLayer is the same
 
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (pDrView)

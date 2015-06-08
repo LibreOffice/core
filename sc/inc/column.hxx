@@ -633,7 +633,7 @@ public:
      * Reset column position of formula cells within specified row range.
      * If bUpdateRefs==true then reference positions are also adjusted to
      * reflect the new position so that the formula cells still reference the
-     * same cells or ranges after the the position change.
+     * same cells or ranges after the position change.
      * The position of a formula cell before the call is interpreted as the old
      * position of that cell.
      *

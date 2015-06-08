@@ -124,7 +124,7 @@ PiePositionHelper::~PiePositionHelper()
  *      inner_radius = (ring_index + 1) - 0.5 + max_offset,
  *      outer_radius = (ring_index + 1) + 0.5 + max_offset.
  *  When orientation for the radius axis is reversed these values are swapped.
- *  (Indeed the the orientation for the radius axis is always reversed!
+ *  (Indeed the orientation for the radius axis is always reversed!
  *  See `PieChartTypeTemplate::adaptScales`.)
  *  The maximum relative offset (see notes for P`ieChart::getMaxOffset`) is
  *  added to both the inner and the outer radius.
@@ -556,7 +556,7 @@ void PieChart::createShapes()
 
         bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
 
-        /// The angle degree offset is set by the the same property of the
+        /// The angle degree offset is set by the same property of the
         /// data series.
         /// Counter-clockwise offset from the 3 o'clock position.
         m_pPosHelper->m_fAngleDegreeOffset = pSeries->getStartingAngle();

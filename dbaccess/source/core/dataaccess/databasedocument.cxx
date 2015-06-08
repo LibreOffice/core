@@ -1676,7 +1676,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     OUString sURL = _rMediaDescriptor.getOrDefault("URL", OUString());
     if (sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
     {
-        // In this case the host contains the real path, and the the path is the embedded stream name.
+        // In this case the host contains the real path, and the path is the embedded stream name.
         INetURLObject aURL(sURL);
         sStreamRelPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
         if (sStreamRelPath.startsWith("/"))
