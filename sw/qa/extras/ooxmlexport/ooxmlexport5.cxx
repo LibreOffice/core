@@ -813,6 +813,12 @@ DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOO47778, "ooo47778-3.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        assertXPathContent(pXmlDoc, "(//w:t)[3]", "c");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
