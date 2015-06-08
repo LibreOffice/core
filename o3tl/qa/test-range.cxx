@@ -199,7 +199,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("ivec distance_to4", t1.distance_to(t11) == 2);
         CPPUNIT_ASSERT_MESSAGE("ivec distance_to5", t1.distance_to(t3) == -88);
 
-        const std::vector< int* >   h2(20, (int*)0);
+        const std::vector< int* >   h2(20, nullptr);
         std::deque< double >        h3(30, 0.0);
 
         CPPUNIT_ASSERT_MESSAGE("range_of1", range_of(h2).begin() == h2.begin());
