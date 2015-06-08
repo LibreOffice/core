@@ -56,7 +56,7 @@ using ::osl::MutexGuard;
 OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement)
     :OCommonStatement_IBase(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBase::rBHelper)
-    ,OStatement_CBase( (::cppu::OWeakObject*)_pConnection, this )
+    ,OStatement_CBase( static_cast<cppu::OWeakObject*>(_pConnection), this )
     ,m_pConnection(_pConnection)
     ,cppStatement(_cppStatement)
     ,rBHelper(OCommonStatement_IBase::rBHelper)

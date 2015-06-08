@@ -75,7 +75,7 @@ sal_Bool SAL_CALL OResultSet::supportsService(const rtl::OUString& _rServiceName
 OResultSet::OResultSet(OCommonStatement * pStmt, sql::ResultSet * result, rtl_TextEncoding _encoding )
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-    ,m_aStatement((OWeakObject*)pStmt)
+    ,m_aStatement(static_cast<OWeakObject*>(pStmt))
     ,m_xMetaData(NULL)
     ,m_result(result)
     ,fieldCount( 0 )
