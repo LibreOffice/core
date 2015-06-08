@@ -29,11 +29,19 @@ sfx2::StylePreviewRenderer* CommonStyleManager::CreateStylePreviewRenderer(
     while (pStyle)
     {
         if (rName == pStyle->GetName())
-            return new CommonStylePreviewRenderer(mrShell, rOutputDev, pStyle, nMaxHeight);
+            return CreateStylePreviewRenderer(rOutputDev, pStyle, nMaxHeight);
+
         pStyle = pPool->Next();
     }
 
     return nullptr;
+}
+
+sfx2::StylePreviewRenderer* CommonStyleManager::CreateStylePreviewRenderer(
+                                            OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
+                                            long nMaxHeight)
+{
+    return new CommonStylePreviewRenderer(mrShell, rOutputDev, pStyle, nMaxHeight);
 }
 
 } // end svx namespace
