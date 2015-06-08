@@ -80,7 +80,7 @@ bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
     aNew >>= aSeq;
     if ( aSeq.getLength() == 16 )
     {
-        m_aName.MakeFromMemory( (void*) aSeq.getConstArray() );
+        m_aName.MakeFromMemory( const_cast<sal_Int8 *>(aSeq.getConstArray()) );
         return true;
     }
 
@@ -92,7 +92,7 @@ bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
 bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
        com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-    void* pData = ( void* ) &m_aName.GetCLSID();
+    void const * pData = &m_aName.GetCLSID();
     memcpy( aSeq.getArray(), pData, 16 );
     rVal <<= aSeq;
     return true;

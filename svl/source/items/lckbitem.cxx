@@ -121,7 +121,7 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
         if ( aSeq.getLength() )
         {
             SvMemoryStream* pStream = new SvMemoryStream();
-            pStream->Write( (void*)aSeq.getConstArray(), aSeq.getLength() );
+            pStream->Write( aSeq.getConstArray(), aSeq.getLength() );
             pStream->Seek(0);
 
             _xVal = new SvLockBytes( pStream, true );

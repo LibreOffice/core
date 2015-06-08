@@ -1634,7 +1634,7 @@ void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 // ----------------------------------------------- class SfxAllItemSet
 
 SfxAllItemSet::SfxAllItemSet( SfxItemPool &rPool )
-:   SfxItemSet(rPool, (const sal_uInt16*) 0),
+:   SfxItemSet(rPool, nullptr),
     aDefault(0),
     nFree(nInitCount)
 {
@@ -1707,11 +1707,11 @@ static SfxItemArray AddItem_Impl(SfxItemArray pItems, sal_uInt16 nOldSize, sal_u
     {
         // Copy all Items before nPos
         if ( nPos )
-            memcpy( (void*) pNew, pItems, nPos * sizeof(SfxPoolItem *) );
+            memcpy( static_cast<void*>(pNew), pItems, nPos * sizeof(SfxPoolItem *) );
 
         // Copy all Items after nPos
         if ( nPos < nOldSize )
-            memcpy( (void*) (pNew + nPos + 1), pItems + nPos,
+            memcpy( static_cast<void*>(pNew + nPos + 1), pItems + nPos,
                     (nOldSize-nPos) * sizeof(SfxPoolItem *) );
     }
 
