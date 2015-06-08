@@ -213,7 +213,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC (const sal_uInt
         case OBJ_PLIN:
         case OBJ_FREELINE:
         case OBJ_EDGE:
-        case OBJ_LINE:
         case OBJ_MEASURE:
         case OBJ_RECT:
         case OBJ_CIRC:
@@ -226,6 +225,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC (const sal_uInt
         case OBJ_CUSTOMSHAPE:
         case OBJ_GRUP:
             return EnumContext::Context_Draw;
+        case OBJ_LINE:
+            return EnumContext::Context_DrawLine;
 
         case OBJ_GRAF:
             return EnumContext::Context_Graphic;
@@ -256,7 +257,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
         case OBJ_PLIN:
         case OBJ_FREELINE:
         case OBJ_EDGE:
-        case OBJ_LINE:
         case OBJ_MEASURE:
         case OBJ_RECT:
         case OBJ_CIRC:
@@ -269,6 +269,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
         case OBJ_CUSTOMSHAPE:
         case OBJ_GRUP:
             return EnumContext::Context_Draw;
+        case OBJ_LINE:
+            return EnumContext::Context_DrawLine;
 
         case OBJ_TITLETEXT:
         case OBJ_OUTLINETEXT:
