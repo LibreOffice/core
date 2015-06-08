@@ -171,8 +171,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_FONTHEIGHT:
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_POSTURE:
-        case SID_ATTR_CHAR_SHADOWED:
+            case SID_ATTR_CHAR_SHADOWED:
             case SID_ATTR_CHAR_STRIKEOUT:
+            case SID_ATTR_CHAR_CASEMAP:
             {
                 sal_uInt16 stretchX = 100;
                 sal_uInt16 stretchY = 100;

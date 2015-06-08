@@ -409,6 +409,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_KERNING:
+            case SID_ATTR_CHAR_CASEMAP:
             case SID_SET_SUB_SCRIPT:
             case SID_SET_SUPER_SCRIPT:
             {

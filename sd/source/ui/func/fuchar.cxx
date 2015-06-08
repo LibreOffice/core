@@ -106,6 +106,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
                     SID_ATTR_CHAR_FONTHEIGHT,
                     SID_ATTR_CHAR_COLOR,
                     SID_ATTR_CHAR_KERNING,
+                    SID_ATTR_CHAR_CASEMAP,
                     SID_SET_SUPER_SCRIPT,
                     SID_SET_SUB_SCRIPT,
                     0 };

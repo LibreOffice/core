@@ -92,6 +92,12 @@ shell TextObjectBar
         StateMethod = GetAttrState;
     ]
 
+    SID_ATTR_CHAR_CASEMAP   // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
     SID_ATTR_PARA_ADJUST_LEFT  // ole : ?, status : ?
     [
         ExecMethod = Execute;

@@ -60,7 +60,6 @@ void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == mnCharEffects)
     {
-        aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
         rPage.PageCreated(aSet);
     }
 }

@@ -87,6 +87,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 
+#include <editeng/cmapitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -3026,6 +3027,16 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
         if( rReq.GetArgs() )
         {
             SFX_REQUEST_ARG( rReq, pItem, SvxKerningItem, SID_ATTR_CHAR_KERNING , false );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_CASEMAP:
+        if( rReq.GetArgs() )
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SvxCaseMapItem, SID_ATTR_CHAR_CASEMAP , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);

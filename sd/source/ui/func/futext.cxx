@@ -85,12 +85,13 @@ static sal_uInt16 SidArray[] = {
     SID_ATTR_CHAR_FONT,               //   10007
     SID_ATTR_CHAR_POSTURE,            //   10008
     SID_ATTR_CHAR_WEIGHT,             //   10009
-    SID_ATTR_CHAR_SHADOWED,     //10010
-    SID_ATTR_CHAR_STRIKEOUT,        //10013
+    SID_ATTR_CHAR_SHADOWED,           //   10010
+    SID_ATTR_CHAR_STRIKEOUT,          //   10013
     SID_ATTR_CHAR_UNDERLINE,          //   10014
     SID_ATTR_CHAR_FONTHEIGHT,         //   10015
     SID_ATTR_CHAR_COLOR,              //   10017
-    SID_ATTR_CHAR_KERNING,          //10018
+    SID_ATTR_CHAR_KERNING,            //   10018
+    SID_ATTR_CHAR_CASEMAP,            //   10019
     SID_ATTR_PARA_ADJUST_LEFT,        //   10028
     SID_ATTR_PARA_ADJUST_RIGHT,       //   10029
     SID_ATTR_PARA_ADJUST_CENTER,      //   10030
