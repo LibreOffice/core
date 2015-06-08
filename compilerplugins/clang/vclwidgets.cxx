@@ -46,6 +46,7 @@ public:
 
     bool VisitCallExpr(const CallExpr *);
     bool VisitDeclRefExpr(const DeclRefExpr* pDeclRefExpr);
+    bool VisitCXXConstructExpr( const CXXConstructExpr* expr );
 private:
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
     bool mbCheckingMemcpy = false;
@@ -581,6 +582,24 @@ bool VCLWidgets::VisitDeclRefExpr(const DeclRefExpr* pDeclRefExpr)
     return true;
 }
 
+bool VCLWidgets::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
+{
+    if (ignoreLocation(constructExpr)) {
+        return true;
+    }
+    if (constructExpr->getConstructionKind() != CXXConstructExpr::CK_Complete) {
+        return true;
+    }
+    const CXXConstructorDecl* pConstructorDecl = constructExpr->getConstructor();
+    const CXXRecordDecl* recordDecl = pConstructorDecl->getParent();
+    if (isDerivedFromWindow(recordDecl)) {
+        report(
+            DiagnosticsEngine::Warning,
+            "Calling constructor of a Window-derived type directly. All such creation should go via VclPtr<>::Create",
+            constructExpr->getExprLoc());
+    }
+    return true;
+}
 
 loplugin::Plugin::Registration< VCLWidgets > X("vclwidgets");
 
