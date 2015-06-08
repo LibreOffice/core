@@ -1335,6 +1335,7 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_post_key(GtkWidget* /*pWidget*/, GdkEvent
 
 SAL_DLLPUBLIC_EXPORT void lok_doc_view_get_visarea(LOKDocView* pThis, GdkRectangle* pArea)
 {
+#if GTK_CHECK_VERSION(2,14,0) // we need gtk_adjustment_get_page_size()
     float zoom = pThis->m_pImpl->m_fZoom;
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pThis));
     pArea->x = pixelToTwip(gtk_adjustment_get_value(pHAdjustment),zoom);
@@ -1342,6 +1343,7 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_get_visarea(LOKDocView* pThis, GdkRectang
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pThis));
     pArea->y = pixelToTwip(gtk_adjustment_get_value(pVAdjustment), zoom);
     pArea->height = pixelToTwip(gtk_adjustment_get_page_size(pVAdjustment), zoom);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
