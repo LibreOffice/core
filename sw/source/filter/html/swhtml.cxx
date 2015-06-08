@@ -2292,7 +2292,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
         {
             SwTextAttr *pHt = rHints.GetTextHint( i );
             sal_uInt16 nWhich = pHt->Which();
-            sal_Int16 nIdx = -1;
+            sal_Int16 nIdx = 0;
             bool bFont = false;
             switch( nWhich )
             {
@@ -2345,44 +2345,42 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                     nIdx = 14;
                     break;
                 default:
-                    break;
+                    // Skip to next attribute
+                    continue;
             }
-            if( nIdx != -1 )
+            const sal_Int32 nStt = pHt->GetStart();
+            if( nStt >= aEndPos[nIdx] )
             {
-                sal_Int32 nStt = pHt->GetStart();
-                if( nStt >= aEndPos[nIdx] )
+                const SfxPoolItem& rItem =
+                    static_cast<const SwContentNode *>(pTextNd)->GetAttr( nWhich );
+                if( bFont ? swhtml_css1atr_equalFontItems(rItem,pHt->GetAttr())
+                            : rItem == pHt->GetAttr() )
                 {
-                    const SfxPoolItem& rItem =
-                        static_cast<const SwContentNode *>(pTextNd)->GetAttr( nWhich );
-                    if( bFont ? swhtml_css1atr_equalFontItems(rItem,pHt->GetAttr())
-                              : rItem == pHt->GetAttr() )
-                    {
-                        // The hint is the same as set in the paragraph and
-                        // therefore, it can be deleted
-                        // CAUTION!!! This WILL delete the hint and it MAY
-                        // also delete the SwpHints!!! To avoid any trouble
-                        // we leave the loop immediately if this is the last
-                        // hint.
-                        pTextNd->DeleteAttribute( pHt );
-                        if( 1 == nCntAttr )
-                            break;
-                        i--;
-                        nCntAttr--;
-                    }
-                    else
-                    {
-                        // The hint is different. Therefore all hints within that
-                        // hint have to be ignored.
-                        aEndPos[nIdx] = pHt->GetEnd() ? *pHt->GetEnd() : nStt;
-                    }
+                    // The hint is the same as set in the paragraph and
+                    // therefore, it can be deleted
+                    // CAUTION!!! This WILL delete the hint and it MAY
+                    // also delete the SwpHints!!! To avoid any trouble
+                    // we leave the loop immediately if this is the last
+                    // hint.
+                    pTextNd->DeleteAttribute( pHt );
+                    if( 1 == nCntAttr )
+                        break;
+                    i--;
+                    nCntAttr--;
                 }
                 else
                 {
-                    // The hint starts before another one ends.
-                    // The hint in this case is not deleted
-                    OSL_ENSURE( pHt->GetEnd() && *pHt->GetEnd() <= aEndPos[nIdx],
-                            "hints aren't nested properly!" );
+                    // The hint is different. Therefore all hints within that
+                    // hint have to be ignored.
+                    aEndPos[nIdx] = pHt->GetEnd() ? *pHt->GetEnd() : nStt;
                 }
+            }
+            else
+            {
+                // The hint starts before another one ends.
+                // The hint in this case is not deleted
+                OSL_ENSURE( pHt->GetEnd() && *pHt->GetEnd() <= aEndPos[nIdx],
+                        "hints aren't nested properly!" );
             }
         }
     }
