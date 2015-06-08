@@ -83,11 +83,9 @@ class TileBuffer
 {
  public:
  TileBuffer(LibreOfficeKitDocument *document,
-            int tileSize,
             int rows,
             int columns)
      : m_pLOKDocument(document)
-        , m_nTileSize(tileSize)
         , m_nWidth(columns)
         , m_nHeight(rows)
     {  }
@@ -104,10 +102,11 @@ class TileBuffer
 
        @param x the tile along the x-axis of the buffer
        @param y the tile along the y-axis of the buffer
+       @param aZoom This function needs the zoom factor to draw the tile using paintTile()
 
        @return the tile at the mentioned position (x, y)
      */
-    Tile& getTile(int x, int y);
+    Tile& getTile(int x, int y, float aZoom);
     /// Destroys all the tiles in the tile buffer; also frees the memory allocated
     /// for all the Tile objects.
     void resetAllTiles();
@@ -123,8 +122,6 @@ class TileBuffer
  private:
     /// Contains the reference to the LOK Document that this tile buffer is for.
     LibreOfficeKitDocument *m_pLOKDocument;
-    /// The side of each squared tile in pixels.
-    int m_nTileSize;
     /// Stores all the tiles cached by this tile buffer.
     std::map<int, Tile> m_mTiles;
     /// Width of the current tile buffer (number of columns)
