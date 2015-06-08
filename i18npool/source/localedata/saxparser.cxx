@@ -338,8 +338,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         // create and connect the document handler to the parser
         TestDocumentHandler *pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
 
-        Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
-        Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
+        Reference < XDocumentHandler >  rDocHandler( static_cast<XDocumentHandler *>(pDocHandler) );
+        Reference< XEntityResolver > rEntityResolver( static_cast<XEntityResolver *>(pDocHandler) );
 
         rParser->setDocumentHandler( rDocHandler );
         rParser->setEntityResolver( rEntityResolver );

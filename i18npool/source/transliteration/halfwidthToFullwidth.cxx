@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 halfwidthToFullwidth::halfwidthToFullwidth()
 {
-    func = (TransFunc) 0;
+    func = nullptr;
     table = &widthfolding::gethalf2fullTable();
     transliterationName = "halfwidthToFullwidth";
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH";
@@ -59,7 +59,7 @@ halfwidthToFullwidth::transliterateChar2Char( sal_Unicode inChar)
 
 halfwidthKatakanaToFullwidthKatakana::halfwidthKatakanaToFullwidthKatakana()
 {
-    func = (TransFunc) 0;
+    func = nullptr;
     table = &widthfolding::gethalfKana2fullKanaTable();
     transliterationName = "halfwidthKatakanaToFullwidthKatakana";
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTHKATAKANA_FULLWIDTHKATAKANA";
@@ -89,7 +89,7 @@ halfwidthKatakanaToFullwidthKatakana::transliterateChar2Char( sal_Unicode inChar
 
 halfwidthToFullwidthLikeJIS::halfwidthToFullwidthLikeJIS()
 {
-    func = (TransFunc) 0;
+    func = nullptr;
     table = &widthfolding::gethalf2fullTableForJIS();
     transliterationName = "halfwidthToFullwidthLikeJIS";
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH_LIKE_JIS";

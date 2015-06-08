@@ -69,8 +69,8 @@ using namespace ::com::sun::star;
                     lang::XMultiServiceFactory >& )       \
 {                                                         \
     return uno::Reference <                               \
-            uno::XInterface >( ( ::cppu::OWeakObject* )   \
-                                    new ImplName );       \
+            uno::XInterface >( static_cast<cppu::OWeakObject*>(   \
+                                    new ImplName) );       \
 }
 
 #define IMPL_CREATEINSTANCE_CTX( ImplName )               \
@@ -80,8 +80,8 @@ using namespace ::com::sun::star;
                     lang::XMultiServiceFactory >& rxMSF ) \
 {                                                         \
     return uno::Reference <                               \
-            uno::XInterface >( ( ::cppu::OWeakObject* )   \
-                                    new ImplName( comphelper::getComponentContext(rxMSF) ) );  \
+            uno::XInterface >( static_cast<cppu::OWeakObject*>(   \
+                                    new ImplName( comphelper::getComponentContext(rxMSF) )) );  \
 }
 
 typedef uno::Reference<

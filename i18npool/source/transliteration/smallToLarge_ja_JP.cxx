@@ -69,7 +69,7 @@ OneToOneMappingTable_t small2large[] = {
 smallToLarge_ja_JP::smallToLarge_ja_JP()
 {
     static oneToOneMapping _table(small2large, sizeof(small2large));
-    func = (TransFunc) 0;
+    func = nullptr;
     table = &_table;
     transliterationName = "smallToLarge_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.smallToLarge_ja_JP";

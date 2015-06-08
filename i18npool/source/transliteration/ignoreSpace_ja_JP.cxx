@@ -42,7 +42,7 @@ OneToOneMappingTable_t ignoreSpace_ja_JP_mappingTable[] = {
 
 ignoreSpace_ja_JP::ignoreSpace_ja_JP()
 {
-    func = (TransFunc)0;
+    func = nullptr;
     table = new oneToOneMapping(ignoreSpace_ja_JP_mappingTable, sizeof(ignoreSpace_ja_JP_mappingTable));
     map = 0;
     transliterationName = "ignoreSpace_ja_JP";

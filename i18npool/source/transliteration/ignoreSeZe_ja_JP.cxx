@@ -39,7 +39,7 @@ static const transliteration_Ignore::Mapping SeZe[] = {
 
 ignoreSeZe_ja_JP::ignoreSeZe_ja_JP()
 {
-    func = (TransFunc) 0;
+    func = nullptr;
     table = 0;
     map = SeZe;
     transliterationName = "ignoreSeZe_ja_JP";

@@ -1104,8 +1104,8 @@ SAL_CALL TextSearch_CreateInstance(
 {
     return ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface >(
-                (::cppu::OWeakObject*) new TextSearch(
-                        comphelper::getComponentContext( rxMSF ) ) );
+                static_cast<cppu::OWeakObject*>(new TextSearch(
+                        comphelper::getComponentContext( rxMSF ) )) );
 }
 
 extern "C"

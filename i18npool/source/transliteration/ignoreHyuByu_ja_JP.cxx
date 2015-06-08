@@ -34,7 +34,7 @@ static const transliteration_Ignore::Mapping HyuByu[] = {
 
 ignoreHyuByu_ja_JP::ignoreHyuByu_ja_JP()
 {
-    func = (TransFunc) 0;
+    func = nullptr;
     table = 0;
     map = HyuByu;
     transliterationName = "ignoreHyuByu_ja_JP";

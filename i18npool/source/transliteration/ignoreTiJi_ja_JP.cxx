@@ -43,7 +43,7 @@ static const transliteration_Ignore::Mapping TiJi[] = {
 
 ignoreTiJi_ja_JP::ignoreTiJi_ja_JP()
 {
-    func = (TransFunc) 0;
+    func = nullptr;
     table = 0;
     map = TiJi;
     transliterationName = "ignoreTiJi_ja_JP";

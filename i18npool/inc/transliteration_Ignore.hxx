@@ -100,7 +100,7 @@ TRANSLITERATION_IGNORE(Kashida_CTL)
 class ignore##name : public transliteration_Ignore {\
 public:\
         ignore##name () {\
-            func = (TransFunc) 0;\
+            func = nullptr;\
             table = 0;\
             map = 0;\
             transliterationName = "ignore"#name;\
@@ -121,7 +121,7 @@ TRANSLITERATION_IGNORE(ProlongedSoundMark_ja_JP)
 class ignore##name : public transliteration_Ignore {\
 public:\
         ignore##name () {\
-            func = (TransFunc) 0;\
+            func = nullptr;\
             table = 0;\
             map = 0;\
             transliterationName = "ignore"#name;\

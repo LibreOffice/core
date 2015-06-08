@@ -33,7 +33,7 @@ static const transliteration_Ignore::Mapping BaFa[] = {
 
 ignoreBaFa_ja_JP::ignoreBaFa_ja_JP()
 {
-    func = (TransFunc) 0;
+    func = nullptr;
     table = 0;
     map = BaFa;
     transliterationName = "ignoreBaFa_ja_JP";
