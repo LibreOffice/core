@@ -2502,7 +2502,7 @@ void SvxFontNameToolBoxControl::StateChanged(
     if ( SfxItemState::DISABLED == eState )
     {
         pBox->Disable();
-        pBox->Update( (const SvxFontItem*)NULL );
+        pBox->Update( nullptr );
     }
     else
     {

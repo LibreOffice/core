@@ -535,7 +535,7 @@ void GalleryTheme::Actualize( const Link<>& rActualizeLink, GalleryProgress* pPr
 
             const INetURLObject aURL( pEntry->aURL );
 
-            rActualizeLink.Call( (void*) &aURL );
+            rActualizeLink.Call( const_cast<INetURLObject *>(&aURL) );
 
             // SvDraw objects will be updated later
             if( pEntry->eObjKind != SGA_OBJ_SVDRAW )
@@ -558,11 +558,11 @@ void GalleryTheme::Actualize( const Link<>& rActualizeLink, GalleryProgress* pPr
                         boost::scoped_ptr<SgaObject> pNewObj;
 
                         if ( SGA_OBJ_INET == pEntry->eObjKind )
-                            pNewObj.reset((SgaObject*) new SgaObjectINet( aGraphic, aURL, aFormat ));
+                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectINet( aGraphic, aURL, aFormat )));
                         else if ( aGraphic.IsAnimated() )
-                            pNewObj.reset((SgaObject*) new SgaObjectAnim( aGraphic, aURL, aFormat ));
+                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectAnim( aGraphic, aURL, aFormat )));
                         else
-                            pNewObj.reset((SgaObject*) new SgaObjectBmp( aGraphic, aURL, aFormat ));
+                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectBmp( aGraphic, aURL, aFormat )));
 
                         if( !InsertObject( *pNewObj ) )
                             pEntry->mbDelete = true;
@@ -1111,15 +1111,15 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
     if( nImportRet != GalleryGraphicImportRet::IMPORT_NONE )
     {
         if ( GalleryGraphicImportRet::IMPORT_INET == nImportRet )
-            pNewObj.reset((SgaObject*) new SgaObjectINet( aGraphic, rURL, aFormat ));
+            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectINet( aGraphic, rURL, aFormat )));
         else if ( aGraphic.IsAnimated() )
-            pNewObj.reset((SgaObject*) new SgaObjectAnim( aGraphic, rURL, aFormat ));
+            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectAnim( aGraphic, rURL, aFormat )));
         else
-            pNewObj.reset((SgaObject*) new SgaObjectBmp( aGraphic, rURL, aFormat ));
+            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectBmp( aGraphic, rURL, aFormat )));
     }
 #if HAVE_FEATURE_AVMEDIA
     else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), ""/*TODO?*/ ) )
-        pNewObj.reset((SgaObject*) new SgaObjectSound( rURL ));
+        pNewObj.reset(static_cast<SgaObject*>(new SgaObjectSound( rURL )));
 #endif
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )
         bRet = true;

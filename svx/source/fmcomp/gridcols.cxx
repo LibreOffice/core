@@ -58,7 +58,7 @@ namespace
     sal_Int32 lcl_findPos(const OUString& aStr, const Sequence< OUString>& rList)
     {
         const OUString* pStrList = rList.getConstArray();
-        OUString* pResult = static_cast<OUString*>(bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(OUString),
+        OUString* pResult = static_cast<OUString*>(bsearch(&aStr, static_cast<void const *>(pStrList), rList.getLength(), sizeof(OUString),
             &NameCompare));
 
         if (pResult)

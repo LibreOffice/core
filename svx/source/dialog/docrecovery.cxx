@@ -916,7 +916,7 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
         sName += "\t";
         sName += impl_getStatusString( rInfo );
         SvTreeListEntry* pEntry = m_pFileListLB->InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
-        pEntry->SetUserData((void*)&rInfo);
+        pEntry->SetUserData(const_cast<TURLInfo *>(&rInfo));
     }
 
     // mark first item
@@ -1313,7 +1313,7 @@ void BrokenRecoveryDialog::impl_refresh()
         m_bExecutionNeeded = true;
 
         sal_uInt16 nPos = m_pFileListLB->InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
-        m_pFileListLB->SetEntryData( nPos, (void*)&rInfo );
+        m_pFileListLB->SetEntryData( nPos, const_cast<TURLInfo *>(&rInfo) );
     }
     m_sSavePath.clear();
     m_pOkBtn->GrabFocus();

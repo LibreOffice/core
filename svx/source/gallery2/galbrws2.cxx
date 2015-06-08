@@ -1207,9 +1207,9 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
 
                 switch( GetMode() )
                 {
-                    case( GALLERYBROWSERMODE_ICON ): pWindow = (vcl::Window*) mpIconView; break;
-                    case( GALLERYBROWSERMODE_LIST ): pWindow = (vcl::Window*) mpListView; break;
-                    case( GALLERYBROWSERMODE_PREVIEW ): pWindow = (vcl::Window*) mpPreview; break;
+                    case( GALLERYBROWSERMODE_ICON ): pWindow = static_cast<vcl::Window*>(mpIconView); break;
+                    case( GALLERYBROWSERMODE_LIST ): pWindow = static_cast<vcl::Window*>(mpListView); break;
+                    case( GALLERYBROWSERMODE_PREVIEW ): pWindow = static_cast<vcl::Window*>(mpPreview); break;
 
                     default:
                         pWindow = NULL;

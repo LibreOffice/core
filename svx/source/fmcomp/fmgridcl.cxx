@@ -1131,7 +1131,7 @@ void FmGridControl::DeleteSelectedRows()
         return;
 
     // try to confirm the delete
-    Reference< ::com::sun::star::frame::XDispatchProvider >  xDispatcher = (::com::sun::star::frame::XDispatchProvider*)GetPeer();
+    Reference< ::com::sun::star::frame::XDispatchProvider >  xDispatcher = static_cast<com::sun::star::frame::XDispatchProvider*>(GetPeer());
     if (xDispatcher.is())
     {
         ::com::sun::star::util::URL aUrl;

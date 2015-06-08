@@ -311,7 +311,7 @@ sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleIndexInParent() thr
             for( sal_Int32 i = 0 ; i < nChildCount ; ++i )
             {
                 Reference< XAccessible >    xChild( xParentContext->getAccessibleChild( i ) );
-                if( xChild.get() == ( XAccessible* ) this )
+                if( xChild.get() == static_cast<XAccessible*>(this) )
                     return i;
             }
         }

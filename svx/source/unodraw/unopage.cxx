@@ -141,7 +141,7 @@ void SvxDrawPage::dispose()
         // Create an event with this as sender
         try
         {
-            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( (lang::XComponent *)this ) );
+            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) ) );
             ::com::sun::star::document::EventObject aEvt;
             aEvt.Source = xSource;
             // inform all listeners to release this object

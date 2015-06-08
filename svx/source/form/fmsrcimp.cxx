@@ -103,7 +103,7 @@ FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::
         return;
     }
 
-    m_xListening->addPropertyChangeListener(FM_PROP_ROWCOUNT, (::com::sun::star::beans::XPropertyChangeListener*)this);
+    m_xListening->addPropertyChangeListener(FM_PROP_ROWCOUNT, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
 }
 
 
@@ -128,7 +128,7 @@ FmRecordCountListener::~FmRecordCountListener()
 void FmRecordCountListener::DisConnect()
 {
     if(m_xListening.is())
-        m_xListening->removePropertyChangeListener(FM_PROP_ROWCOUNT, (::com::sun::star::beans::XPropertyChangeListener*)this);
+        m_xListening->removePropertyChangeListener(FM_PROP_ROWCOUNT, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
     m_xListening = NULL;
 }
 

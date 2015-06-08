@@ -725,7 +725,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     const SfxItemSet& rSet = GetObjectItemSet();
 
     if (bCon1) {
-        if (rCon1.pObj==(SdrObject*)this)
+        if (rCon1.pObj==static_cast<SdrObject const *>(this))
         {
             // check, just in case
             aBoundRect1=aOutRect;
@@ -750,7 +750,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBewareRect1=aBoundRect1;
     }
     if (bCon2) {
-        if (rCon2.pObj==(SdrObject*)this) { // check, just in case
+        if (rCon2.pObj==static_cast<SdrObject const *>(this)) { // check, just in case
             aBoundRect2=aOutRect;
         }
         else
@@ -2124,7 +2124,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
         no--;
         SdrObject* pObj=pOL->GetObj(no);
         if (rVisLayer.IsSet(pObj->GetLayer()) && pObj->IsVisible() &&      // only visible objects
-            (pThis==NULL || pObj!=(SdrObject*)pThis) && // don't connect it to itself
+            (pThis==NULL || pObj!=static_cast<SdrObject const *>(pThis)) && // don't connect it to itself
             pObj->IsNode())
         {
             Rectangle aObjBound(pObj->GetCurrentBoundRect());

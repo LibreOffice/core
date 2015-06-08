@@ -1649,7 +1649,7 @@ void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw(
 
         Reference< XReset >  xColumnReset(m_xColumns, UNO_QUERY);
         if (xColumnReset.is())
-            xColumnReset->removeResetListener((XResetListener*)this);
+            xColumnReset->removeResetListener(static_cast<XResetListener*>(this));
     }
     if (Columns.is())
     {
@@ -1668,7 +1668,7 @@ void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw(
 
         Reference< XReset >  xColumnReset(Columns, UNO_QUERY);
         if (xColumnReset.is())
-            xColumnReset->addResetListener((XResetListener*)this);
+            xColumnReset->addResetListener(static_cast<XResetListener*>(this));
     }
     m_xColumns = Columns;
     if (pGrid)
@@ -2411,7 +2411,7 @@ void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
     sal_Int32 _nIndex = pGrid->GetModelColumnPos(pColumn->GetId());
     Reference< ::com::sun::star::awt::XControl >  xControl(pColumn->GetCell());
     ContainerEvent aEvt;
-    aEvt.Source   = (XContainer*)this;
+    aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
     aEvt.Element  <<= xControl;
 
@@ -2426,7 +2426,7 @@ void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
     sal_Int32 _nIndex = pGrid->GetModelColumnPos(pColumn->GetId());
     Reference< ::com::sun::star::awt::XControl >  xControl(pColumn->GetCell());
     ContainerEvent aEvt;
-    aEvt.Source   = (XContainer*)this;
+    aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
     aEvt.Element  <<= xControl;
 
@@ -2489,12 +2489,12 @@ void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< ::com::su
         else
         {
             // it is the first interceptor; set ourself as slave
-            _xInterceptor->setSlaveDispatchProvider((::com::sun::star::frame::XDispatchProvider*)this);
+            _xInterceptor->setSlaveDispatchProvider(static_cast<com::sun::star::frame::XDispatchProvider*>(this));
         }
 
         // we are the master of the chain's first interceptor
         m_xFirstDispatchInterceptor = _xInterceptor;
-        m_xFirstDispatchInterceptor->setMasterDispatchProvider((::com::sun::star::frame::XDispatchProvider*)this);
+        m_xFirstDispatchInterceptor->setMasterDispatchProvider(static_cast<com::sun::star::frame::XDispatchProvider*>(this));
 
         // we have a new interceptor and we're alive ?
         if (!isDesignMode())
@@ -2539,13 +2539,13 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< ::com::sun
                     xMaster->setSlaveDispatchProvider(Reference< ::com::sun::star::frame::XDispatchProvider >::query(xSlave));
                 else
                     // it's the first interceptor of the chain, set ourself as slave
-                    xMaster->setSlaveDispatchProvider((::com::sun::star::frame::XDispatchProvider*)this);
+                    xMaster->setSlaveDispatchProvider(static_cast<com::sun::star::frame::XDispatchProvider*>(this));
             }
             else
             {
                 // the chain's first element was removed, set ourself as new master of the second one
                 if (xSlave.is())
-                    xSlave->setMasterDispatchProvider((::com::sun::star::frame::XDispatchProvider*)this);
+                    xSlave->setMasterDispatchProvider(static_cast<com::sun::star::frame::XDispatchProvider*>(this));
             }
         }
 
@@ -2722,10 +2722,10 @@ void FmXGridPeer::UpdateDispatches()
         if (xNewDispatch != m_pDispatchers[i])
         {
             if (m_pDispatchers[i].is())
-                m_pDispatchers[i]->removeStatusListener((::com::sun::star::frame::XStatusListener*)this, *pSupportedURLs);
+                m_pDispatchers[i]->removeStatusListener(static_cast<com::sun::star::frame::XStatusListener*>(this), *pSupportedURLs);
             m_pDispatchers[i] = xNewDispatch;
             if (m_pDispatchers[i].is())
-                m_pDispatchers[i]->addStatusListener((::com::sun::star::frame::XStatusListener*)this, *pSupportedURLs);
+                m_pDispatchers[i]->addStatusListener(static_cast<com::sun::star::frame::XStatusListener*>(this), *pSupportedURLs);
         }
         if (m_pDispatchers[i].is())
             ++nDispatchersGot;
@@ -2764,7 +2764,7 @@ void FmXGridPeer::ConnectToDispatcher()
         m_pDispatchers[i] = queryDispatch(*pSupportedURLs, OUString(), 0);
         if (m_pDispatchers[i].is())
         {
-            m_pDispatchers[i]->addStatusListener((::com::sun::star::frame::XStatusListener*)this, *pSupportedURLs);
+            m_pDispatchers[i]->addStatusListener(static_cast<com::sun::star::frame::XStatusListener*>(this), *pSupportedURLs);
             ++nDispatchersGot;
         }
     }
@@ -2790,7 +2790,7 @@ void FmXGridPeer::DisConnectFromDispatcher()
     for (sal_Int32 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
         if (m_pDispatchers[i].is())
-            m_pDispatchers[i]->removeStatusListener((::com::sun::star::frame::XStatusListener*)this, *pSupportedURLs);
+            m_pDispatchers[i]->removeStatusListener(static_cast<com::sun::star::frame::XStatusListener*>(this), *pSupportedURLs);
     }
 
     delete[] m_pStateCache;

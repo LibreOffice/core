@@ -7960,13 +7960,13 @@ static const mso_CustomShape msoStraightConnector1 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptStraightConnector1Vert), SAL_N_ELEMENTS( mso_sptStraightConnector1Vert ),
     const_cast<sal_uInt16*>(mso_sptStraightConnector1Segm), sizeof( mso_sptStraightConnector1Segm ) >> 1,
-    (SvxMSDffCalculationData*)NULL, 0,
-    (sal_Int32*)NULL,
+    nullptr, 0,
+    nullptr,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)NULL, 0
+    nullptr, 0
 };
 
 static const SvxMSDffVertPair mso_sptBentConnector2Vert[] =
@@ -7981,13 +7981,13 @@ static const mso_CustomShape msoBentConnector2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBentConnector2Vert), SAL_N_ELEMENTS( mso_sptBentConnector2Vert ),
     const_cast<sal_uInt16*>(mso_sptBentConnector2Segm), sizeof( mso_sptBentConnector2Segm ) >> 1,
-    (SvxMSDffCalculationData*)NULL, 0,
-    (sal_Int32*)NULL,
+    nullptr, 0,
+    nullptr,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)NULL, 0
+    nullptr, 0
 };
 
 static const SvxMSDffVertPair mso_sptBentConnector3Vert[] =
@@ -8121,13 +8121,13 @@ static const mso_CustomShape msoCurvedConnector2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCurvedConnector2Vert), SAL_N_ELEMENTS( mso_sptCurvedConnector2Vert ),
     const_cast<sal_uInt16*>(mso_sptCurvedConnector2Segm), sizeof( mso_sptCurvedConnector2Segm ) >> 1,
-    (SvxMSDffCalculationData*)NULL, 0,
-    (sal_Int32*)NULL,
+    nullptr, 0,
+    nullptr,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)NULL, 0
+    nullptr, 0
 };
 
 static const SvxMSDffVertPair mso_sptCurvedConnector3Vert[] =

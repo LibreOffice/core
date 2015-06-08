@@ -177,7 +177,7 @@ css::uno::Reference<css::uno::XInterface> create(
             sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
             sal_uInt32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
 
-            return uno::Reference< uno::XInterface >( (drawing::XShape*) SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, 0, 0, referer ) );
+            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, 0, 0, referer )) );
         }
     }
     else if ( rServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
@@ -345,7 +345,7 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SvxUnoDrawingModel::getDrawPages(
     uno::Reference< drawing::XDrawPages >  xDrawPages( mxDrawPagesAccess );
 
     if( !xDrawPages.is() )
-        mxDrawPagesAccess = xDrawPages = (drawing::XDrawPages*)new SvxUnoDrawPagesAccess(*this);
+        mxDrawPagesAccess = xDrawPages = static_cast<drawing::XDrawPages*>(new SvxUnoDrawPagesAccess(*this));
 
     return xDrawPages;
 }
@@ -414,7 +414,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 
     if( aServiceSpecifier == "com.sun.star.text.TextField.DateTime" )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField(text::textfield::Type::DATE);
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField(text::textfield::Type::DATE));
     }
 
     uno::Reference< uno::XInterface > xRet;
@@ -504,7 +504,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         if( pShape )
             pShape->SetShapeType(aServiceSpecifier);
 
-        xRet = (uno::XWeak*)pShape;
+        xRet = static_cast<uno::XWeak*>(pShape);
     }
     else
     {
@@ -621,9 +621,9 @@ uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
             if( !xPage.is() )
             {
                 if( PTR_CAST( FmFormModel, mrModel.mpDoc ) )
-                    xPage = (drawing::XDrawPage*)new SvxFmDrawPage( pPage );
+                    xPage = static_cast<drawing::XDrawPage*>(new SvxFmDrawPage( pPage ));
                 else
-                    xPage = (drawing::XDrawPage*)new SvxDrawPage( pPage );
+                    xPage = static_cast<drawing::XDrawPage*>(new SvxDrawPage( pPage ));
 
                 pPage->mxUnoPage = xPage;
             }

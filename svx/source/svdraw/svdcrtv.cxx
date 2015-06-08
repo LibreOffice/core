@@ -702,7 +702,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
             SdrTextObj* pText=PTR_CAST(SdrTextObj,pObjMerk);
             if (pText!=NULL && pText->IsTextFrame())
             {
-                SdrBeginTextEdit(pText, pPVMerk, (vcl::Window*)0L, true, (SdrOutliner*)0L, (OutlinerView*)0L);
+                SdrBeginTextEdit(pText, pPVMerk, nullptr, true, nullptr, nullptr);
             }
         }
     }

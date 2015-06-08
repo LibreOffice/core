@@ -768,11 +768,11 @@ void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e) throw( Runtime
         Reference< runtime::XFormController > xFormController( m_xExternalViewController, UNO_QUERY );
         OSL_ENSURE( xFormController.is(), "FmXFormShell::disposing: invalid external view controller!" );
         if (xFormController.is())
-            xFormController->removeActivateListener((XFormControllerListener*)this);
+            xFormController->removeActivateListener(static_cast<XFormControllerListener*>(this));
 
         Reference< ::com::sun::star::lang::XComponent> xComp(m_xExternalViewController, UNO_QUERY);
         if (xComp.is())
-            xComp->removeEventListener((XEventListener*)(XPropertyChangeListener*)this);
+            xComp->removeEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
 
         m_xExternalViewController = NULL;
         m_xExternalDisplayedForm = NULL;
@@ -1830,9 +1830,9 @@ void FmXFormShell::impl_switchActiveControllerListening( const bool _bListen )
         return;
 
     if ( _bListen )
-        xComp->addEventListener( (XFormControllerListener*)this );
+        xComp->addEventListener( static_cast<XFormControllerListener*>(this) );
     else
-        xComp->removeEventListener( (XFormControllerListener*)this );
+        xComp->removeEventListener( static_cast<XFormControllerListener*>(this) );
 }
 
 
@@ -3195,7 +3195,7 @@ void FmXFormShell::CreateExternalView()
             m_xExternalViewController = xExternalViewFrame->getController();
             Reference< ::com::sun::star::lang::XComponent> xComp(m_xExternalViewController, UNO_QUERY);
             if (xComp.is())
-                xComp->addEventListener((XEventListener*)(XPropertyChangeListener*)this);
+                xComp->addEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
         }
     }
     else
@@ -3525,7 +3525,7 @@ void FmXFormShell::CreateExternalView()
             Reference< runtime::XFormController > xFormController( m_xExternalViewController, UNO_QUERY );
             OSL_ENSURE( xFormController.is(), "FmXFormShell::CreateExternalView:: invalid external view controller!" );
             if (xFormController.is())
-                xFormController->addActivateListener((XFormControllerListener*)this);
+                xFormController->addActivateListener(static_cast<XFormControllerListener*>(this));
         }
     }
 #ifdef DBG_UTIL

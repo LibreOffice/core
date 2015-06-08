@@ -652,7 +652,7 @@ void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
     if(mpObj.is() && rPropSet.AreThereOwnUsrAnys() && mpModel)
     {
         SfxItemSet aSet( mpModel->GetItemPool(), SDRATTR_START, SDRATTR_END);
-        Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
+        Reference< beans::XPropertySet > xShape( static_cast<OWeakObject*>(this), UNO_QUERY );
         SvxItemPropertySet_ObtainSettingsFromPropertySet(rPropSet, aSet, xShape, &mpPropSet->getPropertyMap() );
 
         mpObj->SetMergedItemSetAndBroadcast(aSet);
@@ -1303,7 +1303,7 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException, std::exception)
     mpImpl->mbDisposing = true;
 
     lang::EventObject aEvt;
-    aEvt.Source = *(OWeakAggObject*) this;
+    aEvt.Source = *static_cast<OWeakAggObject*>(this);
     mpImpl->maDisposeListeners.disposeAndClear(aEvt);
     mpImpl->maPropertyNotifier.disposing();
 

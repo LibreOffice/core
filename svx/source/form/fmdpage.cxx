@@ -84,7 +84,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 {
     if( FmFormInventor == pObj->GetObjInventor() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  xShape = (SvxShape*)new SvxShapeControl( pObj );
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  xShape = static_cast<SvxShape*>(new SvxShapeControl( pObj ));
         return xShape;
     }
     else

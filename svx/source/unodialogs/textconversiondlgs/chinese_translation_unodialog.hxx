@@ -86,7 +86,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
             create( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext) throw(::com::sun::star::uno::Exception)
     {
-        return (::cppu::OWeakObject *)new ChineseTranslation_UnoDialog( xContext );
+        return static_cast<cppu::OWeakObject *>(new ChineseTranslation_UnoDialog( xContext ));
     }
 
     // lang::XInitialization

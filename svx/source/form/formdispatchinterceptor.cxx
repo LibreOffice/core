@@ -55,7 +55,7 @@ namespace svxform
         osl_atomic_increment(&m_refCount);
         if (_rxToIntercept.is())
         {
-            _rxToIntercept->registerDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
+            _rxToIntercept->registerDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
             // this should make us the top-level dispatch-provider for the component, via a call to our
             // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fulfill
             Reference< XComponent> xInterceptedComponent(_rxToIntercept, UNO_QUERY);

@@ -260,7 +260,7 @@ Svx3DLightControl::Svx3DLightControl(vcl::Window* pParent, WinBits nStyle)
     mpExpansionObject(0),
     mpLampBottomObject(0),
     mpLampShaftObject(0),
-    maLightObjects(MAX_NUMBER_LIGHTS, (E3dObject*)0),
+    maLightObjects(MAX_NUMBER_LIGHTS, nullptr),
     mfRotateX(-20.0),
     mfRotateY(45.0),
     mfRotateZ(0.0),

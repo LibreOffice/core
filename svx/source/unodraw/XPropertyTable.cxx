@@ -262,7 +262,7 @@ public:
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw()
 {
-    return (OWeakObject*) new SvxUnoXColorTable( pList );
+    return static_cast<OWeakObject*>(new SvxUnoXColorTable( pList ));
 }
 
 // SvxUnoXPropertyTable
@@ -324,7 +324,7 @@ public:
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
 {
-    return (OWeakObject*)new SvxUnoXLineEndTable( pTable );
+    return static_cast<OWeakObject*>(new SvxUnoXLineEndTable( pTable ));
 }
 
 // SvxUnoXPropertyTable
@@ -397,7 +397,7 @@ public:
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
 {
-    return (OWeakObject*)new SvxUnoXDashTable( pTable );
+    return static_cast<OWeakObject*>(new SvxUnoXDashTable( pTable ));
 }
 
 // SvxUnoXPropertyTable
@@ -478,7 +478,7 @@ public:
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
 {
-    return (OWeakObject*)new SvxUnoXHatchTable( pTable );
+    return static_cast<OWeakObject*>(new SvxUnoXHatchTable( pTable ));
 }
 
 // SvxUnoXPropertyTable
@@ -554,7 +554,7 @@ public:
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
 {
-    return (OWeakObject*)new SvxUnoXGradientTable( pTable );
+    return static_cast<OWeakObject*>(new SvxUnoXGradientTable( pTable ));
 }
 
 // SvxUnoXPropertyTable
@@ -642,7 +642,7 @@ public:
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
 {
-    return (OWeakObject*)new SvxUnoXBitmapTable( pTable );
+    return static_cast<OWeakObject*>(new SvxUnoXBitmapTable( pTable ));
 }
 
 // SvxUnoXPropertyTable

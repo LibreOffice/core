@@ -102,7 +102,7 @@ void SvxShapeCollection::release() throw()
         {
             if (! mrBHelper.bDisposed)
             {
-                uno::Reference< uno::XInterface > xHoldAlive( (uno::XWeak*)this );
+                uno::Reference< uno::XInterface > xHoldAlive( static_cast<uno::XWeak*>(this) );
                 // First dispose
                 try
                 {
@@ -159,7 +159,7 @@ void SvxShapeCollection::dispose()
         // Create an event with this as sender
         try
         {
-            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( (lang::XComponent *)this ) );
+            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) ) );
             document::EventObject aEvt;
             aEvt.Source = xSource;
             // inform all listeners to release this object

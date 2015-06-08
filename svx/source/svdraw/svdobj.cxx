@@ -3193,7 +3193,7 @@ SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uIn
     SdrObject* pObj = NULL;
     while (i < n && !pObj)
     {
-        rLL.GetLink(i).Call((void*)pFact.get());
+        rLL.GetLink(i).Call(static_cast<void*>(pFact.get()));
         pObj = pFact->pNewObj;
         i++;
     }

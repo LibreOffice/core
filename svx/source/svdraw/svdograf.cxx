@@ -1403,13 +1403,13 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
             Graphic aGraphic( GetGraphic() );
             GfxLink aLink( aGraphic.GetLink() );
             sal_uInt32 nSize = aLink.GetDataSize();
-            const void* pSourceData = (const void*)aLink.GetData();
+            const void* pSourceData = static_cast<const void*>(aLink.GetData());
             if( nSize && pSourceData )
             {
                 sal_uInt8 * pBuffer = new sal_uInt8[ nSize ];
                 memcpy( pBuffer, pSourceData, nSize );
 
-                SvMemoryStream* pStream = new SvMemoryStream( (void*)pBuffer, (sal_Size)nSize, StreamMode::READ );
+                SvMemoryStream* pStream = new SvMemoryStream( static_cast<void*>(pBuffer), (sal_Size)nSize, StreamMode::READ );
                 pStream->ObjectOwnsMemory( true );
                 xStream.set( new utl::OInputStreamWrapper( pStream, true ) );
             }

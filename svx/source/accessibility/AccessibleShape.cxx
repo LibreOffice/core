@@ -785,7 +785,7 @@ void SAL_CALL AccessibleShape::addAccessibleEventListener (
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         uno::Reference<uno::XInterface> xThis (
-            (lang::XComponent *)this, uno::UNO_QUERY);
+            static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
         rxListener->disposing (lang::EventObject (xThis));
     }
     else

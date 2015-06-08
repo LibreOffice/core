@@ -370,7 +370,7 @@ sal_uIntPtr _SdrItemBrowserControl::GetCurrentPos() const
 {
     sal_uIntPtr nRet=CONTAINER_ENTRY_NOTFOUND;
     if (GetSelectRowCount()==1) {
-        long nPos=((BrowseBox*)this)->FirstSelectedRow();
+        long nPos=static_cast<BrowseBox*>(const_cast<_SdrItemBrowserControl *>(this))->FirstSelectedRow();
         if (nPos>=0 && (sal_uIntPtr)nPos<aList.size()) {
             nRet=(sal_uIntPtr)nPos;
         }

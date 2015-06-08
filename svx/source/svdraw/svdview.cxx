@@ -822,7 +822,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                     if (eHit==SDRHIT_TEXTEDIT)
                     {
                         bool bRet2(pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType() &&
-                            SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get())), false, (SdrOutliner*)0L));
+                            SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get())), false, nullptr));
 
                         if(bRet2)
                         {
@@ -858,7 +858,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 bUnmark=nCount1<nCount0;
             }
             if (!bUnmark) {
-                BegDragObj(aLogicPos,NULL,(SdrHdl*)NULL,nMinMovLog);
+                BegDragObj(aLogicPos,NULL,nullptr,nMinMovLog);
                 bRet=true;
             }
         } break;
@@ -915,7 +915,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             }
 
             bRet = pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType()&&
-                 SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get())), false, (SdrOutliner*)0L);
+                 SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get())), false, nullptr);
 
             if(bRet)
             {

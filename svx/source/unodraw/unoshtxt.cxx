@@ -820,7 +820,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
             // enter edit mode
             mpView->SdrEndTextEdit();
 
-            if(mpView->SdrBeginTextEdit(mpObject, 0L, 0L, false, (SdrOutliner*)0L, 0L, false, false))
+            if(mpView->SdrBeginTextEdit(mpObject, 0L, 0L, false, nullptr, 0L, false, false))
             {
                 SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
                 if (pTextObj && pTextObj->IsTextEditActive())

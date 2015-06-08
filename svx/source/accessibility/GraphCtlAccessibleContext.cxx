@@ -352,7 +352,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent() t
                 if( xChild.is() )
                 {
                     Reference< XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                    if( xChildContext == ( XAccessibleContext* ) this )
+                    if( xChildContext == static_cast<XAccessibleContext*>(this) )
                         return i;
                 }
             }

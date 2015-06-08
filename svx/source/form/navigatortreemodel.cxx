@@ -233,7 +233,7 @@ namespace svxform
     {
         Reference< css::form::XForms >  xForms( GetForms());
         if(xForms.is())
-            xForms->removeContainerListener((XContainerListener*)m_pPropChangeList);
+            xForms->removeContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
 
 
         // delete RootList
@@ -334,7 +334,7 @@ namespace svxform
         {
             Reference< XContainer >  xContainer(xElement, UNO_QUERY);
             if (xContainer.is())
-                xContainer->addContainerListener((XContainerListener*)m_pPropChangeList);
+                xContainer->addContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
         }
 
         if (pFolder)
@@ -471,7 +471,7 @@ namespace svxform
 
         Reference< XContainer >  xContainer( pFormData->GetContainer() );
         if (xContainer.is())
-            xContainer->removeContainerListener((XContainerListener*)m_pPropChangeList);
+            xContainer->removeContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
     }
 
 
@@ -706,7 +706,7 @@ namespace svxform
         }
         // is shell gone?
         else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) && static_cast<const SfxSimpleHint*>(&rHint)->GetId() == SFX_HINT_DYING)
-            UpdateContent((FmFormShell*)NULL);
+            UpdateContent(nullptr);
 
         // changed mark of controls?
         else if (dynamic_cast<const FmNavViewMarksChanged*>(&rHint))
@@ -836,7 +836,7 @@ namespace svxform
         Clear();
         if (xForms.is())
         {
-            xForms->addContainerListener((XContainerListener*)m_pPropChangeList);
+            xForms->addContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
 
             FillBranch(NULL);
 

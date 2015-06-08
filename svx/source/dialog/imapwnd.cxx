@@ -203,8 +203,8 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // clipped on CanvasPane
             aDrawRect.Intersection( aClipRect );
 
-            pSdrObj = (SdrObject*) new SdrRectObj( aDrawRect );
-            pCloneIMapObj.reset((IMapObject*) new IMapRectangleObject( *pIMapRectObj ));
+            pSdrObj = static_cast<SdrObject*>(new SdrRectObj( aDrawRect ));
+            pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapRectangleObject( *pIMapRectObj )));
         }
         break;
 
@@ -219,8 +219,8 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // limited to CanvasPane
             aCircle.Intersection( aClipRect );
 
-            pSdrObj = (SdrObject*) new SdrCircObj( OBJ_CIRC, aCircle, 0, 36000 );
-            pCloneIMapObj.reset((IMapObject*) new IMapCircleObject( *pIMapCircleObj ));
+            pSdrObj = static_cast<SdrObject*>(new SdrCircObj( OBJ_CIRC, aCircle, 0, 36000 ));
+            pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapCircleObject( *pIMapCircleObj )));
         }
         break;
 
@@ -236,7 +236,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 // clipped on CanvasPane
                 aDrawRect.Intersection( aClipRect );
 
-                pSdrObj = (SdrObject*) new SdrCircObj( OBJ_CIRC, aDrawRect, 0, 36000 );
+                pSdrObj = static_cast<SdrObject*>(new SdrCircObj( OBJ_CIRC, aDrawRect, 0, 36000 ));
             }
             else
             {
@@ -248,10 +248,10 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
                 basegfx::B2DPolygon aPolygon;
                 aPolygon.append(aDrawPoly.getB2DPolygon());
-                pSdrObj = (SdrObject*)new SdrPathObj(OBJ_POLY, basegfx::B2DPolyPolygon(aPolygon));
+                pSdrObj = static_cast<SdrObject*>(new SdrPathObj(OBJ_POLY, basegfx::B2DPolyPolygon(aPolygon)));
             }
 
-            pCloneIMapObj.reset((IMapObject*) new IMapPolygonObject( *pIMapPolyObj ));
+            pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapPolygonObject( *pIMapPolyObj )));
         }
         break;
 

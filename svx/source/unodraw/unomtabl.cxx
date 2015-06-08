@@ -93,7 +93,7 @@ public:
 
 SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
 : mpModel( pModel ),
-  mpModelPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
+  mpModelPool( pModel ? &pModel->GetItemPool() : nullptr )
 {
     if( pModel )
         StartListening( *pModel );
