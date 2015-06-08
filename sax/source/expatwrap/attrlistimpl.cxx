@@ -128,7 +128,7 @@ OUString AttributeList::getValueByName(const OUString& sName) throw (RuntimeExce
 Reference< XCloneable > AttributeList::createClone() throw (RuntimeException, std::exception)
 {
     AttributeList *p = new AttributeList( *this );
-    return Reference< XCloneable > ( (XCloneable * ) p );
+    return Reference< XCloneable > ( static_cast<XCloneable *>(p) );
 }
 
 
