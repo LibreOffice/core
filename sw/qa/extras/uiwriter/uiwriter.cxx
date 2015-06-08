@@ -49,6 +49,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include "com/sun/star/util/SearchAlgorithms.hpp"
 #include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
+#include "com/sun/star/sdbcx/XTablesSupplier.hpp"
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -93,6 +94,7 @@ public:
     void testUndoCharAttribute();
     void testTdf86639();
     void testTdf90883TableBoxGetCoordinates();
+    void testEmbeddedDataSource();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -130,6 +132,7 @@ public:
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
+    CPPUNIT_TEST(testEmbeddedDataSource);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -978,6 +981,37 @@ void SwUiWriterTest::testTdf90883TableBoxGetCoordinates()
     pos = aBoxes[1]->GetCoordinates();
     CPPUNIT_ASSERT_EQUAL( 1, (int)pos.X() );
     CPPUNIT_ASSERT_EQUAL( 2, (int)pos.Y() );
+}
+
+void SwUiWriterTest::testEmbeddedDataSource()
+{
+    // Initially no data source.
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(xComponentContext);
+    CPPUNIT_ASSERT(!xDatabaseContext->hasByName("calc-data-source"));
+
+    // Load: should have a component and a data source, too.
+    load(DATA_DIRECTORY, "embedded-data-source.odt");
+    CPPUNIT_ASSERT(mxComponent.is());
+    CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
+
+    // Data source has a table named Sheet1.
+    uno::Reference<sdbc::XDataSource> xDataSource(xDatabaseContext->getByName("calc-data-source"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDataSource.is());
+    uno::Reference<sdbcx::XTablesSupplier> xConnection(xDataSource->getConnection("", ""), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables(xConnection->getTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTables.is());
+    CPPUNIT_ASSERT(xTables->hasByName("Sheet1"));
+
+    // Reload: should still have a component and a data source, too.
+    reload("writer8", "embedded-data-source.odt");
+    CPPUNIT_ASSERT(mxComponent.is());
+    CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
+
+    // Close: should not have a data source anymore.
+    mxComponent->dispose();
+    mxComponent.clear();
+    CPPUNIT_ASSERT(!xDatabaseContext->hasByName("calc-data-source"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
