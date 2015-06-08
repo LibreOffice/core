@@ -96,7 +96,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     CGImageDestinationFinalize( pCGImgDest );
     CFRelease( pCGImgDest );
     const long nBitmapLen = CFDataGetLength( pCFData );
-    void* pBitmapBytes = (void*)CFDataGetBytePtr( pCFData );
+    UInt8 * pBitmapBytes = const_cast<UInt8 *>(CFDataGetBytePtr( pCFData ));
 
     // convert the image into the return-value type which is a graphic::XGraphic
     SvMemoryStream aMemStm( pBitmapBytes, nBitmapLen, StreamMode::READ | StreamMode::WRITE );
