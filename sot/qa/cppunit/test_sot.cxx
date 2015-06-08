@@ -62,7 +62,7 @@ namespace
             CPPUNIT_ASSERT_MESSAGE( "check size #2", xStream->remainingSize() == nSize );
 
             // Read as much as we can, a corrupted FAT chain can cause real grief here
-            nReadableSize = xStream->Read( (void *)pData, nSize );
+            nReadableSize = xStream->Read( static_cast<void *>(pData), nSize );
 //            fprintf(stderr, "readable size %d vs size %d remaining %d\n", nReadableSize, nSize, nReadableSize);
         }
         {   // Read the data backwards as well

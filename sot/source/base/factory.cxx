@@ -145,7 +145,7 @@ void SotFactory::PutSuperClass( const SotFactory * pFact )
     else
     {
         const SotFactory ** pTmp = new const SotFactory * [ nSuperCount ];
-        memcpy( (void *)pTmp, (void *)pSuperClasses,
+        memcpy( static_cast<void *>(pTmp), static_cast<void *>(pSuperClasses),
                 sizeof( void * ) * (nSuperCount -1) );
         delete [] pSuperClasses;
         pSuperClasses = pTmp;

@@ -149,7 +149,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
 
     aData.realloc(nBytesToRead);
 
-    sal_uInt32 nRead = m_pSvStream->Read((void*)aData.getArray(), nBytesToRead);
+    sal_uInt32 nRead = m_pSvStream->Read(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
     // Wenn gelesene Zeichen < MaxLength, Sequence anpassen
@@ -901,13 +901,13 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
         // copy this tail to the temporary stream
 
         sal_uLong aToRead = nSize - aResult;
-        pData = (void*)( static_cast<char*>(pData) + aResult );
+        pData = static_cast<void*>( static_cast<char*>(pData) + aResult );
 
         try
         {
             Sequence<sal_Int8> aData( aToRead );
             sal_uLong aReaded = m_rSource->readBytes( aData, aToRead );
-            aResult += m_pStream->Write( (void*)aData.getArray(), aReaded );
+            aResult += m_pStream->Write( static_cast<void*>(aData.getArray()), aReaded );
             memcpy( pData, aData.getArray(), aReaded );
         }
         catch (const Exception &e)
@@ -1363,13 +1363,13 @@ const SvStream* UCBStorageStream::GetSvStream() const
 
 SvStream* UCBStorageStream::GetModifySvStream()
 {
-    return (SvStream*)pImp;
+    return static_cast<SvStream*>(pImp);
 }
 
 bool  UCBStorageStream::Equals( const BaseStorageStream& rStream ) const
 {
     // ???
-    return ((BaseStorageStream*) this ) == &rStream;
+    return static_cast<BaseStorageStream const *>(this) == &rStream;
 }
 
 bool UCBStorageStream::Commit()
@@ -2605,8 +2605,8 @@ UCBStorageElement_Impl* UCBStorage::FindElement_Impl( const OUString& rName ) co
 
 bool UCBStorage::CopyTo( BaseStorage* pDestStg ) const
 {
-    DBG_ASSERT( pDestStg != ((BaseStorage*)this), "Self-Copying is not possible!" );
-    if ( pDestStg == ((BaseStorage*)this) )
+    DBG_ASSERT( pDestStg != static_cast<BaseStorage const *>(this), "Self-Copying is not possible!" );
+    if ( pDestStg == static_cast<BaseStorage const *>(this) )
         return false;
 
     // perhaps it's also a problem if one storage is a parent of the other ?!
@@ -2639,7 +2639,7 @@ bool UCBStorage::CopyTo( const OUString& rElemName, BaseStorage* pDest, const OU
     if( rElemName.isEmpty() )
         return false;
 
-    if ( pDest == ((BaseStorage*) this) )
+    if ( pDest == static_cast<BaseStorage*>(this) )
     {
         // can't double an element
         return false;
@@ -3001,7 +3001,7 @@ bool UCBStorage::MoveTo( const OUString& rEleName, BaseStorage* pNewSt, const OU
     if( rEleName.isEmpty() || rNewName.isEmpty() )
         return false;
 
-    if ( pNewSt == ((BaseStorage*) this) && !FindElement_Impl( rNewName ) )
+    if ( pNewSt == static_cast<BaseStorage*>(this) && !FindElement_Impl( rNewName ) )
     {
         return Rename( rEleName, rNewName );
     }
@@ -3066,7 +3066,7 @@ const SvStream* UCBStorage::GetSvStream() const
 bool UCBStorage::Equals( const BaseStorage& rStorage ) const
 {
     // ???
-    return ((BaseStorage*)this) == &rStorage;
+    return static_cast<BaseStorage const *>(this) == &rStorage;
 }
 
 bool UCBStorage::IsStorageFile( SvStream* pFile )
