@@ -155,7 +155,7 @@ void SmGraphicAccessible::LaunchEvent(
         const uno::Any &rNewVal)
 {
     AccessibleEventObject aEvt;
-    aEvt.Source     = (XAccessible *) this;
+    aEvt.Source     = static_cast<XAccessible *>(this);
     aEvt.EventId    = nAccesibleEventId;
     aEvt.OldValue   = rOldVal;
     aEvt.NewValue   = rNewVal ;

@@ -292,7 +292,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     {
         // sax parser sends wrapped exceptions,
         // try to find the original one
-        xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
+        xml::sax::SAXException aSaxEx = *static_cast<xml::sax::SAXException*>(&r);
         bool bTryChild = true;
 
         while( bTryChild )
@@ -428,7 +428,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), SvXMLImportFlags::ALL);
+    return static_cast<cppu::OWeakObject*>(new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), SvXMLImportFlags::ALL));
 }
 
 
@@ -448,7 +448,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportMeta_getImplementationName(), SvXMLImportFlags::META );
+    return static_cast<cppu::OWeakObject*>(new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportMeta_getImplementationName(), SvXMLImportFlags::META ));
 }
 
 
@@ -468,7 +468,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportSettings_getImplementationName(), SvXMLImportFlags::SETTINGS );
+    return static_cast<cppu::OWeakObject*>(new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportSettings_getImplementationName(), SvXMLImportFlags::SETTINGS ));
 }
 
 sal_Int64 SAL_CALL SmXMLImport::getSomething(

@@ -181,7 +181,7 @@ SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
 {
     sal_uInt16 nPos;
 
-    *(SmFontPickList *)this = rList;
+    *static_cast<SmFontPickList *>(this) = rList;
 
     for (nPos = 0; nPos < aFontVec.size(); nPos++)
         InsertEntry(GetStringItem(aFontVec[nPos]), nPos);
