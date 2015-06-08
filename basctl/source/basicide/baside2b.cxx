@@ -109,7 +109,7 @@ void setTextEngineText (ExtTextEngine& rEngine, OUString const& aStr)
 {
     rEngine.SetText(OUString());
     OString aUTF8Str = OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
-    SvMemoryStream aMemStream( (void*)aUTF8Str.getStr(), aUTF8Str.getLength(),
+    SvMemoryStream aMemStream( const_cast<char *>(aUTF8Str.getStr()), aUTF8Str.getLength(),
         StreamMode::READ );
     aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     aMemStream.SetLineDelimiter( LINEEND_LF );
@@ -2862,7 +2862,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
     if( pListBox->GetEntryCount() >= 1 )
     {// if there is at least one element inside
         // calculate basic position: under the current line
-        Rectangle aRect = ( (TextEngine*) pParent->GetEditEngine() )->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() , false );
+        Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() , false );
         long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
         Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
         aPos.Y() = (aPos.Y() - nViewYOffset) + nBasePad;

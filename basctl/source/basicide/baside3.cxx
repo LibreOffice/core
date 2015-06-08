@@ -1364,7 +1364,7 @@ void DialogWindow::InitSettings(bool bFont, bool bForeground, bool bBackground)
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > DialogWindow::CreateAccessible()
 {
-    return (::com::sun::star::accessibility::XAccessible*) new AccessibleDialogWindow( this );
+    return static_cast<com::sun::star::accessibility::XAccessible*>(new AccessibleDialogWindow( this ));
 }
 
 char const* DialogWindow::GetHid () const

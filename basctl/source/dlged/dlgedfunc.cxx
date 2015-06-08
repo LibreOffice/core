@@ -363,7 +363,7 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 
         // if selected object was hit, drag object
         if ( pHdl!=NULL || rView.IsMarkedHit(aPos, nHitLog) )
-            rView.BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+            rView.BegDragObj(aPos, nullptr, pHdl, nDrgLog);
         else if ( rView.AreObjectsMarked() )
             rView.UnmarkAll();
 
@@ -461,7 +461,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         // hit selected object?
         if ( pHdl!=NULL || rView.IsMarkedHit(aMDPos, nHitLog) )
         {
-            rView.BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+            rView.BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
         }
         else
         {
@@ -485,7 +485,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 // drag object
                 pHdl = rView.PickHandle(aMDPos);
-                rView.BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                rView.BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
             }
             else
             {

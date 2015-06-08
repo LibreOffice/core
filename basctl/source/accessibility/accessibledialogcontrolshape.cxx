@@ -377,7 +377,7 @@ sal_Int32 AccessibleDialogControlShape::getAccessibleIndexInParent(  ) throw (Ru
                 if ( xChild.is() )
                 {
                     Reference< XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                    if ( xChildContext == (XAccessibleContext*)this )
+                    if ( xChildContext == static_cast<XAccessibleContext*>(this) )
                     {
                         nIndexInParent = i;
                         break;
