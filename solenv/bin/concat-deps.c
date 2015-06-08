@@ -1098,7 +1098,7 @@ static int get_var(char **var, const char *name)
     *var = (char *)getenv(name);
     if(!*var)
     {
-        fprintf(stderr,"Error: %s is missing in the environement\n", name);
+        fprintf(stderr,"Error: %s is missing in the environment\n", name);
         return 1;
     }
     return 0;

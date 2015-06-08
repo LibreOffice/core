@@ -41,7 +41,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.table.Cell
  * @see com.sun.star.text.CellProperties
  * @see com.sun.star.beans.XPropertySet
@@ -76,7 +76,7 @@ public class SwXCell extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. After creating
+    * Creating a TestEnvironment for the interfaces to be tested. After creating
     * a text table, it is inserted to the text document. Finally, first cell of
     * this table is gotten.
     *     Object relations created :

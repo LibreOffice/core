@@ -87,7 +87,7 @@ public class ScTableRowObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from the document and takes one of
     * them. Obtains the collection of rows using the interface
     * <code>XColumnRowRange</code>. Obtains the row with index 6 from the
@@ -126,19 +126,19 @@ public class ScTableRowObj extends TestCase {
         } catch(com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception during creating Testenvironment", e);
+                "Exception during creating TestEnvironment", e);
         } catch(com.sun.star.container.NoSuchElementException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception during creating Testenvironment", e);
+                "Exception during creating TestEnvironment", e);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception during creating Testenvironment", e);
+                "Exception during creating TestEnvironment", e);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception during creating Testenvironment", e);
+                "Exception during creating TestEnvironment", e);
         }
 
         log.println("creating a new environment for object");

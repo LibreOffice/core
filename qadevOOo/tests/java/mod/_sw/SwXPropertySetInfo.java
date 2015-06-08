@@ -39,7 +39,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::beans::XPropertySetInfo</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.beans.XPropertySetInfo
  * @see ifc.beans._XPropertySetInfo
  */
@@ -56,7 +56,7 @@ public class SwXPropertySetInfo extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. Method
+    * Creating a TestEnvironment for the interfaces to be tested. Method
     * creates text document, then obtains PropertySetInfo of created text
     * document using <code>XPropertySet</code> interface.
     */

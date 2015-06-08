@@ -54,7 +54,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::text::XText</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.text.XTextRangeMover
  * @see com.sun.star.text.XSimpleText
  * @see com.sun.star.text.XTextRange
@@ -100,7 +100,7 @@ public class SwXHeadFootText extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. At first
+    * Creating a TestEnvironment for the interfaces to be tested. At first
     * style families are obtained from text document, then style 'Standard' has
     * gotten from style family 'PageStyles'. At the end, document header and
     * footer are switched on and document text is obtained.

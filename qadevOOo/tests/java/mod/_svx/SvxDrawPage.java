@@ -62,7 +62,7 @@ import util.ShapeDsc;
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.drawing.GenericDrawPage
  * @see com.sun.star.drawing.XShapeBinder
@@ -119,7 +119,7 @@ public class SvxDrawPage extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * From the Draw document created a collection of its draw
      * pages is obtained. Two new pages are inserted. And one
      * page is obtained as a testing component. A shape is added

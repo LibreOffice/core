@@ -42,7 +42,7 @@ import lib.TestParameters;
 *  <li> <code>com::sun::star::lang::XComponent</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.container.XHierarchicalNameAccess
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.reflection.TypeDescriptionProvider
@@ -57,7 +57,7 @@ public class RegistryTypeDescriptionProvider extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.reflection.TypeDescriptionProvider</code>.
     *     Object relations created :

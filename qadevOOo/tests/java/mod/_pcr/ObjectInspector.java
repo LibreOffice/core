@@ -52,7 +52,7 @@ import util.utils;
  *  <li> <code>com::sun::star::frame::XController</code></li>
  * </ul>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.lang.XComponent
  * @see com.sun.star.inspection.XObjectInspector
  * @see com.sun.star.frame.XController
@@ -83,7 +83,7 @@ public class ObjectInspector extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.inspection.ObjectInspector</code> and adds it to
      * a floating frame.<br>
@@ -92,7 +92,7 @@ public class ObjectInspector extends TestCase {
      * <CODE>com.sun.star.inspection.XPropertyHandler</CODE> was used.
      * @param tParam the tests parameter
      * @param log the logger
-     * @return the test environement
+     * @return the test environment
      * @see util.DesktopTools
      * @see helper.PropertyHandlerImpl
      */

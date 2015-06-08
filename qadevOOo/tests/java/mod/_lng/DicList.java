@@ -44,7 +44,7 @@ import com.sun.star.uno.XInterface;
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.linguistic2.XSearchableDictionaryList
  * @see com.sun.star.lang.XComponent
@@ -58,7 +58,7 @@ import com.sun.star.uno.XInterface;
 public class DicList extends TestCase {
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.lingu2.DicList</code>. Then two dictionaries
      * are created (positive and negative) and added to the list, one

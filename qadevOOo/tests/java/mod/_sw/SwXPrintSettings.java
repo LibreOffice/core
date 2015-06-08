@@ -40,7 +40,7 @@ import com.sun.star.view.XPrintSettingsSupplier;
  *  <li> <code>com::sun::star::text::PrintSettings</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.text.PrintSettings
  * @see ifc.text._PrintSettings
  */
@@ -72,7 +72,7 @@ public class SwXPrintSettings extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.text.GlobalSettings</code>, then print settings are
     * gotten using <code>XPrintSettingsSupplier</code> interface.

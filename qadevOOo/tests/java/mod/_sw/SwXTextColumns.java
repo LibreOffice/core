@@ -50,7 +50,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::text::TextColumns</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.text.XTextColumns
  * @see com.sun.star.text.TextColumns
  * @see ifc.text._XTextColumns
@@ -84,7 +84,7 @@ public class SwXTextColumns extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. After style
+    * Creating a TestEnvironment for the interfaces to be tested. After style
     * families are gotten from text document using
     * <code>XStyleFamiliesSupplier</code> interface, style family indexed '2'
     * is obtained using <code>XIndexAccess</code> interface. Then style

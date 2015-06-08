@@ -90,7 +90,7 @@ public class ScTableSheetsObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the collection of the spreadsheets using the interface
     * <code>XSpreadsheetDocument</code>. The retrieved collection is the
     * instance of the service <code>com.sun.star.sheet.Spreadsheets</code>.

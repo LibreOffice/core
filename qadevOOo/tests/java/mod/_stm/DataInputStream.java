@@ -57,7 +57,7 @@ import com.sun.star.uno.XInterface;
 public class DataInputStream extends TestCase {
 
     /**
-    * Creates a Testenvironment for the interfaces to be tested.
+    * Creates a TestEnvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.io.DataInputStream</code> object,
     * connects it to <code>com.sun.star.io.DataOutputStream</code>
     * through <code>com.sun.star.io.Pipe</code>. All of possible data

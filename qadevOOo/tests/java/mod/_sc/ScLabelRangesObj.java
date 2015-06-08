@@ -83,7 +83,7 @@ public class ScLabelRangesObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Obtains the value of the property <code>'ColumnLabelRanges'</code>
     * from the document. The property value is the collection of label ranges.
     * Adds new label range to the collection using the interface

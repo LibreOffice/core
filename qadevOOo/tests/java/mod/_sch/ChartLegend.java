@@ -108,7 +108,7 @@ public class ChartLegend extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the diagram of the chart document. The retrieved
     * diagram is the instance of the service
     * <code>com.sun.star.chart.ChartLegend</code>.

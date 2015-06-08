@@ -36,7 +36,7 @@ public class TypeDescriptionManager extends TestCase {
     }
 
     /**
-     *    creating a Testenvironment for the interfaces to be tested
+     *    creating a TestEnvironment for the interfaces to be tested
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {

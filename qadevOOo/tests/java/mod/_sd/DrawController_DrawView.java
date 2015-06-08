@@ -92,7 +92,7 @@ public class DrawController_DrawView extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates two impress documents. After creating
     * of the documents makes short
     * wait to allow frames to be loaded. Retrieves

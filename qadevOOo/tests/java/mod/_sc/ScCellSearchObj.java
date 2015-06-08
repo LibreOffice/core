@@ -90,7 +90,7 @@ public class ScCellSearchObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document,
     * and takes one of them. Creates search descriptor using the interface
     * <code>XSearchable</code>. The created search descriptor is instance of

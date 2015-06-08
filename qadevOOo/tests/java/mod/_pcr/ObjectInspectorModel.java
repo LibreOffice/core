@@ -46,7 +46,7 @@ import util.utils;
  *  <li> <code>com::sun::star::inspection::XObjectInspectorModel</code></li>
  * </ul>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.inspection.XObjectInspectorModel
  */
 public class ObjectInspectorModel extends TestCase {
@@ -75,14 +75,14 @@ public class ObjectInspectorModel extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.inspection.ObjectInspectorModel</code> with a <code>DefaultContext</code> and
      * <code>PropertyHandlerFactroy[]</code> as parameter
      *
      * @param tParam the tests parameter
      * @param log the logger
-     * @return the test environement
+     * @return the test environment
      * @see util.DesktopTools
      * @see helper.PropertyHandlerImpl
      */

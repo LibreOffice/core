@@ -92,7 +92,7 @@ public class SdLayerManager extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the layer manager using the interface <code>XLayerSupplier</code>.
     * The manager is the instance of the service
     * <code>com.sun.star.drawing.LayerManager</code>. Creates a rectangle shape.

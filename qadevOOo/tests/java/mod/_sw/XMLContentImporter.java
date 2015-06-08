@@ -87,7 +87,7 @@ public class XMLContentImporter extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.comp.Writer.XMLContentImporter</code><p>
     *

@@ -109,7 +109,7 @@ public class SdMasterPage extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the collection of the master pages from the document using the
     * interface <code>XMasterPagesSupplier</code> and takes
     * one of them. Inserts some shapes into the document. Creates a rectangle

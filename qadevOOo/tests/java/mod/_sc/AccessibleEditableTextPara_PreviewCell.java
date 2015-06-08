@@ -82,7 +82,7 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
 
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Obtains the accessible object for a one of cell in preview mode.
      */
     @Override

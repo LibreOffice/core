@@ -81,7 +81,7 @@ public class SdXPresentation extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the presentation from the document using the interface
     * <code>XPresentationSupplier</code>. The retrieved presentation is the
     * instance of the service <code>com.sun.star.presentation.Presentation</code>.

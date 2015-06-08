@@ -83,7 +83,7 @@ public class ScCellsEnumeration extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document
     * and takes one of them. Replaces text of some cells.
     * Retrieves a cell range of the visible cells using the interface

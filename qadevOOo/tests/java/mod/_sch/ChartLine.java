@@ -79,7 +79,7 @@ public class ChartLine extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates a bar diagram and sets the created diagram for the chart document.
     * Retrieves the property <code>'DataMeanValueProperties'</code> of
     * the specified data row. The retrieved property is the instance of

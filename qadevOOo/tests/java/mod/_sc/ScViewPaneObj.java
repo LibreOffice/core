@@ -94,7 +94,7 @@ public class ScViewPaneObj extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Retieves the current controller of the spreadsheet document using the
      * interface <code>XModel</code>. The controller contains the collection
      * of the view panes so retrieves the view pane with index 0 from

@@ -85,7 +85,7 @@ public class ChXChartAxis extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the diagram of the chart document. Then obtains the properties
     * of the y-axis of the diagram using the interface
     * <code>XAxisYSupplier</code>. The obatined property is the instance

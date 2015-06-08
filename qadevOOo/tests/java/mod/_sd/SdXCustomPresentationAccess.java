@@ -88,7 +88,7 @@ public class SdXCustomPresentationAccess extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the collection of the CustomPresentation from the document
     * using the interface <code>XCustomPresentationSupplier</code>.
     * The retrieved collection is the instance of the servcie

@@ -50,7 +50,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::text::XText</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.text.XTextRangeMover
  * @see com.sun.star.text.XSimpleText
  * @see com.sun.star.text.XTextRange
@@ -97,7 +97,7 @@ public class SwXTableCellText extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. After creation
+    * Creating a TestEnvironment for the interfaces to be tested. After creation
     * of text table, it is inserted to a text document. Then cell named 'A1' is
     * obtained from table, string 'SwXTableCellText' is set to this cell, then
     * cell text is gotten from cell obtained before and returned as a test

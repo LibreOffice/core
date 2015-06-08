@@ -39,7 +39,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 *  <li> <code>'XIndexContainerINDEX'</code> : For internal test
 *   usage. Contains current thread number. </li>
 *  <li> Test environment variable <code>'THRCNT'</code> : number
-*   of interface threads running concurently. </li>
+*   of interface threads running concurrently. </li>
 * <ul> <p>
 * XIndexComtainer needs n ObjectRelations "INSTANCEn" , where n=1, ...,
 * THRCNT.<p>

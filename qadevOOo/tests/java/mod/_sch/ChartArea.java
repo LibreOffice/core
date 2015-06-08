@@ -91,7 +91,7 @@ public class ChartArea extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieved the instance of the service <code>com.sun.star.chart.ChartArea</code>
     * using the interface <code>XChartDocument</code>.
     * @see com.sun.star.chart.XChartDocument

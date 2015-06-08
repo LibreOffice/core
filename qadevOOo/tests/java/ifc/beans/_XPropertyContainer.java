@@ -47,7 +47,7 @@ public class _XPropertyContainer extends MultiMethodTest {
     /**
      * object relation X<CODE>PropertyAccess.propertyNotRemovable</CODE><br>
      * This relation must be filled from the module. It contains a property which must
-     * be a property of the implementaion object.
+     * be a property of the implementation object.
      */
     private String propertyNotRemovable = null;
 

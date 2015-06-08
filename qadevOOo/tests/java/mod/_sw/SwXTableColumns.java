@@ -43,7 +43,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::table::XTableColumns</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XIndexAccess
  * @see com.sun.star.container.XElementAccess
  * @see com.sun.star.container.XNameAccess
@@ -83,7 +83,7 @@ public class SwXTableColumns extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. After creation
+    * Creating a TestEnvironment for the interfaces to be tested. After creation
     * of text table, it is inserted to text document, then columns are gotten
     * from table.
     */

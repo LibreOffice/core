@@ -44,7 +44,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::container::XElementAccess</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XNameAccess
  * @see com.sun.star.container.XIndexAccess
  * @see com.sun.star.container.XElementAccess
@@ -81,7 +81,7 @@ public class SwXDocumentIndexes extends TestCase {
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.text.ContentIndex</code>, then created content index is
     * inserted to the text document, and finally all document indexes are gotten

@@ -53,7 +53,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::sheet::XSheetAnnotations</code></li>
 * </ul> <p>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.sheet.CellAnnotations
 * @see com.sun.star.container.XIndexAccess
 * @see com.sun.star.container.XElementAccess
@@ -94,7 +94,7 @@ public class ScAnnotationsObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * From a document collection of spreadsheets a single one is
     * retrieved and one annotation is added to it. Then a collection
     * of annotations is retrieved using spreadsheet's

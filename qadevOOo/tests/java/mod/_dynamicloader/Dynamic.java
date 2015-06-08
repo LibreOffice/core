@@ -37,7 +37,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::lang::XServiceInfo</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.loader.XImplementationLoader
 * @see com.sun.star.lang.XServiceInfo
 * @see com.sun.star.loader.Dynamic
@@ -47,7 +47,7 @@ import com.sun.star.uno.XInterface;
 public class Dynamic extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates service
     * <code>com.sun.star.loader.Dynamic</code>.
     */

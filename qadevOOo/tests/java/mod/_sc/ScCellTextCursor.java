@@ -119,7 +119,7 @@ public class ScCellTextCursor extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document
     * and takes one of them. Retrieves the cell from the spreadsheet
     * and creates text cursor of the cell using the interface

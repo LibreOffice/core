@@ -62,7 +62,7 @@ public class DispatchRecorder extends TestCase {
     XComponent oDoc = null;
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.frame.Desktop</code>.
     */
     @Override

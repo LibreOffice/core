@@ -94,7 +94,7 @@ public class ScTableConditionalFormat extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from the document and takes one of
     * them. Fills some cells of the spreadsheet. Retrieves value of the property
     * <code>'ConditionalFormat'</code> that is the collection of the conditions

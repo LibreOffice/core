@@ -42,7 +42,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.table.CellRange
  * @see com.sun.star.text.CellProperties
  * @see com.sun.star.beans.XPropertySet
@@ -78,7 +78,7 @@ public class SwXCellRange extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. At first
+    * Creating a TestEnvironment for the interfaces to be tested. At first
     * method creates and initializes the table, then if text document has no
     * tables, previously created table is inserted to text document. Finally,
     * custom cell range is gotten from the table created.

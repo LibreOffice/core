@@ -45,7 +45,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::container::XEnumeration</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XEnumeration
  * @see ifc.container._XEnumeration
  */
@@ -77,7 +77,7 @@ public class SwXFieldEnumeration extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. FieldMaster
+    * Creating a TestEnvironment for the interfaces to be tested. FieldMaster
     * object is created and attached to Bibliography database. After setting
     * properties of created FieldMaster object, it is attached to the TextField
     * object. Then TextField is inserted as TextContent to the text document.

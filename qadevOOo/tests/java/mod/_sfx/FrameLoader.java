@@ -38,14 +38,14 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::frame::XFrameLoader</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.frame.FrameLoader
 * @see com.sun.star.frame.XSynchronousFrameLoader
 */
 public class FrameLoader extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.comp.office.FrameLoader</code>. <p>
     *     Object relations created :

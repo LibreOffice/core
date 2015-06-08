@@ -45,7 +45,7 @@ import lib.TestParameters;
 public class Pipe extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service <code>com.sun.star.io.Pipe</code>.
     * Writes some information to the created pipe.
     * Object relations created :

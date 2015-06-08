@@ -69,7 +69,7 @@ public class ODatabaseContext extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.sdb.DatabaseContext</code>.
     *     Needed object relations :
     * <ul>

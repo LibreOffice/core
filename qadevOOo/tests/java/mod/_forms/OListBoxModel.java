@@ -63,7 +63,7 @@ import util.DBTools;
 *  <li> <code>com::sun::star::container::XChild</code></li>
 * </ul> <p>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.io.XPersistObject
 * @see com.sun.star.awt.UnoControlListBoxModel
 * @see com.sun.star.form.XReset
@@ -156,7 +156,7 @@ public class OListBoxModel extends GenericModelTest {
 
     /**
      * calls <CODE>createTestEnvironment()</CODE> from it's super class
-     * This test uses not the generic implementaion of <CODE>cecker()</CODE> of its
+     * This test uses not the generic implementation of <CODE>checker()</CODE> of its
      * super class. This tests uses its own implementation of <CODE>checker()</CODE>
      * to test <CODE>com::sun::star::form::XUpdateBroadcaster</CODE>
      * @param Param the test parameter

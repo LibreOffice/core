@@ -147,7 +147,7 @@ public class OSingleSelectQueryComposer extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     *
     *     Object relations created :
     * <ul>SingleSelectQueryAnalyzer

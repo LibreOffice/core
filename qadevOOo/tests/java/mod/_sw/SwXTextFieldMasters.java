@@ -89,7 +89,7 @@ public class SwXTextFieldMasters extends TestCase {
 
 
     /**
-     *    creating a Testenvironment for the interfaces to be tested
+     *    creating a TestEnvironment for the interfaces to be tested
      *
      *  @param tParam    class which contains additional test parameters
      *  @param log        class to log the test state and result

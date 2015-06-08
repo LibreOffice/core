@@ -81,7 +81,7 @@ public class ChXChartDocument extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates two chart documents and retrieves current controllers from them
     * using the interface <code>XChartDocument</code>. The created documents
     * is the instances of the service <code>com.sun.star.chart.ChartDocument</code>.

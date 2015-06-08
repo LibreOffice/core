@@ -51,7 +51,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::text::NumberingRules</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.beans.XPropertySet
  * @see com.sun.star.container.XIndexAccess
  * @see com.sun.star.container.XElementAccess
@@ -89,7 +89,7 @@ public class SwXNumberingRules extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * At first some strings are inserted to a text document, then style families
     * are gotten from text document using <code>XStyleFamiliesSupplier</code>.
     * Then style family 'NuberingRules' is retrieved, then style indexed '0'

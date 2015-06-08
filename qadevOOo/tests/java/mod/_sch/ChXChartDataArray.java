@@ -76,7 +76,7 @@ public class ChXChartDataArray extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the data source of the chart. This data source is the instance
     * of the service <code>com.sun.star.chart.ChartDataArray</code>.
     * <code>com.sun.star.chart.ChartDataArray</code>.

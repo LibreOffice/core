@@ -44,7 +44,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::container::XElementAccess</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XContainer
  * @see com.sun.star.container.XNameAccess
  * @see com.sun.star.container.XIndexAccess
@@ -82,7 +82,7 @@ public class SwXFrames extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.text.TextFrame</code>. Then inserts created text frame
     * to the text, and finally gets all frames of text document using

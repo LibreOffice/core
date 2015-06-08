@@ -95,7 +95,7 @@ namespace xmloff
     protected:
         /** handle one single attribute.
 
-            <p>This is called for every attribute of the element. This class' implementaion checks if the attribute
+            <p>This is called for every attribute of the element. This class' implementation checks if the attribute
             describes a property, if so, it is added to <member>m_aValues</member>.</p>
 
             <p>All non-property attributes should be handled in derived classes.</p>

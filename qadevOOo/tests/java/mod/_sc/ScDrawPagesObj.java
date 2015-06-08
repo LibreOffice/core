@@ -89,7 +89,7 @@ public class ScDrawPagesObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of all drawpages in the document using the
     * interface <code>XDrawPagesSupplier</code>. Creates and inserts two new
     * drawPages into this collection. The retrieved collection is the instance

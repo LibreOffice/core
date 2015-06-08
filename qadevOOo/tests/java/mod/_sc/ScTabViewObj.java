@@ -119,7 +119,7 @@ public class ScTabViewObj extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Retieves the current controller of the spreadsheet document using the
      * interface <code>XModel</code>. The controller is the instance of the
      * service <code>com.sun.star.sheet.SpreadsheetView</code>. Retrieves

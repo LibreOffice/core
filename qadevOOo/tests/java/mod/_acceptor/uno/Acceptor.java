@@ -28,7 +28,7 @@ import util.utils;
 
 /**
 * Here <code>com.sun.star.connection.Acceptor</code> service is tested.<p>
-* Test allows to run object tests in several threads concurently.
+* Test allows to run object tests in several threads concurrently.
 * @see com.sun.star.connection.Acceptor
 * @see com.sun.star.connection.XAcceptor
 * @see com.sun.star.connection.XConnector
@@ -55,7 +55,7 @@ public class Acceptor extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested. <p>
+     * Creating a TestEnvironment for the interfaces to be tested. <p>
      * Creates <code>Acceptor</code> service and passed as relation
      * connection string where port for accepting is unique among
      * different object test threads. <p>

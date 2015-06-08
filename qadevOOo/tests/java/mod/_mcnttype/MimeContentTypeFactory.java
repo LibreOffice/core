@@ -50,7 +50,7 @@ import com.sun.star.uno.XInterface;
 public class MimeContentTypeFactory extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.datatransfer.MimeContentTypeFactory</code>. <p>
     */

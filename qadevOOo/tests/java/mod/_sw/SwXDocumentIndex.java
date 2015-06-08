@@ -46,7 +46,7 @@ import com.sun.star.uno.UnoRuntime;
  *  <li> <code>com::sun::star::text::DocumentIndex</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.lang.XComponent
  * @see com.sun.star.text.XDocumentIndex
  * @see com.sun.star.text.BaseIndex
@@ -86,7 +86,7 @@ public class SwXDocumentIndex extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.text.DocumentIndex</code>, then created document index
     * is inserted to the text of the document as content.

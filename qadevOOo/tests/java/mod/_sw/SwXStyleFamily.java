@@ -49,7 +49,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::container::XNameReplace</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XNameContainer
  * @see com.sun.star.container.XNameAccess
  * @see com.sun.star.container.XElementAccess
@@ -89,7 +89,7 @@ public class SwXStyleFamily extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. At first,
+    * Creating a TestEnvironment for the interfaces to be tested. At first,
     * style families of text document are gotten using
     * <code>XStyleFamiliesSupplier</code> interface, then family indexed '0' is
     * gotten from previously obtained style families collection using

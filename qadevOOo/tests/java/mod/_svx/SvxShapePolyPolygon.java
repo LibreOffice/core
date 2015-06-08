@@ -73,7 +73,7 @@ import com.sun.star.uno.XInterface;
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.style.ParagraphProperties
  * @see com.sun.star.drawing.LineProperties
@@ -160,7 +160,7 @@ public class SvxShapePolyPolygon extends TestCase {
 
 
     /**
-     *  *    creating a Testenvironment for the interfaces to be tested
+     *  *    creating a TestEnvironment for the interfaces to be tested
      *
      *  @param tParam    class which contains additional test parameters
      *  @param log        class to log the test state and result

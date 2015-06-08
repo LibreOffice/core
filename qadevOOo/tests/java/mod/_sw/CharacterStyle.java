@@ -73,7 +73,7 @@ public class CharacterStyle extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * At first style families are gotten from a text document using
     * <code>XStyleFamiliesSupplier</code> interface, then family indexed '0' is
     * gotten from this style family using <code>XIndexAccess</code> interface.

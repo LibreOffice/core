@@ -82,7 +82,7 @@ import com.sun.star.view.XControlAccess;
 *  <li> <code>com::sun::star::container::XContainer</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.util.XModifyBroadcaster
 * @see com.sun.star.form.XGridFieldDataSupplier
 * @see com.sun.star.view.XSelectionSupplier
@@ -193,7 +193,7 @@ public class SbaXGridControl extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * For object creation first a
     * <code>com.sun.star.form.component.GridControl<code> instance
     * is added to the <code>ControlShape</code>. Then this model's

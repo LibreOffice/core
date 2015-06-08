@@ -80,7 +80,7 @@ public class ChartGrid extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the diagram of the chart document. Then obtains
     * the properties of the main grid of the x-axis of the diagram
     * using the interface <code>XAxisXSupplier</code>. This properties is

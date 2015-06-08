@@ -62,7 +62,7 @@ import com.sun.star.uno.XInterface;
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.drawing.ShadowProperties
  * @see com.sun.star.drawing.RotationDescriptor
@@ -119,7 +119,7 @@ public class SvxGraphicObject extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.drawing.GraphicObject</code> as a tested
      * component and inserts it to one of draw pages of the document.

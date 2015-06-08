@@ -58,7 +58,7 @@ import util.InstCreator;
 *  <li> <code>com::sun::star::sheet::XSheetAnnotation</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.sheet.CellAnnotation
 * @see com.sun.star.text.XSimpleText
 * @see com.sun.star.text.XTextRange
@@ -108,7 +108,7 @@ public class ScAnnotationShapeObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document,
     * and takes one them. Then a single cell is retrieved, and
     * using its <code>com.sun.star.sheet.XSheetAnnotationAnchor</code>

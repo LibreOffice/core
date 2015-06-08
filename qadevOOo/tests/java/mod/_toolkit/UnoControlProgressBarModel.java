@@ -39,7 +39,7 @@ import lib.TestParameters;
 *  <li> <code>com::sun::star::beans::XMultiPropertySet</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.awt.UnoControlProgressBarModel
 * @see com.sun.star.io.XPersistObject
 * @see com.sun.star.lang.XComponent
@@ -53,7 +53,7 @@ import lib.TestParameters;
 */
 public class UnoControlProgressBarModel extends TestCase {
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.awt.UnoControlProgressBarModel</code>.
     *     Object relations created :

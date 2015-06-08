@@ -43,7 +43,7 @@ import com.sun.star.uno.UnoRuntime;
  *  <li> <code>com::sun::star::text::LineNumberingProperties</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.text.LineNumberingProperties
  * @see ifc.text._LineNumberingProperties
  */
@@ -76,7 +76,7 @@ public class SwXLineNumberingProperties extends TestCase {
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. After inserting
+    * Creating a TestEnvironment for the interfaces to be tested. After inserting
     * string and control character to the text document, line numbering
     * properties are gotten using <code>XLineNumberingProperties</code> interface.
     */

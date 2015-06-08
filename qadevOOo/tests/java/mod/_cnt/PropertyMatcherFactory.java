@@ -36,7 +36,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::ucb::XPropertyMatcherFactory</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.ucb.XPropertyMatcherFactory
 * @see com.sun.star.ucb.PropertyMatcherFactory
 * @see ifc.ucb._XPropertyMatcherFactory
@@ -44,7 +44,7 @@ import com.sun.star.uno.XInterface;
 public class PropertyMatcherFactory extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.cnt.PropertyMatcherFactory</code>. <p>
     */

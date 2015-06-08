@@ -65,7 +65,7 @@ public class OSpinButtonModel extends TestCase {
 
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Adds spin button into text and retrieves it's control model.
      */
     @Override

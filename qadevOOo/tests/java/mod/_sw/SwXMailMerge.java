@@ -60,7 +60,7 @@ public class SwXMailMerge extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested. <p>
+     * Creating a TestEnvironment for the interfaces to be tested. <p>
      * Creates <code>MailMerge</code> service     * Object relations created :
     * <ul>
     *  <li> <code>'executeArgs'</code> for

@@ -58,11 +58,11 @@ public class ModuleManager extends TestCase {
     XComponent xImpressDoc = null;
     XComponent xMathDoc = null;
 
-    /** Creating a Testenvironment for the interfaces to be tested.
+    /** Creating a TestEnvironment for the interfaces to be tested.
      * @param Param test parameters
      * @param log simple logger
-     * @throws StatusException was thrwon on error
-     * @return the test environement
+     * @throws StatusException was thrown on error
+     * @return the test environment
      */
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,

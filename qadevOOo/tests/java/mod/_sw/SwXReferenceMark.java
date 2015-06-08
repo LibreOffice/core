@@ -45,7 +45,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::text::XTextContent</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XNamed
  * @see com.sun.star.lang.XComponent
  * @see com.sun.star.text.XTextContent
@@ -82,7 +82,7 @@ public class SwXReferenceMark extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.text.ReferenceMark</code>, then sets new
     * name of created ReferenceMark using <code>XNamed</code> interface.

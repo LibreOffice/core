@@ -95,7 +95,7 @@ public class ScDDELinkObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Disposes the testdocument if it was loaded already.
     * Creates an instance of the <code>com.sun.star.frame.Desktop</code>
     * and loads the predefined testdocument. Retrieves a collection of

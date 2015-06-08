@@ -55,7 +55,7 @@ import com.sun.star.uno.XInterface;
 public class FilterFactory extends TestCase {
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.comp.framework.FilterFactory</code>.
      * Prepares relation for

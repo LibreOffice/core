@@ -95,7 +95,7 @@ public class ScSheetLinkObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document
     * and takes one of them. Links the sheet to another sheet in another
     * document using the interface <code>XSheetLinkable</code>. Obtains the

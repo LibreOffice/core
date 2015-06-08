@@ -102,7 +102,7 @@ public class ScDataPilotFieldObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document
     * and takes one of them. Fills some table in the spreadsheet.
     * Obtains the collection of data pilot tables using the interface

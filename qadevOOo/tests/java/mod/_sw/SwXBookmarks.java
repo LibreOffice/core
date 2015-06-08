@@ -42,7 +42,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::container::XElementAccess</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XNameAccess
  * @see com.sun.star.container.XElementAccess
  * @see ifc.container._XNameAccess
@@ -77,7 +77,7 @@ public class SwXBookmarks extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. Method
+    * Creating a TestEnvironment for the interfaces to be tested. Method
     * creates two bookmarks and inserts them to the text document. Then bookmarks
     * are gotten from text document using <code>XBookmarksSupplier</code>
     * interface.

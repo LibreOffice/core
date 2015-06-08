@@ -60,7 +60,7 @@ public class BridgeFactory extends TestCase {
     private static String sOfficeHost = null ;
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Just creates <code>com.sun.star.bridge.BridgeFactory</code>
      * service as object to be tested.
      */

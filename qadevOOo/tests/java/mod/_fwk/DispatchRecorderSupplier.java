@@ -39,7 +39,7 @@ import com.sun.star.uno.XInterface;
 public class DispatchRecorderSupplier extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates instance of
     *  <code>com.sun.star.comp.framework.DispatchRecorderSupplier</code>.
     */

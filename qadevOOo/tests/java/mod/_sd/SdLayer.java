@@ -81,7 +81,7 @@ public class SdLayer extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the layer manager from the document and takes one of the layer.
     * The obtained layer is the instance of the service
     * <code>com.sun.star.drawing.Layer</code>.

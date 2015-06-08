@@ -32,7 +32,7 @@ import com.sun.star.uno.XInterface;
 
 /**
 * Here <code>com.sun.star.sdbc.Driver</code> service is tested.<p>
-* Test allows to run object tests in several threads concurently.
+* Test allows to run object tests in several threads concurrently.
 * @see com.sun.star.sdbc.Driver
 * @see com.sun.star.sdbc.XDriver
 * @see com.sun.star.sdbcx.XCreateCatalog
@@ -43,7 +43,7 @@ import com.sun.star.uno.XInterface;
 */
 public class ODriver extends TestCase {
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.sdbc.Driver</code>. <p>
      * Object relations created :

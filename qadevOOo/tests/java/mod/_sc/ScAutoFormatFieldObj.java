@@ -46,7 +46,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.sheet.TableAutoFormatField
 * @see com.sun.star.beans.XPropertySet
 * @see ifc.sheet._TableAutoFormatField
@@ -55,7 +55,7 @@ import com.sun.star.uno.XInterface;
 public class ScAutoFormatFieldObj extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Using SOffice ServiceManager an instance of
     * <code>com.sun.star.sheet.TableAutoFormatField</code> service
     * is created. From this collection one Format is retrieved

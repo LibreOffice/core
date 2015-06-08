@@ -55,7 +55,7 @@ import util.DBTools;
 *  <li> <code>com::sun::star::container::XChild</code></li>
 * </ul> <p>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.io.XPersistObject
 * @see com.sun.star.form.component.RadioButton
 * @see com.sun.star.form.XReset

@@ -101,7 +101,7 @@ public class SdXImpressDocument extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates new impress document that is the instance of the service
      * <code>com.sun.star.presentation.PresentationDocument</code>.
      * @see com.sun.star.presentation.PresentationDocument

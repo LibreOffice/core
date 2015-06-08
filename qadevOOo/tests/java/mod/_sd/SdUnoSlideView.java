@@ -73,7 +73,7 @@ public class SdUnoSlideView extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates two impress documents. After creating of the documents makes short
     * wait to allow frames to be loaded. Retrieves the collection of the draw pages
     * from the first document and takes one of them. Inserts some shapes to the

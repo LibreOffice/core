@@ -45,7 +45,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::text::FootnoteSettings</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.text.FootnoteSettings
  * @see ifc.text._FootnoteSettings
  */
@@ -77,7 +77,7 @@ public class SwXEndnoteProperties extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.text.Endnote</code>. Then created endnote is inserted
     * to the text document, and finally endnote settings are gotten from text

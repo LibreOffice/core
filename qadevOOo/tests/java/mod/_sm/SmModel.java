@@ -38,7 +38,7 @@ import com.sun.star.lang.XComponent;
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.formula.FormulaProperties
  * @see ifc.formula._FormulaProperties
@@ -47,7 +47,7 @@ public class SmModel extends TestCase {
     XComponent xMathDoc;
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates a <code>StarMath</code> document and passes it as
      * tested component.
      */

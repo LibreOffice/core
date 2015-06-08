@@ -76,7 +76,7 @@ public class ScSpreadsheetSettingsObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * The spreadsheet document is the instance of the service
     * <code>com.sun.star.sheet.SpreadsheetDocumentSettings</code>.
     */

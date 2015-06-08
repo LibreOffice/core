@@ -83,7 +83,7 @@ import util.utils;
 *    {@link util.DBTools DBTools} class for more information.</li>
 * </ul> <p>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.io.XPersistObject
 * @see com.sun.star.awt.UnoControlDateFieldModel
 * @see com.sun.star.form.XReset
@@ -333,7 +333,7 @@ public class GenericModelTest extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * First <code>TestDB</code> database is registered.
      * Creates DateField in the Form, then binds it to TestDB
      * database and returns Field's control. <p>

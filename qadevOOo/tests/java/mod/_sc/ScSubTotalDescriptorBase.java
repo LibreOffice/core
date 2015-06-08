@@ -92,7 +92,7 @@ public class ScSubTotalDescriptorBase extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from the document and takes one of
     * them. Creates a subtotal descriptor using the interface
     * <code>XSubTotalCalculatable</code>. This descriptor is the instance of the

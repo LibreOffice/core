@@ -33,7 +33,7 @@ import lib.TestParameters;
 *  <li> <code>com::sun::star::beans::XIntrospection</code></li>
 * </ul>
 * This object test can be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.beans.XIntrospection
 * @see com.sun.star.beans.Introspection
 * @see ifc.beans._XIntrospection
@@ -41,7 +41,7 @@ import lib.TestParameters;
 public class Introspection extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.comp.stoc.Introspection</code>.
     */
     @Override

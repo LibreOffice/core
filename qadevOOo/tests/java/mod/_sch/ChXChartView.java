@@ -84,7 +84,7 @@ public class ChXChartView extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the current controller of the chart document using
     * the interface <code>XModel</code>.The retrieved controller is the instance
     * of the service  <code>com.sun.star.view.OfficeDocumentView</code>.

@@ -61,7 +61,7 @@ import com.sun.star.view.XControlAccess;
  *  <li> <code>com::sun::star::lang::XEventListener</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.awt.XView
  * @see com.sun.star.form.XBoundControl

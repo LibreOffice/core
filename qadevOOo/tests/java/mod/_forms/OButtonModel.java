@@ -45,7 +45,7 @@ import lib.TestParameters;
  *  <li> <code>com::sun::star::lang::XComponent</code></li>
  * </ul>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.io.XPersistObject
  * @see com.sun.star.container.XChild

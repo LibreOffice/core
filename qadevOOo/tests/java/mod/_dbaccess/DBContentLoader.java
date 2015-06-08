@@ -39,7 +39,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::lang::XInitialization</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.frame.FrameLoader
 * @see com.sun.star.frame.XSynchronousFrameLoader
@@ -52,7 +52,7 @@ import com.sun.star.uno.XInterface;
 public class DBContentLoader extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.sdb.ContentLoader</code>. <p>
     *     Object relations created :

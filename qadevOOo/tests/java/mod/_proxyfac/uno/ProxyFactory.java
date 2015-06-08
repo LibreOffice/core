@@ -35,7 +35,7 @@ import lib.TestParameters;
 *  <li> <code>com::sun::star::reflection::XProxyFactory</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.reflection.XProxyFactory
 * @see com.sun.star.reflection.ProxyFactory
 * @see ifc.reflection._XProxyFactory
@@ -43,7 +43,7 @@ import lib.TestParameters;
 public class ProxyFactory extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.reflection.ProxyFactory</code>.
     */

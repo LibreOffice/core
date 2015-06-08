@@ -51,7 +51,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.sheet.XAreaLink
 * @see com.sun.star.util.XRefreshable
 * @see com.sun.star.sheet.CellAreaLink
@@ -95,7 +95,7 @@ public class ScAreaLinkObj extends TestCase {
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of Area Links using the 'AreaLinks'
     * property of the Spreadsheet document. Adds a new link to this
     * collection, which has a source in the same document. This

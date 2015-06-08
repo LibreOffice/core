@@ -90,7 +90,7 @@ public class ScCellFieldsObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.text.TextField.URL</code>, inserts it to the content
     * of the cell in the spreadsheet. Then the component is obtained

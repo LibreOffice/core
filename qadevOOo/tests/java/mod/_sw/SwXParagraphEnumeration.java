@@ -43,7 +43,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::container::XEnumeration</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XEnumeration
  * @see ifc.container._XEnumeration
  */
@@ -75,7 +75,7 @@ public class SwXParagraphEnumeration extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. After major
+    * Creating a TestEnvironment for the interfaces to be tested. After major
     * text is gotten from a text document, three paragraphs (each of them
     * filled by 5 strings) are inserted to major text. Finally, paragraph
     * enumeration is created using <code>XEnumeration</code> interface.

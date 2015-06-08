@@ -191,7 +191,7 @@ public class JobExecutor extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      *
      * Service <code>com.sun.star.comp.framework.JobExecutor</code>
      * is created.

@@ -42,7 +42,7 @@ import util.utils;
  *   some key set. </li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.registry.XSimpleRegistry
  * @see ifc.registry._XSimpleRegistry
@@ -84,7 +84,7 @@ public class SimpleRegistry extends TestCase {
         fOut.close() ;
     }
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.registry.SimpleRegistry</code>. Then
      * makes three copies of a predefined registry file with different

@@ -111,7 +111,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Sets a value of the cell 'A1'. Sets the property 'PrintHeaders'
      * of the style 'Default' of the family 'PageStyles' to true.
      * Switchs the document to preview mode and then obtains the

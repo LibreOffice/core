@@ -59,7 +59,7 @@ import util.DBTools;
 *    {@link util.DBTools DBTools} class for more information.</li>
 * </ul> <p>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.io.XPersistObject
 * @see com.sun.star.awt.UnoControlDateFieldModel
 * @see com.sun.star.form.XReset

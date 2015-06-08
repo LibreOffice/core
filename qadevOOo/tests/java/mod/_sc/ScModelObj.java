@@ -94,7 +94,7 @@ public class ScModelObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Disposes the spreadsheet documents if they was created already.
     * Creates two spreadsheet documents. Rertieves the current controller for
     * each of them. Obtains the collection of spreadsheets, takes one of them

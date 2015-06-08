@@ -91,7 +91,7 @@ public class ChartTitle extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the shape of the main title of the chart document.
     * The retrieved shape is the instance of the service
     * <code>com.sun.star.chart.ChartTitle</code>.

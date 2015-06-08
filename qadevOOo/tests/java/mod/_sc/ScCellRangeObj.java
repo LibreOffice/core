@@ -117,7 +117,7 @@ public class ScCellRangeObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document,
     * and takes one of them. Retrieves some cell range from the spreadsheet.
     * The retrieved cell range is instance of the service

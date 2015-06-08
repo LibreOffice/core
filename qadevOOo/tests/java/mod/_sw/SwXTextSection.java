@@ -77,7 +77,7 @@ public class SwXTextSection extends TestCase {
     }
 
     /**
-     *    creating a Testenvironment for the interfaces to be tested
+     *    creating a TestEnvironment for the interfaces to be tested
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {

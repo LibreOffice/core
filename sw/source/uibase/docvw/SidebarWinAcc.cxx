@@ -92,7 +92,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         ::osl::Mutex maMutex;
 };
 
-// implementaion of accessible for <SwSidebarWin> instance
+// implementation of accessible for <SwSidebarWin> instance
 SidebarWinAccessible::SidebarWinAccessible( SwSidebarWin& rSidebarWin,
                                             SwViewShell& rViewShell,
                                             const SwSidebarItem& rSidebarItem )

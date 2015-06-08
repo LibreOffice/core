@@ -48,7 +48,7 @@ public class _XCloneable extends MultiMethodTest {
         boolean result = true;
         clone = oObj.createClone();
 
-        //check if the implementaionname equals
+        //check if the implementationname equals
         result &= checkImplementationName(oObj,clone);
 
         //check ImplementationID

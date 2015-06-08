@@ -39,7 +39,7 @@ import com.sun.star.uno.XInterface;
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.lang.XServiceInfo
  * @see com.sun.star.i18n.XNumberFormatCode
@@ -49,7 +49,7 @@ import com.sun.star.uno.XInterface;
 public class NumberFormatCodeMapper extends TestCase {
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.i18n.NumberFormatCodeMapper</code>.
      */

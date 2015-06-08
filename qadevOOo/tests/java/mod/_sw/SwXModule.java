@@ -36,7 +36,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::view::XViewSettingsSupplier</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.view.XPrintSettingsSupplier
  * @see com.sun.star.view.XViewSettingsSupplier
  * @see ifc.view._XPrintSettingsSupplier
@@ -45,7 +45,7 @@ import com.sun.star.uno.XInterface;
 public class SwXModule extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.text.GlobalSettings</code>.
     */

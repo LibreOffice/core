@@ -65,7 +65,7 @@ public class SwXTextDocument extends TestCase {
     }
 
     /**
-     *    creating a Testenvironment for the interfaces to be tested
+     *    creating a TestEnvironment for the interfaces to be tested
      */
     @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,

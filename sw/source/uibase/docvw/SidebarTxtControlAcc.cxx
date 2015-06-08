@@ -271,7 +271,7 @@ void SidebarTextControlAccessibleContext::ProcessWindowEvent( const VclWindowEve
     VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
 
-// implementaion of accessible for <SidebarTextControl> instance
+// implementation of accessible for <SidebarTextControl> instance
 SidebarTextControlAccessible::SidebarTextControlAccessible( SidebarTextControl& rSidebarTextControl )
     : VCLXWindow()
     , mrSidebarTextControl( rSidebarTextControl )

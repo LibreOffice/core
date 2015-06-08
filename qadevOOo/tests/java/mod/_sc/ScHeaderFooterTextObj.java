@@ -110,7 +110,7 @@ public class ScHeaderFooterTextObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the collection of style families available in the document
     * using the interface <code>XStyleFamiliesSupplier</code>.
     * Obtains default style from the style family <code>'PageStyles'</code>.

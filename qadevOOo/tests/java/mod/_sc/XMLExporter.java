@@ -93,7 +93,7 @@ public class XMLExporter extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.comp.Calc.XMLExporter</code> with
     * argument which is an implementation of <code>XDocumentHandler</code>

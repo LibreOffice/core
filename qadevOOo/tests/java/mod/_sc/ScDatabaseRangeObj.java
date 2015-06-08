@@ -102,7 +102,7 @@ public class ScDatabaseRangeObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the collection of database ranges in the document.
     * If the database range with name <code>'dbRange'</code> exists
     * in the collection then removes it from the collection.

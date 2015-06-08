@@ -37,7 +37,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::java::XJavaVM</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.java.XJavaThreadRegister_11
 * @see com.sun.star.java.XJavaVM
 * @see com.sun.star.java.XJavaVirtualMachine
@@ -47,7 +47,7 @@ import com.sun.star.uno.XInterface;
 public class JavaVirtualMachine extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.java.JavaVirtualMachine</code>.
     */

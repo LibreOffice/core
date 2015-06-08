@@ -121,7 +121,7 @@ public class ObjectOutputStream extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instances of services
     * <code>com.sun.star.io.ObjectOutputStream</code>,
     * <code>com.sun.star.io.Pipe</code> and

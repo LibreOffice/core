@@ -51,7 +51,7 @@ import util.utils;
 *     ('#' - is an ordinary number) </li>
 * </ul> <p>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.registry.XSimpleRegistry
 * @see com.sun.star.lang.XInitialization
 * @see ifc.registry._XSimpleRegistry
@@ -104,7 +104,7 @@ public class NestedRegistry extends TestCase {
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates two temporary copies of registry file created before, opens
     * them, and creates service <code>com.sun.star.comp.stoc.NestedRegistry</code>
     * with these two registries. <p>

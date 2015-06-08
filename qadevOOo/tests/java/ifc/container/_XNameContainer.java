@@ -41,7 +41,7 @@ import lib.StatusException;
 *   if this relation exists then container elements can have duplicate
 *   names. </li>
 *  <li> Test environment variable <code>'THRCNT'</code> : number
-*   of interface threads running concurently. </li>
+*   of interface threads running concurrently. </li>
 * <ul> <p>
 * XNameComtainer needs n ObjectRelations "INSTANCEn" , where n=1, ..., THRCNT.
 *

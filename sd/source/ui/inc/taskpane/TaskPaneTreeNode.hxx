@@ -72,7 +72,7 @@ public:
     */
     virtual sal_Int32 GetMinimumWidth();
 
-    /** The default implementaion always returns <FALSE/>
+    /** The default implementation always returns <FALSE/>
     */
     virtual bool IsResizable();
 

@@ -44,7 +44,7 @@ import com.sun.star.uno.UnoRuntime;
 *  <li> <code>'XNameReplaceINDEX'</code> : For internal test
 *   usage. Contains current thread number. </li>
 *  <li> Test environment variable <code>'THRCNT'</code> : number
-*   of interface threads running concurently. </li>
+*   of interface threads running concurrently. </li>
 * <ul> <p>
 * XNameReplace needs n ObjectRelations "INSTANCEn" , where n = 1, ..., THRCNT.
 * <p>

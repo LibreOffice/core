@@ -45,7 +45,7 @@ import com.sun.star.uno.XInterface;
 public class JavaComponentLoader extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.comp.stoc.Java2</code>
     * service. <p>
     * The following object relations created :

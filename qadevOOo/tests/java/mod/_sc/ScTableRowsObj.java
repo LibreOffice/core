@@ -87,7 +87,7 @@ public class ScTableRowsObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from the document and takes one of
     * them. Obtains the collection of rows using the interface
     * <code>XColumnRowRange</code>. The obtained collection is the instance of

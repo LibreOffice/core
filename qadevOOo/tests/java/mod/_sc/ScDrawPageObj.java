@@ -74,7 +74,7 @@ public class ScDrawPageObj extends TestCase {
 
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * From the Calc document created a collection of its draw
      * pages is obtained. Two new pages are inserted. And one
      * page is obtained as a testing component. A shape is added

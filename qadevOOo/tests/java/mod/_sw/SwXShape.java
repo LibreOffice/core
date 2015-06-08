@@ -46,7 +46,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::drawing::Shape</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.lang.XComponent
  * @see com.sun.star.drawing.XShape
  * @see com.sun.star.drawing.XShapeDescriptor
@@ -87,7 +87,7 @@ public class SwXShape extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested. At first,
+    * Creating a TestEnvironment for the interfaces to be tested. At first,
     * DrawPage is gotten from text document using <code>XDrawPageSupplier</code>
     * interface. Then shape (rectangle) is created and added to DrawPage
     * obtained before, then returned as a test component.

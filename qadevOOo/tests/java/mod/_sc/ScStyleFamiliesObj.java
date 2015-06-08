@@ -80,7 +80,7 @@ public class ScStyleFamiliesObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the collection of style families from the document
     * using the interface <code>XStyleFamiliesSupplier</code>.
     * This collection is the instance of the service

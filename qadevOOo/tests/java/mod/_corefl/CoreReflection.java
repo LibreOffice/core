@@ -49,7 +49,7 @@ public class CoreReflection extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.reflection.CoreReflection</code> service.
     */
     @Override

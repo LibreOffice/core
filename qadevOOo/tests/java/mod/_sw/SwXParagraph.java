@@ -57,7 +57,7 @@ import com.sun.star.util.XCloseable;
  *  <li> <code>com::sun::star::style::CharacterPropertiesAsian</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.text.XTextContent
  * @see com.sun.star.text.TextContent
  * @see com.sun.star.style.CharacterPropertiesComplex
@@ -110,7 +110,7 @@ public class SwXParagraph extends TestCase {
 
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested. To obtain
+     * Creating a TestEnvironment for the interfaces to be tested. To obtain
      * test component, at first several paragraphs are inserted to a major text
      * of text document. Then enumeration of text paragraphs is created, and
      * some paragraph is gotten using <code>XEnumeration</code> interface.<p>

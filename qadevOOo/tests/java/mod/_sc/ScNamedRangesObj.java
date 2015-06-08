@@ -88,7 +88,7 @@ public class ScNamedRangesObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document
     * and takes one of them. Obtains the value of the property
     * <code>'NamedRanges'</code> that is the collection of named ranges.

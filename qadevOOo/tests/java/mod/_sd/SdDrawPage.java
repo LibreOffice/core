@@ -115,7 +115,7 @@ public class SdDrawPage extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the collection of the draw pages from the drawing document using
     * the interface <code>XDrawPagesSupplier</code> and take one of them.
     * The retrieved draw page is the instance of the service

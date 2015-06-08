@@ -48,7 +48,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::sheet::XAreaLinks</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.container.XIndexAccess
 * @see com.sun.star.container.XElementAccess
 * @see com.sun.star.sheet.XAreaLinks
@@ -91,7 +91,7 @@ protected void initialize( TestParameters tParam, PrintWriter log ) {
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of Area Links using the 'AreaLinks'
     * property of the Spreadsheet document. Adds a new link to this
     * collection, which has a source in the same document. The

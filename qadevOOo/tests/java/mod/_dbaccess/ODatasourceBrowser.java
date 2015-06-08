@@ -65,7 +65,7 @@ import com.sun.star.view.XControlAccess;
  *  <li> <code>com::sun::star::lang::XComponent</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.container.XChild
  * @see com.sun.star.lang.XInitialization
@@ -128,7 +128,7 @@ public class ODatasourceBrowser extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      *
      * Creates a new text document disposing the old one if it was
      * created. Using <code>Desktop</code> service get the frame

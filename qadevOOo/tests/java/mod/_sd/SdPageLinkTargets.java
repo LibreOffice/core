@@ -82,7 +82,7 @@ public class SdPageLinkTargets extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves the collection of draw pages and take one of them.
     * Obtains the collection of possible links using the interface
     * <code>XLinkTargetSupplier</code>. The obtained collection is

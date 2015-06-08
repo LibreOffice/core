@@ -44,7 +44,7 @@ import lib.TestParameters;
 *  <li> <code>com::sun::star::bridge::XBridge</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.lang.XInitialization
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.bridge.XBridge
@@ -157,7 +157,7 @@ public class various extends TestCase {
     private final boolean[] bridgeDisposed = new boolean[1] ;
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.bridge.Bridge</code>.
     *     Object relations created :

@@ -53,7 +53,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::style::XStyle</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * @see com.sun.star.container.XNamed
  * @see com.sun.star.style.Style
  * @see com.sun.star.style.XStyle
@@ -90,7 +90,7 @@ public class SwXStyle extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * At first style families are gotten from a text document using
     * <code>XStyleFamiliesSupplier</code> interface, then family indexed '0' is
     * gotten from this style family using <code>XIndexAccess</code> interface.

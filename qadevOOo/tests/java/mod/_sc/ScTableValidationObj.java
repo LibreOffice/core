@@ -85,7 +85,7 @@ public class ScTableValidationObj extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from the document and takes one of
     * them. Fills some cell in the spreadsheet. Obtains the property
     * <code>'Validation'</code> of the spreadsheet. The value of the property

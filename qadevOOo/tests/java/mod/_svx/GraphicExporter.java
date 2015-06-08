@@ -56,7 +56,7 @@ import util.XMLTools;
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  *
  * @see com.sun.star.document.XFilter
  * @see com.sun.star.document.XMimeTypeInfo
@@ -88,7 +88,7 @@ public class GraphicExporter extends TestCase {
     }
 
     /**
-     * Creating a Testenvironment for the interfaces to be tested.
+     * Creating a TestEnvironment for the interfaces to be tested.
      * Creates an instance of the service
      * <code>com.sun.star.drawing.GraphicExportFilter</code> as
      * a tested component. Then a <code>GraphicObjectShape</code>

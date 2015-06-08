@@ -121,7 +121,7 @@ import com.sun.star.view.XControlAccess;
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
- * threads concurently.
+ * threads concurrently.
  * The following parameters in ini-file used by this test:
  * <ul>
  *   <li><code>test.db.url</code> - URL to MySQL database.
@@ -303,7 +303,7 @@ public class ODatabaseForm extends TestCase {
     }
 
     /**
-     *  *    creating a Testenvironment for the interfaces to be tested
+     *  *    creating a TestEnvironment for the interfaces to be tested
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,

@@ -38,7 +38,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 * </ul>
 * This object test <b> can </b> be run in several
-* threads concurently.
+* threads concurrently.
 * @see com.sun.star.sdb.QueryDefinition
 * @see com.sun.star.beans.XPropertySet
 * @see ifc.sdb._QueryDefinition
@@ -47,7 +47,7 @@ import com.sun.star.uno.XInterface;
 public class OCommandDefinition extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.sdb.QueryDefinition</code>.
     */
     @Override

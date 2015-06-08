@@ -162,7 +162,7 @@ public class ChXDiagram extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document
     * and takes one of them. Inserts some values into the cells of the some cell
     * range address. Adds and retrieves the chart that using the data from

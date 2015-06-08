@@ -98,7 +98,7 @@ public class ODatabaseSource extends TestCase {
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     *
     * Creates new <code>DataSource</code> which represents DBase database
     * located in temporary directory, and then registers it in service
