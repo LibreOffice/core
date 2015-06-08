@@ -91,6 +91,7 @@ public:
     void testTdf90003();
     void testExportToPicture();
     void testSearchWithTransliterate();
+    void testTableBackgroundColor();
     void testTdf90362();
     void testUndoCharAttribute();
     void testTdf86639();
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
@@ -926,6 +928,63 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTableBackgroundColor()
+{
+    SwDoc* pDoc = createDoc("TableBackgroundColor.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SelAll();
+    Color colour = sal_Int32(0xFF00FF);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->Right(CRSR_SKIP_CELLS, false, 1, false);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->Right(CRSR_SKIP_CELLS, false, 1, false);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->Right(CRSR_SKIP_CELLS, false, 1, false);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->Right(CRSR_SKIP_CELLS, false, 1, false);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->Right(CRSR_SKIP_CELLS, false, 1, false);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->Right(CRSR_SKIP_CELLS, false, 1, false);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->Right(CRSR_SKIP_CELLS, false, 1, false);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    pWrtShell->Right(CRSR_SKIP_CELLS, false, 1, false);
+    pWrtShell->SelTblBox();
+    pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+    //Checking cells for modified background color
+    uno::Reference<table::XCell> xCell;
+   xCell = xTable->getCellByName("A1");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("A2");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("A3");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("B1");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("B2");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("B3");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("C1");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("C2");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell = xTable->getCellByName("C3");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
 void SwUiWriterTest::testTdf90362()
