@@ -114,6 +114,30 @@ namespace
         rRef.SetAbsTab(0);
     }
 
+    struct TokenPointerRange
+    {
+        FormulaToken**  mpStart;
+        FormulaToken**  mpStop;
+
+        TokenPointerRange( FormulaToken** p, sal_uInt16 n ) :
+            mpStart(p), mpStop( p + static_cast<size_t>(n)) {}
+    };
+    struct TokenPointers
+    {
+        TokenPointerRange maPointerRange[2];
+
+        TokenPointers( FormulaToken** pCode, sal_uInt16 nLen, FormulaToken** pRPN, sal_uInt16 nRPN ) :
+            maPointerRange{ TokenPointerRange( pCode, nLen), TokenPointerRange( pRPN, nRPN)} {}
+
+        static bool skipToken( size_t i, const FormulaToken* const * pp )
+        {
+            // Handle all tokens in RPN, and code tokens only if they have a
+            // reference count of 1, which means they are not referenced in
+            // RPN.
+            return i == 0 && (*pp)->GetRef() > 1;
+        }
+    };
+
 } // namespace
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
@@ -3850,28 +3874,35 @@ void checkBounds(
 void ScTokenArray::CheckRelativeReferenceBounds(
     const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const
 {
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
+            if (TokenPointers::skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                checkBounds(rCxt, rPos, nGroupLen, *pToken->GetSingleRef(), rBounds);
+                case svSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        checkBounds(rCxt, rPos, nGroupLen, *pToken->GetSingleRef(), rBounds);
+                    }
+                    break;
+                case svDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        const ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        checkBounds(rCxt, rPos, nGroupLen, rRef.Ref1, rBounds);
+                        checkBounds(rCxt, rPos, nGroupLen, rRef.Ref2, rBounds);
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                const ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                checkBounds(rCxt, rPos, nGroupLen, rRef.Ref1, rBounds);
-                checkBounds(rCxt, rPos, nGroupLen, rRef.Ref2, rBounds);
-            }
-            break;
-            default:
-                ;
         }
     }
 }
@@ -3879,29 +3910,36 @@ void ScTokenArray::CheckRelativeReferenceBounds(
 void ScTokenArray::CheckRelativeReferenceBounds(
     const ScAddress& rPos, SCROW nGroupLen, const ScRange& rRange, std::vector<SCROW>& rBounds ) const
 {
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
+            if (TokenPointers::skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                const ScSingleRefData& rRef = *pToken->GetSingleRef();
-                checkBounds(rPos, nGroupLen, rRange, rRef, rBounds);
+                case svSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        const ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        checkBounds(rPos, nGroupLen, rRange, rRef, rBounds);
+                    }
+                    break;
+                case svDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        const ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds);
+                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref2, rBounds);
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                const ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds);
-                checkBounds(rPos, nGroupLen, rRange, rRef.Ref2, rBounds);
-            }
-            break;
-            default:
-                ;
         }
     }
 }
@@ -3910,91 +3948,98 @@ void ScTokenArray::CheckExpandReferenceBounds(
     const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const
 {
     const SCROW nInsRow = rCxt.maRange.aStart.Row();
-    const FormulaToken* const * p = pCode;
-    const FormulaToken* const * pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        const FormulaToken* const * p = aPtrs.maPointerRange[j].mpStart;
+        const FormulaToken* const * pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svDoubleRef:
+            if (TokenPointers::skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                const formula::FormulaToken* pToken = *p;
-                const ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                bool bStartRowRelative = rRef.Ref1.IsRowRel();
-                bool bEndRowRelative = rRef.Ref2.IsRowRel();
-
-                // For absolute references nothing needs to be done, they stay
-                // the same for all and if to be expanded the group will be
-                // adjusted later.
-                if (!bStartRowRelative && !bEndRowRelative)
-                    break;  // switch
-
-                ScRange aAbsStart(rRef.toAbs(rPos));
-                ScAddress aPos(rPos);
-                aPos.IncRow(nGroupLen);
-                ScRange aAbsEnd(rRef.toAbs(aPos));
-                // References must be at least two rows to be expandable.
-                if ((aAbsStart.aEnd.Row() - aAbsStart.aStart.Row() < 1) &&
-                        (aAbsEnd.aEnd.Row() - aAbsEnd.aStart.Row() < 1))
-                    break;  // switch
-
-                // Only need to process if an edge may be touching the
-                // insertion row anywhere within the run of the group.
-                if (!((aAbsStart.aStart.Row() <= nInsRow && nInsRow <= aAbsEnd.aStart.Row()) ||
-                            (aAbsStart.aEnd.Row() <= nInsRow && nInsRow <= aAbsEnd.aEnd.Row())))
-                    break;  // switch
-
-                SCROW nStartRow = aAbsStart.aStart.Row();
-                SCROW nEndRow = aAbsStart.aEnd.Row();
-                // Position on first relevant range.
-                SCROW nOffset = 0;
-                if (nEndRow + 1 < nInsRow)
-                {
-                    if (bEndRowRelative)
+                case svDoubleRef:
                     {
-                        nOffset = nInsRow - nEndRow - 1;
-                        nEndRow += nOffset;
-                        if (bStartRowRelative)
-                            nStartRow += nOffset;
-                    }
-                    else    // bStartRowRelative==true
-                    {
-                        nOffset = nInsRow - nStartRow;
-                        nStartRow += nOffset;
-                        // Start is overtaking End, swap.
-                        bStartRowRelative = false;
-                        bEndRowRelative = true;
-                    }
-                }
-                for (SCROW i = nOffset; i < nGroupLen; ++i)
-                {
-                    bool bSplit = (nStartRow == nInsRow || nEndRow + 1 == nInsRow);
-                    if (bSplit)
-                        rBounds.push_back( rPos.Row() + i);
+                        const formula::FormulaToken* pToken = *p;
+                        const ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        bool bStartRowRelative = rRef.Ref1.IsRowRel();
+                        bool bEndRowRelative = rRef.Ref2.IsRowRel();
 
-                    if (bEndRowRelative)
-                        ++nEndRow;
-                    if (bStartRowRelative)
-                    {
-                        ++nStartRow;
-                        if (!bEndRowRelative && nStartRow == nEndRow)
+                        // For absolute references nothing needs to be done, they stay
+                        // the same for all and if to be expanded the group will be
+                        // adjusted later.
+                        if (!bStartRowRelative && !bEndRowRelative)
+                            break;  // switch
+
+                        ScRange aAbsStart(rRef.toAbs(rPos));
+                        ScAddress aPos(rPos);
+                        aPos.IncRow(nGroupLen);
+                        ScRange aAbsEnd(rRef.toAbs(aPos));
+                        // References must be at least two rows to be expandable.
+                        if ((aAbsStart.aEnd.Row() - aAbsStart.aStart.Row() < 1) &&
+                                (aAbsEnd.aEnd.Row() - aAbsEnd.aStart.Row() < 1))
+                            break;  // switch
+
+                        // Only need to process if an edge may be touching the
+                        // insertion row anywhere within the run of the group.
+                        if (!((aAbsStart.aStart.Row() <= nInsRow && nInsRow <= aAbsEnd.aStart.Row()) ||
+                                    (aAbsStart.aEnd.Row() <= nInsRow && nInsRow <= aAbsEnd.aEnd.Row())))
+                            break;  // switch
+
+                        SCROW nStartRow = aAbsStart.aStart.Row();
+                        SCROW nEndRow = aAbsStart.aEnd.Row();
+                        // Position on first relevant range.
+                        SCROW nOffset = 0;
+                        if (nEndRow + 1 < nInsRow)
                         {
-                            // Start is overtaking End, swap.
-                            bStartRowRelative = false;
-                            bEndRowRelative = true;
+                            if (bEndRowRelative)
+                            {
+                                nOffset = nInsRow - nEndRow - 1;
+                                nEndRow += nOffset;
+                                if (bStartRowRelative)
+                                    nStartRow += nOffset;
+                            }
+                            else    // bStartRowRelative==true
+                            {
+                                nOffset = nInsRow - nStartRow;
+                                nStartRow += nOffset;
+                                // Start is overtaking End, swap.
+                                bStartRowRelative = false;
+                                bEndRowRelative = true;
+                            }
+                        }
+                        for (SCROW i = nOffset; i < nGroupLen; ++i)
+                        {
+                            bool bSplit = (nStartRow == nInsRow || nEndRow + 1 == nInsRow);
+                            if (bSplit)
+                                rBounds.push_back( rPos.Row() + i);
+
+                            if (bEndRowRelative)
+                                ++nEndRow;
+                            if (bStartRowRelative)
+                            {
+                                ++nStartRow;
+                                if (!bEndRowRelative && nStartRow == nEndRow)
+                                {
+                                    // Start is overtaking End, swap.
+                                    bStartRowRelative = false;
+                                    bEndRowRelative = true;
+                                }
+                            }
+                            if (nInsRow < nStartRow || (!bStartRowRelative && nInsRow <= nEndRow))
+                            {
+                                if (bSplit && (++i < nGroupLen))
+                                    rBounds.push_back( rPos.Row() + i);
+                                break;  // for, out of range now
+                            }
                         }
                     }
-                    if (nInsRow < nStartRow || (!bStartRowRelative && nInsRow <= nEndRow))
-                    {
-                        if (bSplit && (++i < nGroupLen))
-                            rBounds.push_back( rPos.Row() + i);
-                        break;  // for, out of range now
-                    }
-                }
+                    break;
+                default:
+                    ;
             }
-            break;
-            default:
-                ;
         }
     }
 }
