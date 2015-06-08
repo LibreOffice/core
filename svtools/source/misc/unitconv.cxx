@@ -185,7 +185,7 @@ long CalcToUnit( float nIn, SfxMapUnit eUnit )
 
 
 
-long ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl )
+long ItemToControl( long nIn, SfxMapUnit eItem, FieldUnit eCtrl )
 {
     long nOut = 0;
 
@@ -199,13 +199,13 @@ long ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl )
                 nIn /= 10;
             else if ( eItem == SFX_MAPUNIT_100TH_MM )
                 nIn /= 100;
-            nOut = TransformMetric( nIn, FUNIT_MM, (FieldUnit)eCtrl );
+            nOut = TransformMetric( nIn, FUNIT_MM, eCtrl );
         }
         break;
 
         case SFX_MAPUNIT_CM:
         {
-            nOut = TransformMetric( nIn, FUNIT_CM, (FieldUnit)eCtrl );
+            nOut = TransformMetric( nIn, FUNIT_CM, eCtrl );
         }
         break;
 
@@ -220,19 +220,19 @@ long ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl )
                 nIn /= 100;
             else if ( eItem == SFX_MAPUNIT_1000TH_INCH )
                 nIn /= 1000;
-            nOut = TransformMetric( nIn, FUNIT_INCH, (FieldUnit)eCtrl );
+            nOut = TransformMetric( nIn, FUNIT_INCH, eCtrl );
         }
         break;
 
         case SFX_MAPUNIT_POINT:
         {
-            nOut = TransformMetric( nIn, FUNIT_POINT, (FieldUnit)eCtrl );
+            nOut = TransformMetric( nIn, FUNIT_POINT, eCtrl );
         }
         break;
 
         case SFX_MAPUNIT_TWIP:
         {
-            nOut = TransformMetric( nIn, FUNIT_TWIP, (FieldUnit)eCtrl );
+            nOut = TransformMetric( nIn, FUNIT_TWIP, eCtrl );
         }
         break;
         default: ;//prevent warning
@@ -242,7 +242,7 @@ long ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl )
 
 
 
-long ControlToItem( long nIn, SfxFieldUnit eCtrl, SfxMapUnit eItem )
+long ControlToItem( long nIn, FieldUnit eCtrl, SfxMapUnit eItem )
 {
     return ItemToControl( nIn, eItem, eCtrl );
 }
