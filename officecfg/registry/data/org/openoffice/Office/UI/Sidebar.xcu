@@ -384,14 +384,17 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Calc,           Draw,       visible ;
+            Calc,           DrawLine,   visible ;
             Calc,           Graphic,    visible ;
             Calc,           OLE,        hidden  ;
             DrawImpress,    3DObject,   visible ;
             DrawImpress,    Draw,       visible ;
+            DrawImpress,    DrawLine,   visible ;
             DrawImpress,    Graphic,    visible ;
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
             WriterVariants, Draw,       visible ;
+            WriterVariants, DrawLine,   visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
