@@ -451,7 +451,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                             aCurrentInfo = pJInfo;
                             bInfoFound = true;
                         }
-                        else if ((JavaInfo*) aCurrentInfo == NULL)
+                        else if (static_cast<JavaInfo*>(aCurrentInfo) == NULL)
                         {
                             // current Java installation does not provide all features
                             // but no Java installation has been detected before
@@ -537,7 +537,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 //All Java installations found by the current plug-in lib
                 //do not provide the required features. Try the next plug-in
             }
-            if ((JavaInfo*) aCurrentInfo == NULL)
+            if (static_cast<JavaInfo*>(aCurrentInfo) == NULL)
             {//The plug-ins did not find a suitable Java. Now try the paths which have been
             //added manually.
                 //get the list of paths to jre locations which have been added manually
@@ -595,7 +595,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 }// end iterate plug-ins
             }
         }
-        if ((JavaInfo*) aCurrentInfo)
+        if (static_cast<JavaInfo*>(aCurrentInfo))
         {
             jfw::NodeJava javaNode(jfw::NodeJava::USER);
             javaNode.setJavaInfo(aCurrentInfo,true);

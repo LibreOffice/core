@@ -484,7 +484,7 @@ void NodeJava::write() const
 
         xmlNode * nodeEnabled = pathObj->nodesetval->nodeTab[0];
         xmlSetNsProp(nodeEnabled, nsXsi, reinterpret_cast<xmlChar const *>("nil"),reinterpret_cast<xmlChar const *>("false"));
-        xmlNodeSetContent(nodeEnabled,(xmlChar*) CXmlCharPtr(*m_userClassPath));
+        xmlNodeSetContent(nodeEnabled,static_cast<xmlChar*>(CXmlCharPtr(*m_userClassPath)));
     }
 
     //set <javaInfo> element
@@ -852,7 +852,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
             CXmlCharPtr xmlData;
             xmlData = xmlNodeListGetString(
                 pDoc, cur->children, 1);
-            xmlChar* _data = (xmlChar*) xmlData;
+            xmlChar* _data = static_cast<xmlChar*>(xmlData);
             if (_data)
             {
                 rtl::ByteSequence seq(reinterpret_cast<sal_Int8*>(_data), strlen(reinterpret_cast<char*>(_data)));
