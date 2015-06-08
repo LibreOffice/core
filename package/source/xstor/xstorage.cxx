@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-typedef ::std::list< uno::WeakReference< lang::XComponent > > WeakComponentList;
+typedef ::std::vector< uno::WeakReference< lang::XComponent > > WeakComponentList;
 
 struct StorInternalData_Impl
 {
@@ -412,7 +412,7 @@ void OStorage_Impl::SetReadOnlyWrap( OStorage& aStorage )
 void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
 {
     for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapList.begin();
-      pStorageIter != m_aReadOnlyWrapList.end();)
+          pStorageIter != m_aReadOnlyWrapList.end();)
     {
         uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
         if ( !xTmp.is() || pStorageIter->m_pPointer == &aStorage )
@@ -425,9 +425,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
                 AddLog( rException.Message );
             }
 
-            StorageHoldersType::iterator pIterToDelete( pStorageIter );
-            ++pStorageIter;
-            m_aReadOnlyWrapList.erase( pIterToDelete );
+            pStorageIter = m_aReadOnlyWrapList.erase( pStorageIter );
         }
         else
             ++pStorageIter;
@@ -1094,12 +1092,8 @@ void OStorage_Impl::Commit()
             if ( m_bCommited || m_bIsRoot )
                 xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
 
-            SotElement_Impl* pToDelete = *pElementIter;
-
-            ++pElementIter; // to let the iterator be valid it should be increased before removing
-
-            m_aChildrenList.remove( pToDelete );
-            delete pToDelete;
+            delete *pElementIter;
+            pElementIter = m_aChildrenList.erase( pElementIter );
         }
         else
             ++pElementIter;
@@ -1291,10 +1285,7 @@ void OStorage_Impl::Revert()
         if ( (*pElementIter)->m_bIsInserted )
         {
             SotElement_Impl* pToDelete = *pElementIter;
-
-            ++pElementIter; // to let the iterator be valid it should be increased before removing
-
-            m_aChildrenList.remove( pToDelete );
+            pElementIter = m_aChildrenList.erase( pElementIter );
             delete pToDelete;
         }
         else
@@ -1521,7 +1512,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsSt
         else
             OpenSubStream( pDeletedElm );
 
-        m_aChildrenList.remove( pDeletedElm );  // correct usage of list ???
+        m_aChildrenList.erase( std::remove(m_aChildrenList.begin(), m_aChildrenList.end(), pDeletedElm), m_aChildrenList.end() );
         m_aDeletedList.push_back( pDeletedElm );
     }
 
@@ -1615,7 +1606,7 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
 
     if ( pElement->m_bIsInserted )
     {
-        m_aChildrenList.remove( pElement );
+        m_aChildrenList.erase( std::remove(m_aChildrenList.begin(), m_aChildrenList.end(), pElement), m_aChildrenList.end() );
         delete pElement; // ???
     }
     else
@@ -2018,9 +2009,7 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
             uno::Reference< lang::XComponent > xTmp = (*pCompIter);
             if ( !xTmp.is() || xTmp == xChild )
             {
-                WeakComponentList::iterator pIterToRemove = pCompIter;
-                ++pCompIter;
-                m_pData->m_aOpenSubComponentsList.erase( pIterToRemove );
+                pCompIter = m_pData->m_aOpenSubComponentsList.erase( pCompIter );
             }
             else
                 ++pCompIter;

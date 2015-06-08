@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
 
-#include <list>
+#include <vector>
 #include <tools/mempool.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -399,7 +399,7 @@ public:
     const ScPatternAttr& CreatePattern( bool bSkipPoolDefs = false );
 
     void                ApplyPatternToAttrList(
-                            ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
+                            ::std::vector<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
                             sal_uInt32 nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND);
 
     /** Inserts all formatting attributes to the specified area in the Calc document.
@@ -657,7 +657,7 @@ private:
     typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
     typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
     typedef ::std::pair< XclRange, OUString >        XclImpHyperlinkRange;
-    typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;
+    typedef ::std::vector< XclImpHyperlinkRange >      XclImpHyperlinkList;
 
     XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
     XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.

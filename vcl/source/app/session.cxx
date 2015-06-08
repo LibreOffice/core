@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XSessionManagerListener2.hpp>
 
-#include <list>
+#include <vector>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -64,7 +64,7 @@ class VCLSession:
         {}
     };
 
-    std::list< Listener >                           m_aListeners;
+    std::vector< Listener >                         m_aListeners;
     std::unique_ptr< SalSession >                   m_xSession;
     bool                                            m_bInteractionRequested;
     bool                                            m_bInteractionGranted;
@@ -105,11 +105,11 @@ VCLSession::VCLSession()
 
 void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
 {
-    std::list< Listener > aListeners;
+    std::vector< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         // reset listener states
-        for( std::list< Listener >::iterator it = m_aListeners.begin();
+        for( std::vector< Listener >::iterator it = m_aListeners.begin();
              it != m_aListeners.end(); ++it )
         {
             it->m_bSaveDone = it->m_bInteractionRequested = it->m_bInteractionDone = false;
@@ -135,17 +135,17 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
     }
 
     SolarMutexReleaser aReleaser;
-    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
+    for( std::vector< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->doSave( bShutdown, bCancelable );
 }
 
 void VCLSession::callInteractionGranted( bool bInteractionGranted )
 {
-    std::list< Listener > aListeners;
+    std::vector< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         // copy listener list since calling a listener may remove it.
-        for( std::list< Listener >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+        for( std::vector< Listener >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
             if( it->m_bInteractionRequested )
                 aListeners.push_back( *it );
 
@@ -162,13 +162,13 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
     }
 
     SolarMutexReleaser aReleaser;
-    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
+    for( std::vector< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->approveInteraction( bInteractionGranted );
 }
 
 void VCLSession::callShutdownCancelled()
 {
-    std::list< Listener > aListeners;
+    std::vector< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         // copy listener list since calling a listener may remove it.
@@ -178,13 +178,13 @@ void VCLSession::callShutdownCancelled()
     }
 
     SolarMutexReleaser aReleaser;
-    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
+    for( std::vector< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->shutdownCanceled();
 }
 
 void VCLSession::callQuit()
 {
-    std::list< Listener > aListeners;
+    std::vector< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         // copy listener list since calling a listener may remove it.
@@ -194,7 +194,7 @@ void VCLSession::callQuit()
     }
 
     SolarMutexReleaser aReleaser;
-    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
+    for( std::vector< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
     {
         css::uno::Reference< XSessionManagerListener2 > xListener2( it->m_xListener, UNO_QUERY );
         if( xListener2.is() )
@@ -239,7 +239,7 @@ void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Referenc
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    std::list< Listener >::iterator it = m_aListeners.begin();
+    std::vector< Listener >::iterator it = m_aListeners.begin();
     while( it != m_aListeners.end() )
     {
         if( it->m_xListener == xListener )
@@ -268,7 +268,7 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
         m_xSession->queryInteraction();
         m_bInteractionRequested = true;
     }
-    for( std::list< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+    for( std::vector< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
     {
         if( it->m_xListener == xListener )
         {
@@ -282,7 +282,7 @@ void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionMa
 {
     osl::MutexGuard aGuard( m_aMutex );
     int nRequested = 0, nDone = 0;
-    for( std::list< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+    for( std::vector< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
     {
         if( it->m_bInteractionRequested )
         {
@@ -306,7 +306,7 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
     osl::MutexGuard aGuard( m_aMutex );
 
     bool bSaveDone = true;
-    for( std::list< Listener >::iterator it = m_aListeners.begin();
+    for( std::vector< Listener >::iterator it = m_aListeners.begin();
          it != m_aListeners.end(); ++it )
     {
         if( it->m_xListener == xListener )

@@ -23,13 +23,13 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-typedef ::std::vector< OUString > StringList;
-typedef ::std::vector< OString* > ByteStringList;
+typedef ::std::vector< OUString > StringVector;
+typedef ::std::vector< OString* > ByteStringVector;
 
 class SvCommand
 {
 public:
-    StringList  aInFileList;
+    StringVector  aInFileList;
     OUString    aSlotMapFile;
     OUString    aPath;
     OUString    aTargetFile;

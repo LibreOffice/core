@@ -104,7 +104,7 @@ public:
     virtual ~AndroidSalSystem() {}
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::list< OUString >& rButtons,
+                                  const std::vector< OUString >& rButtons,
                                   int nDefButton );
 };
 
@@ -244,7 +244,7 @@ void DestroySalInstance( SalInstance *pInst )
 
 int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
                                         const OUString& rMessage,
-                                        const std::list< OUString >& rButtons,
+                                        const std::vector< OUString >& rButtons,
                                         int nDefButton )
 {
     (void)rButtons; (void)nDefButton;

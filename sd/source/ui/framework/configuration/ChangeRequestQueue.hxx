@@ -22,7 +22,7 @@
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 
-#include <list>
+#include <vector>
 
 namespace sd { namespace framework {
 
@@ -31,7 +31,7 @@ namespace sd { namespace framework {
     ChangeRequestQueueProcessor to process these requests.
 */
 class ChangeRequestQueue
-    : public ::std::list<com::sun::star::uno::Reference<
+    : public ::std::vector<com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfigurationChangeRequest> >
 {
 public:

@@ -257,9 +257,9 @@ void SvpTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     psp::FastPrintFontInfo aInfo;
-    ::std::list< psp::fontID > aList;
+    ::std::vector< psp::fontID > aList;
     rMgr.getFontList( aList );
-    ::std::list< psp::fontID >::iterator it;
+    ::std::vector< psp::fontID >::iterator it;
     for( it = aList.begin(); it != aList.end(); ++it )
     {
         if( !rMgr.getFontFastInfo( *it, aInfo ) )

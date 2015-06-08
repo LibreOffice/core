@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_FLYFRM_HXX
 
 #include "layfrm.hxx"
-#include <list>
+#include <vector>
 #include "frmfmt.hxx"
 
 class SwPageFrm;
@@ -268,7 +268,7 @@ public:
         format isn't possible, if Writer fly frame is locked resp. col-locked.
     */
     virtual bool IsFormatPossible() const SAL_OVERRIDE;
-    static void GetAnchoredObjects( std::list<SwAnchoredObject*>&, const SwFormat& rFormat );
+    static void GetAnchoredObjects( std::vector<SwAnchoredObject*>&, const SwFormat& rFormat );
 
     // overwriting "SwFrameFormat *SwLayoutFrm::GetFormat" to provide the correct derived return type.
     // (This is in order to skip on the otherwise necessary casting of the result to

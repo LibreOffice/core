@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_SALLAYOUT_HXX
 
 #include <iostream>
-#include <list>
 #include <vector>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -327,7 +326,6 @@ public:
     bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
 };
 
-typedef std::list<GlyphItem> GlyphList;
 typedef std::vector<GlyphItem> GlyphVector;
 
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout

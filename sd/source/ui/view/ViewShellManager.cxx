@@ -164,7 +164,7 @@ private:
     typedef std::list<ShellDescriptor> ActiveShellList;
     ActiveShellList maActiveViewShells;
 
-    typedef std::list<ShellDescriptor> SubShellSubList;
+    typedef std::vector<ShellDescriptor> SubShellSubList;
     typedef std::unordered_map<const SfxShell*,SubShellSubList,ShellHash> SubShellList;
     SubShellList maActiveSubShells;
 

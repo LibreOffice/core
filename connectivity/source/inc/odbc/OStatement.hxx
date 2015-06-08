@@ -35,7 +35,7 @@
 #include "odbc/OFunctions.hxx"
 #include "odbc/OConnection.hxx"
 #include "odbc/odbcbasedllapi.hxx"
-#include <list>
+#include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
 
@@ -68,7 +68,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       m_xGeneratedStatement;
             //  for this Statement
 
-            ::std::list< OUString>   m_aBatchList;
+            ::std::vector< OUString>   m_aBatchList;
             OUString                 m_sSqlStatement;
 
             OConnection*                    m_pConnection;// The owning Connection object

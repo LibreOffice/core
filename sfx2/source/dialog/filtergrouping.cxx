@@ -34,7 +34,7 @@
 #include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <list>
+#include <vector>
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -135,12 +135,12 @@ namespace sfx2
     /// a descriptor for a filter class (which in the final dialog is represented by one filter entry)
     typedef struct _tagFilterClass
     {
-        OUString             sDisplayName;       // the display name
-        Sequence< FilterName >      aSubFilters;        // the (logical) names of the filter which belong to the class
+        OUString               sDisplayName;       // the display name
+        Sequence< FilterName > aSubFilters;        // the (logical) names of the filter which belong to the class
     } FilterClass;
 
-    typedef ::std::list< FilterClass >                                  FilterClassList;
-    typedef ::std::map< OUString, FilterClassList::iterator >    FilterClassReferrer;
+    typedef ::std::vector< FilterClass >                         FilterClassVec;
+    typedef ::std::map< OUString, FilterClassVec::iterator >     FilterClassReferrer;
 
     typedef ::std::vector< OUString >                            StringArray;
 
@@ -167,11 +167,11 @@ namespace sfx2
     struct CreateEmptyClassRememberPos : public ::std::unary_function< FilterName, void >
     {
     protected:
-        FilterClassList&        m_rClassList;
+        FilterClassVec&        m_rClassList;
         FilterClassReferrer&    m_rClassesReferrer;
 
     public:
-        CreateEmptyClassRememberPos( FilterClassList& _rClassList, FilterClassReferrer& _rClassesReferrer )
+        CreateEmptyClassRememberPos( FilterClassVec& _rClassList, FilterClassReferrer& _rClassesReferrer )
             :m_rClassList       ( _rClassList )
             ,m_rClassesReferrer ( _rClassesReferrer )
         {
@@ -183,7 +183,7 @@ namespace sfx2
             // insert a new (empty) class
             m_rClassList.push_back( FilterClass() );
             // get the position of this new entry
-            FilterClassList::iterator aInsertPos = m_rClassList.end();
+            FilterClassVec::iterator aInsertPos = m_rClassList.end();
             --aInsertPos;
             // remember this position
             m_rClassesReferrer.insert( FilterClassReferrer::value_type( _rLogicalFilterName, aInsertPos ) );
@@ -224,7 +224,7 @@ namespace sfx2
     };
 
 
-    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames )
+    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassVec& _rGlobalClasses, StringArray& _rGlobalClassNames )
     {
         _rGlobalClasses.clear();
         _rGlobalClassNames.clear();
@@ -272,10 +272,10 @@ namespace sfx2
     {
     protected:
         OConfigurationNode      m_aClassesNode;
-        FilterClassList&        m_rClasses;
+        FilterClassVec&        m_rClasses;
 
     public:
-        ReadLocalFilter( const OConfigurationNode& _rClassesNode, FilterClassList& _rClasses )
+        ReadLocalFilter( const OConfigurationNode& _rClassesNode, FilterClassVec& _rClasses )
             :m_aClassesNode ( _rClassesNode )
             ,m_rClasses     ( _rClasses )
         {
@@ -294,7 +294,7 @@ namespace sfx2
     };
 
 
-    void lcl_ReadLocalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rLocalClasses )
+    void lcl_ReadLocalFilters( const OConfigurationNode& _rFilterClassification, FilterClassVec& _rLocalClasses )
     {
         _rLocalClasses.clear();
 
@@ -311,7 +311,7 @@ namespace sfx2
     }
 
 
-    void lcl_ReadClassification( FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames, FilterClassList& _rLocalClasses )
+    void lcl_ReadClassification( FilterClassVec& _rGlobalClasses, StringArray& _rGlobalClassNames, FilterClassVec& _rLocalClasses )
     {
 
         // open our config node
@@ -503,7 +503,7 @@ namespace sfx2
     }
 
 
-    void lcl_InitGlobalClasses( GroupedFilterList& _rAllFilters, const FilterClassList& _rGlobalClasses, FilterGroupEntryReferrer& _rGlobalClassesRef )
+    void lcl_InitGlobalClasses( GroupedFilterList& _rAllFilters, const FilterClassVec& _rGlobalClasses, FilterGroupEntryReferrer& _rGlobalClassesRef )
     {
         // we need an extra group in our "all filters" container
         _rAllFilters.push_front( FilterGroup() );
@@ -572,7 +572,7 @@ namespace sfx2
 
 
         // read the classification of filters
-        FilterClassList aGlobalClasses, aLocalClasses;
+        FilterClassVec aGlobalClasses, aLocalClasses;
         StringArray aGlobalClassNames;
         lcl_ReadClassification( aGlobalClasses, aGlobalClassNames, aLocalClasses );
 

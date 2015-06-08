@@ -32,7 +32,7 @@
 #include <editeng/editengdllapi.h>
 #include <editeng/editeng.hxx>
 
-#include <list>
+#include <vector>
 
 struct ESelection;
 struct EFieldInfo;
@@ -46,7 +46,7 @@ class SvxFieldItem;
 class SfxBroadcaster;
 class SvxUnoTextRangeBase;
 
-typedef std::list< SvxUnoTextRangeBase* > SvxUnoTextRangeBaseList;
+typedef std::vector< SvxUnoTextRangeBase* > SvxUnoTextRangeBaseList;
 
 /** Wrapper class for unified EditEngine/Outliner access
 

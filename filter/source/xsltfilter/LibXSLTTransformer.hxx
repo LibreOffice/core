@@ -10,7 +10,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_XSLTFILTER_LIBXSLTTRANSFORMER_HXX
 #define INCLUDED_FILTER_SOURCE_XSLTFILTER_LIBXSLTTRANSFORMER_HXX
 
-#include <list>
+#include <vector>
 #include <map>
 
 #include <libxml/parser.h>
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-using ::std::list;
+using ::std::vector;
 using ::std::map;
 
 #define EXT_MODULE_OLE_URI "http://libreoffice.org/2011/xslt/ole"
@@ -79,7 +79,7 @@ namespace XSLT
 
         com::sun::star::uno::Reference<XOutputStream> m_rOutputStream;
 
-        typedef ::std::list<com::sun::star::uno::Reference<XStreamListener> > ListenerList;
+        typedef ::std::vector<com::sun::star::uno::Reference<XStreamListener> > ListenerList;
 
         ListenerList m_listeners;
 

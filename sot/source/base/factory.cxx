@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
+#include <algorithm>
 
 /************** class SotData_Impl *********************************************/
 /*************************************************************************
@@ -179,7 +180,7 @@ void SotFactory::DecSvObjectCount( SotObject * pObj )
     SotData_Impl * pSotData = SOTDATA();
     pSotData->nSvObjCount--;
     if( pObj )
-        pSotData->aObjectList.remove( pObj );
+        pSotData->aObjectList.erase( std::remove(pSotData->aObjectList.begin(), pSotData->aObjectList.end(), pObj), pSotData->aObjectList.end() );
     if( !pSotData->nSvObjCount )
     {
         //keine internen und externen Referenzen mehr

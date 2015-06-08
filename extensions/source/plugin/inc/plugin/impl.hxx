@@ -72,7 +72,7 @@
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implbase1.hxx"
 
-#include <list>
+#include <vector>
 
 #ifdef WNT
 #include <plugin/win/sysplug.hxx>
@@ -148,9 +148,9 @@ private:
     int                         m_nCalledFromPlugin;
     PluginDisposer*             m_pDisposer;
 
-    ::std::list<PluginInputStream*>     m_aInputStreams;
-    ::std::list<PluginOutputStream*>    m_aOutputStreams;
-    ::std::list<PluginEventListener*>   m_aPEventListeners;
+    ::std::vector<PluginInputStream*>     m_aInputStreams;
+    ::std::vector<PluginOutputStream*>    m_aOutputStreams;
+    ::std::vector<PluginEventListener*>   m_aPEventListeners;
     OUString                     m_aURL;
 
     bool                        m_bIsDisposed;
@@ -182,8 +182,8 @@ public:
 
     com::sun::star::plugin::PluginDescription fitDescription( const OUString& rURL );
 
-    ::std::list<PluginInputStream*>& getInputStreams() { return m_aInputStreams; }
-    ::std::list<PluginOutputStream*>& getOutputStreams() { return m_aOutputStreams; }
+    ::std::vector<PluginInputStream*>& getInputStreams() { return m_aInputStreams; }
+    ::std::vector<PluginOutputStream*>& getOutputStreams() { return m_aOutputStreams; }
     PluginComm*     getPluginComm() { return m_pPluginComm; }
     void            setPluginComm( PluginComm* comm )
         {
@@ -270,8 +270,8 @@ class PluginManager
 {
 private:
     Reference< com::sun::star::lang::XMultiServiceFactory >         m_xSMgr;
-    ::std::list<PluginComm*>        m_aPluginComms;
-    ::std::list<XPlugin_Impl*>      m_aAllPlugins;
+    ::std::vector<PluginComm*>        m_aPluginComms;
+    ::std::vector<XPlugin_Impl*>      m_aAllPlugins;
     ::osl::Mutex                    m_aPluginMutex;
 
     static PluginManager*       pManager;
@@ -283,8 +283,8 @@ public:
     static void setServiceFactory( const Reference< com::sun::star::lang::XMultiServiceFactory >& xFactory );
     static const Sequence< OUString >& getAdditionalSearchPaths();
 
-    ::std::list<PluginComm*>& getPluginComms() { return m_aPluginComms; }
-    ::std::list<XPlugin_Impl*>& getPlugins() { return m_aAllPlugins; }
+    ::std::vector<PluginComm*>& getPluginComms() { return m_aPluginComms; }
+    ::std::vector<XPlugin_Impl*>& getPlugins() { return m_aAllPlugins; }
     ::osl::Mutex& getPluginMutex() { return m_aPluginMutex; }
 };
 

@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
-#include <list>
+#include <vector>
 #include <map>
 #include <vector>
 #include <iostream>
@@ -55,7 +55,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-using ::std::list;
+using ::std::vector;
 using ::std::map;
 using ::std::pair;
 
@@ -405,7 +405,7 @@ namespace XSLT
             const css::uno::Reference<XStreamListener>& listener)
             throw (RuntimeException, std::exception)
     {
-        m_listeners.remove(listener);
+        m_listeners.erase( std::remove(m_listeners.begin(), m_listeners.end(), listener), m_listeners.end() );
     }
 
     void

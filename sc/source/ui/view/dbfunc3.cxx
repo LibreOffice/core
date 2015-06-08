@@ -68,7 +68,7 @@
 #include "stringutil.hxx"
 
 #include <boost/scoped_ptr.hpp>
-#include <list>
+#include <vector>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -81,7 +81,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::sheet::XDimensionsSupplier;
-using ::std::list;
+using ::std::vector;
 using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
@@ -1644,7 +1644,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
     {
         typedef ScDPSaveDimension::MemberList MemList;
         const MemList& rDimMembers = pSaveDim->GetMembers();
-        list<OUString> aMembers;
+        vector<OUString> aMembers;
         std::unordered_set<OUString, OUStringHash> aMemberSet;
         size_t nMemberCount = 0;
         for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
@@ -1658,7 +1658,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
 
         // Sort the member list in ascending order.
         ScOUStringCollate aCollate( ScGlobal::GetCollator() );
-        aMembers.sort(aCollate);
+        std::sort(aMembers.begin(), aMembers.end(), aCollate);
 
         // Collect and rank those custom sort strings that also exist in the member name list.
 
@@ -1697,7 +1697,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
 
         vector<OUString> aRankedNames(nMemberCount);
         sal_uInt16 nCurStrId = 0;
-        for (list<OUString>::const_iterator itr = aMembers.begin(), itrEnd = aMembers.end();
+        for (vector<OUString>::const_iterator itr = aMembers.begin(), itrEnd = aMembers.end();
               itr != itrEnd; ++itr)
         {
             OUString aName = *itr;

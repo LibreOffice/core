@@ -25,7 +25,7 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 #define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
-#include <list>
+#include <vector>
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -159,7 +159,7 @@ class DLLEXPORT HWPFile
 /**
  * Reads main paragraph list
  */
-        bool ReadParaList(std::list<HWPPara*> &aplist, unsigned char flag = 0);
+        bool ReadParaList(std::vector<HWPPara*> &aplist, unsigned char flag = 0);
 /**
  * Sets if the stream is compressed
  */
@@ -276,22 +276,22 @@ class DLLEXPORT HWPFile
         HWPInfo   _hwpInfo;
         HWPFont   _hwpFont;
         HWPStyle  _hwpStyle;
-        std::list<ColumnInfo*> columnlist;
+        std::vector<ColumnInfo*> columnlist;
           // paragraph linked list
-        std::list<HWPPara*> plist;
+        std::vector<HWPPara*> plist;
           // floating box linked list
-        std::list<FBox*> blist;
+        std::vector<FBox*> blist;
           // embedded picture list(tag datas)
-        std::list<EmPicture*> emblist;
-        std::list<HyperText*> hyperlist;
+        std::vector<EmPicture*> emblist;
+        std::vector<HyperText*> hyperlist;
         int currenthyper;
-        std::list<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
-        std::list<CharShape*> cslist;
-        std::list<FBoxStyle*> fbslist;
-        std::list<DateCode*> datecodes;
-        std::list<HeaderFooter*> headerfooters;
-        std::list<ShowPageNum*> pagenumbers;
-        std::list<Table*> tables;
+        std::vector<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
+        std::vector<CharShape*> cslist;
+        std::vector<FBoxStyle*> fbslist;
+        std::vector<DateCode*> datecodes;
+        std::vector<HeaderFooter*> headerfooters;
+        std::vector<ShowPageNum*> pagenumbers;
+        std::vector<Table*> tables;
 
 // for global document handling
         static HWPFile *cur_doc;

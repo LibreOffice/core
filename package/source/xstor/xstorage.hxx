@@ -50,7 +50,7 @@
 
 #include "mutexholder.hxx"
 
-#include <list>
+#include <vector>
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -92,7 +92,7 @@ public:
                                 ~SotElement_Impl();
 };
 
-typedef ::std::list< SotElement_Impl* > SotElementList_Impl;
+typedef ::std::vector< SotElement_Impl* > SotElementList_Impl;
 
 // Main storage implementation
 
@@ -115,7 +115,7 @@ struct StorageHolder_Impl
 class SwitchablePersistenceStream;
 struct OStorage_Impl
 {
-    typedef std::list<StorageHolder_Impl> StorageHoldersType;
+    typedef std::vector<StorageHolder_Impl> StorageHoldersType;
 
     SotMutexHolderRef           m_rMutexRef;
 

@@ -3202,8 +3202,8 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 throw FontException();
             // see whether it is pfb or pfa; if it is a pfb, fill ranges
             // of 6 bytes that are not part of the font program
-            std::list< int > aSections;
-            std::list< int >::const_iterator it;
+            std::vector< int > aSections;
+            std::vector< int >::const_iterator it;
             int nIndex = 0;
             while( (nIndex < nFontLen-1) && pFontData[nIndex] == 0x80 )
             {
@@ -3211,10 +3211,10 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 if( pFontData[nIndex+1] == 0x03 )
                     break;
                 sal_Int32 nBytes =
-                ((sal_Int32)pFontData[nIndex+2])            |
-                ((sal_Int32)pFontData[nIndex+3]) << 8       |
-                ((sal_Int32)pFontData[nIndex+4]) << 16      |
-                ((sal_Int32)pFontData[nIndex+5]) << 24;
+                  ((sal_Int32)pFontData[nIndex+2])            |
+                  ((sal_Int32)pFontData[nIndex+3]) << 8       |
+                  ((sal_Int32)pFontData[nIndex+4]) << 16      |
+                  ((sal_Int32)pFontData[nIndex+5]) << 24;
                 nIndex += nBytes+6;
             }
 
@@ -3262,11 +3262,11 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                     // if all fonts complied
                     if( pFontData[nIndex] == '0' )
                         nFound++;
-                        else if( nFound > 0                 &&
+                    else if( nFound > 0                 &&
                             pFontData[nIndex] != '\r'       &&
-                        pFontData[nIndex] != '\t'       &&
-                        pFontData[nIndex] != '\n'       &&
-                        pFontData[nIndex] != ' ' )
+                            pFontData[nIndex] != '\t'       &&
+                            pFontData[nIndex] != '\n'       &&
+                            pFontData[nIndex] != ' ' )
                         break;
                 }
                 nIndex--;
@@ -3314,10 +3314,10 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 nBeginBinaryIndex++;
                 for( it = aSections.begin(); it != aSections.end() && (nBeginBinaryIndex < *it || nBeginBinaryIndex > ((*it) + 5) ); ++it )
                     ;
-                    } while( nBeginBinaryIndex < nEndBinaryIndex &&
-                        ( pFontData[nBeginBinaryIndex] == '\r'  ||
-                            pFontData[nBeginBinaryIndex] == '\n'    ||
-                            it != aSections.end() ) );
+            } while( nBeginBinaryIndex < nEndBinaryIndex &&
+                     ( pFontData[nBeginBinaryIndex] == '\r'  ||
+                       pFontData[nBeginBinaryIndex] == '\n'    ||
+                       it != aSections.end() ) );
 
                     // it seems to be vital to copy the exact whitespace between binary data
                     // and eexec, else a invalid font results. so make nEndAsciiIndex
@@ -12704,8 +12704,8 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
             if( rEle.m_aKids.size() > ncMaxPDFArraySize ) {
                 //then we need to add the containers for the kids elements
                 // a list to be used for the new kid element
-                std::list< PDFStructureElementKid > aNewKids;
-                std::list< sal_Int32 > aNewChildren;
+                std::vector< PDFStructureElementKid > aNewKids;
+                std::vector< sal_Int32 > aNewChildren;
 
                 // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
                 OStringBuffer aNameBuf( "Div" );

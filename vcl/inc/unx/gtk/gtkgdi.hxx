@@ -178,7 +178,7 @@ public:
                                       SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
 
 protected:
-    typedef std::list< Rectangle > clipList;
+    typedef std::vector< Rectangle > clipList;
 
     GdkX11Pixmap* NWGetPixmapFromScreen( Rectangle srcRect, int nBgColor = 0 );
     bool NWRenderPixmapToScreen( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask, Rectangle dstRect );

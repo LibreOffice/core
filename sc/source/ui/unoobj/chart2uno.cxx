@@ -73,7 +73,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::std::unique_ptr;
 using ::std::vector;
-using ::std::list;
+using ::std::vector;
 using ::std::distance;
 using ::std::unary_function;
 using ::boost::shared_ptr;
@@ -127,7 +127,7 @@ private:
     OUStringBuffer & m_rBuffer;
 };
 
-OUString lcl_createTableNumberList( const ::std::list< SCTAB > & rTableList )
+OUString lcl_createTableNumberList( const ::std::vector< SCTAB > & rTableList )
 {
     OUStringBuffer aBuffer;
     ::std::for_each( rTableList.begin(), rTableList.end(), lcl_appendTableNumber( aBuffer ));
@@ -1521,7 +1521,7 @@ ScChart2DataProvider::createDataSource(
         return xResult;
 
     ScChart2DataSource* pDS = NULL;
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > > aSeqs;
+    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqs;
 
     // Fill Categories
     if( bCategories )
@@ -1568,16 +1568,9 @@ ScChart2DataProvider::createDataSource(
     }
 
     pDS = new ScChart2DataSource(m_pDocument);
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aItr( aSeqs.begin() );
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aEndItr( aSeqs.end() );
 
     //reorder labeled sequences according to aSequenceMapping
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVector;
-    while(aItr != aEndItr)
-    {
-        aSeqVector.push_back(*aItr);
-        ++aItr;
-    }
+    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVector(aSeqs);
 
     ::std::map< sal_Int32, Reference< chart2::data::XLabeledDataSequence > > aSequenceMap;
     for( sal_Int32 nNewIndex = 0; nNewIndex < aSequenceMapping.getLength(); nNewIndex++ )
@@ -1591,16 +1584,12 @@ ScChart2DataProvider::createDataSource(
         }
     }
 
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorItr( aSeqVector.begin() );
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorEndItr( aSeqVector.end() );
-    while(aVectorItr != aVectorEndItr)
+    for( Reference< chart2::data::XLabeledDataSequence >& xSeq : aSeqVector )
     {
-        Reference< chart2::data::XLabeledDataSequence > xSeq( *aVectorItr );
         if ( xSeq.is() )
         {
             pDS->AddLabeledSequence( xSeq );
         }
-        ++aVectorItr;
     }
 
     xResult.set( pDS );
@@ -1617,7 +1606,7 @@ class InsertTabNumber : public unary_function<ScTokenRef, void>
 {
 public:
     InsertTabNumber() :
-        mpTabNumList(new list<SCTAB>())
+        mpTabNumList(new vector<SCTAB>())
     {
     }
 
@@ -1635,12 +1624,12 @@ public:
         mpTabNumList->push_back(r.Tab());
     }
 
-    void getList(list<SCTAB>& rList)
+    void getList(vector<SCTAB>& rList)
     {
         mpTabNumList->swap(rList);
     }
 private:
-    shared_ptr< list<SCTAB> > mpTabNumList;
+    shared_ptr< vector<SCTAB> > mpTabNumList;
 };
 
 class RangeAnalyzer
@@ -1910,7 +1899,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
     // TableNumberList
     {
-        list<SCTAB> aTableNumList;
+        vector<SCTAB> aTableNumList;
         InsertTabNumber func;
         func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getList(aTableNumList);
@@ -2571,7 +2560,7 @@ void ScChart2DataSequence::BuildDataCache()
 
     StopListeningToAllExternalRefs();
 
-    ::std::list<sal_Int32> aHiddenValues;
+    ::std::vector<sal_Int32> aHiddenValues;
     sal_Int32 nDataCount = 0;
     sal_Int32 nHiddenValueCount = 0;
 
@@ -2653,10 +2642,7 @@ void ScChart2DataSequence::BuildDataCache()
 
     // convert the hidden cell list to sequence.
     m_aHiddenValues.realloc(nHiddenValueCount);
-    sal_Int32* pArr = m_aHiddenValues.getArray();
-    ::std::list<sal_Int32>::const_iterator itr = aHiddenValues.begin(), itrEnd = aHiddenValues.end();
-    for (;itr != itrEnd; ++itr, ++pArr)
-        *pArr = *itr;
+    std::copy(aHiddenValues.begin(), aHiddenValues.end(), m_aHiddenValues.begin());
 
     // Clear the data series cache when the array is re-built.
     m_aMixedDataCache.realloc(0);
@@ -2809,7 +2795,7 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
         return;
     }
 
-    list<Item> aDataArray(r.m_aDataArray);
+    vector<Item> aDataArray(r.m_aDataArray);
     m_aDataArray.swap(aDataArray);
 
     m_aHiddenValues = r.m_aHiddenValues;
@@ -3024,7 +3010,7 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
         sal_Int32 nCount = m_aDataArray.size();
         m_aMixedDataCache.realloc(nCount);
         uno::Any* pArr = m_aMixedDataCache.getArray();
-        ::std::list<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
+        ::std::vector<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
         for (; itr != itrEnd; ++itr, ++pArr)
         {
             if (itr->mbIsValue)
@@ -3053,7 +3039,7 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
     sal_Int32 nCount = m_aDataArray.size();
     uno::Sequence<double> aSeq(nCount);
     double* pArr = aSeq.getArray();
-    ::std::list<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
+    ::std::vector<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
     for (; itr != itrEnd; ++itr, ++pArr)
         *pArr = itr->mbIsValue ? itr->mfValue : fNAN;
 
@@ -3077,7 +3063,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
     {
         aSeq =  uno::Sequence<OUString>(nCount);
         OUString* pArr = aSeq.getArray();
-        ::std::list<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
+        ::std::vector<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
         for(; itr != itrEnd; ++itr, ++pArr)
             *pArr = itr->maString;
     }

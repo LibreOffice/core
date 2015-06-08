@@ -80,7 +80,7 @@ using namespace com::sun::star::uno;
 #include <sbintern.hxx>
 #include <basic/vbahelper.hxx>
 
-#include <list>
+#include <vector>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -3638,7 +3638,7 @@ RTLFUNC(Shell)
 
         // #55735 if there are parameters, they have to be separated
         // #72471 also separate the single parameters
-        std::list<OUString> aTokenList;
+        std::vector<OUString> aTokenList;
         OUString aToken;
         sal_Int32 i = 0;
         sal_Unicode c;
@@ -3720,7 +3720,7 @@ RTLFUNC(Shell)
         }
 
         // #72471 work parameter(s) up
-        std::list<OUString>::const_iterator iter = aTokenList.begin();
+        std::vector<OUString>::const_iterator iter = aTokenList.begin();
         const OUString& rStr = *iter;
         OUString aOUStrProg( rStr.getStr(), rStr.getLength() );
         OUString aOUStrProgURL = getFullPath( aOUStrProg );

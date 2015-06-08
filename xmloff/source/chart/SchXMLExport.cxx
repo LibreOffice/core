@@ -47,7 +47,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/extract.hxx>
 
-#include <list>
+#include <vector>
 #include <typeinfo>
 #include <algorithm>
 
@@ -3291,7 +3291,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     if( xDiagram.is())
         xColorScheme.set( xDiagram->getDefaultColorScheme());
 
-    ::std::list< SchXMLDataPointStruct > aDataPointList;
+    ::std::vector< SchXMLDataPointStruct > aDataPointList;
 
     sal_Int32 nLastIndex = -1;
     sal_Int32 nCurrIndex = 0;
@@ -3440,7 +3440,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         return;
 
     // write elements (merge equal ones)
-    ::std::list< SchXMLDataPointStruct >::iterator aIter = aDataPointList.begin();
+    ::std::vector< SchXMLDataPointStruct >::iterator aIter = aDataPointList.begin();
     SchXMLDataPointStruct aPoint;
     SchXMLDataPointStruct aLastPoint;
 

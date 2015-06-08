@@ -25,7 +25,7 @@
 #include "address.hxx"
 
 #include <map>
-#include <list>
+#include <vector>
 
 class ScRange;
 class ScRangeList;
@@ -47,14 +47,14 @@ public:
         SCROW mnRow2;
         explicit Range(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     };
-    typedef ::boost::shared_ptr< ::std::list<Range> > RangeListRef;
+    typedef ::boost::shared_ptr< ::std::vector<Range> > RangeListRef;
     typedef ::std::map<SCTAB, RangeListRef> TabType;
 
     ScSimpleRangeList();
 
     void addRange(const ScRange& rRange);
     void insertCol(SCCOL nCol, SCTAB nTab);
-    void getRangeList(::std::list<ScRange>& rList) const;
+    void getRangeList(::std::vector<ScRange>& rList) const;
     void clear();
 
 private:

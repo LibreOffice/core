@@ -21,7 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <list>
+#include <vector>
 #include <map>
 #include <memory>
 #include <set>
@@ -760,7 +760,7 @@ void handleEnumType(
         std::unique_ptr< ClassFile::Code > defCode(cf->newCode());
         defCode->instrAconstNull();
         defCode->instrAreturn();
-        std::list< ClassFile::Code * > blocks;
+        std::vector< ClassFile::Code * > blocks;
             //FIXME: pointers contained in blocks may leak
         sal_Int32 last = SAL_MAX_INT32;
         for (std::map< sal_Int32, OString >::iterator i(map.begin());
@@ -780,7 +780,7 @@ void handleEnumType(
             blockCode.release();
         }
         code->instrTableswitch(defCode.get(), min, blocks);
-        for (std::list< ClassFile::Code * >::iterator i(blocks.begin());
+        for (std::vector< ClassFile::Code * >::iterator i(blocks.begin());
               i != blocks.end(); ++i)
         {
             delete *i;
@@ -789,7 +789,7 @@ void handleEnumType(
         std::unique_ptr< ClassFile::Code > defCode(cf->newCode());
         defCode->instrAconstNull();
         defCode->instrAreturn();
-        std::list< std::pair< sal_Int32, ClassFile::Code * > > blocks;
+        std::vector< std::pair< sal_Int32, ClassFile::Code * > > blocks;
             //FIXME: pointers contained in blocks may leak
         for (std::map< sal_Int32, OString >::iterator i(map.begin());
              i != map.end(); ++i)
@@ -801,7 +801,7 @@ void handleEnumType(
             blockCode.release();
         }
         code->instrLookupswitch(defCode.get(), blocks);
-        for (std::list< std::pair< sal_Int32, ClassFile::Code * > >::iterator
+        for (std::vector< std::pair< sal_Int32, ClassFile::Code * > >::iterator
                  i(blocks.begin());
              i != blocks.end(); ++i)
         {

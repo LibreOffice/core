@@ -59,9 +59,9 @@
 #include "colrowst.hxx"
 #include <svl/poolcach.hxx>
 
-#include <list>
+#include <vector>
 
-using ::std::list;
+using ::std::vector;
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -1325,7 +1325,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 }
 
 void XclImpXF::ApplyPatternToAttrList(
-    list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2, sal_uInt32 nForceScNumFmt)
+    vector<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2, sal_uInt32 nForceScNumFmt)
 {
     // force creation of cell style and hard formatting, do it here to have mpStyleSheet
     CreatePattern();
@@ -2000,7 +2000,7 @@ void XclImpXFRangeBuffer::Finalize()
         {
             XclImpXFRangeColumn& rColumn = **aVIt;
             SCCOL nScCol = static_cast< SCCOL >( aVIt - aVBeg );
-            list<ScAttrEntry> aAttrs;
+            vector<ScAttrEntry> aAttrs;
 
             for (XclImpXFRangeColumn::IndexList::iterator itr = rColumn.begin(), itrEnd = rColumn.end();
                  itr != itrEnd; ++itr)
@@ -2030,8 +2030,8 @@ void XclImpXFRangeBuffer::Finalize()
             assert(aAttrParam.mnSize > 0);
             aAttrParam.mpData = new ScAttrEntry[aAttrParam.mnSize];
             aAttrParam.mbLatinNumFmtOnly = false; // when unsure, set it to false.
-            list<ScAttrEntry>::const_iterator itr = aAttrs.begin(), itrEnd = aAttrs.end();
-            for (size_t i = 0; itr != itrEnd; ++itr, ++i)
+            vector<ScAttrEntry>::const_iterator itr = aAttrs.begin();
+            for (size_t i = 0; itr != aAttrs.end(); ++itr, ++i)
                 aAttrParam.mpData[i] = *itr;
 
             rDoc.setAttrEntries(nScTab, nScCol, aAttrParam);

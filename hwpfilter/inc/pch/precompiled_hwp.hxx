@@ -22,7 +22,7 @@
 #include <errno.h>
 #include <iostream>
 #include <istream>
-#include <list>
+#include <vector>
 #include <locale.h>
 #include <math.h>
 #include <memory>

@@ -80,7 +80,7 @@ using namespace ::comphelper;
 #define LAST_USER_DEFINED_FEATURE   ( ::std::numeric_limits< sal_uInt16 >::max()        )
 
 typedef std::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
-typedef ::std::list< DispatchInformation > DispatchInfoList;
+typedef ::std::vector< DispatchInformation > DispatchInfoList;
 
 namespace dbaui
 {

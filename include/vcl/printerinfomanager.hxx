@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_PRINTERINFOMANAGER_HXX
 
 #include <list>
+#include <vector>
 #include <unordered_map>
 
 #include <vcl/dllapi.h>
@@ -83,14 +84,14 @@ protected:
     {
         // configuration file containing this printer
         // empty means a freshly added printer that has to be saved yet
-        OUString         m_aFile;
+        OUString                m_aFile;
         // details other config files that have this printer
         // in case of removal all have to be removed
-        std::list< OUString > m_aAlternateFiles;
+        std::list< OUString >   m_aAlternateFiles;
         // group in m_aFile containing the printer
         // this must be unique over all configuration files
         // it usually should be the printer name
-        OString          m_aGroup;
+        OString                 m_aGroup;
         // whether changes need to be saved
         bool                    m_bModified;
         // the corresponding info and job data
@@ -99,11 +100,11 @@ protected:
 
     std::unordered_map< OUString, Printer, OUStringHash > m_aPrinters;
     PrinterInfo                         m_aGlobalDefaults;
-    std::list< WatchFile >            m_aWatchFiles;
+    std::vector< WatchFile >            m_aWatchFiles;
     OUString                     m_aDefaultPrinter;
     OUString                     m_aSystemPrintCommand;
 
-    std::list< SystemPrintQueue >     m_aSystemPrintQueues;
+    std::vector< SystemPrintQueue >     m_aSystemPrintQueues;
 
     SystemQueueInfo*                  m_pQueueInfo;
 
@@ -133,7 +134,7 @@ public:
     Type getType() const { return m_eType; }
 
     // lists the names of all known printers
-    void listPrinters( std::list< OUString >& rList ) const;
+    void listPrinters( std::vector< OUString >& rList ) const;
 
     // gets the number of known printers
     int countPrinters() const { return m_aPrinters.size(); }
@@ -178,7 +179,7 @@ public:
 
     // primarily used internally
     // returns the printer queue names
-    const std::list< SystemPrintQueue >& getSystemPrintQueues();
+    const std::vector< SystemPrintQueue >& getSystemPrintQueues();
 
     // abstract print command
     // returns a stdio FILE* that a postscript file may be written to

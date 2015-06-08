@@ -457,9 +457,9 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
                                 anchor, jarfileB, titleB);
                     std::string totalId = fakedHid + "#" + anchor;
                     // std::cerr << hzipFileName << std::endl;
-                    const LinkedList& ll = enumer->second;
-                    LinkedList::const_iterator aOtherEnd = ll.end();
-                    for (LinkedList::const_iterator llIter = ll.begin();
+                    const StringVector& ll = enumer->second;
+                    StringVector::const_iterator aOtherEnd = ll.end();
+                    for (StringVector::const_iterator llIter = ll.begin();
                         llIter != aOtherEnd; ++llIter)
                     {
                             helpKeyword.insert(*llIter, totalId);

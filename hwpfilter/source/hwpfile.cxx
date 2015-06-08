@@ -62,19 +62,19 @@ HWPFile::~HWPFile()
     delete oledata;
     delete hiodev;
 
-    std::list < ColumnInfo* >::iterator it_column = columnlist.begin();
+    std::vector < ColumnInfo* >::iterator it_column = columnlist.begin();
     for (; it_column != columnlist.end(); ++it_column)
         delete *it_column;
 
-    std::list < HWPPara* >::iterator it = plist.begin();
+    std::vector < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
         delete *it;
 
-    std::list < Table* >::iterator tbl = tables.begin();
+    std::vector < Table* >::iterator tbl = tables.begin();
     for (; tbl != tables.end(); ++tbl)
         delete *tbl;
 
-    std::list < HyperText* >::iterator hyp = hyperlist.begin();
+    std::vector < HyperText* >::iterator hyp = hyperlist.begin();
     for (; hyp != hyperlist.end(); ++hyp)
     {
         delete *hyp;
@@ -241,7 +241,7 @@ bool HWPFile::ParaListRead()
     return ReadParaList(plist);
 }
 
-bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
+bool HWPFile::ReadParaList(std::vector < HWPPara* > &aplist, unsigned char flag)
 {
     HWPPara *spNode = new HWPPara;
      unsigned char tmp_etcflag;
@@ -378,7 +378,7 @@ void HWPFile::TagsRead()
 
 ColumnDef *HWPFile::GetColumnDef(int num)
 {
-    std::list<ColumnInfo*>::iterator it = columnlist.begin();
+    std::vector<ColumnInfo*>::iterator it = columnlist.begin();
 
     for(int i = 0; it != columnlist.end() ; ++it, i++){
         if( i == num )
@@ -393,7 +393,7 @@ ColumnDef *HWPFile::GetColumnDef(int num)
 /* @return 인덱스는 1부터 시작한다. */
 int HWPFile::GetPageMasterNum(int page)
 {
-    std::list<ColumnInfo*>::iterator it = columnlist.begin();
+    std::vector<ColumnInfo*>::iterator it = columnlist.begin();
     int i;
 
     for( i = 1 ; it != columnlist.end() ; ++it, i++){
@@ -406,7 +406,7 @@ int HWPFile::GetPageMasterNum(int page)
 
 HyperText *HWPFile::GetHyperText()
 {
-    std::list<HyperText*>::iterator it = hyperlist.begin();
+    std::vector<HyperText*>::iterator it = hyperlist.begin();
 
     for( int i = 0; it != hyperlist.end(); ++it, i++ ){
 	if( i == currenthyper )
@@ -425,7 +425,7 @@ EmPicture *HWPFile::GetEmPicture(Picture * pic)
     name[1] = 'W';
     name[2] = 'P';
 
-    std::list < EmPicture* >::iterator it = emblist.begin();
+    std::vector < EmPicture* >::iterator it = emblist.begin();
     for (; it != emblist.end(); ++it)
         if (strcmp(name, (*it)->name) == 0)
             return *it;
@@ -438,7 +438,7 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
     name[1] = 'W';
     name[2] = 'P';
 
-    std::list < EmPicture* >::iterator it = emblist.begin();
+    std::vector < EmPicture* >::iterator it = emblist.begin();
     for (; it != emblist.end(); ++it)
         if (strcmp(name, (*it)->name) == 0)
             return *it;
@@ -463,7 +463,7 @@ void HWPFile::AddBox(FBox * box)
 
 ParaShape *HWPFile::getParaShape(int index)
 {
-    std::list<ParaShape*>::iterator it = pslist.begin();
+    std::vector<ParaShape*>::iterator it = pslist.begin();
 
     for( int i = 0; it != pslist.end(); ++it, i++ ){
 	if( i == index )
@@ -476,7 +476,7 @@ ParaShape *HWPFile::getParaShape(int index)
 
 CharShape *HWPFile::getCharShape(int index)
 {
-    std::list<CharShape*>::iterator it = cslist.begin();
+    std::vector<CharShape*>::iterator it = cslist.begin();
 
     for( int i = 0; it != cslist.end(); ++it, i++ ){
 	if( i == index )
@@ -489,7 +489,7 @@ CharShape *HWPFile::getCharShape(int index)
 
 FBoxStyle *HWPFile::getFBoxStyle(int index)
 {
-    std::list<FBoxStyle*>::iterator it = fbslist.begin();
+    std::vector<FBoxStyle*>::iterator it = fbslist.begin();
 
     for( int i = 0; it != fbslist.end(); ++it, i++ ){
 	if( i == index )
@@ -501,7 +501,7 @@ FBoxStyle *HWPFile::getFBoxStyle(int index)
 
 DateCode *HWPFile::getDateCode(int index)
 {
-    std::list<DateCode*>::iterator it = datecodes.begin();
+    std::vector<DateCode*>::iterator it = datecodes.begin();
 
     for( int i = 0; it != datecodes.end(); ++it, i++ ){
 	if( i == index )
@@ -513,7 +513,7 @@ DateCode *HWPFile::getDateCode(int index)
 
 HeaderFooter *HWPFile::getHeaderFooter(int index)
 {
-    std::list<HeaderFooter*>::iterator it = headerfooters.begin();
+    std::vector<HeaderFooter*>::iterator it = headerfooters.begin();
 
     for( int i = 0; it != headerfooters.end(); ++it, i++ ){
 	if( i == index )
@@ -525,7 +525,7 @@ HeaderFooter *HWPFile::getHeaderFooter(int index)
 
 ShowPageNum *HWPFile::getPageNumber(int index)
 {
-    std::list<ShowPageNum*>::iterator it = pagenumbers.begin();
+    std::vector<ShowPageNum*>::iterator it = pagenumbers.begin();
 
     for( int i = 0; it != pagenumbers.end(); ++it, i++ ){
 	if( i == index )
@@ -538,7 +538,7 @@ ShowPageNum *HWPFile::getPageNumber(int index)
 
 Table *HWPFile::getTable(int index)
 {
-    std::list<Table*>::iterator it = tables.begin();
+    std::vector<Table*>::iterator it = tables.begin();
 
     for( int i = 0; it != tables.end(); ++it, i++ ){
 	if( i == index )

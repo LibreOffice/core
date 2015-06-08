@@ -74,7 +74,7 @@ void PluginControl_Impl::addEventListener( const Reference< ::com::sun::star::la
 void PluginControl_Impl::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l )
     throw( RuntimeException, std::exception )
 {
-    _aDisposeListeners.remove( l );
+    _aDisposeListeners.erase( std::remove(_aDisposeListeners.begin(), _aDisposeListeners.end(), l), _aDisposeListeners.end() );
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------

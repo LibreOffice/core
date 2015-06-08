@@ -83,7 +83,7 @@ class SvMetaClass : public SvMetaType
                                      SvMetaAttribute & rAttr ) const;
     static void             WriteSlotStubs( const OString& rShellName,
                                         SvSlotElementList & rSlotList,
-                                        ByteStringList & rList,
+                                        ByteStringVector & rList,
                                         SvStream & rOutStm );
     static sal_uInt16       WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvSlotElementList & rSlotList,

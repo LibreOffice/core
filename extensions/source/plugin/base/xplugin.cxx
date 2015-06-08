@@ -153,11 +153,11 @@ void XPlugin_Impl::destroyInstance()
 
     freeArgs();
 
-    while( m_aPEventListeners.size() )
+    for( auto p : m_aPEventListeners )
     {
-        delete *m_aPEventListeners.begin();
-        m_aPEventListeners.pop_front();
+        delete p;
     }
+    m_aPEventListeners.clear();
 }
 
 XPlugin_Impl::~XPlugin_Impl()
@@ -172,7 +172,7 @@ void XPlugin_Impl::checkListeners( const char* normalizedURL )
 
     Guard< Mutex > aGuard( m_aMutex );
 
-    std::list<PluginEventListener*>::iterator iter;
+    std::vector<PluginEventListener*>::iterator iter;
     for( iter = m_aPEventListeners.begin();
          iter != m_aPEventListeners.end();
          ++iter )
@@ -182,7 +182,7 @@ void XPlugin_Impl::checkListeners( const char* normalizedURL )
         {
             (*iter)->disposing( com::sun::star::lang::EventObject() );
             delete *iter;
-            m_aPEventListeners.remove( *iter );
+            m_aPEventListeners.erase( std::remove(m_aPEventListeners.begin(), m_aPEventListeners.end(), *iter), m_aPEventListeners.end() );
             return;
         }
     }
@@ -194,8 +194,8 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
 
     // may have become undisposable between PostUserEvent and here
     // or may have disposed and receive a second UserEvent
-    std::list<XPlugin_Impl*>& rList = ::PluginManager::get().getPlugins();
-    std::list<XPlugin_Impl*>::iterator iter;
+    std::vector<XPlugin_Impl*>& rList = ::PluginManager::get().getPlugins();
+    std::vector<XPlugin_Impl*>::iterator iter;
 
     {
         Guard< Mutex > aPluginGuard( ::PluginManager::get().getPluginMutex() );
@@ -219,7 +219,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
     xPS->removePropertyChangeListener( OUString(), this );
     {
         Guard< Mutex > aPluginGuard( ::PluginManager::get().getPluginMutex() );
-        rList.remove( this );
+        rList.erase( std::remove(rList.begin(), rList.end(), this), rList.end() );
     }
     m_aNPWindow.window = NULL;
 #ifndef UNX
@@ -506,7 +506,7 @@ void XPlugin_Impl::loadPlugin()
 {
     Guard< Mutex > aGuard( m_aMutex );
 
-    std::list<PluginComm*>::iterator iter;
+    std::vector<PluginComm*>::iterator iter;
     for( iter = ::PluginManager::get().getPluginComms().begin();
          iter != ::PluginManager::get().getPluginComms().end(); ++iter )
     {
@@ -625,8 +625,8 @@ void XPlugin_Impl::destroyStreams()
         delete *m_aOutputStreams.begin();
 
     // input streams are XOutputStreams, they cannot be simply deleted
-    std::list<PluginInputStream*> aLocalList( m_aInputStreams );
-    for( std::list<PluginInputStream*>::iterator it = aLocalList.begin();
+    std::vector<PluginInputStream*> aLocalList( m_aInputStreams );
+    for( std::vector<PluginInputStream*>::iterator it = aLocalList.begin();
          it != aLocalList.end(); ++it )
         (*it)->setMode( -1 );
 }
@@ -635,12 +635,12 @@ PluginStream* XPlugin_Impl::getStreamFromNPStream( NPStream* stream )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
-    std::list<PluginInputStream*>::iterator iter;
+    std::vector<PluginInputStream*>::iterator iter;
     for( iter = m_aInputStreams.begin(); iter != m_aInputStreams.end(); ++iter )
         if( &(*iter)->getStream() == stream )
             return *iter;
 
-    std::list<PluginOutputStream*>::iterator iter2;
+    std::vector<PluginOutputStream*>::iterator iter2;
     for( iter2 = m_aOutputStreams.begin(); iter2 != m_aOutputStreams.end(); ++iter2 )
         if( &(*iter2)->getStream() == stream )
             return *iter2;
@@ -689,7 +689,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     // check whether there is a notifylistener for this stream
     // this means that the strema is created from the plugin
     // via NPN_GetURLNotify or NPN_PostURLNotify
-    std::list<PluginEventListener*>::iterator iter;
+    std::vector<PluginEventListener*>::iterator iter;
     for( iter = m_aPEventListeners.begin();
          iter != m_aPEventListeners.end();
          ++iter )
@@ -1010,7 +1010,8 @@ PluginInputStream::~PluginInputStream()
     {
         Guard< Mutex > aGuard( pPlugin->getMutex() );
 
-        pPlugin->getInputStreams().remove( this );
+        auto v = pPlugin->getInputStreams();
+        v.erase( std::remove(v.begin(), v.end(), this), v.end() );
 
         if( m_pPlugin )
         {
@@ -1028,7 +1029,8 @@ PluginInputStream::~PluginInputStream()
                                           aFileName.getStr() );
                 }
                 m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
-                m_pPlugin->getInputStreams().remove( this );
+                auto v2 = m_pPlugin->getInputStreams();
+                v2.erase( std::remove(v2.begin(), v2.end(), this), v2.end() );
             }
             else
                 osl::File::remove( aFile );
@@ -1083,7 +1085,8 @@ void PluginInputStream::setMode( sal_Int32 nMode )
     // invalidation by plugin
     if (m_nMode == -1)
     {
-        m_pPlugin->getInputStreams().remove( this );
+        auto v = m_pPlugin->getInputStreams();
+        v.erase( std::remove(v.begin(), v.end(), this), v.end() );
         m_pPlugin = NULL;
         m_wPlugin.clear();
     }
@@ -1191,7 +1194,8 @@ PluginOutputStream::~PluginOutputStream()
 {
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
-    m_pPlugin->getOutputStreams().remove( this );
+    auto v = m_pPlugin->getOutputStreams();
+    v.erase( std::remove(v.begin(), v.end(), this), v.end() );
 }
 
 PluginStreamType PluginOutputStream::getStreamType()

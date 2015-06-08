@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_GLOBAL_HXX
 #define INCLUDED_CODEMAKER_GLOBAL_HXX
 
-#include <list>
+#include <vector>
 #include <vector>
 #include <set>
 
@@ -38,7 +38,7 @@ struct LessString
     }
 };
 
-typedef ::std::list< ::rtl::OString >               StringList;
+typedef ::std::vector< ::rtl::OString >               StringList;
 typedef ::std::vector< ::rtl::OString >             StringVector;
 typedef ::std::set< ::rtl::OString, LessString >    StringSet;
 

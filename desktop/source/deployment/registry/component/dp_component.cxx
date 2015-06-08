@@ -1221,15 +1221,14 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
         rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
     std::vector< css::uno::Reference< css::uno::XInterface > >::const_iterator
         factory(factories.begin());
-    for (t_stringlist::const_iterator i(data.implementationNames.begin());
-         i != data.implementationNames.end(); ++i)
+    for (auto const i : data.implementationNames)
     {
         try {
             set->insert(css::uno::Any(*factory++));
         } catch (const container::ElementExistException &) {
             OSL_TRACE(
                 "implementation %s already registered",
-                OUStringToOString(*i, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(i, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
     if (!data.singletons.empty()) {
@@ -1268,11 +1267,10 @@ void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
         getMyBackend()->getRootContext());
     css::uno::Reference< css::container::XSet > set(
         rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    for (t_stringlist::const_iterator i(data.implementationNames.begin());
-         i != data.implementationNames.end(); ++i)
+    for (auto i : data.implementationNames)
     {
         try {
-            set->remove(css::uno::Any(*i));
+            set->remove(css::uno::Any(i));
         } catch (const css::container::NoSuchElementException &) {
             // ignore if factory has not been live deployed
         }

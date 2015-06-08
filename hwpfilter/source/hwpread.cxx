@@ -21,7 +21,7 @@
 
 #include <comphelper/newarray.hxx>
 
-#include <list>
+#include <vector>
 
 #include "hwpfile.h"
 #include "hbox.h"
@@ -297,7 +297,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     }
     if (ncell == 1)
         style.cell = &cell[0];
-    plists = ::comphelper::newArray_null< std::list< HWPPara* > >(ncell);
+    plists = ::comphelper::newArray_null< std::vector< HWPPara* > >(ncell);
     if (!plists) {
         return hwpf.SetState(HWP_InvalidFileFormat);
     }

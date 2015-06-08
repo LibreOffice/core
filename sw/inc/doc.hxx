@@ -1664,7 +1664,7 @@ public:
     void dumpAsXml(struct _xmlTextWriter* = 0) const;
 
     std::set<Color> GetDocColors();
-    std::list< std::weak_ptr<SwUnoCrsr> > mvUnoCrsrTbl;
+    std::vector< std::weak_ptr<SwUnoCrsr> > mvUnoCrsrTbl;
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().

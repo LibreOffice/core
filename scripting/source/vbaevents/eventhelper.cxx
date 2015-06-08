@@ -73,7 +73,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 
 #define ASYNC 0
@@ -189,7 +189,7 @@ struct TranslateInfo
 
 
 typedef std::unordered_map< OUString,
-std::list< TranslateInfo >,
+std::vector< TranslateInfo >,
 OUStringHash,
 ::std::equal_to< OUString > > EventInfoHash;
 
@@ -286,7 +286,7 @@ EventInfoHash& getEventTransInfo()
         while (i < nCount)
         {
             sEventInfo = pTransProp->sEventInfo;
-            std::list< TranslateInfo > infoList;
+            std::vector< TranslateInfo > infoList;
             do
             {
                 infoList.push_back( pTransProp->aTransInfo );
@@ -391,7 +391,7 @@ ScriptEventHelper::~ScriptEventHelper()
 Sequence< OUString >
 ScriptEventHelper::getEventListeners()
 {
-    std::list< OUString > eventMethods;
+    std::vector< OUString > eventMethods;
 
     Reference< beans::XIntrospection > xIntrospection = beans::theIntrospection::get( m_xCtx );
 
@@ -417,7 +417,7 @@ ScriptEventHelper::getEventListeners()
     }
 
     Sequence< OUString > sEventMethodNames( eventMethods.size() );
-    std::list< OUString >::const_iterator it = eventMethods.begin();
+    std::vector< OUString >::const_iterator it = eventMethods.begin();
     OUString* pDest = sEventMethodNames.getArray();
 
     for ( ; it != eventMethods.end(); ++it, ++pDest )
@@ -938,9 +938,9 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     }
     if ( xScriptProvider.is() && mpShell )
     {
-        std::list< TranslateInfo >::const_iterator txInfo =
+        std::vector< TranslateInfo >::const_iterator txInfo =
             eventInfo_it->second.begin();
-        std::list< TranslateInfo >::const_iterator txInfo_end = eventInfo_it->second.end();
+        std::vector< TranslateInfo >::const_iterator txInfo_end = eventInfo_it->second.end();
 
         BasicManager* pBasicManager = mpShell->GetBasicManager();
         OUString sProject;

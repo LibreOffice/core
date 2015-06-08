@@ -53,7 +53,7 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <list>
+#include <vector>
 #include <xmloff/xmltypes.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -753,7 +753,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
         Reference< XTransitionFilter > xTransitionFilter( mxNode, UNO_QUERY );
         Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
 
-        std::list< NamedValue > aUserData;
+        std::vector< NamedValue > aUserData;
         XMLTokenEnum meAttributeName = XML_TOKEN_INVALID;
         OUString aFrom, aBy, aTo, aValues;
         bool bHaveXmlId( false );
@@ -1215,12 +1215,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
         if( nUserDataCount )
         {
             Sequence< NamedValue > aUnoUserData( nUserDataCount );
-            NamedValue* pData = aUnoUserData.getArray();
-            std::list< NamedValue >::iterator aIter( aUserData.begin() );
-            const std::list< NamedValue >::iterator aEnd( aUserData.end() );
-            while( aIter != aEnd )
-                *pData++ = (*aIter++);
-
+            std::copy(aUserData.begin(), aUserData.end(), aUnoUserData.begin());
             mxNode->setUserData( aUnoUserData );
         }
 

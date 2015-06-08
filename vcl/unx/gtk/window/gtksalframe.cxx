@@ -858,7 +858,7 @@ GtkSalFrame::~GtkSalFrame()
     }
 
     if( m_pParent )
-        m_pParent->m_aChildren.remove( this );
+        m_pParent->m_aChildren.erase( std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end() );
 
     getDisplay()->deregisterFrame( this );
 
@@ -2396,8 +2396,8 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     // FIXME: we should really let gtk+ handle our widget hierarchy ...
     if( m_pParent && gtk_widget_get_screen( m_pParent->m_pWindow ) != pScreen )
         SetParent( NULL );
-    std::list< GtkSalFrame* > aChildren = m_aChildren;
-    for( std::list< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
+    std::vector< GtkSalFrame* > aChildren = m_aChildren;
+    for( std::vector< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
         (*it)->SetScreen( nNewScreen, SET_RETAIN_SIZE );
 
     m_bDefaultPos = m_bDefaultSize = false;
@@ -2449,7 +2449,7 @@ void GtkSalFrame::SetApplicationID( const OUString &rWMClass )
         m_sWMClass = rWMClass;
         updateWMClass();
 
-        for( std::list< GtkSalFrame* >::iterator it = m_aChildren.begin(); it != m_aChildren.end(); ++it )
+        for( std::vector< GtkSalFrame* >::iterator it = m_aChildren.begin(); it != m_aChildren.end(); ++it )
             (*it)->SetApplicationID(rWMClass);
     }
 }
@@ -2985,7 +2985,8 @@ const SystemEnvData* GtkSalFrame::GetSystemData() const
 void GtkSalFrame::SetParent( SalFrame* pNewParent )
 {
     if( m_pParent )
-        m_pParent->m_aChildren.remove( this );
+        m_pParent->m_aChildren.erase( std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end() );
+
     m_pParent = static_cast<GtkSalFrame*>(pNewParent);
     if( m_pParent )
         m_pParent->m_aChildren.push_back( this );
@@ -3089,9 +3090,9 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     if( bWasVisible )
         Show( true );
 
-    std::list< GtkSalFrame* > aChildren = m_aChildren;
+    std::vector< GtkSalFrame* > aChildren = m_aChildren;
     m_aChildren.clear();
-    for( std::list< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
+    for( std::vector< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
         (*it)->createNewWindow( None, false, m_nXScreen );
 
     // FIXME: SalObjects

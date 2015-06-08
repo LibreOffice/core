@@ -486,8 +486,8 @@ void SheetDataBuffer::finalizeImport()
         aAttrParam.mnSize = aAttrs.maAttrs.size();
         aAttrParam.mpData = new ScAttrEntry[aAttrParam.mnSize];
         aAttrParam.mbLatinNumFmtOnly = aAttrs.mbLatinNumFmtOnly;
-        std::list<ScAttrEntry>::const_iterator itr = aAttrs.maAttrs.begin(), itrEnd = aAttrs.maAttrs.end();
-        for (size_t i = 0; itr != itrEnd; ++itr, ++i)
+        std::vector<ScAttrEntry>::const_iterator itr = aAttrs.maAttrs.begin();
+        for (size_t i = 0; itr != aAttrs.maAttrs.end(); ++itr, ++i)
             aAttrParam.mpData[i] = *itr;
 
         rDoc.setAttrEntries(getSheetIndex(), nScCol, aAttrParam);

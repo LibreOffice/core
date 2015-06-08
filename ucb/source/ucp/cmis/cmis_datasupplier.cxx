@@ -36,10 +36,10 @@ namespace cmis
         if ( mbCountFinal )
             return true;
 
-        list< uno::Reference< ucb::XContent > > aChildren = m_pChildrenProvider->getChildren( );
+        vector< uno::Reference< ucb::XContent > > aChildren = m_pChildrenProvider->getChildren( );
 
         // Loop over the results and filter them
-        for ( list< uno::Reference< ucb::XContent > >::iterator it = aChildren.begin();
+        for ( vector< uno::Reference< ucb::XContent > >::iterator it = aChildren.begin();
                 it != aChildren.end(); ++it )
         {
             OUString sContentType = ( *it )->getContentType( );

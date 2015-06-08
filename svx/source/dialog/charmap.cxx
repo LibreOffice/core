@@ -1575,7 +1575,7 @@ void SubsetMap::InitList()
 #endif
         }
 
-        aAllSubsets.sort();
+        std::sort(aAllSubsets.begin(), aAllSubsets.end());
     }
 
     maSubsets = aAllSubsets;

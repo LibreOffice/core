@@ -28,7 +28,7 @@
 
 using namespace com::sun::star;
 using ::std::vector;
-using ::std::list;
+using ::std::vector;
 using ::std::unary_function;
 using ::std::for_each;
 
@@ -687,7 +687,7 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
         StartTimer();
 
     // New hidden range listener implementation
-    for (list<RangeListenerItem>::iterator itr = maHiddenListeners.begin(), itrEnd = maHiddenListeners.end();
+    for (vector<RangeListenerItem>::iterator itr = maHiddenListeners.begin(), itrEnd = maHiddenListeners.end();
           itr != itrEnd; ++itr)
     {
         if (itr->maRange.Intersects(rRange))
@@ -760,7 +760,7 @@ private:
 }
 void ScChartListenerCollection::EndListeningHiddenRange( ScChartHiddenRangeListener* pListener )
 {
-    maHiddenListeners.remove_if(MatchListener(pListener));
+    maHiddenListeners.erase( std::remove_if(maHiddenListeners.begin(), maHiddenListeners.end(), MatchListener(pListener)), maHiddenListeners.end() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

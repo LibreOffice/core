@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-#include <list>
+#include <vector>
 #include <map>
 
 #include <premac.h>
@@ -157,7 +157,7 @@ private:
     bool m_bIsFilterControlNeeded;
 
     /** a list with all actively used controls */
-    ::std::list<NSControl*> m_aActiveControls;
+    ::std::vector<NSControl*> m_aActiveControls;
 
     /** the filter helper */
     FilterHelper *m_pFilterHelper;

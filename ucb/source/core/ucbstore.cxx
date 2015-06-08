@@ -24,7 +24,7 @@
 
   *************************************************************************/
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -2010,7 +2010,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
     {
         const PropertyValue* pNewValues = aProps.getConstArray();
 
-        typedef std::list< PropertyChangeEvent > Events;
+        typedef std::vector< PropertyChangeEvent > Events;
         Events aEvents;
 
         OUString aFullPropNamePrefix( getFullKey() );

@@ -216,8 +216,8 @@ struct ReSubstUserVarOrder
     }
 };
 
-typedef std::list< ReSubstFixedVarOrder > ReSubstFixedVarOrderVector;
-typedef std::list< ReSubstUserVarOrder > ReSubstUserVarOrderVector;
+typedef std::vector< ReSubstFixedVarOrder > ReSubstFixedVarOrderVector;
+typedef std::vector< ReSubstUserVarOrder > ReSubstUserVarOrderVector;
 typedef ::cppu::WeakComponentImplHelper2<
     css::util::XStringSubstitution,
     css::lang::XServiceInfo > SubstitutePathVariables_BASE;
@@ -748,7 +748,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
             m_aReSubstFixedVarOrder.push_back( aFixedVar );
         }
     }
-    m_aReSubstFixedVarOrder.sort();
+    std::sort(m_aReSubstFixedVarOrder.begin(), m_aReSubstFixedVarOrder.end());
 
     // Sort user variables to path length
     SubstituteVariables::const_iterator pIter;
@@ -759,7 +759,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
         aUserOrderVar.nVarValueLength = pIter->second.aSubstVariable.getLength();
         m_aReSubstUserVarOrder.push_back( aUserOrderVar );
     }
-    m_aReSubstUserVarOrder.sort();
+    std::sort(m_aReSubstUserVarOrder.begin(), m_aReSubstUserVarOrder.end());
 }
 
 SubstitutePathVariables::~SubstitutePathVariables()

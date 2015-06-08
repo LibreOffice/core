@@ -624,7 +624,7 @@ void SchXMLPlotAreaContext::EndElement()
 }
 
 SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
-                                                 ::std::list< DataRowPointStyle >& rStyleList,
+                                                 ::std::vector< DataRowPointStyle >& rStyleList,
                                                  const ::com::sun::star::uno::Reference<
                                                     ::com::sun::star::chart2::XDataSeries >& xSeries,
                                                  sal_Int32& rIndex,
@@ -984,7 +984,7 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const OUString &rSeriesStyleName,
-    ::std::list< DataRowPointStyle >& rStyleList,
+    ::std::vector< DataRowPointStyle >& rStyleList,
     const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
     ContextType eContextType,

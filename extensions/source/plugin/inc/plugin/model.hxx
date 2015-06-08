@@ -42,7 +42,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <rtl/alloc.h>
 
-#include <list>
+#include <vector>
 
 using namespace com::sun::star::uno;
 
@@ -71,7 +71,7 @@ class PluginModel : public BroadcasterHelperHolder,
     OUString m_aCreationURL;
     OUString m_aMimeType;
 
-    std::list< Reference< com::sun::star::lang::XEventListener > >
+    std::vector< Reference< com::sun::star::lang::XEventListener > >
         m_aDisposeListeners;
   public:
     // these are here to force memory de/allocation to sal lib.

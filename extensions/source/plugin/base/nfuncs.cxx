@@ -39,7 +39,7 @@
 #endif
 
 #include <cstdarg>
-#include <list>
+#include <vector>
 
 #include <plugin/impl.hxx>
 #include <vcl/svapp.hxx>
@@ -406,8 +406,8 @@ extern "C" {
         if( ! rangeList )
             return NPERR_NO_ERROR;
 
-        ::std::list<XPlugin_Impl*>& rList = PluginManager::get().getPlugins();
-        ::std::list<XPlugin_Impl*>::iterator iter;
+        ::std::vector<XPlugin_Impl*>& rList = PluginManager::get().getPlugins();
+        ::std::vector<XPlugin_Impl*>::iterator iter;
         XPlugin_Impl* pPlugin = NULL;
         PluginStream* pStream = NULL;
         for( iter = rList.begin(); iter!= rList.end(); ++iter )

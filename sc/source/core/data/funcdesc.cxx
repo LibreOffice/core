@@ -386,7 +386,7 @@ ScFunctionList::ScFunctionList() :
 {
     ScFuncDesc* pDesc = NULL;
     sal_Int32 nStrLen = 0;
-    ::std::list<ScFuncDesc*> tmpFuncList;
+    ::std::vector<ScFuncDesc*> tmpFuncList;
     sal_uInt16 nDescBlock[] =
     {
         RID_SC_FUNCTION_DESCRIPTIONS1,

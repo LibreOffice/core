@@ -42,7 +42,7 @@
 #include <rtl/uri.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <unordered_map>
 
@@ -133,14 +133,14 @@ struct rtl_bootstrap_NameValue
         {}
 };
 
-typedef std::list<rtl_bootstrap_NameValue> NameValueList;
+typedef std::vector<rtl_bootstrap_NameValue> NameValueVector;
 
 bool find(
-    NameValueList const & list, rtl::OUString const & key,
+    NameValueVector const & list, rtl::OUString const & key,
     rtl::OUString * value)
 {
     OSL_ASSERT(value != NULL);
-    for (NameValueList::const_iterator i(list.begin()); i != list.end(); ++i) {
+    for (NameValueVector::const_iterator i(list.begin()); i != list.end(); ++i) {
         if (i->sName == key) {
             *value = i->sValue;
             return true;
@@ -151,17 +151,17 @@ bool find(
 
 namespace {
     struct rtl_bootstrap_set_list :
-        public rtl::Static< NameValueList, rtl_bootstrap_set_list > {};
+        public rtl::Static< NameValueVector, rtl_bootstrap_set_list > {};
 }
 
 static bool getFromCommandLineArgs(
     rtl::OUString const & key, rtl::OUString * value )
 {
     OSL_ASSERT(value != NULL);
-    static NameValueList *pNameValueList = 0;
-    if( ! pNameValueList )
+    static NameValueVector *pNameValueVector = 0;
+    if( ! pNameValueVector )
     {
-        static NameValueList nameValueList;
+        static NameValueVector nameValueList;
 
         sal_Int32 nArgCount = osl_getCommandArgCount();
         for(sal_Int32 i = 0; i < nArgCount; ++ i)
@@ -195,13 +195,13 @@ static bool getFromCommandLineArgs(
             }
             rtl_uString_release( pArg );
         }
-        pNameValueList = &nameValueList;
+        pNameValueVector = &nameValueList;
     }
 
     bool found = false;
 
-    for( NameValueList::iterator ii = pNameValueList->begin() ;
-         ii != pNameValueList->end() ;
+    for( NameValueVector::iterator ii = pNameValueVector->begin() ;
+         ii != pNameValueVector->end() ;
          ++ii )
     {
         if( (*ii).sName.equals(key) )
@@ -307,7 +307,7 @@ struct Bootstrap_Impl
     sal_Int32 _nRefCount;
     Bootstrap_Impl * _base_ini;
 
-    NameValueList _nameValueList;
+    NameValueVector _nameValueList;
     OUString      _iniName;
 
     explicit Bootstrap_Impl (OUString const & rIniName);
@@ -785,9 +785,9 @@ void SAL_CALL rtl_bootstrap_set (
 
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
 
-    NameValueList& r_rtl_bootstrap_set_list = rtl_bootstrap_set_list::get();
-    NameValueList::iterator iPos( r_rtl_bootstrap_set_list.begin() );
-    NameValueList::iterator iEnd( r_rtl_bootstrap_set_list.end() );
+    NameValueVector& r_rtl_bootstrap_set_list = rtl_bootstrap_set_list::get();
+    NameValueVector::iterator iPos( r_rtl_bootstrap_set_list.begin() );
+    NameValueVector::iterator iEnd( r_rtl_bootstrap_set_list.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
         if (iPos->sName.equals( name ))

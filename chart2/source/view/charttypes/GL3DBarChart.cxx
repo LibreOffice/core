@@ -1215,9 +1215,9 @@ void GL3DBarChart::updateDataUpdateFPS()
 
 void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
 {
-    std::list<float>& aList = maBarHistory[nBarID];
+    std::vector<float>& aList = maBarHistory[nBarID];
     if(aList.size() == HISTORY_NUM)
-        aList.pop_front();
+        aList.erase(aList.begin());
     aList.push_back(nVal);
 }
 
@@ -1257,7 +1257,7 @@ void GL3DBarChart::updateClickEvent()
 {
     if (maRenderEvent == EVENT_CLICK || maRenderEvent == EVENT_AUTO_FLY || maRenderEvent == EVENT_SHOW_SELECT)
     {
-        std::list<float>& aList = maBarHistory[mnSelectBarId];
+        std::vector<float>& aList = maBarHistory[mnSelectBarId];
         sal_uInt32 nIdex = 0;
         sal_uInt32 nBarIdArray[DISPLAY_BARS_NUM] = {0};
         OUString aTitle;
@@ -1283,7 +1283,7 @@ void GL3DBarChart::updateClickEvent()
             nMaxXCoord = std::max(nMaxXCoord, 0.55f + nTextWidth);
         }
         getNeighborBarID(mnSelectBarId, nBarIdArray);
-        for (std::list<float>::iterator it = aList.begin();it != aList.end();++it)
+        for (std::vector<float>::iterator it = aList.begin();it != aList.end();++it)
         {
             if (nIdex + 1 < aList.size())
             {

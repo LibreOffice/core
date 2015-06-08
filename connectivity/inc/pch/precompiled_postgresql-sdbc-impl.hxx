@@ -50,7 +50,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <libpq-fe.h>
-#include <list>
+#include <vector>
 #include <osl/module.h>
 #include <osl/thread.h>
 #include <osl/time.h>

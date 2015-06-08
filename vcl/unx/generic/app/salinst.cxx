@@ -184,7 +184,7 @@ void X11SalInstance::DestroyFrame( SalFrame* pFrame )
     delete pFrame;
 }
 
-static void getServerDirectories( std::list< OString >& o_rFontPaths )
+static void getServerDirectories( std::vector< OString >& o_rFontPaths )
 {
 #ifdef LINUX
     /*
@@ -193,7 +193,7 @@ static void getServerDirectories( std::list< OString >& o_rFontPaths )
     static const char* pCommands[] = {
         "/usr/sbin/chkfontpath 2>/dev/null", "chkfontpath 2>/dev/null"
     };
-    ::std::list< OString > aLines;
+    ::std::vector< OString > aLines;
 
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCommands); i++ )
     {
@@ -216,7 +216,7 @@ static void getServerDirectories( std::list< OString >& o_rFontPaths )
         }
     }
 
-    for( ::std::list< OString >::iterator it = aLines.begin(); it != aLines.end(); ++it )
+    for( ::std::vector< OString >::iterator it = aLines.begin(); it != aLines.end(); ++it )
     {
         if( ! access( it->getStr(), F_OK ) )
         {
@@ -231,7 +231,7 @@ static void getServerDirectories( std::list< OString >& o_rFontPaths )
 #endif
 }
 
-void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
+void X11SalInstance::FillFontPathList( std::vector< OString >& o_rFontPaths )
 {
     Display *pDisplay = vcl_sal::getSalDisplay(GetGenericData())->GetDisplay();
 

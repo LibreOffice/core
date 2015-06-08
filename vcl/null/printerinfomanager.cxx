@@ -64,7 +64,7 @@ void PrinterInfoManager::initialize()
     // ???
 }
 
-void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
+void PrinterInfoManager::listPrinters( ::std::vector< OUString >& rList ) const
 {
     rList.clear();
 }
@@ -101,7 +101,7 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& /* rPrinterName */ )
     return false;
 }
 
-const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::getSystemPrintQueues()
+const std::vector< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::getSystemPrintQueues()
 {
     return m_aSystemPrintQueues;
 }

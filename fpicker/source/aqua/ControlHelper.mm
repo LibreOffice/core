@@ -172,7 +172,7 @@ ControlHelper::~ControlHelper()
         [m_pFilterControl setTarget:nil];
     }
 
-    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); ++control) {
+    for(std::vector<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); ++control) {
         NSControl* pControl = (*control);
         NSString* sLabelName = m_aMapListLabels[pControl];
         if (sLabelName != nil) {
@@ -433,7 +433,7 @@ void ControlHelper::createUserPane()
     int nPopupMaxWidth = 0;
     int nPopupLabelMaxWidth = 0;
 
-    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
+    for (::std::vector<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
         SAL_INFO("fpicker.aqua","currentHeight: " << currentHeight);
 
         NSControl* pControl = *child;
@@ -839,7 +839,7 @@ void ControlHelper::layoutControls()
     int nPopupLabelMaxWidth = 0;
 
     //first loop to determine max sizes
-    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
+    for (::std::vector<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
         NSControl* pControl = *child;
 
         NSRect controlRect = [pControl frame];
@@ -870,7 +870,7 @@ void ControlHelper::layoutControls()
 
     int nDistBetweenControls = 0;
 
-    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
+    for (::std::vector<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
         NSControl* pControl = *child;
 
         //get the control's bounds

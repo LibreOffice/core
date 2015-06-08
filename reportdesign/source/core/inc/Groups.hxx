@@ -23,7 +23,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <list>
+#include <vector>
 
 
 namespace reportdesign
@@ -36,7 +36,7 @@ namespace reportdesign
     class OGroups : public comphelper::OBaseMutex,
                     public GroupsBase
     {
-        typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup > > TGroups;
+        typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup > > TGroups;
         ::cppu::OInterfaceContainerHelper                                                       m_aContainerListeners;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XReportDefinition >     m_xParent;

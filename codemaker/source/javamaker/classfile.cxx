@@ -227,12 +227,12 @@ void ClassFile::Code::instrInvokevirtual(
 
 void ClassFile::Code::instrLookupswitch(
     Code const * defaultBlock,
-    std::list< std::pair< sal_Int32, Code * > > const & blocks)
+    std::vector< std::pair< sal_Int32, Code * > > const & blocks)
 {
     // lookupswitch <0--3 byte pad> <defaultbyte1> <defaultbyte2> <defaultbyte3>
     // <defaultbyte4> <npairs1> <npairs2> <npairs3> <npairs4>
     // <match--offset pairs...>:
-    std::list< std::pair< sal_Int32, Code * > >::size_type size = blocks.size();
+    std::vector< std::pair< sal_Int32, Code * > >::size_type size = blocks.size();
     if (size > SAL_MAX_INT32) {
         throw CannotDumpException("Lookup-switch too large for Java class file format");
     }
@@ -246,7 +246,7 @@ void ClassFile::Code::instrLookupswitch(
     appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1)); //FIXME: overflow
     pos2 += defaultBlock->m_code.size(); //FIXME: overflow
     appendU4(m_code, static_cast< sal_uInt32 >(size));
-    for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
+    for (std::vector< std::pair< sal_Int32, Code * > >::const_iterator i(
              blocks.begin());
          i != blocks.end(); ++i)
     {
@@ -256,7 +256,7 @@ void ClassFile::Code::instrLookupswitch(
         pos2 += i->second->m_code.size(); //FIXME: overflow
     }
     appendStream(m_code, defaultBlock->m_code);
-    for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
+    for (std::vector< std::pair< sal_Int32, Code * > >::const_iterator i(
              blocks.begin());
          i != blocks.end(); ++i)
     {
@@ -316,7 +316,7 @@ void ClassFile::Code::instrSwap() {
 
 void ClassFile::Code::instrTableswitch(
     Code const * defaultBlock, sal_Int32 low,
-    std::list< Code * > const & blocks)
+    std::vector< Code * > const & blocks)
 {
     // tableswitch <0--3 byte pad> <defaultbyte1> <defaultbyte2> <defaultbyte3>
     // <defaultbyte4> <lowbyte1> <lowbyte2> <lowbyte3> <lowbyte4> <highbyte1>
@@ -327,7 +327,7 @@ void ClassFile::Code::instrTableswitch(
     for (int i = 0; i < pad; ++i) {
         appendU1(m_code, 0);
     }
-    std::list< Code * >::size_type size = blocks.size();
+    std::vector< Code * >::size_type size = blocks.size();
     Position pos2 = pos1 + 1 + pad + 12 + size * 4; //FIXME: overflow
     sal_uInt32 defaultOffset = static_cast< sal_uInt32 >(pos2 - pos1);
         //FIXME: overflow
@@ -335,7 +335,7 @@ void ClassFile::Code::instrTableswitch(
     pos2 += defaultBlock->m_code.size(); //FIXME: overflow
     appendU4(m_code, static_cast< sal_uInt32 >(low));
     appendU4(m_code, static_cast< sal_uInt32 >(low + (size - 1)));
-    for (std::list< Code * >::const_iterator i(blocks.begin());
+    for (std::vector< Code * >::const_iterator i(blocks.begin());
          i != blocks.end(); ++i)
     {
         if (*i == 0) {
@@ -347,7 +347,7 @@ void ClassFile::Code::instrTableswitch(
         }
     }
     appendStream(m_code, defaultBlock->m_code);
-    for (std::list< Code * >::const_iterator i(blocks.begin());
+    for (std::vector< Code * >::const_iterator i(blocks.begin());
          i != blocks.end(); ++i)
     {
         if (*i != 0) {

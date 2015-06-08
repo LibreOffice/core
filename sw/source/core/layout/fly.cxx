@@ -2637,7 +2637,7 @@ bool SwFlyFrm::IsFormatPossible() const
            !IsLocked() && !IsColLocked();
 }
 
-void SwFlyFrm::GetAnchoredObjects( std::list<SwAnchoredObject*>& aList, const SwFormat& rFormat )
+void SwFlyFrm::GetAnchoredObjects( std::vector<SwAnchoredObject*>& aList, const SwFormat& rFormat )
 {
     SwIterator<SwFlyFrm,SwFormat> aIter( rFormat );
     for( SwFlyFrm* pFlyFrm = aIter.First(); pFlyFrm; pFlyFrm = aIter.Next() )

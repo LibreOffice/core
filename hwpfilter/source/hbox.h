@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <list>
+#include <vector>
 
 #include <sal/types.h>
 
@@ -371,11 +371,11 @@ struct TxtBox: public FBox
 /**
  * Paragraph list
  */
-    std::list<HWPPara*> *plists;
+    std::vector<HWPPara*> *plists;
 /**
  * Caption
  */
-    std::list<HWPPara*> caption;
+    std::vector<HWPPara*> caption;
 
     TxtBox();
     virtual ~TxtBox();
@@ -534,14 +534,14 @@ struct Table
 {
      Table() : box(NULL) {};
      ~Table() {
-          std::list<TCell*>::iterator it = cells.begin();
+          std::vector<TCell*>::iterator it = cells.begin();
           for( ; it != cells.end(); ++it)
                 delete *it;
      };
 
      Columns columns;
      Rows    rows;
-     std::list<TCell*> cells;
+     std::vector<TCell*> cells;
      TxtBox *box;
 };
 
@@ -649,7 +649,7 @@ struct Picture: public FBox
     PicDef    picinfo;
     char      reserved3[9];
 
-    std::list<HWPPara*> caption;
+    std::vector<HWPPara*> caption;
 /**
  * It's for the Drawing object
  */
@@ -695,7 +695,7 @@ struct Hidden: public HBox
     hchar     dummy;
 
     unsigned char info[8];                        // h, next, dummy
-    std::list<HWPPara*> plist;
+    std::vector<HWPPara*> plist;
 
     Hidden();
     virtual ~Hidden();
@@ -724,7 +724,7 @@ struct HeaderFooter: public HBox
 /**
  * Paragraph list of header or footer
  */
-    std::list<HWPPara*> plist;
+    std::vector<HWPPara*> plist;
 
     HeaderFooter();
     virtual ~HeaderFooter();
@@ -757,7 +757,7 @@ struct Footnote: public HBox
 /**
  * Paragraph list of Footnote objects
  */
-    std::list<HWPPara*> plist;
+    std::vector<HWPPara*> plist;
 
     Footnote();
     virtual ~Footnote();

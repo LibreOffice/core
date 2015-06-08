@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <list>
+#include <vector>
 #include <array>
 #include <utility>
 #include <vector>
@@ -1804,7 +1804,7 @@ bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMember
 template<typename Tpoolitem>
 void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpoolitem()> aItemFactory, sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember, bool bAddTwips)
 {
-    std::list< std::pair<sal_uInt16, const uno::Any* > > vMemberAndAny;
+    std::vector< std::pair<sal_uInt16, const uno::Any* > > vMemberAndAny;
     for(sal_uInt16 nMember : vMember)
     {
         const uno::Any* pAny = nullptr;

@@ -258,7 +258,7 @@ void SvxTextEditSourceImpl::addRange( SvxUnoTextRangeBase* pNewRange )
 void SvxTextEditSourceImpl::removeRange( SvxUnoTextRangeBase* pOldRange )
 {
     if( pOldRange )
-        maTextRanges.remove( pOldRange );
+        maTextRanges.erase( std::remove(maTextRanges.begin(), maTextRanges.end(), pOldRange), maTextRanges.end() );
 }
 
 

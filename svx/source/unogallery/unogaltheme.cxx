@@ -418,8 +418,7 @@ void GalleryTheme::implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const SolarMutexGuard aGuard;
 
-//  DBG_ASSERT( maItemList.find( &rItem ) != maItemList.end(), "Item is not registered" );
-    maItemList.remove( &rItem );
+    maItemList.erase( std::remove(maItemList.begin(), maItemList.end(), &rItem), maItemList.end() );
 }
 
 }

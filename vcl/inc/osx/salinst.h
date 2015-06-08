@@ -30,7 +30,7 @@
 
 #include "salinst.hxx"
 
-#include <list>
+#include <vector>
 
 class AquaSalFrame;
 class ApplicationEvent;
@@ -68,15 +68,15 @@ class AquaSalInstance : public SalInstance
 
 public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
-    OUString                           maDefaultPrinter;
+    OUString                                maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
     bool                                    mbWaitingYield;
     int                                     mnActivePrintJobs;
-    std::list< SalUserEvent >               maUserEvents;
+    std::vector< SalUserEvent >             maUserEvents;
     oslMutex                                maUserEventListMutex;
     oslCondition                            maWaitingYieldCond;
 
-    typedef std::list<const ApplicationEvent*> AppEventList;
+    typedef std::vector<const ApplicationEvent*> AppEventList;
     static AppEventList aAppEventList;
 
 public:

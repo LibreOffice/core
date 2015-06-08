@@ -65,7 +65,7 @@
 #include <cstring>
 #include <float.h>
 #include <limits.h>
-#include <list>
+#include <vector>
 #include <math.h>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>

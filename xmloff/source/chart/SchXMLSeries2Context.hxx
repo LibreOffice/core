@@ -26,7 +26,7 @@
 #include <xmloff/xmlstyle.hxx>
 
 #include <vector>
-#include <list>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 {
@@ -46,8 +46,8 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > mxNewDoc;
     ::std::vector< SchXMLAxis >& mrAxes;
-    ::std::list< DataRowPointStyle >& mrStyleList;
-    ::std::list< RegressionStyle >& mrRegressionStyleList;
+    ::std::vector< DataRowPointStyle >& mrStyleList;
+    ::std::vector< RegressionStyle >& mrRegressionStyleList;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > m_xSeries;
     sal_Int32 mnSeriesIndex;
@@ -76,8 +76,8 @@ public:
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::chart2::XChartDocument > & xNewDoc,
                           std::vector< SchXMLAxis >& rAxes,
-                          ::std::list< DataRowPointStyle >& rStyleList,
-                          ::std::list< RegressionStyle >& rRegressionStyleList,
+                          ::std::vector< DataRowPointStyle >& rStyleList,
+                          ::std::vector< RegressionStyle >& rRegressionStyleList,
                           sal_Int32 nSeriesIndex,
                           bool bStockHasVolume,
                           GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
@@ -127,7 +127,7 @@ public:
         , const SvXMLImport& rImport
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter );
 
-    static void switchSeriesLinesOff( ::std::list< DataRowPointStyle >& rSeriesStyleList );
+    static void switchSeriesLinesOff( ::std::vector< DataRowPointStyle >& rSeriesStyleList );
 };
 
 // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLSERIES2CONTEXT_HXX

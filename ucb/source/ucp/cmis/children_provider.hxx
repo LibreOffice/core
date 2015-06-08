@@ -9,7 +9,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CHILDREN_PROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_CMIS_CHILDREN_PROVIDER_HXX
 
-#include <list>
+#include <vector>
 
 #include <com/sun/star/ucb/XContent.hpp>
 
@@ -20,7 +20,7 @@ namespace cmis
         public:
             virtual ~ChildrenProvider( ) { };
 
-            virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) = 0;
+            virtual std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) = 0;
     };
 }
 

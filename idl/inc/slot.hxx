@@ -230,7 +230,7 @@ public:
     virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
                                 SvIdlDataBase& ) SAL_OVERRIDE;
     void                WriteSlotStubs( const OString& rShellName,
-                                    ByteStringList & rList,
+                                    ByteStringVector & rList,
                                     SvStream & rOutStm );
     sal_uInt16          WriteSlotMap( const OString& rShellName,
                                     sal_uInt16 nCount,

@@ -496,7 +496,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 
     OString aBatchSql;
     sal_Int32 nLen = 0;
-    for(::std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
+    for(::std::vector< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
     {
         aBatchSql += OUStringToOString(*i,getOwnConnection()->getTextEncoding());
         aBatchSql += ";";

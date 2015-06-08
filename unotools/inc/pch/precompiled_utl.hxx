@@ -141,7 +141,7 @@
 #include <functional>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <list>
+#include <vector>
 #include <map>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>

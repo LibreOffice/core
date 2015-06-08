@@ -29,7 +29,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <list>
+#include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sqliterator.hxx>
@@ -76,7 +76,7 @@ namespace connectivity
 
             //  for this Statement
 
-            ::std::list< OUString>               m_aBatchList;
+            ::std::vector< OUString>               m_aBatchList;
 
             OTable*                                     m_pTable;
             OConnection*                                m_pConnection;  // The owning Connection object

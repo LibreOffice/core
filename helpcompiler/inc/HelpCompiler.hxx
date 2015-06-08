@@ -25,7 +25,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <list>
+#include <vector>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -155,10 +155,10 @@ struct joaat_hash
 #define pref_hash joaat_hash
 
 typedef std::unordered_map<std::string, std::string, pref_hash> Stringtable;
-typedef std::list<std::string> LinkedList;
+typedef std::vector<std::string> StringVector;
 typedef std::vector<std::string> HashSet;
 
-typedef std::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
+typedef std::unordered_map<std::string, StringVector, pref_hash> Hashtable;
 
 class StreamTable
 {

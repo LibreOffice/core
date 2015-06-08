@@ -22,7 +22,7 @@
 #include <osl/process.h>
 
 #include <map>
-#include <list>
+#include <vector>
 
 
 struct ini_NameValue
@@ -39,9 +39,7 @@ struct ini_NameValue
         {}
 };
 
-typedef std::list<
-    ini_NameValue
-> NameValueList;
+typedef std::vector< ini_NameValue > NameValueList;
 
 struct ini_Section
 {

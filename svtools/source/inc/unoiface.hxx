@@ -106,8 +106,8 @@ public:
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setFocus(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -160,8 +160,8 @@ public:
 
     void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -210,8 +210,8 @@ protected:
 
     virtual void    SetWindow( const VclPtr< vcl::Window > &_pWindow) SAL_OVERRIDE;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -279,8 +279,8 @@ protected:
     // VCLXGraphicControl overridables
     virtual void    ImplSetNewImage() SAL_OVERRIDE;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -321,8 +321,8 @@ public:
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -365,8 +365,8 @@ public:
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -407,8 +407,8 @@ public:
     void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -423,8 +423,8 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
 };
 
 #endif // INCLUDED_SVTOOLS_SOURCE_INC_UNOIFACE_HXX

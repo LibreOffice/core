@@ -182,7 +182,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     SalExtStyle                     m_nExtStyle;
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
-    std::list< GtkSalFrame* >       m_aChildren;
+    std::vector< GtkSalFrame* >     m_aChildren;
     GdkWindowState                  m_nState;
     SystemEnvData                   m_aSystemData;
     GraphicsHolder                  m_aGraphics[ nMaxGraphics ];
@@ -200,8 +200,8 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
     bool                            m_bSetFocusOnMap;
-    OUString                   m_aTitle;
-    OUString                   m_sWMClass;
+    OUString                        m_aTitle;
+    OUString                        m_sWMClass;
 
     IMHandler*                      m_pIMHandler;
 

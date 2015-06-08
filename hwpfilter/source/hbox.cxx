@@ -359,7 +359,7 @@ TxtBox::~TxtBox()
 
     for (int ii = 0; ii < nCell; ++ii)
     {
-        std::list < HWPPara* >::iterator it = plists[ii].begin();
+        std::vector < HWPPara* >::iterator it = plists[ii].begin();
         for (; it != plists[ii].end(); ++it)
         {
             HWPPara* pPara = *it;
@@ -367,7 +367,7 @@ TxtBox::~TxtBox()
         }
     }
 
-    std::list < HWPPara* >::iterator it = caption.begin();
+    std::vector < HWPPara* >::iterator it = caption.begin();
     for (; it != caption.end(); ++it)
     {
         HWPPara* pPara = *it;
@@ -407,7 +407,7 @@ Picture::~Picture()
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
         delete static_cast<HWPDrawingObject *>(picinfo.picdraw.hdo);
 
-    std::list < HWPPara* >::iterator it = caption.begin();
+    std::vector < HWPPara* >::iterator it = caption.begin();
     for (; it != caption.end(); ++it)
     {
         HWPPara* pPara = *it;
@@ -432,7 +432,7 @@ hunit Picture::Height(CharShape * sty)
 // hidden(15)
 Hidden::~Hidden()
 {
-    std::list < HWPPara* >::iterator it = plist.begin();
+    std::vector < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
     {
         HWPPara* pPara = *it;
@@ -444,7 +444,7 @@ Hidden::~Hidden()
 // header/footer(16)
 HeaderFooter::~HeaderFooter()
 {
-    std::list < HWPPara* >::iterator it = plist.begin();
+    std::vector < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
     {
         HWPPara* pPara = *it;
@@ -456,7 +456,7 @@ HeaderFooter::~HeaderFooter()
 // footnote(17)
 Footnote::~Footnote()
 {
-    std::list < HWPPara* >::iterator it = plist.begin();
+    std::vector < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
     {
         HWPPara* pPara = *it;

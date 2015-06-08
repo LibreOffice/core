@@ -32,7 +32,7 @@
 #include <globals.hrc>
 
 #include <comcore.hrc>
-#include <list>
+#include <vector>
 
 void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
 {
@@ -152,7 +152,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     SET_CURR_SHELL( pDestShell );
 
     // List of insert positions for smart insert of block selections
-    std::list< boost::shared_ptr<SwPosition> > aInsertList;
+    std::vector< boost::shared_ptr<SwPosition> > aInsertList;
 
     // Fill list of insert positions
     {
@@ -204,7 +204,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
     sal_Int32 nSttCntIdx = 0;
     // For block selection this list is filled with the insert positions
-    std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
+    std::vector< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
     pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())

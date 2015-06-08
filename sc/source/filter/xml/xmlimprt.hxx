@@ -791,7 +791,7 @@ struct ScMyLabelRange
     bool            bColumnOrientation;
 };
 
-typedef std::list<const ScMyLabelRange*> ScMyLabelRanges;
+typedef std::vector<const ScMyLabelRange*> ScMyLabelRanges;
 
 struct ScMyImportValidation
 {
@@ -817,7 +817,7 @@ struct ScMyImportValidation
 };
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
-typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
+typedef std::vector<SvXMLImportContext*>            ScMyViewContextVec;
 class ScMyStylesImportHelper;
 class ScXMLEditAttributeMap;
 
@@ -836,7 +836,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
 
     mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    ScMyViewContextList                 aViewContextList;
+    ScMyViewContextVec                  aViewContextList;
     ScMyStylesImportHelper*             pStylesImportHelper;
     OUString                       sNumberFormat;
     OUString                       sLocale;

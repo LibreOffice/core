@@ -1912,7 +1912,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
             int nCurrentTime = time( NULL );
             std::unordered_map< Atom, IncrementalTransfer >::iterator inc_it;
             // throw out aborted transfers
-            std::list< Atom > aTimeouts;
+            std::vector< Atom > aTimeouts;
             for( inc_it = it->second.begin(); inc_it != it->second.end(); ++inc_it )
             {
                 if( (nCurrentTime - inc_it->second.m_nTransferStartTime) > (getSelectionTimeout()+2) )
@@ -1929,13 +1929,13 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
                 }
             }
 
-            while( aTimeouts.begin() != aTimeouts.end() )
+            for( auto t : aTimeouts )
             {
                 // transfer broken, might even be a new client with the
                 // same window id
-                it->second.erase( aTimeouts.front() );
-                aTimeouts.pop_front();
+                it->second.erase( t );
             }
+            aTimeouts.clear();
 
             inc_it = it->second.find( rNotify.atom );
             if( inc_it != it->second.end() )
@@ -3677,7 +3677,7 @@ void SelectionManager::run( void* pThis )
         if( (aNow.tv_sec - aLast.tv_sec) > 0 )
         {
             osl::ClearableMutexGuard aGuard(This->m_aMutex);
-            std::list< std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > > > aChangeList;
+            std::vector< std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > > > aChangeList;
 
             for( std::unordered_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
             {
@@ -3694,10 +3694,9 @@ void SelectionManager::run( void* pThis )
                 }
             }
             aGuard.clear();
-            while( aChangeList.begin() != aChangeList.end() )
+            for( auto p : aChangeList )
             {
-                aChangeList.front().first->fireContentsChanged();
-                aChangeList.pop_front();
+                p.first->fireContentsChanged();
             }
             aLast = aNow;
         }

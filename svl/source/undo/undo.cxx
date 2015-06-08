@@ -380,7 +380,7 @@ namespace svl { namespace undo { namespace impl
         SfxUndoManager_Data&                m_rManagerData;
         ::osl::ResettableMutexGuard         m_aGuard;
         ::std::list< SfxUndoAction* >       m_aUndoActionsCleanup;
-        ::std::list< NotifyUndoListener >   m_notifiers;
+        ::std::vector< NotifyUndoListener > m_notifiers;
     };
 
     UndoManagerGuard::~UndoManagerGuard()
@@ -407,7 +407,7 @@ namespace svl { namespace undo { namespace impl
         }
 
         // handle scheduled notification
-        for (   ::std::list< NotifyUndoListener >::const_iterator notifier = m_notifiers.begin();
+        for (   ::std::vector< NotifyUndoListener >::const_iterator notifier = m_notifiers.begin();
                 notifier != m_notifiers.end();
                 ++notifier
              )

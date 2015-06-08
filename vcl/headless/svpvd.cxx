@@ -46,7 +46,7 @@ SalGraphics* SvpSalVirtualDevice::AcquireGraphics()
 
 void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 {
-    m_aGraphics.remove( dynamic_cast<SvpSalGraphics*>(pGraphics) );
+    m_aGraphics.erase( std::remove(m_aGraphics.begin(), m_aGraphics.end(), dynamic_cast<SvpSalGraphics*>(pGraphics)), m_aGraphics.end() );
     delete pGraphics;
 }
 
@@ -87,7 +87,7 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         }
 
         // update device in existing graphics
-        for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
+        for( std::vector< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
              (*it)->setDevice( m_aDevice );
 

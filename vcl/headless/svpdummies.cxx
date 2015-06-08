@@ -70,7 +70,7 @@ OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
 }
 
 int SvpSalSystem::ShowNativeDialog( const OUString&, const OUString&,
-                                    const std::list< OUString >&, int )
+                                    const std::vector< OUString >&, int )
 {
     return 0;
 }

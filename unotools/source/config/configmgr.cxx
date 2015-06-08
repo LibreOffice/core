@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <list>
+#include <vector>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -178,7 +178,7 @@ utl::ConfigManager::addConfigItem(utl::ConfigItem & item) {
 }
 
 void utl::ConfigManager::removeConfigItem(utl::ConfigItem & item) {
-    for (std::list< ConfigItem * >::iterator i(items_.begin());
+    for (std::vector< ConfigItem * >::iterator i(items_.begin());
          i != items_.end(); ++i)
     {
         if (*i == &item) {
@@ -194,7 +194,7 @@ void utl::ConfigManager::registerConfigItem(utl::ConfigItem * item) {
 }
 
 void utl::ConfigManager::doStoreConfigItems() {
-    for (std::list< ConfigItem * >::iterator i(items_.begin());
+    for (std::vector< ConfigItem * >::iterator i(items_.begin());
          i != items_.end(); ++i)
     {
         if ((*i)->IsModified()) {

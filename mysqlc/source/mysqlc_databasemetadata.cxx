@@ -1302,7 +1302,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 sPattern(rtl::OUStringToOString(schemaPattern, m_rConnection.getConnectionEncoding()).getStr()),
                 tNamePattern(rtl::OUStringToOString(tableNamePattern, m_rConnection.getConnectionEncoding()).getStr());
 
-    std::list<sql::SQLString> tabTypes;
+    std::vector<sql::SQLString> tabTypes;
     for (const rtl::OUString *pStart = types.getConstArray(), *p = pStart, *pEnd = pStart + nLength; p != pEnd; ++p) {
         tabTypes.push_back(rtl::OUStringToOString(*p, m_rConnection.getConnectionEncoding()).getStr());
     }

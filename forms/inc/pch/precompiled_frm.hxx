@@ -280,7 +280,7 @@
 #include <iterator>
 #include <limits.h>
 #include <limits>
-#include <list>
+#include <vector>
 #include <memory>
 #include <o3tl/compat_functional.hxx>
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>

@@ -53,7 +53,7 @@
 #include <comphelper/streamsection.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <unotools/desktopterminationobserver.hxx>
-#include <list>
+#include <vector>
 #include <algorithm>
 
 
@@ -1007,26 +1007,26 @@ Any OFormattedModel::translateDbColumnToControlValue()
 
 Sequence< Type > OFormattedModel::getSupportedBindingTypes()
 {
-    ::std::list< Type > aTypes;
-    aTypes.push_back( cppu::UnoType< double >::get() );
+    ::std::vector< Type > aTypes;
     switch ( m_nKeyType & ~NumberFormat::DEFINED )
     {
     case NumberFormat::DATE:
-        aTypes.push_front(cppu::UnoType< UNODate >::get() );
+        aTypes.push_back(cppu::UnoType< UNODate >::get() );
         break;
     case NumberFormat::TIME:
-        aTypes.push_front(cppu::UnoType< UNOTime >::get() );
+        aTypes.push_back(cppu::UnoType< UNOTime >::get() );
         break;
     case NumberFormat::DATETIME:
-        aTypes.push_front(cppu::UnoType< UNODateTime >::get() );
+        aTypes.push_back(cppu::UnoType< UNODateTime >::get() );
         break;
     case NumberFormat::TEXT:
-        aTypes.push_front(cppu::UnoType< OUString >::get() );
+        aTypes.push_back(cppu::UnoType< OUString >::get() );
         break;
     case NumberFormat::LOGICAL:
-        aTypes.push_front(cppu::UnoType< sal_Bool >::get() );
+        aTypes.push_back(cppu::UnoType< sal_Bool >::get() );
         break;
     }
+    aTypes.push_back( cppu::UnoType< double >::get() );
     Sequence< Type > aTypesRet( aTypes.size() );
     ::std::copy( aTypes.begin(), aTypes.end(), aTypesRet.getArray() );
     return aTypesRet;

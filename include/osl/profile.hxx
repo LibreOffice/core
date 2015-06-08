@@ -25,7 +25,7 @@
 
 #include <string.h>
 #include <exception>
-#include <list>
+#include <vector>
 
 namespace osl {
 
@@ -86,12 +86,12 @@ namespace osl {
         }
 
         sal_uInt32 readIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
-                             sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
+                             sal_uInt32 nFirstId, const std::vector< rtl::OString >& rStrings,
                              sal_uInt32 nDefault)
         {
             size_t nItems = rStrings.size();
             const sal_Char** pStrings = new const sal_Char*[ nItems+1 ];
-            std::list< rtl::OString >::const_iterator it = rStrings.begin();
+            std::vector< rtl::OString >::const_iterator it = rStrings.begin();
             nItems = 0;
             while( it != rStrings.end() )
             {
@@ -116,12 +116,12 @@ namespace osl {
         }
 
         bool writeIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
-                            sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
+                            sal_uInt32 nFirstId, const std::vector< rtl::OString >& rStrings,
                             sal_uInt32 nValue)
         {
             size_t nItems = rStrings.size();
             const sal_Char** pStrings = new const sal_Char*[ nItems+1 ];
-            std::list< rtl::OString >::const_iterator it = rStrings.begin();
+            std::vector< rtl::OString >::const_iterator it = rStrings.begin();
             nItems = 0;
             while( it != rStrings.end() )
             {
@@ -149,9 +149,9 @@ namespace osl {
             @param rSection Name of the section.
             @return Pointer to a array of pointers.
         */
-        std::list< rtl::OString > getSectionEntries(const rtl::OString& rSection )
+        std::vector< rtl::OString > getSectionEntries(const rtl::OString& rSection )
         {
-            std::list< rtl::OString > aEntries;
+            std::vector< rtl::OString > aEntries;
 
             // count buffer size necessary
             size_t n = osl_getProfileSectionEntries( profile, rSection.getStr(), NULL, 0 );
@@ -171,9 +171,9 @@ namespace osl {
         /** Get all section entries
             @return Pointer to a array of pointers.
         */
-        std::list< rtl::OString > getSections()
+        std::vector< rtl::OString > getSections()
         {
-            std::list< rtl::OString > aSections;
+            std::vector< rtl::OString > aSections;
 
             // count buffer size necessary
             size_t n = osl_getProfileSections( profile, NULL, 0 );

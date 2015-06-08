@@ -28,7 +28,7 @@
 #define YYMAXDEPTH 0
 #endif
 
-#include <list>
+#include <vector>
 #include <stdlib.h>
 #include <string.h>
 
@@ -36,7 +36,7 @@
 #include "lexer.hxx"
 #include "nodes.h"
 
-std::list<Node*> nodelist;
+std::vector<Node*> nodelist;
 
 void yyerror(const char *);
 
@@ -1236,15 +1236,11 @@ Node *mainParse(const char *_code)
 
 void yyerror(const char * /*err*/)
 {
-//  printf("REALKING ERR[%s]\n",err);
     // if error, delete all nodes.
-    Node *pNode = 0L;
-    int ncount = nodelist.size();
-    for( int i = 0 ; i < ncount ; i++){
-	pNode = nodelist.front();
-	nodelist.pop_front();
+    for( Node *pNode : nodelist) {
         delete pNode;
     }
+    nodelist.clear();
     top = 0L;
 }
 

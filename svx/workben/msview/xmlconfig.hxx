@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_WORKBEN_MSVIEW_XMLCONFIG_HXX
 
 #include <map>
-#include <list>
+#include <vector>
 #include <boost/shared_ptr.hpp>
 
 
@@ -51,7 +51,7 @@ private:
     ElementConfigType mnType;
 };
 typedef boost::shared_ptr< ElementConfig > ElementConfigPtr;
-typedef std::list< ElementConfigPtr > ElementConfigList;
+typedef std::vector< ElementConfigPtr > ElementConfigList;
 
 
 

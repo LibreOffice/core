@@ -24,7 +24,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <list>
+#include <vector>
 #include <tools/wintypes.hxx>
 #include <tools/fract.hxx>
 #include <vcl/cursor.hxx>
@@ -112,7 +112,7 @@ struct ImplWinData
     sal_uInt16          mnIsTopWindow;
     bool                mbMouseOver;            //< tracks mouse over for native widget paint effect
     bool                mbEnableNativeWidget;   //< toggle native widget rendering
-    ::std::list< VclPtr<vcl::Window> >
+    ::std::vector< VclPtr<vcl::Window> >
                         maTopWindowChildren;
 };
 

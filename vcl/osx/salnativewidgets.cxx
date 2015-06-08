@@ -74,7 +74,7 @@ class AquaBlinker : public Timer
 void AquaBlinker::Blink( AquaSalFrame* pFrame, const Rectangle& rRect, int nTimeout )
 {
     // prevent repeated paints from triggering themselves all the time
-    for( std::list< AquaBlinker* >::const_iterator it = pFrame->maBlinkers.begin();
+    for( std::vector< AquaBlinker* >::const_iterator it = pFrame->maBlinkers.begin();
          it != pFrame->maBlinkers.end(); ++it )
     {
         if( (*it)->maInvalidateRect == rRect )

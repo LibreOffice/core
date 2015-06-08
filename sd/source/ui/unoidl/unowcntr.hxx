@@ -21,11 +21,11 @@
 #define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOWCNTR_HXX
 
 #include <cppuhelper/weakref.hxx>
-#include <list>
+#include <vector>
 
 typedef bool (*weakref_searchfunc)( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef, void* pSearchData );
 
-typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >* > WeakRefList;
+typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >* > WeakRefList;
 
 class SvUnoWeakContainer
 {

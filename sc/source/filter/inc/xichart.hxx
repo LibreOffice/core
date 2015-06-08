@@ -23,7 +23,7 @@
 #include <vector>
 #include <map>
 #include <set>
-#include <list>
+#include <vector>
 
 #include <svl/itemset.hxx>
 
@@ -834,9 +834,9 @@ private:
     XPropertySetRef     CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const;
 
 private:
-    typedef ::std::map<sal_uInt16, XclImpChDataFormatRef> XclImpChDataFormatMap;
-    typedef ::std::map<sal_uInt16, XclImpChTextRef>       XclImpChTextMap;
-    typedef ::std::list< XclImpChSerTrendLineRef >        XclImpChSerTrendLineList;
+    typedef ::std::map<sal_uInt16, XclImpChDataFormatRef>    XclImpChDataFormatMap;
+    typedef ::std::map<sal_uInt16, XclImpChTextRef>          XclImpChTextMap;
+    typedef ::std::vector< XclImpChSerTrendLineRef >         XclImpChSerTrendLineVec;
     typedef ::boost::ptr_map<sal_uInt8, XclImpChSerErrorBar> XclImpChSerErrorBarMap;
 
     XclChSeries         maData;             /// Contents of the CHSERIES record.
@@ -847,7 +847,7 @@ private:
     XclImpChDataFormatRef mxSeriesFmt;      /// CHDATAFORMAT group for series format.
     XclImpChDataFormatMap maPointFmts;      /// CHDATAFORMAT groups for data point formats.
     XclImpChTextMap     maLabels;           /// Data point labels (CHTEXT groups).
-    XclImpChSerTrendLineList maTrendLines;  /// Trend line settings (CHSERTRENDLINE records).
+    XclImpChSerTrendLineVec maTrendLines;  /// Trend line settings (CHSERTRENDLINE records).
     XclImpChSerErrorBarMap maErrorBars;     /// Error bar settings (CHSERERRORBAR records).
     sal_uInt16          mnGroupIdx;         /// Chart type group (CHTYPEGROUP group) this series is assigned to.
     sal_uInt16          mnSeriesIdx;        /// 0-based series index.

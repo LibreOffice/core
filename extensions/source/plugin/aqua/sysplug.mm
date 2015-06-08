@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(MacPluginComm, NullTimerHdl)
     aRec.what = nullEvent;
     aRec.where.h = aRec.where.v = 20000;
 
-    for( std::list< XPlugin_Impl* >::iterator it = m_aNullEventClients.begin();
+    for( std::vector< XPlugin_Impl* >::iterator it = m_aNullEventClients.begin();
          it != m_aNullEventClients.end(); ++it )
     {
         SysPlugData& rPlugData( (*it)->getSysPlugData() );

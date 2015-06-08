@@ -1852,7 +1852,7 @@ void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
     if( pEffect.get() )
     {
         pEffect->setEffectSequence( 0 );
-        maEffects.remove( pEffect );
+        maEffects.erase( std::remove(maEffects.begin(), maEffects.end(), pEffect), maEffects.end() );
     }
 
     rebuild();
@@ -2466,7 +2466,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
         Reference< XEnumerationAccess > xText( xTarget, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
 
-        std::list< sal_Int16 > aParaList;
+        std::vector< sal_Int16 > aParaList;
         sal_Int16 nPara;
 
         // fill the list with all valid paragraphs
@@ -2476,7 +2476,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
             if( xRange.is() && !xRange->getString().isEmpty() )
             {
                 if( bTextReverse ) // sort them
-                    aParaList.push_front( nPara );
+                    aParaList.insert( aParaList.begin(), nPara );
                 else
                     aParaList.push_back( nPara );
             }
@@ -2485,8 +2485,8 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
         ParagraphTarget aTarget;
         aTarget.Shape = xTarget;
 
-        std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
-        std::list< sal_Int16 >::iterator aEnd( aParaList.end() );
+        std::vector< sal_Int16 >::iterator aIter( aParaList.begin() );
+        std::vector< sal_Int16 >::iterator aEnd( aParaList.end() );
         while( aIter != aEnd )
         {
             aTarget.Paragraph = (*aIter++);
@@ -2814,7 +2814,7 @@ void EffectSequenceHelper::addListener( ISequenceListener* pListener )
 
 void EffectSequenceHelper::removeListener( ISequenceListener* pListener )
 {
-    maListeners.remove( pListener );
+    maListeners.erase( std::remove(maListeners.begin(), maListeners.end(), pListener), maListeners.end() );
 }
 
 struct stl_notify_listeners_func : public std::unary_function<ISequenceListener*, void>
@@ -3081,7 +3081,7 @@ void MainSequence::createMainSequence()
                 Reference< XTimeContainer > xInteractiveRoot( xChildNode, UNO_QUERY_THROW );
                 InteractiveSequencePtr pIS( new InteractiveSequence( xInteractiveRoot, this ) );
                 pIS->addListener( this );
-                maInteractiveSequenceList.push_back( pIS );
+                maInteractiveSequenceVec.push_back( pIS );
             }
         }
 
@@ -3125,10 +3125,10 @@ void MainSequence::reset()
 {
     EffectSequenceHelper::reset();
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    InteractiveSequenceVec::iterator aIter;
+    for( aIter = maInteractiveSequenceVec.begin(); aIter != maInteractiveSequenceVec.end(); ++aIter )
         (*aIter)->reset();
-    maInteractiveSequenceList.clear();
+    maInteractiveSequenceVec.clear();
 
     try
     {
@@ -3161,7 +3161,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     pIS.reset( new InteractiveSequence( xISRoot, this) );
     pIS->setTriggerShape( xShape );
     pIS->addListener( this );
-    maInteractiveSequenceList.push_back( pIS );
+    maInteractiveSequenceVec.push_back( pIS );
     return pIS;
 }
 
@@ -3171,8 +3171,8 @@ CustomAnimationEffectPtr MainSequence::findEffect( const ::com::sun::star::uno::
 
     if( pEffect.get() == 0 )
     {
-        InteractiveSequenceList::const_iterator aIter;
-        for( aIter = maInteractiveSequenceList.begin(); (aIter != maInteractiveSequenceList.end()) && (pEffect.get() == 0); ++aIter )
+        InteractiveSequenceVec::const_iterator aIter;
+        for( aIter = maInteractiveSequenceVec.begin(); (aIter != maInteractiveSequenceVec.end()) && (pEffect.get() == 0); ++aIter )
         {
             pEffect = (*aIter)->findEffect( xNode );
         }
@@ -3189,8 +3189,8 @@ sal_Int32 MainSequence::getOffsetFromEffect( const CustomAnimationEffectPtr& pEf
 
     nOffset = EffectSequenceHelper::getCount();
 
-    InteractiveSequenceList::const_iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    InteractiveSequenceVec::const_iterator aIter;
+    for( aIter = maInteractiveSequenceVec.begin(); aIter != maInteractiveSequenceVec.end(); ++aIter )
     {
         sal_Int32 nTemp = (*aIter)->getOffsetFromEffect( pEffect );
         if( nTemp != -1 )
@@ -3211,12 +3211,12 @@ CustomAnimationEffectPtr MainSequence::getEffectFromOffset( sal_Int32 nOffset ) 
 
         nOffset -= getCount();
 
-        InteractiveSequenceList::const_iterator aIter( maInteractiveSequenceList.begin() );
+        InteractiveSequenceVec::const_iterator aIter( maInteractiveSequenceVec.begin() );
 
-        while( (aIter != maInteractiveSequenceList.end()) && (nOffset > (*aIter)->getCount()) )
+        while( (aIter != maInteractiveSequenceVec.end()) && (nOffset > (*aIter)->getCount()) )
             nOffset -= (*aIter++)->getCount();
 
-        if( (aIter != maInteractiveSequenceList.end()) && (nOffset >= 0) )
+        if( (aIter != maInteractiveSequenceVec.end()) && (nOffset >= 0) )
             return (*aIter)->getEffectFromOffset( nOffset );
     }
 
@@ -3228,8 +3228,8 @@ bool MainSequence::disposeShape( const Reference< XShape >& xShape )
 {
     bool bChanges = EffectSequenceHelper::disposeShape( xShape );
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end();  )
+    InteractiveSequenceVec::iterator aIter;
+    for( aIter = maInteractiveSequenceVec.begin(); aIter != maInteractiveSequenceVec.end();  )
     {
             bChanges |= (*aIter++)->disposeShape( xShape );
     }
@@ -3245,8 +3245,8 @@ bool MainSequence::hasEffect( const com::sun::star::uno::Reference< com::sun::st
     if( EffectSequenceHelper::hasEffect( xShape ) )
         return true;
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end();  )
+    InteractiveSequenceVec::iterator aIter;
+    for( aIter = maInteractiveSequenceVec.begin(); aIter != maInteractiveSequenceVec.end();  )
     {
         if( (*aIter)->getTriggerShape() == xShape )
             return true;
@@ -3262,8 +3262,8 @@ void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
 {
     EffectSequenceHelper::insertTextRange( aTarget );
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    InteractiveSequenceVec::iterator aIter;
+    for( aIter = maInteractiveSequenceVec.begin(); aIter != maInteractiveSequenceVec.end(); ++aIter )
     {
         (*aIter)->insertTextRange( aTarget );
     }
@@ -3273,8 +3273,8 @@ void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
 {
     EffectSequenceHelper::disposeTextRange( aTarget );
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    InteractiveSequenceVec::iterator aIter;
+    for( aIter = maInteractiveSequenceVec.begin(); aIter != maInteractiveSequenceVec.end(); ++aIter )
     {
         (*aIter)->disposeTextRange( aTarget );
     }
@@ -3285,8 +3285,8 @@ void MainSequence::onTextChanged( const Reference< XShape >& xShape )
 {
     EffectSequenceHelper::onTextChanged( xShape );
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    InteractiveSequenceVec::iterator aIter;
+    for( aIter = maInteractiveSequenceVec.begin(); aIter != maInteractiveSequenceVec.end(); ++aIter )
     {
         (*aIter)->onTextChanged( xShape );
     }
@@ -3342,15 +3342,15 @@ void MainSequence::implRebuild()
 
     EffectSequenceHelper::implRebuild();
 
-    InteractiveSequenceList::iterator aIter( maInteractiveSequenceList.begin() );
-    const InteractiveSequenceList::iterator aEnd( maInteractiveSequenceList.end() );
+    InteractiveSequenceVec::iterator aIter( maInteractiveSequenceVec.begin() );
+    const InteractiveSequenceVec::iterator aEnd( maInteractiveSequenceVec.end() );
     while( aIter != aEnd )
     {
         InteractiveSequencePtr pIS( (*aIter) );
         if( pIS->maEffects.empty() )
         {
             // remove empty interactive sequences
-            aIter = maInteractiveSequenceList.erase( aIter );
+            aIter = maInteractiveSequenceVec.erase( aIter );
 
             Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
             Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
@@ -3380,8 +3380,8 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::
     EffectSequenceHelper* pNewSequence = 0;
     if( xTriggerShape.is() )
     {
-        InteractiveSequenceList::iterator aIter( maInteractiveSequenceList.begin() );
-        const InteractiveSequenceList::iterator aEnd( maInteractiveSequenceList.end() );
+        InteractiveSequenceVec::iterator aIter( maInteractiveSequenceVec.begin() );
+        const InteractiveSequenceVec::iterator aEnd( maInteractiveSequenceVec.end() );
         while( aIter != aEnd )
         {
             InteractiveSequencePtr pIS( (*aIter++) );
@@ -3403,7 +3403,7 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::
     if( pOldSequence != pNewSequence )
     {
         if( pOldSequence )
-            pOldSequence->maEffects.remove( pEffect );
+            pOldSequence->maEffects.erase( std::remove(pOldSequence->maEffects.begin(), pOldSequence->maEffects.end(), pEffect), pOldSequence->maEffects.end() );
         if( pNewSequence )
             pNewSequence->maEffects.push_back( pEffect );
         pEffect->setEffectSequence( pNewSequence );

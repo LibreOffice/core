@@ -2435,7 +2435,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         const SwContact* pContact = _rFrameFormat.FindContactObj();
         if ( pContact )
         {
-            std::list<SwAnchoredObject*> aAnchoredObjs;
+            std::vector<SwAnchoredObject*> aAnchoredObjs;
             pContact->GetAnchoredObjs( aAnchoredObjs );
             if ( !aAnchoredObjs.empty() )
             {

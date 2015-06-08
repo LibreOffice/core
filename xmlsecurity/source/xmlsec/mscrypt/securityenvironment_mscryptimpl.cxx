@@ -149,21 +149,21 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
     }
 
     if( !m_tSymKeyList.empty()  ) {
-        std::list< HCRYPTKEY >::iterator symKeyIt ;
+        std::vector< HCRYPTKEY >::iterator symKeyIt ;
 
         for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; ++symKeyIt )
             CryptDestroyKey( *symKeyIt ) ;
     }
 
     if( !m_tPubKeyList.empty()  ) {
-        std::list< HCRYPTKEY >::iterator pubKeyIt ;
+        std::vector< HCRYPTKEY >::iterator pubKeyIt ;
 
         for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; ++pubKeyIt )
             CryptDestroyKey( *pubKeyIt ) ;
     }
 
     if( !m_tPriKeyList.empty()  ) {
-        std::list< HCRYPTKEY >::iterator priKeyIt ;
+        std::vector< HCRYPTKEY >::iterator priKeyIt ;
 
         for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt )
             CryptDestroyKey( *priKeyIt ) ;
@@ -302,7 +302,7 @@ void SecurityEnvironment_MSCryptImpl :: setCertDb( HCERTSTORE aCertDb ) throw( E
 
 void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( Exception , RuntimeException ) {
     HCRYPTKEY   symkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
+    std::vector< HCRYPTKEY >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
         //First try to find the key in the list
@@ -324,7 +324,7 @@ void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( 
 
 HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) throw( Exception , RuntimeException ) {
     HCRYPTKEY symkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
+    std::vector< HCRYPTKEY >::iterator keyIt ;
     unsigned int pos ;
 
     symkey = NULL ;
@@ -338,7 +338,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) 
 
 HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) throw( Exception , RuntimeException ) {
     HCRYPTKEY pubkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
+    std::vector< HCRYPTKEY >::iterator keyIt ;
     unsigned int pos ;
 
     pubkey = NULL ;
@@ -352,7 +352,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) 
 
 HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) throw( Exception , RuntimeException ) {
     HCRYPTKEY prikey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
+    std::vector< HCRYPTKEY >::iterator keyIt ;
     unsigned int pos ;
 
     prikey = NULL ;
@@ -369,7 +369,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
 {
     sal_Int32 length ;
     X509Certificate_MSCryptImpl* xcert ;
-    std::list< X509Certificate_MSCryptImpl* > certsList ;
+    std::vector< X509Certificate_MSCryptImpl* > certsList ;
     PCCERT_CONTEXT pCertContext = NULL;
 
     //firstly, we try to find private keys in given key store.
@@ -427,7 +427,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
     length = certsList.size() ;
     if( length != 0 ) {
         int i ;
-        std::list< X509Certificate_MSCryptImpl* >::iterator xcertIt ;
+        std::vector< X509Certificate_MSCryptImpl* >::iterator xcertIt ;
         Sequence< Reference< XCertificate > > certSeq( length ) ;
 
         for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); ++xcertIt, ++i ) {

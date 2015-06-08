@@ -48,30 +48,26 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
         return;
 
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link<>> aCopy( m_aListeners );
-    std::list<Link<>>::iterator aIter( aCopy.begin() );
-    std::list<Link<>>::const_iterator aEnd( aCopy.end() );
+    std::vector<Link<>> aCopy( m_aListeners );
     if( pEvent->IsA( VclWindowEvent::StaticType() ) )
     {
         VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(pEvent);
         ImplDelData aDel( pWinEvent->GetWindow() );
-        while ( aIter != aEnd && ! aDel.IsDead() )
+        for ( Link<>& rLink : aCopy )
         {
-            Link<> &rLink = *aIter;
-            // check this hasn't been removed in some re-enterancy scenario fdo#47368
+            if ( aDel.IsDead() )
+                break;
+            // check this hasn't been removed in some re-entrancy scenario fdo#47368
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( pEvent );
-            ++aIter;
         }
     }
     else
     {
-        while ( aIter != aEnd )
+        for ( Link<>& rLink : aCopy )
         {
-            Link<> &rLink = *aIter;
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( pEvent );
-            ++aIter;
         }
     }
 }
@@ -83,17 +79,14 @@ bool VclEventListeners::Process( VclSimpleEvent* pEvent ) const
 
     bool bProcessed = false;
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link<>> aCopy( m_aListeners );
-    std::list<Link<>>::iterator aIter( aCopy.begin() );
-    std::list<Link<>>::const_iterator aEnd( aCopy.end() );
-    while ( aIter != aEnd )
+    std::vector<Link<>> aCopy( m_aListeners );
+    for ( Link<>& rLink : aCopy )
     {
-        if( (*aIter).Call( pEvent ) != 0 )
+        if( rLink.Call( pEvent ) != 0 )
         {
             bProcessed = true;
             break;
         }
-        ++aIter;
     }
     return bProcessed;
 }
@@ -105,7 +98,7 @@ void VclEventListeners::addListener( const Link<>& rListener )
 
 void VclEventListeners::removeListener( const Link<>& rListener )
 {
-    m_aListeners.remove( rListener );
+    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener), m_aListeners.end() );
 }
 
 VclEventListeners2::VclEventListeners2()
@@ -119,7 +112,7 @@ VclEventListeners2::~VclEventListeners2()
 void VclEventListeners2::addListener( const Link<>& i_rLink )
 {
     // ensure uniqueness
-    for( std::list< Link<> >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+    for( std::vector< Link<> >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
     {
         if( *it == i_rLink )
             return;
@@ -138,7 +131,7 @@ void VclEventListeners2::removeListener( const Link<>& i_rLink )
             ++m_aIterators[i].m_aIt;
         }
     }
-    m_aListeners.remove( i_rLink );
+    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), i_rLink), m_aListeners.end() );
 }
 
 void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )

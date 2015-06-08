@@ -32,7 +32,7 @@
 
 #include <sddllapi.h>
 
-#include <list>
+#include <vector>
 #include <map>
 
 class SdrPathObj;
@@ -48,7 +48,7 @@ typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
 
 typedef boost::shared_ptr< CustomAnimationEffect > CustomAnimationEffectPtr;
 
-typedef std::list< CustomAnimationEffectPtr > EffectSequence;
+typedef std::vector< CustomAnimationEffectPtr > EffectSequence;
 
 class EffectSequenceHelper;
 
@@ -351,7 +351,7 @@ protected:
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer > mxSequenceRoot;
     EffectSequence maEffects;
-    std::list< ISequenceListener* > maListeners;
+    std::vector< ISequenceListener* > maListeners;
     CustomAnimationTextGroupMap maGroupMap;
     sal_Int32 mnSequenceType;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxEventSource;
@@ -377,7 +377,7 @@ private:
 };
 
 typedef boost::shared_ptr< InteractiveSequence > InteractiveSequencePtr;
-typedef std::list< InteractiveSequencePtr > InteractiveSequenceList;
+typedef std::vector< InteractiveSequencePtr > InteractiveSequenceVec;
 
 class MainSequence : public EffectSequenceHelper, public ISequenceListener
 {
@@ -404,7 +404,7 @@ public:
     virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ) SAL_OVERRIDE;
     virtual void onTextChanged( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ) SAL_OVERRIDE;
 
-    const InteractiveSequenceList& getInteractiveSequenceList() const { return maInteractiveSequenceList; }
+    const InteractiveSequenceVec& getInteractiveSequenceVec() const { return maInteractiveSequenceVec; }
 
     virtual void notify_change() SAL_OVERRIDE;
 
@@ -436,7 +436,7 @@ protected:
 
     InteractiveSequencePtr createInteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
 
-    InteractiveSequenceList maInteractiveSequenceList;
+    InteractiveSequenceVec maInteractiveSequenceVec;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesListener > mxChangesListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer > mxTimingRootNode;

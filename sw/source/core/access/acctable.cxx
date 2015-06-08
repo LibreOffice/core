@@ -21,7 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
-#include <list>
+#include <vector>
 #include <set>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -62,7 +62,7 @@ typedef ::std::less < sal_Int32 > Int32Less_Impl;
 typedef ::std::set < sal_Int32, Int32Less_Impl > Int32Set_Impl;
 
 typedef ::std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
-typedef ::std::list < Int32Pair_Impl > Int32PairList_Impl;
+typedef ::std::vector < Int32Pair_Impl > Int32PairList_Impl;
 
 const unsigned int SELECTION_WITH_NUM = 10;
 

@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <list>
+#include <vector>
 #include <set>
 
 #include <com/sun/star/beans/Optional.hpp>
@@ -82,7 +82,7 @@ struct UnresolvedListItem {
         name(theName), manager(theManager) {}
 };
 
-typedef std::list< UnresolvedListItem > UnresolvedList;
+typedef std::vector< UnresolvedListItem > UnresolvedList;
 
 void parseXcsFile(
     OUString const & url, int layer, Data & data, Partial const * partial,
@@ -720,7 +720,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
         for (UnresolvedList::iterator i(unres.begin()); i != unres.end();) {
             if (i->manager->parse(&existingDeps)) {
                 processedDeps.insert(i->name);
-                unres.erase(i++);
+                i = unres.erase(i);
                 resolved = true;
             } else {
                 ++i;

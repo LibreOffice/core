@@ -655,7 +655,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
             nSize += psp::appendStr ("/",
                                      pEncodingVector + nSize);
 
-            std::list< OString > aName( rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second) );
+            std::vector< OString > aName( rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second) );
 
             if( aName.begin() != aName.end() )
                 nSize += psp::appendStr ( aName.front().getStr(), pEncodingVector + nSize);
@@ -728,7 +728,7 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
 }
 
 bool
-GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42, std::list< OString >& rSuppliedFonts )
+GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42, std::vector< OString >& rSuppliedFonts )
 {
     // only for truetype fonts
     if (meBaseType != fonttype::TrueType)

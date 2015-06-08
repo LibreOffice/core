@@ -241,7 +241,7 @@ void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (Runt
 //  class VCLXTopWindow
 
 
-void VCLXTopWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXTopWindow::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     VCLXContainer::ImplGetPropertyIds( rIds );
 }

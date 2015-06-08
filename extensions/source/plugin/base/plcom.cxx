@@ -57,11 +57,11 @@ PluginComm::PluginComm( const OString& rLibName, bool bReusable ) :
 
 PluginComm::~PluginComm()
 {
-    PluginManager::get().getPluginComms().remove( this );
-    while( m_aFilesToDelete.size() )
+    auto v = PluginManager::get().getPluginComms();
+    v.erase( std::remove(v.begin(), v.end(), this), v.end() );
+    for( auto f : m_aFilesToDelete )
     {
-        OUString aFile( m_aFilesToDelete.front() );
-        m_aFilesToDelete.pop_front();
+        OUString aFile( f );
         osl::FileBase::getFileURLFromSystemPath( aFile, aFile );
         osl::File::remove( aFile );
     }

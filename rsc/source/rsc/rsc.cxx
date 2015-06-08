@@ -240,7 +240,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     // was an inputted file specified
     else if( !aInputList.empty() )
     {
-        ::std::list<OutputFile>::iterator it;
+        ::std::vector<OutputFile>::iterator it;
         for( it = m_aOutputFiles.begin(); it != m_aOutputFiles.end(); ++it )
         {
             if( it->aOutputRc.isEmpty() )
@@ -264,10 +264,10 @@ OString RscCmdLine::substitutePaths( const OString& rIn )
 {
     // prepare return value
     OStringBuffer aRet( 256 );
-    std::list< std::pair< OString, OString > >::const_iterator last_match = m_aReplacements.end();
+    std::vector< std::pair< OString, OString > >::const_iterator last_match = m_aReplacements.end();
 
     // search for longest replacement match
-    for( std::list< std::pair< OString, OString > >::const_iterator repl = m_aReplacements.begin(); repl != m_aReplacements.end(); ++repl )
+    for( std::vector< std::pair< OString, OString > >::const_iterator repl = m_aReplacements.begin(); repl != m_aReplacements.end(); ++repl )
     {
         if( rIn.startsWith( repl->second ) ) // path matches
         {
@@ -567,7 +567,7 @@ ERRTYPE RscCompiler::Link()
 
     if( !(pCL->nCommands & NOLINK_FLAG) )
     {
-        ::std::list<RscCmdLine::OutputFile>::const_iterator it;
+        ::std::vector<RscCmdLine::OutputFile>::const_iterator it;
 
         for( it = pCL->m_aOutputFiles.begin(); it != pCL->m_aOutputFiles.end(); ++it )
         {
@@ -747,17 +747,17 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                     OString& rImagePath,
                                     FILE* pSysListFile )
 {
-    ::std::list< OString >  aFileNames;
+    ::std::vector< OString >  aFileNames;
     bool bFound = false;
 
     aFileNames.push_back( rBaseFileName + OString(".png") );
     aFileNames.push_back( rBaseFileName + OString(".bmp") );
 
-    ::std::list< OString >::iterator aFileIter( aFileNames.begin() );
+    ::std::vector< OString >::iterator aFileIter( aFileNames.begin() );
 
     while( ( aFileIter != aFileNames.end() ) && !bFound )
     {
-        ::std::list< OString >::const_iterator aDirIter( rOutputFile.aSysSearchDirs.begin() );
+        ::std::vector< OString >::const_iterator aDirIter( rOutputFile.aSysSearchDirs.begin() );
 
         while( ( aDirIter != rOutputFile.aSysSearchDirs.end() ) && !bFound )
         {
@@ -781,7 +781,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
             if( bFile )
             {
-                std::list< std::pair< OString, OString > >::const_iterator  aReplIter( rContext.pCmdLine->m_aReplacements.begin() );
+                std::vector< std::pair< OString, OString > >::const_iterator  aReplIter( rContext.pCmdLine->m_aReplacements.begin() );
                 OString aRelPathStr( aSysPath );
 
                 while( ( aReplIter != rContext.pCmdLine->m_aReplacements.end() ) && !bFound )

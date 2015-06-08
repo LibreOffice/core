@@ -27,12 +27,12 @@
 #include "formulacell.hxx"
 #include <com/sun/star/container/XContainer.hpp>
 
-#include <list>
+#include <vector>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
-using ::std::list;
+using ::std::vector;
 using ::std::for_each;
 using ::std::pair;
 
@@ -50,7 +50,7 @@ public:
         if (itr == maCells.end())
         {
             pair<ModuleCellMap::iterator, bool> r = maCells.insert(
-                ModuleCellMap::value_type(rModuleName, list<ScFormulaCell*>()));
+                ModuleCellMap::value_type(rModuleName, vector<ScFormulaCell*>()));
 
             if (!r.second)
                 // insertion failed.
@@ -65,27 +65,27 @@ public:
     {
         ModuleCellMap::iterator itr = maCells.begin(), itrEnd = maCells.end();
         for (; itr != itrEnd; ++itr)
-            itr->second.remove(pCell);
+            itr->second.erase( std::remove(itr->second.begin(), itr->second.end(), pCell), itr->second.end() );
     }
 
-    void getCellsByModule(const OUString& rModuleName, list<ScFormulaCell*>& rCells)
+    void getCellsByModule(const OUString& rModuleName, vector<ScFormulaCell*>& rCells)
     {
         ModuleCellMap::iterator itr = maCells.find(rModuleName);
         if (itr == maCells.end())
             return;
 
-        list<ScFormulaCell*>& rCellList = itr->second;
+        vector<ScFormulaCell*>& rCellList = itr->second;
 
         // Remove duplicates.
-        rCellList.sort();
-        rCellList.unique();
+        std::sort(rCellList.begin(), rCellList.end());
+        std::unique(rCellList.begin(), rCellList.end());
         // exception safe copy
-        list<ScFormulaCell*> temp(rCellList);
+        vector<ScFormulaCell*> temp(rCellList);
         rCells.swap(temp);
     }
 
 private:
-    typedef std::unordered_map<OUString, list<ScFormulaCell*>, OUStringHash> ModuleCellMap;
+    typedef std::unordered_map<OUString, vector<ScFormulaCell*>, OUStringHash> ModuleCellMap;
     ModuleCellMap maCells;
 };
 
@@ -182,9 +182,9 @@ void ScMacroManager::RemoveDependentCell(ScFormulaCell* pCell)
 
 void ScMacroManager::BroadcastModuleUpdate(const OUString& aModuleName)
 {
-    list<ScFormulaCell*> aCells;
+    vector<ScFormulaCell*> aCells;
     mpDepTracker->getCellsByModule(aModuleName, aCells);
-    list<ScFormulaCell*>::iterator itr = aCells.begin(), itrEnd = aCells.end();
+    vector<ScFormulaCell*>::iterator itr = aCells.begin(), itrEnd = aCells.end();
     for (; itr != itrEnd; ++itr)
     {
         ScFormulaCell* pCell = *itr;

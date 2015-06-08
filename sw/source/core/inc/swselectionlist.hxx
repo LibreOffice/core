@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWSELECTIONLIST_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWSELECTIONLIST_HXX
 
-#include <list>
+#include <vector>
 
 class SwPaM;
 class SwFrm;
@@ -39,7 +39,7 @@ class SwFrm;
 
 class SwSelectionList
 {
-    std::list< SwPaM* > aList;  // container for the selected text portions
+    std::vector< SwPaM* > aList;  // container for the selected text portions
     const SwFrm* pContext;      // the context of these text portions
 public:
     /** Ctor to create an empty list for a given context
@@ -52,18 +52,18 @@ public:
 
     /** Start of the container for the selected text portions
     */
-    std::list<SwPaM*>::iterator getStart() { return aList.begin(); }
+    std::vector<SwPaM*>::iterator getStart() { return aList.begin(); }
 
     /** End of the container for the selected text portions
     */
-    std::list<SwPaM*>::iterator getEnd() { return aList.end(); }
+    std::vector<SwPaM*>::iterator getEnd() { return aList.end(); }
 
     /** Adds a text portion to the selection list
 
         @param pPam
         represents a text portion to select
     */
-    void insertPaM( SwPaM* pPam ) { aList.push_front( pPam ); }
+    void insertPaM( SwPaM* pPam ) { aList.insert( aList.begin(), pPam ); }
 
     /** Reports if the list does not contain any text portion
 

@@ -314,7 +314,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 
     frame::DispatchInformation                  aDispatchInfo;
-    std::list< frame::DispatchInformation >     aDispatchInfoList;
+    std::vector< frame::DispatchInformation >     aDispatchInfoList;
 
     if (( nCommandGroup == frame::CommandGroup::EDIT ) ||
         ( nCommandGroup == frame::CommandGroup::DOCUMENT ) ||
@@ -340,7 +340,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     }
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< ::com::sun::star::frame::DispatchInformation, std::list< ::com::sun::star::frame::DispatchInformation > >( aDispatchInfoList );
+        comphelper::containerToSequence< ::com::sun::star::frame::DispatchInformation, std::vector< ::com::sun::star::frame::DispatchInformation > >( aDispatchInfoList );
 
     return aSeq;
 }

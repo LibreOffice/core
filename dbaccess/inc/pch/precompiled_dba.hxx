@@ -307,7 +307,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <iterator>
 #include <limits>
-#include <list>
+#include <vector>
 #include <map>
 #include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>

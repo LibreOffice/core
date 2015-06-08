@@ -353,7 +353,7 @@ void myparser::traverse( xmlNodePtr parentNode )
             }
             else if (branch.compare("index") == 0)
             {
-                LinkedList ll;
+                StringVector ll;
 
                 for (xmlNodePtr nd = test->xmlChildrenNode; nd; nd = nd->next)
                 {

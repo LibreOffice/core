@@ -62,7 +62,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <vcl/vclptr.hxx>
 
-#include <list>
+#include <vector>
 
 class SystemChildWindow;
 
@@ -152,7 +152,7 @@ protected:
     void                        releasePeer();
 
 protected:
-    ::std::list< Reference< ::com::sun::star::lang::XEventListener > >  _aDisposeListeners;
+    ::std::vector< Reference< ::com::sun::star::lang::XEventListener > >  _aDisposeListeners;
     MRCListenerMultiplexerHelper*           _pMultiplexer;
 
     Reference< XInterface >                 _xContext;

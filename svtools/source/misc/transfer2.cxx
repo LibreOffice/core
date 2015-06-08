@@ -370,7 +370,7 @@ struct TDataCntnrEntry_Impl
 
 
 
-typedef ::std::list< TDataCntnrEntry_Impl > TDataCntnrEntryList;
+typedef ::std::vector< TDataCntnrEntry_Impl > TDataCntnrEntryList;
 
 
 

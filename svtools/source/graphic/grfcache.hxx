@@ -22,7 +22,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/timer.hxx>
-#include <list>
+#include <vector>
 
 
 // - GraphicManagerCache -
@@ -36,12 +36,12 @@ class GraphicObject;
 class GraphicCache
 {
 private:
-    typedef std::list< GraphicCacheEntry* > GraphicCacheEntryList;
-    typedef std::list< GraphicDisplayCacheEntry* > GraphicDisplayCacheEntryList;
+    typedef std::vector< GraphicCacheEntry* > GraphicCacheEntryVec;
+    typedef std::vector< GraphicDisplayCacheEntry* > GraphicDisplayCacheEntryVec;
 
     Timer                   maReleaseTimer;
-    GraphicCacheEntryList   maGraphicCache;
-    GraphicDisplayCacheEntryList maDisplayCache;
+    GraphicCacheEntryVec   maGraphicCache;
+    GraphicDisplayCacheEntryVec maDisplayCache;
     sal_uLong               mnReleaseTimeoutSeconds;
     sal_uLong               mnMaxDisplaySize;
     sal_uLong               mnMaxObjDisplaySize;

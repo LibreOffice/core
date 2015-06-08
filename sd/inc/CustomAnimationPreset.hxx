@@ -36,7 +36,7 @@ namespace sd {
 
 typedef std::unordered_map< OUString, CustomAnimationEffectPtr, OUStringHash > EffectsSubTypeMap;
 typedef std::unordered_map< OUString, OUString, OUStringHash > UStringMap;
-typedef std::vector< OUString > UStringList;
+typedef std::vector< OUString > UStringVector;
 
 class CustomAnimationPreset
 {
@@ -55,8 +55,8 @@ public:
     sal_Int16 getPresetClass() const { return mnPresetClass; }
     double getDuration() const { return mfDuration; }
 
-    UStringList getSubTypes();
-    UStringList getProperties() const;
+    UStringVector getSubTypes();
+    UStringVector getProperties() const;
 
     bool hasProperty( const OUString& rProperty ) const;
     bool isTextOnly() const { return mbIsTextOnly; }

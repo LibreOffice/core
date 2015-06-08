@@ -121,21 +121,21 @@ SecurityEnvironment_NssImpl :: ~SecurityEnvironment_NssImpl() {
     }
 
     if( !m_tSymKeyList.empty()  ) {
-        std::list< PK11SymKey* >::iterator symKeyIt ;
+        std::vector< PK11SymKey* >::iterator symKeyIt ;
 
         for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; ++symKeyIt )
             PK11_FreeSymKey( *symKeyIt ) ;
     }
 
     if( !m_tPubKeyList.empty()  ) {
-        std::list< SECKEYPublicKey* >::iterator pubKeyIt ;
+        std::vector< SECKEYPublicKey* >::iterator pubKeyIt ;
 
         for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; ++pubKeyIt )
             SECKEY_DestroyPublicKey( *pubKeyIt ) ;
     }
 
     if( !m_tPriKeyList.empty()  ) {
-        std::list< SECKEYPrivateKey* >::iterator priKeyIt ;
+        std::vector< SECKEYPrivateKey* >::iterator priKeyIt ;
 
         for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt )
             SECKEY_DestroyPrivateKey( *priKeyIt ) ;
@@ -232,7 +232,7 @@ void SecurityEnvironment_NssImpl :: setCertDb( CERTCertDBHandle* aCertDb ) throw
 }
 
 void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Exception , RuntimeException ) {
-    std::list< PK11SymKey* >::iterator keyIt ;
+    std::vector< PK11SymKey* >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
         //First try to find the key in the list
@@ -256,7 +256,7 @@ void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Ex
 
 PK11SymKey* SecurityEnvironment_NssImpl :: getSymKey( unsigned int position ) throw( Exception , RuntimeException ) {
     PK11SymKey* symkey ;
-    std::list< PK11SymKey* >::iterator keyIt ;
+    std::vector< PK11SymKey* >::iterator keyIt ;
     unsigned int pos ;
 
     symkey = NULL ;
@@ -270,7 +270,7 @@ PK11SymKey* SecurityEnvironment_NssImpl :: getSymKey( unsigned int position ) th
 
 SECKEYPublicKey* SecurityEnvironment_NssImpl :: getPubKey( unsigned int position ) throw( Exception , RuntimeException ) {
     SECKEYPublicKey* pubkey ;
-    std::list< SECKEYPublicKey* >::iterator keyIt ;
+    std::vector< SECKEYPublicKey* >::iterator keyIt ;
     unsigned int pos ;
 
     pubkey = NULL ;
@@ -284,7 +284,7 @@ SECKEYPublicKey* SecurityEnvironment_NssImpl :: getPubKey( unsigned int position
 
 SECKEYPrivateKey* SecurityEnvironment_NssImpl :: getPriKey( unsigned int position ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException )  {
     SECKEYPrivateKey* prikey ;
-    std::list< SECKEYPrivateKey* >::iterator keyIt ;
+    std::vector< SECKEYPrivateKey* >::iterator keyIt ;
     unsigned int pos ;
 
     prikey = NULL ;
@@ -356,7 +356,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
 {
     sal_Int32 length ;
     X509Certificate_NssImpl* xcert ;
-    std::list< X509Certificate_NssImpl* > certsList ;
+    std::vector< X509Certificate_NssImpl* > certsList ;
 
     updateSlots();
     //firstly, we try to find private keys in slot
@@ -394,7 +394,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
 
     //secondly, we try to find certificate from registered private keys.
     if( !m_tPriKeyList.empty()  ) {
-        std::list< SECKEYPrivateKey* >::iterator priKeyIt ;
+        std::vector< SECKEYPrivateKey* >::iterator priKeyIt ;
 
         for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt ) {
             xcert = NssPrivKeyToXCert( *priKeyIt ) ;
@@ -406,7 +406,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
     length = certsList.size() ;
     if( length != 0 ) {
         int i ;
-        std::list< X509Certificate_NssImpl* >::iterator xcertIt ;
+        std::vector< X509Certificate_NssImpl* >::iterator xcertIt ;
         Sequence< Reference< XCertificate > > certSeq( length ) ;
 
         for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); ++xcertIt, ++i ) {

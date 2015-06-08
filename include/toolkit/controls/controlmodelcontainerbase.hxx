@@ -65,7 +65,7 @@ public:
     typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >, OUString >
                                                         UnoControlModelHolder;
 private:
-    typedef ::std::list< UnoControlModelHolder >        UnoControlModelHolderList;
+    typedef ::std::vector< UnoControlModelHolder >        UnoControlModelHolderList;
 
 public:
     // for grouping control models (XTabControllerModel::getGroupXXX)

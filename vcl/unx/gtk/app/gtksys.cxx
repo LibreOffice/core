@@ -284,7 +284,7 @@ static OString MapToGtkAccelerator(const OUString &rStr)
 }
 
 int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMessage,
-                                    const std::list< OUString >& rButtonNames,
+                                    const std::vector< OUString >& rButtonNames,
                                     int nDefaultButton)
 {
     OString aTitle (OUStringToOString (rTitle, RTL_TEXTENCODING_UTF8));
@@ -297,7 +297,7 @@ int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMes
                       "text", aMessage.getStr(),
                       NULL));
     int nButton = 0;
-    std::list< OUString >::const_iterator it;
+    std::vector< OUString >::const_iterator it;
     for (it = rButtonNames.begin(); it != rButtonNames.end(); ++it)
         gtk_dialog_add_button (pDialog, MapToGtkAccelerator(*it).getStr(), nButton++);
     gtk_dialog_set_default_response (pDialog, nDefaultButton);

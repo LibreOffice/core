@@ -24,7 +24,7 @@
 #include <swtypes.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
-#include <list>
+#include <vector>
 
 #include "calbck.hxx"
 #include <anchoreddrawobject.hxx>
@@ -170,7 +170,7 @@ public:
     /** get data collection of anchored objects, handled by with contact
 
     */
-    virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
+    virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
 
     /** get minimum order number of anchored objects handled by with contact
 
@@ -216,7 +216,7 @@ public:
 
     /** get data collection of anchored objects handled by with contact
     */
-    virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const SAL_OVERRIDE;
+    virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const SAL_OVERRIDE;
 };
 
 /** new class for re-direct methods calls at a 'virtual'
@@ -326,7 +326,7 @@ class SwDrawContact : public SwContact
 
         /** data structure for collecting 'virtual'
          drawing object supporting drawing objects in headers/footers. */
-        std::list<SwDrawVirtObj*> maDrawVirtObjs;
+        std::vector<SwDrawVirtObj*> maDrawVirtObjs;
 
         /** boolean indicating set 'master' drawing
          object has been cleared. */
@@ -459,8 +459,8 @@ class SwDrawContact : public SwContact
         /** get data collection of anchored objects, handled by with contact
         */
 
-        static void GetTextObjectsFromFormat( std::list<SdrTextObj*>&, SwDoc* );
-        virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const SAL_OVERRIDE;
+        static void GetTextObjectsFromFormat( std::vector<SdrTextObj*>&, SwDoc* );
+        virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const SAL_OVERRIDE;
 };
 
 #endif

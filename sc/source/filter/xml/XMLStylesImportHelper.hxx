@@ -26,7 +26,7 @@
 
 #include <set>
 #include <vector>
-#include <list>
+#include <vector>
 #include <boost/shared_ptr.hpp>
 
 class ScXMLImport;
@@ -94,7 +94,7 @@ class ScMyStyleRanges : public SvRefBase
     ::boost::shared_ptr<ScSimpleRangeList> mpUndefinedList;
     ScMyCurrencyStylesSet*  pCurrencyList;
 
-    static void SetStylesToRanges(const ::std::list<ScRange>& rList,
+    static void SetStylesToRanges(const ::std::vector<ScRange>& rList,
         const OUString* pStyleName, const sal_Int16 nCellType,
         const OUString* pCurrency, ScXMLImport& rImport);
 public:

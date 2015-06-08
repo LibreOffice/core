@@ -68,8 +68,8 @@ void DisplayConnection::terminate()
 
     MutexGuard aGuard( m_aMutex );
     Any aEvent;
-    std::list< css::uno::Reference< XEventHandler > > aLocalList( m_aHandlers );
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = aLocalList.begin(); it != aLocalList.end(); ++it )
+    std::vector< css::uno::Reference< XEventHandler > > aLocalList( m_aHandlers );
+    for( ::std::vector< css::uno::Reference< XEventHandler > >::const_iterator it = aLocalList.begin(); it != aLocalList.end(); ++it )
         (*it)->handleEvent( aEvent );
 }
 
@@ -84,7 +84,7 @@ void SAL_CALL DisplayConnection::removeEventHandler( const Any& /*window*/, cons
 {
     MutexGuard aGuard( m_aMutex );
 
-    m_aHandlers.remove( handler );
+    m_aHandlers.erase( std::remove(m_aHandlers.begin(), m_aHandlers.end(), handler), m_aHandlers.end() );
 }
 
 void SAL_CALL DisplayConnection::addErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
@@ -98,7 +98,7 @@ void SAL_CALL DisplayConnection::removeErrorHandler( const css::uno::Reference< 
 {
     MutexGuard aGuard( m_aMutex );
 
-    m_aErrorHandlers.remove( handler );
+    m_aErrorHandlers.erase( std::remove(m_aErrorHandlers.begin(), m_aErrorHandlers.end(), handler), m_aErrorHandlers.end() );
 }
 
 Any SAL_CALL DisplayConnection::getIdentifier() throw(std::exception)
@@ -113,12 +113,12 @@ bool DisplayConnection::dispatchEvent( void* pData, int nBytes )
     Sequence< sal_Int8 > aSeq( static_cast<sal_Int8*>(pData), nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    ::std::list< css::uno::Reference< XEventHandler > > handlers;
+    ::std::vector< css::uno::Reference< XEventHandler > > handlers;
     {
         MutexGuard aGuard( m_aMutex );
         handlers = m_aHandlers;
     }
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
+    for( ::std::vector< css::uno::Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
         if( (*it)->handleEvent( aEvent ) )
             return true;
     return false;
@@ -131,12 +131,12 @@ bool DisplayConnection::dispatchErrorEvent( void* pData, int nBytes )
     Sequence< sal_Int8 > aSeq( static_cast<sal_Int8*>(pData), nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    ::std::list< css::uno::Reference< XEventHandler > > handlers;
+    ::std::vector< css::uno::Reference< XEventHandler > > handlers;
     {
         MutexGuard aGuard( m_aMutex );
         handlers = m_aErrorHandlers;
     }
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
+    for( ::std::vector< css::uno::Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
         if( (*it)->handleEvent( aEvent ) )
             return true;
 

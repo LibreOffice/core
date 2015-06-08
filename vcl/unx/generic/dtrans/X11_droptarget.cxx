@@ -19,6 +19,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <X11_selection.hxx>
+#include <algorithm>
 
 using namespace x11;
 using namespace com::sun::star::uno;
@@ -85,7 +86,7 @@ void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
-    m_aListeners.remove( xListener );
+    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), xListener), m_aListeners.end() );
 }
 
 sal_Bool DropTarget::isActive() throw(std::exception)
@@ -115,10 +116,10 @@ void DropTarget::setDefaultActions( sal_Int8 actions ) throw(std::exception)
 void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
+    std::vector< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
-    for( std::list< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
+    for( std::vector< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
     {
         (*it)->drop( dtde );
     }
@@ -127,10 +128,10 @@ void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
 void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
+    std::vector< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
-    for( std::list< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
+    for( std::vector< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
     {
         (*it)->dragEnter( dtde );
     }
@@ -139,10 +140,10 @@ void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
 void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
+    std::vector< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
-    for( std::list< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
+    for( std::vector< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
     {
         (*it)->dragExit( dte );
     }
@@ -151,10 +152,10 @@ void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
 void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
+    std::vector< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
-    for( std::list< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
+    for( std::vector< Reference< XDropTargetListener > >::iterator it = aListeners.begin(); it!= aListeners.end(); ++it )
     {
         (*it)->dragOver( dtde );
     }

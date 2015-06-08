@@ -25,7 +25,7 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <list>
+#include <vector>
 #include <comphelper/extract.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -224,7 +224,7 @@ struct XMLEffectHint
 class AnimExpImpl
 {
 public:
-    list<XMLEffectHint> maEffects;
+    vector<XMLEffectHint> maEffects;
     rtl::Reference< XMLShapeExport > mxShapeExp;
 
     OUString msDimColor;
@@ -429,21 +429,16 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
 
 void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 {
-    mpImpl->maEffects.sort();
-
-    list<XMLEffectHint>::iterator aIter = mpImpl->maEffects.begin();
-    const list<XMLEffectHint>::iterator aEnd = mpImpl->maEffects.end();
-
     OUStringBuffer sTmp;
 
-    if( aIter != aEnd )
+    if( !mpImpl->maEffects.empty() )
     {
+        std::sort(mpImpl->maEffects.begin(), mpImpl->maEffects.end());
+
         SvXMLElementExport aElement( rExport, XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, true, true );
 
-        do
+        for(XMLEffectHint& rEffect : mpImpl->maEffects)
         {
-            XMLEffectHint& rEffect = *aIter;
-
             DBG_ASSERT( rEffect.mxShape.is(), "shape id creation failed for animation effect?" );
 
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_SHAPE_ID, rExport.getInterfaceToIdentifierMapper().getIdentifier( rEffect.mxShape ) );
@@ -528,10 +523,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                     SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, true, true );
                 }
             }
-
-            ++aIter;
         }
-        while( aIter != aEnd );
     }
 
     mpImpl->maEffects.clear();

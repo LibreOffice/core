@@ -70,7 +70,7 @@ public:
     bool                            mbSized:1;
     bool                            mbPresentation:1;
 
-    sal_uLong                           mnStyle;
+    sal_uLong                       mnStyle;
     unsigned int                    mnStyleMask;            // our style mask from NSWindow creation
 
     sal_uInt64                      mnLastEventTime;
@@ -86,7 +86,7 @@ public:
     CGMutablePathRef                mrClippingPath;         // used for "shaping"
     std::vector< CGRect >           maClippingRects;
 
-    std::list<AquaBlinker*>         maBlinkers;
+    std::vector<AquaBlinker*>       maBlinkers;
 
     Rectangle                       maInvalidRect;
 

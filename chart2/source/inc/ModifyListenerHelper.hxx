@@ -31,7 +31,7 @@
 #include "MutexContainer.hxx"
 #include "charttoolsdllapi.hxx"
 
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <functional>
 #include <utility>
@@ -97,7 +97,7 @@ private:
 //     ::osl::Mutex & m_rMutex;
     ::cppu::OBroadcastHelper  m_aModifyListeners;
 
-    typedef ::std::list<
+    typedef ::std::vector<
             ::std::pair<
             ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XModifyListener >,
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > > >

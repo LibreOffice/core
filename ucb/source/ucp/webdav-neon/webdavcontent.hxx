@@ -31,7 +31,7 @@
 
 #include <config_lgpl.h>
 #include <memory>
-#include <list>
+#include <vector>
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
@@ -124,7 +124,7 @@ private:
         throw ( ::com::sun::star::uno::Exception, std::exception );
 
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren);
 
     bool

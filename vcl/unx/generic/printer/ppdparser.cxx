@@ -42,6 +42,7 @@
 #include "com/sun/star/lang/Locale.hpp"
 
 #include <unordered_map>
+#include <list>
 
 namespace psp
 {
@@ -453,9 +454,9 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     rPPDCache.pAllPPDFiles = new std::unordered_map< OUString, OUString, OUStringHash >();
 
     // check installation directories
-    std::list< OUString > aPathList;
+    std::vector< OUString > aPathList;
     psp::getPrinterPathList( aPathList, PRINTER_PPDDIR );
-    for( std::list< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
+    for( std::vector< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
     {
         INetURLObject aPPDDir( *ppd_it, INetProtocol::File, INetURLObject::ENCODE_ALL );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -603,7 +604,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pTranslator( new PPDTranslator() )
 {
     // read in the file
-    std::list< OString > aLines;
+    std::vector< OString > aLines;
     PPDDecompressStream aStream( m_aFile );
     if( aStream.IsOpen() )
     {
@@ -697,7 +698,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
     }
     SAL_INFO("vcl.unx.print",
             "constraints: (" << m_aConstraints.size() << " found)");
-    for( std::list< PPDConstraint >::const_iterator cit = m_aConstraints.begin(); cit != m_aConstraints.end(); ++cit )
+    for( std::vector< PPDConstraint >::const_iterator cit = m_aConstraints.begin(); cit != m_aConstraints.end(); ++cit )
     {
         SAL_INFO("vcl.unx.print", "*\"" << cit->m_pKey1->getKey() << "\" \""
                 << (cit->m_pOption1 ? cit->m_pOption1->m_aOption : "<nil>")
@@ -872,9 +873,9 @@ namespace
     }
 }
 
-void PPDParser::parse( ::std::list< OString >& rLines )
+void PPDParser::parse( ::std::vector< OString >& rLines )
 {
-    std::list< OString >::iterator line = rLines.begin();
+    std::vector< OString >::iterator line = rLines.begin();
     PPDParser::hash_type::const_iterator keyit;
     while( line != rLines.end() )
     {
@@ -1696,8 +1697,8 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
         pNewValue == pKey->getDefaultValue() )
         return true;
 
-    const ::std::list< PPDParser::PPDConstraint >& rConstraints( m_pParser->getConstraints() );
-    for( ::std::list< PPDParser::PPDConstraint >::const_iterator it = rConstraints.begin(); it != rConstraints.end(); ++it )
+    const ::std::vector< PPDParser::PPDConstraint >& rConstraints( m_pParser->getConstraints() );
+    for( ::std::vector< PPDParser::PPDConstraint >::const_iterator it = rConstraints.begin(); it != rConstraints.end(); ++it )
     {
         const PPDKey* pLeft     = it->m_pKey1;
         const PPDKey* pRight    = it->m_pKey2;

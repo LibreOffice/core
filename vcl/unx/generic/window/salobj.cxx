@@ -240,14 +240,14 @@ X11SalObject::X11SalObject()
     maSystemChildData.aShellWindow  = 0;
     maSystemChildData.pShellWidget  = NULL;
 
-    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
+    std::vector< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
     rObjects.push_back( this );
 }
 
 X11SalObject::~X11SalObject()
 {
-    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
-    rObjects.remove( this );
+    std::vector< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
+    rObjects.erase( std::remove(rObjects.begin(), rObjects.end(), this), rObjects.end() );
 
     GetGenericData()->ErrorTrapPush();
     if ( maSecondary )
@@ -420,9 +420,9 @@ static sal_uInt16 sal_GetCode( int state )
 
 bool X11SalObject::Dispatch( XEvent* pEvent )
 {
-    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
+    std::vector< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
 
-    for( std::list< SalObject* >::iterator it = rObjects.begin(); it != rObjects.end(); ++it )
+    for( std::vector< SalObject* >::iterator it = rObjects.begin(); it != rObjects.end(); ++it )
     {
         X11SalObject* pObject = static_cast<X11SalObject*>(*it);
         if( pEvent->xany.window == pObject->maPrimary ||

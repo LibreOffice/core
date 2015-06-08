@@ -20,7 +20,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_CONTENT_HXX
 
 #include <memory>
-#include <list>
+#include <vector>
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
@@ -74,7 +74,7 @@ class Content : public ::ucbhelper::ContentImplHelper,
 
 private:
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
 
     // Instance data
     ContentProvider  *m_pProvider;  // No need for a ref, base class holds object

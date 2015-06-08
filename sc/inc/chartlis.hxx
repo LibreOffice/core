@@ -28,7 +28,7 @@
 #include "externalrefmgr.hxx"
 
 #include <vector>
-#include <list>
+#include <vector>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
@@ -146,7 +146,7 @@ private:
         SC_CLCUPDATE_RUNNING,
         SC_CLCUPDATE_MODIFIED
     } meModifiedDuringUpdate;
-    ::std::list<RangeListenerItem> maHiddenListeners;
+    ::std::vector<RangeListenerItem> maHiddenListeners;
     StringSetType maNonOleObjectNames;
 
     Idle            aIdle;

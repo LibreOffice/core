@@ -432,8 +432,8 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
     GlyphCache& rGC = getPlatformGlyphCache();
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    ::std::list< psp::fontID > aList;
-    ::std::list< psp::fontID >::iterator it;
+    ::std::vector< psp::fontID > aList;
+    ::std::vector< psp::fontID >::iterator it;
     psp::FastPrintFontInfo aInfo;
     rMgr.getFontList( aList );
     for( it = aList.begin(); it != aList.end(); ++it )

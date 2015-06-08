@@ -347,7 +347,7 @@ sal_uInt32 SwContact::GetMinOrdNum() const
 {
     sal_uInt32 nMinOrdNum( SAL_MAX_UINT32 );
 
-    std::list< SwAnchoredObject* > aObjs;
+    std::vector< SwAnchoredObject* > aObjs;
     GetAnchoredObjs( aObjs );
 
     while ( !aObjs.empty() )
@@ -372,7 +372,7 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 {
     sal_uInt32 nMaxOrdNum( 0L );
 
-    std::list< SwAnchoredObject* > aObjs;
+    std::vector< SwAnchoredObject* > aObjs;
     GetAnchoredObjs( aObjs );
 
     while ( !aObjs.empty() )
@@ -548,7 +548,7 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 }
 
 /// get data collection of anchored objects, handled by with contact
-void SwFlyDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
+void SwFlyDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const
 {
     const SwFrameFormat* pFormat = GetFormat();
     SwFlyFrm::GetAnchoredObjects( _roAnchoredObjs, *pFormat );
@@ -632,7 +632,7 @@ SwDrawContact::~SwDrawContact()
     }
 }
 
-void SwDrawContact::GetTextObjectsFromFormat( std::list<SdrTextObj*>& rTextObjects, SwDoc* pDoc )
+void SwDrawContact::GetTextObjectsFromFormat( std::vector<SdrTextObj*>& rTextObjects, SwDoc* pDoc )
 {
     for( sal_Int32 n=0; n<(sal_Int32)pDoc->GetSpzFrameFormats()->size(); n++ )
     {
@@ -850,7 +850,7 @@ SwDrawVirtObj* SwDrawContact::AddVirtObj()
     SwDrawVirtObj* pAddedDrawVirtObj = 0L;
 
     // check, if a disconnected 'virtual' drawing object exist and use it
-    std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
+    std::vector<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
             std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
                           UsedOrUnusedVirtObjPred( false ) );
 
@@ -872,7 +872,7 @@ SwDrawVirtObj* SwDrawContact::AddVirtObj()
 /// remove 'virtual' drawing objects and destroy them.
 void SwDrawContact::RemoveAllVirtObjs()
 {
-    for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjsIter = maDrawVirtObjs.begin();
+    for ( std::vector<SwDrawVirtObj*>::iterator aDrawVirtObjsIter = maDrawVirtObjs.begin();
           aDrawVirtObjsIter != maDrawVirtObjs.end();
           ++aDrawVirtObjsIter )
     {
@@ -955,7 +955,7 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
     }
     else
     {
-        std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
+        std::vector<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
                 std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
                               VirtObjAnchoredAtFrmPred( *pProposedAnchorFrm ) );
 
@@ -970,7 +970,7 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
 
 void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
 {
-    for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjIter = maDrawVirtObjs.begin();
+    for ( std::vector<SwDrawVirtObj*>::iterator aDrawVirtObjIter = maDrawVirtObjs.begin();
           aDrawVirtObjIter != maDrawVirtObjs.end();
           ++aDrawVirtObjIter )
     {
@@ -1563,7 +1563,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
 {
     // invalidate position of existing 'virtual' drawing objects
-    for ( std::list<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
+    for ( std::vector<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
           aDisconnectIter != maDrawVirtObjs.end();
           ++aDisconnectIter )
     {
@@ -1607,7 +1607,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 
     // remove 'virtual' drawing objects from writer
     // layout and from drawing page
-    for ( std::list<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
+    for ( std::vector<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
           aDisconnectIter != maDrawVirtObjs.end();
           ++aDisconnectIter )
     {
@@ -1674,7 +1674,7 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
     }
     else
     {
-        std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
+        std::vector<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
                 std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
                               UsedOrUnusedVirtObjPred( true ) );
         if ( aFoundVirtObjIter != maDrawVirtObjs.end() )
@@ -1971,11 +1971,11 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
 }
 
 /// get data collection of anchored objects, handled by with contact
-void SwDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
+void SwDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const
 {
     _roAnchoredObjs.push_back( const_cast<SwAnchoredDrawObject*>(&maAnchoredDrawObj) );
 
-    for ( std::list<SwDrawVirtObj*>::const_iterator aDrawVirtObjsIter = maDrawVirtObjs.begin();
+    for ( std::vector<SwDrawVirtObj*>::const_iterator aDrawVirtObjsIter = maDrawVirtObjs.begin();
           aDrawVirtObjsIter != maDrawVirtObjs.end();
           ++aDrawVirtObjsIter )
     {

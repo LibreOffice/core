@@ -171,10 +171,10 @@ void EffectMigration::SetFadeEffect( SdPage* pPage, ::com::sun::star::presentati
     {
         const OUString aPresetId( OUString::createFromAscii( pEntry->mpPresetId ) );
 
-        const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
+        const TransitionPresetVec& rPresetList = TransitionPreset::getTransitionPresetVec();
 
-        TransitionPresetList::const_iterator aIt( rPresetList.begin());
-        const TransitionPresetList::const_iterator aEndIt( rPresetList.end());
+        TransitionPresetVec::const_iterator aIt( rPresetList.begin());
+        const TransitionPresetVec::const_iterator aEndIt( rPresetList.end());
         for( ; aIt != aEndIt; ++aIt )
         {
             if( (*aIt)->getPresetId() == aPresetId)
@@ -198,9 +198,9 @@ void EffectMigration::SetFadeEffect( SdPage* pPage, ::com::sun::star::presentati
 
 FadeEffect EffectMigration::GetFadeEffect( const SdPage* pPage )
 {
-    const TransitionPresetList & rPresetList = TransitionPreset::getTransitionPresetList();
-    TransitionPresetList::const_iterator aIt( rPresetList.begin());
-    const TransitionPresetList::const_iterator aEndIt( rPresetList.end());
+    const TransitionPresetVec & rPresetList = TransitionPreset::getTransitionPresetVec();
+    TransitionPresetVec::const_iterator aIt( rPresetList.begin());
+    const TransitionPresetVec::const_iterator aEndIt( rPresetList.end());
     for( ; aIt != aEndIt; ++aIt )
     {
         if( ( (*aIt)->getTransition() == pPage->getTransitionType() ) &&

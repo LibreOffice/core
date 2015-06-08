@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <osl/mutex.hxx>
+#include <vector>
 
 #include "pk11func.h"
 #include "keyhi.h"
@@ -52,15 +53,15 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper3<
 {
 private :
 
-    std::list< PK11SlotInfo* > m_Slots;
-    typedef std::list< PK11SlotInfo* >::const_iterator CIT_SLOTS;
+    std::vector< PK11SlotInfo* > m_Slots;
+    typedef std::vector< PK11SlotInfo* >::const_iterator CIT_SLOTS;
 
     osl::Mutex m_mutex;
 
         CERTCertDBHandle*                   m_pHandler ;
-        std::list< PK11SymKey* >            m_tSymKeyList ;
-        std::list< SECKEYPublicKey* >       m_tPubKeyList ;
-        std::list< SECKEYPrivateKey* >      m_tPriKeyList ;
+        std::vector< PK11SymKey* >            m_tSymKeyList ;
+        std::vector< SECKEYPublicKey* >       m_tPubKeyList ;
+        std::vector< SECKEYPrivateKey* >      m_tPriKeyList ;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public :

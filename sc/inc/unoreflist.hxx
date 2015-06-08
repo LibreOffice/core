@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_UNOREFLIST_HXX
 #define INCLUDED_SC_INC_UNOREFLIST_HXX
 
-#include <list>
+#include <vector>
 #include <svl/hint.hxx>
 #include "rangelst.hxx"
 
@@ -42,7 +42,7 @@ struct ScUnoRefEntry
 class ScUnoRefList
 {
 private:
-    ::std::list<ScUnoRefEntry> aEntries;
+    ::std::vector<ScUnoRefEntry> aEntries;
 
 public:
                 ScUnoRefList();

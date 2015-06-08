@@ -431,13 +431,13 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames(
     const sal_uInt32 nCount = pList ? pList->size() : 0;
 
     uno::Sequence< OUString > aSequence( nCount );
-    OUString* pStringList = aSequence.getArray();
+    OUString* pStringVector = aSequence.getArray();
 
     sal_uInt32 nIdx = 0;
     while( nIdx < nCount )
     {
         const SdCustomShow* pShow = (*pList)[nIdx];
-        pStringList[nIdx] = pShow->GetName();
+        pStringVector[nIdx] = pShow->GetName();
         nIdx++;
     }
 

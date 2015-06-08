@@ -26,7 +26,7 @@
 
 #include <salframe.hxx>
 
-#include <list>
+#include <vector>
 
 #ifdef IOS
 #define SvpSalInstance AquaSalInstance
@@ -40,7 +40,7 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
 {
     SvpSalInstance*                     m_pInstance;
     SvpSalFrame*                        m_pParent;       // pointer to parent frame
-    std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
+    std::vector< SvpSalFrame* >         m_aChildren;     // List of child frames
     sal_uLong                           m_nStyle;
     bool                                m_bVisible;
     bool                                m_bTopDown;
@@ -56,9 +56,9 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
 
     SystemEnvData                       m_aSystemChildData;
 
-    std::list< SvpSalGraphics* >        m_aGraphics;
+    std::vector< SvpSalGraphics* >      m_aGraphics;
 
-    static SvpSalFrame*       s_pFocusFrame;
+    static SvpSalFrame*                 s_pFocusFrame;
 public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,

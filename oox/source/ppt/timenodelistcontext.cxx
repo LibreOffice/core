@@ -555,17 +555,15 @@ namespace oox { namespace ppt {
 
         virtual ~AnimContext() throw ()
             {
-                ::std::list< TimeAnimationValue >::iterator iter, end;
                 int nKeyTimes = maTavList.size();
                 if( nKeyTimes > 0)
                 {
-                    int i;
+                    int i = 0;
                     Sequence< double > aKeyTimes( nKeyTimes );
                     Sequence< Any > aValues( nKeyTimes );
 
                     NodePropertyMap & aProps( mpNode->getNodeProperties() );
-                    end = maTavList.end();
-                    for(iter = maTavList.begin(), i=0; iter != end; ++iter,++i)
+                    for(::std::vector< TimeAnimationValue >::iterator iter = maTavList.begin(); iter != maTavList.end(); ++iter,++i)
                     {
                         // TODO what to do if it is Timing_INFINITE ?
                         Any aTime = GetTimeAnimateValueTime( iter->msTime );

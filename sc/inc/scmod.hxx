@@ -31,7 +31,7 @@
 #include <tools/shl.hxx>
 
 #include <map>
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <stack>
 
@@ -111,7 +111,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     bool                mbIsInSharedDocLoading:1;
     bool                mbIsInSharedDocSaving:1;
 
-    std::map<sal_uInt16, std::list<VclPtr<vcl::Window> > > m_mapRefWindow;
+    std::map<sal_uInt16, std::vector<VclPtr<vcl::Window> > > m_mapRefWindow;
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 

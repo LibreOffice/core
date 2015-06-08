@@ -23,7 +23,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/shapeimport.hxx>
-#include <list>
+#include <vector>
 
 #include "transporttypes.hxx"
 
@@ -35,7 +35,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        std::list< RegressionStyle >& rRegressionStyleList,
+        std::vector< RegressionStyle >& rRegressionStyleList,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
         const ::com::sun::star::awt::Size & rChartSize );
@@ -53,7 +53,7 @@ private:
     SchXMLImportHelper&                mrImportHelper;
     com::sun::star::uno::Reference<com::sun::star::chart2::XDataSeries > mxSeries;
     com::sun::star::awt::Size          maChartSize;
-    std::list< RegressionStyle >&      mrRegressionStyleList;
+    std::vector< RegressionStyle >&      mrRegressionStyleList;
 };
 
 class SchXMLEquationContext : public SvXMLImportContext

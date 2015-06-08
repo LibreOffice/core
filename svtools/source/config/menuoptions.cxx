@@ -29,7 +29,7 @@
 
 #include "itemholder2.hxx"
 
-#include <list>
+#include <vector>
 
 
 //  namespaces
@@ -69,7 +69,7 @@ class SvtMenuOptions_Impl : public ConfigItem
 
 
     private:
-        ::std::list<Link<>> aList;
+        ::std::vector<Link<>> aList;
         bool        m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         bool        m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
         TriState    m_eMenuIcons                        ;   /// cache "MenuIcons" of Menu section
@@ -126,7 +126,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_eMenuIcons = eState;
                         SetModified();
-                        for ( ::std::list<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+                        for ( ::std::vector<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
                             iter->Call( this );
                         Commit();
                     }
@@ -285,7 +285,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     if ( bMenuSettingsChanged )
         m_eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
 
-    for ( ::std::list<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::vector<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
         iter->Call( this );
 }
 
@@ -354,7 +354,7 @@ void SvtMenuOptions_Impl::AddListenerLink( const Link<>& rLink )
 
 void SvtMenuOptions_Impl::RemoveListenerLink( const Link<>& rLink )
 {
-    for ( ::std::list<Link<>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::vector<Link<>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
         if ( *iter == rLink )
         {

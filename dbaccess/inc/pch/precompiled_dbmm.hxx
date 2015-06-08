@@ -59,7 +59,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <iterator>
-#include <list>
+#include <vector>
 #include <map>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>

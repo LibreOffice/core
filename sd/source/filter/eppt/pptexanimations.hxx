@@ -34,7 +34,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <list>
+#include <vector>
 
 class SvStream;
 
@@ -109,7 +109,7 @@ class AnimationExporter
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > createAfterEffectNodeClone( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
-    std::list< AfterEffectNodePtr > maAfterEffectNodes;
+    std::vector< AfterEffectNodePtr > maAfterEffectNodes;
 
 public:
     AnimationExporter( const EscherSolverContainer& rSolverContainer, ppt::ExSoundCollection& rExSoundCollection );

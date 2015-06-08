@@ -308,7 +308,7 @@ void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID)
 {
     ScMyDeleted* pDeleted = new ScMyDeleted();
     pDeleted->nID = nID;
-    pCurrentAction->aDeletedList.push_front(pDeleted);
+    pCurrentAction->aDeletedList.insert(pCurrentAction->aDeletedList.begin(), pDeleted);
 }
 
 void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, ScMyCellInfo* pCellInfo)
@@ -316,7 +316,7 @@ void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, ScMyCellI
     ScMyDeleted* pDeleted = new ScMyDeleted();
     pDeleted->nID = nID;
     pDeleted->pCellInfo = pCellInfo;
-    pCurrentAction->aDeletedList.push_front(pDeleted);
+    pCurrentAction->aDeletedList.insert(pCurrentAction->aDeletedList.begin(), pDeleted);
 }
 
 void ScXMLChangeTrackingImportHelper::SetMultiSpanned(const sal_Int16 nTempMultiSpanned)
@@ -348,7 +348,8 @@ void ScXMLChangeTrackingImportHelper::AddMoveCutOff(const sal_uInt32 nID, const 
     if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyDelAction*>(pCurrentAction)->aMoveCutOffs.push_front(ScMyMoveCutOff(nID, nStartPosition, nEndPosition));
+        auto v = static_cast<ScMyDelAction*>(pCurrentAction)->aMoveCutOffs;
+        v.insert(v.begin(), ScMyMoveCutOff(nID, nStartPosition, nEndPosition));
     }
     else
     {
@@ -670,13 +671,11 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
     {
         if (!pAction->aDependencies.empty())
         {
-            ScMyDependencies::iterator aItr(pAction->aDependencies.begin());
-            ScMyDependencies::iterator aEndItr(pAction->aDependencies.end());
-            while(aItr != aEndItr)
+            for(auto d : pAction->aDependencies)
             {
-                pAct->AddDependent(*aItr, pTrack);
-                aItr = pAction->aDependencies.erase(aItr);
+                pAct->AddDependent(d, pTrack);
             }
+            pAction->aDependencies.clear();
         }
         if (!pAction->aDeletedList.empty())
         {

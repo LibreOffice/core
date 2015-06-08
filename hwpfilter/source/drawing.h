@@ -22,7 +22,7 @@
 
 #include "precompile.h"
 
-#include <list>
+#include <vector>
 #include <math.h>
 
 #include <osl/diagnose.h>
@@ -666,7 +666,7 @@ static HWPPara *LoadParaList()
     HWPFile *hwpf = GetCurrentDoc();
     HIODev *hio = hwpf->SetIODevice(hmem);
 
-    std::list < HWPPara* > plist;
+    std::vector < HWPPara* > plist;
 
     hwpf->ReadParaList(plist);
     hwpf->SetIODevice(hio);

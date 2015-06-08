@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
-#include <list>
+#include <vector>
 #include <map>
 
 class SvXMLExport;
@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
  } } }
 
 // store a list of redline properties
-typedef ::std::list<
+typedef ::std::vector<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet> > ChangesListType;
 

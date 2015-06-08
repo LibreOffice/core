@@ -22,7 +22,7 @@
 
 #include <salvd.hxx>
 
-#include <list>
+#include <vector>
 
 class SvpSalGraphics;
 
@@ -30,7 +30,7 @@ class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
     sal_uInt16                          m_nBitCount;
     basebmp::BitmapDeviceSharedPtr      m_aDevice;
-    std::list< SvpSalGraphics* >        m_aGraphics;
+    std::vector< SvpSalGraphics* >      m_aGraphics;
 
 public:
     SvpSalVirtualDevice( sal_uInt16 nBitCount ) : m_nBitCount(nBitCount) {}

@@ -23,7 +23,7 @@
 #include <rscerror.h>
 #include <rsctools.hxx>
 
-#include <list>
+#include <vector>
 
 class RscTypCont;
 
@@ -47,13 +47,13 @@ public:
         OString aLangName;         // language name
         OString aOutputRc;         // target file
         OString aLangSearchPath;   // language specific search path
-        ::std::list< OString >    aSysSearchDirs;    // paths to search for images
+        ::std::vector< OString >    aSysSearchDirs;    // paths to search for images
 
         OutputFile() {}
     };
 
-    std::list<OutputFile>                                   m_aOutputFiles;
-    std::list< std::pair< OString, OString > >    m_aReplacements;
+    std::vector<OutputFile>                                   m_aOutputFiles;
+    std::vector< std::pair< OString, OString > >    m_aReplacements;
 
     RscCmdLine( int argc, char ** argv, RscError * pEH );
     ~RscCmdLine();

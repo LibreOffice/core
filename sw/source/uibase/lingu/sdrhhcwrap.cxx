@@ -124,9 +124,9 @@ bool SdrHHCWrapper::ConvertNextDocument()
 
     const auto n = nDocIndex;
 
-    std::list<SdrTextObj*> aTextObjs;
+    std::vector<SdrTextObj*> aTextObjs;
     SwDrawContact::GetTextObjectsFromFormat( aTextObjs, pView->GetDocShell()->GetDoc() );
-    for ( std::list<SdrTextObj*>::iterator aIt = aTextObjs.begin(); aIt != aTextObjs.end(); ++aIt )
+    for ( std::vector<SdrTextObj*>::iterator aIt = aTextObjs.begin(); aIt != aTextObjs.end(); ++aIt )
     {
         pTextObj = (*aIt);
         if ( pTextObj )

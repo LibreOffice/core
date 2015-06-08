@@ -32,7 +32,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <list>
+#include <vector>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,7 +51,7 @@ using namespace ::xmloff::token;
 
 class XMLMyList
 {
-    std::list<beans::PropertyValue> aProps;
+    std::vector<beans::PropertyValue> aProps;
     sal_uInt32                      nCount;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
@@ -80,7 +80,7 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
         assert(nCount == aProps.size());
         aSeq.realloc(nCount);
         beans::PropertyValue* pProps = aSeq.getArray();
-        std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
+        std::vector<beans::PropertyValue>::iterator aItr = aProps.begin();
         while (aItr != aProps.end())
         {
             *pProps = *aItr;
@@ -94,7 +94,7 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
 uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 {
     uno::Reference<container::XNameContainer> xNameContainer = document::NamedPropertyValues::create(m_xContext);
-    std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
+    std::vector<beans::PropertyValue>::iterator aItr = aProps.begin();
     while (aItr != aProps.end())
     {
         xNameContainer->insertByName(aItr->Name, aItr->Value);
@@ -107,7 +107,7 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
     uno::Reference<container::XIndexContainer> xIndexContainer = document::IndexedPropertyValues::create(m_xContext);
-    std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
+    std::vector<beans::PropertyValue>::iterator aItr = aProps.begin();
     sal_uInt32 i(0);
     while (aItr != aProps.end())
     {
@@ -285,7 +285,7 @@ struct XMLDocumentSettingsContext_Data
 {
     com::sun::star::uno::Any        aViewProps;
     com::sun::star::uno::Any        aConfigProps;
-    ::std::list< SettingsGroup >    aDocSpecificSettings;
+    ::std::vector< SettingsGroup >    aDocSpecificSettings;
 };
 
 XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -348,7 +348,7 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p
                 {
                     m_pData->aDocSpecificSettings.push_back( SettingsGroup( aLocalConfigName, uno::Any() ) );
 
-                    ::std::list< SettingsGroup >::reverse_iterator settingsPos =
+                    ::std::vector< SettingsGroup >::reverse_iterator settingsPos =
                         m_pData->aDocSpecificSettings.rbegin();
 
                     pContext = new XMLConfigItemSetContext(GetImport(),
@@ -423,7 +423,7 @@ void XMLDocumentSettingsContext::EndElement()
         GetImport().SetConfigurationSettings( aSeqConfigProps );
     }
 
-    for (   ::std::list< SettingsGroup >::const_iterator settings = m_pData->aDocSpecificSettings.begin();
+    for (   ::std::vector< SettingsGroup >::const_iterator settings = m_pData->aDocSpecificSettings.begin();
             settings != m_pData->aDocSpecificSettings.end();
             ++settings
         )

@@ -20,7 +20,7 @@
 #include "simplerangelist.hxx"
 #include "rangelst.hxx"
 
-using ::std::list;
+using ::std::vector;
 using ::std::pair;
 using ::std::max;
 
@@ -128,8 +128,8 @@ void ScSimpleRangeList::insertCol(SCCOL nCol, SCTAB nTab)
         // This should never happen!
         return;
 
-    list<Range>::iterator itr = pRef->begin(), itrEnd = pRef->end();
-    for (; itr != itrEnd; ++itr)
+    vector<Range>::iterator itr = pRef->begin();
+    for (; itr != pRef->end(); ++itr)
     {
         Range& r = *itr;
         if (r.mnCol2 < nCol)
@@ -150,17 +150,15 @@ void ScSimpleRangeList::insertCol(SCCOL nCol, SCTAB nTab)
     }
 }
 
-void ScSimpleRangeList::getRangeList(list<ScRange>& rList) const
+void ScSimpleRangeList::getRangeList(vector<ScRange>& rList) const
 {
-    list<ScRange> aList;
-    for (TabType::const_iterator itrTab = maTabs.begin(), itrTabEnd = maTabs.end(); itrTab != itrTabEnd; ++itrTab)
+    vector<ScRange> aList;
+    for (TabType::const_iterator itrTab = maTabs.begin(); itrTab != maTabs.end(); ++itrTab)
     {
         SCTAB nTab = itrTab->first;
         const RangeListRef& pRanges = itrTab->second;
-        list<Range>::const_iterator itr = pRanges->begin(), itrEnd = pRanges->end();
-        for (; itr != itrEnd; ++itr)
+        for (const Range& r : *pRanges)
         {
-            const Range& r = *itr;
             aList.push_back(ScRange(r.mnCol1, r.mnRow1, nTab, r.mnCol2, r.mnRow2, nTab));
         }
     }
@@ -177,7 +175,7 @@ ScSimpleRangeList::RangeListRef ScSimpleRangeList::findTab(SCTAB nTab)
     TabType::iterator itr = maTabs.find(nTab);
     if (itr == maTabs.end())
     {
-        RangeListRef p(new list<Range>);
+        RangeListRef p(new vector<Range>);
         pair<TabType::iterator, bool> r = maTabs.insert(TabType::value_type(nTab, p));
         if (!r.second)
             return RangeListRef();

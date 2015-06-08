@@ -46,7 +46,7 @@ bool ScMyImpDetectiveOp::operator<(const ScMyImpDetectiveOp& rDetOp) const
 
 void ScMyImpDetectiveOpArray::Sort()
 {
-    aDetectiveOpList.sort();
+    std::sort(aDetectiveOpList.begin(), aDetectiveOpList.end());
 }
 
 bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
