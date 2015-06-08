@@ -88,24 +88,12 @@ class TileBuffer
             int columns)
      : m_pLOKDocument(document)
         , m_nTileSize(tileSize)
-        , m_fZoomFactor(1)
         , m_nWidth(columns)
         , m_nHeight(rows)
     {  }
 
     ~TileBuffer() {}
 
-    /**
-       Sets the zoom factor (m_fZoomFactor) for this tile buffer. Setting the
-       zoom factor invalidates whole of the tile buffer, destroys all tiles
-       contained within it, and sets new width, height values for tile
-       buffer. The width, height value of tile buffer is the width and height of
-       the table containing all possible tiles (rendered and non-rendered) that
-       this buffer can have.
-
-       @param zoomFactor the new zoom factor value to set
-     */
-    void setZoom(float zoomFactor, int rows, int columns);
     /**
        Gets the underlying Tile object for given position. The position (0, 0)
        points to the left top most tile of the buffer.
@@ -137,8 +125,6 @@ class TileBuffer
     LibreOfficeKitDocument *m_pLOKDocument;
     /// The side of each squared tile in pixels.
     int m_nTileSize;
-    /// The zoom factor that the tile buffer is currently rendered to.
-    float m_fZoomFactor;
     /// Stores all the tiles cached by this tile buffer.
     std::map<int, Tile> m_mTiles;
     /// Width of the current tile buffer (number of columns)

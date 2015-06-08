@@ -846,7 +846,7 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
             {
                 //g_info("tile_buffer_get_tile (%d, %d)", nRow, nColumn);
 
-                Tile& currentTile = m_aTileBuffer.getTile(nRow, nColumn);
+                Tile& currentTile = m_aTileBuffer.getTile(nRow, nColumn, m_fZoom);
                 GdkPixbuf* pPixBuf = currentTile.getBuffer();
 
                 gdk_cairo_set_source_pixbuf (pcairo, pPixBuf,
@@ -1262,7 +1262,10 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_zoom ( LOKDocView* pDocView, float fZ
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
-    pDocView->m_pImpl->m_aTileBuffer.setZoom(fZoom, nRows, nColumns);
+    pDocView->m_pImpl->m_aTileBuffer = TileBuffer(pDocView->m_pImpl->m_pDocument,
+                                                  nTileSizePixels,
+                                                  nRows,
+                                                  nColumns);
     gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
