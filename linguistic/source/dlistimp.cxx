@@ -387,7 +387,7 @@ uno::Reference< XInterface > SAL_CALL
     DicList_CreateInstance( const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
             throw(Exception)
 {
-    uno::Reference< XInterface > xService = (cppu::OWeakObject *) new DicList;
+    uno::Reference< XInterface > xService = static_cast<cppu::OWeakObject *>(new DicList);
     return xService;
 }
 
@@ -580,7 +580,7 @@ void SAL_CALL
     if (!bDisposing)
     {
         bDisposing = true;
-        EventObject aEvtObj( (XDictionaryList *) this );
+        EventObject aEvtObj( static_cast<XDictionaryList *>(this) );
 
         aEvtListeners.disposeAndClear( aEvtObj );
         if (pDicEvtLstnrHelper)

@@ -102,7 +102,7 @@ void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
     //!! keep a reference until everything is done to
     //!! ensure the proper lifetime of the object
     uno::Reference < xml::sax::XDocumentHandler > xFilter(
-            (xml::sax::XExtendedDocumentHandler *) &rImport, UNO_QUERY );
+            static_cast<xml::sax::XExtendedDocumentHandler *>(&rImport), UNO_QUERY );
 
     // connect parser and filter
     xParser->setDocumentHandler( xFilter );
@@ -144,7 +144,7 @@ bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType
     ConvDicXMLImport *pImport = new ConvDicXMLImport( 0 );
 
     //!! keep a first reference to ensure the lifetime of the object !!
-    uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
+    uno::Reference< XInterface > xRef( static_cast<document::XFilter *>(pImport), UNO_QUERY );
 
     ReadThroughDic( rFileURL, *pImport );    // will implicitly add the entries
     bRes =  !LinguIsUnspecified( pImport->GetLanguage()) &&
@@ -222,7 +222,7 @@ void ConvDic::Load()
     bNeedEntries = false;
     ConvDicXMLImport *pImport = new ConvDicXMLImport( this );
     //!! keep a first reference to ensure the lifetime of the object !!
-    uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
+    uno::Reference< XInterface > xRef( static_cast<document::XFilter *>(pImport), UNO_QUERY );
     ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
     bIsModified = false;
 }
@@ -266,7 +266,7 @@ void ConvDic::Save()
         ConvDicXMLExport *pExport = new ConvDicXMLExport( *this, aMainURL, xDocHandler );
         //!! keep a first(!) reference until everything is done to
         //!! ensure the proper lifetime of the object
-        uno::Reference< document::XFilter > aRef( (document::XFilter *) pExport );
+        uno::Reference< document::XFilter > aRef( static_cast<document::XFilter *>(pExport) );
         bool bRet = pExport->Export();     // write entries to file
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)

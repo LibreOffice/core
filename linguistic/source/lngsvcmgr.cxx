@@ -237,7 +237,7 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
     if (xDicList.is())
     {
         xDicList->addDictionaryListEventListener(
-            (linguistic2::XDictionaryListEventListener *) this, sal_False );
+            static_cast<linguistic2::XDictionaryListEventListener *>(this), sal_False );
     }
 
     nCombinedLngSvcEvt = 0;
@@ -409,7 +409,7 @@ void LngSvcMgrListenerHelper::DisposeAndClear( const lang::EventObject &rEvtObj 
     if (xDicList.is())
     {
         xDicList->removeDictionaryListEventListener(
-            (linguistic2::XDictionaryListEventListener *) this );
+            static_cast<linguistic2::XDictionaryListEventListener *>(this) );
         xDicList = 0;
     }
 }
@@ -423,7 +423,7 @@ bool LngSvcMgrListenerHelper::AddLngSvcEvtBroadcaster(
     {
         aLngSvcEvtBroadcasters.addInterface( rxBroadcaster );
         rxBroadcaster->addLinguServiceEventListener(
-                (linguistic2::XLinguServiceEventListener *) this );
+                static_cast<linguistic2::XLinguServiceEventListener *>(this) );
     }
     return bRes;
 }
@@ -437,7 +437,7 @@ bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
     {
         aLngSvcEvtBroadcasters.removeInterface( rxBroadcaster );
         rxBroadcaster->removeLinguServiceEventListener(
-                (linguistic2::XLinguServiceEventListener *) this );
+                static_cast<linguistic2::XLinguServiceEventListener *>(this) );
     }
     return bRes;
 }
@@ -985,7 +985,7 @@ void LngSvcMgr::GetListenerHelper_Impl()
     if (!pListenerHelper)
     {
         pListenerHelper = new LngSvcMgrListenerHelper( *this, linguistic::GetDictionaryList() );
-        xListenerHelper = (linguistic2::XLinguServiceEventListener *) pListenerHelper;
+        xListenerHelper = static_cast<linguistic2::XLinguServiceEventListener *>(pListenerHelper);
     }
 }
 
@@ -2094,7 +2094,7 @@ uno::Reference< uno::XInterface > SAL_CALL LngSvcMgr_CreateInstance(
             const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ )
         throw(uno::Exception)
 {
-    uno::Reference< uno::XInterface > xService = (cppu::OWeakObject*) new LngSvcMgr;
+    uno::Reference< uno::XInterface > xService = static_cast<cppu::OWeakObject*>(new LngSvcMgr);
     return xService;
 }
 

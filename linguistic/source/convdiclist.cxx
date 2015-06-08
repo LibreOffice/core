@@ -359,7 +359,7 @@ namespace
     struct StaticConvDicList : public rtl::StaticWithInit<
         uno::Reference<XInterface>, StaticConvDicList> {
         uno::Reference<XInterface> operator () () {
-            return (cppu::OWeakObject *) new ConvDicList;
+            return static_cast<cppu::OWeakObject *>(new ConvDicList);
         }
     };
 }
@@ -565,7 +565,7 @@ void SAL_CALL ConvDicList::dispose(  )
     if (!bDisposing)
     {
         bDisposing = true;
-        EventObject aEvtObj( (XConversionDictionaryList *) this );
+        EventObject aEvtObj( static_cast<XConversionDictionaryList *>(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
 
         FlushDics();

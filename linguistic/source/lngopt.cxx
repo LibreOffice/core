@@ -218,7 +218,7 @@ Reference< XInterface > SAL_CALL LinguProps_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
-    Reference< XInterface > xService = (cppu::OWeakObject*)new LinguProps;
+    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new LinguProps);
     return xService;
 }
 
@@ -245,7 +245,7 @@ void SAL_CALL LinguProps::setPropertyValue(
         Any aOld( aConfig.GetProperty( pCur->nWID ) );
         if (aOld != rValue && aConfig.SetProperty( pCur->nWID, rValue ))
         {
-            PropertyChangeEvent aChgEvt( (XPropertySet *) this, rPropertyName,
+            PropertyChangeEvent aChgEvt( static_cast<XPropertySet *>(this), rPropertyName,
                     sal_False, pCur->nWID, aOld, rValue );
             launchEvent( aChgEvt );
         }
@@ -322,7 +322,7 @@ void SAL_CALL LinguProps::setFastPropertyValue( sal_Int32 nHandle, const Any& rV
     Any aOld( aConfig.GetProperty( nHandle ) );
     if (aOld != rValue && aConfig.SetProperty( nHandle, rValue ))
     {
-        PropertyChangeEvent aChgEvt( (XPropertySet *) this,
+        PropertyChangeEvent aChgEvt( static_cast<XPropertySet *>(this),
                 LinguOptions::GetName( nHandle ), sal_False, nHandle, aOld, rValue );
         launchEvent( aChgEvt );
     }
@@ -393,7 +393,7 @@ void SAL_CALL
         // (see AppExitListener for saving)
         //aOpt.Save();  // save (possible) changes before exiting
 
-        EventObject aEvtObj( (XPropertySet *) this );
+        EventObject aEvtObj( static_cast<XPropertySet *>(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
         aPropListeners.disposeAndClear( aEvtObj );
     }

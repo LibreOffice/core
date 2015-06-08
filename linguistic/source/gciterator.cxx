@@ -920,7 +920,7 @@ throw (uno::RuntimeException, std::exception)
 void SAL_CALL GrammarCheckingIterator::dispose()
 throw (uno::RuntimeException, std::exception)
 {
-    lang::EventObject aEvt( (linguistic2::XProofreadingIterator *) this );
+    lang::EventObject aEvt( static_cast<linguistic2::XProofreadingIterator *>(this) );
     m_aEventListeners.disposeAndClear( aEvt );
 
     TerminateThread();
