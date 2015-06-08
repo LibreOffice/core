@@ -1352,7 +1352,7 @@ void PresenterAccessible::AccessibleObject::ThrowIfDisposed() const
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
-        throw lang::DisposedException("object has already been disposed", uno::Reference<uno::XInterface>((uno::XWeak*)(this)));
+        throw lang::DisposedException("object has already been disposed", uno::Reference<uno::XInterface>(const_cast<uno::XWeak*>(static_cast<uno::XWeak const *>(this))));
 }
 
 //===== AccessibleStateSet ====================================================

@@ -171,7 +171,7 @@ Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()
 Reference< XInterface > PPPOptimizerDialog_createInstance( const Reference< XComponentContext > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new PPPOptimizerDialog( rSMgr );
+    return static_cast<cppu::OWeakObject*>(new PPPOptimizerDialog( rSMgr ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

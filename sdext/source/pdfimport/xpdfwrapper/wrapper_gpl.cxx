@@ -100,10 +100,10 @@ int main(int argc, char **argv)
                                  ? new GooString( aPwBuf )
                                  : (ownerPassword[0] != '\001'
                                     ? new GooString(ownerPassword)
-                                    : (GooString *)NULL ) );
+                                    : nullptr ) );
     GooString* pUserPasswordStr(  userPassword[0] != '\001'
                                   ? new GooString(userPassword)
-                                  : (GooString *)NULL );
+                                  : nullptr );
     if( outputFile[0] != '\001' )
         g_binary_out = fopen(outputFile,"wb");
 
