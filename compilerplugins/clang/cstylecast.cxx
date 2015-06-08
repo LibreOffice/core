@@ -165,14 +165,6 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
                 expr->getTypeAsWritten()))
         {
             perf = "const_cast";
-        } else if (expr->getSubExprAsWritten()->getType() != expr->getType()
-                   && (!t1.isMoreQualifiedThan(t2)
-                       || ((t1.getUnqualifiedType().getCanonicalType()
-                            .getTypePtr())
-                           != (t2.getUnqualifiedType().getCanonicalType()
-                               .getTypePtr()))))
-        {
-            return true;
         }
     }
     std::string incompFrom;
