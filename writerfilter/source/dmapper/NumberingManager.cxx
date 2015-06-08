@@ -49,24 +49,6 @@ namespace dmapper {
 
 //---------------------------------------------------  Utility functions
 
-#ifdef DEBUG_WRITERFILTER
-void lcl_printProperties( uno::Sequence< beans::PropertyValue > const & aProps )
-{
-    sal_Int32 nLen = aProps.getLength( );
-    for ( sal_Int32 i = 0; i < nLen; i++ )
-    {
-        uno::Any aValue = aProps[i].Value;
-        sal_Int32 nValue = 0;
-        OUString sValue;
-
-        if ( !( aValue >>= sValue ) && ( aValue >>= nValue ) )
-            sValue = OUString::number( nValue );
-
-        SAL_INFO("writerfilter", "Property " << aProps[i].Name << ": " << sValue);
-    }
-}
-#endif
-
 sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, const OUString& sName )
 {
     sal_Int32 i = 0;
