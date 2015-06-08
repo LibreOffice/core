@@ -61,11 +61,11 @@ BufferedInputStream::BufferedInputStream(const Reference<XInputStream>& xInputSt
             {
                 tmp = m_pBuffer;
                 m_pBuffer = new sal_Int8[m_nBufferSize+num];
-                memcpy((void *)(m_pBuffer),
-                               (void *)(tmp),
+                memcpy(static_cast<void *>(m_pBuffer),
+                               static_cast<void *>(tmp),
                                sal_uInt32(m_nBufferSize));
-                memcpy((void *)(m_pBuffer+m_nBufferSize),
-                               (void *)(aData.getArray()),
+                memcpy(static_cast<void *>(m_pBuffer+m_nBufferSize),
+                               static_cast<void *>(aData.getArray()),
                                sal_uInt32(num));
                 m_nBufferSize += num;
                 delete[] tmp;
@@ -134,8 +134,8 @@ sal_Int32 SAL_CALL BufferedInputStream::readBytes( Sequence< sal_Int8 >& aData,s
     if( aData.getLength() < nBytesToRead )
         aData.realloc(nBytesToRead);
 
-    memcpy((void*)(aData.getArray()),
-                   (void*)(m_pBuffer+m_nBufferLocation),
+    memcpy(static_cast<void*>(aData.getArray()),
+                   static_cast<void*>(m_pBuffer+m_nBufferLocation),
                    nBytesToRead);
 
     return nBytesToRead;

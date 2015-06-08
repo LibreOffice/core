@@ -171,7 +171,7 @@ Reference< XInterface > SAL_CALL
 TVFactory::CreateInstance(
     const Reference< XMultiServiceFactory >& xMultiServiceFactory )
 {
-    XServiceInfo* xP = (XServiceInfo*) new TVFactory( comphelper::getComponentContext(xMultiServiceFactory) );
+    XServiceInfo* xP = static_cast<XServiceInfo*>(new TVFactory( comphelper::getComponentContext(xMultiServiceFactory) ));
     return Reference< XInterface >::query( xP );
 }
 

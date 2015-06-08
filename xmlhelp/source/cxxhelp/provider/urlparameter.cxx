@@ -712,7 +712,7 @@ zipOpen(SAL_UNUSED_PARAMETER const char *) {
     OUString language,jar,path;
 
     if( !ugblData->m_pInitial->get_eid().isEmpty() )
-        return (void*)(new Reference< XHierarchicalNameAccess >);
+        return static_cast<void*>(new Reference< XHierarchicalNameAccess >);
     else
     {
         jar = ugblData->m_pInitial->get_jar();
@@ -1143,8 +1143,8 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
 
     char* tmp = buffer;
     buffer = new char[ len+len_ ];
-    memcpy( (void*)(buffer),(void*)(tmp),sal_uInt32( len ) );
-    memcpy( (void*)(buffer+len),(void*)(buffer_),sal_uInt32( len_ ) );
+    memcpy( static_cast<void*>(buffer),static_cast<void*>(tmp),sal_uInt32( len ) );
+    memcpy( static_cast<void*>(buffer+len),static_cast<void const *>(buffer_),sal_uInt32( len_ ) );
     delete[] tmp;
     len += len_;
 }

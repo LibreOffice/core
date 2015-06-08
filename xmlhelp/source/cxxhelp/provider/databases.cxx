@@ -436,7 +436,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
     OUString key = processLang(Language) + "/" + Module;
 
     std::pair< ModInfoTable::iterator,bool > aPair =
-        m_aModInfo.insert( ModInfoTable::value_type( key,(StaticModuleInformation*)0 ) );
+        m_aModInfo.insert( ModInfoTable::value_type( key,nullptr ) );
 
     ModInfoTable::iterator it = aPair.first;
 
@@ -836,7 +836,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
     OUString key = processLang(Language) + "/" + Database;
 
     std::pair< KeywordInfoTable::iterator,bool > aPair =
-        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,(KeywordInfo*)0 ) );
+        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,nullptr ) );
 
     KeywordInfoTable::iterator it = aPair.first;
 
