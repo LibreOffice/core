@@ -2012,6 +2012,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
     // if we have an URL parameter, it replaces the one in the media descriptor
     if (!URL.isEmpty()) {
         md[ utl::MediaDescriptor::PROP_URL() ] <<= URL;
+        md[ utl::MediaDescriptor::PROP_READONLY() ] <<= true;
     }
     if (md.addInputStream()) {
         md[ utl::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
