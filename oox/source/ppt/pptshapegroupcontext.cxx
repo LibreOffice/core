@@ -56,7 +56,7 @@ PPTShapeGroupContext::PPTShapeGroupContext(
 : ShapeGroupContext( rParent, pMasterShapePtr, pGroupShapePtr )
 , mpSlidePersistPtr( rSlidePersistPtr )
 , meShapeLocation( eShapeLocation )
-, pGraphicShape( (PPTShape *)NULL )
+, pGraphicShape( nullptr )
 {
 }
 
@@ -136,7 +136,7 @@ void PPTShapeGroupContext::importExtDrawings( )
                 if( pGraphicShape->getFontRefColorForNodes().isUsed() )
                     applyFontRefColor(mpGroupShapePtr, pGraphicShape->getFontRefColorForNodes());
             }
-            pGraphicShape = oox::drawingml::ShapePtr( (PPTShape *)NULL );
+            pGraphicShape = oox::drawingml::ShapePtr( nullptr );
     }
 }
 

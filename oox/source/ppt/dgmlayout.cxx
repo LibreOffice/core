@@ -55,7 +55,7 @@ uno::Sequence< OUString > SAL_CALL QuickDiagrammingLayout_getSupportedServiceNam
 
 uno::Reference< uno::XInterface > SAL_CALL QuickDiagrammingLayout_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return (cppu::OWeakObject*)new QuickDiagrammingLayout( rxContext );
+    return static_cast<cppu::OWeakObject*>(new QuickDiagrammingLayout( rxContext ));
 }
 
 QuickDiagrammingLayout::QuickDiagrammingLayout( const Reference< XComponentContext >& rxContext )

@@ -32,7 +32,7 @@ void SAL_CALL ShapeDrawingFragmentHandler::endDocument() throw (xml::sax::SAXExc
     switch( Element )
     {
         case DSP_TOKEN( spTree ):
-            return new oox::drawingml::ShapeGroupContext(*this, oox::drawingml::ShapePtr((oox::drawingml::Shape*)0), mpGroupShapePtr);
+            return new oox::drawingml::ShapeGroupContext(*this, oox::drawingml::ShapePtr(nullptr), mpGroupShapePtr);
         default:
             break;
     }

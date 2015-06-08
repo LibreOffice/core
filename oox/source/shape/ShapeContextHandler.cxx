@@ -475,7 +475,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
                     pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
                     xResult = pShapePtr->getXShape();
                 }
-                mpShape.reset((Shape*)0);
+                mpShape.reset();
             }
             mxDiagramShapeContext.clear();
         }
