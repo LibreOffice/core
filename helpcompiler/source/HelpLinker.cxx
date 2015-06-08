@@ -943,7 +943,7 @@ bool compileExtensionHelp
     std::string aStdStrDestination = pDestination;
 
     // Set error handler
-    xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
+    xmlSetStructuredErrorFunc( NULL, StructuredXMLErrorFunction );
     try
     {
         boost::scoped_ptr<HelpLinker> pHelpLinker(new HelpLinker());
