@@ -1332,7 +1332,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                         xRootHierNameAccess->getByHierarchicalName( aValueName )
                             >>= nHandle;
 
-                        aEvt.Source         = (OWeakObject*)this;
+                        aEvt.Source         = static_cast<OWeakObject*>(this);
                         aEvt.PropertyName   = aPropertyName;
                         aEvt.PropertyHandle = nHandle;
                         aEvt.Further        = sal_False;
@@ -2068,7 +2068,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                         if ( m_pImpl->m_pPropertyChangeListeners )
                         {
                             PropertyChangeEvent aEvt;
-                            aEvt.Source         = (OWeakObject*)this;
+                            aEvt.Source         = static_cast<OWeakObject*>(this);
                             aEvt.PropertyName   = rNewValue.Name;
                             aEvt.PropertyHandle = rNewValue.Handle;
                             aEvt.Further        = sal_False;

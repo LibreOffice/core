@@ -1009,9 +1009,9 @@ void NeonSession::PROPPATCH( const OUString & inPath,
 
     for ( n = 0; n < nPropCount; ++n )
     {
-        free( (void *)pItems[ n ].name->name );
+        free( const_cast<char *>(pItems[ n ].name->name) );
         delete pItems[ n ].name;
-        free( (void *)pItems[ n ].value );
+        free( const_cast<char *>(pItems[ n ].value) );
     }
 
     delete [] pItems;
@@ -1989,8 +1989,8 @@ NeonSession::getDataFromInputStream(
                         rData.realloc( nPos + nRead );
 
                     aBuffer.realloc( nRead );
-                    memcpy( (void*)( rData.getArray() + nPos ),
-                                    (const void*)aBuffer.getConstArray(),
+                    memcpy( static_cast<void*>( rData.getArray() + nPos ),
+                                    static_cast<const void*>(aBuffer.getConstArray()),
                                     nRead );
                     nPos += nRead;
 

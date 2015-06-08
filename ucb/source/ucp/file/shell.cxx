@@ -591,7 +591,7 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 
     do
     {
-        err = aFile.read( (void*) BFF,bfz,nrc );
+        err = aFile.read( static_cast<void*>(BFF),bfz,nrc );
         if(  err == osl::FileBase::E_None )
         {
             uno::Sequence< sal_Int8 > seq( BFF, (sal_uInt32)nrc );
@@ -1868,7 +1868,7 @@ shell::write( sal_Int32 CommandId,
         {
             const sal_Int8* p = seq.getConstArray();
 
-            err = aFile.write( ((void*)(p)),
+            err = aFile.write( (static_cast<void const *>(p)),
                                sal_uInt64( nReadBytes ),
                                nWrittenBytes );
 

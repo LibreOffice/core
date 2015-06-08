@@ -182,7 +182,7 @@ Reference< XInterface > SAL_CALL
 FileProvider::CreateInstance(
     const Reference< XMultiServiceFactory >& xMultiServiceFactory )
 {
-    XServiceInfo* xP = (XServiceInfo*) new FileProvider( comphelper::getComponentContext(xMultiServiceFactory) );
+    XServiceInfo* xP = static_cast<XServiceInfo*>(new FileProvider( comphelper::getComponentContext(xMultiServiceFactory) ));
     return Reference< XInterface >::query( xP );
 }
 

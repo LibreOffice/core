@@ -1218,7 +1218,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
                         getTitle(m_aUncPath),
                         rtl_UriDecodeWithCharset,
                         RTL_TEXTENCODING_UTF8),
-                    (cppu::OWeakObject*)this,
+                    static_cast<cppu::OWeakObject*>(this),
                     m_pMyShell,nMyCommandIdentifier);
             uno::Reference< task::XInteractionRequest > aReq( aRequestImpl );
 

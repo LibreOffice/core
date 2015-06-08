@@ -1417,7 +1417,7 @@ void SortedResultSet::Initialize(
     size_t i;
 
     for ( i=1; i<maS2O.Count(); i++ )
-        maO2S.Insert( (void*) 0, i );   // Insert( data, pos )
+        maO2S.Insert( nullptr, i );   // Insert( data, pos )
     for ( i=1; i<maS2O.Count(); i++ )
         maO2S.Replace( reinterpret_cast<void*>(i), maS2O[ i ] ); // Insert( data, pos )
 
@@ -1530,7 +1530,7 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
 
         SortListData *pData = maS2O.Remove( nSortPos );
         if ( pData->mbModified )
-            maModList.Remove( (void*) pData );
+            maModList.Remove( static_cast<void*>(pData) );
         delete pData;
 
         // generate remove Event, but not for new entries

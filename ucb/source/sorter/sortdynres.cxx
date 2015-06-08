@@ -494,8 +494,8 @@ SortedDynamicResultSetFactory_CreateInstance( const css::uno::Reference<
                                               css::lang::XMultiServiceFactory> & rSMgr )
     throw( css::uno::Exception )
 {
-    css::lang::XServiceInfo* pX = (css::lang::XServiceInfo*)
-        new SortedDynamicResultSetFactory( ucbhelper::getComponentContext(rSMgr) );
+    css::lang::XServiceInfo* pX = static_cast<css::lang::XServiceInfo*>(
+        new SortedDynamicResultSetFactory( ucbhelper::getComponentContext(rSMgr) ));
     return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 

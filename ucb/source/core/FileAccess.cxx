@@ -543,7 +543,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
     INetURLObject aObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
-    Reference< XActiveDataSink > xSink = (XActiveDataSink*)(new OActiveDataSink());
+    Reference< XActiveDataSink > xSink = static_cast<XActiveDataSink*>(new OActiveDataSink());
 
     try
     {
@@ -572,7 +572,7 @@ Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
 Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
-    Reference< XActiveDataStreamer > xSink = (XActiveDataStreamer*)new OActiveDataStreamer();
+    Reference< XActiveDataStreamer > xSink = static_cast<XActiveDataStreamer*>(new OActiveDataStreamer());
     Reference< XInterface > xSinkIface = Reference< XInterface >::query( xSink );
 
     OpenCommandArgument2 aArg;
@@ -637,7 +637,7 @@ void OFileAccess::setInteractionHandler( const Reference< XInteractionHandler >&
     if( !mpEnvironment )
     {
         mpEnvironment = new OCommandEnvironment();
-        mxEnvironment = (XCommandEnvironment*)mpEnvironment;
+        mxEnvironment = static_cast<XCommandEnvironment*>(mpEnvironment);
     }
     mpEnvironment->setHandler( Handler );
 }
@@ -775,7 +775,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
 
 Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
 {
-    return Reference < XInterface >( ( cppu::OWeakObject * ) new OFileAccess( comphelper::getComponentContext(xSMgr) ) );
+    return Reference < XInterface >( static_cast<cppu::OWeakObject *>(new OFileAccess( comphelper::getComponentContext(xSMgr) )) );
 }
 
 Sequence< OUString > FileAccess_getSupportedServiceNames()

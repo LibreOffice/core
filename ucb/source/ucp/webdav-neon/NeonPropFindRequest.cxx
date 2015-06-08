@@ -273,7 +273,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         }
 
         for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
-            free( (void *)thePropNames[ theIndex ].name );
+            free( const_cast<char *>(thePropNames[ theIndex ].name) );
     }
     else
     {

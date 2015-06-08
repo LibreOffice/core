@@ -213,7 +213,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     {
         sal_uInt64 nWrittenBytes(0);
         const sal_Int8* p = aData.getConstArray();
-        if(osl::FileBase::E_None != m_aFile.write(((void*)(p)),sal_uInt64(length),nWrittenBytes) ||
+        if(osl::FileBase::E_None != m_aFile.write((static_cast<void const *>(p)),sal_uInt64(length),nWrittenBytes) ||
            nWrittenBytes != length )
             throw io::IOException( THROW_WHERE );
     }
