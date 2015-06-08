@@ -908,7 +908,7 @@ void SwUiWriterTest::testExportToPicture()
     {
         beans::PropertyValue("PixelWidth", sal_Int32(0), uno::makeAny(sal_Int32(610)), beans::PropertyState_DIRECT_VALUE),
         beans::PropertyValue("PixelHeight", sal_Int32(0), uno::makeAny(sal_Int32(610)), beans::PropertyState_DIRECT_VALUE)
-        };
+    };
     uno::Sequence<beans::PropertyValue> aDescriptor =
     {
         beans::PropertyValue("FilterName", sal_Int32(0), uno::makeAny(OUString("writer_png_Export")), beans::PropertyState_DIRECT_VALUE),
@@ -919,6 +919,11 @@ void SwUiWriterTest::testExportToPicture()
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
     sal_Bool extchk = aTempFile.IsValid();
     CPPUNIT_ASSERT_EQUAL(sal_Bool(true), extchk);
+    osl::File tmpFile(aTempFile.GetURL());
+    tmpFile.open(sal_uInt32(0x00000001L));
+    sal_uInt64 val;
+    tmpFile.getSize(val);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(2369), val);
     aTempFile.EnableKillingFile();
 }
 
