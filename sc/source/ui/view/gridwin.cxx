@@ -1870,7 +1870,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             SfxInt16Item aPosXItem( SID_RANGE_COL, nPosX );
             SfxInt32Item aPosYItem( SID_RANGE_ROW, nPosY );
             pViewData->GetDispatcher().Execute( SID_FILL_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD,
-                                        &aPosXItem, &aPosYItem, (void*)0L );
+                                        &aPosXItem, &aPosYItem, nullptr );
 
         }
         nButtonDown = 0;
@@ -2567,7 +2567,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             // back to the origin of the selection where the cell cursor is.
             SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
             pDisp->Execute( SID_CURRENTCELL, SfxCallMode::SLOT | SfxCallMode::RECORD,
-                                        &aPosItem, &aAlignCursorItem, (void*)0L );
+                                        &aPosItem, &aAlignCursorItem, nullptr );
 
             pViewData->GetView()->InvalidateAttribs();
         }
@@ -4240,7 +4240,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 SfxStringItem aRangeItem( SID_CHART_SOURCE, aRangeName );
                 sal_uInt16 nId = bIsMove ? SID_CHART_SOURCE : SID_CHART_ADDSOURCE;
                 pViewData->GetDispatcher().Execute( nId, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                                            &aRangeItem, &aNameItem, (void*) NULL );
+                                            &aRangeItem, &aNameItem, nullptr );
                 bDone = true;
             }
             else if ( pThisDoc->GetDPAtCursor( nDestPosX, nDestPosY, nThisTab ) )

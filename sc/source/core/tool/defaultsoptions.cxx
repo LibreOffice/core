@@ -166,7 +166,7 @@ void ScDefaultsCfg::ImplCommit()
 
 void ScDefaultsCfg::SetOptions( const ScDefaultsOptions& rNew )
 {
-    *(ScDefaultsOptions*)this = rNew;
+    *static_cast<ScDefaultsOptions*>(this) = rNew;
     SetModified();
 }
 

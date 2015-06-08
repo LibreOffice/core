@@ -509,7 +509,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                 uno::Reference< embed::XStorage > xWorkStore =
                     ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
-                uno::Reference < embed::XEmbedPersist > xPers( (embed::XVisualObject*)pEmbObj, uno::UNO_QUERY );
+                uno::Reference < embed::XEmbedPersist > xPers( static_cast<embed::XVisualObject*>(pEmbObj), uno::UNO_QUERY );
                 if ( xPers.is() )
                 {
                     try

@@ -636,7 +636,7 @@ ScChangeActionDelMoveEntry::ScChangeActionDelMoveEntry(
     :   ScChangeActionLinkEntry(
             reinterpret_cast<ScChangeActionLinkEntry**>(
                 ppPrevP),
-            (ScChangeAction*) pMove ),
+            static_cast<ScChangeAction*>(pMove) ),
         nCutOffFrom( nFrom ),
         nCutOffTo( nTo )
 {}

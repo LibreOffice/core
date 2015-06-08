@@ -143,7 +143,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if ( bDrag )
             {
                 aDragTimer.Start();
-                if (pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl))
+                if (pView->BegDragObj(aMDPos, nullptr, pHdl))
                     pView->GetDragMethod()->SetShiftPressed( rMEvt.IsShift() );
                 bReturn = true;
             }
@@ -289,7 +289,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             aDragTimer.Start();
 
                         pHdl=pView->PickHandle(aMDPos);
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        pView->BegDragObj(aMDPos, nullptr, pHdl);
                         bReturn = true;
                     }
                     else                                    // Objekt am Rand getroffen

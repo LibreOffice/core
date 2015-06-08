@@ -118,7 +118,7 @@ void ScRetypePassDlg::SetDataFromDocument(const ScDocument& rDoc)
         pFtSheetStatus->Show(true);
         pFtSheetStatus->SetStyle(WB_VCENTER);
 
-        VclPtr<PushButton> pBtnSheet = VclPtr<PushButton>::Create((vcl::Window*)pSheet);
+        VclPtr<PushButton> pBtnSheet = VclPtr<PushButton>::Create(static_cast<vcl::Window*>(pSheet));
         pBtnSheet->SetText(ScResId(STR_RETYPE));
         pBtnSheet->SetClickHdl(LINK(this, ScRetypePassDlg, RetypeBtnHdl));
         pBtnSheet->Disable();

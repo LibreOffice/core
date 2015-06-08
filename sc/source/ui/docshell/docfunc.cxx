@@ -5117,7 +5117,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
                 if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(itr->first))
                     ppSortArray[j++] = &r;
             }
-            qsort( (void*)ppSortArray.get(), nValidCount, sizeof(ScRangeData*),
+            qsort( static_cast<void*>(ppSortArray.get()), nValidCount, sizeof(ScRangeData*),
                 &ScRangeData_QsortNameCompare );
             OUString aName;
             OUStringBuffer aContent;

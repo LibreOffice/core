@@ -434,7 +434,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
     {
         case SC_SERVICE_SHEET:
             //  noch nicht eingefuegt - DocShell=Null
-            xRet.set((sheet::XSpreadsheet*)new ScTableSheetObj(NULL,0));
+            xRet.set(static_cast<sheet::XSpreadsheet*>(new ScTableSheetObj(NULL,0)));
             break;
         case SC_SERVICE_URLFIELD:
         case SC_SERVICE_PAGEFIELD:
@@ -452,28 +452,28 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         }
         break;
         case SC_SERVICE_CELLSTYLE:
-            xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PARA, OUString() ));
+            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( NULL, SFX_STYLE_FAMILY_PARA, OUString() )));
             break;
         case SC_SERVICE_PAGESTYLE:
-            xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PAGE, OUString() ));
+            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( NULL, SFX_STYLE_FAMILY_PAGE, OUString() )));
             break;
         case SC_SERVICE_AUTOFORMAT:
-            xRet.set((container::XIndexAccess*)new ScAutoFormatObj( SC_AFMTOBJ_INVALID ));
+            xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));
             break;
         case SC_SERVICE_CELLRANGES:
             //  wird nicht eingefuegt, sondern gefuellt
             //  -> DocShell muss gesetzt sein, aber leere Ranges
             if (pDocShell)
-                xRet.set((sheet::XSheetCellRanges*)new ScCellRangesObj( pDocShell, ScRangeList() ));
+                xRet.set(static_cast<sheet::XSheetCellRanges*>(new ScCellRangesObj( pDocShell, ScRangeList() )));
             break;
 
         case SC_SERVICE_DOCDEFLTS:
             if (pDocShell)
-                xRet.set((beans::XPropertySet*)new ScDocDefaultsObj( pDocShell ));
+                xRet.set(static_cast<beans::XPropertySet*>(new ScDocDefaultsObj( pDocShell )));
             break;
         case SC_SERVICE_DRAWDEFLTS:
             if (pDocShell)
-                xRet.set((beans::XPropertySet*)new ScDrawDefaultsObj( pDocShell ));
+                xRet.set(static_cast<beans::XPropertySet*>(new ScDrawDefaultsObj( pDocShell )));
             break;
 
         //  Drawing layer tables are not in SvxUnoDrawMSFactory,
@@ -512,7 +512,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_SHEETDOCSET:
         case SC_SERVICE_DOCCONF:
             if (pDocShell)
-                xRet.set((beans::XPropertySet*)new ScDocumentConfiguration(pDocShell));
+                xRet.set(static_cast<beans::XPropertySet*>(new ScDocumentConfiguration(pDocShell)));
             break;
 
         case SC_SERVICE_IMAP_RECT:
@@ -527,21 +527,21 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
 
         // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         case SC_SERVICE_EXPORT_GOR:
-            xRet.set((::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
+            xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE )));
             break;
 
         case SC_SERVICE_IMPORT_GOR:
-            xRet.set((::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ ));
+            xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ )));
             break;
 
         case SC_SERVICE_EXPORT_EOR:
             if (pDocShell)
-                xRet.set((::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
+                xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_WRITE )));
             break;
 
         case SC_SERVICE_IMPORT_EOR:
             if (pDocShell)
-                xRet.set((::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ ));
+                xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ )));
             break;
 
         case SC_SERVICE_VALBIND:

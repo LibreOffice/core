@@ -227,7 +227,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     }
 
     SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem);
-    err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
+    err = clSetKernelArg(k, argno, sizeof(cl_mem), static_cast<void*>(&mpClmem));
     if (CL_SUCCESS != err)
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
     return 1;
@@ -286,7 +286,7 @@ public:
 
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_uint: " << hashCode);
-        cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
+        cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), static_cast<void*>(&hashCode));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
         return 1;
@@ -336,7 +336,7 @@ public:
         double tmp = GetDouble();
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp);
-        cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
+        cl_int err = clSetKernelArg(k, argno, sizeof(double), static_cast<void*>(&tmp));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
         return 1;
@@ -376,7 +376,7 @@ public:
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp);
-        cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
+        cl_int err = clSetKernelArg(k, argno, sizeof(double), static_cast<void*>(&tmp));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
         return 1;
@@ -741,7 +741,7 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
         cl_int seed = formula::rng::nRandom(0, SAL_MAX_INT32);
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_int: " << seed);
-        cl_int err = clSetKernelArg(k, argno, sizeof(cl_int), (void*)&seed);
+        cl_int err = clSetKernelArg(k, argno, sizeof(cl_int), static_cast<void*>(&seed));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
         return 1;
@@ -852,7 +852,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
         throw OpenCLError("clEnqueueUnmapMemObject", err, __FILE__, __LINE__);
 
     SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem);
-    err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
+    err = clSetKernelArg(k, argno, sizeof(cl_mem), static_cast<void*>(&mpClmem));
     if (CL_SUCCESS != err)
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
     return 1;
@@ -1506,7 +1506,7 @@ public:
         cl_mem buf = Base::GetCLBuffer();
         SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 0 << ": cl_mem: " << buf);
         err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
-            (void*)&buf);
+            static_cast<void*>(&buf));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
@@ -1516,12 +1516,12 @@ public:
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
         SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 2 << ": cl_int: " << nInput);
-        err = clSetKernelArg(redKernel, 2, sizeof(cl_int), (void*)&nInput);
+        err = clSetKernelArg(redKernel, 2, sizeof(cl_int), static_cast<void*>(&nInput));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
         SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 3 << ": cl_int: " << nCurWindowSize);
-        err = clSetKernelArg(redKernel, 3, sizeof(cl_int), (void*)&nCurWindowSize);
+        err = clSetKernelArg(redKernel, 3, sizeof(cl_int), static_cast<void*>(&nCurWindowSize));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
@@ -1564,7 +1564,7 @@ public:
             buf = Base::GetCLBuffer();
             SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 0 << ": cl_mem: " << buf);
             err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
-                (void*)&buf);
+                static_cast<void*>(&buf));
             if (CL_SUCCESS != err)
                 throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
@@ -1574,12 +1574,12 @@ public:
                 throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
             SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 2 << ": cl_int: " << nInput);
-            err = clSetKernelArg(redKernel, 2, sizeof(cl_int), (void*)&nInput);
+            err = clSetKernelArg(redKernel, 2, sizeof(cl_int), static_cast<void*>(&nInput));
             if (CL_SUCCESS != err)
                 throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
             SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 3 << ": cl_int: " << nCurWindowSize);
-            err = clSetKernelArg(redKernel, 3, sizeof(cl_int), (void*)&nCurWindowSize);
+            err = clSetKernelArg(redKernel, 3, sizeof(cl_int), static_cast<void*>(&nCurWindowSize));
             if (CL_SUCCESS != err)
                 throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
@@ -2293,12 +2293,12 @@ public:
                     SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": " << (vclmem[j] ? "cl_mem" : "double") << ": " << vclmem[j]);
                     err = clSetKernelArg(redKernel, j,
                         vclmem[j] ? sizeof(cl_mem) : sizeof(double),
-                        (void*)&vclmem[j]);
+                        static_cast<void*>(&vclmem[j]));
                     if (CL_SUCCESS != err)
                         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
                 }
                 SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << vclmem.size() << ": cl_mem: " << pClmem2);
-                err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void*)&pClmem2);
+                err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), static_cast<void*>(&pClmem2));
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
@@ -2316,7 +2316,7 @@ public:
 
                 // Pass pClmem2 to the "real" kernel
                 SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << pClmem2);
-                err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&pClmem2);
+                err = clSetKernelArg(k, argno, sizeof(cl_mem), static_cast<void*>(&pClmem2));
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
             }
@@ -2346,7 +2346,7 @@ public:
                     else if (DynamicKernelConstantArgument* CA = dynamic_cast<DynamicKernelConstantArgument*>(it->get()))
                         vclmem.push_back(SumIfsArgs(CA->GetDouble()));
                     else
-                        vclmem.push_back(SumIfsArgs((cl_mem)NULL));
+                        vclmem.push_back(SumIfsArgs(nullptr));
                 }
                 mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
                     sizeof(double) * nVectorWidth, NULL, &err);
@@ -2369,23 +2369,23 @@ public:
                         SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": double: " << vclmem[j].mConst);
                     err = clSetKernelArg(redKernel, j,
                         vclmem[j].mCLMem ? sizeof(cl_mem) : sizeof(double),
-                        vclmem[j].mCLMem ? (void*)&vclmem[j].mCLMem :
-                                           (void*)&vclmem[j].mConst);
+                        vclmem[j].mCLMem ? static_cast<void*>(&vclmem[j].mCLMem) :
+                                           static_cast<void*>(&vclmem[j].mConst));
                     if (CL_SUCCESS != err)
                         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
                 }
                 SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << vclmem.size() << ": cl_mem: " << mpClmem2);
-                err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void*)&mpClmem2);
+                err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), static_cast<void*>(&mpClmem2));
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
                 SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << (vclmem.size() + 1) << ": cl_int: " << nInput);
-                err = clSetKernelArg(redKernel, vclmem.size() + 1, sizeof(cl_int), (void*)&nInput);
+                err = clSetKernelArg(redKernel, vclmem.size() + 1, sizeof(cl_int), static_cast<void*>(&nInput));
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
                 SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << (vclmem.size() + 2) << ": cl_int: " << nCurWindowSize);
-                err = clSetKernelArg(redKernel, vclmem.size() + 2, sizeof(cl_int), (void*)&nCurWindowSize);
+                err = clSetKernelArg(redKernel, vclmem.size() + 2, sizeof(cl_int), static_cast<void*>(&nCurWindowSize));
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
                 // set work group size and execute
@@ -2407,7 +2407,7 @@ public:
 
                 // Pass mpClmem2 to the "real" kernel
                 SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem2);
-                err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem2);
+                err = clSetKernelArg(k, argno, sizeof(cl_mem), static_cast<void*>(&mpClmem2));
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
             }
@@ -3935,7 +3935,7 @@ void DynamicKernel::Launch( size_t nr )
     SAL_INFO("sc.opencl", "Created buffer " << mpResClmem << " size " << nr << "*" << sizeof(double) << "=" << (nr*sizeof(double)));
 
     SAL_INFO("sc.opencl", "Kernel " << mpKernel << " arg " << 0 << ": cl_mem: " << mpResClmem);
-    err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
+    err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), static_cast<void*>(&mpResClmem));
     if (CL_SUCCESS != err)
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
     // The rest of buffers

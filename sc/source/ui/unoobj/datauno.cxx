@@ -1963,7 +1963,7 @@ void SAL_CALL ScDatabaseRangeObj::removeRefreshListener(
 void ScDatabaseRangeObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source = (cppu::OWeakObject*)this;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
     for ( size_t n=0; n<aRefreshListeners.size(); n++ )
         aRefreshListeners[n]->refreshed( aEvent );
 }

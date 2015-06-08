@@ -183,7 +183,7 @@ void ScPrintCfg::ImplCommit()
 
 void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
 {
-    *(ScPrintOptions*)this = rNew;
+    *static_cast<ScPrintOptions*>(this) = rNew;
     SetModified();
 }
 

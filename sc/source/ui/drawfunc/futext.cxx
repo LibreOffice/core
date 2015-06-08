@@ -250,7 +250,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( bDrag )
                 {
                     aDragTimer.Start();
-                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                    pView->BegDragObj(aMDPos, nullptr, pHdl);
                 }
             }
         }
@@ -289,7 +289,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         pHdl=pView->GetHdl(nHdlNum);
                     }
 
-                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                    pView->BegDragObj(aMDPos, nullptr, pHdl);
                 }
                 else
                 {
@@ -324,7 +324,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     // also adjusted )
                     Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
 
-                    bool bRet = pView->BegCreateObj(aMDPos, (OutputDevice*) NULL);
+                    bool bRet = pView->BegCreateObj(aMDPos, nullptr);
                     if ( bRet )
                     pView->GetCreateObj()->SetGridOffset( aGridOff );
                 }
@@ -336,7 +336,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     pView->MarkObj(pObj,pPV,false,false);
 
                     pHdl=pView->PickHandle(aMDPos);
-                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                    pView->BegDragObj(aMDPos, nullptr, pHdl);
                     return true;
                 }
             }

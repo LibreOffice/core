@@ -102,7 +102,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno:
     //! existierendes Objekt finden und zurueckgeben ???
 
     if (pDocShell)
-        return (cppu::OWeakObject*)new ScCellObj( pDocShell, aCellPos );
+        return static_cast<cppu::OWeakObject*>(new ScCellObj( pDocShell, aCellPos ));
 
     return NULL;
 }

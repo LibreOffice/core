@@ -493,7 +493,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
                 pChild = pChild->GetWindow(GetWindowType::Next))
             {
                 vcl::Window *pWin = pChild->GetWindow(GetWindowType::Client);
-                if (pWin == (vcl::Window*)pRefEdit || pWin == (vcl::Window*)pRefBtn)
+                if (pWin == static_cast<vcl::Window*>(pRefEdit) || pWin == static_cast<vcl::Window*>(pRefBtn))
                     continue; // do nothing
                 else if (pWin->IsVisible())
                 {

@@ -129,7 +129,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                 SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
                 SvxIMapDlg* pDlg = GetIMapDlg();
 
-                if ( ScIMapDlgGetObj(pDlg) == (void*) pSdrObj )
+                if ( ScIMapDlgGetObj(pDlg) == static_cast<void*>(pSdrObj) )
                 {
                     const ImageMap& rImageMap = ScIMapDlgGetMap(pDlg);
                     ScIMapInfo*     pIMapInfo = ScDrawLayer::GetIMapInfo( pSdrObj );
@@ -189,7 +189,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
                             if ( ScIMapDlgGetObj(GetIMapDlg()) ==
-                                        (void*) rMarkList.GetMark(0)->GetMarkedSdrObj() )
+                                        static_cast<void*>(rMarkList.GetMark(0)->GetMarkedSdrObj()) )
                                 bDisable = false;
                     }
 

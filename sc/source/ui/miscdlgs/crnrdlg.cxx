@@ -811,9 +811,9 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
 
 IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )
 {
-    if( (pCtrl == (Control*)pEdAssign) || (pCtrl == (Control*)pRbAssign) )
+    if( (pCtrl == static_cast<Control*>(pEdAssign)) || (pCtrl == static_cast<Control*>(pRbAssign)) )
         pEdActive = pEdAssign;
-    else if( (pCtrl == (Control*)pEdAssign2) || (pCtrl == (Control*)pRbAssign2) )
+    else if( (pCtrl == static_cast<Control*>(pEdAssign2)) || (pCtrl == static_cast<Control*>(pRbAssign2)) )
         pEdActive = pEdAssign2;
     else
         pEdActive = NULL;

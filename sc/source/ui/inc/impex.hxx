@@ -186,7 +186,7 @@ class ScImportStringStream : public SvMemoryStream
 {
 public:
     ScImportStringStream( const OUString& rStr )
-        : SvMemoryStream( (void*)rStr.getStr(),
+        : SvMemoryStream( const_cast<sal_Unicode *>(rStr.getStr()),
                 rStr.getLength() * sizeof(sal_Unicode), StreamMode::READ)
     {
         SetStreamCharSet( RTL_TEXTENCODING_UNICODE );

@@ -1371,7 +1371,7 @@ void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 void ScDataPilotTableObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source.set((cppu::OWeakObject*)this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
 
     // the EventObject holds a Ref to this object until after the listener calls
 

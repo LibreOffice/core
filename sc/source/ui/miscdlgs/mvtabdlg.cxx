@@ -249,7 +249,7 @@ void ScMoveTableDlg::InitDocListBox()
             }
 
             pLbDoc->InsertEntry( aEntryName, i );
-            pLbDoc->SetEntryData( i, (void*)&pScSh->GetDocument() );
+            pLbDoc->SetEntryData( i, static_cast<void*>(&pScSh->GetDocument()) );
 
             i++;
         }

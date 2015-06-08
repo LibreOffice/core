@@ -347,16 +347,16 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 
 IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 {
-    if ( pCtr ==(Control*)pEdDataArea ||
-         pCtr ==(Control*)pEdDestArea)
+    if ( pCtr ==static_cast<Control*>(pEdDataArea) ||
+         pCtr ==static_cast<Control*>(pEdDestArea))
     {
         pRefInputEdit = static_cast<formula::RefEdit*>(pCtr);
     }
-    else if(pCtr ==(Control*)pLbDataArea )
+    else if(pCtr ==static_cast<Control*>(pLbDataArea) )
     {
         pRefInputEdit = pEdDataArea;
     }
-    else if(pCtr ==(Control*)pLbDestArea )
+    else if(pCtr ==static_cast<Control*>(pLbDestArea) )
     {
         pRefInputEdit = pEdDestArea;
     }

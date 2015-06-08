@@ -342,7 +342,7 @@ IMPL_LINK( ScRandomNumberGeneratorDialog, GetFocusHandler, Control*, pCtrl )
 {
     Edit* pEdit = NULL;
 
-    if( (pCtrl == (Control*) mpInputRangeEdit) || (pCtrl == (Control*) mpInputRangeButton) )
+    if( (pCtrl == static_cast<Control*>(mpInputRangeEdit)) || (pCtrl == static_cast<Control*>(mpInputRangeButton)) )
         pEdit = mpInputRangeEdit;
 
     if( pEdit )

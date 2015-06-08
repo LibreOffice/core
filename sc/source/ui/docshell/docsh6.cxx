@@ -216,7 +216,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
 
 SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 {
-    return (SfxStyleSheetBasePool*)aDocument.GetStyleSheetPool();
+    return static_cast<SfxStyleSheetBasePool*>(aDocument.GetStyleSheetPool());
 }
 
 //  nach dem Laden von Vorlagen aus einem anderen Dokment (LoadStyles, Insert)

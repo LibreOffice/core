@@ -517,21 +517,21 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
 
 IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 {
-    if ( pCtr ==(Control *) pEdPrintArea ||
-         pCtr ==(Control *) pEdRepeatRow ||
-         pCtr ==(Control *) pEdRepeatCol)
+    if ( pCtr ==static_cast<Control *>(pEdPrintArea) ||
+         pCtr ==static_cast<Control *>(pEdRepeatRow) ||
+         pCtr ==static_cast<Control *>(pEdRepeatCol))
     {
          pRefInputEdit = static_cast<formula::RefEdit*>(pCtr);
     }
-    else if ( pCtr ==(Control *) pLbPrintArea)
+    else if ( pCtr ==static_cast<Control *>(pLbPrintArea))
     {
         pRefInputEdit = pEdPrintArea;
     }
-    else if ( pCtr ==(Control *) pLbRepeatRow)
+    else if ( pCtr ==static_cast<Control *>(pLbRepeatRow))
     {
         pRefInputEdit = pEdRepeatRow;
     }
-    else if ( pCtr ==(Control *) pLbRepeatCol)
+    else if ( pCtr ==static_cast<Control *>(pLbRepeatCol))
     {
         pRefInputEdit = pEdRepeatCol;
     }

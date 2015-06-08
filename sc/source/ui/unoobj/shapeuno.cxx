@@ -107,7 +107,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
     {
         xShape = NULL;      // during setDelegator, mxShapeAgg must be the only ref
 
-        mxShapeAgg->setDelegator( (cppu::OWeakObject*)this );
+        mxShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
 
         xShape.set(uno::Reference<drawing::XShape>( mxShapeAgg, uno::UNO_QUERY ));
 

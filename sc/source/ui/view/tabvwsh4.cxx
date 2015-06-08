@@ -326,7 +326,7 @@ void ScTabViewShell::UpdateOleZoom()
     if ( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         //TODO/LATER: is there a difference between the two GetVisArea methods?
-        Size aObjSize = ((const SfxObjectShell*)pDocSh)->GetVisArea().GetSize();
+        Size aObjSize = static_cast<const SfxObjectShell*>(pDocSh)->GetVisArea().GetSize();
         if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
         {
             vcl::Window* pWin = GetActiveWin();
@@ -1476,7 +1476,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     if ( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         //TODO/LATER: is there a difference between the two GetVisArea methods?
-        Rectangle aVisArea = ((const SfxObjectShell*)pDocSh)->GetVisArea();
+        Rectangle aVisArea = static_cast<const SfxObjectShell*>(pDocSh)->GetVisArea();
 
         SCTAB nVisTab = rDoc.GetVisibleTab();
         if (!rDoc.HasTable(nVisTab))

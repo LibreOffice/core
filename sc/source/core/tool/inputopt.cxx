@@ -243,7 +243,7 @@ void ScInputCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 
 void ScInputCfg::SetOptions( const ScInputOptions& rNew )
 {
-    *(ScInputOptions*)this = rNew;
+    *static_cast<ScInputOptions*>(this) = rNew;
     SetModified();
 }
 

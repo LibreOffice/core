@@ -135,7 +135,7 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
         if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
         {
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, 1);
+            pView->BegDragObj(aMDPos, nullptr, pHdl, 1);
             bReturn = true;
         }
         else if ( pView->AreObjectsMarked() )

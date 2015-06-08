@@ -326,11 +326,11 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
 
 IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
 {
-    if( (pCtrl == (Control*)m_pEdFormulaRange) || (pCtrl == (Control*)m_pRBFormulaRange) )
+    if( (pCtrl == static_cast<Control*>(m_pEdFormulaRange)) || (pCtrl == static_cast<Control*>(m_pRBFormulaRange)) )
         pEdActive = m_pEdFormulaRange;
-    else if( (pCtrl == (Control*)m_pEdRowCell) || (pCtrl == (Control*)m_pRBRowCell) )
+    else if( (pCtrl == static_cast<Control*>(m_pEdRowCell)) || (pCtrl == static_cast<Control*>(m_pRBRowCell)) )
         pEdActive = m_pEdRowCell;
-    else if( (pCtrl == (Control*)m_pEdColCell) || (pCtrl == (Control*)m_pRBColCell) )
+    else if( (pCtrl == static_cast<Control*>(m_pEdColCell)) || (pCtrl == static_cast<Control*>(m_pRBColCell)) )
         pEdActive = m_pEdColCell;
     else
         pEdActive = NULL;

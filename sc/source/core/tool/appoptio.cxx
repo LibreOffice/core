@@ -749,7 +749,7 @@ IMPL_LINK_NOARG(ScAppCfg, CompatCommitHdl)
 
 void ScAppCfg::SetOptions( const ScAppOptions& rNew )
 {
-    *(ScAppOptions*)this = rNew;
+    *static_cast<ScAppOptions*>(this) = rNew;
     OptionsChanged();
 }
 

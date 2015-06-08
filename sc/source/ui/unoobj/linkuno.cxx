@@ -188,7 +188,7 @@ void SAL_CALL ScSheetLinkObj::removeRefreshListener(
 void ScSheetLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source.set((cppu::OWeakObject*)this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     for ( size_t n=0; n<aRefreshListeners.size(); n++ )
         aRefreshListeners[n]->refreshed( aEvent );
 }
@@ -741,7 +741,7 @@ void SAL_CALL ScAreaLinkObj::removeRefreshListener(
 void ScAreaLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source.set((cppu::OWeakObject*)this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     for ( size_t n=0; n<aRefreshListeners.size(); n++ )
         aRefreshListeners[n]->refreshed( aEvent );
 }
@@ -1241,7 +1241,7 @@ void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >&
 void ScDDELinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source.set((cppu::OWeakObject*)this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     for ( size_t n=0; n<aRefreshListeners.size(); n++ )
         aRefreshListeners[n]->refreshed( aEvent );
 }

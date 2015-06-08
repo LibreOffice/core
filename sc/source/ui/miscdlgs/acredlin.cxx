@@ -368,7 +368,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
     OUString aDesc;
 
     ScRedlinData* pNewData=new ScRedlinData;
-    pNewData->pData=(void *)pScChangeAction;
+    pNewData->pData=const_cast<ScChangeAction *>(pScChangeAction);
     pNewData->nActionNo=pScChangeAction->GetActionNumber();
     pNewData->bIsAcceptable=pScChangeAction->IsClickable();
     pNewData->bIsRejectable=pScChangeAction->IsRejectable();
@@ -545,7 +545,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
         OUString aDesc;
 
         ScRedlinData* pNewData=new ScRedlinData;
-        pNewData->pData=(void *)pScChangeAction;
+        pNewData->pData=const_cast<ScChangeAction *>(pScChangeAction);
         pNewData->nActionNo=pScChangeAction->GetActionNumber();
         pNewData->bIsAcceptable=pScChangeAction->IsClickable();
         pNewData->bIsRejectable=pScChangeAction->IsRejectable();
@@ -733,7 +733,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
 
     ScRedlinData* pNewData=new ScRedlinData;
     pNewData->nInfo=nSpecial;
-    pNewData->pData=(void *)pScChangeAction;
+    pNewData->pData=const_cast<ScChangeActionContent *>(pScChangeAction);
     pNewData->nActionNo=pScChangeAction->GetActionNumber();
     pNewData->bIsAcceptable=pScChangeAction->IsClickable();
     pNewData->bIsRejectable=false;
@@ -1181,7 +1181,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
     {
         bTheTestFlag=false;
         ScRedlinData *pParentData=static_cast<ScRedlinData *>(pOriginal->GetUserData());
-        pParentData->pData=(void *)pScChangeAction;
+        pParentData->pData=const_cast<ScChangeAction *>(pScChangeAction);
         pParentData->nActionNo=pScChangeAction->GetActionNumber();
         pParentData->bIsAcceptable=pScChangeAction->IsRejectable(); // select old value
         pParentData->bIsRejectable=false;
@@ -1209,7 +1209,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
         {
             bTheTestFlag=false;
             ScRedlinData *pParentData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-            pParentData->pData=(void *)pScChangeAction;
+            pParentData->pData=const_cast<ScChangeAction *>(pScChangeAction);
             pParentData->nActionNo=pScChangeAction->GetActionNumber();
             pParentData->bIsAcceptable=pScChangeAction->IsClickable();
             pParentData->bIsRejectable=false;

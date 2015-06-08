@@ -185,7 +185,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return (cppu::OWeakObject*)new ScSpreadsheetSettings();
+    return static_cast<cppu::OWeakObject*>(new ScSpreadsheetSettings());
 }
 
 OUString ScSpreadsheetSettings::getImplementationName_Static()

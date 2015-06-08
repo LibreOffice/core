@@ -662,7 +662,7 @@ IMPL_LINK_NOARG(ScViewCfg, GridCommitHdl)
 
 void ScViewCfg::SetOptions( const ScViewOptions& rNew )
 {
-    *(ScViewOptions*)this = rNew;
+    *static_cast<ScViewOptions*>(this) = rNew;
     aLayoutItem.SetModified();
     aDisplayItem.SetModified();
     aGridItem.SetModified();

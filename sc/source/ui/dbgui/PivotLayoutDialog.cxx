@@ -661,13 +661,13 @@ IMPL_LINK(ScPivotLayoutDialog, GetFocusHandler, Control*, pCtrl)
 {
     mpActiveEdit = NULL;
 
-    if (pCtrl == (Control*) mpSourceEdit  ||
-        pCtrl == (Control*) mpSourceButton)
+    if (pCtrl == static_cast<Control*>(mpSourceEdit)  ||
+        pCtrl == static_cast<Control*>(mpSourceButton))
     {
         mpActiveEdit = mpSourceEdit;
     }
-    else if (pCtrl == (Control*) mpDestinationEdit  ||
-             pCtrl == (Control*) mpDestinationButton)
+    else if (pCtrl == static_cast<Control*>(mpDestinationEdit)  ||
+             pCtrl == static_cast<Control*>(mpDestinationButton))
     {
         mpActiveEdit = mpDestinationEdit;
     }

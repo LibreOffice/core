@@ -1592,7 +1592,7 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
         pSortArray[j].pPair = maPairs[ j ];
         pSortArray[j].pDoc = pDoc;
     }
-    qsort( (void*)pSortArray, nListCount, sizeof(ScRangePairNameSort), &ScRangePairList_QsortNameCompare );
+    qsort( static_cast<void*>(pSortArray), nListCount, sizeof(ScRangePairNameSort), &ScRangePairList_QsortNameCompare );
     // ScRangePair Pointer aufruecken
     ScRangePair** ppSortArray = reinterpret_cast<ScRangePair**>(pSortArray);
     for ( j=0; j < nListCount; j++ )

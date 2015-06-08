@@ -275,7 +275,7 @@ void ScTabControl::Select()
         //  Tabelle fuer Basic ist 1-basiert
         SfxUInt16Item aItem( SID_CURRENTTAB, nPage + 1 );
         rDisp.Execute( SID_CURRENTTAB, SfxCallMode::SLOT | SfxCallMode::RECORD,
-                                &aItem, (void*) NULL );
+                                &aItem, nullptr );
     }
 
     SfxBindings& rBind = pViewData->GetBindings();

@@ -292,9 +292,9 @@ IMPL_LINK( ScSamplingDialog, GetFocusHandler, Control*, pCtrl )
 {
     mpActiveEdit = NULL;
 
-    if(      (pCtrl == (Control*) mpInputRangeEdit)  || (pCtrl == (Control*) mpInputRangeButton) )
+    if(      (pCtrl == static_cast<Control*>(mpInputRangeEdit))  || (pCtrl == static_cast<Control*>(mpInputRangeButton)) )
         mpActiveEdit = mpInputRangeEdit;
-    else if( (pCtrl == (Control*) mpOutputRangeEdit) || (pCtrl == (Control*) mpOutputRangeButton) )
+    else if( (pCtrl == static_cast<Control*>(mpOutputRangeEdit)) || (pCtrl == static_cast<Control*>(mpOutputRangeButton)) )
         mpActiveEdit = mpOutputRangeEdit;
 
     if( mpActiveEdit )

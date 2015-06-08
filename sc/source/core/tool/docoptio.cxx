@@ -376,7 +376,7 @@ IMPL_LINK_NOARG(ScDocCfg, LayoutCommitHdl)
 
 void ScDocCfg::SetOptions( const ScDocOptions& rNew )
 {
-    *(ScDocOptions*)this = rNew;
+    *static_cast<ScDocOptions*>(this) = rNew;
 
     aCalcItem.SetModified();
     aLayoutItem.SetModified();

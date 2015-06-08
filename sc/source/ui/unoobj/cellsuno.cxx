@@ -1637,7 +1637,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 //  SFX_HINT_DATACHANGED.
 
                 lang::EventObject aEvent;
-                aEvent.Source.set((cppu::OWeakObject*)this);
+                aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
 
                 // the EventObject holds a Ref to this object until after the listener calls
 
@@ -3994,7 +3994,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 if (bFound)
                 {
                     ScAddress aFoundPos( nCol, nRow, nTab );
-                    xRet.set((cppu::OWeakObject*) new ScCellObj( pDocShell, aFoundPos ));
+                    xRet.set(static_cast<cppu::OWeakObject*>(new ScCellObj( pDocShell, aFoundPos )));
                 }
             }
         }
@@ -5109,7 +5109,7 @@ void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,
     {
         if ( !rFormula.isEmpty() )
         {
-            if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
+            if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
             {
                 //  don't set array formula for sheet object
                 throw uno::RuntimeException();
@@ -5182,7 +5182,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
     {
         if ( rTokens.getLength() )
         {
-            if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
+            if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
             {
                 throw uno::RuntimeException();
             }
@@ -5214,7 +5214,7 @@ uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
 {
     SolarMutexGuard aGuard;
 
-    if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
+    if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
     {
         //  don't create a data array for the sheet
         throw uno::RuntimeException();
@@ -5261,7 +5261,7 @@ uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArra
 {
     SolarMutexGuard aGuard;
 
-    if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
+    if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
     {
         //  don't create a data array for the sheet
         throw uno::RuntimeException();

@@ -656,7 +656,7 @@ void ScFormulaCfg::ImplCommit()
 
 void ScFormulaCfg::SetOptions( const ScFormulaOptions& rNew )
 {
-    *(ScFormulaOptions*)this = rNew;
+    *static_cast<ScFormulaOptions*>(this) = rNew;
     SetModified();
 }
 

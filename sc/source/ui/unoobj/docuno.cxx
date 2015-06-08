@@ -407,7 +407,7 @@ uno::Reference< uno::XAggregation> ScModelObj::GetFormatter()
         xFormatter = NULL;
 
         if (xNumberAgg.is())
-            xNumberAgg->setDelegator( (cppu::OWeakObject*)this );
+            xNumberAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
         osl_atomic_decrement( &m_refCount );
     } // if ( !xNumberAgg.is() )
     return xNumberAgg;

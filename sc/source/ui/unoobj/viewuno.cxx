@@ -1335,7 +1335,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
 void ScTabViewObj::EndMouseListening()
 {
     lang::EventObject aEvent;
-    aEvent.Source = (cppu::OWeakObject*)this;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
     for (const XMouseClickHandlerUnoRef rListener : aMouseClickHandlers)
     {
         try
@@ -1352,7 +1352,7 @@ void ScTabViewObj::EndMouseListening()
 void ScTabViewObj::EndActivationListening()
 {
     lang::EventObject aEvent;
-    aEvent.Source = (cppu::OWeakObject*)this;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
     for (const XActivationEventListenerUnoRef rListener : aActivationListeners)
     {
         try

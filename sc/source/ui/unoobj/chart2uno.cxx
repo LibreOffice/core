@@ -2853,7 +2853,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             {
                 m_aDataArray.clear();
                 lang::EventObject aEvent;
-                aEvent.Source.set((cppu::OWeakObject*)this);
+                aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
 
                 if( m_pDocument )
                 {

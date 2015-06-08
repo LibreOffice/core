@@ -262,11 +262,11 @@ IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
     Edit* pEdit = NULL;
     pEdActive = NULL;
 
-    if( (pCtrl == (Control*)m_pEdFormulaCell) || (pCtrl == (Control*)m_pRBFormulaCell) )
+    if( (pCtrl == static_cast<Control*>(m_pEdFormulaCell)) || (pCtrl == static_cast<Control*>(m_pRBFormulaCell)) )
         pEdit = pEdActive = m_pEdFormulaCell;
-    else if( (pCtrl == (Control*)m_pEdVariableCell) || (pCtrl == (Control*)m_pRBVariableCell) )
+    else if( (pCtrl == static_cast<Control*>(m_pEdVariableCell)) || (pCtrl == static_cast<Control*>(m_pRBVariableCell)) )
         pEdit = pEdActive = m_pEdVariableCell;
-    else if( pCtrl == (Control*)m_pEdTargetVal )
+    else if( pCtrl == static_cast<Control*>(m_pEdTargetVal) )
         pEdit = m_pEdTargetVal;
 
     if( pEdit )

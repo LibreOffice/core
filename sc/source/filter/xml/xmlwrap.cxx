@@ -190,7 +190,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     {
         // sax parser sends wrapped exceptions,
         // try to find the original one
-        xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
+        xml::sax::SAXException aSaxEx = *static_cast<xml::sax::SAXException const *>(&r);
         bool bTryChild = true;
 
         while( bTryChild )

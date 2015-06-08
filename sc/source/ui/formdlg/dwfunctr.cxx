@@ -762,7 +762,7 @@ void ScFunctionDockWin::UpdateFunctionList()
         {
             pAllFuncList->SetEntryData(
                 pAllFuncList->InsertEntry( *(pDesc->pFuncName) ),
-                (void*)pDesc );
+                const_cast<ScFuncDesc *>(pDesc) );
             pDesc = pFuncMgr->Next();
         }
     }
@@ -773,7 +773,7 @@ void ScFunctionDockWin::UpdateFunctionList()
         {
             const formula::IFunctionDescription* pDesc = *iter;
             if (pDesc)
-                pAllFuncList->SetEntryData( pAllFuncList->InsertEntry( pDesc->getFunctionName()), (void*)pDesc);
+                pAllFuncList->SetEntryData( pAllFuncList->InsertEntry( pDesc->getFunctionName()), const_cast<formula::IFunctionDescription *>(pDesc));
         }
     }
 

@@ -2229,7 +2229,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
         // initialize
         // -> pTransClip has to be delted before the original document!
 
-    pTransClip->ResetClip(this, (ScMarkData*)NULL);     // all
+    pTransClip->ResetClip(this, nullptr);     // all
 
         // Take over range
 
