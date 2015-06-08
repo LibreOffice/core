@@ -707,7 +707,6 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
             osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL );
     if( osl::Directory::E_None == aDirectory.open() )
     {
-        int idx_ = 0;
         OUString aFileUrl, aFileName;
         while( aDirectory.getNextItem( aDirItem ) == osl::FileBase::E_None &&
                aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
@@ -716,7 +715,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
           {
             aFileUrl = aFileStatus.getFileURL();
             aFileName = aFileStatus.getFileName();
-            idx_ = aFileName.lastIndexOf( '.' );
+            int idx_ = aFileName.lastIndexOf( '.' );
             if( idx_ == -1 )
               continue;
 

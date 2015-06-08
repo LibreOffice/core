@@ -713,13 +713,12 @@ bool VCartesianAxis::createTextShapes(
 
     const TickInfo* pPreviousVisibleTickInfo = NULL;
     const TickInfo* pPREPreviousVisibleTickInfo = NULL;
-    const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rTickIter.nextInfo(), nTick++ )
     {
-        pLastVisibleNeighbourTickInfo = bIsStaggered ?
+        const TickInfo* pLastVisibleNeighbourTickInfo = bIsStaggered ?
                     pPREPreviousVisibleTickInfo : pPreviousVisibleTickInfo;
 
         //don't create labels which does not fit into the rhythm
@@ -909,13 +908,12 @@ bool VCartesianAxis::createTextShapesSimple(
     uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
 
     const TickInfo* pPreviousVisibleTickInfo = NULL;
-    const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rTickIter.nextInfo(), nTick++ )
     {
-        pLastVisibleNeighbourTickInfo = pPreviousVisibleTickInfo;
+        const TickInfo* pLastVisibleNeighbourTickInfo = pPreviousVisibleTickInfo;
 
         //don't create labels which does not fit into the rhythm
         if( nTick%rAxisLabelProperties.nRhythm != 0 )

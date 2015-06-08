@@ -3560,10 +3560,9 @@ RTLFUNC(Randomize)
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     }
-    int nSeed;
     if( rPar.Count() == 2 )
     {
-        nSeed = (int)rPar.Get(1)->GetInteger();
+        int nSeed = (int)rPar.Get(1)->GetInteger();
         theRandomNumberGenerator::get().global_rng.seed(nSeed);
     }
     // without parameter, no need to do anything - RNG is seeded at first use

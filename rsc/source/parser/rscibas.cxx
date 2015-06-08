@@ -150,22 +150,18 @@ void RscLangEnum::Init( RscNameTable& rNames )
 Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
 {
     Atom nResult = 0;
-    bool bAdd = false;
     KEY_STRUCT aStruct;
     if( ! rNames.Get( nResult = pHS->getID( pLang ), &aStruct ) )
     {
         SetConstant( nResult = rNames.Put( pLang, CONSTNAME, mnLangId ), mnLangId );
         // insert new lang to ULong_Iso_map
         OString aLang( pLang );
-        bAdd = (GetLangId( aLang ) == 0);
+        bool bAdd = (GetLangId( aLang ) == 0);
         if ( bAdd )
             ULong_Iso_map[ aLang ] = mnLangId;
         // increase id counter
         mnLangId++;
     }
-#if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "AddLanguage( '%s' ) = %d (%s)\n", pLang, nResult, (bAdd ? "added" : "exists") );
-#endif
     return nResult;
 }
 
