@@ -168,7 +168,7 @@ public:
     void CallWorkHandler()
     {
         LINK( this, PluginConnector, WorkOnNewMessageHdl ).
-            Call( (Mediator*)this );
+            Call( static_cast<Mediator*>(this) );
     }
 };
 

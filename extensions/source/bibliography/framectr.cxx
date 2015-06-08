@@ -253,7 +253,7 @@ void BibFrameController_Impl::dispose() throw (::com::sun::star::uno::RuntimeExc
 {
     bDisposing = true;
     lang::EventObject aObject;
-    aObject.Source = (XController*)this;
+    aObject.Source = static_cast<XController*>(this);
     pImp->aLC.disposeAndClear(aObject);
     m_xDatMan = 0;
     pDatMan = 0;
@@ -280,7 +280,7 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
         {
             if (( pDatMan->HasActiveConnection() ) ||
                 ( !pIter->second.bActiveConnection ))
-                return (frame::XDispatch*) this;
+                return static_cast<frame::XDispatch*>(this);
         }
     }
 
@@ -454,7 +454,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     aEvent.FeatureURL = pObj->aURL;
                     aEvent.IsEnabled  = sal_True;
                     aEvent.Requery    = sal_False;
-                    aEvent.Source     = (XDispatch *) this;
+                    aEvent.Source     = static_cast<XDispatch *>(this);
                     pObj->xListener->statusChanged( aEvent );
                     //break; because there are more than one
                 }
@@ -505,7 +505,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     aEvent.FeatureURL = pObj->aURL;
                     aEvent.IsEnabled  = !pDatMan->getParser()->getFilter().isEmpty();
                     aEvent.Requery    = sal_False;
-                    aEvent.Source     = (XDispatch *) this;
+                    aEvent.Source     = static_cast<XDispatch *>(this);
                     pObj->xListener->statusChanged( aEvent );
                 }
             }
@@ -650,7 +650,7 @@ void BibFrameController_Impl::addStatusListener(
     FeatureStateEvent aEvent;
     aEvent.FeatureURL = aURL;
     aEvent.Requery    = sal_False;
-    aEvent.Source     = (XDispatch *) this;
+    aEvent.Source     = static_cast<XDispatch *>(this);
     if ( aURL.Path == "StatusBarVisible" )
     {
         aEvent.IsEnabled  = sal_False;
@@ -812,7 +812,7 @@ void BibFrameController_Impl::RemoveFilter()
             aEvent.FeatureURL = pObj->aURL;
             aEvent.IsEnabled  = sal_False;
             aEvent.Requery    = sal_False;
-            aEvent.Source     = (XDispatch *) this;
+            aEvent.Source     = static_cast<XDispatch *>(this);
             pObj->xListener->statusChanged( aEvent );
             bRemoveFilter=true;
         }
@@ -822,7 +822,7 @@ void BibFrameController_Impl::RemoveFilter()
             aEvent.FeatureURL = pObj->aURL;
             aEvent.IsEnabled  = sal_True;
             aEvent.Requery    = sal_False;
-            aEvent.Source     = (XDispatch *) this;
+            aEvent.Source     = static_cast<XDispatch *>(this);
             aEvent.State <<= aQuery;
             pObj->xListener->statusChanged( aEvent );
             bQueryText=true;
@@ -872,7 +872,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             aEvent.FeatureURL = pObj->aURL;
             aEvent.IsEnabled  = sal_True;
             aEvent.Requery    = sal_False;
-            aEvent.Source     = (XDispatch *) this;
+            aEvent.Source     = static_cast<XDispatch *>(this);
             aEvent.FeatureDescriptor=pDatMan->getQueryField();
 
             uno::Sequence<OUString> aStringSeq=pDatMan->getQueryFields();
@@ -887,7 +887,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             aEvent.FeatureURL = pObj->aURL;
             aEvent.IsEnabled  = sal_True;
             aEvent.Requery    = sal_False;
-            aEvent.Source     = (XDispatch *) this;
+            aEvent.Source     = static_cast<XDispatch *>(this);
             BibConfig* pConfig = BibModul::GetConfig();
             aEvent.State <<= pConfig->getQueryText();
             pObj->xListener->statusChanged( aEvent );

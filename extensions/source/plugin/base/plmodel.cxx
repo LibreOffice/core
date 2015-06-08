@@ -174,7 +174,7 @@ void PluginModel::dispose() throw(std::exception)
 {
     // send disposing events
     ::com::sun::star::lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
     ::std::list< Reference< ::com::sun::star::lang::XEventListener > > aLocalListeners = m_aDisposeListeners;
     for( ::std::list< Reference< ::com::sun::star::lang::XEventListener > >::iterator it = aLocalListeners.begin();
          it != aLocalListeners.end(); ++it )

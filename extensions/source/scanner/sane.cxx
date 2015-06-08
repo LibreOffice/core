@@ -265,7 +265,7 @@ void Sane::ReloadOptions()
     const SANE_Option_Descriptor* pZero = p_get_option_descriptor( maHandle, 0 );
     SANE_Word pOptions[2];
     SANE_Status nStatus = p_control_option( maHandle, 0, SANE_ACTION_GET_VALUE,
-                                            (void*)pOptions, NULL );
+                                            static_cast<void*>(pOptions), NULL );
     if( nStatus != SANE_STATUS_GOOD )
         fprintf( stderr, "Error: sane driver returned %s while reading number of options !\n", p_strstatus( nStatus ) );
 
@@ -426,7 +426,7 @@ bool Sane::SetOptionValue( int n, const OUString& rSet )
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
         return false;
     OString aSet(OUStringToOString(rSet, osl_getThreadTextEncoding()));
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, (void*)aSet.getStr() );
+    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, const_cast<char *>(aSet.getStr()) );
     if( nStatus != SANE_STATUS_GOOD )
         return false;
     return true;

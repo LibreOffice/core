@@ -684,7 +684,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 if( aPluginFuncs.getvalue )
                 {
                     int bNeedsXEmbed = 0;
-                    NPError error = aPluginFuncs.getvalue( instance, NPPVpluginNeedsXEmbed, (void *)&bNeedsXEmbed );
+                    NPError error = aPluginFuncs.getvalue( instance, NPPVpluginNeedsXEmbed, static_cast<void *>(&bNeedsXEmbed) );
                     if( error == NPERR_NO_ERROR )
                         pInst->bShouldUseXEmbed = (bNeedsXEmbed != 0);
                     SAL_INFO(

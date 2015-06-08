@@ -134,7 +134,7 @@ Widget createSubWidget( char* /*pPluginText*/, Widget shell, Window aParentWindo
           shell,
         XtNwidth, 200,
         XtNheight, 200,
-          (char *)NULL );
+          nullptr );
     XtRealizeWidget( shell );
     XtRealizeWidget( newWidget );
 
@@ -166,7 +166,7 @@ void* CreateNewShell( void** pShellReturn, Window aParentWindow )
                             XtNwidth, 200,
                             XtNheight, 200,
                             XtNoverrideRedirect, True,
-                            (char *)NULL );
+                            nullptr );
     *pShellReturn = newShell;
 
     char pText[1024];

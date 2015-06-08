@@ -84,7 +84,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > SAL_CALL getView() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
-    { return (::com::sun::star::awt::XView*)this; }
+    { return static_cast<com::sun::star::awt::XView*>(this); }
 
     virtual sal_Bool SAL_CALL isTransparent() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     { return sal_False; }

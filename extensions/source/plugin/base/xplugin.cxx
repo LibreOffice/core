@@ -90,7 +90,7 @@ void PluginDisposer::onShot()
     {
         if( m_pPlugin->isDisposable() )
         {
-            Application::PostUserEvent( LINK( m_pPlugin, XPlugin_Impl, secondLevelDispose ), (void*)m_pPlugin );
+            Application::PostUserEvent( LINK( m_pPlugin, XPlugin_Impl, secondLevelDispose ), static_cast<void*>(m_pPlugin) );
         }
     }
     else
@@ -276,8 +276,8 @@ void XPlugin_Impl::freeArgs()
     {
         for( ; m_nArgs--; )
         {
-            free( (void*)m_pArgn[m_nArgs] );
-            free( (void*)m_pArgv[m_nArgs] );
+            free( const_cast<char *>(m_pArgn[m_nArgs]) );
+            free( const_cast<char *>(m_pArgv[m_nArgs]) );
         }
         delete [] m_pArgn;
         delete [] m_pArgv;
@@ -958,7 +958,7 @@ PluginStream::~PluginStream()
             m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
         }
     }
-    ::free( (void*)m_aNPStream.url );
+    ::free( const_cast<char *>(m_aNPStream.url) );
 }
 
 PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
