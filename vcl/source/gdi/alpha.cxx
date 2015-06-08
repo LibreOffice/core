@@ -51,7 +51,7 @@ AlphaMask::~AlphaMask()
 
 AlphaMask& AlphaMask::operator=( const Bitmap& rBitmap )
 {
-    *(Bitmap*) this = rBitmap;
+    *static_cast<Bitmap*>(this) = rBitmap;
 
     if( !!rBitmap )
         Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
@@ -68,7 +68,7 @@ void AlphaMask::ImplSetBitmap( const Bitmap& rBitmap )
 {
     SAL_WARN_IF( 8 != rBitmap.GetBitCount(), "vcl.gdi", "Bitmap should be 8bpp, not " << rBitmap.GetBitCount() << "bpp" );
     SAL_WARN_IF( !rBitmap.HasGreyPalette(), "vcl.gdi", "Bitmap isn't greyscale" );
-    *(Bitmap*) this = rBitmap;
+    *static_cast<Bitmap*>(this) = rBitmap;
 }
 
 Bitmap AlphaMask::GetBitmap() const

@@ -1016,7 +1016,7 @@ ooo_fixed_get_type()
             NULL,                      /* class data */
             sizeof (GtkFixed),         /* instance size */
             0,                         /* nb preallocs */
-            (GInstanceInitFunc) NULL,  /* instance init */
+            nullptr,  /* instance init */
             NULL                       /* value table */
         };
 
@@ -1356,7 +1356,7 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
                                     "visible", FALSE, NULL );
     }
     g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
-    g_object_set_data( G_OBJECT( m_pWindow ), "libo-version", (gpointer)LIBO_VERSION_DOTTED);
+    g_object_set_data( G_OBJECT( m_pWindow ), "libo-version", const_cast<char *>(LIBO_VERSION_DOTTED));
 
     // force wm class hint
     m_nExtStyle = ~0;
@@ -4298,7 +4298,7 @@ void GtkSalFrame::IMHandler::doCallEndExtTextInput()
 void GtkSalFrame::IMHandler::updateIMSpotLocation()
 {
     SalExtTextInputPosEvent aPosEvent;
-    m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
+    m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent) );
     GdkRectangle aArea;
     aArea.x = aPosEvent.mnX;
     aArea.y = aPosEvent.mnY;
@@ -4320,7 +4320,7 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
     aEmptyEv.mbOnlyCursor       = False;
-    m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEmptyEv );
+    m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEmptyEv) );
     if( ! aDel.isDeleted() )
         m_pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
 }
@@ -4539,7 +4539,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
         }
         if( ! bSingleCommit )
         {
-            pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
+            pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&pThis->m_aInputEvent));
             if( ! aDel.isDeleted() )
                 pThis->doCallEndExtTextInput();
         }
@@ -4663,7 +4663,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
 
-    pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
+    pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&pThis->m_aInputEvent));
     if( bEndPreedit && ! aDel.isDeleted() )
         pThis->doCallEndExtTextInput();
     if( ! aDel.isDeleted() )

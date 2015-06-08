@@ -61,7 +61,7 @@ hud_awareness_register (GDBusConnection       *connection,
   HudAwarenessHandle *handle;
   guint object_id;
 
-  memset ((void *)&vtable, 0, sizeof (vtable));
+  memset (static_cast<void *>(&vtable), 0, sizeof (vtable));
   vtable.method_call = hud_awareness_method_call;
 
   if G_UNLIKELY (iface == NULL)

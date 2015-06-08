@@ -3041,7 +3041,7 @@ void X11SalFrame::beginUnicodeSequence()
         aEv.mnCursorFlags   = 0;
         aEv.mbOnlyCursor    = false;
 
-        CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
+        CallCallback(SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEv));
     }
 }
 
@@ -3070,7 +3070,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
             aEv.mnCursorFlags   = 0;
             aEv.mbOnlyCursor    = false;
 
-            CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
+            CallCallback(SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEv));
             bRet = true;
         }
         else
@@ -3101,7 +3101,7 @@ bool X11SalFrame::endUnicodeSequence()
             aEv.mnCursorPos     = 0;
             aEv.mnCursorFlags   = 0;
             aEv.mbOnlyCursor    = false;
-            CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
+            CallCallback(SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEv));
         }
     }
     bool bWasInput = !rSeq.isEmpty();

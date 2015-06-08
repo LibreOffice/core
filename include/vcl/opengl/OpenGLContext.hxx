@@ -105,7 +105,7 @@ struct GLWindow
          }
          lookHere=NULL; /* get next token */
       }
-      free((void*)deleteThis);
+      free(static_cast<void*>(deleteThis));
 
       return flag;
     }

@@ -43,7 +43,7 @@ void VclComplexTextTest::testArabic()
     OUString aOneTwoThree( reinterpret_cast<char const *>(pOneTwoThreeUTF8),
                            SAL_N_ELEMENTS( pOneTwoThreeUTF8 ) - 1,
                            RTL_TEXTENCODING_UTF8 );
-    VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );
+    VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( static_cast<vcl::Window *>(nullptr) );
     CPPUNIT_ASSERT( pWin );
 
     OutputDevice *pOutDev = static_cast< OutputDevice * >( pWin.get() );

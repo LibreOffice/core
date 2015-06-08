@@ -32,7 +32,7 @@ ooo_wrapper_registry_get(const Reference< XAccessible >& rxAccessible)
     if( uno_to_gobject )
     {
         gpointer cached =
-            g_hash_table_lookup(uno_to_gobject, (gpointer) rxAccessible.get());
+            g_hash_table_lookup(uno_to_gobject, static_cast<gpointer>(rxAccessible.get()));
 
         if( cached )
             return ATK_OBJECT( cached );
@@ -49,7 +49,7 @@ ooo_wrapper_registry_add(const Reference< XAccessible >& rxAccessible, AtkObject
    if( !uno_to_gobject )
         uno_to_gobject = g_hash_table_new (NULL, NULL);
 
-   g_hash_table_insert( uno_to_gobject, (gpointer) rxAccessible.get(), obj );
+   g_hash_table_insert( uno_to_gobject, static_cast<gpointer>(rxAccessible.get()), obj );
 }
 
 /*****************************************************************************/
@@ -58,7 +58,7 @@ void
 ooo_wrapper_registry_remove(XAccessible *pAccessible)
 {
     if( uno_to_gobject )
-        g_hash_table_remove( uno_to_gobject, (gpointer) pAccessible );
+        g_hash_table_remove( uno_to_gobject, static_cast<gpointer>(pAccessible) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

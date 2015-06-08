@@ -293,7 +293,7 @@ void MetaPixelAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaPixelAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaPixelAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaPixelAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -348,7 +348,7 @@ void MetaPointAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaPointAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaPointAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaPointAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -412,7 +412,7 @@ void MetaLineAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaLineAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaLineAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaLineAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -481,7 +481,7 @@ void MetaRectAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaRectAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaRectAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaRectAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -538,7 +538,7 @@ void MetaRoundRectAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaRoundRectAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaRoundRectAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaRoundRectAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -595,7 +595,7 @@ void MetaEllipseAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaEllipseAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaEllipseAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaEllipseAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -650,7 +650,7 @@ void MetaArcAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaArcAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaArcAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaArcAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -715,7 +715,7 @@ void MetaPieAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaPieAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaPieAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaPieAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -780,7 +780,7 @@ void MetaChordAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaChordAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaChordAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaChordAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -851,7 +851,7 @@ void MetaPolyLineAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaPolyLineAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaPolyLineAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaPolyLineAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -933,7 +933,7 @@ void MetaPolygonAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaPolygonAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaPolygonAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaPolygonAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1002,7 +1002,7 @@ void MetaPolyPolygonAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaPolyPolygonAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaPolyPolygonAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaPolyPolygonAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1115,7 +1115,7 @@ void MetaTextAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTextAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1225,7 +1225,7 @@ void MetaTextArrayAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextArrayAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTextArrayAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextArrayAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1365,7 +1365,7 @@ void MetaStretchTextAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaStretchTextAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaStretchTextAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaStretchTextAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1443,7 +1443,7 @@ void MetaTextRectAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextRectAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTextRectAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextRectAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1519,7 +1519,7 @@ void MetaTextLineAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextLineAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*)new MetaTextLineAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextLineAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1598,7 +1598,7 @@ void MetaBmpAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaBmpAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaBmpAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1659,7 +1659,7 @@ void MetaBmpScaleAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaBmpScaleAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaBmpScaleAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpScaleAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1729,7 +1729,7 @@ void MetaBmpScalePartAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaBmpScalePartAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaBmpScalePartAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpScalePartAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1861,7 +1861,7 @@ void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaBmpExScaleAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaBmpExScaleAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpExScaleAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -1931,7 +1931,7 @@ void MetaBmpExScalePartAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaBmpExScalePartAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaBmpExScalePartAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpExScalePartAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2005,7 +2005,7 @@ void MetaMaskAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaMaskAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaMaskAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaMaskAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2069,7 +2069,7 @@ void MetaMaskScaleAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaMaskScaleAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaMaskScaleAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaMaskScaleAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2142,7 +2142,7 @@ void MetaMaskScalePartAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaMaskScalePartAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaMaskScalePartAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaMaskScalePartAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2216,7 +2216,7 @@ void MetaGradientAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaGradientAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaGradientAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaGradientAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2276,7 +2276,7 @@ void MetaGradientExAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaGradientExAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaGradientExAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaGradientExAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2338,7 +2338,7 @@ void MetaHatchAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaHatchAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaHatchAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaHatchAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2401,7 +2401,7 @@ void MetaWallpaperAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaWallpaperAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaWallpaperAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaWallpaperAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2460,7 +2460,7 @@ void MetaClipRegionAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaClipRegionAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaClipRegionAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaClipRegionAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2516,7 +2516,7 @@ void MetaISectRectClipRegionAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaISectRectClipRegionAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaISectRectClipRegionAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaISectRectClipRegionAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2569,7 +2569,7 @@ void MetaISectRegionClipRegionAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaISectRegionClipRegionAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaISectRegionClipRegionAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaISectRegionClipRegionAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2624,7 +2624,7 @@ void MetaMoveClipRegionAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaMoveClipRegionAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaMoveClipRegionAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaMoveClipRegionAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2681,7 +2681,7 @@ void MetaLineColorAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaLineColorAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaLineColorAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaLineColorAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2731,7 +2731,7 @@ void MetaFillColorAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaFillColorAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaFillColorAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaFillColorAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2776,7 +2776,7 @@ void MetaTextColorAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextColorAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTextColorAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextColorAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2823,7 +2823,7 @@ void MetaTextFillColorAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextFillColorAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTextFillColorAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextFillColorAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2873,7 +2873,7 @@ void MetaTextLineColorAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextLineColorAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTextLineColorAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextLineColorAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2923,7 +2923,7 @@ void MetaOverlineColorAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaOverlineColorAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaOverlineColorAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaOverlineColorAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -2969,7 +2969,7 @@ void MetaTextAlignAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextAlignAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTextAlignAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextAlignAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3013,7 +3013,7 @@ void MetaMapModeAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaMapModeAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaMapModeAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaMapModeAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3073,7 +3073,7 @@ void MetaFontAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaFontAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaFontAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaFontAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3130,7 +3130,7 @@ void MetaPushAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaPushAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaPushAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaPushAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3169,7 +3169,7 @@ void MetaPopAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaPopAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaPopAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaPopAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3206,7 +3206,7 @@ void MetaRasterOpAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaRasterOpAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaRasterOpAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaRasterOpAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3252,7 +3252,7 @@ void MetaTransparentAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTransparentAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTransparentAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTransparentAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3325,7 +3325,7 @@ void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaFloatTransparentAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaFloatTransparentAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaFloatTransparentAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3394,7 +3394,7 @@ void MetaEPSAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaEPSAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaEPSAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaEPSAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3464,7 +3464,7 @@ void MetaRefPointAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaRefPointAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaRefPointAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaRefPointAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3544,7 +3544,7 @@ void MetaCommentAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaCommentAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaCommentAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaCommentAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3558,7 +3558,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
             bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
             if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
-                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, StreamMode::READ );
+                SvMemoryStream  aMemStm( static_cast<void*>(mpData), mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
                 if ( bPathStroke )
                 {
@@ -3614,7 +3614,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
             bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
             if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
-                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, StreamMode::READ );
+                SvMemoryStream  aMemStm( static_cast<void*>(mpData), mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
                 if ( bPathStroke )
                 {
@@ -3636,7 +3636,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 delete[] mpData;
                 ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
             } else if( maComment == "EMF_PLUS_HEADER_INFO" ){
-                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, StreamMode::READ );
+                SvMemoryStream  aMemStm( static_cast<void*>(mpData), mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
 
                 sal_Int32 nLeft(0), nRight(0), nTop(0), nBottom(0);
@@ -3724,7 +3724,7 @@ void MetaLayoutModeAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaLayoutModeAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaLayoutModeAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaLayoutModeAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }
@@ -3769,7 +3769,7 @@ void MetaTextLanguageAction::Execute( OutputDevice* pOut )
 
 MetaAction* MetaTextLanguageAction::Clone()
 {
-    MetaAction* pClone = (MetaAction*) new MetaTextLanguageAction( *this );
+    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextLanguageAction( *this ));
     pClone->ResetRefCount();
     return pClone;
 }

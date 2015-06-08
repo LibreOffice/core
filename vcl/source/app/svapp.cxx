@@ -675,7 +675,7 @@ void Application::RemoveKeyListener( const Link<>& rKeyListener )
 bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
 {
     // let listeners process the key event
-    VclWindowEvent aEvent( pWin, nEvent, (void *) pKeyEvent );
+    VclWindowEvent aEvent( pWin, nEvent, static_cast<void *>(pKeyEvent) );
 
     ImplSVData* pSVData = ImplGetSVData();
     bool bProcessed = false;

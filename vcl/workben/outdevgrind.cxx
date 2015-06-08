@@ -64,7 +64,7 @@ public:
 class TestWindow : public Dialog
 {
     public:
-        TestWindow() : Dialog( (vcl::Window *) NULL )
+        TestWindow() : Dialog( nullptr )
         {
             SetText( OUString("OutDev grinding") );
             SetSizePixel( Size( 1024, 1024 ) );

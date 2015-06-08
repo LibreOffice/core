@@ -960,7 +960,7 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
             mxGraphicContext = mxGraphicContextNew;
         }
 
-        rData.rImageContext = (void *) mxGraphicContext;
+        rData.rImageContext = static_cast<void *>(mxGraphicContext);
         rData.mnWidth = mnWidth;
         rData.mnHeight = mnHeight;
     }

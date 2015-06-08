@@ -884,7 +884,7 @@ void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rRetur
 {
     rReturnedBytes  = 1;
     rReturnedType   = AsciiCString;
-    return (void*)"";
+    return const_cast<char *>("");
 }
 
 // We need to re-encode file urls because osl_getFileURLFromSystemPath converts

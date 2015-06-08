@@ -321,14 +321,14 @@ component_wrapper_add_focus_handler (AtkComponent    *component,
     signal_id = g_signal_lookup( "focus-event", ATK_TYPE_OBJECT );
 
     ret = g_signal_handler_find( component, match_type, signal_id, 0, NULL,
-                                 (gpointer) &handler, NULL);
+                                 static_cast<gpointer>(&handler), NULL);
     if (!ret)
     {
         return g_signal_connect_closure_by_id (component,
                                                signal_id, 0,
                                                g_cclosure_new (
                                                G_CALLBACK (handler), NULL,
-                                               (GClosureNotify) NULL),
+                                               nullptr),
                                                FALSE);
     }
     else

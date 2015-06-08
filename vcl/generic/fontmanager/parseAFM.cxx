@@ -267,7 +267,7 @@ static char *token( FileInputStream* stream, int& rLen )
         ch = stream->getChar();
     }
 
-    if (ch == -1 && idx < 1) return ((char *)NULL);
+    if (ch == -1 && idx < 1) return (nullptr);
     if (idx >= 1 && ch != ':' && ch != -1) stream->ungetChar();
     if (idx < 1 ) ident[idx++] = ch;    /* single-character token */
     ident[idx] = 0;

@@ -62,7 +62,7 @@ PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
      if (pPreeditData->eState == ePreeditStatusActive )
     {
         if( pPreeditData->pFrame )
-            pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+            pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, nullptr );
     }
     pPreeditData->eState = ePreeditStatusStartPending;
 }
@@ -94,11 +94,11 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
         if (to < (int)ptext->nLength)
     {
         // cut out of the middle of the text
-        memmove( (void*)(ptext->pUnicodeBuffer + from),
-                (void*)(ptext->pUnicodeBuffer + to),
+        memmove( static_cast<void*>(ptext->pUnicodeBuffer + from),
+                static_cast<void*>(ptext->pUnicodeBuffer + to),
                 (ptext->nLength - to) * sizeof(sal_Unicode));
-        memmove( (void*)(ptext->pCharStyle + from),
-                (void*)(ptext->pCharStyle + to),
+        memmove( static_cast<void*>(ptext->pCharStyle + from),
+                static_cast<void*>(ptext->pCharStyle + to),
                 (ptext->nLength - to) * sizeof(XIMFeedback));
         ptext->nLength -= howmuch;
       }
@@ -127,9 +127,9 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
         nnewsize *= 2;
 
       ptext->nSize = nnewsize;
-      ptext->pUnicodeBuffer = static_cast<sal_Unicode*>(realloc((void*)ptext->pUnicodeBuffer,
+      ptext->pUnicodeBuffer = static_cast<sal_Unicode*>(realloc(static_cast<void*>(ptext->pUnicodeBuffer),
             nnewsize * sizeof(sal_Unicode)));
-      ptext->pCharStyle = static_cast<XIMFeedback*>(realloc((void*)ptext->pCharStyle,
+      ptext->pCharStyle = static_cast<XIMFeedback*>(realloc(static_cast<void*>(ptext->pCharStyle),
             nnewsize * sizeof(XIMFeedback)));
 }
 
@@ -203,19 +203,19 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     int to      = where + nInsertTextLength;
     int howmany = pText->nLength - where;
 
-    memmove((void*)(pText->pUnicodeBuffer + to),
-          (void*)(pText->pUnicodeBuffer + from),
+    memmove(static_cast<void*>(pText->pUnicodeBuffer + to),
+          static_cast<void*>(pText->pUnicodeBuffer + from),
             howmany * sizeof(sal_Unicode));
-    memmove((void*)(pText->pCharStyle + to),
-            (void*)(pText->pCharStyle + from),
+    memmove(static_cast<void*>(pText->pCharStyle + to),
+            static_cast<void*>(pText->pCharStyle + from),
             howmany * sizeof(XIMFeedback));
 
     to = from;
     howmany = nInsertTextLength;
 
-    memcpy((void*)(pText->pUnicodeBuffer + to), (void*)pInsertTextString,
+    memcpy(static_cast<void*>(pText->pUnicodeBuffer + to), static_cast<void*>(pInsertTextString),
            howmany * sizeof(sal_Unicode));
-    memcpy((void*)(pText->pCharStyle + to), (void*)pInsertTextCharStyle,
+    memcpy(static_cast<void*>(pText->pCharStyle + to), static_cast<void*>(pInsertTextCharStyle),
             howmany * sizeof(XIMFeedback));
 
     pText->nLength += howmany;
@@ -262,7 +262,7 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<sal_uIn
         psalattr = &rSalAttr[0];
     }
       else
-        return (sal_uInt16*)NULL;
+        return nullptr;
 
       for (int npos = 0; npos < nlength; npos++)
     {
@@ -370,9 +370,9 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
     pPreeditData->aInputEv.mbOnlyCursor = False;
 
     if ( pPreeditData->eState == ePreeditStatusActive && pPreeditData->pFrame )
-        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&pPreeditData->aInputEv);
+        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUT, static_cast<void*>(&pPreeditData->aInputEv));
     if (pPreeditData->aText.nLength == 0 && pPreeditData->pFrame )
-        pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+        pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, nullptr );
 
     if (pPreeditData->aText.nLength == 0)
         pPreeditData->eState = ePreeditStatusStartPending;
@@ -390,7 +390,7 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
     preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
 
     if( pPreeditData->pFrame )
-        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&mPosEvent);
+        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&mPosEvent));
 
     XPoint point;
     point.x = mPosEvent.mnX + mPosEvent.mnWidth;

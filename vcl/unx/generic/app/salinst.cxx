@@ -162,7 +162,7 @@ void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     static const char* pDisplay = getenv( "DISPLAY" );
     rReturnedType   = AsciiCString;
     rReturnedBytes  = pDisplay ? strlen( pDisplay )+1 : 1;
-    return pDisplay ? (void*)pDisplay : (void*)"";
+    return pDisplay ? const_cast<char *>(pDisplay) : const_cast<char *>("");
 }
 
 SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, sal_uLong nSalFrameStyle )

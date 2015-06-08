@@ -191,7 +191,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
                                  "slider-width", &slider_width,
                                  "stepper-size", &stepper_size,
                                  "trough-border", &trough_border,
-                                 "stepper-spacing", &stepper_spacing, (char *)NULL );
+                                 "stepper-spacing", &stepper_spacing, nullptr );
 
     gboolean has_forward;
     gboolean has_forward2;
@@ -202,7 +202,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
                                  "has-forward-stepper", &has_forward,
                                  "has-secondary-forward-stepper", &has_forward2,
                                  "has-backward-stepper", &has_backward,
-                                 "has-secondary-backward-stepper", &has_backward2, (char *)NULL );
+                                 "has-secondary-backward-stepper", &has_backward2, nullptr );
     gint       buttonWidth;
     gint       buttonHeight;
     Rectangle  buttonRect;
@@ -309,7 +309,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                  "stepper_size", &stepper_size,
                                  "trough_border", &trough_border,
                                  "stepper_spacing", &stepper_spacing,
-                                 "min_slider_length", &min_slider_length, (char *)NULL );
+                                 "min_slider_length", &min_slider_length, nullptr );
     gboolean has_forward;
     gboolean has_forward2;
     gboolean has_backward;
@@ -319,7 +319,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                  "has-forward-stepper", &has_forward,
                                  "has-secondary-forward-stepper", &has_forward2,
                                  "has-backward-stepper", &has_backward,
-                                 "has-secondary-backward-stepper", &has_backward2, (char *)NULL );
+                                 "has-secondary-backward-stepper", &has_backward2, nullptr );
     gint magic = trough_border ? 1 : 0;
     gint nFirst = 0;
     gint slider_side = slider_width + (trough_border * 2);
@@ -1270,7 +1270,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         gtk_style_context_get_style( mpCheckButtonStyle,
                                      "indicator-size", &indicator_size,
                                      "indicator-spacing", &indicator_spacing,
-                                     (char *)NULL );
+                                     nullptr );
 
         GtkBorder border;
         gtk_style_context_get_border(mpCheckButtonStyle, GTK_STATE_FLAG_NORMAL, &border);
@@ -1296,7 +1296,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
             gtk_style_context_get_style( mpCheckMenuItemStyle,
                                          "indicator-size", &indicator_size,
-                                         (char *)NULL );
+                                         nullptr );
 
             point = MAX(0, rControlRegion.GetHeight() - indicator_size);
             aEditRect = Rectangle( Point( 0, point / 2),
@@ -1742,11 +1742,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // get cursor blink time
     gboolean blink = false;
 
-    g_object_get( pSettings, "gtk-cursor-blink", &blink, (char *)NULL );
+    g_object_get( pSettings, "gtk-cursor-blink", &blink, nullptr );
     if( blink )
     {
         gint blink_time = static_cast<gint>(STYLE_CURSOR_NOBLINKTIME);
-        g_object_get( pSettings, "gtk-cursor-blink-time", &blink_time, (char *)NULL );
+        g_object_get( pSettings, "gtk-cursor-blink-time", &blink_time, nullptr );
         // set the blink_time if there is a setting and it is reasonable
         // else leave the default value
         if( blink_time > 100 && blink_time != gint(STYLE_CURSOR_NOBLINKTIME) )
@@ -1762,7 +1762,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
                   "gtk-double-click-time", &iDoubleClickTime,
                   "gtk-double-click-distance", &iDoubleClickDistance,
                   "gtk-dnd-drag-threshold", &iDragThreshold,
-                  (char *)NULL );
+                  nullptr );
     aMouseSettings.SetDoubleClickTime( iDoubleClickTime );
     aMouseSettings.SetDoubleClickWidth( iDoubleClickDistance );
     aMouseSettings.SetDoubleClickHeight( iDoubleClickDistance );
@@ -1774,7 +1774,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gboolean primarybuttonwarps = false;
     g_object_get( pSettings,
         "gtk-primary-button-warps-slider", &primarybuttonwarps,
-        (char *)NULL );
+        nullptr );
     aStyleSet.SetPreferredUseImagesInMenus(false);
     aStyleSet.SetPrimaryButtonWarpsSlider(primarybuttonwarps);
 
@@ -1788,14 +1788,14 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
                                  "slider-width", &slider_width,
                                  "trough-border", &trough_border,
                                  "min-slider-length", &min_slider_length,
-                                 (char *)NULL );
+                                 nullptr );
     gint magic = trough_border ? 1 : 0;
     aStyleSet.SetScrollBarSize( slider_width + 2*trough_border );
     aStyleSet.SetMinThumbSize( min_slider_length - magic );
 
     // preferred icon style
     gchar* pIconThemeName = NULL;
-    g_object_get( pSettings, "gtk-icon-theme-name", &pIconThemeName, (char *)NULL );
+    g_object_get( pSettings, "gtk-icon-theme-name", &pIconThemeName, nullptr );
     aStyleSet.SetPreferredIconTheme( OUString::createFromAscii( pIconThemeName ) );
     g_free( pIconThemeName );
 
@@ -1806,7 +1806,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
     gchar* pThemeName = NULL;
-    g_object_get( pSettings, "gtk-theme-name", &pThemeName, (char *)NULL );
+    g_object_get( pSettings, "gtk-theme-name", &pThemeName, nullptr );
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
     #endif

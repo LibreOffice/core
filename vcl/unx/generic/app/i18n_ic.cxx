@@ -50,7 +50,7 @@ static void sendEmptyCommit( SalFrame* pFrame )
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
     aEmptyEv.mbOnlyCursor       = False;
-    pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEmptyEv );
+    pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEmptyEv) );
     if( ! aDel.isDeleted() )
         pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
 }
@@ -128,7 +128,7 @@ get_font_set( Display *p_display )
 
 SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mbUseable( True ),
-        maContext( (XIC)NULL ),
+        maContext( nullptr ),
         mnSupportedStatusStyle(
                                XIMStatusCallbacks   |
                                XIMStatusNothing     |
@@ -262,7 +262,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             {
                 // spot location
                 SalExtTextInputPosEvent aPosEvent;
-                pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
+                pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent));
 
                 static XPoint aSpot;
                 aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
@@ -356,7 +356,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
     if ( maContext != NULL)
     {
-        maDestroyCallback.callback    = (XIMProc)IC_IMDestroyCallback;
+        maDestroyCallback.callback    = static_cast<XIMProc>(IC_IMDestroyCallback);
         maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
         XSetICValues( maContext,
                       XNDestroyCallback,      &maDestroyCallback,
@@ -541,8 +541,8 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
         aTextEvent.mnCursorFlags = 0;
         aTextEvent.mbOnlyCursor  = False;
 
-        maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUT,    (void*)&aTextEvent);
-        maClientData.pFrame->CallCallback(SALEVENT_ENDEXTTEXTINPUT, (void*)NULL);
+        maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUT,    static_cast<void*>(&aTextEvent));
+        maClientData.pFrame->CallCallback(SALEVENT_ENDEXTTEXTINPUT, nullptr);
     }
 #if OSL_DEBUG_LEVEL > 1
     else
@@ -559,7 +559,7 @@ SalI18N_InputContext::UpdateSpotLocation()
         return -1;
 
     SalExtTextInputPosEvent aPosEvent;
-    maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
+    maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent));
 
     XPoint aSpot;
     aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
