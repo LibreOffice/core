@@ -95,6 +95,8 @@ private:
     //ui controls
     VclPtr<FixedText>   mpFTWidth;
     VclPtr<ToolBox>     mpTBWidth;
+    VclPtr<FixedText>   mpFTColor;
+    VclPtr<ListBox>     mpLBColor;
     VclPtr<FixedText>   mpFTStyle;
     VclPtr<ListBox>     mpLBStyle;
     VclPtr<FixedText>   mpFTTransparency;
@@ -150,6 +152,7 @@ private:
     void FillLineStyleList();
     void SelectEndStyle(bool bStart);
     void SelectLineStyle();
+    void ActivateControls();
 
     DECL_LINK(ChangeLineStyleHdl, void*);
     DECL_LINK_TYPED(ToolboxWidthSelectHdl, ToolBox*, void);
