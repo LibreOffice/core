@@ -1808,7 +1808,7 @@ namespace cppcanvas
                                            OutDevState& rState, const CanvasSharedPtr& rCanvas )
         {
             sal_uInt32 length = pAct->GetDataSize ();
-            SvMemoryStream rMF ((void*) pAct->GetData (), length, StreamMode::READ);
+            SvMemoryStream rMF (const_cast<sal_uInt8 *>(pAct->GetData ()), length, StreamMode::READ);
 
             length -= 4;
 
