@@ -365,7 +365,7 @@ void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const OUString& a
     tools::SvRef<SotStorage> xStorage = new SotStorage( false, aFile );
     if( xStorage.Is() && xStorage->GetError() == ERRCODE_NONE )
     {
-        BasicManager* pBasicManager = new BasicManager( *(SotStorage*)xStorage, aFile );
+        BasicManager* pBasicManager = new BasicManager( *static_cast<SotStorage*>(xStorage), aFile );
 
         // Set info
         LibraryContainerInfo aInfo( this, NULL, static_cast< OldBasicPassword* >( this ) );

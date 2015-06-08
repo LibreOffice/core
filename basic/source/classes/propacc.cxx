@@ -279,7 +279,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
     // Get class names of struct
     OUString aServiceName( "stardiv.uno.beans.PropertySet");
 
-    Reference< XInterface > xInterface = (OWeakObject*) new SbPropertyValues();
+    Reference< XInterface > xInterface = static_cast<OWeakObject*>(new SbPropertyValues());
 
     SbxVariableRef refVar = rPar.Get(0);
     if( xInterface.is() )
@@ -299,7 +299,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
             // Return object
-            refVar->PutObject( (SbUnoObject*)xUnoObj );
+            refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
             return;
         }
     }

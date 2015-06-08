@@ -257,8 +257,8 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
                 // could be affected if another value should be assigned.
                 // Therefore with flag.
                 if( bObjInObjError && !pDflt &&
-                    ((SbxValue*) pObj)->aData.eType == SbxOBJECT &&
-                    ((SbxValue*) pObj)->aData.pObj == pObj )
+                    static_cast<SbxValue*>(pObj)->aData.eType == SbxOBJECT &&
+                    static_cast<SbxValue*>(pObj)->aData.pObj == pObj )
                 {
 #if !HAVE_FEATURE_SCRIPTING
                     const bool bSuccess = false;

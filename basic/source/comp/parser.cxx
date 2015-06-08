@@ -388,7 +388,7 @@ bool SbiParser::Parse()
     // a runtime error
         if ( eCurTok == _ERROR_ && IsVBASupportOn() ) // we probably need to define a subset of keywords where this madness applies e.g. if ( IsVBASupportOn() && SymbolCanBeRedined( eCurTok ) )
         {
-            SbiTokenizer tokens( *(SbiTokenizer*)this );
+            SbiTokenizer tokens( *static_cast<SbiTokenizer*>(this) );
             tokens.Next();
             if ( tokens.Peek()  == DOT )
             {

@@ -610,10 +610,10 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
         if ( pArray )
         {
             SbxVariableRef xVar = new SbxVariable( eSbxElementType );
-            unoToSbxValue( (SbxVariable*)xVar, aValue );
+            unoToSbxValue( static_cast<SbxVariable*>(xVar), aValue );
 
             sal_Int32* pIndices = indices.getArray();
-            pArray->Put32(  (SbxVariable*)xVar, pIndices );
+            pArray->Put32(  static_cast<SbxVariable*>(xVar), pIndices );
 
         }
     }
@@ -637,7 +637,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             // instantiate SbUnoObject
             OUString aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aClassAny );
-            SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
+            SbxObjectRef xWrapper = static_cast<SbxObject*>(pSbUnoObject);
 
             // If the object is invalid deliver null
             if( pSbUnoObject->getUnoAny().getValueType().getTypeClass() == TypeClass_VOID )
@@ -671,7 +671,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                         SbxDimArrayRef xArray = pArray;
                         SbxFlagBits nFlags = pVar->GetFlags();
                         pVar->ResetFlag( SBX_FIXED );
-                        pVar->PutObject( (SbxDimArray*)xArray );
+                        pVar->PutObject( static_cast<SbxDimArray*>(xArray) );
                         pVar->SetFlags( nFlags );
                     }
                     else
@@ -738,7 +738,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                     pSbUnoObject->SetDfltProperty( sDfltPropName );
                 }
             }
-            SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
+            SbxObjectRef xWrapper = static_cast<SbxObject*>(pSbUnoObject);
 
             // If the object is invalid deliver null
             if( pSbUnoObject->getUnoAny().getValueType().getTypeClass() == TypeClass_VOID )
@@ -787,10 +787,10 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                     // convert elements
                     Any aElementAny = xIdlArray->get( aValue, (sal_uInt32)i );
                     SbxVariableRef xVar = new SbxVariable( eSbxElementType );
-                    unoToSbxValue( (SbxVariable*)xVar, aElementAny );
+                    unoToSbxValue( static_cast<SbxVariable*>(xVar), aElementAny );
 
                     // put into the Array
-                    xArray->Put32( (SbxVariable*)xVar, &i );
+                    xArray->Put32( static_cast<SbxVariable*>(xVar), &i );
                 }
             }
             else
@@ -801,7 +801,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             // return the Array
             SbxFlagBits nFlags = pVar->GetFlags();
             pVar->ResetFlag( SBX_FIXED );
-            pVar->PutObject( (SbxDimArray*)xArray );
+            pVar->PutObject( static_cast<SbxDimArray*>(xArray) );
             pVar->SetFlags( nFlags );
 
         }
@@ -907,7 +907,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                     {
                         // coverity[callee_ptr_arith]
                         SbxVariableRef xVar = pArray->Get32( &nIdx );
-                        Type aType = getUnoTypeForSbxValue( (SbxVariable*)xVar );
+                        Type aType = getUnoTypeForSbxValue( static_cast<SbxVariable*>(xVar) );
                         if( bNeedsInit )
                         {
                             if( aType.getTypeClass() == TypeClass_VOID )
@@ -944,7 +944,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                     for( sal_uInt32 i = 0 ; i < nFlatArraySize ; i++ )
                     {
                         SbxVariableRef xVar = pArray->SbxArray::Get32( i );
-                        Type aType = getUnoTypeForSbxValue( (SbxVariable*)xVar );
+                        Type aType = getUnoTypeForSbxValue( static_cast<SbxVariable*>(xVar) );
                         if( bNeedsInit )
                         {
                             if( aType.getTypeClass() == TypeClass_VOID )
@@ -978,12 +978,12 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
         // No array, but ...
         else if( xObj->ISA(SbUnoObject) )
         {
-            aRetType = static_cast<SbUnoObject*>((SbxBase*)xObj)->getUnoAny().getValueType();
+            aRetType = static_cast<SbUnoObject*>(static_cast<SbxBase*>(xObj))->getUnoAny().getValueType();
         }
         // SbUnoAnyObject?
         else if( xObj->ISA(SbUnoAnyObject) )
         {
-            aRetType = static_cast<SbUnoAnyObject*>((SbxBase*)xObj)->getValue().getValueType();
+            aRetType = static_cast<SbUnoAnyObject*>(static_cast<SbxBase*>(xObj))->getValue().getValueType();
         }
         // Otherwise it is a No-Uno-Basic-Object -> default==deliver void
     }
@@ -1005,11 +1005,11 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
         if( xObj.Is() )
         {
             if( xObj->ISA(SbUnoAnyObject) )
-                return static_cast<SbUnoAnyObject*>((SbxBase*)xObj)->getValue();
+                return static_cast<SbUnoAnyObject*>(static_cast<SbxBase*>(xObj))->getValue();
             if( xObj->ISA(SbClassModuleObject) )
             {
                 Any aRetAny;
-                SbClassModuleObject* pClassModuleObj = static_cast<SbClassModuleObject*>((SbxBase*)xObj);
+                SbClassModuleObject* pClassModuleObj = static_cast<SbClassModuleObject*>(static_cast<SbxBase*>(xObj));
                 SbModule* pClassModule = pClassModuleObj->getClassModule();
                 if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
                     return aRetAny;
@@ -1206,7 +1206,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
         SbxBaseRef xObj = pVar->GetObject();
         if( xObj.Is() && xObj->ISA(SbUnoAnyObject) )
         {
-            return static_cast<SbUnoAnyObject*>((SbxBase*)xObj)->getValue();
+            return static_cast<SbUnoAnyObject*>(static_cast<SbxBase*>(xObj))->getValue();
         }
     }
 
@@ -1261,11 +1261,11 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                 SbxBaseRef pObj = pVar->GetObject();
                 if( pObj && pObj->ISA(SbUnoObject) )
                 {
-                    aRetVal = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
+                    aRetVal = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj))->getUnoAny();
                 }
                 else if( pObj && pObj->ISA(SbUnoStructRefObject) )
                 {
-                    aRetVal = static_cast<SbUnoStructRefObject*>((SbxBase*)pObj)->getUnoAny();
+                    aRetVal = static_cast<SbUnoStructRefObject*>(static_cast<SbxBase*>(pObj))->getUnoAny();
                 }
                 else
                 {
@@ -1287,7 +1287,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                 SbxBaseRef pObj = pVar->GetObject();
                 if( pObj && pObj->ISA(SbUnoObject) )
                 {
-                    Any aUnoAny = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
+                    Any aUnoAny = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj))->getUnoAny();
                     aUnoAny >>= xIdlClass;
                 }
 
@@ -1355,7 +1355,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                         SbxVariableRef xVar = pArray->Get32( &nIdx );
 
                         // Convert the value of Sbx to Uno
-                        Any aAnyValue = sbxToUnoValue( (SbxVariable*)xVar, aElemType );
+                        Any aAnyValue = sbxToUnoValue( static_cast<SbxVariable*>(xVar), aElemType );
 
                         try
                         {
@@ -2089,7 +2089,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 if ( pProp->isUnoStruct() )
                                 {
                                     SbUnoStructRefObject* pSbUnoObject = new SbUnoStructRefObject( pProp->GetName(), aMember );
-                                    SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
+                                    SbxObjectRef xWrapper = static_cast<SbxObject*>(pSbUnoObject);
                                     pVar->PutObject( xWrapper );
                                 }
                                 else
@@ -2676,7 +2676,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                 // create the property and superimpose it
                 SbUnoProperty* pProp = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, 0, false, ( rProp.Type.getTypeClass() ==  com::sun::star::uno::TypeClass_STRUCT  ) );
                 SbxVariableRef xVarRef = pProp;
-                QuickInsert( (SbxVariable*)xVarRef );
+                QuickInsert( static_cast<SbxVariable*>(xVarRef) );
                 pRes = xVarRef;
             }
             else if( mxUnoAccess->hasMethod( aUName,
@@ -2689,7 +2689,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                 // create SbUnoMethod and superimpose it
                 SbxVariableRef xMethRef = new SbUnoMethod( rxMethod->getName(),
                     unoToSbxType( rxMethod->getReturnType() ), rxMethod, false );
-                QuickInsert( (SbxVariable*)xMethRef );
+                QuickInsert( static_cast<SbxVariable*>(xMethRef) );
                 pRes = xMethRef;
             }
 
@@ -2747,14 +2747,14 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                 {
                     // create a property and superimpose it
                     SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, SbxVARIANT, aDummyProp, 0, true, false );
-                    QuickInsert( (SbxVariable*)xVarRef );
+                    QuickInsert( static_cast<SbxVariable*>(xVarRef) );
                     pRes = xVarRef;
                 }
                 else if( mxInvocation->hasMethod( aUName ) )
                 {
                     // create SbUnoMethode and superimpose it
                     SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod, true );
-                    QuickInsert( (SbxVariable*)xMethRef );
+                    QuickInsert( static_cast<SbxVariable*>(xMethRef) );
                     pRes = xMethRef;
                 }
                 else
@@ -2763,7 +2763,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                     if ( xDirectInvoke.is() && xDirectInvoke->hasMember( aUName ) )
                     {
                         SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod, true, true );
-                        QuickInsert( (SbxVariable*)xMethRef );
+                        QuickInsert( static_cast<SbxVariable*>(xMethRef) );
                         pRes = xMethRef;
                     }
 
@@ -2806,15 +2806,15 @@ void SbUnoObject::implCreateDbgProperties()
 
     // Id == -1: display the implemented interfaces corresponding the ClassProvider
     SbxVariableRef xVarRef = new SbUnoProperty( OUString(ID_DBG_SUPPORTEDINTERFACES), SbxSTRING, SbxSTRING, aProp, -1, false, false );
-    QuickInsert( (SbxVariable*)xVarRef );
+    QuickInsert( static_cast<SbxVariable*>(xVarRef) );
 
     // Id == -2: output the properties
     xVarRef = new SbUnoProperty( OUString(ID_DBG_PROPERTIES), SbxSTRING, SbxSTRING, aProp, -2, false, false );
-    QuickInsert( (SbxVariable*)xVarRef );
+    QuickInsert( static_cast<SbxVariable*>(xVarRef) );
 
     // Id == -3: output the Methods
     xVarRef = new SbUnoProperty( OUString(ID_DBG_METHODS), SbxSTRING, SbxSTRING, aProp, -3, false, false );
-    QuickInsert( (SbxVariable*)xVarRef );
+    QuickInsert( static_cast<SbxVariable*>(xVarRef) );
 }
 
 void SbUnoObject::implCreateAll()
@@ -2857,7 +2857,7 @@ void SbUnoObject::implCreateAll()
         SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
         // Create property and superimpose it
         SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, i, false, ( rProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT   ) );
-        QuickInsert( (SbxVariable*)xVarRef );
+        QuickInsert( static_cast<SbxVariable*>(xVarRef) );
     }
 
     // Create Dbg_-Properties
@@ -2876,7 +2876,7 @@ void SbUnoObject::implCreateAll()
         // Create SbUnoMethod and superimpose it
         SbxVariableRef xMethRef = new SbUnoMethod
             ( rxMethod->getName(), unoToSbxType( rxMethod->getReturnType() ), rxMethod, false );
-        QuickInsert( (SbxVariable*)xMethRef );
+        QuickInsert( static_cast<SbxVariable*>(xMethRef) );
     }
 }
 
@@ -2988,7 +2988,7 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     }
     // return the object
     SbxVariableRef refVar = rPar.Get(0);
-    refVar->PutObject( (SbUnoObject*)xUnoObj );
+    refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
 }
 
 void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
@@ -3029,7 +3029,7 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
             // return the object
-            refVar->PutObject( (SbUnoObject*)xUnoObj );
+            refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
         }
         else
         {
@@ -3084,7 +3084,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
             // return the object
-            refVar->PutObject( (SbUnoObject*)xUnoObj );
+            refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
         }
         else
         {
@@ -3111,7 +3111,7 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool 
 
     // Create a SbUnoObject out of it and return it
     SbUnoObjectRef xUnoObj = new SbUnoObject( OUString( "ProcessServiceManager" ), aAny );
-    refVar->PutObject( (SbUnoObject*)xUnoObj );
+    refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
 }
 
 void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
@@ -3137,7 +3137,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         return;
     }
-    Any aAny = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
+    Any aAny = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj))->getUnoAny();
     TypeClass eType = aAny.getValueType().getTypeClass();
     if( eType != TypeClass_INTERFACE )
     {
@@ -3203,7 +3203,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         return;
     }
-    Any aAny = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
+    Any aAny = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj))->getUnoAny();
     TypeClass eType = aAny.getValueType().getTypeClass();
     if( eType == TypeClass_STRUCT )
     {
@@ -3238,7 +3238,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         return;
     }
-    Any aAny1 = static_cast<SbUnoObject*>((SbxBase*)pObj1)->getUnoAny();
+    Any aAny1 = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj1))->getUnoAny();
     TypeClass eType1 = aAny1.getValueType().getTypeClass();
     if( eType1 != TypeClass_INTERFACE )
     {
@@ -3257,7 +3257,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         return;
     }
-    Any aAny2 = static_cast<SbUnoObject*>((SbxBase*)pObj2)->getUnoAny();
+    Any aAny2 = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj2))->getUnoAny();
     TypeClass eType2 = aAny2.getValueType().getTypeClass();
     if( eType2 != TypeClass_INTERFACE )
     {
@@ -3476,7 +3476,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                             if( xClass.is() )
                             {
                                 pRes = new SbxVariable( SbxVARIANT );
-                                SbxObjectRef xWrapper = (SbxObject*)new SbUnoClass( aNewName, xClass );
+                                SbxObjectRef xWrapper = static_cast<SbxObject*>(new SbUnoClass( aNewName, xClass ));
                                 pRes->PutObject( xWrapper );
                             }
                         }
@@ -3498,7 +3498,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                     if( pNewClass )
                     {
                         pRes = new SbxVariable( SbxVARIANT );
-                        SbxObjectRef xWrapper = (SbxObject*)pNewClass;
+                        SbxObjectRef xWrapper = static_cast<SbxObject*>(pNewClass);
                         pRes->PutObject( xWrapper );
                     }
                 }
@@ -3510,7 +3510,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                     if( pUnoService )
                     {
                         pRes = new SbxVariable( SbxVARIANT );
-                        SbxObjectRef xWrapper = (SbxObject*)pUnoService;
+                        SbxObjectRef xWrapper = static_cast<SbxObject*>(pUnoService);
                         pRes->PutObject( xWrapper );
                     }
                 }
@@ -3522,7 +3522,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                     if( pUnoSingleton )
                     {
                         pRes = new SbxVariable( SbxVARIANT );
-                        SbxObjectRef xWrapper = (SbxObject*)pUnoSingleton;
+                        SbxObjectRef xWrapper = static_cast<SbxObject*>(pUnoSingleton);
                         pRes->PutObject( xWrapper );
                     }
                 }
@@ -3602,7 +3602,7 @@ SbxVariable* SbUnoService::Find( const OUString& rName, SbxClassType )
                 {
                     // Create and insert SbUnoServiceCtor
                     SbxVariableRef xSbCtorRef = new SbUnoServiceCtor( aName, xCtor );
-                    QuickInsert( (SbxVariable*)xSbCtorRef );
+                    QuickInsert( static_cast<SbxVariable*>(xSbCtorRef) );
                 }
             }
             pRes = SbxObject::Find( rName, SbxCLASS_METHOD );
@@ -3830,7 +3830,7 @@ SbUnoSingleton::SbUnoSingleton( const OUString& aName_,
         , m_xSingletonTypeDesc( xSingletonTypeDesc )
 {
     SbxVariableRef xGetMethodRef = new SbxMethod( OUString( "get"  ), SbxOBJECT );
-    QuickInsert( (SbxVariable*)xGetMethodRef );
+    QuickInsert( static_cast<SbxVariable*>(xGetMethodRef) );
 }
 
 void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -3945,7 +3945,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
                 {
                     // Convert elements
                     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-                    unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
+                    unoToSbxValue( static_cast<SbxVariable*>(xVar), pArgs[i] );
                     xSbxArray->Put( xVar, sal::static_int_cast< sal_uInt16 >(i+1) );
                 }
 
@@ -4036,7 +4036,7 @@ Reference< XInterface > createAllListenerAdapter
     if( xInvocationAdapterFactory.is() && xListenerType.is() && xListener.is() )
     {
         Reference< XInvocation > xInvocationToAllListenerMapper =
-            (XInvocation*)new InvocationToAllListenerMapper( xListenerType, xListener, Helper );
+            static_cast<XInvocation*>(new InvocationToAllListenerMapper( xListenerType, xListener, Helper ));
         Type aListenerType( xListenerType->getTypeClass(), xListenerType->getName() );
         Sequence<Type> arg2(1);
         arg2[0] = aListenerType;
@@ -4105,7 +4105,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
     }
 
     AllEventObject aAllEvent;
-    aAllEvent.Source = (OWeakObject*) this;
+    aAllEvent.Source = static_cast<OWeakObject*>(this);
     aAllEvent.Helper = m_Helper;
     aAllEvent.ListenerType = Type(m_xListenerType->getTypeClass(), m_xListenerType->getName() );
     aAllEvent.MethodName = FunctionName;
@@ -4227,7 +4227,7 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
     Any aContextAny( comphelper::getProcessComponentContext() );
 
     SbUnoObjectRef xUnoObj = new SbUnoObject( OUString( "DefaultContext" ), aContextAny );
-    refVar->PutObject( (SbUnoObject*)xUnoObj );
+    refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
 }
 
 
@@ -4267,7 +4267,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
             SbxBaseRef pObj = pVal->GetObject();
             if( pObj && pObj->ISA(SbUnoObject) )
             {
-                Any aUnoAny = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
+                Any aUnoAny = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj))->getUnoAny();
                 aUnoAny >>= xIdlClass;
             }
 
@@ -4403,7 +4403,7 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
     // Setup parameter
     SbxArrayRef xArray = new SbxArray;
     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-    unoToSbxValue( (SbxVariable*)xVar, rValue );
+    unoToSbxValue( static_cast<SbxVariable*>(xVar), rValue );
     xArray->Put( xVar, 1 );
 
     // Call property method
@@ -4507,7 +4507,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
         for( sal_Int32 i = 0 ; i < nParamCount ; i++ )
         {
             SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-            unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
+            unoToSbxValue( static_cast<SbxVariable*>(xVar), pArgs[i] );
             xArray->Put( xVar, sal::static_int_cast< sal_uInt16 >(i+1) );
         }
     }
@@ -4533,7 +4533,7 @@ void SAL_CALL ModuleInvocationProxy::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EventObject aEvent( (XComponent*)this );
+    EventObject aEvent( static_cast<XComponent*>(this) );
     m_aListeners.disposeAndClear( aEvent );
 
     m_xScopeObj = NULL;
@@ -4876,7 +4876,7 @@ SbxVariable* SbUnoStructRefObject::Find( const OUString& rName, SbxClassType t )
             aProp.Type = com::sun::star::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
             SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT) );
             SbxVariableRef xVarRef = pProp;
-            QuickInsert( (SbxVariable*)xVarRef );
+            QuickInsert( static_cast<SbxVariable*>(xVarRef) );
             pRes = xVarRef;
         }
     }
@@ -4905,15 +4905,15 @@ void SbUnoStructRefObject::implCreateDbgProperties()
 
     // Id == -1: display the implemented interfaces corresponding the ClassProvider
     SbxVariableRef xVarRef = new SbUnoProperty( OUString(ID_DBG_SUPPORTEDINTERFACES), SbxSTRING, SbxSTRING, aProp, -1, false, false );
-    QuickInsert( (SbxVariable*)xVarRef );
+    QuickInsert( static_cast<SbxVariable*>(xVarRef) );
 
     // Id == -2: output the properties
     xVarRef = new SbUnoProperty( OUString(ID_DBG_PROPERTIES), SbxSTRING, SbxSTRING, aProp, -2, false, false );
-    QuickInsert( (SbxVariable*)xVarRef );
+    QuickInsert( static_cast<SbxVariable*>(xVarRef) );
 
     // Id == -3: output the Methods
     xVarRef = new SbUnoProperty( OUString(ID_DBG_METHODS), SbxSTRING, SbxSTRING, aProp, -3, false, false );
-    QuickInsert( (SbxVariable*)xVarRef );
+    QuickInsert( static_cast<SbxVariable*>(xVarRef) );
 }
 
 void SbUnoStructRefObject::implCreateAll()
@@ -4936,7 +4936,7 @@ void SbUnoStructRefObject::implCreateAll()
         aProp.Type = com::sun::star::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
         SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT) );
         SbxVariableRef xVarRef = pProp;
-        QuickInsert( (SbxVariable*)xVarRef );
+        QuickInsert( static_cast<SbxVariable*>(xVarRef) );
     }
 
     // Create Dbg_-Properties

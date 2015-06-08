@@ -4526,7 +4526,7 @@ RTLFUNC(LoadPicture)
         Graphic aGraphic(aBmp);
 
         SbxObjectRef xRef = new SbStdPicture;
-        static_cast<SbStdPicture*>((SbxObject*)xRef)->SetGraphic( aGraphic );
+        static_cast<SbStdPicture*>(static_cast<SbxObject*>(xRef))->SetGraphic( aGraphic );
         rPar.Get(0)->PutObject( xRef );
     }
 }

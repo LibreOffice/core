@@ -356,7 +356,7 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
             for( sal_uInt16 i = 0; i < pArray->Count(); i++ )
             {
                 SbxVariableRef& rRef = pArray->GetRef( i );
-                if( (SbxVariable*) rRef == pOld )
+                if( static_cast<SbxVariable*>(rRef) == pOld )
                 {
                     nArrayIdx = i; break;
                 }
@@ -549,7 +549,7 @@ void SbxObject::Remove( SbxVariable* pVar )
         {
             EndListening( pVar_->GetBroadcaster(), true );
         }
-        if( (SbxVariable*) pVar_ == pDfltProp )
+        if( static_cast<SbxVariable*>(pVar_) == pDfltProp )
         {
             pDfltProp = NULL;
         }

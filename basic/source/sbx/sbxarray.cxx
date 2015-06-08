@@ -204,7 +204,7 @@ void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
                 if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
                     pVar->Convert( eType );
         SbxVariableRef& rRef = GetRef32( nIdx );
-        if( (SbxVariable*) rRef != pVar )
+        if( static_cast<SbxVariable*>(rRef) != pVar )
         {
             rRef = pVar;
             SetFlag( SBX_MODIFIED );
@@ -224,7 +224,7 @@ void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
                 if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
                     pVar->Convert( eType );
         SbxVariableRef& rRef = GetRef( nIdx );
-        if( (SbxVariable*) rRef != pVar )
+        if( static_cast<SbxVariable*>(rRef) != pVar )
         {
             rRef = pVar;
             SetFlag( SBX_MODIFIED );

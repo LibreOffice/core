@@ -2816,7 +2816,7 @@ void SAL_CALL SfxLibraryContainer::addContainerListener( const Reference< XConta
     throw (RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
-    maNameContainer.setEventSource( static_cast< XInterface* >( (OWeakObject*)this ) );
+    maNameContainer.setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
     maNameContainer.addContainerListener( xListener );
 }
 
@@ -3254,7 +3254,7 @@ Sequence< sal_Int8 > SfxLibrary::getImplementationId()
 void SAL_CALL SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
     throw (RuntimeException, std::exception)
 {
-    maNameContainer.setEventSource( static_cast< XInterface* >( (OWeakObject*)this ) );
+    maNameContainer.setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
     maNameContainer.addContainerListener( xListener );
 }
 
@@ -3268,7 +3268,7 @@ void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerLi
 void SAL_CALL SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
     throw (RuntimeException, std::exception)
 {
-    maNameContainer.setEventSource( static_cast< XInterface* >( (OWeakObject*)this ) );
+    maNameContainer.setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
     maNameContainer.addChangesListener( xListener );
 }
 

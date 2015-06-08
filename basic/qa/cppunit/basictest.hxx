@@ -107,7 +107,7 @@ class MacroSnippet
                 }
                 pMeth->SetParameters( aArgs );
             }
-            pReturn = new SbxMethod( *((SbxMethod*)pMeth));
+            pReturn = new SbxMethod( *static_cast<SbxMethod*>(pMeth));
         }
         return pReturn;
     }

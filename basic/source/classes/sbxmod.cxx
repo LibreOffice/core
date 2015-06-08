@@ -333,7 +333,7 @@ DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue ) t
     SbPropertyRef pProperty = getProperty( aPropertyName );
     if ( !pProperty.Is() )
        throw UnknownPropertyException();
-    unoToSbxValue( (SbxVariable*) pProperty, aValue );
+    unoToSbxValue( static_cast<SbxVariable*>(pProperty), aValue );
 }
 
 Any SAL_CALL
@@ -346,7 +346,7 @@ DocObjectWrapper::getValue( const OUString& aPropertyName ) throw (UnknownProper
     if ( !pProperty.Is() )
        throw UnknownPropertyException();
 
-    SbxVariable* pProp = ( SbxVariable* ) pProperty;
+    SbxVariable* pProp = static_cast<SbxVariable*>(pProperty);
     if ( pProp->GetType() == SbxEMPTY )
         pProperty->Broadcast( SBX_HINT_DATAWANTED );
 
@@ -2198,7 +2198,7 @@ SbObjModule::~SbObjModule()
 void
 SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException )
 {
-    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxVariable*)pDocObject);
+    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,static_cast<SbxVariable*>(pDocObject));
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do
         return;
     pDocObject = new SbUnoObject( GetName(), aObj );

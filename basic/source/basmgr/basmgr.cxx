@@ -1087,7 +1087,7 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
     {
         if( xNew->IsA( TYPE(StarBASIC) ) )
         {
-            StarBASIC* pNew = static_cast<StarBASIC*>((SbxBase*) xNew);
+            StarBASIC* pNew = static_cast<StarBASIC*>(static_cast<SbxBase*>(xNew));
             // Use the Parent of the old BASICs
             if( rOldBasic.Is() )
             {
@@ -1846,8 +1846,8 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : NULL;
     if( !pMod )
         throw container::NoSuchElementException();
-    uno::Reference< script::XStarBasicModuleInfo > xMod = (XStarBasicModuleInfo*)new ModuleInfo_Impl
-        ( aName, "StarBasic", pMod->GetSource32() );
+    uno::Reference< script::XStarBasicModuleInfo > xMod = static_cast<XStarBasicModuleInfo*>(new ModuleInfo_Impl
+        ( aName, "StarBasic", pMod->GetSource32() ));
     uno::Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;
@@ -2011,8 +2011,8 @@ uno::Any DialogContainer_Impl::getByName( const OUString& aName )
     }
 
     uno::Reference< script::XStarBasicDialogInfo > xDialog =
-        (XStarBasicDialogInfo*)new DialogInfo_Impl
-            ( aName, implGetDialogData( static_cast<SbxObject*>(pVar) ) );
+        static_cast<XStarBasicDialogInfo*>(new DialogInfo_Impl
+            ( aName, implGetDialogData( static_cast<SbxObject*>(pVar) ) ));
 
     uno::Any aRetAny;
     aRetAny <<= xDialog;
@@ -2157,10 +2157,10 @@ uno::Any LibraryContainer_Impl::getByName( const OUString& aName )
     StarBASIC* pLib = mpMgr->GetLib( aName );
 
     uno::Reference< container::XNameContainer > xModuleContainer =
-        (container::XNameContainer*)new ModuleContainer_Impl( pLib );
+        static_cast<container::XNameContainer*>(new ModuleContainer_Impl( pLib ));
 
     uno::Reference< container::XNameContainer > xDialogContainer =
-        (container::XNameContainer*)new DialogContainer_Impl( pLib );
+        static_cast<container::XNameContainer*>(new DialogContainer_Impl( pLib ));
 
     BasicLibInfo* pLibInfo = mpMgr->FindLibInfo( pLib );
 
@@ -2273,7 +2273,7 @@ uno::Reference< container::XNameContainer > SAL_CALL StarBasicAccess_Impl::getLi
     throw(uno::RuntimeException, std::exception)
 {
     if( !mxLibContainer.is() )
-        mxLibContainer = (container::XNameContainer*)new LibraryContainer_Impl( mpMgr );
+        mxLibContainer = static_cast<container::XNameContainer*>(new LibraryContainer_Impl( mpMgr ));
     return mxLibContainer;
 }
 

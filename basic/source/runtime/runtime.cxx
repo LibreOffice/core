@@ -1648,8 +1648,8 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     if( !xValObj.Is() || xValObj->ISA(SbUnoAnyObject) )
         return false;
 
-    SbUnoObject* pUnoVal =  PTR_CAST(SbUnoObject,(SbxObject*)xValObj);
-    SbUnoStructRefObject* pUnoStructVal = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xValObj);
+    SbUnoObject* pUnoVal =  PTR_CAST(SbUnoObject,static_cast<SbxObject*>(xValObj));
+    SbUnoStructRefObject* pUnoStructVal = PTR_CAST(SbUnoStructRefObject,static_cast<SbxObject*>(xValObj));
     Any aAny;
     // make doubly sure value is either an Uno object or
     // an uno struct
@@ -1671,7 +1671,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
         else
             SbxBase::ResetError();
 
-        SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xVarObj);
+        SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,static_cast<SbxObject*>(xVarObj));
 
         OUString sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
         OUString sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
@@ -2249,7 +2249,7 @@ void SbiRuntime::StepREDIMP()
     {
         SbxBase* pElemObj = refVar->GetObject();
         SbxDimArray* pNewArray = PTR_CAST(SbxDimArray,pElemObj);
-        SbxDimArray* pOldArray = static_cast<SbxDimArray*>((SbxArray*)refRedimpArray);
+        SbxDimArray* pOldArray = static_cast<SbxDimArray*>(static_cast<SbxArray*>(refRedimpArray));
         if( pNewArray )
         {
             short nDimsNew = pNewArray->GetDims();
@@ -3037,7 +3037,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
             }
             else
             {
-                SbxDimArray* pArray = reinterpret_cast<SbxDimArray*>((SbxVariable*)p->refEnd);
+                SbxDimArray* pArray = reinterpret_cast<SbxDimArray*>(static_cast<SbxVariable*>(p->refEnd));
                 short nDims = pArray->GetDims();
 
                 // Empty array?
@@ -3071,7 +3071,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
         }
         case FOR_EACH_COLLECTION:
         {
-            BasicCollection* pCollection = static_cast<BasicCollection*>((SbxVariable*)pForStk->refEnd);
+            BasicCollection* pCollection = static_cast<BasicCollection*>(static_cast<SbxVariable*>(pForStk->refEnd));
             SbxArrayRef xItemArray = pCollection->xItemArray;
             sal_Int32 nCount = xItemArray->Count32();
             if( pForStk->nCurCollectionIndex < nCount )
@@ -3725,7 +3725,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                     SbxBaseRef pObj = p->GetObject();
                     if( pObj && pObj->ISA(SbUnoObject) )
                     {
-                        SbUnoObject* pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pObj);
+                        SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj));
                         Any aAny = pUnoObj->getUnoAny();
 
                         if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -3853,7 +3853,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             {
                 if( pObj->ISA(SbUnoObject) )
                 {
-                    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pObj);
+                    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj));
                     Any aAny = pUnoObj->getUnoAny();
 
                     if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -3898,7 +3898,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 
                                     // #67173 don't specify a name so that the real class name is entered
                                     OUString aName;
-                                    SbxObjectRef xWrapper = (SbxObject*)new SbUnoObject( aName, aAny );
+                                    SbxObjectRef xWrapper = static_cast<SbxObject*>(new SbUnoObject( aName, aAny ));
                                     pElem->PutObject( xWrapper );
                                 }
                                 else
@@ -3924,7 +3924,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 {
                                     if( pDfltObj->ISA(SbUnoObject) )
                                     {
-                                        pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pDfltObj);
+                                        pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pDfltObj));
                                         Any aUnoAny = pUnoObj->getUnoAny();
 
                                         if( aUnoAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -3964,7 +3964,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                 }
                 else if( pObj->ISA(BasicCollection) )
                 {
-                    BasicCollection* pCol = static_cast<BasicCollection*>((SbxBase*)pObj);
+                    BasicCollection* pCol = static_cast<BasicCollection*>(static_cast<SbxBase*>(pObj));
                     pElem = new SbxVariable( SbxVARIANT );
                     pPar->Put( pElem, 0 );
                     pCol->CollItem( pPar );
@@ -4383,7 +4383,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxDimArray* pArray = 0;
     if( xObj->ISA(SbxDimArray) )
     {
-        SbxBase* pObj = (SbxBase*)xObj;
+        SbxBase* pObj = static_cast<SbxBase*>(xObj);
         pArray = static_cast<SbxDimArray*>(pObj);
 
         short nDims = pArray->GetDims();
@@ -4427,7 +4427,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         }
     }
 
-    SbxDimArray* pOldArray = static_cast<SbxDimArray*>((SbxArray*)refRedimpArray);
+    SbxDimArray* pOldArray = static_cast<SbxDimArray*>(static_cast<SbxArray*>(refRedimpArray));
     if( pArray && pOldArray )
     {
         short nDimsNew = pArray->GetDims();

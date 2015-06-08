@@ -260,7 +260,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                 StarBASIC* pBasic;
                 if( nObj == -1 )
                 {
-                    pBasic = (StarBASIC*)xLibSearchBasic;
+                    pBasic = static_cast<StarBASIC*>(xLibSearchBasic);
                 }
                 else
                 {
@@ -303,7 +303,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             for( sal_Int32 i = 0; i < nCnt; i++ )
             {
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-                unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
+                unoToSbxValue( static_cast<SbxVariable*>(xVar), pArgs[i] );
                 xArray->Put( xVar, sal::static_int_cast< sal_uInt16 >(i+1) );
             }
         }
@@ -335,7 +335,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
     SbxVariable* pDlgLibContVar = pBasic->Find(OUString("DialogLibraries"), SbxCLASS_OBJECT);
     if( pDlgLibContVar && pDlgLibContVar->ISA(SbUnoObject) )
     {
-        SbUnoObject* pDlgLibContUnoObj = static_cast<SbUnoObject*>((SbxBase*)pDlgLibContVar);
+        SbUnoObject* pDlgLibContUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pDlgLibContVar));
         Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
 
         Reference< XLibraryContainer > xDlgLibContNameAccess( aDlgLibContAny, UNO_QUERY );
@@ -437,7 +437,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pObj);
+    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj));
     Any aAnyISP = pUnoObj->getUnoAny();
     TypeClass eType = aAnyISP.getValueType().getTypeClass();
 
@@ -558,7 +558,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     Any aRetVal;
     aRetVal <<= xCntrl;
     SbxVariableRef refVar = rPar.Get(0);
-    unoToSbxValue( (SbxVariable*)refVar, aRetVal );
+    unoToSbxValue( static_cast<SbxVariable*>(refVar), aRetVal );
 }
 
 

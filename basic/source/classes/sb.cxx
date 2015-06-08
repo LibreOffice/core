@@ -1342,7 +1342,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
         }
         if( !pRes )
         {
-            pRes = static_cast<SbiStdObject*>((SbxObject*) pRtl)->Find( rName, t );
+            pRes = static_cast<SbiStdObject*>(static_cast<SbxObject*>(pRtl))->Find( rName, t );
         }
         if( pRes )
         {

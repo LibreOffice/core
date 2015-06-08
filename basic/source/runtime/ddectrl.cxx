@@ -69,7 +69,7 @@ SbError SbiDdeControl::GetLastErr( DdeConnection* pConv )
 
 IMPL_LINK( SbiDdeControl,Data , DdeData*, pData )
 {
-    aData = OUString::createFromAscii( static_cast<const char*>((const void*)*pData) );
+    aData = OUString::createFromAscii( static_cast<const char*>(static_cast<const void*>(*pData)) );
     return 1;
 }
 

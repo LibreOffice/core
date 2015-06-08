@@ -92,7 +92,7 @@ static SbxVariable* QualifiedName
         {
             // It follows still an objectelement. The current element
             // had to be a SBX-Object or had to deliver such an object!
-            pObj = PTR_CAST(SbxObject,(SbxVariable*) refVar);
+            pObj = PTR_CAST(SbxObject,static_cast<SbxVariable*>(refVar));
             if( !pObj )
                 // Then it had to deliver an object
                 pObj = PTR_CAST(SbxObject,refVar->GetObject());
