@@ -91,7 +91,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         VclPtrInstance< PrinterSetupDialog > pDlg(this);
         pDlg->SetPrinter(pPrinter);
         pDlg->Execute();
-        pDlg.reset();
+        pDlg.disposeAndClear();
         GrabFocus();
         m_pPrinterInfo->SetText(pPrinter->GetName());
         return 0;
