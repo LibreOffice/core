@@ -802,6 +802,11 @@ ScFormulaGroupIterator::ScFormulaGroupIterator( ScDocument* pDoc ) :
         mbNullCol = true;
 }
 
+SCCOL ScFormulaGroupIterator::GetCol()
+{
+    return mnCol;
+}
+
 sc::FormulaGroupEntry* ScFormulaGroupIterator::first()
 {
     return this->next();

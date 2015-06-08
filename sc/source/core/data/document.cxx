@@ -5749,14 +5749,39 @@ sal_uLong ScDocument::GetCellCount() const
     return nCellCount;
 }
 
-sal_uLong ScDocument::GetFormulaGroupCount() const
+sal_uLong ScDocument::GetFormulaGroupCount( OUString aBreakCells ) const
 {
     sal_uLong nFormulaGroupCount = 0L;
+    aBreakCells = "";
+    sc::FormulaGroupEntry* pPrevGroup = NULL;
 
     ScFormulaGroupIterator aIter( const_cast<ScDocument*>(this) );
     for ( sc::FormulaGroupEntry* ptr = aIter.first(); ptr; ptr = aIter.next())
     {
          nFormulaGroupCount++;
+
+         if (ptr->mbShared)  // check for formula group breaks
+         {
+             if (pPrevGroup)
+             {
+                // check same token as previous group
+                sal_Int16 nComp = (*pPrevGroup->mpCells)->CompareByTokenArray( **ptr->mpCells );
+                if ( nComp ) {
+                    size_t nPrevGroupRow = pPrevGroup->mnRow;
+                    size_t nPrevGroupLen = pPrevGroup->mnLength;
+                    size_t nNextGroupRow = ptr->mnRow;
+                    if (nPrevGroupRow + nPrevGroupLen + 1 == nNextGroupRow)
+                    {
+                        // exactly one cell breaking group continuity
+                        OUString aCol = ::rtl::OUString::number( aIter.GetCol()    );
+                        OUString aRow = ::rtl::OUString::number( nNextGroupRow - 1 );
+                        aBreakCells  += aCol += ::rtl::OUString(":")
+                                     += aRow += ::rtl::OUString(", ");
+                    }
+                }
+             }
+             pPrevGroup = ptr;
+         }
     }
 
     return nFormulaGroupCount;
@@ -5846,7 +5871,8 @@ void ScDocument::GetDocStat( ScDocStat& rDocStat )
 {
     rDocStat.nTableCount = GetTableCount();
     rDocStat.aDocName    = aDocName;
-    rDocStat.nFormulaCount = GetFormulaGroupCount();
+    OUString aBreakCells;
+    rDocStat.nFormulaCount = GetFormulaGroupCount(aBreakCells);
     rDocStat.nCellCount  = GetCellCount();
 }
 

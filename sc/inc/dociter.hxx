@@ -197,7 +197,7 @@ private:
 
 public:
     ScFormulaGroupIterator( ScDocument* pDoc );
-
+    SCCOL GetCol();
     sc::FormulaGroupEntry* first();
     sc::FormulaGroupEntry* next();
 };
