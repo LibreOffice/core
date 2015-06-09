@@ -58,6 +58,7 @@ class WW8TableNodeInfoInner
     sal_uInt32 mnShadowsBefore;
     sal_uInt32 mnShadowsAfter;
     bool mbEndOfLine;
+    bool mbFinalEndOfLine;
     bool mbEndOfCell;
     bool mbFirstInTable;
     bool mbVertMerge;
@@ -77,10 +78,11 @@ public:
     void setShadowsBefore(sal_uInt32 nShadowsBefore);
     void setShadowsAfter(sal_uInt32 nShadowsAfter);
     void setEndOfLine(bool bEndOfLine);
+    void setFinalEndOfLine(bool bEndOfLine);
     void setEndOfCell(bool bEndOfCell);
     void setFirstInTable(bool bFirstInTable);
-    void setVertMerge(bool bVertMErge);
-    void setTableBox(const SwTableBox * pTableBox);
+    void setVertMerge(bool bVertMerge);
+    void setTableBox(const SwTableBox *pTableBox);
     void setTable(const SwTable * pTable);
     void setRect(const SwRect & rRect);
 
@@ -91,6 +93,7 @@ public:
     sal_uInt32 getShadowsAfter() const { return mnShadowsAfter;}
     bool isEndOfCell() const { return mbEndOfCell;}
     bool isEndOfLine() const { return mbEndOfLine;}
+    bool isFinalEndOfLine() const { return mbFinalEndOfLine;}
     bool isFirstInTable() const { return mbFirstInTable;}
     bool isVertMerge() const;
     const SwTableBox * getTableBox() const { return mpTableBox;}
@@ -156,6 +159,9 @@ public:
 
 typedef ::std::multiset<CellInfo, ::std::less<CellInfo> > CellInfoMultiSet;
 typedef boost::shared_ptr<CellInfoMultiSet> CellInfoMultiSetPtr;
+typedef ::std::map<sal_uInt32, WW8TableNodeInfoInner*,
+            ::std::greater<sal_uInt32> > RowEndInners_t;
+
 
 class WW8TableInfo;
 class WW8TableNodeInfo
@@ -278,7 +284,7 @@ public:
     void insert(const SwRect & rRect, WW8TableNodeInfo * pNodeInfo,
                 unsigned long * pFormatFrmWidth = NULL);
     void addShadowCells();
-    WW8TableNodeInfo * connectCells();
+    WW8TableNodeInfo *connectCells(RowEndInners_t &rLastRowEnds);
 
 #ifdef DBG_UTIL
     ::std::string toString();
@@ -305,14 +311,15 @@ class WW8TableInfo
     processTableLine(const SwTable * pTable,
                      const SwTableLine * pTableLine,
                      sal_uInt32 nRow,
-                     sal_uInt32 nDepth, WW8TableNodeInfo * pPrev);
+                     sal_uInt32 nDepth, WW8TableNodeInfo * pPrev, RowEndInners_t &rLastRowEnds);
 
     WW8TableNodeInfo *
     processTableBox(const SwTable * pTable,
                     const SwTableBox * pTableBox,
                     sal_uInt32 nRow,
                     sal_uInt32 nCell,
-                    sal_uInt32 nDepth, bool bEndOfLine, WW8TableNodeInfo * pPrev);
+                    sal_uInt32 nDepth, bool bEndOfLine,
+                    WW8TableNodeInfo * pPrev, RowEndInners_t &rLastRowEnds);
 
     WW8TableNodeInfo::Pointer_t
     processTableBoxLines(const SwTableBox * pBox,
@@ -341,12 +348,12 @@ public:
     virtual ~WW8TableInfo();
 
     void processSwTable(const SwTable * pTable);
-    WW8TableNodeInfo * processSwTableByLayout(const SwTable * pTable);
+    WW8TableNodeInfo * processSwTableByLayout(const SwTable * pTable, RowEndInners_t &rLastRowEnds);
     WW8TableNodeInfo::Pointer_t getTableNodeInfo(const SwNode * pNode);
     const SwNode * getNextNode(const SwNode * pNode);
     const WW8TableNodeInfo * getFirstTableNodeInfo() const;
 
-    WW8TableNodeInfo * reorderByLayout(const SwTable * pTable);
+    WW8TableNodeInfo * reorderByLayout(const SwTable * pTable, RowEndInners_t &rLastRowEnds);
 };
 
 }
