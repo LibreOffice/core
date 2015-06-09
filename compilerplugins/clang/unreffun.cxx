@@ -87,6 +87,17 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     {
         Decl const * prev = getPreviousNonFriendDecl(decl);
         if (prev != nullptr/* && prev != decl->getPrimaryTemplate()*/) {
+            // Workaround for redeclarations that introduce visiblity attributes
+            // (as is done with
+            //
+            //  SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
+            //
+            // in libreofficekit/source/gtk/lokdocview.cxx):
+            if (decl->getAttr<VisibilityAttr>() != nullptr
+                && prev->getAttr<VisibilityAttr>() == nullptr)
+            {
+                return true;
+            }
             report(
                 DiagnosticsEngine::Warning,
                 "redundant function%0 redeclaration", decl->getLocation())
