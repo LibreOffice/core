@@ -1871,6 +1871,51 @@ SfxPoolItem* SvxBackgroundColorItem::Create(SvStream& rStrm, sal_uInt16 ) const
     return new SvxBackgroundColorItem( rStrm, Which() );
 }
 
+bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    Color aColor = SvxColorItem::GetValue();
+
+    switch( nMemberId )
+    {
+        case MID_GRAPHIC_TRANSPARENT:
+        {
+            rVal <<= Bool2Any (aColor.GetTransparency());
+            break;
+        }
+        default:
+        {
+            rVal <<= (sal_Int32)(aColor.GetColor());
+            break;
+        }
+    }
+    return true;
+}
+
+bool SvxBackgroundColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Int32 nColor = 0;
+    Color aColor = SvxColorItem::GetValue();
+
+    switch( nMemberId )
+    {
+        case MID_GRAPHIC_TRANSPARENT:
+        {
+            aColor.SetTransparency( Any2Bool( rVal ) ? 0xff : 0 );
+            SvxColorItem::SetValue( aColor );
+            break;
+        }
+        default:
+        {
+            if(!(rVal >>= nColor))
+                return false;
+            SvxColorItem::SetValue( Color(nColor) );
+            break;
+        }
+    }
+    return true;
+}
 
 // class SvxColorItem ----------------------------------------------------
 
