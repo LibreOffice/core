@@ -563,7 +563,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         if (!bMetaFile && pViewData)
             pDev->SetMapMode(aMode);
 
-        aOutputData.DrawGrid( true, false );    // no page breaks
+        aOutputData.DrawGrid(*pDev, true, false);    // no page breaks
 
         pDev->SetLineColor( COL_BLACK );
 
@@ -1619,7 +1619,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     }
 
     if (aTableParam.bGrid)
-        aOutputData.DrawGrid( true, false );    // no page breaks
+        aOutputData.DrawGrid(*pDev, true, false);    // no page breaks
 
     aOutputData.AddPDFNotes();      // has no effect if not rendering PDF with notes enabled
 

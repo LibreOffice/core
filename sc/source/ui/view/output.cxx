@@ -307,7 +307,7 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
         }
 }
 
-void ScOutputData::DrawGrid( bool bGrid, bool bPage )
+void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage)
 {
     SCCOL nX;
     SCROW nY;
@@ -324,20 +324,16 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
     if (bPagebreakMode)
         bPage = false;          // no "normal" breaks over the whole width/height
 
-    //! um den einen Pixel sieht das Metafile (oder die Druck-Ausgabe) anders aus
-    //! als die Bildschirmdarstellung, aber wenigstens passen Druck und Metafile zusammen
-
-    Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
-    long nOneX = aOnePixel.Width();
-    long nOneY = aOnePixel.Height();
-    if (bMetaFile)
-        nOneX = nOneY = 1;
-
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
-    long nSignedOneX = nOneX * nLayoutSign;
+    // It is a big mess to distinguish when we are using pixels and when logic
+    // units for drawing.  Ultimately we want to work only in the logic units,
+    // but until that happens, we need to special-case:
+    // * metafile
+    // * drawing to the screen - everything is internally counted in pixels there
+    bool bWorksInPixels = bMetaFile;
 
     if ( eType == OUTTYPE_WINDOW )
     {
+        bWorksInPixels = true;
         const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
         aPageColor.SetColor( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor );
         aManualColor.SetColor( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
@@ -348,8 +344,20 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
         aManualColor = aGridColor;
     }
 
-    mpDev->SetLineColor( aGridColor );
-    ScGridMerger aGrid( mpDev, nOneX, nOneY );
+    long nOneX = 1;
+    long nOneY = 1;
+    if (!bWorksInPixels)
+    {
+        Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
+        nOneX = aOnePixel.Width();
+        nOneY = aOnePixel.Height();
+    }
+
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    long nSignedOneX = nOneX * nLayoutSign;
+
+    rRenderContext.SetLineColor(aGridColor);
+    ScGridMerger aGrid(&rRenderContext, nOneX, nOneY);
 
     // vertical lines
 
@@ -383,7 +391,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                 if (nBreak != nBreakOld)
                 {
                     aGrid.Flush();
-                    mpDev->SetLineColor( (nBreak & BREAK_MANUAL) ? aManualColor :
+                    rRenderContext.SetLineColor( (nBreak & BREAK_MANUAL) ? aManualColor :
                                         nBreak ? aPageColor : aGridColor );
                     nBreakOld = nBreak;
                 }
@@ -441,14 +449,14 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 
                         if (pThisRowInfo->bChanged && !bHOver)
                         {
-                            aGrid.AddVerLine( nPosX-nSignedOneX, nPosY, nNextY-nOneY );
+                            aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY);
                         }
                         nPosY = nNextY;
                     }
                 }
                 else
                 {
-                    aGrid.AddVerLine( nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY );
+                    aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY);
                 }
             }
         }
@@ -489,7 +497,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                 if (nBreakOld != nBreak)
                 {
                     aGrid.Flush();
-                    mpDev->SetLineColor( (nBreak & BREAK_MANUAL) ? aManualColor :
+                    rRenderContext.SetLineColor( (nBreak & BREAK_MANUAL) ? aManualColor :
                                         (nBreak) ? aPageColor : aGridColor );
                     nBreakOld = nBreak;
                 }
@@ -535,7 +543,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                             }
                             if (!bVOver)
                             {
-                                aGrid.AddHorLine( nPosX, nNextX-nSignedOneX, nPosY-nOneY );
+                                aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY);
                             }
                         }
                         nPosX = nNextX;
@@ -543,7 +551,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                 }
                 else
                 {
-                    aGrid.AddHorLine( nScrX, nScrX+nScrW-nOneX, nPosY-nOneY );
+                    aGrid.AddHorLine(bWorksInPixels, nScrX, nScrX+nScrW-nOneX, nPosY-nOneY);
                 }
             }
         }

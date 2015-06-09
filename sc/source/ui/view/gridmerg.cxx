@@ -86,8 +86,16 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
     }
 }
 
-void ScGridMerger::AddHorLine( long nX1, long nX2, long nY )
+void ScGridMerger::AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY)
 {
+    if (bWorksInPixels)
+    {
+        Point aPoint(pDev->PixelToLogic(Point(nX1, nY)));
+        nX1 = aPoint.X();
+        nY = aPoint.Y();
+        nX2 = pDev->PixelToLogic(Point(nX2, 0)).X();
+    }
+
     if ( bOptimize )
     {
         if ( bVertical )
@@ -101,8 +109,16 @@ void ScGridMerger::AddHorLine( long nX1, long nX2, long nY )
         pDev->DrawLine( Point( nX1, nY ), Point( nX2, nY ) );
 }
 
-void ScGridMerger::AddVerLine( long nX, long nY1, long nY2 )
+void ScGridMerger::AddVerLine(bool bWorksInPixels, long nX, long nY1, long nY2)
 {
+    if (bWorksInPixels)
+    {
+        Point aPoint(pDev->PixelToLogic(Point(nX, nY1)));
+        nX = aPoint.X();
+        nY1 = aPoint.Y();
+        nY2 = pDev->PixelToLogic(Point(0, nY2)).Y();
+    }
+
     if ( bOptimize )
     {
         if ( !bVertical )

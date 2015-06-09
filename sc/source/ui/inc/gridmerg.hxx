@@ -42,8 +42,8 @@ public:
                 ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY );
                 ~ScGridMerger();
 
-    void        AddHorLine( long nX1, long nX2, long nY );
-    void        AddVerLine( long nX, long nY1, long nY2 );
+    void        AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY);
+    void        AddVerLine(bool bWorksInPixels, long nX, long nY1, long nY2);
     void        Flush();
 };
 
