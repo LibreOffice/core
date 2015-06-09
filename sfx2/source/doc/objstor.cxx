@@ -3484,6 +3484,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                         case SotClipboardFormatId::STARCALC_8:
                         case SotClipboardFormatId::STARCHART_8:
                         case SotClipboardFormatId::STARMATH_8:
+                        case SotClipboardFormatId::STARBASE_8:
                             break;
 
                         default:
