@@ -860,6 +860,8 @@ protected:
 
     const NfKeywordTable & GetNfKeywordTable();
 
+    void SetCurPam(sal_uLong nStt, sal_uLong nEnd);
+
     /// Populates m_vecBulletPic with all the bullet graphics used by numberings.
     int CollectGrfsOfBullets();
     /// Write the numbering picture bullets.
