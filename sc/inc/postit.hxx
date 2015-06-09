@@ -83,6 +83,7 @@ public:
                         ~ScPostIt();
 
     /** Clones this note and its caption object, if specified.
+        If this note is nullptr, returns nullptr.
 
         @param bCloneCaption  If sal_True is passed, clones the caption object and
             inserts it into the drawing layer of the destination document. If
