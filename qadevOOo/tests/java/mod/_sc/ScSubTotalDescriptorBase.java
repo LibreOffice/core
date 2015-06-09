@@ -20,7 +20,6 @@ package mod._sc;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -64,21 +63,12 @@ public class ScSubTotalDescriptorBase extends TestCase {
     * Creates Spreadsheet document.
     */
     @Override
-    public void initialize( TestParameters Param, PrintWriter log ) {
-        // creation of the testobject here
-        // first we write what we are intend to do to log file
-        log.println("creating a test environment");
-
+    public void initialize( TestParameters Param, PrintWriter log ) throws Exception {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
-        try {
-            log.println("creating a spreadsheetdocument");
-            xSpreadsheetDoc = SOF.createCalcDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document ", e );
-        }
+        log.println("creating a spreadsheetdocument");
+        xSpreadsheetDoc = SOF.createCalcDoc(null);
     }
 
     /**

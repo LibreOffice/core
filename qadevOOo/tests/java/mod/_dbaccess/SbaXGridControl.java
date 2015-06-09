@@ -125,17 +125,11 @@ public class SbaXGridControl extends TestCase {
     * Creates Writer document.
     */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
 
-        try {
-            log.println("creating a textdocument");
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a textdocument");
+        xTextDoc = SOF.createTextDoc(null);
     }
 
     /**

@@ -116,7 +116,7 @@ public class OPatternModel extends GenericModelTest {
      * @param log the log writer
      */
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
 
         super.initialize(tParam, log);
 

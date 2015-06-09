@@ -36,7 +36,7 @@ public class ONavigationBarModel extends GenericModelTest {
      */
 
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
 
         super.initialize(tParam, log);
 

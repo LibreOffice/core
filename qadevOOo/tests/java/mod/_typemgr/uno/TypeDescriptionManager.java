@@ -30,11 +30,6 @@ import lib.TestParameters;
 
 public class TypeDescriptionManager extends TestCase {
 
-    @Override
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-
-    }
-
     /**
      *    creating a TestEnvironment for the interfaces to be tested
      */

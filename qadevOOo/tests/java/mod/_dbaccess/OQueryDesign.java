@@ -57,7 +57,7 @@ public class OQueryDesign extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         xDesk = UnoRuntime.queryInterface(
                     XDesktop.class, DesktopTools.createDesktop(Param.getMSF()) );
     }

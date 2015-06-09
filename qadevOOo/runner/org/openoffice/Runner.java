@@ -136,7 +136,7 @@ public class Runner
         }
     }
 
-    public static boolean run(String... args)
+    public static boolean run(String... args) throws Exception
     {
         System.out.println("OOoRunner Main() version from 20101118 (yyyymmdd)");
 
@@ -189,7 +189,7 @@ public class Runner
         return worked;
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         System.exit(run(args) ? 0 : -1);
     }

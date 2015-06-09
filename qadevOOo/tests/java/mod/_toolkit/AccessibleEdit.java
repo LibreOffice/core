@@ -37,7 +37,6 @@ import com.sun.star.util.XURLTransformer;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -187,13 +186,9 @@ public class AccessibleEdit extends TestCase {
      * Creates writer document
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
-        try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                         Param.getMSF());
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create document", e);
-        }
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     Param.getMSF());
+        xTextDoc = SOF.createTextDoc(null);
     }
 }

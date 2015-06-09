@@ -45,7 +45,7 @@ public class DocumentTemplates extends TestCase {
     XTextDocument xTextDoc;
 
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
         String aURL=util.utils.getFullTestURL("report2.stw");
         xTextDoc = util.WriterTools.loadTextDoc(tParam.getMSF(),aURL);
     }

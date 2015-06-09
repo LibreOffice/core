@@ -20,7 +20,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -57,17 +56,10 @@ public class SwXTextSection extends TestCase {
     XTextDocument xTextDoc;
 
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-    SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
-
-    try {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         log.println( "creating a textdocument" );
         xTextDoc = SOF.createTextDoc( null );
-    } catch ( com.sun.star.uno.Exception e ) {
-        // Some exception occurs.FAILED
-        e.printStackTrace( log );
-        throw new StatusException( "Couldn't create document", e );
-    }
     }
 
     @Override

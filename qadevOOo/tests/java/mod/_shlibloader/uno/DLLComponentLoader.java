@@ -43,14 +43,6 @@ import util.utils;
 public class DLLComponentLoader extends TestCase {
 
     /**
-    * Does nothing.
-    */
-    @Override
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-
-    }
-
-    /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.comp.stoc.DLLComponentLoader</code>
     * service. <p>

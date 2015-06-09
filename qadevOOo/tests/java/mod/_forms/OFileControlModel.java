@@ -19,8 +19,6 @@ package mod._forms;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -95,15 +93,10 @@ public class OFileControlModel extends TestCase {
      * Creates Draw document where controls are placed.
      */
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         SOfficeFactory SOF = SOfficeFactory.getFactory((tParam.getMSF()));
-
-        try {
-            log.println("creating a draw document");
-            xDrawDoc = SOF.createDrawDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Can't create a document"));
-        }
+        log.println("creating a draw document");
+        xDrawDoc = SOF.createDrawDoc(null);
     }
 
     /**

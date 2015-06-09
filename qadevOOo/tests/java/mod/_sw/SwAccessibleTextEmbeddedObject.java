@@ -132,7 +132,7 @@ public class SwAccessibleTextEmbeddedObject extends TestCase {
      * @see #initializeTestCase
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         log.println( "open a text document" );
         String testdoc = utils.getFullTestURL("SwXTextEmbeddedObject.sxw");
         log.println(testdoc);

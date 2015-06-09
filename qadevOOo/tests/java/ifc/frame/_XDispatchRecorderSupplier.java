@@ -73,23 +73,16 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
      * service created for obtaining document's frame.
      */
     @Override
-    protected void before() {
+    protected void before() throws Exception {
         SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
 
-        try {
-            log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
+        log.println( "creating a text document" );
+        xTextDoc = SOF.createTextDoc(null);
 
-            Object inst = tParam.getMSF().createInstance
-                ("com.sun.star.frame.Desktop");
-            desktop = UnoRuntime.queryInterface
-                (XDesktop.class, inst);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
-
+        Object inst = tParam.getMSF().createInstance
+            ("com.sun.star.frame.Desktop");
+        desktop = UnoRuntime.queryInterface
+            (XDesktop.class, inst);
     }
 
     /**

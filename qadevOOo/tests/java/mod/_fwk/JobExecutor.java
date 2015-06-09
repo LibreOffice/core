@@ -99,46 +99,38 @@ public class JobExecutor extends TestCase {
      * <code>(XMultiServiceFactory)SOLink.getMSF()</code>  call.
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
-        boolean serviceRegistered = false;
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         boolean configured = false;
 
         try {
-            Object obj = Param.getMSF().createInstance("test.Job");
-            serviceRegistered = obj != null;
-        } catch(com.sun.star.uno.Exception e) {}
-
-        log.println("Service test.Job is "
-            + (serviceRegistered ? "already" : "not yet")  + " registered.");
-        if (! serviceRegistered){
+            Param.getMSF().createInstance("test.Job");
+        } catch(com.sun.star.uno.Exception e) {
+            log.println("Service test.Job is not yet registered.");
             String message = "You have to register 'test.Job' before office is stared.\n";
             message += "Please run '$OFFICEPATH/program/pkgchk $DOCPTH/qadevlibs/JobExecutor.jar'";
-            throw new StatusException(message, new Exception());
+            throw new StatusException(message, e);
         }
+
 
 
         XNameAccess jobs = null;
         XNameAccess events = null;
-        try {
-            Object obj = Param.getMSF().createInstance
-                ("com.sun.star.configuration.ConfigurationProvider");
-            XMultiServiceFactory xConfigMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, obj);
-            PropertyValue[] args = new PropertyValue[1];
-            args[0] = new PropertyValue();
-            args[0].Name = "nodepath";
-            args[0].Value = "org.openoffice.Office.Jobs";
-            oRootCfg = xConfigMSF.createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationUpdateAccess", args);
-            XHierarchicalNameAccess xHNA = UnoRuntime.queryInterface(XHierarchicalNameAccess.class, oRootCfg);
-            obj = xHNA.getByHierarchicalName("Jobs");
-            jobs = UnoRuntime.queryInterface
-                (XNameAccess.class, obj);
-            obj = xHNA.getByHierarchicalName("Events");
-            events = UnoRuntime.queryInterface
-                (XNameAccess.class, obj);
-        } catch (Exception e) {
-            throw new StatusException("Couldn't get configuration", e);
-        }
+        Object obj = Param.getMSF().createInstance
+            ("com.sun.star.configuration.ConfigurationProvider");
+        XMultiServiceFactory xConfigMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, obj);
+        PropertyValue[] args = new PropertyValue[1];
+        args[0] = new PropertyValue();
+        args[0].Name = "nodepath";
+        args[0].Value = "org.openoffice.Office.Jobs";
+        oRootCfg = xConfigMSF.createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationUpdateAccess", args);
+        XHierarchicalNameAccess xHNA = UnoRuntime.queryInterface(XHierarchicalNameAccess.class, oRootCfg);
+        obj = xHNA.getByHierarchicalName("Jobs");
+        jobs = UnoRuntime.queryInterface
+            (XNameAccess.class, obj);
+        obj = xHNA.getByHierarchicalName("Events");
+        events = UnoRuntime.queryInterface
+            (XNameAccess.class, obj);
 
         configured = jobs.hasByName("TestJob") && events.hasByName("TestEvent");
 
@@ -146,45 +138,38 @@ public class JobExecutor extends TestCase {
             + (configured ? "already" : "not yet")  + " configured.");
 
         if (!configured) {
-            try {
-                log.println("Adding configuration to Jobs  ...");
-                XSingleServiceFactory jobsFac = UnoRuntime.queryInterface(XSingleServiceFactory.class, jobs);
-                Object oNewJob = jobsFac.createInstance();
-                XNameReplace xNewJobNR = UnoRuntime.queryInterface(XNameReplace.class, oNewJob);
-                xNewJobNR.replaceByName("Service", "test.Job");
-                XNameContainer xJobsNC = UnoRuntime.queryInterface(XNameContainer.class, jobs);
-                xJobsNC.insertByName("TestJob", oNewJob);
+            log.println("Adding configuration to Jobs  ...");
+            XSingleServiceFactory jobsFac = UnoRuntime.queryInterface(XSingleServiceFactory.class, jobs);
+            Object oNewJob = jobsFac.createInstance();
+            XNameReplace xNewJobNR = UnoRuntime.queryInterface(XNameReplace.class, oNewJob);
+            xNewJobNR.replaceByName("Service", "test.Job");
+            XNameContainer xJobsNC = UnoRuntime.queryInterface(XNameContainer.class, jobs);
+            xJobsNC.insertByName("TestJob", oNewJob);
 
-                log.println("Adding configuration to Events  ...");
-                XSingleServiceFactory eventsFac = UnoRuntime.queryInterface(XSingleServiceFactory.class, events);
-                Object oNewEvent = eventsFac.createInstance();
+            log.println("Adding configuration to Events  ...");
+            XSingleServiceFactory eventsFac = UnoRuntime.queryInterface(XSingleServiceFactory.class, events);
+            Object oNewEvent = eventsFac.createInstance();
 
-                XNameAccess xNewEventNA = UnoRuntime.queryInterface(XNameAccess.class, oNewEvent);
-                Object oJobList = xNewEventNA.getByName("JobList");
-                XSingleServiceFactory jobListFac = (XSingleServiceFactory)
-                    AnyConverter.toObject(new Type(XSingleServiceFactory.class),
-                    oJobList);
-                XNameContainer jobListNC = (XNameContainer)
-                    AnyConverter.toObject(new Type(XNameContainer.class),
-                    oJobList);
-                log.println("\tAdding TimeStamps to Events ...");
-                Object oNewJobTimeStamps = jobListFac.createInstance();
+            XNameAccess xNewEventNA = UnoRuntime.queryInterface(XNameAccess.class, oNewEvent);
+            Object oJobList = xNewEventNA.getByName("JobList");
+            XSingleServiceFactory jobListFac = (XSingleServiceFactory)
+                AnyConverter.toObject(new Type(XSingleServiceFactory.class),
+                oJobList);
+            XNameContainer jobListNC = (XNameContainer)
+                AnyConverter.toObject(new Type(XNameContainer.class),
+                oJobList);
+            log.println("\tAdding TimeStamps to Events ...");
+            Object oNewJobTimeStamps = jobListFac.createInstance();
 
-                jobListNC.insertByName("TestJob",  oNewJobTimeStamps);
+            jobListNC.insertByName("TestJob",  oNewJobTimeStamps);
 
+            XNameContainer xEventsNC = UnoRuntime.queryInterface(XNameContainer.class, events);
+            xEventsNC.insertByName("TestEvent", oNewEvent);
 
-                XNameContainer xEventsNC = UnoRuntime.queryInterface(XNameContainer.class, events);
-                xEventsNC.insertByName("TestEvent", oNewEvent);
+            XChangesBatch xCB = UnoRuntime.queryInterface(XChangesBatch.class, oRootCfg);
+            xCB.commitChanges();
 
-                XChangesBatch xCB = UnoRuntime.queryInterface(XChangesBatch.class, oRootCfg);
-                xCB.commitChanges();
-
-                util.utils.waitForEventIdle(Param.getMSF());
-
-            } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace(log);
-                throw new StatusException("Couldn't change config", e);
-            }
+            util.utils.waitForEventIdle(Param.getMSF());
         }
 
     }

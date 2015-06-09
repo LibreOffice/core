@@ -20,7 +20,6 @@ package mod._sm;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -68,15 +67,10 @@ public class XMLMetaImporter extends TestCase {
     * New math document created.
     */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
-        try {
-            xMathDoc = SOF.openDoc("smath","_blank");
-        } catch (com.sun.star.uno.Exception ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", ex );
-        }
+        xMathDoc = SOF.openDoc("smath","_blank");
     }
 
     /**

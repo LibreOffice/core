@@ -30,7 +30,6 @@ import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -125,15 +124,11 @@ public class AccessibleMenuSeparator extends TestCase {
      * Creates writer document.
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
-        try {
-            msf = Param.getMSF();
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
+        msf = Param.getMSF();
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create document", e);
-        }
+        SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
+        xTextDoc = SOF.createTextDoc(null);
     }
 
     /**

@@ -21,7 +21,6 @@ package mod._sc;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -70,17 +69,10 @@ public class ScStyleObj extends TestCase {
     * Creates Spreadsheet document.
     */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
-
-        try {
-            log.println( "creating a Spreadsheet document" );
-            xSpreadsheetDoc = SOF.createCalcDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a Spreadsheet document" );
+        xSpreadsheetDoc = SOF.createCalcDoc(null);
     }
 
     /**

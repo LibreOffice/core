@@ -108,7 +108,7 @@ public class ScAccessibleCsvGrid extends TestCase {
      * @see #initializeTestCase
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 

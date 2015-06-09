@@ -39,7 +39,7 @@ public class OScrollBarModel extends TestCase {
     * Creates Writer document.
     */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
 
         log.println( "creating a textdocument" );
         xTextDoc = WriterTools.createTextDoc((tParam.getMSF()));

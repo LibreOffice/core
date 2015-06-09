@@ -94,9 +94,13 @@ public class RunnerService implements XJob, XServiceInfo,
 
         TestBase toExecute = (TestBase)dcl.getInstance("base.java_fat_service");
 
-        boolean worked = toExecute.executeTest(param);
-        if (!worked)
-            log.println("Test did not execute correctly.");
+        try {
+            boolean worked = toExecute.executeTest(param);
+            if (!worked)
+                log.println("Test did not execute correctly.");
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
 
         String returnString = "";
         if (log instanceof InternalLogWriter)

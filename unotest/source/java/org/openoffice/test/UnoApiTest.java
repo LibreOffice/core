@@ -33,7 +33,7 @@ public final class UnoApiTest {
         connection.tearDown();
     }
 
-    @Test public void test() {
+    @Test public void test() throws Exception {
         assertTrue(
             Runner.run(
                 "-sce", Argument.get("sce"), "-xcl", Argument.get("xcl"), "-tdoc",
