@@ -215,7 +215,6 @@ public class _XAutoTextGroup extends MultiMethodTest {
                     oObj.removeByName(str + "dup");
                 } catch (com.sun.star.container.NoSuchElementException e) {}
                 tRes.tested("renameByName()", false);
-                return;
             }
         }
 
