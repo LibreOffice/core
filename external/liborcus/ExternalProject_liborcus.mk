@@ -96,10 +96,16 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			--disable-spreadsheet-model \
 			--without-tools \
 			--disable-werror \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(SYSTEM_BOOST),,--with-boost=$(WORKDIR)/UnpackedTarball/boost) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(if $(VERBOSE)$(verbose),V=1) \
 		   $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(gb_Package_SOURCEDIR_liborcus)/src/liborcus/.libs/liborcus-0.10.0.dylib \
+				$(gb_Package_SOURCEDIR_liborcus)/src/parser/.libs/liborcus-parser-0.10.0.dylib \
+		) \
 	)
 
 # vim: set noet sw=4 ts=4:
