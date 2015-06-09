@@ -240,7 +240,7 @@ public:
     SwTextPortionType GetTextPortionType() const { return m_ePortionType; }
 
     SwUnoCrsr* GetCursor() const
-        { return const_cast<SwUnoCrsr*>(&(*m_pUnoCursor)); }
+        { return &(*m_pUnoCursor); }
 };
 
 class SwXTextPortionEnumeration
@@ -254,7 +254,7 @@ class SwXTextPortionEnumeration
     sw::UnoCursorPointer m_pUnoCrsr;
 
     SwUnoCrsr* GetCursor() const
-        {return const_cast<SwUnoCrsr*>(&(*m_pUnoCrsr));}
+        {return &(*m_pUnoCrsr);}
 
 protected:
     virtual ~SwXTextPortionEnumeration();
