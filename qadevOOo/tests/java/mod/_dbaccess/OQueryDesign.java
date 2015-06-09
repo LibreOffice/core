@@ -40,7 +40,6 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
-import lib.StatusException;
 import util.SOfficeFactory;
 import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdbc.XDataSource;

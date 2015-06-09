@@ -21,8 +21,6 @@ package mod._fwl;
 import com.sun.star.beans.NamedValue;
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;

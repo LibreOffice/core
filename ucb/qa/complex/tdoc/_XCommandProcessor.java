@@ -20,8 +20,6 @@ package complex.tdoc;
 
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XPropertySetInfo;
-import lib.StatusException;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.Command;
 import com.sun.star.ucb.CommandAbortedException;
