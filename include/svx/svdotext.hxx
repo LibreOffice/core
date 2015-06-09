@@ -360,6 +360,7 @@ public:
     // Chaining
     bool IsToBeChained() const;
     SdrTextObj *GetNextLinkInChain() const;
+    bool IsChainable() const { return GetNextLinkInChain() != NULL; }
 
     SdrObjKind GetTextKind() const { return eTextKind; }
 
