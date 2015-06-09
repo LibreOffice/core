@@ -1205,10 +1205,11 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
     if (bSet)
     {
         rDestCol.maCellTextAttrs.set(nDestRow, maCellTextAttrs.get<sc::CellTextAttr>(nSrcRow));
-        ScPostIt* pNote = maCellNotes.get<ScPostIt*>(nSrcRow);
-        rDestCol.maCellNotes.set(nDestRow, pNote);
-        if (pNote)
-            pNote->UpdateCaptionPos(ScAddress(rDestCol.nCol, nDestRow, rDestCol.nTab));
+        ScAddress aSrcPos(nCol, nSrcRow, nTab),
+                  aDestPos(rDestCol.nCol, nDestRow, rDestCol.nTab);
+        ScPostIt* pSrcNote = maCellNotes.get<ScPostIt*>(nSrcRow);
+        ScPostIt* pDestNote = pSrcNote ? pSrcNote->Clone(aSrcPos, *rDestCol.pDocument, aDestPos, true) : NULL;
+        rDestCol.maCellNotes.set(nDestRow, pDestNote);
     }
     else
     {
