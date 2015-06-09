@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_d5801b49",
+        "filename": "svx/source/sidebar/line/LinePropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-06-09T09:11:29Z",
+      "side": 1,
+      "message": "To save some typing here, you could group the widgets and then enable/disable them all at once, or at least in less steps. \n\nGroup1 (everything above line style listbox) already exists (it\u0027s \u0027grid4\u0027 in .ui file). Group2 (everything below line style listbox) needs to be created yet. \n\nThen  mpGroup1-\u003eEnable(); mpGroup2-\u003eEnable(); done. The same with disable",
+      "revId": "1997de3af730a053907f7e343a79526653dbfba6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
