@@ -91,6 +91,7 @@ class SvxItemPropertySet;
     { OUString(UNO_NAME_EDIT_CHAR_LOCALE),      EE_CHAR_LANGUAGE,   ::cppu::UnoType<com::sun::star::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
     { OUString(UNO_NAME_EDIT_CHAR_COLOR),       EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
     { OUString("CharBackColor"),                EE_CHAR_BKGCOLOR,   ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
+    { OUString("CharBackTransparent"),          EE_CHAR_BKGCOLOR,   ::cppu::UnoType<bool>::get(),             0, MID_GRAPHIC_TRANSPARENT }, \
     { OUString(UNO_NAME_EDIT_CHAR_ESCAPEMENT),  EE_CHAR_ESCAPEMENT, ::cppu::UnoType<sal_Int16>::get(),        0, MID_ESC }, \
     { OUString(UNO_NAME_EDIT_CHAR_UNDERLINE),   EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
     { OUString("CharUnderlineColor"),           EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
