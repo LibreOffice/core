@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_b5823fc7",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-09T21:12:31Z",
+      "side": 1,
+      "message": "please use symbolic constants osl_File_OpenFlag_Read instead of magic number",
+      "revId": "9df992abac168aab52beb4c0ad6e03f613e5979d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_756da731",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-09T21:12:31Z",
+      "side": 1,
+      "message": "maybe it would be better to also assert that the return value is osl::FileBase::E_None here",
+      "revId": "9df992abac168aab52beb4c0ad6e03f613e5979d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_d587bbd5",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-09T21:12:31Z",
+      "side": 1,
+      "message": "this could be a little overly specific - maybe some enhancement to the compression used in future versions could result in 2362 byte size or whatever... perhaps a test that it\u0027s \u003e 100 or so, that should be good enough",
+      "revId": "9df992abac168aab52beb4c0ad6e03f613e5979d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
