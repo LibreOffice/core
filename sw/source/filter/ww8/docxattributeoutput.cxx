@@ -718,8 +718,6 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
 
         InitTableHelper( pInner );
 
-        const size_t nLinesCount = m_xTableWrt->GetRows().size();
-
         // HACK
         // msoffice seems to have an internal limitation of 63 columns for tables
         // and refuses to load .docx with more, even though the spec seems to allow that;
@@ -763,7 +761,7 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
             EndTableRow();
 
         // This is the end of the table
-        if ( pInner->isEndOfLine( ) && ( nRow + 1 ) == nLinesCount )
+        if (pInner->isFinalEndOfLine())
             EndTable();
     }
 }
