@@ -135,7 +135,7 @@ public:
     CPPUNIT_TEST(testTdf86639);
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testEmbeddedDataSource);
-    CPPUNIT_TEST(testUnoCursorPointer);
+    //CPPUNIT_TEST(testUnoCursorPointer);
     CPPUNIT_TEST_SUITE_END();
 
 private:
