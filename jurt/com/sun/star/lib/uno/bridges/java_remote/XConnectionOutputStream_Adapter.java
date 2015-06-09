@@ -26,7 +26,7 @@ import com.sun.star.connection.XConnection;
 
 
 class XConnectionOutputStream_Adapter extends OutputStream {
-    static private final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     protected XConnection _xConnection;
     protected byte _bytes[] = new byte[1];

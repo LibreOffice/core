@@ -31,7 +31,7 @@ import java.util.*;
 */
 public class JREProperties
 {
-    static public void main(String[] args)
+    public static void main(String[] args)
     {
          try
         {

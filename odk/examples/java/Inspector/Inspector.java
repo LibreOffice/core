@@ -75,9 +75,9 @@ public class Inspector{
     /** This class implements the method of the interface XInstanceInspector.
      * Also the class implements the interfaces XServiceInfo, and XTypeProvider.
      */
-    static public class _Inspector extends WeakBase implements XInstanceInspector, XServiceInfo{
+    public static class _Inspector extends WeakBase implements XInstanceInspector, XServiceInfo{
 
-        static private final String __serviceName = "org.openoffice.InstanceInspector";
+        private static final String __serviceName = "org.openoffice.InstanceInspector";
         private HashMap<String, String> aApplicationHashMap = new HashMap<String, String>();
         private String sTitle = "Object Inspector";
         private ArrayList<XComponent> aHiddenDocuments = new ArrayList<XComponent>();

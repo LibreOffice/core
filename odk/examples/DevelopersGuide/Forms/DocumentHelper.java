@@ -175,7 +175,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** retrieves the document model which a given form component belongs to
     */
-    static public DocumentHelper getDocumentForComponent( Object aFormComponent, XComponentContext xCtx )
+    public static DocumentHelper getDocumentForComponent( Object aFormComponent, XComponentContext xCtx )
     {
         XChild xChild = UnoRuntime.queryInterface( XChild.class, aFormComponent );
         XModel xModel = null;

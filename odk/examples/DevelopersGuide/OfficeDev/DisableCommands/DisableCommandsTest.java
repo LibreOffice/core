@@ -50,7 +50,7 @@ public class DisableCommandsTest {
     /*
      * A list of command names
      */
-    final static private String[] aCommandURLTestSet =
+    final private static String[] aCommandURLTestSet =
     {
         "Open",
         "About",

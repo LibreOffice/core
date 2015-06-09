@@ -33,7 +33,7 @@ public class Bootstrap_Test {
 
     private static final Logger logger = Logger.getLogger(Bootstrap_Test.class.getName());
 
-    static public boolean test( String ini_file, Map<String,String> bootstrap_parameters )
+    public static boolean test( String ini_file, Map<String,String> bootstrap_parameters )
         throws java.lang.Exception
     {
         boolean passed = false;
@@ -85,7 +85,7 @@ public class Bootstrap_Test {
         System.exit( -1 );
     }
 
-    static public void main(String args[]) throws java.lang.Exception {
+    public static void main(String args[]) throws java.lang.Exception {
         if ( args.length == 0 )
             usage();
 

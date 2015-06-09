@@ -677,7 +677,7 @@ public class Helper
         }
     }
 
-    static private class HTMLParse extends HTMLEditorKit
+    private static class HTMLParse extends HTMLEditorKit
     {
 
         @Override
@@ -687,12 +687,12 @@ public class Helper
         }
     }
 
-    static protected HTMLEditorKit.Parser GetHTMLParser()
+    protected static HTMLEditorKit.Parser GetHTMLParser()
     {
         return new HTMLParse().getParser();
     }
 
-    static private boolean LoginReportsError( String sRespond )
+    private static boolean LoginReportsError( String sRespond )
     {
         boolean bResult = true;
         if ( sRespond != null )
@@ -715,7 +715,7 @@ public class Helper
         return bResult;
     }
 
-    static private String GetLoginToken( String sLoginPage )
+    private static String GetLoginToken( String sLoginPage )
     {
         String sResult = "";
         if ( sLoginPage != null && sLoginPage.length() > 0 )
@@ -738,7 +738,7 @@ public class Helper
         return sResult;
     }
 
-    static protected HostConfiguration Login( URI aMainURL, String sWikiUser, String sWikiPass, XComponentContext xContext )
+    protected static HostConfiguration Login( URI aMainURL, String sWikiUser, String sWikiPass, XComponentContext xContext )
         throws java.io.IOException, WikiCancelException
     {
         HostConfiguration aHostConfig = null;

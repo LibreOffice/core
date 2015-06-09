@@ -56,7 +56,7 @@ public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine
     epsilon_t = lib.getExtremalVcon(true);
   }
 
-  static private int compare(double data1, double data2) {
+  private static int compare(double data1, double data2) {
     if (data1 < data2)
       return LESS_THAN;
     else if (data1 > data2)

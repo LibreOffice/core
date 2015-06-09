@@ -37,7 +37,7 @@ import com.sun.star.uno.UnoRuntime;
 // A helper class to determine the menu element type
 public class MenuElement
 {
-    static public boolean IsMenuEntry( com.sun.star.beans.XPropertySet xMenuElement ) {
+    public static boolean IsMenuEntry( com.sun.star.beans.XPropertySet xMenuElement ) {
         com.sun.star.lang.XServiceInfo xServiceInfo =
             UnoRuntime.queryInterface(
             com.sun.star.lang.XServiceInfo.class, xMenuElement );
@@ -45,7 +45,7 @@ public class MenuElement
         return xServiceInfo.supportsService( "com.sun.star.ui.ActionTrigger" );
     }
 
-    static public boolean IsMenuSeparator( com.sun.star.beans.XPropertySet xMenuElement ) {
+    public static boolean IsMenuSeparator( com.sun.star.beans.XPropertySet xMenuElement ) {
         com.sun.star.lang.XServiceInfo xServiceInfo =
             UnoRuntime.queryInterface(
             com.sun.star.lang.XServiceInfo.class, xMenuElement );

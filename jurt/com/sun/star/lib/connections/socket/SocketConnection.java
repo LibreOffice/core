@@ -48,7 +48,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
     /**
      * When set to true, enables various debugging output.
      */
-    static public final boolean DEBUG = false;
+    public static final boolean DEBUG = false;
 
     protected String       _description;
     protected Socket       _socket;

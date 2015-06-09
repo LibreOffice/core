@@ -51,9 +51,9 @@ import com.sun.star.uno.XInterface;
 public class RunnerService implements XJob, XServiceInfo,
                                             XTypeProvider, XPropertyAccess {
 
-    static public final String __serviceName = "org.openoffice.Runner";
-    static public final String __implName = "org.openoffice.RunnerService";
-    static private XMultiServiceFactory xMSF = null;
+    public static final String __serviceName = "org.openoffice.Runner";
+    public static final String __implName = "org.openoffice.RunnerService";
+    private static XMultiServiceFactory xMSF = null;
 
     public Object execute(NamedValue[] args) {
         // construct valid arguments from the given stuff

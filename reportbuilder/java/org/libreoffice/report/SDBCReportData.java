@@ -179,7 +179,7 @@ public class SDBCReportData implements DataSource
     {
     }
 
-    static private java.sql.Date getDate(final Object obj)
+    private static java.sql.Date getDate(final Object obj)
     {
         final java.sql.Date date;
         if (obj instanceof com.sun.star.util.Date)
@@ -217,7 +217,7 @@ public class SDBCReportData implements DataSource
         return timeString;
     }
 
-    static private StringBuffer getDateString(final int years, final int months, final int days)
+    private static StringBuffer getDateString(final int years, final int months, final int days)
     {
         final StringBuffer str = new StringBuffer();
         str.append(years);
@@ -239,7 +239,7 @@ public class SDBCReportData implements DataSource
         return str;
     }
 
-    static private java.sql.Time getTime(final Object obj)
+    private static java.sql.Time getTime(final Object obj)
     {
         final java.sql.Time time;
         if (obj instanceof Time)
@@ -254,7 +254,7 @@ public class SDBCReportData implements DataSource
         return time;
     }
 
-    static private Timestamp getTimestamp(final Object obj)
+    private static Timestamp getTimestamp(final Object obj)
     {
         final Timestamp ts;
         if (obj instanceof DateTime)

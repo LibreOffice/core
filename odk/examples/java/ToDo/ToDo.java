@@ -93,21 +93,21 @@ public class ToDo {
         private XMultiComponentFactory m_xMCF;
 
         // Implementation helper variables
-        static private final int INT_COLUMN_FEATURE = 0;
-        static private final int INT_COLUMN_NEEDEDDAYS = 2;
-        static private final int INT_COLUMN_STARTDATE = 3;
-        static private final int INT_COLUMN_START_DAY_OF_WEEK = 4;
-        static private final int INT_COLUMN_ENDDATE = 5;
-        static private final int INT_COLUMN_END_DAY_OF_WEEK = 6;
-        static private final int INT_COLUMN_DUEDATE = 7;
-        static private final int INT_COLUMN_STATUS = 8;
+        private static final int INT_COLUMN_FEATURE = 0;
+        private static final int INT_COLUMN_NEEDEDDAYS = 2;
+        private static final int INT_COLUMN_STARTDATE = 3;
+        private static final int INT_COLUMN_START_DAY_OF_WEEK = 4;
+        private static final int INT_COLUMN_ENDDATE = 5;
+        private static final int INT_COLUMN_END_DAY_OF_WEEK = 6;
+        private static final int INT_COLUMN_DUEDATE = 7;
+        private static final int INT_COLUMN_STATUS = 8;
 
-        static private final int INT_ROW_FROM = 14; // 8
+        private static final int INT_ROW_FROM = 14; // 8
 
-        static private final int INT_ROW_HOLIDAYS_START = 4;
-        static private final int INT_COLUMN_HOLIDAYS_START = 7; // 10
+        private static final int INT_ROW_HOLIDAYS_START = 4;
+        private static final int INT_COLUMN_HOLIDAYS_START = 7; // 10
 
-        static private final String STRING_SEPARATOR = "/";
+        private static final String STRING_SEPARATOR = "/";
 
 
         /** The constructor of the inner class has a XComponenContext parameter.

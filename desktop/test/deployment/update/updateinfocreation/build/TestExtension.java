@@ -42,7 +42,7 @@ public class TestExtension {
         implements XServiceInfo {
         /** The service name, that must be used to get an instance of this service.
          */
-        static private final String __serviceName =
+        private static final String __serviceName =
         "com.sun.star.comp.smoketest.TestExtension";
 
         /** The initial component contextr, that gives access to

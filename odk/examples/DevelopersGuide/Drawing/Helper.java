@@ -47,7 +47,7 @@ public class Helper
      * A new connection is established and the service manger from the running
      * offic eis returned.
      */
-    static public XComponentContext connect()
+    public static XComponentContext connect()
         throws Exception
     {
         // get the remote office component context
@@ -62,7 +62,7 @@ public class Helper
 
     /** creates and instantiates new document
     */
-    static public com.sun.star.lang.XComponent createDocument(
+    public static com.sun.star.lang.XComponent createDocument(
         com.sun.star.uno.XComponentContext xOfficeContext,
         String sURL, String sTargetFrame, int nSearchFlags,
         com.sun.star.beans.PropertyValue[] aArgs )

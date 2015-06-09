@@ -39,7 +39,7 @@ public class SharedLibraryLoader_Test {
     private static XImplementationLoader    sharedLibraryLoader         = null;
     private static XSimpleRegistry          simpleRegistry              = null;
 
-    static public boolean test_getSharedLibraryLoaderFactory()
+    public static boolean test_getSharedLibraryLoaderFactory()
             throws java.lang.Exception
     {
         sharedLibraryLoaderFactory = null;
@@ -55,7 +55,7 @@ public class SharedLibraryLoader_Test {
         return sharedLibraryLoaderFactory != null;
     }
 
-    static public boolean test_instantiateSharedLibraryLoader()
+    public static boolean test_instantiateSharedLibraryLoader()
             throws java.lang.Exception
     {
         sharedLibraryLoader = null;
@@ -76,7 +76,7 @@ public class SharedLibraryLoader_Test {
         return sharedLibraryLoader != null;
     }
 
-    static public boolean test_loadNativeServiceManager()
+    public static boolean test_loadNativeServiceManager()
             throws java.lang.Exception
     {
         nativeServiceManager = null;
@@ -103,7 +103,7 @@ public class SharedLibraryLoader_Test {
         return nativeServiceManager != null;
     }
 
-    static public boolean test_loadNativeSimpleRegistry()
+    public static boolean test_loadNativeSimpleRegistry()
             throws java.lang.Exception
     {
         System.out.println("*******************************************************************");
@@ -127,7 +127,7 @@ public class SharedLibraryLoader_Test {
         return true;
     }
 
-    static public boolean test_registerSharedLibraryLoader()
+    public static boolean test_registerSharedLibraryLoader()
             throws java.lang.Exception
     {
         boolean result = true;
@@ -148,7 +148,7 @@ public class SharedLibraryLoader_Test {
         return result;
     }
 
-    static public boolean test() throws java.lang.Exception {
+    public static boolean test() throws java.lang.Exception {
         boolean passed = true;
 
         System.err.println("SharedLibraryLoader - doing tests...");
@@ -162,7 +162,7 @@ public class SharedLibraryLoader_Test {
         return passed;
     }
 
-    static public void main(String args[]) throws java.lang.Exception {
+    public static void main(String args[]) throws java.lang.Exception {
         System.exit( test() ? 0: -1 );
     }
 }

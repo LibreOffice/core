@@ -38,8 +38,8 @@ public class ReportLayouter
 
     private UnoDialog CurUnoDialog;
     private static final int SOCONTENTLST = 29;
-    final static public int SOOPTLANDSCAPE = 30;
-    final static public int SOOPTPORTRAIT = 31;
+    final public static int SOOPTLANDSCAPE = 30;
+    final public static int SOOPTPORTRAIT = 31;
     private static final int SOLAYOUTLST = 32;
     private XListBox xContentListBox;
     private XListBox xLayoutListBox;

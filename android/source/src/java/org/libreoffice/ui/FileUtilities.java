@@ -157,7 +157,7 @@ public class FileUtilities {
     }
 
     // Filter by mode, and/or in future by filename/wildcard
-    static private boolean doAccept(String filename, int byMode, String byFilename) {
+    private static boolean doAccept(String filename, int byMode, String byFilename) {
         Log.d(LOGTAG, "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
         if (filename == null)
             return false;

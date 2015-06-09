@@ -28,7 +28,7 @@ import com.sun.star.uno.Type;
 
 
 class TestBridge implements IBridge {
-    static private final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     private final HashMap<String,Object> _hashtable = new HashMap<String,Object>();
 

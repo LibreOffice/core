@@ -62,9 +62,9 @@ import util.FormTools;
  * @see ifc.sheet._XCellRangeReferrer
  */
 public class ScViewPaneObj extends TestCase {
-    static private XSpreadsheetDocument xSpreadsheetDoc;
-    static private SOfficeFactory SOF;
-    static private XInterface oObj;
+    private static XSpreadsheetDocument xSpreadsheetDoc;
+    private static SOfficeFactory SOF;
+    private static XInterface oObj;
 
     /**
      * Creates Spreadsheet document.

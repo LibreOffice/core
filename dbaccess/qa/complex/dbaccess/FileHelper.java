@@ -21,7 +21,7 @@ package complex.dbaccess;
 public class FileHelper
 {
     private FileHelper(){}
-    static public String getOOoCompatibleFileURL( String _javaFileURL )
+    public static String getOOoCompatibleFileURL( String _javaFileURL )
     {
         String returnURL = _javaFileURL;
         if ( ( returnURL.indexOf( "file:/" ) == 0 ) && ( returnURL.indexOf( "file:///" ) == -1 ) )

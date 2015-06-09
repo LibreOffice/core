@@ -60,7 +60,7 @@ public class CalcAddins {
  * of the service description. It implements the needed interfaces.
  * @implements XCalcAddins, XAddIn, XServiceName, XServiceInfo, XTypeProvider
  */
-    static private class _CalcAddins extends WeakBase implements
+    private static class _CalcAddins extends WeakBase implements
                                             XCalcAddins,
                                             XAddIn,
                                             XServiceName,
@@ -69,9 +69,9 @@ public class CalcAddins {
 
 /** The component will be registered under this name.
  */
-        static private final String __serviceName = "org.openoffice.sheet.addin.CalcAddins";
+        private static final String __serviceName = "org.openoffice.sheet.addin.CalcAddins";
 
-        static private final String ADDIN_SERVICE = "com.sun.star.sheet.AddIn";
+        private static final String ADDIN_SERVICE = "com.sun.star.sheet.AddIn";
 
         private Locale aFuncLoc;
 

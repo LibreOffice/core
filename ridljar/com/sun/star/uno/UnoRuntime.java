@@ -597,7 +597,7 @@ public class UnoRuntime {
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
      */
-    static public boolean reset() {
+    public static boolean reset() {
         synchronized (bridges) {
             for (Iterator<java.lang.ref.WeakReference<IBridge>> i = bridges.values().iterator(); i.hasNext();) {
                 IBridge b = WeakMap.getValue(i.next());
@@ -627,7 +627,7 @@ public class UnoRuntime {
     /**
      * @deprecated As of UDK&nbsp;3.2.0, do not use this internal field.
      */
-    static public final boolean DEBUG = false;
+    public static final boolean DEBUG = false;
 
     private static final class BridgeTurner implements IBridge {
         public BridgeTurner(IBridge bridge) {

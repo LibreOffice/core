@@ -40,7 +40,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     /**
      * When set to true, enables various debugging output.
      */
-    static public final boolean DEBUG = false;
+    public static final boolean DEBUG = false;
 
     static {
         // load shared library for JNI code

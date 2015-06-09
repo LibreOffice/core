@@ -46,7 +46,7 @@ public class OptionsEventHandler {
     public static class _OptionsEventHandler extends WeakBase
         implements XServiceInfo, XContainerWindowEventHandler {
 
-        static private final String __serviceName =
+        private static final String __serviceName =
         "com.sun.star.comp.extensionoptions.OptionsEventHandler";
 
         private final XComponentContext m_cmpCtx;

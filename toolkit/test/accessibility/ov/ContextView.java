@@ -36,7 +36,7 @@ public class ContextView
     extends ListeningObjectView
     implements ActionListener
 {
-    static public ObjectView Create (
+    public static ObjectView Create (
         ObjectViewContainer aContainer,
         XAccessibleContext xContext)
     {

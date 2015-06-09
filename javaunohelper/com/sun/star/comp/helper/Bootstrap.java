@@ -93,7 +93,7 @@ public class Bootstrap {
     /**
      * backwards compatibility stub.
      */
-    static public XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
+    public static XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
             throws Exception
     {
         return createInitialComponentContext((Map<String, Object>) context_entries);
@@ -104,7 +104,7 @@ public class Bootstrap {
         context entries (type class ComponentContextEntry).
         @return a new context.
     */
-    static public XComponentContext createInitialComponentContext( Map<String, Object> context_entries )
+    public static XComponentContext createInitialComponentContext( Map<String, Object> context_entries )
         throws Exception
     {
         ServiceManager xSMgr = new ServiceManager();
@@ -142,7 +142,7 @@ public class Bootstrap {
      *
      * @return     a freshly boostrapped service manager
      */
-    static public XMultiServiceFactory createSimpleServiceManager() throws Exception
+    public static XMultiServiceFactory createSimpleServiceManager() throws Exception
     {
         return UnoRuntime.queryInterface(
             XMultiServiceFactory.class, createInitialComponentContext( (Map<String, Object>) null ).getServiceManager() );
@@ -154,7 +154,7 @@ public class Bootstrap {
         See also
         <code>cppuhelper/defaultBootstrap_InitialComponentContext()</code>.
     */
-    static public final XComponentContext defaultBootstrap_InitialComponentContext()
+    public static final XComponentContext defaultBootstrap_InitialComponentContext()
         throws Exception
     {
         return defaultBootstrap_InitialComponentContext( (String) null, (Map<String,String>) null );
@@ -162,7 +162,7 @@ public class Bootstrap {
     /**
      * Backwards compatibility stub.
      */
-    static public final XComponentContext defaultBootstrap_InitialComponentContext(
+    public static final XComponentContext defaultBootstrap_InitialComponentContext(
             String ini_file, Hashtable<String,String> bootstrap_parameters )
             throws Exception
     {
@@ -179,7 +179,7 @@ public class Bootstrap {
         @param bootstrap_parameters
                bootstrap parameters (maybe null)
     */
-    static public final XComponentContext defaultBootstrap_InitialComponentContext(
+    public static final XComponentContext defaultBootstrap_InitialComponentContext(
         String ini_file, Map<String,String> bootstrap_parameters )
         throws Exception
     {
@@ -232,8 +232,8 @@ public class Bootstrap {
                 ini_file, pairs, Bootstrap.class.getClassLoader() ) );
     }
 
-    static private boolean m_loaded_juh = false;
-    static private native Object cppuhelper_bootstrap(
+    private static boolean m_loaded_juh = false;
+    private static native Object cppuhelper_bootstrap(
         String ini_file, String bootstrap_parameters [], ClassLoader loader )
         throws Exception;
 

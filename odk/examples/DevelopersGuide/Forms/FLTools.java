@@ -120,7 +120,7 @@ public class FLTools
     /* ------------------------------------------------------------------ */
     /** disposes the component given
     */
-    static public void disposeComponent( Object xComp ) throws java.lang.RuntimeException
+    public static void disposeComponent( Object xComp ) throws java.lang.RuntimeException
     {
         XComponent xComponent = UnoRuntime.queryInterface( XComponent.class,
             xComp );
@@ -131,7 +131,7 @@ public class FLTools
     /* ------------------------------------------------------------------ */
     /** get's the XControlModel for a control
     */
-    static public <T> T getModel( Object aControl, Class<T> aInterfaceClass )
+    public static <T> T getModel( Object aControl, Class<T> aInterfaceClass )
     {
         XControl xControl = UnoRuntime.queryInterface(
             XControl.class, aControl );
@@ -149,7 +149,7 @@ public class FLTools
         forms container; and it is able to classify grid columns (which are no form components)
         as well.</p>
     */
-    static public String classifyFormComponentType( XPropertySet xComponent ) throws com.sun.star.uno.Exception
+    public static String classifyFormComponentType( XPropertySet xComponent ) throws com.sun.star.uno.Exception
     {
         String sType = "<unknown component>";
 

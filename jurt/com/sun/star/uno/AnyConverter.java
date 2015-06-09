@@ -37,7 +37,7 @@ public class AnyConverter
      * @param object any object.
      * @return type object.
      */
-    static public Type getType( Object object )
+    public static Type getType( Object object )
     {
         Type t;
         if (null == object)
@@ -64,7 +64,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any is void, false otherwise.
      */
-    static public boolean isVoid(Object object){
+    public static boolean isVoid(Object object){
         return containsType(TypeClass.VOID, object);
     }
 
@@ -74,7 +74,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a char, false otherwise.
      */
-    static public boolean isChar(Object object){
+    public static boolean isChar(Object object){
         return containsType(TypeClass.CHAR, object);
     }
 
@@ -84,7 +84,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a boolean, false otherwise.
      */
-    static public boolean isBoolean(Object object){
+    public static boolean isBoolean(Object object){
         return containsType(TypeClass.BOOLEAN, object);
     }
 
@@ -94,7 +94,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a byte, false otherwise.
      */
-    static public boolean isByte(Object object){
+    public static boolean isByte(Object object){
         return containsType(TypeClass.BYTE, object);
     }
 
@@ -104,7 +104,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a short, false otherwise.
      */
-    static public boolean isShort(Object object){
+    public static boolean isShort(Object object){
         return containsType(TypeClass.SHORT, object);
     }
 
@@ -115,7 +115,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a int, false otherwise.
      */
-    static public boolean isInt(Object object){
+    public static boolean isInt(Object object){
         return containsType(TypeClass.LONG, object);
     }
 
@@ -126,7 +126,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a long, false otherwise.
      */
-    static public boolean isLong(Object object){
+    public static boolean isLong(Object object){
         return containsType(TypeClass.HYPER, object);
     }
 
@@ -136,7 +136,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a float, false otherwise.
      */
-    static public boolean isFloat(Object object){
+    public static boolean isFloat(Object object){
         return containsType(TypeClass.FLOAT, object);
     }
 
@@ -146,7 +146,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a double, false otherwise.
      */
-    static public boolean isDouble(Object object){
+    public static boolean isDouble(Object object){
         return containsType(TypeClass.DOUBLE, object);
     }
 
@@ -156,7 +156,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a string, false otherwise.
      */
-    static public boolean isString(Object object){
+    public static boolean isString(Object object){
         return containsType(TypeClass.STRING, object);
     }
 
@@ -166,7 +166,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true if the any contains an enum, false otherwise.
      */
-    static public boolean isEnum(Object object)
+    public static boolean isEnum(Object object)
     {
         return containsType(TypeClass.ENUM, object);
     }
@@ -177,7 +177,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true when the any contains a type, false otherwise.
      */
-    static public boolean isType(Object object){
+    public static boolean isType(Object object){
         return containsType(TypeClass.TYPE, object);
     }
 
@@ -191,7 +191,7 @@ public class AnyConverter
      * @param object the object to check.
      * @return true if the any contains an object.
      */
-    static public boolean isObject(Object object)
+    public static boolean isObject(Object object)
     {
         int tc = getType(object).getTypeClass().getValue();
         return (TypeClass.INTERFACE_value == tc ||
@@ -209,7 +209,7 @@ public class AnyConverter
      * @return true when the any contains an object which implements interfaces,
      * false otherwise.
      */
-    static public boolean isArray(Object object){
+    public static boolean isArray(Object object){
         return containsType(TypeClass.SEQUENCE, object);
     }
 
@@ -224,7 +224,7 @@ public class AnyConverter
      *
      * @see #isChar
      */
-    static public char toChar(Object object) throws  com.sun.star.lang.IllegalArgumentException{
+    public static char toChar(Object object) throws  com.sun.star.lang.IllegalArgumentException{
         Character ret= (Character)convertSimple(TypeClass.CHAR, null, object);
         return ret.charValue();
     }
@@ -240,7 +240,7 @@ public class AnyConverter
      *
      * @see #isBoolean
     */
-    static public boolean toBoolean(Object object) throws  com.sun.star.lang.IllegalArgumentException{
+    public static boolean toBoolean(Object object) throws  com.sun.star.lang.IllegalArgumentException{
         Boolean ret= (Boolean)convertSimple(TypeClass.BOOLEAN, null, object);
         return ret.booleanValue();
     }
@@ -256,7 +256,7 @@ public class AnyConverter
      *
      * @see #isBoolean
      */
-    static public byte toByte(Object object) throws   com.sun.star.lang.IllegalArgumentException{
+    public static byte toByte(Object object) throws   com.sun.star.lang.IllegalArgumentException{
         Byte ret= (Byte)convertSimple(TypeClass.BYTE, null, object);
         return ret.byteValue();
     }
@@ -272,7 +272,7 @@ public class AnyConverter
      *
      * @return the short contained within the object.
      */
-    static public short toShort(Object object) throws   com.sun.star.lang.IllegalArgumentException{
+    public static short toShort(Object object) throws   com.sun.star.lang.IllegalArgumentException{
         Short ret= (Short)convertSimple(TypeClass.SHORT, null, object);
         return ret.shortValue();
     }
@@ -288,7 +288,7 @@ public class AnyConverter
      *
      * @return an (unsigned) short.
      */
-    static public short toUnsignedShort(Object object)
+    public static short toUnsignedShort(Object object)
         throws com.sun.star.lang.IllegalArgumentException
     {
         Short ret= (Short)convertSimple(TypeClass.UNSIGNED_SHORT, null, object);
@@ -307,7 +307,7 @@ public class AnyConverter
      *
      * @return the int contained within the object.
      */
-    static public int toInt(Object object) throws  com.sun.star.lang.IllegalArgumentException{
+    public static int toInt(Object object) throws  com.sun.star.lang.IllegalArgumentException{
         Integer ret= (Integer) convertSimple( TypeClass.LONG, null, object);
         return ret.intValue();
     }
@@ -324,7 +324,7 @@ public class AnyConverter
      *
      * @return an (unsigned) int.
      */
-    static public int toUnsignedInt(Object object)
+    public static int toUnsignedInt(Object object)
         throws  com.sun.star.lang.IllegalArgumentException
     {
         Integer ret = (Integer)convertSimple(TypeClass.UNSIGNED_LONG, null, object);
@@ -343,7 +343,7 @@ public class AnyConverter
      *
      * @return the long contained within the object.
      */
-    static public long toLong(Object object) throws   com.sun.star.lang.IllegalArgumentException{
+    public static long toLong(Object object) throws   com.sun.star.lang.IllegalArgumentException{
         Long ret= (Long) convertSimple( TypeClass.HYPER, null, object);
         return ret.longValue();
     }
@@ -360,7 +360,7 @@ public class AnyConverter
      *
      * @return an (unsigned) long.
      */
-    static public long toUnsignedLong(Object object)
+    public static long toUnsignedLong(Object object)
         throws com.sun.star.lang.IllegalArgumentException
     {
         Long ret = (Long)convertSimple(TypeClass.UNSIGNED_HYPER, null, object);
@@ -379,7 +379,7 @@ public class AnyConverter
      *
      * @return the float contained within the object.
      */
-    static public float toFloat(Object object) throws com.sun.star.lang.IllegalArgumentException{
+    public static float toFloat(Object object) throws com.sun.star.lang.IllegalArgumentException{
         Float ret= (Float) convertSimple( TypeClass.FLOAT,null, object);
         return ret.floatValue();
     }
@@ -396,7 +396,7 @@ public class AnyConverter
      *
      * @return the double contained within the object.
      */
-    static public double toDouble(Object object) throws com.sun.star.lang.IllegalArgumentException {
+    public static double toDouble(Object object) throws com.sun.star.lang.IllegalArgumentException {
         Double ret= (Double) convertSimple( TypeClass.DOUBLE, null, object);
         return ret.doubleValue();
     }
@@ -410,7 +410,7 @@ public class AnyConverter
      *
      * @return the string contained within the object.
      */
-    static public String toString(Object object) throws com.sun.star.lang.IllegalArgumentException {
+    public static String toString(Object object) throws com.sun.star.lang.IllegalArgumentException {
         return (String) convertSimple( TypeClass.STRING, null, object);
     }
 
@@ -423,7 +423,7 @@ public class AnyConverter
      *
      * @return the type contained within the object.
      */
-    static public Type toType(Object object) throws com.sun.star.lang.IllegalArgumentException {
+    public static Type toType(Object object) throws com.sun.star.lang.IllegalArgumentException {
         return (Type) convertSimple( TypeClass.TYPE, null, object);
     }
 
@@ -445,7 +445,7 @@ public class AnyConverter
      *
      * @return destination object.
      */
-    static public Object toObject(Type type, Object object)
+    public static Object toObject(Type type, Object object)
         throws com.sun.star.lang.IllegalArgumentException
     {
         return convertSimple( type.getTypeClass(), type, object );
@@ -467,7 +467,7 @@ public class AnyConverter
      *
      * @return destination object.
      */
-    static public Object toObject(Class<?> clazz, Object object)
+    public static Object toObject(Class<?> clazz, Object object)
         throws com.sun.star.lang.IllegalArgumentException
     {
         return toObject( new Type( clazz ), object );
@@ -482,7 +482,7 @@ public class AnyConverter
      *
      * @return the array contained within the object.
      */
-    static public Object toArray( Object object) throws com.sun.star.lang.IllegalArgumentException {
+    public static Object toArray( Object object) throws com.sun.star.lang.IllegalArgumentException {
         return convertSimple( TypeClass.SEQUENCE, null, object);
     }
 
@@ -493,13 +493,13 @@ public class AnyConverter
      * <p><em>object</em> is either matched directly against the type or if it is
      * an any then the contained object is matched against the type.</p>
      */
-    static private boolean containsType( TypeClass what, Object object){
+    private static boolean containsType( TypeClass what, Object object){
         return (getType(object).getTypeClass().getValue() == what.getValue());
     }
 
-    static private final Type m_XInterface_type = new Type( XInterface.class );
+    private static final Type m_XInterface_type = new Type( XInterface.class );
 
-    static private Object convertSimple( TypeClass destTClass, Type destType, Object object_ )
+    private static Object convertSimple( TypeClass destTClass, Type destType, Object object_ )
         throws com.sun.star.lang.IllegalArgumentException
     {
         Object object;
