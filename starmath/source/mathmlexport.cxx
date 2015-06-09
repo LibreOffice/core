@@ -901,7 +901,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
     const SmNode *pCSup = 0;
     const SmNode *pLSub = 0;
     const SmNode *pLSup = 0;
-    SvXMLElementExport *pThing = 0, *pThing2 = 0;
+    SvXMLElementExport *pThing2 = nullptr;
 
     //if we have prescripts at all then we must use the tensor notation
 
@@ -984,6 +984,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
     }
     else
     {
+        SvXMLElementExport *pThing = nullptr;
         if (NULL != (pSub = pNode->GetSubNode(RSUB+1)) &&
             NULL != (pSup = pNode->GetSubNode(RSUP+1)))
         {
