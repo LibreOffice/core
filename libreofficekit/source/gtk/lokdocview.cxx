@@ -208,6 +208,7 @@ enum
 
 static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 
+SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
@@ -1195,8 +1196,6 @@ static void lok_doc_view_init (LOKDocView* pDocView)
 
     g_signal_connect(G_OBJECT(pDocView), "destroy", G_CALLBACK(LOKDocView_Impl::destroy), 0);
 }
-
-SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new( LibreOfficeKit* pOffice )
 {
