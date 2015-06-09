@@ -174,29 +174,33 @@ void SwFlyFreeFrm::MakeAll()
                 Format( &rAttrs );
                 bFormatHeightOnly = false;
             }
+        }
 
-            if ( !mbValidPos )
-            {
-                const Point aOldPos( (Frm().*fnRect->fnGetPos)() );
+        if ( !mbValidPos )
+        {
+            const Point aOldPos( (Frm().*fnRect->fnGetPos)() );
+            // #i26791# - use new method <MakeObjPos()>
+            // #i34753# - no positioning, if requested.
+            if ( IsNoMakePos() )
+                mbValidPos = true;
+            else
                 // #i26791# - use new method <MakeObjPos()>
-                // #i34753# - no positioning, if requested.
-                if ( IsNoMakePos() )
+                MakeObjPos();
+            if( aOldPos == (Frm().*fnRect->fnGetPos)() )
+            {
+                if( !mbValidPos && GetAnchorFrm()->IsInSct() &&
+                    !GetAnchorFrm()->FindSctFrm()->IsValid() )
                     mbValidPos = true;
-                else
-                    // #i26791# - use new method <MakeObjPos()>
-                    MakeObjPos();
-                if( aOldPos == (Frm().*fnRect->fnGetPos)() )
-                {
-                    if( !mbValidPos && GetAnchorFrm()->IsInSct() &&
-                        !GetAnchorFrm()->FindSctFrm()->IsValid() )
-                        mbValidPos = true;
-                }
-                else
-                    mbValidSize = false;
             }
+            else
+                mbValidSize = false;
+        }
 
-            if ( !m_bValidContentPos )
-                MakeContentPos( rAttrs );
+        if ( !m_bValidContentPos )
+        {
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
+            const SwBorderAttrs &rAttrs = *aAccess.Get();
+            MakeContentPos( rAttrs );
         }
 
         if ( mbValidPos && mbValidSize )
