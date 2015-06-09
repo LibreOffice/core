@@ -1009,6 +1009,14 @@ void SwUiWriterTest::testEmbeddedDataSource()
     CPPUNIT_ASSERT(mxComponent.is());
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 
+    // Data source has a table named Sheet1 after saving to a different directory.
+    xDataSource.set(xDatabaseContext->getByName("calc-data-source"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDataSource.is());
+    xConnection.set(xDataSource->getConnection("", ""), uno::UNO_QUERY);
+    xTables.set(xConnection->getTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTables.is());
+    CPPUNIT_ASSERT(xTables->hasByName("Sheet1"));
+
     // Close: should not have a data source anymore.
     mxComponent->dispose();
     mxComponent.clear();

@@ -115,12 +115,15 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 
 #include <unomid.h>
 #include <unotextrange.hxx>
 
 #include <sfx2/Metadatable.hxx>
 #include <calbck.hxx>
+#include <dbmgr.hxx>
 
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -416,6 +419,24 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
     }
 
     CalcLayoutForOLEObjects();  // format for OLE objets
+
+    if (!m_pDoc->GetDBManager()->getEmbeddedName().isEmpty())
+    {
+        // We have an embedded data source definition, need to re-store it,
+        // otherwise relative references will break when the new file is in a
+        // different directory.
+        uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
+
+        const INetURLObject& rOldURLObject = GetMedium()->GetURLObject();
+        OUString aURL = "vnd.sun.star.pkg://";
+        aURL += INetURLObject::encode(rOldURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET), INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
+        aURL += "/" + INetURLObject::encode(m_pDoc->GetDBManager()->getEmbeddedName(), INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL);
+
+        uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
+        uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);
+        SwDBManager::StoreEmbeddedDataSource(xStorable, rMedium.GetOutputStorage(), m_pDoc->GetDBManager()->getEmbeddedName(), rMedium.GetName());
+    }
+
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if (m_pWrtShell &&
