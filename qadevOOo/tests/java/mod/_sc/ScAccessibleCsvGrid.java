@@ -55,24 +55,14 @@ public class ScAccessibleCsvGrid extends TestCase {
      * @see #getTestEnvironment
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
-        XInterface oObj = null;
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         util.utils.pause(2000);
 
-        try {
-            oObj = (XInterface) Param.getMSF().createInstance
-                ("com.sun.star.awt.Toolkit") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
-        }
-
+        XInterface oObj = (XInterface) Param.getMSF().createInstance
+            ("com.sun.star.awt.Toolkit") ;
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
-
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 

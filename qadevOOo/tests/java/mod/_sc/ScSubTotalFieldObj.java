@@ -98,7 +98,7 @@ public class ScSubTotalFieldObj extends TestCase {
     * @see com.sun.star.sheet.SubTotalField
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         log.println("getting sheets");
         XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
@@ -106,19 +106,8 @@ public class ScSubTotalFieldObj extends TestCase {
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type (XSpreadsheet.class),oIndexAccess.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type (XSpreadsheet.class),oIndexAccess.getByIndex(0));
 
         XSubTotalCalculatable xSTC = UnoRuntime.queryInterface(XSubTotalCalculatable.class, oSheet);
 
@@ -135,19 +124,8 @@ public class ScSubTotalFieldObj extends TestCase {
 
         XInterface oObj = null;
 
-        try {
-            oObj = ( XSubTotalField ) AnyConverter.toObject(
-                    new Type(XSubTotalField.class),oDescIndex.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get XSubTotalField", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get XSubTotalField", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get XSubTotalField", e);
-        }
+        oObj = ( XSubTotalField ) AnyConverter.toObject(
+                new Type(XSubTotalField.class),oDescIndex.getByIndex(0));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
         return tEnv;

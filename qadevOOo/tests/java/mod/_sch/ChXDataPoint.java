@@ -117,7 +117,7 @@ public class ChXDataPoint extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XPropertySet  oObj = null;
         XDiagram oDiagram = null;
@@ -125,15 +125,9 @@ public class ChXDataPoint extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         // get the DataRowPoint_Point
-        try {
-            log.println( "getting ChXDataRowPoint_Point" );
-            oDiagram = xChartDoc.getDiagram();
-            oObj = oDiagram.getDataPointProperties(1,1);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get ChXDataRowPoint_Point", e );
-        }
+        log.println( "getting ChXDataRowPoint_Point" );
+        oDiagram = xChartDoc.getDiagram();
+        oObj = oDiagram.getDataPointProperties(1,1);
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

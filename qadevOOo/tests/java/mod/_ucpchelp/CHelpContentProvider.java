@@ -20,7 +20,6 @@ package mod._ucpchelp;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -34,22 +33,17 @@ public class CHelpContentProvider extends TestCase {
 
     @Override
     public TestEnvironment createTestEnvironment
-            ( TestParameters Param,PrintWriter log ) {
+            ( TestParameters Param,PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
         Object oInterface = null;
         Object aUCB = null;
 
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.ucb.HelpContentProvider" );
-            aUCB = xMSF.createInstance
-                ( "com.sun.star.comp.ucb.UniversalContentBroker" );
-        } catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
+        XMultiServiceFactory xMSF = Param.getMSF();
+        oInterface = xMSF.createInstance
+            ( "com.sun.star.ucb.HelpContentProvider" );
+        aUCB = xMSF.createInstance
+            ( "com.sun.star.comp.ucb.UniversalContentBroker" );
 
         oObj = (XInterface) oInterface;
 

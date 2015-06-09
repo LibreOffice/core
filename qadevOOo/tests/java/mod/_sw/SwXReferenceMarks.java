@@ -93,7 +93,7 @@ public class SwXReferenceMarks extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-            TestParameters tParam, PrintWriter log ) throws StatusException {
+            TestParameters tParam, PrintWriter log ) throws Exception {
         XInterface oObj = null;
         XText oText = null;
         String Name = "SwXReferenceMark01";
@@ -105,42 +105,22 @@ public class SwXReferenceMarks extends TestCase {
         XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
 
         // Creation and insertion of ReferenceMark01
-        try {
-            oObj = (XInterface)
-                oDocMSF.createInstance( "com.sun.star.text.ReferenceMark" );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get ReferenceMark", e);
-        }
+        oObj = (XInterface)
+            oDocMSF.createInstance( "com.sun.star.text.ReferenceMark" );
         XNamed oObjN = UnoRuntime.queryInterface(XNamed.class, oObj);
         oObjN.setName(Name);
         XTextContent oObjTC = UnoRuntime.queryInterface(XTextContent.class, oObj);
         XTextCursor oCursor = oText.createTextCursor();
-        try {
-            oText.insertTextContent(oCursor, oObjTC, false);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            e.printStackTrace( log );
-            throw new StatusException(" Couldn't insert ReferenceMark01", e);
-        }
+        oText.insertTextContent(oCursor, oObjTC, false);
 
         // Creation and insertion of ReferenceMark02
-        try {
-            oObj = (XInterface)
-                oDocMSF.createInstance( "com.sun.star.text.ReferenceMark" );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get ReferenceMark", e);
-        }
+        oObj = (XInterface)
+            oDocMSF.createInstance( "com.sun.star.text.ReferenceMark" );
         XNamed oObjN2 = UnoRuntime.queryInterface(XNamed.class, oObj);
         oObjN2.setName(Name2);
 
         XTextContent oObjTC2 = UnoRuntime.queryInterface(XTextContent.class, oObj);
-        try {
-            oText.insertTextContent(oCursor, oObjTC2, false);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            e.printStackTrace( log );
-            throw new StatusException(" Couldn't insert ReferenceMark02", e);
-        }
+        oText.insertTextContent(oCursor, oObjTC2, false);
 
         // getting ReferenceMarks from text document
         XReferenceMarksSupplier oRefSupp = UnoRuntime.queryInterface(XReferenceMarksSupplier.class, xTextDoc);

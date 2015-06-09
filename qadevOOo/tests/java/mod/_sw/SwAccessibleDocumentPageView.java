@@ -19,8 +19,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -62,7 +60,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception{
 
         XInterface oObj = null;
 
@@ -70,25 +68,20 @@ public class SwAccessibleDocumentPageView extends TestCase {
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println( "inserting some lines" );
-        try {
-            for (int i=0; i<25; i++){
-                oText.insertString( oCursor,"Paragraph Number: " + i, false);
-                oText.insertString( oCursor,
-                    " The quick brown fox jumps over the lazy Dog: SwAccessibleDocumentPageView",
-                    false);
-                oText.insertControlCharacter(
-                    oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-                oText.insertString( oCursor,
-                    "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwAccessibleDocumentPageView",
-                    false);
-                oText.insertControlCharacter(oCursor,
-                    ControlCharacter.PARAGRAPH_BREAK, false );
-                oText.insertControlCharacter(
-                    oCursor, ControlCharacter.LINE_BREAK, false );
-            }
-        } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't insert lines", e );
+        for (int i=0; i<25; i++){
+            oText.insertString( oCursor,"Paragraph Number: " + i, false);
+            oText.insertString( oCursor,
+                " The quick brown fox jumps over the lazy Dog: SwAccessibleDocumentPageView",
+                false);
+            oText.insertControlCharacter(
+                oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+            oText.insertString( oCursor,
+                "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwAccessibleDocumentPageView",
+                false);
+            oText.insertControlCharacter(oCursor,
+                ControlCharacter.PARAGRAPH_BREAK, false );
+            oText.insertControlCharacter(
+                oCursor, ControlCharacter.LINE_BREAK, false );
         }
 
         XController xController = xTextDoc.getCurrentController();
@@ -96,22 +89,18 @@ public class SwAccessibleDocumentPageView extends TestCase {
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         //switch to 'Print Preview' mode
-        try {
-            XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
-            // Because it's an in/out parameter we must use an array of URL objects.
-            URL[] aParseURL = new URL[1];
-            aParseURL[0] = new URL();
-            aParseURL[0].Complete = ".uno:PrintPreview";
-            xParser.parseStrict(aParseURL);
-            URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
-            if(xDispatcher != null)
-                xDispatcher.dispatch( aURL, null );
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't change mode"));
-        }
+        XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+        XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+                Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
+        // Because it's an in/out parameter we must use an array of URL objects.
+        URL[] aParseURL = new URL[1];
+        aParseURL[0] = new URL();
+        aParseURL[0].Complete = ".uno:PrintPreview";
+        xParser.parseStrict(aParseURL);
+        URL aURL = aParseURL[0];
+        XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
+        if(xDispatcher != null)
+            xDispatcher.dispatch( aURL, null );
 
         util.utils.pause(2000);
 

@@ -20,7 +20,6 @@ package mod._fwk;
 
 import java.io.PrintWriter;
 
-import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -197,18 +196,11 @@ public class JobExecutor extends TestCase {
      * is created.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
-        XInterface oObj = null;
-
-        Object job = null;
-        try {
-            oObj = (XInterface)Param.getMSF().createInstance(
-                "com.sun.star.comp.framework.JobExecutor");
-            job = Param.getMSF().createInstance("test.Job");
-        } catch(com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create instance"));
-        }
+        XInterface oObj = (XInterface)Param.getMSF().createInstance(
+            "com.sun.star.comp.framework.JobExecutor");
+        Object job = Param.getMSF().createInstance("test.Job");
 
         xNamed = UnoRuntime.queryInterface(XNamed.class, job);
         log.println("Count = " + xNamed.getName());

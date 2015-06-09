@@ -19,7 +19,6 @@ package mod._forms;
 
 import java.io.PrintWriter;
 
-import lib.TestEnvironment;
 import lib.TestParameters;
 
 
@@ -95,18 +94,6 @@ public class OFixedTextModel extends GenericModelTest {
 
         super.m_LCShape_Type = "FixedText";
 
-    }
-
-    /**
-     * calls <CODE>createTestEnvironment()</CODE> from it's super class
-     * @param Param the test parameter
-     * @param log the log writer
-     * @return lib.TestEnvironment
-     */
-    @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-            PrintWriter log) {
-        return super.createTestEnvironment(Param, log);
     }
 
 } // finish class OFixedTextModel

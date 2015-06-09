@@ -18,8 +18,8 @@
 
 package mod._sw;
 
-import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
+
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -27,6 +27,7 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XAutoTextContainer;
 import com.sun.star.text.XText;
@@ -35,6 +36,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import util.utils;
 
 
@@ -102,20 +104,15 @@ public class SwXAutoTextGroup extends TestCase {
      * </ul>
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XAutoTextContainer oContainer;
 
         log.println( "creating a test environment" );
-        try {
-            XMultiServiceFactory myMSF = Param.getMSF();
-            Object oInst = myMSF.createInstance("com.sun.star.text.AutoTextContainer");
-            oContainer = UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create AutoTextContainer", e);
-        }
+        XMultiServiceFactory myMSF = Param.getMSF();
+        Object oInst = myMSF.createInstance("com.sun.star.text.AutoTextContainer");
+        oContainer = UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
         String myGroupName="myNewGroup2*1";
 
         XAutoTextContainer xATC = UnoRuntime.queryInterface(XAutoTextContainer.class, oContainer);
@@ -126,17 +123,8 @@ public class SwXAutoTextGroup extends TestCase {
         } catch (com.sun.star.container.NoSuchElementException e) {
         }
 
-        try {
-            log.println("adding element with name '" + myGroupName + "'");
-            xATC.insertNewByName(myGroupName);
-        } catch (ElementExistException ex) {
-            ex.printStackTrace(log);
-            throw new StatusException("could not insert '"+myGroupName+"' into container",ex);
-        } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            ex.printStackTrace(log);
-            throw new StatusException("could not insert '"+myGroupName+"' into container",ex);
-        }
-
+        log.println("adding element with name '" + myGroupName + "'");
+        xATC.insertNewByName(myGroupName);
 
         XNameAccess oContNames = UnoRuntime.queryInterface(XNameAccess.class, oContainer);
 
@@ -147,12 +135,7 @@ public class SwXAutoTextGroup extends TestCase {
             }
         }
 
-        try{
-            oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),oContNames.getByName(myGroupName));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get AutoTextGroup '"+myGroupName + "'", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),oContNames.getByName(myGroupName));
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 

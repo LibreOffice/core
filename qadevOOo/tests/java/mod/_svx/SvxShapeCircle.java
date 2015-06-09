@@ -160,7 +160,7 @@ public class SvxShapeCircle extends TestCase {
      * </ul>
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XShape oShape = null;
@@ -176,23 +176,8 @@ public class SvxShapeCircle extends TestCase {
             (XPropertySet.class, oShape) ;
 
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
-        try {
-            props.setPropertyValue("CircleKind",
-                com.sun.star.drawing.CircleKind.FULL) ;
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Cann't set 'CircleKind' property : " + e);
-            throw new StatusException("Can't create component", e) ;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Cann't set 'CircleKind' property : " + e);
-            throw new StatusException("Can't create component", e) ;
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Cann't set 'CircleKind' property : " + e);
-            throw new StatusException("Can't create component", e) ;
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Cann't set 'CircleKind' property : " + e);
-            throw new StatusException("Can't create component", e) ;
-        }
-
+        props.setPropertyValue("CircleKind",
+            com.sun.star.drawing.CircleKind.FULL) ;
 
         oObj = oShape ;
 

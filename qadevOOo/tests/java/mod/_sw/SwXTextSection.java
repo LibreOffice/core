@@ -80,7 +80,7 @@ public class SwXTextSection extends TestCase {
      *    creating a TestEnvironment for the interfaces to be tested
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XInterface oTS = null;
@@ -152,14 +152,8 @@ public class SwXTextSection extends TestCase {
 
         tEnv.addObjRelation("TRO",Boolean.TRUE);
 
-        try {
-            TC = UnoRuntime.queryInterface(XTextColumns.class,
-                    oDocMSF.createInstance("com.sun.star.text.TextColumns"));
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace(log);
-            throw new StatusException
-                    ("Couldn't create instance of service TextColumns", e );
-        }
+        TC = UnoRuntime.queryInterface(XTextColumns.class,
+                oDocMSF.createInstance("com.sun.star.text.TextColumns"));
         tEnv.addObjRelation("TC",TC);
 
         tEnv.addObjRelation("CONTENT", UnoRuntime.queryInterface(XTextContent.class,instance));

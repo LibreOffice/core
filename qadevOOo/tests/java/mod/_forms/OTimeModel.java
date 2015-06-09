@@ -156,7 +156,7 @@ public class OTimeModel extends GenericModelTest {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 
         HashSet<String> exclude = new HashSet<String>();

@@ -30,8 +30,6 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -93,24 +91,11 @@ public class PathSettings extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
-        Object oInterface = null ;
-
         //now get the OButtonControl
-        try {
-            oInterface = Param.getMSF().createInstance
-                ("com.sun.star.comp.framework.PathSettings") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get service");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get GridControl", e );
-        }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
+        Object oInterface = Param.getMSF().createInstance
+            ("com.sun.star.comp.framework.PathSettings") ;
 
         oObj = (XInterface) oInterface ;
         log.println("ImplName: "+utils.getImplName(oObj));

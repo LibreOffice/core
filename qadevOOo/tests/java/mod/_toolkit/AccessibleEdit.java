@@ -41,7 +41,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
@@ -87,17 +86,11 @@ public class AccessibleEdit extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
 
-        try {
-            oObj = (XInterface) Param.getMSF().createInstance(
-                           "com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
+        oObj = (XInterface) Param.getMSF().createInstance(
+                       "com.sun.star.awt.Toolkit");
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
@@ -113,15 +106,10 @@ public class AccessibleEdit extends TestCase {
 
         XURLTransformer urlTransf = null;
 
-        try {
-            XInterface transf = (XInterface) Param.getMSF().createInstance(
-                                        "com.sun.star.util.URLTransformer");
-            urlTransf = UnoRuntime.queryInterface(
-                                XURLTransformer.class, transf);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create URLTransformer", e);
-        }
+        XInterface transf = (XInterface) Param.getMSF().createInstance(
+                                    "com.sun.star.util.URLTransformer");
+        urlTransf = UnoRuntime.queryInterface(
+                            XURLTransformer.class, transf);
 
         XDispatch getting = null;
         log.println("opening HyperlinkDialog");

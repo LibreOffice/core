@@ -71,22 +71,14 @@ public class ScUniqueCellFormatsObj extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         log.println("Getting the first sheet");
 
         XIndexAccess xIA = UnoRuntime.queryInterface(
                                    XIndexAccess.class, xSheetDoc.getSheets());
 
-        try {
-            oSheet = UnoRuntime.queryInterface(
-                             XSpreadsheet.class, xIA.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        }
+        oSheet = UnoRuntime.queryInterface(
+                         XSpreadsheet.class, xIA.getByIndex(0));
 
         changeColor("A1:A5", 0, 255, 0);
         changeColor("A6:B10", 255, 0, 0);

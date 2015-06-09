@@ -20,7 +20,6 @@ package mod._fwk;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -63,7 +62,7 @@ public class Frame extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
-        PrintWriter log ) throws StatusException {
+        PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
 
@@ -72,14 +71,8 @@ public class Frame extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
-        try {
-            log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a text document" );
+        xTextDoc = SOF.createTextDoc(null);
 
         frame = xTextDoc.getCurrentController().getFrame();
         oObj = UnoRuntime.queryInterface(XInterface.class, frame);

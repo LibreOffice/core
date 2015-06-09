@@ -20,7 +20,6 @@ package mod._lnn;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -73,22 +72,15 @@ public class Hyphenator extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-        (TestParameters Param, PrintWriter log) {
+        (TestParameters Param, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)xMSF.createInstance
-                ("com.sun.star.linguistic2.Hyphenator");
-            Object LP = xMSF.createInstance
-                ("com.sun.star.linguistic2.LinguProperties");
-            XPropertySet LProps = UnoRuntime.queryInterface(XPropertySet.class,LP);
-            LProps.setPropertyValue("IsGermanPreReform",Boolean.TRUE);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        XInterface oObj = (XInterface)xMSF.createInstance
+            ("com.sun.star.linguistic2.Hyphenator");
+        Object LP = xMSF.createInstance
+            ("com.sun.star.linguistic2.LinguProperties");
+        XPropertySet LProps = UnoRuntime.queryInterface(XPropertySet.class,LP);
+        LProps.setPropertyValue("IsGermanPreReform",Boolean.TRUE);
 
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);

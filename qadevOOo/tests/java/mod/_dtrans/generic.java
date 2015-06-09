@@ -20,7 +20,6 @@ package mod._dtrans;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -30,7 +29,8 @@ import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
- * <code>com.sun.star.comp.datatransfer.generic</code>. <p>
+ * <code>com.sun.star.comp.datatransfer.generic</code>.
+ * <p>
  */
 public class generic extends TestCase {
 
@@ -40,30 +40,21 @@ public class generic extends TestCase {
      * <code>com.sun.star.comp.datatransfer.generic</code>.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(
+            TestParameters Param, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) xMSF.createInstance
-                ("com.sun.star.datatransfer.clipboard.GenericClipboard");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        XInterface oObj = (XInterface) xMSF
+                .createInstance("com.sun.star.datatransfer.clipboard.GenericClipboard");
 
         if (oObj == null) {
-        log.println("[ERROR!] System type is *nix, unable to create object...");
-    }
+            log.println("[ERROR!] System type is *nix, unable to create object...");
+        }
         String Iname = util.utils.getImplName(oObj);
-        log.println("Implementation Name: "+Iname);
+        log.println("Implementation Name: " + Iname);
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         return tEnv;
     }
 
-
 }
-

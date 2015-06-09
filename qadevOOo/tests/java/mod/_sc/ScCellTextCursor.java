@@ -135,7 +135,7 @@ public class ScCellTextCursor extends TestCase {
     * @see com.sun.star.text.XText
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XCell aCell = null;
@@ -145,29 +145,14 @@ public class ScCellTextCursor extends TestCase {
         log.println( "Creating a test environment" );
 
         // get a soffice factory object
-        try {
-            log.println("Getting spreadsheet") ;
-            XSpreadsheets oSheets = xSheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+        log.println("Getting spreadsheet") ;
+        XSpreadsheets oSheets = xSheetDoc.getSheets() ;
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
-            log.println("Getting a cell from sheet") ;
-            aCell = oSheet.getCellByPosition(1,1) ;
-
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting cell object from spreadsheet document",e) ;
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting cell object from spreadsheet document",e) ;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting cell object from spreadsheet document",e) ;
-        }
+        log.println("Getting a cell from sheet") ;
+        aCell = oSheet.getCellByPosition(1,1) ;
 
         XText aText = UnoRuntime.queryInterface(XText.class, aCell);
         aText.setString("ScCellTextCursor");

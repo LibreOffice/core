@@ -36,7 +36,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.FormTools;
 import util.SOfficeFactory;
 import util.WriterTools;
@@ -70,7 +69,7 @@ public class UnoControlRadioButton extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
@@ -103,18 +102,12 @@ public class UnoControlRadioButton extends TestCase {
                                             xTextDoc.getCurrentController());
 
         //get the RadioButtonControl for the needed Object relations
-        try {
-            oObj = the_access.getControl(the_Model);
-            aControl = the_access.getControl(the_Model2);
-            the_win = the_access.getControl(the_Model).getPeer();
-            the_kit = the_win.getToolkit();
-            aDevice = the_kit.createScreenCompatibleDevice(200, 200);
-            aGraphic = aDevice.createGraphics();
-        } catch (Exception e) {
-            log.println("Couldn't get RadioButtonControl");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get RadioButtonControl", e);
-        }
+        oObj = the_access.getControl(the_Model);
+        aControl = the_access.getControl(the_Model2);
+        the_win = the_access.getControl(the_Model).getPeer();
+        the_kit = the_win.getToolkit();
+        aDevice = the_kit.createScreenCompatibleDevice(200, 200);
+        aGraphic = aDevice.createGraphics();
 
         log.println(
                 "creating a new environment for UnoControlRadioButton object");

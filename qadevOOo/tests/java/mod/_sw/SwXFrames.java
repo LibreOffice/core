@@ -90,7 +90,7 @@ public class SwXFrames extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-            TestParameters Param, PrintWriter log ) throws StatusException {
+            TestParameters Param, PrintWriter log ) throws Exception {
         XInterface oObj = null;
         XTextFrame oFrame1 = null;
         XText oText = null;
@@ -99,26 +99,14 @@ public class SwXFrames extends TestCase {
         XTextFramesSupplier oInterface = null;
 
         log.println( "creating a test environment" );
-        try {
-            oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
-            Object oInt = oDocMSF.createInstance("com.sun.star.text.TextFrame");
-            oFrame1 = UnoRuntime.queryInterface( XTextFrame.class, oInt );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace(log);
-            throw new StatusException
-                ("Couldn't create instance of TextFrame", e);
-        }
+        oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        Object oInt = oDocMSF.createInstance("com.sun.star.text.TextFrame");
+        oFrame1 = UnoRuntime.queryInterface( XTextFrame.class, oInt );
 
         oText = xTextDoc.getText();
         oCursor = oText.createTextCursor();
 
-        try {
-            oText.insertTextContent(oCursor, oFrame1, false);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException
-                ("Error: can't insert text content to text document", e);
-        }
+        oText.insertTextContent(oCursor, oFrame1, false);
 
         oInterface = UnoRuntime.queryInterface( XTextFramesSupplier.class, xTextDoc );
 

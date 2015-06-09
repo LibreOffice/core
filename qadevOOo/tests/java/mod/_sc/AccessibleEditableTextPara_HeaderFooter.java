@@ -53,17 +53,9 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XAccessibleContext oObj = null;
-        Object toolkit = null;
-
-        try {
-            toolkit = msf.createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
+        Object toolkit = msf.createInstance("com.sun.star.awt.Toolkit");
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);

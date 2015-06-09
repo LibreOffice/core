@@ -91,7 +91,7 @@ public class ScAnnotationTextCursor extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+            throws Exception {
 
         XInterface oObj = null;
 
@@ -101,33 +101,26 @@ public class ScAnnotationTextCursor extends TestCase {
 
         CellAddress cellPos = new CellAddress((short)0, 1, 2);
 
-        try {
-            log.println("Getting test object ") ;
+        log.println("Getting test object ") ;
 
-            XSpreadsheetDocument xArea = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
+        XSpreadsheetDocument xArea = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
 
-            XSpreadsheets oSheets = xArea.getSheets();
+        XSpreadsheets oSheets = xArea.getSheets();
 
-            XIndexAccess XAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        XIndexAccess XAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
 
-            XSpreadsheet oSheet = (XSpreadsheet)XAccess.getByIndex(cellPos.Sheet);
+        XSpreadsheet oSheet = (XSpreadsheet)XAccess.getByIndex(cellPos.Sheet);
 
-            XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
+        XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
 
-            XCell oCell = oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
+        XCell oCell = oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
 
-            XSheetAnnotationAnchor oAnnoA = UnoRuntime.queryInterface(XSheetAnnotationAnchor.class, oCell);
+        XSheetAnnotationAnchor oAnnoA = UnoRuntime.queryInterface(XSheetAnnotationAnchor.class, oCell);
 
-            XSheetAnnotation oAnno = oAnnoA.getAnnotation();
-            XSimpleText aText = UnoRuntime.queryInterface(XSimpleText.class,oAnno);
-            aText.setString("A nice little Test");
-            oObj = aText.createTextCursor();
-
-        } catch (Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                    "Error getting test object from spreadsheet document",e) ;
-        }
+        XSheetAnnotation oAnno = oAnnoA.getAnnotation();
+        XSimpleText aText = UnoRuntime.queryInterface(XSimpleText.class,oAnno);
+        aText.setString("A nice little Test");
+        oObj = aText.createTextCursor();
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

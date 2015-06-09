@@ -20,8 +20,6 @@ package mod._fwk;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -91,26 +89,16 @@ public class Desktop extends TestCase {
     * Creates service <code>com.sun.star.frame.Desktop</code>.
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
-        try {
-            log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println( "creating a text document" );
+        xTextDoc = SOF.createTextDoc(null);
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)Param.getMSF().createInstance(
+        XInterface oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.Desktop");
-        } catch(com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create instance"));
-        }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

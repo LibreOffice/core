@@ -65,17 +65,11 @@ public class BridgeFactory extends TestCase {
      * service as object to be tested.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
-        XInterface oObj = null ;
-
-        try {
-            oObj = (XInterface)
+        XInterface oObj = (XInterface)
                     Param.getMSF().createInstance
                     ("com.sun.star.bridge.BridgeFactory") ;
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create object environment", e) ;
-        }
 
         if (oObj == null)
             throw new StatusException("Can't create service",

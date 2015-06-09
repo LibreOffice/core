@@ -62,16 +62,10 @@ public class ODriver extends TestCase {
      */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log ) throws StatusException {
+        TestParameters Param, PrintWriter log ) throws Exception {
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)Param.getMSF().createInstance(
-                "com.sun.star.comp.sdbc.calc.ODriver");
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create object"));
-        }
+        XInterface oObj = (XInterface)Param.getMSF().createInstance(
+            "com.sun.star.comp.sdbc.calc.ODriver");
 
         log.println("creating a new environment for calc.ODriver object");
         TestEnvironment tEnv = new TestEnvironment(oObj);

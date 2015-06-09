@@ -127,7 +127,7 @@ public class SdGenericDrawPage extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(
-                                    TestParameters Param, PrintWriter log) {
+                                    TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XShapes oShapes = null;
@@ -145,13 +145,8 @@ public class SdGenericDrawPage extends TestCase {
         XDrawPages oDPn = oDPS.getDrawPages();
         XIndexAccess oDPi = UnoRuntime.queryInterface
             (XIndexAccess.class,oDPn);
-        try {
-            oObj = (XDrawPage) AnyConverter.toObject(
-                        new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        }
+        oObj = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(0));
 
         //put something on the drawpage
         log.println( "inserting some Shapes" );

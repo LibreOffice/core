@@ -20,7 +20,6 @@ package mod._lng;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -65,18 +64,11 @@ public class LinguProps extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+            throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)xMSF.createInstance
-                ("com.sun.star.linguistic2.LinguProperties");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        XInterface oObj = (XInterface)xMSF.createInstance
+            ("com.sun.star.linguistic2.LinguProperties");
 
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);

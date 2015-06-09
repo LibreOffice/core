@@ -37,11 +37,9 @@ import com.sun.star.util.XURLTransformer;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
@@ -90,17 +88,13 @@ public class AccessibleCheckBox extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XMultiServiceFactory msf = Param.getMSF();
         log.println("Creating text document");
 
         if (xTextDoc == null) {
-            try {
-                SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
-                xTextDoc = SOF.createTextDoc(null);
-            } catch (com.sun.star.uno.Exception e) {
-                throw new StatusException("Can't create document", e);
-            }
+            SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
+            xTextDoc = SOF.createTextDoc(null);
         }
 
         util.utils.pause(Param.getInt("ShortWait"));
@@ -109,13 +103,7 @@ public class AccessibleCheckBox extends TestCase {
 
         log.println("getting toolkit");
 
-        try {
-            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
+        oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);

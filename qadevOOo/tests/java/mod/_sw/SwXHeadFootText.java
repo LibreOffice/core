@@ -116,7 +116,7 @@ public class SwXHeadFootText extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
         XPropertySet PropSet;
         XNameAccess PageStyles = null;
@@ -127,46 +127,21 @@ public class SwXHeadFootText extends TestCase {
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
 
         // obtains style 'Standatd' from style family 'PageStyles'
-        try {
-            PageStyles = (XNameAccess) AnyConverter.toObject(
-                new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
-            StdStyle = (XStyle) AnyConverter.toObject(
-                    new Type(XStyle.class),PageStyles.getByName("Standard"));
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Error getting style by name!", e);
-        } catch ( com.sun.star.container.NoSuchElementException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Error, no such style name! ", e);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Error getting style by name!", e);
-        }
+        PageStyles = (XNameAccess) AnyConverter.toObject(
+            new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
+        StdStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),PageStyles.getByName("Standard"));
 
         PropSet = UnoRuntime.queryInterface( XPropertySet.class, StdStyle);
 
         // changing/getting some properties
-        try {
-            log.println( "Switching on header" );
-            PropSet.setPropertyValue("HeaderIsOn", Boolean.TRUE);
-            log.println( "Switching on footer" );
-            PropSet.setPropertyValue("FooterIsOn", Boolean.TRUE);
-            log.println( "Get header text" );
-            oObj = UnoRuntime.queryInterface(
-                        XText.class, PropSet.getPropertyValue("HeaderText"));
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set/get propertyValue...", e);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set/get propertyValue...", e);
-        } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set/get propertyValue...", e);
-        } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set/get propertyValue...", e);
-        }
+        log.println( "Switching on header" );
+        PropSet.setPropertyValue("HeaderIsOn", Boolean.TRUE);
+        log.println( "Switching on footer" );
+        PropSet.setPropertyValue("FooterIsOn", Boolean.TRUE);
+        log.println( "Get header text" );
+        oObj = UnoRuntime.queryInterface(
+                    XText.class, PropSet.getPropertyValue("HeaderText"));
 
         log.println( "creating a new environment for bodytext object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

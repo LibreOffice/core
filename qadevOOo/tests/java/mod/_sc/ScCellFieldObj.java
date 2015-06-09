@@ -114,61 +114,43 @@ public class ScCellFieldObj extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XText oText = null;
         XTextContent oContent = null;
         XInterface aField = null;
 
-        try {
-            // we want to create an instance of ScCellFieldObj.
-            // to do this we must get an MultiServiceFactory.
+        // we want to create an instance of ScCellFieldObj.
+        // to do this we must get an MultiServiceFactory.
 
-            XMultiServiceFactory _oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xSheetDoc);
+        XMultiServiceFactory _oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xSheetDoc);
 
-            // Now create the instance of com.sun.star.text.TextField.
-            // This object has type ScCellFieldObj.
+        // Now create the instance of com.sun.star.text.TextField.
+        // This object has type ScCellFieldObj.
 
-            oObj = (XInterface)
-                _oMSF.createInstance("com.sun.star.text.TextField.URL");
+        oObj = (XInterface)
+            _oMSF.createInstance("com.sun.star.text.TextField.URL");
 
-            aField = (XInterface)
-                _oMSF.createInstance("com.sun.star.text.TextField.URL");
-            oContent = UnoRuntime.queryInterface(XTextContent.class, aField);
+        aField = (XInterface)
+            _oMSF.createInstance("com.sun.star.text.TextField.URL");
+        oContent = UnoRuntime.queryInterface(XTextContent.class, aField);
 
-            XSpreadsheets oSheets = xSheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+        XSpreadsheets oSheets = xSheetDoc.getSheets() ;
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
-            XCell oCell = oSheet.getCellByPosition(2,3);
-            oText = UnoRuntime.queryInterface(XText.class, oCell);
+        XCell oCell = oSheet.getCellByPosition(2,3);
+        oText = UnoRuntime.queryInterface(XText.class, oCell);
 
-            XTextContent oTextContent = UnoRuntime.queryInterface(XTextContent.class, oObj);
+        XTextContent oTextContent = UnoRuntime.queryInterface(XTextContent.class, oObj);
 
-            oText.insertTextContent(
-                oText.createTextCursor(), oTextContent, true);
+        oText.insertTextContent(
+            oText.createTextCursor(), oTextContent, true);
 
-            oCell = oSheet.getCellByPosition(1,4);
-            oText = UnoRuntime.queryInterface(XText.class, oCell);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        }
+        oCell = oSheet.getCellByPosition(1,4);
+        oText = UnoRuntime.queryInterface(XText.class, oCell);
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
 

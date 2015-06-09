@@ -20,7 +20,6 @@ package mod._sc;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -49,7 +48,7 @@ public class ScSpreadsheetSettings extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) throws StatusException {
+        TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -58,13 +57,8 @@ public class ScSpreadsheetSettings extends TestCase {
         log.println( "creating a test environment" );
 
         // create testobject here
-        try {
-            oObj = (XInterface)tParam.getMSF().
-                createInstance("com.sun.star.sheet.GlobalSheetSettings");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        oObj = (XInterface)tParam.getMSF().
+            createInstance("com.sun.star.sheet.GlobalSheetSettings");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

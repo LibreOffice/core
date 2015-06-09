@@ -32,13 +32,9 @@ public final class DefaultProvider extends TestCase {
     protected TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log)
     {
-        try {
-            return ProviderTestEnvironment.create(
-                AnyConverter.toObject(
-                    XInterface.class,
-                    theDefaultProvider.get(tParam.getComponentContext())));
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        }
+        return ProviderTestEnvironment.create(
+            AnyConverter.toObject(
+                XInterface.class,
+                theDefaultProvider.get(tParam.getComponentContext())));
     }
 }

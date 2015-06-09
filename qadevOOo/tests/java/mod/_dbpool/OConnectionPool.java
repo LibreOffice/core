@@ -43,17 +43,13 @@ import com.sun.star.uno.XInterface;
 */
 public class OConnectionPool extends TestCase {
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oObj = null;
 
-        try {
-            oObj = (XInterface)
-                xMSF.createInstance("com.sun.star.sdbc.ConnectionPool");
-        } catch(com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create instance"));
-        }
+        oObj = (XInterface)
+            xMSF.createInstance("com.sun.star.sdbc.ConnectionPool");
 
         log.println("creating a new environment for object");
         TestEnvironment tEnv = new TestEnvironment( oObj );

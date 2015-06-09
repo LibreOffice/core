@@ -102,7 +102,7 @@ public class ScTableRowObj extends TestCase {
     * @see com.sun.star.table.TableRow
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -113,33 +113,15 @@ public class ScTableRowObj extends TestCase {
         XSpreadsheet xSpreadsheet = null;
         XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
         XNameAccess oNames = UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
-        try {
-            xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
-                new Type(XSpreadsheet.class),
-                    oNames.getByName(oNames.getElementNames()[0]));
+        xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
+            new Type(XSpreadsheet.class),
+                oNames.getByName(oNames.getElementNames()[0]));
 
-            XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
-            XTableRows oRows = oColumnRowRange.getRows();
-            XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oRows);
-            oObj = (XInterface) AnyConverter.toObject(
-                    new Type(XInterface.class),oIndexAccess.getByIndex(6));
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception during creating TestEnvironment", e);
-        } catch(com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception during creating TestEnvironment", e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception during creating TestEnvironment", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception during creating TestEnvironment", e);
-        }
+        XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
+        XTableRows oRows = oColumnRowRange.getRows();
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oRows);
+        oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),oIndexAccess.getByIndex(6));
 
         log.println("creating a new environment for object");
         TestEnvironment tEnv = new TestEnvironment(oObj);

@@ -115,7 +115,7 @@ public class XMLStylesExporter extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
         XMultiServiceFactory xMSF =  tParam.getMSF() ;
@@ -128,35 +128,26 @@ public class XMLStylesExporter extends TestCase {
         filter.addTag(new XMLTools.Tag("office:document-styles"));
         filter.addTag(new XMLTools.Tag("style:style","style:name", newName));
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Calc.XMLStylesExporter", new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            xEx.setSourceDocument(xSheetDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Calc.XMLStylesExporter", new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        xEx.setSourceDocument(xSheetDoc);
 
-            // Obtaining and changing property values
-            XStyleFamiliesSupplier styleSup = UnoRuntime.queryInterface(
-                XStyleFamiliesSupplier.class, xSheetDoc);
-            XNameAccess StyleFamilies = styleSup.getStyleFamilies();
-            String[] styleFamiliesNames = StyleFamilies.getElementNames();
-            XNameContainer StyleFamilyName = (XNameContainer)
-                AnyConverter.toObject(new Type(XNameContainer.class),
-                    StyleFamilies.getByName(styleFamiliesNames[0]));
-            Object SC = SOF.createInstance(
-                xSheetDoc, "com.sun.star.style.CellStyle");
-            XStyle StyleCell = UnoRuntime.queryInterface(XStyle.class,SC);
-            StyleFamilyName.insertByName(newName, StyleCell);
+        // Obtaining and changing property values
+        XStyleFamiliesSupplier styleSup = UnoRuntime.queryInterface(
+            XStyleFamiliesSupplier.class, xSheetDoc);
+        XNameAccess StyleFamilies = styleSup.getStyleFamilies();
+        String[] styleFamiliesNames = StyleFamilies.getElementNames();
+        XNameContainer StyleFamilyName = (XNameContainer)
+            AnyConverter.toObject(new Type(XNameContainer.class),
+                StyleFamilies.getByName(styleFamiliesNames[0]));
+        Object SC = SOF.createInstance(
+            xSheetDoc, "com.sun.star.style.CellStyle");
+        XStyle StyleCell = UnoRuntime.queryInterface(XStyle.class,SC);
+        StyleFamilyName.insertByName(newName, StyleCell);
 
-            log.println("fill sheet 1 with content...");
-            util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 0, 3, 3, 50, 100);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment.", e);
-        } catch (java.lang.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment.", e);
-        }
+        log.println("fill sheet 1 with content...");
+        util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 0, 3, 3, 50, 100);
 
         // create testobject here
         log.println( "creating a new environment" );

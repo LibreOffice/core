@@ -115,7 +115,7 @@ public class XMLContentExporter extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -131,30 +131,25 @@ public class XMLContentExporter extends TestCase {
         filter.addTag(new XMLTools.Tag("draw:page","draw:name","NewSlide1"));
         filter.addTag(new XMLTools.Tag("draw:page","draw:name","NewSlide2"));
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Draw.XMLContentExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Draw.XMLContentExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
 
-            XDrawPagesSupplier supp = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
-            XDrawPages set = supp.getDrawPages();
+        XDrawPagesSupplier supp = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
+        XDrawPages set = supp.getDrawPages();
 
-            // This is an XML-export BUG (new slide named "NewSlide2"
-            // can not be exported to XML)
-            set.insertNewByIndex(1);
+        // This is an XML-export BUG (new slide named "NewSlide2"
+        // can not be exported to XML)
+        set.insertNewByIndex(1);
 
-            XDrawPage page1 = UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(0));
-            XNamed NPage1 = UnoRuntime.queryInterface(XNamed.class,page1);
-            NPage1.setName("NewSlide1");
-            XDrawPage page2 = UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(1));
-            XNamed NPage2 = UnoRuntime.queryInterface(XNamed.class,page2);
-            NPage2.setName("NewSlide2");
-            xEx.setSourceDocument(xDrawDoc);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        XDrawPage page1 = UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(0));
+        XNamed NPage1 = UnoRuntime.queryInterface(XNamed.class,page1);
+        NPage1.setName("NewSlide1");
+        XDrawPage page2 = UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(1));
+        XNamed NPage2 = UnoRuntime.queryInterface(XNamed.class,page2);
+        NPage2.setName("NewSlide2");
+        xEx.setSourceDocument(xDrawDoc);
 
         // create testobject here
         log.println( "creating a new environment" );

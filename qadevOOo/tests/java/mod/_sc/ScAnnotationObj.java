@@ -39,7 +39,6 @@ import com.sun.star.table.XCellRange;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which represents some text annotation
@@ -111,10 +110,7 @@ public class ScAnnotationObj extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
-            throws StatusException {
-
-        XInterface oObj = null;
-
+            throws Exception {
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -129,31 +125,15 @@ public class ScAnnotationObj extends TestCase {
 
         XIndexAccess XAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         XCell oCell = null;
-        try {
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),XAccess.getByIndex(cellPos.Sheet));
-            XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
-            oCell = oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e);
-        }
+        XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),XAccess.getByIndex(cellPos.Sheet));
+        XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
+        oCell = oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
 
         XSheetAnnotationAnchor oAnnoA = UnoRuntime.queryInterface(XSheetAnnotationAnchor.class, oCell);
         XSheetAnnotation oAnno = oAnnoA.getAnnotation();
 
-        oObj = oAnno;
-
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment( oAnno );
 
         tEnv.addObjRelation("CELLPOS", cellPos);
 

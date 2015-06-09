@@ -34,7 +34,6 @@ import com.sun.star.util.XCloseable;
 import com.sun.star.ui.ConfigurationEvent;
 import com.sun.star.ui.XUIConfigurationManager;
 import ifc.ui._XUIConfigurationManager;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -74,46 +73,40 @@ public class ModuleUIConfigurationManager extends TestCase {
      * Create environment.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         TestEnvironment tEnv = null;
 
-        try {
-            xMSF = tParam.getMSF();
+        xMSF = tParam.getMSF();
 
-            log.println("Creating instance...");
-            xTextDoc = WriterTools.createTextDoc(xMSF);
+        log.println("Creating instance...");
+        xTextDoc = WriterTools.createTextDoc(xMSF);
 
-            Object o = xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
-            XModuleUIConfigurationManagerSupplier xMUICMS = UnoRuntime.queryInterface(XModuleUIConfigurationManagerSupplier.class, o);
+        Object o = xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
+        XModuleUIConfigurationManagerSupplier xMUICMS = UnoRuntime.queryInterface(XModuleUIConfigurationManagerSupplier.class, o);
 
-            util.dbg.printInterfaces(xMUICMS);
-            oObj = xMUICMS.getUIConfigurationManager("com.sun.star.text.TextDocument");
+        util.dbg.printInterfaces(xMUICMS);
+        oObj = xMUICMS.getUIConfigurationManager("com.sun.star.text.TextDocument");
 
-            log.println("TestObject: " + utils.getImplName(oObj));
-            tEnv = new TestEnvironment(oObj);
+        log.println("TestObject: " + utils.getImplName(oObj));
+        tEnv = new TestEnvironment(oObj);
 
-            XNameAccess xMM = UnoRuntime.queryInterface(XNameAccess.class, xMSF.createInstance("com.sun.star.comp.framework.ModuleManager"));
-            xMM.getElementNames();
+        XNameAccess xMM = UnoRuntime.queryInterface(XNameAccess.class, xMSF.createInstance("com.sun.star.comp.framework.ModuleManager"));
+        xMM.getElementNames();
 
-            // the short cut manager service name
-            // 2do: correct the service name when it's no longer in
-            tEnv.addObjRelation("XConfigurationManager.ShortCutManager",
-                "com.sun.star.ui.ModuleAcceleratorConfiguration");
+        // the short cut manager service name
+        // 2do: correct the service name when it's no longer in
+        tEnv.addObjRelation("XConfigurationManager.ShortCutManager",
+            "com.sun.star.ui.ModuleAcceleratorConfiguration");
 
-            // the resourceURL
-            tEnv.addObjRelation("XModuleUIConfigurationManager.ResourceURL",
-                                            "private:resource/menubar/menubar");
-            tEnv.addObjRelation("XUIConfiguration.XUIConfigurationListenerImpl",
-                            new ConfigurationListener(log,
-                            UnoRuntime.queryInterface(
-                            XUIConfigurationManager.class, oObj), xMSF));
-            tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigManagerImplementationName",
-                        "com.sun.star.comp.framework.ModuleUIConfigurationManager");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Cannot create test object", e);
-        }
+        // the resourceURL
+        tEnv.addObjRelation("XModuleUIConfigurationManager.ResourceURL",
+                                        "private:resource/menubar/menubar");
+        tEnv.addObjRelation("XUIConfiguration.XUIConfigurationListenerImpl",
+                        new ConfigurationListener(log,
+                        UnoRuntime.queryInterface(
+                        XUIConfigurationManager.class, oObj), xMSF));
+        tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigManagerImplementationName",
+                    "com.sun.star.comp.framework.ModuleUIConfigurationManager");
         return tEnv;
     }
 

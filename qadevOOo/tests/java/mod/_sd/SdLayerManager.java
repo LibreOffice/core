@@ -109,7 +109,7 @@ public class SdLayerManager extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(
-                                    TestParameters Param, PrintWriter log) {
+                                    TestParameters Param, PrintWriter log) throws Exception {
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -133,20 +133,8 @@ public class SdLayerManager extends TestCase {
         XDrawPages oDPn = oDPS.getDrawPages();
         XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class,oDPn);
 
-        XDrawPage oDP = null;
-        try {
-            oDP = (XDrawPage) AnyConverter.toObject(
-                    new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        }
+        XDrawPage oDP = (XDrawPage) AnyConverter.toObject(
+                new Type(XDrawPage.class),oDPi.getByIndex(0));
 
         XShapes oShapes = UnoRuntime.queryInterface(XShapes.class, oDP);
 

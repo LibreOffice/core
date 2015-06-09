@@ -19,8 +19,6 @@ package mod._sc;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -119,7 +117,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         if (xSheetDoc != null) {
             XComponent oComp = UnoRuntime.queryInterface(
                                        XComponent.class, xSheetDoc);
@@ -128,14 +126,8 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
-        try {
-            log.println("creating a Spreadsheet document");
-            xSheetDoc = SOF.createCalcDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a Spreadsheet document");
+        xSheetDoc = SOF.createCalcDoc(null);
 
         XModel xModel = UnoRuntime.queryInterface(XModel.class,
                                                            xSheetDoc);
@@ -145,31 +137,17 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
         //setting value of cell A1
         XCell xCell = null;
 
-        try {
-            log.println("Getting spreadsheet");
+        log.println("Getting spreadsheet");
 
-            XSpreadsheets oSheets = xSheetDoc.getSheets();
-            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
-                                                XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                                          new Type(XSpreadsheet.class),
-                                          oIndexSheets.getByIndex(0));
+        XSpreadsheets oSheets = xSheetDoc.getSheets();
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
+                                            XIndexAccess.class, oSheets);
+        XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                                      new Type(XSpreadsheet.class),
+                                      oIndexSheets.getByIndex(0));
 
-            log.println("Getting a cell from sheet");
-            xCell = oSheet.getCellByPosition(0, 0);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        }
+        log.println("Getting a cell from sheet");
+        xCell = oSheet.getCellByPosition(0, 0);
 
         xCell.setFormula("Value");
 
@@ -180,67 +158,39 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
         XNameAccess xNA = xSFS.getStyleFamilies();
         XPropertySet xPropSet = null;
 
-        try {
-            Object oPageStyles = xNA.getByName("PageStyles");
-            xNA = UnoRuntime.queryInterface(XNameAccess.class,
-                                                          oPageStyles);
+        Object oPageStyles = xNA.getByName("PageStyles");
+        xNA = UnoRuntime.queryInterface(XNameAccess.class,
+                                                      oPageStyles);
 
-            Object oDefStyle = xNA.getByName("Default");
-            xPropSet = UnoRuntime.queryInterface(
-                               XPropertySet.class, oDefStyle);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            throw new StatusException(e, Status.failed("Couldn't get element"));
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            throw new StatusException(e, Status.failed("Couldn't get element"));
-        }
+        Object oDefStyle = xNA.getByName("Default");
+        xPropSet = UnoRuntime.queryInterface(
+                           XPropertySet.class, oDefStyle);
 
-        try {
-            xPropSet.setPropertyValue("PrintHeaders", Boolean.TRUE);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            throw new StatusException(e, Status.failed(
-                                              "Couldn't set property 'PrintHeaders'"));
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            throw new StatusException(e, Status.failed(
-                                              "Couldn't set property 'PrintHeaders'"));
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            throw new StatusException(e, Status.failed(
-                                              "Couldn't set property 'PrintHeaders'"));
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            throw new StatusException(e, Status.failed(
-                                              "Couldn't set property 'PrintHeaders'"));
-        }
+        xPropSet.setPropertyValue("PrintHeaders", Boolean.TRUE);
 
         //switching to 'Print Preview' mode
-        try {
-            XDispatchProvider xDispProv = UnoRuntime.queryInterface(
-                                                  XDispatchProvider.class,
-                                                  xController);
-            XURLTransformer xParser = UnoRuntime.queryInterface(
-                                              XURLTransformer.class,
-                                              Param.getMSF()
-                                                   .createInstance("com.sun.star.util.URLTransformer"));
-            URL[] aParseURL = new URL[1];
-            aParseURL[0] = new URL();
-            aParseURL[0].Complete = ".uno:PrintPreview";
-            xParser.parseStrict(aParseURL);
+        XDispatchProvider xDispProv = UnoRuntime.queryInterface(
+                                              XDispatchProvider.class,
+                                              xController);
+        XURLTransformer xParser = UnoRuntime.queryInterface(
+                                          XURLTransformer.class,
+                                          Param.getMSF()
+                                               .createInstance("com.sun.star.util.URLTransformer"));
+        URL[] aParseURL = new URL[1];
+        aParseURL[0] = new URL();
+        aParseURL[0].Complete = ".uno:PrintPreview";
+        xParser.parseStrict(aParseURL);
 
-            URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
+        URL aURL = aParseURL[0];
+        XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
 
-            if (xDispatcher != null) {
-                xDispatcher.dispatch(aURL, null);
-            }
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't change mode"));
+        if (xDispatcher != null) {
+            xDispatcher.dispatch(aURL, null);
         }
 
         XInterface oObj = null;
         for (int i = 0;; ++i) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            Thread.sleep(500);
             try {
                 XAccessible xRoot = AccessibilityTools.getAccessibleObject(
                     AccessibilityTools.getCurrentWindow(

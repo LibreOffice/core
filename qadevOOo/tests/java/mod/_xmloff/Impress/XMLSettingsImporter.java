@@ -112,7 +112,7 @@ public class XMLSettingsImporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-        (TestParameters tParam, PrintWriter log ) throws StatusException {
+        (TestParameters tParam, PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
         Object oInt = null ;
@@ -123,14 +123,8 @@ public class XMLSettingsImporter extends TestCase {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
 
-        try {
-            oInt = xMSF.createInstance
-                ("com.sun.star.comp.Impress.XMLSettingsImporter") ;
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        oInt = xMSF.createInstance
+            ("com.sun.star.comp.Impress.XMLSettingsImporter") ;
 
         oObj = (XInterface) oInt ;
 
@@ -169,13 +163,8 @@ public class XMLSettingsImporter extends TestCase {
         XModel xImpressModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
         XController xController = xImpressModel.getCurrentController();
         final XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
-        try {
-            log.println("Property \"IsLayerMode\" before import is " +
-                xPropSet.getPropertyValue("IsLayerMode"));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create component.", e);
-        }
+        log.println("Property \"IsLayerMode\" before import is " +
+            xPropSet.getPropertyValue("IsLayerMode"));
         final PrintWriter logF = log;
         tEnv.addObjRelation("XDocumentHandler.ImportChecker",
             new ifc.xml.sax._XDocumentHandler.ImportChecker() {

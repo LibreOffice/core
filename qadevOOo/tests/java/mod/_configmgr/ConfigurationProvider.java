@@ -29,20 +29,16 @@ public final class ConfigurationProvider extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log)
+        TestParameters tParam, PrintWriter log) throws Exception
     {
         // Create a non-default ConfigurationProvider instance, so that testing
         // its XComponent.dispose does not accidentally dispose the
         // DefaultProvider:
         XComponentContext ctxt = tParam.getComponentContext();
-        try {
             return ProviderTestEnvironment.create(
                 ctxt.getServiceManager().createInstanceWithArgumentsAndContext(
                     "com.sun.star.configuration.ConfigurationProvider",
                     new Object[] { new NamedValue("Locale", "*") },
                     ctxt));
-        } catch (com.sun.star.uno.Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

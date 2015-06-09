@@ -34,7 +34,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.DrawTools;
 import util.FormTools;
 import util.InstCreator;
@@ -138,7 +137,7 @@ public class SvxDrawPage extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
         XShape oShape = null;
         XDrawPages oDP = null;
@@ -151,40 +150,26 @@ public class SvxDrawPage extends TestCase {
         // first we write what we are intend to do to log file
         log.println("creating a test environment");
 
-        try {
-            log.println("getting Drawpages");
+        log.println("getting Drawpages");
 
-            XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(
-                                              XDrawPagesSupplier.class, xDoc);
-            oDP = oDPS.getDrawPages();
-            oDP.insertNewByIndex(1);
-            oDP.insertNewByIndex(2);
-            oObj = (XDrawPage) AnyConverter.toObject(new Type(XDrawPage.class),
-                                                     oDP.getByIndex(0));
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(
+                                          XDrawPagesSupplier.class, xDoc);
+        oDP = oDPS.getDrawPages();
+        oDP.insertNewByIndex(1);
+        oDP.insertNewByIndex(2);
+        oObj = (XDrawPage) AnyConverter.toObject(new Type(XDrawPage.class),
+                                                 oDP.getByIndex(0));
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                         tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     tParam.getMSF());
 
-            oShape = SOF.createShape(xComp, 5000, 3500, 7500, 5000,
-                                     "Rectangle");
-            DrawTools.getShapes((XDrawPage) oObj).add(oShape);
+        oShape = SOF.createShape(xComp, 5000, 3500, 7500, 5000,
+                                 "Rectangle");
+        DrawTools.getShapes((XDrawPage) oObj).add(oShape);
 
-            XShape oShape1 = SOF.createShape(xComp, 5000, 5500, 5000, 5000,
-                                             "Rectangle");
-            DrawTools.getShapes((XDrawPage) oObj).add(oShape1);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Couldn't create insance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Couldn't create insance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Couldn't create insance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment", e);
-        }
+        XShape oShape1 = SOF.createShape(xComp, 5000, 5500, 5000, 5000,
+                                         "Rectangle");
+        DrawTools.getShapes((XDrawPage) oObj).add(oShape1);
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment(oObj);

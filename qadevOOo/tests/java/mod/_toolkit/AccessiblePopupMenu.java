@@ -33,18 +33,14 @@ import com.sun.star.uno.XInterface;
 
 import java.awt.Robot;
 import java.awt.event.InputEvent;
-
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
-
 
 public class AccessiblePopupMenu extends TestCase {
     private static XTextDocument xTextDoc;
@@ -56,8 +52,7 @@ public class AccessiblePopupMenu extends TestCase {
     @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-                                                                Param.getMSF()));
+                DesktopTools.createDesktop(Param.getMSF()));
     }
 
     /**
@@ -87,20 +82,20 @@ public class AccessiblePopupMenu extends TestCase {
     }
 
     /**
-     * Creates a text document.
-     * Then obtains an accessible object with
-     * the role <code>AccessibleRole.PUSHBUTTON</code> and with the name
-     * <code>"Bold"</code>.
-     * Object relations created :
+     * Creates a text document. Then obtains an accessible object with the role
+     * <code>AccessibleRole.PUSHBUTTON</code> and with the name
+     * <code>"Bold"</code>. Object relations created :
      * <ul>
-     *  <li> <code>'EventProducer'</code> for
-     *      {@link ifc.accessibility._XAccessibleEventBroadcaster}</li>
-     *  <li> <code>'XAccessibleText.Text'</code> for
-     *      {@link ifc.accessibility._XAccessibleText}: the name of button</li>
+     * <li> <code>'EventProducer'</code> for
+     * {@link ifc.accessibility._XAccessibleEventBroadcaster}</li>
+     * <li> <code>'XAccessibleText.Text'</code> for
+     * {@link ifc.accessibility._XAccessibleText}: the name of button</li>
      * </ul>
      *
-     * @param tParam test parameters
-     * @param log writer to log information while testing
+     * @param tParam
+     *            test parameters
+     * @param log
+     *            writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
      * @see com.sun.star.accessibility.AccessibleRole
@@ -111,7 +106,7 @@ public class AccessiblePopupMenu extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+            PrintWriter log) throws Exception{
         log.println("creating a test environment");
 
         if (xTextDoc != null) {
@@ -119,38 +114,30 @@ public class AccessiblePopupMenu extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
 
         XInterface toolkit = null;
 
-        try {
-            log.println("creating a text document");
-            xTextDoc = SOF.createTextDoc(null);
-            toolkit = (XInterface) tParam.getMSF().createInstance(
-                              "com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a text document");
+        xTextDoc = SOF.createTextDoc(null);
+        toolkit = (XInterface) tParam.getMSF().createInstance(
+                "com.sun.star.awt.Toolkit");
 
         util.utils.shortWait();
 
-        XModel aModel = UnoRuntime.queryInterface(XModel.class,
-                                                           xTextDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         XInterface oObj = null;
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(
-                                  aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
+                AccessibleRole.PANEL);
 
         XAccessibleComponent window = UnoRuntime.queryInterface(
-                                              XAccessibleComponent.class, oObj);
+                XAccessibleComponent.class, oObj);
 
         point = window.getLocationOnScreen();
         Rectangle rect = window.getBounds();
@@ -168,43 +155,45 @@ public class AccessiblePopupMenu extends TestCase {
 
         util.utils.shortWait();
 
-        XExtendedToolkit tk = UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, toolkit);
+        XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class,
+                toolkit);
 
         try {
             xWindow = UnoRuntime.queryInterface(XWindow.class,
-                                                          tk.getTopWindow(0));
+                    tk.getTopWindow(0));
 
             xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+            AccessibilityTools.printAccessibleTree(log, xRoot,
+                    tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't get Window");
         }
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.POPUP_MENU);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
+                AccessibleRole.POPUP_MENU);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                            Boolean.FALSE);
+                Boolean.FALSE);
 
         final XAccessibleSelection sel = UnoRuntime.queryInterface(
-                                                 XAccessibleSelection.class,
-                                                 oObj);
+                XAccessibleSelection.class, oObj);
 
-        tEnv.addObjRelation("EventProducer",
-                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
-            public void fireEvent() {
-                try {
-                    sel.selectAccessibleChild(2);
-                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    System.out.println("Couldn't fire event");
-                }
-            }
-        });
+        tEnv.addObjRelation(
+                "EventProducer",
+                new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+                    public void fireEvent() {
+                        try {
+                            sel.selectAccessibleChild(2);
+                        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                            System.out.println("Couldn't fire event");
+                        }
+                    }
+                });
 
         return tEnv;
     }

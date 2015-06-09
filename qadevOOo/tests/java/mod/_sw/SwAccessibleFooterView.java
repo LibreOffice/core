@@ -71,7 +71,7 @@ public class SwAccessibleFooterView extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XNameAccess PageStyles = null;
@@ -81,49 +81,24 @@ public class SwAccessibleFooterView extends TestCase {
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
 
         // obtains style 'Standard' from style family 'PageStyles'
-        try {
-            PageStyles = (XNameAccess) AnyConverter.toObject(
-                new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
-            StdStyle = (XStyle) AnyConverter.toObject(
-                    new Type(XStyle.class),PageStyles.getByName("Standard"));
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Error getting style by name!", e);
-        } catch ( com.sun.star.container.NoSuchElementException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Error, no such style name! ", e);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Error getting style by name!", e);
-        }
+        PageStyles = (XNameAccess) AnyConverter.toObject(
+            new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
+        StdStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),PageStyles.getByName("Standard"));
 
         final XPropertySet PropSet = UnoRuntime.queryInterface( XPropertySet.class, StdStyle);
 
         // changing/getting some properties
-        try {
-            log.println( "Switching on footer" );
-            PropSet.setPropertyValue("FooterIsOn", Boolean.TRUE);
+        log.println( "Switching on footer" );
+        PropSet.setPropertyValue("FooterIsOn", Boolean.TRUE);
 
-            //change zoom value to 10%
-            //footer should be in the vissible area of the document
-            XController xController = xTextDoc.getCurrentController();
-            XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
-            xController);
-            XPropertySet xPropSet = xViewSetSup.getViewSettings();
-            xPropSet.setPropertyValue("ZoomValue", Short.valueOf("20"));
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        }  catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        }
+        //change zoom value to 10%
+        //footer should be in the vissible area of the document
+        XController xController = xTextDoc.getCurrentController();
+        XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
+        xController);
+        XPropertySet xPropSet = xViewSetSup.getViewSettings();
+        xPropSet.setPropertyValue("ZoomValue", Short.valueOf("20"));
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 

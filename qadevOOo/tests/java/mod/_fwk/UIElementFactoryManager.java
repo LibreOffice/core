@@ -24,7 +24,6 @@ import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.util.XCloseable;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -69,23 +68,15 @@ public class UIElementFactoryManager extends TestCase {
      * @return The test environment.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        TestEnvironment tEnv = null;
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
 
         log.println("Creating instance...");
         xTextDoc = WriterTools.createTextDoc(xMSF);
-        try {
-            oObj = xMSF.createInstance("com.sun.star.ui.UIElementFactoryManager");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            throw new StatusException("Cannot create test object.", e);
-        }
+        oObj = xMSF.createInstance("com.sun.star.ui.UIElementFactoryManager");
         log.println("TestObject: " + util.utils.getImplName(oObj));
 
-        tEnv = new TestEnvironment((XInterface)oObj);
-
-
+        TestEnvironment tEnv = new TestEnvironment((XInterface)oObj);
         return tEnv;
     }
 }

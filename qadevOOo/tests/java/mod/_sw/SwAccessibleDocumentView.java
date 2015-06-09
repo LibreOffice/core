@@ -19,7 +19,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -74,25 +73,20 @@ public class SwAccessibleDocumentView extends TestCase {
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println( "inserting some lines" );
-        try {
-            for (int i=0; i<5; i++){
-                oText.insertString( oCursor,"Paragraph Number: " + i, false);
-                oText.insertString( oCursor,
-                    " The quick brown fox jumps over the lazy Dog: SwXParagraph",
-                    false);
-                oText.insertControlCharacter(
-                    oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-                oText.insertString( oCursor,
-                    "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph",
-                    false);
-                oText.insertControlCharacter(oCursor,
-                    ControlCharacter.PARAGRAPH_BREAK, false );
-                oText.insertControlCharacter(
-                    oCursor, ControlCharacter.LINE_BREAK, false );
-            }
-        } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't insert lines", e );
+        for (int i=0; i<5; i++){
+            oText.insertString( oCursor,"Paragraph Number: " + i, false);
+            oText.insertString( oCursor,
+                " The quick brown fox jumps over the lazy Dog: SwXParagraph",
+                false);
+            oText.insertControlCharacter(
+                oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+            oText.insertString( oCursor,
+                "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph",
+                false);
+            oText.insertControlCharacter(oCursor,
+                ControlCharacter.PARAGRAPH_BREAK, false );
+            oText.insertControlCharacter(
+                oCursor, ControlCharacter.LINE_BREAK, false );
         }
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);

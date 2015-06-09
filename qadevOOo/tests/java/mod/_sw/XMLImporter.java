@@ -107,21 +107,16 @@ public class XMLImporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters tParam, PrintWriter log) {
+            ( TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
 
-        try {
-            oObj = (XInterface) xMSF.createInstance
-                ("com.sun.star.comp.Writer.XMLImporter");
-            XImporter xIm = UnoRuntime.queryInterface
-                (XImporter.class,oObj);
-            xIm.setTargetDocument(xTextDoc);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        oObj = (XInterface) xMSF.createInstance
+            ("com.sun.star.comp.Writer.XMLImporter");
+        XImporter xIm = UnoRuntime.queryInterface
+            (XImporter.class,oObj);
+        xIm.setTargetDocument(xTextDoc);
 
         // create testobject here
         log.println( "creating a new environment" );

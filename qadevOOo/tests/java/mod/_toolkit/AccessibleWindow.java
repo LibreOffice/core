@@ -31,11 +31,9 @@ import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
@@ -128,7 +126,7 @@ public class AccessibleWindow extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         log.println("creating a test environment");
 
         if (xTextDoc != null) {
@@ -141,16 +139,10 @@ public class AccessibleWindow extends TestCase {
 
         XInterface toolkit = null;
 
-        try {
-            log.println("creating a text document");
-            xTextDoc = SOF.createTextDoc(null);
-            toolkit = (XInterface) tParam.getMSF().createInstance(
-                              "com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a text document");
+        xTextDoc = SOF.createTextDoc(null);
+        toolkit = (XInterface) tParam.getMSF().createInstance(
+                          "com.sun.star.awt.Toolkit");
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);

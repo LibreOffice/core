@@ -63,7 +63,7 @@ public class AccessibleDrawDocumentView extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
 
         // get a soffice factory object
@@ -76,20 +76,8 @@ public class AccessibleDrawDocumentView extends TestCase {
         XDrawPages oDPn = oDPS.getDrawPages();
         final XDrawPage fDP2 = oDPn.insertNewByIndex(1);
         XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
-        XDrawPage oDP = null;
-        try {
-            oDP = (XDrawPage) AnyConverter.toObject(
-                                new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        }
+        XDrawPage oDP = (XDrawPage) AnyConverter.toObject(
+                            new Type(XDrawPage.class),oDPi.getByIndex(0));
 
         //get a Shape
         log.println( "inserting a Shape" );

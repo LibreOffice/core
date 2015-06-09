@@ -19,7 +19,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -72,13 +71,7 @@ public class SwAccessibleTableCellView extends TestCase {
 
         oTable = SOfficeFactory.createTextTable(xTextDoc);
 
-        try {
-            SOfficeFactory.insertTextContent(xTextDoc, oTable);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert text content :" +
-                                      e.getMessage(), e);
-        }
+        SOfficeFactory.insertTextContent(xTextDoc, oTable);
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);

@@ -117,7 +117,7 @@ public class XMLExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log ) {
+            (TestParameters tParam, PrintWriter log ) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -126,20 +126,15 @@ public class XMLExporter extends TestCase {
         FilterChecker filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Chart.XMLExporter", new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            xEx.setSourceDocument(xChartDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Chart.XMLExporter", new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        xEx.setSourceDocument(xChartDoc);
 
-            Object oTitle = xChartDoc.getTitle() ;
-            XPropertySet xTitleProp = UnoRuntime.queryInterface
-                (XPropertySet.class, oTitle) ;
-            xTitleProp.setPropertyValue("String", exportStr) ;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        Object oTitle = xChartDoc.getTitle() ;
+        XPropertySet xTitleProp = UnoRuntime.queryInterface
+            (XPropertySet.class, oTitle) ;
+        xTitleProp.setPropertyValue("String", exportStr) ;
 
         filter.addTag(new XMLTools.Tag("office:document")) ;
         filter.addTagEnclosed(new XMLTools.Tag("office:meta"),

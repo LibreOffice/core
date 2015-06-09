@@ -67,7 +67,7 @@ public class ScIndexEnumeration_LabelRangesEnumeration extends TestCase {
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -75,27 +75,17 @@ public class ScIndexEnumeration_LabelRangesEnumeration extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "Creating a test environment" );
 
-        try {
-            log.println("Getting test object ") ;
-            XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
-            Object ranges = docProps.getPropertyValue("ColumnLabelRanges");
-            XLabelRanges lRanges = UnoRuntime.queryInterface(XLabelRanges.class, ranges);
+        log.println("Getting test object ") ;
+        XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+        Object ranges = docProps.getPropertyValue("ColumnLabelRanges");
+        XLabelRanges lRanges = UnoRuntime.queryInterface(XLabelRanges.class, ranges);
 
-            log.println("Adding at least one element for ElementAccess interface");
-            CellRangeAddress aRange2 = new CellRangeAddress((short)0, 0, 1, 0, 6);
-            CellRangeAddress aRange1 = new CellRangeAddress((short)0, 0, 0, 0, 1);
-            lRanges.addNew(aRange1, aRange2);
+        log.println("Adding at least one element for ElementAccess interface");
+        CellRangeAddress aRange2 = new CellRangeAddress((short)0, 0, 1, 0, 6);
+        CellRangeAddress aRange1 = new CellRangeAddress((short)0, 0, 0, 0, 1);
+        lRanges.addNew(aRange1, aRange2);
 
-            oObj = lRanges;
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e);
-        }
+        oObj = lRanges;
 
         log.println("creating a new environment for object");
         XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);

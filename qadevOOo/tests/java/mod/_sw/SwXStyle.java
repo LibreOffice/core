@@ -110,7 +110,7 @@ public class SwXStyle extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         TestEnvironment tEnv = null;
         XNameAccess oSFNA = null;
@@ -119,42 +119,22 @@ public class SwXStyle extends TestCase {
 
         log.println("creating a test environment");
 
-        try {
-            log.println("getting style");
-            XStyleFamiliesSupplier oSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
-            xTextDoc);
-            XNameAccess oSF = oSFS.getStyleFamilies();
-            XIndexAccess oSFsIA = UnoRuntime.queryInterface(XIndexAccess.class, oSF);
-            oSFNA = (XNameAccess) AnyConverter.toObject(
-                        new Type(XNameAccess.class),oSFsIA.getByIndex(0));
-            XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
-            oStyle = (XStyle) AnyConverter.toObject(
-                    new Type(XStyle.class),oSFIA.getByIndex(10));
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error: exception occurred.");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            log.println("Error: exception occurred.");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error: exception occurred.");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        }
+        log.println("getting style");
+        XStyleFamiliesSupplier oSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
+        xTextDoc);
+        XNameAccess oSF = oSFS.getStyleFamilies();
+        XIndexAccess oSFsIA = UnoRuntime.queryInterface(XIndexAccess.class, oSF);
+        oSFNA = (XNameAccess) AnyConverter.toObject(
+                    new Type(XNameAccess.class),oSFsIA.getByIndex(0));
+        XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
+        oStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oSFIA.getByIndex(10));
 
-        try {
-            log.print("Creating a user-defined style... ");
-            XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
-            XInterface oInt = (XInterface)
-                oMSF.createInstance("com.sun.star.style.CharacterStyle");
-            oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
-        } catch ( com.sun.star.uno.Exception e ) {
-            log.println("Error: exception occurred.");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        }
+        log.print("Creating a user-defined style... ");
+        XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XInterface oInt = (XInterface)
+            oMSF.createInstance("com.sun.star.style.CharacterStyle");
+        oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
 
 
         if (oMyStyle == null)
@@ -163,43 +143,15 @@ public class SwXStyle extends TestCase {
             log.println("OK");
             XNameContainer oSFNC = UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
-        try {
-            if ( oSFNC.hasByName("My Style") )
-                oSFNC.removeByName("My Style");
-            oSFNC.insertByName("My Style", oMyStyle);
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch     ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.container.NoSuchElementException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.container.ElementExistException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        }
+        if ( oSFNC.hasByName("My Style") )
+            oSFNC.removeByName("My Style");
+        oSFNC.insertByName("My Style", oMyStyle);
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, oCursor);
 
-        try {
-            xProp.setPropertyValue("CharStyleName", oMyStyle.getName());
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create environment ", e );
-        }
+        xProp.setPropertyValue("CharStyleName", oMyStyle.getName());
 
         log.println("creating a new environment for object");
         tEnv = new TestEnvironment(oMyStyle);

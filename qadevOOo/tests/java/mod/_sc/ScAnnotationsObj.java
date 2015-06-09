@@ -101,9 +101,7 @@ public class ScAnnotationsObj extends TestCase {
     * <code>com.sun.star.sheet.XSheetAnnotationsSupplier</code> interface.
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
-        XInterface oObj = null;
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -117,30 +115,12 @@ public class ScAnnotationsObj extends TestCase {
         XNameAccess oNames = UnoRuntime.queryInterface( XNameAccess.class, sheets );
         XCell oCell = null;
         XSpreadsheet oSheet  = null;
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),
-                        oNames.getByName(oNames.getElementNames()[0]));
-            // adding an annotation...
-            XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
-            oCell = oCRange.getCellByPosition(10,10);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),
+                    oNames.getByName(oNames.getElementNames()[0]));
+        // adding an annotation...
+        XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
+        oCell = oCRange.getCellByPosition(10,10);
 
         XSheetAnnotationAnchor oAnnoA = UnoRuntime.queryInterface(XSheetAnnotationAnchor.class, oCell);
         XSheetAnnotation oAnno = oAnnoA.getAnnotation();
@@ -149,7 +129,7 @@ public class ScAnnotationsObj extends TestCase {
 
         XSheetAnnotationsSupplier supp = UnoRuntime.queryInterface(
             XSheetAnnotationsSupplier.class, oSheet);
-        oObj = supp.getAnnotations();
+        XInterface oObj = supp.getAnnotations();
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

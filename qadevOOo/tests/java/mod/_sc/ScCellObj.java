@@ -122,7 +122,7 @@ public class ScCellObj extends TestCase {
     * @see com.sun.star.sheet.SheetCell
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -132,30 +132,15 @@ public class ScCellObj extends TestCase {
 
         XSpreadsheet oSheet = null;
         XCell cell = null;
-        try {
-            log.println("Getting spreadsheet") ;
-            XSpreadsheets oSheets = xSheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+        log.println("Getting spreadsheet") ;
+        XSpreadsheets oSheets = xSheetDoc.getSheets() ;
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
-            log.println("Getting a cell from sheet") ;
-            oObj = oSheet.getCellByPosition(2, 3) ;
-            cell = UnoRuntime.queryInterface(XCell.class, oObj);
-
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
-        }
+        log.println("Getting a cell from sheet") ;
+        oObj = oSheet.getCellByPosition(2, 3) ;
+        cell = UnoRuntime.queryInterface(XCell.class, oObj);
 
         log.println( "creating a new environment for ScCellObj object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

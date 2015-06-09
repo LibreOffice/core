@@ -31,7 +31,9 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -75,7 +77,7 @@ public class PageStyle extends TestCase {
     }
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         TestEnvironment tEnv = null;
         XNameAccess oSFNA = null;
         XStyle oStyle = null;
@@ -83,43 +85,22 @@ public class PageStyle extends TestCase {
 
         log.println("creating a test environment");
 
-        try {
-            log.println("getting style");
-            XStyleFamiliesSupplier oSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
-            xTextDoc);
-            XNameAccess oSF = oSFS.getStyleFamilies();
-            oSFNA = UnoRuntime.queryInterface(
-                        XNameAccess.class,oSF.getByName("PageStyles"));    // get the page style
-            XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
-            oStyle = UnoRuntime.queryInterface(
-                        XStyle.class,oSFIA.getByIndex(0));
-            log.println("Chosen pool style: "+oStyle.getName());
+        log.println("getting style");
+        XStyleFamiliesSupplier oSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
+        xTextDoc);
+        XNameAccess oSF = oSFS.getStyleFamilies();
+        oSFNA = UnoRuntime.queryInterface(
+                    XNameAccess.class,oSF.getByName("PageStyles"));    // get the page style
+        XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
+        oStyle = UnoRuntime.queryInterface(
+                    XStyle.class,oSFIA.getByIndex(0));
+        log.println("Chosen pool style: "+oStyle.getName());
 
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error: exception occurred.");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            log.println("Error: exception occurred.");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.container.NoSuchElementException e ) {
-            log.println("Error: exception occurred.");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        }
-
-        try {
-            log.print("Creating a user-defined style... ");
-            XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
-            XInterface oInt = (XInterface)
-                oMSF.createInstance("com.sun.star.style.PageStyle");
-            oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
-        } catch ( com.sun.star.uno.Exception e ) {
-            log.println("Error: exception occurred.");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        }
+        log.print("Creating a user-defined style... ");
+        XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XInterface oInt = (XInterface)
+            oMSF.createInstance("com.sun.star.style.PageStyle");
+        oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
 
 
         if (oMyStyle == null)
@@ -130,23 +111,9 @@ public class PageStyle extends TestCase {
         XNameContainer oSFNC = UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
 
-        try {
-            if ( oSFNC.hasByName("My Style") )
-                oSFNC.removeByName("My Style");
-            oSFNC.insertByName("My Style", oMyStyle);
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch     ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.container.NoSuchElementException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.container.ElementExistException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create environment ", e );
-        }
+        if ( oSFNC.hasByName("My Style") )
+            oSFNC.removeByName("My Style");
+        oSFNC.insertByName("My Style", oMyStyle);
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
@@ -154,21 +121,7 @@ public class PageStyle extends TestCase {
         Property[] props = xProp.getPropertySetInfo().getProperties();
         for (int i=0; i<props.length; i++)
             System.out.println("# Property: " + props[i].Name + "    val: " + props[i].Type.toString() + "   attr: " + props[i].Attributes);
-        try {
-            xProp.setPropertyValue("PageDescName", oMyStyle.getName());
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create environment ", e );
-        } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create environment ", e );
-        }
+        xProp.setPropertyValue("PageDescName", oMyStyle.getName());
 
 //        oMyStyle = oStyle;
         log.println("creating a new environment for object");

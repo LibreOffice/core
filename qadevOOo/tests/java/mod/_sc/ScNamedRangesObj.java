@@ -103,7 +103,7 @@ public class ScNamedRangesObj extends TestCase {
     * @see com.sun.star.sheet.NamedRanges
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -115,32 +115,12 @@ public class ScNamedRangesObj extends TestCase {
         log.println("Getting test object ");
         XSpreadsheets oSheets = xSheetDoc.getSheets();
         XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
         // Getting named ranges.
         XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
-        Object ranges = null;
-        try {
-            ranges = docProps.getPropertyValue("NamedRanges");
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get NamedRanges", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get NamedRanges", e);
-        }
+        Object ranges = docProps.getPropertyValue("NamedRanges");
 
         XNamedRanges xNamedRanges = UnoRuntime.queryInterface(XNamedRanges.class, ranges);
 

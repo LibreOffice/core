@@ -22,8 +22,6 @@ import com.sun.star.beans.NamedValue;
 
 import util.DBTools;
 import util.utils;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
@@ -72,19 +70,15 @@ public class SwXMailMerge extends TestCase {
     * </ul>
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XInterface oRowSet = null;
         XJob Job = null;
 
         log.println(" instantiate MailMerge service");
-        try {
-            oObj = (XInterface) Param.getMSF().createInstance
-                ("com.sun.star.text.MailMerge");
-        } catch (Exception e) {
-            throw new StatusException("Can't create object environment", e) ;
-        }
+        oObj = (XInterface) Param.getMSF().createInstance
+            ("com.sun.star.text.MailMerge");
 
         // <set some variables>
         String cTestDoc = utils.getFullTestURL("MailMerge.sxw");
@@ -100,32 +94,14 @@ public class SwXMailMerge extends TestCase {
 
         // <create XResultSet>
         log.println("create a XResultSet");
-        try {
-            oRowSet = (XInterface) Param.getMSF().createInstance
-                ("com.sun.star.sdb.RowSet");
-        } catch (Exception e) {
-            throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
-        }
+        oRowSet = (XInterface) Param.getMSF().createInstance
+            ("com.sun.star.sdb.RowSet");
         XPropertySet oRowSetProps = UnoRuntime.queryInterface(XPropertySet.class, oRowSet);
         XRowSet xRowSet = UnoRuntime.queryInterface(XRowSet.class, oRowSet);
-        try {
-            oRowSetProps.setPropertyValue("DataSourceName",cDataSourceName);
-            oRowSetProps.setPropertyValue("Command",cDataCommand);
-            oRowSetProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
-        } catch (UnknownPropertyException e) {
-            throw new StatusException("Can't set properties on oRowSet", e);
-        } catch (PropertyVetoException e) {
-            throw new StatusException("Can't set properties on oRowSet", e);
-        } catch (IllegalArgumentException e) {
-            throw new StatusException("Can't set properties on oRowSet", e);
-        } catch (WrappedTargetException e) {
-            throw new StatusException("Can't set properties on oRowSet", e);
-        }
-        try {
-            xRowSet.execute();
-        } catch (SQLException e) {
-            throw new StatusException("Can't execute oRowSet", e);
-        }
+        oRowSetProps.setPropertyValue("DataSourceName",cDataSourceName);
+        oRowSetProps.setPropertyValue("Command",cDataCommand);
+        oRowSetProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
+        xRowSet.execute();
 
         XResultSet oResultSet = UnoRuntime.queryInterface(XResultSet.class, oRowSet);
 
@@ -134,16 +110,12 @@ public class SwXMailMerge extends TestCase {
 
         // <create Bookmarks>
         log.println("create bookmarks");
-        try {
-            XRowLocate oRowLocate = UnoRuntime.queryInterface(
-                                                  XRowLocate.class, oResultSet);
-            oResultSet.first();
-            myBookMarks[0] = oRowLocate.getBookmark();
-            oResultSet.next();
-            myBookMarks[1] = oRowLocate.getBookmark();
-        } catch (SQLException e) {
-            throw new StatusException("Can't get Bookmarks", e);
-        }
+        XRowLocate oRowLocate = UnoRuntime.queryInterface(
+                                              XRowLocate.class, oResultSet);
+        oResultSet.first();
+        myBookMarks[0] = oRowLocate.getBookmark();
+        oResultSet.next();
+        myBookMarks[1] = oRowLocate.getBookmark();
         // </create Bookmarks>
 
         // <fill object with values>
@@ -151,27 +123,17 @@ public class SwXMailMerge extends TestCase {
         log.println("fill MailMerge with default connection");
 
         XPropertySet oObjProps = UnoRuntime.queryInterface(XPropertySet.class, oObj);
-        try {
-            oObjProps.setPropertyValue("ActiveConnection", getLocalXConnection(Param));
-            oObjProps.setPropertyValue("DataSourceName", cDataSourceName);
-            oObjProps.setPropertyValue("Command", cDataCommand);
-            oObjProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
-            oObjProps.setPropertyValue("OutputType", Short.valueOf(MailMergeType.FILE));
-            oObjProps.setPropertyValue("DocumentURL", cTestDoc);
-            oObjProps.setPropertyValue("OutputURL", cOutputURL);
-            oObjProps.setPropertyValue("FileNamePrefix", "Author");
-            oObjProps.setPropertyValue("FileNameFromColumn", Boolean.FALSE);
-            oObjProps.setPropertyValue("Selection", new Object[0]);
+        oObjProps.setPropertyValue("ActiveConnection", getLocalXConnection(Param));
+        oObjProps.setPropertyValue("DataSourceName", cDataSourceName);
+        oObjProps.setPropertyValue("Command", cDataCommand);
+        oObjProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
+        oObjProps.setPropertyValue("OutputType", Short.valueOf(MailMergeType.FILE));
+        oObjProps.setPropertyValue("DocumentURL", cTestDoc);
+        oObjProps.setPropertyValue("OutputURL", cOutputURL);
+        oObjProps.setPropertyValue("FileNamePrefix", "Author");
+        oObjProps.setPropertyValue("FileNameFromColumn", Boolean.FALSE);
+        oObjProps.setPropertyValue("Selection", new Object[0]);
 
-        } catch (UnknownPropertyException e) {
-            throw new StatusException("Can't set properties on oObj", e);
-        } catch (PropertyVetoException e) {
-            throw new StatusException("Can't set properties on oObj", e);
-        } catch (IllegalArgumentException e) {
-            throw new StatusException("Can't set properties on oObj", e);
-        } catch (WrappedTargetException e) {
-            throw new StatusException("Can't set properties on oObj", e);
-        }
         // </fill object with values>
 
 
@@ -234,45 +196,22 @@ public class SwXMailMerge extends TestCase {
         // <create XResultSet>
         log.println("create XResultSet");
 
-        try {
-            oRowSet = (XInterface) Param.getMSF().createInstance
-                ("com.sun.star.sdb.RowSet");
-        } catch (Exception e) {
-            throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
-        }
+        oRowSet = (XInterface) Param.getMSF().createInstance
+            ("com.sun.star.sdb.RowSet");
         oRowSetProps = UnoRuntime.queryInterface(XPropertySet.class, oRowSet);
 
         xRowSet = UnoRuntime.queryInterface(XRowSet.class, oRowSet);
 
-        try {
-            oRowSetProps.setPropertyValue("DataSourceName",cDataSourceName);
-            oRowSetProps.setPropertyValue("Command",cDataCommand);
-            oRowSetProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
-        } catch (UnknownPropertyException e) {
-            throw new StatusException("Can't set properties on oRowSet", e);
-        } catch (PropertyVetoException e) {
-            throw new StatusException("Can't set properties on oRowSet", e);
-        } catch (IllegalArgumentException e) {
-            throw new StatusException("Can't set properties on oRowSet", e);
-        } catch (WrappedTargetException e) {
-            throw new StatusException("Can't set properties on oRowSet", e);
-        }
-        try {
-            xRowSet.execute();
-        } catch (SQLException e) {
-            throw new StatusException("Can't execute oRowSet", e);
-        }
+        oRowSetProps.setPropertyValue("DataSourceName",cDataSourceName);
+        oRowSetProps.setPropertyValue("Command",cDataCommand);
+        oRowSetProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
+        xRowSet.execute();
 
         oResultSet = UnoRuntime.queryInterface(XResultSet.class, oRowSet);
 
         XResultSet oMMXResultSet = null;
-        try {
-            oMMXResultSet = UnoRuntime.queryInterface(XResultSet.class,
-                   Param.getMSF().createInstance("com.sun.star.sdb.RowSet"));
-
-        } catch (Exception e) {
-            throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
-        }
+        oMMXResultSet = UnoRuntime.queryInterface(XResultSet.class,
+               Param.getMSF().createInstance("com.sun.star.sdb.RowSet"));
         // </create object relations>
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;

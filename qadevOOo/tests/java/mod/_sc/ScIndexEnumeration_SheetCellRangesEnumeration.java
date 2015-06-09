@@ -72,7 +72,7 @@ public class ScIndexEnumeration_SheetCellRangesEnumeration extends TestCase {
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         Object oRange = null ;
@@ -94,49 +94,29 @@ public class ScIndexEnumeration_SheetCellRangesEnumeration extends TestCase {
         XSpreadsheets oSheets = xSheetDoc.getSheets() ;
         XIndexAccess oIndSheets = UnoRuntime.queryInterface (XIndexAccess.class, oSheets);
         XSpreadsheet oSheet = null;
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndSheets.getByIndex(0));
-            XNameContainer oRanges = UnoRuntime.queryInterface(XNameContainer.class, oObj);
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndSheets.getByIndex(0));
+        XNameContainer oRanges = UnoRuntime.queryInterface(XNameContainer.class, oObj);
 
-            oRange = oSheet.getCellRangeByName("C1:D4");
-            oRanges.insertByName("Range1", oRange);
-            oRange = oSheet.getCellRangeByName("E2:F5");
-            oRanges.insertByName("Range2", oRange);
-            oRange = oSheet.getCellRangeByName("G2:H3");
-            oRanges.insertByName("Range3", oRange);
-            oRange = oSheet.getCellRangeByName("I7:J8");
-            oRanges.insertByName("Range4", oRange);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch(com.sun.star.container.ElementExistException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        }
+        oRange = oSheet.getCellRangeByName("C1:D4");
+        oRanges.insertByName("Range1", oRange);
+        oRange = oSheet.getCellRangeByName("E2:F5");
+        oRanges.insertByName("Range2", oRange);
+        oRange = oSheet.getCellRangeByName("G2:H3");
+        oRanges.insertByName("Range3", oRange);
+        oRange = oSheet.getCellRangeByName("I7:J8");
+        oRanges.insertByName("Range4", oRange);
 
         log.println("filling some cells");
-        try {
-            for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 5; j++) {
-                    oSheet.getCellByPosition(i, j).setFormula("a");
-                }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 5; j++) {
+                oSheet.getCellByPosition(i, j).setFormula("a");
             }
-            for (int i = 0; i < 10; i++) {
-                for (int j = 5; j < 10; j++) {
-                    oSheet.getCellByPosition(i, j).setValue(i + j);
-                }
+        }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 5; j < 10; j++) {
+                oSheet.getCellByPosition(i, j).setValue(i + j);
             }
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException (
-                "Exception occurred while filling cells", e);
         }
 
         XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);

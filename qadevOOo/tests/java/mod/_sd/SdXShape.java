@@ -116,7 +116,7 @@ public class SdXShape extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(
-                                    TestParameters Param, PrintWriter log) {
+                                    TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
 
@@ -129,20 +129,8 @@ public class SdXShape extends TestCase {
         XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
         XDrawPages oDPn = oDPS.getDrawPages();
         XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
-        XDrawPage oDP = null;
-        try {
-            oDP = (XDrawPage) AnyConverter.toObject(
-                        new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        }
+        XDrawPage oDP = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(0));
 
         //get a Shape
         log.println( "getting Shape" );
@@ -166,39 +154,14 @@ public class SdXShape extends TestCase {
         log.println( "adding two style as ObjRelation for ShapeDescriptor" );
         XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class, oObj);
         XStyle aStyle = null;
-        try {
-            aStyle = (XStyle) AnyConverter.toObject(
-                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
-            oShapeProps.setPropertyValue("ZOrder", Integer.valueOf(1));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set or get property value", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set or get property value", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set or get property value", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set or get property value", e);
-        }
+        aStyle = (XStyle) AnyConverter.toObject(
+            new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
+        oShapeProps.setPropertyValue("ZOrder", Integer.valueOf(1));
 
         tEnv.addObjRelation("Style1", aStyle);
         oShapeProps = UnoRuntime.queryInterface(XPropertySet.class, oShape);
-        try {
-            aStyle = (XStyle) AnyConverter.toObject(
-                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get property value", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get property value", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get property value", e);
-        }
+        aStyle = (XStyle) AnyConverter.toObject(
+            new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
 
         tEnv.addObjRelation("Style2", aStyle);
 

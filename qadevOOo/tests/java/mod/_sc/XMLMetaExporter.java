@@ -115,7 +115,7 @@ public class XMLMetaExporter extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment( TestParameters tParam,
                                                   PrintWriter log )
-                                                    throws StatusException {
+                                                    throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -128,29 +128,20 @@ public class XMLMetaExporter extends TestCase {
         filter.addCharactersEnclosed("TestDocument",
             new XMLTools.Tag ("dc:title"));
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Calc.XMLMetaExporter", new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xSheetDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Calc.XMLMetaExporter", new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xSheetDoc);
 
-            // Obtaining and changing property values
-            XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
-                (XDocumentPropertiesSupplier.class, xSheetDoc);
-            final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
-            xDocProps.setTitle("TestDocument");
+        // Obtaining and changing property values
+        XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+            (XDocumentPropertiesSupplier.class, xSheetDoc);
+        final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
+        xDocProps.setTitle("TestDocument");
 
-            log.println("fill sheet 1 with contnet...");
-            util.CalcTools.fillCalcSheetWithContent(xSheetDoc,1, 3, 3, 50, 50);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create environment.", e) ;
-        } catch (java.lang.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment.", e);
-        }
+        log.println("fill sheet 1 with contnet...");
+        util.CalcTools.fillCalcSheetWithContent(xSheetDoc,1, 3, 3, 50, 50);
 
         // create testobject here
         log.println( "creating a new environment" );

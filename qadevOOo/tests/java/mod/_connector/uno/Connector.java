@@ -20,7 +20,6 @@ package mod._connector.uno;
 
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -71,22 +70,13 @@ public class Connector extends TestCase {
     * Just creates service <code>com.sun.star.connection.Connector</code>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
-        XInterface oObj = null ;
+        XInterface connector = (XInterface)
+            Param.getMSF().createInstance
+                                ("com.sun.star.connection.Connector") ;
 
-        try {
-            XInterface connector = (XInterface)
-                Param.getMSF().createInstance
-                                    ("com.sun.star.connection.Connector") ;
-
-            oObj = connector ;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create object environment", e);
-        }
-
-        TestEnvironment tEnv = new TestEnvironment(oObj) ;
+        TestEnvironment tEnv = new TestEnvironment(connector) ;
 
         // select the port
         curPort = utils.getNextFreePort(basePort);

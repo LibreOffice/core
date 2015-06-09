@@ -90,7 +90,7 @@ public class SwXReferenceMark extends TestCase {
     * document as a text content.
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception{
         XInterface oObj = null;
         XText oText = null;
         String Name = "SwXReferenceMark";
@@ -99,27 +99,17 @@ public class SwXReferenceMark extends TestCase {
         oText = xTextDoc.getText();
         XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         Object instance = null;
-        try {
-            oObj = (XInterface) oDocMSF.createInstance
-                ("com.sun.star.text.ReferenceMark");
-            instance = oDocMSF.createInstance
-                ("com.sun.star.text.ReferenceMark");
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get ReferenceMark", e);
-        }
+        oObj = (XInterface) oDocMSF.createInstance
+            ("com.sun.star.text.ReferenceMark");
+        instance = oDocMSF.createInstance
+            ("com.sun.star.text.ReferenceMark");
 
         XNamed oObjN = UnoRuntime.queryInterface(XNamed.class, oObj);
         oObjN.setName(Name);
         XTextContent oObjTC = UnoRuntime.queryInterface(XTextContent.class, oObj);
 
         XTextCursor oCursor = oText.createTextCursor();
-        try {
-            oText.insertTextContent(oCursor, oObjTC, false);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            e.printStackTrace( log );
-            throw new StatusException(" Couldn't insert ReferenceMark", e);
-        }
+        oText.insertTextContent(oCursor, oObjTC, false);
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

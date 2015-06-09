@@ -20,8 +20,6 @@ package mod._fwk;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -47,16 +45,10 @@ public class ServiceHandler extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
-        PrintWriter log ) throws StatusException {
+        PrintWriter log ) throws Exception {
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)Param.getMSF().createInstance(
-                "com.sun.star.comp.framework.ServiceHandler");
-        } catch(com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create instance"));
-        }
+        XInterface oObj = (XInterface)Param.getMSF().createInstance(
+            "com.sun.star.comp.framework.ServiceHandler");
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

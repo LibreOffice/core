@@ -31,8 +31,10 @@ import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -161,7 +163,7 @@ public class ObjectOutputStream extends TestCase {
     * @see com.sun.star.cmp.PersistObject
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -174,22 +176,17 @@ public class ObjectOutputStream extends TestCase {
         XInterface aConnect = null;
         Object minstream = null;
 
-        try {
-            ostream = xMSF.createInstance
-                ( "com.sun.star.io.ObjectOutputStream" );
-            istream = xMSF.createInstance
-                ("com.sun.star.io.ObjectInputStream");
-            aPipe = xMSF.createInstance("com.sun.star.io.Pipe");
-            mostream = xMSF.createInstance
-                ("com.sun.star.io.MarkableOutputStream");
-            aConnect = (XInterface)xMSF.createInstance
-                ("com.sun.star.io.DataInputStream");
-            minstream = xMSF.createInstance
-                ("com.sun.star.io.MarkableInputStream");
-        } catch( com.sun.star.uno.Exception e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        ostream = xMSF.createInstance
+            ( "com.sun.star.io.ObjectOutputStream" );
+        istream = xMSF.createInstance
+            ("com.sun.star.io.ObjectInputStream");
+        aPipe = xMSF.createInstance("com.sun.star.io.Pipe");
+        mostream = xMSF.createInstance
+            ("com.sun.star.io.MarkableOutputStream");
+        aConnect = (XInterface)xMSF.createInstance
+            ("com.sun.star.io.DataInputStream");
+        minstream = xMSF.createInstance
+            ("com.sun.star.io.MarkableInputStream");
 
         // creating the pipe where object has to be written to
         XActiveDataSource xdSo = UnoRuntime.queryInterface(XActiveDataSource.class, ostream);
@@ -215,14 +212,9 @@ public class ObjectOutputStream extends TestCase {
 
         // creating Persistent object which has to be written
         XPersistObject xPersObj = null ;
-        try {
-            Object oPersObj = xMSF.createInstance
-                ("com.sun.star.cmp.PersistObject");
-            xPersObj = UnoRuntime.queryInterface(XPersistObject.class, oPersObj);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't write persist object.", e) ;
-        }
+        Object oPersObj = xMSF.createInstance
+            ("com.sun.star.cmp.PersistObject");
+        xPersObj = UnoRuntime.queryInterface(XPersistObject.class, oPersObj);
 
         oObj = oStream;
 

@@ -116,29 +116,15 @@ public class ScChartsObj extends TestCase {
     * @see com.sun.star.table.XTableChartsSupplier
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XSpreadsheet oSheet=null;
 
-        try {
-            log.println("Getting spreadsheet") ;
-            XSpreadsheets oSheets = xSheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Couldn't get Sheet ");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get sheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Couldn't get Sheet ");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get sheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Couldn't get Sheet ");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get sheet", e);
-        }
+        log.println("Getting spreadsheet") ;
+        XSpreadsheets oSheets = xSheetDoc.getSheets() ;
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
         log.println("Creating the Header") ;
 

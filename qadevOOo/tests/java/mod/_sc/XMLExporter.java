@@ -113,7 +113,7 @@ public class XMLExporter extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -121,32 +121,23 @@ public class XMLExporter extends TestCase {
         Any arg = new Any(new Type(XDocumentHandler.class), Filter);
         final String SHEET_NAME = "XMLExporter_SheetTestName";
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Calc.XMLExporter", new Object[] {arg} );
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xSheetDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Calc.XMLExporter", new Object[] {arg} );
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xSheetDoc);
 
-            //set name of sheet
-            XSpreadsheetDocument xSpreadsheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
-            XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
-            XIndexAccess xSheetsIndexArray = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-            XSpreadsheet xSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(0));
-            XNamed xSheetNamed = UnoRuntime.queryInterface(XNamed.class, xSheet);
-            xSheetNamed.setName(SHEET_NAME);
+        //set name of sheet
+        XSpreadsheetDocument xSpreadsheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
+        XIndexAccess xSheetsIndexArray = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XSpreadsheet xSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(0));
+        XNamed xSheetNamed = UnoRuntime.queryInterface(XNamed.class, xSheet);
+        xSheetNamed.setName(SHEET_NAME);
 
-            log.println("fill sheet with contnet...");
-            util.CalcTools.fillCalcSheetWithContent(xSheet, 3, 3, 50, 50);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        } catch (java.lang.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment.", e);
-        }
+        log.println("fill sheet with contnet...");
+        util.CalcTools.fillCalcSheetWithContent(xSheet, 3, 3, 50, 50);
 
         // adding tags which must be contained in XML output
         Filter.addTag( new XMLTools.Tag("office:document") );

@@ -113,7 +113,7 @@ public class XMLExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         final String TEST_STR = "XMLExporter";
 
@@ -123,20 +123,15 @@ public class XMLExporter extends TestCase {
         Filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class),Filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Writer.XMLExporter", new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xTextDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Writer.XMLExporter", new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xTextDoc);
 
-            XSimpleText aText = xTextDoc.getText();
-            XTextCursor curs = aText.createTextCursor();
-                        aText.insertString(curs, TEST_STR, false);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        XSimpleText aText = xTextDoc.getText();
+        XTextCursor curs = aText.createTextCursor();
+                    aText.insertString(curs, TEST_STR, false);
 
         // adding tags which must be contained in XML output
         Filter.addTag("office:document") ;

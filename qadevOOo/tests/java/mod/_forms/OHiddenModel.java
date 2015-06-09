@@ -134,7 +134,7 @@ public class OHiddenModel extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
         XInterface oObj = null;
 
 
@@ -147,34 +147,20 @@ public class OHiddenModel extends TestCase {
         String objName = "HiddenControl";
         XInterface ctrl = SOF.createControl(xDrawDoc, objName);
 
-        try {
-            XDrawPage oDP = DrawTools.getDrawPage(xDrawDoc, 0);
+        XDrawPage oDP = DrawTools.getDrawPage(xDrawDoc, 0);
 
-            XNameContainer nc = FormTools.getForms(oDP);
-            FormTools.insertForm(xDrawDoc, nc, "OHiddenModelForm");
+        XNameContainer nc = FormTools.getForms(oDP);
+        FormTools.insertForm(xDrawDoc, nc, "OHiddenModelForm");
 
-            Object frm = nc.getByName("OHiddenModelForm");
+        Object frm = nc.getByName("OHiddenModelForm");
 
-            XNameContainer frmNC = UnoRuntime.queryInterface(
-                    XNameContainer.class, frm);
+        XNameContainer frmNC = UnoRuntime.queryInterface(
+                XNameContainer.class, frm);
 
-            frmNC.insertByName("OHiddenModel", ctrl);
-            oObj = (XInterface) AnyConverter.toObject(
-                    new Type(XInterface.class),
-                    frmNC.getByName("OHiddenModel"));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create and add control", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create and add control", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create and add control", e);
-        } catch (com.sun.star.container.ElementExistException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create and add control", e);
-        }
+        frmNC.insertByName("OHiddenModel", ctrl);
+        oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),
+                frmNC.getByName("OHiddenModel"));
 
         log.println("creating a new environment for drawpage object");
 

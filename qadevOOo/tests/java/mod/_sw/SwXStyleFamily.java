@@ -116,7 +116,7 @@ public class SwXStyleFamily extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XNameAccess oSFNA = null;
 
@@ -130,19 +130,8 @@ public class SwXStyleFamily extends TestCase {
         XNameAccess oSF = oSFsS.getStyleFamilies();
         XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSF);
 
-        try {
-            oSFNA = (XNameAccess) AnyConverter.toObject(
-                        new Type(XNameAccess.class),oSFIA.getByIndex(0));
-        } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception. ", e);
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception. ", e);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception. ", e);
-        }
+        oSFNA = (XNameAccess) AnyConverter.toObject(
+                    new Type(XNameAccess.class),oSFIA.getByIndex(0));
 
         XNameContainer oContainer = UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 

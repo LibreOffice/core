@@ -139,7 +139,7 @@ public class ScHeaderFooterTextObj extends TestCase {
     * @see com.sun.star.text.Text
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XPropertySet PropSet;
@@ -150,21 +150,10 @@ public class ScHeaderFooterTextObj extends TestCase {
             XStyleFamiliesSupplier.class,
             xSpreadsheetDoc );
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
-        try{
-            PageStyles = (XNameAccess) AnyConverter.toObject(
-                new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
-            StdStyle = (XStyle) AnyConverter.toObject(
-                        new Type(XStyle.class),PageStyles.getByName("Default"));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.container.NoSuchElementException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        }
+        PageStyles = (XNameAccess) AnyConverter.toObject(
+            new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
+        StdStyle = (XStyle) AnyConverter.toObject(
+                    new Type(XStyle.class),PageStyles.getByName("Default"));
 
         //get the property-set
         PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
@@ -173,76 +162,46 @@ public class ScHeaderFooterTextObj extends TestCase {
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
-        try {
-            RPHC = (XHeaderFooterContent) AnyConverter.toObject(
-                new Type(XHeaderFooterContent.class),
-                    PropSet.getPropertyValue("RightPageHeaderContent"));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        }
+        RPHC = (XHeaderFooterContent) AnyConverter.toObject(
+            new Type(XHeaderFooterContent.class),
+                PropSet.getPropertyValue("RightPageHeaderContent"));
 
         XText center = RPHC.getCenterText();
 
         XTextRange text_to_move = null;
 
         log.println( "inserting some lines" );
-        try {
-            XTextCursor oCursor = center.createTextCursor();
-            center.insertControlCharacter(
-                oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-            center.insertControlCharacter(
-                oCursor, ControlCharacter.LINE_BREAK, false );
-            center.insertString(oCursor,"Paragraph 1", false);
-            center.insertString(oCursor,": ScHeaderFooterTextObj", false);
-            center.insertControlCharacter(
-                oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-            center.insertString(oCursor, "THE QUICK BROWN FOX JUMPS OVER THE" +
-                " LAZY DOG: ScHeaderFooterTextObj", false );
-            center.insertControlCharacter(
-                oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-            center.insertControlCharacter(
-                oCursor, ControlCharacter.LINE_BREAK, false );
-            oCursor.setString("TextForMove");
-            text_to_move = oCursor;
+        XTextCursor oCursor = center.createTextCursor();
+        center.insertControlCharacter(
+            oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+        center.insertControlCharacter(
+            oCursor, ControlCharacter.LINE_BREAK, false );
+        center.insertString(oCursor,"Paragraph 1", false);
+        center.insertString(oCursor,": ScHeaderFooterTextObj", false);
+        center.insertControlCharacter(
+            oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+        center.insertString(oCursor, "THE QUICK BROWN FOX JUMPS OVER THE" +
+            " LAZY DOG: ScHeaderFooterTextObj", false );
+        center.insertControlCharacter(
+            oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+        center.insertControlCharacter(
+            oCursor, ControlCharacter.LINE_BREAK, false );
+        oCursor.setString("TextForMove");
+        text_to_move = oCursor;
 
-            XTextCursor oCursor1 = center.createTextCursorByRange(center.getEnd());
-            center.insertString(oCursor1,"Paragraph 2", false);
-            center.insertString(oCursor1,": ScHeaderFooterTextObj", false);
-            center.insertControlCharacter(
-                oCursor1, ControlCharacter.PARAGRAPH_BREAK, false );
-            center.insertString( oCursor1, "THE QUICK BROWN FOX JUMPS OVER THE" +
-                " LAZY DOG: ScHeaderFooterTextObj", false);
-            center.insertControlCharacter(
-                oCursor1, ControlCharacter.PARAGRAPH_BREAK, false );
-            center.insertControlCharacter(
-                oCursor1, ControlCharacter.LINE_BREAK, false );
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert Text ", e);
-        }
+        XTextCursor oCursor1 = center.createTextCursorByRange(center.getEnd());
+        center.insertString(oCursor1,"Paragraph 2", false);
+        center.insertString(oCursor1,": ScHeaderFooterTextObj", false);
+        center.insertControlCharacter(
+            oCursor1, ControlCharacter.PARAGRAPH_BREAK, false );
+        center.insertString( oCursor1, "THE QUICK BROWN FOX JUMPS OVER THE" +
+            " LAZY DOG: ScHeaderFooterTextObj", false);
+        center.insertControlCharacter(
+            oCursor1, ControlCharacter.PARAGRAPH_BREAK, false );
+        center.insertControlCharacter(
+            oCursor1, ControlCharacter.LINE_BREAK, false );
 
-        try {
-            PropSet.setPropertyValue("RightPageHeaderContent", RPHC);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set HeaderContent", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set HeaderContent", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set HeaderContent", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set HeaderContent", e);
-        }
+        PropSet.setPropertyValue("RightPageHeaderContent", RPHC);
 
         // create testobject here
         oObj = center;

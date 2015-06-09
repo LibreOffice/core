@@ -128,7 +128,7 @@ public class SdMasterPage extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-                                    TestParameters Param, PrintWriter log) {
+                                    TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
 
@@ -139,20 +139,8 @@ public class SdMasterPage extends TestCase {
         XIndexAccess oMPi = UnoRuntime.queryInterface(XIndexAccess.class, oMPn);
 
         log.println( "getting MasterPage" );
-        XInterface oObj = null;
-        try {
-            oObj = (XDrawPage) AnyConverter.toObject(
-                        new Type(XDrawPage.class),oMPi.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get MasterPage by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get MasterPage by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get MasterPage by index", e);
-        }
+        XInterface oObj = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oMPi.getByIndex(0));
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(

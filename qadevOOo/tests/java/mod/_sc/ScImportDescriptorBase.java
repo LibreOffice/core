@@ -105,7 +105,7 @@ public class ScImportDescriptorBase extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters tParam,
                                                   PrintWriter log )
-                                                    throws StatusException {
+                                                    throws Exception {
 
         XInterface oObj = null;
         XImportable xIMP = null;
@@ -123,11 +123,7 @@ public class ScImportDescriptorBase extends TestCase {
         log.println("getting a sheet");
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
-        try {
-            oObj = UnoRuntime.queryInterface(XInterface.class,oIndexAccess.getByIndex(0));
-        } catch (Exception e) {
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
+        oObj = UnoRuntime.queryInterface(XInterface.class,oIndexAccess.getByIndex(0));
 
         xIMP = UnoRuntime.queryInterface(XImportable.class,oObj);
 

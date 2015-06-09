@@ -122,7 +122,7 @@ public class ScDatabaseRangeObj extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         XInterface oObj = null;
 
 
@@ -140,28 +140,13 @@ public class ScDatabaseRangeObj extends TestCase {
         XDatabaseRanges dbRanges = null;
         XImportable xImp = null;
 
-        try {
-            Object sheet = sheets.getByName(names[0]);
-            xImp = UnoRuntime.queryInterface(XImportable.class,
-                                                           sheet);
-            dbRanges = (XDatabaseRanges) AnyConverter.toObject(
-                               new Type(XDatabaseRanges.class),
-                               docProps.getPropertyValue("DatabaseRanges"));
-            _doImport(xImp);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a property", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a property", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a property", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting test object from spreadsheet document", e);
-        }
+        Object sheet = sheets.getByName(names[0]);
+        xImp = UnoRuntime.queryInterface(XImportable.class,
+                                                       sheet);
+        dbRanges = (XDatabaseRanges) AnyConverter.toObject(
+                           new Type(XDatabaseRanges.class),
+                           docProps.getPropertyValue("DatabaseRanges"));
+        _doImport(xImp);
 
         String dbName = "dbRange";
 
@@ -174,37 +159,23 @@ public class ScDatabaseRangeObj extends TestCase {
 
         XNameAccess dbrNA = UnoRuntime.queryInterface(
                                     XNameAccess.class, dbRanges);
-        try {
-            // we need to add it
-            dbRanges.addNewByName(dbName,new CellRangeAddress((short)0, 0, 0, 0, 5));
+        // we need to add it
+        dbRanges.addNewByName(dbName,new CellRangeAddress((short)0, 0, 0, 0, 5));
 
-            UnoRuntime.queryInterface(XNamed.class,
-                                                        dbrNA.getByName(
-                                                                dbName));
+        UnoRuntime.queryInterface(XNamed.class,
+                                                    dbrNA.getByName(
+                                                            dbName));
 
-            XCellRangeReferrer aReferrer = UnoRuntime.queryInterface(
-                                                   XCellRangeReferrer.class,
-                                                   dbrNA.getByName(dbName));
-            XCellRangeAddressable aRangeA = UnoRuntime.queryInterface(
-                                                    XCellRangeAddressable.class,
-                                                    aReferrer.getReferredCells());
-            aRange = aRangeA.getRangeAddress();
-            oObj = (XInterface) AnyConverter.toObject(
-                           new Type(XInterface.class),
-                           dbrNA.getByName(dbName));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting test object from spreadsheet document", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting test object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting test object from spreadsheet document", e);
-        }
+        XCellRangeReferrer aReferrer = UnoRuntime.queryInterface(
+                                               XCellRangeReferrer.class,
+                                               dbrNA.getByName(dbName));
+        XCellRangeAddressable aRangeA = UnoRuntime.queryInterface(
+                                                XCellRangeAddressable.class,
+                                                aReferrer.getReferredCells());
+        aRange = aRangeA.getRangeAddress();
+        oObj = (XInterface) AnyConverter.toObject(
+                       new Type(XInterface.class),
+                       dbrNA.getByName(dbName));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
@@ -212,23 +183,8 @@ public class ScDatabaseRangeObj extends TestCase {
         // Other parameters required for interface tests
         tEnv.addObjRelation("DATAAREA", aRange);
 
-        XCellRange xCellRange = null;
-
-        try {
-            Object sheet = sheets.getByName(names[0]);
-            xCellRange = UnoRuntime.queryInterface(
-                                 XCellRange.class, sheet);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting of first spreadsheet from spreadsheet" +
-                    " document", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting of first spreadsheet from spreadsheet" +
-                    " document", e);
-        }
+        XCellRange xCellRange = UnoRuntime.queryInterface(
+                             XCellRange.class, sheets.getByName(names[0]));
 
         tEnv.addObjRelation("XCELLRANGE", xCellRange);
 

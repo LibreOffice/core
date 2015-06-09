@@ -124,7 +124,7 @@ public class ScDataPilotTableObj extends TestCase {
     * @see com.sun.star.sheet.XDataPilotDescriptor
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -142,37 +142,21 @@ public class ScDataPilotTableObj extends TestCase {
         XSpreadsheet oSheet = null;
         Object oChangeCell = null;
         Object oCheckCell = null;
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
-            oChangeCell = oSheet.getCellByPosition(1, 5);
-            oCheckCell = oSheet.getCellByPosition(
-                sCellAddress.Column, sCellAddress.Row + 3);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
+        oChangeCell = oSheet.getCellByPosition(1, 5);
+        oCheckCell = oSheet.getCellByPosition(
+            sCellAddress.Column, sCellAddress.Row + 3);
+        log.println("Filing a table");
+        for (int i = 1; i < 6; i++) {
+            oSheet.getCellByPosition(0, i).setFormula("Row" + i);
+            oSheet.getCellByPosition(i, 0).setFormula("Col" + i);
         }
-        try {
-            log.println("Filing a table");
-            for (int i = 1; i < 6; i++) {
-                oSheet.getCellByPosition(0, i).setFormula("Row" + i);
-                oSheet.getCellByPosition(i, 0).setFormula("Col" + i);
-            }
 
-            for (int i = 1; i < 6; i++)
-                for (int j = 1; j < 6; j++) {
-                    oSheet.getCellByPosition(i, j).setValue(2.5 * j + i);
-                }
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't fill some cells", e);
-        }
+        for (int i = 1; i < 6; i++)
+            for (int j = 1; j < 6; j++) {
+                oSheet.getCellByPosition(i, j).setValue(2.5 * j + i);
+            }
 
         CellRangeAddress sCellRangeAddress = new CellRangeAddress();
         sCellRangeAddress.Sheet = 0;
@@ -205,53 +189,20 @@ public class ScDataPilotTableObj extends TestCase {
         SFD.setFilterFields(filterFields);
 
         XPropertySet fieldPropSet = null;
-        try {
-            Object oDataPilotField = DPDsc.getDataPilotFields().getByIndex(0);
-            fieldPropSet = UnoRuntime.queryInterface(XPropertySet.class, oDataPilotField);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        }
+        Object oDataPilotField = DPDsc.getDataPilotFields().getByIndex(0);
+        fieldPropSet = UnoRuntime.queryInterface(XPropertySet.class, oDataPilotField);
 
-        try {
-            fieldPropSet.setPropertyValue("Function",
-                com.sun.star.sheet.GeneralFunction.SUM);
-            fieldPropSet.setPropertyValue("Orientation",
-                com.sun.star.sheet.DataPilotFieldOrientation.DATA);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch(com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        }
+        fieldPropSet.setPropertyValue("Function",
+            com.sun.star.sheet.GeneralFunction.SUM);
+        fieldPropSet.setPropertyValue("Orientation",
+            com.sun.star.sheet.DataPilotFieldOrientation.DATA);
 
         if (DPT.hasByName("DataPilotTable")) {
             DPT.removeByName("DataPilotTable");
         }
         DPT.insertNewByName("DataPilotTable", sCellAddress, DPDsc);
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),DPT.getByName(DPT.getElementNames()[0]));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+            new Type(XInterface.class),DPT.getByName(DPT.getElementNames()[0]));
 
         log.println("Creating object - " +
                                     ((oObj == null) ? "FAILED" : "OK"));

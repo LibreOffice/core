@@ -107,19 +107,14 @@ public class XMLImporter extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+            throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oObj = null;
         final String impFormula = "a - b" ;
 
-        try {
-            oObj = (XInterface)xMSF.createInstance(
-                    "com.sun.star.comp.Math.XMLImporter");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        oObj = (XInterface)xMSF.createInstance(
+                "com.sun.star.comp.Math.XMLImporter");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

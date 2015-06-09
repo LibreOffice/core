@@ -95,43 +95,37 @@ public class SvxUnoTextContent extends TestCase {
      *    @see PrintWriter
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         // create testobject here
 
         XEnumerationAccess xEA = null ;
-        try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
-            XShape oShape = SOF.createShape(xDrawDoc,
-                5000,3500,7500,5000,"Text");
-            DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
+        XShape oShape = SOF.createShape(xDrawDoc,
+            5000,3500,7500,5000,"Text");
+        DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
 
-            XSimpleText text = UnoRuntime.queryInterface
-                (XSimpleText.class, oShape) ;
+        XSimpleText text = UnoRuntime.queryInterface
+            (XSimpleText.class, oShape) ;
 
-            XTextCursor cursor = text.createTextCursor() ;
+        XTextCursor cursor = text.createTextCursor() ;
 
-            text.insertString(cursor, "Paragraph 1", false) ;
-            text.insertControlCharacter(cursor,
-                ControlCharacter.PARAGRAPH_BREAK, false) ;
-            text.insertString(cursor, "Paragraph 2", false) ;
-            text.insertControlCharacter(cursor,
-                ControlCharacter.PARAGRAPH_BREAK, false) ;
-            text.insertString(cursor, "Paragraph 3", false) ;
-            text.insertControlCharacter(cursor,
-                ControlCharacter.PARAGRAPH_BREAK, false) ;
+        text.insertString(cursor, "Paragraph 1", false) ;
+        text.insertControlCharacter(cursor,
+            ControlCharacter.PARAGRAPH_BREAK, false) ;
+        text.insertString(cursor, "Paragraph 2", false) ;
+        text.insertControlCharacter(cursor,
+            ControlCharacter.PARAGRAPH_BREAK, false) ;
+        text.insertString(cursor, "Paragraph 3", false) ;
+        text.insertControlCharacter(cursor,
+            ControlCharacter.PARAGRAPH_BREAK, false) ;
 
-            xEA = UnoRuntime.queryInterface
-                (XEnumerationAccess.class, text) ;
+        xEA = UnoRuntime.queryInterface
+            (XEnumerationAccess.class, text) ;
 
-            oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),xEA.createEnumeration().nextElement());
-        } catch (Exception e) {
-            log.println("Can't create test object") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Unexpected exception", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+            new Type(XInterface.class),xEA.createEnumeration().nextElement());
 
         // create test environment here
          TestEnvironment tEnv = new TestEnvironment( oObj );

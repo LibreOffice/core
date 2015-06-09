@@ -115,7 +115,7 @@ public class XMLMetaExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-        (TestParameters tParam, PrintWriter log) throws StatusException {
+        (TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -124,23 +124,17 @@ public class XMLMetaExporter extends TestCase {
         Any arg = new Any(new Type(XDocumentHandler.class), filter);
         final String NAME = "XMLMetaExporter";
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Impress.XMLMetaExporter",
-                new Object[]{arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            xEx.setSourceDocument(xImpressDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Impress.XMLMetaExporter",
+            new Object[]{arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        xEx.setSourceDocument(xImpressDoc);
 
-            // change title name
-            XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
-                (XDocumentPropertiesSupplier.class, xImpressDoc);
-            final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
-            xDocProps.setTitle(NAME);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        // change title name
+        XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+            (XDocumentPropertiesSupplier.class, xImpressDoc);
+        final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
+        xDocProps.setTitle(NAME);
 
         // Checking tags existence and changed property value
         filter.addTag(new XMLTools.Tag ("office:document-meta"));

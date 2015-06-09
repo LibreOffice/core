@@ -134,7 +134,7 @@ public class ScTabViewObj extends TestCase {
      * @see com.sun.star.sheet.SpreadsheetView
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
         XDrawPage oDrawPage = null;
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
@@ -149,19 +149,8 @@ public class ScTabViewObj extends TestCase {
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                new Type(XSpreadsheet.class), oIndexAccess.getByIndex(1));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+            new Type(XSpreadsheet.class), oIndexAccess.getByIndex(1));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
@@ -180,16 +169,11 @@ public class ScTabViewObj extends TestCase {
         XCell cell_1 = null;
         XCell cell_2 = null;
         Object cellRange = null;
-        try {
-            cellRange = oSheet.getCellRangeByPosition(0, 0, 3, 3);
-            cell_1 = oSheet.getCellByPosition(5,5);
-            cell_2 = oSheet.getCellByPosition(7,7);
-            cell_2.setValue(17.5);
-            cell_1.setValue(5.5);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get some cell", e);
-        }
+        cellRange = oSheet.getCellRangeByPosition(0, 0, 3, 3);
+        cell_1 = oSheet.getCellByPosition(5,5);
+        cell_2 = oSheet.getCellByPosition(7,7);
+        cell_2.setValue(17.5);
+        cell_1.setValue(5.5);
 
         Object[] selections = {oSheet, cellRange, cell_1, cell_2};
         tEnv.addObjRelation("Selections", selections);
@@ -211,17 +195,10 @@ public class ScTabViewObj extends TestCase {
             XForm myForm = null;
             String kindOfControl="CommandButton";
             XShape aShape = null;
-            try{
-                log.println("adding contol shape '" + kindOfControl + "'");
-                XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc) ;
+            log.println("adding contol shape '" + kindOfControl + "'");
+            XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc) ;
 
-                aShape = FormTools.createControlShape(oComp, 3000, 4500, 15000, 10000, kindOfControl);
-
-            } catch (Exception e){
-                e.printStackTrace(log);
-                throw new StatusException("Couldn't create following control shape : '" +
-                    kindOfControl + "': ", e);
-            }
+            aShape = FormTools.createControlShape(oComp, 3000, 4500, 15000, 10000, kindOfControl);
 
             log.println("adding relation for com.sun.star.view.XFormLayerAccess: XForm");
             try {

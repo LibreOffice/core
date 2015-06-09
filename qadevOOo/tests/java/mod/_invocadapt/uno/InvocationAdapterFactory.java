@@ -21,7 +21,6 @@ package mod._invocadapt.uno;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -48,19 +47,14 @@ public class InvocationAdapterFactory extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-                        TestParameters tParam, PrintWriter log) {
+                        TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
 
-        try {
-            XInterface xInt = (XInterface)xMSF.createInstance(
-                    "com.sun.star.script.InvocationAdapterFactory");
+        XInterface xInt = (XInterface)xMSF.createInstance(
+                "com.sun.star.script.InvocationAdapterFactory");
 
-            TestEnvironment tEnv = new TestEnvironment(xInt);
+        TestEnvironment tEnv = new TestEnvironment(xInt);
 
-            return tEnv;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        return tEnv;
     }
 }

@@ -20,7 +20,6 @@ package mod._smgr;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -90,7 +89,7 @@ public class OServiceManager extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         Object oInterface = null;
@@ -117,28 +116,23 @@ public class OServiceManager extends TestCase {
             ex.printStackTrace(log);
         }
 
-        try {
-            XSet set = UnoRuntime.queryInterface
-                (XSet.class, oInterface) ;
-            XSet set1 = UnoRuntime.queryInterface
-                (XSet.class, srvMan) ;
-            XEnumeration oEnum = set1.createEnumeration();
-            Object srv = oEnum.nextElement();
+        XSet set = UnoRuntime.queryInterface
+            (XSet.class, oInterface) ;
+        XSet set1 = UnoRuntime.queryInterface
+            (XSet.class, srvMan) ;
+        XEnumeration oEnum = set1.createEnumeration();
+        Object srv = oEnum.nextElement();
 
-            set.insert(srv) ;
+        set.insert(srv) ;
 
-            newElement = oEnum.nextElement();
+        newElement = oEnum.nextElement();
 
-            XPropertySet xProp = UnoRuntime.queryInterface(
-                                            XPropertySet.class, oInterface);
-            if (xProp != null) {
-                xContext = (XComponentContext) AnyConverter.toObject(
-                    new Type(XComponentContext.class),
-                            xProp.getPropertyValue("DefaultContext"));
-            }
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't insert a service to the ServiceManager") ;
-            throw new StatusException("Can't create object environment", e) ;
+        XPropertySet xProp = UnoRuntime.queryInterface(
+                                        XPropertySet.class, oInterface);
+        if (xProp != null) {
+            xContext = (XComponentContext) AnyConverter.toObject(
+                new Type(XComponentContext.class),
+                        xProp.getPropertyValue("DefaultContext"));
         }
 
         oObj = (XInterface) oInterface;

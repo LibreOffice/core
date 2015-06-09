@@ -27,11 +27,9 @@ import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.utils;
 
 
@@ -72,7 +70,7 @@ public class UnoControlDialogModel extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         XInterface oObj = null;
         XInterface dialogModel = null;
         String _buttonName = "MyButton";
@@ -80,71 +78,67 @@ public class UnoControlDialogModel extends TestCase {
         String _labelPrefix = "MyLabelPrefix";
         XMultiServiceFactory xMultiServiceFactory = null;
 
-        try {
-            dialogModel = (XInterface) Param.getMSF().createInstance(
-                                  "com.sun.star.awt.UnoControlDialogModel");
+        dialogModel = (XInterface) Param.getMSF().createInstance(
+                              "com.sun.star.awt.UnoControlDialogModel");
 
-            // create the dialog model and set the properties
-            XPropertySet xPSetDialog = UnoRuntime.queryInterface(
-                                               XPropertySet.class, dialogModel);
-            xPSetDialog.setPropertyValue("PositionX", Integer.valueOf(100));
-            xPSetDialog.setPropertyValue("PositionY", Integer.valueOf(100));
-            xPSetDialog.setPropertyValue("Width", Integer.valueOf(150));
-            xPSetDialog.setPropertyValue("Height", Integer.valueOf(100));
-            xPSetDialog.setPropertyValue("Title", "Runtime Dialog Demo");
+        // create the dialog model and set the properties
+        XPropertySet xPSetDialog = UnoRuntime.queryInterface(
+                                           XPropertySet.class, dialogModel);
+        xPSetDialog.setPropertyValue("PositionX", Integer.valueOf(100));
+        xPSetDialog.setPropertyValue("PositionY", Integer.valueOf(100));
+        xPSetDialog.setPropertyValue("Width", Integer.valueOf(150));
+        xPSetDialog.setPropertyValue("Height", Integer.valueOf(100));
+        xPSetDialog.setPropertyValue("Title", "Runtime Dialog Demo");
 
-            // get the service manager from the dialog model
-            xMultiServiceFactory = UnoRuntime.queryInterface(
-                                           XMultiServiceFactory.class,
+        // get the service manager from the dialog model
+        xMultiServiceFactory = UnoRuntime.queryInterface(
+                                       XMultiServiceFactory.class,
+                                       dialogModel);
+
+        // create the button model and set the properties
+        Object buttonModel = xMultiServiceFactory.createInstance(
+                                     "com.sun.star.awt.UnoControlButtonModel");
+        XPropertySet xPSetButton = UnoRuntime.queryInterface(
+                                           XPropertySet.class, buttonModel);
+        xPSetButton.setPropertyValue("PositionX", Integer.valueOf(50));
+        xPSetButton.setPropertyValue("PositionY", Integer.valueOf(30));
+        xPSetButton.setPropertyValue("Width", Integer.valueOf(50));
+        xPSetButton.setPropertyValue("Height", Integer.valueOf(14));
+        xPSetButton.setPropertyValue("Name", _buttonName);
+        xPSetButton.setPropertyValue("TabIndex", Short.valueOf((short) 0));
+        xPSetButton.setPropertyValue("Label", "Click Me");
+
+        // create the label model and set the properties
+        Object labelModel = xMultiServiceFactory.createInstance(
+                                    "com.sun.star.awt.UnoControlFixedTextModel");
+        XPropertySet xPSetLabel = UnoRuntime.queryInterface(
+                                          XPropertySet.class, labelModel);
+        xPSetLabel.setPropertyValue("PositionX", Integer.valueOf(40));
+        xPSetLabel.setPropertyValue("PositionY", Integer.valueOf(60));
+        xPSetLabel.setPropertyValue("Width", Integer.valueOf(100));
+        xPSetLabel.setPropertyValue("Height", Integer.valueOf(14));
+        xPSetLabel.setPropertyValue("Name", _labelName);
+        xPSetLabel.setPropertyValue("TabIndex", Short.valueOf((short) 1));
+        xPSetLabel.setPropertyValue("Label", _labelPrefix);
+
+        // insert the control models into the dialog model
+        XNameContainer xNameCont = UnoRuntime.queryInterface(
+                                           XNameContainer.class,
                                            dialogModel);
+        xNameCont.insertByName(_buttonName, buttonModel);
+        xNameCont.insertByName(_labelName, labelModel);
 
-            // create the button model and set the properties
-            Object buttonModel = xMultiServiceFactory.createInstance(
-                                         "com.sun.star.awt.UnoControlButtonModel");
-            XPropertySet xPSetButton = UnoRuntime.queryInterface(
-                                               XPropertySet.class, buttonModel);
-            xPSetButton.setPropertyValue("PositionX", Integer.valueOf(50));
-            xPSetButton.setPropertyValue("PositionY", Integer.valueOf(30));
-            xPSetButton.setPropertyValue("Width", Integer.valueOf(50));
-            xPSetButton.setPropertyValue("Height", Integer.valueOf(14));
-            xPSetButton.setPropertyValue("Name", _buttonName);
-            xPSetButton.setPropertyValue("TabIndex", Short.valueOf((short) 0));
-            xPSetButton.setPropertyValue("Label", "Click Me");
-
-            // create the label model and set the properties
-            Object labelModel = xMultiServiceFactory.createInstance(
-                                        "com.sun.star.awt.UnoControlFixedTextModel");
-            XPropertySet xPSetLabel = UnoRuntime.queryInterface(
-                                              XPropertySet.class, labelModel);
-            xPSetLabel.setPropertyValue("PositionX", Integer.valueOf(40));
-            xPSetLabel.setPropertyValue("PositionY", Integer.valueOf(60));
-            xPSetLabel.setPropertyValue("Width", Integer.valueOf(100));
-            xPSetLabel.setPropertyValue("Height", Integer.valueOf(14));
-            xPSetLabel.setPropertyValue("Name", _labelName);
-            xPSetLabel.setPropertyValue("TabIndex", Short.valueOf((short) 1));
-            xPSetLabel.setPropertyValue("Label", _labelPrefix);
-
-            // insert the control models into the dialog model
-            XNameContainer xNameCont = UnoRuntime.queryInterface(
-                                               XNameContainer.class,
-                                               dialogModel);
-            xNameCont.insertByName(_buttonName, buttonModel);
-            xNameCont.insertByName(_labelName, labelModel);
-
-            // create the dialog control and set the model
-            XControl dialog = UnoRuntime.queryInterface(
-                                      XControl.class,
-                                      Param.getMSF().createInstance(
-                                              "com.sun.star.awt.UnoControlDialog"));
-            XControl xControl = UnoRuntime.queryInterface(
-                                        XControl.class, dialog);
-            XControlModel xControlModel = UnoRuntime.queryInterface(
-                                                  XControlModel.class,
-                                                  dialogModel);
-            xControl.setModel(xControlModel);
-        } catch (Exception e) {
-            throw new StatusException("Could no create test object", e);
-        }
+        // create the dialog control and set the model
+        XControl dialog = UnoRuntime.queryInterface(
+                                  XControl.class,
+                                  Param.getMSF().createInstance(
+                                          "com.sun.star.awt.UnoControlDialog"));
+        XControl xControl = UnoRuntime.queryInterface(
+                                    XControl.class, dialog);
+        XControlModel xControlModel = UnoRuntime.queryInterface(
+                                              XControlModel.class,
+                                              dialogModel);
+        xControl.setModel(xControlModel);
 
         oObj = dialogModel;
 

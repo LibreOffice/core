@@ -18,9 +18,9 @@
 package mod._sw;
 
 import com.sun.star.beans.XPropertySet;
+
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -94,17 +94,12 @@ public class SwXTextEmbeddedObject extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
 
         // create testobject here
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
-        try {
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't open document", e);
-        }
+        xTextDoc = SOF.createTextDoc(null);
 
         XTextCursor xCursor = xTextDoc.getText().createTextCursor();
         try {
@@ -129,13 +124,8 @@ public class SwXTextEmbeddedObject extends TestCase {
         XIndexAccess oEmIn = UnoRuntime.queryInterface(
                                      XIndexAccess.class, oEmObj);
 
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-                           new Type(XInterface.class), oEmIn.getByIndex(0));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get Object", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+                       new Type(XInterface.class), oEmIn.getByIndex(0));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

@@ -20,7 +20,6 @@ package mod._lnn;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -72,20 +71,12 @@ public class SpellChecker extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
-        XInterface oObj = null;
-        Object LinguServiceManager = null;
-
-        try {
-            oObj = (XInterface)xMSF.createInstance
-                ("com.sun.star.lingu2.SpellChecker");
-            LinguServiceManager = xMSF.createInstance
-                ("com.sun.star.linguistic2.LinguServiceManager");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        XInterface oObj = (XInterface)xMSF.createInstance
+            ("com.sun.star.lingu2.SpellChecker");
+        Object LinguServiceManager = xMSF.createInstance
+            ("com.sun.star.linguistic2.LinguServiceManager");
 
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);

@@ -20,8 +20,6 @@ package mod._fwk;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -45,16 +43,10 @@ public class DispatchRecorderSupplier extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
-        PrintWriter log ) throws StatusException {
+        PrintWriter log ) throws Exception {
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)Param.getMSF().createInstance(
+        XInterface oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.DispatchRecorderSupplier");
-        } catch(com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create instance"));
-        }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

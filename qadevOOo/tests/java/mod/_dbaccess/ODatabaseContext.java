@@ -21,8 +21,6 @@ package mod._dbaccess;
 import com.sun.star.beans.PropertyValue;
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -80,59 +78,35 @@ public class ODatabaseContext extends TestCase {
     * </ul>
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null;
-        XMultiServiceFactory xMSF = null ;
-
-        try {
-            xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Service not available" );
-            throw new StatusException("Service not available", e) ;
-        }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
-
-        oObj = (XInterface) oInterface;
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // adding obj relation for XNamingService
-        try {
-            xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance( "com.sun.star.sdb.DataSource" );
+        oInterface = xMSF.createInstance( "com.sun.star.sdb.DataSource" );
 
-            XPropertySet xDSProps = UnoRuntime.queryInterface(XPropertySet.class, oInterface) ;
+        XPropertySet xDSProps = UnoRuntime.queryInterface(XPropertySet.class, oInterface) ;
 
-            xDSProps.setPropertyValue("URL", "sdbc:dbase:file:///.") ;
+        xDSProps.setPropertyValue("URL", "sdbc:dbase:file:///.") ;
 
-            XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, oInterface);
-            XStorable store = UnoRuntime.queryInterface(XStorable.class,
-            xDDS.getDatabaseDocument ());
-            String aFile = utils.getOfficeTemp (Param.getMSF ())+"DatabaseContext.odb";
-            log.println("store to '" + aFile + "'");
-            store.storeAsURL(aFile,new PropertyValue[]{});
+        XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, oInterface);
+        XStorable store = UnoRuntime.queryInterface(XStorable.class,
+        xDDS.getDatabaseDocument ());
+        String aFile = utils.getOfficeTemp (Param.getMSF ())+"DatabaseContext.odb";
+        log.println("store to '" + aFile + "'");
+        store.storeAsURL(aFile,new PropertyValue[]{});
 
-            tEnv.addObjRelation("XNamingService.RegisterObject", oInterface) ;
+        tEnv.addObjRelation("XNamingService.RegisterObject", oInterface) ;
 
-            tEnv.addObjRelation("INSTANCE", oInterface);
+        tEnv.addObjRelation("INSTANCE", oInterface);
 
-            tEnv.addObjRelation("XContainer.Container",
-                UnoRuntime.queryInterface(
-                                    XNamingService.class, oObj));
-
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create object relation", e) ;
-        } catch (NullPointerException e) {
-            throw new StatusException("Can't create object relation", e) ;
-        }
+        tEnv.addObjRelation("XContainer.Container",
+            UnoRuntime.queryInterface(
+                                XNamingService.class, oObj));
 
         return tEnv;
     } // finish method getTestEnvironment

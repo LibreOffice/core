@@ -22,8 +22,6 @@ import com.sun.star.beans.NamedValue;
 import com.sun.star.container.XNameAccess;
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -87,23 +85,12 @@ public class TypeDetection extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
         Object oInterface = null ;
 
-        try {
-            oInterface = Param.getMSF().createInstance
-                ("com.sun.star.document.TypeDetection") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get service");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get TypeDetection", e );
-        }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
+        oInterface = Param.getMSF().createInstance
+            ("com.sun.star.document.TypeDetection") ;
 
         oObj = (XInterface) oInterface ;
         log.println("ImplName: "+utils.getImplName(oObj));
@@ -116,13 +103,7 @@ public class TypeDetection extends TestCase {
         String[] elementNames = xNA.getElementNames();
         String elementName = elementNames[0];
         Object[] instance = null;
-        try{
-            instance = (Object[]) xNA.getByName(elementName);
-        } catch (com.sun.star.container.NoSuchElementException e){
-            throw new StatusException(e, Status.failed("Couldn't get elements from object"));
-        } catch (com.sun.star.lang.WrappedTargetException e){
-            throw new StatusException(e, Status.failed("Couldn't get elements from object"));
-        }
+        instance = (Object[]) xNA.getByName(elementName);
 
         log.println("adding INSTANCE 1 as obj relation to environment");
 
@@ -140,22 +121,16 @@ public class TypeDetection extends TestCase {
         log.println("create text document with bookmarks");
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         String fileURL = null;
-        try {
-            xTextDoc = SOF.createTextDoc( null );
-            XInterface xBookMark = SOfficeFactory.createBookmark( xTextDoc );
-            SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) xBookMark );
+        xTextDoc = SOF.createTextDoc( null );
+        XInterface xBookMark = SOfficeFactory.createBookmark( xTextDoc );
+        SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) xBookMark );
 
-            fileURL = utils.getOfficeTemp(Param.getMSF() );
-            fileURL = fileURL + "bookmarks.oot";
+        fileURL = utils.getOfficeTemp(Param.getMSF() );
+        fileURL = fileURL + "bookmarks.oot";
 
-            XStorable store = UnoRuntime.queryInterface(XStorable.class, xTextDoc);
-            System.out.println(fileURL);
-            store.storeToURL(fileURL, new PropertyValue[0]);
-
-        } catch( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create Bookmark", e );
-        }
+        XStorable store = UnoRuntime.queryInterface(XStorable.class, xTextDoc);
+        System.out.println(fileURL);
+        store.storeToURL(fileURL, new PropertyValue[0]);
 
         tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
             querySequenze);

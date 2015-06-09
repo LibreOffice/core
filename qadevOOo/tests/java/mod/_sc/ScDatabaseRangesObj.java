@@ -97,7 +97,7 @@ public class ScDatabaseRangesObj extends TestCase {
     * @see com.sun.star.container.XElementAccess
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -109,23 +109,9 @@ public class ScDatabaseRangesObj extends TestCase {
         XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
 
         XDatabaseRanges dbRanges = null;
-        try {
-            dbRanges = (XDatabaseRanges) AnyConverter.toObject(
-                new Type(XDatabaseRanges.class),
-                    docProps.getPropertyValue("DatabaseRanges"));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        }
+        dbRanges = (XDatabaseRanges) AnyConverter.toObject(
+            new Type(XDatabaseRanges.class),
+                docProps.getPropertyValue("DatabaseRanges"));
 
         log.println("Adding at least one element for ElementAccess interface");
         CellRangeAddress aRange = new CellRangeAddress((short)0, 2, 4, 5, 6);

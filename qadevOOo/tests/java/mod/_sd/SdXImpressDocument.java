@@ -17,13 +17,10 @@
  */
 package mod._sd;
 
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.XSelectionSupplier;
@@ -32,7 +29,6 @@ import java.io.File;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -109,21 +105,16 @@ public class SdXImpressDocument extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log)
-        throws StatusException {
+        throws Exception {
         log.println("creating a test environment");
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
             Param.getMSF());
 
-        try {
-            log.println("creating two impress documents");
-            xImpressDoc2 = SOF.createImpressDoc(null);
-            xImpressDoc = SOF.createImpressDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create documents", e);
-        }
+        log.println("creating two impress documents");
+        xImpressDoc2 = SOF.createImpressDoc(null);
+        xImpressDoc = SOF.createImpressDoc(null);
 
         XModel xModel1 = UnoRuntime.queryInterface(XModel.class,
             xImpressDoc);
@@ -145,22 +136,8 @@ public class SdXImpressDocument extends TestCase {
 
         XPropertySet xShapeProps = UnoRuntime.queryInterface(XPropertySet.class, aShape);
 
-        try {
-            xShapeProps.setPropertyValue("FillStyle", com.sun.star.drawing.FillStyle.SOLID);
-            xShapeProps.setPropertyValue("FillTransparence", Integer.valueOf(50));
-        } catch (UnknownPropertyException ex) {
-            ex.printStackTrace(log);
-            throw new StatusException("Couldn't make shape transparent", ex);
-        } catch (PropertyVetoException ex) {
-            ex.printStackTrace(log);
-            throw new StatusException("Couldn't make shape transparent", ex);
-        } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            ex.printStackTrace(log);
-            throw new StatusException("Couldn't make shape transparent", ex);
-        } catch (WrappedTargetException ex) {
-            ex.printStackTrace(log);
-            throw new StatusException("Couldn't make shape transparent", ex);
-        }
+        xShapeProps.setPropertyValue("FillStyle", com.sun.star.drawing.FillStyle.SOLID);
+        xShapeProps.setPropertyValue("FillTransparence", Integer.valueOf(50));
 
         DrawTools.getDrawPage(xImpressDoc, 0).add(aShape);
 

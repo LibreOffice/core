@@ -70,7 +70,7 @@ public class SwXTextFrame extends TestCase {
      */
     @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                              PrintWriter log) {
+                                                              PrintWriter log) throws Exception {
         XInterface oObj = null;
         XTextFrame oFrame1 = null;
         XTextFrame oFrame2 = null;
@@ -93,42 +93,36 @@ public class SwXTextFrame extends TestCase {
 
         Object instance = null;
 
-        try {
-            oFrame1 = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
-            oFrame2 = SOfficeFactory.createTextFrame(xTextDoc, 1500, 1500);
-            oPropSet = UnoRuntime.queryInterface(
-                               XPropertySet.class, oFrame1);
+        oFrame1 = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
+        oFrame2 = SOfficeFactory.createTextFrame(xTextDoc, 1500, 1500);
+        oPropSet = UnoRuntime.queryInterface(
+                           XPropertySet.class, oFrame1);
 
 
-            // AnchorTypes: 0 = paragraph, 1 = as char, 2 = page,
-            // 3 = frame/paragraph 4= at char
-            oPropSet.setPropertyValue("AnchorType",
-                                      TextContentAnchorType.AS_CHARACTER);
-            oText = xTextDoc.getText();
-            oCursor = oText.createTextCursor();
+        // AnchorTypes: 0 = paragraph, 1 = as char, 2 = page,
+        // 3 = frame/paragraph 4= at char
+        oPropSet.setPropertyValue("AnchorType",
+                                  TextContentAnchorType.AS_CHARACTER);
+        oText = xTextDoc.getText();
+        oCursor = oText.createTextCursor();
 
-            log.println("inserting Frame1");
+        log.println("inserting Frame1");
 
-            XTextContent the_content = UnoRuntime.queryInterface(
-                                               XTextContent.class, oFrame1);
-            oText.insertTextContent(oCursor, the_content, true);
+        XTextContent the_content = UnoRuntime.queryInterface(
+                                           XTextContent.class, oFrame1);
+        oText.insertTextContent(oCursor, the_content, true);
 
-            log.println("inserting Frame2");
-            the_content = UnoRuntime.queryInterface(
-                                  XTextContent.class, oFrame2);
-            oText.insertTextContent(oCursor, the_content, true);
+        log.println("inserting Frame2");
+        the_content = UnoRuntime.queryInterface(
+                              XTextContent.class, oFrame2);
+        oText.insertTextContent(oCursor, the_content, true);
 
-            XText oFrameText = oFrame1.getText();
-            oFrameText.insertString(oFrameText.getStart(), "The FrameText",
-                                    true);
+        XText oFrameText = oFrame1.getText();
+        oFrameText.insertString(oFrameText.getStart(), "The FrameText",
+                                true);
 
-            instance = SOF.createInstance(xTextDoc,
-                                          "com.sun.star.text.TextFrame");
-        } catch (Exception Ex) {
-            Ex.printStackTrace(log);
-            throw new StatusException("Couldn't insert TextFrame ", Ex);
-        }
-
+        instance = SOF.createInstance(xTextDoc,
+                                      "com.sun.star.text.TextFrame");
         oObj = oFrame1;
 
         log.println("creating a new environment for TextFrame object");

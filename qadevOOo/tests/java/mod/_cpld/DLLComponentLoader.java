@@ -66,20 +66,12 @@ public class DLLComponentLoader extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null;
+            (TestParameters Param, PrintWriter log) throws Exception {
 
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.comp.stoc.DLLComponentLoader" );
-        }
-        catch( Exception e ) {
-            log.println("DLLComponentLoader Service not available" );
-        }
-
-        oObj = (XInterface) oInterface;
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
+            ( "com.sun.star.comp.stoc.DLLComponentLoader" );
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for DLLComponentLoader object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

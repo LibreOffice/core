@@ -93,7 +93,7 @@ public class SdPageLinkTargets extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -116,22 +116,8 @@ public class SdPageLinkTargets extends TestCase {
 
         log.println("Inserting a Chart");
 
-        try {
-            shape_props.
-                setPropertyValue("CLSID","12DCAE26-281F-416F-a234-c3086127382e");
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("WrappedTarget: couldn't change property CLSID", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("IllegalArgument: couldn't change property CLSID", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("PropertyVeto: couldn't change property CLSID", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("UnknownProperty: couldn't change property CLSID", e);
-        }
+        shape_props.
+            setPropertyValue("CLSID","12DCAE26-281F-416F-a234-c3086127382e");
 
         log.println( "creating a new environment for LinkTargets object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

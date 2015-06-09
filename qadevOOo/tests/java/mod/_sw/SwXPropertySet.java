@@ -20,7 +20,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -57,17 +56,12 @@ public class SwXPropertySet extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-            TestParameters Param, PrintWriter log ) throws StatusException {
+            TestParameters Param, PrintWriter log ) throws Exception {
 
         log.println( "creating a test environment" );
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
-        try {
-            log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create text document", e );
-        }
+        log.println( "creating a text document" );
+        xTextDoc = SOF.createTextDoc( null );
 
         TestEnvironment tEnv = new TestEnvironment( xTextDoc );
         return tEnv;

@@ -107,20 +107,14 @@ public class XMLSettingsImporter extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+            throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oObj = null;
         final short impMargin = 67 ;
 
-        try {
-            oObj = (XInterface)xMSF.createInstance(
-                    "com.sun.star.comp.Math.XMLSettingsImporter");
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        oObj = (XInterface)xMSF.createInstance(
+                "com.sun.star.comp.Math.XMLSettingsImporter");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

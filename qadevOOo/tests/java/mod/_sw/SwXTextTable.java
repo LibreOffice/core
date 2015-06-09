@@ -98,13 +98,7 @@ public class SwXTextTable extends TestCase {
         tEnv = new TestEnvironment(oObj);
 
         if (SOfficeFactory.getTableCollection(xTextDoc).getCount() == 0) {
-            try {
-                SOfficeFactory.insertTextContent(xTextDoc, oObj);
-            } catch (com.sun.star.lang.IllegalArgumentException uE) {
-                uE.printStackTrace(log);
-                throw new StatusException("Couldn't create TextTable : " +
-                                          uE.getMessage(), uE);
-            }
+            SOfficeFactory.insertTextContent(xTextDoc, oObj);
         }
 
         XPropertySet props = UnoRuntime.queryInterface(

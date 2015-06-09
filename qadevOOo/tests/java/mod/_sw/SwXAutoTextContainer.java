@@ -20,7 +20,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -55,22 +54,17 @@ public class SwXAutoTextContainer extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-            TestParameters Param, PrintWriter log ) throws StatusException {
+            TestParameters Param, PrintWriter log ) throws Exception {
         XAutoTextContainer  oContainer = null;
 
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println("creating a AutoTextContainer");
-        try {
-            XMultiServiceFactory myMSF = Param.getMSF();
-            Object oInst = myMSF.createInstance
-                ("com.sun.star.text.AutoTextContainer");
-            oContainer = UnoRuntime.queryInterface
-                (XAutoTextContainer.class,oInst);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create AutoTextContainer", e);
-        }
+        XMultiServiceFactory myMSF = Param.getMSF();
+        Object oInst = myMSF.createInstance
+            ("com.sun.star.text.AutoTextContainer");
+        oContainer = UnoRuntime.queryInterface
+            (XAutoTextContainer.class,oInst);
 
         TestEnvironment tEnv = new TestEnvironment(oContainer);
 

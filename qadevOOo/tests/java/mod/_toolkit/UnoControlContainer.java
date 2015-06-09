@@ -41,7 +41,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.FormTools;
 import util.WriterTools;
 import util.utils;
@@ -79,7 +78,7 @@ public class UnoControlContainer extends TestCase {
 
     @Override
     public TestEnvironment createTestEnvironment(TestParameters param,
-                                                 PrintWriter log) {
+                                                 PrintWriter log) throws Exception {
         // create Object Relations -------------------------------------------
         XInterface oObj = null;
         XControlShape shape = null;
@@ -105,12 +104,7 @@ public class UnoControlContainer extends TestCase {
         access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
 
-        try {
-            xCtrl = access.getControl(model);
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create XControl", e);
-        }
+        xCtrl = access.getControl(model);
 
 
         // create second XControl
@@ -121,12 +115,7 @@ public class UnoControlContainer extends TestCase {
         access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
 
-        try {
-            xCtrl1 = access.getControl(model);
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create XControl", e);
-        }
+        xCtrl1 = access.getControl(model);
 
 
         // create third XControl
@@ -137,12 +126,7 @@ public class UnoControlContainer extends TestCase {
         access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
 
-        try {
-            xCtrl2 = access.getControl(model);
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create XControl", e);
-        }
+        xCtrl2 = access.getControl(model);
 
         // create XToolkit, XWindowPeer, XDevice
         //Insert a ControlShape and get the ControlModel
@@ -162,44 +146,28 @@ public class UnoControlContainer extends TestCase {
                                             xTD2.getCurrentController());
 
         //get the ButtonControl for the needed Object relations
-        try {
-            the_win = the_access.getControl(the_Model).getPeer();
-            the_kit = the_win.getToolkit();
+        the_win = the_access.getControl(the_Model).getPeer();
+        the_kit = the_win.getToolkit();
 
-            XDevice aDevice = the_kit.createScreenCompatibleDevice(200, 200);
-            aGraphic = aDevice.createGraphics();
-        } catch (Exception e) {
-            log.println("Couldn't get ButtonControl");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get ButtonControl", e);
-        }
+        XDevice aDevice = the_kit.createScreenCompatibleDevice(200, 200);
+        aGraphic = aDevice.createGraphics();
 
-        try {
-            XController aController = xTD2.getCurrentController();
-            XFrame aFrame = aController.getFrame();
-            anotherWindow = aFrame.getComponentWindow();
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create XWindow", e);
-        }
+        XController aController = xTD2.getCurrentController();
+        XFrame aFrame = aController.getFrame();
+        anotherWindow = aFrame.getComponentWindow();
 
         // finished create Object Relations -----------------------------------
         // create the UnoControlContainer
-        try {
-            oObj = (XInterface) param.getMSF().createInstance(
-                           "com.sun.star.awt.UnoControlContainer");
+        oObj = (XInterface) param.getMSF().createInstance(
+                       "com.sun.star.awt.UnoControlContainer");
 
-            XControl xCtrl = UnoRuntime.queryInterface(
-                                     XControl.class, oObj);
-            xCtrl.setModel(the_Model);
+        XControl xCtrl = UnoRuntime.queryInterface(
+                                 XControl.class, oObj);
+        xCtrl.setModel(the_Model);
 
-            ctrlCont = UnoRuntime.queryInterface(
-                               XControlContainer.class, oObj);
-            ctrlCont.addControl("jupp", access.getControl(aShape.getControl()));
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create UnoControlContainer", e);
-        }
+        ctrlCont = UnoRuntime.queryInterface(
+                           XControlContainer.class, oObj);
+        ctrlCont.addControl("jupp", access.getControl(aShape.getControl()));
 
         log.println(
                 "creating a new environment for UnoControlContainer object");

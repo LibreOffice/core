@@ -20,7 +20,6 @@ package mod._cnt;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -79,37 +78,27 @@ public class CntUnoDataContainer extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-                                    TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null;
+                                    TestParameters Param, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = Param.getMSF();
-        Object relationContainer = null ;
-        Object xIn = null;
 
-        try {
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.ucb.DataContainer" );
+        Object oInterface = xMSF.createInstance
+            ( "com.sun.star.ucb.DataContainer" );
 
-            // adding one child container
-            XIndexContainer xIC = UnoRuntime.queryInterface
-                (XIndexContainer.class, oInterface) ;
+        // adding one child container
+        XIndexContainer xIC = UnoRuntime.queryInterface
+            (XIndexContainer.class, oInterface) ;
 
-            Object child = xMSF.createInstance
-                ( "com.sun.star.ucb.DataContainer" );
-            xIC.insertByIndex(0, child) ;
+        Object child = xMSF.createInstance
+            ( "com.sun.star.ucb.DataContainer" );
+        xIC.insertByIndex(0, child) ;
 
-            relationContainer = xMSF.createInstance
-                ( "com.sun.star.ucb.DataContainer" );
+        Object relationContainer = xMSF.createInstance
+            ( "com.sun.star.ucb.DataContainer" );
 
-            xIn = xMSF.createInstance
-                ( "com.sun.star.io.DataInputStream" );
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
+        Object xIn = xMSF.createInstance
+            ( "com.sun.star.io.DataInputStream" );
 
-        oObj = (XInterface) oInterface;
+        XInterface oObj = (XInterface) oInterface;
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

@@ -28,7 +28,6 @@ import com.sun.star.util.URL;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -118,7 +117,7 @@ public class GraphicExporter extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
         XShape oShape = null;
         Object go = null;
@@ -147,29 +146,15 @@ public class GraphicExporter extends TestCase {
                                            XPropertySet.class, oShape);
         XComponent xComp = null;
 
-        try {
-            oShapeProps.setPropertyValue("GraphicURL",
-                                         util.utils.getFullTestURL(
-                                                 "space-metal.jpg"));
-            xComp = UnoRuntime.queryInterface(XComponent.class,
-                                                           oShape);
+        oShapeProps.setPropertyValue("GraphicURL",
+                                     util.utils.getFullTestURL(
+                                             "space-metal.jpg"));
+        xComp = UnoRuntime.queryInterface(XComponent.class,
+                                                       oShape);
 
-            XExporter xEx = UnoRuntime.queryInterface(
-                                    XExporter.class, go);
-            xEx.setSourceDocument(xComp);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Error while preparing component", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Error while preparing component", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Error while preparing component", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Error while preparing component", e);
-        }
+        XExporter xEx = UnoRuntime.queryInterface(
+                                XExporter.class, go);
+        xEx.setSourceDocument(xComp);
 
         final URL aURL = new URL();
         aURL.Complete = util.utils.getOfficeTemp(
@@ -178,19 +163,13 @@ public class GraphicExporter extends TestCase {
 
         final XSimpleFileAccess fAcc;
 
-        try {
-            Object oFAcc = tParam.getMSF().createInstance(
-                                   "com.sun.star.ucb.SimpleFileAccess");
-            fAcc = UnoRuntime.queryInterface(
-                           XSimpleFileAccess.class, oFAcc);
+        Object oFAcc = tParam.getMSF().createInstance(
+                               "com.sun.star.ucb.SimpleFileAccess");
+        fAcc = UnoRuntime.queryInterface(
+                       XSimpleFileAccess.class, oFAcc);
 
-            if (fAcc.exists(aURL.Complete)) {
-                fAcc.kill(aURL.Complete);
-            }
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Error accessing file system :");
-            e.printStackTrace(log);
-            throw new StatusException("Error accessing file system.", e);
+        if (fAcc.exists(aURL.Complete)) {
+            fAcc.kill(aURL.Complete);
         }
 
         oObj = (XInterface) go;

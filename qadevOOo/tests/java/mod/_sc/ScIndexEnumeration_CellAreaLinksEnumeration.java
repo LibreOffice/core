@@ -71,52 +71,37 @@ protected void initialize( TestParameters tParam, PrintWriter log ) {
 
 
     @Override
-    public synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log){
+    public synchronized TestEnvironment createTestEnvironment(
+            TestParameters Param, PrintWriter log) throws Exception {
 
-      XInterface oObj = null;
-      TestEnvironment tEnv = null ;
-
-      try {
+        XInterface oObj = null;
+        TestEnvironment tEnv = null;
 
         // creation of testobject here
-        XPropertySet props = UnoRuntime.queryInterface
-            (XPropertySet.class, xSheetDoc);
-        oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),props.getPropertyValue("AreaLinks")) ;
-        XAreaLinks links = null ;
+        XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class,
+                xSheetDoc);
+        oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),
+                props.getPropertyValue("AreaLinks"));
+        XAreaLinks links = null;
 
         // adding one link into collection (for best testing)
-        links = UnoRuntime.queryInterface(XAreaLinks.class, oObj) ;
-        CellAddress addr = new CellAddress ((short) 1,2,3) ;
+        links = UnoRuntime.queryInterface(XAreaLinks.class, oObj);
+        CellAddress addr = new CellAddress((short) 1, 2, 3);
         String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
-        links.insertAtPosition (addr, aSourceArea, "a2:b5", "", "") ;
+        links.insertAtPosition(addr, aSourceArea, "a2:b5", "", "");
 
-        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
+        XEnumerationAccess ea = UnoRuntime.queryInterface(
+                XEnumerationAccess.class, oObj);
 
         oObj = ea.createEnumeration();
 
-        log.println("ImplementationName: "+util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
         // creating test environment
         tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("ENUM",ea);
+        tEnv.addObjRelation("ENUM", ea);
 
-      } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println ("Exception occurred while creating test Object.") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Couldn't create test object", e);
-      } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println ("Exception occurred while creating test Object.") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Couldn't create test object", e);
-      } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println ("Exception occurred while creating test Object.") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Couldn't create test object", e);
-      }
-
-       return tEnv ;
+        return tEnv;
     }
 
 }

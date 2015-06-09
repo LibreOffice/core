@@ -101,7 +101,7 @@ public class ScDataPilotFieldsObj extends TestCase {
     * @see com.sun.star.sheet.XDataPilotDescriptor
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -117,35 +117,19 @@ public class ScDataPilotFieldsObj extends TestCase {
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
+
+        log.println("Filing a table");
+        for (int i = 1; i < 4; i++) {
+            oSheet.getCellByPosition(i, 0).setFormula("Col" + i);
+            oSheet.getCellByPosition(0, i).setFormula("Row" + i);
         }
 
-        try {
-            log.println("Filing a table");
-            for (int i = 1; i < 4; i++) {
-                oSheet.getCellByPosition(i, 0).setFormula("Col" + i);
-                oSheet.getCellByPosition(0, i).setFormula("Row" + i);
+        for (int i = 1; i < 4; i++)
+            for (int j = 1; j < 4; j++) {
+                oSheet.getCellByPosition(i, j).setValue(i * (j + 1));
             }
-
-            for (int i = 1; i < 4; i++)
-                for (int j = 1; j < 4; j++) {
-                    oSheet.getCellByPosition(i, j).setValue(i * (j + 1));
-                }
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't fill some cells", e);
-        }
 
         XDataPilotTablesSupplier DPTS = UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
 

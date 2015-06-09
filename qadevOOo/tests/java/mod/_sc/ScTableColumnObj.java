@@ -106,7 +106,7 @@ public class ScTableColumnObj extends TestCase {
     * @see com.sun.star.table.TableColumn
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -118,37 +118,15 @@ public class ScTableColumnObj extends TestCase {
 
         XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
         XNameAccess oNames = UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
-        try {
-            xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
-                new Type(XSpreadsheet.class),
-                    oNames.getByName(oNames.getElementNames()[0]));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get element by name", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get element by name", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get element by name", e);
-        }
+        xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
+            new Type(XSpreadsheet.class),
+                oNames.getByName(oNames.getElementNames()[0]));
 
         XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
         XTableColumns oColumns = oColumnRowRange.getColumns();
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-                    new Type(XInterface.class),oIndexAccess.getByIndex(10));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),oIndexAccess.getByIndex(10));
 
         log.println("creating a new environment for object");
         TestEnvironment tEnv = new TestEnvironment(oObj);

@@ -87,18 +87,13 @@ public class ScAccessibleCell extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(  Param.getMSF());
 
-        try {
-            log.println("creating a spreadsheetdocument");
-            xSpreadsheetDoc = SOF.createCalcDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document ", e );
-        }
+        log.println("creating a spreadsheetdocument");
+        xSpreadsheetDoc = SOF.createCalcDoc(null);
 
         XInterface oObj = null;
 

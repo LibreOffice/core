@@ -25,11 +25,10 @@ import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import ifc.awt.tree._XMutableTreeNode.XMutableTreeNodeCreator;
 
 import java.io.PrintWriter;
-import lib.Status;
-import lib.StatusException;
 
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -63,16 +62,11 @@ public class MutableTreeNode extends TestCase {
 
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-        PrintWriter log) {
+        PrintWriter log) throws Exception {
         XMutableTreeNode xNode;
 
-        try {
-            mXTreeDataModel = UnoRuntime.queryInterface(XMutableTreeDataModel.class,
-                mxMSF.createInstance("com.sun.star.awt.tree.MutableTreeDataModel"));
-        } catch (com.sun.star.uno.Exception ex) {
-            throw new StatusException(ex, Status.failed("ERROR: could not create instance of" +
-                " 'com.sun.star.awt.tree.MutableTreeDataModel'"));
-        }
+        mXTreeDataModel = UnoRuntime.queryInterface(XMutableTreeDataModel.class,
+            mxMSF.createInstance("com.sun.star.awt.tree.MutableTreeDataModel"));
 
         xNode = mXTreeDataModel.createNode("UnoTreeControl", false);
 

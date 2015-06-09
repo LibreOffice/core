@@ -65,32 +65,24 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
-        XInterface oObj = null;
+        // creation of testobject here
+        // get AutoFormats
+        XInterface oObj = (XInterface)Param.getMSF().createInstance
+            ("com.sun.star.sheet.TableAutoFormats");
 
-        try {
-            // creation of testobject here
-            // get AutoFormats
-            oObj = (XInterface)Param.getMSF().createInstance
-                ("com.sun.star.sheet.TableAutoFormats");
+        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 
-            XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
+        oObj = ea.createEnumeration();
 
-            oObj = ea.createEnumeration();
+        log.println("ImplementationName: "+util.utils.getImplName(oObj));
+        // creating test environment
+        TestEnvironment tEnv = new TestEnvironment( oObj );
 
-            log.println("ImplementationName: "+util.utils.getImplName(oObj));
-            // creating test environment
-            TestEnvironment tEnv = new TestEnvironment( oObj );
+        tEnv.addObjRelation("ENUM",ea);
 
-            tEnv.addObjRelation("ENUM",ea);
-
-            return tEnv;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println ("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        }
+        return tEnv;
     }
 
 }    // finish class ScAutoFormatsObj

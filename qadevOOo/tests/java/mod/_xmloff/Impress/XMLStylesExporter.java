@@ -118,7 +118,7 @@ public class XMLStylesExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-        (TestParameters tParam, PrintWriter log) throws StatusException {
+        (TestParameters tParam, PrintWriter log) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         XMultiServiceFactory xMSF = tParam.getMSF() ;
@@ -132,29 +132,23 @@ public class XMLStylesExporter extends TestCase {
         filter.addTag(new XMLTools.Tag("office:styles"));
         filter.addTag(new XMLTools.Tag("style:style","style:name", newName));
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Impress.XMLStylesExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            xEx.setSourceDocument(xImpressDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Impress.XMLStylesExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        xEx.setSourceDocument(xImpressDoc);
 
-            // Obtaining and changing property values
-            XStyleFamiliesSupplier styleSup = UnoRuntime.queryInterface
-            (XStyleFamiliesSupplier.class, xImpressDoc) ;
-            XNameAccess styleFamilies = styleSup.getStyleFamilies();
-            String[] styleFamiliesNames = styleFamilies.getElementNames();
-            XNameContainer StyleFamilyName = UnoRuntime.queryInterface(XNameContainer.class,
-            styleFamilies.getByName(styleFamiliesNames[0]));
-            Object SC = SOF.createInstance
-                (xImpressDoc, "com.sun.star.style.Style");
-            XStyle StylePage = UnoRuntime.queryInterface(XStyle.class,SC);
-            StyleFamilyName.insertByName(newName, StylePage);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        // Obtaining and changing property values
+        XStyleFamiliesSupplier styleSup = UnoRuntime.queryInterface
+        (XStyleFamiliesSupplier.class, xImpressDoc) ;
+        XNameAccess styleFamilies = styleSup.getStyleFamilies();
+        String[] styleFamiliesNames = styleFamilies.getElementNames();
+        XNameContainer StyleFamilyName = UnoRuntime.queryInterface(XNameContainer.class,
+        styleFamilies.getByName(styleFamiliesNames[0]));
+        Object SC = SOF.createInstance
+            (xImpressDoc, "com.sun.star.style.Style");
+        XStyle StylePage = UnoRuntime.queryInterface(XStyle.class,SC);
+        StyleFamilyName.insertByName(newName, StylePage);
 
         // create testobject here
         log.println( "creating a new environment" );

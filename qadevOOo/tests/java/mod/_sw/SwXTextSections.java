@@ -70,7 +70,7 @@ public class SwXTextSections extends TestCase {
      */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-        (TestParameters Param, PrintWriter log ) throws StatusException {
+        (TestParameters Param, PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
         XInterface oTS = null;
@@ -92,28 +92,16 @@ public class SwXTextSections extends TestCase {
         XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
 
         // First TextSection
-        try {
-            oTS = (XInterface) oDocMSF.createInstance
-                ("com.sun.star.text.TextSection");
-            XTextContent oTSC = UnoRuntime.queryInterface(XTextContent.class, oTS);
-            oText.insertTextContent(oCursor, oTSC, false);
-        }
-        catch(Exception e){
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        oTS = (XInterface) oDocMSF.createInstance
+            ("com.sun.star.text.TextSection");
+        XTextContent oTSC = UnoRuntime.queryInterface(XTextContent.class, oTS);
+        oText.insertTextContent(oCursor, oTSC, false);
 
         // Second TextSection
-        try {
-            oTS = (XInterface) oDocMSF.createInstance
-                ("com.sun.star.text.TextSection");
-            XTextContent oTSC = UnoRuntime.queryInterface(XTextContent.class, oTS);
-            oText.insertTextContent(oCursor, oTSC, false);
-        }
-        catch(Exception e){
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        oTS = (XInterface) oDocMSF.createInstance
+            ("com.sun.star.text.TextSection");
+        XTextContent oTSC2 = UnoRuntime.queryInterface(XTextContent.class, oTS);
+        oText.insertTextContent(oCursor, oTSC2, false);
 
 
         log.println( "try to get a TextSection with the XTextSectionSupplier()" );

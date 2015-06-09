@@ -89,7 +89,7 @@ public class SdLayer extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(
-                                    TestParameters Param, PrintWriter log) {
+                                    TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XLayerManager oLM = null;
@@ -105,19 +105,8 @@ public class SdLayer extends TestCase {
         oLM = UnoRuntime.queryInterface(XLayerManager.class, oNA);
         XIndexAccess oIA = UnoRuntime.queryInterface(XIndexAccess.class,oLM);
         log.println( "getting LayerManager" );
-        try {
-            oObj = (XLayer) AnyConverter.toObject(
-                        new Type(XLayer.class),oIA.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get by index", e);
-        }
+        oObj = (XLayer) AnyConverter.toObject(
+                    new Type(XLayer.class),oIA.getByIndex(0));
 
         log.println( "creating a new environment for drawpage object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

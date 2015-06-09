@@ -21,31 +21,21 @@ package mod._fwk;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
 
-/**
- */
 public class HeaderMenuController extends TestCase {
     XInterface oObj = null;
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        TestEnvironment tEnv = null;
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
-        try {
-            oObj = (XInterface)xMSF.createInstance("com.sun.star.comp.framework.HeaderMenuController");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could not create object 'HeaderMenuController'", e);
-        }
+        oObj = (XInterface)xMSF.createInstance("com.sun.star.comp.framework.HeaderMenuController");
 
         log.println("TestObject: " + utils.getImplName(oObj));
-        tEnv = new TestEnvironment(oObj);
+        TestEnvironment tEnv = new TestEnvironment(oObj);
         return tEnv;
     }
 

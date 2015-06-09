@@ -91,7 +91,7 @@ public class SwXCellRange extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         XTextTable the_table = null;
         XInterface oObj = null;
@@ -99,22 +99,10 @@ public class SwXCellRange extends TestCase {
         the_table.initialize(5, 5);
 
         if( SOfficeFactory.getTableCollection( xTextDoc ).getCount() == 0 ) {
-            try {
-                SOfficeFactory.insertTextContent(xTextDoc, the_table );
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                e.printStackTrace( log );
-                throw new StatusException("Couldn't create TextTable : "
-                        + e.getMessage(), e);
-            }
+            SOfficeFactory.insertTextContent(xTextDoc, the_table );
         }
-        try {
-            XCellRange the_Range = UnoRuntime.queryInterface(XCellRange.class, the_table);
-            oObj = the_Range.getCellRangeByPosition(0, 0, 3, 4);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get CellRange : "
-                    + e.getMessage(), e);
-        }
+        XCellRange the_Range = UnoRuntime.queryInterface(XCellRange.class, the_table);
+        oObj = the_Range.getCellRangeByPosition(0, 0, 3, 4);
 
         log.println("Creating instance...");
         TestEnvironment tEnv = new TestEnvironment( oObj );

@@ -20,7 +20,6 @@ package mod._i18n;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -53,21 +52,11 @@ public class IndexEntrySupplier extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.i18n.IndexEntrySupplier" );
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
-
-        oObj = (XInterface) oInterface;
+                                                    throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
+            ( "com.sun.star.i18n.IndexEntrySupplier" );
+        XInterface oObj = (XInterface) oInterface;
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

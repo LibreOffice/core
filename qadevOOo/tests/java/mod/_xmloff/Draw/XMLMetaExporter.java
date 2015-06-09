@@ -115,7 +115,7 @@ public class XMLMetaExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log ) throws StatusException {
+            (TestParameters tParam, PrintWriter log ) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -124,22 +124,16 @@ public class XMLMetaExporter extends TestCase {
         FilterChecker filter = new FilterChecker(log) ;
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Draw.XMLMetaExporter", new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class, oObj);
-            xEx.setSourceDocument(xDrawDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Draw.XMLMetaExporter", new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class, oObj);
+        xEx.setSourceDocument(xDrawDoc);
 
-            //set some meta data
-            XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
-                (XDocumentPropertiesSupplier.class, xDrawDoc);
-            final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
-            xDocProps.setTitle(TITLE);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        //set some meta data
+        XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+            (XDocumentPropertiesSupplier.class, xDrawDoc);
+        final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
+        xDocProps.setTitle(TITLE);
 
         // Checking Head Tag existence and that property has changed
         filter.addTag(new XMLTools.Tag ("office:document-meta"));

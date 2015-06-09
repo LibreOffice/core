@@ -27,7 +27,6 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XCloseable;
 import com.sun.star.frame.XUIControllerRegistration;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -66,7 +65,7 @@ public class PopupMenuControllerFactory extends TestCase {
      * @return The test environment.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = tParam.getMSF();
         XInterface xInst = null;
@@ -76,30 +75,15 @@ public class PopupMenuControllerFactory extends TestCase {
         xTextDoc = WriterTools.createTextDoc(xMSF);
         util.dbg.printInterfaces(xTextDoc);
 
-        try {
-            xInst = (XInterface)xMSF.createInstance(
-                            "com.sun.star.comp.framework.PopupMenuControllerFactory");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            throw new StatusException("Couldn't create test object", e);
-        }
+        xInst = (XInterface)xMSF.createInstance(
+                        "com.sun.star.comp.framework.PopupMenuControllerFactory");
 
         log.println("TestObject: " + util.utils.getImplName(xInst));
         tEnv = new TestEnvironment(xInst);
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
-        try {
-            Object o = xProp.getPropertyValue("DefaultContext");
-            XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class, o);
-            tEnv.addObjRelation("DC", xContext);
-        }
-        catch(com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Cannot get the 'DefaultContext' for XMultiComponentFactory test.");
-            e.printStackTrace(log);
-        }
-        catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Cannot get the 'DefaultContext' for XMultiComponentFactory test.");
-            e.printStackTrace(log);
-        }
+        Object o = xProp.getPropertyValue("DefaultContext");
+        XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class, o);
+        tEnv.addObjRelation("DC", xContext);
 
         // register one controller, so it can be instantiated
         XUIControllerRegistration xReg = UnoRuntime.queryInterface(XUIControllerRegistration.class, xInst);

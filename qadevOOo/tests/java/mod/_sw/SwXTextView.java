@@ -141,30 +141,25 @@ public class SwXTextView extends TestCase {
 
         Object oFrame1 = null;
         Object oFrame2 = null;
-        try {
-            XText oText = xTextDoc.getText();
-            XTextCursor oCursor = oText.createTextCursor();
-            oFrame1 = SOF.createInstance
-                (xTextDoc, "com.sun.star.text.TextFrame" );
-            first = UnoRuntime.queryInterface
-                ( XTextFrame.class, oFrame1);
-            oText.insertTextContent(oCursor,first, false);
-            first.getText().setString("Frame 1");
-            oFrame2 = SOF.createInstance(xTextDoc, "com.sun.star.text.TextFrame" );
-            second = UnoRuntime.queryInterface
-                ( XTextFrame.class, oFrame2);
-            oText.insertTextContent(oCursor,second, false);
-            second.getText().setString("Frame 2");
-            oText.insertString( oCursor,
-                "SwXTextRanges...SwXTextRanges...SwXTextRanges", false);
-            oText.insertControlCharacter( oCursor,
-                ControlCharacter.PARAGRAPH_BREAK, false);
-            oText.insertString( oCursor,
-                "bla...bla...", false);
-        } catch (Exception Ex ) {
-            Ex.printStackTrace(log);
-            throw new StatusException("Couldn't insert text table ", Ex);
-        }
+        XText oText = xTextDoc.getText();
+        XTextCursor oCursor = oText.createTextCursor();
+        oFrame1 = SOF.createInstance
+            (xTextDoc, "com.sun.star.text.TextFrame" );
+        first = UnoRuntime.queryInterface
+            ( XTextFrame.class, oFrame1);
+        oText.insertTextContent(oCursor,first, false);
+        first.getText().setString("Frame 1");
+        oFrame2 = SOF.createInstance(xTextDoc, "com.sun.star.text.TextFrame" );
+        second = UnoRuntime.queryInterface
+            ( XTextFrame.class, oFrame2);
+        oText.insertTextContent(oCursor,second, false);
+        second.getText().setString("Frame 2");
+        oText.insertString( oCursor,
+            "SwXTextRanges...SwXTextRanges...SwXTextRanges", false);
+        oText.insertControlCharacter( oCursor,
+            ControlCharacter.PARAGRAPH_BREAK, false);
+        oText.insertString( oCursor,
+            "bla...bla...", false);
 
         XSearchable oSearch = UnoRuntime.queryInterface
             (XSearchable.class, xTextDoc);
@@ -209,28 +204,16 @@ public class SwXTextView extends TestCase {
           });
 
         XSelectionSupplier xsel = UnoRuntime.queryInterface(XSelectionSupplier.class,xContr);
-        try {
-            xsel.select(second);
-        } catch (Exception e) {
-            log.println("Couldn't select");
-            throw new StatusException( "Couldn't select", e );
-        }
+        xsel.select(second);
 
         tEnv.addObjRelation("DOCUMENT",xTextDoc);
         XForm myForm = null;
         String kindOfControl="CommandButton";
         XShape aShape = null;
-        try{
-            log.println("adding contol shape '" + kindOfControl + "'");
-            aShape = FormTools.createControlShape(xTextDoc, 3000,
-                                                            4500, 15000, 10000,
-                                                            kindOfControl);
-        } catch (Exception e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create following control shape : '" +
-                                        kindOfControl + "': ", e);
-
-        }
+        log.println("adding contol shape '" + kindOfControl + "'");
+        aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                        4500, 15000, 10000,
+                                                        kindOfControl);
 
 
         log.println("adding relation for com.sun.star.view.XFormLayerAccess: XForm");

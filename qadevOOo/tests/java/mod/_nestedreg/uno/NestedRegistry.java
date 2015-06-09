@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -127,7 +126,7 @@ public class NestedRegistry extends TestCase {
     * </ul>
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
         Object oInterface = null;
 
@@ -140,15 +139,9 @@ public class NestedRegistry extends TestCase {
         uniq++ ;
 
         log.println("creating copies of the registry for XSimpleRegistry");
-        try {
-            String source = utils.getFullTestDocName("XSimpleRegistry.rdb");
-            copyFile(source, openF) ;
-            copyFile(source, mergeF) ;
-        } catch (java.io.IOException e) {
-            log.println("Exception occurred while copying files");
-            e.printStackTrace(log);
-            throw new StatusException("Exception occurred while copying files", e);
-        }
+        String source = utils.getFullTestDocName("XSimpleRegistry.rdb");
+        copyFile(source, openF) ;
+        copyFile(source, mergeF) ;
 
         try {
             XMultiServiceFactory xMSF = Param.getMSF();

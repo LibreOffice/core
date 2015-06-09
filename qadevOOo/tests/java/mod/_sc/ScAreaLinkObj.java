@@ -103,40 +103,21 @@ public class ScAreaLinkObj extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters Param, PrintWriter log ) throws StatusException {
+            ( TestParameters Param, PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
 
-        try {
+        // creation of testobject here
+        XPropertySet props = UnoRuntime.queryInterface
+            (XPropertySet.class, xSheetDoc);
+        XAreaLinks links = (XAreaLinks) AnyConverter.toObject(
+            new Type(XAreaLinks.class),props.getPropertyValue("AreaLinks")) ;
+        CellAddress addr = new CellAddress ((short) 1,2,3) ;
+        String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
+        links.insertAtPosition (addr, aSourceArea, "a2:b5", "", "") ;
 
-            // creation of testobject here
-            XPropertySet props = UnoRuntime.queryInterface
-                (XPropertySet.class, xSheetDoc);
-            XAreaLinks links = (XAreaLinks) AnyConverter.toObject(
-                new Type(XAreaLinks.class),props.getPropertyValue("AreaLinks")) ;
-            CellAddress addr = new CellAddress ((short) 1,2,3) ;
-            String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
-            links.insertAtPosition (addr, aSourceArea, "a2:b5", "", "") ;
-
-            oObj = (XInterface) AnyConverter.toObject(
-                        new Type(XInterface.class), links.getByIndex(0)) ;
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println ("Exception occurred while creating test Object.") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println ("Exception occurred while creating test Object.") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println ("Exception occurred while creating test Object.") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println ("Exception occurred while creating test Object.") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Couldn't create test object", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+                    new Type(XInterface.class), links.getByIndex(0)) ;
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
 

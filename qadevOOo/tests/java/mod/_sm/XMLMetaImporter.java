@@ -111,7 +111,7 @@ public class XMLMetaImporter extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+            throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oObj = null;
@@ -119,13 +119,8 @@ public class XMLMetaImporter extends TestCase {
         final String impValue = "XMLMetaImporter_Value" ;
         final String impTitle = "XMLMetaImporter Title" ;
 
-        try {
-            oObj = (XInterface)xMSF.createInstance(
-                    "com.sun.star.comp.Math.XMLMetaImporter");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        oObj = (XInterface)xMSF.createInstance(
+                "com.sun.star.comp.Math.XMLMetaImporter");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

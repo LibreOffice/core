@@ -369,53 +369,40 @@ public class GenericModelTest extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         XInterface oObj = null;
         XControlShape aShape = null;
         XMultiServiceFactory xMSF = Param.getMSF();
 
-        try{
-            log.println("adding contol shape '" + m_kindOfControl + "'");
-            aShape = FormTools.createControlShape(m_xTextDoc, 3000,
-                                                            4500, 15000, 10000,
-                                                            m_kindOfControl);
-        } catch (Exception e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create following control shape (m_kindOfControl): '" +
-                                        m_kindOfControl + "': ", e);
-
-        }
+        log.println("adding contol shape '" + m_kindOfControl + "'");
+        aShape = FormTools.createControlShape(m_xTextDoc, 3000,
+                                                        4500, 15000, 10000,
+                                                        m_kindOfControl);
 
         WriterTools.getDrawPage(m_xTextDoc).add(aShape);
         oObj = aShape.getControl();
 
         log.println("Implementation name: " + util.utils.getImplName(oObj));
 
-        try {
-            String sourceTestDB = utils.getFullURL(utils.getFullTestDocName("TestDB/testDB.dbf"));
-            String destTestDB = utils.getOfficeTemp(xMSF);
-            destTestDB = utils.getFullURL(destTestDB + "testDB.dbf");
+        String sourceTestDB = utils.getFullURL(utils.getFullTestDocName("TestDB/testDB.dbf"));
+        String destTestDB = utils.getOfficeTemp(xMSF);
+        destTestDB = utils.getFullURL(destTestDB + "testDB.dbf");
 
-            log.println("copy '"+sourceTestDB + "' -> '" + destTestDB + "'");
-            utils.copyFile(xMSF, sourceTestDB, destTestDB);
+        log.println("copy '"+sourceTestDB + "' -> '" + destTestDB + "'");
+        utils.copyFile(xMSF, sourceTestDB, destTestDB);
 
-            m_dbTools = new DBTools( xMSF );
-            String tmpDir = utils.getOfficeTemp((xMSF));
+        m_dbTools = new DBTools( xMSF );
+        String tmpDir = utils.getOfficeTemp((xMSF));
 
-            DBTools.DataSourceInfo srcInf = m_dbTools.newDataSourceInfo();
-            srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
-            log.println("data source: " + srcInf.URL);
+        DBTools.DataSourceInfo srcInf = m_dbTools.newDataSourceInfo();
+        srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
+        log.println("data source: " + srcInf.URL);
 
-            m_dbSrc = srcInf.getDataSourceService();
-            m_dbTools.reRegisterDB(m_dbSourceName, m_dbSrc);
+        m_dbSrc = srcInf.getDataSourceService();
+        m_dbTools.reRegisterDB(m_dbSourceName, m_dbSrc);
 
-            m_XFormLoader = FormTools.bindForm(m_xTextDoc, m_dbSourceName,
-                                            m_TestDB);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("!!! Can't access TestDB !!!");
-            e.printStackTrace(log);
-            throw new StatusException("Can't access TestDB", e);
-        }
+        m_XFormLoader = FormTools.bindForm(m_xTextDoc, m_dbSourceName,
+                                        m_TestDB);
 
         log.println("creating a new environment for object");
 
@@ -433,29 +420,12 @@ public class GenericModelTest extends TestCase {
 
         int i = 0;
         NamedValue prop = null;
-        try {
-            for (i = 0; i < m_propertiesToSet.size(); i++){
-                prop = m_propertiesToSet.get(i);
+        for (i = 0; i < m_propertiesToSet.size(); i++){
+            prop = m_propertiesToSet.get(i);
 
-                log.println("setting property: '"+prop.Name+"' to value '"+prop.Value.toString()+"'");
+            log.println("setting property: '"+prop.Name+"' to value '"+prop.Value.toString()+"'");
 
-                m_XPS.setPropertyValue(prop.Name, prop.Value);
-            }
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set property '" + prop.Name + "': ", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set property '" + prop.Name + "': ", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set property '" + prop.Name + "': ", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set property '" + prop.Name + "': ", e);
-        } catch (java.lang.ClassCastException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get property on index '" + i + "': ", e);
+            m_XPS.setPropertyValue(prop.Name, prop.Value);
         }
 
         // added LabelControl for 'DataAwareControlModel'
@@ -467,7 +437,7 @@ public class GenericModelTest extends TestCase {
         // adding relation for XUpdateBroadcaster
         m_XCtrl = oObj;
 
-    tEnv.addObjRelation("XUpdateBroadcaster.Checker",
+        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
                             new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName, m_ChangePropertyValue));
 
         // adding relation for DataAwareControlModel service

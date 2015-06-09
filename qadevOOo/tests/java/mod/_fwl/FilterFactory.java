@@ -21,8 +21,6 @@ package mod._fwl;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -66,25 +64,10 @@ public class FilterFactory extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null ;
-
-        try {
-            oInterface = Param.getMSF().createInstance
-                ("com.sun.star.document.FilterFactory") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get service");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get FilterFactory", e );
-        }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
-
-        oObj = (XInterface) oInterface ;
+            (TestParameters Param, PrintWriter log) throws Exception {
+        Object oInterface = Param.getMSF().createInstance
+            ("com.sun.star.document.FilterFactory") ;
+        XInterface oObj = (XInterface) oInterface ;
         log.println("ImplName: "+utils.getImplName(oObj));
 
         log.println( "creating a new environment for object" );
@@ -98,15 +81,9 @@ public class FilterFactory extends TestCase {
         String filterName = filterNames[0];
         Object[] instance = null;
         new PropertyValue();
-        try{
-            instance = (Object[]) xNA.getByName(filterName);
-            getPropertyValue
-                    (((PropertyValue[]) instance), "FilterService");
-        } catch (com.sun.star.container.NoSuchElementException e){
-            throw new StatusException(e, Status.failed("Couldn't get elements from object"));
-        } catch (com.sun.star.lang.WrappedTargetException e){
-            throw new StatusException(e, Status.failed("Couldn't get elements from object"));
-        }
+        instance = (Object[]) xNA.getByName(filterName);
+        getPropertyValue
+                (((PropertyValue[]) instance), "FilterService");
 
         log.println("adding INSTANCE 1 as obj relation to environment");
 
@@ -120,15 +97,9 @@ public class FilterFactory extends TestCase {
         ArrayList<Object[]> vFArgs = new ArrayList<Object[]>();
         for (int i = 0; i < filterNames.length; i++) {
             PropertyValue[] filterProps = null;
-            try {
-                System.out.println(filterNames[i]);
-                filterProps = (PropertyValue[])
-                    xNA.getByName(filterNames[i]);
-            } catch (com.sun.star.lang.WrappedTargetException e) {
-                throw new StatusException("Couldn't create relation", e);
-            } catch (com.sun.star.container.NoSuchElementException e) {
-                throw new StatusException("Couldn't create relation", e);
-            }
+            System.out.println(filterNames[i]);
+            filterProps = (PropertyValue[])
+                xNA.getByName(filterNames[i]);
             String filterImpl = (String) getPropertyValueValue
                 (filterProps, "FilterService");
             if (filterImpl != null && filterImpl.length() > 0) {

@@ -20,7 +20,6 @@ package mod._corefl;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -54,21 +53,11 @@ public class CoreReflection extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
+        TestParameters Param, PrintWriter log) throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
                 ("com.sun.star.reflection.CoreReflection");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            log.println("CoreReflection Service not available" );
-        }
-
-        oObj = (XInterface) oInterface;
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for CoreReflection object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

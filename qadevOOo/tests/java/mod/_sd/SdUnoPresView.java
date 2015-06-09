@@ -21,7 +21,6 @@ package mod._sd;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -140,7 +139,7 @@ public class SdUnoPresView extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
 
@@ -148,15 +147,10 @@ public class SdUnoPresView extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                         Param.getMSF());
 
-        try {
-            log.println( "creating two impress documents" );
-            xImpressDoc = SOF.createImpressDoc(null);
-            xSecondDrawDoc = SOF.createImpressDoc(null);
-            util.utils.pause(5000);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println( "creating two impress documents" );
+        xImpressDoc = SOF.createImpressDoc(null);
+        xSecondDrawDoc = SOF.createImpressDoc(null);
+        util.utils.pause(5000);
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
@@ -166,25 +160,14 @@ public class SdUnoPresView extends TestCase {
 
         XDrawPage oDrawPage = null;
         XDrawPage secondDrawPage = null;
-        try {
-            oDrawPage = (XDrawPage) AnyConverter.toObject(
-                    new Type(XDrawPage.class),oDPi.getByIndex(0));
-            the_pages.insertNewByIndex(0);
-            the_pages.insertNewByIndex(0);
-            the_pages.insertNewByIndex(0);
-            the_pages.insertNewByIndex(0);
-           secondDrawPage = (XDrawPage) AnyConverter.toObject(
-                    new Type(XDrawPage.class),oDPi.getByIndex(3));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        }
+        oDrawPage = (XDrawPage) AnyConverter.toObject(
+                new Type(XDrawPage.class),oDPi.getByIndex(0));
+        the_pages.insertNewByIndex(0);
+        the_pages.insertNewByIndex(0);
+        the_pages.insertNewByIndex(0);
+        the_pages.insertNewByIndex(0);
+        secondDrawPage = (XDrawPage) AnyConverter.toObject(
+                new Type(XDrawPage.class),oDPi.getByIndex(3));
 
         //put something on the drawpage
         log.println( "inserting some Shapes" );

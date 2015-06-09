@@ -116,7 +116,7 @@ public class SdXCustomPresentationAccess extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+        TestParameters Param, PrintWriter log) throws Exception {
 
 
         log.println( "creating a test environment" );
@@ -131,40 +131,16 @@ public class SdXCustomPresentationAccess extends TestCase {
 
         XInterface oInstance = null;
         XInterface oSecondInstance = null;
-        try{
-            oInstance = (XInterface) oSingleMSF.createInstance();
-            oSecondInstance = (XInterface) oSingleMSF.createInstance();
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        oInstance = (XInterface) oSingleMSF.createInstance();
+        oSecondInstance = (XInterface) oSingleMSF.createInstance();
 
         XNameContainer aContainer = UnoRuntime.queryInterface(XNameContainer.class, oObj);
 
         if (aContainer.hasByName("FirstPresentation")) {
-            try {
-                aContainer.removeByName("FirstPresentation");
-            } catch (com.sun.star.lang.WrappedTargetException e) {
-                e.printStackTrace(log);
-                throw new StatusException("Exception while removing instance", e);
-            } catch (com.sun.star.container.NoSuchElementException e) {
-                e.printStackTrace(log);
-                throw new StatusException("Exception while removing instance", e);
-            }
+            aContainer.removeByName("FirstPresentation");
         }
 
-        try {
-            aContainer.insertByName("FirstPresentation",oInstance);
-        } catch (com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Instance", e);
-        } catch (com.sun.star.container.ElementExistException e){
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Instance", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Instance", e);
-        }
+        aContainer.insertByName("FirstPresentation",oInstance);
 
         log.println( "creating a new environment for XPresentation object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

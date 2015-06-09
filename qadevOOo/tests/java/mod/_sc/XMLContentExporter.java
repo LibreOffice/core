@@ -114,7 +114,7 @@ public class XMLContentExporter extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -123,33 +123,24 @@ public class XMLContentExporter extends TestCase {
         ContentFilterChecker Filter = new ContentFilterChecker(log);
 
         Any arg = new Any(new Type(XDocumentHandler.class), Filter);
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Calc.XMLContentExporter",
-                new Object[] {arg} );
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xSheetDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Calc.XMLContentExporter",
+            new Object[] {arg} );
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xSheetDoc);
 
-            // Setting some string to a cell
-            XSpreadsheetDocument xSpreadsheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
-            XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
-            XIndexAccess xSheetsIndexArray = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-            XSpreadsheet xSheet = (XSpreadsheet) AnyConverter.toObject(
-                new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(0));
-            XCell xCell = xSheet.getCellByPosition(0, 0);
-            xCell.setFormula(CELL_TEXT);
+        // Setting some string to a cell
+        XSpreadsheetDocument xSpreadsheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
+        XIndexAccess xSheetsIndexArray = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XSpreadsheet xSheet = (XSpreadsheet) AnyConverter.toObject(
+            new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(0));
+        XCell xCell = xSheet.getCellByPosition(0, 0);
+        xCell.setFormula(CELL_TEXT);
 
-            log.println("fill sheet 1 with contnet...");
-            util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 1, 1, 1, 5, 5);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        } catch (java.lang.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment.", e);
-        }
+        log.println("fill sheet 1 with contnet...");
+        util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 1, 1, 1, 5, 5);
 
         // adding tags which must be contained in XML output
         Filter.addTag("office:document-content");

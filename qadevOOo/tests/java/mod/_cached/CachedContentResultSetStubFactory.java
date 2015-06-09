@@ -77,81 +77,63 @@ public class CachedContentResultSetStubFactory extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
+                                                    throws Exception {
         XMultiServiceFactory xMSF = Param.getMSF();
-        try {
-            oInterface = xMSF.createInstance
+        Object oInterface = xMSF.createInstance
                 ( "com.sun.star.ucb.CachedContentResultSetStubFactory" );
-
-            // adding one child container
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
-
-        oObj = (XInterface) oInterface;
+        XInterface oObj = (XInterface) oInterface;
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // creating relation for XCachedContentResultSetStubFactory
         XResultSet resSet = null ;
-        try {
-            Object oUCB = xMSF.createInstanceWithArguments
-                ("com.sun.star.ucb.UniversalContentBroker",
-                new Object[0]) ;
+        Object oUCB = xMSF.createInstanceWithArguments
+            ("com.sun.star.ucb.UniversalContentBroker",
+            new Object[0]) ;
 
-            XContentIdentifierFactory ciFac = UnoRuntime.queryInterface(XContentIdentifierFactory.class, oUCB) ;
+        XContentIdentifierFactory ciFac = UnoRuntime.queryInterface(XContentIdentifierFactory.class, oUCB) ;
 
-            String url = util.utils.getFullTestURL("SwXTextEmbeddedObject.sxw") ;
-            String escUrl = "" ;
+        String url = util.utils.getFullTestURL("SwXTextEmbeddedObject.sxw") ;
+        String escUrl = "" ;
 
-            // In base URL of a JAR file in content URL all directory
-            // separators ('/') must be replaced with escape symbol '%2F'.
-            int idx = url.indexOf("/") ;
-            int lastIdx = -1 ;
-            while (idx >= 0) {
-                escUrl += url.substring(lastIdx + 1, idx) + "%2F" ;
-                lastIdx = idx ;
-                idx = url.indexOf("/", idx + 1) ;
-            }
-            escUrl += url.substring(lastIdx + 1) ;
-            String cntUrl = "vnd.sun.star.pkg://" + escUrl + "/" ;
-            log.println("Getting Content of '" + cntUrl + "'") ;
-
-            XContentIdentifier CI = ciFac.createContentIdentifier(cntUrl) ;
-
-            XContentProvider cntProv = UnoRuntime.queryInterface(XContentProvider.class, oUCB) ;
-
-            XContent cnt = cntProv.queryContent(CI) ;
-
-            XCommandProcessor cmdProc = UnoRuntime.queryInterface(XCommandProcessor.class, cnt) ;
-
-            Property prop = new Property() ;
-            prop.Name = "Title" ;
-
-            Command cmd = new Command("open", -1, new OpenCommandArgument2
-                (OpenMode.ALL, 10000, null, new Property[] {prop},
-                 new NumberedSortingInfo[0])) ;
-
-            XDynamicResultSet dynResSet = null;
-            try {
-                dynResSet = (XDynamicResultSet)
-                    AnyConverter.toObject(new Type(XDynamicResultSet.class),
-                                        cmdProc.execute(cmd, 0, null));
-            } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                throw new StatusException("Couldn't convert Any ",iae);
-            }
-
-            resSet = dynResSet.getStaticResultSet() ;
-
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't create relation." );
-            e.printStackTrace(log) ;
-            throw new StatusException( "Can't create relation", e );
+        // In base URL of a JAR file in content URL all directory
+        // separators ('/') must be replaced with escape symbol '%2F'.
+        int idx = url.indexOf("/") ;
+        int lastIdx = -1 ;
+        while (idx >= 0) {
+            escUrl += url.substring(lastIdx + 1, idx) + "%2F" ;
+            lastIdx = idx ;
+            idx = url.indexOf("/", idx + 1) ;
         }
+        escUrl += url.substring(lastIdx + 1) ;
+        String cntUrl = "vnd.sun.star.pkg://" + escUrl + "/" ;
+        log.println("Getting Content of '" + cntUrl + "'") ;
+
+        XContentIdentifier CI = ciFac.createContentIdentifier(cntUrl) ;
+
+        XContentProvider cntProv = UnoRuntime.queryInterface(XContentProvider.class, oUCB) ;
+
+        XContent cnt = cntProv.queryContent(CI) ;
+
+        XCommandProcessor cmdProc = UnoRuntime.queryInterface(XCommandProcessor.class, cnt) ;
+
+        Property prop = new Property() ;
+        prop.Name = "Title" ;
+
+        Command cmd = new Command("open", -1, new OpenCommandArgument2
+            (OpenMode.ALL, 10000, null, new Property[] {prop},
+             new NumberedSortingInfo[0])) ;
+
+        XDynamicResultSet dynResSet = null;
+        try {
+            dynResSet = (XDynamicResultSet)
+                AnyConverter.toObject(new Type(XDynamicResultSet.class),
+                                    cmdProc.execute(cmd, 0, null));
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
+            throw new StatusException("Couldn't convert Any ",iae);
+        }
+
+        resSet = dynResSet.getStaticResultSet() ;
 
         tEnv.addObjRelation("ContentResultSet", resSet) ;
 

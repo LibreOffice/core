@@ -113,7 +113,7 @@ public class XMLSettingsExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-        (TestParameters tParam, PrintWriter log ) throws StatusException {
+        (TestParameters tParam, PrintWriter log ) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF();
         XInterface oObj = null;
@@ -121,27 +121,21 @@ public class XMLSettingsExporter extends TestCase {
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
         final boolean NewDataValue;
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Impress.XMLSettingsExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            xEx.setSourceDocument(xImpressDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Impress.XMLSettingsExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        xEx.setSourceDocument(xImpressDoc);
 
-            //set some settings
-            XModel xImpressModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
-            XController xController = xImpressModel.getCurrentController();
-            XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
-            NewDataValue = ! ((Boolean) xPropSet.getPropertyValue
-                ("IsLayerMode")).booleanValue();
-            xPropSet.setPropertyValue("IsLayerMode",
-                Boolean.valueOf(NewDataValue));
+        //set some settings
+        XModel xImpressModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
+        XController xController = xImpressModel.getCurrentController();
+        XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
+        NewDataValue = ! ((Boolean) xPropSet.getPropertyValue
+            ("IsLayerMode")).booleanValue();
+        xPropSet.setPropertyValue("IsLayerMode",
+            Boolean.valueOf(NewDataValue));
 
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
 
         // Adding tags for checking existence of head tag and other tags
         filter.addTagEnclosed(new XMLTools.Tag("office:settings"),

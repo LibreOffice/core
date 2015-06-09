@@ -144,7 +144,7 @@ public class ORadioButtonControl extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
@@ -175,18 +175,12 @@ public class ORadioButtonControl extends TestCase {
                                             xTextDoc.getCurrentController());
 
         //now get the ORadioButtonControl
-        try {
-            oObj = the_access.getControl(the_Model);
-            aControl = the_access.getControl(the_Model2);
-            the_win = the_access.getControl(the_Model).getPeer();
-            the_kit = the_win.getToolkit();
-            aDevice = the_kit.createScreenCompatibleDevice(200, 200);
-            aGraphic = aDevice.createGraphics();
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Couldn't get ORadioButtonControl");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get ORadioButtonControl", e);
-        }
+        oObj = the_access.getControl(the_Model);
+        aControl = the_access.getControl(the_Model2);
+        the_win = the_access.getControl(the_Model).getPeer();
+        the_kit = the_win.getToolkit();
+        aDevice = the_kit.createScreenCompatibleDevice(200, 200);
+        aGraphic = aDevice.createGraphics();
 
         log.println(
                 "creating a new environment for ORadioButtonControl object");

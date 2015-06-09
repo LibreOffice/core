@@ -123,7 +123,7 @@ public class ScHeaderFieldObj extends TestCase {
     * @see com.sun.star.text.XTextContent
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XPropertySet PropSet;
@@ -137,21 +137,10 @@ public class ScHeaderFieldObj extends TestCase {
             xSpreadsheetDoc );
 
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
-        try{
-            PageStyles = (XNameAccess) AnyConverter.toObject(
-                new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
-            StdStyle = (XStyle) AnyConverter.toObject(
-                        new Type(XStyle.class),PageStyles.getByName("Default"));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.container.NoSuchElementException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        }
+        PageStyles = (XNameAccess) AnyConverter.toObject(
+            new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
+        StdStyle = (XStyle) AnyConverter.toObject(
+                    new Type(XStyle.class),PageStyles.getByName("Default"));
 
         //get the property-set
         PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
@@ -160,20 +149,9 @@ public class ScHeaderFieldObj extends TestCase {
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
-        try {
-            RPHC = (XHeaderFooterContent) AnyConverter.toObject(
-                new Type(XHeaderFooterContent.class),
-                    PropSet.getPropertyValue("RightPageHeaderContent"));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        }
+        RPHC = (XHeaderFooterContent) AnyConverter.toObject(
+            new Type(XHeaderFooterContent.class),
+                PropSet.getPropertyValue("RightPageHeaderContent"));
 
         XText left = RPHC.getLeftText();
 
@@ -182,39 +160,20 @@ public class ScHeaderFieldObj extends TestCase {
             xSpreadsheetDoc );
 
         XTextContent the_Field = null;
-        try {
-            oObj = (XInterface)
-                oDocMSF.createInstance( "com.sun.star.text.TextField.Time" );
+        oObj = (XInterface)
+            oDocMSF.createInstance( "com.sun.star.text.TextField.Time" );
 
-            the_Field = UnoRuntime.queryInterface(XTextContent.class,oObj);
+        the_Field = UnoRuntime.queryInterface(XTextContent.class,oObj);
 
-            aField = (XInterface)
-                oDocMSF.createInstance("com.sun.star.text.TextField.Date");
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        aField = (XInterface)
+            oDocMSF.createInstance("com.sun.star.text.TextField.Date");
 
         oContent = UnoRuntime.queryInterface(XTextContent.class, aField);
 
         XTextCursor the_Cursor = left.createTextCursor();
 
-        try {
-            left.insertTextContent(the_Cursor,the_Field, false);
-            PropSet.setPropertyValue("RightPageHeaderContent", RPHC);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch(com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        }
+        left.insertTextContent(the_Cursor,the_Field, false);
+        PropSet.setPropertyValue("RightPageHeaderContent", RPHC);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

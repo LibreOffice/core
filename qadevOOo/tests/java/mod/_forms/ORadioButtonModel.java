@@ -141,7 +141,7 @@ public class ORadioButtonModel extends GenericModelTest {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
         tEnv.addObjRelation("DataAwareControlModel.NewFieldName",
                             DBTools.TST_INT_F);

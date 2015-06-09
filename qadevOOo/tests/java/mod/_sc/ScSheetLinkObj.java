@@ -106,7 +106,7 @@ public class ScSheetLinkObj extends TestCase {
     * @see com.sun.star.sheet.XSheetLinkable
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -118,19 +118,8 @@ public class ScSheetLinkObj extends TestCase {
         log.println("Getting test object ") ;
         XSpreadsheets oSheets = xSheetDoc.getSheets() ;
         XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
         XSheetLinkable SL = UnoRuntime.queryInterface(XSheetLinkable.class, oSheet);
 
@@ -141,34 +130,14 @@ public class ScSheetLinkObj extends TestCase {
 
         // Getting links.
         XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
-        Object oLinks = null;
-        try {
-            oLinks = docProps.getPropertyValue("SheetLinks");
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get SheetLinks", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get SheetLinks", e);
-        }
+        Object oLinks = docProps.getPropertyValue("SheetLinks");
 
         XNameAccess links = UnoRuntime.queryInterface(XNameAccess.class, oLinks);
 
         String[] names = links.getElementNames();
 
-        try {
-            oObj = (XInterface)AnyConverter.toObject(
-                        new Type(XInterface.class),links.getByName(names[0]));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.container.NoSuchElementException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        }
+        oObj = (XInterface)AnyConverter.toObject(
+                    new Type(XInterface.class),links.getByName(names[0]));
 
         log.println("Creating object - " +
             ((oObj == null) ? "FAILED" : "OK"));

@@ -114,35 +114,26 @@ public class XMLSettingsExporter extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment( TestParameters tParam,
                                                   PrintWriter log )
-                                                    throws StatusException {
+                                                    throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
         SettingsFilterChecker filter = new SettingsFilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class), filter);
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Calc.XMLSettingsExporter",
-                new Object[] {arg} );
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xSheetDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Calc.XMLSettingsExporter",
+            new Object[] {arg} );
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xSheetDoc);
 
-            //set some settings
-            XModel xSheetModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
-            XController xController = xSheetModel.getCurrentController();
-            XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
-            xPropSet.setPropertyValue("ShowGrid", "false");
+        //set some settings
+        XModel xSheetModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
+        XController xController = xSheetModel.getCurrentController();
+        XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
+        xPropSet.setPropertyValue("ShowGrid", "false");
 
-            util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 0, 3, 3, 50, 50);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        } catch (java.lang.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment.", e);
-        }
+        util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 0, 3, 3, 50, 50);
 
         //Create and prepare filter
         // adding tags which must be contained in XML output

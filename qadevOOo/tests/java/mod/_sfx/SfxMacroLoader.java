@@ -20,8 +20,6 @@ package mod._sfx;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -59,24 +57,13 @@ public class SfxMacroLoader extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
         Object oInterface = null ;
 
         //now get the OButtonControl
-        try {
-            oInterface = Param.getMSF().createInstance
-                                ("com.sun.star.comp.sfx2.SfxMacroLoader");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get service");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get GridControl", e );
-        }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
+        oInterface = Param.getMSF().createInstance
+                            ("com.sun.star.comp.sfx2.SfxMacroLoader");
 
         oObj = (XInterface) oInterface ;
         System.out.println("ImplName: "+utils.getImplName(oObj));

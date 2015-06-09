@@ -54,20 +54,12 @@ public class JavaComponentLoader extends TestCase {
     * </ul>
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null;
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance(
-                            "com.sun.star.comp.stoc.JavaComponentLoader" );
-        }
-        catch( Exception e ) {
-            log.println("JavaComponentLoader Service not available" );
-        }
-
-        oObj = (XInterface) oInterface;
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance(
+                        "com.sun.star.comp.stoc.JavaComponentLoader" );
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for JavaComponentLoader object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

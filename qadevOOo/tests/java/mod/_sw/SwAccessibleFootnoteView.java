@@ -19,7 +19,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -61,7 +60,7 @@ public class SwAccessibleFootnoteView extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XFootnote oFootnote = null;
@@ -71,47 +70,23 @@ public class SwAccessibleFootnoteView extends TestCase {
         XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a footnote");
 
-        try {
-            oFootnote = UnoRuntime.queryInterface(XFootnote.class,
-                    msf.createInstance("com.sun.star.text.Footnote"));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create footnote", e);
-        }
+        oFootnote = UnoRuntime.queryInterface(XFootnote.class,
+                msf.createInstance("com.sun.star.text.Footnote"));
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println("inserting the footnote into text document");
-        try {
-            oText.insertTextContent(oCursor, oFootnote, false);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert the footnote", e);
-        }
+        oText.insertTextContent(oCursor, oFootnote, false);
 
         XController xController = xTextDoc.getCurrentController();
         XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
         xController);
         XPropertySet xPropSet = xViewSetSup.getViewSettings();
 
-        try {
-            //change zoom value to 10%
-            //footer should be in the vissible area of the document
-            xPropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        }  catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        }
+        //change zoom value to 10%
+        //footer should be in the vissible area of the document
+        xPropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 

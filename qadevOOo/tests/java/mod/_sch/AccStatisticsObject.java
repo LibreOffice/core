@@ -19,7 +19,6 @@ package mod._sch;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -44,22 +43,16 @@ public class AccStatisticsObject extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         if (xChartDoc != null) cleanup(Param, log);
         log.println( "creating a chart document" );
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
-        try {
-            log.println( "creating a chartdocument" );
-            xChartDoc = SOF.createChartDoc();
-            log.println("Display MeanValue");
-            XPropertySet diagProps = UnoRuntime.queryInterface(XPropertySet.class, xChartDoc.getDiagram());
-            diagProps.setPropertyValue("MeanValue",Boolean.TRUE);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a chartdocument" );
+        xChartDoc = SOF.createChartDoc();
+        log.println("Display MeanValue");
+        XPropertySet diagProps = UnoRuntime.queryInterface(XPropertySet.class, xChartDoc.getDiagram());
+        diagProps.setPropertyValue("MeanValue",Boolean.TRUE);
 
         XInterface oObj = null;
 
