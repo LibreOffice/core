@@ -27,12 +27,16 @@
 #include <svl/svldllapi.h>
 #include <vector>
 
+/// map a property between beans::XPropertySet and SfxPoolItem
 struct SfxItemPropertyMapEntry
 {
-    OUString                            aName;
-    sal_uInt16                          nWID;
-    com::sun::star::uno::Type           aType;
+    OUString                            aName; ///< name of property
+    sal_uInt16                          nWID;  ///< WhichId of SfxPoolItem
+    com::sun::star::uno::Type           aType; ///< UNO type of property
+    /// flag bitmap, @see com::sun::star::beans::PropertyAttribute
     long                                nFlags;
+    /// "member ID" to tell QueryValue/PutValue which property it is
+    /// (when multiple properties map to the same nWID)
     sal_uInt8                           nMemberId;
 
 };
