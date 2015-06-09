@@ -274,7 +274,7 @@ LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPaylo
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     : m_pDocView(pDocView),
       m_pDrawingArea(gtk_drawing_area_new()),
-      m_aTileBuffer(TileBuffer(0,0,0)),
+      m_aTileBuffer(TileBuffer(0,0)),
       m_fZoom(1),
       m_pOffice(0),
       m_pDocument(0),
@@ -1230,13 +1230,11 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_open_document( LOKDocView* pDocView, 
         long nDocumentHeightTwips = pDocView->m_pImpl->m_nDocumentHeightTwips;
         long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
         long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
-        // Total number of rows / columns in this document.
-        guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
+        // Total number of columns in this document.
         guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
 
         pDocView->m_pImpl->m_aTileBuffer = TileBuffer(pDocView->m_pImpl->m_pDocument,
-                                                      nRows,
                                                       nColumns);
         gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
                                     nDocumentWidthPixels,
@@ -1257,12 +1255,10 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_zoom ( LOKDocView* pDocView, float fZ
     pDocView->m_pImpl->m_fZoom = fZoom;
     long nDocumentWidthPixels = twipToPixel(pDocView->m_pImpl->m_nDocumentWidthTwips, fZoom);
     long nDocumentHeightPixels = twipToPixel(pDocView->m_pImpl->m_nDocumentHeightTwips, fZoom);
-    // Total number of rows / columns in this document.
-    guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
+    // Total number of columns in this document.
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
     pDocView->m_pImpl->m_aTileBuffer = TileBuffer(pDocView->m_pImpl->m_pDocument,
-                                                  nRows,
                                                   nColumns);
     gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
                                 nDocumentWidthPixels,

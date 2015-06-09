@@ -83,11 +83,9 @@ class TileBuffer
 {
  public:
  TileBuffer(LibreOfficeKitDocument *document,
-            int rows,
             int columns)
      : m_pLOKDocument(document)
         , m_nWidth(columns)
-        , m_nHeight(rows)
     {  }
 
     ~TileBuffer() {}
@@ -126,8 +124,6 @@ class TileBuffer
     std::map<int, Tile> m_mTiles;
     /// Width of the current tile buffer (number of columns)
     int m_nWidth;
-    /// Height of the current tile buffer (numbero of rows)
-    int m_nHeight;
 };
 
 #endif // INCLUDED_TILEBUFFER_HXX
