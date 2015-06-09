@@ -115,13 +115,8 @@ public class ScAccessibleCell extends TestCase {
         try {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = null;
-            try {
-                oSheet = (XSpreadsheet) AnyConverter.toObject(
-                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
-            } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                throw new StatusException("couldn't get sheet",iae);
-            }
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
             xCell = oSheet.getCellByPosition(1, 0) ;
             xCell.setFormula(text);
             XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);

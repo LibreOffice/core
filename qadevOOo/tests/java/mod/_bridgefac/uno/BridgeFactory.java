@@ -71,10 +71,6 @@ public class BridgeFactory extends TestCase {
                     Param.getMSF().createInstance
                     ("com.sun.star.bridge.BridgeFactory") ;
 
-        if (oObj == null)
-            throw new StatusException("Can't create service",
-                new NullPointerException());
-
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
 
         // select the port

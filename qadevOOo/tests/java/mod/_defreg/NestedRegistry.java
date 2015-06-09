@@ -132,7 +132,7 @@ public class NestedRegistry extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
+                                                    throws Exception {
         XInterface oObj = null;
         Object oInterface = null;
 
@@ -144,15 +144,9 @@ public class NestedRegistry extends TestCase {
         uniq++ ;
 
         log.println("creating copies of the registry for XSimpleRegistry");
-        try {
-            String source = utils.getFullTestDocName("XSimpleRegistry.rdb");
-            copyFile(source, openF, log) ;
-            copyFile(source, mergeF, log) ;
-        } catch (java.io.IOException e) {
-            log.println("Exception occurred while copying files");
-            e.printStackTrace(log);
-            throw new StatusException("Exception occurred while copying files", e);
-        }
+        String source = utils.getFullTestDocName("XSimpleRegistry.rdb");
+        copyFile(source, openF, log) ;
+        copyFile(source, mergeF, log) ;
 
         try {
             XMultiServiceFactory xMSF = Param.getMSF();

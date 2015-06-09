@@ -40,6 +40,7 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -229,7 +230,7 @@ public class ScDataPilotTableObj extends TestCase {
      * @param srcRange source range
      * @param tEnv test environment instance
      */
-    private void createTable2(XSpreadsheet oSheet, CellRangeAddress srcRange, TestEnvironment tEnv)
+    private void createTable2(XSpreadsheet oSheet, CellRangeAddress srcRange, TestEnvironment tEnv) throws Exception
     {
         XDataPilotTablesSupplier DPTS = UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
         log.println("Creating test table object");
@@ -239,53 +240,45 @@ public class ScDataPilotTableObj extends TestCase {
 
         XIndexAccess xIA = DPDsc.getDataPilotFields();
         int fieldCount = xIA.getCount() - 1; // skip the last field because it's always hidden.
-        try
+        for (int i = 0; i < fieldCount; ++i)
         {
-            for (int i = 0; i < fieldCount; ++i)
+            Object o = xIA.getByIndex(i);
+            XPropertySet fieldPropSet = UnoRuntime.queryInterface(
+                XPropertySet.class, o);
+
+            if (i == fieldCount - 1)
             {
-                Object o = xIA.getByIndex(i);
-                XPropertySet fieldPropSet = UnoRuntime.queryInterface(
-                    XPropertySet.class, o);
-
-                if (i == fieldCount - 1)
-                {
-                    // last field
-                    fieldPropSet.setPropertyValue(
-                        "Function", com.sun.star.sheet.GeneralFunction.SUM);
-                    fieldPropSet.setPropertyValue(
-                        "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.DATA);
-                }
-                else if (i%2 == 0)
-                {
-                    // even number fields
-                    fieldPropSet.setPropertyValue(
-                        "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.COLUMN);
-                }
-                else if (i%2 == 1)
-                {
-                    // odd number fields
-                    fieldPropSet.setPropertyValue(
-                        "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.ROW);
-                }
+                // last field
+                fieldPropSet.setPropertyValue(
+                    "Function", com.sun.star.sheet.GeneralFunction.SUM);
+                fieldPropSet.setPropertyValue(
+                    "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.DATA);
             }
-
-            if (DPT.hasByName("DataPilotTable2"))
-                DPT.removeByName("DataPilotTable2");
-
-            CellAddress destAddr = new CellAddress();
-            destAddr.Sheet = 0;
-            destAddr.Column = 0;
-            destAddr.Row = 14;
-            DPT.insertNewByName("DataPilotTable2", destAddr, DPDsc);
-
-            Object o = DPT.getByName("DataPilotTable2");
-            tEnv.addObjRelation("DATAPILOTTABLE2", o);
+            else if (i%2 == 0)
+            {
+                // even number fields
+                fieldPropSet.setPropertyValue(
+                    "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.COLUMN);
+            }
+            else if (i%2 == 1)
+            {
+                // odd number fields
+                fieldPropSet.setPropertyValue(
+                    "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.ROW);
+            }
         }
-        catch (com.sun.star.uno.Exception e)
-        {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create a test environment", e);
-        }
+
+        if (DPT.hasByName("DataPilotTable2"))
+            DPT.removeByName("DataPilotTable2");
+
+        CellAddress destAddr = new CellAddress();
+        destAddr.Sheet = 0;
+        destAddr.Column = 0;
+        destAddr.Row = 14;
+        DPT.insertNewByName("DataPilotTable2", destAddr, DPDsc);
+
+        Object o = DPT.getByName("DataPilotTable2");
+        tEnv.addObjRelation("DATAPILOTTABLE2", o);
     }
 
 }

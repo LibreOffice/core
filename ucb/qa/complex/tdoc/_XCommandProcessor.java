@@ -108,13 +108,13 @@ public class _XCommandProcessor {
 
     /**
      * First executes 'geCommandInfo' command and examines returned
-     * command info information. Second tries to execute inproper
+     * command info information. Second tries to execute in proper
      * command. <p>
      * Has <b> OK </b> status if in the first case returned information
      * contains info about 'getCommandInfo' command and in the second
      * case an exception is thrown. <p>
      */
-    public boolean _execute() {
+    public boolean _execute() throws Exception {
         String[]commands = new String[] {"getCommandInfo", "getPropertySetInfo"};
         boolean returnVal = true;
         for (int j=0; j<commands.length; j++) {
@@ -124,17 +124,7 @@ public class _XCommandProcessor {
             Object result;
 
             log.println("executing command " + commandName);
-            try {
-                result = oObj.execute(command, 0, null);
-            } catch (CommandAbortedException e) {
-                log.println("The command aborted " + e.getMessage());
-                e.printStackTrace((java.io.PrintWriter)log);
-                throw new StatusException("Unexpected exception", e);
-            } catch (Exception e) {
-                log.println("Unexpected exception " + e.getMessage());
-                e.printStackTrace((java.io.PrintWriter)log);
-                throw new StatusException("Unexpected exception", e);
-            }
+            result = oObj.execute(command, 0, null);
 
             boolean found = false;
 

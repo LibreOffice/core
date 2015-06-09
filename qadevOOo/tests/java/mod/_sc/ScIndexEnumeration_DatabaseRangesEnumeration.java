@@ -33,6 +33,7 @@ import com.sun.star.sheet.XDatabaseRanges;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -70,7 +71,7 @@ public class ScIndexEnumeration_DatabaseRangesEnumeration extends TestCase {
     }
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -81,24 +82,9 @@ public class ScIndexEnumeration_DatabaseRangesEnumeration extends TestCase {
         log.println("Getting test object ") ;
         XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
 
-        XDatabaseRanges dbRanges = null;
-        try {
-            dbRanges = (XDatabaseRanges) AnyConverter.toObject(
-                new Type(XDatabaseRanges.class),
-                    docProps.getPropertyValue("DatabaseRanges"));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
-        }
+        XDatabaseRanges dbRanges = (XDatabaseRanges) AnyConverter.toObject(
+            new Type(XDatabaseRanges.class),
+                docProps.getPropertyValue("DatabaseRanges"));
 
         log.println("Adding at least one element for ElementAccess interface");
         CellRangeAddress aRange = new CellRangeAddress((short)0, 2, 4, 5, 6);

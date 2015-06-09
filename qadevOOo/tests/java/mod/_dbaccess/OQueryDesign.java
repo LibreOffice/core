@@ -179,55 +179,34 @@ public class OQueryDesign extends TestCase {
 
     } // finish method getTestEnvironment
 
-    private XInitialization getUnititializedObj(TestParameters Param){
+    private XInitialization getUnititializedObj(TestParameters Param) throws Exception {
         // creating an object which ist not initialized
 
         // get a model of a DataSource
         Object oDBC = null;
         XMultiServiceFactory xMSF;
 
-        try {
-            xMSF = Param.getMSF();
-            oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            throw new StatusException("Could not instantiate DatabaseContext", e) ;
-        }
+        xMSF = Param.getMSF();
+        oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 
         Object oDataSource = null;
-        try{
-            XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, oDBC);
-            oDataSource = xNA.getByName(sDataSourceName);
-        } catch ( com.sun.star.container.NoSuchElementException e){
-            throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
-        } catch ( com.sun.star.lang.WrappedTargetException e){
-            throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
-        }
+        XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, oDBC);
+        oDataSource = xNA.getByName(sDataSourceName);
 
         XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
         XModel xMod = UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
 
         // get an intaces of QueryDesign
-        Object oQueryDesign = null;
-        try{
-            oQueryDesign = xMSF.createInstance("com.sun.star.sdb.QueryDesign");
-        }catch( com.sun.star.uno.Exception e ) {
-            throw new StatusException("Could not instantiate QueryDesign", e) ;
-        }
+        Object oQueryDesign = xMSF.createInstance("com.sun.star.sdb.QueryDesign");
 
         XController xCont = UnoRuntime.queryInterface(XController.class, oQueryDesign);
 
         // marry them all
         xCont.attachModel(xMod);
         xMod.connectController(xCont);
-        try{
-            xMod.setCurrentController(xCont);
-        } catch (com.sun.star.container.NoSuchElementException e){
-            throw new StatusException("Could not set controller", e) ;
-        }
+        xMod.setCurrentController(xCont);
 
         return UnoRuntime.queryInterface(XInitialization.class, oQueryDesign);
-
     }
 
     @Override

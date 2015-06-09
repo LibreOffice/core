@@ -395,7 +395,7 @@ public class SbaXGridControl extends TestCase {
     } // finish method getTestEnvironment
 
     public static XControlShape createGrid(XComponent oDoc, int height,
-                                           int width, int x, int y) {
+                                           int width, int x, int y) throws Exception {
         Size size = new Size();
         Point position = new Point();
         XControlShape oCShape = null;
@@ -406,30 +406,24 @@ public class SbaXGridControl extends TestCase {
                                                XMultiServiceFactory.class,
                                                oDoc);
 
-        try {
-            Object oInt = oDocMSF.createInstance(
-                                  "com.sun.star.drawing.ControlShape");
-            Object aCon = oDocMSF.createInstance(
-                                  "com.sun.star.form.component.GridControl");
-            XPropertySet model_props = UnoRuntime.queryInterface(
-                                               XPropertySet.class, aCon);
-            model_props.setPropertyValue("DefaultControl",
-                                         "com.sun.star.form.control.InteractionGridControl");
-            aControl = UnoRuntime.queryInterface(
-                               XControlModel.class, aCon);
-            oCShape = UnoRuntime.queryInterface(
-                              XControlShape.class, oInt);
-            size.Height = height;
-            size.Width = width;
-            position.X = x;
-            position.Y = y;
-            oCShape.setSize(size);
-            oCShape.setPosition(position);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            System.out.println("Couldn't create Grid" + e);
-            throw new StatusException("Couldn't create Grid", e);
-        }
+        Object oInt = oDocMSF.createInstance(
+                              "com.sun.star.drawing.ControlShape");
+        Object aCon = oDocMSF.createInstance(
+                              "com.sun.star.form.component.GridControl");
+        XPropertySet model_props = UnoRuntime.queryInterface(
+                                           XPropertySet.class, aCon);
+        model_props.setPropertyValue("DefaultControl",
+                                     "com.sun.star.form.control.InteractionGridControl");
+        aControl = UnoRuntime.queryInterface(
+                           XControlModel.class, aCon);
+        oCShape = UnoRuntime.queryInterface(
+                          XControlShape.class, oInt);
+        size.Height = height;
+        size.Width = width;
+        position.X = x;
+        position.Y = y;
+        oCShape.setSize(size);
+        oCShape.setPosition(position);
 
         oCShape.setControl(aControl);
 

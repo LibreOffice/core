@@ -67,11 +67,6 @@ public class ContentHandlerFactory extends TestCase {
         oInterface = Param.getMSF().createInstance
             ("com.sun.star.frame.ContentHandlerFactory") ;
 
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
-
         oObj = (XInterface) oInterface ;
         log.println("ImplName: "+utils.getImplName(oObj));
 

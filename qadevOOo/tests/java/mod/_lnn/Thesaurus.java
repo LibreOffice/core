@@ -67,17 +67,10 @@ public class Thesaurus extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)xMSF.createInstance
+        XInterface oObj = (XInterface)xMSF.createInstance
                 ("com.sun.star.linguistic2.Thesaurus");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
 
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);

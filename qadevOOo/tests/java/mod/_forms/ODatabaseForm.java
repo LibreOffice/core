@@ -481,13 +481,7 @@ public class ODatabaseForm extends TestCase {
         XResultSet the_set = UnoRuntime.queryInterface(
                                      XResultSet.class, oObj);
 
-        try {
-            the_set.first();
-        } catch (SQLException e) {
-            log.println("Cann't move cursor to the first row.");
-            e.printStackTrace();
-            throw new StatusException("Can't move cursor to the first row.", e);
-        }
+        the_set.first();
 
         tEnv.addObjRelation("Model1", shape1.getControl());
         tEnv.addObjRelation("Model2", shape2.getControl());

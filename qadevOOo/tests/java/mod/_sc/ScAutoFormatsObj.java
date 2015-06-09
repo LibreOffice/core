@@ -106,45 +106,39 @@ public class ScAutoFormatsObj extends TestCase{
     @Override
     public TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log )
-            throws StatusException {
+            throws Exception {
 
         XInterface oObj = null;
 
-        try {
-            // creation of testobject here
-            // get AutoFormats
-            XComponent xComp = UnoRuntime.queryInterface
-                (XComponent.class, xSheetDoc);
-            oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),Param.getMSF().createInstance
-                                    ("com.sun.star.sheet.TableAutoFormats"));
-            Object secondInstance = SOF.createInstance
-                (xComp, "com.sun.star.sheet.TableAutoFormat");
+        // creation of testobject here
+        // get AutoFormats
+        XComponent xComp = UnoRuntime.queryInterface
+            (XComponent.class, xSheetDoc);
+        oObj = (XInterface) AnyConverter.toObject(
+            new Type(XInterface.class),Param.getMSF().createInstance
+                                ("com.sun.star.sheet.TableAutoFormats"));
+        Object secondInstance = SOF.createInstance
+            (xComp, "com.sun.star.sheet.TableAutoFormat");
 
-            TestEnvironment tEnv = new TestEnvironment(oObj) ;
+        TestEnvironment tEnv = new TestEnvironment(oObj) ;
 
-            //adding ObjRelation for XNameContainer
-            tEnv.addObjRelation("SecondInstance",secondInstance);
+        //adding ObjRelation for XNameContainer
+        tEnv.addObjRelation("SecondInstance",secondInstance);
 
-            // INSTANCEn : _XNameContainer; _XNameReplace
-            log.println( "adding INSTANCEn as mod relation to environment" );
-            int THRCNT = 1;
-            if ((String)Param.get("THRCNT") != null) {
-                Integer.parseInt((String)Param.get("THRCNT"));
-            }
-            for (int n = 1; n < (THRCNT+1) ;n++ ) {
-                log.println( "adding INSTANCE" + n
-                    +" as mod relation to environment" );
-                tEnv.addObjRelation("INSTANCE" + n, SOF.createInstance(xComp,
-                    "com.sun.star.sheet.TableAutoFormat"));
-            }
-
-            return tEnv;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println ("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
+        // INSTANCEn : _XNameContainer; _XNameReplace
+        log.println( "adding INSTANCEn as mod relation to environment" );
+        int THRCNT = 1;
+        if ((String)Param.get("THRCNT") != null) {
+            Integer.parseInt((String)Param.get("THRCNT"));
         }
+        for (int n = 1; n < (THRCNT+1) ;n++ ) {
+            log.println( "adding INSTANCE" + n
+                +" as mod relation to environment" );
+            tEnv.addObjRelation("INSTANCE" + n, SOF.createInstance(xComp,
+                "com.sun.star.sheet.TableAutoFormat"));
+        }
+
+        return tEnv;
     }
 
 }    // finish class ScAutoFormatsObj

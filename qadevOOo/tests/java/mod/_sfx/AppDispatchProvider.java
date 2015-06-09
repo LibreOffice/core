@@ -67,11 +67,6 @@ public class AppDispatchProvider extends TestCase {
         oInterface = Param.getMSF().createInstance
             ("com.sun.star.comp.sfx2.AppDispatchProvider") ;
 
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
-
         oObj = (XInterface) oInterface ;
         System.out.println("ImplName: "+utils.getImplName(oObj));
         dbg.printInterfaces(oObj);

@@ -125,14 +125,9 @@ public class CachedContentResultSetFactory extends TestCase {
             (OpenMode.ALL, 10000, null, new Property[] {prop},
              new NumberedSortingInfo[0])) ;
 
-        XDynamicResultSet dynResSet = null;
-        try {
-            dynResSet = (XDynamicResultSet)
-                AnyConverter.toObject(new Type(XDynamicResultSet.class),
-                                    cmdProc.execute(cmd, 0, null));
-        } catch (com.sun.star.lang.IllegalArgumentException iae) {
-            throw new StatusException("Couldn't convert Any ",iae);
-        }
+        XDynamicResultSet dynResSet = (XDynamicResultSet)
+            AnyConverter.toObject(new Type(XDynamicResultSet.class),
+                                cmdProc.execute(cmd, 0, null));
 
         XResultSet resSet = dynResSet.getStaticResultSet() ;
 

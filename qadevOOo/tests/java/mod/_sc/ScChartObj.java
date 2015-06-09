@@ -201,27 +201,12 @@ public class ScChartObj extends TestCase {
 
         // get the TableChart
         XTableChart oChart = null;
-        try {
-            XNameAccess names = (XNameAccess) AnyConverter.toObject(
-                new Type(XNameAccess.class),UnoRuntime.queryInterface(
-                    XNameAccess.class, oCharts));
+        XNameAccess names = (XNameAccess) AnyConverter.toObject(
+            new Type(XNameAccess.class),UnoRuntime.queryInterface(
+                XNameAccess.class, oCharts));
 
-            oChart = (XTableChart) AnyConverter.toObject(
-                new Type(XTableChart.class),names.getByName("ScChartObj"));
-
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Couldn't get TableChart");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get TableChart", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Couldn't get TableChart");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get TableChart", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Couldn't get TableChart");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get TableChart", e);
-        }
+        oChart = (XTableChart) AnyConverter.toObject(
+            new Type(XTableChart.class),names.getByName("ScChartObj"));
 
         log.println("creating a new environment for object");
         TestEnvironment tEnv = new TestEnvironment(oChart);

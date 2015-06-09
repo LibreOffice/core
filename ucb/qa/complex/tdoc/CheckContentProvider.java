@@ -33,6 +33,7 @@ import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.uno.UnoRuntime;
+
 import util.WriterTools;
 
 import org.junit.After;
@@ -41,6 +42,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
+
 import static org.junit.Assert.*;
 
 /**
@@ -145,7 +147,7 @@ public class CheckContentProvider {
     /**
      * Check the interfaces of the root.
      */
-    @Test public void checkTDOCRootInterfaces() {
+    @Test public void checkTDOCRootInterfaces() throws Exception {
         checkInterfaces(false);
     }
 
@@ -179,7 +181,7 @@ public class CheckContentProvider {
     /**
      * Check the interfaces on the document.
      */
-    @Test public void checkTDOCDocumentInterfaces() {
+    @Test public void checkTDOCDocumentInterfaces() throws Exception {
         checkInterfaces(true);
     }
 
@@ -214,7 +216,7 @@ public class CheckContentProvider {
     /**
      * Check the interfaces on the folder.
      */
-    @Test public void checkTDOCFolderInterfaces() {
+    @Test public void checkTDOCFolderInterfaces() throws Exception {
         checkInterfaces(true);
     }
 
@@ -249,7 +251,7 @@ public class CheckContentProvider {
     /**
      * Check the interfaces on the stream.
      */
-    @Test public void checkTDOCStreamInterfaces() {
+    @Test public void checkTDOCStreamInterfaces() throws Exception {
         checkInterfaces(true);
     }
 
@@ -272,7 +274,7 @@ public class CheckContentProvider {
      * @param hasParent True, if the tested content type does have a parent:
      * only the root has not. Used in the XChild interface test.
      */
-    private void checkInterfaces(boolean hasParent) {
+    private void checkInterfaces(boolean hasParent) throws Exception {
         // check the XTypeProvider interface
         _XTypeProvider xTypeProvider = new _XTypeProvider();
         _XTypeProvider.oObj = UnoRuntime.queryInterface(XTypeProvider.class, xContent);
