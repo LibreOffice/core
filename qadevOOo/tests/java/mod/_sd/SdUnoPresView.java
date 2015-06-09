@@ -150,7 +150,7 @@ public class SdUnoPresView extends TestCase {
         log.println( "creating two impress documents" );
         xImpressDoc = SOF.createImpressDoc(null);
         xSecondDrawDoc = SOF.createImpressDoc(null);
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );

@@ -18,16 +18,18 @@
 package complex.persistent_window_states;
 
 
-import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.PosSize;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.awt.XWindow;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyState;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.FrameSearchFlag;
 import helper.WindowListener;
+
+import com.sun.star.awt.PosSize;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyState;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.FrameSearchFlag;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XFrame;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 
 /**
  * Load and resize a document.
@@ -57,7 +59,7 @@ public class DocumentHandle {
      * @param hidden If true, the document is loaded hidden.
      * @return The size of the opened/created document.
      */
-    public Rectangle loadDocument(String docName, boolean hidden)
+    public Rectangle loadDocument(XMultiServiceFactory xMSF, String docName, boolean hidden)
                                                             throws Exception{
         wl.resetTrigger();
         try {
@@ -85,7 +87,7 @@ public class DocumentHandle {
             XComponentLoader xFrameLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
             xFrameLoader.loadComponentFromURL(docName, "_self", 0, szArgs);
             // wait for the document to load.
-            util.utils.pause(10000);
+            util.utils.waitForEventIdle(xMSF);
 
             xWin = xFrame.getContainerWindow();
             xWin.addWindowListener(wl);
@@ -123,13 +125,13 @@ public class DocumentHandle {
      * Y-Position +10 pixel
      * @return True if resize worked.
      */
-    public boolean resizeDocument() {
+    public boolean resizeDocument(XMultiServiceFactory xMSF) {
         Rectangle newPosSize = xWin.getPosSize();
         newPosSize.Width = newPosSize.Width - 20;
         newPosSize.Height = newPosSize.Height - 20;
         newPosSize.X = newPosSize.X + 80;
         newPosSize.Y = newPosSize.Y + 80;
-        return resizeDocument(newPosSize);
+        return resizeDocument(xMSF, newPosSize);
     }
 
     /**
@@ -137,11 +139,11 @@ public class DocumentHandle {
      * @param newPosSize The new position and size of the window.
      * @return True if resize worked.
      */
-    private boolean resizeDocument(Rectangle newPosSize){
+    private boolean resizeDocument(XMultiServiceFactory xMSF, Rectangle newPosSize){
         wl.resetTrigger();
         xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
                                     newPosSize.Height, PosSize.POSSIZE);
-        util.utils.pause(3000);
+        util.utils.waitForEventIdle(xMSF);
         return wl.resizedTrigger;
     }
 }

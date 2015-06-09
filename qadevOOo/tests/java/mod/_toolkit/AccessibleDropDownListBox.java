@@ -73,7 +73,7 @@ public class AccessibleDropDownListBox extends TestCase {
                                                     PrintWriter log) {
         XInterface oObj = null;
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   xTextDoc);

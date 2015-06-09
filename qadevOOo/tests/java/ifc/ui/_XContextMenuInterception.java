@@ -42,7 +42,6 @@ import lib.Status;
 import lib.StatusException;
 import util.AccessibilityTools;
 import util.DesktopTools;
-import util.utils;
 
 public class _XContextMenuInterception extends MultiMethodTest {
 
@@ -68,7 +67,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
         log.println("ensure that the first model is focused");
         DesktopTools.bringWindowToFront(docModel);
 
-        utils.pause(3000);
+        waitForEventIdle();
     }
 
     @Override
@@ -182,7 +181,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
             log.println("couldn't press mouse button");
         }
 
-        utils.pause(1000);
+        waitForEventIdle();
 
     }
 

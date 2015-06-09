@@ -389,7 +389,7 @@ public class DesktopTools
      * zoom to have a view over the hole page
      * @param xDoc the document to zoom
      */
-    public static void zoomToEntirePage(XInterface xDoc)
+    public static void zoomToEntirePage(XMultiServiceFactory xMSF, XInterface xDoc)
     {
         try
         {
@@ -402,7 +402,7 @@ public class DesktopTools
             oViewProp.setPropertyValue("ZoomType",
                     Short.valueOf(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
 
-            utils.pause(5000);
+            util.utils.waitForEventIdle(xMSF);
         }
         catch (Exception e)
         {

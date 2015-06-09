@@ -87,10 +87,10 @@ public class _XFormController extends MultiMethodTest {
 
         XWindow wind = UnoRuntime.queryInterface(XWindow.class, cntrl);
         wind.setFocus();
-        util.utils.pause(1000);
+        waitForEventIdle();
         XWindow otherWind = (XWindow)tEnv.getObjRelation("otherWindow");
         otherWind.setFocus();
-        util.utils.pause(1000);
+        waitForEventIdle();
         log.println("activated = " + listener.activated +
             ", deactivated = " + listener.deactivated) ;
 
@@ -112,10 +112,10 @@ public class _XFormController extends MultiMethodTest {
 
         XWindow wind = UnoRuntime.queryInterface(XWindow.class, cntrl);
         wind.setFocus();
-        util.utils.pause(1000);
+        waitForEventIdle();
         XWindow otherWind = (XWindow)tEnv.getObjRelation("otherWindow");
         otherWind.setFocus();
-        util.utils.pause(1000);
+        waitForEventIdle();
         log.println("activated = " + listener.activated +
             ", deactivated = " + listener.deactivated) ;
 

@@ -136,12 +136,12 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
 
         try {
             checker.update() ;
-            util.utils.pause(200);
+            waitForEventIdle();
             checker.commit() ;
-            util.utils.pause(200);
+            waitForEventIdle();
             boolean committed = checker.wasCommited() ;
 
-            util.utils.pause(200);
+            waitForEventIdle();
 
             bResult = listener.approveCalled &&
                       ! listener.updateCalled &&
@@ -152,18 +152,18 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
                 (listener.updateCalled ? "":"NOT")+" called, the value was " +
                 (committed ? "" : "NOT") + " committed.") ;
 
-            util.utils.pause(200);
+            waitForEventIdle();
 
             listener.init() ;
             listener.approve = true ;
-            util.utils.pause(200);
+            waitForEventIdle();
             checker.update() ;
-            util.utils.pause(200);
+            waitForEventIdle();
             checker.commit() ;
-            util.utils.pause(200);
+            waitForEventIdle();
             committed = checker.wasCommited() ;
 
-            util.utils.pause(200);
+            waitForEventIdle();
 
             log.println("Calling with approving : approveUpdate() was " +
                 (listener.approveCalled ? "":"NOT")+" called, updated() was "+
@@ -202,10 +202,10 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
 
         try {
             checker.update() ;
-            util.utils.pause(200);
+            waitForEventIdle();
             checker.commit() ;
 
-            util.utils.pause(200);
+            waitForEventIdle();
 
             bResult = ! listener.approveCalled &&
                       ! listener.updateCalled ;

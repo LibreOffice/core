@@ -93,7 +93,7 @@ public class AccessibleButton extends lib.TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(Param.getInt("ShortWait"));
+        util.utils.waitForEventIdle(Param.getMSF());
 
         DiagThread psDiag = new DiagThread(xTextDoc, msf);
         psDiag.start();

@@ -123,8 +123,6 @@ public class AccessiblePopupMenu extends TestCase {
         toolkit = (XInterface) tParam.getMSF().createInstance(
                 "com.sun.star.awt.Toolkit");
 
-        util.utils.shortWait();
-
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         XInterface oObj = null;

@@ -126,7 +126,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         if(xDispatcher != null)
             xDispatcher.dispatch( aURL, null );
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

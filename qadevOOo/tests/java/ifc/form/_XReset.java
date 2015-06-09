@@ -134,11 +134,11 @@ public class _XReset extends MultiMethodTest {
          log.println("Testing reset() ...");
          approve = false;
          oObj.reset();
-         util.utils.shortWait();
+         waitForEventIdle();
          tRes.tested("reset()", (approveReset[0] && (! resetted[0])));
          approve = true;
          oObj.reset();
-         util.utils.shortWait();
+         waitForEventIdle();
          tRes.tested("addResetListener()", (approveReset[1] && resetted[1]));
 
     } // finished _reset
@@ -159,7 +159,7 @@ public class _XReset extends MultiMethodTest {
          approveReset[0] = resetted[0] = false;
          oObj.removeResetListener(listener1);
          oObj.reset();
-         util.utils.shortWait();
+         waitForEventIdle();
          tRes.tested("removeResetListener()", !approveReset[0] && !resetted[0]);
          //removing the second listener here may avoid crashing the office
     } // finished _removeResetListener()

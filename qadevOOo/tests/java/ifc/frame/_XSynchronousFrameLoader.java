@@ -151,8 +151,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
 
         oObj.cancel() ;
 
-        util.utils.pause(1000);
-
+        waitForEventIdle();
 
         tRes.tested("cancel()", !result[0]) ;
     }

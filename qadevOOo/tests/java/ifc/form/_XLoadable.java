@@ -117,7 +117,7 @@ public class _XLoadable extends MultiMethodTest {
         boolean result = true ;
         oObj.load() ;
 
-        util.utils.pause(100);
+        waitForEventIdle();
         result = oObj.isLoaded() && loadListener.loadedCalled ;
 
         tRes.tested("load()", result) ;
@@ -142,7 +142,7 @@ public class _XLoadable extends MultiMethodTest {
         boolean result = true ;
         oObj.unload() ;
 
-        util.utils.pause(100);
+        waitForEventIdle();
         result = !oObj.isLoaded() && loadListener.unloadedCalled ;
 
         tRes.tested("unload()", result) ;
@@ -167,7 +167,7 @@ public class _XLoadable extends MultiMethodTest {
         boolean result = true ;
         oObj.reload() ;
 
-        util.utils.pause(100);
+        waitForEventIdle();
         result = oObj.isLoaded() && loadListener.reloadedCalled;
 
         tRes.tested("reload()", result) ;

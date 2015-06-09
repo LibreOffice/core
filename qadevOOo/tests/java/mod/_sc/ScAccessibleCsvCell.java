@@ -58,8 +58,6 @@ public class ScAccessibleCsvCell extends TestCase {
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
-        util.utils.pause(2000);
-
         XInterface oObj = (XInterface) tParam.getMSF().createInstance
             ("com.sun.star.awt.Toolkit") ;
 

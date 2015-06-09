@@ -131,7 +131,7 @@ public class AccessibleTreeListBox extends TestCase {
         log.println( "creating a text document" );
         xTextDoc = SOF.createTextDoc(null);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
@@ -149,7 +149,7 @@ public class AccessibleTreeListBox extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XFrame the_frame1 = the_Desk.getCurrentFrame();
 

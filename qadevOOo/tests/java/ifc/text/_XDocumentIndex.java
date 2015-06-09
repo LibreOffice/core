@@ -96,7 +96,7 @@ public class _XDocumentIndex extends MultiMethodTest {
 
         oObj.update();
 
-        util.utils.pause(1000);
+        waitForEventIdle();
 
 
         String contentAfter = oObj.getAnchor().getString();

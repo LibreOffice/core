@@ -114,7 +114,7 @@ public class AccessibleTabBarPageList extends TestCase {
         log.println("creating a draw document");
         xDoc = SOF.createDrawDoc(null);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XInterface oObj = (XInterface) tParam.getMSF()
                                       .createInstance("com.sun.star.awt.Toolkit");
@@ -122,7 +122,7 @@ public class AccessibleTabBarPageList extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());

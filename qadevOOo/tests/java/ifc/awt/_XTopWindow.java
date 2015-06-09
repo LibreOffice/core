@@ -140,7 +140,7 @@ public class _XTopWindow extends MultiMethodTest {
         requiredMethod("addTopWindowListener()");
         listener.initListener();
         oObj.toFront();
-        util.utils.pause(1000);
+        waitForEventIdle();
 
         tRes.tested("toFront()", listener.activated && !listener.deactivated);
     }

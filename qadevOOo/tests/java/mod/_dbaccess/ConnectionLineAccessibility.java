@@ -84,7 +84,7 @@ public class ConnectionLineAccessibility extends TestCase
      * creates two tables in database.
      * Creates a new query and adds it to DefinitionContainer.
      * Opens the QueryComponent.with loadComponentFromURL
-     * and gets the object with the role UNKNOWN and the Impplementation
+     * and gets the object with the role UNKNOWN and the implementation
      * name that contains ConnectionLine
      * @param Param test parameters
      * @param log writer to log information while testing
@@ -161,30 +161,16 @@ public class ConnectionLineAccessibility extends TestCase
         final String col_name1 = "id1";
         final String col_name2 = "id2";
 
-        try
-        {
-            connection = isolConnection.getIsolatedConnection(user, password);
-            statement = connection.createStatement();
-            statement.executeUpdate("drop table if exists " + tbl_name1);
-            statement.executeUpdate("drop table if exists " + tbl_name2);
-            statement.executeUpdate("create table " + tbl_name1 + " (" +
-                    col_name1 + " int)");
-            statement.executeUpdate("create table " + tbl_name2 + " (" +
-                    col_name2 + " int)");
-        }
-        catch (com.sun.star.sdbc.SQLException e)
-        {
-                util.utils.pause(1500);
-                connection = isolConnection.getIsolatedConnection(user,
-                        password);
-                statement = connection.createStatement();
-                statement.executeUpdate("drop table if exists " + tbl_name1);
-                statement.executeUpdate("drop table if exists " + tbl_name2);
-                statement.executeUpdate("create table " + tbl_name1 + " (" +
-                        col_name1 + " int)");
-                statement.executeUpdate("create table " + tbl_name2 + " (" +
-                        col_name2 + " int)");
-        }
+        util.utils.waitForEventIdle(Param.getMSF());
+
+        connection = isolConnection.getIsolatedConnection(user, password);
+        statement = connection.createStatement();
+        statement.executeUpdate("drop table if exists " + tbl_name1);
+        statement.executeUpdate("drop table if exists " + tbl_name2);
+        statement.executeUpdate("create table " + tbl_name1 + " (" +
+                col_name1 + " int)");
+        statement.executeUpdate("create table " + tbl_name2 + " (" +
+                col_name2 + " int)");
 
         XQueryDefinitionsSupplier querySuppl = UnoRuntime.queryInterface(
                 XQueryDefinitionsSupplier.class,
@@ -224,7 +210,7 @@ public class ConnectionLineAccessibility extends TestCase
 
         QueryComponent = DesktopTools.loadDoc(Param.getMSF(),".component:DB/QueryDesign",loadProps);
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         xWindow = UnoRuntime.queryInterface(XModel.class, QueryComponent).
             getCurrentController().getFrame().getContainerWindow();
@@ -241,7 +227,7 @@ public class ConnectionLineAccessibility extends TestCase
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        util.utils.pause(1500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         final XWindow queryWin = xWindow;
 

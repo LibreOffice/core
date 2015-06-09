@@ -120,7 +120,7 @@ public class PersistentWindowTest
                 Rectangle rect1 = handle.getDocumentPosSize();
 
                 // resize
-                handle.resizeDocument();
+                handle.resizeDocument(getMSF());
                 // after resize
                 Rectangle rect2 = handle.getDocumentPosSize();
 
@@ -269,7 +269,7 @@ public class PersistentWindowTest
                 }
             }
             docHandle = new DocumentHandle(xCompLoader);
-            docHandle.loadDocument(docLoader, false);
+            docHandle.loadDocument(xMSF, docLoader, false);
         }
         catch (com.sun.star.uno.Exception e)
         {

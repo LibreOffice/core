@@ -97,7 +97,7 @@ public class AccessibleCheckBox extends TestCase {
             xTextDoc = SOF.createTextDoc(null);
         }
 
-        util.utils.pause(Param.getInt("ShortWait"));
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XInterface oObj = null;
 
@@ -108,7 +108,7 @@ public class AccessibleCheckBox extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(Param.getInt("ShortWait"));
+        util.utils.waitForEventIdle(Param.getMSF());
 
         log.println("Opening Dialog in second thread");
 

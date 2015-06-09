@@ -254,10 +254,10 @@ public class _XContainer extends MultiMethodTest {
     protected boolean performChanges2() {
         int precount = CC.getControls().length;
         CC.addControl("NewControl",(XControl) inst);
-        util.utils.pause(1000);
+        waitForEventIdle();
         int count = CC.getControls().length;
         CC.removeControl(CC.getControl("NewControl"));
-        util.utils.pause(1000);
+        waitForEventIdle();
         return count>precount;
     }
 

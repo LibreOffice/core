@@ -151,9 +151,9 @@ public class SdUnoDrawView extends TestCase {
 
         log.println( "creating two draw documents" );
         xDrawDoc = SOF.createDrawDoc(null);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
         xSecondDrawDoc = SOF.createDrawDoc(null);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
@@ -176,7 +176,7 @@ public class SdUnoDrawView extends TestCase {
         oShapes.add(shape1);
         oShapes.add(shape2);
         oShapes.add(shape3);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 

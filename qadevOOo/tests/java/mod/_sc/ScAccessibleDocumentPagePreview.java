@@ -196,7 +196,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             log.println("loading document "+url);
             xSpreadsheetDoc = UnoRuntime.queryInterface(
                             XSpreadsheetDocument.class,SOF.loadDocument(url));
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document ", e );

@@ -196,7 +196,7 @@ public class AccessibleStatusBarItem {
         try {
             System.out.println("****** Open a new calc document");
             xSpreadsheetDoc = xSOF.createCalcDoc("_blank");
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(xMSF);
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
@@ -222,18 +222,18 @@ public class AccessibleStatusBarItem {
             XExtendedToolkit tk =
                         UnoRuntime.queryInterface(XExtendedToolkit.class,xIfc);
 
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(xMSF);
             xWindow = UnoRuntime.queryInterface(
                                     XWindow.class,tk.getActiveTopWindow());
 
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(xMSF);
             XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
             XAccessibleContext parentContext = null;
 
             System.out.println("Get the accessible status bar.");
             parentContext = AccessibilityTools.getAccessibleObjectForRole(
                                         xRoot, AccessibleRole.STATUS_BAR, "");
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(xMSF);
             if ( parentContext == null ) {
                 fail("Could not create a test object.");
             }
@@ -312,8 +312,8 @@ public class AccessibleStatusBarItem {
             System.out.println("*** Now testing XAccessibleEventBroadcaster ***");
             _XAccessibleEventBroadcaster _xAccEvBcast =
                                     new _XAccessibleEventBroadcaster(object, xWindow);
-            assertTrue("failed: "+accName+" - XAccessibleEventBroadcaster::addEventListener", _xAccEvBcast._addEventListener());
-            assertTrue("failed: "+accName+" - XAccessibleEventBroadcaster::removeEventListener", _xAccEvBcast._removeEventListener());
+            assertTrue("failed: "+accName+" - XAccessibleEventBroadcaster::addEventListener", _xAccEvBcast._addEventListener(xMSF));
+            assertTrue("failed: "+accName+" - XAccessibleEventBroadcaster::removeEventListener", _xAccEvBcast._removeEventListener(xMSF));
 
             System.out.println("*** Now testing XAccessibleText ***");
             _XAccessibleText _xAccText =

@@ -109,7 +109,7 @@ public class OQueryDesign extends TestCase {
         Args[1] = param2;
         getting.dispatch(the_url,Args);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         Object oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 

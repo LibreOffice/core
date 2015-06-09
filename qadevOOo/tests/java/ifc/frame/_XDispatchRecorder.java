@@ -67,7 +67,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
         tRes.tested("startRecording()", true);
     }
 
-    public void _getRecordedMacro() {
+    public void _getRecordedMacro() throws Exception {
 
         clearBuffer();
 
@@ -86,7 +86,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
         XDispatch xDisp = xDispProv.queryDispatch(dispURL, "", 0);
         xDisp.dispatch(dispURL, dispArgs);
 
-        util.utils.shortWait();
+        waitForEventIdle();
 
         log.println("Getting macro ... :");
         String macro = oObj.getRecordedMacro();

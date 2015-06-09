@@ -63,7 +63,7 @@ public class AccessibleShape extends TestCase {
     }
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(final TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
         log.println( "creating a test environment" );
         String aURL=utils.getFullTestURL("basDialog.odt");
@@ -90,7 +90,7 @@ public class AccessibleShape extends TestCase {
         aArgs[3].Value = "Dialog";
         xDPH.executeDispatch(xDPP, ".uno:BasicIDEAppear", "", 0, aArgs);
 
-        utils.pause(3000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         oObj = (XInterface) tParam.getMSF().createInstance
                 ("com.sun.star.awt.Toolkit") ;
@@ -121,7 +121,7 @@ public class AccessibleShape extends TestCase {
                 newPosSize.Y = oldPosSize.Y + 20;
                 basicIDE.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
                                 newPosSize.Height, PosSize.POSSIZE);
-                utils.pause(1000);
+                util.utils.waitForEventIdle(tParam.getMSF());
                 basicIDE.setPosSize(oldPosSize.X, oldPosSize.Y, oldPosSize.Width,
                                 oldPosSize.Height, PosSize.POSSIZE);
             }

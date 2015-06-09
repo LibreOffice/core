@@ -53,7 +53,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
     public void _addPrintJobListener() {
         oObj.addPrintJobListener(listenerImpl);
         listenerImpl.fireEvent();
-        util.utils.pause(1000);
+        waitForEventIdle();
         tRes.tested("addPrintJobListener()", listenerImpl.actionTriggered());
     }
 
@@ -64,7 +64,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
         requiredMethod("addPrintJobListener");
         oObj.removePrintJobListener(listenerImpl);
 
-            util.utils.pause(5000);
+        waitForEventIdle();
 
         listenerImpl.reset();
         listenerImpl.fireEvent();

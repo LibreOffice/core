@@ -117,7 +117,7 @@ public class AccessibleComboBox extends TestCase {
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
         }
-        util.utils.pause(Param.getInt("ShortWait"));
+        util.utils.waitForEventIdle(Param.getMSF());
 
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",

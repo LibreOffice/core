@@ -64,6 +64,7 @@ import com.sun.star.uno.UnoRuntime;
  *
  * @see TestResult
  */
+@SuppressWarnings("unused")
 public class MultiMethodTest
 {
 
@@ -465,4 +466,9 @@ public class MultiMethodTest
     {
         this.getClass().getField(fieldName).set(this, value);
     }
+
+    protected final void waitForEventIdle() {
+        util.utils.waitForEventIdle(tParam.getMSF());
+    }
+
 }

@@ -22,6 +22,7 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
+
 import java.util.StringTokenizer;
 import java.io.*;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.sun.star.awt.XToolkitExperimental;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -37,17 +39,15 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.ucb.InteractiveAugmentedIOException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.lang.XServiceInfo;
-
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
-
 import java.util.Collections;
 import java.util.GregorianCalendar;
 
@@ -661,6 +661,17 @@ public class utils {
         }
     }
 
+    public static void waitForEventIdle(XMultiServiceFactory xMSF) {
+        try {
+            XToolkitExperimental xToolkit = UnoRuntime.queryInterface(
+                    XToolkitExperimental.class,
+                    xMSF.createInstance("com.sun.star.awt.Toolkit"));
+            xToolkit.processEventsToIdle();
+        } catch (com.sun.star.uno.Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     /**
      * Validate the AppExecutionCommand. Returned is an error message, starting
      * with "Error:", or a warning, if the command might work.
@@ -832,7 +843,7 @@ public class utils {
             XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
             xDispatcher.dispatch(aURL, null);
 
-            utils.pause(3000);
+            waitForEventIdle(xMSF);
 
         } catch (Exception e) {
             throw new Exception("ERROR: could not dispatch URL '" + URL + "'", e);

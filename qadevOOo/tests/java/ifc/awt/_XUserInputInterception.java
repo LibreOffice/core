@@ -39,7 +39,6 @@ import java.awt.event.InputEvent;
 
 import lib.MultiMethodTest;
 import util.AccessibilityTools;
-import util.utils;
 
 /**
 * Testing <code>com.sun.star.awt.XUserInputInterception</code>
@@ -151,7 +150,7 @@ public class _XUserInputInterception extends MultiMethodTest {
 
         et.run();
 
-        util.utils.pause(utils.DEFAULT_SHORT_WAIT_MS * 2);
+        waitForEventIdle();
         log.println("key listener thread should be finished.");
 
 
@@ -214,7 +213,7 @@ public class _XUserInputInterception extends MultiMethodTest {
 
         et.run();
 
-        util.utils.pause(utils.DEFAULT_SHORT_WAIT_MS * 2);
+        waitForEventIdle();
         log.println("mouse listener thread should be finished.");
 
         boolean bOK = m_mousePressed1 & m_mouseReleased1 &

@@ -197,7 +197,7 @@ public class ODatasourceBrowser extends TestCase {
         log.println("creating a text document");
         xTextDoc = SOF.createTextDoc(null);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -250,7 +250,7 @@ public class ODatasourceBrowser extends TestCase {
                                         XInitialization.class, oObj);
         xInit.initialize(params);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
                                                             4500, 15000, 10000,
