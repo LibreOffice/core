@@ -402,7 +402,7 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
    (void) nThres;
-   if (nMapNum == 0)
+   if (nMapNum == 0 || nDPI == 0)
    {
        return 0;
    }
