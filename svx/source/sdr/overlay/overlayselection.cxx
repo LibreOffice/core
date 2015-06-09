@@ -72,9 +72,8 @@ namespace sdr
                     // not possible when switched off by user
                     return OVERLAY_INVERT;
                 }
-                else
+                else if (const OutputDevice* pOut = Application::GetDefaultDevice())
                 {
-                    const OutputDevice *pOut = Application::GetDefaultDevice();
 
                     if(pOut->GetSettings().GetStyleSettings().GetHighContrastMode())
                     {
