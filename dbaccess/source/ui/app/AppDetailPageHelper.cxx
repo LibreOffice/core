@@ -193,7 +193,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     ,m_aTBPreview(VclPtr<ToolBox>::Create(this,WB_TABSTOP) )
     ,m_aBorder(VclPtr<Window>::Create(this,WB_BORDER | WB_READONLY))
     ,m_aPreview(VclPtr<OPreviewWindow>::Create(m_aBorder.get()))
-    ,m_aDocumentInfo(VclPtr<::svtools::ODocumentInfoPreview>::Create(m_aBorder.get(), WB_LEFT | WB_VSCROLL | WB_READONLY) )
+    ,m_aDocumentInfo(VclPtr< ::svtools::ODocumentInfoPreview>::Create(m_aBorder.get(), WB_LEFT | WB_VSCROLL | WB_READONLY) )
     ,m_ePreviewMode(_ePreviewMode)
 {
 

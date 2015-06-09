@@ -280,7 +280,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     pView->Show();
     m_pDatMan->SetView( pView );
 
-    VclPtrInstance<::bib::BibBeamer> pBeamer( pMyWindow, m_pDatMan );
+    VclPtrInstance< ::bib::BibBeamer> pBeamer( pMyWindow, m_pDatMan );
     pBeamer->Show();
     pMyWindow->createTopFrame(pBeamer);
 
