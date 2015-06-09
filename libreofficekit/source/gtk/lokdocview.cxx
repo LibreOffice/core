@@ -121,7 +121,7 @@ struct LOKDocView_Impl
     static void onExposed(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
     /// Receives a key press or release event.
     void signalKey(GdkEventKey* pEvent);
-    /**
+    /*
      * The user drags the handle, which is below the cursor, but wants to move the
      * cursor accordingly.
      *
@@ -144,7 +144,7 @@ struct LOKDocView_Impl
     gboolean renderOverlayImpl(GtkWidget* pEventBox);
     /// Is rRectangle empty?
     static bool isEmptyRectangle(const GdkRectangle& rRectangle);
-    /**
+    /*
      * Renders pHandle below an rCursor rectangle on pCairo.
      * @param rRectangle output parameter, the rectangle that contains the rendered handle.
      */
@@ -1175,6 +1175,12 @@ static void lok_doc_view_init (LOKDocView* pDocView)
     g_signal_connect(G_OBJECT(pDocView), "destroy", G_CALLBACK(LOKDocView_Impl::destroy), 0);
 }
 
+/**
+ * lok_doc_view_new:
+ * @pOffice: The LibreOfficeKit context.
+ *
+ * Returns: The #LOKDocView widget instance.
+ */
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new( LibreOfficeKit* pOffice )
 {
     LOKDocView* pDocView = LOK_DOC_VIEW(gtk_type_new(lok_doc_view_get_type()));
@@ -1182,6 +1188,13 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new( LibreOfficeKit* pOffice )
     return GTK_WIDGET( pDocView );
 }
 
+/**
+ * lok_doc_view_open_document:
+ * @pDocView: The #LOKDocView instance
+ * @pPath: The path of the document that #LOKDocView widget should try to open
+ *
+ * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
+ */
 SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_open_document( LOKDocView* pDocView, char* pPath )
 {
     if ( pDocView->m_pImpl->m_pDocument )
@@ -1226,11 +1239,24 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_open_document( LOKDocView* pDocView, 
     return TRUE;
 }
 
+/**
+ * lok_doc_view_get_document:
+ * @pDocView: The #LOKDocView instance
+ *
+ * Returns: The #LibreOfficeKitDocument instance the widget is currently showing
+ */
 SAL_DLLPUBLIC_EXPORT LibreOfficeKitDocument* lok_doc_view_get_document(LOKDocView* pDocView)
 {
     return pDocView->m_pImpl->m_pDocument;
 }
 
+/**
+ * lok_doc_view_set_zoom:
+ * @pDocView: The #LOKDocView instance
+ * @fZoom: The new zoom level that pDocView must set it into.
+ *
+ * Sets the new zoom level for the widget.
+ */
 SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_zoom ( LOKDocView* pDocView, float fZoom )
 {
     pDocView->m_pImpl->m_fZoom = fZoom;
@@ -1246,6 +1272,12 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_zoom ( LOKDocView* pDocView, float fZ
                                 nDocumentHeightPixels);
 }
 
+/**
+ * lok_doc_view_get_zoom:
+ * @pDocView: The #LOKDocView instance
+ *
+ * Returns: The current zoom factor value in float for pDocView
+ */
 SAL_DLLPUBLIC_EXPORT float lok_doc_view_get_zoom ( LOKDocView* pDocView )
 {
     return pDocView->m_pImpl->m_fZoom;
@@ -1277,6 +1309,13 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_partmode( LOKDocView* pDocView,
     pDocView->m_pImpl->m_pDocument->pClass->setPartMode( pDocView->m_pImpl->m_pDocument, nPartMode );
 }
 
+/**
+ * lok_doc_view_set_edit:
+ * @pDocView: The #LOKDocView instance
+ * @bEdit: %TRUE if the pDocView should go in edit mode, %FALSE otherwise
+ *
+ * Sets the edit-mode for pDocView
+ */
 SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_edit( LOKDocView* pDocView,
                                                 gboolean bEdit )
 {
@@ -1294,6 +1333,12 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_edit( LOKDocView* pDocView,
     gtk_widget_queue_draw(GTK_WIDGET(pDocView));
 }
 
+/**
+ * lok_doc_view_get_edit:
+ * @pDocView: The #LOKDocView instance
+ *
+ * Returns: %TRUE if the given pDocView is in edit mode.
+ */
 SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_get_edit(LOKDocView* pDocView)
 {
     return pDocView->m_pImpl->m_bEdit;
@@ -1310,11 +1355,29 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_post_key(GtkWidget* /*pWidget*/, GdkEvent
     pDocView->m_pImpl->signalKey(pEvent);
 }
 
+/**
+ * lok_doc_view_pixel_to_twip:
+ * @pDocView: The #LOKDocView instance
+ * @fInput: The value in pixels to convert to twips
+ *
+ * Converts the value in pixels to twips according to zoom level.
+ *
+ * Returns: The corresponding value in twips
+ */
 SAL_DLLPUBLIC_EXPORT float lok_doc_view_pixel_to_twip(LOKDocView* pDocView, float fInput)
 {
     return pixelToTwip(fInput, pDocView->m_pImpl->m_fZoom);
 }
 
+/**
+ * lok_doc_view_twip_to_pixel:
+ * @pDocView: The #LOKDocView instance
+ * @fInput: The value in twips to convert to pixels
+ *
+ * Converts the value in twips to pixels according to zoom level.
+ *
+ * Returns: The corresponding value in pixels
+ */
 SAL_DLLPUBLIC_EXPORT float lok_doc_view_twip_to_pixel(LOKDocView* pDocView, float fInput)
 {
     return twipToPixel(fInput, pDocView->m_pImpl->m_fZoom);
