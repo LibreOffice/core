@@ -125,17 +125,17 @@ public:
         { OComponentDefinition::removeEventListener(p1); }
 
     // XQueryDefinition properties
-    virtual OUString getName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString getCommand() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setCommand(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
-    virtual bool getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setEscapeProcessing(bool) throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setUpdateTableName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setUpdateCatalogName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setUpdateSchemaName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    OUString getName() throw( ::com::sun::star::uno::RuntimeException );
+    OUString getCommand() throw( ::com::sun::star::uno::RuntimeException );
+    void setCommand(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    bool getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException );
+    void setEscapeProcessing(bool) throw( ::com::sun::star::uno::RuntimeException );
+    OUString getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException );
+    void setUpdateTableName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    OUString getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException );
+    void setUpdateCatalogName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    OUString getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException );
+    void setUpdateSchemaName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
 
     // OPropertySetHelper
     DECLARE_PROPERTYCONTAINER_DEFAULTS( );

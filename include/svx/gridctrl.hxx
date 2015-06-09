@@ -324,8 +324,8 @@ protected:
     virtual bool IsModified() const SAL_OVERRIDE;
 
     virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth = 0, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1) SAL_OVERRIDE;
-    virtual void RemoveColumn(sal_uInt16 nId);
-    virtual DbGridColumn* CreateColumn(sal_uInt16 nId) const;
+    void RemoveColumn(sal_uInt16 nId);
+    DbGridColumn* CreateColumn(sal_uInt16 nId) const;
     virtual void ColumnMoved(sal_uInt16 nId) SAL_OVERRIDE;
     virtual bool SaveRow() SAL_OVERRIDE;
     virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
@@ -347,12 +347,12 @@ protected:
     */
     virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
-    virtual void DataSourcePropertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
+    void DataSourcePropertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual void FieldValueChanged(sal_uInt16 _nId, const ::com::sun::star::beans::PropertyChangeEvent& _evt);
-    virtual void FieldListenerDisposing(sal_uInt16 _nId);
+    void FieldValueChanged(sal_uInt16 _nId, const ::com::sun::star::beans::PropertyChangeEvent& _evt);
+    void FieldListenerDisposing(sal_uInt16 _nId);
 
-    virtual void disposing(sal_uInt16 _nId, const ::com::sun::star::lang::EventObject& _rEvt);
+    void disposing(sal_uInt16 _nId, const ::com::sun::star::lang::EventObject& _rEvt);
 
     // own overridables
     /// called when the current row changed
@@ -396,7 +396,7 @@ public:
 
     // the data source
     // the options can restrict but not extend the update abilities
-    virtual void setDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& rCursor,
+    void setDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& rCursor,
         sal_uInt16 nOpts = OPT_INSERT | OPT_UPDATE | OPT_DELETE);
     virtual void Dispatch(sal_uInt16 nId) SAL_OVERRIDE;
 
@@ -426,7 +426,7 @@ public:
     bool IsDesignMode() const {return m_bDesignMode;}
     bool IsOpen() const {return m_pSeekCursor != NULL;}
 
-    virtual void SetFilterMode(bool bMode);
+    void SetFilterMode(bool bMode);
     bool IsFilterMode() const {return m_bFilterMode;}
     bool IsFilterRow(long nRow) const {return m_bFilterMode && nRow == 0;}
 
@@ -463,9 +463,9 @@ public:
     // is the current line being updated
     bool IsUpdating() const {return m_bUpdating;}
 
-    virtual void RowRemoved( long nRow, long nNumRows = 1, bool bDoPaint = true );
-    virtual void RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
-    virtual void RowModified( long nRow, sal_uInt16 nColId = USHRT_MAX );
+    void RowRemoved( long nRow, long nNumRows = 1, bool bDoPaint = true );
+    void RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
+    void RowModified( long nRow, sal_uInt16 nColId = USHRT_MAX );
 
     void resetCurrentRow();
 

@@ -32,7 +32,7 @@ public:
     void testGetPropertyValue();
 
 protected:
-    virtual bool isPropertyValueChangeable(const OUString& rName);
+    bool isPropertyValueChangeable(const OUString& rName);
 
 private:
     void fillPropsToTest(const css::uno::Reference<css::beans::XPropertySetInfo>& xPropInfo);

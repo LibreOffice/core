@@ -540,7 +540,7 @@ namespace svt
         // should be used instead of GetFieldRectPixel, 'cause this method here takes into account the borders
         Rectangle GetCellRect(long nRow, sal_uInt16 nColId, bool bRelToBrowser = true) const;
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
-        virtual sal_uInt32 GetAutoColumnWidth(sal_uInt16 nColId);
+        sal_uInt32 GetAutoColumnWidth(sal_uInt16 nColId);
 
         virtual void PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const;
         virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const = 0;
@@ -570,14 +570,14 @@ namespace svt
 
         virtual CellController* GetController(long nRow, sal_uInt16 nCol);
         virtual void InitController(CellControllerRef& rController, long nRow, sal_uInt16 nCol);
-        virtual void ResizeController(CellControllerRef& rController, const Rectangle&);
-        virtual void ReleaseController(CellControllerRef& pController, long nRow, sal_uInt16 nCol);
+        static void ResizeController(CellControllerRef& rController, const Rectangle&);
+        static void ReleaseController(CellControllerRef& pController, long nRow, sal_uInt16 nCol);
         virtual void DoubleClick(const BrowserMouseEvent&) SAL_OVERRIDE;
 
         void ActivateCell() { ActivateCell(GetCurRow(), GetCurColumnId()); }
 
         // retrieve the image for the row status
-        virtual Image GetImage(RowStatus) const;
+        Image GetImage(RowStatus) const;
 
         // inserting columns
         // if you don't set a width, this will be calculated automatically

@@ -137,7 +137,7 @@ namespace pcr
         void SAL_CALL notifyModifiedValue(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
-        virtual void SAL_CALL dispose();
+        void SAL_CALL dispose();
 
         /** (fail-safe) wrapper around calling our context's activateNextControl
         */
