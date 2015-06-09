@@ -319,6 +319,7 @@ namespace drawinglayer
                 }
                 else if( rText.isChainable() /*&& !rText.isInEditMode()*/ ) // FIXME(matteocam)
                 {
+                    fprintf(stderr, "[CHAINABLE?] Making a Chained Primitive for %p\n", pReferredTextObj);
                     pNew = new SdrChainedTextPrimitive2D(
                                     &rText.getSdrText(),
                                     rText.getOutlinerParaObject(),
