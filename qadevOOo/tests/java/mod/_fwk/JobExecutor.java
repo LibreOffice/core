@@ -179,7 +179,7 @@ public class JobExecutor extends TestCase {
                 XChangesBatch xCB = UnoRuntime.queryInterface(XChangesBatch.class, oRootCfg);
                 xCB.commitChanges();
 
-                util.utils.pause(1000);
+                util.utils.waitForEventIdle(Param.getMSF());
 
             } catch (com.sun.star.uno.Exception e) {
                 e.printStackTrace(log);

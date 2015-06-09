@@ -81,7 +81,7 @@ public class AccessibleControlShape extends TestCase {
         final XShape oShape = FormTools.insertControlShape
             (xDrawDoc,3000,4500,15000,1000,"CommandButton");
 
-        utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
         XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

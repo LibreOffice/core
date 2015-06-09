@@ -86,7 +86,7 @@ public class AccessibleMenuItem extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         Object atw = tk.getActiveTopWindow();
 
@@ -105,10 +105,9 @@ public class AccessibleMenuItem extends TestCase {
             XAccessibleAction act = UnoRuntime.queryInterface(
                                             XAccessibleAction.class, Menu);
             act.doAccessibleAction(0);
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(Param.getMSF());
 
-
-            //get a menue-item
+            //get a menu-item
             oObj = Menu.getAccessibleContext().getAccessibleChild(11);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
         }

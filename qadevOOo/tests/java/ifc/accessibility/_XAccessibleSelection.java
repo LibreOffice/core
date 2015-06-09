@@ -167,7 +167,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
      * Has OK status if exception was thrown for wrong index and
      * if exception wasn't thrown for the correct index.
      */
-    public void _isAccessibleChildSelected() {
+    public void _isAccessibleChildSelected() throws Exception {
         executeMethod("selectAccessibleChild()");
 
         boolean res = true;
@@ -212,7 +212,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
                     if (isSelectable(tEnv.getTestObject(), k)) {
                         oObj.selectAccessibleChild(k);
-                        util.utils.shortWait();
+                        waitForEventIdle();
                         isSelected = oObj.isAccessibleChildSelected(k);
                         log.println("isAccessibleChildSelected - " +
                                     isSelected);
@@ -236,7 +236,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
      * Has OK status if the method <code>isAccessibleChildSelected()</code>
      * returned <code>false</code>.
      */
-    public void _clearAccessibleSelection() {
+    public void _clearAccessibleSelection() throws Exception {
         executeMethod("isAccessibleChildSelected()");
 
         boolean res = true;
@@ -247,7 +247,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         // clearAccessibleSelection() call is oneway so we need
         // some waiting
-        util.utils.shortWait();
+        waitForEventIdle();
 
         if ((childCount > 0) && !OneAlwaysSelected) {
             try {
@@ -284,7 +284,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         // selectAllAccessibleChildren() call is oneway so we need
         // some waiting
-        util.utils.shortWait();
+        waitForEventIdle();
 
         boolean res = true;
         boolean isSelected = true;
@@ -394,7 +394,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
      * if exception wasn't thrown for the correct index and
      * if the method have returned a not null for the correct index.
      */
-    public void _getSelectedAccessibleChild() {
+    public void _getSelectedAccessibleChild() throws Exception {
         executeMethod("getSelectedAccessibleChildCount()");
 
         boolean res = true;
@@ -435,7 +435,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
                     if (isSelectable(tEnv.getTestObject(), k)) {
                         oObj.selectAccessibleChild(k);
-                        util.utils.shortWait();
+                        waitForEventIdle();
                         log.println("selected child count: " +
                                     oObj.getSelectedAccessibleChildCount());
                         XAccessible selChild = oObj.getSelectedAccessibleChild(0);

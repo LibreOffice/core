@@ -225,7 +225,7 @@ public class OTimeControl extends TestCase {
         tEnv.addObjRelation("TestTextListener", listener);
 
         FormTools.switchDesignOf((Param.getMSF()), xTextDoc);
-        util.utils.pause(200);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         return tEnv;
     } // finish method getTestEnvironment

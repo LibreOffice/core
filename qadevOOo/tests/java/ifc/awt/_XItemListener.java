@@ -95,7 +95,7 @@ public class _XItemListener extends MultiMethodTest {
         event.Highlighted = 2 ;
         oObj.itemStateChanged(event) ;
 
-        util.utils.pause(200);
+        waitForEventIdle();
 
         result = itemListener.itemStateChangedCalled &&
             itemListener.event.Selected == 1 &&

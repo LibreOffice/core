@@ -135,7 +135,7 @@ public class SdUnoOutlineView extends TestCase {
 
         log.println( "creating a impress document" );
         xImpressDoc = SOF.createImpressDoc(null);
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
         XDrawPages the_pages = oDPS.getDrawPages();
@@ -166,7 +166,7 @@ public class SdUnoOutlineView extends TestCase {
 
         log.println( "creating a second impress document" );
         xSecondDrawDoc = SOF.createImpressDoc(null);
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel2 = UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
 

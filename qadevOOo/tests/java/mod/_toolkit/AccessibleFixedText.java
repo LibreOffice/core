@@ -129,7 +129,7 @@ public class AccessibleFixedText extends TestCase {
         oObj = (XInterface) Param.getMSF().createInstance(
                        "com.sun.star.awt.Toolkit");
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWinDlg);
 

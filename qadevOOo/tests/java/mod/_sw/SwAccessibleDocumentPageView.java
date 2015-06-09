@@ -60,7 +60,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws Exception{
+        final TestParameters Param, PrintWriter log) throws Exception{
 
         XInterface oObj = null;
 
@@ -102,7 +102,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
         if(xDispatcher != null)
             xDispatcher.dispatch( aURL, null );
 
-        util.utils.pause(2000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -120,7 +120,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
                 public void fireEvent() {
                     String oldText = the_text.getString();
                     the_text.setString("EVENT FIRED");
-                    util.utils.pause(2000);
+                    util.utils.waitForEventIdle(Param.getMSF());
                     the_text.setString(oldText);
                 }
             });

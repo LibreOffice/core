@@ -49,7 +49,6 @@ import util.utils;
 public class UnoControlContainer extends TestCase {
     private static XTextDocument xTextDoc;
     private static XTextDocument xTD2;
-    private static XControl xCtrl;
     private static XControl xCtrl1;
     private static XControl xCtrl2;
 
@@ -104,7 +103,7 @@ public class UnoControlContainer extends TestCase {
         access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
 
-        xCtrl = access.getControl(model);
+        access.getControl(model);
 
 
         // create second XControl

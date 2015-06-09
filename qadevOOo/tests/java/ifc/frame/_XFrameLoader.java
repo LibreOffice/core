@@ -126,7 +126,7 @@ public class _XFrameLoader extends MultiMethodTest {
 
     /**
     * First <code>cancel</code> method test is called.
-    * If in that test loaing process was interrupted by
+    * If in that test loading process was interrupted by
     * <code>cancel</code> call then <code>load</code> test
     * executes. It loads a component, waits some moment to
     * listener have a chance to be called  and then checks
@@ -140,13 +140,13 @@ public class _XFrameLoader extends MultiMethodTest {
     *  <li> <code> cancel() </code> </li>
     * </ul>
     */
-    public void _load() {
+    public void _load() throws Exception {
         executeMethod("cancel()") ;
 
         if (!loaded) {
             oObj.load(frame, url, args, listener) ;
 
-            util.utils.shortWait();
+            waitForEventIdle();
 
             loaded = listener.finished ;
         }
@@ -160,13 +160,13 @@ public class _XFrameLoader extends MultiMethodTest {
     * Has <b>OK</b> status if the process was cancelled or
     * finished (appropriate listener methods were called).
     */
-    public void _cancel() {
+    public void _cancel() throws Exception {
         boolean result = true ;
 
         oObj.load(frame, url, args, listener) ;
         oObj.cancel() ;
 
-        util.utils.shortWait();
+        waitForEventIdle();
 
         if (listener.cancelled) {
             log.println("Loading was canceled.") ;

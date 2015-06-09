@@ -60,8 +60,6 @@ public class ScAccessibleCsvRuler extends TestCase {
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) throws Exception {
-        util.utils.pause(2000);
-
         XMultiServiceFactory msf = Param.getMSF();
 
         XInterface oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");

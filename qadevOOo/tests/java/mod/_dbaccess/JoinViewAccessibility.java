@@ -161,29 +161,15 @@ public class JoinViewAccessibility extends TestCase {
         final String col_name1 = "id1";
         final String col_name2 = "id2";
 
-        try
-        {
-            connection = isolConnection.getIsolatedConnection (user, password);
-            statement = connection.createStatement ();
-            statement.executeUpdate ("drop table if exists " + tbl_name1);
-            statement.executeUpdate ("drop table if exists " + tbl_name2);
-            statement.executeUpdate ("create table " + tbl_name1 + " (" +
-            col_name1 + " int)");
-            statement.executeUpdate ("create table " + tbl_name2 + " (" +
-            col_name2 + " int)");
-        } catch (com.sun.star.sdbc.SQLException e)
-        {
-            util.utils.pause(1500);
-            connection = isolConnection.getIsolatedConnection (user,
-            password);
-            statement = connection.createStatement ();
-            statement.executeUpdate ("drop table if exists " + tbl_name1);
-            statement.executeUpdate ("drop table if exists " + tbl_name2);
-            statement.executeUpdate ("create table " + tbl_name1 + " (" +
-            col_name1 + " int)");
-            statement.executeUpdate ("create table " + tbl_name2 + " (" +
-            col_name2 + " int)");
-        }
+        util.utils.waitForEventIdle(Param.getMSF());
+        connection = isolConnection.getIsolatedConnection (user, password);
+        statement = connection.createStatement ();
+        statement.executeUpdate ("drop table if exists " + tbl_name1);
+        statement.executeUpdate ("drop table if exists " + tbl_name2);
+        statement.executeUpdate ("create table " + tbl_name1 + " (" +
+        col_name1 + " int)");
+        statement.executeUpdate ("create table " + tbl_name2 + " (" +
+        col_name2 + " int)");
 
         XQueryDefinitionsSupplier querySuppl = UnoRuntime.queryInterface (
         XQueryDefinitionsSupplier.class,
@@ -238,7 +224,7 @@ public class JoinViewAccessibility extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        util.utils.pause(1500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         final XWindow queryWin = xWindow;
 

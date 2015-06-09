@@ -68,7 +68,7 @@ public class SmGraphicAccessible extends TestCase {
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(final TestParameters Param, PrintWriter log) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         xMathDoc = SOF.openDoc("smath","_blank");
@@ -106,9 +106,9 @@ public class SmGraphicAccessible extends TestCase {
                     try {
                         xAC.grabFocus();
                         xPS.setPropertyValue("Formula", "sum hat x");
-                        util.utils.pause(1000);
+                        util.utils.waitForEventIdle(Param.getMSF());
                         xPS.setPropertyValue("Formula", expFormula);
-                        util.utils.pause(1000);
+                        util.utils.waitForEventIdle(Param.getMSF());
                     } catch(com.sun.star.lang.WrappedTargetException e) {
                     } catch(com.sun.star.lang.IllegalArgumentException e) {
                     } catch(com.sun.star.beans.PropertyVetoException e) {

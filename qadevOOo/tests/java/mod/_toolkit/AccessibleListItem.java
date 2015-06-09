@@ -90,7 +90,7 @@ public class AccessibleListItem extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -120,7 +120,7 @@ public class AccessibleListItem extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
@@ -142,7 +142,7 @@ public class AccessibleListItem extends TestCase {
                                                XAccessibleSelection.class,
                                                oObj);
         xAccSel.selectAccessibleChild(3);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST_ITEM,"Spr");
 

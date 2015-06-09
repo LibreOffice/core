@@ -108,7 +108,7 @@ public class SdUnoSlideView extends TestCase {
         XDrawPages xDP = null;
         log.println( "creating a impress document" );
         xImpressDoc = SOF.createImpressDoc(null);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
         xDP = DrawTools.getDrawPages(xImpressDoc);
         xDP.insertNewByIndex(0);
         xDP.insertNewByIndex(0);
@@ -138,7 +138,7 @@ public class SdUnoSlideView extends TestCase {
 
         log.println( "creating a second impress document" );
         xSecondDrawDoc = SOF.createImpressDoc(null);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel2 = UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
 

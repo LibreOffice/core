@@ -154,9 +154,9 @@ public class DrawController_PresentationView extends TestCase {
 
         log.println( "creating two impress documents" );
         xSecondDrawDoc = SOF.createImpressDoc(null);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
         xDrawDoc = SOF.createImpressDoc(null);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
@@ -179,12 +179,12 @@ public class DrawController_PresentationView extends TestCase {
         oShapes.add(shape1);
         oShapes.add(shape2);
         oShapes.add(shape3);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         log.println("switch to PresentationView...");
         utils.dispatchURL(xMSF, xDrawDoc, ".uno:DiaMode");
 
-        utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 
@@ -217,7 +217,7 @@ public class DrawController_PresentationView extends TestCase {
         xShapes1.add(shape2);
         xShapes1.add(shape3);
         xShapes2.add(shape1);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         tEnv.addObjRelation("Selections", new Object[] {
             oDrawPage, oShapeCol1, oShapeCol2});

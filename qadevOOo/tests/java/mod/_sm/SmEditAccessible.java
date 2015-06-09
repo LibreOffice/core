@@ -66,7 +66,7 @@ public class SmEditAccessible extends TestCase {
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(final TestParameters Param, PrintWriter log) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         xMathDoc = SOF.openDoc("smath","_blank");
@@ -101,10 +101,10 @@ public class SmEditAccessible extends TestCase {
                     try {
                         System.out.println("Children "+con.getAccessibleChildCount());
                         xPS.setPropertyValue("Formula", "sum hat x \n int a \n sum b");
-                        util.utils.pause(1000);
+                        util.utils.waitForEventIdle(Param.getMSF());
                         System.out.println("Children "+con.getAccessibleChildCount());
                         xPS.setPropertyValue("Formula", expFormula);
-                        util.utils.pause(1000);
+                        util.utils.waitForEventIdle(Param.getMSF());
                     } catch(com.sun.star.lang.WrappedTargetException e) {
                     } catch(com.sun.star.lang.IllegalArgumentException e) {
                     } catch(com.sun.star.beans.PropertyVetoException e) {

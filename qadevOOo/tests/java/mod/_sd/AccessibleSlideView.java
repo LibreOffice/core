@@ -69,7 +69,7 @@ public class AccessibleSlideView extends TestCase {
 
         oDPn.insertNewByIndex(0);
 
-        util.utils.pause(2000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (
                                 aModel);
@@ -135,7 +135,7 @@ public class AccessibleSlideView extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.pause(2000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         aModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 
@@ -160,8 +160,7 @@ public class AccessibleSlideView extends TestCase {
             log.println("Couldn't change mode");
         }
 
-        util.utils.pause(2000);
-
+        util.utils.waitForEventIdle(Param.getMSF());
     }
 }
 

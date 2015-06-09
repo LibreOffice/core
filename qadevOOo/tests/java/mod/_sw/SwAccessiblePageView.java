@@ -108,7 +108,7 @@ public class SwAccessiblePageView extends TestCase {
         paraP = UnoRuntime.queryInterface(XPropertySet.class, para);
         paraP.setPropertyValue("BreakType",com.sun.star.style.BreakType.PAGE_AFTER);
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XController xController = xTextDoc.getCurrentController();
 
@@ -128,7 +128,7 @@ public class SwAccessiblePageView extends TestCase {
         if(xDispatcher != null)
             xDispatcher.dispatch( aURL, null );
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

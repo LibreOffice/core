@@ -149,7 +149,7 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
         log.println( "creating a text document" );
         xTextDoc = SOF.createTextDoc(null);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
@@ -173,14 +173,14 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XInterface oObj = (XInterface) tParam.getMSF().createInstance
                 ("com.sun.star.awt.Toolkit") ;
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
 

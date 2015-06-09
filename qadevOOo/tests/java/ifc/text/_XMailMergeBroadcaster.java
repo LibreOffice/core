@@ -103,8 +103,6 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
                 ("'could not fire event: " + e)) ;
         }
 
-        util.utils.pause(200);
-
         tRes.tested("addMailMergeEventListener()", changed);
     }
 
@@ -132,7 +130,7 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
                 ("'could not fire event: " + e)) ;
         }
 
-        util.utils.pause(200);
+        waitForEventIdle();
 
         tRes.tested("removeMailMergeEventListener()", !changed);
     }

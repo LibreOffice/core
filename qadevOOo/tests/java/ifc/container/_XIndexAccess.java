@@ -75,7 +75,7 @@ public class _XIndexAccess extends MultiMethodTest {
         requiredMethod("getCount()");
         // get count from holder
 
-        util.utils.pause(200);
+        waitForEventIdle();
 
         boolean result = true;
         log.println("Testing getByIndex()");

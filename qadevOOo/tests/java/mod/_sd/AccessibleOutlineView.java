@@ -123,7 +123,7 @@ public class AccessibleOutlineView extends TestCase {
         try {
             log.println( "creating a impress document" );
             xImpressDoc = SOF.createImpressDoc(null);
-            util.utils.pause(2000);
+            util.utils.waitForEventIdle(Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
@@ -152,7 +152,7 @@ public class AccessibleOutlineView extends TestCase {
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't change mode");
         }
-        util.utils.pause(2000);
+        util.utils.waitForEventIdle(Param.getMSF());
     }
 }
 

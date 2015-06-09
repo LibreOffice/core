@@ -60,12 +60,12 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
 
-        util.utils.pause(Param.getInt("ShortWait"));
+        util.utils.waitForEventIdle(Param.getMSF());
 
         DiagThread psDiag = new DiagThread(xCalcDoc, msf);
         psDiag.start();
 
-        util.utils.pause(Param.getInt("ShortWait")*5);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         Object atw = tk.getActiveTopWindow();
 
@@ -74,7 +74,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        util.utils.pause(Param.getInt("ShortWait"));
+        util.utils.waitForEventIdle(Param.getMSF());
 
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         XAccessibleContext ok_button = AccessibilityTools.getAccessibleObjectForRole(xRoot,

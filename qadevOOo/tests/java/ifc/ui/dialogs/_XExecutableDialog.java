@@ -73,7 +73,7 @@ public class _XExecutableDialog extends MultiMethodTest {
             eThread.start();
             XCancellable canc = UnoRuntime.queryInterface
                     (XCancellable.class, tEnv.getTestObject());
-            util.utils.pause(2000);
+            waitForEventIdle();
             if (canc != null) {
                 closeDialog();
                 short res = eThread.execRes;

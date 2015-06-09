@@ -74,7 +74,7 @@ public class DispatchRecorder extends TestCase {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
         oDoc = SOF.createTextDoc(null);
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel model = UnoRuntime.queryInterface(XModel.class, oDoc);
         xFrame = model.getCurrentController().getFrame();
