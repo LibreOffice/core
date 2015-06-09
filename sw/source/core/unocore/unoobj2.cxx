@@ -1682,8 +1682,8 @@ bool SwXParaFrameEnumerationImpl::CreateNextObject()
     if (!m_vFrames.size())
         return false;
 
-    SwFrameFormat* const pFormat = static_cast<SwFrameFormat*>(const_cast<SwModify*>(
-            m_vFrames.front()->GetRegisteredIn()));
+    SwFrameFormat* const pFormat = static_cast<SwFrameFormat*>(
+            m_vFrames.front()->GetRegisteredIn());
     m_vFrames.pop_front();
     // the format should be valid here, otherwise the client
     // would have been removed by PurgeFrameClients
