@@ -206,12 +206,12 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
     }
 
     @Override
-    public void mark(int readlimit) {
+    public synchronized void mark(int readlimit) {
         // Not supported.
     }
 
     @Override
-    public void reset() throws IOException {
+    public synchronized void reset() throws IOException {
         // Not supported.
     }
 }

@@ -307,7 +307,7 @@ public final class Loader {
         }
 
         @Override
-        protected Class<?> loadClass( String name, boolean resolve )
+        protected synchronized Class<?> loadClass( String name, boolean resolve )
             throws ClassNotFoundException
         {
             Class c = findLoadedClass( name );

@@ -106,7 +106,7 @@ public class AccessibilityTreeModel
         the child and add the child to the canvas.
     */
     @Override
-    public Object getChild (Object aParent, int nIndex)
+    public synchronized Object getChild (Object aParent, int nIndex)
     {
         AccessibleTreeNode aChild = (AccessibleTreeNode)super.getChild (aParent, nIndex);
 
@@ -118,17 +118,6 @@ public class AccessibilityTreeModel
 
         return aChild;
     }
-
-    @Override
-    public Object getChildNoCreate (Object aParent, int nIndex)
-    {
-        AccessibleTreeNode aChild = (AccessibleTreeNode)super.getChildNoCreate (aParent, nIndex);
-
-        return aChild;
-    }
-
-
-
 
     /** Remove a node (and all children) from the tree model.
     */
