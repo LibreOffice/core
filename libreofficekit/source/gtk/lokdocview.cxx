@@ -208,9 +208,14 @@ enum
 
 static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 
-
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 G_DEFINE_TYPE(LOKDocView, lok_doc_view, GTK_TYPE_SCROLLED_WINDOW)
-
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 namespace {
 
