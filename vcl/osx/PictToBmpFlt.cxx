@@ -40,7 +40,7 @@ bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
         if( !pRep)
         return false;
 
-    NSData* pOut = [pRep representationUsingType: NSPNGFileType properties: nil];
+        NSData* pOut = [pRep representationUsingType: NSPNGFileType properties: @{ }];
     if( !pOut)
         return false;
 
@@ -63,7 +63,7 @@ bool PNGToImage( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
     if( !pRep)
         return false;
 
-    NSData* pOut = [pRep representationUsingType: eOutFormat properties: nil];
+    NSData* pOut = [pRep representationUsingType: eOutFormat properties: @{ }];
     if( !pOut)
         return false;
 
