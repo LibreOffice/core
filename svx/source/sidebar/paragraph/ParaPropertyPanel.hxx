@@ -83,7 +83,6 @@ private:
     VclPtr<SvxRelativeField>   mpTopDist;
     VclPtr<SvxRelativeField>   mpBottomDist;
     VclPtr<ToolBox>            mpTbxIndent_IncDec;
-    VclPtr<ToolBox>            mpTbxProDemote;
     VclPtr<SvxRelativeField>   mpLeftIndent;
     VclPtr<SvxRelativeField>   mpRightIndent;
     VclPtr<SvxRelativeField>   mpFLineIndent;
@@ -94,8 +93,6 @@ private:
 
     // Data Member
     long                maTxtLeft;
-    bool                    mbOutLineLeft;
-    bool                    mbOutLineRight;
     long                    maUpper;
     long                    maLower;
 
@@ -106,8 +103,6 @@ private:
     // Control Items
     ::sfx2::sidebar::ControllerItem  maLRSpaceControl;
     ::sfx2::sidebar::ControllerItem  maULSpaceControl;
-    ::sfx2::sidebar::ControllerItem  maOutLineLeftControl;
-    ::sfx2::sidebar::ControllerItem  maOutLineRightControl;
     ::sfx2::sidebar::ControllerItem  maDecIndentControl;
     ::sfx2::sidebar::ControllerItem  maIncIndentControl;
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
@@ -119,12 +114,10 @@ private:
 
     DECL_LINK(ModifyIndentHdl_Impl, void*);
     DECL_LINK_TYPED(ClickIndent_IncDec_Hdl_Impl, ToolBox*, void);
-    DECL_LINK_TYPED(ClickProDemote_Hdl_Impl, ToolBox*, void);
     DECL_LINK(ULSpaceHdl_Impl, void*);
 
     void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    void StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 
     void initial();

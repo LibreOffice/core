@@ -40,10 +40,6 @@ const char UNO_INCREMENTINDENT[]  = ".uno:IncrementIndent";
 const char UNO_DECREMENTINDENT[]  = ".uno:DecrementIndent";
 const char UNO_HANGINGINDENT[]    = ".uno:HangingIndent";
 
-const char UNO_PROMOTE[]          = ".uno:Promote";
-const char UNO_DEMOTE[]           = ".uno:Demote";
-const char UNO_HANGINGINDENT2[]   = ".uno:HangingIndent2";
-
 namespace svx {namespace sidebar {
 #define DEFAULT_VALUE          0
 
@@ -88,12 +84,11 @@ void ParaPropertyPanel::HandleContextChange (
     switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application_Calc, Context_DrawText):
+        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
             mpTBxVertAlign->Show();
             mpTBxBackColor->Hide();
             mpTBxNumBullet->Hide();
             ReSize(false);
-            mpTbxIndent_IncDec->Show();
-            mpTbxProDemote->Hide();
             break;
 
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
@@ -103,26 +98,14 @@ void ParaPropertyPanel::HandleContextChange (
             mpTBxBackColor->Hide();
             mpTBxNumBullet->Show();
             ReSize(true);
-            mpTbxIndent_IncDec->Hide();
-            mpTbxProDemote->Show();
             break;
 
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
-            mpTBxVertAlign->Show();
-            mpTBxBackColor->Hide();
-            mpTBxNumBullet->Show();
-            ReSize(true);
-            mpTbxIndent_IncDec->Hide();
-            mpTbxProDemote->Show();
-            break;
-
         case CombinedEnumContext(Application_DrawImpress, Context_Table):
             mpTBxVertAlign->Show();
             mpTBxBackColor->Hide();
             mpTBxNumBullet->Show();
             ReSize(true);
-            mpTbxIndent_IncDec->Hide();
-            mpTbxProDemote->Show();
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Default):
@@ -130,10 +113,7 @@ void ParaPropertyPanel::HandleContextChange (
             mpTBxVertAlign->Hide();
             mpTBxBackColor->Show();
             mpTBxNumBullet->Show();
-
             ReSize(true);
-            mpTbxIndent_IncDec->Show();
-            mpTbxProDemote->Hide();
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Table):
@@ -141,17 +121,6 @@ void ParaPropertyPanel::HandleContextChange (
             mpTBxBackColor->Show();
             mpTBxNumBullet->Show();
             ReSize(true);
-            mpTbxIndent_IncDec->Show();
-            mpTbxProDemote->Hide();
-            break;
-
-        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
-            mpTBxVertAlign->Show();
-            mpTBxBackColor->Hide();
-            mpTBxNumBullet->Hide();
-            ReSize(false);
-            mpTbxIndent_IncDec->Show();
-            mpTbxProDemote->Hide();
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
@@ -159,8 +128,6 @@ void ParaPropertyPanel::HandleContextChange (
             mpTBxBackColor->Hide();
             mpTBxNumBullet->Hide();
             ReSize(false);
-            mpTbxIndent_IncDec->Show();
-            mpTbxProDemote->Hide();
             break;
 
         case CombinedEnumContext(Application_Calc, Context_EditCell):
@@ -217,14 +184,6 @@ void ParaPropertyPanel::InitToolBoxIndent()
 
     mpTbxIndent_IncDec->SetSelectHdl(LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl ));
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
-
-    const sal_uInt16 nIdPromote  = mpTbxProDemote->GetItemId(UNO_PROMOTE);
-    const sal_uInt16 nIdDemote   = mpTbxProDemote->GetItemId(UNO_DEMOTE);
-    const sal_uInt16 nIdHanging2 = mpTbxProDemote->GetItemId(UNO_HANGINGINDENT2);
-    mpTbxProDemote->SetItemImage(nIdPromote, maOutLineLeftControl.GetIcon());
-    mpTbxProDemote->SetItemImage(nIdDemote, maOutLineRightControl.GetIcon());
-    mpTbxProDemote->SetItemImage(nIdHanging2, maIndHang);
-    mpTbxProDemote->SetSelectHdl(LINK( this, ParaPropertyPanel, ClickProDemote_Hdl_Impl ));
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 }
 
@@ -338,29 +297,6 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
         }
 }
 
-IMPL_LINK_TYPED(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl, void)
-{
-    const OUString aCommand(pControl->GetItemCommand(pControl->GetCurItemId()));
-
-        if (aCommand == UNO_PROMOTE)
-        {
-            GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_RIGHT, SfxCallMode::RECORD );
-        }
-        else if (aCommand == UNO_DEMOTE)
-        {
-            GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_LEFT, SfxCallMode::RECORD );
-        }
-        else if (aCommand == UNO_HANGINGINDENT2)
-        {
-            SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-            aMargin.SetTextLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
-            aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-            aMargin.SetTextFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
-
-            GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
-        }
-}
-
 // for Paragraph Spacing
 IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl)
 {
@@ -407,11 +343,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
         StateChangedULImpl( nSID, eState, pState );
         break;
 
-    case SID_OUTLINE_LEFT:
-    case SID_OUTLINE_RIGHT:
-        StateChangeOutLineImpl( nSID, eState, pState );
-        break;
-
     case SID_INC_INDENT:
     case SID_DEC_INDENT:
         StateChangeIncDecImpl( nSID, eState, pState );
@@ -427,14 +358,6 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
     case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
     case CombinedEnumContext(Application_Calc, Context_DrawText):
-        {
-            mpLeftIndent->SetMin( DEFAULT_VALUE );
-            mpRightIndent->SetMin( DEFAULT_VALUE );
-            mpFLineIndent->SetMin( DEFAULT_VALUE );
-            mpTbxIndent_IncDec->Show();
-            mpTbxProDemote->Hide();
-        }
-        break;
     case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
     case CombinedEnumContext(Application_DrawImpress, Context_Draw):
     case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
@@ -444,8 +367,6 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             mpLeftIndent->SetMin( DEFAULT_VALUE );
             mpRightIndent->SetMin( DEFAULT_VALUE );
             mpFLineIndent->SetMin( DEFAULT_VALUE );
-            mpTbxIndent_IncDec->Hide();
-            mpTbxProDemote->Show();
         }
         break;
     case CombinedEnumContext(Application_WriterVariants, Context_Default):
@@ -455,14 +376,11 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             mpLeftIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
             mpRightIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
             mpFLineIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
-            mpTbxIndent_IncDec->Show();
-            mpTbxProDemote->Hide();
         }
         break;
     }
 
     const sal_uInt16 nIdHangingIndent   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
-    const sal_uInt16 nIdHangingIndent2  = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT2);
     if( pState && eState >= SfxItemState::DEFAULT )
     {
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
@@ -536,24 +454,18 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             mpTbxIndent_IncDec->EnableItem(nIdIncrIndent, true);
             mpTbxIndent_IncDec->EnableItem(nIdDecrIndent, true);
         }
-
-        mpTbxProDemote->EnableItem(nIdHangingIndent2, true);
     }
     else if( eState == SfxItemState::DISABLED )
     {
         mpLeftIndent-> Disable();
         mpRightIndent->Disable();
         mpFLineIndent->Disable();
-        mpTbxIndent_IncDec->Disable();
         if( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)  &&
             maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default) &&
             maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application_WriterVariants, Context_Table) )
             mpTbxIndent_IncDec->Disable();
         else
             mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, false);
-
-        //      maTbxProDemote->Disable();
-        mpTbxProDemote->EnableItem(nIdHangingIndent2, false);
     }
     else
     {
@@ -566,7 +478,6 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             mpTbxIndent_IncDec->Disable();
         else
             mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, false);
-        mpTbxProDemote->EnableItem(nIdHangingIndent2, false);
     }
 }
 
@@ -605,37 +516,6 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
         mpTopDist->SetEmptyFieldValue();
         mpBottomDist->SetEmptyFieldValue();
     }
-}
-
-void ParaPropertyPanel::StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    if (nSID==SID_OUTLINE_LEFT)
-    {
-        if( pState && eState == SfxItemState::UNKNOWN )
-            mbOutLineLeft = true;
-        else
-            mbOutLineLeft = false;
-    }
-    if (nSID==SID_OUTLINE_RIGHT)
-    {
-        if( pState && eState == SfxItemState::UNKNOWN )
-            mbOutLineRight = true;
-        else
-            mbOutLineRight = false;
-    }
-
-    const sal_uInt16 nIdDemote = mpTbxProDemote->GetItemId(UNO_DEMOTE);
-    if(mbOutLineLeft)
-        mpTbxProDemote->EnableItem(nIdDemote, true);
-    else
-        mpTbxProDemote->EnableItem(nIdDemote, false);
-
-    const sal_uInt16 nIdPromote = mpTbxProDemote->GetItemId(UNO_PROMOTE);
-    if(mbOutLineRight)
-        mpTbxProDemote->EnableItem(nIdPromote, true);
-    else
-        mpTbxProDemote->EnableItem(nIdPromote, false);
-
 }
 
 void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
@@ -696,8 +576,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       maSpace3 (SVX_RES(IMG_SPACE3)),
       maIndHang (SVX_RES(IMG_INDENT_HANG)),
       maTxtLeft (0),
-      mbOutLineLeft (false),
-      mbOutLineRight (false),
       maUpper (0),
       maLower (0),
       m_eMetricUnit(FUNIT_NONE),
@@ -706,8 +584,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       m_eULSpaceUnit(),
       maLRSpaceControl (SID_ATTR_PARA_LRSPACE,*pBindings,*this),
       maULSpaceControl (SID_ATTR_PARA_ULSPACE, *pBindings,*this),
-      maOutLineLeftControl(SID_OUTLINE_LEFT, *pBindings, *this, OUString("OutlineRight"), rxFrame),
-      maOutLineRightControl(SID_OUTLINE_RIGHT, *pBindings, *this, OUString("OutlineLeft"), rxFrame),
       maDecIndentControl(SID_DEC_INDENT, *pBindings,*this, OUString("DecrementIndent"), rxFrame),
       maIncIndentControl(SID_INC_INDENT, *pBindings,*this, OUString("IncrementIndent"), rxFrame),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
@@ -732,9 +608,7 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     mpRightIndent->set_width_request(mpRightIndent->get_preferred_size().Width());
     get(mpFLineIndent,  "firstlineindent");
     mpFLineIndent->set_width_request(mpFLineIndent->get_preferred_size().Width());
-
     get(mpTbxIndent_IncDec, "indent");
-    get(mpTbxProDemote, "promotedemote");
 
     initial();
     m_aMetricCtl.RequestUpdate();
@@ -753,15 +627,12 @@ void ParaPropertyPanel::dispose()
     mpTopDist.clear();
     mpBottomDist.clear();
     mpTbxIndent_IncDec.clear();
-    mpTbxProDemote.clear();
     mpLeftIndent.clear();
     mpRightIndent.clear();
     mpFLineIndent.clear();
 
     maLRSpaceControl.dispose();
     maULSpaceControl.dispose();
-    maOutLineLeftControl.dispose();
-    maOutLineRightControl.dispose();
     maDecIndentControl.dispose();
     maIncIndentControl.dispose();
     m_aMetricCtl.dispose();
