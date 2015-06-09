@@ -75,6 +75,110 @@ class FileViewContainer : public vcl::Window
     }
 };
 
+class Breadcrumb : public VclHBox
+{
+    private:
+    const unsigned int m_cCount = 4; // how many labels we have - temporary
+
+    std::vector< VclPtr< FixedHyperlink > > m_aLinks;
+    std::vector< VclPtr< FixedText > > m_aSeparators;
+
+    OUString m_sPath;
+    OUString m_sClickedURL;
+
+    Link<> m_aClickHdl;
+
+    DECL_LINK ( ClickLinkHdl, FixedHyperlink* );
+
+    public:
+    Breadcrumb( vcl::Window* pParent ) : VclHBox( pParent )
+    {
+        set_spacing( 6 );
+
+        for(unsigned int i = 0; i < m_cCount; i++)
+        {
+            m_aLinks.push_back( VclPtr< FixedHyperlink >::Create( this ) );
+            m_aLinks[i]->Hide();
+            m_aLinks[i]->SetClickHdl( LINK( this, Breadcrumb, ClickLinkHdl ) );
+            m_aSeparators.push_back( VclPtr< FixedText >::Create( this ) );
+            m_aSeparators[i]->SetText( ">" );
+            m_aSeparators[i]->Hide();
+        }
+    }
+
+    ~Breadcrumb()
+    {
+        disposeOnce();
+    }
+
+    void dispose()
+    {
+        for(unsigned int i = 0; i < m_cCount; i++)
+        {
+            m_aSeparators[i].disposeAndClear();
+            m_aLinks[i].disposeAndClear();
+        }
+
+        VclHBox::dispose();
+    }
+
+    void SetClickHdl( const Link<>& rLink )
+    {
+        m_aClickHdl = rLink;
+    }
+
+    OUString GetHdlURL()
+    {
+        return m_sClickedURL;
+    }
+
+    void SetURL( const OUString& rURL )
+    {
+        m_sPath = rURL;
+        INetURLObject aURL( rURL );
+        aURL.setFinalSlash();
+        OUString sPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
+
+        unsigned int nSegments = aURL.getSegmentCount();
+        unsigned int nPos = 0;
+        unsigned int i;
+
+        m_aLinks[0]->SetText( "Root" );
+        m_aLinks[0]->Show();
+        m_aLinks[0]->SetURL( INetURLObject::GetScheme( aURL.GetProtocol() )
+                                + aURL.GetHost() );
+        m_aSeparators[0]->Show();
+
+        for(i = 1; i < m_cCount && i < nSegments + 1; i++)
+        {
+            unsigned int nEnd = sPath.indexOf( '/', nPos + 1 );
+            OUString sLabel = OUString( sPath.getStr() + nPos + 1, nEnd - nPos - 1 );
+
+            m_aLinks[i]->SetText( sLabel );
+            m_aLinks[i]->SetURL( INetURLObject::GetScheme( aURL.GetProtocol() )
+                                + aURL.GetHost()
+                                + OUString( sPath.getStr(), nEnd ) );
+            m_aLinks[i]->Show();
+            m_aSeparators[i]->Show();
+
+            nPos = nEnd;
+        }
+        for(; i < m_cCount; i++)
+        {
+            m_aLinks[i]->Hide();
+            m_aSeparators[i]->Hide();
+        }
+    }
+};
+
+IMPL_LINK ( Breadcrumb, ClickLinkHdl, FixedHyperlink*, pLink )
+{
+    m_sClickedURL = pLink->GetURL();
+    m_aClickHdl.Call( this );
+
+    return 1;
+}
+
 RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     : ModalDialog(pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui")
     , m_context(comphelper::getProcessComponentContext())
@@ -88,7 +192,6 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     get(m_pCancel_btn, "cancel");
     get(m_pAddService_btn, "add_service_btn");
     get(m_pServices_lb, "services_lb");
-    get(m_pPath_ed, "path");
     get(m_pFilter_lb, "filter_lb");
     get(m_pName_ed, "name_ed");
 
@@ -117,6 +220,11 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
         m_pSave_btn->Show();
         m_pOpen_btn->Hide();
     }
+
+    m_pPath = VclPtr<Breadcrumb>::Create( get<vcl::Window>("breadcrumb_container") );
+    m_pPath->set_hexpand(true);
+    m_pPath->SetClickHdl( LINK( this, RemoteFilesDialog, SelectBreadcrumbHdl ) );
+    m_pPath->Show();
 
     m_pContainer = VclPtr<FileViewContainer>::Create( get<vcl::Window>("container") );
 
@@ -201,13 +309,13 @@ void RemoteFilesDialog::dispose()
     m_pFileView.disposeAndClear();
     m_pSplitter.disposeAndClear();
     m_pContainer.disposeAndClear();
+    m_pPath.disposeAndClear();
 
     m_pOpen_btn.clear();
     m_pSave_btn.clear();
     m_pCancel_btn.clear();
     m_pAddService_btn.clear();
     m_pServices_lb.clear();
-    m_pPath_ed.clear();
     m_pFilter_lb.clear();
     m_pName_ed.clear();
 
@@ -307,11 +415,11 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
         OUString sFilter = getCurrentFilter();
 
         m_pFileView->EndInplaceEditing( false );
-        m_pPath_ed->SetText( sURL );
         eResult = m_pFileView->Initialize( sURL, sFilter, NULL, BlackList );
 
         if( eResult == eSuccess )
         {
+            m_pPath->SetURL( sURL );
             m_pFilter_lb->Enable( true );
             m_pName_ed->Enable( true );
             m_pContainer->Enable( true );
@@ -559,6 +667,16 @@ IMPL_LINK ( RemoteFilesDialog, TreeSelectHdl, SvTreeListBox *, pBox )
 IMPL_LINK ( RemoteFilesDialog, TreeExpandHdl, SvTreeListBox *, pBox )
 {
     fillTreeEntry( pBox->GetHdlEntry() );
+
+    return 1;
+}
+
+IMPL_LINK ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr )
+{
+    if( pPtr )
+    {
+        OpenURL( pPtr->GetHdlURL() );
+    }
 
     return 1;
 }

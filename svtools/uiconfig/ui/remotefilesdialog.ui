@@ -123,9 +123,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="path">
+          <object class="GtkBox" id="breadcrumb_container">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

@@ -23,6 +23,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/fixedhyper.hxx>
 
 #include <svtools/fileview.hxx>
 #include <svtools/treelistentry.hxx>
@@ -63,6 +64,7 @@ typedef std::shared_ptr<Place> ServicePtr;
 typedef ::com::sun::star::uno::Sequence<OUString>  OUStringList;
 
 class FileViewContainer;
+class Breadcrumb;
 
 class SVT_DLLPUBLIC RemoteFilesDialog : public ModalDialog
 {
@@ -92,7 +94,7 @@ private:
     VclPtr<CancelButton> m_pCancel_btn;
     VclPtr<MenuButton> m_pAddService_btn;
     VclPtr<ListBox> m_pServices_lb;
-    VclPtr<Edit> m_pPath_ed;
+    VclPtr<Breadcrumb> m_pPath;
     VclPtr<Splitter> m_pSplitter;
     VclPtr<SvTreeListBox> m_pTreeView;
     VclPtr<SvtFileView> m_pFileView;
@@ -127,6 +129,8 @@ private:
 
     DECL_LINK( TreeSelectHdl, SvTreeListBox * );
     DECL_LINK( TreeExpandHdl, SvTreeListBox * );
+
+    DECL_LINK( SelectBreadcrumbHdl, Breadcrumb * );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
