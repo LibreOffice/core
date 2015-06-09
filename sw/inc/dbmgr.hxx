@@ -28,6 +28,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace com{namespace sun{namespace star{
@@ -414,6 +416,11 @@ public:
 
     void setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell);
     OUString getEmbeddedName() const;
+
+    static void StoreEmbeddedDataSource(const css::uno::Reference<css::frame::XStorable>& xStorable,
+                                        const css::uno::Reference<css::embed::XStorage>& xStorage,
+                                        const OUString& rStreamRelPath,
+                                        const OUString& rOwnURL);
 };
 
 #endif

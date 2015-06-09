@@ -2595,39 +2595,23 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
             uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), uno::UNO_QUERY_THROW);
             OUString sOutputExt = ".odb";
             OUString aOwnURL = lcl_getOwnURL(pDocShell);
-            OUString sTmpName;
-            uno::Sequence<beans::PropertyValue> aSequence;
             if (aOwnURL.isEmpty())
             {
                 // Cannot embed, as embedded data source would need the URL of the parent document.
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
                 aTempFile.EnableKillingFile(true);
-                sTmpName = aTempFile.GetURL();
+                OUString sTmpName = aTempFile.GetURL();
+                xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
             }
             else
             {
-                // Embed: construct vnd.sun.star.pkg:// URL for later loading, and TargetStorage/StreamRelPath for storing.
+                // Embed.
                 OUString aStreamRelPath = "EmbeddedDatabase";
-                sTmpName = "vnd.sun.star.pkg://";
-                sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
-                sTmpName += "/" + aStreamRelPath;
                 uno::Reference<embed::XStorage> xStorage = pDocShell->GetStorage();
 
-                aSequence = comphelper::InitPropertySequence(
-                {
-                    {"TargetStorage", uno::makeAny(xStorage)},
-                    {"StreamRelPath", uno::makeAny(aStreamRelPath)},
-                    {"BaseURI", uno::makeAny(aOwnURL)}
-                });
-
-                // Refer to the sub-storage name in the document settings, so
-                // we can load it again next time the file is imported.
-                uno::Reference<lang::XMultiServiceFactory> xFactory(pDocShell->GetModel(), uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-                xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::makeAny(aStreamRelPath));
+                SwDBManager::StoreEmbeddedDataSource(xStore, xStorage, aStreamRelPath, aOwnURL);
             }
-            xStore->storeAsURL(sTmpName, aSequence);
         }
         xDBContext->registerObject( sFind, xNewInstance );
     }
@@ -2636,6 +2620,25 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
         sFind.clear();
     }
     return sFind;
+}
+
+void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>& xStorable,
+                                          const uno::Reference<embed::XStorage>& xStorage,
+                                          const OUString& rStreamRelPath,
+                                          const OUString& rOwnURL)
+{
+    // Construct vnd.sun.star.pkg:// URL for later loading, and TargetStorage/StreamRelPath for storing.
+    OUString sTmpName = "vnd.sun.star.pkg://";
+    sTmpName += INetURLObject::encode(rOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
+    sTmpName += "/" + rStreamRelPath;
+
+    uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
+    {
+        {"TargetStorage", uno::makeAny(xStorage)},
+        {"StreamRelPath", uno::makeAny(rStreamRelPath)},
+        {"BaseURI", uno::makeAny(rOwnURL)}
+    });
+    xStorable->storeAsURL(sTmpName, aSequence);
 }
 
 OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir,
