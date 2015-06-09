@@ -31,11 +31,9 @@ import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
@@ -81,18 +79,14 @@ public class AccessibleMenu extends TestCase {
      * walking through the accessible component tree of a document.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(final TestParameters Param,
+                                                    PrintWriter log) throws Exception {
         XMultiServiceFactory msf = Param.getMSF();
 
-        try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create document", e);
-        }
+        SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
+        xTextDoc = SOF.createTextDoc(null);
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
@@ -126,7 +120,7 @@ public class AccessibleMenu extends TestCase {
                 try {
                     act2.doAccessibleAction(0);
 
-                    util.utils.pause(500);
+                    util.utils.waitForEventIdle(Param.getMSF());
 
                     act1.doAccessibleAction(0);
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {

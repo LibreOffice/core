@@ -46,7 +46,6 @@ import util.AccessibilityTools;
 import util.DesktopTools;
 import util.DrawTools;
 import util.SOfficeFactory;
-import util.utils;
 import org.openoffice.test.OfficeFileUrl;
 
 // ---------- junit imports -----------------
@@ -121,7 +120,7 @@ public class CheckContextMenuInterceptor
         xFrame = xModel.getCurrentController().getFrame();
 
         // ensure that the document content is optimal visible
-        DesktopTools.zoomToEntirePage(xDrawDoc);
+        DesktopTools.zoomToEntirePage(xMSF, xDrawDoc);
 
         XBitmap xBitmap = null;
 
@@ -278,8 +277,7 @@ public class CheckContextMenuInterceptor
             System.out.println("couldn't press mouse button");
         }
 
-        utils.pause(3000);
-
+        util.utils.waitForEventIdle(getMSF());
     }
 
     private XMultiServiceFactory getMSF()

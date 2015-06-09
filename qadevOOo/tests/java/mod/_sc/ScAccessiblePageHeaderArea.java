@@ -131,7 +131,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
             throw new StatusException(e, Status.failed("Couldn't change mode"));
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

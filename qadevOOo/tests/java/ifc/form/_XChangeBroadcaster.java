@@ -124,13 +124,13 @@ public class _XChangeBroadcaster extends MultiMethodTest {
         win1.setFocus();
 
         changeContent() ;
-        util.utils.pause(2000);
+        waitForEventIdle();
 
         win2.setFocus();
         XTextComponent TC = UnoRuntime.queryInterface
             (XTextComponent.class,tEnv.getObjRelation("CONTROL"));
         TC.setText("NOXChangeBroadcaster");
-        util.utils.pause(2000);
+        waitForEventIdle();
         tRes.tested("addChangeListener()", changed);
     }
 
@@ -156,7 +156,7 @@ public class _XChangeBroadcaster extends MultiMethodTest {
         changeContent() ;
 
         win2.setFocus();
-        util.utils.pause(2000);
+        waitForEventIdle();
         tRes.tested("removeChangeListener()", !changed);
     }
 

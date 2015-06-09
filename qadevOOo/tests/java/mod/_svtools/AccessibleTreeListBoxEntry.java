@@ -156,7 +156,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -178,7 +178,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XFrame the_frame1 = the_Desk.getCurrentFrame();
 
@@ -223,7 +223,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
             throw new StatusException("Could not select Biblio-Database", ex);
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 

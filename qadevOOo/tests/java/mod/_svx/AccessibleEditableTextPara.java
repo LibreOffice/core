@@ -46,7 +46,7 @@ public class AccessibleEditableTextPara extends TestCase {
     /**
     * Called to create an instance of <code>TestEnvironment</code>
     * with an object to test and related objects.
-    * Obtains accissible object for the spreadsheet document.
+    * Obtains accessible object for the spreadsheet document.
     *
     * @param Param test parameters
     * @param log writer to log information while testing
@@ -128,7 +128,7 @@ public class AccessibleEditableTextPara extends TestCase {
         try {
             log.println("creating a spreadsheetdocument");
             xSpreadsheetDoc = UnoRuntime.queryInterface(XComponent.class,SOF.createCalcDoc(null));
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document ", e );

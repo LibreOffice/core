@@ -86,22 +86,14 @@ public class AccessibleListBox extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) Param.getMSF().createInstance(
-                           "com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
+                                                    PrintWriter log) throws Exception {
+        XInterface oObj = (XInterface) Param.getMSF().createInstance(
+                       "com.sun.star.awt.Toolkit");
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -114,15 +106,10 @@ public class AccessibleListBox extends TestCase {
 
         XURLTransformer urlTransf = null;
 
-        try {
-            XInterface transf = (XInterface) Param.getMSF().createInstance(
-                                        "com.sun.star.util.URLTransformer");
-            urlTransf = UnoRuntime.queryInterface(
-                                XURLTransformer.class, transf);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create URLTransformer", e);
-        }
+        XInterface transf = (XInterface) Param.getMSF().createInstance(
+                                    "com.sun.star.util.URLTransformer");
+        urlTransf = UnoRuntime.queryInterface(
+                            XURLTransformer.class, transf);
 
         XDispatch getting = null;
         log.println("opening HyperlinkDialog");
@@ -136,7 +123,7 @@ public class AccessibleListBox extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
@@ -153,17 +140,13 @@ public class AccessibleListBox extends TestCase {
                          XAccessibleAction.class, oObj);
 
         // Selecting 'New Document' tab
-        try {
-            oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
 
-            XAccessibleSelection xAccSel = UnoRuntime.queryInterface(
-                                                   XAccessibleSelection.class,
-                                                   oObj);
-            xAccSel.selectAccessibleChild(3);
-            util.utils.pause(1000);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            throw new StatusException("Can't switch to required tab", e);
-        }
+        XAccessibleSelection xAccSel = UnoRuntime.queryInterface(
+                                               XAccessibleSelection.class,
+                                               oObj);
+        xAccSel.selectAccessibleChild(3);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
                                              "com.sun.star.comp.toolkit.AccessibleListBox");

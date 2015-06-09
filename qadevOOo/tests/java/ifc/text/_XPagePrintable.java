@@ -108,7 +108,7 @@ public class _XPagePrintable extends MultiMethodTest {
      * Has <b>OK</b> status if the file to which printing must be performed
      * is exists.
      */
-    public void _printPages() {
+    public void _printPages() throws Exception {
         boolean res = true;
 
         try {
@@ -132,7 +132,7 @@ public class _XPagePrintable extends MultiMethodTest {
 
             oObj.printPages(PrintOptions);
 
-            util.utils.shortWait();
+            waitForEventIdle();
 
             if (! util.utils.fileExists(xMSF, printFile)){
                 log.println("ERROR: could not find '" + printFile + "'");

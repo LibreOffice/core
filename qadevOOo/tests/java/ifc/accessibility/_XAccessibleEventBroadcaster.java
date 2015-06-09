@@ -114,7 +114,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
         log.println("fire event");
         prod.fireEvent() ;
 
-        util.utils.pause(3000);
+        waitForEventIdle();
 
         boolean works = true;
 
@@ -148,7 +148,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
      *  <li> <code>addEventListener()</code> : to have added listeners </li>
      * </ul>
      */
-    public void _removeEventListener() {
+    public void _removeEventListener() throws Exception {
         requiredMethod("addEventListener()");
 
         list.notifiedEvent = null;
@@ -159,7 +159,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
         log.println("fire event");
         prod.fireEvent() ;
 
-        util.utils.shortWait();
+        waitForEventIdle();
 
         if (list.notifiedEvent == null) {
             log.println("listener wasn't called -- OK");

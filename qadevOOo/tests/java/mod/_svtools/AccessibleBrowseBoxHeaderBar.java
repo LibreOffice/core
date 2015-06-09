@@ -132,7 +132,7 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
             xTextDoc);
@@ -171,7 +171,7 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
         param3.Value = "biblio";
         params[2] = param3;
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XFrame the_frame1 = the_Desk.getCurrentFrame();
 
@@ -207,14 +207,14 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XAccessibleComponent accComp = UnoRuntime.queryInterface(
             XAccessibleComponent.class,
             oObj);
         final Point point = accComp.getLocationOnScreen();
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {

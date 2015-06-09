@@ -45,7 +45,7 @@ public class _XComponentLoader extends MultiMethodTest {
     * and no exceptions were thrown. <p>
     * @see XComponent
     */
-    public void _loadComponentFromURL() {
+    public void _loadComponentFromURL() throws Exception {
         boolean result = true;
 
         log.println("testing loadComponentFromURL() ... ");
@@ -65,7 +65,7 @@ public class _XComponentLoader extends MultiMethodTest {
             oDoc = oObj.loadComponentFromURL(
                             url, frameName, 0, szArgs);
 
-            util.utils.shortWait();
+            waitForEventIdle();
 
             oDoc.dispose();
 
@@ -74,7 +74,7 @@ public class _XComponentLoader extends MultiMethodTest {
             oDoc = oObj.loadComponentFromURL(
                             url, frameName, 0, szArgs);
 
-            util.utils.shortWait();
+            waitForEventIdle();
 
             oDoc.dispose();
 

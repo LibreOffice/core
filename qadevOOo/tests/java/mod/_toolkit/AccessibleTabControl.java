@@ -160,7 +160,7 @@ public class AccessibleTabControl extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -195,7 +195,7 @@ public class AccessibleTabControl extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XInterface oObj = null;
 
@@ -211,7 +211,7 @@ public class AccessibleTabControl extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());

@@ -18,18 +18,19 @@
 
 package complex.toolkit.accessibility;
 
-import com.sun.star.lang.EventObject;
-import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.PosSize;
-import com.sun.star.awt.XWindow;
 import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleEventBroadcaster;
 import com.sun.star.accessibility.XAccessibleEventListener;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.uno.XInterface;
+import com.sun.star.awt.PosSize;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.XWindow;
+import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Testing <code>
@@ -108,14 +109,14 @@ public class _XAccessibleEventBroadcaster {
      * Adds two listeners and fires event by mean of object relation. <p>
      * Has <b> OK </b> status if both listeners were called
      */
-    public boolean _addEventListener() {
+    public boolean _addEventListener(XMultiServiceFactory xMSF) {
         System.out.println("adding two listeners");
         oObj.addAccessibleEventListener(list);
         boolean isTransient = chkTransient(oObj);
         System.out.println("fire event");
         prod.fireEvent() ;
 
-        util.utils.pause(1500);
+        util.utils.waitForEventIdle(xMSF);
 
         boolean works = true;
 
@@ -143,7 +144,7 @@ public class _XAccessibleEventBroadcaster {
      *  <li> <code>addEventListener()</code> : to have added listeners </li>
      * </ul>
      */
-    public boolean _removeEventListener() {
+    public boolean _removeEventListener(XMultiServiceFactory xMSF) {
 
         list.notifiedEvent = null;
 
@@ -153,7 +154,7 @@ public class _XAccessibleEventBroadcaster {
         System.out.println("fire event");
         prod.fireEvent() ;
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(xMSF);
 
         if (list.notifiedEvent == null) {
             System.out.println("listener wasn't called -- OK");

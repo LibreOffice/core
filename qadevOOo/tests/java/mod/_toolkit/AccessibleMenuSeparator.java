@@ -73,7 +73,7 @@ public class AccessibleMenuSeparator extends TestCase {
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
@@ -93,10 +93,9 @@ public class AccessibleMenuSeparator extends TestCase {
                           XAccessibleAction.class, Menu);
             act.doAccessibleAction(0);
 
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(Param.getMSF());
 
-
-            //get a menue-separator
+            //get a menu-separator
             oObj = Menu.getAccessibleContext().getAccessibleChild(3);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);

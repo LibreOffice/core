@@ -71,7 +71,7 @@ public class AccessibleMenuBar extends TestCase {
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();

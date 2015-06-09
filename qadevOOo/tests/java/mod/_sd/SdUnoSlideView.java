@@ -19,9 +19,9 @@
 package mod._sd;
 
 import com.sun.star.drawing.XDrawPages;
+
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -98,25 +98,20 @@ public class SdUnoSlideView extends TestCase {
     * @see com.sun.star.frame.XModel
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
         XDrawPages xDP = null;
-        try {
-            log.println( "creating a impress document" );
-            xImpressDoc = SOF.createImpressDoc(null);
-            util.utils.pause(1000);
-            xDP = DrawTools.getDrawPages(xImpressDoc);
-            xDP.insertNewByIndex(0);
-            xDP.insertNewByIndex(0);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println( "creating a impress document" );
+        xImpressDoc = SOF.createImpressDoc(null);
+        util.utils.waitForEventIdle(Param.getMSF());
+        xDP = DrawTools.getDrawPages(xImpressDoc);
+        xDP.insertNewByIndex(0);
+        xDP.insertNewByIndex(0);
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 
@@ -141,14 +136,9 @@ public class SdUnoSlideView extends TestCase {
             log.println("Couldn't change to slide view");
         }
 
-        try {
-            log.println( "creating a second impress document" );
-            xSecondDrawDoc = SOF.createImpressDoc(null);
-            util.utils.pause(1000);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println( "creating a second impress document" );
+        xSecondDrawDoc = SOF.createImpressDoc(null);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel2 = UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
 

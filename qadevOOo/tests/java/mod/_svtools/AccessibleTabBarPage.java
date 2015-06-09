@@ -118,7 +118,7 @@ public class AccessibleTabBarPage extends TestCase {
             throw new StatusException( "Couldn't create document", e );
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XInterface oObj = null;
 
@@ -135,7 +135,7 @@ public class AccessibleTabBarPage extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
 
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 

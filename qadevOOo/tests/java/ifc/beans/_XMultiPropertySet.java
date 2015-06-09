@@ -197,7 +197,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 e.printStackTrace(log);
             } // end of try-catch
         }
-        util.utils.pause(200);
+        waitForEventIdle();
         tRes.tested("addPropertiesChangeListener()", propertiesChanged);
     }
 
@@ -216,7 +216,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
         propertiesChanged = false ;
 
         oObj.firePropertiesChangeEvent(testPropsNames, PClistener);
-        util.utils.pause(200);
+        waitForEventIdle();
 
         tRes.tested("firePropertiesChangeEvent()", propertiesChanged);
     }

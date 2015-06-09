@@ -144,7 +144,7 @@ public class SwAccessiblePageView extends TestCase {
             throw new StatusException( "Couldn't get Paragraph", e );
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XController xController = xTextDoc.getCurrentController();
 
@@ -168,7 +168,7 @@ public class SwAccessiblePageView extends TestCase {
             throw new StatusException(e, Status.failed("Couldn't change mode"));
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

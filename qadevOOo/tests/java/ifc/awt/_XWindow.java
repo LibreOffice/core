@@ -242,7 +242,7 @@ public class _XWindow extends MultiMethodTest {
             oObj.setPosSize(0, 0, 100, 100, PosSize.WIDTH);
         }
 
-        util.utils.pause(200);
+        waitForEventIdle();
         boolean res = wListener.resized && wListener.moved &&
             !wListener.hidden && !wListener.shown;
         result &= res;
@@ -257,10 +257,10 @@ public class _XWindow extends MultiMethodTest {
 
         // testing wListener.windowHidden()
         wListener.init();
-        util.utils.pause(200);
+        waitForEventIdle();
         log.println("set object invisible...");
         oObj.setVisible(false);
-        util.utils.pause(200);
+        waitForEventIdle();
         res = wListener.hidden && !wListener.resized
                         && !wListener.moved && !wListener.shown;
         result &= res;
@@ -275,10 +275,10 @@ public class _XWindow extends MultiMethodTest {
 
         // testing wListener.windowShown()
         wListener.init() ;
-        util.utils.pause(200);
+        waitForEventIdle();
         log.println("set object visible...");
         oObj.setVisible(true) ;
-        util.utils.pause(200);
+        waitForEventIdle();
         res = wListener.shown && !wListener.resized &&
                 !wListener.hidden && !wListener.moved;
         result &= res;
@@ -361,9 +361,9 @@ public class _XWindow extends MultiMethodTest {
 
         // testing fListener.lost()
         oObj.setFocus();
-        util.utils.pause(200);
+        waitForEventIdle();
         win.setFocus();
-        util.utils.pause(200);
+        waitForEventIdle();
         result &= fListener.lost;
         if (!fListener.lost) {
             log.println("Lost focus was not notified about") ;
@@ -371,7 +371,7 @@ public class _XWindow extends MultiMethodTest {
 
         // testing fListener.gained()
         oObj.setFocus() ;
-        util.utils.pause(200);
+        waitForEventIdle();
         result &= fListener.gained;
         if (!fListener.gained) {
             log.println("Gained focus was not notified about") ;

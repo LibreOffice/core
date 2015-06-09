@@ -111,7 +111,7 @@ public class WriterHelper {
                 System.out.println("Couldn't press button");
             }
 
-            util.utils.pause(4000);
+            util.utils.waitForEventIdle(m_xMSF);
         }
 
         XDesktop xDesktop = getDesktop();

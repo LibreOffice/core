@@ -157,7 +157,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
      *
      * Has <b>OK</b> status if all cases are OK.
      */
-    public void _dispatchAndRecord() {
+    public void _dispatchAndRecord() throws Exception {
         requiredMethod("getDispatchRecorder()");
 
         boolean res = true;
@@ -173,7 +173,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
             }
         }
 
-        util.utils.shortWait();
+        waitForEventIdle();
 
         XModel model = UnoRuntime.queryInterface(XModel.class, xTextDoc);
         XFrame fr = model.getCurrentController().getFrame();

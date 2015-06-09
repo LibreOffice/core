@@ -22,6 +22,7 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
+
 import java.util.StringTokenizer;
 import java.io.*;
 import java.util.ArrayList;
@@ -38,17 +39,15 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.ucb.InteractiveAugmentedIOException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.lang.XServiceInfo;
-
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
-
 import java.util.Collections;
 import java.util.GregorianCalendar;
 
@@ -844,7 +843,7 @@ public class utils {
             XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
             xDispatcher.dispatch(aURL, null);
 
-            utils.pause(3000);
+            waitForEventIdle(xMSF);
 
         } catch (Exception e) {
             throw new Exception("ERROR: could not dispatch URL '" + URL + "'", e);

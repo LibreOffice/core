@@ -204,7 +204,7 @@ public class ODatasourceBrowser extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -263,7 +263,7 @@ public class ODatasourceBrowser extends TestCase {
             throw new StatusException("Couldn't initialize document", e);
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
                                                             4500, 15000, 10000,

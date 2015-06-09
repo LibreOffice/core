@@ -97,7 +97,7 @@ public class AccessibleTabPage extends TestCase {
             if (accCloseButton != null) {
                 log.println("closing InsertFields Dialog");
                 accCloseButton.doAccessibleAction(0);
-                util.utils.pause(1000);
+                util.utils.waitForEventIdle(Param.getMSF());
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
@@ -140,7 +140,7 @@ public class AccessibleTabPage extends TestCase {
             if (accCloseButton != null) {
                 log.println("closing InsertFields Dialog");
                 accCloseButton.doAccessibleAction(0);
-                util.utils.pause(1000);
+                util.utils.waitForEventIdle(tParam.getMSF());
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
@@ -167,7 +167,7 @@ public class AccessibleTabPage extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -202,7 +202,7 @@ public class AccessibleTabPage extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XInterface oObj = null;
 
@@ -218,7 +218,7 @@ public class AccessibleTabPage extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
@@ -246,7 +246,7 @@ public class AccessibleTabPage extends TestCase {
                                                oObj);
         accComp.getLocationOnScreen();
 
-        util.utils.pause(1000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XInterface xEventInt = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Variables");
         final XAccessibleComponent eventAccComp = UnoRuntime.queryInterface(

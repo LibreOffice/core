@@ -87,10 +87,10 @@ public class _XTextComponent extends MultiMethodTest {
     * to the object.<p>
     * Has <b> OK </b> status if listener was called.
     */
-    public void _addTextListener(){
+    public void _addTextListener() throws Exception {
         oObj.addTextListener(listener);
         oObj.setText("Listen");
-        util.utils.shortWait();
+        waitForEventIdle();
         if (!textChanged) {
             log.println("Listener wasn't called after changing Text");
         }

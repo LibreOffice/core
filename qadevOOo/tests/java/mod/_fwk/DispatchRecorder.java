@@ -22,7 +22,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XModel;
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -62,27 +61,26 @@ public class DispatchRecorder extends TestCase {
     XComponent oDoc = null;
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.frame.Desktop</code>.
     */
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
-        PrintWriter log ) throws StatusException {
+        PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
         XFrame xFrame = null;
         XDispatchRecorder xDR = null;
 
-        try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
-            oDoc = SOF.createTextDoc(null);
-            util.utils.pause(1000);
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
+        oDoc = SOF.createTextDoc(null);
+        util.utils.waitForEventIdle(Param.getMSF());
 
-            XModel model = UnoRuntime.queryInterface(XModel.class, oDoc);
-            xFrame = model.getCurrentController().getFrame();
+        XModel model = UnoRuntime.queryInterface(XModel.class, oDoc);
+        xFrame = model.getCurrentController().getFrame();
 
-            XPropertySet xFramePS = UnoRuntime.queryInterface
-                (XPropertySet.class, xFrame);
+        XPropertySet xFramePS = UnoRuntime.queryInterface
+            (XPropertySet.class, xFrame);
             XDispatchRecorderSupplier xDRS = null;
             xDRS = (XDispatchRecorderSupplier) AnyConverter.toObject(
                              new Type(XDispatchRecorderSupplier.class),
@@ -98,15 +96,12 @@ public class DispatchRecorder extends TestCase {
             xDR = xDRS.getDispatchRecorder();
             if (xDR != null) {
                 oObj = xDR;
-            } else {
-                oObj = (XInterface)Param.getMSF().createInstance(
-                    "com.sun.star.comp.framework.DispatchRecorder");
-                xDR = UnoRuntime.queryInterface
-                    (XDispatchRecorder.class, oObj);
-                xDRS.setDispatchRecorder(xDR);
-            }
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create component", e);
+        } else {
+            oObj = (XInterface)Param.getMSF().createInstance(
+                "com.sun.star.comp.framework.DispatchRecorder");
+            xDR = UnoRuntime.queryInterface
+                (XDispatchRecorder.class, oObj);
+            xDRS.setDispatchRecorder(xDR);
         }
 
 

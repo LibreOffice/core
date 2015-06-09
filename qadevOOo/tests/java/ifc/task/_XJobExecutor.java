@@ -57,7 +57,7 @@ public class _XJobExecutor extends MultiMethodTest {
 
         oObj.trigger("TestEvent");
 
-        util.utils.pause(1000);
+        waitForEventIdle();
 
         int after = Integer.parseInt(counter.getName());
 

@@ -235,7 +235,7 @@ public class ViewForwarder {
             return;
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(mXMSF);
 
         System.out.println("Press any key after resizing ");
         try{
@@ -277,7 +277,7 @@ public class ViewForwarder {
         System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
         System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(mXMSF);
 
         System.out.println("Press any key when the second line is on top");
         try{
@@ -639,7 +639,7 @@ public class ViewForwarder {
             return;
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(mXMSF);
 
         System.out.println("Press any key after resizing ");
         try{
@@ -681,7 +681,7 @@ public class ViewForwarder {
         System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
         System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(mXMSF);
 
         System.out.println("Press any key when the header is not visible.");
         try{
@@ -845,7 +845,7 @@ public class ViewForwarder {
             return;
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(mXMSF);
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -924,7 +924,7 @@ public class ViewForwarder {
             return;
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(mXMSF);
 
         xSpreadsheetDoc = UnoRuntime.queryInterface(
                                             XSpreadsheetDocument.class, xComp);
@@ -957,7 +957,7 @@ public class ViewForwarder {
             return;
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(mXMSF);
 
         System.out.println("Press any key when a shape is on top.");
         try{

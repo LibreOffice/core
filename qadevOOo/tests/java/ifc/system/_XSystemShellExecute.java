@@ -90,7 +90,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
             } catch(com.sun.star.uno.Exception e) {
                 log.println("Exception:" + e);
             }
-            util.utils.pause(1000);
+            waitForEventIdle();
             i++;
         }
 

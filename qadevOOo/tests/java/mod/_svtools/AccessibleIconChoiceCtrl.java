@@ -152,7 +152,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -187,7 +187,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XInterface oObj = null;
 
@@ -203,7 +203,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());

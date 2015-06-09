@@ -35,10 +35,10 @@ public class _XSpinValue extends MultiMethodTest {
     public boolean adjusted = false;
     com.sun.star.awt.XAdjustmentListener listener = new AdjustmentListener();
 
-    public void _addAdjustmentListener() {
+    public void _addAdjustmentListener() throws Exception {
         util.FormTools.switchDesignOf(tParam.getMSF(),
                                  (XTextDocument) tEnv.getObjRelation("Document"));
-        util.utils.shortWait();
+        waitForEventIdle();
         oObj.addAdjustmentListener(listener);
         adjustScrollBar();
 
@@ -158,7 +158,7 @@ public class _XSpinValue extends MultiMethodTest {
 
         sv.setValue(500);
 
-        util.utils.shortWait();
+        waitForEventIdle();
 
         XAccessible acc = UnoRuntime.queryInterface(
                                   XAccessible.class, tEnv.getTestObject());
@@ -177,7 +177,7 @@ public class _XSpinValue extends MultiMethodTest {
             System.out.println("couldn't adjust scrollbar");
         }
 
-        util.utils.shortWait();
+        waitForEventIdle();
     }
 
     public class AdjustmentListener

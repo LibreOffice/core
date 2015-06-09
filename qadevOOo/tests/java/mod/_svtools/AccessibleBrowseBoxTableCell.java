@@ -129,7 +129,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
             throw new StatusException( "Couldn't create document", e );
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
@@ -147,7 +147,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url,noArgs);
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XFrame the_frame1 = the_Desk.getCurrentFrame();
 
@@ -178,7 +178,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
         param3.Value = "biblio";
         params[2] = param3;
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 

@@ -97,11 +97,9 @@ public class AccessibleTabBar extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.pause(5000);
+        util.utils.waitForEventIdle(tParam.getMSF());
 
         XInterface oObj = null;
-
-        util.utils.pause(5000);
 
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xDoc).
             getCurrentController().getFrame().getContainerWindow();

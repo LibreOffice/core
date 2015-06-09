@@ -126,7 +126,7 @@ public class _XActiveDataControl extends MultiMethodTest {
     }
 
     /**
-     * Starts the data activity (e.g. data pump). Verifictation is performed
+     * Starts the data activity (e.g. data pump). Verification is performed
      * later, in <code>_terminate()</code> method.
      */
     public void _start() {

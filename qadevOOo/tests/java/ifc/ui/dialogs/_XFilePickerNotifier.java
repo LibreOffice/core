@@ -134,7 +134,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             e.printStackTrace(log) ;
         }
 
-        util.utils.pause(2000);
+        waitForEventIdle();
 
         if (!listener.called) {
             log.println("Listener wasn't called :-(");
@@ -169,7 +169,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             e.printStackTrace(log) ;
         }
 
-        util.utils.pause(2000);
+        waitForEventIdle();
 
         closeDialog();
 

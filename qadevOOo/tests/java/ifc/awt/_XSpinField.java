@@ -94,7 +94,7 @@ public class _XSpinField extends MultiMethodTest {
         requiredMethod("addSpinListener()") ;
 
         oObj.up() ;
-        util.utils.shortWait();
+        waitForEventIdle();
 
         tRes.tested("up()", listener.upFl) ;
     }
@@ -108,11 +108,11 @@ public class _XSpinField extends MultiMethodTest {
     *  <li> <code> addSpinListener </code> </li>
     * </ul>
     */
-    public void _down() {
+    public void _down() throws Exception {
         requiredMethod("addSpinListener()") ;
 
         oObj.down() ;
-        util.utils.shortWait();
+        waitForEventIdle();
 
         tRes.tested("down()", listener.downFl) ;
     }
@@ -126,11 +126,11 @@ public class _XSpinField extends MultiMethodTest {
     *  <li> <code> addSpinListener </code> </li>
     * </ul>
     */
-    public void _first() {
+    public void _first() throws Exception {
         requiredMethod("addSpinListener()") ;
 
-        oObj.first() ;
-        util.utils.shortWait();
+        oObj.first();
+        waitForEventIdle();
 
         tRes.tested("first()", listener.firstFl) ;
     }
@@ -144,11 +144,11 @@ public class _XSpinField extends MultiMethodTest {
     *  <li> <code> addSpinListener </code> </li>
     * </ul>
     */
-    public void _last() {
+    public void _last() throws Exception {
         requiredMethod("addSpinListener()") ;
 
-        oObj.last() ;
-        util.utils.shortWait();
+        oObj.last();
+        waitForEventIdle();
 
         tRes.tested("last()", listener.lastFl) ;
     }

@@ -59,20 +59,10 @@ public class ScAccessibleCsvRuler extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
-        XInterface oObj = null;
-
-        util.utils.pause(2000);
-
+                                                    PrintWriter log) throws Exception {
         XMultiServiceFactory msf = Param.getMSF();
 
-        try {
-            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
+        XInterface oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);

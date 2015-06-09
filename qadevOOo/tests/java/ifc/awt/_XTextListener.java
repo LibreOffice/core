@@ -98,7 +98,7 @@ public class _XTextListener extends MultiMethodTest {
         event.dummy1 = 2;
         oObj.textChanged(event);
 
-        util.utils.pause(200);
+        waitForEventIdle();
 
         result = textListener.textChangedCalled &&
             textListener.event.dummy1 == 2;

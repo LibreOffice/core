@@ -134,7 +134,7 @@ public class _XSubmit extends MultiMethodTest {
         }
 
         oObj.submit(cntrl, new MouseEvent());
-        util.utils.pause(200);
+        waitForEventIdle();
 
         log.println("Listener1 called " + listener1.called + " times");
         log.println("Listener2 called " + listener2.called + " times");

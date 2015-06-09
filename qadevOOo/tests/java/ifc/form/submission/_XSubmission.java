@@ -110,7 +110,7 @@ public class _XSubmission extends MultiMethodTest {
 
         log.println("Sleeping 2s");
 
-        util.utils.pause(2000);
+        waitForEventIdle();
 
         log.println("... done");
 

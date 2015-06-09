@@ -137,7 +137,7 @@ public class AccessibleFixedText extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        util.utils.pause(500);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWinDlg);
 

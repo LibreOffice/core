@@ -20,7 +20,6 @@ package mod._sm;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -69,41 +68,16 @@ public class SmGraphicAccessible extends TestCase {
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(final TestParameters Param, PrintWriter log) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
-        try {
-            xMathDoc = SOF.openDoc("smath","_blank");
-        } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", ex );
-        } catch (com.sun.star.io.IOException ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", ex );
-        } catch (com.sun.star.uno.Exception ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", ex );
-        }
+        xMathDoc = SOF.openDoc("smath","_blank");
 
         // setting a formula in document
         final String expFormula = "sum a cdot b";
         final XPropertySet xPS = UnoRuntime.queryInterface
             (XPropertySet.class, xMathDoc);
-        try {
-            xPS.setPropertyValue("Formula", expFormula);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Couldn't set property value");
-            e.printStackTrace(log);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Couldn't set property value");
-            e.printStackTrace(log);
-        } catch(com.sun.star.beans.PropertyVetoException e) {
-            log.println("Couldn't set property value");
-            e.printStackTrace(log);
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Couldn't set property value");
-            e.printStackTrace(log);
-        }
+        xPS.setPropertyValue("Formula", expFormula);
 
         XInterface oObj = null;
 
@@ -132,9 +106,9 @@ public class SmGraphicAccessible extends TestCase {
                     try {
                         xAC.grabFocus();
                         xPS.setPropertyValue("Formula", "sum hat x");
-                        util.utils.pause(1000);
+                        util.utils.waitForEventIdle(Param.getMSF());
                         xPS.setPropertyValue("Formula", expFormula);
-                        util.utils.pause(1000);
+                        util.utils.waitForEventIdle(Param.getMSF());
                     } catch(com.sun.star.lang.WrappedTargetException e) {
                     } catch(com.sun.star.lang.IllegalArgumentException e) {
                     } catch(com.sun.star.beans.PropertyVetoException e) {

@@ -20,7 +20,6 @@ package mod._sd;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -126,22 +125,17 @@ public class SdUnoOutlineView extends TestCase {
     * @see com.sun.star.frame.XModel
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
-        try {
-            log.println( "creating a impress document" );
-            xImpressDoc = SOF.createImpressDoc(null);
-            util.utils.pause(5000);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println( "creating a impress document" );
+        xImpressDoc = SOF.createImpressDoc(null);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
         XDrawPages the_pages = oDPS.getDrawPages();
@@ -170,14 +164,9 @@ public class SdUnoOutlineView extends TestCase {
             log.println("Couldn't change mode");
         }
 
-        try {
-            log.println( "creating a second impress document" );
-            xSecondDrawDoc = SOF.createImpressDoc(null);
-            util.utils.pause(5000);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println( "creating a second impress document" );
+        xSecondDrawDoc = SOF.createImpressDoc(null);
+        util.utils.waitForEventIdle(Param.getMSF());
 
         XModel aModel2 = UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
 

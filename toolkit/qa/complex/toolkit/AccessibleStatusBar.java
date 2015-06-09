@@ -193,7 +193,7 @@ public class AccessibleStatusBar {
         try {
             System.out.println("****** Open a new calc document");
             xSpreadsheetDoc = xSOF.createCalcDoc("_blank");
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(xMSF);
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
@@ -218,17 +218,17 @@ public class AccessibleStatusBar {
                                             "com.sun.star.awt.Toolkit") ;
             XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, xIfc);
 
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(xMSF);
             xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
 
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(xMSF);
             XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
             XAccessibleContext parentContext = null;
 
             System.out.println("Get the accessible status bar.");
             parentContext = AccessibilityTools.getAccessibleObjectForRole(
                                         xRoot, AccessibleRole.STATUS_BAR, "");
-            util.utils.pause(500);
+            util.utils.waitForEventIdle(xMSF);
             System.out.println("...OK.");
 
             XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class, parentContext);
@@ -289,8 +289,8 @@ public class AccessibleStatusBar {
         System.out.println("*** Now testing XAccessibleEventBroadcaster ***");
         _XAccessibleEventBroadcaster _xAccEvBcast =
                                 new _XAccessibleEventBroadcaster(testObject, xWindow);
-        assertTrue("failed: XAccessibleEventBroadcaster::addEventListener", _xAccEvBcast._addEventListener());
-        assertTrue("failed: XAccessibleEventBroadcaster::removeEventListener", _xAccEvBcast._removeEventListener());
+        assertTrue("failed: XAccessibleEventBroadcaster::addEventListener", _xAccEvBcast._addEventListener(xMSF));
+        assertTrue("failed: XAccessibleEventBroadcaster::removeEventListener", _xAccEvBcast._removeEventListener(xMSF));
     }
 
 
