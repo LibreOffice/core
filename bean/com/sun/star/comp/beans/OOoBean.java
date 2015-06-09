@@ -1350,8 +1350,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             new com.sun.star.beans.PropertyValue[ nNumArgs + 1 ];
 
         // copy current arguments
-        for ( int n = 0; n < nNumArgs; ++n )
-            aExtendedArguments[n] = aArguments[n];
+        System.arraycopy(aArguments, 0, aExtendedArguments, 0, nNumArgs);
 
         // add new argument
         aExtendedArguments[ nNumArgs ] = aArgument;

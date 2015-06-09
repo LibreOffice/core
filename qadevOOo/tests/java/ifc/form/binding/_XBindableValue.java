@@ -82,11 +82,10 @@ public class _XBindableValue extends MultiMethodTest {
     }
 
     class MyValueBinding implements XValueBinding {
-        private Type[] TypeArray;
         private final ArrayList<Type> types = new ArrayList<Type>();
 
         public com.sun.star.uno.Type[] getSupportedValueTypes() {
-            return TypeArray;
+            return types.toArray(new Type[types.size()]);
         }
 
         public Object getValue(com.sun.star.uno.Type type)
@@ -101,12 +100,6 @@ public class _XBindableValue extends MultiMethodTest {
 
         public boolean supportsType(com.sun.star.uno.Type type) {
             types.add(type);
-            TypeArray = new Type[types.size()];
-
-            for (int i = 0; i < types.size(); i++) {
-                TypeArray[i] = (Type) types.toArray()[i];
-            }
-
             return true;
         }
     }

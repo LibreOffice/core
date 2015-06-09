@@ -218,9 +218,7 @@ public final class Loader {
                         return;
                     }
                     byte[] buf2 = new byte[2 * n];
-                    for (int i = 0; i < n; ++i) {
-                        buf2[i] = buf[i];
-                    }
+                    System.arraycopy(buf, 0, buf2, 0, n);
                     buf = buf2;
                 }
                 int k = s.read(buf, n, buf.length - n);
