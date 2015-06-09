@@ -505,6 +505,8 @@ ScPostIt::~ScPostIt()
 
 ScPostIt* ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, bool bCloneCaption ) const
 {
+    if (this == nullptr)
+        return nullptr;
     CreateCaptionFromInitData( rOwnPos );
     return bCloneCaption ? new ScPostIt( rDestDoc, rDestPos, *this ) : new ScPostIt( rDestDoc, rDestPos, maNoteData, false );
 }
