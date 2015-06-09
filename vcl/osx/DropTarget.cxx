@@ -204,7 +204,7 @@ NSDragOperation DropTarget::draggingEntered(id sender)
         NSPoint mouseLoc = [NSEvent mouseLocation];
 
         id wnd = [mView window];
-        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
+        NSPoint dragLocation = [mView convertPoint:[wnd convertRectFromScreen:NSMakeRect(mouseLoc.x, mouseLoc.y, 1, 1)].origin fromView:nil];
 
         CocoaToVCL(dragLocation, bounds);
 
@@ -245,7 +245,7 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
         NSPoint mouseLoc = [NSEvent mouseLocation];
 
         id wnd = [mView window];
-        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
+        NSPoint dragLocation = [mView convertPoint:[wnd convertRectFromScreen:NSMakeRect(mouseLoc.x, mouseLoc.y, 1, 1)].origin fromView:nil];
 
         CocoaToVCL(dragLocation, bounds);
 
@@ -311,7 +311,7 @@ BOOL DropTarget::performDragOperation()
         NSPoint mouseLoc = [NSEvent mouseLocation];
 
         id wnd = [mView window];
-        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
+        NSPoint dragLocation = [mView convertPoint:[wnd convertRectFromScreen:NSMakeRect(mouseLoc.x, mouseLoc.y, 1, 1)].origin fromView:nil];
 
         CocoaToVCL(dragLocation, bounds);
 
