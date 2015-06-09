@@ -26,10 +26,10 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.form.XForm;
 import com.sun.star.lang.WrappedTargetException;
+
 import java.io.PrintWriter;
 import java.util.Comparator;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -90,20 +90,13 @@ public class ScTabViewObj extends TestCase {
      * Creates Spreadsheet document.
      */
     @Override
-    public void initialize( TestParameters Param, PrintWriter log ) {
+    public void initialize( TestParameters Param, PrintWriter log ) throws Exception {
         // get a soffice factory object
-
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
-
-        try {
-            log.println("creating two spreadsheet documents");
-            xSpreadsheetDoc = SOF.createCalcDoc(null);
-            util.utils.waitForEventIdle(Param.getMSF());
-            xSpreadsheetDoc2 = SOF.createCalcDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document ", e );
-        }
+        log.println("creating two spreadsheet documents");
+        xSpreadsheetDoc = SOF.createCalcDoc(null);
+        util.utils.waitForEventIdle(Param.getMSF());
+        xSpreadsheetDoc2 = SOF.createCalcDoc(null);
     }
 
     /**

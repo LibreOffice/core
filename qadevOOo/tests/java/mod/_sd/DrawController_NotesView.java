@@ -87,7 +87,7 @@ public class DrawController_NotesView extends TestCase {
     * @see com.sun.star.frame.Desktop
     */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         the_Desk = UnoRuntime.queryInterface(
             XDesktop.class, DesktopTools.createDesktop(
                                 Param.getMSF()) );

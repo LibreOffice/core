@@ -80,7 +80,7 @@ public class ODatabaseSource extends TestCase {
     * on static field. For names differs in different object threads.
     */
     @Override
-    protected void initialize ( TestParameters Param, PrintWriter log) {
+    protected void initialize ( TestParameters Param, PrintWriter log) throws Exception {
         uniqueSuffix = uniqueSuffixStat++ ;
     }
 

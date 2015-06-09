@@ -46,7 +46,7 @@ public class MutableTreeNode extends TestCase {
      * Creates StarOffice Writer document.
      */
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         mxMSF = tParam.getMSF();
     }
 

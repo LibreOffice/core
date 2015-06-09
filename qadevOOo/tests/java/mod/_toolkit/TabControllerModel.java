@@ -23,7 +23,6 @@ import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -36,15 +35,9 @@ public class TabControllerModel extends TestCase {
     private static XTextDocument xTextDoc;
 
     @Override
-    protected void initialize(TestParameters param, PrintWriter log) {
-        try {
-            log.println("creating a textdocument");
-            xTextDoc = WriterTools.createTextDoc(
-                               param.getMSF());
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
+        log.println("creating a textdocument");
+        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
     }
 
     @Override

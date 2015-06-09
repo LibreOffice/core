@@ -25,6 +25,6 @@ import lib.TestParameters;
  */
 public interface TestBase {
 
-    boolean executeTest(TestParameters param);
+    boolean executeTest(TestParameters param) throws Exception;
 
 }

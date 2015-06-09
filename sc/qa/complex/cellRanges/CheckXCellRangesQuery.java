@@ -54,66 +54,48 @@ public class CheckXCellRangesQuery {
     String sSheetName = "";
 
     /**
-    * Creates Spreadsheet document and the test object,
-    * before the actual test starts.
-    */
-    @Before public void before() {
+     * Creates Spreadsheet document and the test object, before the actual test
+     * starts.
+     */
+    @Before
+    public void before() throws Exception {
         // create a calc document
-        final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(
+                XMultiServiceFactory.class, connection.getComponentContext()
+                        .getServiceManager());
         SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
 
-        try {
-            System.out.println( "creating a Spreadsheet document" );
-            m_xSheetDoc = SOF.createCalcDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(  );
-            fail( "Couldn?t create document");
-        }
+        System.out.println("creating a Spreadsheet document");
+        m_xSheetDoc = SOF.createCalcDoc(null);
         XInterface oObj = null;
 
-        try {
-            System.out.println("Getting spreadsheet") ;
-            XSpreadsheets oSheets = m_xSheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets =
-            UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            m_xSpreadSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+        System.out.println("Getting spreadsheet");
+        XSpreadsheets oSheets = m_xSheetDoc.getSheets();
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
+                XIndexAccess.class, oSheets);
+        m_xSpreadSheet = (XSpreadsheet) AnyConverter.toObject(new Type(
+                XSpreadsheet.class), oIndexSheets.getByIndex(0));
 
-            // get the first sheet name
-            XNamed xNamed = (XNamed) AnyConverter.toObject(new Type(XNamed.class),m_xSpreadSheet);
-            sSheetName = xNamed.getName();
+        // get the first sheet name
+        XNamed xNamed = (XNamed) AnyConverter.toObject(new Type(XNamed.class),
+                m_xSpreadSheet);
+        sSheetName = xNamed.getName();
 
-            // get the cell
-            System.out.println("Getting a cell from sheet") ;
-            oObj = m_xSpreadSheet.getCellByPosition(2, 3);
-            m_xCell = UnoRuntime.queryInterface(XCellRangesQuery.class, oObj);
-
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace();
-            fail("Error getting cell object from spreadsheet document");
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            fail("Error getting cell object from spreadsheet document");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace();
-            fail("Error getting cell object from spreadsheet document");
-        }
+        // get the cell
+        System.out.println("Getting a cell from sheet");
+        oObj = m_xSpreadSheet.getCellByPosition(2, 3);
+        m_xCell = UnoRuntime.queryInterface(XCellRangesQuery.class, oObj);
 
         // set one value for comparison.
-        try {
-            m_xSpreadSheet.getCellByPosition(1, 1).setValue(15);
-            m_xSpreadSheet.getCellByPosition(1, 3).setValue(5);
-            m_xSpreadSheet.getCellByPosition(2, 1).setFormula("=B2+B4");
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            fail("Could not fill cell (1, 1) with a value.");
-        }
+        m_xSpreadSheet.getCellByPosition(1, 1).setValue(15);
+        m_xSpreadSheet.getCellByPosition(1, 3).setValue(5);
+        m_xSpreadSheet.getCellByPosition(2, 1).setFormula("=B2+B4");
 
     }
 
-       /*
-     * this method closes a calc document and resets the corresponding class variable xSheetDoc
+    /**
+     * this method closes a calc document and resets the corresponding class
+     * variable xSheetDoc
      */
     protected boolean closeSpreadsheetDocument() {
         boolean worked = true;
@@ -121,8 +103,8 @@ public class CheckXCellRangesQuery {
         System.out.println("    disposing xSheetDoc ");
 
         try {
-            XCloseable oCloser =  UnoRuntime.queryInterface(
-                                         XCloseable.class, m_xSheetDoc);
+            XCloseable oCloser = UnoRuntime.queryInterface(XCloseable.class,
+                    m_xSheetDoc);
             oCloser.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
             worked = false;
@@ -140,10 +122,10 @@ public class CheckXCellRangesQuery {
         return worked;
     }
 
-    @After public void after()
-        {
-            closeSpreadsheetDocument();
-        }
+    @After
+    public void after() {
+        closeSpreadsheetDocument();
+    }
 
     /**
      * Perform some tests on an empty cell:
@@ -153,24 +135,32 @@ public class CheckXCellRangesQuery {
      * <li>query for empty cells</li>
      * <ol>
      */
-    @Test public void checkEmptyCell() {
+    @Test
+    public void checkEmptyCell() {
         System.out.println("Checking an empty cell...");
         // compare an empty cell with a cell with a value
-        assertTrue("\tQuery column differences did not return the correct value.", _queryColumnDifferences(sSheetName+".C4"));
+        assertTrue(
+                "\tQuery column differences did not return the correct value.",
+                _queryColumnDifferences(sSheetName + ".C4"));
         // compare an empty cell with a cell with a value
-        assertTrue("\tQuery column differences did not return the correct value.", _queryRowDifferences(sSheetName+".C4"));
+        assertTrue(
+                "\tQuery column differences did not return the correct value.",
+                _queryRowDifferences(sSheetName + ".C4"));
         System.out.println("...done");
     }
 
     /**
      * Perform some tests on a filled cell:
      * <ol>
-     * <li>compare an cell with value 5 with a cell with value 15 in the same column</li>
-     * <li>compare an cell with value 5 with a cell with value 15 in the same row</li>
+     * <li>compare an cell with value 5 with a cell with value 15 in the same
+     * column</li>
+     * <li>compare an cell with value 5 with a cell with value 15 in the same
+     * row</li>
      * <li>query for an empty cell.</li>
      * <ol>
      */
-    @Test public void checkFilledCell() {
+    @Test
+    public void checkFilledCell() {
         System.out.println("Checking a filled cell...");
 
         // fill the cell with a value
@@ -182,24 +172,30 @@ public class CheckXCellRangesQuery {
         }
 
         // compare an cell with value 5 with a cell with value 15
-        assertTrue("\tQuery column differences did not return the correct value.", _queryColumnDifferences(sSheetName + ".C4"));
+        assertTrue(
+                "\tQuery column differences did not return the correct value.",
+                _queryColumnDifferences(sSheetName + ".C4"));
         // compare an cell with value 5 with a cell with value 15
-        assertTrue("\tQuery column differences did not return the correct value.", _queryRowDifferences(sSheetName+".C4"));
+        assertTrue(
+                "\tQuery column differences did not return the correct value.",
+                _queryRowDifferences(sSheetName + ".C4"));
         // try to get nothing
-        assertTrue("\tQuery empty cells did not return the correct value.", _queryEmptyCells(""));
+        assertTrue("\tQuery empty cells did not return the correct value.",
+                _queryEmptyCells(""));
         System.out.println("...done");
     }
 
-
     /**
-     *  Query column differences between my cell(2,3) and (1,1).
-     *  @param expected The expected outcome value.
-     *  @return True, if the result equals the expected result.
+     * Query column differences between my cell(2,3) and (1,1).
+     *
+     * @param expected
+     *            The expected outcome value.
+     * @return True, if the result equals the expected result.
      */
     public boolean _queryColumnDifferences(String expected) {
         System.out.println("\tQuery column differences");
-        XSheetCellRanges ranges = m_xCell.queryColumnDifferences(
-                                          new CellAddress((short) 0, 1, 1));
+        XSheetCellRanges ranges = m_xCell
+                .queryColumnDifferences(new CellAddress((short) 0, 1, 1));
         String getting = ranges.getRangeAddressesAsString();
 
         if (!getting.equals(expected)) {
@@ -212,8 +208,10 @@ public class CheckXCellRangesQuery {
 
     /**
      * Query for an empty cell.
-     *  @param expected The expected outcome value.
-     *  @return True, if the result equals the expected result.
+     *
+     * @param expected
+     *            The expected outcome value.
+     * @return True, if the result equals the expected result.
      */
     public boolean _queryEmptyCells(String expected) {
         System.out.println("\tQuery empty cells");
@@ -229,14 +227,16 @@ public class CheckXCellRangesQuery {
     }
 
     /**
-     *  Query row differences between my cell(2,3) and (1,1).
-     *  @param expected The expected outcome value.
-     *  @return True, if the result equals the expected result.
+     * Query row differences between my cell(2,3) and (1,1).
+     *
+     * @param expected
+     *            The expected outcome value.
+     * @return True, if the result equals the expected result.
      */
     public boolean _queryRowDifferences(String expected) {
         System.out.println("\tQuery row differences");
-        XSheetCellRanges ranges = m_xCell.queryRowDifferences(
-                                          new CellAddress((short) 0, 1, 1));
+        XSheetCellRanges ranges = m_xCell.queryRowDifferences(new CellAddress(
+                (short) 0, 1, 1));
         String getting = ranges.getRangeAddressesAsString();
 
         if (!getting.equals(expected)) {
@@ -248,14 +248,14 @@ public class CheckXCellRangesQuery {
         return true;
     }
 
-
-    @BeforeClass public static void setUpConnection() throws Exception {
+    @BeforeClass
+    public static void setUpConnection() throws Exception {
         connection.setUp();
     }
 
-    @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
-    {
+    @AfterClass
+    public static void tearDownConnection() throws InterruptedException,
+            com.sun.star.uno.Exception {
         connection.tearDown();
     }
 

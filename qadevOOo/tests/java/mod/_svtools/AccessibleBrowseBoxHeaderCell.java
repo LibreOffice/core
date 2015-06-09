@@ -70,7 +70,7 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         the_Desk = UnoRuntime.queryInterface(
                     XDesktop.class, DesktopTools.createDesktop(Param.getMSF()));
     }

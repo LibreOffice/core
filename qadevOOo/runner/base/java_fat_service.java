@@ -231,7 +231,7 @@ public class java_fat_service implements TestBase {
                 } catch (com.sun.star.lang.DisposedException de) {
                     log.println("Office disposed");
                 }
-            } catch (java.lang.IllegalArgumentException ie) {
+            } catch (java.lang.Exception ie) {
                 entry.ErrorMsg=ie.getMessage();
                 entry.hasErrorMsg=true;
             }

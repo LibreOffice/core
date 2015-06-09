@@ -33,7 +33,6 @@ import com.sun.star.view.XControlAccess;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -47,18 +46,12 @@ public class UnoControlPatternField extends TestCase {
     private static XTextDocument xTextDoc;
 
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      Param.getMSF());
 
-        try {
-            log.println("creating a textdocument");
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a textdocument");
+        xTextDoc = SOF.createTextDoc(null);
     }
 
     @Override

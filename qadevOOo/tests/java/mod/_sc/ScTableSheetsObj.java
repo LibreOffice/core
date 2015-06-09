@@ -66,17 +66,11 @@ public class ScTableSheetsObj extends TestCase {
     * Creates Spreadsheet document.
     */
     @Override
-    public void initialize( TestParameters Param, PrintWriter log ) {
+    public void initialize( TestParameters Param, PrintWriter log ) throws Exception {
         // get a soffice factory object
-
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
-        try {
-            log.println("creating a spreadsheetdocument");
-            xSpreadsheetDoc = SOF.createCalcDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document ", e );
-        }
+        log.println("creating a spreadsheetdocument");
+        xSpreadsheetDoc = SOF.createCalcDoc(null);
     }
 
     /**

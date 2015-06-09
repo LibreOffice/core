@@ -59,14 +59,6 @@ import util.utils;
 public class ODatabaseContext extends TestCase {
 
     /**
-    * Does nothing.
-    */
-    @Override
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-
-    }
-
-    /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.sdb.DatabaseContext</code>.
     *     Needed object relations :

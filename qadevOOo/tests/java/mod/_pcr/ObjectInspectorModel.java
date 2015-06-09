@@ -27,7 +27,6 @@ import com.sun.star.util.XCloseable;
 import helper.PropertyHandlerFactroy;
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -64,12 +63,9 @@ public class ObjectInspectorModel extends TestCase {
      * @see com.sun.star.frame.Desktop
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         log.println("create a desktop...");
         StarDesktop = DesktopTools.createDesktop(Param.getMSF());
-        if (StarDesktop == null){
-            throw new StatusException("Could not get a Desktop: null", null);
-        }
     }
 
     /**

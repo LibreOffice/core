@@ -187,10 +187,6 @@ public class AccessibleCheckBox extends TestCase {
         }
     }
 
-    @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
-    }
-
     /**
      * Thread for opening modal dialog 'Insert Table'.
      */

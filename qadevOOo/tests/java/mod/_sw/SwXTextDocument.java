@@ -52,10 +52,6 @@ public class SwXTextDocument extends TestCase {
     XTextDocument xSecondTextDoc;
 
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
-    }
-
-    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
         DesktopTools.closeDoc(xSecondTextDoc);

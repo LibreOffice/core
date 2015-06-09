@@ -40,7 +40,7 @@ public class BridgeFactory extends TestCase {
     * parameter <code>'CONNECTION_STRING'</code>.
     */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
         String cncstr = (String) tParam.get("CONNECTION_STRING") ;
         int idx = cncstr.indexOf("host=") + 5 ;
         sOfficeHost = cncstr.substring(idx, cncstr.indexOf(",", idx)) ;
