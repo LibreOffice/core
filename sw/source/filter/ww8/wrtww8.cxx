@@ -1720,6 +1720,8 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     sal_uInt8 nOldTyp = m_nTextTyp;
     m_nTextTyp = nTTyp;
     SwPaM* pOldPam = m_pCurPam;       //!! Simply shifting the PaM without restoring should do the job too
+    sal_uLong nOldStart = m_nCurStart;
+    sal_uLong nOldEnd = m_nCurEnd;
     SwPaM* pOldEnd = m_pOrigPam;
     bool bOldPageDescs = m_bOutPageDescs;
     m_bOutPageDescs = false;
@@ -1731,6 +1733,8 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     m_bOutPageDescs = bOldPageDescs;
     delete m_pCurPam;                    // delete Pam
     m_pCurPam = pOldPam;
+    m_nCurStart = nOldStart;
+    m_nCurEnd = nOldEnd;
     m_pOrigPam = pOldEnd;
     m_nTextTyp = nOldTyp;
 }
@@ -1791,6 +1795,8 @@ void WW8Export::WriteChar( sal_Unicode c )
 
 void MSWordExportBase::SetCurPam(sal_uLong nStt, sal_uLong nEnd)
 {
+    m_nCurStart = nStt;
+    m_nCurEnd = nEnd;
     m_pCurPam = Writer::NewSwPaM( *m_pDoc, nStt, nEnd );
 
     // Recognize tables in special cases
@@ -1842,6 +1848,8 @@ void MSWordExportBase::RestoreData()
 
     delete m_pCurPam;
     m_pCurPam = rData.pOldPam;
+    m_nCurStart = rData.nOldStart;
+    m_nCurEnd = rData.nOldEnd;
     m_pOrigPam = rData.pOldEnd;
 
     m_bOutTable = rData.bOldOutTable;
@@ -2530,11 +2538,12 @@ class TrackContentToExport
 {
 private:
     SwPaM *m_pCurPam;
-    SwPaM m_aOrigPam;
+    sal_uLong m_nStart, m_nEnd;
 public:
-    TrackContentToExport(SwPaM *pCurPam)
+    TrackContentToExport(SwPaM *pCurPam, sal_uLong nCurStart, sal_uLong nCurEnd)
         : m_pCurPam(pCurPam)
-        , m_aOrigPam(*pCurPam, NULL)
+        , m_nStart(nCurStart)
+        , m_nEnd(nCurEnd)
     {
     }
 
@@ -2559,8 +2568,8 @@ public:
 
         if (pNextNode && pCurrentNode != pNextNode)
         {
-            return pNextNode->GetIndex() >= m_aOrigPam.GetPoint()->nNode.GetIndex() &&
-                   pNextNode->GetIndex() < m_aOrigPam.GetMark()->nNode.GetIndex();
+            return pNextNode->GetIndex() >= m_nStart &&
+                   pNextNode->GetIndex() < m_nEnd;
         }
 
         return false;
@@ -2569,7 +2578,7 @@ public:
 
 void MSWordExportBase::WriteText()
 {
-    TrackContentToExport aContentTracking(m_pCurPam);
+    TrackContentToExport aContentTracking(m_pCurPam, m_nCurStart, m_nCurEnd);
     while (aContentTracking.contentRemainsToExport(m_pTableInfo.get()))
     {
         SwNode& rNd = m_pCurPam->GetNode();
@@ -3561,6 +3570,8 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_bOutOutlineOnly(false)
     , m_bFontSizeWritten(false)
     , m_pDoc(pDocument)
+    , m_nCurStart(pCurrentPam->GetPoint()->nNode.GetIndex())
+    , m_nCurEnd(pCurrentPam->GetMark()->nNode.GetIndex())
     , m_pCurPam(pCurrentPam)
     , m_pOrigPam(pOriginalPam)
 {

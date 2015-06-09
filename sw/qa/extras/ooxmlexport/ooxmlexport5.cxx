@@ -813,10 +813,16 @@ DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOO47778, "ooo47778-3.odt")
+DECLARE_OOXMLEXPORT_TEST(testOO47778_1, "ooo47778-3.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[3]", "c");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOO47778_2, "ooo47778-4.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        assertXPathContent(pXmlDoc, "(//w:t)[4]", "c");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
