@@ -518,7 +518,7 @@ namespace sfx2
             :m_rAntiImpl( i_rAntiImpl )
             ,m_sModuleIdentifier( lcl_identifyModule( i_rDocumentFrame ) )
             ,m_xFrame( i_rDocumentFrame )
-            ,m_aPanelDeck( VclPtr<::svt::ToolPanelDeck>::Create(i_rAntiImpl) )
+            ,m_aPanelDeck( VclPtr< ::svt::ToolPanelDeck>::Create(i_rAntiImpl) )
         {
             m_aPanelDeck->Show();
             OnResize();
