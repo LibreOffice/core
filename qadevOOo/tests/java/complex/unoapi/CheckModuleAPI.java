@@ -181,33 +181,8 @@ public class CheckModuleAPI extends ComplexTestCase
     }
     private boolean doesQaUnoApiFolderExist(String srcRoot, String _sModul)
     {
-        if (getQaUnoApiPath(srcRoot, _sModul) != null)
-        {
-            return true;
-        }
-        return false;
+        return getQaUnoApiPath(srcRoot, _sModul) != null;
     }
-/*
- private boolean doesQaUnoApiFolderExist(File srcRoot)
-    {
-        final FolderFilter qaFilter = new FolderFilter("qa");
-        final File[] qaTree = srcRoot.listFiles(qaFilter);
-        if (qaTree != null)
-        {
-            for (int j = 0; j < qaTree.length; j++)
-            {
-                final File qaFolder = qaTree[j];
-                final FolderFilter apiFilter = new FolderFilter("unoapi");
-                final File[] apiTree = qaFolder.listFiles(apiFilter);
-                if (apiTree != null && apiTree.length > 0)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-*/
 
     private String[] getAllModuleCommand()
     {

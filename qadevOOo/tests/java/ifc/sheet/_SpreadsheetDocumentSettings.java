@@ -132,13 +132,9 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
         }
 
         public boolean hasForbiddenCharacters(Locale rLocale) {
-            if (rLocale.Country.equals(locale.Country) &&
+            return rLocale.Country.equals(locale.Country) &&
                     rLocale.Language.equals(locale.Language) &&
-                    rLocale.Variant.equals(locale.Variant)) {
-                return true;
-            }
-
-            return false;
+                    rLocale.Variant.equals(locale.Variant);
         }
     }
 }

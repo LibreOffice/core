@@ -123,11 +123,7 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
      * @see com.sun.star.lang.XServiceInfo
      */
     public boolean supportsService(String serviceName) {
-        if (serviceName.equals(__serviceName)) {
-            return true;
-        }
-
-        return false;
+        return serviceName.equals(__serviceName);
     }
 
     /**
