@@ -38,11 +38,9 @@ import com.sun.star.util.XURLTransformer;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
@@ -140,7 +138,7 @@ public class AccessibleTabControl extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         log.println("creating a test environment");
 
         if (xTextDoc != null) {
@@ -151,14 +149,8 @@ public class AccessibleTabControl extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      tParam.getMSF());
 
-        try {
-            log.println("creating a text document");
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a text document");
+        xTextDoc = SOF.createTextDoc(null);
 
         util.utils.pause(500);
 
@@ -173,15 +165,10 @@ public class AccessibleTabControl extends TestCase {
 
         XURLTransformer urlTransf = null;
 
-        try {
-            XInterface transf = (XInterface) tParam.getMSF().createInstance(
-                                        "com.sun.star.util.URLTransformer");
-            urlTransf = UnoRuntime.queryInterface(
-                                XURLTransformer.class, transf);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create URLTransformer", e);
-        }
+        XInterface transf = (XInterface) tParam.getMSF().createInstance(
+                                    "com.sun.star.util.URLTransformer");
+        urlTransf = UnoRuntime.queryInterface(
+                            XURLTransformer.class, transf);
 
         XDispatch getting = null;
         log.println("opening InsertField dialog");
@@ -197,16 +184,8 @@ public class AccessibleTabControl extends TestCase {
 
         util.utils.pause(500);
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) tParam.getMSF().createInstance(
-                           "com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
+        XInterface oObj = (XInterface) tParam.getMSF().createInstance(
+                       "com.sun.star.awt.Toolkit");
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);

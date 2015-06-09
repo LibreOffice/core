@@ -26,8 +26,9 @@ import com.sun.star.io.XOutputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import java.io.PrintWriter;
-import lib.StatusException;
+
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -65,21 +66,15 @@ public class Pump extends TestCase {
     * @see com.sun.star.io.Pump
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         Object oInterface = null;
         XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oPipe;
 
         // creating an instance of stm.Pump
-        try {
-            oInterface = xMSF.createInstance( "com.sun.star.io.Pump" );
-            oPipe = (XInterface) xMSF.createInstance( "com.sun.star.io.Pipe" );
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create the needed objects.", e) ;
-        }
-
+        oInterface = xMSF.createInstance( "com.sun.star.io.Pump" );
+        oPipe = (XInterface) xMSF.createInstance( "com.sun.star.io.Pipe" );
 
         XInterface oObj = (XInterface) oInterface;
 

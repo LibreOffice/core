@@ -26,9 +26,10 @@ import com.sun.star.io.XOutputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import lib.StatusException;
+
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -78,17 +79,12 @@ public class DataInputStream extends TestCase {
     * </ul>
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         Object oInterface = null;
 
         XMultiServiceFactory xMSF = Param.getMSF();
-        try {
-            oInterface = xMSF.createInstance("com.sun.star.io.DataInputStream");
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        oInterface = xMSF.createInstance("com.sun.star.io.DataInputStream");
 
         XInterface oObj = (XInterface) oInterface;
 
@@ -96,26 +92,14 @@ public class DataInputStream extends TestCase {
         // DataInputStream created through the Pipe
         XActiveDataSink xDataSink = UnoRuntime.queryInterface(XActiveDataSink.class, oObj);
 
-        XInterface oPipe = null;
-        try {
-            oPipe = (XInterface)
-                xMSF.createInstance("com.sun.star.io.Pipe");
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        XInterface oPipe = (XInterface)
+            xMSF.createInstance("com.sun.star.io.Pipe");
 
         XInputStream xPipeInput = UnoRuntime.queryInterface(XInputStream.class, oPipe);
         XOutputStream xPipeOutput = UnoRuntime.queryInterface(XOutputStream.class, oPipe);
 
-        XInterface oDataOutput = null;
-        try {
-            oDataOutput = (XInterface)
+        XInterface oDataOutput = (XInterface)
                 xMSF.createInstance("com.sun.star.io.DataOutputStream");
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
 
         XDataOutputStream xDataOutput = UnoRuntime.queryInterface(XDataOutputStream.class, oDataOutput) ;
         XActiveDataSource xDataSource = UnoRuntime.queryInterface(XActiveDataSource.class, oDataOutput) ;
@@ -137,27 +121,13 @@ public class DataInputStream extends TestCase {
         byte[] byteData = new byte[] {
             1, 2, 3, 4, 5, 6, 7, 8 } ;
 
-        // createing a connectable object for XConnectable interface
-        XInterface xConnect = null;
-        try {
-            xConnect = (XInterface)xMSF.createInstance(
+        // creating a connectable object for XConnectable interface
+        XInterface xConnect = (XInterface)xMSF.createInstance(
                                     "com.sun.star.io.DataInputStream") ;
-        } catch (Exception e) {
-            log.println("Can't create DataInputStream");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create DataInputStream", e);
-        }
 
         // creating an input stream to set in XActiveDataSink
-        XInterface oDataInput = null;
-        try {
-            oDataInput = (XInterface) xMSF.createInstance(
+        XInterface oDataInput = (XInterface) xMSF.createInstance(
                                         "com.sun.star.io.Pipe" );
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't create new in stream") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create input stream", e) ;
-        }
 
 
         log.println("creating a new environment for object");

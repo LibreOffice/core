@@ -20,8 +20,6 @@ package mod._ucprmt;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -74,27 +72,15 @@ public class ContentProvider extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log ) {
+            (TestParameters Param, PrintWriter log ) throws Exception {
         XInterface oObj = null;
         XMultiServiceFactory xMSF = Param.getMSF();
         XContentIdentifierFactory cntIDFac = null ;
 
-        try {
-            oObj = (XInterface) xMSF.createInstance
-                ("com.sun.star.ucb.RemoteAccessContentProvider");
-            cntIDFac = UnoRuntime.queryInterface
-                    (XContentIdentifierFactory.class, oObj) ;
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
-
-        if (oObj == null) {
-            log.println("!!! Object wasn't created !!!") ;
-            throw new StatusException(Status.failed
-                    ("!!! Object wasn't created !!!")) ;
-        }
+        oObj = (XInterface) xMSF.createInstance
+            ("com.sun.star.ucb.RemoteAccessContentProvider");
+        cntIDFac = UnoRuntime.queryInterface
+                (XContentIdentifierFactory.class, oObj) ;
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

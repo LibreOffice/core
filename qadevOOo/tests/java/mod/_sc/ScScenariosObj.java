@@ -105,36 +105,20 @@ public class ScScenariosObj extends TestCase {
     * @see com.sun.star.sheet.XScenariosSupplier
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         log.println("getting sheets");
         XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-        try {
-            oSheet = (XSpreadsheet)AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
+        oSheet = (XSpreadsheet)AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
 
         log.println("filling some cells");
-        try {
-            oSheet.getCellByPosition(5, 5).setValue(15);
-            oSheet.getCellByPosition(1, 4).setValue(10);
-            oSheet.getCellByPosition(2, 0).setValue(-5.15);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't fill some cell", e);
-        }
+        oSheet.getCellByPosition(5, 5).setValue(15);
+        oSheet.getCellByPosition(1, 4).setValue(10);
+        oSheet.getCellByPosition(2, 0).setValue(-5.15);
 
         XScenariosSupplier xSupp = UnoRuntime.queryInterface(XScenariosSupplier.class, oSheet);
         XCellRange oRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);

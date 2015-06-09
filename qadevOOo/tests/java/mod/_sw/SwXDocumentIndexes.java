@@ -89,31 +89,18 @@ public class SwXDocumentIndexes extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(
-            TestParameters tParam, PrintWriter log ) throws StatusException {
+            TestParameters tParam, PrintWriter log ) throws Exception {
         XInterface oObj = null;
         SOfficeFactory.getFactory( tParam.getMSF() );
 
         log.println( "creating a test environment" );
-        XTextContent xTC = null;
-
-        try {
-            xTC = SOfficeFactory.createIndex(xTextDoc,"com.sun.star.text.ContentIndex");
-        }
-        catch ( com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create the Index", e);
-        }
+        XTextContent xTC = SOfficeFactory.createIndex(xTextDoc,"com.sun.star.text.ContentIndex");
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println("inserting the Index into text document");
-        try {
-            oText.insertTextContent(oCursor, xTC, false);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert the Index", e);
-        }
+        oText.insertTextContent(oCursor, xTC, false);
 
         XDocumentIndexesSupplier xDocInd = UnoRuntime.queryInterface(XDocumentIndexesSupplier.class,xTextDoc);
 

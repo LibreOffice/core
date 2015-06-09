@@ -20,7 +20,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -62,18 +61,13 @@ public class SwXPropertySetInfo extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-            TestParameters Param, PrintWriter log ) throws StatusException {
+            TestParameters Param, PrintWriter log ) throws Exception {
         XInterface oObj = null;
 
         log.println( "creating a test environment" );
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
-        try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a textdocument" );
+        xTextDoc = SOF.createTextDoc( null );
 
         log.println( "    getting the XPropertySetInfo" );
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xTextDoc);

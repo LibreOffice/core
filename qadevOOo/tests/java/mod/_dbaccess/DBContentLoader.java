@@ -20,8 +20,6 @@ package mod._dbaccess;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -64,35 +62,18 @@ public class DBContentLoader extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null ;
+                                                    throws Exception {
 
-        //now get the OButtonControl
-        try {
-            oInterface = Param.getMSF().createInstance
-                ("com.sun.star.sdb.ContentLoader") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get service");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get GridControl", e );
-        }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
-
-        oObj = (XInterface) oInterface ;
+        Object oInterface = Param.getMSF().createInstance
+            ("com.sun.star.sdb.ContentLoader");
+        XInterface oObj = (XInterface) oInterface ;
 
         log.println("ImplementationName " + util.utils.getImplName(oObj));
         log.println( "creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // adding relation for XFrameLoader
-        tEnv.addObjRelation("FrameLoader.URL",
-            ".component:DB/DataSourceBrowser") ;
-
+        tEnv.addObjRelation("FrameLoader.URL",  ".component:DB/DataSourceBrowser") ;
 
         return tEnv;
     } // finish method getTestEnvironment

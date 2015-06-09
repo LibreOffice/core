@@ -114,7 +114,7 @@ public class ScStyleFamilyObj extends TestCase {
     * @see com.sun.star.style.CellStyle
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -128,23 +128,9 @@ public class ScStyleFamilyObj extends TestCase {
 
         XNameAccess oStyleFamilies = oStyleFamiliesSupplier.getStyleFamilies();
         XIndexAccess oStyleFamiliesIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oStyleFamilies);
-        try {
-            oStyleFamilyNameAccess = (XNameAccess) AnyConverter.toObject(
-                new Type(XNameAccess.class),
-                    oStyleFamiliesIndexAccess.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while getting StyleFamily", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while getting StyleFamily", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while getting StyleFamily", e);
-        }
+        oStyleFamilyNameAccess = (XNameAccess) AnyConverter.toObject(
+            new Type(XNameAccess.class),
+                oStyleFamiliesIndexAccess.getByIndex(0));
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         XComponent xComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
@@ -155,18 +141,7 @@ public class ScStyleFamilyObj extends TestCase {
         // insert a Style which can be replaced by name
         XNameContainer oContainer = UnoRuntime.queryInterface(
             XNameContainer.class, oStyleFamilyNameAccess);
-        try {
-            oContainer.insertByName("ScStyleFamilyObj", oInstance);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert new style family", e);
-        } catch (com.sun.star.container.ElementExistException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert new style family", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert new style family", e);
-        }
+        oContainer.insertByName("ScStyleFamilyObj", oInstance);
 
         TestEnvironment tEnv = new TestEnvironment(oStyleFamilyNameAccess);
 

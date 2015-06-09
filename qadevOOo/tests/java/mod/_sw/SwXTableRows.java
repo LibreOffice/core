@@ -92,13 +92,7 @@ public class SwXTableRows extends TestCase {
         SOfficeFactory.getFactory( tParam.getMSF() );
         oTable = SOfficeFactory.createTextTable( xTextDoc );
 
-        try {
-            SOfficeFactory.insertTextContent(xTextDoc, oTable );
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't insert text content: "
-                +e.getMessage(),e);
-        }
+        SOfficeFactory.insertTextContent(xTextDoc, oTable );
         oObj = oTable.getRows();
 
         log.println( "creating a new environment for TableColumns object" );

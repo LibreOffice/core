@@ -100,7 +100,7 @@ public class ScNamedRangeObj extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -113,16 +113,7 @@ public class ScNamedRangeObj extends TestCase {
         // Getting named ranges.
         XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
 
-        Object ranges = null;
-        try {
-            ranges = docProps.getPropertyValue("NamedRanges");
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get NamedRanges", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get NamedRanges", e);
-        }
+        Object ranges = docProps.getPropertyValue("NamedRanges");
 
         XNamedRanges xNamedRanges = UnoRuntime.queryInterface(XNamedRanges.class, ranges);
 
@@ -140,19 +131,8 @@ public class ScNamedRangeObj extends TestCase {
         CellAddress listOutputPosition = new CellAddress((short)0, 1, 1);
         xNamedRanges.outputList(listOutputPosition);
 
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),xNamedRanges.getByName("ANamedRange"));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.container.NoSuchElementException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+            new Type(XInterface.class),xNamedRanges.getByName("ANamedRange"));
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

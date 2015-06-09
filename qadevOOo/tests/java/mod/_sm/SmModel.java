@@ -20,7 +20,6 @@ package mod._sm;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -54,21 +53,10 @@ public class SmModel extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+            throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
-        try {
-            xMathDoc = SOF.openDoc("smath","_blank");
-        } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", ex );
-        } catch (com.sun.star.io.IOException ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", ex );
-        } catch (com.sun.star.uno.Exception ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", ex );
-        }
+        xMathDoc = SOF.openDoc("smath","_blank");
 
         String Iname = util.utils.getImplName(xMathDoc);
         log.println("Implementation Name: "+Iname);

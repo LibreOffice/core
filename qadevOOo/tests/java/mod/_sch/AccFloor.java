@@ -19,7 +19,6 @@ package mod._sch;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -44,41 +43,17 @@ public class AccFloor extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         if (xChartDoc != null) cleanup(Param, log);
         log.println( "creating a chart document" );
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
-        try {
-            log.println( "creating a chartdocument" );
-            xChartDoc = SOF.createChartDoc();
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a chartdocument" );
+        xChartDoc = SOF.createChartDoc();
 
         log.println("Change Diagram to 3D");
         XPropertySet ChartProps = UnoRuntime.queryInterface( XPropertySet.class, xChartDoc.getDiagram() );
-        try {
-            ChartProps.setPropertyValue("Dim3D", Boolean.TRUE);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Couldn't change Diagram to 3D");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't change Diagram to 3D", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Couldn't change Diagram to 3D");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't change Diagram to 3D", e);
-        } catch(com.sun.star.beans.PropertyVetoException e) {
-            log.println("Couldn't change Diagram to 3D");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't change Diagram to 3D", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Couldn't change Diagram to 3D");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't change Diagram to 3D", e);
-        }
+        ChartProps.setPropertyValue("Dim3D", Boolean.TRUE);
 
         XInterface oObj = null;
 

@@ -70,7 +70,7 @@ public class ScAutoFormatFieldObj extends TestCase {
 
         try {
 
-                  log.println ("create Object ...") ;
+            log.println ("create Object ...") ;
             // creation of testobject here
             XInterface formats = (XInterface)Param.getMSF().createInstance
                 ("com.sun.star.sheet.TableAutoFormats");

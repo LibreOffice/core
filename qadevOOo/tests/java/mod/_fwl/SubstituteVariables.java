@@ -20,8 +20,6 @@ package mod._fwl;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -52,26 +50,11 @@ public class SubstituteVariables extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null ;
-
+            (TestParameters Param, PrintWriter log) throws Exception {
         //now get the OButtonControl
-        try {
-            oInterface = Param.getMSF().createInstance
-                ("com.sun.star.util.PathSubstitution") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get service");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get SubstituteVariables", e );
-        }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
-
-        oObj = (XInterface) oInterface ;
+        Object oInterface = Param.getMSF().createInstance
+            ("com.sun.star.util.PathSubstitution") ;
+        XInterface oObj = (XInterface) oInterface ;
         log.println("ImplName: "+utils.getImplName(oObj));
 
         log.println( "creating a new environment for object" );

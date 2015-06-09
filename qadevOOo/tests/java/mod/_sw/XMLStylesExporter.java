@@ -113,24 +113,19 @@ public class XMLStylesExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters tParam, PrintWriter log ) {
+            ( TestParameters tParam, PrintWriter log ) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
         FilterChecker filter = new FilterChecker(log) ;
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Writer.XMLStylesExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xTextDoc);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Writer.XMLStylesExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xTextDoc);
 
         // Cheching Head Tag existence and that property has changed
         filter.addTag(new XMLTools.Tag ("office:document-styles"));
@@ -147,12 +142,7 @@ public class XMLStylesExporter extends TestCase {
         XPropertySet set = supp.getFootnoteSettings();
 
         // Change property "Prefix"
-        try {
-            set.setPropertyValue("Prefix","New Property");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't change property value", e );
-        }
+        set.setPropertyValue("Prefix","New Property");
 
         tEnv.addObjRelation("MediaDescriptor", XMLTools.createMediaDescriptor(
             new String[] {"FilterName"},

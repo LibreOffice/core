@@ -114,7 +114,7 @@ public class XMLMetaExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters tParam, PrintWriter log ) throws StatusException {
+            ( TestParameters tParam, PrintWriter log ) throws Exception {
         final String TITLE = "Title for testing of XMLMetaExporter";
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
@@ -123,23 +123,18 @@ public class XMLMetaExporter extends TestCase {
         Filter = new MetaFilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class), Filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Writer.XMLMetaExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xTextDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Writer.XMLMetaExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xTextDoc);
 
-            //set some meta data
-            XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
-                (XDocumentPropertiesSupplier.class, xTextDoc);
-            final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
-            xDocProps.setTitle(TITLE);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        //set some meta data
+        XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+            (XDocumentPropertiesSupplier.class, xTextDoc);
+        final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
+        xDocProps.setTitle(TITLE);
 
         // adding tags which must be contained in XML output
         Filter.addTag("office:document-meta");

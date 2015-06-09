@@ -118,7 +118,7 @@ public class SdXCustomPresentation extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-                                TestParameters Param, PrintWriter log) {
+                                TestParameters Param, PrintWriter log) throws Exception {
 
 
         log.println( "creating a test environment" );
@@ -130,28 +130,11 @@ public class SdXCustomPresentation extends TestCase {
 
         XSingleServiceFactory oSingleMSF = UnoRuntime.queryInterface(XSingleServiceFactory.class, oObj);
 
-        XInterface oInstance = null;
-        try {
-            oInstance = (XInterface) oSingleMSF.createInstance();
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        XInterface oInstance = (XInterface) oSingleMSF.createInstance();
 
         XNameContainer aContainer = UnoRuntime.queryInterface(XNameContainer.class, oObj);
 
-        try {
-            aContainer.insertByName("FirstPresentation", oInstance);
-        } catch (com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Presentation", e);
-        } catch (com.sun.star.container.ElementExistException e){
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Presentation", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Presentation", e);
-        }
+        aContainer.insertByName("FirstPresentation", oInstance);
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
@@ -159,35 +142,12 @@ public class SdXCustomPresentation extends TestCase {
         XDrawPages oDPn = oDPS.getDrawPages();
         XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
 
-        XDrawPage oDrawPage = null;
-        try {
-            oDrawPage = (XDrawPage) AnyConverter.toObject(
-                    new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        }
+        XDrawPage oDrawPage = (XDrawPage) AnyConverter.toObject(
+                new Type(XDrawPage.class),oDPi.getByIndex(0));
 
         XIndexContainer aIContainer = UnoRuntime.queryInterface(XIndexContainer.class,oInstance);
 
-        try {
-            aIContainer.insertByIndex(0, oDrawPage);
-        } catch (com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert DrawPage", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert DrawPage", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert DrawPage", e);
-        }
+        aIContainer.insertByIndex(0, oDrawPage);
 
         log.println( "creating a new environment for XPresentation object" );
         TestEnvironment tEnv = new TestEnvironment( oInstance );
@@ -203,24 +163,13 @@ public class SdXCustomPresentation extends TestCase {
 
         // INSTANCEn : _XNameContainer; _XNameReplace
         log.println( "adding INSTANCEn as mod relation to environment" );
-        try {
-            for (int n = 1; n < (2*THRCNT+1) ;n++ ) {
-                log.println( "adding INSTANCE" + n
-                    +" as mod relation to environment" );
-                oDPn.insertNewByIndex(0);
-                oDrawPage = (XDrawPage) AnyConverter.toObject(
-                        new Type(XDrawPage.class),oDPi.getByIndex(0));
-                tEnv.addObjRelation("INSTANCE" + n, oDrawPage);
-            }
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could't adding INSTANCEn", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could't adding INSTANCEn", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could't adding INSTANCEn", e);
+        for (int n = 1; n < (2*THRCNT+1) ;n++ ) {
+            log.println( "adding INSTANCE" + n
+                +" as mod relation to environment" );
+            oDPn.insertNewByIndex(0);
+            oDrawPage = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(0));
+            tEnv.addObjRelation("INSTANCE" + n, oDrawPage);
         }
 
         return tEnv;

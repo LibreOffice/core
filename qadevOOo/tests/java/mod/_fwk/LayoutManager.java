@@ -28,7 +28,6 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.util.XCloseable;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -72,7 +71,7 @@ public class LayoutManager extends TestCase {
      * @return The test environment.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = tParam.getMSF();
 
@@ -89,18 +88,8 @@ public class LayoutManager extends TestCase {
 
         XFrame xFrame = xTextDoc.getCurrentController().getFrame();
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xFrame);
-        try {
-            Object any = xProp.getPropertyValue("LayoutManager");
-            xManager = UnoRuntime.queryInterface(XInterface.class, any);
-        }
-        catch(com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could not get property 'LayoutManager' from the current frame.", e);
-        }
-        catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could not get property 'LayoutManager' from the current frame.", e);
-        }
+        Object any = xProp.getPropertyValue("LayoutManager");
+        xManager = UnoRuntime.queryInterface(XInterface.class, any);
 
         // just to make sure, it's the right one.
         log.println("TestObject: " + util.utils.getImplName(xManager));

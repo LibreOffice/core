@@ -22,7 +22,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -59,20 +58,11 @@ public class ControlMenuController extends TestCase {
      * Create test environment.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        TestEnvironment tEnv = null;
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
-        try {
-            oObj = (XInterface)xMSF.createInstance("com.sun.star.comp.framework.ControlMenuController");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could not create object 'ControlMenuController'", e);
-        }
-
-
+        oObj = (XInterface)xMSF.createInstance("com.sun.star.comp.framework.ControlMenuController");
         log.println("TestObject: " + utils.getImplName(oObj));
-        tEnv = new TestEnvironment(oObj);
+        TestEnvironment tEnv = new TestEnvironment(oObj);
         return tEnv;
     }
 

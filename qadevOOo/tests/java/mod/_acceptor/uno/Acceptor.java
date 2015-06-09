@@ -20,7 +20,6 @@ package mod._acceptor.uno;
 
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -71,25 +70,17 @@ public class Acceptor extends TestCase {
      * <ul>
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
-        XInterface oObj = null;
-        XInterface acceptor = null;
-
-        try {
-            acceptor = (XInterface)
-                Param.getMSF().createInstance
-                ("com.sun.star.connection.Acceptor");
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create object environment", e) ;
-        }
+        XInterface acceptor = (XInterface)
+            Param.getMSF().createInstance
+            ("com.sun.star.connection.Acceptor");
 
         // select the port
         curPort = utils.getNextFreePort(basePort);
         log.println("Choose Port nr: " + curPort);
-        oObj = acceptor;
 
-        TestEnvironment tEnv = new TestEnvironment(oObj) ;
+        TestEnvironment tEnv = new TestEnvironment(acceptor) ;
 
         // adding connection string as relation
         tEnv.addObjRelation("XAcceptor.connectStr",

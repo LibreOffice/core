@@ -22,7 +22,6 @@ import ifc.sdb._XCompletedExecution;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -242,7 +241,7 @@ public class ORowSet extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-            PrintWriter log)
+            PrintWriter log) throws Exception
     {
         XMultiServiceFactory orb = Param.getMSF();
         uniqueSuffix++;
@@ -251,27 +250,14 @@ public class ORowSet extends TestCase {
         //initialize test table
         if (isMySQLDB)
         {
-            try
-            {
-                DBTools.DataSourceInfo legacyDescriptor = dbTools.newDataSourceInfo();
-                legacyDescriptor.Name = srcInf.Name;
-                legacyDescriptor.User = srcInf.User;
-                legacyDescriptor.Password = srcInf.Password;
-                legacyDescriptor.Info = srcInf.Info;
-                legacyDescriptor.URL = srcInf.URL;
-                legacyDescriptor.IsPasswordRequired = srcInf.IsPasswordRequired;
-                dbTools.initTestTableUsingJDBC(tableName, legacyDescriptor);
-            }
-            catch(java.sql.SQLException e)
-            {
-                throw new StatusException(e, Status.failed("Couldn't " +
-                    " init test table. SQLException..."));
-            }
-            catch(java.lang.ClassNotFoundException e)
-            {
-                throw new StatusException(e, Status.failed("Couldn't " +
-                    "register mysql driver"));
-            }
+            DBTools.DataSourceInfo legacyDescriptor = dbTools.newDataSourceInfo();
+            legacyDescriptor.Name = srcInf.Name;
+            legacyDescriptor.User = srcInf.User;
+            legacyDescriptor.Password = srcInf.Password;
+            legacyDescriptor.Info = srcInf.Info;
+            legacyDescriptor.URL = srcInf.URL;
+            legacyDescriptor.IsPasswordRequired = srcInf.IsPasswordRequired;
+            dbTools.initTestTableUsingJDBC(tableName, legacyDescriptor);
         }
         else
         {
@@ -398,19 +384,12 @@ public class ORowSet extends TestCase {
 
             // Adding relation for XCompletedExecution
             tEnv.addObjRelation( "InteractionHandlerChecker", new InteractionHandlerImpl() );
-            try
-            {
-                String sqlCommand = isMySQLDB
-                    ?   "SELECT Column0  FROM soffice_test_table  WHERE ( (  Column0 = :param1 ) )"
-                    :   "SELECT \"_TEXT\" FROM \"" + tableName + "\" WHERE ( ( \"_TEXT\" = :param1 ) )";
-                rowSetProps.setPropertyValue( "DataSourceName", dbSourceName );
-                rowSetProps.setPropertyValue( "Command", sqlCommand );
-                rowSetProps.setPropertyValue( "CommandType", Integer.valueOf(CommandType.COMMAND) );
-            }
-            catch(Exception e)
-            {
-                throw new StatusException( "setting up the RowSet with a parametrized command failed", e );
-            }
+            String sqlCommand = isMySQLDB
+                ?   "SELECT Column0  FROM soffice_test_table  WHERE ( (  Column0 = :param1 ) )"
+                :   "SELECT \"_TEXT\" FROM \"" + tableName + "\" WHERE ( ( \"_TEXT\" = :param1 ) )";
+            rowSetProps.setPropertyValue( "DataSourceName", dbSourceName );
+            rowSetProps.setPropertyValue( "Command", sqlCommand );
+            rowSetProps.setPropertyValue( "CommandType", Integer.valueOf(CommandType.COMMAND) );
 
             // Adding relation for XParameters ifc test
             tEnv.addObjRelation( "XParameters.ParamValues", new ArrayList<String>() );
@@ -463,20 +442,6 @@ public class ORowSet extends TestCase {
             envCreatedOK = true ;
             return tEnv;
 
-        }
-        catch(com.sun.star.uno.Exception e)
-        {
-            log.println( "couldn't set up test environment:" );
-            e.printStackTrace(log);
-            try
-            {
-                if ( m_connection != null )
-                    m_connection.close();
-            }
-            catch(Exception ex)
-            {
-            }
-            throw new StatusException( "couldn't set up test environment", e );
         }
         finally
         {

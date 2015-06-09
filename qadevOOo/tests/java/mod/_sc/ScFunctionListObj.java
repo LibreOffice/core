@@ -91,7 +91,7 @@ public class ScFunctionListObj extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -102,16 +102,10 @@ public class ScFunctionListObj extends TestCase {
         log.println("Getting test object ") ;
 
         XMultiServiceFactory oDocMSF = Param.getMSF();
-        try {
-            oObj =  (XInterface)oDocMSF.createInstance(
-                "com.sun.star.sheet.FunctionDescriptions");
-            log.println("Creating object - " +
-                                        ((oObj == null) ? "FAILED" : "OK"));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document", e);
-        }
+        oObj =  (XInterface)oDocMSF.createInstance(
+            "com.sun.star.sheet.FunctionDescriptions");
+        log.println("Creating object - " +
+                                    ((oObj == null) ? "FAILED" : "OK"));
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

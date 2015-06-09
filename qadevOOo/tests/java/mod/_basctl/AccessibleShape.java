@@ -35,7 +35,6 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -64,7 +63,7 @@ public class AccessibleShape extends TestCase {
     }
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
         log.println( "creating a test environment" );
         String aURL=utils.getFullTestURL("basDialog.odt");
@@ -74,37 +73,27 @@ public class AccessibleShape extends TestCase {
         XDispatchProvider xDPP = UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
 
         log.println( "opening the basic dialog editor" );
-        try {
-            Object o = xMSF.createInstance("com.sun.star.frame.DispatchHelper");
-            XDispatchHelper xDPH = UnoRuntime.queryInterface(XDispatchHelper.class, o);
-            PropertyValue[] aArgs = new PropertyValue[4];
-            aArgs[0] = new PropertyValue();
-            aArgs[0].Name = "Document";
-            aArgs[0].Value = aURL;
-            aArgs[1] = new PropertyValue();
-            aArgs[1].Name = "LibName";
-            aArgs[1].Value = "basctl";
-            aArgs[2] = new PropertyValue();
-            aArgs[2].Name = "Name";
-            aArgs[2].Value = "Dialog1";
-            aArgs[3] = new PropertyValue();
-            aArgs[3].Name = "Type";
-            aArgs[3].Value = "Dialog";
-            xDPH.executeDispatch(xDPP, ".uno:BasicIDEAppear", "", 0, aArgs);
-        } catch (Exception e) {
-            throw new StatusException("Couldn't open Basic Dialog",e);
-        }
+        Object o = xMSF.createInstance("com.sun.star.frame.DispatchHelper");
+        XDispatchHelper xDPH = UnoRuntime.queryInterface(XDispatchHelper.class, o);
+        PropertyValue[] aArgs = new PropertyValue[4];
+        aArgs[0] = new PropertyValue();
+        aArgs[0].Name = "Document";
+        aArgs[0].Value = aURL;
+        aArgs[1] = new PropertyValue();
+        aArgs[1].Name = "LibName";
+        aArgs[1].Value = "basctl";
+        aArgs[2] = new PropertyValue();
+        aArgs[2].Name = "Name";
+        aArgs[2].Value = "Dialog1";
+        aArgs[3] = new PropertyValue();
+        aArgs[3].Name = "Type";
+        aArgs[3].Value = "Dialog";
+        xDPH.executeDispatch(xDPP, ".uno:BasicIDEAppear", "", 0, aArgs);
 
         utils.pause(3000);
 
-        try {
-            oObj = (XInterface) tParam.getMSF().createInstance
-                    ("com.sun.star.awt.Toolkit") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
-        }
+        oObj = (XInterface) tParam.getMSF().createInstance
+                ("com.sun.star.awt.Toolkit") ;
 
         final XWindow basicIDE = xFrame.getContainerWindow();
 

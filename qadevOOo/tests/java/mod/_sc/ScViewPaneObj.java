@@ -95,7 +95,7 @@ public class ScViewPaneObj extends TestCase {
 
     /**
      * Creating a TestEnvironment for the interfaces to be tested.
-     * Retieves the current controller of the spreadsheet document using the
+     * Retrieves the current controller of the spreadsheet document using the
      * interface <code>XModel</code>. The controller contains the collection
      * of the view panes so retrieves the view pane with index 0 from
      * the collection. The retrieved view pane is the instance of the service
@@ -109,25 +109,14 @@ public class ScViewPaneObj extends TestCase {
      * @see com.sun.star.frame.XModel
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
         XDrawPage oDrawPage;
 
         XModel xm = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
         XController xc = xm.getCurrentController();
         XIndexAccess xIA = UnoRuntime.queryInterface(XIndexAccess.class, xc);
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),xIA.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+            new Type(XInterface.class),xIA.getByIndex(0));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
@@ -145,17 +134,10 @@ public class ScViewPaneObj extends TestCase {
         XForm myForm = null;
         String kindOfControl="CommandButton";
         XShape aShape = null;
-        try{
-            log.println("adding contol shape '" + kindOfControl + "'");
-            XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc) ;
+        log.println("adding contol shape '" + kindOfControl + "'");
+        XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc) ;
 
-            aShape = FormTools.createControlShape(oComp, 3000, 4500, 15000, 10000, kindOfControl);
-
-        } catch (Exception e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create following control shape : '" +
-                kindOfControl + "': ", e);
-        }
+        aShape = FormTools.createControlShape(oComp, 3000, 4500, 15000, 10000, kindOfControl);
 
         try {
             log.println( "getting Drawpages" );

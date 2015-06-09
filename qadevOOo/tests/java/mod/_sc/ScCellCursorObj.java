@@ -147,7 +147,7 @@ public class ScCellCursorObj extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         XInterface oObj = null;
         TestEnvironment tEnv = null;
         XSpreadsheet oSheet = null;
@@ -162,39 +162,21 @@ public class ScCellCursorObj extends TestCase {
                                                XSpreadsheetDocument.class,
                                                xSheetDoc).getSheets();
 
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                             new Type(XSpreadsheet.class),
-                             oSpreadsheets.getByName(
-                                     oSpreadsheets.getElementNames()[0]));
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                         new Type(XSpreadsheet.class),
+                         oSpreadsheets.getByName(
+                                 oSpreadsheets.getElementNames()[0]));
 
-            testRange = oSheet.getCellRangeByName("$A$1:$D$4");
+        testRange = oSheet.getCellRangeByName("$A$1:$D$4");
 
-            XSheetCellRange testSheetRange = UnoRuntime.queryInterface(
-                                                     XSheetCellRange.class,
-                                                     testRange);
-            oObj = oSheet.createCursorByRange(testSheetRange);
-            oSheet.getCellByPosition(1, 1).setValue(1);
-            oSheet.getCellByPosition(4, 5).setValue(1);
-            oSheet.getCellByPosition(3, 2).setFormula("xTextDoc");
-            oSheet.getCellByPosition(3, 3).setFormula("xTextDoc");
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while creating test object:");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Exception occurred while creating test object:");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occurred while creating test object:");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while creating test object:");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        }
+        XSheetCellRange testSheetRange = UnoRuntime.queryInterface(
+                                                 XSheetCellRange.class,
+                                                 testRange);
+        oObj = oSheet.createCursorByRange(testSheetRange);
+        oSheet.getCellByPosition(1, 1).setValue(1);
+        oSheet.getCellByPosition(4, 5).setValue(1);
+        oSheet.getCellByPosition(3, 2).setFormula("xTextDoc");
+        oSheet.getCellByPosition(3, 3).setFormula("xTextDoc");
 
         log.println("Test object successfully created.");
 

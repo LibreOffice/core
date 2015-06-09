@@ -20,7 +20,6 @@ package mod._lng;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -63,21 +62,14 @@ public class DicList extends TestCase {
      * <code>com.sun.star.lingu2.DicList</code>. Then two dictionaries
      * are created (positive and negative) and added to the list, one
      * entry is added to each of dictionaries and they both are activated.
-     * The distionary list is retruned as a component for testing.
+     * The dictionary list is returned as a component for testing.
      */
     @Override
     public synchronized TestEnvironment createTestEnvironment( TestParameters Param, PrintWriter log )
-           throws StatusException {
+           throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)xMSF.createInstance("com.sun.star.lingu2.DicList");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        XInterface oObj = (XInterface)xMSF.createInstance("com.sun.star.lingu2.DicList");
 
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);

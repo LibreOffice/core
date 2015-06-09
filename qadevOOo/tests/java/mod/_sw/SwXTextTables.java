@@ -95,27 +95,13 @@ public class SwXTextTables extends TestCase {
         // create testobject here
         TestEnvironment tEnv = null;
         XTextTable oTable = null;
-        try {
-            oTable = SOfficeFactory.createTextTable( xTextDoc );
-            SOfficeFactory.insertTextContent(xTextDoc, oTable );
-        }
-        catch( Exception uE ) {
-            uE.printStackTrace( log );
-            throw new StatusException("Couldn't create TextTable : "
-                    + uE.getMessage(), uE);
-        }
+        oTable = SOfficeFactory.createTextTable( xTextDoc );
+        SOfficeFactory.insertTextContent(xTextDoc, oTable );
 
         // Number two
         XTextTable oTable2 = null;
-        try {
-            oTable2 = SOfficeFactory.createTextTable( xTextDoc );
-            SOfficeFactory.insertTextContent(xTextDoc, oTable2 );
-        }
-        catch( Exception uE ) {
-            uE.printStackTrace( log );
-            throw new StatusException("Couldn't create TextTable two: "
-                    + uE.getMessage(), uE);
-        }
+        oTable2 = SOfficeFactory.createTextTable( xTextDoc );
+        SOfficeFactory.insertTextContent(xTextDoc, oTable2 );
 
         XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         XTextTablesSupplier oTTSupp = UnoRuntime.queryInterface(XTextTablesSupplier.class, msf);
@@ -130,14 +116,7 @@ public class SwXTextTables extends TestCase {
         tEnv.addObjRelation( "TEXTDOC", xTextDoc );
         tEnv.addObjRelation( "ROW", Integer.valueOf( nRow ) );
         tEnv.addObjRelation( "COL", Integer.valueOf( nCol ) );
-        try {
-            tEnv.addObjRelation( "INST", SOfficeFactory.createTextTable( xTextDoc ));
-        }
-        catch( Exception uE ) {
-            uE.printStackTrace( log );
-            throw new StatusException("Couldn't create TextTable : "
-                    + uE.getMessage(), uE);
-        }
+        tEnv.addObjRelation( "INST", SOfficeFactory.createTextTable( xTextDoc ));
 
         return tEnv;
     } // finish method getTestEnvironment

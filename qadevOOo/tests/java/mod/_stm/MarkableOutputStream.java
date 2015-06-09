@@ -21,7 +21,6 @@ package mod._stm;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -88,7 +87,7 @@ public class MarkableOutputStream extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -98,18 +97,13 @@ public class MarkableOutputStream extends TestCase {
         Object mistream = null;
         XInterface aConnect;
 
-        try {
-            aPipe = xMSF.createInstance("com.sun.star.io.Pipe");
-            mistream = xMSF.createInstance
-                ("com.sun.star.io.MarkableInputStream");
-            mostream = xMSF.createInstance
-                ("com.sun.star.io.MarkableOutputStream");
-            aConnect = (XInterface)xMSF.createInstance
-                ("com.sun.star.io.DataOutputStream");
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e) ;
-        }
+        aPipe = xMSF.createInstance("com.sun.star.io.Pipe");
+        mistream = xMSF.createInstance
+            ("com.sun.star.io.MarkableInputStream");
+        mostream = xMSF.createInstance
+            ("com.sun.star.io.MarkableOutputStream");
+        aConnect = (XInterface)xMSF.createInstance
+            ("com.sun.star.io.DataOutputStream");
 
         // Creating construction :
         // MarkableOutputStream -> Pipe -> MarkableInputStream

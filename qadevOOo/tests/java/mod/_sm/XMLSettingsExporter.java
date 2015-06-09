@@ -112,7 +112,7 @@ public class XMLSettingsExporter extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
         final short expMargin = 67 ;
@@ -120,23 +120,18 @@ public class XMLSettingsExporter extends TestCase {
         FilterChecker filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class), filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Math.XMLSettingsExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xMathDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Math.XMLSettingsExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xMathDoc);
 
-            // setting a formula in document
-            XPropertySet xPS = UnoRuntime.queryInterface
-                (XPropertySet.class, xMathDoc) ;
+        // setting a formula in document
+        XPropertySet xPS = UnoRuntime.queryInterface
+            (XPropertySet.class, xMathDoc) ;
 
-            xPS.setPropertyValue("TopMargin", Short.valueOf(expMargin)) ;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        xPS.setPropertyValue("TopMargin", Short.valueOf(expMargin)) ;
 
         // checking tags required
 

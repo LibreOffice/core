@@ -17,7 +17,6 @@
  */
 package complex.dbaccess;
 
-import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;

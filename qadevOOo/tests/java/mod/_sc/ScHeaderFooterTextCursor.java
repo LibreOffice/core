@@ -134,7 +134,7 @@ public class ScHeaderFooterTextCursor extends TestCase {
     * </ul>
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XPropertySet PropSet;
@@ -146,21 +146,10 @@ public class ScHeaderFooterTextCursor extends TestCase {
             xSpreadsheetDoc );
 
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
-        try{
-            PageStyles = (XNameAccess) AnyConverter.toObject(
-                new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
-            StdStyle = (XStyle) AnyConverter.toObject(
-                        new Type(XStyle.class),PageStyles.getByName("Default"));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.container.NoSuchElementException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        }
+        PageStyles = (XNameAccess) AnyConverter.toObject(
+            new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
+        StdStyle = (XStyle) AnyConverter.toObject(
+                    new Type(XStyle.class),PageStyles.getByName("Default"));
 
         //get the property-set
         PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
@@ -169,39 +158,14 @@ public class ScHeaderFooterTextCursor extends TestCase {
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
-        try {
-            RPHC = (XHeaderFooterContent) AnyConverter.toObject(
-                new Type(XHeaderFooterContent.class),
-                    PropSet.getPropertyValue("RightPageHeaderContent"));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        }
+        RPHC = (XHeaderFooterContent) AnyConverter.toObject(
+            new Type(XHeaderFooterContent.class),
+                PropSet.getPropertyValue("RightPageHeaderContent"));
 
         XText center = RPHC.getCenterText();
         center.setString("CENTER");
 
-        try {
-            PropSet.setPropertyValue("RightPageHeaderContent",RPHC);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set HeaderContent", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set HeaderContent", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set HeaderContent", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set HeaderContent", e);
-        }
+        PropSet.setPropertyValue("RightPageHeaderContent",RPHC);
 
         // create testobject here
         oObj = center.createTextCursor();

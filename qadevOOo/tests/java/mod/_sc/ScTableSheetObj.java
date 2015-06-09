@@ -180,7 +180,7 @@ public class ScTableSheetObj extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         XInterface oObj = null;
 
         log.println("getting sheets");
@@ -193,37 +193,21 @@ public class ScTableSheetObj extends TestCase {
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(
                                             XIndexAccess.class, xSpreadsheets);
 
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                             new Type(XSpreadsheet.class),
-                             oIndexAccess.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                         new Type(XSpreadsheet.class),
+                         oIndexAccess.getByIndex(0));
 
         log.println("filling some cells");
 
-        try {
-            oSheet.getCellByPosition(5, 5).setValue(15);
-            oSheet.getCellByPosition(1, 4).setValue(10);
-            oSheet.getCellByPosition(2, 0).setValue(-5.15);
-            oSheet.getCellByPosition(8, 8).setFormula("= B5 + C1");
-            // fill cells for XSheetOtline::autoutline
-            oSheet.getCellByPosition(6, 6).setValue(3);
-            oSheet.getCellByPosition(7, 6).setValue(3);
-            oSheet.getCellByPosition(8, 6).setFormula("= SUM(G7:H7)");
-            oSheet.getCellByPosition(9, 6).setFormula("= G7*I7");
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Exception occurred while filling cells", e);
-        }
+        oSheet.getCellByPosition(5, 5).setValue(15);
+        oSheet.getCellByPosition(1, 4).setValue(10);
+        oSheet.getCellByPosition(2, 0).setValue(-5.15);
+        oSheet.getCellByPosition(8, 8).setFormula("= B5 + C1");
+        // fill cells for XSheetOtline::autoutline
+        oSheet.getCellByPosition(6, 6).setValue(3);
+        oSheet.getCellByPosition(7, 6).setValue(3);
+        oSheet.getCellByPosition(8, 6).setFormula("= SUM(G7:H7)");
+        oSheet.getCellByPosition(9, 6).setFormula("= G7*I7");
 
         oObj = UnoRuntime.queryInterface(XInterface.class, oSheet);
 

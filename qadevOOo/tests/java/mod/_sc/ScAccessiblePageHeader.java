@@ -20,7 +20,6 @@ package mod._sc;
 
 import java.io.PrintWriter;
 
-import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -89,7 +88,7 @@ public class ScAccessiblePageHeader extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         // inserting some content to have non-empty page preview
         XCell xCell = null;
@@ -118,30 +117,22 @@ public class ScAccessiblePageHeader extends TestCase {
         XController xController = aModel.getCurrentController();
 
         // switching to 'Page Preview' mode
-        try {
-            XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
-            // Because it's an in/out parameter we must use an array of URL objects.
-            URL[] aParseURL = new URL[1];
-            aParseURL[0] = new URL();
-            aParseURL[0].Complete = ".uno:PrintPreview";
-            xParser.parseStrict(aParseURL);
-            URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
-            if(xDispatcher != null)
-                xDispatcher.dispatch( aURL, null );
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't change mode"));
-        }
+        XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+        XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+                Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
+        // Because it's an in/out parameter we must use an array of URL objects.
+        URL[] aParseURL = new URL[1];
+        aParseURL[0] = new URL();
+        aParseURL[0].Complete = ".uno:PrintPreview";
+        xParser.parseStrict(aParseURL);
+        URL aURL = aParseURL[0];
+        XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
+        if(xDispatcher != null)
+            xDispatcher.dispatch( aURL, null );
 
         XInterface oObj = null;
         for (int i = 0;; ++i) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            Thread.sleep(500);
             try {
                 XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
                 XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -172,21 +163,11 @@ public class ScAccessiblePageHeader extends TestCase {
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
         XStyle StdStyle = null;
 
-        try{
-            XNameAccess PageStyles = (XNameAccess) AnyConverter.toObject(
-                            new Type(XNameAccess.class),
-                                        StyleFamNames.getByName("PageStyles"));
-            StdStyle = (XStyle) AnyConverter.toObject(
-                new Type(XStyle.class), PageStyles.getByName("Default"));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch(com.sun.star.container.NoSuchElementException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by name", e);
-        } catch (com.sun.star.lang.IllegalArgumentException iae) {
-           throw new StatusException("Couldn't convert any", iae);
-        }
+        XNameAccess PageStyles = (XNameAccess) AnyConverter.toObject(
+                        new Type(XNameAccess.class),
+                                    StyleFamNames.getByName("PageStyles"));
+        StdStyle = (XStyle) AnyConverter.toObject(
+            new Type(XStyle.class), PageStyles.getByName("Default"));
 
         //get the property-set
         final XPropertySet PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
@@ -195,20 +176,9 @@ public class ScAccessiblePageHeader extends TestCase {
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
-        try {
-            RPHC = (XHeaderFooterContent) AnyConverter.toObject(
-                new Type(XHeaderFooterContent.class),
-                    PropSet.getPropertyValue("RightPageHeaderContent"));
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get HeaderContent", e);
-        }
+        RPHC = (XHeaderFooterContent) AnyConverter.toObject(
+            new Type(XHeaderFooterContent.class),
+                PropSet.getPropertyValue("RightPageHeaderContent"));
 
         final XHeaderFooterContent RPHC2 = RPHC;
 

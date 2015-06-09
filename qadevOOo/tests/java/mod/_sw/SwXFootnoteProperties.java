@@ -84,7 +84,7 @@ public class SwXFootnoteProperties extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-            TestParameters Param, PrintWriter log ) throws StatusException {
+            TestParameters Param, PrintWriter log ) throws Exception {
         XFootnotesSupplier oInterface = null;
         XInterface oObj = null;
         XFootnote oFootnote;
@@ -94,24 +94,14 @@ public class SwXFootnoteProperties extends TestCase {
         XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a footnote");
 
-        try {
-            oFootnote = UnoRuntime.queryInterface(XFootnote.class,
-                    msf.createInstance("com.sun.star.text.Footnote"));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create footnote", e);
-        }
+        oFootnote = UnoRuntime.queryInterface(XFootnote.class,
+                msf.createInstance("com.sun.star.text.Footnote"));
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println("inserting the footnote into text document");
-        try {
-            oText.insertTextContent(oCursor, oFootnote, false);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert the footnote", e);
-        }
+        oText.insertTextContent(oCursor, oFootnote, false);
 
         oInterface = UnoRuntime.queryInterface(XFootnotesSupplier.class, xTextDoc);
         oObj = oInterface.getFootnoteSettings();

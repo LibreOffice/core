@@ -157,7 +157,7 @@ public abstract class TestCase {
      * @see #getTestEnvironment
      */
     protected abstract TestEnvironment createTestEnvironment(
-            TestParameters tParam, PrintWriter log );
+            TestParameters tParam, PrintWriter log ) throws Exception;
 
     /**
      * @return the name of the object

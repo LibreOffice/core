@@ -20,14 +20,12 @@ package mod._ucpdav;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XContentIdentifierFactory;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
@@ -42,35 +40,23 @@ public class WebDAVContentProvider extends TestCase {
      */
     @Override
     public TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
         XInterface xInt;
 
         log.println("creating WebDAVContentProvider instance");
-        try {
-            xInt = (XInterface)xMSF.createInstance(
-                    "com.sun.star.ucb.WebDAVContentProvider");
-        } catch (Exception e) {
-            log.println("Unexpected exception " + e.getMessage());
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        xInt = (XInterface)xMSF.createInstance(
+                "com.sun.star.ucb.WebDAVContentProvider");
 
         TestEnvironment tEnv = new TestEnvironment(xInt);
 
         log.println("creating XContentIdentifierFactory");
         XContentIdentifierFactory xCIF;
 
-        try {
-            xCIF = UnoRuntime.queryInterface(
-                    XContentIdentifierFactory.class,
-                    xMSF.createInstance(
-                            "com.sun.star.comp.ucb.UniversalContentBroker"));
-        } catch (Exception e) {
-            log.println("Unexpected exception " + e.getMessage());
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        xCIF = UnoRuntime.queryInterface(
+                XContentIdentifierFactory.class,
+                xMSF.createInstance(
+                        "com.sun.star.comp.ucb.UniversalContentBroker"));
 
         tEnv.addObjRelation("FACTORY", xCIF);
 

@@ -31,8 +31,10 @@ import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -169,7 +171,7 @@ public class ObjectInputStream extends TestCase {
     * @see com.sun.star.cmp.PersistObject
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         System.out.println("create TestEnvironment started.");
         XMultiServiceFactory xMSF = Param.getMSF();
@@ -179,24 +181,18 @@ public class ObjectInputStream extends TestCase {
         Object mistream = null;
         Object istream = null;
         Object xConnect = null;
-        try {
-            istream = xMSF.createInstance
-                ("com.sun.star.io.ObjectInputStream");
-            ostream = xMSF.createInstance
-                ("com.sun.star.io.ObjectOutputStream");
-            aPipe = xMSF.createInstance
-                ("com.sun.star.io.Pipe");
-            mistream = xMSF.createInstance
-                ("com.sun.star.io.MarkableInputStream");
-            mostream = xMSF.createInstance
-                ("com.sun.star.io.MarkableOutputStream");
-            xConnect = xMSF.createInstance
-                ("com.sun.star.io.DataInputStream") ;
-
-        } catch( com.sun.star.uno.Exception e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        istream = xMSF.createInstance
+            ("com.sun.star.io.ObjectInputStream");
+        ostream = xMSF.createInstance
+            ("com.sun.star.io.ObjectOutputStream");
+        aPipe = xMSF.createInstance
+            ("com.sun.star.io.Pipe");
+        mistream = xMSF.createInstance
+            ("com.sun.star.io.MarkableInputStream");
+        mostream = xMSF.createInstance
+            ("com.sun.star.io.MarkableOutputStream");
+        xConnect = xMSF.createInstance
+            ("com.sun.star.io.DataInputStream") ;
         // Creating construction :
         // ObjectOutputStream -> MarkableOutputStream -> Pipe ->
         // -> MarkableInputStream -> ObjectInputStream

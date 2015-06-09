@@ -20,7 +20,6 @@ package mod._i18n;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -53,21 +52,11 @@ public class CharacterClassification extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.i18n.CharacterClassification" );
-        } catch( com.sun.star.uno.Exception e ) {
-            log.println("CharacterClassification Service not available" );
-            throw new StatusException
-                ( "CharacterClassification Service not available", e );
-        }
-
-        oObj = (XInterface) oInterface;
+                                                    throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
+            ( "com.sun.star.i18n.CharacterClassification" );
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for CharacterClassification object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

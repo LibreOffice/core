@@ -20,7 +20,6 @@ package mod._cmdmail;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -33,23 +32,13 @@ public class SimpleCommandMail extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
+                                                    throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.system.SimpleCommandMail" );
 
-            if (oInterface == null) log.println("!!! NULL !!!") ;
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
-
-        oObj = (XInterface) oInterface;
+        if (oInterface == null) log.println("!!! NULL !!!") ;
+        XInterface oObj = (XInterface) oInterface;
 
         log.println("ImplementationName: "+util.utils.getImplName(oObj));
 

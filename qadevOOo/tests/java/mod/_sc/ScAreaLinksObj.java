@@ -98,45 +98,29 @@ protected void initialize( TestParameters tParam, PrintWriter log ) {
     * link collection is passed as a tested object.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log){
+    public synchronized TestEnvironment createTestEnvironment(
+            TestParameters Param, PrintWriter log) throws Exception {
 
-      XInterface oObj = null;
-      TestEnvironment tEnv = null ;
-
-      try {
+        XInterface oObj = null;
+        TestEnvironment tEnv = null;
 
         // creation of testobject here
-        XPropertySet props = UnoRuntime.queryInterface
-            (XPropertySet.class, xSheetDoc);
-        oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),props.getPropertyValue("AreaLinks")) ;
-        XAreaLinks links = null ;
+        XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class,
+                xSheetDoc);
+        oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),
+                props.getPropertyValue("AreaLinks"));
+        XAreaLinks links = null;
 
         // adding one link into collection (for best testing)
-        links = UnoRuntime.queryInterface(XAreaLinks.class, oObj) ;
-        CellAddress addr = new CellAddress ((short) 1,2,3) ;
+        links = UnoRuntime.queryInterface(XAreaLinks.class, oObj);
+        CellAddress addr = new CellAddress((short) 1, 2, 3);
         String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
-        links.insertAtPosition (addr, aSourceArea, "a2:b5", "", "") ;
+        links.insertAtPosition(addr, aSourceArea, "a2:b5", "", "");
 
         // creating test environment
         tEnv = new TestEnvironment(oObj);
 
-      } catch (com.sun.star.beans.UnknownPropertyException e) {
-        log.println ("Exception occurred while creating test Object.") ;
-        e.printStackTrace(log) ;
-        throw new StatusException("Couldn't create test object", e);
-      } catch (com.sun.star.lang.WrappedTargetException e) {
-        log.println ("Exception occurred while creating test Object.") ;
-        e.printStackTrace(log) ;
-        throw new StatusException("Couldn't create test object", e);
-      } catch (com.sun.star.lang.IllegalArgumentException e) {
-        log.println ("Exception occurred while creating test Object.") ;
-        e.printStackTrace(log) ;
-        throw new StatusException("Couldn't create test object", e);
-      }
-
-       return tEnv ;
+        return tEnv;
     }
 
 }    // finish class ScAreaLinksObj

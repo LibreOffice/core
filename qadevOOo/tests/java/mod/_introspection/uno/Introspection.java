@@ -45,18 +45,11 @@ public class Introspection extends TestCase {
     * Creates service <code>com.sun.star.comp.stoc.Introspection</code>.
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.comp.stoc.Introspection" );
-        } catch( com.sun.star.uno.Exception e ) {
-            log.println("Introspection Service not available" );
-        }
-        oObj = (XInterface) oInterface;
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
+            ( "com.sun.star.comp.stoc.Introspection" );
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for Introspection object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

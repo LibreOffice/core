@@ -73,7 +73,7 @@ public class AccessibleOLEShape extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -91,22 +91,8 @@ public class AccessibleOLEShape extends TestCase {
 
         log.println("Inserting a Chart");
 
-        try {
-            shape_props.
-                setPropertyValue("CLSID","12DCAE26-281F-416F-a234-c3086127382e");
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't change property", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't change property", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't change property", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't change property", e);
-        }
+        shape_props.
+            setPropertyValue("CLSID","12DCAE26-281F-416F-a234-c3086127382e");
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

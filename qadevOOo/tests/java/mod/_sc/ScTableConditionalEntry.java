@@ -102,7 +102,7 @@ public class ScTableConditionalEntry extends TestCase {
     * @see com.sun.star.sheet.TableConditionalEntry
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         log.println("getting sheets");
@@ -112,19 +112,8 @@ public class ScTableConditionalEntry extends TestCase {
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
 
         log.println("filling some cells");
         try {
@@ -139,47 +128,17 @@ public class ScTableConditionalEntry extends TestCase {
         Object CFormat = null;
         XPropertySet Props = null;
 
-        try {
-            Props = UnoRuntime.queryInterface(XPropertySet.class, oSheet);
-            CFormat = Props.getPropertyValue("ConditionalFormat");
-            if (utils.isVoid(CFormat)) {
-                log.println("Property 'ConditionalFormat' is void");
-            }
-        } catch (com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
+        Props = UnoRuntime.queryInterface(XPropertySet.class, oSheet);
+        CFormat = Props.getPropertyValue("ConditionalFormat");
+        if (utils.isVoid(CFormat)) {
+            log.println("Property 'ConditionalFormat' is void");
         }
 
-        try {
-            XSheetConditionalEntries xSCE = UnoRuntime.queryInterface(XSheetConditionalEntries.class, CFormat);
-            xSCE.addNew(Conditions());
-            Props.setPropertyValue("ConditionalFormat", xSCE);
-            oObj = (XSheetConditionalEntry) AnyConverter.toObject(
-                    new Type(XSheetConditionalEntry.class),xSCE.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while getting Entry", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while getting Entry", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while getting Entry", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while getting Entry", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while getting Entry", e);
-        }
+        XSheetConditionalEntries xSCE = UnoRuntime.queryInterface(XSheetConditionalEntries.class, CFormat);
+        xSCE.addNew(Conditions());
+        Props.setPropertyValue("ConditionalFormat", xSCE);
+        oObj = (XSheetConditionalEntry) AnyConverter.toObject(
+                new Type(XSheetConditionalEntry.class),xSCE.getByIndex(0));
 
         log.println("creating a new environment for object");
         TestEnvironment tEnv = new TestEnvironment(oObj);

@@ -111,7 +111,7 @@ public class XMLImporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-        (TestParameters tParam, PrintWriter log) throws StatusException {
+        (TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         Object oInt = null ;
@@ -122,13 +122,8 @@ public class XMLImporter extends TestCase {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
 
-        try {
-            oInt = xMSF.createInstance
-                ("com.sun.star.comp.Impress.XMLImporter") ;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        oInt = xMSF.createInstance
+            ("com.sun.star.comp.Impress.XMLImporter") ;
 
         oObj = (XInterface) oInt ;
 

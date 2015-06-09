@@ -70,24 +70,13 @@ public class ScIndexEnumeration_SpreadsheetViewPanesEnumeration extends TestCase
     }
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XModel xm = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
         XController xc = xm.getCurrentController();
         XIndexAccess xIA = UnoRuntime.queryInterface(XIndexAccess.class, xc);
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-                        new Type(XInterface.class),xIA.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+                    new Type(XInterface.class),xIA.getByIndex(0));
 
         XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,xIA);
 

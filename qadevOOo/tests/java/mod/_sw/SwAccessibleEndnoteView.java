@@ -19,7 +19,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -61,7 +60,7 @@ public class SwAccessibleEndnoteView extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XInterface oEndnote = null;
@@ -69,48 +68,24 @@ public class SwAccessibleEndnoteView extends TestCase {
         log.println( "Creating a test environment" );
         XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a endnote");
-        try {
-            oEndnote = UnoRuntime.queryInterface(XInterface.class,
-                    msf.createInstance("com.sun.star.text.Endnote"));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create endnote", e);
-        }
+        oEndnote = UnoRuntime.queryInterface(XInterface.class,
+                msf.createInstance("com.sun.star.text.Endnote"));
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println("inserting the footnote into text document");
         XTextContent xTC = UnoRuntime.queryInterface(XTextContent.class, oEndnote);
-        try {
-            oText.insertTextContent(oCursor, xTC, false);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert the endnote", e);
-        }
+        oText.insertTextContent(oCursor, xTC, false);
 
         XController xController = xTextDoc.getCurrentController();
         XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
         xController);
         XPropertySet xPropSet = xViewSetSup.getViewSettings();
 
-        try {
-            //change zoom value to 10%
-            //footer should be in the vissible area of the document
-            xPropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        }  catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set propertyValue...", e);
-        }
+        //change zoom value to 10%
+        //footer should be in the vissible area of the document
+        xPropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 

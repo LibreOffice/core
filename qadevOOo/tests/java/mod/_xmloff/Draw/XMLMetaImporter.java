@@ -110,7 +110,7 @@ public class XMLMetaImporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam,PrintWriter log ) {
+            (TestParameters tParam,PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
         Object oInt = null ;
@@ -121,12 +121,7 @@ public class XMLMetaImporter extends TestCase {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
 
-        try {
-            oInt = xMSF.createInstance("com.sun.star.comp.Draw.XMLMetaImporter") ;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        oInt = xMSF.createInstance("com.sun.star.comp.Draw.XMLMetaImporter") ;
 
         oObj = (XInterface) oInt ;
 

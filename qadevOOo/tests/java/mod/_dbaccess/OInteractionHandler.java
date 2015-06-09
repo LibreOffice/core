@@ -20,8 +20,6 @@ package mod._dbaccess;
 
 import java.io.PrintWriter;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -75,26 +73,10 @@ public class OInteractionHandler extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            oInterface = Param.getMSF().createInstance(
-                            "com.sun.star.sdb.InteractionHandler" );
-
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Service not available" );
-            throw new StatusException("Service not available", e) ;
-        }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException(Status.failed("Service wasn't created")) ;
-        }
-
-          oObj = (XInterface) oInterface;
+                                                    throws Exception {
+        Object oInterface = Param.getMSF().createInstance(
+                          "com.sun.star.sdb.InteractionHandler" );
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

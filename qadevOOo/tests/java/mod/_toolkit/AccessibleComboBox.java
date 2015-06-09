@@ -41,7 +41,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
@@ -79,17 +78,11 @@ public class AccessibleComboBox extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
 
-        try {
-            oObj = (XInterface) Param.getMSF().createInstance(
-                           "com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
+        oObj = (XInterface) Param.getMSF().createInstance(
+                       "com.sun.star.awt.Toolkit");
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);

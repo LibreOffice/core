@@ -116,7 +116,7 @@ public class XMLSettingsExporter extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -124,23 +124,17 @@ public class XMLSettingsExporter extends TestCase {
         FilterChecker filter = new FilterChecker(log) ;
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Draw.XMLSettingsExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class, oObj);
-            xEx.setSourceDocument(xDrawDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Draw.XMLSettingsExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class, oObj);
+        xEx.setSourceDocument(xDrawDoc);
 
-            //set some settings
-            XModel xDrawModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
-            XController xController = xDrawModel.getCurrentController();
-            XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
-            xPropSet.setPropertyValue("IsLayerMode", Boolean.TRUE);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        //set some settings
+        XModel xDrawModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
+        XController xController = xDrawModel.getCurrentController();
+        XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
+        xPropSet.setPropertyValue("IsLayerMode", Boolean.TRUE);
 
         // Checking Head Tag existence and that property has changed
         filter.addTag(new XMLTools.Tag ("office:document-settings"));

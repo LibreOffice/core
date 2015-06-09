@@ -20,7 +20,6 @@ package mod._stm;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -60,18 +59,13 @@ public class Pipe extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         Object oInterface = null;
 
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance( "com.sun.star.io.Pipe" );
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        XMultiServiceFactory xMSF = Param.getMSF();
+        oInterface = xMSF.createInstance( "com.sun.star.io.Pipe" );
 
         oObj = (XInterface) oInterface;
 

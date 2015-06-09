@@ -21,8 +21,6 @@ package mod._sd;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
-import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -147,23 +145,18 @@ public class DrawController_PresentationView extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
         XMultiServiceFactory xMSF = Param.getMSF();
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(xMSF);
 
-        try {
-            log.println( "creating two impress documents" );
-            xSecondDrawDoc = SOF.createImpressDoc(null);
-            util.utils.pause(1000);
-            xDrawDoc = SOF.createImpressDoc(null);
-            util.utils.pause(1000);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println( "creating two impress documents" );
+        xSecondDrawDoc = SOF.createImpressDoc(null);
+        util.utils.pause(1000);
+        xDrawDoc = SOF.createImpressDoc(null);
+        util.utils.pause(1000);
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
@@ -171,20 +164,8 @@ public class DrawController_PresentationView extends TestCase {
         XDrawPages the_pages = oDPS.getDrawPages();
         XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class,the_pages);
 
-        XDrawPage oDrawPage = null;
-        try {
-            oDrawPage = (XDrawPage) AnyConverter.toObject(
-                        new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        }
+        XDrawPage oDrawPage = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(0));
 
         //put something on the drawpage
         log.println( "inserting some Shapes" );
@@ -201,12 +182,7 @@ public class DrawController_PresentationView extends TestCase {
         util.utils.pause(1000);
 
         log.println("switch to PresentationView...");
-        try{
-            utils.dispatchURL(xMSF, xDrawDoc, ".uno:DiaMode");
-        } catch (Exception e){
-            e.printStackTrace(log);
-            throw new StatusException(e, Status.failed(e.getMessage()));
-        }
+        utils.dispatchURL(xMSF, xDrawDoc, ".uno:DiaMode");
 
         utils.pause(500);
 
@@ -231,14 +207,10 @@ public class DrawController_PresentationView extends TestCase {
 
         Object oShapeCol1 = null;
         Object oShapeCol2 = null;
-        try {
-            oShapeCol1 = xMSF.
-                createInstance("com.sun.star.drawing.ShapeCollection");
-            oShapeCol2 = xMSF.
-                createInstance("com.sun.star.drawing.ShapeCollection");
-        } catch(com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create instance"));
-        }
+        oShapeCol1 = xMSF.
+            createInstance("com.sun.star.drawing.ShapeCollection");
+        oShapeCol2 = xMSF.
+            createInstance("com.sun.star.drawing.ShapeCollection");
 
         XShapes xShapes1 = UnoRuntime.queryInterface(XShapes.class, oShapeCol1);
         XShapes xShapes2 = UnoRuntime.queryInterface(XShapes.class, oShapeCol2);

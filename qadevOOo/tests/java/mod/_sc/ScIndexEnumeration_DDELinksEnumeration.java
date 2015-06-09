@@ -75,7 +75,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -89,18 +89,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
 
         // load the predefined testdocument
         String testdoc = utils.getFullTestURL("ScDDELinksObj.ods");
-        try {
-            oDoc = SOfficeFactory.getFactory(oMSF).loadDocument(testdoc);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't load test document", e);
-        } catch (com.sun.star.io.IOException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't load test document", e);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't load test document", e);
-        }
+        oDoc = SOfficeFactory.getFactory(oMSF).loadDocument(testdoc);
 
         log.println("getting sheets");
         XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
@@ -108,57 +97,26 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
 
         testdoc = utils.getFullTestDocName("ScDDELinksObj.ods");
         log.println("filling some cells");
-        try {
-            oSheet.getCellByPosition(5, 5).setFormula(
-                "=DDE(\"soffice\";\""+testdoc+"\";\"Sheet1.A1\"");
-            oSheet.getCellByPosition(1, 4).setFormula(
-                "=DDE(\"soffice\";\""+testdoc+"\";\"Sheet1.A1\"");
-            oSheet.getCellByPosition(2, 0).setFormula(
-                "=DDE(\"soffice\";\""+testdoc+"\";\"Sheet1.A1\"");
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while filling cells", e);
-        }
+        oSheet.getCellByPosition(5, 5).setFormula(
+            "=DDE(\"soffice\";\""+testdoc+"\";\"Sheet1.A1\"");
+        oSheet.getCellByPosition(1, 4).setFormula(
+            "=DDE(\"soffice\";\""+testdoc+"\";\"Sheet1.A1\"");
+        oSheet.getCellByPosition(2, 0).setFormula(
+            "=DDE(\"soffice\";\""+testdoc+"\";\"Sheet1.A1\"");
 
-        try {
-            log.println("Getting test object ") ;
+        log.println("Getting test object ") ;
 
-            // Getting named ranges.
-            XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
-            oObj = (XInterface)AnyConverter.toObject(
-                new Type(XInterface.class),docProps.getPropertyValue("DDELinks"));
-            log.println("Creating object - " +
-                                        ((oObj == null) ? "FAILED" : "OK"));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document", e) ;
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document", e) ;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(
-                "Error getting test object from spreadsheet document", e) ;
-        }
+        // Getting named ranges.
+        XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+        oObj = (XInterface)AnyConverter.toObject(
+            new Type(XInterface.class),docProps.getPropertyValue("DDELinks"));
+        log.println("Creating object - " +
+                                    ((oObj == null) ? "FAILED" : "OK"));
 
         XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 

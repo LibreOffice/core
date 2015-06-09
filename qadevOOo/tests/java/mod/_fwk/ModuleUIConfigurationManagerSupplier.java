@@ -21,31 +21,21 @@ package mod._fwk;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-/**
- *
- */
 public class ModuleUIConfigurationManagerSupplier extends TestCase{
     XInterface oObj = null;
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        TestEnvironment tEnv = null;
-        try {
-            XMultiServiceFactory xMSF = tParam.getMSF();
-            oObj = (XInterface)xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
-            tEnv = new TestEnvironment(oObj);
-            tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigurationManager",
-                                            "com.sun.star.frame.StartModule");
-            tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigManagerImplementationName", "com.sun.star.comp.framework.ModuleUIConfigurationManager");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            throw new StatusException("Cannot create test object", e);
-        }
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
+        XMultiServiceFactory xMSF = tParam.getMSF();
+        oObj = (XInterface)xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+        tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigurationManager",
+                                        "com.sun.star.frame.StartModule");
+        tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigManagerImplementationName", "com.sun.star.comp.framework.ModuleUIConfigurationManager");
         return tEnv;
     }
 

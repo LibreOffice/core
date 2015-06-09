@@ -116,7 +116,7 @@ public class XMLContentExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-        (TestParameters tParam, PrintWriter log ) throws StatusException {
+        (TestParameters tParam, PrintWriter log ) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -125,24 +125,19 @@ public class XMLContentExporter extends TestCase {
         FilterChecker filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Impress.XMLContentExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            xEx.setSourceDocument(xImpressDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Impress.XMLContentExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        xEx.setSourceDocument(xImpressDoc);
 
-            // assigning a draw page a new name
-            XDrawPagesSupplier xPagesSup = UnoRuntime.queryInterface
-            (XDrawPagesSupplier.class, xImpressDoc) ;
-            XDrawPages xPages = xPagesSup.getDrawPages() ;
-            XNamed xPageName = UnoRuntime.queryInterface
-                (XNamed.class, xPages.getByIndex(0)) ;
-            xPageName.setName(expPageName) ;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        // assigning a draw page a new name
+        XDrawPagesSupplier xPagesSup = UnoRuntime.queryInterface
+        (XDrawPagesSupplier.class, xImpressDoc) ;
+        XDrawPages xPages = xPagesSup.getDrawPages() ;
+        XNamed xPageName = UnoRuntime.queryInterface
+            (XNamed.class, xPages.getByIndex(0)) ;
+        xPageName.setName(expPageName) ;
 
         // adding tags required to be in XML data exported.
         filter.addTag(new XMLTools.Tag("office:document-content")) ;

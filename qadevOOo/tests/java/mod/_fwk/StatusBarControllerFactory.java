@@ -23,42 +23,23 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-/**
- */
 public class StatusBarControllerFactory extends TestCase {
     XInterface oObj = null;
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        TestEnvironment tEnv = null;
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
-        try {
-            oObj = (XInterface)xMSF.createInstance("com.sun.star.comp.framework.StatusBarControllerFactory");
+        oObj = (XInterface)xMSF.createInstance("com.sun.star.comp.framework.StatusBarControllerFactory");
 
-            tEnv = new TestEnvironment(oObj);
-        }
-        catch(com.sun.star.uno.Exception e) {
-            throw new StatusException("Cannot create test object 'StatusBarControllerFactory'", e);
-        }
+        TestEnvironment tEnv = new TestEnvironment(oObj);
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
-        try {
-            Object o = xProp.getPropertyValue("DefaultContext");
-            XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class, o);
-            tEnv.addObjRelation("DC", xContext);
-        }
-        catch(com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Cannot get the 'DefaultContext' for XMultiComponentFactory test.");
-            e.printStackTrace(log);
-        }
-        catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Cannot get the 'DefaultContext' for XMultiComponentFactory test.");
-            e.printStackTrace(log);
-        }
+        Object o = xProp.getPropertyValue("DefaultContext");
+        XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class, o);
+        tEnv.addObjRelation("DC", xContext);
         return tEnv;
     }
 }

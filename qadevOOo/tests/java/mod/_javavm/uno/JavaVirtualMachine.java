@@ -21,7 +21,6 @@ package mod._javavm.uno;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -51,17 +50,12 @@ public class JavaVirtualMachine extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
 
-        try {
-            XInterface xInt = (XInterface)xMSF.createInstance(
-                    "com.sun.star.java.JavaVirtualMachine");
+        XInterface xInt = (XInterface)xMSF.createInstance(
+                "com.sun.star.java.JavaVirtualMachine");
 
-            return new TestEnvironment(xInt);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        return new TestEnvironment(xInt);
     }
 }

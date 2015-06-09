@@ -25,7 +25,6 @@ import com.sun.star.form.XLoadable;
 
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import ifc.form._XUpdateBroadcaster.UpdateChecker;
@@ -165,7 +164,7 @@ public class OListBoxModel extends GenericModelTest {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 
         tEnv.addObjRelation("XUpdateBroadcaster.Checker",
@@ -187,7 +186,7 @@ public class OListBoxModel extends GenericModelTest {
                 this.ChangePropertyName=ChangePropertyName;
             }
 
-            public void update() throws Exception {
+            public void update() throws com.sun.star.uno.Exception {
                 if (!formLoaderF.isLoaded()) {
                     formLoaderF.load();
                 }
@@ -206,7 +205,7 @@ public class OListBoxModel extends GenericModelTest {
                 update.updateRow();
             }
 
-            public boolean wasCommited() throws Exception {
+            public boolean wasCommited() throws com.sun.star.uno.Exception {
                 formLoaderF.reload();
 
                 short[] getS = (short[]) ps.getPropertyValue(ChangePropertyName);

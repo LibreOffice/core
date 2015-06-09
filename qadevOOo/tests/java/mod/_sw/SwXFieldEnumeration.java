@@ -141,13 +141,8 @@ public class SwXFieldEnumeration extends TestCase {
         the_Cursor = the_Text.createTextCursor();
         the_Field = UnoRuntime.queryInterface(XTextContent.class, oObj);
 
-        try {
-            xTF.attachTextFieldMaster(PFieldMaster);
-            the_Text.insertTextContent(the_Cursor,the_Field,false);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't create TextField", e );
-        }
+        xTF.attachTextFieldMaster(PFieldMaster);
+        the_Text.insertTextContent(the_Cursor,the_Field,false);
 
         // create testobject here
         XTextFieldsSupplier oTFS = UnoRuntime.queryInterface( XTextFieldsSupplier.class, xTextDoc );

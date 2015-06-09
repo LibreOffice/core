@@ -19,7 +19,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -70,7 +69,7 @@ public class SwAccessibleTextFrameView extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XTextFrame oFrame1 = null;
@@ -82,22 +81,17 @@ public class SwAccessibleTextFrameView extends TestCase {
         SOfficeFactory.getFactory( Param.getMSF() );
         // creating Frames
         log.println( "creating Frames" );
-        try {
-            oFrame1 = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
-            oPropSet = UnoRuntime.queryInterface(
-                XPropertySet.class, oFrame1 );
-            oPropSet.setPropertyValue("AnchorType",
-                TextContentAnchorType.AS_CHARACTER);
-            oText = xTextDoc.getText();
-            oCursor = oText.createTextCursor();
+        oFrame1 = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
+        oPropSet = UnoRuntime.queryInterface(
+            XPropertySet.class, oFrame1 );
+        oPropSet.setPropertyValue("AnchorType",
+            TextContentAnchorType.AS_CHARACTER);
+        oText = xTextDoc.getText();
+        oCursor = oText.createTextCursor();
 
-            log.println( "inserting Frame1" );
-            XTextContent the_content = UnoRuntime.queryInterface(XTextContent.class, oFrame1);
-            oText.insertTextContent(oCursor, the_content, true);
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert TextFrame", e);
-        }
+        log.println( "inserting Frame1" );
+        XTextContent the_content = UnoRuntime.queryInterface(XTextContent.class, oFrame1);
+        oText.insertTextContent(oCursor, the_content, true);
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 

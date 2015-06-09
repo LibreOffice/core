@@ -21,28 +21,18 @@ import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.utils;
 
 
 public class UnoControlContainerModel extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment(TestParameters param,
-                                                 PrintWriter log) {
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) param.getMSF().createInstance(
-                           "com.sun.star.awt.UnoControlContainerModel");
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create " +
-                                      "UnoControlContainerModel", e);
-        }
+                                                 PrintWriter log) throws Exception {
+        XInterface oObj = (XInterface) param.getMSF().createInstance(
+                       "com.sun.star.awt.UnoControlContainerModel");
 
         log.println(
                 "creating a new environment for UnoControlContainer object");

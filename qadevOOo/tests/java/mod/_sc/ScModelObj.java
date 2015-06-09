@@ -35,7 +35,6 @@ import java.io.File;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -116,7 +115,7 @@ public class ScModelObj extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         // creation of the testobject here
         // first we write what we are intend to do to log file
         log.println("craeting a test environment");
@@ -137,14 +136,9 @@ public class ScModelObj extends TestCase {
             util.DesktopTools.closeDoc(oComp);
         }
 
-        try {
-            log.println("creating two spreadsheet documents");
-            xSpreadsheetDoc = SOF.createCalcDoc(null);
-            xSecondsheetDoc = SOF.createCalcDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document ", e);
-        }
+        log.println("creating two spreadsheet documents");
+        xSpreadsheetDoc = SOF.createCalcDoc(null);
+        xSecondsheetDoc = SOF.createCalcDoc(null);
 
         XModel model1 = UnoRuntime.queryInterface(XModel.class,
                                                            xSpreadsheetDoc);
@@ -164,43 +158,29 @@ public class ScModelObj extends TestCase {
 
         XCell toSel = null;
         XCell[] xCalculatableCells = null;
-        try {
-            log.println("Getting spreadsheet");
+        log.println("Getting spreadsheet");
 
-            XSpreadsheets oSheets = xSpreadsheetDoc.getSheets();
-            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
-                                                XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                                          new Type(XSpreadsheet.class),
-                                          oIndexSheets.getByIndex(0));
+        XSpreadsheets oSheets = xSpreadsheetDoc.getSheets();
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
+                                            XIndexAccess.class, oSheets);
+        XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                                      new Type(XSpreadsheet.class),
+                                      oIndexSheets.getByIndex(0));
 
-            log.println("Getting a cell from sheet");
-            toSel = oSheet.getCellByPosition(2, 3);
-            // create a simple formula for XCalculatable
-            oSheet.getCellByPosition(4, 5).setValue(15);
-            oSheet.getCellByPosition(5, 5).setValue(10);
-            oSheet.getCellByPosition(6, 5).setFormula("= E6 * F6");
-            xCalculatableCells = new XCell[]{
-                oSheet.getCellByPosition(4, 5),
-                oSheet.getCellByPosition(5, 5),
-                oSheet.getCellByPosition(6, 5)
-            };
+        log.println("Getting a cell from sheet");
+        toSel = oSheet.getCellByPosition(2, 3);
+        // create a simple formula for XCalculatable
+        oSheet.getCellByPosition(4, 5).setValue(15);
+        oSheet.getCellByPosition(5, 5).setValue(10);
+        oSheet.getCellByPosition(6, 5).setFormula("= E6 * F6");
+        xCalculatableCells = new XCell[]{
+            oSheet.getCellByPosition(4, 5),
+            oSheet.getCellByPosition(5, 5),
+            oSheet.getCellByPosition(6, 5)
+        };
 
-            // Make sure there are at least two sheets:
-            oSheets.insertNewByName("Some Sheet", (short) 1);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        }
+        // Make sure there are at least two sheets:
+        oSheets.insertNewByName("Some Sheet", (short) 1);
 
         log.println("Adding SelectionSupplier and Shape to select for XModel");
         tEnv.addObjRelation("SELSUPP", sel);

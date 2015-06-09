@@ -92,7 +92,7 @@ public class SvxShapeGroup extends TestCase {
      */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log ) {
+            (TestParameters Param, PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
         XShapes oShapes = null;
@@ -104,18 +104,12 @@ public class SvxShapeGroup extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         // get the drawpage of drawing here
-        try {
-            log.println( "getting Drawpage" );
-            XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDrawDoc);
-            XDrawPages oDPn = oDPS.getDrawPages();
-            XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class,oDPn);
-            oObj = (XDrawPage) AnyConverter.toObject(
-                new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch ( Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get DrawPage", e );
-        }
+        log.println( "getting Drawpage" );
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDrawDoc);
+        XDrawPages oDPn = oDPS.getDrawPages();
+        XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class,oDPn);
+        oObj = (XDrawPage) AnyConverter.toObject(
+            new Type(XDrawPage.class),oDPi.getByIndex(0));
 
         if (oObj == null) {
             System.out.println("**************************");
@@ -151,15 +145,10 @@ public class SvxShapeGroup extends TestCase {
 
 
        //get the XShapeGrouper
-       try{
-            log.println("get XShapeGroup");
-            XShapeGrouper oSG = UnoRuntime.queryInterface
-                (XShapeGrouper.class, oObj);
-            oObj = oSG.group(oShapes);
-        } catch ( Exception e) {
-                e.printStackTrace( log );
-                throw new StatusException(" Couldn't get XShapeGroup: ", e);
-        }
+        log.println("get XShapeGroup");
+        XShapeGrouper oSG = UnoRuntime.queryInterface
+            (XShapeGrouper.class, oObj);
+        oObj = oSG.group(oShapes);
 
         log.println( "creating a new environment for drawpage object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

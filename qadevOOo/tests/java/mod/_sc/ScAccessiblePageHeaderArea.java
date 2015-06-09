@@ -20,7 +20,6 @@ package mod._sc;
 
 import java.io.PrintWriter;
 
-import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -85,7 +84,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -114,38 +113,30 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         XController xController = aModel.getCurrentController();
 
         // switching to 'Page Preview' mode
-        try {
-            XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
-            // Because it's an in/out parameter we must use an array of URL objects.
-            URL[] aParseURL = new URL[1];
-            aParseURL[0] = new URL();
-            aParseURL[0].Complete = ".uno:PrintPreview";
-            xParser.parseStrict(aParseURL);
-            URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
-            if(xDispatcher != null)
-                xDispatcher.dispatch( aURL, null );
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't change mode"));
-        }
+        XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+        XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+                Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
+        // Because it's an in/out parameter we must use an array of URL objects.
+        URL[] aParseURL = new URL[1];
+        aParseURL[0] = new URL();
+        aParseURL[0].Complete = ".uno:PrintPreview";
+        xParser.parseStrict(aParseURL);
+        URL aURL = aParseURL[0];
+        XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
+        if(xDispatcher != null)
+            xDispatcher.dispatch( aURL, null );
 
         util.utils.pause(500);
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        try {
-            oObj = AccessibilityTools.getAccessibleObjectForRole
-                (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
-            XAccessibleContext cont = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
-            XAccessibleStateSet StateSet = cont.getAccessibleStateSet();
-            if (StateSet.contains((short)27)) {
-                log.println("Object is transient");
-            }
-        } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            throw new StatusException("Couldn't find needed Child",iabe);
+        oObj = AccessibilityTools.getAccessibleObjectForRole
+            (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
+        XAccessibleContext cont = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
+        XAccessibleStateSet StateSet = cont.getAccessibleStateSet();
+        if (StateSet.contains((short)27)) {
+            log.println("Object is transient");
         }
 
         log.println("ImplementationName " + utils.getImplName(oObj));

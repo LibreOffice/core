@@ -97,85 +97,72 @@ public class ObjectInspector extends TestCase {
      * @see helper.PropertyHandlerImpl
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         this.cleanup(tParam, log);
 
         XMultiServiceFactory xMSF = tParam.getMSF();
 
-        try {
-            XInterface oInspector = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspector");
+        XInterface oInspector = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspector");
 
-            XObjectInspector xInspector = UnoRuntime.queryInterface(XObjectInspector.class, oInspector);
+        XObjectInspector xInspector = UnoRuntime.queryInterface(XObjectInspector.class, oInspector);
 
-            log.println("ImplementationName '" + utils.getImplName(xInspector) + "'");
+        log.println("ImplementationName '" + utils.getImplName(xInspector) + "'");
 
-            XInterface oInspectorModel = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspectorModel");
+        XInterface oInspectorModel = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspectorModel");
 
-            XObjectInspectorModel xInspectorModel = UnoRuntime.queryInterface(XObjectInspectorModel.class, oInspectorModel);
+        XObjectInspectorModel xInspectorModel = UnoRuntime.queryInterface(XObjectInspectorModel.class, oInspectorModel);
 
-            XInterface oInspectorModelToSet = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspectorModel");
+        XInterface oInspectorModelToSet = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspectorModel");
 
-            XObjectInspectorModel xInspectorModelToSet = UnoRuntime.queryInterface(XObjectInspectorModel.class, oInspectorModelToSet);
-
-
-            log.println("create a floating frame...");
-
-            XWindow xWindow = null;
-            try{
-
-                XWindowPeer xWindowPeer = DesktopTools.createFloatingWindow(xMSF);
-
-                xWindow = UnoRuntime.queryInterface(XWindow.class, xWindowPeer);
-
-            } catch (StatusException e){
-                throw new StatusException("Coud not create test object", e);
-            }
-
-            XInterface oFrame = (XInterface) xMSF.createInstance("com.sun.star.frame.Frame");
-
-            XFrame xFrame = UnoRuntime.queryInterface(XFrame.class, oFrame);
-
-            xFrame.setName("ObjectInspector");
-            xFrame.initialize(xWindow);
-
-            XFramesSupplier xFramesSup = UnoRuntime.queryInterface(XFramesSupplier.class, StarDesktop);
-
-            XFrames xFrames = xFramesSup.getFrames();
-            xFrames.append(xFrame);
+        XObjectInspectorModel xInspectorModelToSet = UnoRuntime.queryInterface(XObjectInspectorModel.class, oInspectorModelToSet);
 
 
-            log.println("attach ObjectInspector to floating frame...");
+        log.println("create a floating frame...");
 
-            XInitialization xOII = UnoRuntime.queryInterface(XInitialization.class, xInspectorModel);
+        XWindowPeer xWindowPeer = DesktopTools.createFloatingWindow(xMSF);
 
-            xOII.initialize(new Object[0]);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, xWindowPeer);
 
-            xInspector.setInspectorModel(xInspectorModel);
+        XInterface oFrame = (XInterface) xMSF.createInstance("com.sun.star.frame.Frame");
 
-            // for debug purposes the following lines could commented out. But in
-            // this case the com.sun.star.frame.XController would be failed!
-            //xInspector.attachFrame(xFrame);
-            //xWindow.setVisible(true);
+        XFrame xFrame = UnoRuntime.queryInterface(XFrame.class, oFrame);
 
-            Object[] oInspect = new Object[1];
-            oInspect[0] = new PropertyHandlerImpl();
+        xFrame.setName("ObjectInspector");
+        xFrame.initialize(xWindow);
 
-            TestEnvironment tEnv = new TestEnvironment(xInspector);
+        XFramesSupplier xFramesSup = UnoRuntime.queryInterface(XFramesSupplier.class, StarDesktop);
 
-            // com.sun.star.frame.XController
-            tEnv.addObjRelation("Frame",xFrame);
+        XFrames xFrames = xFramesSup.getFrames();
+        xFrames.append(xFrame);
 
-            tEnv.addObjRelation("XObjectInspector.toInspect", oInspect);
 
-            tEnv.addObjRelation("XObjectInspector.InspectorModelToSet", xInspectorModelToSet);
+        log.println("attach ObjectInspector to floating frame...");
 
-            return tEnv;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        XInitialization xOII = UnoRuntime.queryInterface(XInitialization.class, xInspectorModel);
 
+        xOII.initialize(new Object[0]);
+
+        xInspector.setInspectorModel(xInspectorModel);
+
+        // for debug purposes the following lines could commented out. But in
+        // this case the com.sun.star.frame.XController would be failed!
+        //xInspector.attachFrame(xFrame);
+        //xWindow.setVisible(true);
+
+        Object[] oInspect = new Object[1];
+        oInspect[0] = new PropertyHandlerImpl();
+
+        TestEnvironment tEnv = new TestEnvironment(xInspector);
+
+        // com.sun.star.frame.XController
+        tEnv.addObjRelation("Frame",xFrame);
+
+        tEnv.addObjRelation("XObjectInspector.toInspect", oInspect);
+
+        tEnv.addObjRelation("XObjectInspector.InspectorModelToSet", xInspectorModelToSet);
+
+        return tEnv;
     }
 
     /**

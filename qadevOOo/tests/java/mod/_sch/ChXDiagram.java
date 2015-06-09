@@ -211,7 +211,7 @@ public class ChXDiagram extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         XSpreadsheet oSheet=null;
         XChartDocument xChartDoc=null;
@@ -220,19 +220,8 @@ public class ChXDiagram extends TestCase {
         System.out.println("Getting spreadsheet") ;
         XSpreadsheets oSheets = xSheetDoc.getSheets() ;
         XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get sheet", e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get sheet", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get sheet", e);
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
         log.println("Creating the Header") ;
 
@@ -318,21 +307,9 @@ public class ChXDiagram extends TestCase {
         }
 
         // get the TableChart
-        XTableChart oChart = null;
-        try {
-            oChart = (XTableChart) AnyConverter.toObject(
-                new Type(XTableChart.class),UnoRuntime.queryInterface(
-                    XNameAccess.class, oCharts).getByName("ChXDiagram"));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get TableChart", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get TableChart", e);
-        }  catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get TableChart", e);
-        }
+        XTableChart oChart = (XTableChart) AnyConverter.toObject(
+            new Type(XTableChart.class),UnoRuntime.queryInterface(
+                XNameAccess.class, oCharts).getByName("ChXDiagram"));
 
         XEmbeddedObjectSupplier oEOS = UnoRuntime.queryInterface(XEmbeddedObjectSupplier.class, oChart);
         XInterface oInt = oEOS.getEmbeddedObject();

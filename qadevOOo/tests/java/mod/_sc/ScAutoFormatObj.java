@@ -20,7 +20,6 @@ package mod._sc;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -72,24 +71,19 @@ public class ScAutoFormatObj extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(TestParameters tParam,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XMultiServiceFactory oMSF = tParam.getMSF();
-        try {
-            XInterface formats = (XInterface)oMSF.createInstance
-                    ("com.sun.star.sheet.TableAutoFormats");
-            XIndexAccess formatsIndex = UnoRuntime.queryInterface(XIndexAccess.class, formats);
-            oObj = (XInterface) AnyConverter.toObject(
-                    new Type(XInterface.class),formatsIndex.getByIndex
-                                            (formatsIndex.getCount() - 1));
+        XInterface formats = (XInterface)oMSF.createInstance
+                ("com.sun.star.sheet.TableAutoFormats");
+        XIndexAccess formatsIndex = UnoRuntime.queryInterface(XIndexAccess.class, formats);
+        oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),formatsIndex.getByIndex
+                                        (formatsIndex.getCount() - 1));
 
-            XNamed objNamed = UnoRuntime.queryInterface(XNamed.class, oObj) ;
-            log.println("AutoFormat name is '" + objNamed.getName() + "'") ;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        XNamed objNamed = UnoRuntime.queryInterface(XNamed.class, oObj) ;
+        log.println("AutoFormat name is '" + objNamed.getName() + "'") ;
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

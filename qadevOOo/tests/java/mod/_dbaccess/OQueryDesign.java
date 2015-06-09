@@ -17,9 +17,6 @@
  */
 package mod._dbaccess;
 
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.uno.Exception;
 import java.io.PrintWriter;
@@ -67,7 +64,7 @@ public class OQueryDesign extends TestCase {
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
 
@@ -78,45 +75,22 @@ public class OQueryDesign extends TestCase {
         XDispatch getting = null;
         XMultiServiceFactory xMSF = Param.getMSF();
 
-              XNameAccess xNameAccess = null;
+        XNameAccess xNameAccess = null;
 
-            // we use the first datasource
-            XDataSource xDS = null;
-        try {
-            xNameAccess = UnoRuntime.queryInterface(
-                        XNameAccess.class,
-                        xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
-        } catch (Exception ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Could not get Databasecontext", ex );
-        }
-        try {
-            xDS = UnoRuntime.queryInterface(
-                    XDataSource.class, xNameAccess.getByName( "Bibliography" ));
-        } catch (NoSuchElementException ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Could not get XDataSource", ex );
-        } catch (WrappedTargetException ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Could not get XDataSource", ex );
-        }
-        try {
-            xNameAccess = UnoRuntime.queryInterface(
-                        XNameAccess.class,
-                        xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
-        } catch (Exception ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Could not get DatabaseConext", ex );
-        }
+        // we use the first datasource
+        XDataSource xDS = null;
+        xNameAccess = UnoRuntime.queryInterface(
+                    XNameAccess.class,
+                    xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
+        xDS = UnoRuntime.queryInterface(
+                XDataSource.class, xNameAccess.getByName( "Bibliography" ));
+        xNameAccess = UnoRuntime.queryInterface(
+                    XNameAccess.class,
+                    xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
 
-            log.println("check XMultiServiceFactory");
+        log.println("check XMultiServiceFactory");
 
-        try {
-            xConn = xDS.getConnection("", "");
-        } catch (SQLException ex) {
-            ex.printStackTrace( log );
-            throw new StatusException( "Could not get XConnection", ex );
-        }
+        xConn = xDS.getConnection("", "");
 
         log.println( "opening QueryDesign" );
         URL the_url = new URL();
@@ -138,38 +112,20 @@ public class OQueryDesign extends TestCase {
 
         util.utils.pause(5000);
 
-        Object oDBC = null;
-
-        try {
-            oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            throw new StatusException("Could not instantiate DatabaseContext", e) ;
-        }
+        Object oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 
         Object oDataSource = null;
-        try{
-            XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, oDBC);
-            oDataSource = xNA.getByName(sDataSourceName);
-        } catch ( com.sun.star.container.NoSuchElementException e){
-            throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
-        } catch ( com.sun.star.lang.WrappedTargetException e){
-            throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
-        }
+        XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, oDBC);
+        oDataSource = xNA.getByName(sDataSourceName);
         UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
 
         xFrame = DesktopTools.getCurrentFrame(xMSF);
 
-         SOfficeFactory SOF = null;
+        SOfficeFactory SOF = null;
 
         SOF = SOfficeFactory.getFactory( xMSF );
-        try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Could not create document", e );
-        }
+        log.println( "creating a textdocument" );
+        xTextDoc = SOF.createTextDoc( null );
 
         XModel xDocMod = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 

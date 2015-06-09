@@ -67,7 +67,7 @@ public class ScFunctionDescriptionObj extends TestCase {
     @Override
     public synchronized TestEnvironment createTestEnvironment(
                                     TestParameters Param, PrintWriter log )
-                                                       throws StatusException {
+                                                       throws Exception {
 
         XInterface oObj = null;
 
@@ -75,30 +75,23 @@ public class ScFunctionDescriptionObj extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "Creating a test environment" );
 
-        try {
-            log.println("Getting test object ") ;
+        log.println("Getting test object ") ;
 
-            XMultiServiceFactory oDocMSF =  Param.getMSF();
+        XMultiServiceFactory oDocMSF =  Param.getMSF();
 
-            XInterface FDs = (XInterface)oDocMSF.
-                    createInstance("com.sun.star.sheet.FunctionDescriptions");
-            XNameAccess NA = UnoRuntime.queryInterface
-                (XNameAccess.class, FDs);
+        XInterface FDs = (XInterface)oDocMSF.
+                createInstance("com.sun.star.sheet.FunctionDescriptions");
+        XNameAccess NA = UnoRuntime.queryInterface
+            (XNameAccess.class, FDs);
 
-            String names[] = NA.getElementNames();
-            Random rnd = new Random();
-            int idx = rnd.nextInt(names.length);
+        String names[] = NA.getElementNames();
+        Random rnd = new Random();
+        int idx = rnd.nextInt(names.length);
 
-            oObj = (XInterface)NA.getByName(names[idx]);
+        oObj = (XInterface)NA.getByName(names[idx]);
 
-            log.println("Creating object - " +
-                                        ((oObj == null) ? "FAILED" : "OK"));
-
-        } catch (Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException
-                ("Error getting test object from spreadsheet document",e) ;
-        }
+        log.println("Creating object - " +
+                                    ((oObj == null) ? "FAILED" : "OK"));
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

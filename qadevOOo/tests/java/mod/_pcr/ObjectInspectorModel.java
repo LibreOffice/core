@@ -17,11 +17,9 @@
  */
 
 package mod._pcr;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XFrame;
 import com.sun.star.inspection.XObjectInspectorModel;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.CloseVetoException;
@@ -87,7 +85,7 @@ public class ObjectInspectorModel extends TestCase {
      * @see helper.PropertyHandlerImpl
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         this.cleanup(tParam, log);
 
@@ -95,48 +93,32 @@ public class ObjectInspectorModel extends TestCase {
 
         XPropertySet xMSFProp = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
         XComponentContext xDefaultContext = null;
-        try{
-            // Get the default context from the office server.
-            Object oDefaultContext = xMSFProp.getPropertyValue("DefaultContext");
+        // Get the default context from the office server.
+        Object oDefaultContext = xMSFProp.getPropertyValue("DefaultContext");
 
-            // Query for the interface XComponentContext.
-            xDefaultContext = UnoRuntime.queryInterface(
-                    XComponentContext.class, oDefaultContext);
+        // Query for the interface XComponentContext.
+        xDefaultContext = UnoRuntime.queryInterface(
+                XComponentContext.class, oDefaultContext);
 
-        } catch (UnknownPropertyException e){
-            throw new StatusException("could not get DefaultContext from xMSF", e);
-        } catch (WrappedTargetException e){
-            throw new StatusException("could not get DefaultContext from xMSF", e);
-        } catch (Exception e){
-            throw new StatusException("could not get DefaultContext from xMSF", e);
-        }
+        Object[] oHandlerFactories = new Object[1];
+        oHandlerFactories[0] = new PropertyHandlerFactroy();
 
-        try {
+        int minHelpTextLines = 200;
+        int maxHelpTextLines = 400;
 
-            Object[] oHandlerFactories = new Object[1];
-            oHandlerFactories[0] = new PropertyHandlerFactroy();
+        XObjectInspectorModel oInspectorModel = com.sun.star.inspection.ObjectInspectorModel.
+                createWithHandlerFactoriesAndHelpSection(xDefaultContext, oHandlerFactories,
+                                                         minHelpTextLines, maxHelpTextLines);
 
-            int minHelpTextLines = 200;
-            int maxHelpTextLines = 400;
+        log.println("ImplementationName '" + utils.getImplName(oInspectorModel) + "'");
 
-            XObjectInspectorModel oInspectorModel = com.sun.star.inspection.ObjectInspectorModel.
-                    createWithHandlerFactoriesAndHelpSection(xDefaultContext, oHandlerFactories,
-                                                             minHelpTextLines, maxHelpTextLines);
+        TestEnvironment tEnv = new TestEnvironment(oInspectorModel);
 
-            log.println("ImplementationName '" + utils.getImplName(oInspectorModel) + "'");
+        // com.sun.star.inspection.XObjectInspectorModel
+        tEnv.addObjRelation("minHelpTextLines", Integer.valueOf(minHelpTextLines));
+        tEnv.addObjRelation("maxHelpTextLines", Integer.valueOf(maxHelpTextLines));
 
-            TestEnvironment tEnv = new TestEnvironment(oInspectorModel);
-
-            // com.sun.star.inspection.XObjectInspectorModel
-            tEnv.addObjRelation("minHelpTextLines", Integer.valueOf(minHelpTextLines));
-            tEnv.addObjRelation("maxHelpTextLines", Integer.valueOf(maxHelpTextLines));
-
-            return tEnv;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
-
+        return tEnv;
     }
 
     /**

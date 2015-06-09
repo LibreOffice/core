@@ -71,7 +71,7 @@ public class ScIndexEnumeration_TableColumnsEnumeration extends TestCase {
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -83,20 +83,9 @@ public class ScIndexEnumeration_TableColumnsEnumeration extends TestCase {
         XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
         XNameAccess oNames = UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
         XSpreadsheet xSpreadsheet = null;
-        try {
-            xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
-                new Type(XSpreadsheet.class),
-                    oNames.getByName(oNames.getElementNames()[0]));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get spreadsheet", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get spreadsheet", e);
-        }
+        xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
+            new Type(XSpreadsheet.class),
+                oNames.getByName(oNames.getElementNames()[0]));
 
         XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
         XTableColumns oColumns = oColumnRowRange.getColumns();

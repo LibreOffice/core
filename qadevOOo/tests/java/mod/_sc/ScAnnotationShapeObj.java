@@ -123,7 +123,7 @@ public class ScAnnotationShapeObj extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+        TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
 
         // creation of testobject here
@@ -144,29 +144,15 @@ public class ScAnnotationShapeObj extends TestCase {
             oSheets);
         XCell oCell = null;
 
-        try {
-            XSpreadsheet oSheet =
-                (XSpreadsheet) AnyConverter.toObject(new Type(
-                        XSpreadsheet.class),
-                    XAccess.getByIndex(cellPos.Sheet));
-            XCellRange oCRange =
-                UnoRuntime.queryInterface(XCellRange.class,
-                oSheet);
-            oCell =
-                oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Error getting test object from spreadsheet document",
-                e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Error getting test object from spreadsheet document",
-                e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Error getting test object from spreadsheet document",
-                e);
-        }
+        XSpreadsheet oSheet =
+            (XSpreadsheet) AnyConverter.toObject(new Type(
+                    XSpreadsheet.class),
+                XAccess.getByIndex(cellPos.Sheet));
+        XCellRange oCRange =
+            UnoRuntime.queryInterface(XCellRange.class,
+            oSheet);
+        oCell =
+            oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
 
         XSheetAnnotationAnchor oAnnoA =
             UnoRuntime.queryInterface(XSheetAnnotationAnchor.class,

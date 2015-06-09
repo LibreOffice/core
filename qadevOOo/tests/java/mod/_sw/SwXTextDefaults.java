@@ -72,18 +72,14 @@ public class SwXTextDefaults extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(
-            TestParameters tParam, PrintWriter log) {
+            TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
         XMultiServiceFactory docMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class,xTextDoc);
 
-        try {
-            oObj = (XInterface)
-                docMSF.createInstance("com.sun.star.text.Defaults");
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Couldn't create Object",e);
-        }
+        oObj = (XInterface)
+            docMSF.createInstance("com.sun.star.text.Defaults");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

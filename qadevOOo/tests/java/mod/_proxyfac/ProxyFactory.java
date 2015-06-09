@@ -20,7 +20,6 @@ package mod._proxyfac;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -51,20 +50,14 @@ public class ProxyFactory extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
 
-        try {
-            XInterface xInt = (XInterface)xMSF.createInstance(
-                    "com.sun.star.reflection.ProxyFactory");
+        XInterface xInt = (XInterface)xMSF.createInstance(
+                "com.sun.star.reflection.ProxyFactory");
 
-            TestEnvironment tEnv = new TestEnvironment(xInt);
+        TestEnvironment tEnv = new TestEnvironment(xInt);
 
-            return tEnv;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
-
+        return tEnv;
     }
 }

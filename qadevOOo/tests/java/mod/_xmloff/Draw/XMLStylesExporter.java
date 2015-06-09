@@ -118,7 +118,7 @@ public class XMLStylesExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) throws StatusException {
+        TestParameters tParam, PrintWriter log) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         XMultiServiceFactory xMSF = tParam.getMSF() ;
@@ -127,30 +127,25 @@ public class XMLStylesExporter extends TestCase {
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
         final String STYLE_NAME = "New style" + counter++ ;
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Draw.XMLStylesExporter", new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            xEx.setSourceDocument(xDrawDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Draw.XMLStylesExporter", new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        xEx.setSourceDocument(xDrawDoc);
 
-            //obtain style families
-            XStyleFamiliesSupplier styleSup = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xDrawDoc);
-            XNameAccess StyleFamilies = styleSup.getStyleFamilies();
-            //obtain all style family names
-            String[] styleFamiliesNames = StyleFamilies.getElementNames();
-            String styleFamilyName = styleFamiliesNames[0];
-            //obtain style family with name[0]
-            Object objectStyle = StyleFamilies.getByName(styleFamilyName);
-            XNameContainer xStyleFamilyName = UnoRuntime.queryInterface(XNameContainer.class, objectStyle);
-            //create new style
-            Object SC = SOF.createInstance(xDrawDoc, "com.sun.star.style.Style");
-            XStyle Style = UnoRuntime.queryInterface(XStyle.class,SC);
-            //add new style to style familiy with name[0]
-            xStyleFamilyName.insertByName(STYLE_NAME,Style);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        //obtain style families
+        XStyleFamiliesSupplier styleSup = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xDrawDoc);
+        XNameAccess StyleFamilies = styleSup.getStyleFamilies();
+        //obtain all style family names
+        String[] styleFamiliesNames = StyleFamilies.getElementNames();
+        String styleFamilyName = styleFamiliesNames[0];
+        //obtain style family with name[0]
+        Object objectStyle = StyleFamilies.getByName(styleFamilyName);
+        XNameContainer xStyleFamilyName = UnoRuntime.queryInterface(XNameContainer.class, objectStyle);
+        //create new style
+        Object SC = SOF.createInstance(xDrawDoc, "com.sun.star.style.Style");
+        XStyle Style = UnoRuntime.queryInterface(XStyle.class,SC);
+        //add new style to style familiy with name[0]
+        xStyleFamilyName.insertByName(STYLE_NAME,Style);
 
         // Checking Head Tag existence and that property has changed
         filter.addTag(new XMLTools.Tag ("office:document-styles"));

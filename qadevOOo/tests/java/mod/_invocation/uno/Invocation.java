@@ -21,7 +21,6 @@ package mod._invocation.uno;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -63,34 +62,29 @@ public class Invocation extends TestCase {
     * </ul>
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
 
-        try {
-            XInterface xInt = (XInterface)xMSF.createInstance(
-                    "com.sun.star.script.Invocation");
+        XInterface xInt = (XInterface)xMSF.createInstance(
+                "com.sun.star.script.Invocation");
 
-            TestEnvironment tEnv = new TestEnvironment(xInt);
+        TestEnvironment tEnv = new TestEnvironment(xInt);
 
-            // the createInstance should fail according to the documentation
-            tEnv.addObjRelation(
-                    "XSingleServiceFactory.createInstance.negative", "true");
+        // the createInstance should fail according to the documentation
+        tEnv.addObjRelation(
+                "XSingleServiceFactory.createInstance.negative", "true");
 
-            // creating parameters to createInstanceWithArguments
-            Object[] args = new Object[1];
+        // creating parameters to createInstanceWithArguments
+        Object[] args = new Object[1];
 
-            args[0] = xMSF.createInstance("com.suns.star.io.Pipe");
+        args[0] = xMSF.createInstance("com.suns.star.io.Pipe");
 
-            tEnv.addObjRelation(
-                    "XSingleServiceFactory.arguments", args);
+        tEnv.addObjRelation(
+                "XSingleServiceFactory.arguments", args);
 
-            tEnv.addObjRelation("XSingleServiceFactory.MustSupport",
-                new Class[] {com.sun.star.script.XInvocation.class});
+        tEnv.addObjRelation("XSingleServiceFactory.MustSupport",
+            new Class[] {com.sun.star.script.XInvocation.class});
 
-            return tEnv;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        return tEnv;
     }
 }

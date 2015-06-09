@@ -18,9 +18,9 @@
 package mod._svtools;
 
 import com.sun.star.view.XSelectionSupplier;
+
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -137,7 +137,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         log.println("creating a test environment");
 
         if (xTextDoc != null) {
@@ -147,14 +147,8 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
-        try {
-            log.println("creating a text document");
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a text document");
+        xTextDoc = SOF.createTextDoc(null);
 
         util.utils.pause(5000);
 
@@ -217,11 +211,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         XSelectionSupplier xSelect = UnoRuntime.queryInterface(
             XSelectionSupplier.class, xCont);
 
-        try {
-            xSelect.select(params);
-        } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            throw new StatusException("Could not select Biblio-Database", ex);
-        }
+        xSelect.select(params);
 
         util.utils.pause(5000);
 

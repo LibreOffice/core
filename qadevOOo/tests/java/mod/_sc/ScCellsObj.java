@@ -97,7 +97,7 @@ public class ScCellsObj extends TestCase {
     * @see com.sun.star.sheet.XCellRangesQuery
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         Object cellArr[] = new Object[3];
@@ -106,39 +106,25 @@ public class ScCellsObj extends TestCase {
         XSpreadsheets oSheets = xSheetDoc.getSheets();
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         XCellRange oSheet = null;
-        try {
-            oSheet = (XCellRange) AnyConverter.toObject(
-                    new Type(XCellRange.class),oIndexAccess.getByIndex(0));
+        oSheet = (XCellRange) AnyConverter.toObject(
+                new Type(XCellRange.class),oIndexAccess.getByIndex(0));
 
-            XCell oCell_1 = oSheet.getCellByPosition(0, 0);
-            XTextRange oTextRange = UnoRuntime.queryInterface(XTextRange.class, oCell_1);
+        XCell oCell_1 = oSheet.getCellByPosition(0, 0);
+        XTextRange oTextRange = UnoRuntime.queryInterface(XTextRange.class, oCell_1);
 
-            oTextRange.setString("ScCellsObj test 1");
+        oTextRange.setString("ScCellsObj test 1");
 
-            XCell oCell_2 = oSheet.getCellByPosition(5, 1);
-            oCell_2.setValue(15);
+        XCell oCell_2 = oSheet.getCellByPosition(5, 1);
+        oCell_2.setValue(15);
 
-            XCell oCell_3 = oSheet.getCellByPosition(3, 9);
-            oTextRange = UnoRuntime.queryInterface(XTextRange.class, oCell_3);
+        XCell oCell_3 = oSheet.getCellByPosition(3, 9);
+        oTextRange = UnoRuntime.queryInterface(XTextRange.class, oCell_3);
 
-            oTextRange.setString("ScCellsObj test 2");
+        oTextRange.setString("ScCellsObj test 2");
 
-            cellArr[0] = oCell_1;
-            cellArr[2] = oCell_2;
-            cellArr[1] = oCell_3;
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println ("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println ("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println ("Exception occurred while creating test Object.");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test object", e);
-        }
+        cellArr[0] = oCell_1;
+        cellArr[2] = oCell_2;
+        cellArr[1] = oCell_3;
 
         XCellRangesQuery oCellRangesQuery = UnoRuntime.queryInterface(XCellRangesQuery.class, oSheet);
         XSheetCellRanges oSheetCellRanges = oCellRangesQuery.queryVisibleCells();

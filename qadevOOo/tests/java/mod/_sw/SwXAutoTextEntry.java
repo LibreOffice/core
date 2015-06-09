@@ -27,6 +27,7 @@ import lib.TestParameters;
 import util.DefaultDsc;
 import util.InstCreator;
 import util.SOfficeFactory;
+
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XAutoTextContainer;
@@ -120,21 +121,16 @@ public class SwXAutoTextEntry extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         XAutoTextEntry oEntry = null;
         XAutoTextContainer oContainer;
         XInterface oObj = null;
         log.println( "creating a test environment" );
-        try {
-            XMultiServiceFactory myMSF = Param.getMSF();
-            Object oInst = myMSF.createInstance
-                    ("com.sun.star.text.AutoTextContainer");
-            oContainer = UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create AutoTextContainer", e);
-        }
+        XMultiServiceFactory myMSF = Param.getMSF();
+        Object oInst = myMSF.createInstance
+                ("com.sun.star.text.AutoTextContainer");
+        oContainer = UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
 
         XNameAccess oContNames = UnoRuntime.queryInterface(XNameAccess.class, oContainer);
 
@@ -143,12 +139,7 @@ public class SwXAutoTextEntry extends TestCase {
             log.println("ContainerNames[ "+ i + "]: " + contNames[i]);
         }
 
-        try{
-            oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),oContNames.getByName("mytexts"));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get AutoTextGroup", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),oContNames.getByName("mytexts"));
 
         oGroup = UnoRuntime.queryInterface
                 (XAutoTextGroup.class, oObj);

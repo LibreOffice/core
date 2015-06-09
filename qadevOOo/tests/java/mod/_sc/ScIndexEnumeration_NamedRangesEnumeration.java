@@ -67,7 +67,7 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -79,16 +79,7 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
 
         // Getting named ranges.
         XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
-        Object ranges = null;
-        try {
-            ranges = docProps.getPropertyValue("NamedRanges");
-        } catch(com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get NamedRanges", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get NamedRanges", e);
-        }
+        Object ranges = docProps.getPropertyValue("NamedRanges");
 
         XNamedRanges xNamedRanges = UnoRuntime.queryInterface(XNamedRanges.class, ranges);
 

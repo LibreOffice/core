@@ -132,7 +132,7 @@ public class ScCellRangeObj extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
         XCellRange testRange;
 
@@ -149,32 +149,13 @@ public class ScCellRangeObj extends TestCase {
 
         XSpreadsheet oSheet = null;
 
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                             new Type(XSpreadsheet.class),
-                             oNames.getByName(oNames.getElementNames()[0]));
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                         new Type(XSpreadsheet.class),
+                         oNames.getByName(oNames.getElementNames()[0]));
 
-            oObj = oSheet.getCellRangeByPosition(0, 0, 3, 4);
-            testRange = UnoRuntime.queryInterface(
-                                XCellRange.class, oObj);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                    "Error getting cell object from spreadsheet document", e);
-        }
-
+        oObj = oSheet.getCellRangeByPosition(0, 0, 3, 4);
+        testRange = UnoRuntime.queryInterface(
+                            XCellRange.class, oObj);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

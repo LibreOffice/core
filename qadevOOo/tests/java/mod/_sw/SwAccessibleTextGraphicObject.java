@@ -19,7 +19,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -81,12 +80,7 @@ public class SwAccessibleTextGraphicObject extends TestCase {
         XTextContent the_content = UnoRuntime.queryInterface(XTextContent.class, oGraphObj);
 
         log.println( "inserting graphic" );
-        try {
-            the_text.insertTextContent(the_cursor, the_content, true);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't insert Content", e);
-        }
+        the_text.insertTextContent(the_cursor, the_content, true);
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 

@@ -20,7 +20,6 @@ package mod._smplmail;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -68,7 +67,7 @@ public class SimpleSystemMail extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
+                                                    throws Exception {
         XInterface oObj = null;
         Object oInterface = null;
         boolean isWinOS = false ;
@@ -82,19 +81,14 @@ public class SimpleSystemMail extends TestCase {
             ((String) Param.get("test.system.mail.isExist")) ;
 
         XMultiServiceFactory xMSF = Param.getMSF();
-        try {
-            if (isWinOS) {
-                log.println("The OS is Win : trying to create service");
-                oInterface = xMSF.createInstance
-                    ( "com.sun.star.system.SimpleSystemMail" );
-            } else {
-                log.println("The OS is NOT Win, SKIPPING this component");
-                log.println("Creating Dummy object ...");
-                oInterface = xMSF.createInstance( "com.sun.star.io.Pipe" );
-            }
-        } catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
+        if (isWinOS) {
+            log.println("The OS is Win : trying to create service");
+            oInterface = xMSF.createInstance
+                ( "com.sun.star.system.SimpleSystemMail" );
+        } else {
+            log.println("The OS is NOT Win, SKIPPING this component");
+            log.println("Creating Dummy object ...");
+            oInterface = xMSF.createInstance( "com.sun.star.io.Pipe" );
         }
 
         oObj = (XInterface) oInterface;

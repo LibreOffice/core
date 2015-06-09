@@ -20,7 +20,6 @@ package mod._svtools;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -138,7 +137,7 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) {
+        TestParameters tParam, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
 
@@ -147,14 +146,8 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
-        try {
-            log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a text document" );
+        xTextDoc = SOF.createTextDoc(null);
 
         util.utils.pause(5000);
 
@@ -165,17 +158,10 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
         XDispatchProvider aProv = UnoRuntime.
             queryInterface(XDispatchProvider.class, secondController);
 
-        XURLTransformer urlTransf = null;
-
-        try {
-            XInterface transf = (XInterface)tParam.getMSF().createInstance
-                ("com.sun.star.util.URLTransformer");
-            urlTransf = UnoRuntime.queryInterface
-                (XURLTransformer.class, transf);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create URLTransformer", e );
-        }
+        XInterface transf = (XInterface)tParam.getMSF().createInstance
+            ("com.sun.star.util.URLTransformer");
+        XURLTransformer urlTransf = UnoRuntime.queryInterface
+            (XURLTransformer.class, transf);
 
         XDispatch getting = null;
         log.println( "opening HyperlinkDialog" );
@@ -189,15 +175,8 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
 
         util.utils.pause(5000);
 
-        XInterface oObj = null;
-        try {
-            oObj = (XInterface) tParam.getMSF().createInstance
+        XInterface oObj = (XInterface) tParam.getMSF().createInstance
                 ("com.sun.star.awt.Toolkit") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
-        }
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
 

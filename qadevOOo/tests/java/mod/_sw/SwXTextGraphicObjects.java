@@ -42,114 +42,101 @@ public class SwXTextGraphicObjects extends TestCase {
     /**
      * in general this method creates a testdocument
      *
-     *  @param tParam    class which contains additional test parameters
-     *  @param log        class to log the test state and result
+     * @param tParam
+     *            class which contains additional test parameters
+     * @param log
+     *            class to log the test state and result
      *
      *
-     *  @see TestParameters
-     *    @see PrintWriter
+     * @see TestParameters
+     * @see PrintWriter
      *
      */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
         try {
-            log.println( "creating a textdoc" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( Exception e ) {
+            log.println("creating a textdoc");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (Exception e) {
             // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
     /**
      * in general this method disposes the testenvironment and document
      *
-     *  @param tParam    class which contains additional test parameters
-     *  @param log        class to log the test state and result
+     * @param tParam
+     *            class which contains additional test parameters
+     * @param log
+     *            class to log the test state and result
      *
      *
-     *  @see TestParameters
-     *    @see PrintWriter
+     * @see TestParameters
+     * @see PrintWriter
      *
      */
     @Override
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
-
     /**
-     *    creating a TestEnvironment for the interfaces to be tested
+     * creating a TestEnvironment for the interfaces to be tested
      *
-     *  @param tParam    class which contains additional test parameters
-     *  @param log        class to log the test state and result
+     * @param tParam
+     *            class which contains additional test parameters
+     * @param log
+     *            class to log the test state and result
      *
-     *  @return    Status class
+     * @return Status class
      *
-     *  @see TestParameters
-     *    @see PrintWriter
+     * @see TestParameters
+     * @see PrintWriter
      */
     @Override
-    public TestEnvironment createTestEnvironment( TestParameters tParam,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    public TestEnvironment createTestEnvironment(TestParameters tParam,
+            PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         Object oGObject = null;
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
 
-        try {
-            oGObject = SOF.createInstance
-                (xTextDoc,"com.sun.star.text.GraphicObject");
-        }
-        catch (Exception ex) {
-            log.println("Couldn't create instance");
-            ex.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", ex );
-        }
+        oGObject = SOF.createInstance(xTextDoc,
+                "com.sun.star.text.GraphicObject");
 
         oObj = (XInterface) oGObject;
 
         XText the_text = xTextDoc.getText();
         XTextCursor the_cursor = the_text.createTextCursor();
-        XTextContent the_content = UnoRuntime.queryInterface(XTextContent.class,oObj);
+        XTextContent the_content = UnoRuntime.queryInterface(
+                XTextContent.class, oObj);
 
-       log.println( "inserting graphic" );
-        try {
-            the_text.insertTextContent(the_cursor,the_content,true);
-        } catch (Exception e) {
-            System.out.println("Couldn't insert Content");
-            e.printStackTrace();
-            throw new StatusException("Couldn't insert Content", e );
-        }
+        log.println("inserting graphic");
+        the_text.insertTextContent(the_cursor, the_content, true);
 
-        log.println( "adding graphic" );
-        XPropertySet oProps = UnoRuntime.queryInterface(XPropertySet.class,oObj);
-        try {
-            String wat = util.utils.getFullTestURL("space-metal.jpg");
-            oProps.setPropertyValue("GraphicURL",wat);
-            oProps.setPropertyValue("HoriOrientPosition",Integer.valueOf(5500));
-            oProps.setPropertyValue("VertOrientPosition",Integer.valueOf(4200));
-            oProps.setPropertyValue("Width",Integer.valueOf(4400));
-            oProps.setPropertyValue("Height",Integer.valueOf(4000));
-        } catch (Exception e) {
-            System.out.println("Couldn't set property 'GraphicURL'");
-            e.printStackTrace();
-            throw new StatusException("Couldn't set property 'GraphicURL'", e );
-        }
+        log.println("adding graphic");
+        XPropertySet oProps = UnoRuntime.queryInterface(XPropertySet.class,
+                oObj);
+        String wat = util.utils.getFullTestURL("space-metal.jpg");
+        oProps.setPropertyValue("GraphicURL", wat);
+        oProps.setPropertyValue("HoriOrientPosition", Integer.valueOf(5500));
+        oProps.setPropertyValue("VertOrientPosition", Integer.valueOf(4200));
+        oProps.setPropertyValue("Width", Integer.valueOf(4400));
+        oProps.setPropertyValue("Height", Integer.valueOf(4000));
 
-        XTextGraphicObjectsSupplier xTGS = UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
-        xTextDoc);
+        XTextGraphicObjectsSupplier xTGS = UnoRuntime.queryInterface(
+                XTextGraphicObjectsSupplier.class, xTextDoc);
         oObj = xTGS.getGraphicObjects();
 
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         return tEnv;
 
     } // finish method getTestEnvironment
 
-}    // finish class SwXTextGraphicObjects
+} // finish class SwXTextGraphicObjects
 

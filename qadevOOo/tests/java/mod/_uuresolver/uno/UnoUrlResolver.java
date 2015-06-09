@@ -19,10 +19,10 @@
 package mod._uuresolver.uno;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.XInterface;
+
 import java.io.PrintWriter;
-import lib.StatusException;
+
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -32,29 +32,23 @@ public class UnoUrlResolver extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
 
-        try {
-            XInterface xInt = (XInterface)xMSF.createInstance(
-                    "com.sun.star.bridge.UnoUrlResolver");
-            TestEnvironment tEnv = new TestEnvironment(xInt);
-            Object oBFctr = xMSF.createInstance(
-                                        "com.sun.star.bridge.BridgeFactory");
-            tEnv.addObjRelation("BRIDGEFACTORY", oBFctr);
+        XInterface xInt = (XInterface)xMSF.createInstance(
+                "com.sun.star.bridge.UnoUrlResolver");
+        TestEnvironment tEnv = new TestEnvironment(xInt);
+        Object oBFctr = xMSF.createInstance(
+                                    "com.sun.star.bridge.BridgeFactory");
+        tEnv.addObjRelation("BRIDGEFACTORY", oBFctr);
 
-            Object oAcctr = xMSF.createInstance(
-                                        "com.sun.star.connection.Acceptor") ;
-            tEnv.addObjRelation("ACCEPTOR", oAcctr);
+        Object oAcctr = xMSF.createInstance(
+                                    "com.sun.star.connection.Acceptor") ;
+        tEnv.addObjRelation("ACCEPTOR", oAcctr);
 
-            int port = util.utils.getNextFreePort(20004);
-            tEnv.addObjRelation("PORT", Integer.valueOf(port));
+        int port = util.utils.getNextFreePort(20004);
+        tEnv.addObjRelation("PORT", Integer.valueOf(port));
 
-            return tEnv;
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
-
+        return tEnv;
     }
 }

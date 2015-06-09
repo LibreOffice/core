@@ -101,7 +101,7 @@ public class SvxUnoTextField extends TestCase {
      *    @see PrintWriter
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XShape oShape = null;
@@ -109,38 +109,22 @@ public class SvxUnoTextField extends TestCase {
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
-        try {
-
-            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
-              oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Rectangle");
-            DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
-        }
-        catch (Exception e) {
-            log.println("Couldn't create Shape");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create Shape ",e);
-        }
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+          oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Rectangle");
+        DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
         XTextCursor the_Cursor = null;
 
-          // create testobject here
-        try {
-
-            XText the_Text = UnoRuntime.queryInterface(XText.class,oShape);
-            XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, xDrawDoc );
-            the_Cursor = the_Text.createTextCursor();
-            oObj = (XInterface)
-                oDocMSF.createInstance( "com.sun.star.text.TextField.DateTime" );
-            XTextContent the_Field = UnoRuntime.queryInterface(XTextContent.class,oObj);
+        // create testobject here
+        XText the_Text = UnoRuntime.queryInterface(XText.class,oShape);
+        XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, xDrawDoc );
+        the_Cursor = the_Text.createTextCursor();
+        oObj = (XInterface)
+            oDocMSF.createInstance( "com.sun.star.text.TextField.DateTime" );
+        XTextContent the_Field = UnoRuntime.queryInterface(XTextContent.class,oObj);
 
 
-            the_Text.insertTextContent(the_Cursor,the_Field,false);
-        }
-        catch (Exception ex) {
-            log.println("Couldn't create Textfield");
-            ex.printStackTrace(log);
-            throw new StatusException("Couldn't create TextField ",ex);
-        }
+        the_Text.insertTextContent(the_Cursor,the_Field,false);
 
         log.println( "creating a new environment for FieldMaster object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

@@ -54,16 +54,10 @@ public class ODBCDriver extends TestCase {
      * </ul>
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)Param.getMSF().createInstance(
-                "com.sun.star.comp.sdbc.ODBCDriver");
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create object"));
-        }
+        XInterface oObj = (XInterface)Param.getMSF().createInstance(
+            "com.sun.star.comp.sdbc.ODBCDriver");
 
         log.println("creating a new environment for ODBCDriver object");
         TestEnvironment tEnv = new TestEnvironment(oObj);

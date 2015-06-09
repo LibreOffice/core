@@ -63,17 +63,11 @@ public class ScDocumentConfiguration extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XMultiServiceFactory docMSF = UnoRuntime.queryInterface(
                                               XMultiServiceFactory.class,
                                               xSheetDoc);
-        Object oObj = null;
-
-        try {
-            oObj = docMSF.createInstance("com.sun.star.sheet.DocumentSettings");
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Couldn't create document settings", e);
-        }
+        Object oObj = docMSF.createInstance("com.sun.star.sheet.DocumentSettings");
 
         log.println("Implementationname: " + util.utils.getImplName(oObj));
 

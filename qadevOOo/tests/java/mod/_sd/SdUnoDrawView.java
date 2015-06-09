@@ -21,7 +21,6 @@ package mod._sd;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -142,7 +141,7 @@ public class SdUnoDrawView extends TestCase {
     */
     @Override
     public synchronized lib.TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );
 
@@ -150,16 +149,11 @@ public class SdUnoDrawView extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                     Param.getMSF());
 
-        try {
-            log.println( "creating two draw documents" );
-            xDrawDoc = SOF.createDrawDoc(null);
-            util.utils.pause(1000);
-            xSecondDrawDoc = SOF.createDrawDoc(null);
-            util.utils.pause(1000);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println( "creating two draw documents" );
+        xDrawDoc = SOF.createDrawDoc(null);
+        util.utils.pause(1000);
+        xSecondDrawDoc = SOF.createDrawDoc(null);
+        util.utils.pause(1000);
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
@@ -167,20 +161,8 @@ public class SdUnoDrawView extends TestCase {
         XDrawPages the_pages = oDPS.getDrawPages();
         XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class,the_pages);
 
-        XDrawPage oDrawPage = null;
-        try {
-            oDrawPage = (XDrawPage) AnyConverter.toObject(
-                        new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't get DrawPage", e);
-        }
+        XDrawPage oDrawPage = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(0));
 
         //put something on the drawpage
         log.println( "inserting some Shapes" );

@@ -44,47 +44,50 @@ import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
- * <code>com.sun.star.sdb.DataSource</code>. <p>
+ * <code>com.sun.star.sdb.DataSource</code>.
+ * <p>
  *
  * Object implements the following interfaces :
  * <ul>
- *  <li> <code>com::sun::star::sdbc::RowSet</code></li>
- *  <li> <code>com::sun::star::sdbcx::XRowLocate</code></li>
- *  <li> <code>com::sun::star::sdbc::XResultSetUpdate</code></li>
- *  <li> <code>com::sun::star::util::XCancellable</code></li>
- *  <li> <code>com::sun::star::sdbc::XParameters</code></li>
- *  <li> <code>com::sun::star::sdbc::XResultSetMetaDataSupplier</code></li>
- *  <li> <code>com::sun::star::sdbcx::XDeleteRows</code></li>
- *  <li> <code>com::sun::star::sdbc::XCloseable</code></li>
- *  <li> <code>com::sun::star::sdbcx::XColumnsSupplier</code></li>
- *  <li> <code>com::sun::star::sdb::XResultSetAccess</code></li>
- *  <li> <code>com::sun::star::sdbc::XResultSet</code></li>
- *  <li> <code>com::sun::star::sdbc::XColumnLocate</code></li>
- *  <li> <code>com::sun::star::sdbc::XRowSet</code></li>
- *  <li> <code>com::sun::star::sdb::RowSet</code></li>
- *  <li> <code>com::sun::star::sdbc::XRowUpdate</code></li>
- *  <li> <code>com::sun::star::sdb::XRowSetApproveBroadcaster</code></li>
- *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
- *  <li> <code>com::sun::star::sdbc::XRow</code></li>
- *  <li> <code>com::sun::star::sdbc::XWarningsSupplier</code></li>
- *  <li> <code>com::sun::star::lang::XComponent</code></li>
- *  <li> <code>com::sun::star::sdbcx::ResultSet</code></li>
- *  <li> <code>com::sun::star::sdbc::ResultSet</code></li>
- * </ul> <p>
+ * <li> <code>com::sun::star::sdbc::RowSet</code></li>
+ * <li> <code>com::sun::star::sdbcx::XRowLocate</code></li>
+ * <li> <code>com::sun::star::sdbc::XResultSetUpdate</code></li>
+ * <li> <code>com::sun::star::util::XCancellable</code></li>
+ * <li> <code>com::sun::star::sdbc::XParameters</code></li>
+ * <li> <code>com::sun::star::sdbc::XResultSetMetaDataSupplier</code></li>
+ * <li> <code>com::sun::star::sdbcx::XDeleteRows</code></li>
+ * <li> <code>com::sun::star::sdbc::XCloseable</code></li>
+ * <li> <code>com::sun::star::sdbcx::XColumnsSupplier</code></li>
+ * <li> <code>com::sun::star::sdb::XResultSetAccess</code></li>
+ * <li> <code>com::sun::star::sdbc::XResultSet</code></li>
+ * <li> <code>com::sun::star::sdbc::XColumnLocate</code></li>
+ * <li> <code>com::sun::star::sdbc::XRowSet</code></li>
+ * <li> <code>com::sun::star::sdb::RowSet</code></li>
+ * <li> <code>com::sun::star::sdbc::XRowUpdate</code></li>
+ * <li> <code>com::sun::star::sdb::XRowSetApproveBroadcaster</code></li>
+ * <li> <code>com::sun::star::beans::XPropertySet</code></li>
+ * <li> <code>com::sun::star::sdbc::XRow</code></li>
+ * <li> <code>com::sun::star::sdbc::XWarningsSupplier</code></li>
+ * <li> <code>com::sun::star::lang::XComponent</code></li>
+ * <li> <code>com::sun::star::sdbcx::ResultSet</code></li>
+ * <li> <code>com::sun::star::sdbc::ResultSet</code></li>
+ * </ul>
+ * <p>
  * The following files used by this test :
  * <ul>
- *  <li><b> TestDB/TestDB.dbf </b> : the database file with some
- *    predefined fields described in <code>util.DBTools</code>.
- *    The copy of this file is always made in temp directory for
- *    testing purposes.</li>
- * </ul> <p>
+ * <li><b> TestDB/TestDB.dbf </b> : the database file with some predefined
+ * fields described in <code>util.DBTools</code>. The copy of this file is
+ * always made in temp directory for testing purposes.</li>
+ * </ul>
+ * <p>
  * The following parameters in ini-file used by this test:
  * <ul>
- *   <li><code>test.db.url</code> - URL to MySQL database.
- *   For example: <code>mysql://mercury:3306/api_current</code></li>
- *   <li><code>test.db.user</code> - user for MySQL database</li>
- *   <li><code>test.db.password</code> - password for MySQL database</li>
- * </ul><p>
+ * <li><code>test.db.url</code> - URL to MySQL database. For example:
+ * <code>mysql://mercury:3306/api_current</code></li>
+ * <li><code>test.db.user</code> - user for MySQL database</li>
+ * <li><code>test.db.password</code> - password for MySQL database</li>
+ * </ul>
+ * <p>
  *
  * @see com.sun.star.sdbc.RowSet
  * @see com.sun.star.sdbcx.XRowLocate
@@ -139,10 +142,9 @@ public class OSingleSelectQueryComposer extends TestCase {
     protected final static String dbSourceName = "OSingleSelectQueryComposerDataSource";
     public XConnection conn = null;
 
-
     @Override
-    protected void initialize ( TestParameters Param, PrintWriter log)
-        throws StatusException {
+    protected void initialize(TestParameters Param, PrintWriter log)
+            throws StatusException {
 
     }
 
@@ -167,103 +169,90 @@ public class OSingleSelectQueryComposer extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = null ;
-        try {
-            xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = null;
+        xMSF = Param.getMSF();
 
-              XNameAccess xNameAccess = UnoRuntime.queryInterface(
-                        XNameAccess.class,
-                        xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
-            // we use the first datasource
-            XDataSource xDS = UnoRuntime.queryInterface(
-                    XDataSource.class, xNameAccess.getByName( "Bibliography" ));
+        XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class,
+                xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
+        // we use the first datasource
+        XDataSource xDS = UnoRuntime.queryInterface(XDataSource.class,
+                xNameAccess.getByName("Bibliography"));
 
-            log.println("check XMultiServiceFactory");
-            XMultiServiceFactory xConn = UnoRuntime.queryInterface(XMultiServiceFactory.class,
-            xDS.getConnection("", ""));
+        log.println("check XMultiServiceFactory");
+        XMultiServiceFactory xConn = UnoRuntime.queryInterface(
+                XMultiServiceFactory.class, xDS.getConnection("", ""));
 
-            log.println("check getAvailableServiceNames");
-            String[] sServiceNames = xConn.getAvailableServiceNames();
-            if (! sServiceNames[0].equals("com.sun.star.sdb.SingleSelectQueryComposer"))
-            {
-                log.println("Service 'SingleSelectQueryComposer' not supported");
-            }
-
-            oInterface = xConn.createInstance( sServiceNames[0]);
-
-            if (oInterface == null) {
-                log.println("Service wasn't created") ;
-                throw new StatusException("Service wasn't created",
-                    new NullPointerException()) ;
-            }
-
-            Object oRowSet = xMSF.createInstance("com.sun.star.sdb.RowSet") ;
-
-            XPropertySet xSetProp = UnoRuntime.queryInterface
-                (XPropertySet.class, oRowSet) ;
-
-            xSetProp.setPropertyValue("DataSourceName", "Bibliography") ;
-            xSetProp.setPropertyValue("Command", "biblio") ;
-            xSetProp.setPropertyValue("CommandType",
-                Integer.valueOf(CommandType.TABLE)) ;
-
-            com.sun.star.sdbc.XRowSet xORowSet = UnoRuntime.queryInterface(com.sun.star.sdbc.XRowSet.class,
-            oRowSet) ;
-
-            xORowSet.execute() ;
-
-            XColumnsSupplier xColSup = UnoRuntime.queryInterface(XColumnsSupplier.class, oRowSet);
-
-            XNameAccess xCols = xColSup.getColumns();
-
-            XPropertySet xCol = (XPropertySet) AnyConverter.toObject(
-                                new Type(XPropertySet.class),
-                                xCols.getByName(xCols.getElementNames()[0]));
-
-            XSingleSelectQueryAnalyzer xQueryAna = UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,
-             oInterface);
-
-            // XSingleSelectQueryComposer
-            XSingleSelectQueryComposer xComposer = UnoRuntime.queryInterface(XSingleSelectQueryComposer.class,
-              xQueryAna);
-            xQueryAna.setQuery("SELECT * FROM \"biblio\"");
-
-            oObj = (XInterface) oInterface;
-            log.println("ImplementationName: " + utils.getImplName(oObj));
-
-            log.println( "    creating a new environment for object" );
-            TestEnvironment tEnv = new TestEnvironment( oObj );
-
-            // for XSingleSelectQueryAnalyzer
-            tEnv.addObjRelation("xComposer", xComposer);
-
-            // for XSingleSelectQueryComposer
-            tEnv.addObjRelation("xQueryAna", xQueryAna);
-
-            tEnv.addObjRelation("xProp", xCol);
-            tEnv.addObjRelation("colName", xCols.getElementNames()[0]);
-
-            XResultSet xResultSet = UnoRuntime.queryInterface(XResultSet.class, oRowSet);
-            tEnv.addObjRelation("xResultSet", xResultSet);
-
-          return tEnv;
-
-        } catch(com.sun.star.uno.Exception e) {
-            log.println("Can't create object" );
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create object", e) ;
+        log.println("check getAvailableServiceNames");
+        String[] sServiceNames = xConn.getAvailableServiceNames();
+        if (!sServiceNames[0]
+                .equals("com.sun.star.sdb.SingleSelectQueryComposer")) {
+            log.println("Service 'SingleSelectQueryComposer' not supported");
         }
+
+        oInterface = xConn.createInstance(sServiceNames[0]);
+        Object oRowSet = xMSF.createInstance("com.sun.star.sdb.RowSet");
+
+        XPropertySet xSetProp = UnoRuntime.queryInterface(XPropertySet.class,
+                oRowSet);
+
+        xSetProp.setPropertyValue("DataSourceName", "Bibliography");
+        xSetProp.setPropertyValue("Command", "biblio");
+        xSetProp.setPropertyValue("CommandType",
+                Integer.valueOf(CommandType.TABLE));
+
+        com.sun.star.sdbc.XRowSet xORowSet = UnoRuntime.queryInterface(
+                com.sun.star.sdbc.XRowSet.class, oRowSet);
+
+        xORowSet.execute();
+
+        XColumnsSupplier xColSup = UnoRuntime.queryInterface(
+                XColumnsSupplier.class, oRowSet);
+
+        XNameAccess xCols = xColSup.getColumns();
+
+        XPropertySet xCol = (XPropertySet) AnyConverter.toObject(new Type(
+                XPropertySet.class),
+                xCols.getByName(xCols.getElementNames()[0]));
+
+        XSingleSelectQueryAnalyzer xQueryAna = UnoRuntime.queryInterface(
+                XSingleSelectQueryAnalyzer.class, oInterface);
+
+        // XSingleSelectQueryComposer
+        XSingleSelectQueryComposer xComposer = UnoRuntime.queryInterface(
+                XSingleSelectQueryComposer.class, xQueryAna);
+        xQueryAna.setQuery("SELECT * FROM \"biblio\"");
+
+        oObj = (XInterface) oInterface;
+        log.println("ImplementationName: " + utils.getImplName(oObj));
+
+        log.println("    creating a new environment for object");
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        // for XSingleSelectQueryAnalyzer
+        tEnv.addObjRelation("xComposer", xComposer);
+
+        // for XSingleSelectQueryComposer
+        tEnv.addObjRelation("xQueryAna", xQueryAna);
+
+        tEnv.addObjRelation("xProp", xCol);
+        tEnv.addObjRelation("colName", xCols.getElementNames()[0]);
+
+        XResultSet xResultSet = UnoRuntime.queryInterface(XResultSet.class,
+                oRowSet);
+        tEnv.addObjRelation("xResultSet", xResultSet);
+
+        return tEnv;
 
     } // finish method getTestEnvironment
 
     /**
-    * Closes connection of <code>RowSet</code> instance created.
-    */
+     * Closes connection of <code>RowSet</code> instance created.
+     */
     @Override
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
     }
 }

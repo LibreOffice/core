@@ -27,7 +27,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.FormTools;
 import util.WriterTools;
 import util.utils;
@@ -56,7 +55,7 @@ public class TabControllerModel extends TestCase {
 
     @Override
     public TestEnvironment createTestEnvironment(TestParameters param,
-                                                 PrintWriter log) {
+                                                 PrintWriter log) throws Exception {
         XInterface oObj = null;
 
         log.println("inserting some ControlShapes");
@@ -68,14 +67,8 @@ public class TabControllerModel extends TestCase {
                                                             3500, 7500, 5000,
                                                             "TextField");
 
-        try {
-            oObj = (XInterface) param.getMSF().createInstance(
-                           "com.sun.star.awt.TabControllerModel");
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create " +
-                                      "TabControllerModel", e);
-        }
+        oObj = (XInterface) param.getMSF().createInstance(
+                       "com.sun.star.awt.TabControllerModel");
 
         log.println("creating a new environment for TabControllerModel");
 

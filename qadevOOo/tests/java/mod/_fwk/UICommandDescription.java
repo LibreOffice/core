@@ -20,7 +20,6 @@ package mod._fwk;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -30,19 +29,12 @@ public class UICommandDescription extends TestCase {
     XInterface oObj = null;
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        TestEnvironment tEnv = null;
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
-        try {
-            oObj = (XInterface)xMSF.createInstance("com.sun.star.frame.UICommandDescription");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could not create object 'UICommandDescription'", e);
-        }
+        oObj = (XInterface)xMSF.createInstance("com.sun.star.frame.UICommandDescription");
 
         log.println("TestObject: " + utils.getImplName(oObj));
-        tEnv = new TestEnvironment(oObj);
+        TestEnvironment tEnv = new TestEnvironment(oObj);
         return tEnv;
     }
 

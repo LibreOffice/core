@@ -122,13 +122,7 @@ public class SwXTableCellText extends TestCase {
         log.println( "Creating a test environment" );
         oTable = SOfficeFactory.createTextTable( xTextDoc );
 
-        try {
-            SOfficeFactory.insertTextContent(xTextDoc, oTable );
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't insert text content : "
-                +e.getMessage(),e);
-        }
+        SOfficeFactory.insertTextContent(xTextDoc, oTable );
 
         XCell oCell = oTable.getCellByName("A1");
         XSimpleText oCellText = UnoRuntime.queryInterface(XSimpleText.class, oCell);

@@ -19,7 +19,6 @@ package mod._dbaccess;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -175,7 +174,7 @@ public class ODatasourceBrowser extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         log.println("creating a test environment");
 
         if (xTextDoc != null) {
@@ -195,14 +194,8 @@ public class ODatasourceBrowser extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory((Param.getMSF()));
 
-        try {
-            log.println("creating a text document");
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a text document");
+        xTextDoc = SOF.createTextDoc(null);
 
         util.utils.pause(5000);
 
@@ -253,15 +246,9 @@ public class ODatasourceBrowser extends TestCase {
         param3.Value = "biblio";
         params[2] = param3;
 
-        try {
-            XInitialization xInit = UnoRuntime.queryInterface(
-                                            XInitialization.class, oObj);
-            xInit.initialize(params);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't initialize document", e);
-        }
+        XInitialization xInit = UnoRuntime.queryInterface(
+                                        XInitialization.class, oObj);
+        xInit.initialize(params);
 
         util.utils.pause(5000);
 

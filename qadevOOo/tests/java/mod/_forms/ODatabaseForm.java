@@ -22,7 +22,6 @@ import ifc.sdb._XCompletedExecution;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -307,7 +306,7 @@ public class ODatabaseForm extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         if (xTextDoc != null) {
             try {
                 XCloseable closer = UnoRuntime.queryInterface(
@@ -327,13 +326,7 @@ public class ODatabaseForm extends TestCase {
 
         //initialize test table
         if (isMySQLDB) {
-            try {
-                dbTools.initTestTableUsingJDBC(tableName, srcInf);
-            } catch (java.sql.SQLException e) {
-                throw new StatusException(e, Status.failed("Couldn't " + " init test table. SQLException..."));
-            } catch (java.lang.ClassNotFoundException e) {
-                throw new StatusException(e, Status.failed("Couldn't " + "register mysql driver"));
-            }
+            dbTools.initTestTableUsingJDBC(tableName, srcInf);
         }
 
         XInterface oObj = null;
@@ -368,15 +361,8 @@ public class ODatabaseForm extends TestCase {
 
         XLoadable formLoader = null;
 
-        try {
-            formLoader = FormTools.bindForm(xTextDoc, "MyForm", dbSourceName,
-                                            tableName);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Cann't bind the form to source '" + dbSourceName +
-                        "', table '" + tableName + "' :");
-            e.printStackTrace(log);
-            throw new StatusException("Cann't bind a form", e);
-        }
+        formLoader = FormTools.bindForm(xTextDoc, "MyForm", dbSourceName,
+                                        tableName);
 
 
         // DEBUG
@@ -489,14 +475,8 @@ public class ODatabaseForm extends TestCase {
         XControl cntrl = null;
 
         //now get the OEditControl
-        try {
-            cntrl = the_access.getControl(the_Model);
-            log.println(cntrl.getClass().getName());
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Couldn't get OEditControl");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get OEditControl", e);
-        }
+        cntrl = the_access.getControl(the_Model);
+        log.println(cntrl.getClass().getName());
 
         XResultSet the_set = UnoRuntime.queryInterface(
                                      XResultSet.class, oObj);

@@ -19,7 +19,6 @@ package mod._svtools;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -74,7 +73,7 @@ public class AccessibleTabBar extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         log.println("creating a test environment");
 
         if (xDoc != null) {
@@ -86,16 +85,10 @@ public class AccessibleTabBar extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
 
-        try {
-            log.println("creating a calc document");
-            xDoc = UnoRuntime.queryInterface(XComponent.class,
-                                                          SOF.createCalcDoc(
-                                                                  null));
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a calc document");
+        xDoc = UnoRuntime.queryInterface(XComponent.class,
+                                                      SOF.createCalcDoc(
+                                                              null));
 
         util.utils.pause(5000);
 

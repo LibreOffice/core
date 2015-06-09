@@ -20,7 +20,6 @@ package mod._sfx;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -64,21 +63,16 @@ public class DocumentTemplates extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF();
         XInterface oObj = null;
         XStorable store = null;
 
-        try {
-            oObj = (XInterface)xMSF.createInstance
-                ("com.sun.star.frame.DocumentTemplates");
-            store = UnoRuntime.queryInterface
-                (XStorable.class,xTextDoc);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        oObj = (XInterface)xMSF.createInstance
+            ("com.sun.star.frame.DocumentTemplates");
+        store = UnoRuntime.queryInterface
+            (XStorable.class,xTextDoc);
 
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);

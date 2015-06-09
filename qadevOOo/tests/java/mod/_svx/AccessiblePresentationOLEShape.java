@@ -74,7 +74,7 @@ public class AccessiblePresentationOLEShape extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XShape oShape = null;
@@ -84,12 +84,8 @@ public class AccessiblePresentationOLEShape extends TestCase {
         log.println( "creating a test environment" );
 
         XMultiServiceFactory docMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc);
-        try {
-            oShape = UnoRuntime.queryInterface(XShape.class,
-                docMSF.createInstance("com.sun.star.presentation.OLE2Shape"));
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("couldn't create component", e);
-        }
+        oShape = UnoRuntime.queryInterface(XShape.class,
+            docMSF.createInstance("com.sun.star.presentation.OLE2Shape"));
 
 
         XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oShape);

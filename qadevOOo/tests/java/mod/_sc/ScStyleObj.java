@@ -116,7 +116,7 @@ public class ScStyleObj extends TestCase {
     * @see com.sun.star.style.XStyleFamiliesSupplier
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
 
         // creation of the testobject here
@@ -131,62 +131,31 @@ public class ScStyleObj extends TestCase {
         XIndexAccess oStyleFamiliesIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oStyleFamilies);
         XNameAccess oStyleFamilyNameAccess = null;
         XStyle oStyle = null;
-        try {
-            oStyleFamilyNameAccess = (XNameAccess) AnyConverter.toObject(
-                new Type(XNameAccess.class),
-                    oStyleFamiliesIndexAccess.getByIndex(0));
+        oStyleFamilyNameAccess = (XNameAccess) AnyConverter.toObject(
+            new Type(XNameAccess.class),
+                oStyleFamiliesIndexAccess.getByIndex(0));
 
-            XIndexAccess oStyleFamilyIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class,
-            oStyleFamilyNameAccess);
-            oStyle = (XStyle) AnyConverter.toObject(
-                new Type(XStyle.class),oStyleFamilyIndexAccess.getByIndex(0));
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get by index", e);
-        }
+        XIndexAccess oStyleFamilyIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class,
+        oStyleFamilyNameAccess);
+        oStyle = (XStyle) AnyConverter.toObject(
+            new Type(XStyle.class),oStyleFamilyIndexAccess.getByIndex(0));
 
         log.println("Creating a user-defined style");
         XMultiServiceFactory oMSF = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, xSpreadsheetDoc);
 
-        XInterface oInt = null;
-        try {
-            oInt = (XInterface)
+        XInterface oInt = (XInterface)
                 oMSF.createInstance("com.sun.star.style.CellStyle");
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
         XStyle oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
 
         XNameContainer oStyleFamilyNameContainer = UnoRuntime.
             queryInterface(XNameContainer.class, oStyleFamilyNameAccess);
 
-        try {
-            if (oStyleFamilyNameContainer.hasByName("My Style")) {
-                oStyleFamilyNameContainer.removeByName("My Style");
-            }
-
-            oStyleFamilyNameContainer.insertByName("My Style", oMyStyle);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test environment", e);
-        } catch(com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test environment", e);
-        } catch(com.sun.star.container.ElementExistException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test environment", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create test environment", e);
+        if (oStyleFamilyNameContainer.hasByName("My Style")) {
+            oStyleFamilyNameContainer.removeByName("My Style");
         }
+
+        oStyleFamilyNameContainer.insertByName("My Style", oMyStyle);
 
 
         //using the style
@@ -195,39 +164,14 @@ public class ScStyleObj extends TestCase {
         XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
 
         XCell aCell = null;
-        try {
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
-            log.println("Getting a cell from sheet") ;
-            aCell = oSheet.getCellByPosition(2,3) ;
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get spreadsheet by index", e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get spreadsheet by index", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get spreadsheet by index", e);
-        }
+        XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+        log.println("Getting a cell from sheet") ;
+        aCell = oSheet.getCellByPosition(2,3) ;
 
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, aCell);
 
-        try {
-            xProp.setPropertyValue("CellStyle", oMyStyle.getName());
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set property CellStyle", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set property CellStyle", e);
-        } catch(com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set property CellStyle", e);
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set property CellStyle", e);
-        }
+        xProp.setPropertyValue("CellStyle", oMyStyle.getName());
 
         log.println("creating a new environment for object");
         TestEnvironment tEnv = new TestEnvironment(oMyStyle);

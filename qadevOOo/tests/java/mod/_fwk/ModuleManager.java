@@ -66,29 +66,17 @@ public class ModuleManager extends TestCase {
      */
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
-        PrintWriter log ) throws StatusException {
+        PrintWriter log ) throws Exception {
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface)Param.getMSF().createInstance(
-                "com.sun.star.comp.framework.ModuleManager");
-        } catch(Exception e) {
-            throw new StatusException(e, Status.failed("Couldn't create instance"));
-        }
+        XInterface oObj = (XInterface)Param.getMSF().createInstance(
+            "com.sun.star.comp.framework.ModuleManager");
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      Param.getMSF());
 
         // get text document interfaces
-        try {
-            log.println("creating a text document");
-            xTextDoc = SOF.createTextDoc(null);
-
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document ", e);
-        }
+        log.println("creating a text document");
+        xTextDoc = SOF.createTextDoc(null);
         XModel xTextMode1 = UnoRuntime.queryInterface(XModel.class,
                                                        xTextDoc);
         XController xTextController = xTextMode1.getCurrentController();
@@ -96,80 +84,48 @@ public class ModuleManager extends TestCase {
 
 
         // get webdoc interfaces
-        try {
-            log.println("creating a web document");
-            xWebDoc = SOF.loadDocument("private:factory/swriter/web");
-
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document ", e);
-        }
+        log.println("creating a web document");
+        xWebDoc = SOF.loadDocument("private:factory/swriter/web");
         XModel xWebMode1 = UnoRuntime.queryInterface(XModel.class,
                                                        xWebDoc);
         XController xWebController = xWebMode1.getCurrentController();
         XFrame xWebFrame = xWebController.getFrame();
 
         // get global document interfaces
-        try {
-            log.println("creating a global document");
-            xGlobalDoc = SOF.loadDocument("private:factory/swriter/GlobalDocument");
-
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document ", e);
-        }
+        log.println("creating a global document");
+        xGlobalDoc = SOF.loadDocument("private:factory/swriter/GlobalDocument");
         XModel xGlobalMode1 = UnoRuntime.queryInterface(XModel.class,
                                                        xGlobalDoc);
         XController xGlobalController = xGlobalMode1.getCurrentController();
         XFrame xGlobalFrame = xGlobalController.getFrame();
 
         // get clac interfaces
-        try {
-            log.println("creating a spreadsheetdocument");
-            xSheetDoc = SOF.createCalcDoc(null);
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document ", e);
-        }
+        log.println("creating a spreadsheetdocument");
+        xSheetDoc = SOF.createCalcDoc(null);
         XModel xSheetMode1 = UnoRuntime.queryInterface(XModel.class,
                                                        xSheetDoc);
 
         XController xSheetController = xSheetMode1.getCurrentController();
         XFrame xSheetFrame = xSheetController.getFrame();
         // get draw interfaces
-        try {
-            log.println("creating a draw document");
-            xDrawDoc = SOF.createDrawDoc(null);
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document ", e);
-        }
+        log.println("creating a draw document");
+        xDrawDoc = SOF.createDrawDoc(null);
         XModel xDrawMode1 = UnoRuntime.queryInterface(XModel.class,
                                                        xDrawDoc);
         XController xDrawController = xDrawMode1.getCurrentController();
         XFrame xDrawFrame = xDrawController.getFrame();
 
         // get impress interfaces
-        try {
-            log.println("creating a impress document");
-            xImpressDoc = SOF.createImpressDoc(null);
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document ", e);
-        }
+        log.println("creating a impress document");
+        xImpressDoc = SOF.createImpressDoc(null);
         XModel xImpressMode1 = UnoRuntime.queryInterface(XModel.class,
                                                        xImpressDoc);
         XController xImpressController = xImpressMode1.getCurrentController();
         XFrame xImpressFrame = xImpressController.getFrame();
 
         // get math interfaces
-        try {
-            log.println("creating a math document");
-            xMathDoc = SOF.createMathDoc(null);
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document ", e);
-        }
+        log.println("creating a math document");
+        xMathDoc = SOF.createMathDoc(null);
         XModel xMathMode1 = UnoRuntime.queryInterface(XModel.class,
                                                        xMathDoc);
         XController xMathController = xMathMode1.getCurrentController();

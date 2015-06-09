@@ -20,7 +20,6 @@ package mod._mcnttype;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -57,21 +56,11 @@ public class MimeContentTypeFactory extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
+                                                    throws Exception {
         XMultiServiceFactory xMSF = Param.getMSF();
-
-
-        try {
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.datatransfer.MimeContentTypeFactory" );
-        } catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
-
-        oObj = (XInterface) oInterface;
+        Object oInterface = xMSF.createInstance
+            ( "com.sun.star.datatransfer.MimeContentTypeFactory" );
+        XInterface oObj = (XInterface) oInterface;
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

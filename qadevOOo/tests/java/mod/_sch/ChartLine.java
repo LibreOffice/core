@@ -87,7 +87,7 @@ public class ChartLine extends TestCase {
     * @see com.sun.star.chart.ChartLine
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XPropertySet oObj = null;
         XDiagram oDiagram = null;
@@ -101,35 +101,12 @@ public class ChartLine extends TestCase {
         xChartDoc.setDiagram(oDiagram);
 
         // get the Line
-        try {
-            log.println( "getting Line" );
-            XPropertySet RowProps = oDiagram.getDataRowProperties(1);
-            RowProps.setPropertyValue("MeanValue", Boolean.TRUE);
-            oObj = (XPropertySet) AnyConverter.toObject(
-                new Type(XPropertySet.class),
-                    RowProps.getPropertyValue("DataMeanValueProperties"));
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get Line", e );
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get Line", e );
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get Line", e );
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get Line", e );
-        }
-        catch(com.sun.star.beans.PropertyVetoException e) {
-             // Some exception occurs.FAILED
-             e.printStackTrace( log );
-             throw new StatusException( "Couldn't get Line", e );
-         }
+        log.println( "getting Line" );
+        XPropertySet RowProps = oDiagram.getDataRowProperties(1);
+        RowProps.setPropertyValue("MeanValue", Boolean.TRUE);
+        oObj = (XPropertySet) AnyConverter.toObject(
+            new Type(XPropertySet.class),
+                RowProps.getPropertyValue("DataMeanValueProperties"));
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

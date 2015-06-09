@@ -20,7 +20,6 @@ package mod._fps;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -88,7 +87,7 @@ public class FilePicker extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
+                                                    throws Exception {
         XInterface oObj = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = Param.getMSF();
@@ -97,13 +96,8 @@ public class FilePicker extends TestCase {
             (com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_READONLY_VERSION)};
         short ctrlId =
             com.sun.star.ui.dialogs.ExtendedFilePickerElementIds.CHECKBOX_READONLY;
-        try {
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.ui.dialogs.FilePicker" );
-        } catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
+        oInterface = xMSF.createInstance
+            ( "com.sun.star.ui.dialogs.FilePicker" );
 
         oObj = (XInterface) oInterface;
 

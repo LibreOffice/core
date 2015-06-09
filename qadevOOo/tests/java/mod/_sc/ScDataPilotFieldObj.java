@@ -117,10 +117,9 @@ public class ScDataPilotFieldObj extends TestCase {
     * @see com.sun.star.sheet.XDataPilotDescriptor
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(
+            TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
-
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -146,105 +145,56 @@ public class ScDataPilotFieldObj extends TestCase {
         XSpreadsheet oSheet = null;
         XSpreadsheet oSheet2 = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(
-                                            XIndexAccess.class, xSpreadsheets);
+                XIndexAccess.class, xSpreadsheets);
         // Make sure there are at least two sheets
-        xSpreadsheets.insertNewByName("Some Sheet", (short)0);
+        xSpreadsheets.insertNewByName("Some Sheet", (short) 0);
 
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                             new Type(XSpreadsheet.class),
-                             oIndexAccess.getByIndex(0));
-            oSheet2 = (XSpreadsheet) AnyConverter.toObject(
-                              new Type(XSpreadsheet.class),
-                              oIndexAccess.getByIndex(1));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't get a spreadsheet", e);
+        oSheet = (XSpreadsheet) AnyConverter.toObject(new Type(
+                XSpreadsheet.class), oIndexAccess.getByIndex(0));
+        oSheet2 = (XSpreadsheet) AnyConverter.toObject(new Type(
+                XSpreadsheet.class), oIndexAccess.getByIndex(1));
+
+        log.println("Filling a table");
+
+        for (int i = 1; i < mMaxFieldIndex; i++) {
+            oSheet.getCellByPosition(i, 0).setFormula("Col" + i);
+            oSheet.getCellByPosition(0, i).setFormula("Row" + i);
+            oSheet2.getCellByPosition(i, 0).setFormula("Col" + i);
+            oSheet2.getCellByPosition(0, i).setFormula("Row" + i);
         }
 
-        try {
-            log.println("Filling a table");
-
-            for (int i = 1; i < mMaxFieldIndex; i++) {
-                oSheet.getCellByPosition(i, 0).setFormula("Col" + i);
-                oSheet.getCellByPosition(0, i).setFormula("Row" + i);
-                oSheet2.getCellByPosition(i, 0).setFormula("Col" + i);
-                oSheet2.getCellByPosition(0, i).setFormula("Row" + i);
+        for (int i = 1; i < mMaxFieldIndex; i++)
+            for (int j = 1; j < mMaxFieldIndex; j++) {
+                oSheet.getCellByPosition(i, j).setValue(i * (j + 1));
+                oSheet2.getCellByPosition(i, j).setValue(i * (j + 2));
             }
 
-            for (int i = 1; i < mMaxFieldIndex; i++)
-                for (int j = 1; j < mMaxFieldIndex; j++) {
-                    oSheet.getCellByPosition(i, j).setValue(i * (j + 1));
-                    oSheet2.getCellByPosition(i, j).setValue(i * (j + 2));
-                }
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't fill some cells", e);
-        }
+        oSheet.getCellByPosition(1, 5);
 
-        try {
-            oSheet.getCellByPosition(1, 5);
+        int x = sCellAdress.Column;
+        int y = sCellAdress.Row + 3;
 
-            int x = sCellAdress.Column;
-            int y = sCellAdress.Row + 3;
-
-
-            oSheet.getCellByPosition(x, y);
-            Integer.valueOf(27);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't get cells for changing.", e);
-        }
-
+        oSheet.getCellByPosition(x, y);
 
         // create the test objects
         log.println("Getting test objects");
 
         XDataPilotTablesSupplier DPTS = UnoRuntime.queryInterface(
-                                                XDataPilotTablesSupplier.class,
-                                                oSheet);
+                XDataPilotTablesSupplier.class, oSheet);
         XDataPilotTables DPT = DPTS.getDataPilotTables();
         XDataPilotDescriptor DPDsc = DPT.createDataPilotDescriptor();
         DPDsc.setSourceRange(sCellRangeAdress);
 
         XPropertySet fieldPropSet = null;
 
-        try {
-            Object oDataPilotField = DPDsc.getDataPilotFields().getByIndex(0);
-            fieldPropSet = UnoRuntime.queryInterface(
-                                   XPropertySet.class, oDataPilotField);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't create a test environment", e);
-        }
+        Object oDataPilotField = DPDsc.getDataPilotFields().getByIndex(0);
+        fieldPropSet = UnoRuntime.queryInterface(XPropertySet.class,
+                oDataPilotField);
 
-        try {
-            fieldPropSet.setPropertyValue("Function",
-                                          com.sun.star.sheet.GeneralFunction.SUM);
-            fieldPropSet.setPropertyValue("Orientation",
-                                          com.sun.star.sheet.DataPilotFieldOrientation.DATA);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't create a test environment", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't create a test environment", e);
-        }
+        fieldPropSet.setPropertyValue("Function",
+                com.sun.star.sheet.GeneralFunction.SUM);
+        fieldPropSet.setPropertyValue("Orientation",
+                com.sun.star.sheet.DataPilotFieldOrientation.DATA);
 
         log.println("Insert the DataPilotTable");
 
@@ -257,22 +207,10 @@ public class ScDataPilotFieldObj extends TestCase {
 
         DPT.insertNewByName("DataPilotTable", sCellAdress, DPDsc);
 
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-                           new Type(XInterface.class), IA.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't get data pilot field", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't get data pilot field", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new StatusException("Couldn't get data pilot field", e);
-        }
+        oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),
+                IA.getByIndex(0));
 
-        log.println("Creating object - " +
-                    ((oObj == null) ? "FAILED" : "OK"));
+        log.println("Creating object - " + ((oObj == null) ? "FAILED" : "OK"));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

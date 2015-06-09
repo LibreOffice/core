@@ -20,7 +20,6 @@ package mod._javaloader;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -59,20 +58,11 @@ public class JavaComponentLoader extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance(
-                            "com.sun.star.comp.stoc.JavaComponentLoader" );
-        }
-        catch( Exception e ) {
-            log.println("JavaComponentLoader Service not available" );
-        }
-
-        oObj = (XInterface) oInterface;
+                                                    throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance(
+                        "com.sun.star.comp.stoc.JavaComponentLoader" );
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for JavaComponentLoader object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

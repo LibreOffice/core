@@ -22,11 +22,9 @@ import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.WriterTools;
 import util.utils;
 
@@ -56,16 +54,9 @@ public class UnoControlCheckBoxModel extends TestCase {
 
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) Param.getMSF().createInstance(
-                           "com.sun.star.awt.UnoControlCheckBoxModel");
-        } catch (Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create object", e);
-        }
+                                                                 PrintWriter log) throws Exception {
+        XInterface oObj = (XInterface) Param.getMSF().createInstance(
+                       "com.sun.star.awt.UnoControlCheckBoxModel");
 
         log.println(
                 "creating a new environment for UnoControlCheckBoxModel object");

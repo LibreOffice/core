@@ -124,20 +124,14 @@ public class ChXDataRow extends TestCase {
     * </ul>
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XPropertySet  oObj = null;
         XDiagram oDiagram = null;
         // get the ChXDataRowPoint_Row
-        try {
-            log.println( "getting ChXDataRowPoint_Row" );
-            oDiagram = xChartDoc.getDiagram();
-            oObj = oDiagram.getDataRowProperties(1);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't get ChXDataRowPoint_Row", e );
-        }
+        log.println( "getting ChXDataRowPoint_Row" );
+        oDiagram = xChartDoc.getDiagram();
+        oObj = oDiagram.getDataRowProperties(1);
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

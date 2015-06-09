@@ -20,7 +20,6 @@ package mod._fileacc;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -50,21 +49,13 @@ public class SimpleFileAccess extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
-        Object oIH = null;
+                                                    throws Exception {
 
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ("com.sun.star.comp.ucb.SimpleFileAccess");
-            oIH = xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
-        } catch( com.sun.star.uno.Exception e ) {
-            log.println("SimpleFileAccess Service not available" );
-        }
-
-        oObj = (XInterface) oInterface;
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
+            ("com.sun.star.comp.ucb.SimpleFileAccess");
+        Object oIH = xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for CoreReflection object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

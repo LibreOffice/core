@@ -228,7 +228,7 @@ public class SbaXGridControl extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
@@ -254,63 +254,33 @@ public class SbaXGridControl extends TestCase {
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
-        try {
-            columns = UnoRuntime.queryInterface(
-                              XGridColumnFactory.class, the_Model);
-            aControl = columns.createColumn("TextField");
-            aControl.setPropertyValue("DataField", "Identifier");
-            aControl.setPropertyValue("Label", "Identifier");
-            aControl2 = columns.createColumn("TextField");
-            aControl2.setPropertyValue("DataField", "Publisher");
-            aControl2.setPropertyValue("Label", "Publisher");
-            aControl3 = columns.createColumn("TextField");
-            aControl3.setPropertyValue("DataField", "Author");
-            aControl3.setPropertyValue("Label", "Author");
-            aControl4 = columns.createColumn("TextField");
-            aControl4.setPropertyValue("DataField", "Title");
-            aControl4.setPropertyValue("Label", "Title");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            // Some exception occurs.FAILED
-            log.println("!!! Couldn't create instance : " + e);
-            throw new StatusException("Can't create column instances.", e);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            // Some exception occurs.FAILED
-            log.println("!!! Couldn't create instance : " + e);
-            throw new StatusException("Can't create column instances.", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            // Some exception occurs.FAILED
-            log.println("!!! Couldn't create instance : " + e);
-            throw new StatusException("Can't create column instances.", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            // Some exception occurs.FAILED
-            log.println("!!! Couldn't create instance : " + e);
-            throw new StatusException("Can't create column instances.", e);
-        }
+        columns = UnoRuntime.queryInterface(
+                          XGridColumnFactory.class, the_Model);
+        aControl = columns.createColumn("TextField");
+        aControl.setPropertyValue("DataField", "Identifier");
+        aControl.setPropertyValue("Label", "Identifier");
+        aControl2 = columns.createColumn("TextField");
+        aControl2.setPropertyValue("DataField", "Publisher");
+        aControl2.setPropertyValue("Label", "Publisher");
+        aControl3 = columns.createColumn("TextField");
+        aControl3.setPropertyValue("DataField", "Author");
+        aControl3.setPropertyValue("Label", "Author");
+        aControl4 = columns.createColumn("TextField");
+        aControl4.setPropertyValue("DataField", "Title");
+        aControl4.setPropertyValue("Label", "Title");
 
         XNameContainer aContainer = UnoRuntime.queryInterface(
                                             XNameContainer.class, the_Model);
 
-        try {
-            aContainer.insertByName("First", aControl);
-            aContainer.insertByName("Second", aControl2);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("!!! Could't insert column Instance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e);
-        }
+        aContainer.insertByName("First", aControl);
+        aContainer.insertByName("Second", aControl2);
 
         //now get the OGridControl
-        try {
-            oObj = the_access.getControl(the_Model);
-            the_win = the_access.getControl(the_Model).getPeer();
-            the_kit = the_win.getToolkit();
-            aDevice = the_kit.createScreenCompatibleDevice(200, 200);
-            aGraphic = aDevice.createGraphics();
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get GridControl");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get GridControl", e);
-        }
+        oObj = the_access.getControl(the_Model);
+        the_win = the_access.getControl(the_Model).getPeer();
+        the_kit = the_win.getToolkit();
+        aDevice = the_kit.createScreenCompatibleDevice(200, 200);
+        aGraphic = aDevice.createGraphics();
 
 
         // creating another window
@@ -331,14 +301,8 @@ public class SbaXGridControl extends TestCase {
         XWindow win = null;
         Object cntrl = null;
 
-        try {
-            cntrl = the_access.getControl(the_Model);
-            win = UnoRuntime.queryInterface(XWindow.class, cntrl);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get Control");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get Control", e);
-        }
+        cntrl = the_access.getControl(the_Model);
+        win = UnoRuntime.queryInterface(XWindow.class, cntrl);
 
         log.println("creating a new environment for object");
 

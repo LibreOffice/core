@@ -20,7 +20,6 @@ package mod._namingservice;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -59,7 +58,7 @@ public class NamingService extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
+                                                    throws Exception {
         XInterface oObj = null;
         Object oInterface = null;
 
@@ -78,14 +77,9 @@ public class NamingService extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // objRelation for XNamingService as object to be registered
-        try {
-            tEnv.addObjRelation("XNamingService.RegisterObject",
-                Param.getMSF().createInstance
-                ("com.sun.star.lang.ServiceManager")) ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't create object relation") ;
-            throw new StatusException("Can't create object relation", e) ;
-        }
+        tEnv.addObjRelation("XNamingService.RegisterObject",
+            Param.getMSF().createInstance
+            ("com.sun.star.lang.ServiceManager")) ;
 
         return tEnv;
     } // finish method getTestEnvironment

@@ -140,7 +140,7 @@ public class OImageButtonControl extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         XInterface oObj = null;
         Object anotherCtrl = null;
         XWindowPeer the_win = null;
@@ -171,18 +171,12 @@ public class OImageButtonControl extends TestCase {
                                             xTextDoc.getCurrentController());
 
         //now get the OImageButtonControl
-        try {
-            oObj = the_access.getControl(the_Model);
-            anotherCtrl = the_access.getControl(the_Model2);
-            the_win = the_access.getControl(the_Model).getPeer();
-            the_kit = the_win.getToolkit();
-            aDevice = the_kit.createScreenCompatibleDevice(200, 200);
-            aGraphic = aDevice.createGraphics();
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Couldn't get OImageButtonControl");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get OImageButtonControl", e);
-        }
+        oObj = the_access.getControl(the_Model);
+        anotherCtrl = the_access.getControl(the_Model2);
+        the_win = the_access.getControl(the_Model).getPeer();
+        the_kit = the_win.getToolkit();
+        aDevice = the_kit.createScreenCompatibleDevice(200, 200);
+        aGraphic = aDevice.createGraphics();
 
         log.println(
                 "creating a new environment for OImageButtonControl object");

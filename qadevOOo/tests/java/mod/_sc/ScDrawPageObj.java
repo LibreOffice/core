@@ -92,7 +92,7 @@ public class ScDrawPageObj extends TestCase {
      * </ul>
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XShape oShape = null ;
@@ -103,35 +103,21 @@ public class ScDrawPageObj extends TestCase {
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
-        try {
-            log.println( "getting Drawpages" );
-            XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDoc);
-            oDP = oDPS.getDrawPages();
-            oDP.insertNewByIndex(1);
-            oDP.insertNewByIndex(2);
-            oObj = (XDrawPage) AnyConverter.toObject(
-                    new Type(XDrawPage.class),oDP.getByIndex(0));
+        log.println( "getting Drawpages" );
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDoc);
+        oDP = oDPS.getDrawPages();
+        oDP.insertNewByIndex(1);
+        oDP.insertNewByIndex(2);
+        oObj = (XDrawPage) AnyConverter.toObject(
+                new Type(XDrawPage.class),oDP.getByIndex(0));
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
-            oShape = SOF.createShape(xComp,5000,3500,7500,5000,"Rectangle");
-            DrawTools.getShapes((XDrawPage) oObj).add(oShape);
-            XShape oShape1 = SOF.createShape(xComp,
-                5000,5500,5000,5000,"Rectangle");
-            DrawTools.getShapes((XDrawPage) oObj).add(oShape1);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Couldn't create insance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment", e) ;
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Couldn't create insance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment", e) ;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Couldn't create insance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't create environment", e) ;
-        }
+        oShape = SOF.createShape(xComp,5000,3500,7500,5000,"Rectangle");
+        DrawTools.getShapes((XDrawPage) oObj).add(oShape);
+        XShape oShape1 = SOF.createShape(xComp,
+            5000,5500,5000,5000,"Rectangle");
+        DrawTools.getShapes((XDrawPage) oObj).add(oShape1);
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oObj );

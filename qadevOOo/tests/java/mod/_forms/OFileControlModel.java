@@ -136,7 +136,7 @@ public class OFileControlModel extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-        PrintWriter log) {
+        PrintWriter log) throws Exception {
         XInterface oObj = null;
 
 
@@ -158,24 +158,20 @@ public class OFileControlModel extends TestCase {
             XMultiServiceFactory.class,
             xDrawDoc);
 
-        try {
-            Object oInt = oDocMSF.createInstance(
-                "com.sun.star.drawing.ControlShape");
-            Object aCon = oDocMSF.createInstance(
-                "com.sun.star.form.component." + objName);
-            aControl = UnoRuntime.queryInterface(
-                XControlModel.class, aCon);
-            aShape = UnoRuntime.queryInterface(
-                XControlShape.class, oInt);
-            size.Height = 1500;
-            size.Width = 3000;
-            position.X = 1000;
-            position.Y = 1000;
-            aShape.setSize(size);
-            aShape.setPosition(position);
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException(e, Status.failed("Can't create component"));
-        }
+        Object oInt = oDocMSF.createInstance(
+            "com.sun.star.drawing.ControlShape");
+        Object aCon = oDocMSF.createInstance(
+            "com.sun.star.form.component." + objName);
+        aControl = UnoRuntime.queryInterface(
+            XControlModel.class, aCon);
+        aShape = UnoRuntime.queryInterface(
+            XControlShape.class, oInt);
+        size.Height = 1500;
+        size.Width = 3000;
+        position.X = 1000;
+        position.Y = 1000;
+        aShape.setSize(size);
+        aShape.setPosition(position);
 
         aShape.setControl(aControl);
 

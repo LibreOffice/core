@@ -20,7 +20,6 @@ package mod._impreg;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -51,22 +50,11 @@ public class ImplementationRegistration extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
-                                                    throws StatusException {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.registry.ImplementationRegistration" );
-        } catch( com.sun.star.uno.Exception e ) {
-            log.println("Service not available" );
-        }
-
-        if (oInterface == null)
-            log.println("Service wasn't created") ;
-
-        oObj = (XInterface) oInterface;
+                                                    throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
+            ( "com.sun.star.registry.ImplementationRegistration" );
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

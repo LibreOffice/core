@@ -113,7 +113,7 @@ public class XMLMetaExporter extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
         final String expName = "XMLMetaExporterName" ;
@@ -122,23 +122,18 @@ public class XMLMetaExporter extends TestCase {
         FilterChecker filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class), filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Math.XMLMetaExporter", new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xMathDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Math.XMLMetaExporter", new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xMathDoc);
 
-            // setting a new name and value for user info field
-            XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
-                (XDocumentPropertiesSupplier.class, xMathDoc);
-            final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
-            XPropertyContainer xProps = xDocProps.getUserDefinedProperties();
-            xProps.addProperty(expName, (short)0, expValue);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        // setting a new name and value for user info field
+        XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+            (XDocumentPropertiesSupplier.class, xMathDoc);
+        final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
+        XPropertyContainer xProps = xDocProps.getUserDefinedProperties();
+        xProps.addProperty(expName, (short)0, expValue);
 
         // checking tags required
         filter.addTag(new XMLTools.Tag("office:document-meta")) ;

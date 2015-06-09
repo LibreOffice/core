@@ -161,7 +161,7 @@ public class OGridControlModel extends GenericModelTest {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 
         XInterface oObj = tEnv.getTestObject();
@@ -172,39 +172,19 @@ public class OGridControlModel extends GenericModelTest {
         XPropertySet aControl4 = null;
         XPropertySet aControl5 = null;
 
-        try {
-            XGridColumnFactory columns = UnoRuntime.queryInterface(
-                              XGridColumnFactory.class, oObj);
-            aControl = columns.createColumn("TextField");
-            aControl2 = columns.createColumn("DateField");
-            aControl3 = columns.createColumn("TextField");
-            aControl4 = columns.createColumn("TextField");
-            aControl5 = columns.createColumn("TextField");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            // Some exception occurs.FAILED
-            log.println("!!! Couldn't create instance : " + e);
-            throw new StatusException("Can't create column instances.", e);
-        }
+        XGridColumnFactory columns = UnoRuntime.queryInterface(
+                          XGridColumnFactory.class, oObj);
+        aControl = columns.createColumn("TextField");
+        aControl2 = columns.createColumn("DateField");
+        aControl3 = columns.createColumn("TextField");
+        aControl4 = columns.createColumn("TextField");
+        aControl5 = columns.createColumn("TextField");
 
         XNameContainer aContainer = UnoRuntime.queryInterface(
                                             XNameContainer.class, oObj);
 
-        try {
-            aContainer.insertByName("First", aControl);
-            aContainer.insertByName("Second", aControl2);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("!!! Could't insert column Instance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("!!! Could't insert column Instance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e);
-        } catch (com.sun.star.container.ElementExistException e) {
-            log.println("!!! Could't insert column Instance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e);
-        }
+        aContainer.insertByName("First", aControl);
+        aContainer.insertByName("Second", aControl2);
 
         //Relations for XSelectionSupplier
         tEnv.addObjRelation("Selections", new Object[] { aControl, aControl2 });
@@ -302,7 +282,7 @@ class OGridControlModelold extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         XInterface oObj = null;
         XInterface oInstance = null;
         XPropertySet aControl = null;
@@ -325,39 +305,19 @@ class OGridControlModelold extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        try {
-            columns = UnoRuntime.queryInterface(
-                              XGridColumnFactory.class, oObj);
-            aControl = columns.createColumn("TextField");
-            aControl2 = columns.createColumn("DateField");
-            aControl3 = columns.createColumn("TextField");
-            aControl4 = columns.createColumn("TextField");
-            columns.createColumn("TextField");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            // Some exception occurs.FAILED
-            log.println("!!! Couldn't create instance : " + e);
-            throw new StatusException("Can't create column instances.", e);
-        }
+        columns = UnoRuntime.queryInterface(
+                          XGridColumnFactory.class, oObj);
+        aControl = columns.createColumn("TextField");
+        aControl2 = columns.createColumn("DateField");
+        aControl3 = columns.createColumn("TextField");
+        aControl4 = columns.createColumn("TextField");
+        columns.createColumn("TextField");
 
         XNameContainer aContainer = UnoRuntime.queryInterface(
                                             XNameContainer.class, oObj);
 
-        try {
-            aContainer.insertByName("First", aControl);
-            aContainer.insertByName("Second", aControl2);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("!!! Could't insert column Instance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("!!! Could't insert column Instance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e);
-        } catch (com.sun.star.container.ElementExistException e) {
-            log.println("!!! Could't insert column Instance");
-            e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e);
-        }
+        aContainer.insertByName("First", aControl);
+        aContainer.insertByName("Second", aControl2);
 
         //Relations for XSelectionSupplier
         tEnv.addObjRelation("Selections", new Object[] { aControl, aControl2 });
@@ -373,16 +333,11 @@ class OGridControlModelold extends TestCase {
         // INSTANCEn : _XNameContainer; _XNameReplace
         log.println("adding INSTANCEn as obj relation to environment");
 
-        try {
-            for (int n = 1; n < (3 * THRCNT + 1); n++) {
-                log.println("adding INSTANCE" + n +
-                            " as obj relation to environment");
-                oInstance = columns.createColumn("TextField");
-                tEnv.addObjRelation("INSTANCE" + n, oInstance);
-            }
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Can't create 'INSTANCEn' relations", e);
+        for (int n = 1; n < (3 * THRCNT + 1); n++) {
+            log.println("adding INSTANCE" + n +
+                        " as obj relation to environment");
+            oInstance = columns.createColumn("TextField");
+            tEnv.addObjRelation("INSTANCE" + n, oInstance);
         }
 
 

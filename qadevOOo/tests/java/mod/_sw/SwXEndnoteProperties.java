@@ -85,7 +85,7 @@ public class SwXEndnoteProperties extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-            TestParameters Param, PrintWriter log ) throws StatusException {
+            TestParameters Param, PrintWriter log ) throws Exception {
         XEndnotesSupplier oInterface = null;
         XInterface oObj = null;
         XInterface oEndnote;
@@ -93,25 +93,15 @@ public class SwXEndnoteProperties extends TestCase {
         log.println( "Creating a test environment" );
         XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a endnote");
-        try {
-            oEndnote = UnoRuntime.queryInterface(XInterface.class,
-                    msf.createInstance("com.sun.star.text.Endnote"));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create endnote", e);
-        }
+        oEndnote = UnoRuntime.queryInterface(XInterface.class,
+                msf.createInstance("com.sun.star.text.Endnote"));
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println("inserting the footnote into text document");
         XTextContent xTC = UnoRuntime.queryInterface(XTextContent.class, oEndnote);
-        try {
-            oText.insertTextContent(oCursor, xTC, false);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't insert the endnote", e);
-        }
+        oText.insertTextContent(oCursor, xTC, false);
 
         oInterface = UnoRuntime.queryInterface(XEndnotesSupplier.class, xTextDoc);
         oObj = oInterface.getEndnoteSettings();

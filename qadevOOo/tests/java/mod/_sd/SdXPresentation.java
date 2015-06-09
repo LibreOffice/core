@@ -100,7 +100,7 @@ public class SdXPresentation extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+        TestParameters Param, PrintWriter log) throws Exception {
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -120,27 +120,11 @@ public class SdXPresentation extends TestCase {
 
         XSingleServiceFactory oSingleMSF = UnoRuntime.queryInterface(XSingleServiceFactory.class, xCP);
 
-        try{
-            oInstance = (XInterface) oSingleMSF.createInstance();
-            oInstance2 = (XInterface) oSingleMSF.createInstance();
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
+        oInstance = (XInterface) oSingleMSF.createInstance();
+        oInstance2 = (XInterface) oSingleMSF.createInstance();
 
-        try {
-            xCP.insertByName("FirstPresentation",oInstance);
-            xCP.insertByName("SecondPresentation", oInstance2);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Instance", e);
-        } catch (com.sun.star.container.ElementExistException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Instance", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Could't insert Instance", e);
-        }
+        xCP.insertByName("FirstPresentation",oInstance);
+        xCP.insertByName("SecondPresentation", oInstance2);
 
         log.println( "creating a new environment for XPresentation object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

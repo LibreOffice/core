@@ -87,7 +87,7 @@ public class ScRecentFunctionsObj extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log ) throws StatusException {
+        TestParameters Param, PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
         XInterface allFunctions = null;
@@ -96,20 +96,15 @@ public class ScRecentFunctionsObj extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "Creating a test environment" );
 
-        try {
-            log.println("Getting test object ") ;
-            XMultiServiceFactory oDocMSF = Param.getMSF();
-            oObj =  (XInterface)oDocMSF.createInstance(
-                "com.sun.star.sheet.RecentFunctions");
-            allFunctions =  (XInterface)oDocMSF.createInstance(
-                "com.sun.star.sheet.FunctionDescriptions");
+        log.println("Getting test object ") ;
+        XMultiServiceFactory oDocMSF = Param.getMSF();
+        oObj =  (XInterface)oDocMSF.createInstance(
+            "com.sun.star.sheet.RecentFunctions");
+        allFunctions =  (XInterface)oDocMSF.createInstance(
+            "com.sun.star.sheet.FunctionDescriptions");
 
-            log.println("Creating object - " +
-                                        ((oObj == null) ? "FAILED" : "OK"));
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Couldn't create instance", e);
-        }
+        log.println("Creating object - " +
+                                    ((oObj == null) ? "FAILED" : "OK"));
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

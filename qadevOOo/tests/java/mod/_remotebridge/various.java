@@ -159,79 +159,63 @@ public class various extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
 
-        try {
-            XInterface xInt = (XInterface)xMSF.createInstance(
-                    "com.sun.star.bridge.Bridge");
+        XInterface xInt = (XInterface)xMSF.createInstance(
+                "com.sun.star.bridge.Bridge");
 
-            TestEnvironment tEnv = new TestEnvironment(xInt);
-            // creating arguments for XInitialization
-            // first, creating a connection
-            // connection string
-            String cncstr = (String) tParam.get("CONNECTION_STRING") ;
-            int idx = cncstr.indexOf("host=") + 5 ;
+        TestEnvironment tEnv = new TestEnvironment(xInt);
+        // creating arguments for XInitialization
+        // first, creating a connection
+        // connection string
+        String cncstr = (String) tParam.get("CONNECTION_STRING") ;
+        int idx = cncstr.indexOf("host=") + 5 ;
 
-            // select the port
-            log.println("Choose Port nr: " + curPort);
+        // select the port
+        log.println("Choose Port nr: " + curPort);
 
-            connectString = "socket,host=" +
-                    cncstr.substring(idx, cncstr.indexOf(",", idx)) +
-                    ",port=" + curPort;
+        connectString = "socket,host=" +
+                cncstr.substring(idx, cncstr.indexOf(",", idx)) +
+                ",port=" + curPort;
 
-            // create acceptor
-            XInterface oAcctr = (XInterface)xMSF.createInstance(
-                    "com.sun.star.connection.Acceptor") ;
+        // create acceptor
+        XInterface oAcctr = (XInterface)xMSF.createInstance(
+                "com.sun.star.connection.Acceptor") ;
 
-            xAcctr = UnoRuntime.queryInterface(
-                    XAcceptor.class, oAcctr);
-            // create connector
-            XInterface oCntr = (XInterface)xMSF.createInstance(
-                    "com.sun.star.connection.Connector") ;
-            xCntr = UnoRuntime.queryInterface(
-                    XConnector.class, oCntr);
+        xAcctr = UnoRuntime.queryInterface(
+                XAcceptor.class, oAcctr);
+        // create connector
+        XInterface oCntr = (XInterface)xMSF.createInstance(
+                "com.sun.star.connection.Connector") ;
+        xCntr = UnoRuntime.queryInterface(
+                XConnector.class, oCntr);
 
-            // create bridge factory
-            XInterface oBrdg = (XInterface)xMSF.createInstance(
-                    "com.sun.star.bridge.BridgeFactory") ;
-            xBrdgFctr = UnoRuntime.queryInterface(XBridgeFactory.class, oBrdg);
+        // create bridge factory
+        XInterface oBrdg = (XInterface)xMSF.createInstance(
+                "com.sun.star.bridge.BridgeFactory") ;
+        xBrdgFctr = UnoRuntime.queryInterface(XBridgeFactory.class, oBrdg);
 
-            // create own implementation of XInstanceProvider
-            new MyInstanceProvider(xMSF);
-            // create waiting acceptor thread
-            accThread = new AcceptorThread(xAcctr);
-            accThread.start();
-            // let the thread sleep
-            util.utils.pause(500);
+        // create own implementation of XInstanceProvider
+        new MyInstanceProvider(xMSF);
+        // create waiting acceptor thread
+        accThread = new AcceptorThread(xAcctr);
+        accThread.start();
+        // let the thread sleep
+        util.utils.pause(500);
 
-            // establish the connection
-            XConnection xConnection = xCntr.connect(connectString);
+        // establish the connection
+        XConnection xConnection = xCntr.connect(connectString);
 
-            String protocol = "urp";
-            String bridgeName = protocol + ":" + connectString;
+        String protocol = "urp";
+        String bridgeName = protocol + ":" + connectString;
 
-/*            bridgeDisposed[0] = false ;
-            XComponent xComp = (XComponent)UnoRuntime.queryInterface(
-                XComponent.class, xInt);
-            final PrintWriter logF = log;
-            xComp.addEventListener(new XEventListener() {
-                public void disposing(EventObject ev) {
-                    bridgeDisposed[0] = true ;
-                    logF.println("The bridge Disposed.");
-                }
-            });
-*/
-            tEnv.addObjRelation("XInitialization.args", new Object[] {
-                    bridgeName, protocol, xConnection, null});
+        tEnv.addObjRelation("XInitialization.args", new Object[] {
+                bridgeName, protocol, xConnection, null});
 
-            bridge = tEnv.getTestObject();
+        bridge = tEnv.getTestObject();
 
-            return tEnv;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        return tEnv;
     }
 
     /**

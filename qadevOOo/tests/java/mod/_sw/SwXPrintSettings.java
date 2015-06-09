@@ -79,19 +79,13 @@ public class SwXPrintSettings extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment(
-            TestParameters tParam, PrintWriter log ) throws StatusException {
+            TestParameters tParam, PrintWriter log ) throws Exception {
         XInterface oObj = null;
         Object oInst = null;
 
         log.println( "creating a test environment" );
-        try {
-            XMultiServiceFactory myMSF = tParam.getMSF();
-            oInst = myMSF.createInstance("com.sun.star.text.GlobalSettings");
-        } catch ( com.sun.star.uno.Exception e ){
-            log.println("Couldn't create instance!" + e);
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create instance!", e );
-        }
+        XMultiServiceFactory myMSF = tParam.getMSF();
+        oInst = myMSF.createInstance("com.sun.star.text.GlobalSettings");
         XPrintSettingsSupplier xPSS = UnoRuntime.queryInterface(XPrintSettingsSupplier.class, oInst);
         oObj = xPSS.getPrintSettings();
 

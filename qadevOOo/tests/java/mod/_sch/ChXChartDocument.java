@@ -26,11 +26,9 @@ import com.sun.star.view.XSelectionSupplier;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
 import util.SOfficeFactory;
 
 
@@ -108,21 +106,15 @@ public class ChXChartDocument extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                                 PrintWriter log) {
+                                                                 PrintWriter log) throws Exception {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      tParam.getMSF());
 
-        try {
-            log.println("creating a chartdocument");
-            xChartDoc = SOF.createChartDoc();
-            log.println("Waiting before opening second document");
-            doc2 = SOF.createChartDoc();
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a chartdocument");
+        xChartDoc = SOF.createChartDoc();
+        log.println("Waiting before opening second document");
+        doc2 = SOF.createChartDoc();
 
 
         // get the chartdocument

@@ -93,7 +93,7 @@ public class ScTableValidationObj extends TestCase {
     * @see com.sun.star.sheet.TableValidation
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 
@@ -103,47 +103,19 @@ public class ScTableValidationObj extends TestCase {
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-        try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get a spreadsheet", e);
-        }
+        oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
 
         log.println("filling some cells");
-        try {
-            oSheet.getCellByPosition(5, 5).setValue(15);
-            oSheet.getCellByPosition(1, 4).setValue(10);
-            oSheet.getCellByPosition(2, 0).setValue(-5.15);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Exception occurred while filling cells", e);
-        }
+        oSheet.getCellByPosition(5, 5).setValue(15);
+        oSheet.getCellByPosition(1, 4).setValue(10);
+        oSheet.getCellByPosition(2, 0).setValue(-5.15);
 
         XPropertySet Props = null;
 
-        try {
-            Props = UnoRuntime.queryInterface(XPropertySet.class, oSheet);
-            oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),Props.getPropertyValue("Validation"));
-        } catch (com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get property 'Validation'", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get property 'Validation'", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e){
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get property 'Validation'", e);
-        }
+        Props = UnoRuntime.queryInterface(XPropertySet.class, oSheet);
+        oObj = (XInterface) AnyConverter.toObject(
+            new Type(XInterface.class),Props.getPropertyValue("Validation"));
 
         log.println("creating a new environment for object");
         TestEnvironment tEnv = new TestEnvironment(oObj);

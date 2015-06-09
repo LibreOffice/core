@@ -43,155 +43,135 @@ public class SwXTextGraphicObject extends TestCase {
     /**
      * in general this method creates a testdocument
      *
-     *  @param tParam    class which contains additional test parameters
-     *  @param log        class to log the test state and result
+     * @param tParam
+     *            class which contains additional test parameters
+     * @param log
+     *            class to log the test state and result
      *
      *
-     *  @see TestParameters
-     *    @see PrintWriter
+     * @see TestParameters
+     * @see PrintWriter
      *
      */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
         try {
-            log.println( "creating a textdoc" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( Exception e ) {
+            log.println("creating a textdoc");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (Exception e) {
             // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
     /**
      * in general this method disposes the testenvironment and document
      *
-     *  @param tParam    class which contains additional test parameters
-     *  @param log        class to log the test state and result
+     * @param tParam
+     *            class which contains additional test parameters
+     * @param log
+     *            class to log the test state and result
      *
      *
-     *  @see TestParameters
-     *    @see PrintWriter
+     * @see TestParameters
+     * @see PrintWriter
      *
      */
     @Override
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xDrawDoc " );
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xDrawDoc ");
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
-
     /**
-     *    creating a TestEnvironment for the interfaces to be tested
+     * Creating a TestEnvironment for the interfaces to be tested
      *
-     *  @param tParam    class which contains additional test parameters
-     *  @param log        class to log the test state and result
+     * @param tParam
+     *            class which contains additional test parameters
+     * @param log
+     *            class to log the test state and result
      *
-     *  @return    Status class
+     * @return Status class
      *
-     *  @see TestParameters
-     *    @see PrintWriter
+     * @see TestParameters
+     * @see PrintWriter
      */
     @Override
-    protected TestEnvironment createTestEnvironment
-                (TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+            PrintWriter log) throws Exception {
 
-            XInterface oObj = null;
-            Object oGObject = null;
-            Object xTextFrame = null;
-            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        XInterface oObj = null;
+        Object oGObject = null;
+        Object xTextFrame = null;
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
 
-            Object instance = null;
+        Object instance = null;
 
-            try {
-                oGObject = SOF.createInstance
-                    (xTextDoc,"com.sun.star.text.GraphicObject");
-                instance = SOF.createInstance
-                    (xTextDoc,"com.sun.star.text.GraphicObject");
-                xTextFrame = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
-            }
-            catch (Exception ex) {
-                log.println("Couldn't create instance");
-                ex.printStackTrace(log);
-                throw new StatusException("Couldn't create instance", ex );
-            }
+        oGObject = SOF.createInstance(xTextDoc,
+                "com.sun.star.text.GraphicObject");
+        instance = SOF.createInstance(xTextDoc,
+                "com.sun.star.text.GraphicObject");
+        xTextFrame = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
 
-            oObj = (XInterface) oGObject;
+        oObj = (XInterface) oGObject;
 
-            XText the_text = xTextDoc.getText();
-            XTextCursor the_cursor = the_text.createTextCursor();
-            XTextContent the_content = UnoRuntime.queryInterface(XTextContent.class,oObj);
+        XText the_text = xTextDoc.getText();
+        XTextCursor the_cursor = the_text.createTextCursor();
+        XTextContent the_content = UnoRuntime.queryInterface(
+                XTextContent.class, oObj);
 
-            log.println("inserting Frame");
-            try{
-                XTextContent Framecontent = UnoRuntime.queryInterface(
-                                                   XTextContent.class, xTextFrame);
-                the_text.insertTextContent(the_cursor, Framecontent, true);
-            } catch (Exception e) {
-                System.out.println("Couldn't insert text frame");
-                e.printStackTrace();
-                throw new StatusException("Couldn't insert text frame", e );
-            }
+        log.println("inserting Frame");
+        XTextContent Framecontent = UnoRuntime.queryInterface(
+                XTextContent.class, xTextFrame);
+        the_text.insertTextContent(the_cursor, Framecontent, true);
 
+        log.println("inserting graphic");
+        the_text.insertTextContent(the_cursor, the_content, true);
 
-           log.println( "inserting graphic" );
-            try {
-                the_text.insertTextContent(the_cursor,the_content,true);
-            } catch (Exception e) {
-                System.out.println("Couldn't insert Content");
-                e.printStackTrace();
-                throw new StatusException("Couldn't insert Content", e );
-            }
+        log.println("adding graphic");
+        XPropertySet oProps = UnoRuntime.queryInterface(XPropertySet.class,
+                oObj);
+        String wat = util.utils.getFullTestURL("space-metal.jpg");
+        oProps.setPropertyValue("AnchorType",
+                TextContentAnchorType.AT_PARAGRAPH);
+        oProps.setPropertyValue("GraphicURL", wat);
+        oProps.setPropertyValue("HoriOrientPosition", Integer.valueOf(5500));
+        oProps.setPropertyValue("VertOrientPosition", Integer.valueOf(4200));
+        oProps.setPropertyValue("Width", Integer.valueOf(4400));
+        oProps.setPropertyValue("Height", Integer.valueOf(4000));
 
-            log.println( "adding graphic" );
-            XPropertySet oProps = UnoRuntime.queryInterface(XPropertySet.class,oObj);
-            try {
-                String wat = util.utils.getFullTestURL("space-metal.jpg");
-                oProps.setPropertyValue("AnchorType",
-                    TextContentAnchorType.AT_PARAGRAPH);
-                oProps.setPropertyValue("GraphicURL",wat);
-                oProps.setPropertyValue("HoriOrientPosition",Integer.valueOf(5500));
-                oProps.setPropertyValue("VertOrientPosition",Integer.valueOf(4200));
-                oProps.setPropertyValue("Width",Integer.valueOf(4400));
-                oProps.setPropertyValue("Height",Integer.valueOf(4000));
-            } catch (Exception e) {
-                System.out.println("Couldn't set property 'GraphicURL'");
-                e.printStackTrace();
-                throw new StatusException
-                    ("Couldn't set property 'GraphicURL'", e );
-            }
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
-                    TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("adding ObjRelation for XShape "
+                + "(get/setPosition won't work there)");
+        tEnv.addObjRelation("NoPos", "SwXTextGraphicObject");
+        tEnv.addObjRelation("NoSetSize", "SwXTextGraphicObject");
+        Object ImgMap = null;
+        // creating ObjectRelation for the property
+        // 'ImageMap' of 'TextGraphicObject'
+        try {
+            XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface(
+                    XMultiServiceFactory.class, xTextDoc);
+            ImgMap = xDocMSF
+                    .createInstance("com.sun.star.image.ImageMapRectangleObject");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-                    log.println( "adding ObjRelation for XShape "
-                        +"(get/setPosition won't work there)" );
-                    tEnv.addObjRelation("NoPos", "SwXTextGraphicObject");
-                    tEnv.addObjRelation("NoSetSize","SwXTextGraphicObject");
-            Object ImgMap = null;
-            //creating ObjectRelation for the property
-            // 'ImageMap' of 'TextGraphicObject'
-            try {
-                XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface
-                (XMultiServiceFactory.class,xTextDoc);
-                ImgMap = xDocMSF.createInstance
-                    ("com.sun.star.image.ImageMapRectangleObject");
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        tEnv.addObjRelation("IMGMAP", ImgMap);
 
-            tEnv.addObjRelation("IMGMAP",ImgMap);
+        tEnv.addObjRelation("CONTENT",
+                UnoRuntime.queryInterface(XTextContent.class, instance));
+        tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
 
-            tEnv.addObjRelation("CONTENT", UnoRuntime.queryInterface(XTextContent.class,instance));
-            tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
+        // object relation for text.BaseFrameProperties
+        tEnv.addObjRelation("TextFrame", xTextFrame);
 
-            //object relation for text.BaseFrameProperties
-            tEnv.addObjRelation("TextFrame", xTextFrame);
-
-            return tEnv;
+        return tEnv;
 
     } // finish method getTestEnvironment
 
-}    // finish class SwXTextGraphicObject
+} // finish class SwXTextGraphicObject
 

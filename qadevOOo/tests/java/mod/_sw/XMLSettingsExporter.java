@@ -117,7 +117,7 @@ public class XMLSettingsExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         final short ZOOM = 50;
 
@@ -126,25 +126,19 @@ public class XMLSettingsExporter extends TestCase {
 
         Filter = new SettingsFilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class), Filter);
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Writer.XMLSettingsExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xTextDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Writer.XMLSettingsExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xTextDoc);
 
-            //set some settings
-            XController xController = xTextDoc.getCurrentController();
-            XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
-            xController);
-            XPropertySet xPropSet = xViewSetSup.getViewSettings();
-            xPropSet.setPropertyValue("ZoomValue", Short.valueOf(ZOOM));
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        //set some settings
+        XController xController = xTextDoc.getCurrentController();
+        XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
+        xController);
+        XPropertySet xPropSet = xViewSetSup.getViewSettings();
+        xPropSet.setPropertyValue("ZoomValue", Short.valueOf(ZOOM));
 
         // adding tags which must be contained in XML output
         Filter.addTag( new XMLTools.Tag("office:document-settings") );

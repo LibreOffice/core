@@ -40,6 +40,7 @@ import com.sun.star.uno.XInterface;
 /**
  *
  * initial description
+ *
  * @see com.sun.star.text.TextPortion
  *
  */
@@ -48,96 +49,90 @@ public class SwXTextPortionEnumeration extends TestCase {
     XTextDocument xTextDoc;
 
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
 
         try {
-                log.println( "creating a textdocument" );
-                xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
-                // Some exception occurs.FAILED
-                e.printStackTrace( log );
-                throw new StatusException( "Couldn't create document", e );
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
+            // Some exception occurs.FAILED
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
     @Override
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
     /**
-     *    creating a TestEnvironment for the interfaces to be tested
+     * creating a TestEnvironment for the interfaces to be tested
      *
-     *  @param tParam    class which contains additional test parameters
-     *  @param log        class to log the test state and result
+     * @param tParam
+     *            class which contains additional test parameters
+     * @param log
+     *            class to log the test state and result
      *
-     *  @return    Status class
+     * @return Status class
      *
-     *  @see TestParameters
-     *    @see PrintWriter
+     * @see TestParameters
+     * @see PrintWriter
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(
+            TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface param = null;
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
 
         // create testobject here
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
-        log.println( "inserting Strings" );
-        log.println( "inserting ControlCharacter" );
+        log.println("inserting Strings");
+        log.println("inserting ControlCharacter");
 
-
-        try{
-            for (int i =0; i < 5; i++){
-                oText.insertString( oCursor,"Paragraph Number: " + i, false);
-                oText.insertControlCharacter(
-                    oCursor, ControlCharacter.LINE_BREAK, false );
-                oText.insertString( oCursor,
+        for (int i = 0; i < 5; i++) {
+            oText.insertString(oCursor, "Paragraph Number: " + i, false);
+            oText.insertControlCharacter(oCursor, ControlCharacter.LINE_BREAK,
+                    false);
+            oText.insertString(
+                    oCursor,
                     "The quick brown fox jumps over the lazy Dog: SwXParagraph\n",
                     false);
-                oText.insertControlCharacter(
-                    oCursor, ControlCharacter.LINE_BREAK, false );
-                oText.insertString( oCursor,
+            oText.insertControlCharacter(oCursor, ControlCharacter.LINE_BREAK,
+                    false);
+            oText.insertString(
+                    oCursor,
                     "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph",
                     false);
-                oText.insertControlCharacter(
-                    oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-            }
-        }catch(Exception e){
-            log.println("Couldn't insert Text");
-            e.printStackTrace();
-            throw new StatusException( "Couldn't insert Text", e );
+            oText.insertControlCharacter(oCursor,
+                    ControlCharacter.PARAGRAPH_BREAK, false);
         }
 
         // Enumeration
-        XEnumerationAccess oEnumA = UnoRuntime.queryInterface( XEnumerationAccess.class, oText );
+        XEnumerationAccess oEnumA = UnoRuntime.queryInterface(
+                XEnumerationAccess.class, oText);
         XEnumeration oEnum = oEnumA.createEnumeration();
 
-        while ( (oEnum.hasMoreElements()) ) {
-            try {
-                    param = (XInterface) AnyConverter.toObject(
-                        new Type(XInterface.class),oEnum.nextElement());
-            } catch ( Exception e) {
-                log.println("Couldn't get Paragraph");
-                e.printStackTrace();
-                throw new StatusException( "Couldn't get Paragraph", e );
-            }
+        while ((oEnum.hasMoreElements())) {
+            param = (XInterface) AnyConverter.toObject(new Type(
+                    XInterface.class), oEnum.nextElement());
         }
 
-        XEnumerationAccess oEnumP = UnoRuntime.queryInterface( XEnumerationAccess.class, param );
+        XEnumerationAccess oEnumP = UnoRuntime.queryInterface(
+                XEnumerationAccess.class, param);
         XEnumeration oEnum2 = oEnumP.createEnumeration();
 
-        log.println( "creating a new environment for TextPortionEnumeration object" );
-        TestEnvironment tEnv = new TestEnvironment( oEnum2 );
+        log.println("creating a new environment for TextPortionEnumeration object");
+        TestEnvironment tEnv = new TestEnvironment(oEnum2);
 
         log.println("adding ObjRelation ENUM for XEnumeration");
         tEnv.addObjRelation("ENUM", oEnumP);
@@ -145,6 +140,5 @@ public class SwXTextPortionEnumeration extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
-
-}    // finish class SwXTextPortionEnumeration
+} // finish class SwXTextPortionEnumeration
 

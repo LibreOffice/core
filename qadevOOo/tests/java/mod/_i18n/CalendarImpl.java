@@ -20,7 +20,6 @@ package mod._i18n;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -46,21 +45,11 @@ public class CalendarImpl extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null;
-
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ( "com.sun.star.i18n.LocaleCalendar" );
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Can't create an object." );
-            throw new StatusException( "Can't create an object", e );
-        }
-
-        oObj = (XInterface) oInterface;
+            (TestParameters Param, PrintWriter log) throws Exception {
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
+            ( "com.sun.star.i18n.LocaleCalendar" );
+        XInterface oObj = (XInterface) oInterface;
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

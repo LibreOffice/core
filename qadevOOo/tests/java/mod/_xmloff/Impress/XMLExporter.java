@@ -117,7 +117,7 @@ public class XMLExporter extends TestCase {
     */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
+            (TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -127,25 +127,19 @@ public class XMLExporter extends TestCase {
 
         final String NAME = "XMLExporter";
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Impress.XMLExporter", new Object[] {arg});
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Impress.XMLExporter", new Object[] {arg});
 
-            //get draw pages
-            XDrawPagesSupplier drawPagesSupplier = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
-            XDrawPages drawPages = drawPagesSupplier.getDrawPages();
-            //insert new draw page
-            XDrawPage newDrawPage = drawPages.insertNewByIndex(0);
-            //set specific test name
-            XNamed newPageNamed = UnoRuntime.queryInterface(XNamed.class, newDrawPage);
-            newPageNamed.setName(NAME);
-            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            xEx.setSourceDocument(xImpressDoc);
-
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        //get draw pages
+        XDrawPagesSupplier drawPagesSupplier = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
+        XDrawPages drawPages = drawPagesSupplier.getDrawPages();
+        //insert new draw page
+        XDrawPage newDrawPage = drawPages.insertNewByIndex(0);
+        //set specific test name
+        XNamed newPageNamed = UnoRuntime.queryInterface(XNamed.class, newDrawPage);
+        newPageNamed.setName(NAME);
+        XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
+        xEx.setSourceDocument(xImpressDoc);
 
         // adding tags which must be contained in XML output
         Filter.addTag( new XMLTools.Tag("office:document") );

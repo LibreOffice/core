@@ -19,9 +19,9 @@ package mod._svtools;
 
 import com.sun.star.drawing.XLayerManager;
 import com.sun.star.drawing.XLayerSupplier;
+
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -101,7 +101,7 @@ public class AccessibleTabBarPageList extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+                                                    PrintWriter log) throws Exception {
         log.println("creating a test environment");
 
         if (xDoc != null) {
@@ -111,27 +111,13 @@ public class AccessibleTabBarPageList extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
-        try {
-            log.println("creating a draw document");
-            xDoc = SOF.createDrawDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a draw document");
+        xDoc = SOF.createDrawDoc(null);
 
         util.utils.pause(5000);
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) tParam.getMSF()
+        XInterface oObj = (XInterface) tParam.getMSF()
                                       .createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);

@@ -22,7 +22,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XModel;
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -67,46 +66,42 @@ public class DispatchRecorder extends TestCase {
     */
     @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
-        PrintWriter log ) throws StatusException {
+        PrintWriter log ) throws Exception {
 
         XInterface oObj = null;
         XFrame xFrame = null;
         XDispatchRecorder xDR = null;
 
-        try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
-            oDoc = SOF.createTextDoc(null);
-            util.utils.pause(1000);
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
+        oDoc = SOF.createTextDoc(null);
+        util.utils.pause(1000);
 
-            XModel model = UnoRuntime.queryInterface(XModel.class, oDoc);
-            xFrame = model.getCurrentController().getFrame();
+        XModel model = UnoRuntime.queryInterface(XModel.class, oDoc);
+        xFrame = model.getCurrentController().getFrame();
 
-            XPropertySet xFramePS = UnoRuntime.queryInterface
-                (XPropertySet.class, xFrame);
-            XDispatchRecorderSupplier xDRS = null;
-            xDRS = (XDispatchRecorderSupplier) AnyConverter.toObject(
-                             new Type(XDispatchRecorderSupplier.class),
-                          xFramePS.getPropertyValue("DispatchRecorderSupplier"));
-            if (xDRS == null) {
+        XPropertySet xFramePS = UnoRuntime.queryInterface
+            (XPropertySet.class, xFrame);
+        XDispatchRecorderSupplier xDRS = null;
+        xDRS = (XDispatchRecorderSupplier) AnyConverter.toObject(
+                         new Type(XDispatchRecorderSupplier.class),
+                      xFramePS.getPropertyValue("DispatchRecorderSupplier"));
+        if (xDRS == null) {
 
-                Object oDRS = Param.getMSF().createInstance(
-                    "com.sun.star.comp.framework.DispatchRecorderSupplier");
-                xFramePS.setPropertyValue("DispatchRecorderSupplier", oDRS);
-                xDRS = UnoRuntime.queryInterface(XDispatchRecorderSupplier.class,oDRS);
-            }
+            Object oDRS = Param.getMSF().createInstance(
+                "com.sun.star.comp.framework.DispatchRecorderSupplier");
+            xFramePS.setPropertyValue("DispatchRecorderSupplier", oDRS);
+            xDRS = UnoRuntime.queryInterface(XDispatchRecorderSupplier.class,oDRS);
+        }
 
-            xDR = xDRS.getDispatchRecorder();
-            if (xDR != null) {
-                oObj = xDR;
-            } else {
-                oObj = (XInterface)Param.getMSF().createInstance(
-                    "com.sun.star.comp.framework.DispatchRecorder");
-                xDR = UnoRuntime.queryInterface
-                    (XDispatchRecorder.class, oObj);
-                xDRS.setDispatchRecorder(xDR);
-            }
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create component", e);
+        xDR = xDRS.getDispatchRecorder();
+        if (xDR != null) {
+            oObj = xDR;
+        } else {
+            oObj = (XInterface)Param.getMSF().createInstance(
+                "com.sun.star.comp.framework.DispatchRecorder");
+            xDR = UnoRuntime.queryInterface
+                (XDispatchRecorder.class, oObj);
+            xDRS.setDispatchRecorder(xDR);
         }
 
 

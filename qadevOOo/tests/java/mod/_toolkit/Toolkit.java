@@ -75,7 +75,7 @@ public class Toolkit extends TestCase {
     @Override
     public TestEnvironment createTestEnvironment(TestParameters Param,
                                                  PrintWriter log)
-                                          throws StatusException {
+                                          throws Exception {
         XInterface oObj = null;
         XWindowPeer the_win = null;
         XWindow win = null;
@@ -98,17 +98,11 @@ public class Toolkit extends TestCase {
                                      xTextDoc.getCurrentController());
 
         //now get the toolkit
-        try {
-            win = cntrlr.getFrame().getContainerWindow();
+        win = cntrlr.getFrame().getContainerWindow();
 
-            the_win = the_access.getControl(the_Model).getPeer();
-            oObj = (XInterface) Param.getMSF().createInstance(
-                           "com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
+        the_win = the_access.getControl(the_Model).getPeer();
+        oObj = (XInterface) Param.getMSF().createInstance(
+                       "com.sun.star.awt.Toolkit");
 
         XModel xModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 

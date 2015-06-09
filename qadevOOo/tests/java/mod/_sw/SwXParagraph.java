@@ -20,7 +20,6 @@ package mod._sw;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -132,7 +131,7 @@ public class SwXParagraph extends TestCase {
      */
     @Override
     protected synchronized TestEnvironment createTestEnvironment
-    (TestParameters tParam, PrintWriter log) {
+    (TestParameters tParam, PrintWriter log) throws Exception {
 
         if (xTextDoc != null) {
             log.println("    disposing xTextDoc ");
@@ -148,13 +147,8 @@ public class SwXParagraph extends TestCase {
             }
         }
         SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
-        try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a textdocument" );
+        xTextDoc = SOF.createTextDoc( null );
 
         XInterface oObj = null;
         XPropertySet paraP = null;
@@ -170,25 +164,20 @@ public class SwXParagraph extends TestCase {
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println( "inserting some lines" );
-        try {
-            for (int i=0; i<5; i++){
-                oText.insertString( oCursor,"Paragraph Number: " + i, false);
-                oText.insertString( oCursor,
-                " The quick brown fox jumps over the lazy Dog: SwXParagraph",
-                false);
-                oText.insertControlCharacter(
-                oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-                oText.insertString( oCursor,
-                "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph",
-                false);
-                oText.insertControlCharacter(oCursor,
-                ControlCharacter.PARAGRAPH_BREAK, false );
-                oText.insertControlCharacter(
-                oCursor, ControlCharacter.LINE_BREAK, false );
-            }
-        } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't insert lines", e );
+        for (int i=0; i<5; i++){
+            oText.insertString( oCursor,"Paragraph Number: " + i, false);
+            oText.insertString( oCursor,
+            " The quick brown fox jumps over the lazy Dog: SwXParagraph",
+            false);
+            oText.insertControlCharacter(
+            oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+            oText.insertString( oCursor,
+            "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph",
+            false);
+            oText.insertControlCharacter(oCursor,
+            ControlCharacter.PARAGRAPH_BREAK, false );
+            oText.insertControlCharacter(
+            oCursor, ControlCharacter.LINE_BREAK, false );
         }
 
         // Enumeration
@@ -213,38 +202,14 @@ public class SwXParagraph extends TestCase {
             log.println("Error: exception occurred...");
         }
 
-        try {
-            portP = UnoRuntime.queryInterface(XPropertySet.class, port);
-            paraP = UnoRuntime.queryInterface(XPropertySet.class, para);
-            paraP.setPropertyValue("NumberingStyleName","Numbering 4");
-            nRules = paraP.getPropertyValue("NumberingRules");
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error, exception occurred...");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get Paragraph", e );
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occurred...");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get Paragraph", e );
-        } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            log.println("Error, exception occurred...");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get Paragraph", e );
-        } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            log.println("Error, exception occurred...");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get Paragraph", e );
-        }
+        portP = UnoRuntime.queryInterface(XPropertySet.class, port);
+        paraP = UnoRuntime.queryInterface(XPropertySet.class, para);
+        paraP.setPropertyValue("NumberingStyleName","Numbering 4");
+        nRules = paraP.getPropertyValue("NumberingRules");
 
 
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-            new Type(XInterface.class),oEnum.nextElement());
-        } catch ( Exception e) {
-            log.println("Error, exception occurred...");
-            e.printStackTrace(log);
-            throw new StatusException( "Couldn't get Paragraph", e );
-        }
+        oObj = (XInterface) AnyConverter.toObject(
+        new Type(XInterface.class),oEnum.nextElement());
 
 
         log.println( "creating a new environment for Paragraph object" );

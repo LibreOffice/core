@@ -50,21 +50,12 @@ public class CoreReflection extends TestCase {
     * Creates <code>com.sun.star.reflection.CoreReflection</code> service.
     */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-        XInterface oObj = null;
-        Object oInterface = null;
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
-        try {
-            XMultiServiceFactory xMSF = Param.getMSF();
-            oInterface = xMSF.createInstance
-                ("com.sun.star.reflection.CoreReflection");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            log.println("CoreReflection Service not available" );
-        }
-
-        oObj = (XInterface) oInterface;
+        XMultiServiceFactory xMSF = Param.getMSF();
+        Object oInterface = xMSF.createInstance
+            ("com.sun.star.reflection.CoreReflection");
+        XInterface oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for CoreReflection object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

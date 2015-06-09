@@ -115,13 +115,7 @@ public class SwXDocumentIndexMark extends TestCase {
 
         XDocumentIndexMark xDIM = UnoRuntime.queryInterface(XDocumentIndexMark.class, oDIM);
 
-        try {
-            oText.insertTextContent(oCursor, xDIM, false);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException
-                ("Couldn't insert the DocumentIndexMark", e);
-        }
+        oText.insertTextContent(oCursor, xDIM, false);
 
         TestEnvironment tEnv = new TestEnvironment(xDIM);
 

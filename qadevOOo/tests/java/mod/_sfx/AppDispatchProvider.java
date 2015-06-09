@@ -59,19 +59,13 @@ public class AppDispatchProvider extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) throws Exception {
         XInterface oObj = null;
         Object oInterface = null ;
 
         //now get the OButtonControl
-        try {
-            oInterface = Param.getMSF().createInstance
-                ("com.sun.star.comp.sfx2.AppDispatchProvider") ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get service");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get GridControl", e );
-        }
+        oInterface = Param.getMSF().createInstance
+            ("com.sun.star.comp.sfx2.AppDispatchProvider") ;
 
         if (oInterface == null) {
             log.println("Service wasn't created") ;

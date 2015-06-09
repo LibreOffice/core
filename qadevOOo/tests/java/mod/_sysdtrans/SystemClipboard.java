@@ -20,33 +20,25 @@ package mod._sysdtrans;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.XInterface;
 
 public class SystemClipboard extends TestCase {
 
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
 
-        try {
-            XInterface xInt = (XInterface)xMSF.createInstance(
-                    "com.sun.star.datatransfer.clipboard.SystemClipboard");
+        XInterface xInt = (XInterface)xMSF.createInstance(
+                "com.sun.star.datatransfer.clipboard.SystemClipboard");
 
-            TestEnvironment tEnv = new TestEnvironment(xInt);
+        TestEnvironment tEnv = new TestEnvironment(xInt);
 
-            return tEnv;
-        } catch (Exception e) {
-            log.println("Unexpected exception : " + e.getMessage());
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        }
+        return tEnv;
     }
 }

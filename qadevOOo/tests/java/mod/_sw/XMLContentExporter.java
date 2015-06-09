@@ -113,7 +113,7 @@ public class XMLContentExporter extends TestCase {
     */
     @Override
     public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters tParam, PrintWriter log ) throws StatusException {
+            ( TestParameters tParam, PrintWriter log ) throws Exception {
 
         final String CONTENT = "XMLContentExporter";
         XMultiServiceFactory xMSF = tParam.getMSF() ;
@@ -122,22 +122,17 @@ public class XMLContentExporter extends TestCase {
         Filter = new ContentFilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class), Filter);
 
-        try {
-            oObj = (XInterface) xMSF.createInstanceWithArguments(
-                "com.sun.star.comp.Writer.XMLContentExporter",
-                new Object[] {arg});
-            XExporter xEx = UnoRuntime.queryInterface
-                (XExporter.class,oObj);
-            xEx.setSourceDocument(xTextDoc);
+        oObj = (XInterface) xMSF.createInstanceWithArguments(
+            "com.sun.star.comp.Writer.XMLContentExporter",
+            new Object[] {arg});
+        XExporter xEx = UnoRuntime.queryInterface
+            (XExporter.class,oObj);
+        xEx.setSourceDocument(xTextDoc);
 
-            // text added to the document
-            XSimpleText aText = xTextDoc.getText();
-            XTextCursor curs = aText.createTextCursor();
-            aText.insertString(curs, CONTENT, false);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create component.", e) ;
-        }
+        // text added to the document
+        XSimpleText aText = xTextDoc.getText();
+        XTextCursor curs = aText.createTextCursor();
+        aText.insertString(curs, CONTENT, false);
 
         // adding tags which must be contained in XML output
         Filter.addTag("office:document-content") ;
