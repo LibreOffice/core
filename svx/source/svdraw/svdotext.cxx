@@ -2061,7 +2061,7 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
     SdrTextObj *pNextTextObj = NULL;
 
     if ( pPage && pPage->GetObjCount() > 1) {
-        int nextIndex = (GetOrdNum()+1);
+        sal_uInt32 nextIndex = (GetOrdNum()+1);
         // FIXME
         if (nextIndex >= 3 || nextIndex >= pPage->GetObjCount()) {
             fprintf(stderr, "Object not chainable\n");
