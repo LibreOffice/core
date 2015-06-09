@@ -317,7 +317,7 @@ namespace drawinglayer
                                     aAnchorTransform,
                                     bWordWrap);
                 }
-                else if( rText.isToBeChained() /*&& !rText.isInEditMode()*/ ) // FIXME(matteocam)
+                else if( rText.isChainable() /*&& !rText.isInEditMode()*/ ) // FIXME(matteocam)
                 {
                     pNew = new SdrChainedTextPrimitive2D(
                                     &rText.getSdrText(),

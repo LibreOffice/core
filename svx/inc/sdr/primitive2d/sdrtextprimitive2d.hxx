@@ -353,6 +353,7 @@ namespace drawinglayer
 
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
+            bool getWordWrap() const { return true; } // XXX: Hack! Should have a proper implementation
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;

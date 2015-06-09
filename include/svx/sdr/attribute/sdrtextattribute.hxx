@@ -77,9 +77,10 @@ namespace drawinglayer
                 bool bInEditMode,
                 bool bFixedCellHeight,
                 bool bWrongSpell,
-                bool bToBeChained);
+                bool bToBeChained,
+                bool bChainable);
             SdrTextAttribute();
-            SdrTextAttribute(bool bIsToBeChained); // special treatment for text chaining
+            //SdrTextAttribute(bool bIsToBeChained); // special treatment for text chaining
             SdrTextAttribute(const SdrTextAttribute& rCandidate);
             SdrTextAttribute& operator=(const SdrTextAttribute& rCandidate);
             ~SdrTextAttribute();
@@ -102,6 +103,7 @@ namespace drawinglayer
             bool isInEditMode() const;
             bool isFixedCellHeight() const;
             bool isToBeChained() const;
+            bool isChainable() const;
             const SdrFormTextAttribute& getSdrFormTextAttribute() const;
             sal_Int32 getTextLeftDistance() const;
             sal_Int32 getTextUpperDistance() const;

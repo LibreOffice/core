@@ -67,6 +67,7 @@ namespace drawinglayer
             bool                                mbFixedCellHeight : 1;
             bool                                mbWrongSpell : 1;
             bool                                mbToBeChained : 1;
+            bool                                mbChainable : 1;
 
         public:
             ImpSdrTextAttribute(
@@ -88,7 +89,8 @@ namespace drawinglayer
                 bool bInEditMode,
                 bool bFixedCellHeight,
                 bool bWrongSpell,
-                bool bToBeChained)
+                bool bToBeChained,
+                bool bChainable)
             :   mpSdrText(pSdrText),
                 mxOutlinerParaObject(new OutlinerParaObject(rOutlinerParaObject)),
                 maSdrFormTextAttribute(),
@@ -108,7 +110,8 @@ namespace drawinglayer
                 mbInEditMode(bInEditMode),
                 mbFixedCellHeight(bFixedCellHeight),
                 mbWrongSpell(bWrongSpell),
-                mbToBeChained(bToBeChained)
+                mbToBeChained(bToBeChained),
+                mbChainable(bChainable)
             {
                 if(pSdrText)
                 {
@@ -145,7 +148,8 @@ namespace drawinglayer
                 mbInEditMode(false),
                 mbFixedCellHeight(false),
                 mbWrongSpell(false),
-                mbToBeChained(false)
+                mbToBeChained(false),
+                mbChainable(false)
             {
             }
 
@@ -172,6 +176,7 @@ namespace drawinglayer
             bool isFixedCellHeight() const { return mbFixedCellHeight; }
             bool isWrongSpell() const { return mbWrongSpell; }
             bool isToBeChained() const { return mbToBeChained; }
+            bool isChainable() const { return mbChainable; }
             const SdrFormTextAttribute& getSdrFormTextAttribute() const { return maSdrFormTextAttribute; }
             sal_Int32 getTextLeftDistance() const { return maTextLeftDistance; }
             sal_Int32 getTextUpperDistance() const { return maTextUpperDistance; }
@@ -260,14 +265,15 @@ namespace drawinglayer
             bool bInEditMode,
             bool bFixedCellHeight,
             bool bWrongSpell,
-	    bool bIsToBeChained)
+	    bool bIsToBeChained,
+            bool bChainable)
         :   mpSdrTextAttribute(
                 ImpSdrTextAttribute(
                     &rSdrText, rOutlinerParaObject, eFormTextStyle, aTextLeftDistance,
                     aTextUpperDistance, aTextRightDistance, aTextLowerDistance,
                     aSdrTextHorzAdjust, aSdrTextVertAdjust, bContour, bFitToSize, bAutoFit,
                     bHideContour, bBlink, bScroll, bInEditMode, bFixedCellHeight, bWrongSpell,
-		    bIsToBeChained))
+		    bIsToBeChained, bChainable))
         {
         }
 
@@ -365,6 +371,11 @@ namespace drawinglayer
         bool SdrTextAttribute::isToBeChained() const
         {
             return mpSdrTextAttribute->isToBeChained();
+        }
+
+        bool SdrTextAttribute::isChainable() const
+        {
+            return mpSdrTextAttribute->isChainable();
         }
 
         const SdrFormTextAttribute& SdrTextAttribute::getSdrFormTextAttribute() const
