@@ -41,7 +41,6 @@
 struct LOKDocView_Impl
 {
     LOKDocView* m_pDocView;
-    GtkWidget *m_pDrawingArea;
     TileBuffer m_aTileBuffer;
 
     float m_fZoom;
@@ -119,7 +118,7 @@ struct LOKDocView_Impl
     /// Connected to the destroy signal of LOKDocView, deletes its LOKDocView_Impl.
     static void destroy(LOKDocView* pDocView, gpointer pData);
     /// Connected to the expose-event of the GtkDrawingArea
-    static void on_exposed(GtkWidget *widget, GdkEvent *event, gpointer user_data);
+    static void onExposed(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
     /// Receives a key press or release event.
     void signalKey(GdkEventKey* pEvent);
     /**
@@ -156,16 +155,8 @@ struct LOKDocView_Impl
     static gboolean handleTimeout(gpointer pData);
     /// Implementation of the timeout handler, invoked by handleTimeout().
     gboolean handleTimeoutImpl();
-    /**
-     * Renders the document to a number of visible tiles.
-     *
-     * This method is invoked only manually, not when some Gtk signal is
-     * emitted.
-     *
-     * @param pPartial if 0, then the full visible document is rendered, otherwise only
-     * the tiles that intersect with pPartial.
-     */
-    void renderDocument(GdkRectangle* pPartial);
+    /// Implementation of expose event handler, invoked by onExposed().
+    void onExposedImpl(GdkEventExpose* event);
     /// Returns the GdkRectangle of a x,y,width,height string.
     GdkRectangle payloadToRectangle(const char* pPayload);
     /// Returns the GdkRectangles of a x1,y1,w1,h1;x2,y2,w2,h2;... string.
@@ -213,7 +204,7 @@ SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
-G_DEFINE_TYPE(LOKDocView, lok_doc_view, GTK_TYPE_SCROLLED_WINDOW)
+G_DEFINE_TYPE(LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA)
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
@@ -279,7 +270,6 @@ LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPaylo
 
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     : m_pDocView(pDocView),
-      m_pDrawingArea(gtk_drawing_area_new()),
       m_aTileBuffer(TileBuffer(0,0)),
       m_fZoom(1),
       m_pOffice(0),
@@ -328,10 +318,70 @@ void LOKDocView_Impl::destroy(LOKDocView* pDocView, gpointer /*pData*/)
     delete pDocView->m_pImpl;
 }
 
-void LOKDocView_Impl::on_exposed(GtkWidget* /*widget*/, GdkEvent* /*event*/, gpointer userdata)
+void LOKDocView_Impl::onExposed(GtkWidget* /*widget*/, GdkEventExpose* event, gpointer userdata)
 {
     LOKDocView *pDocView = LOK_DOC_VIEW (userdata);
-    pDocView->m_pImpl->renderDocument(0);
+    pDocView->m_pImpl->onExposedImpl(event);
+}
+
+void LOKDocView_Impl::onExposedImpl(GdkEventExpose* event)
+{
+    long nDocumentWidthPixels = twipToPixel(m_nDocumentWidthTwips, m_fZoom);
+    long nDocumentHeightPixels = twipToPixel(m_nDocumentHeightTwips, m_fZoom);
+    // Total number of rows / columns in this document.
+    guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
+    guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+    GdkRectangle aVisibleArea = event->area;
+    cairo_t *pcairo = gdk_cairo_create(GTK_WIDGET(m_pDocView)->window);
+
+    aVisibleArea.x = pixelToTwip (aVisibleArea.x, m_fZoom);
+    aVisibleArea.y = pixelToTwip (aVisibleArea.y, m_fZoom);
+    aVisibleArea.width = pixelToTwip (aVisibleArea.width, m_fZoom);
+    aVisibleArea.height = pixelToTwip (aVisibleArea.height, m_fZoom);
+
+    // Render the tiles.
+    for (guint nRow = 0; nRow < nRows; ++nRow)
+    {
+        for (guint nColumn = 0; nColumn < nColumns; ++nColumn)
+        {
+            GdkRectangle aTileRectangleTwips, aTileRectanglePixels;
+            bool bPaint = true;
+
+            // Determine size of the tile: the rightmost/bottommost tiles may
+            // be smaller, and we need the size to decide if we need to repaint.
+            if (nColumn == nColumns - 1)
+                aTileRectanglePixels.width = nDocumentWidthPixels - nColumn * nTileSizePixels;
+            else
+                aTileRectanglePixels.width = nTileSizePixels;
+            if (nRow == nRows - 1)
+                aTileRectanglePixels.height = nDocumentHeightPixels - nRow * nTileSizePixels;
+            else
+                aTileRectanglePixels.height = nTileSizePixels;
+
+            // Determine size and position of the tile in document coordinates,
+            // so we can decide if we can skip painting for partial rendering.
+            aTileRectangleTwips.x = pixelToTwip(nTileSizePixels, m_fZoom) * nColumn;
+            aTileRectangleTwips.y = pixelToTwip(nTileSizePixels, m_fZoom) * nRow;
+            aTileRectangleTwips.width = pixelToTwip(aTileRectanglePixels.width, m_fZoom);
+            aTileRectangleTwips.height = pixelToTwip(aTileRectanglePixels.height, m_fZoom);
+
+            if (!gdk_rectangle_intersect(&aVisibleArea, &aTileRectangleTwips, 0))
+                bPaint = false;
+
+            if (bPaint)
+            {
+                Tile& currentTile = m_aTileBuffer.getTile(nRow, nColumn, m_fZoom);
+                GdkPixbuf* pPixBuf = currentTile.getBuffer();
+
+                gdk_cairo_set_source_pixbuf (pcairo, pPixBuf,
+                                             twipToPixel(aTileRectangleTwips.x, m_fZoom),
+                                             twipToPixel(aTileRectangleTwips.y, m_fZoom));
+                cairo_paint(pcairo);
+            }
+        }
+    }
+
+    cairo_destroy(pcairo);
 }
 
 void LOKDocView_Impl::signalKey(GdkEventKey* pEvent)
@@ -798,74 +848,11 @@ gboolean LOKDocView_Impl::handleTimeoutImpl()
             m_bCursorOverlayVisible = false;
         else
             m_bCursorOverlayVisible = true;
-        gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
+        gtk_widget_queue_draw(GTK_WIDGET(m_pDocView));
     }
 
     return G_SOURCE_CONTINUE;
 }
-
-void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
-{
-    GdkRectangle visibleArea;
-    lok_doc_view_get_visarea (m_pDocView, &visibleArea);
-
-    long nDocumentWidthPixels = twipToPixel(m_nDocumentWidthTwips, m_fZoom);
-    long nDocumentHeightPixels = twipToPixel(m_nDocumentHeightTwips, m_fZoom);
-    // Total number of rows / columns in this document.
-    guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
-    guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
-
-    cairo_t *pcairo = gdk_cairo_create(m_pDrawingArea->window);
-
-    // Render the tiles.
-    for (guint nRow = 0; nRow < nRows; ++nRow)
-    {
-        for (guint nColumn = 0; nColumn < nColumns; ++nColumn)
-        {
-            GdkRectangle aTileRectangleTwips, aTileRectanglePixels;
-            bool bPaint = true;
-
-            // Determine size of the tile: the rightmost/bottommost tiles may
-            // be smaller, and we need the size to decide if we need to repaint.
-            if (nColumn == nColumns - 1)
-                aTileRectanglePixels.width = nDocumentWidthPixels - nColumn * nTileSizePixels;
-            else
-                aTileRectanglePixels.width = nTileSizePixels;
-            if (nRow == nRows - 1)
-                aTileRectanglePixels.height = nDocumentHeightPixels - nRow * nTileSizePixels;
-            else
-                aTileRectanglePixels.height = nTileSizePixels;
-
-            // Determine size and position of the tile in document coordinates,
-            // so we can decide if we can skip painting for partial rendering.
-            aTileRectangleTwips.x = pixelToTwip(nTileSizePixels, m_fZoom) * nColumn;
-            aTileRectangleTwips.y = pixelToTwip(nTileSizePixels, m_fZoom) * nRow;
-            aTileRectangleTwips.width = pixelToTwip(aTileRectanglePixels.width, m_fZoom);
-            aTileRectangleTwips.height = pixelToTwip(aTileRectanglePixels.height, m_fZoom);
-            if (pPartial && !gdk_rectangle_intersect(pPartial, &aTileRectangleTwips, 0))
-                bPaint = false;
-
-            if (!gdk_rectangle_intersect(&visibleArea, &aTileRectangleTwips, 0))
-                bPaint = false;
-
-            if (bPaint)
-            {
-                //g_info("tile_buffer_get_tile (%d, %d)", nRow, nColumn);
-
-                Tile& currentTile = m_aTileBuffer.getTile(nRow, nColumn, m_fZoom);
-                GdkPixbuf* pPixBuf = currentTile.getBuffer();
-
-                gdk_cairo_set_source_pixbuf (pcairo, pPixBuf,
-                                             twipToPixel(aTileRectangleTwips.x, m_fZoom),
-                                             twipToPixel(aTileRectangleTwips.y, m_fZoom));
-                cairo_paint(pcairo);
-            }
-        }
-    }
-
-    cairo_destroy(pcairo);
-}
-
 
 GdkRectangle LOKDocView_Impl::payloadToRectangle(const char* pPayload)
 {
@@ -978,14 +965,14 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         else
             m_aTileBuffer.resetAllTiles();
 
-        gtk_widget_queue_draw(m_pDrawingArea);
+        gtk_widget_queue_draw(GTK_WIDGET(m_pDocView));
     }
     break;
     case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
         m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         m_bCursorOverlayVisible = true;
-        gtk_widget_queue_draw(m_pDrawingArea);
+        gtk_widget_queue_draw(GTK_WIDGET(m_pDocView));
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION:
@@ -1025,7 +1012,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
             m_aGraphicSelection = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         else
             memset(&m_aGraphicSelection, 0, sizeof(m_aGraphicSelection));
-        gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
+        gtk_widget_queue_draw(GTK_WIDGET(m_pDocView));
     }
     break;
     case LOK_CALLBACK_HYPERLINK_CLICKED:
@@ -1049,7 +1036,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
         payloadToSize(pCallback->m_aPayload.c_str(), m_nDocumentWidthTwips, m_nDocumentHeightTwips);
-        gtk_widget_set_size_request(m_pDrawingArea,
+        gtk_widget_set_size_request(GTK_WIDGET(m_pDocView),
                                     twipToPixel(m_nDocumentWidthTwips, m_fZoom),
                                     twipToPixel(m_nDocumentHeightTwips, m_fZoom));
     }
@@ -1113,7 +1100,6 @@ void LOKDocView_Impl::searchNotFound(const std::string& rString)
 void LOKDocView_Impl::setPart(const std::string& rString)
 {
     g_signal_emit(m_pDocView, doc_view_signals[PART_CHANGED], 0, std::stoi(rString));
-    renderDocument(0);
 }
 
 static void lok_doc_view_class_init (LOKDocViewClass* pClass)
@@ -1163,34 +1149,26 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
 
 static void lok_doc_view_init (LOKDocView* pDocView)
 {
-    // Gtk ScrolledWindow is apparently not fully initialised yet, we specifically
-    // have to set the [hv]adjustment to prevent GTK assertions from firing, see
-    // https://bugzilla.gnome.org/show_bug.cgi?id=438114 for more info.
-    gtk_scrolled_window_set_hadjustment( GTK_SCROLLED_WINDOW( pDocView ), NULL );
-    gtk_scrolled_window_set_vadjustment( GTK_SCROLLED_WINDOW( pDocView ), NULL );
-
     pDocView->m_pImpl = new LOKDocView_Impl(pDocView);
-    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
-                                           pDocView->m_pImpl->m_pDrawingArea );
 
-    g_signal_connect(G_OBJECT(pDocView->m_pImpl->m_pDrawingArea),
+    g_signal_connect(G_OBJECT(pDocView),
                      "expose-event",
-                     G_CALLBACK(LOKDocView_Impl::on_exposed), pDocView);
-    g_signal_connect(G_OBJECT(pDocView->m_pImpl->m_pDrawingArea),
+                     G_CALLBACK(LOKDocView_Impl::onExposed), pDocView);
+    g_signal_connect(G_OBJECT(pDocView),
                      "expose-event",
                      G_CALLBACK(LOKDocView_Impl::renderOverlay), pDocView);
-    gtk_widget_add_events(pDocView->m_pImpl->m_pDrawingArea,
+    gtk_widget_add_events(GTK_WIDGET(pDocView),
                            GDK_BUTTON_PRESS_MASK
                           |GDK_BUTTON_RELEASE_MASK
                           |GDK_BUTTON_MOTION_MASK);
 
-    g_signal_connect(G_OBJECT(pDocView->m_pImpl->m_pDrawingArea),
+    g_signal_connect(G_OBJECT(pDocView),
                      "button-press-event",
                      G_CALLBACK(LOKDocView_Impl::signalButton), pDocView);
-    g_signal_connect(G_OBJECT(pDocView->m_pImpl->m_pDrawingArea),
+    g_signal_connect(G_OBJECT(pDocView),
                      "button-release-event",
                      G_CALLBACK(LOKDocView_Impl::signalButton), pDocView);
-    g_signal_connect(G_OBJECT(pDocView->m_pImpl->m_pDrawingArea),
+    g_signal_connect(G_OBJECT(pDocView),
                      "motion-notify-event",
                      G_CALLBACK(LOKDocView_Impl::signalMotion), pDocView);
 
@@ -1240,10 +1218,9 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_open_document( LOKDocView* pDocView, 
 
         pDocView->m_pImpl->m_aTileBuffer = TileBuffer(pDocView->m_pImpl->m_pDocument,
                                                       nColumns);
-        gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
+        gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                     nDocumentWidthPixels,
                                     nDocumentHeightPixels);
-        pDocView->m_pImpl->renderDocument(0);
     }
 
     return TRUE;
@@ -1264,12 +1241,9 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_zoom ( LOKDocView* pDocView, float fZ
 
     pDocView->m_pImpl->m_aTileBuffer = TileBuffer(pDocView->m_pImpl->m_pDocument,
                                                   nColumns);
-    gtk_widget_set_size_request(pDocView->m_pImpl->m_pDrawingArea,
+    gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
-
-    if ( pDocView->m_pImpl->m_pDocument )
-        pDocView->m_pImpl->renderDocument(0);
 }
 
 SAL_DLLPUBLIC_EXPORT float lok_doc_view_get_zoom ( LOKDocView* pDocView )
@@ -1301,7 +1275,6 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_partmode( LOKDocView* pDocView,
                                                     int nPartMode )
 {
     pDocView->m_pImpl->m_pDocument->pClass->setPartMode( pDocView->m_pImpl->m_pDocument, nPartMode );
-    pDocView->m_pImpl->renderDocument(0);
 }
 
 SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_edit( LOKDocView* pDocView,
@@ -1318,7 +1291,7 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_set_edit( LOKDocView* pDocView,
     }
     pDocView->m_pImpl->m_bEdit = bEdit;
     g_signal_emit(pDocView, doc_view_signals[EDIT_CHANGED], 0, bWasEdit);
-    gtk_widget_queue_draw(GTK_WIDGET(pDocView->m_pImpl->m_pDrawingArea));
+    gtk_widget_queue_draw(GTK_WIDGET(pDocView));
 }
 
 SAL_DLLPUBLIC_EXPORT gboolean lok_doc_view_get_edit(LOKDocView* pDocView)
@@ -1337,17 +1310,15 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_post_key(GtkWidget* /*pWidget*/, GdkEvent
     pDocView->m_pImpl->signalKey(pEvent);
 }
 
-SAL_DLLPUBLIC_EXPORT void lok_doc_view_get_visarea(LOKDocView* pThis, GdkRectangle* pArea)
+SAL_DLLPUBLIC_EXPORT float lok_doc_view_pixel_to_twip(LOKDocView* pDocView, float fInput)
 {
-#if GTK_CHECK_VERSION(2,14,0) // we need gtk_adjustment_get_page_size()
-    float zoom = pThis->m_pImpl->m_fZoom;
-    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pThis));
-    pArea->x = pixelToTwip(gtk_adjustment_get_value(pHAdjustment),zoom);
-    pArea->width = pixelToTwip(gtk_adjustment_get_page_size(pHAdjustment), zoom);
-    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pThis));
-    pArea->y = pixelToTwip(gtk_adjustment_get_value(pVAdjustment), zoom);
-    pArea->height = pixelToTwip(gtk_adjustment_get_page_size(pVAdjustment), zoom);
-#endif
+    return pixelToTwip(fInput, pDocView->m_pImpl->m_fZoom);
 }
+
+SAL_DLLPUBLIC_EXPORT float lok_doc_view_twip_to_pixel(LOKDocView* pDocView, float fInput)
+{
+    return twipToPixel(fInput, pDocView->m_pImpl->m_fZoom);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

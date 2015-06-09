@@ -31,21 +31,23 @@ typedef struct _LOKDocViewClass  LOKDocViewClass;
 
 struct _LOKDocView
 {
-    GtkScrolledWindow aScrollWindow;
+    GtkDrawingArea aDrawingArea;
     struct LOKDocView_Impl* m_pImpl;
 };
 
 struct _LOKDocViewClass
 {
-  GtkScrolledWindowClass parent_class;
-  void (* edit_changed)  (LOKDocView* pView, gboolean was_edit);
-  void (* command_changed) (LOKDocView* pView, char* new_state);
-  void (* search_not_found) (LOKDocView* pView, char* new_state);
-  void (* part_changed) (LOKDocView* pView, int new_part);
+    GtkDrawingAreaClass parent_class;
+    void (* edit_changed)  (LOKDocView* pView, gboolean was_edit);
+    void (* command_changed) (LOKDocView* pView, char* new_state);
+    void (* search_not_found) (LOKDocView* pView, char* new_state);
+    void (* part_changed) (LOKDocView* pView, int new_part);
 };
 
 GType                          lok_doc_view_get_type               (void) G_GNUC_CONST;
+
 GtkWidget*                     lok_doc_view_new                    (LibreOfficeKit* pOffice );
+
 gboolean                       lok_doc_view_open_document          (LOKDocView* pDocView,
                                                                     char* pPath);
 
@@ -80,9 +82,11 @@ void                           lok_doc_view_post_key               (GtkWidget* p
                                                                     GdkEventKey* pEvent,
                                                                     gpointer pData);
 
-/// Get the visible area of the document (in twips).
-void                           lok_doc_view_get_visarea            (LOKDocView* pThis,
-                                                                    GdkRectangle* pArea);
+float                          lok_doc_view_pixel_to_twip          (LOKDocView* pDocView,
+                                                                    float fInput);
+
+float                          lok_doc_view_twip_to_pixel          (LOKDocView* pDocView,
+                                                                    float fInput);
 
 G_END_DECLS
 

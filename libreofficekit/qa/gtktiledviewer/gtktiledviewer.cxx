@@ -38,6 +38,7 @@ static GtkToolItem* pBold;
 static GtkToolItem* pItalic;
 static GtkToolItem* pUnderline;
 static GtkToolItem* pStrikethrough;
+static GtkWidget* pScrolledWindow;
 std::map<GtkToolItem*, std::string> g_aToolItemCommandNames;
 std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
 bool g_bToolItemBroadcast = true;
@@ -134,6 +135,23 @@ static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 #endif
 }
 
+/// Get the visible area of the scrolled window
+static void getVisibleAreaTwips(GdkRectangle* pArea)
+{
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
+
+    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
+                                               gtk_adjustment_get_value(pHAdjustment));
+    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
+                                               gtk_adjustment_get_value(pVAdjustment));
+    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
+                                               gtk_adjustment_get_page_size(pHAdjustment));
+    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
+                                               gtk_adjustment_get_page_size(pVAdjustment));
+}
+
+
 /// Handles the key-press-event of the window.
 static gboolean signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData)
 {
@@ -161,7 +179,7 @@ static void doSearch(bool bBackwards)
 
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
     GdkRectangle aArea;
-    lok_doc_view_get_visarea(pLOKDocView, &aArea);
+    getVisibleAreaTwips(&aArea);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/type", '/'), "long");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/value", '/'), aArea.x);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/type", '/'), "long");
@@ -461,7 +479,12 @@ int main( int argc, char* argv[] )
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);
     g_signal_connect(pWindow, "key-release-event", G_CALLBACK(signalKey), pDocView);
 
-    gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
+    // Scrolled window for DocView
+    pScrolledWindow = gtk_scrolled_window_new(0, 0);
+    gtk_container_add(GTK_CONTAINER(pVBox), pScrolledWindow);
+
+    // DocView doesn't have scrolling capability, so need a viewport
+    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(pScrolledWindow), pDocView);
 
     gtk_widget_show_all( pWindow );
     // Hide the findbar by default.
