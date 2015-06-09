@@ -437,6 +437,7 @@ struct MSWordSaveData
     RndStdIds eOldAnchorType;
     ww::bytes* pOOld;                ///< WW8Export only
     SwPaM* pOldPam, *pOldEnd;
+    sal_uLong nOldStart, nOldEnd;
     const sw::Frame* pOldFlyFormat;
     const SwPageDesc* pOldPageDesc;
 
@@ -554,6 +555,7 @@ public:
     bool m_bFontSizeWritten;
 
     SwDoc *m_pDoc;
+    sal_uLong m_nCurStart, m_nCurEnd;
     SwPaM *m_pCurPam, *m_pOrigPam;
 
     /// Stack to remember the nesting (see MSWordSaveData for more)
