@@ -3471,25 +3471,26 @@ bool adjustDoubleRefOnDeleteTab(ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSh
     ScAddress aEndPos = rRef2.toAbs(rOldPos);
     bool bMoreThanOneTab = aStartPos.Tab() != aEndPos.Tab();
     bool bModified = false;
-    if (bMoreThanOneTab && aStartPos.Tab() == nDelPos)
+    if (bMoreThanOneTab && aStartPos.Tab() == nDelPos && nDelPos + nSheets <= aEndPos.Tab())
     {
-        if (rRef1.IsTabRel())
+        if (rRef1.IsTabRel() && aStartPos.Tab() < rOldPos.Tab())
         {
-            aStartPos.IncTab(nSheets);
-            rRef1.SetAddress(aStartPos, rOldPos);
+            rRef1.IncTab(nSheets);
+            bModified = true;
         }
-        bModified = true;
     }
     else
     {
         bModified = adjustSingleRefOnDeletedTab(rRef1, nDelPos, nSheets, rOldPos, rNewPos);
     }
 
-    if (bMoreThanOneTab && aEndPos.Tab() == nDelPos)
+    if (bMoreThanOneTab && aEndPos.Tab() == nDelPos && aStartPos.Tab() <= nDelPos - nSheets)
     {
-        aEndPos.IncTab(-nSheets);
-        rRef2.SetAddress(aEndPos, rNewPos);
-        bModified = true;
+        if (!rRef2.IsTabRel() || rOldPos.Tab() < aEndPos.Tab())
+        {
+            rRef2.IncTab(-nSheets);
+            bModified = true;
+        }
     }
     else
     {
