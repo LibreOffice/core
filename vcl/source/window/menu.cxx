@@ -1843,7 +1843,12 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     if (bRollover)
                         rRenderContext.SetTextColor(rSettings.GetMenuBarRolloverTextColor());
                     else if (bHighlighted)
-                        rRenderContext.SetTextColor(rSettings.GetMenuBarHighlightTextColor());
+                    {
+                        if ( rSettings.GetMenuHighlightColor().AsRGBHexString() != rSettings.GetMenuBarHighlightTextColor().AsRGBHexString() )
+                            rRenderContext.SetTextColor(rSettings.GetMenuBarHighlightTextColor());
+                        else
+                            rRenderContext.SetTextColor(rSettings.GetMenuBarRolloverTextColor());
+                    }
                 }
                 else
                 {
