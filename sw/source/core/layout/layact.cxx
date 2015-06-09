@@ -1239,7 +1239,12 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
             aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect();
         }
 
-        pLay->Calc();
+        {
+            //JoinLock pParent for the lifetime of the Calc call to avoid
+            //SwSectionFrm::MergeNext removing the pLay we're trying to Format
+            FlowFrmJoinLockGuard aJoinGuard(pLay);
+            pLay->Calc();
+        }
 
         if ( aOldFrame != pLay->Frm() )
             bChanged = true;
