@@ -1724,17 +1724,7 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     bool bOldPageDescs = m_bOutPageDescs;
     m_bOutPageDescs = false;
                                     // bOutKF was setted / stored in WriteKF1
-    m_pCurPam = Writer::NewSwPaM( *m_pDoc, nStart, nEnd );
-
-    // Tabelle in Sonderbereichen erkennen
-    if ( ( nStart != m_pCurPam->GetMark()->nNode.GetIndex() ) &&
-         m_pDoc->GetNodes()[ nStart ]->IsTableNode() )
-    {
-        m_pCurPam->GetMark()->nNode = nStart;
-    }
-
-    m_pOrigPam = m_pCurPam;
-    m_pCurPam->Exchange();
+    SetCurPam(nStart, nEnd);
 
     WriteText();
 
@@ -1799,6 +1789,21 @@ void WW8Export::WriteChar( sal_Unicode c )
         Strm().WriteUChar( c );
 }
 
+void MSWordExportBase::SetCurPam(sal_uLong nStt, sal_uLong nEnd)
+{
+    m_pCurPam = Writer::NewSwPaM( *m_pDoc, nStt, nEnd );
+
+    // Recognize tables in special cases
+    if ( nStt != m_pCurPam->GetMark()->nNode.GetIndex() &&
+         m_pDoc->GetNodes()[ nStt ]->IsTableNode() )
+    {
+        m_pCurPam->GetMark()->nNode = nStt;
+    }
+
+    m_pOrigPam = m_pCurPam;
+    m_pCurPam->Exchange();
+}
+
 void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
 {
     MSWordSaveData aData;
@@ -1820,17 +1825,7 @@ void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
     aData.bOldStartTOX = m_bStartTOX;
     aData.bOldInWriteTOX = m_bInWriteTOX;
 
-    m_pCurPam = Writer::NewSwPaM( *m_pDoc, nStt, nEnd );
-
-    // Recognize tables in special cases
-    if ( nStt != m_pCurPam->GetMark()->nNode.GetIndex() &&
-         m_pDoc->GetNodes()[ nStt ]->IsTableNode() )
-    {
-        m_pCurPam->GetMark()->nNode = nStt;
-    }
-
-    m_pOrigPam = m_pCurPam;
-    m_pCurPam->Exchange();
+    SetCurPam(nStt, nEnd);
 
     m_bOutTable = false;
     // Caution: bIsInTable should not be set here
