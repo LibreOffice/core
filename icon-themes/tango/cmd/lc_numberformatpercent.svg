@@ -14,7 +14,7 @@
    height="24"
    id="svg4552"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="lc_numberformatpercent.svg"
    inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_numberformatpercent.png"
    inkscape:export-xdpi="90"
@@ -254,7 +254,7 @@
        y2="11.178635"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       gradientTransform="matrix(1.119525,0,0,1.119525,14.909742,-59.991073)"
+       gradientTransform="matrix(1.0915149,0,0,1.0915149,14.412115,-59.800261)"
        y2="11.178635"
        x2="61.14473"
        y1="31.678635"
@@ -272,18 +272,18 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="11.295291"
+     inkscape:cx="-207.20471"
      inkscape:cy="-26.304498"
      inkscape:current-layer="g4851"
-     showgrid="false"
+     showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      inkscape:snap-global="false"
      showborder="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="714"
+     inkscape:window-width="1364"
+     inkscape:window-height="699"
      inkscape:window-x="0"
-     inkscape:window-y="28"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true">
@@ -341,16 +341,16 @@
            transform="translate(-6.970051,-5.3131159)">
           <text
              xml:space="preserve"
-             style="font-size:26.31069183px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient4808);fill-opacity:1;stroke:none;display:inline;enable-background:new;font-family:Sans"
-             x="63.032848"
-             y="-25.024321"
+             style="font-style:normal;font-weight:normal;font-size:25.6524086px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:url(#linearGradient4808);fill-opacity:1;stroke:none;enable-background:new"
+             x="61.3312"
+             y="-25.708363"
              id="text4134"
              sodipodi:linespacing="125%"
-             transform="matrix(0.70267911,0.70267911,-0.71156235,0.71156235,0,0)"><tspan
+             transform="matrix(0.72207287,0.72207287,-0.69245089,0.69245089,0,0)"><tspan
                sodipodi:role="line"
                id="tspan4136"
-               x="63.032848"
-               y="-25.024321"
+               x="61.3312"
+               y="-25.708363"
                style="fill:url(#linearGradient4808);fill-opacity:1">%</tspan></text>
         </g>
       </g>

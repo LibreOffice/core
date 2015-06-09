@@ -48,7 +48,7 @@
        xlink:href="#linearGradient3764-0"
        id="linearGradient3218"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.1666667,0,0,0.93750001,-29.5,1032.3622)"
+       gradientTransform="matrix(1.1666667,0,0,0.99999885,-29.5,1032.3622)"
        x1="8"
        y1="0"
        x2="8"
@@ -58,7 +58,7 @@
        xlink:href="#linearGradient4457-9-7"
        id="linearGradient3220"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.66666666,0,0,0.75108694,-193,1283.9207)"
+       gradientTransform="matrix(0.66666666,0,0,0.80115847,-193,1300.691)"
        x1="262"
        y1="-332.77026"
        x2="262"
@@ -71,17 +71,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="22.627417"
-     inkscape:cx="10.795739"
-     inkscape:cy="3.938626"
+     inkscape:zoom="1"
+     inkscape:cx="10.022341"
+     inkscape:cy="9.2419269"
      inkscape:current-layer="g3862"
      showgrid="false"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
+     inkscape:window-width="1364"
+     inkscape:window-height="699"
      inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:snap-global="true"
      inkscape:showpageshadow="false"
@@ -103,7 +103,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -129,27 +129,27 @@
                style="fill:url(#linearGradient3218);fill-opacity:1;stroke:none"
                id="rect2998"
                width="14"
-               height="15"
+               height="15.999982"
                x="-26"
                y="1032.3622"
                rx="0.77777773"
-               ry="0.71428514" />
+               ry="0.76190329" />
             <path
                style="opacity:0.85;fill:url(#linearGradient3220);fill-opacity:1;stroke:none"
-               d="m -17.000001,1033.3622 c -0.443533,2.3371 -5.12814,6.3859 -7.999999,6.8096 l 0,0.677 0,0.5611 0,0.6189 c 1.999999,0 4.281066,1.9659 4.666666,4.3334 l 0.666668,0 c -0.689173,-3.1596 -1.780628,-4.9232 -3.083334,-5.32 2.778666,-0.9948 5.468539,-4.4033 6.416667,-7.68 l -0.666668,0 z m 1.333334,0 c -1.333334,3.0044 -1.333334,7.4286 -0.666666,13 l 1.999999,0 c -1.333333,-4.3334 0,-9.5087 1.333334,-11.7618 l 0,-0.5805 c 0,-0.3598 -0.320754,-0.6577 -0.708333,-0.6577 l -1.958334,0 z"
+               d="m -17.000001,1033.4289 c -0.443533,2.4929 -5.12814,6.8116 -7.999999,7.2635 l 0,0.7222 0,0.5985 0,0.6601 c 1.999999,0 4.281066,2.097 4.666666,4.6223 l 0.666668,0 c -0.689173,-3.3702 -1.780628,-5.2514 -3.083334,-5.6746 2.778666,-1.0611 5.468539,-4.6969 6.416667,-8.192 l -0.666668,0 z m 1.333334,0 c -1.333334,3.2047 -1.333334,7.9238 -0.666666,13.8666 l 1.999999,0 c -1.333333,-4.6223 0,-10.1426 1.333334,-12.5459 l 0,-0.6192 c 0,-0.3838 -0.320754,-0.7015 -0.708333,-0.7015 l -1.958334,0 z"
                id="path3107"
                inkscape:connector-curvature="0" />
             <path
                inkscape:connector-curvature="0"
                style="opacity:0.4;fill:#ffffff;fill-opacity:1;stroke:none"
-               d="m -25,1033.3622 0,13 12,0 0,-13 -12,0 z m 0.75,0.6842 10.5,0 0,11.6316 -10.5,0 0,-11.6316 z"
+               d="m -25,1033.4289 0,13.8666 12,0 0,-13.8666 -12,0 z m 0.75,0.7298 10.5,0 0,12.407 -10.5,0 0,-12.407 z"
                id="rect3095" />
             <g
                transform="matrix(0.77777778,0,0,0.71428512,-49.069445,300.67554)"
                id="g3185" />
             <path
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.20734406px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;opacity:0.4;fill:#000000;fill-opacity:1;stroke:none"
-               d="m -26,1032.3622 0,1 0,13 0,1 13,0 1,0 0,-1 0,-13 0,-1 -14,0 z m 1,1 12,0 0,13 -12,0 0,-13 z"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.20734406px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;opacity:0.35;fill:#000000;fill-opacity:1;stroke:none"
+               d="m -26,1032.3622 0,1.0667 0,13.8666 0,1.0667 13,0 1,0 0,-1.0667 0,-13.8666 0,-1.0667 -14,0 z m 1,1.0667 12,0 0,13.8666 -12,0 0,-13.8666 z"
                id="rect8760"
                inkscape:connector-curvature="0" />
           </g>
