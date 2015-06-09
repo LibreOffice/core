@@ -57,7 +57,7 @@ class BookmarkHashes {
         assertEquals(aExpectation.m_nMsWordReloadHash, m_nMsWordReloadHash);
     }
 
-    static public java.math.BigInteger getBookmarksHash(XTextDocument xDoc)
+    public static java.math.BigInteger getBookmarksHash(XTextDocument xDoc)
         throws com.sun.star.uno.Exception, java.security.NoSuchAlgorithmException
     {
         StringBuffer buffer = new StringBuffer("");

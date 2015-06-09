@@ -60,7 +60,7 @@ public class PageHelper
 
     /** get the page count for standard pages
     */
-    static public int getDrawPageCount( XComponent xComponent )
+    public static int getDrawPageCount( XComponent xComponent )
     {
         XDrawPagesSupplier xDrawPagesSupplier =
             UnoRuntime.queryInterface(
@@ -71,7 +71,7 @@ public class PageHelper
 
     /** get draw page by index
     */
-    static public XDrawPage getDrawPageByIndex( XComponent xComponent, int nIndex )
+    public static XDrawPage getDrawPageByIndex( XComponent xComponent, int nIndex )
         throws com.sun.star.lang.IndexOutOfBoundsException,
             com.sun.star.lang.WrappedTargetException
     {
@@ -85,7 +85,7 @@ public class PageHelper
     /** creates and inserts a draw page into the giving position,
         the method returns the new created page
     */
-    static public XDrawPage insertNewDrawPageByIndex( XComponent xComponent, int nIndex )
+    public static XDrawPage insertNewDrawPageByIndex( XComponent xComponent, int nIndex )
         throws Exception
     {
         XDrawPagesSupplier xDrawPagesSupplier =
@@ -99,7 +99,7 @@ public class PageHelper
 
     /** get size of the given page
     */
-    static public Size getPageSize( XDrawPage xDrawPage )
+    public static Size getPageSize( XDrawPage xDrawPage )
         throws com.sun.star.beans.UnknownPropertyException,
             com.sun.star.lang.WrappedTargetException
     {
@@ -113,7 +113,7 @@ public class PageHelper
 
     /** get the page count for master pages
     */
-    static public int getMasterPageCount( XComponent xComponent )
+    public static int getMasterPageCount( XComponent xComponent )
     {
         XMasterPagesSupplier xMasterPagesSupplier =
             UnoRuntime.queryInterface(
@@ -124,7 +124,7 @@ public class PageHelper
 
     /** get master page by index
     */
-    static public XDrawPage getMasterPageByIndex( XComponent xComponent, int nIndex )
+    public static XDrawPage getMasterPageByIndex( XComponent xComponent, int nIndex )
         throws com.sun.star.lang.IndexOutOfBoundsException,
             com.sun.star.lang.WrappedTargetException
     {
@@ -138,7 +138,7 @@ public class PageHelper
     /** creates and inserts a new master page into the giving position,
         the method returns the new created page
     */
-    static public XDrawPage insertNewMasterPageByIndex( XComponent xComponent, int nIndex )
+    public static XDrawPage insertNewMasterPageByIndex( XComponent xComponent, int nIndex )
     {
         XMasterPagesSupplier xMasterPagesSupplier =
             UnoRuntime.queryInterface(
@@ -153,7 +153,7 @@ public class PageHelper
 
     /** sets given masterpage at the drawpage
     */
-    static public void setMasterPage( XDrawPage xDrawPage, XDrawPage xMasterPage )
+    public static void setMasterPage( XDrawPage xDrawPage, XDrawPage xMasterPage )
     {
         XMasterPageTarget xMasterPageTarget =
             UnoRuntime.queryInterface(
@@ -167,7 +167,7 @@ public class PageHelper
         This is important, because only presentation documents
         have notes and handout pages
     */
-    static public boolean isImpressDocument( XComponent xComponent )
+    public static boolean isImpressDocument( XComponent xComponent )
     {
         XServiceInfo xInfo = UnoRuntime.queryInterface(
                 XServiceInfo.class, xComponent );
@@ -176,7 +176,7 @@ public class PageHelper
 
     /** in impress documents each normal draw page has a corresponding notes page
     */
-    static public XDrawPage getNotesPage( XDrawPage xDrawPage )
+    public static XDrawPage getNotesPage( XDrawPage xDrawPage )
     {
         XPresentationPage aPresentationPage =
             UnoRuntime.queryInterface(
@@ -186,7 +186,7 @@ public class PageHelper
 
     /** in impress each documents has one handout page
     */
-    static public XDrawPage getHandoutMasterPage( XComponent xComponent )
+    public static XDrawPage getHandoutMasterPage( XComponent xComponent )
     {
         XHandoutMasterSupplier aHandoutMasterSupplier =
             UnoRuntime.queryInterface(

@@ -39,11 +39,11 @@ import java.io.PrintWriter;
 
 public final class GlobalTransfer_Test extends ComplexTestCase {
 
-    static private final String fileName
+    private static final String fileName
         = "testcase-do-not-remove.sxw";
-    static private final String httpSourceDir
+    private static final String httpSourceDir
         = "http://so-berlin/~webdav/";
-    static private final String fileTargetDir
+    private static final String fileTargetDir
         = "file:///d:/temp/";
 
     @Override

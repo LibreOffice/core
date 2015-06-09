@@ -44,7 +44,7 @@ public class PipedConnection implements XConnection {
      * The name of the service, the <code>JavaLoader</code> accesses this through
      * reflection.
      */
-    static private final String __serviceName = "com.sun.star.connection.PipedConnection";
+    private static final String __serviceName = "com.sun.star.connection.PipedConnection";
 
     /**
      * Gives a factory for creating the service.

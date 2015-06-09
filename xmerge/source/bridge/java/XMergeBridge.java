@@ -82,7 +82,7 @@ public class XMergeBridge {
     /** This inner class provides the component as a concrete implementation
      * of the service description. It implements the needed interfaces.
      */
-    static public class _XMergeBridge implements
+    public static class _XMergeBridge implements
                                                XImportFilter,
      XExportFilter,
         XServiceName,
@@ -92,7 +92,7 @@ public class XMergeBridge {
 
         /** The component will be registered under this name.
          */
-        static private final String __serviceName = "com.sun.star.documentconversion.XMergeBridge";
+        private static final String __serviceName = "com.sun.star.documentconversion.XMergeBridge";
 
 
 

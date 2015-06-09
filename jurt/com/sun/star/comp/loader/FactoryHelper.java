@@ -50,7 +50,7 @@ public class FactoryHelper {
 
     private static final boolean DEBUG = false;
     // the factory
-    static protected class Factory
+    protected static class Factory
         implements XSingleServiceFactory, XSingleComponentFactory, XServiceInfo,
         XTypeProvider {
 
@@ -384,7 +384,7 @@ public class FactoryHelper {
      * @see     com.sun.star.lang.XServiceInfo
      * @deprecated as of UDK 1.0
      */
-    static public XSingleServiceFactory getServiceFactory(Class<?> implClass,
+    public static XSingleServiceFactory getServiceFactory(Class<?> implClass,
                                                           XMultiServiceFactory multiFactory,
                                                           XRegistryKey regKey)
     {
@@ -420,7 +420,7 @@ public class FactoryHelper {
      * @return  returns a factory.
      * @see     com.sun.star.lang.XServiceInfo
      */
-    static public XSingleServiceFactory getServiceFactory(Class<?> implClass,
+    public static XSingleServiceFactory getServiceFactory(Class<?> implClass,
                                                           String serviceName,
                                                           XMultiServiceFactory multiFactory,
                                                           XRegistryKey regKey)
@@ -434,7 +434,7 @@ public class FactoryHelper {
      * @param  implClass the implementing class.
      * @return returns a factory object.
      */
-    static public Object createComponentFactory( Class<?> implClass, String serviceName )
+    public static Object createComponentFactory( Class<?> implClass, String serviceName )
     {
         return new Factory( implClass, serviceName, null, null );
     }
@@ -449,7 +449,7 @@ public class FactoryHelper {
      *
      * @see     com.sun.star.lang.XServiceInfo
      */
-    static public boolean writeRegistryServiceInfo(String implName, String serviceName, XRegistryKey regKey) {
+    public static boolean writeRegistryServiceInfo(String implName, String serviceName, XRegistryKey regKey) {
         boolean result = false;
 
           try {

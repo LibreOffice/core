@@ -30,7 +30,7 @@ class dbfTools
     /* ------------------------------------------------------------------ */
     /** disposes the component given
     */
-    static public void disposeComponent( Object xComp ) throws java.lang.RuntimeException
+    public static void disposeComponent( Object xComp ) throws java.lang.RuntimeException
     {
         XComponent xComponent = queryComponent( xComp );
         if ( null != xComponent )
@@ -40,7 +40,7 @@ class dbfTools
     /* ------------------------------------------------------------------ */
     /** queries an object for the XPropertySet interface
     */
-    static public XPropertySet queryPropertySet( Object aComp )
+    public static XPropertySet queryPropertySet( Object aComp )
     {
         return UnoRuntime.queryInterface( XPropertySet.class, aComp );
     }
@@ -48,7 +48,7 @@ class dbfTools
     /* ------------------------------------------------------------------ */
     /** queries an object for the XIndexContainer interface
     */
-    static public XIndexContainer queryIndexContainer( Object aComp )
+    public static XIndexContainer queryIndexContainer( Object aComp )
     {
         return UnoRuntime.queryInterface( XIndexContainer.class, aComp );
     }
@@ -56,7 +56,7 @@ class dbfTools
     /* ------------------------------------------------------------------ */
     /** queries an object for the XComponent interface
     */
-    static public XComponent queryComponent( Object aComp )
+    public static XComponent queryComponent( Object aComp )
     {
         return UnoRuntime.queryInterface( XComponent.class, aComp );
     }

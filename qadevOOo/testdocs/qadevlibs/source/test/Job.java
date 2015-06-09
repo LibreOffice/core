@@ -30,9 +30,9 @@ import com.sun.star.comp.loader.FactoryHelper;
 
 public class Job {
 
-    static public class _Implementation implements XServiceInfo, XTypeProvider,
+    public static class _Implementation implements XServiceInfo, XTypeProvider,
             XJob, XNamed {
-        static private final String __serviceName = "test.Job";
+        private static final String __serviceName = "test.Job";
         Object oDoc = null;
         String actionType = null;
         String actionParm = null;

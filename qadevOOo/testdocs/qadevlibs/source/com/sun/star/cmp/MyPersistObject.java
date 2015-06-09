@@ -72,11 +72,11 @@ public class MyPersistObject implements XPersistObject, XTypeProvider,
         }
     }
 
-    static private final boolean verbose = false;
+    private static final boolean verbose = false;
 
-    static public final String __serviceName =
+    public static final String __serviceName =
                                         "com.sun.star.cmp.PersistObject";
-    static public final String __implName =
+    public static final String __implName =
                                         "com.sun.star.cmp.MyPersistObject";
 
     // lots of props to write

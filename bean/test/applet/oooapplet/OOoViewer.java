@@ -28,7 +28,7 @@ import java.util.*;
 
 public class OOoViewer extends Applet {
 
-    static private CustomURLClassLoader m_loader;
+    private static CustomURLClassLoader m_loader;
 
     Object  m_objBean;
 

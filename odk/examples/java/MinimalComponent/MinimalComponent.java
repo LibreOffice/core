@@ -53,7 +53,7 @@ public class MinimalComponent {
         implements XInitialization, XServiceInfo {
         /** The service name, that must be used to get an instance of this service.
          */
-        static private final String __serviceName =
+        private static final String __serviceName =
         "org.openoffice.MinimalComponent";
 
         /** The initial component contextr, that gives access to

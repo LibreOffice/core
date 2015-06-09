@@ -46,7 +46,7 @@ import com.sun.star.uno.UnoRuntime;
  * @since       UDK1.0
  */
 public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
-    static private final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     /**
      * The name of the service, the <code>JavaLoader</code> accesses this through

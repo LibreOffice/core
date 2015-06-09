@@ -30,7 +30,7 @@ import com.sun.star.ucb.XCommandEnvironment;
 public class SmoketestCommandEnvironment extends WeakBase
     implements XServiceInfo, XCommandEnvironment {
 
-    static private final String __serviceName =
+    private static final String __serviceName =
     "com.sun.star.deployment.test.SmoketestCommandEnvironment";
 
     public static String[] getServiceNames() {

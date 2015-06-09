@@ -1664,7 +1664,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
     }
 
-    static private double[] calcPaintSize(final CSSNumericValue areaWidth, final CSSNumericValue areaHeight,
+    private static double[] calcPaintSize(final CSSNumericValue areaWidth, final CSSNumericValue areaHeight,
             final CSSNumericValue imageWidth, final CSSNumericValue imageHeight)
     {
 

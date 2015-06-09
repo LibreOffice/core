@@ -42,13 +42,13 @@ public class ConstantInstanceProvider implements XInstanceProvider {
     /**
      * When set to true, enables various debugging output.
      */
-    static public final boolean DEBUG = false;
+    public static final boolean DEBUG = false;
 
     /**
      * The name of the service, the <code>JavaLoader</code> accesses this through
      * reflection.
      */
-    static private final String __serviceName = "com.sun.star.comp.connection.InstanceProvider";
+    private static final String __serviceName = "com.sun.star.comp.connection.InstanceProvider";
 
     /**
      * Gives a factory for creating the service.

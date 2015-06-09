@@ -83,7 +83,7 @@ public class ShowTargets
         }
     }
 
-    static private String getShortTestDescription( Class<?> _testClass )
+    private static String getShortTestDescription( Class<?> _testClass )
     {
         java.lang.reflect.Method getShortDescriptionMethod = null;
         try { getShortDescriptionMethod = _testClass.getMethod( "getShortTestDescription", new Class[]{} ); }

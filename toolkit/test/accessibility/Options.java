@@ -27,29 +27,29 @@ import java.util.Properties;
 class Options
     extends Properties
 {
-    static public Options Instance ()
+    public static Options Instance ()
     {
         if (saOptions == null)
             saOptions = new Options ();
         return saOptions;
     }
 
-    static public void SetBoolean (String sName, boolean bValue)
+    public static void SetBoolean (String sName, boolean bValue)
     {
         Instance().setProperty (sName, Boolean.toString(bValue));
     }
 
-    static public boolean GetBoolean (String sName)
+    public static boolean GetBoolean (String sName)
     {
         return Boolean.getBoolean(Instance().getProperty (sName));
     }
 
-    static public void SetInteger (String sName, int nValue)
+    public static void SetInteger (String sName, int nValue)
     {
         Instance().setProperty (sName, Integer.toString(nValue));
     }
 
-    static public int GetInteger (String sName, int nDefault)
+    public static int GetInteger (String sName, int nDefault)
     {
         String sValue = Instance().getProperty (sName);
         if (sValue == null)
@@ -118,5 +118,5 @@ class Options
             sBaseName);
     }
 
-    static private Options saOptions = null;
+    private static Options saOptions = null;
 }

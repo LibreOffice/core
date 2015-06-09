@@ -108,15 +108,15 @@ class ExampleAddInThread extends Thread
 
 public class ExampleAddIn
 {
-    static public class _ExampleAddIn extends com.sun.star.lib.uno.helper.WeakBase
+    public static class _ExampleAddIn extends com.sun.star.lib.uno.helper.WeakBase
            implements org.openoffice.sheet.addin.XExampleAddIn,
                       com.sun.star.sheet.XAddIn,
                       com.sun.star.lang.XServiceName,
                       com.sun.star.lang.XServiceInfo
     {
-        static private final String aExampleService = "org.openoffice.sheet.addin.ExampleAddIn";
-        static private final String aAddInService = "com.sun.star.sheet.AddIn";
-        static private final String aImplName = _ExampleAddIn.class.getName();
+        private static final String aExampleService = "org.openoffice.sheet.addin.ExampleAddIn";
+        private static final String aAddInService = "com.sun.star.sheet.AddIn";
+        private static final String aImplName = _ExampleAddIn.class.getName();
 
         private static final short FUNCTION_INVALID   = -1;
 

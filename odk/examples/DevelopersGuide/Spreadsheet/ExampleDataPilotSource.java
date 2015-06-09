@@ -40,13 +40,13 @@ import com.sun.star.sheet.DataPilotFieldFilter;
 
 class ExampleSettings
 {
-    static public final int nDimensionCount = 6;
-    static public final int nValueDimension = 4;
-    static public final int nDataDimension = 5;
-    static public final String [] aDimensionNames = {
+    public static final int nDimensionCount = 6;
+    public static final int nValueDimension = 4;
+    public static final int nDataDimension = 5;
+    public static final String [] aDimensionNames = {
         "ones", "tens", "hundreds", "thousands", "value", "" };
 
-    static public final String getMemberName( int nMember )
+    public static final String getMemberName( int nMember )
     {
         return String.valueOf( nMember );
     }
@@ -752,7 +752,7 @@ public class ExampleDataPilotSource
 {
     //  implementation of com.sun.star.sheet.DataPilotSource
 
-    static public class _ExampleDataPilotSource implements
+    public static class _ExampleDataPilotSource implements
                         com.sun.star.sheet.XDimensionsSupplier,
                         com.sun.star.sheet.XDataPilotResults,
                         com.sun.star.util.XRefreshable,
@@ -760,8 +760,8 @@ public class ExampleDataPilotSource
                         com.sun.star.lang.XInitialization,
                         com.sun.star.lang.XServiceInfo
     {
-        static private final String aServiceName = "com.sun.star.sheet.DataPilotSource";
-        static private final String aImplName =  _ExampleDataPilotSource.class.getName();
+        private static final String aServiceName = "com.sun.star.sheet.DataPilotSource";
+        private static final String aImplName =  _ExampleDataPilotSource.class.getName();
 
         private final ExampleSettings aSettings = new ExampleSettings();
         private ExampleDimensions aDimensions;

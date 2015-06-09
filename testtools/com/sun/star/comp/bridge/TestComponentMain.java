@@ -63,7 +63,7 @@ public class TestComponentMain
         }
     }
 
-    static public void main(String args[]) throws Exception, com.sun.star.uno.Exception {
+    public static void main(String args[]) throws Exception, com.sun.star.uno.Exception {
         if(args.length != 2)    {
             System.err.println("usage : com.sun.star.comp.bridge.TestComponentMain uno:connection;protocol;objectName singleaccept");
             System.exit(-1);

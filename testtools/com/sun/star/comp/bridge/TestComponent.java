@@ -62,10 +62,10 @@ import com.sun.star.uno.XInterface;
 
 @SuppressWarnings("unchecked")
 public class TestComponent {
-    static public final boolean DEBUG = false;
+    public static final boolean DEBUG = false;
 
-    static public class _PerformancTestObject implements XPerformanceTest, XServiceInfo, XTypeProvider {
-        static private final String __serviceName = "com.sun.star.comp.benchmark.JavaTestObject";
+    public static class _PerformancTestObject implements XPerformanceTest, XServiceInfo, XTypeProvider {
+        private static final String __serviceName = "com.sun.star.comp.benchmark.JavaTestObject";
 
         private int      _long;
         private long     _hyper;
@@ -289,8 +289,8 @@ public class TestComponent {
         }
     }
 
-    static public class _TestObject implements XBridgeTest2, XRecursiveCall, XServiceInfo, XTypeProvider {
-        static private final String __serviceName = "com.sun.star.test.bridge.JavaTestObject";
+    public static class _TestObject implements XBridgeTest2, XRecursiveCall, XServiceInfo, XTypeProvider {
+        private static final String __serviceName = "com.sun.star.test.bridge.JavaTestObject";
 
         private boolean  _bool;
         private char     _char;

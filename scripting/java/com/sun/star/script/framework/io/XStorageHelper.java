@@ -220,7 +220,7 @@ public class XStorageHelper implements XEventListener {
 
     }
 
-    static public void disposeObject(XInterface xInterface) {
+    public static void disposeObject(XInterface xInterface) {
         if (xInterface == null) {
             return;
         }
@@ -235,7 +235,7 @@ public class XStorageHelper implements XEventListener {
         xComponent.dispose();
     }
 
-    static public void commit(XInterface xInterface) {
+    public static void commit(XInterface xInterface) {
 
         XTransactedObject xTrans =
             UnoRuntime.queryInterface(XTransactedObject.class, xInterface);

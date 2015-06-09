@@ -36,7 +36,7 @@ public class MainThreadDialogExecutor implements XCallback
     private boolean    m_bCalled = false;
     private boolean    m_bClose = false;
 
-    static public boolean Show( XComponentContext xContext, WikiDialog aWikiDialog )
+    public static boolean Show( XComponentContext xContext, WikiDialog aWikiDialog )
     {
         MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( aWikiDialog );
         return GetCallback( xContext, aExecutor );
@@ -44,13 +44,13 @@ public class MainThreadDialogExecutor implements XCallback
 
 
 
-    static public boolean Execute( XComponentContext xContext, XMessageBox xMessageBox )
+    public static boolean Execute( XComponentContext xContext, XMessageBox xMessageBox )
     {
         MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xMessageBox );
         return GetCallback( xContext, aExecutor );
     }
 
-    static public boolean Close( XComponentContext xContext, XDialog xDialog )
+    public static boolean Close( XComponentContext xContext, XDialog xDialog )
     {
         MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xDialog );
         aExecutor.m_bClose = true;
@@ -58,7 +58,7 @@ public class MainThreadDialogExecutor implements XCallback
         return GetCallback( xContext, aExecutor );
     }
 
-    static private boolean GetCallback( XComponentContext xContext, MainThreadDialogExecutor aExecutor )
+    private static boolean GetCallback( XComponentContext xContext, MainThreadDialogExecutor aExecutor )
     {
         try
         {

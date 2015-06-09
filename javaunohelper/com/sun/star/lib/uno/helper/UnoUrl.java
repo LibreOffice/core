@@ -61,7 +61,7 @@ public class UnoUrl {
     private final UnoUrlPart protocol;
     private final String rootOid;
 
-    static private class UnoUrlPart {
+    private static class UnoUrlPart {
 
         private final String partTypeName;
         private final HashMap<String,String> partParameters;

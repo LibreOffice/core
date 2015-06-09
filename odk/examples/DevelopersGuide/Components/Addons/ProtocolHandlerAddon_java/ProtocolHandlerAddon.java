@@ -64,7 +64,7 @@ public class ProtocolHandlerAddon {
 
         /** The service name, that must be used to get an instance of this service.
          */
-        static private final String[] m_serviceNames = { "com.sun.star.frame.ProtocolHandler" };
+        private static final String[] m_serviceNames = { "com.sun.star.frame.ProtocolHandler" };
 
         /** The component context, that gives access to the service manager and all registered services.
          */

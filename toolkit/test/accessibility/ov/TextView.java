@@ -34,7 +34,7 @@ public class TextView
     /** Create a TextView when the given object supports the
         XAccessibleText interface.
     */
-    static public ObjectView Create (
+    public static ObjectView Create (
         ObjectViewContainer aContainer,
         XAccessibleContext xContext)
     {

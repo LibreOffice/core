@@ -71,7 +71,7 @@ public class java_remote_bridge
     /**
      * When set to true, enables various debugging output.
      */
-    static private final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     private final class MessageDispatcher extends Thread {
         public MessageDispatcher() {

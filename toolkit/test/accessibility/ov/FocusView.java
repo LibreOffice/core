@@ -41,7 +41,7 @@ public class FocusView
     /** Create a FocusView when the given object supports the
         XAccessibleComponent interface.
     */
-    static public ObjectView Create (
+    public static ObjectView Create (
         ObjectViewContainer aContainer,
         XAccessibleContext xContext)
     {
