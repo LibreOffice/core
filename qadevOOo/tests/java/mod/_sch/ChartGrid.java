@@ -89,7 +89,7 @@ public class ChartGrid extends TestCase {
     * @see com.sun.star.chart.ChartGrid
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XPropertySet oObj = null;
         XShape oDiagram = null;
 

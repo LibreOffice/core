@@ -115,7 +115,7 @@ public class XMLStylesExporter extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
         XMultiServiceFactory xMSF =  tParam.getMSF() ;

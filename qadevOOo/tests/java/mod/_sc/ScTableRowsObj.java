@@ -96,7 +96,7 @@ public class ScTableRowsObj extends TestCase {
     * @see com.sun.star.table.TableRows
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 

@@ -114,7 +114,7 @@ public class ChartLegend extends TestCase {
     * <code>com.sun.star.chart.ChartLegend</code>.
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XShape oObj = null;
 

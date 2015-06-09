@@ -110,7 +110,7 @@ public class XMLStylesImporter extends TestCase {
     * </ul>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment
+    public TestEnvironment createTestEnvironment
         (TestParameters tParam, PrintWriter log ) throws Exception {
 
         XInterface oObj = null;

@@ -134,7 +134,7 @@ public class ScTabViewObj extends TestCase {
      * @see com.sun.star.sheet.SpreadsheetView
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
         XDrawPage oDrawPage = null;
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);

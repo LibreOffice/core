@@ -55,7 +55,7 @@ public class SwXPropertySet extends TestCase {
     * Method creates text document as a test component.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws Exception {
 
         log.println( "creating a test environment" );

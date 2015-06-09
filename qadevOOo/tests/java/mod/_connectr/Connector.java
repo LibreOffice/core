@@ -72,7 +72,7 @@ public class Connector extends TestCase {
     * Just creates service <code>com.sun.star.connection.Connector</code>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws Exception {
         XInterface connector = (XInterface)
             Param.getMSF().createInstance

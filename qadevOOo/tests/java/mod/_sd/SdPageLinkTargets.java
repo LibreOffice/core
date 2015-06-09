@@ -92,7 +92,7 @@ public class SdPageLinkTargets extends TestCase {
     * @see com.sun.star.document.LinkTargets
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws Exception {
 
         // creation of testobject here

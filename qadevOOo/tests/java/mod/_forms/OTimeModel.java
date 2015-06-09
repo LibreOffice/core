@@ -155,7 +155,7 @@ public class OTimeModel extends GenericModelTest {
      * @return lib.TestEnvironment
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 

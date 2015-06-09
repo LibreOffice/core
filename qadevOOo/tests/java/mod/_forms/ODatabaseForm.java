@@ -302,10 +302,10 @@ public class ODatabaseForm extends TestCase {
     }
 
     /**
-     *  *    creating a TestEnvironment for the interfaces to be tested
+     *  creating a TestEnvironment for the interfaces to be tested
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         if (xTextDoc != null) {
             try {

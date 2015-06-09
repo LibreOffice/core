@@ -71,7 +71,7 @@ public class Hyphenator extends TestCase {
      * is set.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
         (TestParameters Param, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();

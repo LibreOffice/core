@@ -97,7 +97,7 @@ public class ChartTitle extends TestCase {
     * <code>com.sun.star.chart.ChartTitle</code>.
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // get the Title
         log.println( "getting Title" );

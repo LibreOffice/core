@@ -125,7 +125,7 @@ public class SdUnoOutlineView extends TestCase {
     * @see com.sun.star.frame.XModel
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );

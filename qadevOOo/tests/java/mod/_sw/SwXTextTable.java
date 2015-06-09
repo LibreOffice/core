@@ -80,7 +80,7 @@ public class SwXTextTable extends TestCase {
      @see PrintWriter
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                                  PrintWriter log) {
         // creation of testobject here
         XTextTable oObj = null;

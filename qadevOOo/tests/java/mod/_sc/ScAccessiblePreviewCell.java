@@ -109,7 +109,7 @@ public class ScAccessiblePreviewCell extends TestCase {
      * Obtains the accessible object for a one of cell in preview mode.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
         XCell xCell = null;
 
         log.println("Getting spreadsheet") ;

@@ -114,7 +114,7 @@ public class SwXTableCellText extends TestCase {
     * </ul>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws StatusException {
         XInterface oObj = null;
         XTextTable oTable = null;

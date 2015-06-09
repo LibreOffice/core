@@ -83,7 +83,7 @@ public class ChXChartDataArray extends TestCase {
     * @see com.sun.star.chart.ChartDataArray
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // get the Data
         log.println( "getting Data" );

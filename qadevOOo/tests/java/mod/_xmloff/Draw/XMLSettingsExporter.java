@@ -115,7 +115,7 @@ public class XMLSettingsExporter extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;

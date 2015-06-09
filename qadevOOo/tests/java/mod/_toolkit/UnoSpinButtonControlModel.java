@@ -36,7 +36,7 @@ public class UnoSpinButtonControlModel extends TestCase {
     * <code>com.sun.star.awt.UnoControlSpinButtonModel</code>.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log)
         throws StatusException {
         XInterface oObj = null;

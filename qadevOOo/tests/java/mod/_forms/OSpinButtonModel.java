@@ -69,7 +69,7 @@ public class OSpinButtonModel extends TestCase {
      * Adds spin button into text and retrieves it's control model.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
 

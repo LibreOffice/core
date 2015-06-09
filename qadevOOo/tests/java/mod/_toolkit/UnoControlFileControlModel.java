@@ -54,7 +54,7 @@ public class UnoControlFileControlModel extends TestCase {
     }
 
     @Override
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log) {
         XInterface oObj = null;
 

@@ -126,7 +126,7 @@ public class SdGenericDrawPage extends TestCase {
     * @see com.sun.star.drawing.XDrawPagesSupplier
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
                                     TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;

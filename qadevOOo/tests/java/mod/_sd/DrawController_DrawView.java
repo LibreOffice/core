@@ -125,7 +125,7 @@ public class DrawController_DrawView extends TestCase {
     * @see com.sun.star.drawing.DrawingDocumentDrawView
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );

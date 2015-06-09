@@ -82,7 +82,7 @@ public class SwXTextPortionEnumeration extends TestCase {
      * @see PrintWriter
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface param = null;

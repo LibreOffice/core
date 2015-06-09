@@ -86,7 +86,7 @@ public class SwXFootnotes extends TestCase {
     * through <code>XFootnotesSupplier</code> interface.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws Exception {
         XFootnotesSupplier oInterface = null;
         XInterface oObj = null;

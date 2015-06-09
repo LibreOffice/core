@@ -102,7 +102,7 @@ public class ScCellsEnumeration extends TestCase {
     * @see com.sun.star.container.XEnumerationAccess
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         Object cellArr[] = new Object[3] ;

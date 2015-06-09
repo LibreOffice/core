@@ -69,7 +69,7 @@ public class SwXTextSections extends TestCase {
      *    creating a TestEnvironment for the interfaces to be tested
      */
     @Override
-    public synchronized TestEnvironment createTestEnvironment
+    public TestEnvironment createTestEnvironment
         (TestParameters Param, PrintWriter log ) throws Exception {
 
         XInterface oObj = null;

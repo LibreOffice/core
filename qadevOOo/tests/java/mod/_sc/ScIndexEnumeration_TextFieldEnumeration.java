@@ -93,7 +93,7 @@ public class ScIndexEnumeration_TextFieldEnumeration extends TestCase {
     * and <code>XEnumerationSupplier</code> interface .<p>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;

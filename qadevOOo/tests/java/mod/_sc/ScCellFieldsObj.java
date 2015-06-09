@@ -97,7 +97,7 @@ public class ScCellFieldsObj extends TestCase {
     * by <code>XTextFieldsSupplier</code> interface  of a cell.<p>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;

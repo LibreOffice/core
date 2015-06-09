@@ -116,7 +116,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
      * accessible object for the header cell.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         if (xSheetDoc != null) {
             XComponent oComp = UnoRuntime.queryInterface(

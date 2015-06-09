@@ -66,7 +66,7 @@ public class SmEditAccessible extends TestCase {
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         xMathDoc = SOF.openDoc("smath","_blank");

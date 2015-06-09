@@ -65,7 +65,7 @@ public class DicList extends TestCase {
      * The dictionary list is returned as a component for testing.
      */
     @Override
-    public synchronized TestEnvironment createTestEnvironment( TestParameters Param, PrintWriter log )
+    public TestEnvironment createTestEnvironment( TestParameters Param, PrintWriter log )
            throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();

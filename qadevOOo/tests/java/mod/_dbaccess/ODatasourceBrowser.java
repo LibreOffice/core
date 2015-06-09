@@ -173,7 +173,7 @@ public class ODatasourceBrowser extends TestCase {
      * @see com.sun.star.frame.XDispatchProvider
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         log.println("creating a test environment");
 

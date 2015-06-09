@@ -83,7 +83,7 @@ public class UnoControlDialog extends TestCase {
     * sets the dialog visible. <p>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log) {
         XInterface oObj = null;
         XMultiServiceFactory xMSF = Param.getMSF();

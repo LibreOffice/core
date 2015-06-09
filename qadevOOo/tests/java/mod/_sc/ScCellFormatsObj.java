@@ -92,7 +92,7 @@ public class ScCellFormatsObj extends TestCase {
     * @see com.sun.star.sheet.XCellFormatRangesSupplier
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 

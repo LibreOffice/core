@@ -40,7 +40,7 @@ public class generic extends TestCase {
      * <code>com.sun.star.comp.datatransfer.generic</code>.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log) throws Exception {
 
         XMultiServiceFactory xMSF = Param.getMSF();

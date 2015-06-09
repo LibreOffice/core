@@ -146,7 +146,7 @@ public class ScCellCursorObj extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         XInterface oObj = null;
         TestEnvironment tEnv = null;

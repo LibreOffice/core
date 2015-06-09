@@ -92,7 +92,7 @@ public class SwXReferenceMarks extends TestCase {
     * <code>XReferenceMarksSupplier</code> interface.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log ) throws Exception {
         XInterface oObj = null;
         XText oText = null;

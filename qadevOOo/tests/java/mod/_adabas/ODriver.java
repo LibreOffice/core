@@ -59,7 +59,7 @@ public class ODriver extends TestCase {
      * </ul>
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = (XInterface)Param.getMSF().
             createInstance("com.sun.star.comp.sdbcx.adabas.ODriver");

@@ -94,7 +94,7 @@ public class ChXChartAxis extends TestCase {
     * @see com.sun.star.chart.ChartAxis
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XPropertySet oObj = null;
         XShape oDiagram = null;

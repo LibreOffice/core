@@ -105,7 +105,7 @@ public class SwXFootnote extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
         XFootnote oFootnote;
 
         log.println( "Creating a test environment" );

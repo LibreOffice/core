@@ -76,7 +76,7 @@ public class ScIndexEnumeration_TableChartsEnumeration extends TestCase {
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
         log.println("Getting spreadsheet") ;
         XSpreadsheets oSheets = xSheetDoc.getSheets() ;
         XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);

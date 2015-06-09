@@ -120,7 +120,7 @@ public class SwXAutoTextEntry extends TestCase {
      * </ul>
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) throws Exception {
 
         XAutoTextEntry oEntry = null;

@@ -160,7 +160,7 @@ public class OGridControlModel extends GenericModelTest {
      * @return lib.TestEnvironment
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
             PrintWriter log) throws Exception {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 
@@ -281,7 +281,7 @@ class OGridControlModelold extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         XInterface oObj = null;
         XInterface oInstance = null;

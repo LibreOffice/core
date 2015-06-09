@@ -85,7 +85,7 @@ public class SwXBookmark extends TestCase {
     * a bookmark, it is inserted to the text document.
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         XInterface oObj = null;
         Object instance = null;

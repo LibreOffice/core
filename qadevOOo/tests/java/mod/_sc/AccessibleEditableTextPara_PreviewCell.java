@@ -85,7 +85,7 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
      * Obtains the accessible object for a one of cell in preview mode.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XCell xCell = null;
 

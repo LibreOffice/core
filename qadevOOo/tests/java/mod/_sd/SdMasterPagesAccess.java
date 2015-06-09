@@ -90,7 +90,7 @@ public class SdMasterPagesAccess extends TestCase {
     * @see com.sun.star.drawing.MasterPages
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
 
         log.println( "creating a test environment" );

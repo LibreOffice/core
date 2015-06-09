@@ -97,7 +97,7 @@ public class ScFilterDescriptorBase extends TestCase {
     * @see com.sun.star.sheet.SheetFilterDescriptor
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         XSheetFilterable SF = null;

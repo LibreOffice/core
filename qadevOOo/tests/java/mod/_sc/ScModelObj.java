@@ -114,7 +114,7 @@ public class ScModelObj extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         // creation of the testobject here
         // first we write what we are intend to do to log file

@@ -90,7 +90,7 @@ public class SwXCellRange extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) throws Exception {
 
         XTextTable the_table = null;

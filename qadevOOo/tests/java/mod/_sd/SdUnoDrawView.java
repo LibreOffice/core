@@ -140,7 +140,7 @@ public class SdUnoDrawView extends TestCase {
     * @see com.sun.star.drawing.DrawingDocumentDrawView
     */
     @Override
-    public synchronized lib.TestEnvironment createTestEnvironment
+    public lib.TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) throws Exception {
 
         log.println( "creating a test environment" );

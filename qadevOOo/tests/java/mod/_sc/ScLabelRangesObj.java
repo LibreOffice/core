@@ -94,7 +94,7 @@ public class ScLabelRangesObj extends TestCase {
     * @see com.sun.star.sheet.XLabelRanges
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;

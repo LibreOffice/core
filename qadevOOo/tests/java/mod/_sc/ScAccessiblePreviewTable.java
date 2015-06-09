@@ -111,7 +111,7 @@ public class ScAccessiblePreviewTable extends TestCase {
      * Obtains the accessible object for a table in preview mode.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XCell xCell = null;
 

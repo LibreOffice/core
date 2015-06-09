@@ -69,7 +69,7 @@ public class SwXTextFrame extends TestCase {
      *    creating a TestEnvironment for the interfaces to be tested
      */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log) throws Exception {
         XInterface oObj = null;
         XTextFrame oFrame1 = null;

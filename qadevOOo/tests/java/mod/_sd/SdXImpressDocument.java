@@ -103,7 +103,7 @@ public class SdXImpressDocument extends TestCase {
      * @see com.sun.star.presentation.PresentationDocument
      */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log)
         throws Exception {
         log.println("creating a test environment");

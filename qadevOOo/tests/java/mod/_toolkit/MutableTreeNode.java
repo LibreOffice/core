@@ -61,7 +61,7 @@ public class MutableTreeNode extends TestCase {
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) throws Exception {
         XMutableTreeNode xNode;
 

@@ -108,7 +108,7 @@ public class ScChartObj extends TestCase {
     * @see com.sun.star.container.XNamed
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XSpreadsheet oSheet=null;
 

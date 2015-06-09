@@ -65,7 +65,7 @@ public class UnoControlFixedLineModel extends TestCase {
     * </ul>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log)
         throws StatusException {
         XInterface oObj = null;

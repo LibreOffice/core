@@ -109,7 +109,7 @@ public class SwXStyle extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) throws Exception {
 
         TestEnvironment tEnv = null;

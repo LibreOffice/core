@@ -98,7 +98,7 @@ public class ChartArea extends TestCase {
     * @see com.sun.star.chart.ChartArea
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // get the Area
         log.println( "getting Area" );

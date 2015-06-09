@@ -94,7 +94,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment (TestParameters Param,
+    protected TestEnvironment createTestEnvironment (TestParameters Param,
         PrintWriter log) throws Exception
     {
         XInterface oObj = null;

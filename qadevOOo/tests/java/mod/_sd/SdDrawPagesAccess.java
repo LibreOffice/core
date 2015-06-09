@@ -95,7 +95,7 @@ public class SdDrawPagesAccess extends TestCase {
     * @see com.sun.star.drawing.DrawPages
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
 
         // creation of testobject here

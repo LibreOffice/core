@@ -81,7 +81,7 @@ public class SwXTextPortion extends TestCase {
      * @see TestParameters * @see PrintWriter
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log) throws Exception {
 
         XInterface oObj = null;

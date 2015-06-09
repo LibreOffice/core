@@ -113,7 +113,7 @@ public class XMLMetaExporter extends TestCase {
     * </ul>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment
+    public TestEnvironment createTestEnvironment
             ( TestParameters tParam, PrintWriter log ) throws Exception {
         final String TITLE = "Title for testing of XMLMetaExporter";
 

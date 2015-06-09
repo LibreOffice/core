@@ -74,7 +74,7 @@ public class SwXViewSettings extends TestCase {
      *    @see PrintWriter
      */
     @Override
-    public synchronized TestEnvironment createTestEnvironment
+    public TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log ) {
 
         XInterface oObj = null;

@@ -96,7 +96,7 @@ public class ChXChartView extends TestCase {
     * @see com.sun.star.frame.XModel
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XController oObj = null;
         XModel oModel = null;

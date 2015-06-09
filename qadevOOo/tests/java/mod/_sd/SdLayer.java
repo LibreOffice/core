@@ -88,7 +88,7 @@ public class SdLayer extends TestCase {
     * @see com.sun.star.drawing.Layer
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
                                     TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;

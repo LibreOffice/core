@@ -53,7 +53,7 @@ public class SwXAutoTextContainer extends TestCase {
     * <code>com.sun.star.text.AutoTextContainer</code>.<p>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws Exception {
         XAutoTextContainer  oContainer = null;
 

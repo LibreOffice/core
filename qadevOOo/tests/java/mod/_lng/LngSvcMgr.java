@@ -56,7 +56,7 @@ public class LngSvcMgr extends TestCase {
      * <code>com.sun.star.linguistic2.LinguServiceManager</code>.
      */
     @Override
-    public synchronized TestEnvironment createTestEnvironment
+    public TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
             throws Exception {
 

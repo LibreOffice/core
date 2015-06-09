@@ -65,7 +65,7 @@ public class BridgeFactory extends TestCase {
      * service as object to be tested.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = (XInterface)
                     Param.getMSF().createInstance

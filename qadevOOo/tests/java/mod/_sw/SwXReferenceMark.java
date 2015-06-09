@@ -90,7 +90,7 @@ public class SwXReferenceMark extends TestCase {
     * document as a text content.
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception{
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception{
         XInterface oObj = null;
         XText oText = null;
         String Name = "SwXReferenceMark";

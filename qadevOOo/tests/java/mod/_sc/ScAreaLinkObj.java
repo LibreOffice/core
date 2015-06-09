@@ -102,7 +102,7 @@ public class ScAreaLinkObj extends TestCase {
     * link is passed as a tested object.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment
+    public TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log ) throws Exception {
 
         XInterface oObj = null;

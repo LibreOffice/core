@@ -81,7 +81,7 @@ public class ScSpreadsheetSettingsObj extends TestCase {
     * <code>com.sun.star.sheet.SpreadsheetDocumentSettings</code>.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
 
         XInterface oObj = null;

@@ -106,7 +106,7 @@ public class ScSheetLinkObj extends TestCase {
     * @see com.sun.star.sheet.XSheetLinkable
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 

@@ -88,7 +88,7 @@ public class SwXTableColumns extends TestCase {
     * from table.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log ) throws StatusException {
         XInterface oObj = null;
         XTextTable oTable = null;

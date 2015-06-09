@@ -108,7 +108,7 @@ public class SdLayerManager extends TestCase {
     * @see com.sun.star.drawing.LayerManager
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
                                     TestParameters Param, PrintWriter log) throws Exception {
 
         // creation of testobject here

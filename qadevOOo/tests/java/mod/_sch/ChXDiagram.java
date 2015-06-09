@@ -210,7 +210,7 @@ public class ChXDiagram extends TestCase {
     * @see com.sun.star.chart.StockDiagram
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) throws Exception {
 
         XSpreadsheet oSheet=null;

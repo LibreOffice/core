@@ -30,7 +30,7 @@ import util.utils;
 
 public class UnoControlImageControlModel extends TestCase {
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;
 

@@ -121,7 +121,7 @@ public class ScDatabaseRangeObj extends TestCase {
     * @see com.sun.star.table.CellRangeAddress
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         XInterface oObj = null;
 

@@ -113,7 +113,7 @@ public class ScCellFieldObj extends TestCase {
     * </ul>
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(
+    protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;

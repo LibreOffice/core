@@ -83,7 +83,7 @@ public class SwXFootnoteProperties extends TestCase {
     * document through <code>XFootnotesSupplier</code> interface.<br>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws Exception {
         XFootnotesSupplier oInterface = null;
         XInterface oObj = null;

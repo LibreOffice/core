@@ -130,7 +130,7 @@ public class SwXParagraph extends TestCase {
      * </ul>
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment
+    protected TestEnvironment createTestEnvironment
     (TestParameters tParam, PrintWriter log) throws Exception {
 
         if (xTextDoc != null) {

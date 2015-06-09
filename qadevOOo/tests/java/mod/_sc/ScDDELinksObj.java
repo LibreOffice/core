@@ -105,7 +105,7 @@ public class ScDDELinksObj extends TestCase {
     * @see com.sun.star.sheet.DDELinks
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 

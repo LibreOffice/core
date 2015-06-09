@@ -105,7 +105,7 @@ public class XMLContentImporter extends TestCase {
     * </ul>
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment( TestParameters tParam,
+    public TestEnvironment createTestEnvironment( TestParameters tParam,
                                                   PrintWriter log )
                                                     throws Exception {
 

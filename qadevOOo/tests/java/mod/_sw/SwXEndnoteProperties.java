@@ -84,7 +84,7 @@ public class SwXEndnoteProperties extends TestCase {
     * document using <code>XEndnotesSupplier</code> interface.
     */
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
+    public TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws Exception {
         XEndnotesSupplier oInterface = null;
         XInterface oObj = null;

@@ -101,7 +101,7 @@ public class ScAnnotationsObj extends TestCase {
     * <code>com.sun.star.sheet.XSheetAnnotationsSupplier</code> interface.
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         // creation of testobject here
         // first we write what we are intend to do to log file

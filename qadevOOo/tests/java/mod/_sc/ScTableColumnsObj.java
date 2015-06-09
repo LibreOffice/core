@@ -100,7 +100,7 @@ public class ScTableColumnsObj extends TestCase {
     * @see com.sun.star.table.TableColumns
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
 

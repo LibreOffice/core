@@ -105,7 +105,7 @@ public class ChXChartDocument extends TestCase {
     * @see com.sun.star.chart.ChartDocument
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                                  PrintWriter log) throws Exception {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(

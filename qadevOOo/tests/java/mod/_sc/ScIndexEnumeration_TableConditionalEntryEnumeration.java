@@ -75,7 +75,7 @@ public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCas
     }
 
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XInterface oObj = null;
         log.println("getting sheets");

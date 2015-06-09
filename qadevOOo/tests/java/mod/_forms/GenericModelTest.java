@@ -368,7 +368,7 @@ public class GenericModelTest extends TestCase {
      * @return a test environment
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) throws Exception {
         XInterface oObj = null;
         XControlShape aShape = null;

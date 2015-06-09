@@ -87,7 +87,7 @@ public class ChartLine extends TestCase {
     * @see com.sun.star.chart.ChartLine
     */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
 
         XPropertySet oObj = null;
         XDiagram oDiagram = null;

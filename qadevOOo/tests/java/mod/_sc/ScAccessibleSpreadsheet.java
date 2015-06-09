@@ -101,7 +101,7 @@ public class ScAccessibleSpreadsheet extends TestCase {
      * Obtains the accessible object for the spreadsheet.
      */
     @Override
-    public synchronized TestEnvironment createTestEnvironment
+    public TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
 
