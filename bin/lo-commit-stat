@@ -17,7 +17,8 @@ my %module_dirname = (
 
 
 my %bugzillas = (
-    fdo  => "https://bugs.libreoffice.org/show_bug.cgi?id=",
+    fdo  => "https://bugs.documentfoundation.org/show_bug.cgi?id=",
+    tdf  => "https://bugs.documentfoundation.org/show_bug.cgi?id=",
     bnc  => "https://bugzilla.novell.com/show_bug.cgi?id=",
     rhbz => "https://bugzilla.redhat.com/show_bug.cgi?id=",
     i    => "https://bz.apache.org/ooo/show_bug.cgi?id=",
@@ -54,7 +55,7 @@ sub search_bugs($$$$)
 #        print "   found $bug\n";
         # remove bug number from the comment; it will be added later a standardized way
         $bug_orig =~ s/\#/\\#/;
-        $line =~ s/[Rr]esolve[ds]:?\s*$bug_orig\s*//;
+        $line =~ s/(,\s)*[Rr](elated|esolve[ds]):?\s*$bug_orig\s*//;
         $line =~ s/\s*-\s*$bug_orig\s*//;
         $line =~ s/\(?$bug_orig\)?\s*[:,-]?\s*//;
 
