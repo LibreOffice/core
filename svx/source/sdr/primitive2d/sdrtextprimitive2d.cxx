@@ -487,8 +487,10 @@ namespace drawinglayer
 
         SdrChainedTextPrimitive2D::SdrChainedTextPrimitive2D(
             const SdrText* pSdrText,
-            const OutlinerParaObject& rOutlinerParaObject)
-        : SdrTextPrimitive2D(pSdrText, rOutlinerParaObject)
+            const OutlinerParaObject& rOutlinerParaObject,
+            const basegfx::B2DHomMatrix& rTextRangeTransform)
+        : SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
+          maTextRangeTransform(rTextRangeTransform)
         { }
 
         Primitive2DSequence SdrChainedTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
@@ -499,11 +501,21 @@ namespace drawinglayer
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
 
-        SdrTextPrimitive2D* SdrChainedTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& ) const
+        bool SdrChainedTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+         {
+             if(SdrTextPrimitive2D::operator==(rPrimitive))
+             {
+                 const SdrBlockTextPrimitive2D& rCompare = (SdrBlockTextPrimitive2D&)rPrimitive;
+
+                 return (getTextRangeTransform() == rCompare.getTextRangeTransform());
+             }
+
+             return false;
+         }
+
+        SdrTextPrimitive2D* SdrChainedTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            //FIXME(matteocam)
-            assert(0);
-            return NULL;
+            return new SdrChainedTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform());
         }
 
         // provide unique ID

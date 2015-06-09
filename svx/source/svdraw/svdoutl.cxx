@@ -63,7 +63,7 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         ClearPolygon();
 
         // FIXME(matteoca)
-        SetChainingEventHdl( LINK(pObj,SdrTextObj,ImpDecomposeChainedText) );
+        //SetChainingEventHdl( LINK(pObj,SdrTextObj,ImpDecomposeChainedText) );
     }
 
     mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );
