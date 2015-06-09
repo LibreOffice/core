@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_b50b1f7d",
+        "filename": "svx/source/unodraw/unoprov.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-09T21:06:21Z",
+      "side": 1,
+      "message": "this is an odd table, all the ids are 0...\n\nit looks like this is used in SvxShapeControl, where there is another array SvxShapeControlPropertyMapping that also lists CharBackColor - probably the CharBackTransparent should be added there too?\n\nthe SvxShape::_setPropertyValue() that would be called if there\u0027s no entry in the other array doesn\u0027t look like it would be happy about a 0 nWID.",
+      "revId": "f57316d40232aee403149dd6850b54f805c3d5b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
