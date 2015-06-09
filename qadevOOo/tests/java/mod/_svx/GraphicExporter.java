@@ -71,7 +71,7 @@ public class GraphicExporter extends TestCase {
      * Creates a new draw document.
      */
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         log.println("creating a drawdoc");
         xDrawDoc = DrawTools.createDrawDoc(
                            tParam.getMSF());

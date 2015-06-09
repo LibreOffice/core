@@ -51,11 +51,6 @@ import lib.TestParameters;
 */
 public class RegistryTypeDescriptionProvider extends TestCase {
 
-    @Override
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-
-    }
-
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service

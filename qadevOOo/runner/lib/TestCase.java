@@ -63,7 +63,7 @@ public abstract class TestCase {
      *
      * @param tParam test parameters.
      */
-    public final void initializeTestCase( TestParameters tParam ) {
+    public final void initializeTestCase( TestParameters tParam ) throws Exception {
         initialize( tParam, log );
     }
 
@@ -77,7 +77,7 @@ public abstract class TestCase {
      *
      * @see #initializeTestCase
      */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
     }
 
 

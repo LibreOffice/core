@@ -153,7 +153,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
      * @see #initializeTestCase
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         log.println( "creating a text document" );
         xTextDoc = WriterTools.createTextDoc( Param.getMSF());
     }

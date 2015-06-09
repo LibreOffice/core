@@ -35,7 +35,7 @@ public class SvxUnoNumberingRules extends TestCase {
     static XComponent xDrawDoc;
 
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         log.println("creating a drawdoc");
         xDrawDoc = DrawTools.createDrawDoc(
                            tParam.getMSF());

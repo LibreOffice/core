@@ -20,7 +20,6 @@ package mod._dbaccess;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -141,12 +140,6 @@ public class OSingleSelectQueryComposer extends TestCase {
     boolean isMySQLDB = false;
     protected final static String dbSourceName = "OSingleSelectQueryComposerDataSource";
     public XConnection conn = null;
-
-    @Override
-    protected void initialize(TestParameters Param, PrintWriter log)
-            throws StatusException {
-
-    }
 
     /**
     * Creating a TestEnvironment for the interfaces to be tested.

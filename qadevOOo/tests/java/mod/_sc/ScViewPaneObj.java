@@ -19,9 +19,9 @@
 package mod._sc;
 
 import com.sun.star.container.NoSuchElementException;
+
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -45,6 +45,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import util.FormTools;
 
 /**
@@ -70,17 +71,11 @@ public class ScViewPaneObj extends TestCase {
      * Creates Spreadsheet document.
      */
     @Override
-    public void initialize( TestParameters Param, PrintWriter log ) {
+    public void initialize( TestParameters Param, PrintWriter log ) throws Exception {
         // get a soffice factory object
         SOF = SOfficeFactory.getFactory( Param.getMSF());
-
-        try {
-            log.println("creating a spreadsheetdocument");
-            xSpreadsheetDoc = SOF.createCalcDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document ", e );
-        }
+        log.println("creating a spreadsheetdocument");
+        xSpreadsheetDoc = SOF.createCalcDoc(null);
     }
 
     /**

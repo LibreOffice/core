@@ -19,7 +19,6 @@ package mod._sc;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -142,17 +141,13 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
      * Opens new writer document.
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         msf = Param.getMSF();
 
-        try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
-            xCalcDoc = UnoRuntime.queryInterface(XComponent.class,
-                                                              SOF.createCalcDoc(
-                                                                      null));
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create document", e);
-        }
+        SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
+        xCalcDoc = UnoRuntime.queryInterface(XComponent.class,
+                                                          SOF.createCalcDoc(
+                                                                  null));
     }
 
 

@@ -26,7 +26,6 @@ import com.sun.star.io.XObjectOutputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XPersistObject;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.registry.CannotRegisterImplementationException;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.UnoRuntime;
@@ -79,7 +78,7 @@ public class ObjectInputStream extends TestCase {
     * @see com.sun.star.cmp.PersistObject
     */
     @Override
-    public void initialize(TestParameters tParam, PrintWriter log) {
+    public void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = tParam.getMSF();
         Object oPersObj = null;
         // test first if object is already registered
@@ -96,33 +95,16 @@ public class ObjectInputStream extends TestCase {
             String url = util.utils.getFullTestURL
                 ("qadevlibs/MyPersistObjectImpl.jar");
             XImplementationRegistration xir;
-            try {
-                Object o = xMSF.createInstance(
-                        "com.sun.star.registry.ImplementationRegistration");
-                xir = UnoRuntime.queryInterface(
-                XImplementationRegistration.class, o);
-
-            }
-            catch (com.sun.star.uno.Exception e) {
-                System.err.println(
-                            "Couldn't create implementation registration");
-                e.printStackTrace();
-                throw new StatusException("Couldn't create ImplReg", e);
-            }
+            Object o = xMSF.createInstance(
+                    "com.sun.star.registry.ImplementationRegistration");
+            xir = UnoRuntime.queryInterface(
+            XImplementationRegistration.class, o);
 
             XSimpleRegistry xReg = null;
-            try {
-                System.out.println("Register library: " + url);
-                xir.registerImplementation(
-                                    "com.sun.star.loader.Java2", url, xReg);
-                System.out.println("...done");
-            } catch (CannotRegisterImplementationException e) {
-                System.err.println("Name: " + url + "  msg: " +
-                                    e.getMessage());
-                e.printStackTrace();
-                throw new StatusException(
-                                    "Couldn't register MyPersistObject", e);
-            }
+            System.out.println("Register library: " + url);
+            xir.registerImplementation(
+                                "com.sun.star.loader.Java2", url, xReg);
+            System.out.println("...done");
         }
     }
 

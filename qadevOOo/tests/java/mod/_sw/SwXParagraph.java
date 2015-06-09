@@ -84,14 +84,6 @@ import com.sun.star.util.XCloseable;
 public class SwXParagraph extends TestCase {
     XTextDocument xTextDoc;
 
-    /**
-     * Creates text document.
-     */
-    @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-
-    }
-
     @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");

@@ -83,7 +83,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
      * Creates a spreadsheet document.
      */
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
     }
 
     /**

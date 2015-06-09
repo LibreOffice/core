@@ -20,7 +20,6 @@ package mod._svx;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -128,19 +127,12 @@ public class SvxShapePolyPolygonBezier extends TestCase {
      *
      */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
-
-        try {
-            log.println( "creating a chartdocument" );
-            xDrawDoc = SOF.loadDocument(
-                             utils.getFullTestURL("SvxShape.sxd"));
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a chartdocument" );
+        xDrawDoc = SOF.loadDocument(
+                         utils.getFullTestURL("SvxShape.sxd"));
     }
 
     /**

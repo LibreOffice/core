@@ -30,7 +30,6 @@ import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -63,13 +62,13 @@ import util.SOfficeFactory;
  * @see ifc.accessibility._XAccessibleExtendedComponent
  */
 public class AccessibleToolBox extends TestCase {
-    private static XTextDocument xTextDoc;
+    private XTextDocument xTextDoc;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         UnoRuntime.queryInterface(XDesktop.class,
                 DesktopTools.createDesktop(
                 Param.getMSF()));
@@ -110,7 +109,7 @@ public class AccessibleToolBox extends TestCase {
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-            PrintWriter log) {
+            PrintWriter log) throws Exception {
         log.println("creating a test environment");
 
         if (xTextDoc != null) {
@@ -122,14 +121,8 @@ public class AccessibleToolBox extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
 
-        try {
-            log.println("creating a text document");
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a text document");
+        xTextDoc = SOF.createTextDoc(null);
 
         XInterface oObj = null;
 

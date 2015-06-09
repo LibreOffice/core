@@ -44,7 +44,7 @@ public class UnoSpinButtonControl extends TestCase {
     private static XTextDocument xTextDoc;
 
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         log.println("creating a textdocument");
         xTextDoc = WriterTools.createTextDoc(
                            Param.getMSF());

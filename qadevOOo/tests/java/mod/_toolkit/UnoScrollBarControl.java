@@ -37,7 +37,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -51,36 +50,29 @@ public class UnoScrollBarControl extends TestCase {
     private static XTextDocument xTextDoc;
 
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      Param.getMSF());
 
-        try {
-            log.println("creating a textdocument");
-            xTextDoc = SOF.createTextDoc(null);
+        log.println("creating a textdocument");
+        xTextDoc = SOF.createTextDoc(null);
 
-            log.println("maximize the window size");
-            XModel xModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
-            XFrame xFrame = xModel.getCurrentController().getFrame();
-            XWindow xWin = xFrame.getContainerWindow();
+        log.println("maximize the window size");
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XFrame xFrame = xModel.getCurrentController().getFrame();
+        XWindow xWin = xFrame.getContainerWindow();
 
-            Toolkit.getDefaultToolkit();
-            Dimension dim = new Dimension(800, 600);
+        Toolkit.getDefaultToolkit();
+        Dimension dim = new Dimension(800, 600);
 
-            Rectangle newPosSize = xWin.getPosSize();
-            newPosSize.Width = new Double(dim.getWidth()).intValue();
-            newPosSize.Height = new Double(dim.getHeight()).intValue();
-            newPosSize.X = 0;
-            newPosSize.Y = 0;
+        Rectangle newPosSize = xWin.getPosSize();
+        newPosSize.Width = new Double(dim.getWidth()).intValue();
+        newPosSize.Height = new Double(dim.getHeight()).intValue();
+        newPosSize.X = 0;
+        newPosSize.Y = 0;
 
-            xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
-                            newPosSize.Height, com.sun.star.awt.PosSize.POSSIZE);
-
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
+                        newPosSize.Height, com.sun.star.awt.PosSize.POSSIZE);
     }
 
     @Override

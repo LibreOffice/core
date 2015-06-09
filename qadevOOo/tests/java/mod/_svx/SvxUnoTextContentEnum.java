@@ -52,15 +52,9 @@ public class SvxUnoTextContentEnum extends TestCase {
      *
      */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        try {
-            log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
-        } catch ( Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
+        log.println( "creating a drawdoc" );
+        xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
     }
 
     /**

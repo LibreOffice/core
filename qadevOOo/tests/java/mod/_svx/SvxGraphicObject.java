@@ -103,7 +103,7 @@ public class SvxGraphicObject extends TestCase {
      * Creates a new Draw document.
      */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
 
         log.println( "creating a drawdoc" );
         xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());

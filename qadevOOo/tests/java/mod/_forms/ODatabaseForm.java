@@ -228,7 +228,7 @@ public class ODatabaseForm extends TestCase {
     private Object dbSrc = null;
 
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         tmpDir = utils.getOfficeTemp((tParam.getMSF()));
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");

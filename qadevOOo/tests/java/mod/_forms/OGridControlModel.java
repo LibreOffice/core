@@ -20,7 +20,6 @@ package mod._forms;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -140,7 +139,7 @@ public class OGridControlModel extends GenericModelTest {
      */
 
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
 
         super.initialize(tParam, log);
 
@@ -229,16 +228,10 @@ class OGridControlModelold extends TestCase {
     * Creates Drawing document.
     */
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         SOfficeFactory SOF = SOfficeFactory.getFactory((tParam.getMSF()));
-
         log.println("creating a draw document");
-
-        try {
-            xDrawDoc = SOF.createDrawDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create Draw document", e);
-        }
+        xDrawDoc = SOF.createDrawDoc(null);
     }
 
     /**

@@ -20,7 +20,6 @@ package mod._svx;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -201,17 +200,11 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
      * @see #initializeTestCase
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
-
-        try {
-            log.println("creating a draw document");
-            xDrawDoc = SOF.createDrawDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document ", e );
-        }
+        log.println("creating a draw document");
+        xDrawDoc = SOF.createDrawDoc(null);
     }
 
 }

@@ -37,7 +37,6 @@ import com.sun.star.view.XControlAccess;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -53,18 +52,12 @@ public class UnoControlContainer extends TestCase {
     private static XControl xCtrl2;
 
     @Override
-    protected void initialize(TestParameters param, PrintWriter log) {
-        try {
-            log.println("creating a textdocument");
-            xTD2 = WriterTools.createTextDoc(
-                           param.getMSF());
-            xTextDoc = WriterTools.createTextDoc(
-                               param.getMSF());
-        } catch (Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
+        log.println("creating a textdocument");
+        xTD2 = WriterTools.createTextDoc(
+                Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc(
+                Param.getMSF());
     }
 
     @Override

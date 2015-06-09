@@ -109,16 +109,12 @@ public class AccessibleDropDownListBox extends TestCase {
      * Creates writer document.
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
-        try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                         Param.getMSF());
-            // Dock the Navigator to supply an AccessibleDropDownListBox
-            DesktopTools.dockNavigator(Param.getMSF());
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create document", e);
-        }
+    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     Param.getMSF());
+        // Dock the Navigator to supply an AccessibleDropDownListBox
+        DesktopTools.dockNavigator(Param.getMSF());
+        xTextDoc = SOF.createTextDoc(null);
     }
 
     /**

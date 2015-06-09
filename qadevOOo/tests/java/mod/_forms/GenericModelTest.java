@@ -214,7 +214,7 @@ public class GenericModelTest extends TestCase {
      * @param log the log writer
      */
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         log.println("creating a textdocument");
         m_xTextDoc = WriterTools.createTextDoc((tParam.getMSF()));
         m_ConnectionColsed = false;

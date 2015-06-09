@@ -66,17 +66,11 @@ public class XMLExporter extends TestCase {
      * New math document created.
      */
     @Override
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
-        try {
-            log.println( "creating a math document" );
-            xMathDoc = SOF.createMathDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
-        }
+        log.println( "creating a math document" );
+        xMathDoc = SOF.createMathDoc(null);
     }
 
     /**

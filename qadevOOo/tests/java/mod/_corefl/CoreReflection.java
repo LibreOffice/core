@@ -40,14 +40,6 @@ import com.sun.star.uno.XInterface;
 public class CoreReflection extends TestCase {
 
     /**
-    * Does nothing.
-    */
-    @Override
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-
-    }
-
-    /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.reflection.CoreReflection</code> service.
     */

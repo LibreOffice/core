@@ -34,7 +34,6 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -74,24 +73,18 @@ public class ScAnnotationShapeObj extends TestCase {
     * Creates a spreadsheet document.
     */
     @Override
-    protected void initialize(TestParameters tParam, PrintWriter log) {
+    protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         SOfficeFactory SOF =
             SOfficeFactory.getFactory(tParam
                 .getMSF());
 
-        try {
-            log.println("creating a Spreadsheet document");
-            log.println("Loading: "+utils.getFullTestURL(
-                            "ScAnnotationShapeObj.sxc"));
-            xSheetDoc =
-                UnoRuntime.queryInterface(XSpreadsheetDocument.class,
-                    SOF.loadDocument(utils.getFullTestURL(
-                            "ScAnnotationShapeObj.sxc")));
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        log.println("creating a Spreadsheet document");
+        log.println("Loading: "+utils.getFullTestURL(
+                        "ScAnnotationShapeObj.sxc"));
+        xSheetDoc =
+            UnoRuntime.queryInterface(XSpreadsheetDocument.class,
+                SOF.loadDocument(utils.getFullTestURL(
+                        "ScAnnotationShapeObj.sxc")));
     }
 
     /**

@@ -155,10 +155,4 @@ public class AccessibleMenu extends TestCase {
         }
     }
 
-    /**
-     * Creates a new writer document
-     */
-    @Override
-    protected void initialize(TestParameters Param, PrintWriter log) {
-    }
 }
