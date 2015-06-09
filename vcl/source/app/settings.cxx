@@ -738,7 +738,7 @@ void ImplStyleData::SetStandardStyles()
     maMenuTextColor             = Color( COL_BLACK );
     maMenuBarTextColor          = Color( COL_BLACK );
     maMenuBarRolloverTextColor  = Color( COL_WHITE );
-    maMenuBarHighlightTextColor = Color( COL_BLUE );
+    maMenuBarHighlightTextColor = Color( COL_WHITE );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
     maHighlightColor            = Color( COL_BLUE );
