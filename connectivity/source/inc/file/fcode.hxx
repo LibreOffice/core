@@ -108,7 +108,6 @@ namespace connectivity
             OOperandAttr(sal_uInt16 _nPos,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
 
-            virtual bool isIndexed() const;
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0) SAL_OVERRIDE;
             TYPEINFO_OVERRIDE();
         };

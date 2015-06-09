@@ -451,7 +451,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         {
             if (m_orgColumns->getByName(aColumnName) >>= xCol)
             {
-                pOperand = m_pAnalyzer->createOperandAttr(Reference< XColumnLocate>(m_orgColumns,UNO_QUERY)->findColumn(aColumnName),xCol,m_xIndexes);
+                pOperand = OSQLAnalyzer::createOperandAttr(Reference< XColumnLocate>(m_orgColumns,UNO_QUERY)->findColumn(aColumnName),xCol,m_xIndexes);
             }
             else
             {// Column doesn't exist in the Result-set

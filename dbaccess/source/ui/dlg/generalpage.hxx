@@ -181,7 +181,7 @@ namespace dbaui
         ::std::vector< OUString>
                             m_aEmbeddedURLPrefixes;
 
-        virtual OUString getEmbeddedDBName( const SfxItemSet& _rSet );
+        OUString getEmbeddedDBName( const SfxItemSet& _rSet );
         void initializeEmbeddedDBList();
 
     protected:

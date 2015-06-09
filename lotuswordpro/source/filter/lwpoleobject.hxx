@@ -102,7 +102,7 @@ class LwpGraphicOleObject : public LwpContent
 public:
     LwpGraphicOleObject(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     virtual void Read() SAL_OVERRIDE;
-    virtual void GetGrafScaledSize(double& fWidth, double& fHeight);
+    void         GetGrafScaledSize(double& fWidth, double& fHeight);
     virtual void GetGrafOrgSize(double& rWidth, double& rHeight);
 protected:
     LwpObjectID m_pPrevObj;

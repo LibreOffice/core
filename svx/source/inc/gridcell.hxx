@@ -1110,7 +1110,7 @@ public:
     static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
 //  painting the filter text
-    virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect);
+    void PaintCell(OutputDevice& rDev, const Rectangle& rRect);
     void Update(){m_pCellControl->Update();}
 
 // OComponentHelper

@@ -129,17 +129,6 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvalu
         OOperandAttr* pAttr = PTR_CAST(OOperandAttr,(*aIter));
         if (pAttr)
         {
-            if (pAttr->isIndexed() && !m_aCompiler->hasORCondition())
-            {
-                OCode* pCode1 = *(aIter + 1);
-                OCode* pCode2 = *(aIter + 2);
-
-                if (PTR_CAST(OOperand,pCode1))
-                    pEvaluateSet = pAttr->preProcess(PTR_CAST(OBoolOperator,pCode2), PTR_CAST(OOperand,pCode1));
-                else
-                    pEvaluateSet = pAttr->preProcess(PTR_CAST(OBoolOperator,pCode1));
-            }
-
             if (pEvaluateSet)
             {
                 _rEvaluateSetList.push_back(pEvaluateSet);

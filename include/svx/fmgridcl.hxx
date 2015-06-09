@@ -173,7 +173,7 @@ protected:
 
     // Initialize columns
     // a.) only by column description
-    virtual void InitColumnsByModels(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& xColumns);
+    void InitColumnsByModels(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& xColumns);
     // b.) during alivemode by database fields
     virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields) SAL_OVERRIDE;
 

@@ -102,11 +102,6 @@ void OOperandValue::setValue(const ORowSetValue& _rVal)
     m_aValue = _rVal;
 }
 
-bool OOperandAttr::isIndexed() const
-{
-    return false;
-}
-
 OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
     : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Type
 {

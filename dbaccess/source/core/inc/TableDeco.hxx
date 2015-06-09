@@ -119,7 +119,7 @@ namespace dbaccess
         )   throw(::com::sun::star::sdbc::SQLException);
 
         // ODescriptor
-        virtual void construct();
+        void construct();
 
         //XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
