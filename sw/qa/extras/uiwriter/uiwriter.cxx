@@ -1035,11 +1035,12 @@ void SwUiWriterTest::testUnoCursorPointer()
             dynamic_cast<SwXTextDocument *>(xDocComponent.get()));
     CPPUNIT_ASSERT(pxDocDocument);
     SwDoc* const pDoc(pxDocDocument->GetDocShell()->GetDoc());
-    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    std::unique_ptr<SwPosition> pPos(new SwPosition(aIdx));
-    sw::UnoCursorPointer pCursor(pDoc->CreateUnoCrsr(*pPos));
+    std::unique_ptr<SwNodeIndex> xIdx(new SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1));
+    std::unique_ptr<SwPosition> xPos(new SwPosition(*xIdx));
+    sw::UnoCursorPointer pCursor(pDoc->CreateUnoCrsr(*xPos));
     CPPUNIT_ASSERT(static_cast<bool>(pCursor));
-    pPos.reset(nullptr); // we need to kill the SwPosition before disposing
+    xPos.reset(); // we need to kill the SwPosition before disposing
+    xIdx.reset(); // we need to kill the SwNodeIndex before disposing
     xDocComponent->dispose();
     CPPUNIT_ASSERT(!static_cast<bool>(pCursor));
 }
