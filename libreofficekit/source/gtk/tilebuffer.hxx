@@ -51,7 +51,7 @@ float twipToPixel(float fInput, float zoom);
 class Tile
 {
  public:
-    Tile() : valid(0) {}
+    Tile() : valid(false) {}
     ~Tile() { }
 
     /**

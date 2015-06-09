@@ -67,7 +67,7 @@ void TileBuffer::setInvalid(int x, int y)
     g_info("Setting tile invalid (%d, %d)", x, y);
     if (m_mTiles.find(index) != m_mTiles.end())
     {
-        m_mTiles[index].valid = 0;
+        m_mTiles[index].valid = false;
         m_mTiles[index].release();
         m_mTiles.erase(index);
     }
@@ -101,7 +101,7 @@ Tile& TileBuffer::getTile(int x, int y, float aZoom)
 
         //create a mapping for it
         m_mTiles[index].setPixbuf(pPixBuf);
-        m_mTiles[index].valid = 1;
+        m_mTiles[index].valid = true;
     }
 
     return m_mTiles[index];
