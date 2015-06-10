@@ -891,8 +891,8 @@ void SwUiWriterTest::testExportToPicture()
     utl::TempFile aTempFile;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    sal_Bool extchk = aTempFile.IsValid();
-    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), extchk);
+    bool extchk = aTempFile.IsValid();
+    CPPUNIT_ASSERT_EQUAL(true, extchk);
     osl::File tmpFile(aTempFile.GetURL());
     tmpFile.open(sal_uInt32(osl_File_OpenFlag_Read));
     sal_uInt64 val;
