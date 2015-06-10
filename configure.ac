@@ -5079,7 +5079,7 @@ if test $_os = Darwin; then
             if test "$enable_bogus_pkg_config" = "yes"; then
                 AC_MSG_RESULT([yes, user-approved from unknown origin.])
             else
-                AC_MSG_ERROR([yes, from unknown origin. This *will* break the build. Please remove or hide $PKG_CONFIG])
+                AC_MSG_ERROR([yes, from unknown origin. This *will* break the build. Please modify your PATH variable so that $PKG_CONFIG is no longer found by configure scripts.])
             fi
         fi
     else
