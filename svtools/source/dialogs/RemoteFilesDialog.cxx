@@ -138,6 +138,7 @@ class Breadcrumb : public VclHBox
 
         m_aLinks[0]->SetText( m_sRootName );
         m_aLinks[0]->Show();
+        m_aLinks[0]->Enable( true );
         m_aLinks[0]->SetURL( INetURLObject::GetScheme( aURL.GetProtocol() )
                                 + aURL.GetHost() );
         m_aSeparators[0]->Show();
@@ -155,10 +156,15 @@ class Breadcrumb : public VclHBox
                                 + aURL.GetHost()
                                 + OUString( sPath.getStr(), nEnd ) );
             m_aLinks[i]->Show();
+            m_aLinks[i]->Enable( true );
             m_aSeparators[i]->Show();
 
             nPos = nEnd;
         }
+
+        m_aLinks[i - 1]->Enable( false );
+        m_aSeparators[i - 1]->Hide();
+
         for( ; i < m_aLinks.size(); i++ )
         {
             m_aLinks[i]->Hide();
