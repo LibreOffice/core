@@ -23,6 +23,7 @@
 #include <swcache.hxx>
 #include <swfntcch.hxx>
 
+sw::LegacyModifyHint::~LegacyModifyHint() {}
 
 TYPEINIT0( SwClient );
 

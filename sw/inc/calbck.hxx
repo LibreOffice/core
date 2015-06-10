@@ -65,9 +65,10 @@ template<typename E, typename S> class SwIterator;
 namespace sw
 {
     class ClientIteratorBase;
-    struct LegacyModifyHint SAL_FINAL: SfxHint
+    struct SW_DLLPUBLIC LegacyModifyHint SAL_FINAL: SfxHint
     {
         LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : m_pOld(pOld), m_pNew(pNew) {};
+        virtual ~LegacyModifyHint();
         const SfxPoolItem* m_pOld;
         const SfxPoolItem* m_pNew;
     };

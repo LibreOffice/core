@@ -25,6 +25,8 @@
 #include <rootfrm.hxx>
 #include <calbck.hxx>
 
+sw::DocDisposingHint::~DocDisposingHint() {}
+
 IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
