@@ -28,7 +28,8 @@ public class LocalDocumentsDirectoryProvider extends LocalDocumentsProvider {
     @Override
     public IFile getRootDirectory() {
         File documentsDirectory = new File(
-                Environment.getExternalStorageDirectory(), "");
+                Environment.getExternalStorageDirectory(), "Documents");
+        documentsDirectory.mkdirs();
         return new LocalFile(documentsDirectory);
     }
 
