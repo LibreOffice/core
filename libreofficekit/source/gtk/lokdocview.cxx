@@ -18,6 +18,7 @@
 #include <com/sun/star/awt/Key.hpp>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <rsc/rsc-vcl-shared-types.hxx>
@@ -308,7 +309,10 @@ LOKDocView_Impl::~LOKDocView_Impl()
 {
     if (m_pDocument)
         m_pDocument->pClass->destroy(m_pDocument);
+    if (m_pOffice)
+        m_pOffice->pClass->destroy(m_pOffice);
     m_pDocument = 0;
+    m_pOffice = 0;
 }
 
 void LOKDocView_Impl::destroy(LOKDocView* pDocView, gpointer /*pData*/)
@@ -1177,14 +1181,16 @@ static void lok_doc_view_init (LOKDocView* pDocView)
 
 /**
  * lok_doc_view_new:
- * @pOffice: The LibreOfficeKit context.
+ * @pPath: LibreOffice install path.
  *
  * Returns: The #LOKDocView widget instance.
  */
-SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new( LibreOfficeKit* pOffice )
+SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new(const char* pPath)
 {
-    LOKDocView* pDocView = LOK_DOC_VIEW(gtk_type_new(lok_doc_view_get_type()));
-    pDocView->m_pImpl->m_pOffice = pOffice;
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_object_new(LOK_TYPE_DOC_VIEW, NULL));
+    pDocView->m_pImpl->m_pOffice = lok_init (pPath);
+    if (pDocView->m_pImpl->m_pOffice == NULL)
+        return NULL;
     return GTK_WIDGET( pDocView );
 }
 
