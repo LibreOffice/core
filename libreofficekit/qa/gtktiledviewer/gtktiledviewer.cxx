@@ -19,7 +19,6 @@
 #include <gtk/gtk.h>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
-#include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #ifndef g_info
@@ -52,8 +51,6 @@ static bool g_bPartSelectorBroadcast = true;
 GtkWidget* pFindbar;
 GtkWidget* pFindbarEntry;
 GtkWidget* pFindbarLabel;
-
-static LibreOfficeKit* pOffice;
 
 static void lcl_registerToolItem(GtkToolItem* pItem, const std::string& rName)
 {
@@ -368,10 +365,6 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    pOffice = lok_init( argv[1] );
-    if ( pOffice == NULL )
-        return 1;
-
     gtk_init( &argc, &argv );
 
     GtkWidget *pWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
@@ -476,7 +469,9 @@ int main( int argc, char* argv[] )
     gtk_box_pack_end(GTK_BOX(pVBox), pFindbar, FALSE, FALSE, 0);
 
     // Docview
-    pDocView = lok_doc_view_new( pOffice );
+    pDocView = lok_doc_view_new(argv[1]);
+    if (pDocView == NULL)
+        g_error ("Error while creating LOKDocView widget");
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
@@ -502,7 +497,7 @@ int main( int argc, char* argv[] )
 
     int bOpened = lok_doc_view_open_document( LOK_DOC_VIEW(pDocView), argv[2] );
     if (!bOpened)
-        g_error("main: lok_doc_view_open_document() failed with '%s'", pOffice->pClass->getError(pOffice));
+        g_error("main: lok_doc_view_open_document() failed");
     assert(lok_doc_view_get_document(LOK_DOC_VIEW(pDocView)));
 
     // GtkComboBox requires gtk 2.24 or later
@@ -516,8 +511,6 @@ int main( int argc, char* argv[] )
 #endif
 
     gtk_main();
-
-    pOffice->pClass->destroy( pOffice );
 
     return 0;
 }
