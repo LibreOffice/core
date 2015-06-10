@@ -259,14 +259,14 @@ void AquaClipboard::fireClipboardChangedEvent()
     list<Reference< XClipboardListener > > listeners(mClipboardListeners);
     ClipboardEvent aEvent;
 
-    if (listeners.begin() != listeners.end())
+    if (!listeners.empty())
     {
         aEvent = ClipboardEvent(static_cast<OWeakObject*>(this), getContents());
     }
 
     aGuard.clear();
 
-    while (listeners.begin() != listeners.end())
+    while (!listeners.empty())
     {
         if (listeners.front().is())
         {

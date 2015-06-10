@@ -241,7 +241,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
     }
     if(!bFoundSomeMatch)
     {
-        if(rMap.begin()!=rMap.end())
+        if(!rMap.empty())
             rParameter = (*rMap.begin()).second;
         else
             rParameter = ChartTypeParameter();

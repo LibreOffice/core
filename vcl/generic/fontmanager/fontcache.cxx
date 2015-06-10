@@ -125,7 +125,7 @@ void FontCache::flush()
         {
             // insert cache entries
             const FontCacheEntry& rEntry( entry_it->second.m_aEntry );
-            if( rEntry.begin() == rEntry.end() )
+            if( rEntry.empty() )
                 continue;
 
             aLine.append("File:");

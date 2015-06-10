@@ -927,7 +927,7 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
                     // the iterator will not be used any more so it can be removed directly
                     aIter->second.erase( aNPIter );
 
-                    if( aIter->second.begin() == aIter->second.end() )
+                    if( aIter->second.empty() )
                         m_aContainer.erase( aIter );
 
                     return;
@@ -973,7 +973,7 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
                     if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
                         aIter->second.erase( aNPIter );
 
-                    if( aIter->second.begin() == aIter->second.end() )
+                    if( aIter->second.empty() )
                         m_aContainer.erase( aIter );
 
                     return;
@@ -1012,7 +1012,7 @@ void SAL_CALL PasswordContainer::removeAllPersistent() throw(RuntimeException, s
                 ++aNPIter;
         }
 
-        if( aIter->second.begin() == aIter->second.end() )
+        if( aIter->second.empty() )
         {
             PassMap::iterator aIterToDelete( aIter );
             ++aIter;

@@ -77,7 +77,7 @@ void CandleStickChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, s
 
 void CandleStickChart::createShapes()
 {
-    if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
+    if( m_aZSlots.empty() ) //no series
         return;
 
     if( m_nDimension!=2 )

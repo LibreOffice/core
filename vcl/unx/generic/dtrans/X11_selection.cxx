@@ -1929,7 +1929,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
                 }
             }
 
-            while( aTimeouts.begin() != aTimeouts.end() )
+            while( !aTimeouts.empty() )
             {
                 // transfer broken, might even be a new client with the
                 // same window id
@@ -1979,7 +1979,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
 
             }
             // eventually clean up the hash map
-            if( it->second.begin() == it->second.end() )
+            if( it->second.empty() )
                 m_aIncrementals.erase( it );
         }
     }
@@ -3694,7 +3694,7 @@ void SelectionManager::run( void* pThis )
                 }
             }
             aGuard.clear();
-            while( aChangeList.begin() != aChangeList.end() )
+            while( !aChangeList.empty() )
             {
                 aChangeList.front().first->fireContentsChanged();
                 aChangeList.pop_front();

@@ -76,7 +76,7 @@ void TextParagraph::insertAt(
         }
 
         sal_Int32 nCharHeight = 0;
-        if ( maRuns.begin() == maRuns.end() )
+        if ( maRuns.empty() )
         {
             PropertySet aPropSet( xAt );
 
