@@ -57,7 +57,7 @@ const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
 
 static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
-    const char *sName = gtk_tool_button_get_stock_id( GTK_TOOL_BUTTON(pButton) );
+    const char *sName = gtk_tool_button_get_icon_name( GTK_TOOL_BUTTON(pButton) );
 
     float fZoom = 0;
     float fCurrentZoom = 0;
@@ -67,7 +67,7 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
         fCurrentZoom = lok_doc_view_get_zoom( LOK_DOC_VIEW(pDocView) );
     }
 
-    if ( strcmp(sName, "gtk-zoom-in") == 0)
+    if ( strcmp(sName, "zoom-in-symbolic") == 0)
     {
         for ( unsigned int i = 0; i < sizeof( fZooms ) / sizeof( fZooms[0] ); i++ )
         {
@@ -78,11 +78,11 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
             }
         }
     }
-    else if ( strcmp(sName, "gtk-zoom-100") == 0)
+    else if ( strcmp(sName, "zoom-original-symbolic") == 0)
     {
         fZoom = 1;
     }
-    else if ( strcmp(sName, "gtk-zoom-out") == 0)
+    else if ( strcmp(sName, "zoom-out-symbolic") == 0)
     {
         for ( unsigned int i = 0; i < sizeof( fZooms ) / sizeof( fZooms[0] ); i++ )
         {
@@ -353,22 +353,25 @@ int main( int argc, char* argv[] )
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 1024, 768);
     g_signal_connect( pWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL );
 
-    pVBox = gtk_vbox_new( FALSE, 0 );
+    pVBox = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
     gtk_container_add( GTK_CONTAINER(pWindow), pVBox );
 
     // Toolbar
     GtkWidget* pToolbar = gtk_toolbar_new();
     gtk_toolbar_set_style( GTK_TOOLBAR(pToolbar), GTK_TOOLBAR_ICONS );
 
-    GtkToolItem* pZoomIn = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_IN );
+    GtkToolItem* pZoomIn = gtk_tool_button_new( NULL, NULL );
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomIn), "zoom-in-symbolic");
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomIn, 0);
     g_signal_connect( G_OBJECT(pZoomIn), "clicked", G_CALLBACK(changeZoom), NULL );
 
-    GtkToolItem* pZoom1 = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_100 );
+    GtkToolItem* pZoom1 = gtk_tool_button_new( NULL, NULL );
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoom1), "zoom-original-symbolic");
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoom1, -1);
     g_signal_connect( G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), NULL );
 
-    GtkToolItem* pZoomOut = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_OUT );
+    GtkToolItem* pZoomOut = gtk_tool_button_new( NULL, NULL );
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomOut), "zoom-out-symbolic");
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomOut, -1);
     g_signal_connect( G_OBJECT(pZoomOut), "clicked", G_CALLBACK(changeZoom), NULL );
 
@@ -391,27 +394,38 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1 );
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
-    pEnableEditing = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_EDIT);
+    pEnableEditing = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pEnableEditing), "insert-text-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
     g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
-    GtkToolItem* pFindButton = gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
+
+    GtkToolItem* pFindButton = gtk_tool_button_new( NULL, NULL);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindButton), "edit-find-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pFindButton, -1);
     g_signal_connect(G_OBJECT(pFindButton), "clicked", G_CALLBACK(toggleFindbar), NULL);
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
-    pBold = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_BOLD);
+
+    pBold = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pBold), "format-text-bold-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pBold, -1);
     g_signal_connect(G_OBJECT(pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pBold, ".uno:Bold");
-    pItalic = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_ITALIC);
+
+    pItalic = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pItalic), "format-text-italic-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pItalic, -1);
     g_signal_connect(G_OBJECT(pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pItalic, ".uno:Italic");
-    pUnderline = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_UNDERLINE);
+
+    pUnderline = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pUnderline), "format-text-underline-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pUnderline, -1);
     g_signal_connect(G_OBJECT(pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pUnderline, ".uno:Underline");
-    pStrikethrough = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_STRIKETHROUGH);
+
+    pStrikethrough = gtk_toggle_tool_button_new ();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pStrikethrough), "format-text-strikethrough-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pStrikethrough, -1);
     g_signal_connect(G_OBJECT(pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pStrikethrough, ".uno:Strikeout");
@@ -422,7 +436,8 @@ int main( int argc, char* argv[] )
     pFindbar = gtk_toolbar_new();
     gtk_toolbar_set_style(GTK_TOOLBAR(pFindbar), GTK_TOOLBAR_ICONS);
 
-    GtkToolItem* pFindbarClose = gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
+    GtkToolItem* pFindbarClose = gtk_tool_button_new( NULL, NULL);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarClose), "window-close-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarClose, -1);
     g_signal_connect(G_OBJECT(pFindbarClose), "clicked", G_CALLBACK(toggleFindbar), NULL);
 
@@ -432,10 +447,13 @@ int main( int argc, char* argv[] )
     g_signal_connect(pFindbarEntry, "key-press-event", G_CALLBACK(signalFindbar), 0);
     gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pEntryContainer, -1);
 
-    GtkToolItem* pFindbarNext = gtk_tool_button_new_from_stock(GTK_STOCK_GO_DOWN);
+    GtkToolItem* pFindbarNext = gtk_tool_button_new( NULL, NULL);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarNext), "go-down-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarNext, -1);
     g_signal_connect(G_OBJECT(pFindbarNext), "clicked", G_CALLBACK(signalSearchNext), NULL);
-    GtkToolItem* pFindbarPrev = gtk_tool_button_new_from_stock(GTK_STOCK_GO_UP);
+
+    GtkToolItem* pFindbarPrev = gtk_tool_button_new( NULL, NULL);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarPrev), "go-up-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarPrev, -1);
     g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), NULL);
 
@@ -465,8 +483,7 @@ int main( int argc, char* argv[] )
     gtk_widget_set_vexpand (pScrolledWindow, TRUE);
     gtk_container_add(GTK_CONTAINER(pVBox), pScrolledWindow);
 
-    // DocView doesn't have scrolling capability, so need a viewport
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(pScrolledWindow), pDocView);
+    gtk_container_add(GTK_CONTAINER(pScrolledWindow), pDocView);
 
     gtk_widget_show_all( pWindow );
     // Hide the findbar by default.
