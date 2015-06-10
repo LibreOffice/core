@@ -3484,12 +3484,11 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                         case SotClipboardFormatId::STARCALC_8:
                         case SotClipboardFormatId::STARCHART_8:
                         case SotClipboardFormatId::STARMATH_8:
-                        case SotClipboardFormatId::STARBASE_8:
                             break;
 
                         default:
                         {
-                            OSL_ENSURE( aSubElements[nInd] == "Configurations2" || !xTarget->hasByName( aSubElements[nInd] ),
+                            OSL_ENSURE( aSubElements[nInd] == "Configurations2" || nFormat == SotClipboardFormatId::STARBASE_8 || !xTarget->hasByName( aSubElements[nInd] ),
                                         "The target storage is an output storage, the element should not exist in the target!\n" );
 
                             if ( !xTarget->hasByName( aSubElements[nInd] ) )
