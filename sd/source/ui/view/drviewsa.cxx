@@ -59,6 +59,7 @@
 #include "Window.hxx"
 #include "fupoor.hxx"
 #include "fusel.hxx"
+#include "funavig.hxx"
 #include "drawview.hxx"
 #include "SdUnoDrawView.hxx"
 #include "ViewShellBase.hxx"
@@ -824,6 +825,81 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
             mpDrawView->GetMarkedObjectList(),
             eViewType));
 }
+
+void DrawViewShell::ExecGoToNextPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToNextPage (SfxItemSet& rSet)
+{
+}
+
+void DrawViewShell::ExecGoToPreviousPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToPreviousPage (SfxItemSet& rSet)
+{
+}
+
+
+void DrawViewShell::ExecGoToFirstPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToFirstPage (SfxItemSet& rSet)
+{
+}
+
+void DrawViewShell::ExecGoToLastPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToLastPage (SfxItemSet& rSet)
+{
+}
+
+void DrawViewShell::ExecMovePageUp (SfxRequest& rReq)
+{
+}
+
+void DrawViewShell::GetStateMovePageUp (SfxItemSet& rSet)
+{
+}
+
+void DrawViewShell::ExecMovePageDown (SfxRequest& rReq)
+{
+}
+
+void DrawViewShell::GetStateMovePageDown (SfxItemSet& rSet)
+{
+}
+
+void DrawViewShell::ExecMovePageFirst (SfxRequest& rReq)
+{
+}
+
+void DrawViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
+{
+}
+
+void DrawViewShell::ExecMovePageLast (SfxRequest& rReq)
+{
+}
+
+void DrawViewShell::GetStateMovePageLast (SfxItemSet& rSet)
+{
+}
+
+
 
 } // end of namespace sd
 
