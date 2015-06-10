@@ -597,7 +597,6 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox*, p )
 IMPL_LINK_NOARG_TYPED(MediaControl, implTimeoutHdl, Idle *, void)
 {
     update();
-    maIdle.Start();
 }
 
 }
