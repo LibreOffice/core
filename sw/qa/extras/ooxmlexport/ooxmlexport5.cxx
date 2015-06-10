@@ -837,11 +837,11 @@ DECLARE_OOXMLEXPORT_TEST(testKDE302504, "kde302504-1.odt")
         assertXPath(pXmlDoc, "//v:shape", "ID", "KoPathShape");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testKDE216114, "kde216114-1.odt")
-{
-    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
-        assertXPath(pXmlDoc, "//w:pict", 1);
-}
+//DECLARE_OOXMLEXPORT_TEST(testKDE216114, "kde216114-1.odt")
+//{
+//    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+//        assertXPath(pXmlDoc, "//w:pict", 1);
+//}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
