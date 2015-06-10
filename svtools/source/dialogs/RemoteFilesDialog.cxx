@@ -258,7 +258,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pSplitter->SetSplitHdl( LINK( this, RemoteFilesDialog, SplitHdl ) );
     m_pSplitter->Show();
 
-    m_pTreeView = VclPtr<SvTreeListBox>::Create( m_pContainer, WB_BORDER );
+    m_pTreeView = VclPtr<SvTreeListBox>::Create( m_pContainer, WB_BORDER | WB_SORT );
     Size aSize(100, 200);
     m_pTreeView->set_height_request(aSize.Height());
     m_pTreeView->set_width_request(aSize.Width());
