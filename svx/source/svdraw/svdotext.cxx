@@ -1977,11 +1977,10 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 
 void SdrTextObj::onOverflowStatusEvent( bool bIsPageOverflow )
 {
-    // FIXME: Should have a IsChainable or something.
-    if (IsAutoGrowWidth() || IsAutoGrowHeight() || IsAutoFit())
+    if (!IsChainable())
         return;
 
-    if ( GetNextLinkInChain() != NULL ) // is this a chainable object?
+    if ( GetNextLinkInChain() != NULL ) // is there anything to transfer text to?
     {
         // set whether there is need for chaining
         // (used in EndTextEdit to crop the overflowing part)
@@ -1992,17 +1991,18 @@ void SdrTextObj::onOverflowStatusEvent( bool bIsPageOverflow )
 
         // Pushes text in next link on the fly
         if ( bIsPageOverflow ) {
+            SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
             if (pEdtOutl != NULL)
                 mpOverflowingText = pEdtOutl->GetOverflowingText();
             else
-                mpOverflowingText = ImpGetDrawOutliner().GetOverflowingText();
+                mpOverflowingText = aDrawOutliner.GetOverflowingText();
 
             SdrTextObj *pNextTextObj = GetNextLinkInChain();
 
-            impLeaveOnlyNonOverflowingText();
+            impLeaveOnlyNonOverflowingText(&aDrawOutliner);
 
             // Transfer overflowing text
-            impMoveChainedTextToNextLink(pNextTextObj);
+            impMoveChainedTextToNextLink(&aDrawOutliner, pNextTextObj);
         }
 
     }

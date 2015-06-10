@@ -721,36 +721,36 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
 {
     NonOverflowingText *pNonOverflowingTxt;
     pNonOverflowingTxt =
-            rOutliner.GetNonOverflowingText();
+            pOutliner->GetNonOverflowingText();
 
-    pOutliner.Clear();
-    //pOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
+    pOutliner->Clear();
+    //pOutliner->SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
     if (pNonOverflowingTxt->mPreOverflowingTxt == "" &&
         pNonOverflowingTxt->mpHeadParas != NULL) {
         // Only (possibly empty) paragraphs before overflowing one
-        pOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);
+        pOutliner->SetText(*pNonOverflowingTxt->mpHeadParas);
     } else { // We have to include the non-overflowing lines from the overfl. para
 
         // first make a ParaObject for the strings
-        Paragraph *pTmpPara0 = pOutliner.GetParagraph(0);
-        pOutliner.SetText(pNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
-        OutlinerParaObject *pPObj = pOutliner.CreateParaObject();
-        pOutliner.Clear();
-        //pOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
+        Paragraph *pTmpPara0 = pOutliner->GetParagraph(0);
+        pOutliner->SetText(pNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
+        OutlinerParaObject *pPObj = pOutliner->CreateParaObject();
+        pOutliner->Clear();
+        //pOutliner->SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
         if (pNonOverflowingTxt->mpHeadParas != NULL)
-            pOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);
+            pOutliner->SetText(*pNonOverflowingTxt->mpHeadParas);
 
-        pOutliner.AddText(*pPObj);
+        pOutliner->AddText(*pPObj);
     }
 
-     return pOutliner.CreateParaObject();
+     return pOutliner->CreateParaObject();
 }
 
 void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
 {
-    OutlinerParaObject *pNewText = impGetNonOverflowingParaObject();
+    OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pOutliner);
     // we need this when we are in editing mode
     if (pEdtOutl != NULL)
         pEdtOutl->SetText(*pNewText);
@@ -758,6 +758,66 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
     const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
 }
 
+OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const
+ {
+
+    if (mpOverflowingText == NULL)
+        return NULL;
+
+    // XXX: Not sure if necessary
+    pOutliner->Clear();
+
+    OutlinerParaObject *pCurTxt = pNextTextObj->GetOutlinerParaObject();
+    pOutliner->SetText(*pCurTxt);
+
+    // Get text of first paragraph of destination box
+    Paragraph *pOldPara0 = pOutliner->GetParagraph(0);
+    OUString aOldPara0Txt;
+    if (pOldPara0)
+        aOldPara0Txt = pOutliner->GetText(pOldPara0);
+
+    // Get other paras of destination box (from second on)
+    OutlinerParaObject *pOldParasTail = NULL;
+    if (pOutliner->GetParagraphCount() > 1)
+        pOldParasTail = pOutliner->CreateParaObject(1);
+
+    // Create ParaObject appending old first para in the dest. box
+    //   to last part of overflowing text
+    Paragraph *pTmpPara0 = NULL;
+    OutlinerParaObject *pJoiningPara = NULL;
+
+    if (pOldPara0) {
+        pOutliner->Clear();
+
+        pTmpPara0 = pOutliner->GetParagraph(0);
+        pOutliner->SetText(mpOverflowingText->mTailTxt + aOldPara0Txt, pTmpPara0);
+        pJoiningPara = pOutliner->CreateParaObject();
+    }
+
+    // start actual composition
+    pOutliner->Clear();
+
+    // Set headText at the beginning of box
+    Paragraph *pNewPara0 = pOutliner->GetParagraph(0);
+    pOutliner->SetText(mpOverflowingText->mHeadTxt, pNewPara0);
+
+    // Set all the intermediate Paras
+    if (mpOverflowingText->mpMidParas)
+        pOutliner->AddText(*mpOverflowingText->mpMidParas);
+
+    // Append old first para in the destination box to
+    //   last part of overflowing text
+    if (pJoiningPara)
+        pOutliner->AddText(*pJoiningPara);
+
+    // Append all other old paras
+    if (pOldParasTail)
+        pOutliner->AddText(*pOldParasTail);
+
+    // Draw everything
+    OutlinerParaObject *pNewText = pOutliner->CreateParaObject();
+    return pNewText;
+ }
 
 void SdrTextObj::impMoveChainedTextToNextLink(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const
 {
@@ -765,65 +825,16 @@ void SdrTextObj::impMoveChainedTextToNextLink(SdrOutliner *pOutliner, SdrTextObj
     if ( this ==  pNextTextObj )
         return;
 
-    //pOutliner.SetChainingEventHdl(LINK(this,SdrTextObj,ImpDecomposeChainedText));
+    //pOutliner->SetChainingEventHdl(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
-    if (mpOverflowingText != NULL) {
-        // XXX: Not sure if necessary
-        pOutliner.Clear();
+    if (mpOverflowingText == NULL)
+        return;
 
-        OutlinerParaObject *pCurTxt = pNextTextObj->GetOutlinerParaObject();
-        pOutliner.SetText(*pCurTxt);
-
-        // Get text of first paragraph of destination box
-        Paragraph *pOldPara0 = pOutliner.GetParagraph(0);
-        OUString aOldPara0Txt;
-        if (pOldPara0)
-            aOldPara0Txt = pOutliner.GetText(pOldPara0);
-
-        // Get other paras of destination box (from second on)
-        OutlinerParaObject *pOldParasTail = NULL;
-        if (pOutliner.GetParagraphCount() > 1)
-            pOldParasTail = pOutliner.CreateParaObject(1);
-
-        // Create ParaObject appending old first para in the dest. box
-        //   to last part of overflowing text
-        Paragraph *pTmpPara0 = NULL;
-        OutlinerParaObject *pJoiningPara = NULL;
-
-        if (pOldPara0) {
-            pOutliner.Clear();
-
-            pTmpPara0 = pOutliner.GetParagraph(0);
-            pOutliner.SetText(mpOverflowingText->mTailTxt + aOldPara0Txt, pTmpPara0);
-            pJoiningPara = pOutliner.CreateParaObject();
-        }
-
-        // start actual composition
-        pOutliner.Clear();
-
-        // Set headText at the beginning of box
-        Paragraph *pNewPara0 = pOutliner.GetParagraph(0);
-        pOutliner.SetText(mpOverflowingText->mHeadTxt, pNewPara0);
-
-        // Set all the intermediate Paras
-        if (mpOverflowingText->mpMidParas)
-            pOutliner.AddText(*mpOverflowingText->mpMidParas);
-
-        // Append old first para in the destination box to
-        //   last part of overflowing text
-        if (pJoiningPara)
-            pOutliner.AddText(*pJoiningPara);
-
-        // Append all other old paras
-        if (pOldParasTail)
-            pOutliner.AddText(*pOldParasTail);
-
-        // Draw everything
-        OutlinerParaObject *pNewText = pOutliner.CreateParaObject();
+    OutlinerParaObject *pNewText = impGetOverflowingParaObject(pOutliner, pNextTextObj);
+    if (pNewText)
         pNextTextObj->NbcSetOutlinerParaObject(pNewText);
-    }
 
-//    pOutliner.SetChainingEventHdl(Link());
+//    pOutliner->SetChainingEventHdl(Link());
 
 }
 
@@ -1610,8 +1621,9 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     // If overflow occurs we have to cut the text at the right point
     if ( rOutliner.IsPageOverflow() ) {
-        const OutlinerParaObject *pNewTxt = impGetNonOverflowingParaObject();
+        const OutlinerParaObject *pNewTxt = impGetNonOverflowingParaObject(&rOutliner);
         rOutliner.SetText(*pNewTxt);
+
         // XXX: Order transfer of stuff in next link here
     }
 

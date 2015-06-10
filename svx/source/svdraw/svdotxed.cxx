@@ -288,7 +288,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             // XXX: FRESHLY COMMENTED (5/6/15) // FIXME:matteocam
             //pNewText = rOutl.CreateParaObject( 0, nParaAnz );
 
-            pNewText = impGetNonOverflowingParaObject();
+            pNewText = impGetNonOverflowingParaObject(&rOutl);
 
             // set non overflow part of text to current box
 

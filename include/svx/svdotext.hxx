@@ -616,9 +616,10 @@ public:
         const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 
-    void impMoveChainedTextToNextLink(SdrTextObj *pNextTextObj) const;
-    OutlinerParaObject *impGetNonOverflowingParaObject() const;
-    void impLeaveOnlyNonOverflowingText() const;
+    void impMoveChainedTextToNextLink(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const;
+    OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const;
+    void impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const;
+    OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner) const;
 
     // Handler for Chained Text
     DECL_LINK(ImpDecomposeChainedText,bool*);
