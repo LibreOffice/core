@@ -63,4 +63,14 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="10157"/>
  <toolbar:toolbaritem xlink:href=".uno:PresentationCurrentSlide"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FirstPage" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:PreviousPage" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NextPage" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:LastPage" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MovePageFirst" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MovePageUp" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MovePageDown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MovePageLast" toolbar:visible="false"/>
 </toolbar:toolbar>

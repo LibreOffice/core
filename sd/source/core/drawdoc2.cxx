@@ -703,12 +703,14 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     {
         pPage = GetSdPage(nPage, PK_STANDARD);
 
-        if (pPage->IsSelected())
+        if (pPage->IsSelected()) {
             aPageList.push_back(pPage);
+        }
     }
 
     // If necessary, look backwards, until we find a page that wasn't selected
     nPage = nTargetPage;
+
     if (nPage != (sal_uInt16)-1)
     {
         pPage = GetSdPage(nPage, PK_STANDARD);
