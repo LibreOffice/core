@@ -83,7 +83,7 @@ class Breadcrumb : public VclHBox
     std::vector< VclPtr< FixedHyperlink > > m_aLinks;
     std::vector< VclPtr< FixedText > > m_aSeparators;
 
-    OUString m_sPath;
+    OUString m_sRootName;
     OUString m_sClickedURL;
 
     Link<> m_aClickHdl;
@@ -132,9 +132,13 @@ class Breadcrumb : public VclHBox
         return m_sClickedURL;
     }
 
+    void SetRootName( const OUString& rURL )
+    {
+        m_sRootName = rURL;
+    }
+
     void SetURL( const OUString& rURL )
     {
-        m_sPath = rURL;
         INetURLObject aURL( rURL );
         aURL.setFinalSlash();
         OUString sPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
@@ -143,7 +147,7 @@ class Breadcrumb : public VclHBox
         unsigned int nPos = 0;
         unsigned int i;
 
-        m_aLinks[0]->SetText( "Root" );
+        m_aLinks[0]->SetText( m_sRootName );
         m_aLinks[0]->Show();
         m_aLinks[0]->SetURL( INetURLObject::GetScheme( aURL.GetProtocol() )
                                 + aURL.GetHost() );
@@ -523,12 +527,14 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
     if(nPos > 0)
     {
         OUString sURL = m_aServices[nPos]->GetUrl();
+        OUString sName = m_aServices[nPos]->GetName();
 
         if( OpenURL( sURL ) == eSuccess )
         {
+            m_pPath->SetRootName( sName );
             m_pTreeView->Clear();
 
-            SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( m_pServices_lb->GetSelectEntry(), NULL, true );
+            SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( sName, NULL, true );
             OUString* sData = new OUString( sURL );
             pRoot->SetUserData( static_cast< void* >( sData ) );
 
