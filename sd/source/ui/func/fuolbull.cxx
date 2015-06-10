@@ -182,16 +182,11 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     sal_uInt16 nIdx = pItem->GetValue();
     bool bToggle = false;
-    bool bSwitchOff = false;
     if( nIdx == (sal_uInt16)0xFFFF )
     {
         // If the nIdx is (sal_uInt16)0xFFFF, means set bullet status to on/off
         nIdx = 1;
         bToggle = true;
-    }
-    else if (nIdx == DEFAULT_NONE)
-    {
-        bSwitchOff = true;
     }
     nIdx--;
 
@@ -266,18 +261,11 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     if ( pOLV )
     {
-        if ( bSwitchOff )
-        {
-            pOLV->SwitchOffBulletsNumbering( true );
-        }
-        else
-        {
-            pOLV->ToggleBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? 0 : pNumRule );
-        }
+        pOLV->ToggleBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? 0 : pNumRule );
     }
     else
     {
-        mpView->ChangeMarkedObjectsBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? 0 : pNumRule, bSwitchOff );
+        mpView->ChangeMarkedObjectsBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? 0 : pNumRule, false );
     }
     if ( bInMasterView )
     {

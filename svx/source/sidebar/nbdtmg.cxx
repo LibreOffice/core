@@ -1302,7 +1302,7 @@ void NumberingTypeMgr::Init()
     {
         aNumberings = xDefNum->getDefaultContinuousNumberingLevels( aLocale );
 
-        sal_Int32 nLength = aNumberings.getLength() > DEFAULT_NUM_VALUSET_COUNT ? DEFAULT_NUM_VALUSET_COUNT :aNumberings.getLength();
+        sal_Int32 nLength = aNumberings.getLength();
 
         const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
         for(sal_Int32 i = 0; i < nLength; i++)
