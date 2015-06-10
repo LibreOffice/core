@@ -448,15 +448,12 @@ void RemoteFilesDialog::fillTreeEntry( SvTreeListEntry* pParent )
     {
         // remove childs
 
-        if ( pParent )
-        {
-            SvTreeList* pModel = m_pTreeView->GetModel();
+        SvTreeList* pModel = m_pTreeView->GetModel();
 
-            if( pModel->HasChildren( pParent ) )
-            {
-                SvTreeListEntries& rEntries = pModel->GetChildList( pParent );
-                rEntries.clear();
-            }
+        if( pModel->HasChildren( pParent ) )
+        {
+            SvTreeListEntries& rEntries = pModel->GetChildList( pParent );
+            rEntries.clear();
         }
 
         // fill with new ones
