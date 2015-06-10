@@ -19,6 +19,12 @@
 
 #include <vector>
 
+enum SvtBreadcrumbMode
+{
+    ONLY_CURRENT_PATH = 0,
+    ALL_VISITED = 1
+};
+
 class SVT_DLLPUBLIC Breadcrumb : public VclHBox
 {
     private:
@@ -28,9 +34,12 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
         OUString m_sRootName;
         OUString m_sClickedURL;
 
+        SvtBreadcrumbMode m_eMode;
+
         Link<> m_aClickHdl;
 
         void appendField();
+        void clearFields( unsigned int nStartIndex );
 
         DECL_LINK ( ClickLinkHdl, FixedHyperlink* );
 
@@ -45,6 +54,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
 
         void SetRootName( const OUString& rURL );
         void SetURL( const OUString& rURL );
+        void SetMode( SvtBreadcrumbMode eMode );
 };
 
 #endif

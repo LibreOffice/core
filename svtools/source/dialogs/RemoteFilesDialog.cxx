@@ -120,6 +120,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pPath = VclPtr<Breadcrumb>::Create( get<vcl::Window>("breadcrumb_container") );
     m_pPath->set_hexpand(true);
     m_pPath->SetClickHdl( LINK( this, RemoteFilesDialog, SelectBreadcrumbHdl ) );
+    m_pPath->SetMode( SvtBreadcrumbMode::ALL_VISITED );
     m_pPath->Show();
 
     m_pContainer = VclPtr<FileViewContainer>::Create( get<vcl::Window>("container") );
