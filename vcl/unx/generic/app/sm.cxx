@@ -352,8 +352,8 @@ IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownHdl )
     }
 
     const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
-    SAL_INFO("vcl.sm", (rFrames.begin() != rFrames.end() ? "shutdown on first frame" : "shutdown event but no frame"));
-    if( rFrames.begin() != rFrames.end() )
+    SAL_INFO("vcl.sm", (!rFrames.empty() ? "shutdown on first frame" : "shutdown event but no frame"));
+    if( !rFrames.empty() )
         rFrames.front()->CallCallback( SALEVENT_SHUTDOWN, 0 );
     return 0;
 }

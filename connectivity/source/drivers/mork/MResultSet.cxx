@@ -1147,7 +1147,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     if(!m_pTable)
     {
         const OSQLTables& xTabs = m_pSQLIterator->getTables();
-        if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
+        if (xTabs.empty() || !xTabs.begin()->second.is())
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
         m_pTable = static_cast< OTable* > ((xTabs.begin()->second).get());

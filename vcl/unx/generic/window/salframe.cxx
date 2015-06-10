@@ -103,7 +103,7 @@ static int          nVisibleFloats      = 0;
 static void doReparentPresentationDialogues( SalDisplay* pDisplay )
 {
     GetGenericData()->ErrorTrapPush();
-    while( aPresentationReparentList.begin() != aPresentationReparentList.end() )
+    while( !aPresentationReparentList.empty() )
     {
         int x, y;
         ::Window aRoot, aChild;
@@ -3539,7 +3539,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
     }
 
     if( IsOverrideRedirect() && mbFullScreen &&
-        aPresentationReparentList.begin() == aPresentationReparentList.end() )
+        aPresentationReparentList.empty() )
         // we are in fullscreen mode -> override redirect
          // focus is possibly lost, so reget it
          XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToNone, CurrentTime );
@@ -3562,7 +3562,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
 
 void X11SalFrame::RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWindows )
 {
-    if( maChildren.begin() != maChildren.end() )
+    if( !maChildren.empty() )
     {
         int nWindow = nTopLevelWindows;
         while( nWindow-- )
@@ -3604,7 +3604,7 @@ void X11SalFrame::RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWind
 void X11SalFrame::RestackChildren()
 {
     if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected()
-        && maChildren.begin() != maChildren.end() )
+        && !maChildren.empty() )
     {
         ::Window aRoot, aParent, *pChildren = NULL;
         unsigned int nChildren;

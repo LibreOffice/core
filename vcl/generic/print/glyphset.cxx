@@ -657,7 +657,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 
             std::list< OString > aName( rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second) );
 
-            if( aName.begin() != aName.end() )
+            if( !aName.empty() )
                 nSize += psp::appendStr ( aName.front().getStr(), pEncodingVector + nSize);
             else
                 nSize += psp::appendStr (".notdef", pEncodingVector + nSize );

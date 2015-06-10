@@ -326,7 +326,7 @@ void ZipPackageFolder::saveContents(
 {
     bool bWritingFailed = false;
 
-    if ( maContents.begin() == maContents.end() && !rPath.isEmpty() && m_nFormat != embed::StorageFormats::OFOPXML )
+    if ( maContents.empty() && !rPath.isEmpty() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();

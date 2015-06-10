@@ -644,7 +644,7 @@ struct FormerPoint
 
 void AreaChart::createShapes()
 {
-    if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
+    if( m_aZSlots.empty() ) //no series
         return;
 
     if( m_nDimension == 2 && ( m_bArea || !m_bCategoryXAxis ) )

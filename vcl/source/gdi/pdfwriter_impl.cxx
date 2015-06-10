@@ -2174,7 +2174,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     if( ! nBytes ) // huh ?
         return true;
 
-    if( m_aOutputStreams.begin() != m_aOutputStreams.end() )
+    if( !m_aOutputStreams.empty() )
     {
         m_aOutputStreams.front().m_pStream->Seek( STREAM_SEEK_TO_END );
         m_aOutputStreams.front().m_pStream->Write( pBuffer, sal::static_int_cast<sal_Size>(nBytes) );
@@ -2314,13 +2314,13 @@ sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, P
 
 void PDFWriterImpl::endPage()
 {
-    if( m_aPages.begin() != m_aPages.end() )
+    if( !m_aPages.empty() )
     {
         // close eventual MC sequence
         endStructureElementMCSeq();
 
         // sanity check
-        if( m_aOutputStreams.begin() != m_aOutputStreams.end() )
+        if( !m_aOutputStreams.empty() )
         {
             OSL_FAIL( "redirection across pages !!!" );
             m_aOutputStreams.clear(); // leak !
