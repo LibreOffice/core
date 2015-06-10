@@ -11,13 +11,17 @@ $(eval $(call gb_Library_Library,libreofficekitgtk))
 
 $(eval $(call gb_Library_use_sdk_api,libreofficekitgtk))
 
-$(eval $(call gb_Library_use_externals,libreofficekitgtk,\
-    gtk \
-))
-
 $(eval $(call gb_Library_add_exception_objects,libreofficekitgtk,\
     libreofficekit/source/gtk/lokdocview \
     libreofficekit/source/gtk/tilebuffer \
+))
+
+$(eval $(call gb_Library_add_cxxflags,libreofficekitgtk,\
+    $$(GTK3_CFLAGS) \
+))
+
+$(eval $(call gb_Library_add_libs,libreofficekitgtk,\
+    $(GTK3_LIBS) \
 ))
 
 ifeq ($(OS),LINUX)

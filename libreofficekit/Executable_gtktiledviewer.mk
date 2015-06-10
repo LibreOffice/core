@@ -16,7 +16,14 @@ $(eval $(call gb_Executable_set_include,gtktiledviewer,\
 
 $(eval $(call gb_Executable_use_externals,gtktiledviewer,\
     boost_headers \
-    gtk \
+))
+
+$(eval $(call gb_Executable_add_cxxflags,gtktiledviewer,\
+    $$(GTK3_CFLAGS) \
+))
+
+$(eval $(call gb_Executable_add_libs,gtktiledviewer,\
+    $(GTK3_LIBS) \
 ))
 
 $(eval $(call gb_Executable_use_libraries,gtktiledviewer,\

@@ -13,8 +13,6 @@
 #include <vector>
 #include <string>
 
-#include <gdk/gdkkeysyms.h>
-
 #include <com/sun/star/awt/Key.hpp>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
@@ -336,7 +334,7 @@ void LOKDocView_Impl::onExposedImpl(GdkEventExpose* event)
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
     GdkRectangle aVisibleArea = event->area;
-    cairo_t *pcairo = gdk_cairo_create(GTK_WIDGET(m_pDocView)->window);
+    cairo_t *pcairo = gdk_cairo_create(gtk_widget_get_window(GTK_WIDGET(m_pDocView)));
 
     aVisibleArea.x = pixelToTwip (aVisibleArea.x, m_fZoom);
     aVisibleArea.y = pixelToTwip (aVisibleArea.y, m_fZoom);
@@ -401,33 +399,33 @@ void LOKDocView_Impl::signalKey(GdkEventKey* pEvent)
 
     switch (pEvent->keyval)
     {
-    case GDK_BackSpace:
+    case GDK_KEY_BackSpace:
         nKeyCode = com::sun::star::awt::Key::BACKSPACE;
         break;
-    case GDK_Return:
+    case GDK_KEY_Return:
         nKeyCode = com::sun::star::awt::Key::RETURN;
         break;
-    case GDK_Escape:
+    case GDK_KEY_Escape:
         nKeyCode = com::sun::star::awt::Key::ESCAPE;
         break;
-    case GDK_Tab:
+    case GDK_KEY_Tab:
         nKeyCode = com::sun::star::awt::Key::TAB;
         break;
-    case GDK_Down:
+    case GDK_KEY_Down:
         nKeyCode = com::sun::star::awt::Key::DOWN;
         break;
-    case GDK_Up:
+    case GDK_KEY_Up:
         nKeyCode = com::sun::star::awt::Key::UP;
         break;
-    case GDK_Left:
+    case GDK_KEY_Left:
         nKeyCode = com::sun::star::awt::Key::LEFT;
         break;
-    case GDK_Right:
+    case GDK_KEY_Right:
         nKeyCode = com::sun::star::awt::Key::RIGHT;
         break;
     default:
-        if (pEvent->keyval >= GDK_F1 && pEvent->keyval <= GDK_F26)
-            nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_F1);
+        if (pEvent->keyval >= GDK_KEY_F1 && pEvent->keyval <= GDK_KEY_F26)
+            nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_KEY_F1);
         else
             nCharCode = gdk_keyval_to_unicode(pEvent->keyval);
     }
