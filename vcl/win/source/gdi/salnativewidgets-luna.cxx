@@ -1546,6 +1546,7 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
         // in aero menuitem highlight text is drawn in the same color as normal
         aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
         aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarTextColor );
+        aStyleSettings.SetMenuBarHighlightTextColor( aMenuBarTextColor );
         pSVData->maNWFData.mnMenuFormatBorderX = 2;
         pSVData->maNWFData.mnMenuFormatBorderY = 2;
         pSVData->maNWFData.maMenuBarHighlightTextColor = aMenuBarTextColor;
