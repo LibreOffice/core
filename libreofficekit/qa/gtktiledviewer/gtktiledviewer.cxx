@@ -476,6 +476,8 @@ int main( int argc, char* argv[] )
 
     // Scrolled window for DocView
     pScrolledWindow = gtk_scrolled_window_new(0, 0);
+    gtk_widget_set_hexpand (pScrolledWindow, TRUE);
+    gtk_widget_set_vexpand (pScrolledWindow, TRUE);
     gtk_container_add(GTK_CONTAINER(pVBox), pScrolledWindow);
 
     // DocView doesn't have scrolling capability, so need a viewport

@@ -116,8 +116,10 @@ struct LOKDocView_Impl
     ~LOKDocView_Impl();
     /// Connected to the destroy signal of LOKDocView, deletes its LOKDocView_Impl.
     static void destroy(LOKDocView* pDocView, gpointer pData);
-    /// Connected to the expose-event of the GtkDrawingArea
-    static void onExposed(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
+    /// Connected to the draw of the GtkDrawingArea
+    static gboolean renderDocument(GtkWidget *widget, cairo_t *cr, gpointer user_data);
+    /// Implementation of draw event handler, invoked by renderDocument().
+    gboolean renderDocumentImpl(cairo_t* cr);
     /// Receives a key press or release event.
     void signalKey(GdkEventKey* pEvent);
     /*
@@ -138,9 +140,9 @@ struct LOKDocView_Impl
     /// Implementation of motion event handler, invoked by signalMotion().
     gboolean signalMotionImpl(GdkEventButton* pEvent);
     /// Receives an expose event.
-    static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, LOKDocView* pDocView);
+    static gboolean renderOverlay(GtkWidget* pWidget, cairo_t* cr, gpointer userdata);
     /// Implementation of expose event handler (renders cursor and selection overlay), invoked by renderOverlay().
-    gboolean renderOverlayImpl(GtkWidget* pEventBox);
+    gboolean renderOverlayImpl(cairo_t *cr);
     /// Is rRectangle empty?
     static bool isEmptyRectangle(const GdkRectangle& rRectangle);
     /*
@@ -154,8 +156,6 @@ struct LOKDocView_Impl
     static gboolean handleTimeout(gpointer pData);
     /// Implementation of the timeout handler, invoked by handleTimeout().
     gboolean handleTimeoutImpl();
-    /// Implementation of expose event handler, invoked by onExposed().
-    void onExposedImpl(GdkEventExpose* event);
     /// Returns the GdkRectangle of a x,y,width,height string.
     GdkRectangle payloadToRectangle(const char* pPayload);
     /// Returns the GdkRectangles of a x1,y1,w1,h1;x2,y2,w2,h2;... string.
@@ -320,21 +320,22 @@ void LOKDocView_Impl::destroy(LOKDocView* pDocView, gpointer /*pData*/)
     delete pDocView->m_pImpl;
 }
 
-void LOKDocView_Impl::onExposed(GtkWidget* /*widget*/, GdkEventExpose* event, gpointer userdata)
+gboolean LOKDocView_Impl::renderDocument(GtkWidget* /*widget*/, cairo_t *cr, gpointer userdata)
 {
     LOKDocView *pDocView = LOK_DOC_VIEW (userdata);
-    pDocView->m_pImpl->onExposedImpl(event);
+    return pDocView->m_pImpl->renderDocumentImpl(cr);
 }
 
-void LOKDocView_Impl::onExposedImpl(GdkEventExpose* event)
+gboolean LOKDocView_Impl::renderDocumentImpl(cairo_t *pCairo)
 {
     long nDocumentWidthPixels = twipToPixel(m_nDocumentWidthTwips, m_fZoom);
     long nDocumentHeightPixels = twipToPixel(m_nDocumentHeightTwips, m_fZoom);
     // Total number of rows / columns in this document.
     guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
-    GdkRectangle aVisibleArea = event->area;
-    cairo_t *pcairo = gdk_cairo_create(gtk_widget_get_window(GTK_WIDGET(m_pDocView)));
+    GdkRectangle aVisibleArea;
+
+    gdk_cairo_get_clip_rectangle (pCairo, &aVisibleArea);
 
     aVisibleArea.x = pixelToTwip (aVisibleArea.x, m_fZoom);
     aVisibleArea.y = pixelToTwip (aVisibleArea.y, m_fZoom);
@@ -374,16 +375,14 @@ void LOKDocView_Impl::onExposedImpl(GdkEventExpose* event)
             {
                 Tile& currentTile = m_aTileBuffer.getTile(nRow, nColumn, m_fZoom);
                 GdkPixbuf* pPixBuf = currentTile.getBuffer();
-
-                gdk_cairo_set_source_pixbuf (pcairo, pPixBuf,
+                gdk_cairo_set_source_pixbuf (pCairo, pPixBuf,
                                              twipToPixel(aTileRectangleTwips.x, m_fZoom),
                                              twipToPixel(aTileRectangleTwips.y, m_fZoom));
-                cairo_paint(pcairo);
+                cairo_paint(pCairo);
             }
         }
     }
-
-    cairo_destroy(pcairo);
+    return FALSE;
 }
 
 void LOKDocView_Impl::signalKey(GdkEventKey* pEvent)
@@ -644,16 +643,15 @@ gboolean LOKDocView_Impl::signalMotionImpl(GdkEventButton* pEvent)
     return FALSE;
 }
 
-gboolean LOKDocView_Impl::renderOverlay(GtkWidget* pEventBox, GdkEventExpose* /*pEvent*/, LOKDocView* pDocView)
+gboolean LOKDocView_Impl::renderOverlay(GtkWidget* /*widget*/, cairo_t *cr, gpointer userdata)
 {
-    return pDocView->m_pImpl->renderOverlayImpl(pEventBox);
+    LOKDocView *pDocView = LOK_DOC_VIEW (userdata);
+    return pDocView->m_pImpl->renderOverlayImpl(cr);
 }
 
-gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
+gboolean LOKDocView_Impl::renderOverlayImpl(cairo_t *pCairo)
 {
 #if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
-    cairo_t* pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
-
     if (m_bEdit && m_bCursorVisible && m_bCursorOverlayVisible && !isEmptyRectangle(m_aVisibleCursor))
     {
         if (m_aVisibleCursor.width < 30)
@@ -715,7 +713,6 @@ gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
         renderGraphicHandle(pCairo, m_aGraphicSelection, m_pGraphicHandle);
     }
 
-    cairo_destroy(pCairo);
 #endif
     return FALSE;
 }
@@ -1154,10 +1151,10 @@ static void lok_doc_view_init (LOKDocView* pDocView)
     pDocView->m_pImpl = new LOKDocView_Impl(pDocView);
 
     g_signal_connect(G_OBJECT(pDocView),
-                     "expose-event",
-                     G_CALLBACK(LOKDocView_Impl::onExposed), pDocView);
+                     "draw",
+                     G_CALLBACK(LOKDocView_Impl::renderDocument), pDocView);
     g_signal_connect(G_OBJECT(pDocView),
-                     "expose-event",
+                     "draw",
                      G_CALLBACK(LOKDocView_Impl::renderOverlay), pDocView);
     gtk_widget_add_events(GTK_WIDGET(pDocView),
                            GDK_BUTTON_PRESS_MASK
