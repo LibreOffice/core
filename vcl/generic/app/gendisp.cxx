@@ -73,7 +73,7 @@ bool SalGenericDisplay::DispatchInternalEvent()
 
     if( osl_acquireMutex( m_aEventGuard ) )
     {
-        if( m_aUserEvents.begin() != m_aUserEvents.end() )
+        if( !m_aUserEvents.empty() )
         {
             pFrame	= m_aUserEvents.front().m_pFrame;
             pData	= m_aUserEvents.front().m_pData;
@@ -137,7 +137,7 @@ bool SalGenericDisplay::HasUserEvents() const
     bool bRet = false;
     if( osl_acquireMutex( m_aEventGuard ) )
     {
-        if( m_aUserEvents.begin() != m_aUserEvents.end() )
+        if( !m_aUserEvents.empty() )
             bRet = true;
         osl_releaseMutex( m_aEventGuard );
     }

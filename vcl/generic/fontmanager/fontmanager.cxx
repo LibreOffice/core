@@ -1208,7 +1208,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         // set family name from XLFD if possible
         if( ! pFont->m_nFamilyName )
         {
-            if( aNames.begin() != aNames.end() )
+            if( !aNames.empty() )
             {
                 pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, aNames.front(), true );
                 aNames.pop_front();
@@ -2187,7 +2187,7 @@ std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aCha
     for( ; range.first != range.second; ++range.first )
         aRet.push_back( range.first->second );
 
-    if( aRet.begin() == aRet.end() && aChar != 0 )
+    if( aRet.empty() && aChar != 0 )
     {
         sal_Char aBuf[8];
         sal_Int32 nChars = snprintf( aBuf, sizeof( aBuf ), "uni%.4hX", aChar );
@@ -2207,7 +2207,7 @@ std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const OStri
     for( ; range.first != range.second; ++range.first )
         aRet.push_back( range.first->second );
 
-    if( aRet.begin() == aRet.end() )
+    if( aRet.empty() )
     {
         if( rName.getLength() == 7 && rName.startsWith( "uni" ) )
         {

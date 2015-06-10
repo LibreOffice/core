@@ -413,7 +413,7 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
 
 void BarChart::createShapes()
 {
-    if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
+    if( m_aZSlots.empty() ) //no series
         return;
 
     OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BarChart is not proper initialized");

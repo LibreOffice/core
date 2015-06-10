@@ -228,12 +228,12 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
         Point aLastPoint = leftside.front();
         PSBinMoveTo (aLastPoint, rOldPoint, rColumn);
         leftside.pop_front();
-        while( leftside.begin() != leftside.end() )
+        while( !leftside.empty() )
         {
             Point aPoint (leftside.front());
             leftside.pop_front();
             // may have been the last one
-            if( leftside.begin() != leftside.end() )
+            if( !leftside.empty() )
             {
                 nNewDX = aPoint.X() - aLastPoint.X();
                 nNewDY = aPoint.Y() - aLastPoint.Y();
@@ -248,11 +248,11 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
         aLastPoint = rightside.back();
         PSBinLineTo (aLastPoint, rOldPoint, rColumn);
         rightside.pop_back();
-        while( rightside.begin() != rightside.end() )
+        while( !rightside.empty() )
         {
             Point aPoint (rightside.back());
             rightside.pop_back();
-            if( rightside.begin() != rightside.end() )
+            if( !rightside.empty() )
             {
                 nNewDX = aPoint.X() - aLastPoint.X();
                 nNewDY = aPoint.Y() - aLastPoint.Y();
@@ -663,7 +663,7 @@ PrinterGfx::PSGSave ()
 {
     WritePS (mpPageBody, "gsave\n" );
     GraphicsStatus aNewState;
-    if( maGraphicsStack.begin() != maGraphicsStack.end() )
+    if( !maGraphicsStack.empty() )
         aNewState = maGraphicsStack.front();
     maGraphicsStack.push_front( aNewState );
 }
@@ -672,7 +672,7 @@ void
 PrinterGfx::PSGRestore ()
 {
     WritePS (mpPageBody, "grestore\n" );
-    if( maGraphicsStack.begin() == maGraphicsStack.end() )
+    if( maGraphicsStack.empty() )
         WritePS (mpPageBody, "Error: too many grestores\n" );
     else
         maGraphicsStack.pop_front();

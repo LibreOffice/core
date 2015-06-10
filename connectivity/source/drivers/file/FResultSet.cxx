@@ -1262,7 +1262,7 @@ bool OResultSet::OpenImpl()
     if(!m_pTable)
     {
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
+        if (xTabs.empty() || !xTabs.begin()->second.is())
             lcl_throwError(STR_QUERY_TOO_COMPLEX,*this);
 
         if ( xTabs.size() > 1 || m_aSQLIterator.hasErrors() )

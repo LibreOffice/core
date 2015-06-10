@@ -458,7 +458,7 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
 void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
 {
     const ScDPSaveDimension::MemberList &rMembers = pDim->GetMembers();
-    if (rMembers.begin() != rMembers.end())
+    if (!rMembers.empty())
     {
         SvXMLElementExport aElemDPMs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBERS, true, true);
         rExport.CheckAttrList();

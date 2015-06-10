@@ -770,7 +770,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
     for( sal_Int32 i=0; i<nNumRows; ++i )
         aDataInRows[i].realloc( nNumColumns );
 
-    if( rTable.aData.begin() != rTable.aData.end())
+    if( !rTable.aData.empty() )
     {
         //apply column labels
         if( rTable.bHasHeaderRow )
