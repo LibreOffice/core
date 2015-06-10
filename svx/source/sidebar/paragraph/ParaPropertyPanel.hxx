@@ -78,6 +78,7 @@ private:
     VclPtr<ToolBox>            mpTBxVertAlign;
     //NumBullet&Backcolor
     VclPtr<ToolBox>            mpTBxNumBullet;
+    VclPtr<ToolBox>            mpTBxOutline;
     VclPtr<ToolBox>            mpTBxBackColor;
     //Paragraph spacing
     VclPtr<SvxRelativeField>   mpTopDist;
