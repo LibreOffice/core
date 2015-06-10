@@ -98,7 +98,7 @@ void Timer::InitSystemTimer()
     }
 }
 
-Timer::Timer() : Scheduler()
+Timer::Timer(const sal_Char *pDebugName) : Scheduler(pDebugName)
 {
     mnTimeout = 1;
     mbAuto = false;

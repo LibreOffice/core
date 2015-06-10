@@ -123,7 +123,9 @@ public:
                     { return (nTime <= rTime.nTime); }
 
     static Time     GetUTCOffset();
-    static sal_uInt64 GetSystemTicks();       // Elapsed time
+
+    /// Elapsed time since epoch in milliseconds
+    static sal_uInt64 GetSystemTicks();
 
     void            ConvertToUTC()       { *this -= Time::GetUTCOffset(); }
     void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }
