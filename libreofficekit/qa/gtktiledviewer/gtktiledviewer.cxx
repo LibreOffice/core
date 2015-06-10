@@ -14,9 +14,7 @@
 #include <map>
 
 #include <boost/property_tree/json_parser.hpp>
-#include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtk.h>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -208,13 +206,13 @@ static gboolean signalFindbar(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpoin
     gtk_label_set_text(GTK_LABEL(pFindbarLabel), "");
     switch(pEvent->keyval)
     {
-        case GDK_Return:
+        case GDK_KEY_Return:
         {
             // Search forward.
             doSearch(/*bBackwards=*/false);
             return TRUE;
         }
-        case GDK_Escape:
+        case GDK_KEY_Escape:
         {
             // Hide the findbar.
             gtk_widget_hide(pFindbar);

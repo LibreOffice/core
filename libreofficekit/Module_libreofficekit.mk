@@ -15,7 +15,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
     CppunitTest_libreofficekit_tiledrendering \
 ))
 
-ifneq ($(ENABLE_GTK),)
+ifneq ($(ENABLE_GTK3),)
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     Library_libreofficekitgtk \
     Executable_gtktiledviewer \
@@ -24,7 +24,7 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     Executable_tilebench \
 ))
-endif # ($(ENABLE_GTK),)
+endif # ($(ENABLE_GTK3),)
 
 endif # ($(OS),LINUX)
 
