@@ -16,6 +16,24 @@
       "revId": "f57316d40232aee403149dd6850b54f805c3d5b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_5503cb0f",
+        "filename": "svx/source/unodraw/unoprov.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-06-10T10:41:26Z",
+      "side": 1,
+      "message": "Yeah, it is odd, but it\u0027s been like that afaics since 2001 at least. I can fill nWIDs in for the two properties referenced in this bugfix, but for the rest, it\u0027s more a follow-up cleanup task (and who knows what relies on this table being so odd and breaks when we fix it *grin*)",
+      "parentUuid": "3a57f1b5_b50b1f7d",
+      "revId": "f57316d40232aee403149dd6850b54f805c3d5b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
