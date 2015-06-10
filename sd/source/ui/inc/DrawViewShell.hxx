@@ -226,7 +226,31 @@ public:
     void            AttrExec (SfxRequest& rReq);
     void            AttrState (SfxItemSet& rSet);
 
-    void        ExecChar(SfxRequest& rReq);
+    void            ExecGoToNextPage (SfxRequest& rReq);
+    void            GetStateGoToNextPage (SfxItemSet& rSet);
+
+    void            ExecGoToPreviousPage (SfxRequest& rReq);
+    void            GetStateGoToPreviousPage (SfxItemSet& rSet);
+
+    void            ExecGoToFirstPage (SfxRequest& rReq);
+    void            GetStateGoToFirstPage (SfxItemSet& rSet);
+
+    void            ExecGoToLastPage (SfxRequest& rReq);
+    void            GetStateGoToLastPage (SfxItemSet& rSet);
+
+    void            ExecMovePageUp (SfxRequest& rReq);
+    void            GetStateMovePageUp (SfxItemSet& rSet);
+
+    void            ExecMovePageDown (SfxRequest& rReq);
+    void            GetStateMovePageDown (SfxItemSet& rSet);
+
+    void            ExecMovePageFirst (SfxRequest& rReq);
+    void            GetStateMovePageFirst (SfxItemSet& rSet);
+
+    void            ExecMovePageLast (SfxRequest& rReq);
+    void            GetStateMovePageLast (SfxItemSet& rSet);
+
+    void            ExecChar(SfxRequest& rReq);
 
     void            ExecuteAnnotation (SfxRequest& rRequest);
     void            GetAnnotationState (SfxItemSet& rItemSet);

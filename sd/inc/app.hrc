@@ -108,6 +108,16 @@
 #define SID_DRAW_MEASURELINE                (SID_SD_START+48)
 #define SID_STARTAPP                        (SID_SD_START+49)
 #define SID_MASTERPAGE                      (SID_SD_START+50)
+// Navigation between slides
+#define SID_GO_TO_NEXT_PAGE                 (SID_SD_START+51)
+#define SID_GO_TO_PREVIOUS_PAGE             (SID_SD_START+52)
+#define SID_GO_TO_FIRST_PAGE                (SID_SD_START+53)
+#define SID_GO_TO_LAST_PAGE                 (SID_SD_START+54)
+// Slide sorting
+#define SID_MOVE_PAGE_UP                    (SID_SD_START+55)
+#define SID_MOVE_PAGE_DOWN                  (SID_SD_START+56)
+#define SID_MOVE_PAGE_FIRST                 (SID_SD_START+57)
+#define SID_MOVE_PAGE_LAST                  (SID_SD_START+58)
     // FREE
 #define SID_TOOL_CONNECTOR                  (SID_SD_START+61)
 #define SID_ANIMATION_OBJECTS               (SID_SD_START+62)
