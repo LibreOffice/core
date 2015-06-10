@@ -1487,6 +1487,26 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     rSet.DisableItem( SID_ATTR_ZOOMSLIDER );
             }
             break;
+            case SID_ATTR_POSITION:
+            case SID_ATTR_SIZE:
+            {
+                if( !rShell.IsFrmSelected() && !rShell.IsObjSelected() )
+                    SwBaseShell::_SetFrmMode( FLY_DRAG_END );
+                else
+                {
+                    FlyMode eFrameMode = SwBaseShell::GetFrmMode();
+                    if ( eFrameMode == FLY_DRAG_START || eFrameMode == FLY_DRAG )
+                    {
+                        if ( nWhich == SID_ATTR_POSITION )
+                            rSet.Put( SfxPointItem( SID_ATTR_POSITION,
+                                                    rShell.GetAnchorObjDiff()));
+                        else
+                            rSet.Put( SvxSizeItem( SID_ATTR_SIZE,
+                                                   rShell.GetObjSize()));
+                    }
+                }
+            }
+            break;
             case SID_TABLE_CELL:
 
             if( rShell.IsFrmSelected() || rShell.IsObjSelected() )
@@ -1774,6 +1794,39 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 bUp = true;
                 rReq.Done();
             }
+        }
+        break;
+
+        case SID_ATTR_SIZE:
+        {
+            sal_uInt16 nId = 0;
+            if( rSh.IsCrsrInTable() )
+                nId = FN_FORMAT_TABLE_DLG;
+            else if( rSh.GetCurTOX() )
+                nId = FN_INSERT_MULTI_TOX;
+            else if( rSh.GetCurrSection() )
+                nId = FN_EDIT_REGION;
+            else
+            {
+                const SwNumRule* pNumRule = rSh.GetNumRuleAtCurrCrsrPos();
+                if( pNumRule )  // cursor in numbering
+                {
+                    if( pNumRule->IsAutoRule() )
+                        nId = FN_NUMBER_BULLETS;
+                    else
+                    {
+                        // start dialog of the painter
+                        nId = 0;
+                    }
+                }
+                else if( rSh.IsFrmSelected() )
+                    nId = FN_FORMAT_FRAME_DLG;
+                else if( rSh.IsObjSelected() )
+                    nId = SID_ATTR_TRANSFORM;
+            }
+            if( nId )
+                GetViewFrame()->GetDispatcher()->Execute(nId,
+                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
         }
         break;
 
