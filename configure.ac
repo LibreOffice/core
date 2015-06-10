@@ -100,6 +100,26 @@ add_warning()
     echo "$COLORWARN $@" >> warn
 }
 
+dnl Some Mac User have the bad habbit of letting a lot fo crap
+dnl accumulate in their PATH and even adding stuff in /usr/local/bin
+dnl that confuse the build.
+dnl For the ones that use LODE, let's be nice and protect them
+dnl from themselves
+
+mac_sanitize_path()
+{
+    mac_path="$LODE_HOME/opt/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+dnl a common but nevertheless necessary thing that may be in a fancy
+dnl path location is git, so make sure we have it
+    mac_git_path=`which git 2>/dev/null`
+    if test -n "$mac_git_path" -a -x "$mac_git_path" -a "$mac_git_path" != "/usr/bin/git" ; then
+        mac_path="$mac_path:`dirname $mac_git_path`"
+    fi
+    PATH="$mac_path"
+    unset mac_path
+    unset git_mac_path
+}
+
 echo "********************************************************************"
 echo "*"
 echo "*   Running ${PACKAGE_NAME} build configuration."
@@ -667,6 +687,10 @@ darwin*) # Mac OS X or iOS
         test_cups=no
     else
         _os=Darwin
+        if test -n "$LODE_HOME" ; then
+            mac_sanitize_path
+            AC_MSG_NOTICE([sanitized the PATH to $PATH])
+        fi
         INSTROOTSUFFIX=/$PRODUCTNAME.app/Contents
         SDKDIRNAME=AC_PACKAGE_NAME${PRODUCTVERSION}_SDK
     fi
