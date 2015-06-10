@@ -57,6 +57,7 @@
 #include <columnspanset.hxx>
 #include <tokenstringcontext.hxx>
 #include <formula/errorcodes.hxx>
+#include "externalrefmgr.hxx"
 
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -2909,6 +2910,10 @@ void ScFiltersTest::testExternalRefCacheODS()
     CPPUNIT_ASSERT_EQUAL(OUString("text"), rDoc.GetString(ScAddress(1,2,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("text"), rDoc.GetString(ScAddress(1,3,0)));
 
+    // Both cells A6 and A7 should be registered with scExternalRefManager properly
+    CPPUNIT_ASSERT_EQUAL(true, rDoc.GetExternalRefManager()->hasCellExternalReference(ScAddress(0, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(true, rDoc.GetExternalRefManager()->hasCellExternalReference(ScAddress(0, 6, 0)));
+
     xDocSh->DoClose();
 }
 
@@ -3067,7 +3072,7 @@ void ScFiltersTest::testRefStringXLSX()
 }
 
 ScFiltersTest::ScFiltersTest()
-      : ScBootstrapFixture( "/sc/qa/unit/data" )
+      : ScBootstrapFixture( "sc/qa/unit/data" )
 {
 }
 
