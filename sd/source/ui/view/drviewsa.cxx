@@ -59,6 +59,7 @@
 #include "Window.hxx"
 #include "fupoor.hxx"
 #include "fusel.hxx"
+#include "funavig.hxx"
 #include "drawview.hxx"
 #include "SdUnoDrawView.hxx"
 #include "ViewShellBase.hxx"
@@ -824,6 +825,66 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
             mpDrawView->GetMarkedObjectList(),
             eViewType));
 }
+
+void DrawViewShell::ExecGoToNextPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToNextPage (SfxItemSet& rSet)
+{
+    SdPage* pPage = GetActualPage();
+    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
+    sal_uInt16 totalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
+    if (nSdPage + 1 >= totalPages)
+        rSet.DisableItem( SID_GO_TO_NEXT_PAGE );
+}
+
+void DrawViewShell::ExecGoToPreviousPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToPreviousPage (SfxItemSet& rSet)
+{
+    SdPage* pPage = GetActualPage();
+    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
+    if (nSdPage == 0)
+        rSet.DisableItem( SID_GO_TO_PREVIOUS_PAGE );
+}
+
+
+void DrawViewShell::ExecGoToFirstPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToFirstPage (SfxItemSet& rSet)
+{
+    SdPage* pPage = GetActualPage();
+    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
+    if (nSdPage == 0)
+        rSet.DisableItem( SID_GO_TO_FIRST_PAGE );
+}
+
+void DrawViewShell::ExecGoToLastPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToLastPage (SfxItemSet& rSet)
+{
+    SdPage* pPage = GetActualPage();
+    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
+    sal_uInt16 totalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
+    if (nSdPage + 1 >= totalPages)
+        rSet.DisableItem( SID_GO_TO_LAST_PAGE );
+}
+
 
 } // end of namespace sd
 
