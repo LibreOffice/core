@@ -78,8 +78,6 @@ class FileViewContainer : public vcl::Window
 class Breadcrumb : public VclHBox
 {
     private:
-    const unsigned int m_cCount = 4; // how many labels we have - temporary
-
     std::vector< VclPtr< FixedHyperlink > > m_aLinks;
     std::vector< VclPtr< FixedText > > m_aSeparators;
 
@@ -94,16 +92,7 @@ class Breadcrumb : public VclHBox
     Breadcrumb( vcl::Window* pParent ) : VclHBox( pParent )
     {
         set_spacing( 6 );
-
-        for(unsigned int i = 0; i < m_cCount; i++)
-        {
-            m_aLinks.push_back( VclPtr< FixedHyperlink >::Create( this ) );
-            m_aLinks[i]->Hide();
-            m_aLinks[i]->SetClickHdl( LINK( this, Breadcrumb, ClickLinkHdl ) );
-            m_aSeparators.push_back( VclPtr< FixedText >::Create( this ) );
-            m_aSeparators[i]->SetText( ">" );
-            m_aSeparators[i]->Hide();
-        }
+        appendField(); // root
     }
 
     ~Breadcrumb()
@@ -113,7 +102,7 @@ class Breadcrumb : public VclHBox
 
     void dispose()
     {
-        for(unsigned int i = 0; i < m_cCount; i++)
+        for( unsigned int i = 0; i < m_aLinks.size(); i++ )
         {
             m_aSeparators[i].disposeAndClear();
             m_aLinks[i].disposeAndClear();
@@ -153,8 +142,11 @@ class Breadcrumb : public VclHBox
                                 + aURL.GetHost() );
         m_aSeparators[0]->Show();
 
-        for(i = 1; i < m_cCount && i < nSegments + 1; i++)
+        for( i = 1; i < nSegments + 1; i++ )
         {
+            if( i >= m_aLinks.size() )
+                appendField();
+
             unsigned int nEnd = sPath.indexOf( '/', nPos + 1 );
             OUString sLabel = OUString( sPath.getStr() + nPos + 1, nEnd - nPos - 1 );
 
@@ -167,11 +159,22 @@ class Breadcrumb : public VclHBox
 
             nPos = nEnd;
         }
-        for(; i < m_cCount; i++)
+        for( ; i < m_aLinks.size(); i++ )
         {
             m_aLinks[i]->Hide();
             m_aSeparators[i]->Hide();
         }
+    }
+
+    private:
+    void appendField()
+    {
+        m_aLinks.push_back( VclPtr< FixedHyperlink >::Create( this ) );
+        m_aLinks[m_aLinks.size() - 1]->Hide();
+        m_aLinks[m_aLinks.size() - 1]->SetClickHdl( LINK( this, Breadcrumb, ClickLinkHdl ) );
+        m_aSeparators.push_back( VclPtr< FixedText >::Create( this ) );
+        m_aSeparators[m_aLinks.size() - 1]->SetText( ">" );
+        m_aSeparators[m_aLinks.size() - 1]->Hide();
     }
 };
 
