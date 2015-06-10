@@ -651,7 +651,6 @@ gboolean LOKDocView_Impl::renderOverlay(GtkWidget* /*widget*/, cairo_t *cr, gpoi
 
 gboolean LOKDocView_Impl::renderOverlayImpl(cairo_t *pCairo)
 {
-#if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
     if (m_bEdit && m_bCursorVisible && m_bCursorOverlayVisible && !isEmptyRectangle(m_aVisibleCursor))
     {
         if (m_aVisibleCursor.width < 30)
@@ -713,7 +712,6 @@ gboolean LOKDocView_Impl::renderOverlayImpl(cairo_t *pCairo)
         renderGraphicHandle(pCairo, m_aGraphicSelection, m_pGraphicHandle);
     }
 
-#endif
     return FALSE;
 }
 
@@ -1017,9 +1015,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     case LOK_CALLBACK_HYPERLINK_CLICKED:
     {
         GError* pError = NULL;
-#if GTK_CHECK_VERSION(2,14,0)
         gtk_show_uri(NULL, pCallback->m_aPayload.c_str(), GDK_CURRENT_TIME, &pError);
-#endif
     }
     break;
     case LOK_CALLBACK_STATE_CHANGED:
@@ -1070,21 +1066,15 @@ void LOKDocView_Impl::callbackWorkerImpl(int nType, const char* pPayload)
 {
     LOKDocView_Impl::CallbackData* pCallback = new LOKDocView_Impl::CallbackData(nType, pPayload ? pPayload : "(nil)", m_pDocView);
     g_info("lok_doc_view_callback_worker: %s, '%s'", LOKDocView_Impl::callbackTypeToString(nType), pPayload);
-#if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(LOKDocView_Impl::callback, pCallback);
-#endif
 }
 
 void LOKDocView_Impl::globalCallbackWorkerImpl(int nType, const char* pPayload)
 {
     LOKDocView_Impl::CallbackData* pCallback = new LOKDocView_Impl::CallbackData(nType, pPayload ? pPayload : "(nil)", m_pDocView);
     g_info("LOKDocView_Impl::globalCallbackWorkerImpl: %s, '%s'", LOKDocView_Impl::callbackTypeToString(nType), pPayload);
-#if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(LOKDocView_Impl::globalCallback, pCallback);
-#endif
 }
-
-
 
 void LOKDocView_Impl::commandChanged(const std::string& rString)
 {

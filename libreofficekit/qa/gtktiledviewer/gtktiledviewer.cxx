@@ -40,12 +40,9 @@ std::map<GtkToolItem*, std::string> g_aToolItemCommandNames;
 std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
 bool g_bToolItemBroadcast = true;
 static GtkWidget* pVBox;
-// GtkComboBox requires gtk 2.24 or later
-#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 static GtkComboBoxText* pPartSelector;
 /// Should the part selector avoid calling lok::Document::setPart()?
 static bool g_bPartSelectorBroadcast = true;
-#endif
 GtkWidget* pFindbar;
 GtkWidget* pFindbarEntry;
 GtkWidget* pFindbarLabel;
@@ -117,7 +114,6 @@ static void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 /// Toggle the visibility of the findbar.
 static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
-#if GTK_CHECK_VERSION(2,18,0) // we need gtk_widget_get_visible()
     if (gtk_widget_get_visible(pFindbar))
     {
         gtk_widget_hide(pFindbar);
@@ -127,7 +123,6 @@ static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
         gtk_widget_show_all(pFindbar);
         gtk_widget_grab_focus(pFindbarEntry);
     }
-#endif
 }
 
 /// Get the visible area of the scrolled window
@@ -153,13 +148,11 @@ static void getVisibleAreaTwips(GdkRectangle* pArea)
 static gboolean signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData)
 {
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
-#if GTK_CHECK_VERSION(2,18,0) // we need gtk_widget_get_visible()
     if (!gtk_widget_get_visible(pFindbar) && bool(lok_doc_view_get_edit(pLOKDocView)))
         {
             lok_doc_view_post_key(pWidget, pEvent, pData);
             return TRUE;
         }
-#endif
     return FALSE;
 }
 
@@ -265,11 +258,9 @@ static void signalSearch(LOKDocView* /*pLOKDocView*/, char* /*pPayload*/, gpoint
 
 static void signalPart(LOKDocView* /*pLOKDocView*/, int nPart, gpointer /*pData*/)
 {
-#if GTK_CHECK_VERSION(2,24,0)
     g_bPartSelectorBroadcast = false;
     gtk_combo_box_set_active(GTK_COMBO_BOX(pPartSelector), nPart);
     g_bPartSelectorBroadcast = true;
-#endif
 }
 
 /// User clicked on a cmmand button -> inform LOKDocView.
@@ -285,8 +276,6 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
     }
 }
 
-// GtkComboBox requires gtk 2.24 or later
-#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 static void populatePartSelector()
 {
     gtk_list_store_clear( GTK_LIST_STORE(
@@ -344,7 +333,6 @@ static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
         lok_doc_view_set_partmode( LOK_DOC_VIEW(pDocView), ePartMode );
     }
 }
-#endif
 
 int main( int argc, char* argv[] )
 {
@@ -387,8 +375,6 @@ int main( int argc, char* argv[] )
     GtkToolItem* pSeparator1 = gtk_separator_tool_item_new();
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator1, -1);
 
-// GtkComboBox requires gtk 2.24 or later
-#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
     GtkToolItem* pPartSelectorToolItem = gtk_tool_item_new();
     GtkWidget* pComboBox = gtk_combo_box_text_new();
     gtk_container_add( GTK_CONTAINER(pPartSelectorToolItem), pComboBox );
@@ -403,7 +389,6 @@ int main( int argc, char* argv[] )
     GtkWidget* pPartModeComboBox = gtk_combo_box_text_new();
     gtk_container_add( GTK_CONTAINER(pPartModeSelectorToolItem), pPartModeComboBox );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1 );
-#endif
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
     pEnableEditing = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_EDIT);
@@ -492,15 +477,11 @@ int main( int argc, char* argv[] )
         g_error("main: lok_doc_view_open_document() failed");
     assert(lok_doc_view_get_document(LOK_DOC_VIEW(pDocView)));
 
-    // GtkComboBox requires gtk 2.24 or later
-#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
     populatePartSelector();
     populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
     // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
     g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
-
     g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
-#endif
 
     gtk_main();
 
