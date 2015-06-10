@@ -591,21 +591,30 @@ ScDocShellRef ScBootstrapFixture::loadDoc(
 ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
 ScBootstrapFixture::~ScBootstrapFixture() {}
 
+namespace {
+OUString EnsureSeparator(const OUStringBuffer& rFilePath)
+{
+    return (rFilePath.getLength() == 0) || (rFilePath[rFilePath.getLength() - 1] != '/') ?
+        OUString("/") :
+        OUString("");
+}
+}
+
 void ScBootstrapFixture::createFileURL(
     const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    OUString aSep("/");
     OUStringBuffer aBuffer( getSrcRootURL() );
-    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
+    aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
+    aBuffer.append(EnsureSeparator(aBuffer)).append(aFileExtension);
+    aBuffer.append(EnsureSeparator(aBuffer)).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
 }
 
 void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSVPath)
 {
     OUStringBuffer aBuffer( getSrcRootPath());
-    aBuffer.append(m_aBaseString).append("/contentCSV/");
-    aBuffer.append(aFileBase).append("csv");
+    aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
+    aBuffer.append(EnsureSeparator(aBuffer)).append("contentCSV/").append(aFileBase).append("csv");
     rCSVPath = aBuffer.makeStringAndClear();
 }
 
