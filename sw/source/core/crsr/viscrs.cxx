@@ -90,10 +90,7 @@ void SwVisCrsr::Show()
 
         // display at all?
         if( m_pCrsrShell->VisArea().IsOver( m_pCrsrShell->m_aCharRect ) || m_pCrsrShell->isTiledRendering() )
-        {
-            m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
             _SetPosAndShow();
-        }
     }
 }
 
@@ -105,9 +102,6 @@ void SwVisCrsr::Hide()
 
         if( m_aTextCrsr.IsVisible() )      // Shouldn't the flags be in effect?
             m_aTextCrsr.Hide();
-
-        if( m_pCrsrShell->isTiledRendering() )
-            m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
     }
 }
 
