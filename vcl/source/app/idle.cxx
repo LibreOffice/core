@@ -18,6 +18,8 @@
  */
 
 #include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
+#include "svdata.hxx"
 
 void Idle::Invoke()
 {
@@ -31,7 +33,7 @@ Idle& Idle::operator=( const Idle& rIdle )
     return *this;
 }
 
-Idle::Idle() : Scheduler()
+Idle::Idle( const sal_Char *pDebugName ) : Scheduler( pDebugName )
 {
 }
 
@@ -39,5 +41,26 @@ Idle::Idle( const Idle& rIdle ) : Scheduler(rIdle)
 {
     maIdleHdl = rIdle.maIdleHdl;
 }
+
+void Idle::Start()
+{
+    Scheduler::Start();
+    ImplSVData* pSVData = ImplGetSVData();
+    Timer::ImplStartTimer( pSVData, 0 );
+}
+
+bool Idle::ReadyForSchedule( bool bTimer )
+{
+    // tdf#91727 - We need to re-work this to allow only UI idle handlers
+    //             and not timeouts to be processed in some limited scenarios
+    (void)bTimer;
+    return true; // !bTimer
+}
+
+sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTime */ )
+{
+    return 1;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

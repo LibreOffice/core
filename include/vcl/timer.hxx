@@ -38,7 +38,7 @@ private:
     static void InitSystemTimer();
 
 public:
-    Timer();
+    Timer( const sal_Char *pDebugName = NULL );
     Timer( const Timer& rTimer );
 
     /// Make it possible to associate a callback with this timer handler

@@ -102,6 +102,7 @@ OLEObjCache::OLEObjCache()
     pTimer->SetTimeoutHdl(aLink);
     pTimer->SetTimeout(20000);
     pTimer->Start();
+    pTimer->SetDebugName("OLEObjCache pTimer UnloadCheck");
 
     aLink.Call(pTimer);
 }

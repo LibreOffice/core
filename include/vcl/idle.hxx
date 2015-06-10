@@ -29,14 +29,18 @@ protected:
     Link<Idle *, void> maIdleHdl;          // Callback Link
 
 public:
-    Idle();
+    Idle( const sal_Char *pDebugName = NULL );
     Idle( const Idle& rIdle );
+
+    virtual void    Start();
 
     /// Make it possible to associate a callback with this idle handler
     /// of course, you can also sub-class and override 'Invoke'
     void            SetIdleHdl( const Link<Idle *, void>& rLink ) { maIdleHdl = rLink; }
     const Link<Idle *, void>& GetIdleHdl() const { return maIdleHdl; }
-    virtual void    Invoke() SAL_OVERRIDE;
+    virtual void Invoke() SAL_OVERRIDE;
+    virtual bool ReadyForSchedule( bool bTimer ) SAL_OVERRIDE;
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) SAL_OVERRIDE;
     Idle&           operator=( const Idle& rIdle );
 };
 
