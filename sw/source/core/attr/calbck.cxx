@@ -57,6 +57,20 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
     }
 }
 
+void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
+{
+    if (typeid(rHint) == typeid(sw::LegacyModifyHint))
+    {
+        auto pLegacyHint(static_cast<const sw::LegacyModifyHint*>(&rHint));
+        Modify(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+    }
+};
+
+void SwClient::Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const pNewValue)
+{
+    CheckRegistration( pOldValue, pNewValue );
+}
+
 SwModify::~SwModify()
 {
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );

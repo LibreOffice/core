@@ -115,17 +115,9 @@ public:
     // should be called only from SwModify the client is registered in
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use SwClientNotify instead.
-    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
-        { CheckRegistration( pOldValue, pNewValue ); }
+    virtual void Modify(const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue);
     // when overriding this, you MUST call SwClient::SwClientModify() in the override!
-    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) SAL_OVERRIDE
-    {
-        if(typeid(rHint) == typeid(sw::LegacyModifyHint))
-        {
-            auto pLegacyHint(static_cast<const sw::LegacyModifyHint*>(&rHint));
-            Modify(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
-        }
-    };
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) SAL_OVERRIDE;
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
