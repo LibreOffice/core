@@ -52,22 +52,26 @@ enum class SchedulerPriority {
 class VCL_DLLPUBLIC Scheduler
 {
 protected:
-    ImplSchedulerData*  mpSchedulerData;    // Pointer to element in scheduler list
-    SchedulerPriority   mePriority;         // Scheduler priority
-    bool                mbActive;           // Currently in the scheduler
+    ImplSchedulerData*  mpSchedulerData;    /// Pointer to element in scheduler list
+    const sal_Char     *mpDebugName;        /// Useful for debugging
+    SchedulerPriority   mePriority;         /// Scheduler priority
+    bool                mbActive;           /// Currently in the scheduler
 
     friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();
-    virtual bool ReadyForSchedule( bool bTimer ) { return !bTimer; }
-    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime );
+    virtual bool ReadyForSchedule( bool bTimer ) = 0;
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) = 0;
 
 public:
-    Scheduler();
+    Scheduler( const sal_Char *pDebugName = NULL );
     Scheduler( const Scheduler& rScheduler );
     virtual ~Scheduler();
 
     void SetPriority( SchedulerPriority ePriority );
     SchedulerPriority GetPriority() const { return mePriority; }
+
+    void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
+    const sal_Char *GetDebugName() { return mpDebugName; }
 
     // Call handler
     virtual void    Invoke() = 0;

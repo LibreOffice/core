@@ -805,6 +805,7 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
 }
 
 GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDisplayCacheSize ) :
+    maReleaseTimer          ( "GraphicCache maReleaseTimer" ),
     mnReleaseTimeoutSeconds ( 0UL ),
     mnMaxDisplaySize        ( nDisplayCacheSize ),
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
