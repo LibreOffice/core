@@ -1880,7 +1880,7 @@ bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case MID_GRAPHIC_TRANSPARENT:
         {
-            rVal <<= Bool2Any (aColor.GetTransparency());
+            rVal <<= Bool2Any (aColor.GetTransparency() == 0xff);
             break;
         }
         default:
