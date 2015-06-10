@@ -244,8 +244,7 @@ public:
     void ChangeMarkedObjectsBulletsNumbering(
         const bool bToggle,
         const bool bHandleBullets,
-        const SvxNumRule* pNumRule,
-        const bool bSwitchOff);
+        const SvxNumRule* pNumRule);
 
     void SetPossibilitiesDirty() { bPossibilitiesDirty = true; }
     void SetMoveAllowed( bool bSet ) { bMoveAllowed = bSet; }

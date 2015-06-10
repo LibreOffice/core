@@ -1326,8 +1326,7 @@ bool View::ShouldToggleOn(
 void View::ChangeMarkedObjectsBulletsNumbering(
     const bool bToggle,
     const bool bHandleBullets,
-    const SvxNumRule* pNumRule,
-    const bool bSwitchOff )
+    const SvxNumRule* pNumRule )
 {
     SdrModel* pSdrModel = GetModel();
     vcl::Window* pWindow = dynamic_cast< vcl::Window* >(GetFirstOutputDevice());
@@ -1337,9 +1336,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     const bool bUndoEnabled = pSdrModel->IsUndoEnabled();
     SdrUndoGroup* pUndoGroup = bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : 0;
 
-    const bool bToggleOn =
-        !bSwitchOff
-        && ShouldToggleOn( bToggle, bHandleBullets );
+    const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 
     boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
     boost::scoped_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));
