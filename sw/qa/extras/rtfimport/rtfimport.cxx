@@ -2301,6 +2301,12 @@ DECLARE_RTFIMPORT_TEST(testTdf90315, "tdf90315.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(xTextSection->getPropertyValue("TextColumns"), "AutomaticDistance"));
 }
 
+DECLARE_RTFIMPORT_TEST(testBinSkipping, "bin-skipping.rtf")
+{
+    // before, it was importing '/nMUST NOT IMPORT'
+    CPPUNIT_ASSERT_EQUAL(OUString("text"), getRun(getParagraph(1), 1)->getString());
+}
+
 DECLARE_RTFIMPORT_TEST(testTdf92061, "tdf92061.rtf")
 {
     // This was "C", i.e. part of the footnote ended up in the body text.
