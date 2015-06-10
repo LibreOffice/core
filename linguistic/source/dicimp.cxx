@@ -331,11 +331,10 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     }
     else if (DIC_VERSION_7 == nDicVersion)
     {
-        bool bSuccess;
         OString aLine;
 
         // remaining lines - stock strings (a [==] b)
-        while ((bSuccess = pStream->ReadLine(aLine)))
+        while (pStream->ReadLine(aLine))
         {
             if (aLine[0] == '#') // skip comments
                 continue;
@@ -385,7 +384,7 @@ struct TmpDictionary
         }
         catch (const uno::Exception &) { }
     }
-    TmpDictionary(const OUString &rURL)
+    explicit TmpDictionary(const OUString &rURL)
         : maURL( rURL )
     {
         maTmpURL = maURL + ".tmp";

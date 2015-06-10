@@ -86,7 +86,7 @@ class HyphenatorDispatcher :
                     sal_Int16 nLanguage );
 
 public:
-    HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr );
+    explicit HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr );
     virtual ~HyphenatorDispatcher();
 
     // XSupportedLocales

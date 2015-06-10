@@ -83,7 +83,7 @@ class ConvDicXMLImport : public SvXMLImport
 public:
 
     //!!  see comment for pDic member
-    ConvDicXMLImport( ConvDic *pConvDic ) :
+    explicit ConvDicXMLImport( ConvDic *pConvDic ) :
         SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", SvXMLImportFlags::ALL ),
         pDic        ( pConvDic )
     {

@@ -146,7 +146,7 @@ class CBenIDListElmt : public CUtListElmt
 public: // Internal methods
     CBenIDListElmt(BenObjectID ID, pCUtListElmt pPrev) : CUtListElmt(pPrev)
       { cID = ID; }
-    CBenIDListElmt(BenObjectID ID) { cID = ID; }
+    explicit CBenIDListElmt(BenObjectID ID) { cID = ID; }
     BenObjectID GetID() { return cID; }
 
 private: // Data
@@ -157,7 +157,7 @@ class CBenNamedObjectListElmt : public CUtListElmt
 {
 public: // Methods
     // added to remove warning
-    CBenNamedObjectListElmt(pCUtListElmt pPrev) : CUtListElmt(pPrev)
+    explicit CBenNamedObjectListElmt(pCUtListElmt pPrev) : CUtListElmt(pPrev)
       { cpNamedObject = NULL; }
     void SetNamedObject(pCBenNamedObject pObj)
     {
@@ -176,7 +176,7 @@ private: // Data
 class LtcUtBenValueStream : public SvStream
 {
 public:
-    LtcUtBenValueStream(pCBenValue pValue);
+    explicit LtcUtBenValueStream(pCBenValue pValue);
     virtual ~LtcUtBenValueStream();
 
 public: // Overridden methods
@@ -213,7 +213,7 @@ public:
       BenObjectID PropertyID);
 
 public: // Internal methods
-    LtcBenContainer(LwpSvStream * pStream);
+    explicit LtcBenContainer(LwpSvStream * pStream);
     ~LtcBenContainer();
 
     BenError Read(BenDataPtr pBuffer, unsigned long MaxSize,
@@ -274,7 +274,7 @@ public:
 
 public: // Internal methods
     // added to remove WARNING
-    CBenValue(BenObjectID TypeID):CBenIDListElmt(TypeID)
+    explicit CBenValue(BenObjectID TypeID):CBenIDListElmt(TypeID)
     {
         cpProperty = NULL;
         cpReferencedList = NULL;

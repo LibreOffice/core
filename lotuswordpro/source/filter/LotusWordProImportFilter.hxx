@@ -54,7 +54,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
-    LotusWordProImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit LotusWordProImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
         : mxContext( rxContext )
     {
     }

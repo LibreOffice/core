@@ -74,7 +74,7 @@ class DicEvtListenerHelper :
                                          nNumVerboseListeners;
 
 public:
-    DicEvtListenerHelper( const uno::Reference< XDictionaryList > &rxDicList );
+    explicit DicEvtListenerHelper( const uno::Reference< XDictionaryList > &rxDicList );
     virtual ~DicEvtListenerHelper();
 
     // XEventListener

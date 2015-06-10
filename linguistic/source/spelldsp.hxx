@@ -94,7 +94,7 @@ class SpellCheckerDispatcher :
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:
-    SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr );
+    explicit SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr );
     virtual ~SpellCheckerDispatcher();
 
     // XSupportedLocales (for XSpellChecker)

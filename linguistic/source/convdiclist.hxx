@@ -47,7 +47,7 @@ class ConvDicList :
         ConvDicList & rMyDicList;
 
     public:
-        MyAppExitListener( ConvDicList &rDicList ) : rMyDicList( rDicList ) {}
+        explicit MyAppExitListener( ConvDicList &rDicList ) : rMyDicList( rDicList ) {}
         virtual void    AtExit() SAL_OVERRIDE;
     };
 

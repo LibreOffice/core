@@ -49,7 +49,7 @@ class DicList :
         DicList & rMyDicList;
 
     public:
-        MyAppExitListener( DicList &rDicList ) : rMyDicList( rDicList ) {}
+        explicit MyAppExitListener( DicList &rDicList ) : rMyDicList( rDicList ) {}
         virtual void    AtExit() SAL_OVERRIDE;
     };
 
