@@ -96,7 +96,9 @@ public:
     void testTdf86639();
     void testTdf90883TableBoxGetCoordinates();
     void testEmbeddedDataSource();
+#if 0
     void testUnoCursorPointer();
+#endif
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -135,7 +137,9 @@ public:
     CPPUNIT_TEST(testTdf86639);
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testEmbeddedDataSource);
-    //CPPUNIT_TEST(testUnoCursorPointer);
+#if 0
+    CPPUNIT_TEST(testUnoCursorPointer);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1026,6 +1030,7 @@ void SwUiWriterTest::testEmbeddedDataSource()
 #endif
 }
 
+#if 0
 void SwUiWriterTest::testUnoCursorPointer()
 {
     auto xDocComponent(loadFromDesktop(
@@ -1044,6 +1049,7 @@ void SwUiWriterTest::testUnoCursorPointer()
     xDocComponent->dispose();
     CPPUNIT_ASSERT(!static_cast<bool>(pCursor));
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
