@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_f073e5b2",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-10T12:31:36Z",
+      "side": 1,
+      "message": "ok, now that the test is running, there is just this problem with the bug document: it really isn\u0027t necessary and only makes the test run slower.\n\nyou can just inser a new table, it just has to have more than 1 cell in the row so the bug will happen.",
+      "revId": "9e954e89bd6ee9d48b812f53fa32ab63c41aa4af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_5048b95b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-10T12:31:36Z",
+      "side": 1,
+      "message": "this isn\u0027t obvious... it took me half an hour to figure out that this SelTableBox should be replaced by \"pWrtShell-\u003eClearMark()\" to reproduce bug 91145.\n\nthe SelTableBox will do some additional stuff that covers up the bug in ClearMark :(",
+      "revId": "9e954e89bd6ee9d48b812f53fa32ab63c41aa4af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
