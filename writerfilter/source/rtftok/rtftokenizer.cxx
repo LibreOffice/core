@@ -282,7 +282,13 @@ bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
 RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
     if (m_rImport.getDestination() == Destination::SKIP)
+    {
+        // skip binary data explicitely, to not trip over rtf markup
+        // control characters
+        if (rKeyword.equals("bin"))
+            Strm().SeekRel(nParam);
         return RTFError::OK;
+    }
     SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
              "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
     RTFSymbol aSymbol;
