@@ -741,7 +741,7 @@ public:
     const Size&             GetMaxAutoPaperSize() const             { return aMaxAutoPaperSize; }
     void                    SetMaxAutoPaperSize( const Size& rSz )  { aMaxAutoPaperSize = rSz; }
 
-    bool IsPageOverflow( const Size aCurPaperSize, const Size aPrevPaperSize ) const;
+    bool IsPageOverflow( ) const;
 
     void                    FormatDoc();
     void                    FormatFullDoc();

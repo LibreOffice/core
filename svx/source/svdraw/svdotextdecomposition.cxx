@@ -1591,22 +1591,6 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     // Text
     const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();
-
-    // FIXME
-    // Experiment: cutting all paragraphs after first (if any)
-    rOutliner.SetText(*pOutlinerParaObject);
-    pOutlinerParaObject = rOutliner.CreateParaObject(0,1);
-
-
-
-    // FIXME(matteocam)
-    // Experiment: setting only the non overflowing text
-    // Question: XXX: How do you know there is an overflow in the first place here??
-    // Question: what is the page size set at the end of these procedure. Is the "real" text size anywhere?
-
-    // Sub-experiment: removing the second paragraph if present
-
-
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
 
     const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
@@ -1629,9 +1613,15 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     rOutliner.SetPaperSize(aNullSize);
     rOutliner.SetUpdateMode(true);
+    // Sets original text
     rOutliner.SetText(*pOutlinerParaObject);
-    // We do not need this
-    //ImpAutoFitText(rOutliner,aAnchorTextSize,bVerticalWritintg);
+
+    // If overflow occurs we have to cut the text at the right point
+    if ( rOutliner.IsPageOverflow() ) {
+        const OutlinerParaObject *pNewTxt = impGetNonOverflowingParaObject();
+        rOutliner.SetText(*pNewTxt);
+        // XXX: Order transfer of stuff in next link here
+    }
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));

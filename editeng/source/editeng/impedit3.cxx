@@ -349,21 +349,9 @@ void ImpEditEngine::FormatFullDoc()
     FormatDoc();
 }
 
-bool ImpEditEngine::IsPageOverflow( const Size aCurPaperSize, const Size aPrevPaperSize ) const
+bool ImpEditEngine::IsPageOverflow( ) const
 {
-    const bool bTextGrowX=(aStatus.GetControlWord() & EE_STAT_TEXTWIDTHCHANGED) !=0;
-    const bool bTextGrowY=(aStatus.GetControlWord() & EE_STAT_TEXTHEIGHTCHANGED) !=0;
-
-    const bool bPageExpansionX = ( aPrevPaperSize.Width() != 0 ) && // XXX
-                            ( aCurPaperSize.Width() > aPrevPaperSize.Width() );
-    const bool bPageExpansionY = ( aPrevPaperSize.Height() != 0 ) && // XXX
-                            ( aCurPaperSize.Height() > aPrevPaperSize.Height() );
-
-    // Has text size changed (in the right vertical direction) AND
-    //      is this change an expansion?
-    return ( bTextGrowY && !IsVertical() && bPageExpansionY ) ||
-           ( bTextGrowX && IsVertical() &&  bPageExpansionX );
-
+    return mbNeedsChainingHandling;
 }
 
 void ImpEditEngine::FormatDoc()
