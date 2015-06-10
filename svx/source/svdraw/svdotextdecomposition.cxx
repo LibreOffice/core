@@ -1572,6 +1572,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     // prepare outliner
     const SfxItemSet& rTextItemSet = rSdrChainedTextPrimitive.getSdrText()->GetItemSet();
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
+
     SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);
     SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust(rTextItemSet);
     const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
@@ -1587,8 +1588,27 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
+
+    // Text
     const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();
+
+    // FIXME
+    // Experiment: cutting all paragraphs after first (if any)
+    rOutliner.SetText(*pOutlinerParaObject);
+    pOutlinerParaObject = rOutliner.CreateParaObject(0,1);
+
+
+
+    // FIXME(matteocam)
+    // Experiment: setting only the non overflowing text
+    // Question: XXX: How do you know there is an overflow in the first place here??
+    // Question: what is the page size set at the end of these procedure. Is the "real" text size anywhere?
+
+    // Sub-experiment: removing the second paragraph if present
+
+
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
+
     const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
