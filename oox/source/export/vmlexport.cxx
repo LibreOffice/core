@@ -474,27 +474,56 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         for ( ; nSegments; --nSegments )
                         {
                             sal_uInt16 nSeg = impl_GetUInt16( pSegmentIt );
-                            switch ( nSeg )
+
+                            // The segment type is stored in the upper 3 bits
+                            // and segment count is stored in the lower 13
+                            // bits.
+                            unsigned char nSegmentType = (nSeg & 0xE000) >> 13;
+                            unsigned short nSegmentCount = nSeg & 0x03FF;
+
+                            switch (nSegmentType)
                             {
-                                case 0x4000: // moveto
+                                case msopathMoveTo:
+                                {
+                                    sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
+                                    sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
+                                    if (nX >= 0 && nY >= 0 )
+                                        aPath.append( "m" ).append( nX ).append( "," ).append( nY );
+                                    break;
+                                }
+                                case msopathClientEscape:
+                                    break;
+                                case msopathEscape:
+                                {
+                                    // If the segment type is msopathEscape, the lower 13 bits are
+                                    // divided in a 5 bit escape code and 8 bit
+                                    // vertex count (not segment count!)
+                                    unsigned char nEscapeCode = (nSegmentCount & 0x1F00) >> 8;
+                                    unsigned char nVertexCount = nSegmentCount & 0x00FF;
+                                    pVerticesIt += nVertexCount;
+
+                                    switch (nEscapeCode)
                                     {
-                                        sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
-                                        sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
-                                        if (nX >= 0 && nY >= 0 )
-                                            aPath.append( "m" ).append( nX ).append( "," ).append( nY );
+                                        case 0xa: // nofill
+                                            aPath.append( "nf" );
+                                            break;
+                                        case 0xb: // nostroke
+                                            aPath.append( "ns" );
+                                            break;
                                     }
+
                                     break;
-                                case 0xb300:
-                                case 0xac00:
-                                    break;
-                                case 0x0001: // lineto
+                                }
+                                case msopathLineTo:
+                                    for (unsigned short i = 0; i < nSegmentCount; ++i)
                                     {
                                         sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         aPath.append( "l" ).append( nX ).append( "," ).append( nY );
                                     }
                                     break;
-                                case 0x2001: // curveto
+                                case msopathCurveTo:
+                                    for (unsigned short i = 0; i < nSegmentCount; ++i)
                                     {
                                         sal_Int32 nX1 = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nY1 = impl_GetPointComponent( pVerticesIt, nPointSize );
@@ -507,35 +536,17 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                             .append( nX3 ).append( "," ).append( nY3 );
                                     }
                                     break;
-                                case 0xaa00: // nofill
-                                    aPath.append( "nf" );
-                                    break;
-                                case 0xab00: // nostroke
-                                    aPath.append( "ns" );
-                                    break;
-                                case 0x6001: // close
+                                case msopathClose:
                                     aPath.append( "x" );
                                     break;
-                                case 0x8000: // end
+                                case msopathEnd:
                                     aPath.append( "e" );
                                     break;
                                 default:
-                                    // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
-                                    // FIXME: we miss out a significant amount of complexity from
-                                    // the above method here, and do some rather odd things to match.
-                                    int nElems = !nPointSize ? 0 : aVertices.nPropSize / (nPointSize * 2);
-                                    if (nSeg > nElems)
-                                    {
-                                        SAL_WARN("oox", "Busted escher export " << nSeg << "vs . " << nElems << " truncating point stream");
-                                        nSeg = nElems;
-                                    }
-                                    for (int i = 0; i < nSeg; ++i)
-                                    {
-                                        sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nPointSize);
-                                        sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nPointSize);
-                                        if (nX >= 0 && nY >= 0 )
-                                            aPath.append("l").append(nX).append(",").append(nY);
-                                    }
+                                    SAL_WARN("oox", "Totally b0rked\n");
+                                    break;
+                                case msopathInvalid:
+                                    SAL_WARN("oox", "Invalid - should never be found");
                                     break;
                             }
                         }
