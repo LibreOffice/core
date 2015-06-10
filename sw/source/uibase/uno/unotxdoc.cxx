@@ -3157,15 +3157,6 @@ void SwXTextDocument::initializeForTiledRendering()
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->setTiledRendering(true);
 
-    if ( pViewShell->GetWin() )
-    {
-        // Check initial window size and set minimal size (1,1)
-        Size aSize( pViewShell->GetWin()->GetOutputSizePixel() );
-        if ( aSize.Width() == 0 || aSize.Height() == 0 )
-            pViewShell->GetWin()->SetOutputSizePixel(Size( std::max( aSize.Width() , long(1)),
-                                                           std::max( aSize.Height(), long(1)) ));
-    }
-
     bool      bBookMode = false;
     sal_Int16 nColumns = 1;
 

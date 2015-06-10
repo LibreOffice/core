@@ -6203,7 +6203,9 @@ void SwEditWin::LogicInvalidate(const Rectangle* pRectangle)
         sRectangle = "EMPTY";
     else
         sRectangle = pRectangle->toString();
-    m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+
+    if ( m_rView.GetWrtShellPtr() )
+        m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
