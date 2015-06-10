@@ -720,8 +720,12 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOutliner) const
 {
     NonOverflowingText *pNonOverflowingTxt;
-    pNonOverflowingTxt =
-            pOutliner->GetNonOverflowingText();
+    if (pEdtOutl != NULL)
+        pNonOverflowingTxt =
+                pEdtOutl->GetNonOverflowingText();
+    else
+        pNonOverflowingTxt =
+                pOutliner->GetNonOverflowingText();
 
     pOutliner->Clear();
     //pOutliner->SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
