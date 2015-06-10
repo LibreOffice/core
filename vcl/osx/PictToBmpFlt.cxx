@@ -37,10 +37,10 @@ bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
         return false;
 
     NSBitmapImageRep* pRep =[NSBitmapImageRep imageRepWithData: pData];
-        if( !pRep)
+    if( !pRep)
         return false;
 
-        NSData* pOut = [pRep representationUsingType: NSPNGFileType properties: @{ }];
+    NSData* pOut = [pRep representationUsingType: NSPNGFileType properties: @{ }];
     if( !pOut)
         return false;
 
