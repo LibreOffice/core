@@ -15,6 +15,9 @@
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
+#include <svtools/breadcrumb.hxx>
+#include <svtools/fileview.hxx>
+#include <svtools/treelistentry.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/menubtn.hxx>
@@ -23,10 +26,6 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/fixedhyper.hxx>
-
-#include <svtools/fileview.hxx>
-#include <svtools/treelistentry.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
