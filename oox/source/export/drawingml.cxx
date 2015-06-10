@@ -2282,9 +2282,11 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                 }
                 else
                 {
-                    sal_Int32 nXMin = aPairs[0].First.Value.get<sal_Int32>();
+                    sal_Int32 nXMin(0);
+                    aPairs[0].First.Value >>= nXMin;
                     sal_Int32 nXMax = nXMin;
-                    sal_Int32 nYMin = aPairs[0].Second.Value.get<sal_Int32>();
+                    sal_Int32 nYMin(0);
+                    aPairs[0].Second.Value >>= nYMin;
                     sal_Int32 nYMax = nYMin;
 
                     for ( int j = 0; j < aPairs.getLength(); ++j )
@@ -2321,9 +2323,13 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                             {
                                 mpFS->startElementNS( XML_a, XML_moveTo, FSEND );
 
+                                sal_Int32 nX(0), nY(0);
+                                aPairs[nPairIndex].First.Value >>= nX;
+                                aPairs[nPairIndex].Second.Value >>= nY;
+
                                 mpFS->singleElementNS( XML_a, XML_pt,
-                                   XML_x, I64S( aPairs[nPairIndex].First.Value.get<sal_Int32>() ),
-                                   XML_y, I64S( aPairs[nPairIndex].Second.Value.get<sal_Int32>() ),
+                                   XML_x, I64S(nX),
+                                   XML_y, I64S(nY),
                                    FSEND );
 
                                 mpFS->endElementNS( XML_a, XML_moveTo );
@@ -2333,9 +2339,14 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                             case drawing::EnhancedCustomShapeSegmentCommand::LINETO :
                             {
                                 mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
+
+                                sal_Int32 nX(0), nY(0);
+                                aPairs[nPairIndex].First.Value >>= nX;
+                                aPairs[nPairIndex].Second.Value >>= nY;
+
                                 mpFS->singleElementNS( XML_a, XML_pt,
-                                   XML_x, I64S( aPairs[nPairIndex].First.Value.get<sal_Int32>() ),
-                                   XML_y, I64S( aPairs[nPairIndex].Second.Value.get<sal_Int32>() ),
+                                   XML_x, I64S(nX),
+                                   XML_y, I64S(nY),
                                    FSEND );
                                 mpFS->endElementNS( XML_a, XML_lnTo );
                                 nPairIndex++;
@@ -2346,9 +2357,13 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                                 mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
                                 for( sal_uInt8 l = 0; l <= 2; ++l )
                                 {
+                                    sal_Int32 nX(0), nY(0);
+                                    aPairs[nPairIndex+l].First.Value >>= nX;
+                                    aPairs[nPairIndex+l].Second.Value >>= nY;
+
                                     mpFS->singleElementNS( XML_a, XML_pt,
-                                    XML_x, I64S( aPairs[nPairIndex+l].First.Value.get<sal_Int32>() ),
-                                    XML_y, I64S( aPairs[nPairIndex+l].Second.Value.get<sal_Int32>() ),
+                                    XML_x, I64S( nX ),
+                                    XML_y, I64S( nY ),
                                     FSEND );
 
                                 }
@@ -2381,10 +2396,14 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                                 mpFS->startElementNS( XML_a, XML_quadBezTo, FSEND );
                                 for( sal_uInt8 l = 0; l < 2; ++l )
                                 {
+                                    sal_Int32 nX(0), nY(0);
+                                    aPairs[nPairIndex+l].First.Value >>= nX;
+                                    aPairs[nPairIndex+l].Second.Value >>= nY;
+
                                     mpFS->singleElementNS( XML_a, XML_pt,
-                                    XML_x, I64S( aPairs[nPairIndex+l].First.Value.get<sal_Int32>() ),
-                                    XML_y, I64S( aPairs[nPairIndex+l].Second.Value.get<sal_Int32>() ),
-                                    FSEND );
+                                        XML_x, I64S( nX ),
+                                        XML_y, I64S( nY ),
+                                        FSEND );
 
                                 }
                                 mpFS->endElementNS( XML_a, XML_quadBezTo );
