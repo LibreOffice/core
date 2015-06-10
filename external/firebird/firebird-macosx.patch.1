@@ -27,6 +27,15 @@
  
  PLATFORM_POSTBUILD_TARGET=darwin_postbuild_target
  
+@@ -57,7 +57,7 @@
+ 
+ LINK_TRACE = $(LIB_LINK) $(LIB_BUNDLE_OPTIONS)
+ 
+-LINK_CLIENT = $(LIB_LINK) -nodefaultlibs $(LINK_FIREBIRD_CLIENT_SYMBOLS) $(LIB_LINK_OPTIONS) $(LIB_LINK_IMPLIB)\
++LINK_CLIENT = $(LIB_LINK) $(LINK_FIREBIRD_CLIENT_SYMBOLS) $(LIB_LINK_OPTIONS) $(LIB_LINK_IMPLIB)\
+  $(LIB_CLIENT_LINK_OPTIONS) $(LIB_LINK_SONAME)
+ 
+ ifeq (@VOID_PTR_SIZE@,8)
 diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.darwin
 --- firebird.org/builds/posix/postfix.darwin	2013-07-12 20:55:46.000000000 +0200
 +++ firebird/builds/posix/postfix.darwin	2013-07-15 12:07:36.000000000 +0200
