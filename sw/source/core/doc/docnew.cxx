@@ -343,7 +343,7 @@ SwDoc::SwDoc()
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DBManager
-    mpDBManager = new SwDBManager;
+    mpDBManager = new SwDBManager(this);
 #endif
 
     // create TOXTypes
@@ -543,7 +543,11 @@ SwDoc::~SwDoc()
     // On load, SwDBManager::setEmbeddedName() may register a data source.
     // If we have an embedded one, then sDataSoure points to the registered name, so revoke it here.
     if (!mpDBManager->getEmbeddedName().isEmpty() && !maDBData.sDataSource.isEmpty())
+    {
+        // Remove the revoke listener here first, so that we don't remove the data source from the document.
+        mpDBManager->releaseRevokeListener();
         SwDBManager::RevokeDataSource(maDBData.sDataSource);
+    }
 
     DELETEZ( mpDBManager );
 #endif

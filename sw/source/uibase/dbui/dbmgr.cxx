@@ -204,11 +204,90 @@ public:
 
 };
 
+/// Listens to removed data sources, and if it's one that's embedded into this document, triggers embedding removal.
+class SwDataSourceRemovedListener : public cppu::WeakImplHelper<sdb::XDatabaseRegistrationsListener>
+{
+    uno::Reference<sdb::XDatabaseContext> m_xDatabaseContext;
+    SwDBManager* m_pDBManager;
+
+public:
+    SwDataSourceRemovedListener(SwDBManager& rDBManager);
+    virtual ~SwDataSourceRemovedListener();
+    virtual void SAL_CALL registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const lang::EventObject& rObject) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void Dispose();
+};
+
+SwDataSourceRemovedListener::SwDataSourceRemovedListener(SwDBManager& rDBManager)
+    : m_pDBManager(&rDBManager)
+{
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    m_xDatabaseContext = sdb::DatabaseContext::create(xComponentContext);
+    m_xDatabaseContext->addDatabaseRegistrationsListener(this);
+}
+
+SwDataSourceRemovedListener::~SwDataSourceRemovedListener()
+{
+    if (m_xDatabaseContext.is())
+        m_xDatabaseContext->removeDatabaseRegistrationsListener(this);
+}
+
+void SAL_CALL SwDataSourceRemovedListener::registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& /*rEvent*/) throw (uno::RuntimeException, std::exception)
+{
+}
+
+void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception)
+{
+    if (!m_pDBManager || m_pDBManager->getEmbeddedName().isEmpty())
+        return;
+
+    SwDoc* pDoc = m_pDBManager->getDoc();
+    if (!pDoc)
+        return;
+
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    if (!pDocShell)
+        return;
+
+    OUString aOwnURL = pDocShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_WITH_CHARSET);
+    OUString sTmpName = "vnd.sun.star.pkg://";
+    sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
+    sTmpName += "/" + m_pDBManager->getEmbeddedName();
+
+    if (sTmpName != rEvent.OldLocation)
+        return;
+
+    // The revoked database location is inside this document, then remove the
+    // embedding, as otherwise it would be back on the next reload of the
+    // document.
+    pDocShell->GetStorage()->removeElement(m_pDBManager->getEmbeddedName());
+    m_pDBManager->setEmbeddedName(OUString(), *pDocShell);
+}
+
+void SAL_CALL SwDataSourceRemovedListener::changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception)
+{
+    if (rEvent.OldLocation != rEvent.NewLocation)
+        revokedDatabaseLocation(rEvent);
+}
+
+void SwDataSourceRemovedListener::disposing(const lang::EventObject& /*rObject*/) throw (uno::RuntimeException, std::exception)
+{
+    m_xDatabaseContext.clear();
+}
+
+void SwDataSourceRemovedListener::Dispose()
+{
+    m_pDBManager = 0;
+}
+
 struct SwDBManager_Impl
 {
     SwDSParam*          pMergeData;
     AbstractMailMergeDlg*     pMergeDialog;
     ::rtl::Reference<SwConnectionDisposedListener_Impl> m_xDisposeListener;
+    rtl::Reference<SwDataSourceRemovedListener> m_xDataSourceRemovedListener;
 
     explicit SwDBManager_Impl(SwDBManager& rDBManager)
        :pMergeData(0)
@@ -219,6 +298,8 @@ struct SwDBManager_Impl
     ~SwDBManager_Impl()
     {
         m_xDisposeListener->Dispose();
+        if (m_xDataSourceRemovedListener.is())
+            m_xDataSourceRemovedListener->Dispose();
     }
 };
 
@@ -693,7 +774,7 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
     }
 }
 
-SwDBManager::SwDBManager()
+SwDBManager::SwDBManager(SwDoc* pDoc)
     : bCancel(false)
     , bInitDBFields(false)
     , bSingleJobs(false)
@@ -702,6 +783,7 @@ SwDBManager::SwDBManager()
     , bMergeLock(false)
     , pImpl(new SwDBManager_Impl(*this))
     , pMergeEvtSrc(NULL)
+    , m_pDoc(pDoc)
 {
 }
 
@@ -2973,6 +3055,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
 void SwDBManager::setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell)
 {
     bool bLoad = m_sEmbeddedName != rEmbeddedName && !rEmbeddedName.isEmpty();
+    bool bRegisterListener = m_sEmbeddedName.isEmpty() && !rEmbeddedName.isEmpty();
 
     m_sEmbeddedName = rEmbeddedName;
 
@@ -2984,11 +3067,26 @@ void SwDBManager::setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDo
         if (xStorage->hasByName(rEmbeddedName))
             LoadAndRegisterEmbeddedDataSource(rDocShell.GetDoc()->GetDBData(), rDocShell);
     }
+
+    if (bRegisterListener)
+        // Register a remove listener, so we know when the embedded data source is removed.
+        pImpl->m_xDataSourceRemovedListener = new SwDataSourceRemovedListener(*this);
 }
 
 OUString SwDBManager::getEmbeddedName() const
 {
     return m_sEmbeddedName;
+}
+
+SwDoc* SwDBManager::getDoc() const
+{
+    return m_pDoc;
+}
+
+void SwDBManager::releaseRevokeListener()
+{
+    pImpl->m_xDataSourceRemovedListener->Dispose();
+    pImpl->m_xDataSourceRemovedListener.clear();
 }
 
 SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwDBManager& rManager)

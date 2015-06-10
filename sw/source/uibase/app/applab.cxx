@@ -159,7 +159,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DB-Manager
-    boost::scoped_ptr<SwDBManager> pDBManager(new SwDBManager);
+    boost::scoped_ptr<SwDBManager> pDBManager(new SwDBManager(0));
 #endif
 
     // Read SwLabItem from Config
