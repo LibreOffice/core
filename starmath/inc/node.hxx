@@ -109,6 +109,17 @@ protected:
     // index in accessible text -1 if not (yet) applicable
     sal_Int32       nAccIndex;
 
+    template<typename F>
+    void ForEachNonNull(F && f)
+    {
+        auto nSize = GetNumSubNodes();
+        for (sal_uInt16 i = 0; i < nSize; i++) {
+            auto pNode = GetSubNode(i);
+            if (pNode != nullptr)
+                f(pNode);
+        }
+    }
+
 public:
     virtual             ~SmNode();
 

@@ -37,6 +37,7 @@
 #include <math.h>
 #include <float.h>
 #include <vector>
+#include <boost/checked_delete.hpp>
 
 SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     : aNodeToken( rNodeToken )
@@ -93,11 +94,9 @@ void SmNode::SetPhantom(bool bIsPhantomP)
     if (! (Flags() & FLG_VISIBLE))
         bIsPhantom = bIsPhantomP;
 
-    SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->SetPhantom(bIsPhantom);
+    // Attention: is it intentional, or mistaken for given bIsPhantomP?
+    bool b = bIsPhantom;
+    ForEachNonNull([&b](SmNode *pNode){pNode->SetPhantom(b);});
 }
 
 
@@ -106,11 +105,7 @@ void SmNode::SetColor(const Color& rColor)
     if (! (Flags() & FLG_COLOR))
         GetFont().SetColor(rColor);
 
-    SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->SetColor(rColor);
+    ForEachNonNull([&rColor](SmNode *pNode){pNode->SetColor(rColor);});
 }
 
 
@@ -124,11 +119,7 @@ void SmNode::SetAttribut(sal_uInt16 nAttrib)
         nAttributes |= nAttrib;
     }
 
-    SmNode *pNode;
-    sal_uInt16 nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->SetAttribut(nAttrib);
+    ForEachNonNull([&nAttrib](SmNode *pNode){pNode->SetAttribut(nAttrib);});
 }
 
 
@@ -142,11 +133,7 @@ void SmNode::ClearAttribut(sal_uInt16 nAttrib)
         nAttributes &= ~nAttrib;
     }
 
-    SmNode *pNode;
-    sal_uInt16 nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->ClearAttribut(nAttrib);
+    ForEachNonNull([&nAttrib](SmNode *pNode){pNode->ClearAttribut(nAttrib);});
 }
 
 
@@ -155,11 +142,7 @@ void SmNode::SetFont(const SmFace &rFace)
     if (!(Flags() & FLG_FONT))
         GetFont() = rFace;
 
-    SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->SetFont(rFace);
+    ForEachNonNull([&rFace](SmNode *pNode){pNode->SetFont(rFace);});
 }
 
 
@@ -210,11 +193,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
         GetFont().SetSize(aFntSize);
     }
 
-    SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0;  i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->SetFontSize(rSize, nType);
+    ForEachNonNull([&rSize, &nType](SmNode *pNode){pNode->SetFontSize(rSize, nType);});
 }
 
 
@@ -222,11 +201,7 @@ void SmNode::SetSize(const Fraction &rSize)
 {
     GetFont() *= rSize;
 
-    SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0;  i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->SetSize(rSize);
+    ForEachNonNull([&rSize](SmNode *pNode){pNode->SetSize(rSize);});
 }
 
 
@@ -236,13 +211,7 @@ void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree )
         eRectHorAlign = eHorAlign;
 
     if (bApplyToSubTree)
-    {
-        SmNode *pNode;
-        sal_uInt16  nSize = GetNumSubNodes();
-        for (sal_uInt16 i = 0; i < nSize; i++)
-            if (NULL != (pNode = GetSubNode(i)))
-                pNode->SetRectHorAlign(eHorAlign);
-    }
+        ForEachNonNull([&eHorAlign](SmNode *pNode){pNode->SetRectHorAlign(eHorAlign);});
 }
 
 
@@ -271,11 +240,7 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     GetFont().SetWeight(WEIGHT_NORMAL);
     GetFont().SetItalic(ITALIC_NONE);
 
-    SmNode *pNode;
-    sal_uInt16      nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0; i < nSize; i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->Prepare(rFormat, rDocShell);
+    ForEachNonNull([&rFormat, &rDocShell](SmNode *pNode){pNode->Prepare(rFormat, rDocShell);});
 }
 
 sal_uInt16 SmNode::FindIndex() const
@@ -301,32 +266,21 @@ void SmNode::Move(const Point& rPosition)
 
     SmRect::Move(rPosition);
 
-    SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0;  i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->Move(rPosition);
+    ForEachNonNull([&rPosition](SmNode *pNode){pNode->Move(rPosition);});
 }
 
 
 void SmNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-    SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    for (sal_uInt16 i = 0;  i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->Arrange(rDev, rFormat);
+    ForEachNonNull([&rDev, &rFormat](SmNode *pNode){pNode->Arrange(rDev, rFormat);});
 }
 
 void SmNode::CreateTextFromNode(OUString &rText)
 {
-    SmNode *pNode;
     sal_uInt16  nSize = GetNumSubNodes();
     if (nSize > 1)
         rText += "{";
-    for (sal_uInt16 i = 0;  i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            pNode->CreateTextFromNode(rText);
+    ForEachNonNull([&rText](SmNode *pNode){pNode->CreateTextFromNode(rText);});
     if (nSize > 1)
     {
         rText = comphelper::string::stripEnd(rText, ' ');
@@ -571,11 +525,7 @@ SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
 
 SmStructureNode::~SmStructureNode()
 {
-    SmNode *pNode;
-
-    for (sal_uInt16 i = 0;  i < GetNumSubNodes();  i++)
-        if (NULL != (pNode = GetSubNode(i)))
-            delete pNode;
+    ForEachNonNull(boost::checked_deleter<SmNode>());
 }
 
 
