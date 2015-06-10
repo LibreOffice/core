@@ -18,6 +18,10 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
+#include "svdata.hxx"
+#include "salinst.hxx"
+
+// #define TEST_WATCHDOG
 
 /// Avoid our timer tests just wedging the build if they fail.
 class WatchDog : public osl::Thread
@@ -47,6 +51,7 @@ class TimerTest : public test::BootstrapFixture
 public:
     TimerTest() : BootstrapFixture(true, false) {}
 
+    void testIdleMainloop();
     void testIdle();
 #ifdef TEST_WATCHDOG
     void testWatchdog();
@@ -58,6 +63,7 @@ public:
 
     CPPUNIT_TEST_SUITE(TimerTest);
     CPPUNIT_TEST(testIdle);
+    CPPUNIT_TEST(testIdleMainloop);
 #ifdef TEST_WATCHDOG
     CPPUNIT_TEST(testWatchdog);
 #endif
@@ -105,7 +111,25 @@ void TimerTest::testIdle()
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
     Scheduler::ProcessTaskScheduling(false);
-    CPPUNIT_ASSERT_MESSAGE("watchdog triggered", bTriggered);
+    CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered);
+}
+
+// tdf#91727
+void TimerTest::testIdleMainloop()
+{
+    bool bTriggered = false;
+    IdleBool aTest( bTriggered );
+    while (!bTriggered)
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+
+        // can't test this via Application::Yield since this
+        // also processes all tasks directly via the scheduler.
+        pSVData->maAppData.mnDispatchLevel++;
+        pSVData->mpDefInst->Yield( true, false );
+        pSVData->maAppData.mnDispatchLevel--;
+    }
+    CPPUNIT_ASSERT_MESSAGE("mainloop idle triggered", bTriggered);
 }
 
 // --------------------------------------------------------------------
