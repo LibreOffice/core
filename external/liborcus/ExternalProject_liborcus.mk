@@ -77,6 +77,10 @@ ifneq (,$(PTHREAD_LIBS))
 liborcus_LDFLAGS+=$(PTHREAD_LIBS)
 endif
 
+ifeq ($(OS),LINUX)
+liborcus_LDFLAGS+=-Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN
+endif
+
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(liborcus_LIBS),LIBS='$(liborcus_LIBS)') \
