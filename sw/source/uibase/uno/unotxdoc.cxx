@@ -3165,6 +3165,7 @@ void SwXTextDocument::initializeForTiledRendering()
     SwView* pView = pDocShell->GetView();
     if (!pView)
         return;
+
     pView->SetViewLayout(nColumns, bBookMode, true);
 
     // Tiled rendering defaults.
