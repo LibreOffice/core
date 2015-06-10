@@ -29,7 +29,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
-#include <locale.h>
 
 #include <typelib/typedescription.hxx>
 
@@ -982,26 +981,6 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
 }
 
 
-static const char * g_NUMERICID = "pyuno.lcNumeric";
-static ::std::vector< OString > g_localeList;
-
-static const char *ensureUnlimitedLifetime( const char *str )
-{
-    int size = g_localeList.size();
-    int i;
-    for( i = 0 ; i < size ; i ++ )
-    {
-        if( 0 == strcmp( g_localeList[i].getStr(), str ) )
-            break;
-    }
-    if( i == size )
-    {
-        g_localeList.push_back( str );
-    }
-    return g_localeList[i].getStr();
-}
-
-
 PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
     throw ( com::sun::star::uno::RuntimeException )
 {
@@ -1009,35 +988,18 @@ PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
     if( !tstate  )
         throw RuntimeException( "Couldn't create a pythreadstate" );
     PyEval_AcquireThread( tstate);
-    // set LC_NUMERIC to "C"
-    const char * oldLocale =
-        ensureUnlimitedLifetime( setlocale( LC_NUMERIC, 0 )  );
-    setlocale( LC_NUMERIC, "C" );
-    PyRef locale( // python requires C locale
-        PyLong_FromVoidPtr( const_cast<char *>(oldLocale) ), SAL_NO_ACQUIRE);
-    PyDict_SetItemString(
-        PyThreadState_GetDict(), g_NUMERICID, locale.get() );
 }
 
 PyThreadAttach::~PyThreadAttach()
 {
-    PyObject *value =
-        PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
-    if( value )
-        setlocale( LC_NUMERIC, static_cast<const char *>(PyLong_AsVoidPtr( value )) );
     PyThreadState_Clear( tstate );
     PyEval_ReleaseThread( tstate );
     PyThreadState_Delete( tstate );
-
 }
 
 PyThreadDetach::PyThreadDetach() throw ( com::sun::star::uno::RuntimeException )
 {
     tstate = PyThreadState_Get();
-    PyObject *value =
-        PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
-    if( value )
-        setlocale( LC_NUMERIC, static_cast<const char *>(PyLong_AsVoidPtr( value )) );
     PyEval_ReleaseThread( tstate );
 }
 
@@ -1047,12 +1009,6 @@ PyThreadDetach::PyThreadDetach() throw ( com::sun::star::uno::RuntimeException )
 PyThreadDetach::~PyThreadDetach()
 {
     PyEval_AcquireThread( tstate );
-//     PyObject *value =
-//         PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
-
-    // python requires C LC_NUMERIC locale,
-    // always set even when it is already "C"
-    setlocale( LC_NUMERIC, "C" );
 }
 
 
