@@ -831,6 +831,12 @@ DECLARE_OOXMLEXPORT_TEST(testOO67471, "ooo67471-2.odt")
         assertXPathContent(pXmlDoc, "(//w:t)[2]", "B");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testKDE302504, "kde302504-1.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        assertXPath(pXmlDoc, "//v:shape", "ID", "KoPathShape");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
