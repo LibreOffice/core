@@ -424,6 +424,18 @@ enum ESCHER_LineCap
     ESCHER_LineEndCapFlat     // Line ends at end point
 };
 
+enum MSOPATHTYPE
+{
+    msopathLineTo,        // Draw a straight line (one point)
+    msopathCurveTo,       // Draw a cubic Bezier curve (three points)
+    msopathMoveTo,        // Move to a new point (one point)
+    msopathClose,         // Close a sub - path (no points)
+    msopathEnd,           // End a path (no points)
+    msopathEscape,        // Escape code
+    msopathClientEscape,  // Escape code interpreted by the client
+    msopathInvalid        // Invalid - should never be found
+};
+
 // Shape Properties
 // 1pt = 12700 EMU (English Metric Units)
 // 1pt = 20 Twip = 20/1440" = 1/72"

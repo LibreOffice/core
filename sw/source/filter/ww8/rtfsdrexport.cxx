@@ -278,48 +278,61 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRec
                 for (; nSegments; --nSegments)
                 {
                     sal_uInt16 nSeg = impl_GetUInt16(pSegmentIt);
+
+                    // The segment type is stored in the upper 3 bits
+                    // and segment count is stored in the lower 13
+                    // bits.
+                    unsigned char nSegmentType = (nSeg & 0xE000) >> 13;
+                    unsigned short nSegmentCount = nSeg & 0x03FF;
+
                     aSegmentInfo.append(';').append((sal_Int32)nSeg);
-                    switch (nSeg)
+                    switch (nSegmentType)
                     {
-                    case 0x0001: // lineto
-                    case 0x4000: // moveto
-                    {
-                        sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                        sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                        aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
-                        nVertices ++;
-                    }
-                    break;
-                    case 0x2001: // curveto
-                    {
-                        for (int i = 0; i < 3; i++)
+                        case msopathLineTo:
+                            for (unsigned short i = 0; i < nSegmentCount; ++i)
+                            {
+                                sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                                sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                                aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
+                                nVertices ++;
+                            }
+                            break;
+                        case msopathMoveTo:
                         {
                             sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
                             sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
                             aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
-                            nVertices ++;
+                            nVertices++;
+                            break;
                         }
-                    }
-                    break;
-                    case 0xb300:
-                    case 0xac00:
-                    case 0xaa00: // nofill
-                    case 0xab00: // nostroke
-                    case 0x6001: // close
-                    case 0x8000: // end
-                        break;
-                    default:
-                        // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
-                        for (int i = 0; i < nSeg; ++i)
+                        case msopathCurveTo:
+                            for (unsigned short j = 0; j < nSegmentCount; ++j)
+                            {
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                                    sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                                    aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
+                                    nVertices ++;
+                                }
+                            }
+                            break;
+                        case msopathEscape:
                         {
-                            if (nVerticesPos >= aVertices.nPropSize)
-                                break;
-                            sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                            sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                            aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
-                            ++nVertices;
+                            // If the segment type is msopathEscape, the lower 13 bits are
+                            // divided in a 5 bit escape code and 8 bit
+                            // vertex count (not segment count!)
+                            unsigned char nVertexCount = nSegmentCount & 0x00FF;
+                            nVerticesPos += nVertexCount;
+                            break;
                         }
-                        break;
+                        case msopathClientEscape:
+                        case msopathClose:
+                        case msopathEnd:
+                            break;
+                        default:
+                            SAL_WARN("oox", "Totally b0rked\n");
+                            break;
                     }
                 }
 

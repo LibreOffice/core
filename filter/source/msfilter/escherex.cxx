@@ -3253,85 +3253,92 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                .WriteUInt16( nElementSize );
                                             for ( j = 0; j < nElements; j++ )
                                             {
+                                                // The segment type is stored in the upper 3 bits
+                                                // and segment count is stored in the lower 13
+                                                // bits.
+                                                //
+                                                // If the segment type is msopathEscape, the lower 13 bits
+                                                // are divided in a 5 bit escape code and 8 bit
+                                                // vertex count (not segment count!)
                                                 sal_uInt16 nVal = (sal_uInt16)aSegments[ j ].Count;
                                                 switch( aSegments[ j ].Command )
                                                 {
-                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN :
-                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO : break;
-                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
-                                                    {
-                                                        nVal = 0x4000;
-                                                    }
-                                                    break;
+                                                    case css::drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN :
+                                                    case css::drawing::EnhancedCustomShapeSegmentCommand::LINETO :
+                                                        break;
+                                                    case css::drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
+                                                        nVal = (msopathMoveTo << 13);
+                                                        break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
                                                     {
-                                                        nVal |= 0x2000;
+                                                        nVal |= (msopathCurveTo << 13);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
                                                     {
-                                                        nVal = 0x6001;
+                                                        nVal = 1;
+                                                        nVal |= (msopathClose << 13);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
                                                     {
-                                                        nVal = 0x8000;
+                                                        nVal = (msopathEnd << 13);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
                                                     {
-                                                        nVal = 0xaa00;
+                                                        nVal = (msopathEscape << 13) | (5 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
                                                     {
-                                                        nVal = 0xab00;
+                                                        nVal = (msopathEscape << 13) | (11 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
                                                     {
                                                         nVal *= 3;
-                                                        nVal |= 0xa100;
+                                                        nVal |= (msopathEscape << 13) | (1 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
                                                     {
                                                         nVal *= 3;
-                                                        nVal |= 0xa200;
+                                                        nVal |= (msopathEscape << 13) | (2 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
                                                     {
                                                         nVal <<= 2;
-                                                        nVal |= 0xa300;
+                                                        nVal |= (msopathEscape << 13) | (3 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARC :
                                                     {
                                                         nVal <<= 2;
-                                                        nVal |= 0xa400;
+                                                        nVal |= (msopathEscape << 13) | (4 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
                                                     {
                                                         nVal <<= 2;
-                                                        nVal |= 0xa500;
+                                                        nVal |= (msopathEscape << 13) | (5 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
                                                     {
                                                         nVal <<= 2;
-                                                        nVal |= 0xa600;
+                                                        nVal |= (msopathEscape << 13) | (6 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
                                                     {
-                                                        nVal |= 0xa700;
+                                                        nVal |= (msopathEscape << 13) | (7 << 8);
                                                     }
                                                     break;
                                                     case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
                                                     {
-                                                        nVal |= 0xa800;
+                                                        nVal |= (msopathEscape << 13) | (8 << 8);
                                                     }
                                                     break;
                                                 }
