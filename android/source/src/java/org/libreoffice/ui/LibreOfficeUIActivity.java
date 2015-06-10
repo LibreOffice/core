@@ -20,6 +20,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -96,6 +97,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
     ListView lv;
 
     private final LOAbout mAbout;
+    private boolean canQuit = false;
 
     public LibreOfficeUIActivity() {
         mAbout = new LOAbout(this, true);
@@ -195,6 +197,31 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         }
         // close drawer if it was open
         drawerLayout.closeDrawer(drawerList);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!currentDirectory.equals(homeDirectory)) {
+            // navigate upwards in directory hierarchy
+            openParentDirectory();
+        } else {
+            // only exit if warning has been shown
+            if (canQuit) {
+                super.onBackPressed();
+                return;
+            }
+
+            // show warning about leaving the app and set a timer
+            Toast.makeText(this, R.string.back_again_to_quit,
+                    Toast.LENGTH_SHORT).show();
+            canQuit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    canQuit = false;
+                }
+            }, 3000);
+        }
     }
 
     @Override
