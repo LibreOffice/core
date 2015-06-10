@@ -706,6 +706,100 @@ void SlideSorterViewShell::RemoveSelectionChangeListener (
     mpSlideSorter->GetController().GetSelectionManager()->RemoveSelectionChangeListener(rCallback);
 }
 
+void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
+{
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    // it is SdPage*
+    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
+        (*it)->SetSelected(true);
+
+    // Moves selected pages after page -1
+    GetDoc()->MovePages( (sal_uInt16) -1 );
+}
+
+void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
+{
+}
+
+void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
+{
+    sal_uInt16 minPageNo = SAL_MAX_UINT16;
+    sal_uInt16 pageNo;
+    // Select all pages from a SdDrawDocument point of view
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    // it is SdPage*
+    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
+        // Check page number
+        pageNo = (*it)->GetPageNum();
+        if (pageNo < minPageNo) minPageNo = pageNo;
+        (*it)->SetSelected(true);
+
+    }
+    // Now compute human page number from internal page number
+    minPageNo = (minPageNo - 1) / 2;
+
+    if (minPageNo == 0)
+        return;
+
+    // Move pages before minPageNo - 1 (so after minPageNo - 2),
+    // remembering that -1 means at first, which is good.
+    GetDoc()->MovePages( minPageNo - 2 );
+}
+
+void SlideSorterViewShell::GetStateMovePageUp (SfxItemSet& rSet)
+{
+}
+
+void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
+{
+    sal_uInt16 maxPageNo = 0;
+    sal_uInt16 pageNo;
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    // it is SdPage*
+    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
+    {
+        // Check page number
+        pageNo = (*it)->GetPageNum();
+        if (pageNo > maxPageNo) maxPageNo = pageNo;
+
+        (*it)->SetSelected(true);
+    }
+
+    // Get page number of the last page
+    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
+
+    // Now compute human page number from internal page number
+    maxPageNo = (maxPageNo - 1) / 2;
+    if (maxPageNo == nNoOfPages - 1)
+        return;
+
+    // Move to position after maxPageNo
+    GetDoc()->MovePages( maxPageNo + 1 );
+}
+
+void SlideSorterViewShell::GetStateMovePageDown (SfxItemSet& rSet)
+{
+}
+
+void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
+{
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    // it is SdPage*
+    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
+        (*it)->SetSelected(true);
+
+    // Get page number of the last page
+    sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
+
+    // Move to position after last page No (=Number of pages - 1)
+    GetDoc()->MovePages( nNoOfPages - 1 );
+}
+
+void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
+{
+}
+
+
 } } // end of namespace ::sd::slidesorter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

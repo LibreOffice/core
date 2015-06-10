@@ -2776,4 +2776,25 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_GO_TO_NEXT_PAGE
+    [
+        ExecMethod = ExecGoToNextPage ;
+        StateMethod = GetStateGoToNextPage ;
+    ]
+    SID_GO_TO_PREVIOUS_PAGE
+    [
+        ExecMethod = ExecGoToPreviousPage ;
+        StateMethod = GetStateGoToPreviousPage ;
+    ]
+    SID_GO_TO_FIRST_PAGE
+    [
+        ExecMethod = ExecGoToFirstPage ;
+        StateMethod = GetStateGoToFirstPage ;
+    ]
+    SID_GO_TO_LAST_PAGE
+    [
+        ExecMethod = ExecGoToLastPage ;
+        StateMethod = GetStateGoToLastPage ;
+    ]
+
 }

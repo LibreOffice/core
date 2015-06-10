@@ -115,6 +115,20 @@ public:
     virtual void Activate (bool IsMDIActivate) SAL_OVERRIDE;
     virtual void Deactivate (bool IsMDIActivate) SAL_OVERRIDE;
 
+    /** Move slides up and down. Mainly uno commands. */
+    void ExecMovePageUp (SfxRequest& rReq);
+    void GetStateMovePageUp (SfxItemSet& rSet);
+
+    void ExecMovePageDown (SfxRequest& rReq);
+    void GetStateMovePageDown (SfxItemSet& rSet);
+
+    void ExecMovePageFirst (SfxRequest& rReq);
+    void GetStateMovePageFirst (SfxItemSet& rSet);
+
+    void ExecMovePageLast (SfxRequest& rReq);
+    void GetStateMovePageLast (SfxItemSet& rSet);
+
+
     //===== Drag and Drop =====================================================
 
     void StartDrag (

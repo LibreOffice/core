@@ -298,6 +298,26 @@ interface SlideSorterView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_MOVE_PAGE_UP
+    [
+        ExecMethod = ExecMovePageUp ;
+        StateMethod = GetStateMovePageUp ;
+    ]
+    SID_MOVE_PAGE_DOWN
+    [
+        ExecMethod = ExecMovePageDown ;
+        StateMethod = GetStateMovePageDown ;
+    ]
+    SID_MOVE_PAGE_FIRST
+    [
+        ExecMethod = ExecMovePageFirst ;
+        StateMethod = GetStateMovePageFirst ;
+    ]
+    SID_MOVE_PAGE_LAST
+    [
+        ExecMethod = ExecMovePageLast ;
+        StateMethod = GetStateMovePageLast ;
+    ]
 }
 
 shell SlideSorterController
