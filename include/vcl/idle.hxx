@@ -32,7 +32,7 @@ public:
     Idle( const sal_Char *pDebugName = NULL );
     Idle( const Idle& rIdle );
 
-    virtual void    Start();
+    virtual void    Start() SAL_OVERRIDE;
 
     /// Make it possible to associate a callback with this idle handler
     /// of course, you can also sub-class and override 'Invoke'
