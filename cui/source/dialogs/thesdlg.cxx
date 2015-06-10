@@ -147,9 +147,9 @@ AlternativesString::AlternativesString(
 }
 
 void AlternativesString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                               const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                               const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    AlternativesExtraData* pData = m_rControlImpl.GetExtraData(pEntry);
+    AlternativesExtraData* pData = m_rControlImpl.GetExtraData(&rEntry);
     Point aPos(rPos);
     rRenderContext.Push(PushFlags::FONT);
     if (pData && pData->IsHeader())

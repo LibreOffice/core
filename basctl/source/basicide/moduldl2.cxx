@@ -114,19 +114,19 @@ public:
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                          const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                          const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     // Change text color if library is read only:
     bool bReadOnly = false;
-    if (pEntry && pEntry->GetUserData())
+    if (rEntry.GetUserData())
     {
-        ScriptDocument aDocument(static_cast<LibUserData*>(pEntry->GetUserData())->GetDocument());
+        ScriptDocument aDocument(static_cast<LibUserData*>(rEntry.GetUserData())->GetDocument());
 
-        OUString aLibName = static_cast<const SvLBoxString*>(pEntry->GetItem(1))->GetText();
+        OUString aLibName = static_cast<const SvLBoxString*>(rEntry.GetItem(1))->GetText();
         Reference<script::XLibraryContainer2> xModLibContainer(aDocument.getLibraryContainer(E_SCRIPTS), UNO_QUERY);
         Reference<script::XLibraryContainer2 > xDlgLibContainer(aDocument.getLibraryContainer(E_DIALOGS), UNO_QUERY);
         bReadOnly = (xModLibContainer.is() && xModLibContainer->hasByName(aLibName) && xModLibContainer->isLibraryReadOnly(aLibName))

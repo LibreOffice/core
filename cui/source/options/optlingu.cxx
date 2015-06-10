@@ -264,13 +264,13 @@ public:
         const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 void BrwStringDic_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                              const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                              const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
+    ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(rEntry.GetUserData());
     Point aPos(rPos);
     rRenderContext.Push(PushFlags::FONT);
     if (pData->IsParent())
@@ -441,16 +441,16 @@ public:
         const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 void BrwString_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     Point aPos(rPos);
     aPos.X() += 20;
     rRenderContext.DrawText(aPos, GetText());
-    if (pEntry->GetUserData())
+    if (rEntry.GetUserData())
     {
         Point aNewPos(aPos);
         aNewPos.X() += rRenderContext.GetTextWidth(GetText());
@@ -459,7 +459,7 @@ void BrwString_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Rend
         aFont.SetWeight(WEIGHT_BOLD);
 
         //??? convert the lower byte from the user date into a string
-        OptionsUserData aData(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
+        OptionsUserData aData(reinterpret_cast<sal_uLong>(rEntry.GetUserData()));
         if (aData.HasNumericValue())
         {
             OUStringBuffer sTxt;

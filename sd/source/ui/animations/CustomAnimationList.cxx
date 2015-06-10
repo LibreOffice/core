@@ -210,7 +210,7 @@ public:
     void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
 
     virtual void Paint(const Point&, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView,const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView,const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 private:
     VclPtr<CustomAnimationList> mpParent;
     OUString        maDescription;
@@ -241,10 +241,10 @@ void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeLis
 }
 
 void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                                         const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                                         const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
 
-    const SvViewDataItem* pViewData = mpParent->GetViewDataItem(pEntry, this);
+    const SvViewDataItem* pViewData = mpParent->GetViewDataItem(&rEntry, this);
 
     Point aPos(rPos);
     Size aSize(pViewData->maSize);
@@ -348,7 +348,7 @@ public:
     SvLBoxItem*     Create() const SAL_OVERRIDE;
     void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 
 private:
     OUString        maDescription;
@@ -375,7 +375,7 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvTree
 }
 
 void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+                                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     Size aSize(rRenderContext.GetOutputSizePixel().Width(), static_cast<SvTreeListBox*>(&rDev)->GetEntryHeight());
 

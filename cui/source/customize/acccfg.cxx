@@ -625,7 +625,7 @@ public:
     virtual ~SfxAccCfgLBoxString_Impl();
 
     virtual void Paint(const Point& aPos, SvTreeListBox& rDevice, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 
@@ -637,12 +637,9 @@ SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 {}
 
 void SfxAccCfgLBoxString_Impl::Paint(const Point& aPos, SvTreeListBox& /*rDevice*/, vcl::RenderContext& rRenderContext,
-                                     const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                                     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    if (!pEntry)
-        return;
-
-    TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
+    TAccInfo* pUserData = static_cast<TAccInfo*>(rEntry.GetUserData());
     if (!pUserData)
         return;
 

@@ -3453,7 +3453,7 @@ public:
         const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
@@ -3468,9 +3468,9 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
 }
 
 void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                                const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+                                const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
 {
-    if (lcl_IsContent(pEntry) && static_cast<SwContent *>(pEntry->GetUserData())->IsInvisible())
+    if (lcl_IsContent(&rEntry) && static_cast<SwContent *>(rEntry.GetUserData())->IsInvisible())
     {
         vcl::Font aOldFont(rRenderContext.GetFont());
         vcl::Font aFont(aOldFont);
@@ -3482,7 +3482,7 @@ void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
     }
     // IA2 CWS. MT: Removed for now (also in SvLBoxEntry) - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
     /*
-    else if (pEntry->IsMarked())
+    else if (rEntry.IsMarked())
     {
             rDev.DrawText( rPos, GetText() );
             XubString str;
@@ -3499,7 +3499,7 @@ void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
     }
     */
     else
-        SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
+        SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
 }
 
 void SwContentTree::DataChanged(const DataChangedEvent& rDCEvt)

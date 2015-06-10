@@ -71,7 +71,7 @@ namespace dbaui
         void    updateHelpText();
 
     protected:
-        virtual void        PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry* _pEntry) SAL_OVERRIDE;
+        virtual void        PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry) SAL_OVERRIDE;
         virtual Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine ) SAL_OVERRIDE;
         virtual void        ModelHasCleared() SAL_OVERRIDE;
 

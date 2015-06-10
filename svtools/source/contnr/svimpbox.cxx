@@ -944,7 +944,7 @@ void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
     for(sal_uInt16 n=0; n< nCount && pEntry; n++)
     {
         /*long nMaxRight=*/
-        pView->PaintEntry1(pEntry, nY, rRenderContext, SvLBoxTabFlags::ALL, true );
+        pView->PaintEntry1(*pEntry, nY, rRenderContext, SvLBoxTabFlags::ALL, true );
         nY += nEntryHeight;
         pEntry = pView->NextVisible(pEntry);
     }

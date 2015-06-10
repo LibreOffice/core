@@ -42,7 +42,7 @@ namespace dbaui
         virtual sal_uInt16 GetType() const SAL_OVERRIDE;
 
         virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                           const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                           const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
         virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData) SAL_OVERRIDE;
 
         bool    isEmphasized() const { return m_bEmphasized; }

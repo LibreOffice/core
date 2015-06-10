@@ -194,18 +194,12 @@ sal_uInt16 SvLBoxString::GetType() const
 
 void SvLBoxString::Paint(
     const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-    const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+    const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    if (pEntry)
-    {
-        DrawTextFlags nStyle = rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable;
-        if (rDev.IsEntryMnemonicsEnabled())
-            nStyle |= DrawTextFlags::Mnemonic;
-        rRenderContext.DrawText(Rectangle(rPos, GetSize(&rDev, pEntry)), maText, nStyle);
-    }
-    else
-        rRenderContext.DrawText(rPos, maText);
-
+    DrawTextFlags nStyle = rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable;
+    if (rDev.IsEntryMnemonicsEnabled())
+        nStyle |= DrawTextFlags::Mnemonic;
+    rRenderContext.DrawText(Rectangle(rPos, GetSize(&rDev, &rEntry)), maText, nStyle);
 }
 
 SvLBoxItem* SvLBoxString::Create() const
@@ -271,7 +265,7 @@ void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 }
 
 void SvLBoxBmp::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                      const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+                      const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     DrawImageFlags nStyle = rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
     rRenderContext.DrawImage(rPos, aBmp ,nStyle);
@@ -338,7 +332,7 @@ bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
 
 void SvLBoxButton::Paint(
     const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-    const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+    const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     SvBmp nIndex = eKind == SvLBoxButtonKind_staticImage ? SvBmp::STATICIMAGE : SvLBoxButtonData::GetIndex(nItemFlags);
     DrawImageFlags nStyle = eKind != SvLBoxButtonKind_disabledCheckbox && rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
@@ -506,13 +500,13 @@ void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntr
 
 void SvLBoxContextBmp::Paint(
     const Point& _rPos, SvTreeListBox& _rDev, vcl::RenderContext& rRenderContext,
-    const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+    const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
 {
 
     // get the image.
     const Image& rImage = implGetImageStore(pView->IsExpanded() != m_pImpl->m_bExpanded);
 
-    bool _bSemiTransparent = pEntry && bool( SvTLEntryFlags::SEMITRANSPARENT  & pEntry->GetFlags( ) );
+    bool _bSemiTransparent = bool( SvTLEntryFlags::SEMITRANSPARENT & rEntry.GetFlags( ) );
     // draw
     DrawImageFlags nStyle = _rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
     if (_bSemiTransparent)

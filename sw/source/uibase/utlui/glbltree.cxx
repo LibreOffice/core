@@ -1238,9 +1238,9 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
 }
 
 void SwLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                         const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+                         const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
 {
-    SwGlblDocContent* pCont = static_cast<SwGlblDocContent*>(pEntry->GetUserData());
+    SwGlblDocContent* pCont = static_cast<SwGlblDocContent*>(rEntry.GetUserData());
     if (pCont->GetType() == GLBLDOC_SECTION &&
       !(pCont->GetSection())->IsConnectFlag())
     {
@@ -1254,7 +1254,7 @@ void SwLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCont
         rRenderContext.Pop();
     }
     else
-        SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
+        SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
 }
 
 void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )

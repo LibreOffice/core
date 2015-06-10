@@ -350,11 +350,11 @@ public:
     }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 void OColumnString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                          const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+                          const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     rRenderContext.Push(PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR);
     if(m_bReadOnly)

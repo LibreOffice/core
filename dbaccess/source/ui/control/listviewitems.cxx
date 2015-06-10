@@ -45,7 +45,7 @@ namespace dbaui
     }
 
     void OBoldListboxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                                   const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+                                   const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
     {
         if (m_bEmphasized)
         {
@@ -59,7 +59,7 @@ namespace dbaui
         }
         else
         {
-            SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
+            SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
         }
     }
 

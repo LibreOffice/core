@@ -52,7 +52,7 @@ SvLBoxItem* SvLBoxFontString::Create() const
 }
 
 void SvLBoxFontString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                             const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+                             const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
 {
     rRenderContext.Push(PushFlags::FONT);
     vcl::Font aNewFont(maFont);
@@ -64,7 +64,7 @@ void SvLBoxFontString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Render
     }
 
     rRenderContext.SetFont(aNewFont);
-    SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
+    SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
     rRenderContext.Pop();
 }
 

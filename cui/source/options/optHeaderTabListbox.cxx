@@ -35,18 +35,18 @@ public:
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 
 
 void OptLBoxString_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                               const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                               const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     rRenderContext.Push(PushFlags::FONT);
     vcl::Font aFont(rRenderContext.GetFont());
     //detect readonly state by asking for a valid Image
-    if (pEntry && !(!SvTreeListBox::GetCollapsedEntryBmp(pEntry)))
+    if (!(!SvTreeListBox::GetCollapsedEntryBmp(&rEntry)))
         aFont.SetColor(Application::GetSettings().GetStyleSettings().GetDeactiveTextColor());
     rRenderContext.SetFont(aFont);
     rRenderContext.DrawText(rPos, GetText());

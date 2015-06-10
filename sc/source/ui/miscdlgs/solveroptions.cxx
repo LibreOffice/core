@@ -73,11 +73,11 @@ public:
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 void ScSolverOptionsString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                                  const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+                                  const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     //! move position? (SvxLinguTabPage: aPos.X() += 20)
     OUString aNormalStr(GetText());

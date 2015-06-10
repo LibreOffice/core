@@ -1328,9 +1328,9 @@ public:
     virtual ~PopupPainter() { }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE
     {
-        SvLBoxString::Paint(rPos, rOutDev, rRenderContext, pView, pEntry);
+        SvLBoxString::Paint(rPos, rOutDev, rRenderContext, pView, rEntry);
 
         rRenderContext.Push(PushFlags::FILLCOLOR);
 
@@ -1343,7 +1343,7 @@ public:
             nX -= pVScroll->GetSizePixel().Width();
         }
 
-        const SvViewDataItem* pItem = rOutDev.GetViewDataItem( pEntry, this );
+        const SvViewDataItem* pItem = rOutDev.GetViewDataItem( &rEntry, this );
         nX -= pItem->maSize.Height();
 
         long nSize = pItem->maSize.Height() / 2;

@@ -93,7 +93,7 @@ public:
                        SvTreeListBox& rDevice,
                        vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
-                       const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
@@ -145,11 +145,8 @@ void StyleLBoxString::InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry
 
 void StyleLBoxString::Paint(
     const Point& aPos, SvTreeListBox& /*rDevice*/, vcl::RenderContext& rRenderContext,
-    const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+    const SvViewDataEntry* pView, const SvTreeListEntry& /*rEntry*/)
 {
-    if (!pEntry)
-        return;
-
     bool bResult = false;
 
     if (mpStylePreviewRenderer)

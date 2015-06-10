@@ -2864,16 +2864,16 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
     }
 }
 
-long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::RenderContext& rRenderContext,
+long SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext,
                                 SvLBoxTabFlags nTabFlags, bool bHasClipRegion)
 {
 
     Rectangle aRect; // multi purpose
 
     bool bHorSBar = pImp->HasHorScrollBar();
-    PreparePaint(rRenderContext, pEntry);
+    PreparePaint(rRenderContext, rEntry);
 
-    pImp->UpdateContextBmpWidthMax(pEntry);
+    pImp->UpdateContextBmpWidthMax(&rEntry);
 
     if (nTreeFlags & SvTreeFlags::RECALCTABS)
         SetTabs();
@@ -2895,7 +2895,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
     Color aBackupColor = rRenderContext.GetFillColor();
 
     bool bCurFontIsSel = false;
-    bool bInUse = pEntry->HasInUseEmphasis();
+    bool bInUse = rEntry.HasInUseEmphasis();
     // if a ClipRegion was set from outside, we don't have to reset it
     const WinBits nWindowStyle = GetStyle();
     const bool bResetClipRegion = !bHasClipRegion;
@@ -2914,10 +2914,10 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
         bHasClipRegion = true;
     }
 
-    SvViewDataEntry* pViewDataEntry = GetViewDataEntry( pEntry );
+    SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
 
     sal_uInt16 nTabCount = aTabs.size();
-    sal_uInt16 nItemCount = pEntry->ItemCount();
+    sal_uInt16 nItemCount = rEntry.ItemCount();
     sal_uInt16 nCurTab = 0;
     sal_uInt16 nCurItem = 0;
 
@@ -2926,15 +2926,15 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
         SvLBoxTab* pTab = aTabs[nCurTab];
         sal_uInt16 nNextTab = nCurTab + 1;
         SvLBoxTab* pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
-        SvLBoxItem* pItem = nCurItem < nItemCount ? pEntry->GetItem(nCurItem) : 0;
+        SvLBoxItem* pItem = nCurItem < nItemCount ? rEntry.GetItem(nCurItem) : 0;
 
         SvLBoxTabFlags nFlags = pTab->nFlags;
         Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nCurItem));
-        long nTabPos = GetTabPos(pEntry, pTab);
+        long nTabPos = GetTabPos(&rEntry, pTab);
 
         long nNextTabPos;
         if (pNextTab)
-            nNextTabPos = GetTabPos(pEntry, pNextTab);
+            nNextTabPos = GetTabPos(&rEntry, pNextTab);
         else
         {
             nNextTabPos = nMaxRight;
@@ -3002,7 +3002,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
                 }
                 else
                 {
-                    aWallpaper.SetColor(pEntry->GetBackColor());
+                    aWallpaper.SetColor(rEntry.GetBackColor());
                 }
             }
 
@@ -3028,7 +3028,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
                 if (pNextTab)
                 {
                     long nRight;
-                    nRight = GetTabPos(pEntry, pNextTab) - 1;
+                    nRight = GetTabPos(&rEntry, pNextTab) - 1;
                     if (nRight > nMaxRight)
                         nRight = nMaxRight;
                     aRect.Right() = nRight;
@@ -3057,7 +3057,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
             aEntryPos.Y() += (nTempEntryHeight - aSize.Height()) / 2;
             pViewDataEntry->SetPaintRectangle(aRect);
 
-            pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, pEntry);
+            pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
 
             // division line between tabs
             if (pNextTab && pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
@@ -3079,7 +3079,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
         rRenderContext.SetFillColor();
         Color aOldLineColor = rRenderContext.GetLineColor();
         rRenderContext.SetLineColor(Color(COL_BLACK));
-        aRect = GetFocusRect(pEntry, nLine);
+        aRect = GetFocusRect(&rEntry, nLine);
         aRect.Top()++;
         aRect.Bottom()--;
         rRenderContext.DrawRect(aRect);
@@ -3095,15 +3095,15 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
 
     sal_uInt16 nFirstDynTabPos;
     SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab(nFirstDynTabPos);
-    long nDynTabPos = GetTabPos(pEntry, pFirstDynamicTab);
+    long nDynTabPos = GetTabPos(&rEntry, pFirstDynamicTab);
     nDynTabPos += pImp->nNodeBmpTabDistance;
     nDynTabPos += pImp->nNodeBmpWidth / 2;
     nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
                      // to the next tab
 
-    if( (!(pEntry->GetFlags() & SvTLEntryFlags::NO_NODEBMP)) &&
+    if( (!(rEntry.GetFlags() & SvTLEntryFlags::NO_NODEBMP)) &&
         (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab &&
-        (pEntry->HasChildren() || pEntry->HasChildrenOnDemand()))
+        (rEntry.HasChildren() || rEntry.HasChildrenOnDemand()))
     {
         // find first tab and check if the node bitmap extends into it
         sal_uInt16 nNextTab = nFirstDynTabPos;
@@ -3114,21 +3114,21 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
             pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
         } while (pNextTab && pNextTab->IsDynamic());
 
-        if (!pNextTab || (GetTabPos( pEntry, pNextTab ) > nDynTabPos))
+        if (!pNextTab || (GetTabPos( &rEntry, pNextTab ) > nDynTabPos))
         {
-            if ((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(pEntry) > 0)
+            if ((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(&rEntry) > 0)
             {
-                Point aPos(GetTabPos(pEntry, pFirstDynamicTab), nLine);
+                Point aPos(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
                 aPos.X() += pImp->nNodeBmpTabDistance;
 
                 const Image* pImg = 0;
 
-                if (IsExpanded(pEntry))
+                if (IsExpanded(&rEntry))
                     pImg = &pImp->GetExpandedNodeBmp();
                 else
                 {
-                    if ((!pEntry->HasChildren()) && pEntry->HasChildrenOnDemand() &&
-                        (!(pEntry->GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
+                    if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
+                        (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
                         pImp->GetDontKnowNodeBmp().GetSizePixel().Width())
                     {
                         pImg = &pImp->GetDontKnowNodeBmp( );
@@ -3155,12 +3155,12 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
                     if (IsEnabled())
                         nState |= ControlState::ENABLED;
 
-                    if (IsExpanded(pEntry))
+                    if (IsExpanded(&rEntry))
                         aControlValue.setTristateVal(BUTTONVALUE_ON); //expanded node
                     else
                     {
-                        if ((!pEntry->HasChildren()) && pEntry->HasChildrenOnDemand() &&
-                            (!(pEntry->GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
+                        if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
+                            (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
                             pImp->GetDontKnowNodeBmp().GetSizePixel().Width())
                         {
                             aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); //dont know
@@ -3188,7 +3188,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
     return 0; // nRowLen;
 }
 
-void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeListEntry* /*pEntry*/)
+void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeListEntry& /*rEntry*/)
 {
 }
 

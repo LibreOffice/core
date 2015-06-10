@@ -452,7 +452,7 @@ public:
     IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText,
         Image* pMacroImg, Image* pComponentImg );
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 
@@ -467,7 +467,7 @@ IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, cons
 
 
 void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::RenderContext& rRenderContext,
-                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     OUString aTxt(GetText());
     if (!aTxt.isEmpty())

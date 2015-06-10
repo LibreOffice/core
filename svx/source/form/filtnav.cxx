@@ -1015,16 +1015,16 @@ public:
         :SvLBoxString(pEntry,nFlags,rStr){}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
     virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData) SAL_OVERRIDE;
 };
 
 const int nxDBmp = 12;
 
 void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                                const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                                const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    FmFilterItems* pRow = static_cast<FmFilterItems*>(pEntry->GetUserData());
+    FmFilterItems* pRow = static_cast<FmFilterItems*>(rEntry.GetUserData());
     FmFormItem* pForm = static_cast<FmFormItem*>(pRow->GetParent());
 
     // current filter is significant painted
@@ -1034,7 +1034,7 @@ void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
         rRenderContext.Push(PushFlags::LINECOLOR);
         rRenderContext.SetLineColor(rRenderContext.GetTextColor());
 
-        Rectangle aRect(rPos, GetSize(&rDev, pEntry));
+        Rectangle aRect(rPos, GetSize(&rDev, &rEntry));
         Point aFirst(rPos.X(), aRect.Bottom() - 6);
         Point aSecond(aFirst .X() + 2, aFirst.Y() + 3);
 
@@ -1076,7 +1076,7 @@ public:
     }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
     virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData) SAL_OVERRIDE;
 };
 
@@ -1101,7 +1101,7 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 
 
 void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     rRenderContext.Push(PushFlags::FONT);
     vcl::Font aFont(rRenderContext.GetFont());

@@ -80,14 +80,14 @@ SvLBoxItem* SvLBoxColorString::Create() const
 }
 
 void SvLBoxColorString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                              const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+                              const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
 {
     Color aColor = rRenderContext.GetTextColor();
     if (!pView->IsSelected())
     {
         rRenderContext.SetTextColor(aPrivColor);
     }
-    SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
+    SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
     rRenderContext.SetTextColor(aColor);
 }
 

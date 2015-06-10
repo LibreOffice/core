@@ -768,13 +768,13 @@ RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
 
 
 void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::RenderContext& rRenderContext,
-                              const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                              const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     const Image* pImg = 0;
     const OUString* pTxt = 0;
     RecovDocList* pList = static_cast<RecovDocList*>(&aDevice);
 
-    TURLInfo* pInfo = static_cast<TURLInfo*>(pEntry->GetUserData());
+    TURLInfo* pInfo = static_cast<TURLInfo*>(rEntry.GetUserData());
     switch (pInfo->RecoveryState)
     {
         case E_SUCCESSFULLY_RECOVERED:

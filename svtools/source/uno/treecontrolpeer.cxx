@@ -116,7 +116,7 @@ public:
     OUString        GetGraphicURL() const { return maGraphicURL;}
     void            SetGraphicURL( const OUString& rGraphicURL );
     virtual void    Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                          const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                          const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
     SvLBoxItem*     Create() const SAL_OVERRIDE;
     void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
 
@@ -1593,30 +1593,18 @@ UnoTreeListItem::~UnoTreeListItem()
 
 
 void UnoTreeListItem::Paint(
-    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     Point aPos(rPos);
-    if (pEntry)
+    Size aSize(GetSize(&rDev, &rEntry));
+    if (!!maImage)
     {
-        Size aSize(GetSize(&rDev, pEntry));
-        if (!!maImage)
-        {
-            rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
-            int nWidth = maImage.GetSizePixel().Width() + 6;
-            aPos.X() += nWidth;
-            aSize.Width() -= nWidth;
-        }
-        rRenderContext.DrawText(Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable);
+        rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
+        int nWidth = maImage.GetSizePixel().Width() + 6;
+        aPos.X() += nWidth;
+        aSize.Width() -= nWidth;
     }
-    else
-    {
-        if (!!maImage)
-        {
-            rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
-            aPos.X() += maImage.GetSizePixel().Width() + 6;
-        }
-        rRenderContext.DrawText(aPos, maText);
-    }
+    rRenderContext.DrawText(Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable);
 }
 
 

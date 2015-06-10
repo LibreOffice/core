@@ -78,7 +78,7 @@ public:
         The relevant text with the selected color is drawn in the output device.
     */
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 
     SvLBoxItem*     Create() const SAL_OVERRIDE;
 };

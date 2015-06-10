@@ -167,7 +167,7 @@ public:
     const Size&         GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
     static const Size&  GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) = 0;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) = 0;
 
     virtual void InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry,
                             // If != 0: this Pointer must be used!
@@ -576,7 +576,7 @@ protected:
     SVT_DLLPRIVATE void         AdjustEntryHeight( const vcl::Font& rFont );
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
-    SVT_DLLPRIVATE long         PaintEntry1( SvTreeListEntry*, long nLine, vcl::RenderContext& rRenderContext,
+    SVT_DLLPRIVATE long         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext,
                                              SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL,
                                              bool bHasClipRegion=false );
 
@@ -617,7 +617,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void    PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry* pEntry);
+    virtual void    PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void            InitSettings(bool bFont, bool bForeground, bool bBackground);

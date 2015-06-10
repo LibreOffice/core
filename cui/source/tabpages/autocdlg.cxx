@@ -335,16 +335,16 @@ public:
         const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
 };
 
 void OfaImpBrwString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     rRenderContext.DrawText(rPos, GetText());
-    if (pEntry->GetUserData())
+    if (rEntry.GetUserData())
     {
-        ImpUserData* pUserData = static_cast<ImpUserData*>(pEntry->GetUserData());
+        ImpUserData* pUserData = static_cast<ImpUserData*>(rEntry.GetUserData());
         Point aNewPos(rPos);
         aNewPos.X() += rRenderContext.GetTextWidth(GetText());
         vcl::Font aOldFont(rRenderContext.GetFont());
