@@ -52,6 +52,7 @@ case "$1" in
         echo "                                     (yes, this modifies your last commit)"
         echo "                                     (yes, this modifies your last commit)"
         echo "             nextchange [BRANCH]     reset branch to the remote to start with the next change"
+        echo "             testfeature [BRANCH]    trigger a test of a feature branch on gerrit"
         echo "Note: drafts are only visibly to yourself and those that you explicitly add as reviewers."
         echo
         echo " --- for reviewers:"
@@ -202,6 +203,41 @@ case "$1" in
     query)
         shift
         ssh ${GERRITHOST?} gerrit query project:core $@
+    ;;
+    testfeature)
+        BRANCH=$2
+        if test -z "$BRANCH"
+        then
+            BRANCH=`git symbolic-ref HEAD 2> /dev/null`
+            BRANCH="${BRANCH##refs/heads/}"
+            if test -z "$BRANCH"
+            then
+                echo "no branch specified, and could not guess the current branch"
+                exit 1
+            fi
+            echo "no branch specified, guessing current branch $BRANCH"
+        fi
+        BRANCH="${BRANCH##feature/}"
+        WORKDIR=`mktemp -d`
+        if test -z "$WORKDIR"
+        then
+            echo "could no create work directory."
+            exit 1
+        fi
+        echo workdir at $WORKDIR
+        git clone -s `dirname $0` $WORKDIR/core
+        pushd $WORKDIR/core
+        echo "noop commit: trigger test build for branch feature/$BRANCH" > ../commitmsg
+        echo >> ../commitmsg
+        echo "branch is at:" >> ../commitmsg
+        git log -1|sed -e "s/Change-Id:/XXXXXX:/" >> ../commitmsg
+        git fetch git://gerrit.libreoffice.org/core.git feature/$BRANCH && \
+            git checkout -b featuretst FETCH_HEAD && \
+            cp -a .git-hooks/* .git/hooks
+            git commit --allow-empty -F ../commitmsg && \
+            git push $GERRITURL HEAD:refs/for/feature/$BRANCH
+        popd
+        rm -rf $WORKDIR/core
     ;;
     *)
         ssh ${GERRITHOST?} gerrit $@
