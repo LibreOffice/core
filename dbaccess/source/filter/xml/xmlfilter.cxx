@@ -20,14 +20,10 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <config_features.h>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#if HAVE_FEATURE_JAVA
-#include <jvmaccess/virtualmachine.hxx>
-#endif
 #include "xmlfilter.hxx"
 #include "xmlservices.hxx"
 #include "flt_reghelper.hxx"
@@ -52,24 +48,16 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlHelper.hxx"
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/mimeconfighelper.hxx>
-#include <comphelper/documentconstants.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <osl/thread.hxx>
-#include <connectivity/CommonTools.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include "dsntypes.hxx"
 #include <rtl/strbuf.hxx>
@@ -83,148 +71,6 @@ extern "C" void SAL_CALL createRegistryInfo_ODBFilter( )
 
 namespace dbaxml
 {
-    namespace
-    {
-        class FastLoader : public ::osl::Thread
-        {
-        public:
-            typedef enum { E_JAVA, E_CALC } StartType;
-            FastLoader(uno::Reference< uno::XComponentContext > const & _xContext,StartType _eType)
-                :m_xContext(_xContext)
-                ,m_eWhat(_eType)
-            {}
-
-        protected:
-            virtual ~FastLoader(){}
-
-            /// Working method which should be overridden.
-            virtual void SAL_CALL run() SAL_OVERRIDE;
-            virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
-        private:
-            uno::Reference< uno::XComponentContext > m_xContext;
-            StartType m_eWhat;
-        };
-
-        void SAL_CALL FastLoader::run()
-        {
-            osl_setThreadName("dbaxml::FastLoader");
-
-            if ( m_eWhat == E_JAVA )
-            {
-#if HAVE_FEATURE_JAVA
-                static bool s_bFirstTime = true;
-                if ( s_bFirstTime )
-                {
-                    s_bFirstTime = false;
-                    try
-                    {
-                        ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_xContext);
-                    }
-                    catch (const uno::Exception&)
-                    {
-                        OSL_ASSERT(false);
-                    }
-                }
-#endif
-            }
-            else if ( m_eWhat == E_CALC )
-            {
-                static bool s_bFirstTime = true;
-                if ( s_bFirstTime )
-                {
-                    s_bFirstTime = false;
-                    try
-                    {
-                        uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( m_xContext );
-                        const OUString sTarget("_blank");
-                        sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-                        uno::Reference< frame::XFrame> xFrame = xDesktop->findFrame(sTarget,nFrameSearchFlag);
-                        uno::Reference<frame::XComponentLoader> xFrameLoad(xFrame,uno::UNO_QUERY);
-
-                        if ( xFrameLoad.is() )
-                        {
-                            uno::Sequence < beans::PropertyValue > aArgs( 3);
-                            sal_Int32 nLen = 0;
-                            aArgs[nLen].Name = "AsTemplate";
-                            aArgs[nLen++].Value <<= sal_False;
-
-                            aArgs[nLen].Name = "ReadOnly";
-                            aArgs[nLen++].Value <<= sal_True;
-
-                            aArgs[nLen].Name = "Hidden";
-                            aArgs[nLen++].Value <<= sal_True;
-
-                            ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
-                            SvtModuleOptions aModuleOptions;
-                            // This looks like it makes no sense,
-                            // but is probably used to lower latency
-                            // of the user interface for the user:
-                            // when the user will do anything that requires
-                            // the data connection to be established,
-                            // calc will already have been loaded, initialised, etc
-                            // so establishing the data connection (to a Calc sheet)
-                            // will be "faster".
-                            uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
-                                aModuleOptions.GetFactoryEmptyDocumentURL( SvtModuleOptions::ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII) )),
-                                OUString(), // empty frame name
-                                0,
-                                aArgs
-                                ),uno::UNO_QUERY);
-                            ::comphelper::disposeComponent(xModel);
-                        }
-                    }
-                    catch (const uno::Exception&)
-                    {
-                        OSL_ASSERT(false);
-                    }
-                }
-            }
-        }
-        void SAL_CALL FastLoader::onTerminated()
-        {
-            delete this;
-        }
-
-        class DatasourceURLListener:
-            public cppu::WeakImplHelper1<beans::XPropertyChangeListener>,
-            private boost::noncopyable
-        {
-            uno::Reference< uno::XComponentContext > m_xContext;
-            ::dbaccess::ODsnTypeCollection m_aTypeCollection;
-        protected:
-            virtual ~DatasourceURLListener(){}
-        public:
-            DatasourceURLListener(uno::Reference< uno::XComponentContext > const & _xContext) : m_xContext(_xContext), m_aTypeCollection(_xContext){}
-            // XPropertyChangeListener
-            virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
-            {
-                OUString sURL;
-                _rEvent.NewValue >>= sURL;
-                FastLoader* pCreatorThread = NULL;
-
-                if ( m_aTypeCollection.needsJVM(sURL) )
-                {
-#if HAVE_FEATURE_JAVA
-                    pCreatorThread = new FastLoader(m_xContext, FastLoader::E_JAVA);
-#endif
-                }
-                else if ( sURL.startsWithIgnoreAsciiCase("sdbc:calc:") )
-                {
-                    pCreatorThread = new FastLoader(m_xContext, FastLoader::E_CALC);
-                }
-                if ( pCreatorThread )
-                {
-                    pCreatorThread->createSuspended();
-                    pCreatorThread->setPriority(osl_Thread_PriorityBelowNormal);
-                    pCreatorThread->resume();
-                }
-            }
-            // XEventListener
-            virtual void SAL_CALL disposing( const lang::EventObject& /*_rSource*/ ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
-            {
-            }
-        };
-    }
     sal_Char const sXML_np__db[] = "_db";
     sal_Char const sXML_np___db[] = "__db";
 
@@ -483,8 +329,6 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
         m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener( GetComponentContext());
-        m_xDataSource->addPropertyChangeListener(PROPERTY_URL,xListener);
         uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
         SetNumberFormatsSupplier(xNum);
 
