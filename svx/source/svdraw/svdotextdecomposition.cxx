@@ -717,44 +717,38 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     rTarget = aConverter.getPrimitive2DSequence();
 }
 
-OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject() const
+OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOutliner) const
 {
     NonOverflowingText *pNonOverflowingTxt;
-    // Cut non overflowing text
-    if (pEdtOutl != NULL)
-        pNonOverflowingTxt =
-            pEdtOutl->GetNonOverflowingText();
-    else
-        pNonOverflowingTxt =
-            ImpGetDrawOutliner().GetNonOverflowingText();
+    pNonOverflowingTxt =
+            rOutliner.GetNonOverflowingText();
 
-    SdrOutliner &rOutliner = ImpGetDrawOutliner();
-    rOutliner.Clear();
-    //rOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
+    pOutliner.Clear();
+    //pOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
     if (pNonOverflowingTxt->mPreOverflowingTxt == "" &&
         pNonOverflowingTxt->mpHeadParas != NULL) {
         // Only (possibly empty) paragraphs before overflowing one
-        rOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);
+        pOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);
     } else { // We have to include the non-overflowing lines from the overfl. para
 
         // first make a ParaObject for the strings
-        Paragraph *pTmpPara0 = rOutliner.GetParagraph(0);
-        rOutliner.SetText(pNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
-        OutlinerParaObject *pPObj = rOutliner.CreateParaObject();
-        rOutliner.Clear();
-        //rOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
+        Paragraph *pTmpPara0 = pOutliner.GetParagraph(0);
+        pOutliner.SetText(pNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
+        OutlinerParaObject *pPObj = pOutliner.CreateParaObject();
+        pOutliner.Clear();
+        //pOutliner.SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
         if (pNonOverflowingTxt->mpHeadParas != NULL)
-            rOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);
+            pOutliner.SetText(*pNonOverflowingTxt->mpHeadParas);
 
-        rOutliner.AddText(*pPObj);
+        pOutliner.AddText(*pPObj);
     }
 
-     return rOutliner.CreateParaObject();
+     return pOutliner.CreateParaObject();
 }
 
-void SdrTextObj::impLeaveOnlyNonOverflowingText() const
+void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject();
     // we need this when we are in editing mode
@@ -765,33 +759,31 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText() const
 }
 
 
-void SdrTextObj::impMoveChainedTextToNextLink(SdrTextObj *pNextTextObj) const
+void SdrTextObj::impMoveChainedTextToNextLink(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const
 {
     // prevent copying text in same box
     if ( this ==  pNextTextObj )
         return;
 
-    SdrOutliner &rOutliner = ImpGetDrawOutliner();
-
-    //rOutliner.SetChainingEventHdl(LINK(this,SdrTextObj,ImpDecomposeChainedText));
+    //pOutliner.SetChainingEventHdl(LINK(this,SdrTextObj,ImpDecomposeChainedText));
 
     if (mpOverflowingText != NULL) {
         // XXX: Not sure if necessary
-        rOutliner.Clear();
+        pOutliner.Clear();
 
         OutlinerParaObject *pCurTxt = pNextTextObj->GetOutlinerParaObject();
-        rOutliner.SetText(*pCurTxt);
+        pOutliner.SetText(*pCurTxt);
 
         // Get text of first paragraph of destination box
-        Paragraph *pOldPara0 = rOutliner.GetParagraph(0);
+        Paragraph *pOldPara0 = pOutliner.GetParagraph(0);
         OUString aOldPara0Txt;
         if (pOldPara0)
-            aOldPara0Txt = rOutliner.GetText(pOldPara0);
+            aOldPara0Txt = pOutliner.GetText(pOldPara0);
 
         // Get other paras of destination box (from second on)
         OutlinerParaObject *pOldParasTail = NULL;
-        if (rOutliner.GetParagraphCount() > 1)
-            pOldParasTail = rOutliner.CreateParaObject(1);
+        if (pOutliner.GetParagraphCount() > 1)
+            pOldParasTail = pOutliner.CreateParaObject(1);
 
         // Create ParaObject appending old first para in the dest. box
         //   to last part of overflowing text
@@ -799,39 +791,39 @@ void SdrTextObj::impMoveChainedTextToNextLink(SdrTextObj *pNextTextObj) const
         OutlinerParaObject *pJoiningPara = NULL;
 
         if (pOldPara0) {
-            rOutliner.Clear();
+            pOutliner.Clear();
 
-            pTmpPara0 = rOutliner.GetParagraph(0);
-            rOutliner.SetText(mpOverflowingText->mTailTxt + aOldPara0Txt, pTmpPara0);
-            pJoiningPara = rOutliner.CreateParaObject();
+            pTmpPara0 = pOutliner.GetParagraph(0);
+            pOutliner.SetText(mpOverflowingText->mTailTxt + aOldPara0Txt, pTmpPara0);
+            pJoiningPara = pOutliner.CreateParaObject();
         }
 
         // start actual composition
-        rOutliner.Clear();
+        pOutliner.Clear();
 
         // Set headText at the beginning of box
-        Paragraph *pNewPara0 = rOutliner.GetParagraph(0);
-        rOutliner.SetText(mpOverflowingText->mHeadTxt, pNewPara0);
+        Paragraph *pNewPara0 = pOutliner.GetParagraph(0);
+        pOutliner.SetText(mpOverflowingText->mHeadTxt, pNewPara0);
 
         // Set all the intermediate Paras
         if (mpOverflowingText->mpMidParas)
-            rOutliner.AddText(*mpOverflowingText->mpMidParas);
+            pOutliner.AddText(*mpOverflowingText->mpMidParas);
 
         // Append old first para in the destination box to
         //   last part of overflowing text
         if (pJoiningPara)
-            rOutliner.AddText(*pJoiningPara);
+            pOutliner.AddText(*pJoiningPara);
 
         // Append all other old paras
         if (pOldParasTail)
-            rOutliner.AddText(*pOldParasTail);
+            pOutliner.AddText(*pOldParasTail);
 
         // Draw everything
-        OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
+        OutlinerParaObject *pNewText = pOutliner.CreateParaObject();
         pNextTextObj->NbcSetOutlinerParaObject(pNewText);
     }
 
-//    rOutliner.SetChainingEventHdl(Link());
+//    pOutliner.SetChainingEventHdl(Link());
 
 }
 
