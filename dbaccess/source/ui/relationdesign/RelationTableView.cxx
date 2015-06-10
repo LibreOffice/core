@@ -216,7 +216,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
         catch(const Exception&)
         {
-            OSL_FAIL("ORelationTableView::AddConnection: Exception oocured!");
+            OSL_FAIL("ORelationTableView::AddConnection: Exception occurred!");
         }
     }
 }

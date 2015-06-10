@@ -39,7 +39,7 @@ public class _XFilterManager extends MultiMethodTest {
 
     /**
     * Appends a new filter (for extension 'txt'). <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _appendFilter() {
         boolean res = true;
