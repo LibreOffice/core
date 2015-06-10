@@ -31,6 +31,7 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
+#include <comphelper/lok.hxx>
 
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
@@ -1132,7 +1133,7 @@ vcl::Region Window::GetPaintRegion() const
 
 void Window::Invalidate( sal_uInt16 nFlags )
 {
-    if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
+    if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
     ImplInvalidate( NULL, nFlags );
@@ -1141,7 +1142,7 @@ void Window::Invalidate( sal_uInt16 nFlags )
 
 void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
-    if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
+    if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
     OutputDevice *pOutDev = GetOutDev();
@@ -1157,7 +1158,7 @@ void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void Window::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
 {
-    if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
+    if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
     if ( rRegion.IsNull() )
@@ -1180,7 +1181,7 @@ void Window::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
 void Window::Validate( sal_uInt16 nFlags )
 {
 
-    if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
+    if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
     ImplValidate( NULL, nFlags );
