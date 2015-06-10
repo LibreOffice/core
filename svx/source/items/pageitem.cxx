@@ -152,7 +152,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_PAGE_ORIENTATION:
             //Landscape= sal_True
-            rVal = Bool2Any(bLandscape);
+            rVal = css::uno::makeAny<bool>(bLandscape);
         break;
         case MID_PAGE_LAYOUT     :
         {

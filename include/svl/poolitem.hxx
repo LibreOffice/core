@@ -75,11 +75,6 @@ inline bool Any2Bool( const ::com::sun::star::uno::Any&rValue )
     return nValue;
 }
 
-inline ::com::sun::star::uno::Any Bool2Any( bool bValue )
-{
-    return ::com::sun::star::uno::Any( &bValue, cppu::UnoType<bool>::get() );
-}
-
 enum SfxMapUnit
 {
     SFX_MAPUNIT_100TH_MM,

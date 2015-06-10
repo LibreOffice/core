@@ -468,7 +468,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
 
         case MID_FIRST_AUTO:
-            rVal = Bool2Any(IsAutoFirst());
+            rVal = css::uno::makeAny<bool>(IsAutoFirst());
             break;
 
         default:
@@ -1206,7 +1206,7 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             return false;
     }
 
-    rVal = Bool2Any( bValue );
+    rVal = css::uno::makeAny<bool>( bValue );
     return true;
 }
 
@@ -3600,7 +3600,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
-            rVal = Bool2Any( aColor.GetTransparency() == 0xff );
+            rVal = css::uno::makeAny<bool>( aColor.GetTransparency() == 0xff );
         break;
 
         case MID_GRAPHIC_URL:
