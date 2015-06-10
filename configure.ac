@@ -11300,7 +11300,7 @@ int main(int argc, char **argv) {
             #               vptr for 'QObjectPrivate'
             save_CXX=$CXX
             CXX=$(printf %s "$CXX" \
-                | sed -e 's/-fno-sanitize-recover(=[0-9A-Za-z,_-]*)*//')
+                | sed -e 's/-fno-sanitize-recover\(=[[0-9A-Za-z,_-]]*\)*//')
             save_CXXFLAGS=$CXXFLAGS
             CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
             save_LIBS=$LIBS
