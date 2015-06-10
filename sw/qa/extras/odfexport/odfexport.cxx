@@ -184,6 +184,17 @@ DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, "FillBitmapTile"));
     aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, "FillTransparenceGradient");
     CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
+
+    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    {
+        // check that there are 3 background-image elements
+        assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']/style:background-image[@style:repeat='stretch']", 3);
+        // tdf#90640: check that one of them is 55% opaque
+        assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap' and @fo:background-color='transparent' and @draw:opacity='55%']/style:background-image[@style:repeat='stretch' and @draw:opacity='55%']", 1);
+        // tdf#90640: check that one of them is 43% opaque
+        // (emulated - hopefully not with rounding errors)
+        assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap' and @fo:background-color='transparent' and @draw:opacity-name='Transparency_20_1']/style:background-image[@style:repeat='stretch' and @draw:opacity='43%']", 1);
+    }
 }
 
 DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
