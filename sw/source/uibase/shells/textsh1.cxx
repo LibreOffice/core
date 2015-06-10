@@ -1794,8 +1794,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         {
             SwNumRule* pCurRule = const_cast<SwNumRule*>(GetShell().GetNumRuleAtCurrCrsrPos());
             sal_uInt16  nActNumLvl = USHRT_MAX;
-            rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,DEFAULT_NONE));
-            rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,DEFAULT_NONE));
             if( pCurRule )
             {
                 nActNumLvl = GetShell().GetNumLevel();
