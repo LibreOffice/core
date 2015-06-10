@@ -34,6 +34,24 @@
       "revId": "f57316d40232aee403149dd6850b54f805c3d5b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_501af96f",
+        "filename": "svx/source/unodraw/unoprov.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-10T11:27:04Z",
+      "side": 1,
+      "message": "it looks intentional - the idea is apparently that SvxShapeControl forwards all of them to some xControl member, that\u0027s why there is the other SvxShapeControlPropertyMapping thing.",
+      "parentUuid": "3a57f1b5_5503cb0f",
+      "revId": "f57316d40232aee403149dd6850b54f805c3d5b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
