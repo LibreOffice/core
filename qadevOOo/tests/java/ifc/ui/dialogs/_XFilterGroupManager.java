@@ -33,7 +33,7 @@ public class _XFilterGroupManager extends MultiMethodTest {
 
     /**
     * Appends a new FilterGroup (for extension 'txt'). <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _appendFilterGroup() {
         boolean res = true;

@@ -1911,7 +1911,7 @@ typedef struct lcl_ScTable_DoSubTotals_RowEntry
 } RowEntry;
 
 //      new intermediate results
-//      rParam.nRow2 is changed !
+//      rParam.nRow2 is changed!
 
 bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 {
@@ -1942,7 +1942,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     //  With (blank) as a separate category, subtotal rows from
     //  the other columns must always be tested
-    //  (previously only when a column occured more than once)
+    //  (previously only when a column occurred more than once)
     bool bTestPrevSub = ( nLevelCount > 1 );
 
     OUString  aSubString;
@@ -1950,7 +1950,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     bool bIgnoreCase = !rParam.bCaseSens;
 
-    OUString *pCompString[MAXSUBTOTAL];               // Pointer due to compiler problemens
+    OUString *pCompString[MAXSUBTOTAL];               // Pointer due to compiler problems
     for (i=0; i<MAXSUBTOTAL; i++)
         pCompString[i] = new OUString;
 
@@ -1959,7 +1959,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pDocument->GetStyleSheetPool()->Find(
                                 ScGlobal::GetRscString(STR_STYLENAME_RESULT), SFX_STYLE_FAMILY_PARA ));
 
-    bool bSpaceLeft = true;                                         // Succsess when inserting?
+    bool bSpaceLeft = true;                                         // Success when inserting?
 
     // For performance reasons collect formula entries so their
     // references don't have to be tested for updates each time a new row is
@@ -2006,7 +2006,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             GetString( nGroupCol[i], nRow, aString );
                             if (bIgnoreCase)
                                 aString = ScGlobal::pCharClass->uppercase(aString);
-                            //  when sorting, blanks are seperate group
+                            //  when sorting, blanks are separate group
                             //  otherwise blak cells are allowed below
                             bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
                                             aString != *pCompString[i] );
@@ -2151,7 +2151,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     }
 
-    //TODO: according to setting, shift intermediate-sum rows up ?
+    //TODO: according to setting, shift intermediate-sum rows up?
 
     //TODO: create Outlines directly?
 
