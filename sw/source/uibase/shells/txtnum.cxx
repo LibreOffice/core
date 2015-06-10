@@ -251,45 +251,38 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
             if ( pItem != NULL )
             {
                 const sal_uInt16 nChoosenItemIdx = pItem->GetValue();
-                if ( nChoosenItemIdx == DEFAULT_NONE )
+                svx::sidebar::NBOTypeMgrBase* pNBOTypeMgr =
+                    nSlot == FN_SVX_SET_NUMBER
+                        ? svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::NUMBERING )
+                        : svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::BULLETS );
+                if ( pNBOTypeMgr != NULL )
                 {
-                    GetShell().DelNumRules();
-                }
-                else
-                {
-                    svx::sidebar::NBOTypeMgrBase* pNBOTypeMgr =
-                        nSlot == FN_SVX_SET_NUMBER
-                            ? svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::NUMBERING )
-                            : svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::BULLETS );
-                    if ( pNBOTypeMgr != NULL )
+                    const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();
+                    sal_uInt16 nActNumLvl = USHRT_MAX;
+                    if ( pNumRuleAtCurrentSelection != NULL )
                     {
-                        const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();
-                        sal_uInt16 nActNumLvl = USHRT_MAX;
-                        if ( pNumRuleAtCurrentSelection != NULL )
+                        const sal_uInt16 nLevel = GetShell().GetNumLevel();
+                        if ( nLevel < MAXLEVEL )
                         {
-                            const sal_uInt16 nLevel = GetShell().GetNumLevel();
-                            if ( nLevel < MAXLEVEL )
-                            {
-                                nActNumLvl = 1 << nLevel;
-                            }
+                            nActNumLvl = 1 << nLevel;
                         }
-                        SwNumRule aNewNumRule(
-                            pNumRuleAtCurrentSelection != NULL ? pNumRuleAtCurrentSelection->GetName() : GetShell().GetUniqueNumRuleName(),
-                            numfunc::GetDefaultPositionAndSpaceMode() );
-                        SvxNumRule aNewSvxNumRule = pNumRuleAtCurrentSelection != NULL
-                                                        ? pNumRuleAtCurrentSelection->MakeSvxNumRule()
-                                                        : aNewNumRule.MakeSvxNumRule();
-                        // set unit attribute to NB Manager
-                        SfxItemSet aSet( GetPool(), SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL, 0 );
-                        aSet.Put( SvxNumBulletItem( aNewSvxNumRule ) );
-                        pNBOTypeMgr->SetItems( &aSet );
-                        pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChoosenItemIdx - 1, nActNumLvl );
-
-                        aNewNumRule.SetSvxRule( aNewSvxNumRule, GetShell().GetDoc() );
-                        aNewNumRule.SetAutoRule( true );
-                        const bool bCreateNewList = ( pNumRuleAtCurrentSelection == NULL );
-                        GetShell().SetCurNumRule( aNewNumRule, bCreateNewList );
                     }
+                    SwNumRule aNewNumRule(
+                        pNumRuleAtCurrentSelection != NULL ? pNumRuleAtCurrentSelection->GetName() : GetShell().GetUniqueNumRuleName(),
+                        numfunc::GetDefaultPositionAndSpaceMode() );
+                    SvxNumRule aNewSvxNumRule = pNumRuleAtCurrentSelection != NULL
+                                                    ? pNumRuleAtCurrentSelection->MakeSvxNumRule()
+                                                    : aNewNumRule.MakeSvxNumRule();
+                    // set unit attribute to NB Manager
+                    SfxItemSet aSet( GetPool(), SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL, 0 );
+                    aSet.Put( SvxNumBulletItem( aNewSvxNumRule ) );
+                    pNBOTypeMgr->SetItems( &aSet );
+                    pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChoosenItemIdx - 1, nActNumLvl );
+
+                    aNewNumRule.SetSvxRule( aNewSvxNumRule, GetShell().GetDoc() );
+                    aNewNumRule.SetAutoRule( true );
+                    const bool bCreateNewList = ( pNumRuleAtCurrentSelection == NULL );
+                    GetShell().SetCurNumRule( aNewNumRule, bCreateNewList );
                 }
             }
         }
