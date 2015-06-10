@@ -120,6 +120,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     sal_uInt64         nMinPeriod = MAX_TIMER_PERIOD;
     pSVData->mnUpdateStack++;
 
+    // tdf#91727 - NB. bTimer is ultimately not used
     if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimer)))
     {
         pSchedulerData->mnUpdateTime = nTime;
@@ -164,16 +165,10 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
         pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
     }
     else
+    {
         Timer::ImplStartTimer( pSVData, nMinPeriod );
+    }
     pSVData->mnUpdateStack--;
-}
-
-sal_uInt64 Scheduler::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
-{
-    // this period is only useful for timer
-    // so in this implementation it' only a pass through
-    (void)nTime;
-    return nMinPeriod;
 }
 
 void Scheduler::SetPriority( SchedulerPriority ePriority )
@@ -235,8 +230,9 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
     return *this;
 }
 
-Scheduler::Scheduler():
+Scheduler::Scheduler(const sal_Char *pDebugName):
     mpSchedulerData(NULL),
+    mpDebugName(pDebugName),
     mePriority(SchedulerPriority::HIGH),
     mbActive(false)
 {
@@ -244,6 +240,7 @@ Scheduler::Scheduler():
 
 Scheduler::Scheduler( const Scheduler& rScheduler ):
     mpSchedulerData(NULL),
+    mpDebugName(rScheduler.mpDebugName),
     mePriority(rScheduler.mePriority),
     mbActive(false)
 {
