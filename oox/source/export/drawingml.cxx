@@ -2289,14 +2289,15 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
 
                     for ( int j = 0; j < aPairs.getLength(); ++j )
                     {
-                        if ( aPairs[j].First.Value.get<sal_Int32>() < nXMin )
-                            nXMin = aPairs[j].First.Value.get<sal_Int32>();
-                        if ( aPairs[j].Second.Value.get<sal_Int32>() < nYMin )
-                            nYMin = aPairs[j].Second.Value.get<sal_Int32>();
-                        if ( aPairs[j].First.Value.get<sal_Int32>() > nXMax )
-                            nXMax = aPairs[j].First.Value.get<sal_Int32>();
-                        if ( aPairs[j].Second.Value.get<sal_Int32>() > nYMax )
-                            nYMax = aPairs[j].Second.Value.get<sal_Int32>();
+                        sal_Int32 nCandidate(0);
+                        if ((aPairs[j].First.Value >>= nCandidate) && nCandidate < nXMin)
+                            nXMin = nCandidate;
+                        if ((aPairs[j].Second.Value >>= nCandidate) && nCandidate < nYMin)
+                            nYMin = nCandidate;
+                        if ((aPairs[j].First.Value >>= nCandidate) && nCandidate > nXMax)
+                            nXMax = nCandidate;
+                        if ((aPairs[j].Second.Value >>= nCandidate) && nCandidate > nYMax)
+                            nYMax = nCandidate;
                     }
                     mpFS->startElementNS( XML_a, XML_path,
                           XML_w, I64S( nXMax - nXMin ),
