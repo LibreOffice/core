@@ -390,7 +390,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
             if( nStart != nEnd ) // a section?
             {
-                sTxt = pTxtNd->GetExpandTxt( nStart, nEnd - nStart );
+                sTxt = pTxtNd->GetExpandTxt( nStart, nEnd - nStart, false, false, false, false );
 
                 // remove all special characters (replace them with blanks)
                 if( !sTxt.isEmpty() )
