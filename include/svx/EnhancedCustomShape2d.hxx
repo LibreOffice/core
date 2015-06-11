@@ -39,6 +39,7 @@
 #include <memory>
 #include <vector>
 
+class Color;
 class SdrModel;
 class SdrObject;
 class SfxItemSet;

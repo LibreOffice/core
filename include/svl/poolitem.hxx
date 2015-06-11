@@ -16,26 +16,20 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_SVL_POOLITEM_HXX
 #define INCLUDED_SVL_POOLITEM_HXX
 
-#include <svl/svldllapi.h>
-#include <com/sun/star/uno/Any.hxx>
-
 #include <sal/config.h>
-#include <tools/rtti.hxx>
-#include <limits.h>
-#include <tools/solar.h>
-#include <tools/debug.hxx>
+
+#include <com/sun/star/uno/Any.hxx>
 #include <svl/hint.hxx>
+#include <svl/svldllapi.h>
+#include <tools/debug.hxx>
+#include <tools/rtti.hxx>
 
-class SbxVariable;
-class SbxObject;
-class SvStream;
-class Color;
 class IntlWrapper;
-
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+class SvStream;
 
 enum SfxItemKind {
    SFX_ITEMS_NONE,
@@ -49,10 +43,6 @@ enum SfxItemKind {
 #define SFX_ITEMS_SPECIAL                   0xffffffff
 
 #define CONVERT_TWIPS                       0x80    // Uno conversion for measurement (for MemberId)
-
-
-
-// UNO3 shortcuts
 
 // warning, if there is no boolean inside the any this will always return the value false
 inline bool Any2Bool( const ::com::sun::star::uno::Any&rValue )
@@ -94,15 +84,12 @@ enum SfxMapUnit
     SFX_MAPUNIT_ABSOLUTE
 };
 
-
-
-enum SfxItemPresentation
-
 /*
  * The values of this enum describe the degree of textual
  * representation of an item after calling the virtual
  * method <SfxPoolItem::GetPresentation()const>.
  */
+enum SfxItemPresentation
 {
     SFX_ITEM_PRESENTATION_NAMELESS,
     SFX_ITEM_PRESENTATION_COMPLETE
@@ -146,9 +133,6 @@ enum class SfxItemState {
 class SvXMLUnitConverter;
 class SfxItemPool;
 class SfxItemSet;
-
-
-
 
 class SVL_DLLPUBLIC SfxPoolItem
 {
@@ -212,8 +196,6 @@ private:
     SfxPoolItem&             operator=( const SfxPoolItem& ) SAL_DELETED_FUNCTION;
 };
 
-
-
 inline void SfxPoolItem::SetRefCount( sal_uLong n )
 {
     m_nRefCount = n;
@@ -241,8 +223,6 @@ inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
     return m_nRefCount;
 }
 
-
-
 inline bool IsPoolDefaultItem(const SfxPoolItem *pItem )
 {
     return pItem && pItem->GetKind() == SFX_ITEMS_POOLDEFAULT;
@@ -268,8 +248,6 @@ inline bool IsInvalidItem(const SfxPoolItem *pItem)
     return pItem == reinterpret_cast<SfxPoolItem *>(-1);
 }
 
-
-
 class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
 {
     SfxVoidItem & operator=( const SfxVoidItem& ) SAL_DELETED_FUNCTION;
@@ -292,8 +270,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
             void            SetWhich(sal_uInt16 nWh) { m_nWhich = nWh; }
 };
-
-
 
 class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
 {
@@ -327,7 +303,6 @@ public:
                             { return *pSet; }
 };
 
-
 class SVL_DLLPUBLIC SfxPoolItemHint: public SfxHint
 {
     SfxPoolItem* pObj;
@@ -337,8 +312,6 @@ public:
     SfxPoolItem* GetObject() const { return pObj; }
 };
 
-
-
-#endif // INCLUDED_SVL_POOLITEM_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,6 +25,7 @@
 
 #include <boost/noncopyable.hpp>
 
+class Color;
 class SvxFont;
 class SvxFontItem;
 class SvxWeightItem;
