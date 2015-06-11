@@ -22,6 +22,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdmodel.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -1644,6 +1645,17 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         impLeaveOnlyNonOverflowingText(&rOutliner);
 
         // XXX: Order transfer of stuff in next link here
+        /* Get chaining outliner  here */
+        // Code adapted from ImpGetDrawOutliner
+        SdrOutliner &rChainingOutl = pModel->GetChainingOutliner(this);
+        ImpInitDrawOutliner( rChainingOutl );
+        rOutliner.SetUpdateMode(true);
+
+        /* Actual transfer of text */
+        const_cast<SdrTextObj*>(this)->mpOverflowingText = rOutliner.GetOverflowingText();
+        if (GetNextLinkInChain())
+            impMoveChainedTextToNextLink(&rChainingOutl, GetNextLinkInChain());
+
     }
     /* End overflow handling */
 

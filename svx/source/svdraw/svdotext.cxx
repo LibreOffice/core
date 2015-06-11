@@ -2063,7 +2063,7 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
     if ( pPage && pPage->GetObjCount() > 1) {
         sal_uInt32 nextIndex = (GetOrdNum()+1);
         // FIXME
-        if (nextIndex >= 3 || nextIndex >= pPage->GetObjCount()) {
+        if (!GetName().startsWith("Chainable")) {
             fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
             return NULL;
         }
