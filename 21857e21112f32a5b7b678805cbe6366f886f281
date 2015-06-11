@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_b0348d4a",
+        "filename": "include/formula/compiler.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-11T10:35:29Z",
+      "side": 1,
+      "message": "If you check this against the corresponding change of CEILING in http://cgit.freedesktop.org/libreoffice/core/diff/include/formula/compiler.hrc?id\u003d010b2d2d9be846fb6b10848204e29e1bc00ef1ea that did something slightly different regarding the _MATH function. We should either follow that for a similar approach, or change the CEILING one to follow this one here, for clarity.\n\nI think keeping the old opcodes is better because if users had the functions in their MRU function list they\u0027d be presented with the same function.",
+      "revId": "21857e21112f32a5b7b678805cbe6366f886f281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_d0390943",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2516,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-11T10:35:29Z",
+      "side": 1,
+      "message": "This is now checked on *every* found opcode and does more than just a simple comparison, and if true ...",
+      "range": {
+        "startLine": 2516,
+        "startChar": 18,
+        "endLine": 2516,
+        "endChar": 38
+      },
+      "revId": "21857e21112f32a5b7b678805cbe6366f886f281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_703ff525",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-11T10:35:29Z",
+      "side": 1,
+      "message": "... just to check if it is ocCeil ...",
+      "revId": "21857e21112f32a5b7b678805cbe6366f886f281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_903cf130",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2524,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-11T10:35:29Z",
+      "side": 1,
+      "message": "... or ocFloor.\n\nFor performance better keep the previous code and have\n\n else if (eOp \u003d\u003d ocCeil \u0026\u0026 mxSymbols-\u003eisOOXML())\n { ... }\n else if (eOp \u003d\u003d ocFloor \u0026\u0026 mxSymbols-\u003eisOOXML())\n { ... }",
+      "revId": "21857e21112f32a5b7b678805cbe6366f886f281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_b00b2d7d",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-11T10:35:29Z",
+      "side": 1,
+      "message": "Why develop this different from the http://cgit.freedesktop.org/libreoffice/core/diff/sc/source/core/tool/interpr2.cxx?id\u003d010b2d2d9be846fb6b10848204e29e1bc00ef1ea CEILING case?\n\nActually bool(... \u0026\u0026 GetBool()) is the same as bool(... \u0026\u0026 GetDouble() !\u003d 0.0), there\u0027s no need for two code paths here.",
+      "revId": "21857e21112f32a5b7b678805cbe6366f886f281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_d01029ab",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-11T10:35:29Z",
+      "side": 1,
+      "message": "Compared with the change in http://cgit.freedesktop.org/libreoffice/core/diff/sc/source/core/tool/interpr2.cxx?id\u003d010b2d2d9be846fb6b10848204e29e1bc00ef1ea for ScCeil_MS() this logic looks a bit odd and weird, but I compared with what Excel does and indeed their FLOOR behaves different than their CEILING if the second argument is 0 ...",
+      "revId": "21857e21112f32a5b7b678805cbe6366f886f281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_107ec1e4",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 4764,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-11T10:35:29Z",
+      "side": 1,
+      "message": "Please use English comments ;-)\nI know it means something like \"is that regardless of sign really correct\", but...\n\nYes, regardless of sign here means that both, negative and positive values, are rounded down (i.e. mathematical floor, as contrary to the weird old Excel logic).",
+      "revId": "21857e21112f32a5b7b678805cbe6366f886f281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
