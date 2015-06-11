@@ -45,6 +45,7 @@
 #include "chartlis.hxx"
 #include "chart2uno.hxx"
 #include "convuno.hxx"
+#include "ScChartListenerCollection.hxx"
 
 using namespace com::sun::star;
 
