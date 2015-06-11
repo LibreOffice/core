@@ -446,7 +446,7 @@ shell::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
 
     it->second.notifier->remove( pNotifier );
 
-    if( ! it->second.notifier->size() )
+    if( it->second.notifier->empty() )
         m_aContent.erase( it );
 }
 

@@ -300,7 +300,7 @@ The code below would only be part of the solution.
                     else
                         m_pSpellState->m_bOtherSpelled = true;
                     // if no result has been found try at the body text - completely
-                    if(!m_pSpellState->m_bBodySpelled && !aRet.size())
+                    if(!m_pSpellState->m_bBodySpelled && aRet.empty())
                     {
                         pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START );
                         if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
@@ -334,7 +334,7 @@ The code below would only be part of the solution.
                         pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_CURR, DOCPOS_OTHERSTART );
                         (void)pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
                     }
-                    if(!aRet.size())
+                    if(aRet.empty())
                     {
                         // end spelling
                         pWrtShell->SpellEnd();
@@ -370,7 +370,7 @@ The code below would only be part of the solution.
                     }
 
                     // search for a draw text object that contains error and spell it
-                    if(!aRet.size() &&
+                    if(aRet.empty() &&
                             (m_pSpellState->m_bDrawingsSpelled ||
                             !FindNextDrawTextError_Impl(*pWrtShell) || !SpellDrawText_Impl(*pWrtShell, aRet)))
                     {
@@ -383,7 +383,7 @@ The code below would only be part of the solution.
         // now only the rest of the body text can be spelled -
         // if the spelling started inside of the body
         bool bCloseMessage = true;
-        if(!aRet.size() && !m_pSpellState->m_bStartedInSelection)
+        if(aRet.empty() && !m_pSpellState->m_bStartedInSelection)
         {
             OSL_ENSURE(m_pSpellState->m_bDrawingsSpelled &&
                         m_pSpellState->m_bOtherSpelled && m_pSpellState->m_bBodySpelled,
@@ -413,7 +413,7 @@ The code below would only be part of the solution.
                     bCloseMessage = false; // no closing message if a wrap around has been denied
             }
         }
-        if(!aRet.size())
+        if(aRet.empty())
         {
             if(bCloseMessage)
             {
@@ -755,10 +755,10 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
             m_pSpellState->m_aTextObjects.push_back(pCurrentTextObj);
                                 }
                             }
-    if(m_pSpellState->m_aTextObjects.size())
+    if(!m_pSpellState->m_aTextObjects.empty())
     {
         Reference< XSpellChecker1 >  xSpell( GetSpellChecker() );
-        while(!bNextDoc && m_pSpellState->m_aTextObjects.size())
+        while(!bNextDoc && !m_pSpellState->m_aTextObjects.empty())
         {
             std::list<SdrTextObj*>::iterator aStart = m_pSpellState->m_aTextObjects.begin();
             SdrTextObj* pTextObj = *aStart;

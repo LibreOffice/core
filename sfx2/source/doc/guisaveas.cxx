@@ -769,18 +769,18 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 
     // if the old filter is not acceptable
     // and there is no default filter or it is not acceptable for requested parameters then proceed with saveAs
-    if ( ( !aFiltPropsHM.size() || !( nFiltFlags & SfxFilterFlags::EXPORT ) )
-      && ( !aDefFiltPropsHM.size() || !( nDefFiltFlags & SfxFilterFlags::EXPORT ) || nDefFiltFlags & SfxFilterFlags::INTERNAL ) )
+    if ( ( aFiltPropsHM.empty() || !( nFiltFlags & SfxFilterFlags::EXPORT ) )
+      && ( aDefFiltPropsHM.empty() || !( nDefFiltFlags & SfxFilterFlags::EXPORT ) || nDefFiltFlags & SfxFilterFlags::INTERNAL ) )
         return STATUS_SAVEAS;
 
     // so at this point there is either an acceptable old filter or default one
-    if ( !aFiltPropsHM.size() || !( nFiltFlags & SfxFilterFlags::EXPORT ) )
+    if ( aFiltPropsHM.empty() || !( nFiltFlags & SfxFilterFlags::EXPORT ) )
     {
         // so the default filter must be acceptable
         return STATUS_SAVEAS_STANDARDNAME;
     }
     else if ( ( !( nFiltFlags & SfxFilterFlags::OWN ) || ( nFiltFlags & SfxFilterFlags::ALIEN ) )
-           && aDefFiltPropsHM.size()
+           && !aDefFiltPropsHM.empty()
            && ( nDefFiltFlags & SfxFilterFlags::EXPORT ) && !( nDefFiltFlags & SfxFilterFlags::INTERNAL ))
     {
         // the default filter is acceptable and the old filter is alien one
@@ -938,7 +938,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
-        if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && aPreselectedFilterPropsHM.size() )
+        if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && !aPreselectedFilterPropsHM.empty() )
         {
             // this is a PDF export
             // the filter options has been shown already

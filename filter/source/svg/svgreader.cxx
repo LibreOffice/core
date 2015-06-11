@@ -1786,7 +1786,7 @@ struct OfficeStylesWritingVisitor
         *dots2_length = 0;
         *dash_distance = 0;
 
-        if( maCurrState.maDashArray.size() == 0 ) {
+        if( maCurrState.maDashArray.empty() ) {
             return;
         }
 

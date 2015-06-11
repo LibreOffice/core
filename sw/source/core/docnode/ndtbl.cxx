@@ -263,7 +263,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
     if( !pPrvBox && !pNxtBox )
     {
         bool bSetIdxPos = true;
-        if( pTableNd->GetTable().GetTabLines().size() && !nInsPos )
+        if( !pTableNd->GetTable().GetTabLines().empty() && !nInsPos )
         {
             const SwTableLine* pTableLn = pLine;
             while( pTableLn->GetUpper() )
@@ -272,7 +272,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
             if( pTableNd->GetTable().GetTabLines()[ 0 ] == pTableLn )
             {
                 // Before the Table's first Box
-                while( ( pNxtBox = pLine->GetTabBoxes()[0])->GetTabLines().size() )
+                while( !( pNxtBox = pLine->GetTabBoxes()[0])->GetTabLines().empty() )
                     pLine = pNxtBox->GetTabLines()[0];
                 nIdxPos = pNxtBox->GetSttIdx();
                 bSetIdxPos = false;
@@ -1351,7 +1351,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                                     SwTableBoxFormat* pBoxFormat,
                                     SwTextFormatColl* /*pTextColl*/  /*, SwUndo... pUndo*/  )
 {
-    if( !rTableNodes.size() )
+    if( rTableNodes.empty() )
         return 0;
 
     SwTableNode * pTableNd = new SwTableNode( rTableNodes.begin()->begin()->aStart );
@@ -1846,7 +1846,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
             ForEach_FndLineCopyCol( pTableNd->GetTable().GetTabLines(), &aPara );
         }
 
-        if( !aFndBox.GetLines().size() )
+        if( aFndBox.GetLines().empty() )
             return false;
 
         SwEditShell* pESh = GetEditShell();

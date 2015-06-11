@@ -483,7 +483,7 @@ namespace
 
         lcl_CalcBreaks(Breaks, rPam);
 
-        if (!Breaks.size())
+        if (Breaks.empty())
         {
             return (rDocumentContentOperations.*pFunc)(rPam, bForceJoinNext);
         }
@@ -2968,7 +2968,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     }
     *rPam.Start() = *aPam.GetMark(); // update start of original pam w/ prefix
 
-    if (!Breaks.size())
+    if (Breaks.empty())
     {
         // park aPam somewhere so it does not point to node that is deleted
         aPam.DeleteMark();

@@ -614,7 +614,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
     CellPropertyValuesSeq_t aCellProperties( m_aCellProperties.size() );
 
-    if ( !m_aCellProperties.size() )
+    if ( m_aCellProperties.empty() )
     {
         #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().endElement();

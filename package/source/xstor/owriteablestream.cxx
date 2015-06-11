@@ -76,7 +76,7 @@ namespace package
 
 bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 )
 {
-    bool bResult = ( aHash1.size() && aHash1.size() == aHash2.size() );
+    bool bResult = !aHash1.empty() && aHash1.size() == aHash2.size();
     for ( ::comphelper::SequenceAsHashMap::const_iterator aIter = aHash1.begin();
           bResult && aIter != aHash1.end();
           ++aIter )
@@ -455,7 +455,7 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException();
 
-    if ( !aEncryptionData.size() )
+    if ( aEncryptionData.empty() )
         throw uno::RuntimeException();
 
     GetStreamProperties();

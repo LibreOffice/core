@@ -1233,7 +1233,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTable )
 
     if( ULONG_MAX == nSttNode )     // no EndBox
     {
-        if( !rBox.GetTabLines().size() )
+        if( rBox.GetTabLines().empty() )
         {
             OSL_ENSURE( false, "Number of lines changed" );
         }

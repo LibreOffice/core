@@ -1767,7 +1767,7 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
 char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
 {
     rBytes = 0;
-    if( ! m_aCurrentValues.size() )
+    if( m_aCurrentValues.empty() )
         return NULL;
     hash_type::const_iterator it;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )

@@ -586,7 +586,7 @@ public:
         throw ( RuntimeException, std::exception ) SAL_OVERRIDE
     {
         bool result = true;
-        if ( !m_vNodes.size() )
+        if ( m_vNodes.empty() )
         {
             result = false;
         }

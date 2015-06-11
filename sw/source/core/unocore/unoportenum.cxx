@@ -391,7 +391,7 @@ throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
-    return m_Portions.size() > 0;
+    return !m_Portions.empty();
 }
 
 uno::Any SwXTextPortionEnumeration::nextElement()
@@ -400,7 +400,7 @@ throw( container::NoSuchElementException, lang::WrappedTargetException,
 {
     SolarMutexGuard aGuard;
 
-    if (!m_Portions.size())
+    if (m_Portions.empty())
         throw container::NoSuchElementException();
 
     Any any;
@@ -1152,7 +1152,7 @@ static void lcl_ExportAnnotationStarts(
     SwAnnotationStartPortion_ImplList& rAnnotationStartArr,
     const sal_Int32 nIndex)
 {
-    if ( rAnnotationStartArr.size() > 0 )
+    if ( !rAnnotationStartArr.empty() )
     {
         for ( SwAnnotationStartPortion_ImplList::iterator aIter = rAnnotationStartArr.begin(), aEnd = rAnnotationStartArr.end();
               aIter != aEnd; )
@@ -1187,11 +1187,11 @@ static sal_Int32 lcl_ExportFrames(
 {
     // Ignore frames which are not exported, as we are exporting a selection
     // and they are anchored before the start of the selection.
-    while (i_rFrames.size() && i_rFrames.front().nIndex < i_nCurrentIndex)
+    while (!i_rFrames.empty() && i_rFrames.front().nIndex < i_nCurrentIndex)
         i_rFrames.pop_front();
 
     // find first Frame in (sorted) i_rFrames at current position
-    while (i_rFrames.size() && (i_rFrames.front().nIndex == i_nCurrentIndex))
+    while (!i_rFrames.empty() && (i_rFrames.front().nIndex == i_nCurrentIndex))
     // do not check for i_nEnd here; this is done implicity by lcl_MoveCursor
     {
         const SwModify * const pFrame =
@@ -1205,7 +1205,7 @@ static sal_Int32 lcl_ExportFrames(
         i_rFrames.pop_front();
     }
 
-    return i_rFrames.size() ? i_rFrames.front().nIndex : -1;
+    return !i_rFrames.empty() ? i_rFrames.front().nIndex : -1;
 }
 
 static sal_Int32 lcl_GetNextIndex(
@@ -1341,7 +1341,7 @@ static void lcl_CreatePortions(
         if (!xRef.is() && !bCursorMoved)
         {
             if (!bAtEnd &&
-                FieldMarks.size() && (FieldMarks.front() == nCurrentIndex))
+                !FieldMarks.empty() && (FieldMarks.front() == nCurrentIndex))
             {
                 // moves cursor
                 xRef = lcl_ExportFieldMark(i_xParentText, pUnoCrsr, pTextNode);
@@ -1350,7 +1350,7 @@ static void lcl_CreatePortions(
         }
         else
         {
-            OSL_ENSURE(!FieldMarks.size() ||
+            OSL_ENSURE(FieldMarks.empty() ||
                    (FieldMarks.front() != nCurrentIndex),
                    "fieldmark and hint with CH_TXTATR at same pos?");
         }
@@ -1360,8 +1360,8 @@ static void lcl_CreatePortions(
             const sal_Int32 nNextPortionIndex =
                 lcl_GetNextIndex(Bookmarks, Redlines, SoftPageBreaks);
 
-            sal_Int32 nNextMarkIndex = ( FieldMarks.size() ? FieldMarks.front() : -1 );
-            if ( AnnotationStarts.size() > 0
+            sal_Int32 nNextMarkIndex = ( !FieldMarks.empty() ? FieldMarks.front() : -1 );
+            if ( !AnnotationStarts.empty()
                  && ( nNextMarkIndex == -1
                       || (*AnnotationStarts.begin())->getIndex() < nNextMarkIndex ) )
             {

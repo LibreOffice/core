@@ -170,7 +170,7 @@ namespace
             back_inserter(vCandidates),
             boost::bind( ::std::logical_not<bool>(), boost::bind( &IMark::EndsBefore, _1, rPos ) ) );
         // no candidate left => we are in front of the first mark or there are none
-        if(!vCandidates.size()) return NULL;
+        if(vCandidates.empty()) return NULL;
         // return the highest (last) candidate using mark end ordering
         return max_element(vCandidates.begin(), vCandidates.end(), &lcl_MarkOrderingByEnd)->get();
     }
@@ -809,7 +809,7 @@ namespace sw { namespace mark
             // in order to assure sorting.  The sorting is critical for the
             // deletion of a mark as it is searched in these container for
             // deletion.
-            if ( vMarksToDelete.size() > 0 && bMarksMoved )
+            if ( !vMarksToDelete.empty() && bMarksMoved )
             {
                 sortSubsetMarks();
             }

@@ -582,7 +582,7 @@ FieldContextPtr  DomainMapper_Impl::GetTopFieldContext()
 
 void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
 {
-    OSL_ENSURE(!m_aCurrentTabStops.size(), "tab stops already initialized");
+    OSL_ENSURE(m_aCurrentTabStops.empty(), "tab stops already initialized");
     for( sal_Int32 nTab = 0; nTab < rInitTabStops.getLength(); ++nTab)
     {
         m_aCurrentTabStops.push_back( DeletableTabStop(rInitTabStops[nTab]) );
@@ -1025,7 +1025,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 #endif
 
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
-    if (!m_aTextAppendStack.size())
+    if (m_aTextAppendStack.empty())
         return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend >  xTextAppend;

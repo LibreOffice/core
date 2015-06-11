@@ -861,7 +861,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList_Y = rAxisUsage.getCoordinateSystems( 1, nAxisIndex );
-            if( !aVCooSysList_Y.size() )
+            if( aVCooSysList_Y.empty() )
                 continue;
 
             uno::Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );

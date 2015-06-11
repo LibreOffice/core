@@ -487,7 +487,7 @@ void XclExpPaletteImpl::WriteBody( XclExpStream& rStrm )
 
 void XclExpPaletteImpl::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !maPalette.size() )
+    if( maPalette.empty() )
         return;
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
@@ -1411,7 +1411,7 @@ void XclExpNumFmtBuffer::Save( XclExpStream& rStrm )
 
 void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !maFormatMap.size() )
+    if( maFormatMap.empty() )
         return;
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();

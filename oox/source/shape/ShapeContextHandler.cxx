@@ -437,7 +437,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
         else if (mxDiagramShapeContext.is())
         {
             basegfx::B2DHomMatrix aMatrix;
-            if (mpShape->getExtDrawings().size() == 0)
+            if (mpShape->getExtDrawings().empty())
             {
                 mpShape->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, mpShape->getFillProperties() );
                 xResult = mpShape->getXShape();

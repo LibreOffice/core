@@ -79,7 +79,7 @@ PresentationFragmentHandler::~PresentationFragmentHandler() throw()
 void ResolveTextFields( XmlFilterBase& rFilter )
 {
     const oox::core::TextFieldStack& rTextFields = rFilter.getTextFieldStack();
-    if ( rTextFields.size() )
+    if ( !rTextFields.empty() )
     {
         Reference< frame::XModel > xModel( rFilter.getModel() );
         oox::core::TextFieldStack::const_iterator aIter( rTextFields.begin() );
@@ -192,7 +192,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                         Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
                         Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_QUERY_THROW );
 
-                        if( !(rFilter.getMasterPages().size() ))
+                        if( rFilter.getMasterPages().empty() )
                             xMasterPages->getByIndex( 0 ) >>= xMasterPage;
                         else
                             xMasterPage = xMasterPages->insertNewByIndex( xMasterPages->getCount() );

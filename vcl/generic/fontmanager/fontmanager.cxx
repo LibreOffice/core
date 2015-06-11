@@ -2136,7 +2136,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
     }
     else if( pFont->m_eType == fonttype::Type1 )
     {
-        if( ! pFont->m_aEncodingVector.size() )
+        if( pFont->m_aEncodingVector.empty() )
             pFont->readAfmMetrics( m_pAtoms, true, true );
         if( pFont->m_pMetrics )
         {
@@ -2163,18 +2163,18 @@ const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( font
     if( !pFont || pFont->m_eType != fonttype::Type1 )
         return NULL;
 
-    if( ! pFont->m_aEncodingVector.size() )
+    if( pFont->m_aEncodingVector.empty() )
         pFont->readAfmMetrics( m_pAtoms, true, true );
 
     if( pNonEncoded )
-        *pNonEncoded = pFont->m_aNonEncoded.size() ? &pFont->m_aNonEncoded : NULL;
+        *pNonEncoded = !pFont->m_aNonEncoded.empty() ? &pFont->m_aNonEncoded : NULL;
 
     if (ppPriority)
     {
         *ppPriority = &pFont->m_aEncodingVectorPriority;
     }
 
-    return pFont->m_aEncodingVector.size() ? &pFont->m_aEncodingVector : NULL;
+    return !pFont->m_aEncodingVector.empty() ? &pFont->m_aEncodingVector : NULL;
 }
 
 std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aChar ) const

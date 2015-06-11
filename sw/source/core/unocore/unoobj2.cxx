@@ -1679,7 +1679,7 @@ void SwXParaFrameEnumerationImpl::FillFrame()
 
 bool SwXParaFrameEnumerationImpl::CreateNextObject()
 {
-    if (!m_vFrames.size())
+    if (m_vFrames.empty())
         return false;
 
     SwFrameFormat* const pFormat = static_cast<SwFrameFormat*>(
@@ -1740,7 +1740,7 @@ throw (container::NoSuchElementException,
     if (!GetCursor())
         throw uno::RuntimeException();
     PurgeFrameClients();
-    if (!m_xNextObject.is() && m_vFrames.size())
+    if (!m_xNextObject.is() && !m_vFrames.empty())
         CreateNextObject();
     if (!m_xNextObject.is())
         throw container::NoSuchElementException();

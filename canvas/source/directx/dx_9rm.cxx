@@ -1225,7 +1225,7 @@ namespace dxcanvas
 
         void DXRenderModule::flushVertexCache()
         {
-            if(!(maVertexCache.size()))
+            if(maVertexCache.empty())
                 return;
 
             mbError=true;

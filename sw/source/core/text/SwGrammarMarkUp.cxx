@@ -39,7 +39,7 @@ void SwGrammarMarkUp::CopyFrom( const SwWrongList& rCopy )
 void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
 {
     Move( nPos, nDiff );
-    if( !maSentence.size() )
+    if( maSentence.empty() )
         return;
     std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter < nPos )
@@ -58,7 +58,7 @@ void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
 SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( sal_Int32 nSplitPos )
 {
     SwGrammarMarkUp* pNew = static_cast<SwGrammarMarkUp*>(SplitList( nSplitPos ));
-    if( !maSentence.size() )
+    if( maSentence.empty() )
         return pNew;
     std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter < nSplitPos )
@@ -80,7 +80,7 @@ void SwGrammarMarkUp::JoinGrammarList( SwGrammarMarkUp* pNext, sal_Int32 nInsert
     JoinList( pNext, nInsertPos );
     if (pNext)
     {
-        if( !pNext->maSentence.size() )
+        if( pNext->maSentence.empty() )
             return;
         std::vector< sal_Int32 >::iterator pIter = pNext->maSentence.begin();
         while( pIter != pNext->maSentence.end() )
@@ -126,7 +126,7 @@ void SwGrammarMarkUp::setSentence( sal_Int32 nStart )
 
 sal_Int32 SwGrammarMarkUp::getSentenceStart( sal_Int32 nPos )
 {
-    if( !maSentence.size() )
+    if( maSentence.empty() )
         return 0;
     std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter < nPos )
@@ -140,7 +140,7 @@ sal_Int32 SwGrammarMarkUp::getSentenceStart( sal_Int32 nPos )
 
 sal_Int32 SwGrammarMarkUp::getSentenceEnd( sal_Int32 nPos )
 {
-    if( !maSentence.size() )
+    if( maSentence.empty() )
         return COMPLETE_STRING;
     std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter <= nPos )

@@ -1998,7 +1998,7 @@ void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
         }
     }
 
-    if (maColPositions.size() == 0)
+    if (maColPositions.empty())
         return;
 
     maColPos = maColPositions.begin();
@@ -2080,7 +2080,7 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
                     debugiter("remove column %d at row %d\n",
                               (int)maColPos->mnCol, (int)nRow);
                     maColPos = maColPositions.erase(maColPos);
-                    if (maColPositions.size() == 0)
+                    if (maColPositions.empty())
                     {
                         debugiter("no more columns\n");
                         mbMore = false;
@@ -2102,7 +2102,7 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
     }
 
     // No more columns with anything interesting in them ?
-    if (maColPositions.size() == 0)
+    if (maColPositions.empty())
     {
         debugiter("no more live columns left - done\n");
         mbMore = false;

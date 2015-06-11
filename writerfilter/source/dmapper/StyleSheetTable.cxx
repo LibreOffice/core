@@ -1471,7 +1471,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
             ++aIt;
         }
     }
-    if(!m_pImpl->m_aStyleNameMap.size())
+    if(m_pImpl->m_aStyleNameMap.empty())
     {
         for( sal_uInt32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
         {

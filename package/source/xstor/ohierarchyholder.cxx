@@ -79,7 +79,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     if ( !( nStorageMode & embed::ElementModes::WRITE ) && ( nStreamMode & embed::ElementModes::WRITE ) )
         throw io::IOException();
 
-    if ( !aListPath.size() )
+    if ( aListPath.empty() )
         throw uno::RuntimeException();
 
     OUString aNextName = *(aListPath.begin());
@@ -94,9 +94,9 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     if ( !xOwnStor.is() )
         throw uno::RuntimeException();
 
-    if ( !aListPath.size() )
+    if ( aListPath.empty() )
     {
-        if ( !aEncryptionData.size() )
+        if ( aEncryptionData.empty() )
         {
             uno::Reference< embed::XHierarchicalStorageAccess > xHStorage( xOwnStor, uno::UNO_QUERY_THROW );
             xResult = xHStorage->openStreamElementByHierarchicalName( aNextName, nStreamMode );
@@ -162,7 +162,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !aListPath.size() )
+    if ( aListPath.empty() )
         throw uno::RuntimeException();
 
     OUString aNextName = *(aListPath.begin());
@@ -177,7 +177,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
     if ( !xOwnStor.is() )
         throw uno::RuntimeException();
 
-    if ( !aListPath.size() )
+    if ( aListPath.empty() )
     {
         xOwnStor->removeElement( aNextName );
     }

@@ -394,7 +394,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 // The cell will own the text object instance.
                 mpDoc->SetEditText(ScAddress(nCol,nRow,nTab), mpEngine->CreateTextObject(pE->aSel));
             }
-            if ( pE->maImageList.size() )
+            if ( !pE->maImageList.empty() )
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );
             if ( pE->pName )
             {   // Anchor Name => RangeName
@@ -470,7 +470,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
 
 bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )
 {
-    if ( !pE->maImageList.size() )
+    if ( pE->maImageList.empty() )
         return false;
     bool bHasGraphics = false;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
@@ -534,7 +534,7 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseE
 void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScEEParseEntry* pE )
 {
-    if ( !pE->maImageList.size() )
+    if ( pE->maImageList.empty() )
         return ;
     ScDrawLayer* pModel = mpDoc->GetDrawLayer();
     if (!pModel)

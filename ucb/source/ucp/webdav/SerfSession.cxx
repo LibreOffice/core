@@ -1206,7 +1206,7 @@ bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
 
         PROPFIND( rEnv.m_aRequestURI, DAVZERO, aPropNames, aResources, rEnv );
 
-        if ( aResources.size() == 0 )
+        if ( aResources.empty() )
             return false;
 
         std::vector< DAVPropertyValue >::const_iterator it
