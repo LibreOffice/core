@@ -145,12 +145,12 @@ static void getVisibleAreaTwips(GdkRectangle* pArea)
 
 
 /// Handles the key-press-event of the window.
-static gboolean signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData)
+static gboolean signalKey(GtkWidget* /*pWidget*/, GdkEvent* pEvent, gpointer/* pData*/)
 {
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
     if (!gtk_widget_get_visible(pFindbar) && bool(lok_doc_view_get_edit(pLOKDocView)))
         {
-            lok_doc_view_post_key(pWidget, pEvent, pData);
+            lok_doc_view_post_key(pLOKDocView, pEvent);
             return TRUE;
         }
     return FALSE;
