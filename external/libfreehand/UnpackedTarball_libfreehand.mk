@@ -11,8 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libfreehand))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libfreehand,$(FREEHAND_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libfreehand,\
-	external/libfreehand/libfreehand_quote.patch.1 \
-))
-
 # vim: set noet sw=4 ts=4:
