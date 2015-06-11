@@ -25,23 +25,19 @@ G_BEGIN_DECLS
 #define LOK_IS_DOC_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  LOK_TYPE_DOC_VIEW))
 #define LOK_DOC_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  LOK_TYPE_DOC_VIEW, LOKDocViewClass))
 
-
-typedef struct _LOKDocView       LOKDocView;
-typedef struct _LOKDocViewClass  LOKDocViewClass;
+typedef struct _LOKDocView        LOKDocView;
+typedef struct _LOKDocViewClass   LOKDocViewClass;
+typedef struct _LOKDocViewPrivate LOKDocViewPrivate;
 
 struct _LOKDocView
 {
     GtkDrawingArea aDrawingArea;
-    struct LOKDocView_Impl* m_pImpl;
+    LOKDocViewPrivate* priv;
 };
 
 struct _LOKDocViewClass
 {
     GtkDrawingAreaClass parent_class;
-    void (* edit_changed)  (LOKDocView* pView, gboolean was_edit);
-    void (* command_changed) (LOKDocView* pView, char* new_state);
-    void (* search_not_found) (LOKDocView* pView, char* new_state);
-    void (* part_changed) (LOKDocView* pView, int new_part);
 };
 
 GType                          lok_doc_view_get_type               (void) G_GNUC_CONST;
@@ -78,9 +74,8 @@ void                           lok_doc_view_post_command           (LOKDocView* 
                                                                     const char* pArguments);
 
 /// Posts a keyboard event to LibreOfficeKit.
-void                           lok_doc_view_post_key               (GtkWidget* pWidget,
-                                                                    GdkEventKey* pEvent,
-                                                                    gpointer pData);
+void                           lok_doc_view_post_key               (LOKDocView* pDocView,
+                                                                    GdkEvent* pEvent);
 
 float                          lok_doc_view_pixel_to_twip          (LOKDocView* pDocView,
                                                                     float fInput);
