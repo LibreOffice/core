@@ -887,8 +887,10 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         if ( !bCompileLater && bClipMode )
         {
             // Merging ranges needs the actual positions after UpdateReference.
-            // ColRowNames need new lookup after positions are adjusted.
-            bCompileLater = pCode->HasOpCode( ocRange) || pCode->HasOpCode( ocColRowName);
+            // ColRowNames and TableRefs need new lookup after positions are
+            // adjusted.
+            bCompileLater = pCode->HasOpCode( ocRange) || pCode->HasOpCode( ocColRowName) ||
+                pCode->HasOpCode( ocTableRef);
         }
         if ( !bCompileLater )
         {
