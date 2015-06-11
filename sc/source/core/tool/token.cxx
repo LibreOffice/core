@@ -2895,64 +2895,71 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
 
     bool b3DFlag = rOldPos.Tab() != rNewPos.Tab() || rCxt.mnTabDelta;
 
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rOldPos);
-                if (aOldRange.In(aAbs))
-                {
-                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-                    aRes.mbReferenceModified = true;
-                }
+            if (TokenPointers::skipToken(j,p))
+                continue;
 
-                rRef.SetAddress(aAbs, rNewPos);
-                if (b3DFlag)
-                    rRef.SetFlag3D(b3DFlag);
-            }
-            break;
-            case svDoubleRef:
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rOldPos);
-                if (aOldRange.In(aAbs))
-                {
-                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-                    aRes.mbReferenceModified = true;
-                }
+                case svSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        if (aOldRange.In(aAbs))
+                        {
+                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            aRes.mbReferenceModified = true;
+                        }
 
-                rRef.SetRange(aAbs, rNewPos);
-                if (b3DFlag)
-                    rRef.Ref1.SetFlag3D(true);
+                        rRef.SetAddress(aAbs, rNewPos);
+                        if (b3DFlag)
+                            rRef.SetFlag3D(b3DFlag);
+                    }
+                    break;
+                case svDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        if (aOldRange.In(aAbs))
+                        {
+                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            aRes.mbReferenceModified = true;
+                        }
+
+                        rRef.SetRange(aAbs, rNewPos);
+                        if (b3DFlag)
+                            rRef.Ref1.SetFlag3D(true);
+                    }
+                    break;
+                case svIndex:
+                    {
+                        switch ((*p)->GetOpCode())
+                        {
+                            case ocName:
+                                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            case ocDBArea:
+                            case ocTableRef:
+                                if (isDBDataModified(rCxt.mrDoc, **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            default:
+                                ;   // nothing
+                        }
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svIndex:
-            {
-                switch ((*p)->GetOpCode())
-                {
-                    case ocName:
-                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    case ocDBArea:
-                    case ocTableRef:
-                        if (isDBDataModified(rCxt.mrDoc, **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    default:
-                        ;   // nothing
-                }
-            }
-            break;
-            default:
-                ;
         }
     }
 
