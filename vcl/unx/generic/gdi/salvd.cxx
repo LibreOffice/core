@@ -42,7 +42,10 @@ SalVirtualDevice* X11SalInstance::CreateX11VirtualDevice(SalGraphics* pGraphics,
     if (OpenGLHelper::isVCLOpenGLEnabled())
         return new X11OpenGLSalVirtualDevice( pGraphics, nDX, nDY, nBitCount, pData );
     else
+    {
+        assert(pNewGraphics);
         return new X11SalVirtualDevice(pGraphics, nDX, nDY, nBitCount, pData, pNewGraphics);
+    }
 }
 
 SalVirtualDevice* X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
