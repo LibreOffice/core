@@ -23,14 +23,6 @@
 using namespace ::std;
 using namespace com::sun::star;
 
-SdrCustomShapeEngineItem::SdrCustomShapeEngineItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, "" )
-{}
-
-SdrCustomShapeDataItem::SdrCustomShapeDataItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, "" )
-{}
-
 TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem);
 
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()

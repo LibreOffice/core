@@ -31,18 +31,6 @@
 #include <map>
 #include <unordered_map>
 
-class SdrCustomShapeEngineItem : public SfxStringItem
-{
-    public :
-            SdrCustomShapeEngineItem();
-};
-
-class SdrCustomShapeDataItem : public SfxStringItem
-{
-    public :
-            SdrCustomShapeDataItem();
-};
-
 class SVX_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
 {
 public:

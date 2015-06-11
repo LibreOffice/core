@@ -171,7 +171,7 @@ static MSO_SPT ImpGetCustomShapeType( const SdrObjCustomShape& rCustoShape )
 {
     MSO_SPT eRetValue = mso_sptNil;
 
-    OUString aEngine( static_cast<const SdrCustomShapeEngineItem&>( rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ) ).GetValue() );
+    OUString aEngine( static_cast<const SfxStringItem&>( rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ) ).GetValue() );
     if ( aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine" )
     {
         OUString sShapeType;
@@ -412,7 +412,7 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;
 
-    OUString aEngine(static_cast<const SdrCustomShapeEngineItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
+    OUString aEngine(static_cast<const SfxStringItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
     if ( aEngine.isEmpty() )
         aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
 
@@ -3255,7 +3255,7 @@ void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& 
 OUString SdrObjCustomShape::GetCustomShapeName()
 {
     OUString sShapeName;
-    OUString aEngine( static_cast<const SdrCustomShapeEngineItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue() );
+    OUString aEngine( static_cast<const SfxStringItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue() );
     if ( aEngine.isEmpty()
          || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine" )
     {
