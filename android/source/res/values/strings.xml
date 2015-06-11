@@ -46,6 +46,8 @@
     <string name="share_via">Share via</string>
 
     <!-- Document provider names -->
+    <string name="document_locations">Document locations</string>
+    <string name="close_document_locations">Close document locations</string>
     <string name="local_documents">Local documents</string>
     <string name="local_file_system">Local file system</string>
     <string name="owncloud">ownCloud</string>

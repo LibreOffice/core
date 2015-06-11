@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -93,6 +94,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
 
     private DrawerLayout drawerLayout;
     private ListView drawerList;
+    private ActionBarDrawerToggle drawerToggle;
     GridView gv;
     ListView lv;
 
@@ -128,6 +130,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); //This should show current directory if anything
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //make the navigation spinner
         Context context = actionBar.getThemedContext();
@@ -163,6 +166,25 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.document_locations, R.string.close_document_locations) {
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                supportInvalidateOptionsMenu();
+                drawerList.requestFocus(); // Make keypad navigation easier
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                supportInvalidateOptionsMenu();
+            }
+        };
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
 
         // Set the adapter for the list view
         drawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -178,12 +200,19 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         });
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        drawerToggle.syncState();
+    }
+
     private void refreshView() {
         // enable home icon as "up" if required
         if (!currentDirectory.equals(homeDirectory)) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            drawerToggle.setDrawerIndicatorEnabled(false);
         } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            drawerToggle.setDrawerIndicatorEnabled(true);
         }
 
         FileUtilities.sortFiles(filePaths, sortMode);
@@ -201,7 +230,9 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
 
     @Override
     public void onBackPressed() {
-        if (!currentDirectory.equals(homeDirectory)) {
+        if (drawerLayout.isDrawerOpen(drawerList)) {
+            drawerLayout.closeDrawer(drawerList);
+        } else if (!currentDirectory.equals(homeDirectory)) {
             // navigate upwards in directory hierarchy
             openParentDirectory();
         } else {
@@ -459,7 +490,13 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         return true;
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Will close the drawer if the home button is pressed
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (!currentDirectory.equals(homeDirectory)){
