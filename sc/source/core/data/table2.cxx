@@ -53,6 +53,7 @@
 #include "columnspanset.hxx"
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
+#include "ScChartListenerCollection.hxx"
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>

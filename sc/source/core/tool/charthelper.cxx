@@ -23,6 +23,7 @@
 #include "rangelst.hxx"
 #include "chartlis.hxx"
 #include "docuno.hxx"
+#include "ScChartListenerCollection.hxx"
 
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>

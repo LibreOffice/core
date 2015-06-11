@@ -95,6 +95,7 @@
 #include "scopetools.hxx"
 #include "refupdatecontext.hxx"
 #include "formulagroup.hxx"
+#include "ScChartListenerCollection.hxx"
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 

@@ -83,6 +83,7 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "rangeutl.hxx"
+#include "ScChartListenerCollection.hxx"
 #include "tokenarray.hxx"
 #include "token.hxx"
 #include "compiler.hxx"
