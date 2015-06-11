@@ -502,7 +502,8 @@ TextAndReading SwTOXPara::GetText_Impl() const
         {
             return TextAndReading(static_cast<const SwTextNode*>(pNd)->GetExpandText(
                     nStartIndex,
-                    nEndIndex == -1 ? -1 : nEndIndex - nStartIndex),
+                    nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
+                    false, false, false, false),
                     OUString());
         }
         break;
