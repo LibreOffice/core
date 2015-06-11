@@ -16,6 +16,8 @@ $(eval $(call gb_ExternalProject_register_targets,libfreehand,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libfreehand,\
+	icu \
+	lcms2 \
 	revenge \
 	zlib \
 ))
