@@ -1116,7 +1116,7 @@ AC_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--enable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.
          This is experimental and may not work.]),
-,enable_gtk3=no)
+,enable_gtk3=yes)
 
 AC_ARG_ENABLE(systray,
     AS_HELP_STRING([--disable-systray],
@@ -9934,6 +9934,11 @@ dnl ===================================================================
 dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
+AC_MSG_CHECKING([which VCLplugs shall be built])
+if test "$GUIBASE" != "unx" -o "$with_x" = "no"; then
+    enable_gtk=no
+    enable_gtk3=no
+fi
 GTK3_CFLAGS=""
 GTK3_LIBS=""
 ENABLE_GTK3=""
@@ -9954,10 +9959,6 @@ AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
 AC_SUBST(ENABLE_GTK3)
 
-AC_MSG_CHECKING([which VCLplugs shall be built])
-if test "$GUIBASE" != "unx" -o "$with_x" = "no"; then
-    enable_gtk=no
-fi
 ENABLE_GTK=""
 if test "x$enable_gtk" = "xyes"; then
     if test "$with_system_cairo" = no; then
