@@ -63,9 +63,9 @@
           <menu:menuitem menu:id=".uno:SendAbstractToStarImpress"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:WebHtml"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:PrintPreview"/>
       <menu:menuitem menu:id=".uno:Print"/>
       <menu:menuitem menu:id=".uno:PrinterSetup"/>
       <menu:menuseparator/>
@@ -108,19 +108,18 @@
           <menu:menuitem menu:id=".uno:CommentChangeTracking"/>
           <menu:menuitem menu:id=".uno:NextTrackedChange"/>
           <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:CompareDocuments"/>
+          <menu:menuitem menu:id=".uno:MergeDocuments"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:CompareDocuments"/>
-      <menu:menuitem menu:id=".uno:MergeDocuments"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
+      <menu:menuitem menu:id=".uno:EditHyperlink"/>
       <menu:menu menu:id=".uno:EditLinksMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:FieldDialog"/>
           <menu:menuitem menu:id=".uno:EditFootnote"/>
           <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
           <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
-          <menu:menuitem menu:id=".uno:EditHyperlink"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:EditCommentsMenu">
@@ -130,10 +129,12 @@
           <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:FieldDialog"/>
       <menu:menuitem menu:id=".uno:LinkDialog"/>
       <menu:menuitem menu:id=".uno:PlugInsActive"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:ObjectMenue"/>
+      <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditDoc"/>
     </menu:menupopup>
@@ -142,7 +143,6 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:PrintLayout" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:BrowseView" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:PrintPreview" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
@@ -224,12 +224,15 @@
       </menu:menu>
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
+          <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
           <menu:menuitem menu:id=".uno:InsertObject"/>
           <menu:menuitem menu:id=".uno:InsertPlugin"/>
-          <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
           <menu:menuitem menu:id=".uno:InsertDoc"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:DrawText"/>
+      <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menu menu:id=".uno:InsertFrameMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertFrameInteract"/>
@@ -237,9 +240,6 @@
           <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DrawText"/>
-      <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
@@ -380,26 +380,6 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menu menu:id=".uno:FormatStylesMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:EditStyle"/>
-          <menu:menuitem menu:id=".uno:StyleUpdateByExample"/>
-          <menu:menuitem menu:id=".uno:StyleNewByExample"/>
-          <menu:menuitem menu:id=".uno:LoadStyles"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:DesignerDialog"/>
-        </menu:menupopup>
-      </menu:menu>
       <menu:menuitem menu:id=".uno:ResetAttributes"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FontDialog"/>
@@ -521,6 +501,27 @@
       </menu:menu>
     </menu:menupopup>
   </menu:menu>
+  <menu:menu menu:id=".uno:FormatStylesMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:EditStyle"/>
+      <menu:menuitem menu:id=".uno:StyleUpdateByExample"/>
+      <menu:menuitem menu:id=".uno:StyleNewByExample"/>
+      <menu:menuitem menu:id=".uno:LoadStyles"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ResetAttributes"/>
+      <menu:menuitem menu:id=".uno:DesignerDialog"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menu menu:id=".uno:TableMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertTable"/>
@@ -537,9 +538,9 @@
       </menu:menu>
       <menu:menu menu:id=".uno:TableDeleteMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:DeleteTable"/>
           <menu:menuitem menu:id=".uno:DeleteRows"/>
           <menu:menuitem menu:id=".uno:DeleteColumns"/>
+          <menu:menuitem menu:id=".uno:DeleteTable"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:TableSelectMenu">

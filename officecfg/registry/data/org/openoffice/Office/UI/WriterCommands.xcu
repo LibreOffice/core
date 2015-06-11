@@ -400,7 +400,7 @@
           <value xml:lang="en-US">Insert Frame</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Frame</value>
+          <value xml:lang="en-US">Draw ~Frame</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

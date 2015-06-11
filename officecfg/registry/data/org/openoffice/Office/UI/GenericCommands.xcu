@@ -3155,7 +3155,7 @@
       </node>
       <node oor:name=".uno:FormatStylesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">St~yles</value>
+          <value xml:lang="en-US">~Styles</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5597,7 +5597,7 @@
       </node>
       <node oor:name=".uno:EditLinksMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Entries</value>
+          <value xml:lang="en-US">~References</value>
         </prop>
       </node>
       <node oor:name=".uno:EditCommentsMenu" oor:op="replace">
