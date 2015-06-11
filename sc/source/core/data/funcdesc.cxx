@@ -752,12 +752,13 @@ sal_uInt32 ScFunctionMgr::getCount() const
 
 const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategory) const
 {
-    formula::IFunctionCategory* pRet = NULL;
     if ( nCategory < (MAX_FUNCCAT-1) )
     {
-         pRet = new ScFunctionCategory(const_cast<ScFunctionMgr*>(this),aCatLists[nCategory+1],nCategory); // aCatLists[0] is "all"
+        if (m_aCategories.find(nCategory) == m_aCategories.end())
+            m_aCategories[nCategory].reset(new ScFunctionCategory(const_cast<ScFunctionMgr*>(this),aCatLists[nCategory+1],nCategory)); // aCatLists[0] is "all"
+        return m_aCategories[nCategory].get();
     }
-    return pRet;
+    return NULL;
 }
 
 const formula::IFunctionDescription* ScFunctionMgr::getFunctionByName(const OUString& _sFunctionName) const

@@ -23,8 +23,6 @@
 #include <unotools/charclass.hxx>
 #include <unotools/syslocale.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 namespace formula
 {
 
@@ -95,7 +93,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
             const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
             for(sal_uInt32 j= 0; j < nCategoryCount && !*ppFDesc; ++j)
             {
-                boost::scoped_ptr<const IFunctionCategory> pCategory(m_pFunctionManager->getCategory(j));
+                const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(j);
                 const sal_uInt32 nCount = pCategory->getCount();
                 for(sal_uInt32 i = 0 ; i < nCount; ++i)
                 {
