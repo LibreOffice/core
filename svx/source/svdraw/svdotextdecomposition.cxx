@@ -664,6 +664,11 @@ namespace
     }
 } // end of anonymous namespace
 
+void impSetOutlinerToEmptyTxt(SdrOutliner *pOutliner)
+{
+    OutlinerParaObject *pEmptyTxt = pOutliner->GetEmptyParaObject();
+    pOutliner->SetText(*pEmptyTxt);
+}
 
 // primitive decompositions
 
@@ -766,12 +771,6 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
         pEdtOutl->SetText(*pNewText);
 
     const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
-}
-
-void impSetOutlinerToEmptyTxt(SdrOutliner *pOutliner)
-{
-    OutlinerParaObject *pEmptyTxt = pOutliner->GetEmptyParaObject();
-    pOutliner->SetText(*pEmptyTxt);
 }
 
 OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const
