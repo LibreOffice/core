@@ -22,6 +22,7 @@
 #include <PageBreakWin.hxx>
 #include <pagefrm.hxx>
 #include <PostItMgr.hxx>
+#include <FrameControlsManager.hxx>
 #include <uiitems.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>

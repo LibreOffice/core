@@ -143,6 +143,7 @@
 #include <xmloff/odffields.hxx>
 
 #include <PostItMgr.hxx>
+#include <FrameControlsManager.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -4933,7 +4934,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_bObjectSelect(false),
     m_nKS_NUMDOWN_Count(0),
     m_nKS_NUMINDENTINC_Count(0),
-    m_aFrameControlsManager( this )
+    m_pFrameControlsManager(new SwFrameControlsManager(this))
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
@@ -4974,6 +4975,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 SwEditWin::~SwEditWin()
 {
     disposeOnce();
+    delete m_pFrameControlsManager;
 }
 
 void SwEditWin::dispose()
@@ -5000,7 +5002,7 @@ void SwEditWin::dispose()
     delete m_pAnchorMarker;
     m_pAnchorMarker = NULL;
 
-    m_aFrameControlsManager.dispose();
+    m_pFrameControlsManager->dispose();
 
     vcl::Window::dispose();
 }
@@ -6303,6 +6305,11 @@ void SwEditWin::SetGraphicTwipPosition(bool bStart, const Point& rPosition)
         MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
         MouseButtonUp(aClickEvent);
     }
+}
+
+SwFrameControlsManager& SwEditWin::GetFrameControlsManager()
+{
+    return *m_pFrameControlsManager;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

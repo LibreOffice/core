@@ -102,6 +102,8 @@
 #include <sfx2/viewfrm.hxx>
 
 #include "PostItMgr.hxx"
+#include "FrameControlsManager.hxx"
+
 #include <sfx2/msgpool.hxx>
 #include <boost/scoped_ptr.hpp>
 

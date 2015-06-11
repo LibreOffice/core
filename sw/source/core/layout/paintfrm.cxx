@@ -70,6 +70,7 @@
 
 #include <ndole.hxx>
 #include <PostItMgr.hxx>
+#include <FrameControlsManager.hxx>
 #include <vcl/settings.hxx>
 
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
