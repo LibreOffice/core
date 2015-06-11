@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <climits>
+
 #include <com/sun/star/uno/Any.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
