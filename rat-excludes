@@ -1484,3 +1484,12 @@ main/autom4te.cache/*
 main/LinuxX86-64Env.Set*
 main/MacOSXX64Env.Set*
 main/winenv.set*
+
+##############################################################################
+#
+# exclude preference files
+#
+
+main/ooxml/source/framework/OOXMLViewer/.settings/org.eclipse.jdt.core.prefs
+main/ooxml/source/framework/SchemaParser/.settings/org.eclipse.jdt.core.prefs
+
