@@ -44,21 +44,24 @@ import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
 
-
 /**
- * Test for object which is represented by accessible compoent of
- * check box in 'InsertTable' dialog. <p>
+ * Test for object which is represented by accessible compoent of check box in
+ * 'InsertTable' dialog.
+ * <p>
  *
  * Object implements the following interfaces :
  * <ul>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleExtendedComponent</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleValue</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleAction</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleText</code></li>
- * </ul> <p>
+ * <li>
+ * <code>::com::sun::star::accessibility::XAccessibleExtendedComponent</code></li>
+ * <li>
+ * <code>::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
+ * <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code></li>
+ * <li> <code>::com::sun::star::accessibility::XAccessibleValue</code></li>
+ * <li> <code>::com::sun::star::accessibility::XAccessibleAction</code></li>
+ * <li> <code>::com::sun::star::accessibility::XAccessibleContext</code></li>
+ * <li> <code>::com::sun::star::accessibility::XAccessibleText</code></li>
+ * </ul>
+ * <p>
  *
  * @see com.sun.star.accessibility.XAccessibleExtendedComponent
  * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
@@ -78,17 +81,15 @@ import util.utils;
 public class AccessibleCheckBox extends TestCase {
     private static XTextDocument xTextDoc = null;
     private static XAccessibleAction action = null;
-    private static DiagThread psDiag = null;
 
     /**
-     * Opens 'Insert Table' dialog using document dispatch provider
-     * running in a separate thread. Finds active top window (the dialog
-     * window) and finds first accessible check box walking through the
-     * accessible component tree.
+     * Opens 'Insert Table' dialog using document dispatch provider running in a
+     * separate thread. Finds active top window (the dialog window) and finds
+     * first accessible check box walking through the accessible component tree.
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) throws Exception {
+            PrintWriter log) throws Exception {
         XMultiServiceFactory msf = Param.getMSF();
         log.println("Creating text document");
 
@@ -105,60 +106,78 @@ public class AccessibleCheckBox extends TestCase {
 
         oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
 
-        XExtendedToolkit tk = UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, oObj);
+        XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class,
+                oObj);
 
         util.utils.waitForEventIdle(Param.getMSF());
 
         log.println("Opening Dialog in second thread");
 
-        psDiag = new DiagThread(xTextDoc, msf);
-        psDiag.start();
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
-        util.utils.pause(Param.getInt("ShortWait"));
+        XController xController = aModel.getCurrentController();
 
-        util.utils.pause(Param.getInt("ShortWait"));
+        // Opening PrinterSetupDialog
+        String aSlotID = ".uno:InsertTable";
+        XDispatchProvider xDispProv = UnoRuntime.queryInterface(
+                XDispatchProvider.class, xController);
+        XURLTransformer xParser = UnoRuntime.queryInterface(
+                XURLTransformer.class,
+                msf.createInstance("com.sun.star.util.URLTransformer"));
+
+        // Because it's an in/out parameter we must use an array of URL
+        // objects.
+        URL[] aParseURL = new URL[] { new URL() };
+        aParseURL[0].Complete = aSlotID;
+        xParser.parseStrict(aParseURL);
+
+        XDispatch xDispatcher = xDispProv.queryDispatch(aParseURL[0], "", 0);
+        if (xDispatcher != null) {
+            xDispatcher.dispatch(aParseURL[0], null);
+        }
+
+        util.utils.waitForEventIdle(msf);
 
         log.println("Getting the active TopWindow");
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
-                                                              tk.getActiveTopWindow());
+                tk.getActiveTopWindow());
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
+        AccessibilityTools.printAccessibleTree(log, xRoot,
+                Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
+                AccessibleRole.PUSH_BUTTON, "Cancel");
 
-        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
-                                             "Cancel");
+        action = UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
 
-        action = UnoRuntime.queryInterface(
-                         XAccessibleAction.class, oObj);
-
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.CHECK_BOX);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
+                AccessibleRole.CHECK_BOX);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleComponent acomp = UnoRuntime.queryInterface(
-                                                   XAccessibleComponent.class,
-                                                   oObj);
+                XAccessibleComponent.class, oObj);
 
-        tEnv.addObjRelation("EventProducer",
-                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
-            public void fireEvent() {
-                System.out.println("Grabbing focus ... ");
-                acomp.grabFocus();
-            }
-        });
+        tEnv.addObjRelation(
+                "EventProducer",
+                new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+                    public void fireEvent() {
+                        System.out.println("Grabbing focus ... ");
+                        acomp.grabFocus();
+                    }
+                });
 
-        XAccessibleText text = UnoRuntime.queryInterface(
-                                       XAccessibleText.class, oObj);
+        XAccessibleText text = UnoRuntime.queryInterface(XAccessibleText.class,
+                oObj);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
         tEnv.addObjRelation("EditOnly",
-                            "This method isn't supported in this component");
+                "This method isn't supported in this component");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
@@ -174,8 +193,6 @@ public class AccessibleCheckBox extends TestCase {
         try {
             log.println("closing dialog");
             action.doAccessibleAction(0);
-            log.println("interrupting corresponding Thread");
-            psDiag.interrupt();
             log.println("closing the document");
             util.DesktopTools.closeDoc(xTextDoc);
             log.println("reinitialize the variable");
@@ -187,51 +204,4 @@ public class AccessibleCheckBox extends TestCase {
         }
     }
 
-    /**
-     * Thread for opening modal dialog 'Insert Table'.
-     */
-    private class DiagThread extends Thread {
-        private XTextDocument xTextDoc = null;
-        private XMultiServiceFactory msf = null;
-
-        private DiagThread(XTextDocument xTextDoc, XMultiServiceFactory msf) {
-            this.xTextDoc = xTextDoc;
-            this.msf = msf;
-        }
-
-        @Override
-        public void run() {
-            XModel aModel = UnoRuntime.queryInterface(XModel.class,
-                                                               xTextDoc);
-
-            XController xController = aModel.getCurrentController();
-
-            //Opening PrinterSetupDialog
-            try {
-                String aSlotID = ".uno:InsertTable";
-                XDispatchProvider xDispProv = UnoRuntime.queryInterface(
-                                                      XDispatchProvider.class,
-                                                      xController);
-                XURLTransformer xParser = UnoRuntime.queryInterface(
-                                                  XURLTransformer.class,
-                                                  msf.createInstance(
-                                                          "com.sun.star.util.URLTransformer"));
-
-                // Because it's an in/out parameter we must use an array of URL objects.
-                URL[] aParseURL = new URL[1];
-                aParseURL[0] = new URL();
-                aParseURL[0].Complete = aSlotID;
-                xParser.parseStrict(aParseURL);
-
-                URL aURL = aParseURL[0];
-                XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
-
-                if (xDispatcher != null) {
-                    xDispatcher.dispatch(aURL, null);
-                }
-            } catch (com.sun.star.uno.Exception e) {
-                log.println("Couldn't open dialog");
-            }
-        }
-    }
 }
