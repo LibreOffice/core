@@ -249,7 +249,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
 
         sal_uInt32 nRow = pTextNodeInfo->getRow();
         sal_uInt32 nCell = pTextNodeInfo->getCell();
-        if ( nRow == 0 && nCell == 0 )
+        if (nCell == 0)
         {
             // Do we have to start the table?
             // [If we are at the right depth already, it means that we
@@ -259,14 +259,14 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
             if ( nCurrentDepth > m_tableReference->m_nTableDepth )
             {
                 // Start all the tables that begin here
-                for ( sal_uInt32 nDepth = m_tableReference->m_nTableDepth + 1; nDepth <= pTextNodeInfo->getDepth(); ++nDepth )
+                for ( sal_uInt32 nDepth = m_tableReference->m_nTableDepth + 1; nDepth <= nCurrentDepth; ++nDepth )
                 {
                     ww8::WW8TableNodeInfoInner::Pointer_t pInner( pTextNodeInfo->getInnerForDepth( nDepth ) );
 
                     StartTable( pInner );
                     StartTableRow( pInner );
 
-                    StartTableCell(pInner, 0, 0);
+                    StartTableCell(pInner, 0, nDepth == nCurrentDepth ? nRow : 0);
                 }
 
                 m_tableReference->m_nTableDepth = nCurrentDepth;
