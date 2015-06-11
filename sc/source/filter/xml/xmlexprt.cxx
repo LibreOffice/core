@@ -66,6 +66,7 @@
 #include <arealink.hxx>
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
+#include "ScChartListenerCollection.hxx"
 #include <tokenstringcontext.hxx>
 #include <cellform.hxx>
 

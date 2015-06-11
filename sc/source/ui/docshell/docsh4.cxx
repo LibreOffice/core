@@ -95,8 +95,10 @@ using namespace ::com::sun::star;
 #include "externalrefmgr.hxx"
 #include "sharedocdlg.hxx"
 #include "conditio.hxx"
+#include "ScChartListenerCollection.hxx"
 #include "sheetevents.hxx"
 #include <documentlinkmgr.hxx>
+
 #include <boost/scoped_ptr.hpp>
 
 #define IS_SHARE_HEADER(set) \
