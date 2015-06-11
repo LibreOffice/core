@@ -55,9 +55,9 @@
                     <menu:menuitem menu:id=".uno:SendViaBluetooth"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:WebHtml"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:PrintPreview"/>
             <menu:menuitem menu:id=".uno:Print"/>
             <menu:menuitem menu:id=".uno:PrinterSetup"/>
             <menu:menuseparator/>
@@ -110,7 +110,6 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:NormalViewMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:PagebreakMode"  menu:style="radio"/>
-            <menu:menuitem menu:id=".uno:PrintPreview"   menu:style="radio"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:InputLineVisible"/>
@@ -151,6 +150,16 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:InsertGraphic"/>
             <menu:menuitem menu:id=".uno:InsertObjectChart"/>
+            <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
+            <menu:menu menu:id=".uno:ShapesMenu">
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:Line"/>
+                <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
+                <menu:menuitem menu:id=".uno:Rect"/>
+                <menu:menuitem menu:id=".uno:Ellipse"/>
+                <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
+              </menu:menupopup>
+            </menu:menu>
             <menu:menu menu:id=".uno:GraphicMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Gallery"/>
@@ -164,30 +173,21 @@
                     <menu:menuitem menu:id=".uno:InsertAVMedia"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:ShapesMenu">
-              <menu:menupopup>
-                <menu:menuitem menu:id=".uno:Line"/>
-                <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
-                <menu:menuitem menu:id=".uno:Rect"/>
-                <menu:menuitem menu:id=".uno:Ellipse"/>
-                <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
-              </menu:menupopup>
-            </menu:menu>
             <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
                     <menu:menuitem menu:id=".uno:InsertObject"/>
                     <menu:menuitem menu:id=".uno:InsertPlugin"/>
-                    <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
                     <menu:menuitem menu:id=".uno:InsertObjectChartFromFile"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FunctionDialog"/>
             <menu:menuitem menu:id=".uno:FunctionBox"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DrawText"/>
             <menu:menuitem menu:id=".uno:InsertAnnotation"/>
+            <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
             <menu:menuseparator/>
@@ -277,6 +277,7 @@
                     <menu:menuitem menu:id=".uno:NumberFormatScientific"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:FormatStylesMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:StyleUpdateByExample"/>
