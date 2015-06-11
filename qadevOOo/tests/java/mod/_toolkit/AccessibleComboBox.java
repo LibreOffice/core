@@ -28,7 +28,6 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -44,18 +43,21 @@ import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
 
-
 /**
- * Test for object which is represented by accessible component
- * of the 'Font' combo box in Format->Character... dislog box. <p>
+ * Test for object which is represented by accessible component of the 'Font'
+ * combo box in Format->Character... dislog box.
+ * <p>
  *
  * Object implements the following interfaces :
  * <ul>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleExtendedComponent</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code></li>
- *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code></li>
- * </ul> <p>
+ * <li>
+ * <code>::com::sun::star::accessibility::XAccessibleExtendedComponent</code></li>
+ * <li>
+ * <code>::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
+ * <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code></li>
+ * <li> <code>::com::sun::star::accessibility::XAccessibleContext</code></li>
+ * </ul>
+ * <p>
  *
  * @see com.sun.star.accessibility.XAccessibleExtendedComponent
  * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
@@ -71,45 +73,61 @@ public class AccessibleComboBox extends TestCase {
     private static XAccessibleAction action = null;
 
     /**
-     * Opens CharacterStyle dialog and
-     * finds AccessibleComboBox walking through the
-     * accessible component tree.
+     * Opens CharacterStyle dialog and finds AccessibleComboBox walking through
+     * the accessible component tree.
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-                                                    PrintWriter log) throws Exception {
+            PrintWriter log) throws Exception {
         XInterface oObj = null;
 
         oObj = (XInterface) Param.getMSF().createInstance(
-                       "com.sun.star.awt.Toolkit");
+                "com.sun.star.awt.Toolkit");
 
-        XExtendedToolkit tk = UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, oObj);
+        XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class,
+                oObj);
 
-        DiagThread psDiag = new DiagThread(xTextDoc,
-                                           Param.getMSF());
-        psDiag.start();
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
-        util.utils.pause(Param.getInt("ShortWait"));
+        XController xController = aModel.getCurrentController();
+
+        // Opening PrinterSetupDialog
+        String aSlotID = ".uno:FontDialog";
+        XDispatchProvider xDispProv = UnoRuntime.queryInterface(
+                XDispatchProvider.class, xController);
+        XURLTransformer xParser = UnoRuntime.queryInterface(
+                XURLTransformer.class,
+                Param.getMSF().createInstance(
+                        "com.sun.star.util.URLTransformer"));
+
+        // Because it's an in/out parameter we must use an array of URL
+        // objects.
+        URL[] aParseURL = new URL[] { new URL() };
+        aParseURL[0].Complete = aSlotID;
+        xParser.parseStrict(aParseURL);
+
+        XDispatch xDispatcher = xDispProv.queryDispatch(aParseURL[0], "", 0);
+        if (xDispatcher != null) {
+            xDispatcher.dispatch(aParseURL[0], null);
+        }
+
+        util.utils.waitForEventIdle(Param.getMSF());
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
-                                                              atw);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
-                                             "Cancel");
-        action = UnoRuntime.queryInterface(
-                         XAccessibleAction.class, oObj);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
+                AccessibleRole.PUSH_BUTTON, "Cancel");
+        action = UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
-                                             AccessibleRole.PAGE_TAB_LIST);
+                AccessibleRole.PAGE_TAB_LIST);
 
         XAccessibleSelection xAccSel = UnoRuntime.queryInterface(
-                                               XAccessibleSelection.class,
-                                               oObj);
+                XAccessibleSelection.class, oObj);
 
         try {
             xAccSel.selectAccessibleChild(0);
@@ -118,28 +136,28 @@ public class AccessibleComboBox extends TestCase {
         }
         util.utils.waitForEventIdle(Param.getMSF());
 
-        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
-                                             "AccessibleComboBox");
+        AccessibilityTools.printAccessibleTree(log, xRoot,
+                Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
+                AccessibleRole.PANEL, "", "AccessibleComboBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleComponent acomp = UnoRuntime.queryInterface(
-                                                   XAccessibleComponent.class,
-                                                   oObj);
+                XAccessibleComponent.class, oObj);
         final XAccessibleComponent acomp1 = UnoRuntime.queryInterface(
-                                                    XAccessibleComponent.class,
-                                                    action);
+                XAccessibleComponent.class, action);
 
-        tEnv.addObjRelation("EventProducer",
-                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
-            public void fireEvent() {
-                acomp1.grabFocus();
-                acomp.grabFocus();
-            }
-        });
+        tEnv.addObjRelation(
+                "EventProducer",
+                new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+                    public void fireEvent() {
+                        acomp1.grabFocus();
+                        acomp.grabFocus();
+                    }
+                });
 
         return tEnv;
     }
@@ -167,58 +185,10 @@ public class AccessibleComboBox extends TestCase {
      * Creates writer doc
      */
     @Override
-    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     Param.getMSF());
+    protected void initialize(TestParameters Param, PrintWriter log)
+            throws Exception {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
         xTextDoc = SOF.createTextDoc(null);
     }
 
-
-    /**
-     * Thread for opening modal dialog 'Character style'.
-     */
-    private class DiagThread extends Thread {
-        private XTextDocument xTextDoc = null;
-        private XMultiServiceFactory msf = null;
-
-        private DiagThread(XTextDocument xTextDoc, XMultiServiceFactory msf) {
-            this.xTextDoc = xTextDoc;
-            this.msf = msf;
-        }
-
-        @Override
-        public void run() {
-            XModel aModel = UnoRuntime.queryInterface(XModel.class,
-                                                               xTextDoc);
-
-            XController xController = aModel.getCurrentController();
-
-            //Opening PrinterSetupDialog
-            try {
-                String aSlotID = ".uno:FontDialog";
-                XDispatchProvider xDispProv = UnoRuntime.queryInterface(
-                                                      XDispatchProvider.class,
-                                                      xController);
-                XURLTransformer xParser = UnoRuntime.queryInterface(
-                                                  XURLTransformer.class,
-                                                  msf.createInstance(
-                                                          "com.sun.star.util.URLTransformer"));
-
-                // Because it's an in/out parameter we must use an array of URL objects.
-                URL[] aParseURL = new URL[1];
-                aParseURL[0] = new URL();
-                aParseURL[0].Complete = aSlotID;
-                xParser.parseStrict(aParseURL);
-
-                URL aURL = aParseURL[0];
-                XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
-
-                if (xDispatcher != null) {
-                    xDispatcher.dispatch(aURL, null);
-                }
-            } catch (com.sun.star.uno.Exception e) {
-                log.println("Couldn't open dialog");
-            }
-        }
-    }
 }

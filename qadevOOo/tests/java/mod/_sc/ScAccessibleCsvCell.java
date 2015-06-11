@@ -20,7 +20,6 @@ package mod._sc;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -40,7 +39,6 @@ import com.sun.star.uno.XInterface;
 
 public class ScAccessibleCsvCell extends TestCase {
 
-    Thread lThread = null;
     static XAccessibleAction accAction = null;
 
     /**
@@ -140,33 +138,8 @@ public class ScAccessibleCsvCell extends TestCase {
         } catch(com.sun.star.uno.Exception e) {
         }
 
-        lThread = new loadThread(SOF, args);
-        lThread.start();
-        util.utils.pause(2000);
+        String url= utils.getFullTestURL("10test.csv");
+        log.println("loading "+url);
+        SOF.loadDocument(url,args);
     }
-
-    private class loadThread extends Thread {
-
-        private final SOfficeFactory SOF;
-        private final PropertyValue[] args;
-
-        private loadThread(SOfficeFactory SOF, PropertyValue[] Args) {
-            this.SOF = SOF;
-            this.args = Args;
-        }
-
-        @Override
-        public void run() {
-            try {
-                String url= utils.getFullTestURL("10test.csv");
-                log.println("loading "+url);
-                SOF.loadDocument(url,args);
-            } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace();
-                throw new StatusException( "Couldn't create document ", e );
-            }
-        }
-    }
-
-
 }
