@@ -2043,13 +2043,18 @@ void ScExternalRefManager::refreshAllRefCells(sal_uInt16 nFileId)
     pVShell->PaintGrid();
 }
 
-void ScExternalRefManager::insertRefCell(RefCellMap::iterator& itr, ScFormulaCell* pCell)
+namespace {
+
+void insertRefCellByIterator(
+    ScExternalRefManager::RefCellMap::iterator& itr, ScFormulaCell* pCell)
 {
     if (pCell)
     {
         itr->second.insert(pCell);
         pCell->SetIsExtRef();
     }
+}
+
 }
 
 void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell)
@@ -2067,7 +2072,7 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
         itr = r.first;
     }
 
-    insertRefCell(itr, mpDoc->GetFormulaCell(rCell));
+    insertRefCellByIterator(itr, mpDoc->GetFormulaCell(rCell));
 }
 
 void ScExternalRefManager::insertRefCellFromTemplate( ScFormulaCell* pTemplateCell, ScFormulaCell* pCell )
@@ -2078,7 +2083,7 @@ void ScExternalRefManager::insertRefCellFromTemplate( ScFormulaCell* pTemplateCe
     for (RefCellMap::iterator itr = maRefCells.begin(); itr != maRefCells.end(); ++itr)
     {
         if (itr->second.find(pTemplateCell) != itr->second.end())
-            insertRefCell(itr, pCell);
+            insertRefCellByIterator(itr, pCell);
     }
 }
 

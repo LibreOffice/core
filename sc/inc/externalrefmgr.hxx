@@ -796,7 +796,6 @@ private:
      */
     void transformUnsavedRefToSavedRef( SfxObjectShell* pShell );
 
-    void insertRefCell(RefCellMap::iterator& itr, ScFormulaCell* pCell);
 private:
     ScDocument* mpDoc;
 
