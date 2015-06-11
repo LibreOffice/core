@@ -148,8 +148,8 @@ namespace slideshow
                 mxPlayerWindow.clear();
             }
 
-            mpMediaWindow.reset();
-            mpEventHandlerParent.reset();
+            mpMediaWindow.disposeAndClear();
+            mpEventHandlerParent.disposeAndClear();
 
             // shutdown player
             if( mxPlayer.is() )
@@ -471,20 +471,23 @@ namespace slideshow
 #else
                             if( avmedia::IsModel(rMimeType) )
                             {
-                                mpEventHandlerParent.reset(VclPtr<vcl::Window>::Create(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
+                                mpMediaWindow.disposeAndClear();
+                                mpEventHandlerParent.disposeAndClear();
+                                mpEventHandlerParent = VclPtr<vcl::Window>::Create(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL);
                                 mpEventHandlerParent->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                                 mpEventHandlerParent->EnablePaint(false);
                                 mpEventHandlerParent->Show();
                                 SystemWindowData aWinData = OpenGLContext::generateWinData(mpEventHandlerParent.get(), false);
-                                mpMediaWindow.reset(VclPtr<SystemChildWindow>::Create(mpEventHandlerParent.get(), 0, &aWinData));
+                                mpMediaWindow = VclPtr<SystemChildWindow>::Create(mpEventHandlerParent.get(), 0, &aWinData);
                                 mpMediaWindow->SetPosSizePixel( Point( 0, 0 ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
                             else
 #endif
                             {
-                                mpMediaWindow.reset( VclPtr<SystemChildWindow>::Create( pWindow, WB_CLIPCHILDREN ) );
+                                mpMediaWindow.disposeAndClear();
+                                mpMediaWindow = VclPtr<SystemChildWindow>::Create( pWindow, WB_CLIPCHILDREN );
                                 mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
@@ -503,7 +506,6 @@ namespace slideshow
 
                                 aAWTRect.X = aAWTRect.Y = 0;
                                 aArgs[ 1 ] = uno::makeAny( aAWTRect );
-
                                 aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() ) );
 
                                 mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );
@@ -519,8 +521,8 @@ namespace slideshow
                             {
                                 //if there was no playerwindow, then clear the mpMediaWindow too
                                 //so that we can draw a placeholder instead in that space
-                                mpMediaWindow.reset();
-                                mpEventHandlerParent.reset();
+                                mpMediaWindow.disposeAndClear();
+                                mpEventHandlerParent.disposeAndClear();
                             }
                         }
                     }
