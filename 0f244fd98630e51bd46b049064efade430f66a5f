@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_563432dd",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-11T13:17:16Z",
+      "side": 1,
+      "message": "I apologize, sFmlaCellRagne can actually be empty here--if the range is not valid. So the check has to be added back.",
+      "revId": "0f244fd98630e51bd46b049064efade430f66a5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
