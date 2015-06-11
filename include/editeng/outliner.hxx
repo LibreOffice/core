@@ -760,6 +760,8 @@ public:
     void ClearOverflowingParaNum();
     bool IsPageOverflow();
 
+    OutlinerParaObject *GetEmptyParaObject() const;
+
     void            DepthChangedHdl();
     void            SetDepthChangedHdl(const Link<Outliner*,void>& rLink){aDepthChangedHdl=rLink;}
     Link<Outliner*,void> GetDepthChangedHdl() const { return aDepthChangedHdl; }

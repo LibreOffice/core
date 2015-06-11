@@ -727,7 +727,7 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
         pNonOverflowingTxt =
                 pOutliner->GetNonOverflowingText();
 
-    pOutliner->Clear();
+    //pOutliner->Clear();
     //pOutliner->SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
     if (pNonOverflowingTxt->mPreOverflowingTxt == "" &&
@@ -745,6 +745,10 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
 
         if (pNonOverflowingTxt->mpHeadParas != NULL)
             pOutliner->SetText(*pNonOverflowingTxt->mpHeadParas);
+        else { // set empty paraObj
+
+            pOutliner->SetText(*emptyParaObj);
+        }
 
         pOutliner->AddText(*pPObj);
     }
@@ -769,7 +773,7 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
         return NULL;
 
     // XXX: Not sure if necessary
-    pOutliner->Clear();
+    //pOutliner->Clear();
 
     OutlinerParaObject *pCurTxt = pNextTextObj->GetOutlinerParaObject();
     pOutliner->SetText(*pCurTxt);
@@ -791,7 +795,7 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
     OutlinerParaObject *pJoiningPara = NULL;
 
     if (pOldPara0) {
-        pOutliner->Clear();
+        //pOutliner->Clear();
 
         pTmpPara0 = pOutliner->GetParagraph(0);
         pOutliner->SetText(mpOverflowingText->mTailTxt + aOldPara0Txt, pTmpPara0);
@@ -799,7 +803,7 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
     }
 
     // start actual composition
-    pOutliner->Clear();
+    //pOutliner->Clear();
 
     // Set headText at the beginning of box
     Paragraph *pNewPara0 = pOutliner->GetParagraph(0);
