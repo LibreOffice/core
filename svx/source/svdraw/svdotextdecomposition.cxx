@@ -738,6 +738,7 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
     } else { // We have to include the non-overflowing lines from the overfl. para
 
         // first make a ParaObject for the strings
+        impSetOutlinerToEmptyTxt(pOutliner);
         Paragraph *pTmpPara0 = pOutliner->GetParagraph(0);
         pOutliner->SetText(pNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
         OutlinerParaObject *pPObj = pOutliner->CreateParaObject();
