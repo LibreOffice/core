@@ -720,6 +720,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOutliner) const
 {
     NonOverflowingText *pNonOverflowingTxt;
+    // We have to get text from the editing outliner if this is set
     if (pEdtOutl != NULL)
         pNonOverflowingTxt =
                 pEdtOutl->GetNonOverflowingText();
@@ -740,14 +741,14 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
         Paragraph *pTmpPara0 = pOutliner->GetParagraph(0);
         pOutliner->SetText(pNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
         OutlinerParaObject *pPObj = pOutliner->CreateParaObject();
-        pOutliner->Clear();
+        //pOutliner->Clear();
         //pOutliner->SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
         if (pNonOverflowingTxt->mpHeadParas != NULL)
             pOutliner->SetText(*pNonOverflowingTxt->mpHeadParas);
         else { // set empty paraObj
-
-            pOutliner->SetText(*emptyParaObj);
+            OutlinerParaObject *pEmptyPObj = pOutliner->GetEmptyParaObject();
+            pOutliner->SetText(*pEmptyPObj);
         }
 
         pOutliner->AddText(*pPObj);
