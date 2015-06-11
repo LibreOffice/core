@@ -121,7 +121,7 @@ namespace basegfx
                 {
                     mpStart = pNewStart;
 
-                    // no horizontal edges allowed, all neeed to traverse vertivally
+                    // no horizontal edges allowed, all neeed to traverse vertically
                     OSL_ENSURE(mpEnd->getY() > mpStart->getY(), "Illegal TrDeEdgeEntry constructed (!)");
                 }
             }
@@ -135,7 +135,7 @@ namespace basegfx
                 {
                     mpEnd = pNewEnd;
 
-                    // no horizontal edges allowed, all neeed to traverse vertivally
+                    // no horizontal edges allowed, all neeed to traverse vertically
                     OSL_ENSURE(mpEnd->getY() > mpStart->getY(), "Illegal TrDeEdgeEntry constructed (!)");
                 }
             }

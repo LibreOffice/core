@@ -104,7 +104,7 @@ struct StringIdPair_Impl
 #define LB_FRAME                0x00000001L // text region of the paragraph
 #define LB_PRTAREA              0x00000002L // text region of the paragraph + indentions
 #define LB_VERT_FRAME           0x00000004L // vertical text region of the paragraph
-#define LB_VERT_PRTAREA         0x00000008L // vertival text region of the paragraph + indentions
+#define LB_VERT_PRTAREA         0x00000008L // vertical text region of the paragraph + indentions
 #define LB_REL_FRM_LEFT         0x00000010L // left paragraph edge
 #define LB_REL_FRM_RIGHT        0x00000020L // right paragraph edge
 
@@ -1134,7 +1134,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
         if ( eVOri == text::VertOrientation::NONE &&
              ( bNew || (bAtVertPosModified || bMod) || nOldV != eVOri) )
         {
-            // vertival position
+            // vertical position
             // recalculate offset for character bound frames
             SwTwips nY = static_cast< SwTwips >(m_pAtVertPosED->Denormalize(m_pAtVertPosED->GetValue(FUNIT_TWIP)));
             if (eAnchorId == FLY_AS_CHAR)
