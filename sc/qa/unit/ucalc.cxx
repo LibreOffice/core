@@ -998,6 +998,11 @@ void Test::testCopyToDocument()
     CPPUNIT_ASSERT_MESSAGE("The notes content should be the same on both documents",
             aDestDoc.GetNote(ScAddress(0, 0, 0))->GetText() ==  m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText());
 
+    m_pDoc->CopyCellToDocument(ScAddress(0, 0, 0), ScAddress(0, 10, 0), aDestDoc);
+    // The first cell contains a note;
+    // destination should have a copy of the note, not a copy of pointer to the same note
+    CPPUNIT_ASSERT(m_pDoc->GetNote(0, 0, 0) != aDestDoc.GetNote(0, 10, 0));
+
     m_pDoc->DeleteTab(0);
 }
 
