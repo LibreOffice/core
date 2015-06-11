@@ -331,10 +331,10 @@
       </node>
       <node oor:name=".uno:DataDataPilotRun" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Create Pivot Table...</value>
+          <value xml:lang="en-US">Insert Pivot Table...</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Create...</value>
+          <value xml:lang="en-US">Pi~vot Table...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -390,7 +390,7 @@
       </node>
       <node oor:name=".uno:InsertObjectChartFromFile" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Chart From File</value>
+          <value xml:lang="en-US">Chart From File...</value>
         </prop>
       </node>
       <node oor:name=".uno:StarChartDialog" oor:op="replace">
@@ -1879,7 +1879,12 @@
       </node>
       <node oor:name=".uno:NamesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Names Cells</value>
+          <value xml:lang="en-US">~Name Cells</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:EditAnnotation" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Comment</value>
         </prop>
       </node>
       <node oor:name=".uno:DataPilotMenu" oor:op="replace">
