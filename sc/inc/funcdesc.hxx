@@ -27,6 +27,7 @@
 #include <formula/IFunctionDescription.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <map>
 
 #define MAX_FUNCCAT 12  /* maximum number of categories for functions */
 #define LRU_MAX 10 /* maximal number of last recently used functions */
@@ -361,7 +362,7 @@ public:
     /**
       Returns a category.
 
-      Creates an IFunctionCategory object from a category specified by nPos.
+      Returns an IFunctionCategory object for a category specified by nPos.
 
       @param nPos
       the index of the category, note that 0 maps to the first category not the cumulative ('All') category.
@@ -399,9 +400,10 @@ public:
 
 private:
     ScFunctionList* pFuncList; /**< list of all calc functions */
-    ::std::vector<const ScFuncDesc*>* aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
-    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListIter; /**< position in current category */
-    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListEnd; /**< end of current category */
+    std::vector<const ScFuncDesc*>* aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
+    mutable std::map< sal_uInt32, std::shared_ptr<ScFunctionCategory> > m_aCategories; /**< map of category pos to IFunctionCategory */
+    mutable std::vector<const ScFuncDesc*>::iterator pCurCatListIter; /**< position in current category */
+    mutable std::vector<const ScFuncDesc*>::iterator pCurCatListEnd; /**< end of current category */
 };
 
 #endif // INCLUDED_SC_INC_FUNCDESC_HXX
