@@ -312,6 +312,7 @@ public class SCalc  {
             oCPS.setPropertyValue("Dim3D", Boolean.TRUE);
             System.out.println("Change the title");
             Thread.sleep(200);
+            xxx();
             XPropertySet oTPS = UnoRuntime.queryInterface(
                 XPropertySet.class, xChart.getTitle() );
             oTPS.setPropertyValue("String","The new title");

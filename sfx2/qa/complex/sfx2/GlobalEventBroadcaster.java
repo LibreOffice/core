@@ -95,7 +95,7 @@ public class GlobalEventBroadcaster {
         System.out.println("... done");
     }
 
-    @Test public void checkWriter() {
+    @Test public void checkWriter() throws Exception {
         System.out.println("-- Checking Writer --");
 
         WriterHelper wHelper = new WriterHelper(m_xMSF);
@@ -156,7 +156,7 @@ public class GlobalEventBroadcaster {
                proveExpectation(expected));
 
         System.out.println("... done");
-        // TODO: It seems not possible to close the document without interactiv question
+        // TODO: It seems not possible to close the document without interactive question
         //       there the follow test will not be execute
         if (false) {
             System.out.println("Opening document with label wizard");
