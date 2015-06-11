@@ -787,9 +787,16 @@ void ScOutputData::DrawDocumentBackground()
 
 namespace {
 
+Rectangle lcl_RectPixelToLogic(vcl::RenderContext& rRenderContext, Rectangle aRect)
+{
+    Point aPoint = rRenderContext.PixelToLogic(Point(aRect.getX(), aRect.getY()));
+    Size  aSize  = rRenderContext.PixelToLogic(aRect.GetSize());
+    return Rectangle(aPoint, aSize);
+}
+
 static const double lclCornerRectTransparency = 40.0;
 
-void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, vcl::RenderContext* pDev, const Rectangle& rRect)
+void drawDataBars( vcl::RenderContext& rRenderContext, bool bWorksInPixels, const ScDataBarInfo* pOldDataBarInfo, const Rectangle& rRect)
 {
     long nPosZero = 0;
     Rectangle aPaintRect = rRect;
@@ -823,9 +830,12 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, vcl::RenderContext* pDe
     else
         return;
 
+    if(bWorksInPixels)
+        aPaintRect = lcl_RectPixelToLogic(rRenderContext, aPaintRect);
+
     if(pOldDataBarInfo->mbGradient)
     {
-        pDev->SetLineColor(pOldDataBarInfo->maColor);
+        rRenderContext.SetLineColor(pOldDataBarInfo->maColor);
         Gradient aGradient(GradientStyle_LINEAR, pOldDataBarInfo->maColor, COL_TRANSPARENT);
 
         if(pOldDataBarInfo->mnLength < 0)
@@ -833,14 +843,14 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, vcl::RenderContext* pDe
         else
             aGradient.SetAngle(900);
 
-        pDev->DrawGradient(aPaintRect, aGradient);
+        rRenderContext.DrawGradient(aPaintRect, aGradient);
 
-        pDev->SetLineColor();
+        rRenderContext.SetLineColor();
     }
     else
     {
-        pDev->SetFillColor(pOldDataBarInfo->maColor);
-        pDev->DrawRect(aPaintRect);
+        rRenderContext.SetFillColor(pOldDataBarInfo->maColor);
+        rRenderContext.DrawRect(aPaintRect);
     }
 
     //draw axis
@@ -852,11 +862,11 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, vcl::RenderContext* pDe
         aLineInfo.SetDashCount( 4 );
         aLineInfo.SetDistance( 3 );
         aLineInfo.SetDashLen( 3 );
-        pDev->SetFillColor(pOldDataBarInfo->maAxisColor);
-        pDev->SetLineColor(pOldDataBarInfo->maAxisColor);
-        pDev->DrawLine(aPoint1, aPoint2, aLineInfo);
-        pDev->SetLineColor();
-        pDev->SetFillColor();
+        rRenderContext.SetFillColor(pOldDataBarInfo->maAxisColor);
+        rRenderContext.SetLineColor(pOldDataBarInfo->maAxisColor);
+        rRenderContext.DrawLine(aPoint1, aPoint2, aLineInfo);
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor();
     }
 }
 
@@ -865,18 +875,25 @@ BitmapEx& getIcon( ScIconSetType eType, sal_Int32 nIndex )
     return ScIconSetFormat::getBitmap( eType, nIndex );
 }
 
-void drawIconSets( const ScIconSetInfo* pOldIconSetInfo, vcl::RenderContext* pDev, const Rectangle& rRect )
+void drawIconSets( vcl::RenderContext& rRenderContext, bool bWorksInPixels, const ScIconSetInfo* pOldIconSetInfo, const Rectangle& rRect )
 {
     //long nSize = 16;
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
     sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
     BitmapEx& rIcon = getIcon( eType, nIndex );
     long aOrigSize = std::max<long>(0,std::min(rRect.GetSize().getWidth() - 4, rRect.GetSize().getHeight() -4));
-    pDev->DrawBitmapEx( Point( rRect.Left() +2, rRect.Top() + 2 ), Size(aOrigSize, aOrigSize), rIcon );
+    Point aPoint(rRect.Left() + 2, rRect.Top() + 2);
+    Size aSize(aOrigSize, aOrigSize);
+    if(bWorksInPixels)
+    {
+        aPoint = rRenderContext.PixelToLogic(aPoint);
+        aSize  = rRenderContext.PixelToLogic(aSize);
+    }
+    rRenderContext.DrawBitmapEx(aPoint, aSize, rIcon);
 }
 
-void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
-        Rectangle& rRect, long nPosX, long nSignedOneX, vcl::RenderContext* pDev, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
+void drawCells(vcl::RenderContext& rRenderContext, bool bWorksInPixels, const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
+        Rectangle& rRect, long nPosX, long nSignedOneX, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
         const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo)
 {
 
@@ -888,13 +905,16 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
         rRect.Right() = nPosX-nSignedOneX;
         if( !pOldColor->GetTransparency() )
         {
-            pDev->SetFillColor( *pOldColor );
-            pDev->DrawRect( rRect );
+            rRenderContext.SetFillColor( *pOldColor );
+            Rectangle aRect = rRect;
+            if(bWorksInPixels)
+                aRect = lcl_RectPixelToLogic(rRenderContext, aRect);
+            rRenderContext.DrawRect(aRect);
         }
         if( pOldDataBarInfo )
-            drawDataBars( pOldDataBarInfo, pDev, rRect );
+            drawDataBars( rRenderContext, bWorksInPixels, pOldDataBarInfo, rRect );
         if( pOldIconSetInfo )
-            drawIconSets( pOldIconSetInfo, pDev, rRect );
+            drawIconSets( rRenderContext, bWorksInPixels, pOldIconSetInfo, rRect );
 
         rRect.Left() = nPosX - nSignedOneX;
     }
@@ -907,14 +927,20 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
             Color aBackCol = pOldBackground->GetColor();
             if ( !aBackCol.GetTransparency() )      //! partial transparency?
             {
-                pDev->SetFillColor( aBackCol );
-                pDev->DrawRect( rRect );
+                rRenderContext.SetFillColor( aBackCol );
+                Rectangle aRect = rRect;
+                if(bWorksInPixels) {
+                    aRect.setWidth(aRect.getWidth() - 1);   // HACK
+                    aRect.setHeight(aRect.getHeight() - 1); // HACK
+                    aRect = lcl_RectPixelToLogic(rRenderContext, aRect);
+                }
+                rRenderContext.DrawRect(aRect);
             }
         }
         if( pOldDataBarInfo )
-            drawDataBars( pOldDataBarInfo, pDev, rRect );
+            drawDataBars( rRenderContext, bWorksInPixels, pOldDataBarInfo, rRect );
         if( pOldIconSetInfo )
-            drawIconSets( pOldIconSetInfo, pDev, rRect );
+            drawIconSets( rRenderContext, bWorksInPixels, pOldIconSetInfo, rRect );
 
         rRect.Left() = nPosX - nSignedOneX;
     }
@@ -952,22 +978,38 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
 
 }
 
-void ScOutputData::DrawBackground()
+void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 {
     FindRotated();              //! from the outside?
 
     Rectangle aRect;
-    Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
-    long nOneX = aOnePixel.Width();
-    long nOneY = aOnePixel.Height();
+    // Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
+    // long nOneX = aOnePixel.Width();
+    // long nOneY = aOnePixel.Height();
+
+    bool bWorksInPixels = bMetaFile;
+    if ( eType == OUTTYPE_WINDOW )
+    {
+        bWorksInPixels = true;
+    }
+
+    long nOneX = 1;
+    long nOneY = 1;
 
     if (bMetaFile)
         nOneX = nOneY = 0;
 
+    if (!bWorksInPixels)
+    {
+        Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
+        nOneX = aOnePixel.Width();
+        nOneY = aOnePixel.Height();
+    }
+
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     long nSignedOneX = nOneX * nLayoutSign;
 
-    mpDev->SetLineColor();
+    rRenderContext.SetLineColor();
 
     bool bShowProt = mbSyntaxMode && mpDoc->IsTabProtected(nTab);
     bool bDoAll = bShowProt || bPagebreakMode || bSolidBackground;
@@ -1055,7 +1097,7 @@ void ScOutputData::DrawBackground()
                     const Color* pColor = pInfo->pColorScale.get();
                     const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar.get();
                     const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet.get();
-                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
+                    drawCells( rRenderContext, bWorksInPixels, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
 
                     // extend for all merged cells
                     nMergedCells = 1;
@@ -1071,7 +1113,7 @@ void ScOutputData::DrawBackground()
                         nPosX += pRowInfo[0].pCellInfo[nX+nOldMerged+nMerged].nWidth * nLayoutSign;
                     }
                 }
-                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
+                drawCells( rRenderContext, bWorksInPixels, NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
 
                 nArrY += nSkip;
             }
