@@ -769,7 +769,8 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
     // we need this when we are in editing mode
     if (pEdtOutl != NULL)
         pEdtOutl->SetText(*pNewText);
-
+    // adds it to current outliner anyway (useful in static decomposition)
+    pOutliner->SetText(*pNewText);
     const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
 }
 
@@ -1636,13 +1637,15 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     // Sets original text
     rOutliner.SetText(*pOutlinerParaObject);
 
+    /* Begin overflow handling */
+
     // If overflow occurs we have to cut the text at the right point
     if ( rOutliner.IsPageOverflow() ) {
-        const OutlinerParaObject *pNewTxt = impGetNonOverflowingParaObject(&rOutliner);
-        rOutliner.SetText(*pNewTxt);
+        impLeaveOnlyNonOverflowingText(&rOutliner);
 
         // XXX: Order transfer of stuff in next link here
     }
+    /* End overflow handling */
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
