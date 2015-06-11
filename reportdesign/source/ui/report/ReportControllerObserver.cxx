@@ -57,7 +57,7 @@ public:
     oslInterlockedCount                                 m_nLocks;
     bool                                                m_bReadOnly;
 
-    OXReportControllerObserverImpl(const OReportController& _rController);
+    explicit OXReportControllerObserverImpl(const OReportController& _rController);
     ~OXReportControllerObserverImpl();
 };
 

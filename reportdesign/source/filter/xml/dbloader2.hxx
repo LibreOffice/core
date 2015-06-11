@@ -68,7 +68,7 @@ namespace rptxml
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 public:
-    ORptTypeDetection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    explicit ORptTypeDetection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     // XServiceInfo
     OUString                                     SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;

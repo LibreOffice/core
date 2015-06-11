@@ -528,7 +528,7 @@ struct OReportDefinitionImpl
     bool                                                    m_bEscapeProcessing;
     bool                                                    m_bSetModifiedEnabled;
 
-    OReportDefinitionImpl(::osl::Mutex& _aMutex)
+    explicit OReportDefinitionImpl(::osl::Mutex& _aMutex)
     :m_aStorageChangeListeners(_aMutex)
     ,m_aCloseListener(_aMutex)
     ,m_aModifyListeners(_aMutex)
@@ -2298,7 +2298,7 @@ class OStylesHelper:
 protected:
     virtual ~OStylesHelper(){}
 public:
-    OStylesHelper(const uno::Type& rType = cppu::UnoType<container::XElementAccess>::get());
+    explicit OStylesHelper(const uno::Type& rType = cppu::UnoType<container::XElementAccess>::get());
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;

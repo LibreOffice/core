@@ -61,7 +61,7 @@ class OTaskWindow : public vcl::Window
 {
     VclPtr<PropBrw> m_pPropWin;
 public:
-    OTaskWindow(vcl::Window* _pParent) : Window(_pParent),m_pPropWin(NULL){}
+    explicit OTaskWindow(vcl::Window* _pParent) : Window(_pParent),m_pPropWin(NULL){}
     virtual ~OTaskWindow() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { m_pPropWin.clear(); vcl::Window::dispose(); }
 

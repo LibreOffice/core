@@ -69,7 +69,7 @@ namespace rptui
         vcl::Window& m_rWindow;
 
     public:
-        UpdateLocker( vcl::Window& _rWindow )
+        explicit UpdateLocker( vcl::Window& _rWindow )
             :m_rWindow( _rWindow )
         {
             _rWindow.SetUpdateMode( false );

@@ -60,7 +60,7 @@ namespace rptui
         bool                            m_bFieldListDirty;
 
     public:
-        FormatNormalizer( const OReportModel& _rModel );
+        explicit FormatNormalizer( const OReportModel& _rModel );
         ~FormatNormalizer();
 
         void    notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent );

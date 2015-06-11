@@ -66,7 +66,7 @@ struct PropertyInfo
 {
     bool    bIsReadonlyOrTransient;
 
-    PropertyInfo( const bool i_bIsTransientOrReadOnly )
+    explicit PropertyInfo( const bool i_bIsTransientOrReadOnly )
         :bIsReadonlyOrTransient( i_bIsTransientOrReadOnly )
     {
     }
@@ -104,7 +104,7 @@ public:
     bool                                            m_bReadOnly;
     bool                                            m_bIsUndo;
 
-    OXUndoEnvironmentImpl(OReportModel& _rModel);
+    explicit OXUndoEnvironmentImpl(OReportModel& _rModel);
 };
 
 OXUndoEnvironmentImpl::OXUndoEnvironmentImpl(OReportModel& _rModel) : m_rModel(_rModel)

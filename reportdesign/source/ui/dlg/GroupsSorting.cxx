@@ -85,7 +85,7 @@ class OFieldExpressionControlContainerListener : public ::cppu::WeakImplHelper1<
 {
     VclPtr<OFieldExpressionControl> mpParent;
 public:
-    OFieldExpressionControlContainerListener(OFieldExpressionControl* pParent) : mpParent(pParent) {}
+    explicit OFieldExpressionControlContainerListener(OFieldExpressionControl* pParent) : mpParent(pParent) {}
 
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

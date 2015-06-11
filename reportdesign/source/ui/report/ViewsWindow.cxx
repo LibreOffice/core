@@ -958,13 +958,13 @@ namespace
         bool                m_bCopy;
 
     public:
-        ApplySectionViewAction(bool _bCopy)
+        explicit ApplySectionViewAction(bool _bCopy)
             : m_eAction(eEndDragObj)
             , m_bCopy(_bCopy)
         {
         }
 
-        ApplySectionViewAction(SectionViewAction _eAction = eEndAction)
+        explicit ApplySectionViewAction(SectionViewAction _eAction = eEndAction)
             : m_eAction(_eAction)
             , m_bCopy(false)
         {

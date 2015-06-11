@@ -65,7 +65,7 @@ class OAddFieldWindowListBox: public SvTreeListBox
     VclPtr<OAddFieldWindow>                    m_pTabWin;
 
 public:
-    OAddFieldWindowListBox( OAddFieldWindow* _pParent );
+    explicit OAddFieldWindowListBox( OAddFieldWindow* _pParent );
     virtual ~OAddFieldWindowListBox();
     virtual void dispose() SAL_OVERRIDE;
 

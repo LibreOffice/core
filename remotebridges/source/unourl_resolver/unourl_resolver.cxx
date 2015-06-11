@@ -65,7 +65,7 @@ class ResolverImpl : public WeakImplHelper2< XServiceInfo, XUnoUrlResolver >
     Reference< XComponentContext > _xCtx;
 
 public:
-    ResolverImpl( const Reference< XComponentContext > & xSMgr );
+    explicit ResolverImpl( const Reference< XComponentContext > & xSMgr );
     virtual ~ResolverImpl();
 
     // XServiceInfo

@@ -32,7 +32,7 @@ namespace rptui
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aGroupRow;
     public:
-        OGroupExchange(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _aGroupRow);
+        explicit OGroupExchange(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _aGroupRow);
 
         static SotClipboardFormatId getReportGroupId();
     protected:

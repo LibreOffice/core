@@ -164,7 +164,7 @@ namespace rptxml
     class OSpecialHandleXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
     public:
-        OSpecialHandleXMLExportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
+        explicit OSpecialHandleXMLExportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
         {
         }
         /** this method is called for every item that has the

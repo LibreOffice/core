@@ -43,7 +43,7 @@ namespace rptxml
         OXMLAutoStylePoolP(const OXMLAutoStylePoolP&) SAL_DELETED_FUNCTION;
         void operator =(const OXMLAutoStylePoolP&) SAL_DELETED_FUNCTION;
     public:
-        OXMLAutoStylePoolP(ORptExport& rXMLExport);
+        explicit OXMLAutoStylePoolP(ORptExport& rXMLExport);
         virtual ~OXMLAutoStylePoolP();
     };
 
