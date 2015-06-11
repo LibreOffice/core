@@ -34,6 +34,7 @@
 #include "unonames.hxx"
 #include "reftokenhelper.hxx"
 #include "scmatrix.hxx"
+#include "ScChartListenerCollection.hxx"
 #include "simplehintids.hxx"
 #include "tokenarray.hxx"
 #include "unoreflist.hxx"

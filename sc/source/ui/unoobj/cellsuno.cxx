@@ -128,6 +128,7 @@
 #include "dputil.hxx"
 #include <sortparam.hxx>
 #include "condformatuno.hxx"
+#include "ScChartListenerCollection.hxx"
 
 #include <list>
 #include <memory>

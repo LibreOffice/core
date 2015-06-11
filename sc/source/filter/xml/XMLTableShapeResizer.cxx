@@ -26,6 +26,7 @@
 #include "rangeutl.hxx"
 #include "compiler.hxx"
 #include "reftokenhelper.hxx"
+#include "ScChartListenerCollection.hxx"
 
 #include <osl/diagnose.h>
 

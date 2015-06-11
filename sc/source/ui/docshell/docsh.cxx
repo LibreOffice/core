@@ -107,8 +107,9 @@
 #include "tabprotection.hxx"
 #include "docparam.hxx"
 #include "docshimp.hxx"
-#include "sizedev.hxx"
 #include "refreshtimerprotector.hxx"
+#include "ScChartListenerCollection.hxx"
+#include "sizedev.hxx"
 
 #include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>

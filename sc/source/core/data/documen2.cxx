@@ -80,6 +80,7 @@
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
 #include "recursionhelper.hxx"
+#include "ScChartListenerCollection.hxx"
 #include "lookupcache.hxx"
 #include "externalrefmgr.hxx"
 #include "appoptio.hxx"
