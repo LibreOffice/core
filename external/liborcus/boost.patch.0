@@ -1,0 +1,106 @@
+--- configure.old	2015-06-10 13:18:15.791765357 +0200
++++ configure	2015-06-10 13:18:31.604545887 +0200
+@@ -17236,6 +17236,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS
+ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ 
++if test x"$BOOST_SYSTEM_LIBS" == "x" -o x"$BOOST_SYSTEM_LDFLAGS" == "x"; then
+ if test x"$boost_cv_inc_path" = xno; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Boost not available, not searching for the Boost system library" >&5
+ $as_echo "$as_me: Boost not available, not searching for the Boost system library" >&6;}
+@@ -17519,6 +17520,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS
+ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ fi
++fi
+ 
+ 
+ 
+@@ -17777,7 +17779,8 @@ fi
+ 
+ if test "x$with_gnumeric_filter" != "xno"; then :
+ 
+-        if test x"$boost_cv_inc_path" = xno; then
++        if test x"$BOOST_IOSTREAMS_LIBS" == "x" -o x"$BOOST_IOSTREAMS_LDFLAGS" == "x"; then
++if test x"$boost_cv_inc_path" = xno; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Boost not available, not searching for the Boost iostreams library" >&5
+ $as_echo "$as_me: Boost not available, not searching for the Boost iostreams library" >&6;}
+ else
+@@ -18060,6 +18063,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS
+ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ fi
++fi
+ 
+ 
+ 
+@@ -18068,7 +18072,8 @@ fi
+ 
+ if test "x$with_tools" != "xno"; then :
+ 
+-        if test x"$boost_cv_inc_path" = xno; then
++        if test x"$BOOST_PROGRAM_OPTIONS_LIBS" == "x" -o x"$BOOST_PROGRAM_OPTIONS_LDFLAGS" == "x"; then
++if test x"$boost_cv_inc_path" = xno; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Boost not available, not searching for the Boost program_options library" >&5
+ $as_echo "$as_me: Boost not available, not searching for the Boost program_options library" >&6;}
+ else
+@@ -18351,6 +18356,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS
+ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ fi
++fi
+ 
+ 
+ 
+@@ -18358,7 +18364,8 @@ fi
+ # added as of 1.35.0.  If we have a version <1.35, we must not attempt to
+ # find Boost.System as it didn't exist by then.
+ if test $boost_major_version -ge 135; then
+-  if test x"$boost_cv_inc_path" = xno; then
++  if test x"$BOOST_SYSTEM_LIBS" == "x" -o x"$BOOST_SYSTEM_LDFLAGS" == "x"; then
++if test x"$boost_cv_inc_path" = xno; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Boost not available, not searching for the Boost system library" >&5
+ $as_echo "$as_me: Boost not available, not searching for the Boost system library" >&6;}
+ else
+@@ -18641,6 +18648,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS
+ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ fi
++fi
+ 
+ 
+ 
+@@ -18649,6 +18657,7 @@ boost_filesystem_save_LIBS=$LIBS
+ boost_filesystem_save_LDFLAGS=$LDFLAGS
+ LIBS="$LIBS $BOOST_SYSTEM_LIBS"
+ LDFLAGS="$LDFLAGS $BOOST_SYSTEM_LDFLAGS"
++if test x"$BOOST_FILESYSTEM_LIBS" == "x" -o x"$BOOST_FILESYSTEM_LDFLAGS" == "x"; then
+ if test x"$boost_cv_inc_path" = xno; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Boost not available, not searching for the Boost filesystem library" >&5
+ $as_echo "$as_me: Boost not available, not searching for the Boost filesystem library" >&6;}
+@@ -18932,6 +18941,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS
+ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ fi
++fi
+ 
+ if test $enable_static_boost = yes && test $boost_major_version -ge 135; then
+   BOOST_FILESYSTEM_LIBS="$BOOST_FILESYSTEM_LIBS $BOOST_SYSTEM_LIBS"
+@@ -18940,7 +18950,8 @@ LIBS=$boost_filesystem_save_LIBS
+ LDFLAGS=$boost_filesystem_save_LDFLAGS
+ 
+ 
+-        if test x"$boost_cv_inc_path" = xno; then
++        if test x"$BOOST_SYSTEM_LIBS" == "x" -o x"$BOOST_SYSTEM_LDFLAGS" == "x"; then
++if test x"$boost_cv_inc_path" = xno; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Boost not available, not searching for the Boost system library" >&5
+ $as_echo "$as_me: Boost not available, not searching for the Boost system library" >&6;}
+ else
+@@ -19223,6 +19234,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS
+ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ fi
++fi
+ 
+ 
+ 
