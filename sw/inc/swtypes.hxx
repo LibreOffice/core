@@ -283,6 +283,13 @@ enum PrepareHint
     PREP_END                // END.
 };
 
+enum FrameControlType
+{
+    PageBreak,
+    Header,
+    Footer
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,6 +42,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include "dcontact.hxx"
 #include "hints.hxx"
+#include <FrameControlsManager.hxx>
 
 #include "ftnidx.hxx"
 #include "bodyfrm.hxx"

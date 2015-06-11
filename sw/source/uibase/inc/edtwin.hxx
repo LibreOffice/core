@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_EDTWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_EDTWIN_HXX
 
-#include <FrameControlsManager.hxx>
-
 #include <sot/exchange.hxx>
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
@@ -29,6 +27,7 @@
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>
 #include <swevent.hxx>
+#include <swtypes.hxx>
 
 class   SwWrtShell;
 class   SwView;
@@ -44,6 +43,7 @@ class   SwPaM;
 struct  SwApplyTemplate;
 struct  QuickHelpData;
 class   SdrDropMarkerOverlay;
+class   SwFrameControlsManager;
 
 // input window
 
@@ -138,7 +138,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     sal_uInt16          m_nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          m_nKS_NUMINDENTINC_Count;
 
-    SwFrameControlsManager m_aFrameControlsManager;
+    SwFrameControlsManager *m_pFrameControlsManager;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
@@ -291,7 +291,7 @@ public:
      */
     OUString ClipLongToolTip(const OUString& rText);
 
-    SwFrameControlsManager& GetFrameControlsManager() { return m_aFrameControlsManager; }
+    SwFrameControlsManager& GetFrameControlsManager();
 
     SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();

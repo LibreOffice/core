@@ -85,13 +85,6 @@ namespace vcl
     class OldStylePrintAdaptor;
 }
 
-enum FrameControlType
-{
-    PageBreak,
-    Header,
-    Footer
-};
-
 // Define for flags needed in ctor or layers below.
 // Currently the Preview flag is needed for DrawPage.
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
