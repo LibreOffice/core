@@ -44,6 +44,7 @@
 #include "miscuno.hxx"
 #include "chart2uno.hxx"
 #include "charthelper.hxx"
+#include "ScChartListenerCollection.hxx"
 
 using namespace ::com::sun::star;
 

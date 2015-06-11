@@ -30,6 +30,7 @@
 #include "chartlis.hxx"
 #include "dpobject.hxx"
 #include "areasave.hxx"
+#include "ScChartListenerCollection.hxx"
 #include "unoreflist.hxx"
 #include <scopetools.hxx>
 #include <refupdatecontext.hxx>

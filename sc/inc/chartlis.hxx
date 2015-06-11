@@ -20,18 +20,14 @@
 #ifndef INCLUDED_SC_INC_CHARTLIS_HXX
 #define INCLUDED_SC_INC_CHARTLIS_HXX
 
-#include <vcl/timer.hxx>
-#include <vcl/idle.hxx>
 #include <svl/listener.hxx>
 #include "rangelst.hxx"
 #include "token.hxx"
 #include "externalrefmgr.hxx"
 
 #include <vector>
-#include <list>
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <unordered_set>
 
 class ScDocument;
@@ -124,101 +120,6 @@ public:
     ScChartHiddenRangeListener();
     virtual ~ScChartHiddenRangeListener();
     virtual void notify() = 0;
-};
-
-class ScChartListenerCollection
-{
-public:
-    struct RangeListenerItem
-    {
-        ScRange                     maRange;
-        ScChartHiddenRangeListener* mpListener;
-        explicit RangeListenerItem(const ScRange& rRange, ScChartHiddenRangeListener* p);
-    };
-
-    typedef boost::ptr_map<OUString, ScChartListener> ListenersType;
-    typedef std::unordered_set<OUString, OUStringHash> StringSetType;
-private:
-    ListenersType maListeners;
-    enum UpdateStatus
-    {
-        SC_CLCUPDATE_NONE,
-        SC_CLCUPDATE_RUNNING,
-        SC_CLCUPDATE_MODIFIED
-    } meModifiedDuringUpdate;
-    ::std::list<RangeListenerItem> maHiddenListeners;
-    StringSetType maNonOleObjectNames;
-
-    Idle            aIdle;
-    ScDocument*     pDoc;
-
-                    DECL_LINK_TYPED(TimerHdl, Idle *, void);
-
-    ScChartListenerCollection& operator=( const ScChartListenerCollection& ) SAL_DELETED_FUNCTION;
-
-public:
-    ScChartListenerCollection( ScDocument* pDoc );
-    ScChartListenerCollection( const ScChartListenerCollection& );
-    ~ScChartListenerCollection();
-
-                    // only needed after copy-ctor, if newly added to doc
-    void            StartAllListeners();
-
-    SC_DLLPUBLIC void insert(ScChartListener* pListener);
-    ScChartListener* findByName(const OUString& rName);
-    const ScChartListener* findByName(const OUString& rName) const;
-    bool hasListeners() const;
-
-    void removeByName(const OUString& rName);
-
-    const ListenersType& getListeners() const { return maListeners;}
-    ListenersType& getListeners() { return maListeners;}
-    StringSetType& getNonOleObjectNames() { return maNonOleObjectNames;}
-
-    /**
-     * Create a unique name that's not taken by any existing chart listener
-     * objects.  The name consists of a prefix given followed by a number.
-     */
-    OUString getUniqueName(const OUString& rPrefix) const;
-
-    void            ChangeListening( const OUString& rName,
-                                    const ScRangeListRef& rRangeListRef,
-                                    bool bDirty = false );
-    // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
-    void            FreeUnused();
-    void            FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
-                             const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
-    void            StartTimer();
-    void            UpdateDirtyCharts();
-    SC_DLLPUBLIC void SetDirty();
-    void            SetDiffDirty( const ScChartListenerCollection&,
-                        bool bSetChartRangeLists = false );
-
-    void            SetRangeDirty( const ScRange& rRange );     // for example rows/columns
-
-    void            UpdateScheduledSeriesRanges();
-    void            UpdateChartsContainingTab( SCTAB nTab );
-
-    bool operator==( const ScChartListenerCollection& r ) const;
-    bool operator!=( const ScChartListenerCollection& r ) const;
-
-    /**
-     * Start listening on hide/show change within specified cell range.  A
-     * single listener may listen on multiple ranges when the caller passes
-     * the same pointer multiple times with different ranges.
-     *
-     * Note that the caller is responsible for managing the life-cycle of the
-     * listener instance.
-     */
-    void            StartListeningHiddenRange( const ScRange& rRange,
-                                               ScChartHiddenRangeListener* pListener );
-
-    /**
-     * Remove all ranges associated with passed listener instance from the
-     * list of hidden range listeners.  This does not delete the passed
-     * listener instance.
-     */
-    void            EndListeningHiddenRange( ScChartHiddenRangeListener* pListener );
 };
 
 #endif

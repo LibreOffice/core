@@ -85,6 +85,7 @@
 #include "scresid.hxx"
 #include "columniterator.hxx"
 #include "globalnames.hxx"
+#include "ScChartListenerCollection.hxx"
 #include "stringutil.hxx"
 #include <documentlinkmgr.hxx>
 #include <scopetools.hxx>

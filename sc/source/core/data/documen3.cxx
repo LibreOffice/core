@@ -70,6 +70,7 @@
 #include "queryentry.hxx"
 #include "formulacell.hxx"
 #include "refupdatecontext.hxx"
+#include "ScChartListenerCollection.hxx"
 #include "scopetools.hxx"
 
 #include "globalnames.hxx"
