@@ -767,6 +767,12 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
     const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
 }
 
+void impSetOutlinerToEmptyTxt(SdrOutliner *pOutliner)
+{
+    OutlinerParaObject *pEmptyTxt = pOutliner->GetEmptyParaObject();
+    pOutliner->SetText(*pEmptyTxt);
+}
+
 OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const
  {
 
@@ -796,7 +802,8 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
     OutlinerParaObject *pJoiningPara = NULL;
 
     if (pOldPara0) {
-        //pOutliner->Clear();
+        //pOutliner->Clear(); // you need a clear outliner here
+        impSetOutlinerToEmptyTxt(pOutliner);
 
         pTmpPara0 = pOutliner->GetParagraph(0);
         pOutliner->SetText(mpOverflowingText->mTailTxt + aOldPara0Txt, pTmpPara0);
@@ -805,6 +812,7 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
 
     // start actual composition
     //pOutliner->Clear();
+    impSetOutlinerToEmptyTxt(pOutliner);
 
     // Set headText at the beginning of box
     Paragraph *pNewPara0 = pOutliner->GetParagraph(0);
