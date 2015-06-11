@@ -51,7 +51,10 @@ MediaWindow::MediaWindow( vcl::Window* parent, bool bInternalMediaControl ) :
 
 
 
-MediaWindow::~MediaWindow() {}
+MediaWindow::~MediaWindow()
+{
+    mpImpl.disposeAndClear();
+}
 
 
 
