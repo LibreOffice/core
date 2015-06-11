@@ -22,7 +22,7 @@ class SwContent
 public:
     int x;
 
-    SwContent(int x_) : x(x_) {}
+    explicit SwContent(int x_) : x(x_) {}
 
     bool operator<( const SwContent &rCmp) const
     {

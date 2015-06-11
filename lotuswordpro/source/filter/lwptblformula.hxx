@@ -122,7 +122,7 @@ public:
 class LwpFormulaConst:public LwpFormulaArg
 {
 public:
-    LwpFormulaConst( double dVal);
+    explicit LwpFormulaConst( double dVal);
     virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 private:
     double m_dVal;
@@ -131,7 +131,7 @@ private:
 class LwpFormulaText:public LwpFormulaArg
 {
 public:
-    LwpFormulaText( const OUString& aText);
+    explicit LwpFormulaText( const OUString& aText);
     virtual OUString ToString(LwpTableLayout* /*pCellsMap*/) SAL_OVERRIDE {return m_aText;}
 private:
     OUString m_aText;
@@ -167,7 +167,7 @@ private:
 class LwpFormulaFunc :public LwpFormulaArg
 {
 public:
-    LwpFormulaFunc(sal_uInt16 nTokenType);
+    explicit LwpFormulaFunc(sal_uInt16 nTokenType);
     virtual ~LwpFormulaFunc();
 
     void AddArg(LwpFormulaArg* pArg);
@@ -183,14 +183,14 @@ protected:
 class LwpFormulaOp : public LwpFormulaFunc
 {
 public:
-    LwpFormulaOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
+    explicit LwpFormulaOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
     virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 };
 
 class LwpFormulaUnaryOp : public LwpFormulaFunc
 {
 public:
-    LwpFormulaUnaryOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
+    explicit LwpFormulaUnaryOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
     virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 };
 

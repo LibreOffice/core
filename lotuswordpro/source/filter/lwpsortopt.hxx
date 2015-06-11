@@ -88,7 +88,7 @@ class LwpSortOption
 {
 public:
     LwpSortOption(){}
-    LwpSortOption(LwpObjectStream* pStrm);
+    explicit LwpSortOption(LwpObjectStream* pStrm);
     ~LwpSortOption(){}
 public:
     void Read(LwpObjectStream *pStrm);

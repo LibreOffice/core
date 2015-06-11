@@ -78,7 +78,7 @@ public:
     {
         m_bValid = true;
     }
-    XFColor(sal_uInt32 color)
+    explicit XFColor(sal_uInt32 color)
     {
         unsigned int    c = color&0x00ffffff;
         unsigned int    temp = c;

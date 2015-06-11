@@ -90,7 +90,7 @@ public:
     OUString GetEditorName(sal_uInt8 nID);
     XFColor GetHighlightColor(sal_uInt8 nID);
 private:
-    LwpGlobalMgr(LwpSvStream* pSvStream);
+    explicit LwpGlobalMgr(LwpSvStream* pSvStream);
 private:
     static std::map< sal_uInt32,LwpGlobalMgr* > m_ThreadMap;
     LwpObjectFactory* m_pObjFactory;

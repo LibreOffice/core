@@ -81,7 +81,7 @@ class IXFAttrList;
 class XFSaxStream : public IXFStream
 {
 public:
-    XFSaxStream(css::uno::Reference<css::xml::sax::XDocumentHandler>& xHandler);
+    explicit XFSaxStream(css::uno::Reference<css::xml::sax::XDocumentHandler>& xHandler);
 
     virtual ~XFSaxStream();
 

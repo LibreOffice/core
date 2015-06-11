@@ -76,7 +76,7 @@ Mar 2005            Created
 class LwpFrame
 {
 public:
-    LwpFrame(LwpPlacableLayout* pLayout);
+    explicit LwpFrame(LwpPlacableLayout* pLayout);
     ~LwpFrame();
     void RegisterStyle(XFFrameStyle* pFrameStyle);
     void Parse(XFFrame* pXFFrame, sal_Int32 nPageNo = 0);

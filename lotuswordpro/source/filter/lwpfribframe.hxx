@@ -71,7 +71,7 @@
 class LwpFribFrame : public LwpFrib
 {
 public:
-    LwpFribFrame( LwpPara* pPara) : LwpFrib(pPara){}
+    explicit LwpFribFrame( LwpPara* pPara) : LwpFrib(pPara){}
     virtual ~LwpFribFrame(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     rtl::Reference<LwpObject> GetLayout();

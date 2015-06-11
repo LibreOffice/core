@@ -61,7 +61,7 @@ namespace OpenStormBento
 class CBenTOCReader
 {
 public: // Methods
-    CBenTOCReader(pLtcBenContainer pContainer)
+    explicit CBenTOCReader(pLtcBenContainer pContainer)
         : cpContainer(pContainer)
         , cpTOC(NULL)
         , cBlockSize(0)

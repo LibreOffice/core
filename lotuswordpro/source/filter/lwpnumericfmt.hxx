@@ -102,7 +102,7 @@ struct LwpCurrencyInfo
     OUString sSymbol;
     bool bPost;
     bool bShowSpace;
-    LwpCurrencyInfo(const OUString& sSym)
+    explicit LwpCurrencyInfo(const OUString& sSym)
     {
         sSymbol = sSym;
         bPost = false;
@@ -248,7 +248,7 @@ private:
 class LwpNumericFormat
 {
 public:
-    LwpNumericFormat(LwpObjectStream * pStrm);
+    explicit LwpNumericFormat(LwpObjectStream * pStrm);
     ~LwpNumericFormat(){}
     void Read();
     static bool IsCurrencyFormat(sal_uInt16 Format);

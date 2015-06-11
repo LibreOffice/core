@@ -72,8 +72,8 @@ public: // Methods
         : cpNext(NULL)
         , cpPrev(NULL)
     {}
-    CUtListElmt(pCUtListElmt pPrev) { InsertAfter(pPrev); }
-    CUtListElmt(pCUtList pList);
+    explicit CUtListElmt(pCUtListElmt pPrev) { InsertAfter(pPrev); }
+    explicit CUtListElmt(pCUtList pList);
     virtual ~CUtListElmt();
     void Remove()
     {
@@ -105,9 +105,9 @@ class CUtComparableListElmt : public CUtListElmt
 {
 public: // Methods
     CUtComparableListElmt() { ; }
-    CUtComparableListElmt(pCUtComparableListElmt pPrev) :
+    explicit CUtComparableListElmt(pCUtComparableListElmt pPrev) :
       CUtListElmt(pPrev) { ; }
-    CUtComparableListElmt(pCUtList pList) : CUtListElmt(pList) { ; }
+    explicit CUtComparableListElmt(pCUtList pList) : CUtListElmt(pList) { ; }
 
 public: // Pure virtual methods
 };

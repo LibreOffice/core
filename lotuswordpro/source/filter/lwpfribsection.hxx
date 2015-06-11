@@ -111,7 +111,7 @@ class XFIndex;
 class LwpFribSection: public LwpFrib
 {
 public:
-    LwpFribSection(LwpPara* pPara );
+    explicit LwpFribSection(LwpPara* pPara );
     virtual ~LwpFribSection();
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     LwpSection * GetSection();

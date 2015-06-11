@@ -91,11 +91,10 @@ class LwpHyperlinkMgr;
 class LwpFrib
 {
 public:
-    LwpFrib(LwpPara* pPara);
+    explicit LwpFrib(LwpPara* pPara);
     virtual ~LwpFrib();
     static LwpFrib* CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag, sal_uInt8 editID);
     virtual void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
-//  virtual void Parse(IXFStream* pOutputStream);
     LwpFrib* GetNext(){return m_pNext;}
     void SetNext(LwpFrib* next){m_pNext = next;}
     sal_uInt8 GetType() { return m_nFribType;}

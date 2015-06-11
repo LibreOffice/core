@@ -115,8 +115,7 @@ inline LwpParaProperty* LwpParaProperty::GetPrevious()
 class LwpParaAlignProperty : public LwpParaProperty
 {
 public:
-//      LwpParaAlignProperty(LwpParaAlignProperty* pOther);
-        LwpParaAlignProperty(LwpObjectStream* pFile);
+        explicit LwpParaAlignProperty(LwpObjectStream* pFile);
         virtual ~LwpParaAlignProperty();
         LwpAlignmentOverride* GetAlignment();
         sal_uInt32  GetType() SAL_OVERRIDE;
@@ -133,7 +132,7 @@ inline LwpAlignmentOverride* LwpParaAlignProperty::GetAlignment()
 class LwpParaIndentProperty : public LwpParaProperty
 {
 public:
-        LwpParaIndentProperty(LwpObjectStream* pFile);
+        explicit LwpParaIndentProperty(LwpObjectStream* pFile);
         virtual ~LwpParaIndentProperty();
         LwpIndentOverride* GetIndent();
         sal_uInt32 GetType() SAL_OVERRIDE;
@@ -155,7 +154,7 @@ inline LwpIndentOverride* LwpParaIndentProperty::GetIndent()
 class LwpParaSpacingProperty : public LwpParaProperty
 {
 public:
-        LwpParaSpacingProperty(LwpObjectStream* pFile);
+        explicit LwpParaSpacingProperty(LwpObjectStream* pFile);
         virtual ~LwpParaSpacingProperty();
         LwpSpacingOverride* GetSpacing();
         sal_uInt32 GetType() SAL_OVERRIDE;
@@ -173,7 +172,7 @@ class LwpParaBorderOverride;
 class LwpParaBorderProperty : public LwpParaProperty
 {
 public:
-    LwpParaBorderProperty(LwpObjectStream* pStrm);
+    explicit LwpParaBorderProperty(LwpObjectStream* pStrm);
 
     sal_uInt32 GetType() SAL_OVERRIDE { return PP_LOCAL_BORDER; }
 
@@ -191,7 +190,7 @@ inline LwpParaBorderOverride* LwpParaBorderProperty::GetLocalParaBorder()
 class LwpParaBreaksProperty : public LwpParaProperty
 {
 public:
-    LwpParaBreaksProperty(LwpObjectStream* pStrm);
+    explicit LwpParaBreaksProperty(LwpObjectStream* pStrm);
 
     sal_uInt32 GetType() SAL_OVERRIDE { return PP_LOCAL_BREAKS; }
 
@@ -210,7 +209,7 @@ inline LwpBreaksOverride* LwpParaBreaksProperty::GetLocalParaBreaks()
 class LwpParaBulletProperty : public LwpParaProperty
 {
 public:
-    LwpParaBulletProperty(LwpObjectStream* pStrm);
+    explicit LwpParaBulletProperty(LwpObjectStream* pStrm);
 
     virtual ~LwpParaBulletProperty();
 
@@ -230,7 +229,7 @@ inline LwpBulletOverride* LwpParaBulletProperty::GetLocalParaBullet()
 class LwpParaNumberingProperty : public LwpParaProperty
 {
 public:
-    LwpParaNumberingProperty(LwpObjectStream* pStrm);
+    explicit LwpParaNumberingProperty(LwpObjectStream* pStrm);
 
     sal_uInt32 GetType() SAL_OVERRIDE { return PP_LOCAL_NUMBERING; }
 
@@ -247,7 +246,7 @@ inline LwpNumberingOverride* LwpParaNumberingProperty::GetLocalNumbering() const
 class LwpParaTabRackProperty : public LwpParaProperty
 {
 public:
-    LwpParaTabRackProperty(LwpObjectStream* pStrm);
+    explicit LwpParaTabRackProperty(LwpObjectStream* pStrm);
     virtual ~LwpParaTabRackProperty();
     sal_uInt32 GetType() SAL_OVERRIDE { return PP_LOCAL_TABRACK; }
 
@@ -265,7 +264,7 @@ inline LwpTabOverride* LwpParaTabRackProperty::GetTab()
 class LwpParaBackGroundProperty : public LwpParaProperty
 {
 public:
-    LwpParaBackGroundProperty(LwpObjectStream* pFile);
+    explicit LwpParaBackGroundProperty(LwpObjectStream* pFile);
     virtual ~LwpParaBackGroundProperty();
     LwpBackgroundOverride* GetBackground();
     sal_uInt32 GetType() SAL_OVERRIDE;

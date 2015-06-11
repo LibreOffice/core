@@ -105,7 +105,7 @@ class LwpFribFootnote: public LwpFrib
 {
 
 public:
-    LwpFribFootnote(LwpPara* pPara );
+    explicit LwpFribFootnote(LwpPara* pPara );
     virtual ~LwpFribFootnote(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void RegisterNewStyle();

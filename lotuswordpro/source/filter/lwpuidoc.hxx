@@ -132,7 +132,7 @@ public:
 class LwpUIDocument
 {
 public:
-    LwpUIDocument(LwpObjectStream *pStrm);
+    explicit LwpUIDocument(LwpObjectStream *pStrm);
     ~LwpUIDocument();
 private:
     LwpNamedProperties m_NamedProps;

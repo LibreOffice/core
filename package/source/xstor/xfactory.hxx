@@ -31,7 +31,7 @@ class OStorageFactory : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 public:
-    OStorageFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+    explicit OStorageFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
     {
         OSL_ENSURE( xContext.is(), "No service manager is provided!\n" );

@@ -189,7 +189,7 @@ public:
     sal_uInt16      m_numOfStrings;
     sal_uInt16      m_stringsCopied;
 
-    StringCache(sal_uInt16 size); // throws std::bad_alloc
+    explicit StringCache(sal_uInt16 size); // throws std::bad_alloc
     ~StringCache();
 
     const sal_Unicode*  getString(sal_uInt16 index);

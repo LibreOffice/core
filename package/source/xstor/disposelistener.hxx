@@ -31,7 +31,7 @@ class OChildDispListener_Impl : public ::cppu::WeakImplHelper1 < ::com::sun::sta
     OStorage* m_pStorage;
 
 public:
-    OChildDispListener_Impl( OStorage& aStorage );
+    explicit OChildDispListener_Impl( OStorage& aStorage );
     virtual ~OChildDispListener_Impl();
 
     void OwnerIsDisposed();

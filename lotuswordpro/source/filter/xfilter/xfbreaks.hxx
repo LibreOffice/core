@@ -70,7 +70,7 @@ class XFBreaks
 public:
     XFBreaks();
 
-    XFBreaks(enumXFBreaks breaks);
+    explicit XFBreaks(enumXFBreaks breaks);
 
 public:
     /**

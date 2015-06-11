@@ -70,7 +70,7 @@ public:
     , m_xOwnStorage( xStorage )
     {}
 
-    OHierarchyElement_Impl( const ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage >& xWeakStorage )
+    explicit OHierarchyElement_Impl( const ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage >& xWeakStorage )
     : m_rParent( NULL )
     , m_xWeakOwnStorage( xWeakStorage )
     {}
@@ -112,7 +112,7 @@ class OHierarchyHolder_Impl : public ::cppu::OWeakObject
     ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage > m_xWeakOwnStorage;
     ::rtl::Reference< OHierarchyElement_Impl > m_xChild;
 public:
-    OHierarchyHolder_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xOwnStorage )
+    explicit OHierarchyHolder_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xOwnStorage )
     : m_xWeakOwnStorage( xOwnStorage )
     , m_xChild( new OHierarchyElement_Impl( ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage >( xOwnStorage ) ) )
     {}

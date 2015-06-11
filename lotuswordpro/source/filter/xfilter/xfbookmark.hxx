@@ -69,7 +69,7 @@
 class XFBookmark : public XFContent
 {
 public:
-    XFBookmark(bool isStart)
+    explicit XFBookmark(bool isStart)
     {
         m_bStart = isStart;
     }

@@ -103,7 +103,7 @@ struct StorageHolder_Impl
     OStorage* m_pPointer;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage > m_xWeakRef;
 
-    inline StorageHolder_Impl( OStorage* pStorage );
+    explicit inline StorageHolder_Impl( OStorage* pStorage );
 
     StorageHolder_Impl( const StorageHolder_Impl& aSH )
     : m_pPointer( aSH.m_pPointer )

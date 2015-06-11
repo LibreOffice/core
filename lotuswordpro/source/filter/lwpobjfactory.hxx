@@ -83,9 +83,8 @@
 class LwpObjectFactory
 {
 public:
-    LwpObjectFactory(LwpSvStream* pSvStream);
+    explicit LwpObjectFactory(LwpSvStream* pSvStream);
 public:
-//  static LwpObjectFactory* Instance(LwpSvStream* pSvStream=NULL);
     ~LwpObjectFactory();
 
 //For object Factory and object manager

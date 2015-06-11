@@ -71,7 +71,7 @@ class XFTextContent : public XFContent
 public:
     XFTextContent(){}
 
-    XFTextContent(const OUString& text);
+    explicit XFTextContent(const OUString& text);
 
     virtual ~XFTextContent();
 

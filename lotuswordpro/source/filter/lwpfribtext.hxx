@@ -83,22 +83,21 @@ public:
 class LwpFribHardSpace : public LwpFrib
 {
 public:
-    LwpFribHardSpace( LwpPara* pPara ) : LwpFrib(pPara){}
+    explicit LwpFribHardSpace( LwpPara* pPara ) : LwpFrib(pPara){}
     virtual ~LwpFribHardSpace(){}
 };
 
 class LwpFribSoftHyphen : public LwpFrib
 {
 public:
-    LwpFribSoftHyphen( LwpPara* pPara ) : LwpFrib(pPara){}
+    explicit LwpFribSoftHyphen( LwpPara* pPara ) : LwpFrib(pPara){}
     virtual ~LwpFribSoftHyphen(){}
 };
 
-//add by , 02/03/2005
 class LwpFribParaNumber : public LwpFrib
 {
 public:
-    LwpFribParaNumber( LwpPara* pPara ) : LwpFrib(pPara),
+    explicit LwpFribParaNumber( LwpPara* pPara ) : LwpFrib(pPara),
         m_nStyleID(0), m_nNumberChar(0), m_nLevel(1), m_nStart(0){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
 
@@ -136,7 +135,7 @@ inline sal_uInt16 LwpFribParaNumber::GetStart() const
 class LwpFribDocVar : public LwpFrib
 {
 public:
-    LwpFribDocVar( LwpPara* pPara );
+    explicit LwpFribDocVar( LwpPara* pPara );
 
     virtual ~LwpFribDocVar();
 
@@ -145,8 +144,6 @@ public:
     void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;//add by ,05/5/27
 
     void XFConvert(XFContentContainer* pXFPara);//add by ,05/5/27
-
-//  inline sal_uInt16 GetType() const;
 
     enum {
         FILENAME = 0x02,
@@ -186,22 +183,18 @@ private:
     void RegisterDefaultTimeStyle();
     void RegisterTotalTimeStyle();
 };
-//inline sal_uInt16 LwpFribDocVar::GetType() const
-//{
-//  return m_nType;
-//}
 
 class LwpFribTab : public LwpFrib
 {
 public:
-    LwpFribTab( LwpPara* pPara ) : LwpFrib(pPara){}
+    explicit LwpFribTab( LwpPara* pPara ) : LwpFrib(pPara){}
     virtual ~LwpFribTab(){}
 };
 
 class LwpFribUnicode: public LwpFrib
 {
 public:
-    LwpFribUnicode( LwpPara* pPara ) : LwpFrib(pPara){}
+    explicit LwpFribUnicode( LwpPara* pPara ) : LwpFrib(pPara){}
     virtual ~LwpFribUnicode(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
@@ -214,7 +207,7 @@ public:
 class LwpFribPageNumber : public LwpFrib
 {
 public:
-    LwpFribPageNumber(LwpPara* pPara) : LwpFrib(pPara),
+    explicit LwpFribPageNumber(LwpPara* pPara) : LwpFrib(pPara),
         m_nNumStyle(0), m_nStartNum(1), m_nStartOnPage(1), m_nFlag(0){}
     virtual ~LwpFribPageNumber(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;

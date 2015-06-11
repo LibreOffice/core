@@ -154,7 +154,7 @@ public:
 class LwpDrawGroup : public LwpDrawObj
 {
 public:
-    LwpDrawGroup(SvStream* pStream) : LwpDrawObj(pStream) {}
+    explicit LwpDrawGroup(SvStream* pStream) : LwpDrawObj(pStream) {}
     virtual ~LwpDrawGroup() {}
 
 protected:
@@ -305,7 +305,7 @@ private:
     SdwPoint m_aVector;
 
 public:
-    LwpDrawTextBox(SvStream* pStream);
+    explicit LwpDrawTextBox(SvStream* pStream);
     virtual ~LwpDrawTextBox();
     static void SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextBoxRecord* pRec);
 
@@ -348,7 +348,7 @@ protected:
 class LwpDrawMetafile : public LwpDrawObj
 {
 public:
-    LwpDrawMetafile(SvStream* pStream);
+    explicit LwpDrawMetafile(SvStream* pStream);
     virtual ~LwpDrawMetafile() {}
 
 protected:
@@ -371,7 +371,7 @@ private:
     SdwBmpRecord m_aBmpRec;
     sal_uInt8* m_pImageData;
 public:
-    LwpDrawBitmap(SvStream* pStream);
+    explicit LwpDrawBitmap(SvStream* pStream);
     virtual ~LwpDrawBitmap();
 
 protected:

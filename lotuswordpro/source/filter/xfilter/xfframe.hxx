@@ -80,7 +80,7 @@ class XFFrame : public XFContentContainer
 {
 public:
     XFFrame();
-    XFFrame(bool isTextBox);
+    explicit XFFrame(bool isTextBox);
 
     virtual ~XFFrame();
 

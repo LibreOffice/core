@@ -64,7 +64,7 @@ namespace connectivity
         public:
             inline const OConnection& getOwnConnection() const { return m_rConnection; }
 
-            ODatabaseMetaData(OConnection& _rCon);
+            explicit ODatabaseMetaData(OConnection& _rCon);
             virtual ~ODatabaseMetaData();
 
             // as I mentioned before this interface is really BIG
