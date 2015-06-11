@@ -81,7 +81,7 @@ void ODatabaseMetaData::fillLiterals()
 
 sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId)
 {
-    if(!m_aLiteralInfo.size())
+    if(m_aLiteralInfo.empty())
         fillLiterals();
 
     sal_Int32 nSize = 0;
@@ -93,7 +93,7 @@ sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId)
 
 sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
 {
-    if(!m_aLiteralInfo.size())
+    if(m_aLiteralInfo.empty())
         fillLiterals();
     sal_Bool bSupported = sal_False;
     ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
@@ -105,7 +105,7 @@ sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
 
 OUString ODatabaseMetaData::getLiteral(sal_uInt32 _nId)
 {
-    if(!m_aLiteralInfo.size())
+    if(m_aLiteralInfo.empty())
         fillLiterals();
     OUString sStr;
     ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
@@ -257,42 +257,42 @@ void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSearchable();
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isAutoIncrement();
     return sal_False;
 }
 
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnServiceName();
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getTableName();
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getCatalogName();
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnTypeName();
     return OUString();
 }
@@ -300,7 +300,7 @@ OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCaseSensitive();
     return sal_True;
 }
@@ -308,7 +308,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32
 
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+    if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getSchemaName();
     return OUString();
 }

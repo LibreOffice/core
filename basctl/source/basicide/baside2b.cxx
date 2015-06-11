@@ -694,7 +694,7 @@ TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
         }
     }
 
-    if( aPortions.size() == 0 )
+    if( aPortions.empty() )
         return TextSelection();
 
     OUString sStr = aLine.copy( r.nBegin, r.nEnd - r.nBegin );
@@ -860,7 +860,7 @@ void EditorWindow::HandleCodeCompletion()
                 aVect.insert( aVect.begin(), aLine.copy(i->nBegin, i->nEnd - i->nBegin) );
         }
 
-        if( aVect.size() == 0 )//nothing to do
+        if( aVect.empty() )//nothing to do
             return;
         OUString sBaseName = aVect[0];//variable name
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
@@ -2921,7 +2921,7 @@ void CodeCompleteWindow::ClearAndHide()
 UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& aVect, const OUString& sVarType )
 : bCanComplete( true )
 {
-    if( aVect.size() == 0 || sVarType.isEmpty() )
+    if( aVect.empty() || sVarType.isEmpty() )
     {
         bCanComplete = false;//invalid parameters, nothing to code complete
         return;

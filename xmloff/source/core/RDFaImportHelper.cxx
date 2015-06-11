@@ -358,7 +358,7 @@ void RDFaInserter::InsertRDFaEntry(
         // compiles on unxsoli4, unxlngi6, but not wntsci12
 //        ::std::not1( ::std::mem_fun_ref(&uno::Reference<rdf::XURI>::is)) );
 
-    if (!predicates.size())
+    if (predicates.empty())
     {
         return; // invalid
     }
@@ -413,7 +413,7 @@ RDFaImportHelper::ParseRDFa(
     }
     const ::std::vector< OUString > properties(
         reader.ReadCURIEs(i_rProperty) );
-    if (!properties.size()) {
+    if (properties.empty()) {
         return std::shared_ptr<ParsedRDFaAttributes>();
     }
     const OUString datatype( !i_rDatatype.isEmpty()

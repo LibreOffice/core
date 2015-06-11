@@ -593,7 +593,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
             pRefList = rTok2.GetRefList();
         if (pRefList)
         {
-            if (!pRefList->size())
+            if (pRefList->empty())
                 return NULL;
             if (bExternal)
                 return NULL;    // external reference list not possible
@@ -617,7 +617,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                 case svRefList:
                     {
                         const ScRefList* p = pt[i]->GetRefList();
-                        if (!p->size())
+                        if (p->empty())
                             return NULL;
                         ScRefList::const_iterator it( p->begin());
                         ScRefList::const_iterator end( p->end());

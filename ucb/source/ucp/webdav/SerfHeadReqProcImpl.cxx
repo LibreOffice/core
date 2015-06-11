@@ -97,7 +97,7 @@ void SerfHeadReqProcImpl::processSingleResponseHeader( const char* inHeaderName,
 
     bool bStoreHeaderField = false;
 
-    if ( mpHeaderNames->size() == 0 )
+    if ( mpHeaderNames->empty() )
     {
         // store all header fields
         bStoreHeaderField = true;

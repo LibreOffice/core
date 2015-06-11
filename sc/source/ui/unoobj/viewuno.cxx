@@ -1391,7 +1391,7 @@ void SAL_CALL ScTabViewObj::removeEnhancedMouseClickHandler( const uno::Referenc
         else
             ++it;
     }
-    if ((aMouseClickHandlers.size() == 0) && (nCount > 0)) // only if last listener removed
+    if (aMouseClickHandlers.empty() && (nCount > 0)) // only if last listener removed
         EndMouseListening();
 }
 
@@ -1422,7 +1422,7 @@ void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference<
         else
             ++it;
     }
-    if ((aActivationListeners.size() == 0) && (nCount > 0)) // only if last listener removed
+    if (aActivationListeners.empty() && (nCount > 0)) // only if last listener removed
         EndActivationListening();
 }
 

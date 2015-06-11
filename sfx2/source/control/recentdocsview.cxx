@@ -265,7 +265,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const Rectangle &
         set_width_request(mnTextHeight + mnItemMaxSize + 2 * mnItemPadding);
     }
 
-    if (mItemList.size() == 0)
+    if (mItemList.empty())
     {
         // No recent files to be shown yet. Show a welcome screen.
         rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);

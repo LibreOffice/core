@@ -251,7 +251,7 @@ namespace connectivity
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
-            if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
+            if (m_Product.mProfileList.empty() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
             {
                 //Profile not found
                 return OUString();
@@ -399,7 +399,7 @@ namespace connectivity
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
-            if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
+            if (m_Product.mProfileList.empty() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
             {
                 return false;
             }

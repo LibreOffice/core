@@ -309,7 +309,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor )
 Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, const OUString& rDestDoc )
     throw (UnsupportedFlavorException, IOException, RuntimeException, std::exception)
 {
-    if( !maAny.hasValue() || !mpFormats->size() || ( maLastFormat != rFlavor.MimeType ) )
+    if( !maAny.hasValue() || mpFormats->empty() || ( maLastFormat != rFlavor.MimeType ) )
     {
         const SolarMutexGuard aGuard;
 
@@ -322,7 +322,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
             bool        bDone = false;
 
             // add formats if not already done
-            if( !mpFormats->size() )
+            if( mpFormats->empty() )
                 AddSupportedFormats();
 
             // check alien formats first and try to get a substitution format
@@ -432,7 +432,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
 
     try
     {
-        if( !mpFormats->size() )
+        if( mpFormats->empty() )
             AddSupportedFormats();
     }
     catch( const ::com::sun::star::uno::Exception& )
@@ -460,7 +460,7 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 
     try
     {
-        if( !mpFormats->size() )
+        if( mpFormats->empty() )
             AddSupportedFormats();
     }
     catch( const ::com::sun::star::uno::Exception& )

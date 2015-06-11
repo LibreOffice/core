@@ -1840,7 +1840,7 @@ void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt
         index++;
     }
     //if the sub texture number of the last texture array reach the largest, create a new textur array
-    if ((m_TextInfoBatch.texture.size() == 0) ||
+    if (m_TextInfoBatch.texture.empty() ||
         (m_TextInfoBatch.texture[index].subTextureNum >= m_TextInfoBatch.batchNum))
     {
         TextureArrayInfo textureArray;
