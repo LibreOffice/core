@@ -16,6 +16,24 @@
       "revId": "8570c66e82752f8ebdde99bdef133e4b77250f58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_165ebae9",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-06-11T22:00:37Z",
+      "side": 1,
+      "message": "This is based on the underlying patch (https://gerrit.libreoffice.org/#/c/16181) that made that call safe. Actually, I wanted to know if this kind of trick (to check for nullptr \u003d\u003d this) in clone() is ok. This trick allows for localizing the check in one place, while returning consistent and meaningful result, instead of checking that multiple times in many places.\n\nMaybe it\u0027s better to convert that to static method",
+      "parentUuid": "3a57f1b5_565512c4",
+      "revId": "8570c66e82752f8ebdde99bdef133e4b77250f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
