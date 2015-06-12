@@ -18,4 +18,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	external/libwps/0001-error-C2065-M_PI-undeclared-identifier.patch \
 ))
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,libwps, \
+    external/libwps/ubsan-visibility.patch.0 \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
