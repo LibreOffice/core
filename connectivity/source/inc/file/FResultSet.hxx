@@ -82,9 +82,6 @@ namespace connectivity
             OValueRefRow                            m_aInsertRow;   // needed for insert by cursor
             ORefAssignValues                        m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
-            TIntVector::iterator                    m_aEvaluateIter;
-
-
             OSkipDeletedSet                         m_aSkipDeletedSet;
 
             ::rtl::Reference<OKeySet>                   m_pFileSet;
