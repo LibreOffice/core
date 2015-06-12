@@ -1828,6 +1828,27 @@ WW8_WrPlcField* WW8Export::CurrentFieldPlc() const
 void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     const OUString& rFieldCmd, sal_uInt8 nMode )
 {
+    OUString sFieldCmd(rFieldCmd);
+    switch (eFieldType)
+    {
+        // map fields that are not supported in WW8 as of Word 2003
+        case ww::eBIBLIOGRPAHY:
+            eFieldType = ww::eQUOTE;
+            assert(rFieldCmd == FieldString(ww::eBIBLIOGRPAHY));
+            sFieldCmd = FieldString(ww::eQUOTE);
+            break;
+        case ww::eCITATION:
+            eFieldType = ww::eQUOTE;
+            assert(rFieldCmd.startsWith(FieldString(ww::eCITATION)));
+            sFieldCmd = rFieldCmd.replaceFirst(FieldString(ww::eCITATION),
+                                               FieldString(ww::eQUOTE));
+            break;
+        default:
+            break;
+    }
+
+    assert(eFieldType <= 0x5F); // 95 is the highest documented one
+
     bool bUnicode = IsUnicode();
     WW8_WrPlcField* pFieldP = CurrentFieldPlc();
 
@@ -1845,10 +1866,10 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     if (WRITEFIELD_CMD_START & nMode)
     {
         if (bUnicode)
-            SwWW8Writer::WriteString16(Strm(), rFieldCmd, false);
+            SwWW8Writer::WriteString16(Strm(), sFieldCmd, false);
         else
         {
-            SwWW8Writer::WriteString8(Strm(), rFieldCmd, false,
+            SwWW8Writer::WriteString8(Strm(), sFieldCmd, false,
                 RTL_TEXTENCODING_MS_1252);
         }
         // #i43956# - write hyperlink character including
@@ -1901,7 +1922,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         if( pField )
             sOut = lcl_GetExpandedField(*pField);
         else
-            sOut = rFieldCmd;
+            sOut = sFieldCmd;
         if( !sOut.isEmpty() )
         {
             if( bUnicode )
@@ -2902,8 +2923,15 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case RES_AUTHORITY:
     {
-        OUString const sRet(static_cast<SwAuthorityField const*>(pField)
+        OUString sRet(static_cast<SwAuthorityField const*>(pField)
                         ->ExpandCitation(AUTH_FIELD_IDENTIFIER));
+        // FIXME: DomainMapper_Impl::CloseFieldCommand() stuffs fully formed
+        // field instructions in here, but if the field doesn't originate
+        // from those filters it won't have that
+        if (!sRet.trim().startsWith("CITATION"))
+        {
+            sRet = FieldString(ww::eCITATION) + " \"" + sRet + "\"";
+        }
         GetExport().OutputField( pField, ww::eCITATION, sRet );
     }
     break;
