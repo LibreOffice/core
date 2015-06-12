@@ -150,13 +150,19 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
     SwPosition aPos( *pNode->StartOfSectionNode(), aIdx );
     SwFrameFormat* pFormat = GetFlyCnt().GetFrameFormat();
     SwFormatAnchor aAnchor( pFormat->GetAnchor() );
+    SwNode *const pOldNode(aAnchor.GetContentAnchor()
+            ? &aAnchor.GetContentAnchor()->nNode.GetNode()
+            : nullptr);
 
-    if( !aAnchor.GetContentAnchor() ||
-        !aAnchor.GetContentAnchor()->nNode.GetNode().GetNodes().IsDocNodes() ||
-        &aAnchor.GetContentAnchor()->nNode.GetNode() != static_cast<SwNode const *>(pNode) )
+    if (!pOldNode || !pOldNode->GetNodes().IsDocNodes() ||
+        pOldNode != static_cast<SwNode const *>(pNode))
+    {
         aPos.nNode = *pNode;
+    }
     else
-        aPos.nNode = aAnchor.GetContentAnchor()->nNode;
+    {
+        aPos.nNode = *pOldNode;
+    }
 
     aAnchor.SetType( FLY_AS_CHAR );        // default!
     aAnchor.SetAnchor( &aPos );
@@ -186,10 +192,17 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
     {
         pFormat->LockModify();
         pFormat->SetFormatAttr( aAnchor );        // nur den Anker neu setzen
+        // tdf#91228 must notify the anchor nodes despite LockModify
+        assert(pOldNode);
+        pOldNode->RemoveAnchoredFly(pFormat);
+        aPos.nNode.GetNode().AddAnchoredFly(pFormat);
         pFormat->UnlockModify();
     }
     else
+    {
+        assert(!pFormat->IsModifyLocked()); // need to notify anchor node
         pFormat->SetFormatAttr( aAnchor );        // nur den Anker neu setzen
+    }
 
     // Am Node haengen u.a. abhaengige CntFrms.
     // Fuer jeden CntFrm wird ein SwFlyInCntFrm angelegt.
