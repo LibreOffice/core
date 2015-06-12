@@ -34,7 +34,8 @@ public:
     X11OpenGLSalVirtualDevice( SalGraphics *pGraphics,
                                long &nDX, long &nDY,
                                sal_uInt16 nBitCount,
-                               const SystemGraphicsData *pData );
+                               const SystemGraphicsData *pData,
+                               X11SalGraphics* pNewGraphics);
     virtual ~X11OpenGLSalVirtualDevice();
 
     // SalGeometryProvider
