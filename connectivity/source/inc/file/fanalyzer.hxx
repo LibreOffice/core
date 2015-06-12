@@ -56,7 +56,7 @@ namespace connectivity
                 {  }
 
             OConnection* getConnection() const { return m_pConnection; }
-            ::std::vector<sal_Int32>* bindEvaluationRow(OValueRefRow& _pRow); // Bind an evaluation row to the restriction
+            void bindEvaluationRow(OValueRefRow& _pRow); // Bind an evaluation row to the restriction
             /** bind the select columns if they contain a function which needs a row value
                 @param  _pRow   the result row
             */

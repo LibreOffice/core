@@ -60,7 +60,6 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_pConnection(_pConnection)
     ,m_pParseTree(NULL)
     ,m_pSQLAnalyzer(NULL)
-    ,m_pEvaluationKeySet(NULL)
     ,m_pTable(NULL)
     ,m_nMaxFieldSize(0)
     ,m_nMaxRows(0)
@@ -308,7 +307,6 @@ void SAL_CALL OStatement_Base::disposing()
         m_aEvaluateRow->get().clear();
         m_aEvaluateRow = NULL;
     }
-    delete m_pEvaluationKeySet;
     OStatement_BASE::disposing();
 }
 
@@ -495,8 +493,8 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
     _pResult->setSelectRow(m_aSelectRow);
 
     m_pSQLAnalyzer->bindSelectRow(m_aRow);
-    m_pEvaluationKeySet = m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);    // Set values in the code of the Compiler
-    _pResult->setEvaluationKeySet(m_pEvaluationKeySet);
+    m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);    // Set values in the code of the Compiler
+    _pResult->setEvaluationKeySet(NULL);
 }
 
 void OStatement_Base::GetAssignValues()

@@ -80,8 +80,6 @@ namespace connectivity
             connectivity::OSQLParseNode*                m_pParseTree;
             OSQLAnalyzer*                               m_pSQLAnalyzer; //the sql analyzer used by the resultset
 
-            ::std::vector<sal_Int32>*                   m_pEvaluationKeySet;
-
             OFileTable*                                 m_pTable;       // the current table
             OValueRefRow                                m_aSelectRow;
             OValueRefRow                                m_aRow;

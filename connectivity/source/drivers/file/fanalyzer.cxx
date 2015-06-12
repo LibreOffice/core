@@ -139,11 +139,9 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
     }
 }
 
-::std::vector<sal_Int32>* OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
+void OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
 {
     bindRow(m_aCompiler->m_aCodeList,_pRow);
-
-    return NULL;
 }
 
 OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
