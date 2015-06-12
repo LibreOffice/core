@@ -119,6 +119,7 @@ void TimerTest::testIdleMainloop()
 {
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
+    // coverity[loop_top] - Application::Yield allows the timer to fire and toggle bDone
     while (!bTriggered)
     {
         ImplSVData* pSVData = ImplGetSVData();
