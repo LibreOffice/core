@@ -1828,6 +1828,21 @@ WW8_WrPlcField* WW8Export::CurrentFieldPlc() const
 void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     const OUString& rFieldCmd, sal_uInt8 nMode )
 {
+    switch (eFieldType)
+    {
+        // map fields that are not supported in WW8
+        case ww::eBIBLIOGRPAHY:
+            eFieldType = ww::eQUOTE;
+            break;
+        case ww::eCITATION:
+            eFieldType = ww::eQUOTE;
+            break;
+        default:
+            break;
+    }
+
+    assert(eFieldType <= 0x5F); // 95 is the highest documented one
+
     bool bUnicode = IsUnicode();
     WW8_WrPlcField* pFieldP = CurrentFieldPlc();
 
