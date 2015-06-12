@@ -186,6 +186,15 @@ DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
     CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
 }
 
+DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
+{
+    //Note this is for a crash test
+    //Counting the Number of Frames and checking with the expected count
+   uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
 {
     // See ooxmlexport's testFdo38244().
