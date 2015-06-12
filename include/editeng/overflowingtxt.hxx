@@ -55,7 +55,8 @@ class NonOverflowingText {
                 : mpHeadParas(pHeadParas),
                   mPreOverflowingTxt(preOverflowingTxt)
                 {
-                    DBG_ASSERT( pHeadParas != NULL, "pHeadParas is null?!" );
+                    if (pHeadParas == NULL) // Redundant line for debugging
+                        DBG_ASSERT( pHeadParas != NULL, "pHeadParas is null?!" );
                 }
 };
 
