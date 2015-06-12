@@ -132,7 +132,6 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow)
 void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 {
     // first the select part
-    OEvaluateSetList    aEvaluateSetList;
     for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
         if ( aIter->first.is() )
@@ -142,42 +141,10 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 
 ::std::vector<sal_Int32>* OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
 {
-    OEvaluateSetList    aEvaluateSetList;
     bindRow(m_aCompiler->m_aCodeList,_pRow);
 
-    ::std::vector<sal_Int32>*   pKeySet      = NULL;
-    OEvaluateSet*               pEvaluateSet = NULL;
-
-    // create Keyset with smallest list
-    if(!aEvaluateSetList.empty())
-    {
-        // which list has the smallest count?
-        OEvaluateSetList::iterator i = aEvaluateSetList.begin();
-        pEvaluateSet = *(i);
-        for(++i; i != aEvaluateSetList.end();++i)
-        {
-            OEvaluateSet*   pEvaluateSetComp = (*i);
-            for(OEvaluateSet::reverse_iterator j = pEvaluateSet->rbegin(); j != pEvaluateSet->rend(); ++j)
-            {
-                if (pEvaluateSetComp->find(j->second) != pEvaluateSetComp->end())
-                    pEvaluateSet->erase(j->second);
-            }
-        }
-        pKeySet = new ::std::vector<sal_Int32>(pEvaluateSet->size());
-        sal_Int32 k=0;
-        for(OEvaluateSet::iterator j = pEvaluateSet->begin(); j != pEvaluateSet->end(); ++j,++k)
-        {
-            (*pKeySet)[k] = j->second;
-        }
-
-        // delete all
-        for(i = aEvaluateSetList.begin(); i != aEvaluateSetList.end();++i)
-            delete (*i);
-    }
-
-    return pKeySet;
+    return NULL;
 }
-
 
 OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                               const Reference< XPropertySet>& _xCol,
