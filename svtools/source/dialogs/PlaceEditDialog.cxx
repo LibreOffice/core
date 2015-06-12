@@ -27,6 +27,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
+    get( m_pBTRepoRefresh, "repositoriesRefresh" );
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTOk->Enable( false );
@@ -184,7 +185,23 @@ void PlaceEditDialog::InitDetails( )
 
 IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, )
 {
+    if (m_xCurrentDetails.get())
+    {
+        OUString sUrl = m_xCurrentDetails->getUrl().GetHost(INetURLObject::DECODE_WITH_CHARSET);
+        OUString sGDriveHost( GDRIVE_BASE_URL );
+        OUString sAlfrescoHost( ALFRESCO_CLOUD_BASE_URL );
+        OUString sOneDriveHost( ONEDRIVE_BASE_URL );
+
+        if( sUrl.compareTo(sGDriveHost, sGDriveHost.getLength()) == 0
+           || sUrl.compareTo(sAlfrescoHost, sAlfrescoHost.getLength()) == 0
+           || sUrl.compareTo(sOneDriveHost, sOneDriveHost.getLength()) == 0 )
+        {
+            m_pBTRepoRefresh->Click();
+        }
+    }
+
     EndDialog( RET_OK );
+
     return 1;
 }
 
