@@ -23,7 +23,7 @@ import org.openoffice.test.OfficeFileUrl;
 
 final class TestDocument
 {
-    private final static String sPathname = "testdocuments";
+    private static final String sPathname = "testdocuments";
     public static String getUrl(String name)
     {
         return OfficeFileUrl.getAbsolute(new File(sPathname, name));

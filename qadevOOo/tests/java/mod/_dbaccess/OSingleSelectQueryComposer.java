@@ -138,7 +138,7 @@ public class OSingleSelectQueryComposer extends TestCase {
     String tableName = null;
     DBTools.DataSourceInfo srcInf = null;
     boolean isMySQLDB = false;
-    protected final static String dbSourceName = "OSingleSelectQueryComposerDataSource";
+    protected static final String dbSourceName = "OSingleSelectQueryComposerDataSource";
     public XConnection conn = null;
 
     /**

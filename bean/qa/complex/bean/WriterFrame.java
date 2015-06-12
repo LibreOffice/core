@@ -30,7 +30,7 @@ import com.sun.star.uno.UnoRuntime;
 class WriterFrame extends java.awt.Frame
 {
     private com.sun.star.comp.beans.OOoBean m_bean;
-    private final static String m_sDocURL = "private:factory/swriter";
+    private static final String m_sDocURL = "private:factory/swriter";
 
     /**
       @param loadBeforeVisible

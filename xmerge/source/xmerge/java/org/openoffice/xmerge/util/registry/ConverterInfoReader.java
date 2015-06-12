@@ -34,17 +34,17 @@ import java.net.JarURLConnection;
  */
 public class ConverterInfoReader {
 
-    private final static String TAG_CONVERTER      = "converter";
-    private final static String ATTRIB_OFFICE_TYPE = "type";
-    private final static String ATTRIB_VERSION     = "version";
-    private final static String TAG_NAME           = "converter-display-name";
-    private final static String TAG_DESC           = "converter-description";
-    private final static String TAG_VENDOR         = "converter-vendor";
-    private final static String TAG_CLASS_IMPL     = "converter-class-impl";
-    private final static String TAG_TARGET         = "converter-target";
-    private final static String ATTRIB_DEVICE_TYPE = "type";
-    private final static String TAG_XSLT_DESERIAL  = "converter-xslt-deserialize";
-    private final static String TAG_XSLT_SERIAL    = "converter-xslt-serialize";
+    private static final String TAG_CONVERTER      = "converter";
+    private static final String ATTRIB_OFFICE_TYPE = "type";
+    private static final String ATTRIB_VERSION     = "version";
+    private static final String TAG_NAME           = "converter-display-name";
+    private static final String TAG_DESC           = "converter-description";
+    private static final String TAG_VENDOR         = "converter-vendor";
+    private static final String TAG_CLASS_IMPL     = "converter-class-impl";
+    private static final String TAG_TARGET         = "converter-target";
+    private static final String ATTRIB_DEVICE_TYPE = "type";
+    private static final String TAG_XSLT_DESERIAL  = "converter-xslt-deserialize";
+    private static final String TAG_XSLT_SERIAL    = "converter-xslt-serialize";
     private final String   jarfilename;
     private final Document document;
     private final ArrayList<ConverterInfo> converterInfoList;

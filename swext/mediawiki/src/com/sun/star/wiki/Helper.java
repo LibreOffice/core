@@ -68,45 +68,45 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 public class Helper
 {
-    public final static int GENERALSEND_ERROR = 0;
-    public final static int NOWIKIFILTER_ERROR = 1;
-    public final static int NOURLCONNECTION_ERROR = 2;
-    public final static int WRONGLOGIN_ERROR = 3;
-    public final static int INVALIDURL_ERROR = 4;
-    public final static int NOURL_ERROR = 5;
+    public static final int GENERALSEND_ERROR = 0;
+    public static final int NOWIKIFILTER_ERROR = 1;
+    public static final int NOURLCONNECTION_ERROR = 2;
+    public static final int WRONGLOGIN_ERROR = 3;
+    public static final int INVALIDURL_ERROR = 4;
+    public static final int NOURL_ERROR = 5;
 
-    public final static int DLG_SENDTITLE = 6;
-    public final static int DLG_WIKIARTICLE = 7;
+    public static final int DLG_SENDTITLE = 6;
+    public static final int DLG_WIKIARTICLE = 7;
 
-    public final static int DLG_OK = 9;
+    public static final int DLG_OK = 9;
 
     // 11 is reserved
-    public final static int DLG_ADDBUTTON = 12;
-    public final static int DLG_EDITBUTTON = 13;
-    public final static int DLG_SENDBUTTON = 14;
-    public final static int DLG_REMOVEBUTTON = 15;
+    public static final int DLG_ADDBUTTON = 12;
+    public static final int DLG_EDITBUTTON = 13;
+    public static final int DLG_SENDBUTTON = 14;
+    public static final int DLG_REMOVEBUTTON = 15;
 
-    public final static int DLG_EDITSETTING_URLLABEL = 16;
-    public final static int DLG_EDITSETTING_USERNAMELABEL = 17;
-    public final static int DLG_EDITSETTING_PASSWORDLABEL = 18;
+    public static final int DLG_EDITSETTING_URLLABEL = 16;
+    public static final int DLG_EDITSETTING_USERNAMELABEL = 17;
+    public static final int DLG_EDITSETTING_PASSWORDLABEL = 18;
 
-    public final static int DLG_SENDTOMEDIAWIKI_LABEL1 = 20;
-    public final static int DLG_SENDTOMEDIAWIKI_LABEL2 = 21;
-    public final static int DLG_SENDTOMEDIAWIKI_LABEL3 = 22;
-    public final static int DLG_SENDTOMEDIAWIKI_MINORCHECK = 23;
-    public final static int DLG_SENDTOMEDIAWIKI_BROWSERCHECK = 24;
-    public final static int UNKNOWNCERT_ERROR = 25;
-    public final static int DLG_MEDIAWIKI_TITLE = 26;
-    public final static int DLG_EDITSETTING_ACCOUNTLINE = 27;
-    public final static int DLG_EDITSETTING_WIKILINE = 28;
-    public final static int DLG_EDITSETTING_SAVEBOX = 29;
-    public final static int CANCELSENDING_ERROR = 30;
-    public final static int DLG_MEDIAWIKIEXTENSION_STRING = 31;
-    public final static int DLG_WIKIPAGEEXISTS_LABEL1 = 32;
+    public static final int DLG_SENDTOMEDIAWIKI_LABEL1 = 20;
+    public static final int DLG_SENDTOMEDIAWIKI_LABEL2 = 21;
+    public static final int DLG_SENDTOMEDIAWIKI_LABEL3 = 22;
+    public static final int DLG_SENDTOMEDIAWIKI_MINORCHECK = 23;
+    public static final int DLG_SENDTOMEDIAWIKI_BROWSERCHECK = 24;
+    public static final int UNKNOWNCERT_ERROR = 25;
+    public static final int DLG_MEDIAWIKI_TITLE = 26;
+    public static final int DLG_EDITSETTING_ACCOUNTLINE = 27;
+    public static final int DLG_EDITSETTING_WIKILINE = 28;
+    public static final int DLG_EDITSETTING_SAVEBOX = 29;
+    public static final int CANCELSENDING_ERROR = 30;
+    public static final int DLG_MEDIAWIKIEXTENSION_STRING = 31;
+    public static final int DLG_WIKIPAGEEXISTS_LABEL1 = 32;
 
-    private final static int STRINGS_NUM = 33;
+    private static final int STRINGS_NUM = 33;
 
-    private final static String[] m_pEntryNames = { "GeneralSendError",
+    private static final String[] m_pEntryNames = { "GeneralSendError",
                                                     "NoWikiFilter",
                                                     "NoConnectionToURL",
                                                     "WrongLogin",

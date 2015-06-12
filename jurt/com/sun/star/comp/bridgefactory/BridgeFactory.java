@@ -52,7 +52,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
      * The name of the service, the <code>JavaLoader</code> accesses this through
      * reflection.
      */
-    public final static String __serviceName = "com.sun.star.bridge.BridgeFactory";
+    public static final String __serviceName = "com.sun.star.bridge.BridgeFactory";
 
     /**
      * Gives a factory for creating the service.

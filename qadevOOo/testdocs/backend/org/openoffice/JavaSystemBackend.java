@@ -36,9 +36,9 @@ import com.sun.star.util.XTimeStamped;
 
 public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
                                           XServiceInfo, XTimeStamped, XComponent {
-    public final static String __serviceName = "com.sun.star.configuration.backend.PlatformBackend";
-    public final static String __implName = "org.openoffice.JavaSystemBackend";
-    public final static String testComponent = "org.openoffice.Office.Common";
+    public static final String __serviceName = "com.sun.star.configuration.backend.PlatformBackend";
+    public static final String __implName = "org.openoffice.JavaSystemBackend";
+    public static final String testComponent = "org.openoffice.Office.Common";
     protected static XMultiServiceFactory msf = null;
     protected XLayer aLayer = null;
 

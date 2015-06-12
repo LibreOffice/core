@@ -40,21 +40,21 @@ public class _XURLTransformer extends MultiMethodTest {
 
     URL url;
 
-    final static String user = "user";
-    final static String invalidUserPrefix = "1";
-    final static String password = "password";
-    final static String server = "server";
-    final static String invalidServerPrefix = "1";
-    final static String port = "8080";
-    final static String path = "/pub/path";
-    final static String name = "file.txt";
-    final static String arguments = "a=b";
-    final static String mark = "mark";
+    static final String user = "user";
+    static final String invalidUserPrefix = "1";
+    static final String password = "password";
+    static final String server = "server";
+    static final String invalidServerPrefix = "1";
+    static final String port = "8080";
+    static final String path = "/pub/path";
+    static final String name = "file.txt";
+    static final String arguments = "a=b";
+    static final String mark = "mark";
 
-    final static String expectedCompleteHTTP = "http://"
+    static final String expectedCompleteHTTP = "http://"
                 + server + ":" + port + path
                 + "/" + name + "?" + arguments + "#" + mark;
-    final static String expectedCompleteFTP = "ftp://"
+    static final String expectedCompleteFTP = "ftp://"
                 + user + ":" + password + "@" + server + ":" + port + path
                 + "/" + name;
 

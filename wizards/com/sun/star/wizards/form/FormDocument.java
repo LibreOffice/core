@@ -56,8 +56,8 @@ public class FormDocument extends TextDocument
     private int nFormWidth;
     private int nFormHeight;
     private Point aMainFormPoint;
-    private final static String SOMAINFORM = "MainForm";
-    private final static String SOSUBFORM = "SubForm";
+    private static final String SOMAINFORM = "MainForm";
+    private static final String SOSUBFORM = "SubForm";
 
     public FormDocument(XMultiServiceFactory xMSF)
     {

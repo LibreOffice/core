@@ -123,7 +123,7 @@ public class ChildrenRetriever {
             // Fill argument structure...
             OpenCommandArgument2 arg = new OpenCommandArgument2();
             arg.Mode = OpenMode.ALL; // FOLDER, DOCUMENTS -> simple filter
-            arg.Priority = 32768;    // Final static for 32768
+            arg.Priority = 32768;    // static final for 32768
             arg.Properties = props;
 
             XDynamicResultSet set;

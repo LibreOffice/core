@@ -44,30 +44,30 @@ public class DBTools {
     private final XMultiServiceFactory xMSF;
     private XNamingService dbContext;
     //JDBC driver
-    public final static String TST_JDBC_DRIVER = "org.gjt.mm.mysql.Driver";
+    public static final String TST_JDBC_DRIVER = "org.gjt.mm.mysql.Driver";
 
     // constants for TestDB table column indexes
-    public final static int TST_STRING = 1 ;
-    public final static int TST_INT = 2 ;
-    private final static int TST_DOUBLE = 5 ;
-    private final static int TST_DATE = 6 ;
-    private final static int TST_BOOLEAN = 10 ;
-    private final static int TST_CHARACTER_STREAM = 11 ;
-    private final static int TST_BINARY_STREAM = 12 ;
+    public static final int TST_STRING = 1 ;
+    public static final int TST_INT = 2 ;
+    private static final int TST_DOUBLE = 5 ;
+    private static final int TST_DATE = 6 ;
+    private static final int TST_BOOLEAN = 10 ;
+    private static final int TST_CHARACTER_STREAM = 11 ;
+    private static final int TST_BINARY_STREAM = 12 ;
 
     // constants for TestDB columns names
-    public final static String TST_STRING_F = "_TEXT" ;
-    public final static String TST_INT_F = "_INT" ;
-    public final static String TST_DOUBLE_F = "_DOUBLE" ;
-    public final static String TST_DATE_F = "_DATE" ;
-    private final static String TST_BOOLEAN_F = "_BOOL" ;
-    private final static String TST_CHARACTER_STREAM_F = "_MEMO1" ;
-    public final static String TST_BINARY_STREAM_F = "_MEMO2" ;
+    public static final String TST_STRING_F = "_TEXT" ;
+    public static final String TST_INT_F = "_INT" ;
+    public static final String TST_DOUBLE_F = "_DOUBLE" ;
+    public static final String TST_DATE_F = "_DATE" ;
+    private static final String TST_BOOLEAN_F = "_BOOL" ;
+    private static final String TST_CHARACTER_STREAM_F = "_MEMO1" ;
+    public static final String TST_BINARY_STREAM_F = "_MEMO2" ;
 
     /**
     * Values for filling test table.
     */
-    public final static Object[][] TST_TABLE_VALUES = new Object[][] {
+    public static final Object[][] TST_TABLE_VALUES = new Object[][] {
         {"String1", Integer.valueOf(1), null, null, new Double(1.1),
          new Date((short) 1,(short) 1, (short) 2001), null, null, null,
          Boolean.TRUE, null, null},
