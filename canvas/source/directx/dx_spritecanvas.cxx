@@ -191,6 +191,11 @@ namespace dxcanvas
 }
 
 // The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS1(directx9canvas, dxcanvas::dxSpriteCanvasDecl)
+extern "C"
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL directx9canvas_component_getFactory( sal_Char const* pImplName,
+                                         void*, void* )
+{
+    return component_getFactoryHelper( pImplName, dxcanvas::dxSpriteCanvasDecl );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

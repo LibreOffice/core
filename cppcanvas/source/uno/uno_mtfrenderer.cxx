@@ -52,6 +52,11 @@ namespace sdecl = comphelper::service_decl;
     "com.sun.star.rendering.MtfRenderer" );
 
 // The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS1(mtfrenderer, MtfRendererDecl)
+extern "C"
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL mtfrenderer_component_getFactory( sal_Char const* pImplName,
+                                         void*, void* )
+{
+    return component_getFactoryHelper( pImplName, MtfRendererDecl );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -186,6 +186,11 @@ namespace oglcanvas
 }
 
 // The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS1(oglcanvas, oglcanvas::oglSpriteCanvasDecl);
+extern "C"
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL oglcanvas_component_getFactory( sal_Char const* pImplName,
+                                         void*, void* )
+{
+    return component_getFactoryHelper( pImplName, oglcanvas::oglSpriteCanvasDecl );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1538,6 +1538,11 @@ namespace sdecl = comphelper::service_decl;
     "com.sun.star.presentation.TransitionFactory" );
 
 // The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS1(ogltrans, OGLTransitionFactoryDecl)
+extern "C"
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL ogltrans_component_getFactory( sal_Char const* pImplName,
+                                         void*, void* )
+{
+    return component_getFactoryHelper( pImplName, OGLTransitionFactoryDecl );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,11 +20,17 @@ const sdecl::ServiceDecl SyncDbusSessionHelperServiceDecl(
     "org.libreoffice.comp.shell.sessioninstall.SyncDbusSessionHelper",
     "org.freedesktop.PackageKit.SyncDbusSessionHelper");
 
-COMPHELPER_SERVICEDECL_EXPORTS1(losessioninstall, SyncDbusSessionHelperServiceDecl);
 extern "C"
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL losessioninstall_component_getFactory( sal_Char const* pImplName,
+                                         void*, void* )
 {
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL sessioninstall_component_getFactory( sal_Char const* pImplName, void* pServiceManager, void* pRegistryKey )
-        { return losessioninstall_component_getFactory(pImplName, pServiceManager, pRegistryKey); }
+    return component_getFactoryHelper( pImplName, SyncDbusSessionHelperServiceDecl );
+}
+
+extern "C"
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL sessioninstall_component_getFactory( sal_Char const* pImplName, void* pServiceManager, void* pRegistryKey )
+{
+    return losessioninstall_component_getFactory(pImplName, pServiceManager, pRegistryKey);
 }
 
 

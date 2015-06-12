@@ -377,59 +377,6 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 } // namespace service_decl
 } // namespace comphelper
 
-/** The following preprocessor macro generates the C access functions,
-    that are used to initialize and register the components of a
-    shared library object.
-
-    If you have, say, written a lib that contains three distinct
-    components, each with its own ServiceDecl object, you might want
-    to employ the following code:
-
-    <pre>
-        // must reside outside _any_ namespace
-        COMPHELPER_SERVICEDECL_EXPORTS3(yourServiceDecl1,
-                                       yourServiceDecl2,
-                                       yourServiceDecl3);
-    </pre>
-
-    For your convenience, the COMPHELPER_SERVICEDECL_EXPORTS<N> macro
-    comes pre-defined up to N=8, if you should need more arguments,
-    call COMPHELPER_SERVICEDECL_make_exports directly, like this:
-
-    <pre>
-        // must reside outside _any_ namespace
-        COMPHELPER_SERVICEDECL_make_exports((yourServiceDecl1)(yourServiceDecl2)...(yourServiceDeclN));
-    </pre>
-
-    Note the missing colons between the bracketed arguments.
- */
-#define COMPHELPER_SERVICEDECL_make_exports(compName, varargs_ ) \
-extern "C" \
-{ \
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL compName##_component_getFactory( sal_Char const* pImplName, \
-                                         void*, void* ) \
-    { \
-        return component_getFactoryHelper( pImplName, \
-                                           BOOST_PP_SEQ_ENUM(varargs_) ); \
-    } \
-}
-
-#define COMPHELPER_SERVICEDECL_EXPORTS1(compName,comp0_)    \
-    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_))
-#define COMPHELPER_SERVICEDECL_EXPORTS2(compName,comp0_,comp1_) \
-    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_))
-#define COMPHELPER_SERVICEDECL_EXPORTS3(compName,comp0_,comp1_,comp2_) \
-    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_))
-#define COMPHELPER_SERVICEDECL_EXPORTS4(compName,comp0_,comp1_,comp2_,comp3_) \
-    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_))
-#define COMPHELPER_SERVICEDECL_EXPORTS5(compName,comp0_,comp1_,comp2_,comp3_,comp4_) \
-    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_))
-#define COMPHELPER_SERVICEDECL_EXPORTS6(compName,comp0_,comp1_,comp2_,comp3_,comp4_,comp5_) \
-    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_))
-#define COMPHELPER_SERVICEDECL_EXPORTS7(compName,comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_) \
-    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_))
-#define COMPHELPER_SERVICEDECL_EXPORTS8(compName,comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_,comp7_) \
-    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_)(comp7_))
 
 #endif //  ! defined( INCLUDED_COMPHELPER_SERVICEDECL_HXX)
 

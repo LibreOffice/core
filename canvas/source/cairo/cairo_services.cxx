@@ -73,6 +73,11 @@ namespace cairocanvas
 }
 
 // The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS2(cairocanvas, cairocanvas::cairoCanvasDecl, cairocanvas::cairoSpriteCanvasDecl)
+extern "C"
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL cairocanvas_component_getFactory( sal_Char const* pImplName,
+                                         void*, void* )
+{
+    return component_getFactoryHelper( pImplName, cairocanvas::cairoCanvasDecl, cairocanvas::cairoSpriteCanvasDecl );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
