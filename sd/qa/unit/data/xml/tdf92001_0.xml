@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape positionX="4826" positionY="4826" sizeX="19557" sizeY="12953" type="com.sun.star.drawing.CustomShape" name="CustomShape 1" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="19558.000000" column2="0.000000" column3="4826.000000"/>
+   <Line2 column1="0.000000" column2="12954.000000" column3="4826.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues/>
+   </PropertyValue>
+   <PropertyValue name="Equations">
+    <Equations/>
+   </PropertyValue>
+   <PropertyValue name="Handles">
+    <Handles/>
+   </PropertyValue>
+   <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="Coordinates">
+      <Coordinates/>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments/>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
+   <PropertyValue name="Type" value="ooxml-non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="7040880" height="4663440"/>
+   </PropertyValue>
+  </CustomShapeGeometry>
+ </XShape>
+</XShapes>
