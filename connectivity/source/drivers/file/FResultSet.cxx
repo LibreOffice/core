@@ -77,7 +77,6 @@ IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","c
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
                         ,m_aAssignValues(NULL)
-                        ,m_pEvaluationKeySet(NULL)
                         ,m_aSkipDeletedSet(this)
                         ,m_pFileSet(NULL)
                         ,m_pSortIndex(NULL)
@@ -498,38 +497,6 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
     return m_nRowPos == -1;
 }
 
-// sal_Bool OResultSet::evaluate()
-// {
-//     OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::evaluate: Analyzer isn't set!");
-//     sal_Bool bRet = sal_True;
-//     while(!m_pSQLAnalyzer->evaluateRestriction())
-//     {
-//         if(m_pEvaluationKeySet)
-//         {
-//             if(m_aEvaluateIter == m_pEvaluationKeySet->end())
-//                 return sal_False;
-//             bRet = m_pTable->seekRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),m_nRowPos);
-//             ++m_aEvaluateIter;
-//         }
-//         else
-//             bRet = m_pTable->seekRow(IResultSetHelper::NEXT,1,m_nRowPos);
-//         if(bRet)
-//         {
-//             if(m_pEvaluationKeySet)
-//             {
-//                 bRet = m_pTable->fetchRow(m_aEvaluateRow,*(m_pTable->getTableColumns()),sal_True,sal_True);
-//                 evaluate();
-
-//             }
-//             else
-//                 bRet = m_pTable->fetchRow(m_aRow,*m_xColumns,sal_False,sal_True);
-//         }
-//     }
-
-//     return bRet;
-// }
-
-
 sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -850,17 +817,7 @@ again:
             )
         {                                                // Evaluate the next record
             // delete current row in Keyset
-            if (m_pEvaluationKeySet)
-            {
-                ++m_aEvaluateIter;
-                if (m_pEvaluationKeySet->end() != m_aEvaluateIter)
-                    nOffset = (*m_aEvaluateIter);
-                else
-                {
-                    return false;
-                }
-            }
-            else if (m_pFileSet.is())
+            if (m_pFileSet.is())
             {
                 OSL_ENSURE(eCursorPosition == IResultSetHelper::NEXT, "Falsche CursorPosition!");
                 eCursorPosition = IResultSetHelper::NEXT;
@@ -1026,23 +983,7 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
                     // Determine the number of further Fetches
                     while (bOK && m_nRowPos >= (sal_Int32)m_pFileSet->get().size())
                     {
-                        if (m_pEvaluationKeySet)
-                        {
-                            if (m_nRowPos >= (sal_Int32)m_pEvaluationKeySet->size())
-                                return false;
-                            else if (m_nRowPos == 0)
-                            {
-                                m_aEvaluateIter = m_pEvaluationKeySet->begin();
-                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,true, bRetrieveData);
-                            }
-                            else
-                            {
-                                ++m_aEvaluateIter;
-                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,true, bRetrieveData);
-                            }
-                        }
-                        else
-                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,true, false);//bRetrieveData);
+                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,true, false);//bRetrieveData);
                     }
 
                     if (bOK)
@@ -1061,7 +1002,6 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
                     else if (!m_pFileSet->isFrozen())                   // no valid record found
                     {
                         m_pFileSet->setFrozen();
-                        m_pEvaluationKeySet = NULL;
                         goto Error;
                     }
                 }
@@ -1224,30 +1164,16 @@ void OResultSet::sortRows()
 
     m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
 
-    if (m_pEvaluationKeySet)
+    while ( ExecuteRow( IResultSetHelper::NEXT, 1, false, true ) )
     {
-        m_aEvaluateIter = m_pEvaluationKeySet->begin();
-
-        while (m_aEvaluateIter != m_pEvaluationKeySet->end())
-        {
-            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),true);
-            ++m_aEvaluateIter;
-        }
-    }
-    else
-    {
-        while ( ExecuteRow( IResultSetHelper::NEXT, 1, false, true ) )
-        {
-            m_aSelectRow->get()[0]->setValue( m_aRow->get()[0]->getValue() );
-            if ( m_pSQLAnalyzer->hasFunctions() )
-                m_pSQLAnalyzer->setSelectionEvaluationResult( m_aSelectRow, m_aColMapping );
-            const sal_Int32 nBookmark = (*m_aRow->get().begin())->getValue();
-            ExecuteRow( IResultSetHelper::BOOKMARK, nBookmark, true, false );
-        }
+        m_aSelectRow->get()[0]->setValue( m_aRow->get()[0]->getValue() );
+        if ( m_pSQLAnalyzer->hasFunctions() )
+            m_pSQLAnalyzer->setSelectionEvaluationResult( m_aSelectRow, m_aColMapping );
+        const sal_Int32 nBookmark = (*m_aRow->get().begin())->getValue();
+        ExecuteRow( IResultSetHelper::BOOKMARK, nBookmark, true, false );
     }
 
     // create sorted Keyset
-    m_pEvaluationKeySet = NULL;
     m_pFileSet = NULL;
     m_pFileSet = m_pSortIndex->CreateKeySet();
     DELETEZ(m_pSortIndex);
@@ -1315,33 +1241,18 @@ bool OResultSet::OpenImpl()
                 // do all actions (or just count)
                 {
                     bool bOK = true;
-                    if (m_pEvaluationKeySet)
-                    {
-                        m_aEvaluateIter = m_pEvaluationKeySet->begin();
-                        bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
-
-                    }
                     while (bOK)
                     {
-                        if (m_pEvaluationKeySet)
-                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),true);
-                        else
-                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,true);
+                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,true);
 
                         if (bOK)
                         {
                             m_nRowCountResult++;
-                            if(m_pEvaluationKeySet)
-                            {
-                                ++m_aEvaluateIter;
-                                bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
-                            }
                         }
                     }
 
                     // save result of COUNT(*) in m_nRowCountResult.
                     // nRowCount (number of Rows in the result) = 1 for this request!
-                    m_pEvaluationKeySet = NULL;
                 }
             }
             else
@@ -1466,33 +1377,18 @@ bool OResultSet::OpenImpl()
             {
 
                 bool bOK = true;
-                if (m_pEvaluationKeySet)
-                {
-                    m_aEvaluateIter = m_pEvaluationKeySet->begin();
-                    bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
-
-                }
                 while (bOK)
                 {
-                    if (m_pEvaluationKeySet)
-                        ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),true);
-                    else
-                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,true);
+                    bOK = ExecuteRow(IResultSetHelper::NEXT,1,true);
 
                     if (bOK)
                     {
                         m_nRowCountResult++;
-                        if(m_pEvaluationKeySet)
-                        {
-                            ++m_aEvaluateIter;
-                            bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
-                        }
                     }
                 }
 
                 // save result of COUNT(*) in nRowCountResult.
                 // nRowCount (number of rows in the result-set) = 1 for this request!
-                m_pEvaluationKeySet = NULL;
             }
             break;
         case SQL_STATEMENT_INSERT:

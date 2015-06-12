@@ -82,7 +82,6 @@ namespace connectivity
             OValueRefRow                            m_aInsertRow;   // needed for insert by cursor
             ORefAssignValues                        m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
-            TIntVector*                             m_pEvaluationKeySet;
             TIntVector::iterator                    m_aEvaluateIter;
 
 
@@ -290,7 +289,6 @@ namespace connectivity
 
             inline void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)  { m_aOrderbyColumnNumber = _aColumnOrderBy; }
             inline void setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
-            inline void setEvaluationKeySet(TIntVector* _pEvaluationKeySet)             { m_pEvaluationKeySet = _pEvaluationKeySet; }
             inline void setMetaData(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             static void setBoundedColumns(const OValueRefRow& _rRow,

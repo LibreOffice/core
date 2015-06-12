@@ -494,7 +494,6 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
 
     m_pSQLAnalyzer->bindSelectRow(m_aRow);
     m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);    // Set values in the code of the Compiler
-    _pResult->setEvaluationKeySet(NULL);
 }
 
 void OStatement_Base::GetAssignValues()
