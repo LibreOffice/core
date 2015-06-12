@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/ubsan.patch \
 	external/libetonyek/0001-add-missing-breaks.patch.1 \
 	external/libetonyek/0002-remove-surplus-breaks.patch.1 \
+	external/libetonyek/rpath.patch \
 ))
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)

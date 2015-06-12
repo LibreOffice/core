@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,xslt,\
 	external/libxslt/libxslt-1.1.26-memdump.patch \
 	$(if $(filter ANDROID,$(OS)),external/libxslt/libxslt-android.patch) \
 	external/libxslt/libxslt-config-guess.patch.0 \
+	external/libxslt/rpath.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

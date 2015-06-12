@@ -1,0 +1,21 @@
+--- configure
++++ configure
+@@ -9843,6 +9843,7 @@
+       else
+         ld_shlibs=no
+       fi
++hardcode_libdir_flag_spec=
+       ;;
+ 
+     netbsd* | netbsdelf*-gnu)
+--- utils/Makefile.in
++++ utils/Makefile.in
+@@ -373,7 +373,7 @@
+ $(man_MANS) \
+ roqet.html
+ 
+-all: all-am
++all:
+ 
+ .SUFFIXES:
+ .SUFFIXES: .c .lo .o .obj

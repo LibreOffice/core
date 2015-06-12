@@ -35,6 +35,9 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 				--prefix=/@.__________________________________________________OOO) \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(gb_COMPILEROPTFLAGS)") \
+			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
+				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\

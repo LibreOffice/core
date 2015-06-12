@@ -1,0 +1,50 @@
+--- Cbc/configure
++++ Cbc/configure
+@@ -12484,6 +12484,7 @@
+ 	output_verbose_link_cmd='templist=`$CC -shared $CFLAGS -v conftest.$objext 2>&1 | grep "ld"`; templist=`echo $templist | $SED "s/\(^.*ld.*\)\( .*ld .*$\)/\1/"`; list=""; for z in $templist; do case $z in conftest.$objext) list="$list $z";; *.$objext);; *) list="$list $z";;esac; done; echo $list'
+ 	;;
+     esac
++hardcode_libdir_flag_spec_CXX=
+     ;;
+   lynxos*)
+     # FIXME: insert proper C++ library support
+--- Cgl/configure
++++ Cgl/configure
+@@ -12455,6 +12455,7 @@
+ 	output_verbose_link_cmd='templist=`$CC -shared $CFLAGS -v conftest.$objext 2>&1 | grep "ld"`; templist=`echo $templist | $SED "s/\(^.*ld.*\)\( .*ld .*$\)/\1/"`; list=""; for z in $templist; do case $z in conftest.$objext) list="$list $z";; *.$objext);; *) list="$list $z";;esac; done; echo $list'
+ 	;;
+     esac
++hardcode_libdir_flag_spec_CXX=
+     ;;
+   lynxos*)
+     # FIXME: insert proper C++ library support
+--- Clp/configure
++++ Clp/configure
+@@ -12482,6 +12482,7 @@
+ 	output_verbose_link_cmd='templist=`$CC -shared $CFLAGS -v conftest.$objext 2>&1 | grep "ld"`; templist=`echo $templist | $SED "s/\(^.*ld.*\)\( .*ld .*$\)/\1/"`; list=""; for z in $templist; do case $z in conftest.$objext) list="$list $z";; *.$objext);; *) list="$list $z";;esac; done; echo $list'
+ 	;;
+     esac
++hardcode_libdir_flag_spec_CXX=
+     ;;
+   lynxos*)
+     # FIXME: insert proper C++ library support
+--- CoinMP/configure
++++ CoinMP/configure
+@@ -12424,6 +12424,7 @@
+ 	output_verbose_link_cmd='templist=`$CC -shared $CFLAGS -v conftest.$objext 2>&1 | grep "ld"`; templist=`echo $templist | $SED "s/\(^.*ld.*\)\( .*ld .*$\)/\1/"`; list=""; for z in $templist; do case $z in conftest.$objext) list="$list $z";; *.$objext);; *) list="$list $z";;esac; done; echo $list'
+ 	;;
+     esac
++hardcode_libdir_flag_spec_CXX=
+     ;;
+   lynxos*)
+     # FIXME: insert proper C++ library support
+--- Osi/configure
++++ Osi/configure
+@@ -12453,6 +12453,7 @@
+ 	output_verbose_link_cmd='templist=`$CC -shared $CFLAGS -v conftest.$objext 2>&1 | grep "ld"`; templist=`echo $templist | $SED "s/\(^.*ld.*\)\( .*ld .*$\)/\1/"`; list=""; for z in $templist; do case $z in conftest.$objext) list="$list $z";; *.$objext);; *) list="$list $z";;esac; done; echo $list'
+ 	;;
+     esac
++hardcode_libdir_flag_spec_CXX=
+     ;;
+   lynxos*)
+     # FIXME: insert proper C++ library support
