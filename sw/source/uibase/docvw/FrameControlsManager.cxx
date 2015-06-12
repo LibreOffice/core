@@ -187,7 +187,7 @@ void SwFrameMenuButtonBase::dispose()
 
 SwFrameControl::SwFrameControl( const VclPtr<vcl::Window> &pWindow )
 {
-    assert( pWindow != NULL );
+    assert(static_cast<bool>(pWindow));
     mxWindow.reset( pWindow );
     mpIFace = dynamic_cast<ISwFrameControl *>( pWindow.get() );
 }
