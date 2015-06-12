@@ -42,6 +42,7 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
     mbGraphics( false ),
     mnXScreen( 0 )
 {
+    assert(mpGraphics);
     // TODO Do we really need the requested bit count?
     if( !nBitCount && pGraphics )
         nBitCount = pGraphics->GetBitCount();
@@ -55,11 +56,6 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
                              vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen();
     mnWidth    = nDX;
     mnHeight   = nDY;
-    if (!mpGraphics)
-    {
-        mpGraphics = new X11SalGraphics();
-        mpGraphics->SetLayout( SalLayoutFlags::NONE );
-    }
     mpGraphics->Init( this );
 }
 
