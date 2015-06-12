@@ -129,7 +129,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
 
     pSVData->maSchedulers->remove_if( [&nMinPeriod, nTime, pSVData] (ImplSchedulerData *rSchedulerData)
     {
-        if (rSchedulerData->mpScheduler)
+        if (rSchedulerData->mpScheduler != 0)
             return rSchedulerData->mpScheduler->ImplHandleTaskScheduling(nMinPeriod, nTime);
         else
         {
