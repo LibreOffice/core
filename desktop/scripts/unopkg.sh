@@ -49,16 +49,31 @@ AIX)
     ;;
 esac
 
+HELP_MODE=0
+SHARED_MODE=0
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on
 for arg in $@
 do
   case "$arg" in
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
-       --shared) umask 0022;;
+       --shared)
+           umask 0022
+           SHARED_MODE=1
+           ;;
            # make sure shared extensions will be readable by all users
+       -h|--help) HELP_MODE=1;;
   esac
 done
+
+# we don't really want root to run unopkg without --shared option
+if [ "$EUID" -eq 0 ]; then
+    # but we might at least let him read help
+    if [ $SHARED_MODE -eq 0 ] && [ $HELP_MODE -eq 0 ]; then
+         echo "Cannot run '${0} $*' as root (did you forget --shared option?)"
+         exit 1
+    fi
+fi
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "${sd_prog}/javaldx" ] ; then
