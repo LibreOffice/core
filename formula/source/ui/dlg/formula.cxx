@@ -597,7 +597,6 @@ bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult )
 void FormulaDlg_Impl::UpdateValues()
 {
     OUString aStrResult;
-
     if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
         m_pWndResult->SetText( aStrResult );
 
@@ -705,6 +704,16 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
                 if(eOp==ocBad)
                 {
                     _pTree->InsertEntry(aResult,pParent,STRUCT_ERROR,0,_pToken);
+                }
+                else if (eOp==ocPush)
+                {
+                    OUString aCellResult;
+                    OUString aEquals(" = ");
+                    CalcValue( "=" + aResult, aCellResult);
+                    if (aCellResult != aResult) // cell is a formula, print subformula
+                        _pTree->InsertEntry(aResult + aEquals + aCellResult,pParent,STRUCT_END,0,_pToken);
+                    else
+                        _pTree->InsertEntry(aResult,pParent,STRUCT_END,0,_pToken);
                 }
                 else
                 {
