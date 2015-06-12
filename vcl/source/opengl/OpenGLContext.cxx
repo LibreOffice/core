@@ -1633,8 +1633,11 @@ void OpenGLContext::ReleaseFramebuffers()
     OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
     while( pFramebuffer )
     {
-        BindFramebuffer( pFramebuffer );
-        pFramebuffer->DetachTexture();
+        if (!pFramebuffer->IsFree())
+        {
+            BindFramebuffer( pFramebuffer );
+            pFramebuffer->DetachTexture();
+        }
         pFramebuffer = pFramebuffer->mpPrevFramebuffer;
     }
 }
