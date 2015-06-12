@@ -1797,7 +1797,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case SID_ATTR_SIZE:
         {
             sal_uInt16 nId = 0;
-            if( rSh.IsCrsrInTable() )
+            if( rSh.IsCrsrInTbl() )
                 nId = FN_FORMAT_TABLE_DLG;
             else if( rSh.GetCurTOX() )
                 nId = FN_INSERT_MULTI_TOX;
