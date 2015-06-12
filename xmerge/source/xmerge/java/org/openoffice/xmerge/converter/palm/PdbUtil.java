@@ -24,12 +24,12 @@ package org.openoffice.xmerge.converter.palm;
 public final class PdbUtil {
 
     /** Difference in seconds from Jan 01, 1904 to Jan 01, 1970. */
-    final static long TIME_DIFF = 2082844800;
+    static final long TIME_DIFF = 2082844800;
 
     /** Encoding scheme used. */
-    final static String ENCODING = "8859_1";
+    static final String ENCODING = "8859_1";
 
     /** Size of a PDB header in bytes. */
-    final static int HEADER_SIZE = 78;
+    static final int HEADER_SIZE = 78;
 
 }

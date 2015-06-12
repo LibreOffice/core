@@ -50,7 +50,7 @@ public final class PdbEncoder {
     private final PalmDB db;
 
     /** The pattern for unique_id=0x00BABE(start). */
-    private final static int START_UNIQUE_ID = 0x00BABE;
+    private static final int START_UNIQUE_ID = 0x00BABE;
 
 
     /**

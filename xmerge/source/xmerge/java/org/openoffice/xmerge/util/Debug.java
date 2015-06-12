@@ -39,14 +39,14 @@ import java.util.Properties;
 public final class Debug {
 
     /** Informational messages. */
-    public final static int INFO = 0x0001;
+    public static final int INFO = 0x0001;
     /** Error messages. */
-    public final static int ERROR = 0x0002;
+    public static final int ERROR = 0x0002;
     /** Trace messages. */
-    public final static int TRACE = 0x0004;
+    public static final int TRACE = 0x0004;
 
     /** To set a flag. */
-    private final static boolean SET = true;
+    private static final boolean SET = true;
 
     private static int flags = 0;
     private static PrintWriter writer = null;

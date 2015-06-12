@@ -501,9 +501,9 @@ public class FilterComponent
     private final class ControlRow
     {
 
-        private final static int SOLSTFIELDNAME = 3;
-        private final static int SOLSTOPERATOR = 4;
-        private final static int SOTXTVALUE = 5;
+        private static final int SOLSTFIELDNAME = 3;
+        private static final int SOLSTOPERATOR = 4;
+        private static final int SOTXTVALUE = 5;
         private XInterface[] ControlElements = new XInterface[6];
         private boolean m_bEnabled;
         private String[] FieldNames;

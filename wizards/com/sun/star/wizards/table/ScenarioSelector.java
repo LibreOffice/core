@@ -45,8 +45,8 @@ import com.sun.star.wizards.ui.event.XItemListenerAdapter;
  */
 public class ScenarioSelector extends FieldSelection implements XItemListener, XFieldSelectionListener
 {
-    private final static int PRIVATE = 0;
-    private final static int BUSINESS = 1;
+    private static final int PRIVATE = 0;
+    private static final int BUSINESS = 1;
 
     private final XRadioButton optBusiness;
     private XListBox xTableListBox;

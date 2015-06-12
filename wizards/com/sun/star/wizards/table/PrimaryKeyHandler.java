@@ -54,7 +54,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     private String[] fieldnames;
     private final TableDescriptor curTableDescriptor;
     private final boolean bAutoPrimaryKeysupportsAutoIncrmentation;
-    private final static String SAUTOMATICKEYFIELDNAME = "ID";
+    private static final String SAUTOMATICKEYFIELDNAME = "ID";
 
     public PrimaryKeyHandler(TableWizard _CurUnoDialog, TableDescriptor _curTableDescriptor)
     {

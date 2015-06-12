@@ -435,7 +435,7 @@ public class TMutableGridDataModel
     private final XMutableGridDataModel m_dataModel;
     private final GridDataListener      m_listener;
 
-    private final static Object[][] m_rowValues = new Object[][] {
+    private static final Object[][] m_rowValues = new Object[][] {
             new Object[] { 1, 2, "3", 4, 5 },
             new Object[] { 2, 3, 4, "5", 6 },
             new Object[] { "3", 4, 5, 6, 7 },
@@ -443,7 +443,7 @@ public class TMutableGridDataModel
             new Object[] { 5, "6", 7, 8, 9 },
         };
 
-    private final static Object[] m_rowHeadings = new Object[] {
+    private static final Object[] m_rowHeadings = new Object[] {
         "1", 2, 3.0, "4", (float)5.0
     };
 }

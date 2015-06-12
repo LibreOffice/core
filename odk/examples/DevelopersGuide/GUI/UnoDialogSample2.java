@@ -55,14 +55,14 @@ public class UnoDialogSample2 extends UnoDialogSample {
     // define some constants used to set positions and sizes
     // of controls. For further information see
     // http://ui.openoffice.org/knowledge/DialogSpecificationandGuidelines.odt
-    final static int nFixedTextHeight = 8;
-    final static int nControlMargin = 6;
-    final static int nDialogWidth = 250;
-    final static int nDialogHeight = 140;
+    static final int nFixedTextHeight = 8;
+    static final int nControlMargin = 6;
+    static final int nDialogWidth = 250;
+    static final int nDialogHeight = 140;
     // the default roadmap width == 80 MAPs
-    final static int nRoadmapWidth = 80;
-    final static int nButtonHeight = 14;
-    final static int nButtonWidth = 50;
+    static final int nRoadmapWidth = 80;
+    static final int nButtonHeight = 14;
+    static final int nButtonWidth = 50;
 
 
     public UnoDialogSample2(XComponentContext _xContext, XMultiComponentFactory _xMCF, Object _oUnoObject) {

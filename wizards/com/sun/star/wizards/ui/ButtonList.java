@@ -65,7 +65,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private IImageRenderer renderer;
     private ListModel listModel;
     private IRenderer counterRenderer = new SimpleCounterRenderer();
-    private final static int LINE_HEIGHT = 8;
+    private static final int LINE_HEIGHT = 8;
 
     public void setName(String _sName)
     {

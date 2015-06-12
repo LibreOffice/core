@@ -44,14 +44,14 @@ public class FieldSelection
 
     private boolean bisModified = false;
 
-    private final static int SOCMDMOVESEL = 1;
-    private final static int SOCMDMOVEALL = 2;
-    private final static int SOCMDREMOVESEL = 3;
-    private final static int SOCMDREMOVEALL = 4;
-    private final static int SOCMDMOVEUP = 5;
-    private final static int SOCMDMOVEDOWN = 6;
-    private final static int SOFLDSLST = 7;
-    private final static int SOSELFLDSLST = 8;
+    private static final int SOCMDMOVESEL = 1;
+    private static final int SOCMDMOVEALL = 2;
+    private static final int SOCMDREMOVESEL = 3;
+    private static final int SOCMDREMOVEALL = 4;
+    private static final int SOCMDMOVEUP = 5;
+    private static final int SOCMDMOVEDOWN = 6;
+    private static final int SOFLDSLST = 7;
+    private static final int SOSELFLDSLST = 8;
 
 
     private class ItemListenerImpl implements com.sun.star.awt.XItemListener
