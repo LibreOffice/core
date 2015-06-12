@@ -1,3 +1,14 @@
+--- nss/lib/certdb/crl.c
++++ nss/lib/certdb/crl.c
+@@ -2150,7 +2150,7 @@
+         return SECSuccess;
+     }
+     /* all CRLs are good, sort them by thisUpdate */
+-    qsort(cache->crls, cache->ncrls, sizeof(CachedCrl*),
++    if (cache->ncrls != 0) qsort(cache->crls, cache->ncrls, sizeof(CachedCrl*),
+           SortCRLsByThisUpdate);
+ 
+     if (cache->ncrls)
 --- nss/lib/libpkix/pkix/util/pkix_tools.h
 +++ nss/lib/libpkix/pkix/util/pkix_tools.h
 @@ -1458,8 +1458,8 @@
