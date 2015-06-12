@@ -21,4 +21,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
 endif
 endif
 
+ifeq ($(SYSTEM_REVENGE),)
+$(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
+    external/libodfgen/rpath.patch \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

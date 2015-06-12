@@ -14,6 +14,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,rasqal,$(RASQAL_TARBALL),,redland))
 # configure generated files for MSVC
 $(eval $(call gb_UnpackedTarball_add_file,rasqal,src/rasqal.h,external/redland/rasqal/rasqal.h))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,rasqal,0))
+
 $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	external/redland/rasqal/rasqal-pkgconfig.patch.1 \
 	external/redland/rasqal/rasqal-freebsd.patch.1 \
@@ -23,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	$(if $(filter ANDROID,$(OS)),external/redland/rasqal/rasqal-android.patch.1) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/redland/rasqal/rasqal-mingw.patch.1) \
 	$(if $(CROSS_COMPILING),external/redland/rasqal/rasqal-xcompile.patch.1) \
+	external/redland/rasqal/rpath.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
