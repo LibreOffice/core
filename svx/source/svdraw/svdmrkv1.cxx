@@ -36,7 +36,7 @@ bool SdrMarkView::HasMarkablePoints() const
     bool bRet=false;
     if (!ImpIsFrameHandles()) {
         const size_t nMarkCount=GetMarkedObjectCount();
-        if (nMarkCount<=static_cast<size_t>(nFrameHandlesLimit)) {
+        if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {
             for (size_t nMarkNum=0; nMarkNum<nMarkCount && !bRet; ++nMarkNum) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -53,7 +53,7 @@ sal_uIntPtr SdrMarkView::GetMarkablePointCount() const
     sal_uIntPtr nCount=0;
     if (!ImpIsFrameHandles()) {
         const size_t nMarkCount=GetMarkedObjectCount();
-        if (nMarkCount<=static_cast<size_t>(nFrameHandlesLimit)) {
+        if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {
             for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -72,7 +72,7 @@ bool SdrMarkView::HasMarkedPoints() const
     bool bRet=false;
     if (!ImpIsFrameHandles()) {
         const size_t nMarkCount=GetMarkedObjectCount();
-        if (nMarkCount<=static_cast<size_t>(nFrameHandlesLimit)) {
+        if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {
             for (size_t nMarkNum=0; nMarkNum<nMarkCount && !bRet; ++nMarkNum) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 const SdrUShortCont* pPts=pM->GetMarkedPoints();
@@ -89,7 +89,7 @@ sal_uIntPtr SdrMarkView::GetMarkedPointCount() const
     sal_uIntPtr nCount=0;
     if (!ImpIsFrameHandles()) {
         size_t nMarkCount=GetMarkedObjectCount();
-        if (nMarkCount<=static_cast<size_t>(nFrameHandlesLimit)) {
+        if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {
             for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 const SdrUShortCont* pPts=pM->GetMarkedPoints();
@@ -149,7 +149,7 @@ bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
     }
 
     pHdl->SetSelected(!bUnmark);
-    if (!bPlusHdlAlways)
+    if (!mbPlusHdlAlways)
     {
         if (!bUnmark)
         {
@@ -262,15 +262,15 @@ bool SdrMarkView::MarkNextPoint(const Point& /*rPnt*/, bool /*bPrev*/)
 const Rectangle& SdrMarkView::GetMarkedPointsRect() const
 {
     ForceUndirtyMrkPnt();
-    if (bMarkedPointsRectsDirty) ImpSetPointsRects();
-    return aMarkedPointsRect;
+    if (mbMarkedPointsRectsDirty) ImpSetPointsRects();
+    return maMarkedPointsRect;
 }
 
 void SdrMarkView::SetPlusHandlesAlwaysVisible(bool bOn)
 { // TODO: Optimize HandlePaint!
     ForceUndirtyMrkPnt();
-    if (bOn!=bPlusHdlAlways) {
-        bPlusHdlAlways=bOn;
+    if (bOn!=mbPlusHdlAlways) {
+        mbPlusHdlAlways=bOn;
         SetMarkHandles();
         MarkListHasChanged();
     }
@@ -301,9 +301,9 @@ void SdrMarkView::ImpSetPointsRects() const
             }
         }
     }
-    const_cast<SdrMarkView*>(this)->aMarkedPointsRect=aPnts;
-    const_cast<SdrMarkView*>(this)->aMarkedGluePointsRect=aGlue;
-    const_cast<SdrMarkView*>(this)->bMarkedPointsRectsDirty=false;
+    const_cast<SdrMarkView*>(this)->maMarkedPointsRect=aPnts;
+    const_cast<SdrMarkView*>(this)->maMarkedGluePointsRect=aGlue;
+    const_cast<SdrMarkView*>(this)->mbMarkedPointsRectsDirty=false;
 }
 
 
@@ -369,8 +369,8 @@ void SdrMarkView::UndirtyMrkPnt() const
             }
         }
     }
-    if (bChg) const_cast<SdrMarkView*>(this)->bMarkedPointsRectsDirty=true;
-    const_cast<SdrMarkView*>(this)->bMrkPntDirty=false;
+    if (bChg) const_cast<SdrMarkView*>(this)->mbMarkedPointsRectsDirty=true;
+    const_cast<SdrMarkView*>(this)->mbMrkPntDirty=false;
 }
 
 
@@ -584,8 +584,8 @@ bool SdrMarkView::MarkNextGluePoint(const Point& /*rPnt*/, bool /*bPrev*/)
 const Rectangle& SdrMarkView::GetMarkedGluePointsRect() const
 {
     ForceUndirtyMrkPnt();
-    if (bMarkedPointsRectsDirty) ImpSetPointsRects();
-    return aMarkedGluePointsRect;
+    if (mbMarkedPointsRectsDirty) ImpSetPointsRects();
+    return maMarkedGluePointsRect;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

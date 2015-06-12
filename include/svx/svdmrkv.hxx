@@ -103,39 +103,39 @@ class SVX_DLLPUBLIC SdrMarkView : public SdrSnapView
     ImplMarkingOverlay*                                 mpMarkGluePointsOverlay;
 
 protected:
-    SdrObject*                  pMarkedObj;       // If not just one object ( i.e. More than one object ) is marked.
-    SdrPageView*                pMarkedPV;        // If all marked obects are situated on the same PageView.
+    SdrObject*                  mpMarkedObj;       // If not just one object ( i.e. More than one object ) is marked.
+    SdrPageView*                mpMarkedPV;        // If all marked obects are situated on the same PageView.
 
-    Point                       aRef1;            // Persistent - Rotation center / axis of reflection
-    Point                       aRef2;            // Persistent
-    Point                       aLastCrookCenter; // Persistent
+    Point                       maRef1;            // Persistent - Rotation center / axis of reflection
+    Point                       maRef2;            // Persistent
+    Point                       maLastCrookCenter; // Persistent
     SdrHdlList                  maHdlList;
     sdr::ViewSelection*         mpSdrViewSelection;
 
-    Rectangle                   aMarkedObjRect;
-    Rectangle                   aMarkedObjRectNoOffset;
-    Rectangle                   aMarkedPointsRect;
-    Rectangle                   aMarkedGluePointsRect;
+    Rectangle                   maMarkedObjRect;
+    Rectangle                   maMarkedObjRectNoOffset;
+    Rectangle                   maMarkedPointsRect;
+    Rectangle                   maMarkedGluePointsRect;
 
-    sal_uInt16                      nFrameHandlesLimit;
+    sal_uInt16                      mnFrameHandlesLimit;
     sal_uIntPtr                 mnInsPointNum;      // Number of the InsPoint
-    sal_uIntPtr                     nMarkableObjCount;
+    sal_uIntPtr                     mnMarkableObjCount;
 
-    SdrDragMode                 eDragMode;        // Persistent
-    SdrViewEditMode             eEditMode;      // Persistent
-    SdrViewEditMode             eEditMode0;     // Persistent
+    SdrDragMode                 meDragMode;        // Persistent
+    SdrViewEditMode             meEditMode;      // Persistent
+    SdrViewEditMode             meEditMode0;     // Persistent
 
     //HMHbool                       bHdlShown : 1;
-    bool                        bRefHdlShownOnly : 1; // Axis of reflextion during dragging (ni)
-    bool                        bDesignMode : 1;      // DesignMode for SdrUnoObj
-    bool                        bForceFrameHandles : 1; // Persistent - FrameDrag auch bei Einzelobjekten
-    bool                        bPlusHdlAlways : 1;   // Persistent
-    bool                        bMarkHdlWhenTextEdit : 1; // Persistent, default=FALSE
-    bool                        bInsPolyPoint : 1;     // at this time InsPolyPointDragging
-    bool                        bMarkedObjRectDirty : 1;
-    bool                        bMrkPntDirty : 1;
-    bool                        bMarkedPointsRectsDirty : 1;
-    bool                        bMarkableObjCountDirty : 1;
+    bool                        mbRefHdlShownOnly : 1; // Axis of reflextion during dragging (ni)
+    bool                        mbDesignMode : 1;      // DesignMode for SdrUnoObj
+    bool                        mbForceFrameHandles : 1; // Persistent - FrameDrag auch bei Einzelobjekten
+    bool                        mbPlusHdlAlways : 1;   // Persistent
+    bool                        mbMarkHdlWhenTextEdit : 1; // Persistent, default=FALSE
+    bool                        mbInsPolyPoint : 1;     // at this time InsPolyPointDragging
+    bool                        mbMarkedObjRectDirty : 1;
+    bool                        mbMrkPntDirty : 1;
+    bool                        mbMarkedPointsRectsDirty : 1;
+    bool                        mbMarkableObjCountDirty : 1;
 
     // flag to completely disable handles at the view
     bool                        mbMarkHandlesHidden : 1;
@@ -158,7 +158,7 @@ protected:
     virtual void AddCustomHdl();
 
     void ForceRefToMarked();
-    void ForceUndirtyMrkPnt() const                                       { if (bMrkPntDirty) UndirtyMrkPnt(); }
+    void ForceUndirtyMrkPnt() const                                       { if (mbMrkPntDirty) UndirtyMrkPnt(); }
 
     //HMHvoid ImpShowMarkHdl(bool bNoRefHdl);
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay) const;
@@ -206,29 +206,29 @@ public:
     // Move==Resize
     // The interface might maybe be changed in the future because of Ortho-Drag
     void SetDragMode(SdrDragMode eMode);
-    SdrDragMode GetDragMode() const { return eDragMode; }
+    SdrDragMode GetDragMode() const { return meDragMode; }
     bool ChkDragMode(SdrDragMode eMode) const;
     void SetFrameHandles(bool bOn);
-    bool IsFrameHandles() const { return bForceFrameHandles; }
+    bool IsFrameHandles() const { return mbForceFrameHandles; }
 
     sal_uIntPtr GetMarkableObjCount() const;
 
     // Limit. Exceeding the limit causes an implicite switch to FrameHandles. default=50.
-    void SetFrameHandlesLimit(sal_uInt16 nCount) { nFrameHandlesLimit=nCount; }
-    sal_uInt16 GetFrameHandlesLimit() const { return nFrameHandlesLimit; }
+    void SetFrameHandlesLimit(sal_uInt16 nCount) { mnFrameHandlesLimit=nCount; }
+    sal_uInt16 GetFrameHandlesLimit() const { return mnFrameHandlesLimit; }
 
     void SetEditMode(SdrViewEditMode eMode);
-    SdrViewEditMode GetEditMode() const { return eEditMode; }
+    SdrViewEditMode GetEditMode() const { return meEditMode; }
 
     void SetEditMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_EDIT:SDREDITMODE_CREATE); }
-    bool IsEditMode() const { return eEditMode==SDREDITMODE_EDIT; }
+    bool IsEditMode() const { return meEditMode==SDREDITMODE_EDIT; }
     void SetCreateMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_CREATE:SDREDITMODE_EDIT); }
-    bool IsCreateMode() const { return eEditMode==SDREDITMODE_CREATE; }
-    void SetGluePointEditMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_GLUEPOINTEDIT:eEditMode0); }
-    bool IsGluePointEditMode() const { return eEditMode==SDREDITMODE_GLUEPOINTEDIT; }
+    bool IsCreateMode() const { return meEditMode==SDREDITMODE_CREATE; }
+    void SetGluePointEditMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_GLUEPOINTEDIT:meEditMode0); }
+    bool IsGluePointEditMode() const { return meEditMode==SDREDITMODE_GLUEPOINTEDIT; }
 
     void SetDesignMode(bool bOn = true);
-    bool IsDesignMode() const { return bDesignMode; }
+    bool IsDesignMode() const { return mbDesignMode; }
 
     void SetFrameDragSingles(bool bOn=true) { SetFrameHandles(bOn); }
     bool IsFrameDragSingles() const { return IsFrameHandles(); }
@@ -369,12 +369,12 @@ public:
 
     // Select that additional handles are displayed permanently.
     void SetPlusHandlesAlwaysVisible(bool bOn);
-    bool IsPlusHandlesAlwaysVisible() const { return bPlusHdlAlways; }
+    bool IsPlusHandlesAlwaysVisible() const { return mbPlusHdlAlways; }
 
     // Are Handles visible during TextEdit (in double size)?
     // Persistent, default=FALSE
-    void SetMarkHdlWhenTextEdit(bool bOn) { bMarkHdlWhenTextEdit=bOn; }
-    bool IsMarkHdlWhenTextEdit() const { return bMarkHdlWhenTextEdit; }
+    void SetMarkHdlWhenTextEdit(bool bOn) { mbMarkHdlWhenTextEdit=bOn; }
+    bool IsMarkHdlWhenTextEdit() const { return mbMarkHdlWhenTextEdit; }
 
     bool HasMarkableGluePoints() const;
     bool HasMarkedGluePoints() const;
@@ -453,17 +453,17 @@ public:
 
     // Get the center point of the last Crook-Dragging. Den kann man
     // bei einem anschliessenden Rotate sinnvoll als Drehmittelpunkt setzen.
-    const Point& GetLastCrookCenter() const { return aLastCrookCenter; }
+    const Point& GetLastCrookCenter() const { return maLastCrookCenter; }
 
     // Is set by DragView automatically when finishing a Crook-Drag.
-    void SetLastCrookCenter(const Point& rPt) { aLastCrookCenter=rPt; }
+    void SetLastCrookCenter(const Point& rPt) { maLastCrookCenter=rPt; }
 
     // Rotation center point and start point of the axis of reflextion, respecively
-    const Point& GetRef1() const { return aRef1; }
+    const Point& GetRef1() const { return maRef1; }
     void SetRef1(const Point& rPt);
 
     // End point of the axis of reflextion
-    const Point& GetRef2() const { return aRef1; }
+    const Point& GetRef2() const { return maRef1; }
     void SetRef2(const Point& rPt);
     void UnmarkObj(SdrObject* pObj);
 };

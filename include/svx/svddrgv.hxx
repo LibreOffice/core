@@ -105,7 +105,7 @@ public:
     void MovDragObj(const Point& rPnt);
     bool EndDragObj(bool bCopy=false);
     void BrkDragObj();
-    bool IsDragObj() const { return mpCurrentSdrDragMethod && !bInsPolyPoint && !mbInsGluePoint; }
+    bool IsDragObj() const { return mpCurrentSdrDragMethod && !mbInsPolyPoint && !mbInsGluePoint; }
     SdrHdl* GetDragHdl() const { return mpDragHdl; }
     SdrDragMethod* GetDragMethod() const { return mpCurrentSdrDragMethod; }
     bool IsDraggingPoints() const { return meDragHdl==HDL_POLY; }
@@ -126,7 +126,7 @@ public:
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
     bool EndInsObjPoint(SdrCreateCmd eCmd);
     void BrkInsObjPoint() { BrkDragObj(); }
-    bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && bInsPolyPoint; }
+    bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && mbInsPolyPoint; }
 
     // For the app to manage the status. GetPreferredPointer() is
     // possibly going to deliver a matching pointer for it.

@@ -1192,7 +1192,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     if(Is3DRotationCreationActive() && GetMarkedObjectCount())
     {
         // Determine all selected polygons and return the mirrored helper overlay
-        mpMirrorOverlay->SetMirrorAxis(aRef1, aRef2);
+        mpMirrorOverlay->SetMirrorAxis(maRef1, maRef2);
     }
     else
     {
@@ -1230,7 +1230,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
             if( bThereAre3DObjects )
             {
                 meDragHdl = ( pHdl == NULL ? HDL_MOVE : pHdl->GetKind() );
-                switch ( eDragMode )
+                switch ( meDragMode )
                 {
                     case SDRDRAG_ROTATE:
                     case SDRDRAG_SHEAR:
@@ -1408,10 +1408,10 @@ void E3dView::Start3DCreation()
             }
         }
 
-        aRef1.X() = basegfx::fround(aR.getMinX());    // Initial move axis 2/100mm to the left
-        aRef1.Y() = nY1;
-        aRef2.X() = aRef1.X();
-        aRef2.Y() = nY2;
+        maRef1.X() = basegfx::fround(aR.getMinX());    // Initial move axis 2/100mm to the left
+        maRef1.Y() = nY1;
+        maRef2.X() = maRef1.X();
+        maRef2.Y() = nY2;
 
         // Turn on marks
         SetMarkHandles();

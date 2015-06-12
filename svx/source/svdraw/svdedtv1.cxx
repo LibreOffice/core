@@ -895,13 +895,13 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool /*bOnlyH
         rAttr.Put(SdrVertShearAllItem());
     }
 
-    if(eDragMode == SDRDRAG_ROTATE || eDragMode == SDRDRAG_MIRROR)
+    if(meDragMode == SDRDRAG_ROTATE || meDragMode == SDRDRAG_MIRROR)
     {
         rAttr.Put(SdrTransformRef1XItem(GetRef1().X()));
         rAttr.Put(SdrTransformRef1YItem(GetRef1().Y()));
     }
 
-    if(eDragMode == SDRDRAG_MIRROR)
+    if(meDragMode == SDRDRAG_MIRROR)
     {
         rAttr.Put(SdrTransformRef2XItem(GetRef2().X()));
         rAttr.Put(SdrTransformRef2YItem(GetRef2().Y()));
@@ -1311,16 +1311,16 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         // size
         long nResizeRefX=aRect.Left();
         long nResizeRefY=aRect.Top();
-        if (eDragMode==SDRDRAG_ROTATE) { // use rotation axis as a reference for resizing, too
-            nResizeRefX=aRef1.X();
-            nResizeRefY=aRef1.Y();
+        if (meDragMode==SDRDRAG_ROTATE) { // use rotation axis as a reference for resizing, too
+            nResizeRefX=maRef1.X();
+            nResizeRefY=maRef1.Y();
         }
         aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH,aRect.Right()-aRect.Left()));
         aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT,aRect.Bottom()-aRect.Top()));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_X,nResizeRefX));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_Y,nResizeRefY));
 
-        Point aRotateAxe(aRef1);
+        Point aRotateAxe(maRef1);
 
         if(GetSdrPageView())
         {
@@ -1330,7 +1330,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         // rotation
         long nRotateRefX=aRect.Center().X();
         long nRotateRefY=aRect.Center().Y();
-        if (eDragMode==SDRDRAG_ROTATE) {
+        if (meDragMode==SDRDRAG_ROTATE) {
             nRotateRefX=aRotateAxe.X();
             nRotateRefY=aRotateAxe.Y();
         }
@@ -1341,7 +1341,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         // shearing
         long nShearRefX=aRect.Left();
         long nShearRefY=aRect.Bottom();
-        if (eDragMode==SDRDRAG_ROTATE) { // use rotation axis as a reference for shearing, too
+        if (meDragMode==SDRDRAG_ROTATE) { // use rotation axis as a reference for shearing, too
             nShearRefX=aRotateAxe.X();
             nShearRefY=aRotateAxe.Y();
         }
@@ -1483,14 +1483,14 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     long nSizY=0;
     long nRotateAngle=0;
 
-    bool bModeIsRotate(eDragMode == SDRDRAG_ROTATE);
+    bool bModeIsRotate(meDragMode == SDRDRAG_ROTATE);
     long nRotateX(0);
     long nRotateY(0);
     long nOldRotateX(0);
     long nOldRotateY(0);
     if(bModeIsRotate)
     {
-        Point aRotateAxe(aRef1);
+        Point aRotateAxe(maRef1);
 
         if(GetSdrPageView())
         {

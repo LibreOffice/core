@@ -576,7 +576,7 @@ SdrObject* SdrDragMethod::GetDragObj() const
 {
     SdrObject* pObj=NULL;
     if (getSdrDragView().mpDragHdl!=NULL) pObj=getSdrDragView().mpDragHdl->GetObj();
-    if (pObj==NULL) pObj=getSdrDragView().pMarkedObj;
+    if (pObj==NULL) pObj=getSdrDragView().mpMarkedObj;
     return pObj;
 }
 
@@ -584,7 +584,7 @@ SdrPageView* SdrDragMethod::GetDragPV() const
 {
     SdrPageView* pPV=NULL;
     if (getSdrDragView().mpDragHdl!=NULL) pPV=getSdrDragView().mpDragHdl->GetPageView();
-    if (pPV==NULL) pPV=getSdrDragView().pMarkedPV;
+    if (pPV==NULL) pPV=getSdrDragView().mpMarkedPV;
     return pPV;
 }
 

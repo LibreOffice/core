@@ -1067,11 +1067,11 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
         bool bCorner=pHdl!=NULL && pHdl->IsCornerHdl();
         bool bVertex=pHdl!=NULL && pHdl->IsVertexHdl();
         bool bMov=eHdl==HDL_MOVE;
-        if (bMov && (eDragMode==SDRDRAG_MOVE || eDragMode==SDRDRAG_RESIZE || mbMarkedHitMovesAlways)) {
+        if (bMov && (meDragMode==SDRDRAG_MOVE || meDragMode==SDRDRAG_RESIZE || mbMarkedHitMovesAlways)) {
             if (!IsMoveAllowed()) return Pointer(PointerStyle::Arrow); // because double click or drag & drop is possible
             return Pointer(PointerStyle::Move);
         }
-        switch (eDragMode) {
+        switch (meDragMode) {
             case SDRDRAG_ROTATE: {
                 if ((bCorner || bMov) && !IsRotateAllowed(true))
                     return Pointer(PointerStyle::NotAllowed);
@@ -1163,7 +1163,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             return Pointer(PointerStyle::Move);
         }
     }
-    if (eEditMode==SDREDITMODE_CREATE) return aAktCreatePointer;
+    if (meEditMode==SDREDITMODE_CREATE) return aAktCreatePointer;
     return Pointer(PointerStyle::Arrow);
 }
 
@@ -1187,7 +1187,7 @@ OUString SdrView::GetStatusText()
     }
     else if (mpCurrentSdrDragMethod)
     {
-        if (bInsPolyPoint || IsInsertGluePoint())
+        if (mbInsPolyPoint || IsInsertGluePoint())
         {
             aStr=maInsPointUndoStr;
         }

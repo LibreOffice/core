@@ -161,15 +161,15 @@ protected:
     SdrHdlKind         GetDragHdlKind() const          { return getSdrDragView().meDragHdl; }
     SdrDragStat&       DragStat()                      { return getSdrDragView().aDragStat; }
     const SdrDragStat& DragStat() const                { return getSdrDragView().aDragStat; }
-    Point&             Ref1() const                    { return mrSdrDragView.aRef1; }
-    Point&             Ref2() const                    { return mrSdrDragView.aRef2; }
+    Point&             Ref1() const                    { return mrSdrDragView.maRef1; }
+    Point&             Ref2() const                    { return mrSdrDragView.maRef2; }
     const SdrHdlList&  GetHdlList() const              { return getSdrDragView().GetHdlList(); }
     void               AddUndo(SdrUndoAction* pUndo)   { getSdrDragView().AddUndo(pUndo); }
     bool               IsDragLimit()                   { return getSdrDragView().mbDragLimit; }
     const Rectangle&   GetDragLimitRect()              { return getSdrDragView().maDragLimit; }
     const SdrMarkList& GetMarkedObjectList()                   { return getSdrDragView().GetMarkedObjectList(); }
-    Point              GetSnapPos(const Point& rPt) const { return getSdrDragView().GetSnapPos(rPt,getSdrDragView().pMarkedPV); }
-    SdrSnap            SnapPos(Point& rPt) const       { return getSdrDragView().SnapPos(rPt,getSdrDragView().pMarkedPV); }
+    Point              GetSnapPos(const Point& rPt) const { return getSdrDragView().GetSnapPos(rPt,getSdrDragView().mpMarkedPV); }
+    SdrSnap            SnapPos(Point& rPt) const       { return getSdrDragView().SnapPos(rPt,getSdrDragView().mpMarkedPV); }
     inline const Rectangle& GetMarkedRect() const;
     SdrPageView*       GetDragPV() const;
     SdrObject*         GetDragObj() const;
