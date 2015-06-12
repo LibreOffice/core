@@ -41,7 +41,7 @@ namespace connectivity
             mutable bool                    m_bHasSelectionCode;
             mutable bool                    m_bSelectionFirstTime;
 
-            static void bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList);
+            static void bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow);
 
         public:
             OSQLAnalyzer(OConnection* _pConnection);

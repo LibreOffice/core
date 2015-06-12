@@ -117,23 +117,13 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 }
 
 
-void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList)
+void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow)
 {
-    // count criteria
-    // if only one criterion, and the corresponding field is indexed
-    // then the index will be used
-    OEvaluateSet*       pEvaluateSet = NULL;
-
     for (OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
         OOperandAttr* pAttr = PTR_CAST(OOperandAttr,(*aIter));
         if (pAttr)
         {
-            if (pEvaluateSet)
-            {
-                _rEvaluateSetList.push_back(pEvaluateSet);
-                pEvaluateSet = NULL;
-            }
             pAttr->bindValue(_pRow);
         }
     }
@@ -146,14 +136,14 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
     for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
         if ( aIter->first.is() )
-            bindRow( aIter->first->m_aCodeList,_pRow,aEvaluateSetList);
+            bindRow(aIter->first->m_aCodeList,_pRow);
     }
 }
 
 ::std::vector<sal_Int32>* OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
 {
     OEvaluateSetList    aEvaluateSetList;
-    bindRow( m_aCompiler->m_aCodeList,_pRow,aEvaluateSetList);
+    bindRow(m_aCompiler->m_aCodeList,_pRow);
 
     ::std::vector<sal_Int32>*   pKeySet      = NULL;
     OEvaluateSet*               pEvaluateSet = NULL;
