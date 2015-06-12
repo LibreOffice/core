@@ -277,33 +277,8 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         // to make the gray field background vanish  again
         rOutl.UpdateFields();
 
-        // FIXME(matteocam)
-        // TODO: move this to one level higher
-        if ( IsToBeChained() && GetNextLinkInChain() != this) // XXX: defensive check
-        {
-            // FIXME: matteocam
-            // for now doing the same as below - probably we don't need
-            // any more chain checks here but one single default behavior
-            sal_Int32 nParaAnz = rOutl.GetParagraphCount();
-            // XXX: FRESHLY COMMENTED (5/6/15) // FIXME:matteocam
-            //pNewText = rOutl.CreateParaObject( 0, nParaAnz );
-
-            pNewText = impGetNonOverflowingParaObject(&rOutl);
-
-            // set non overflow part of text to current box
-
-            // XXX XXX XXX XXX: decomment next line and fix const conversion problem
-            //pNewText = rOutl.GetNonOverflowingText()->mpHeadParas; // empty text obj. if 1st para is overflowing
-            // set overflowing text for SdrChainedTextPrimitive2D
-            mpOverflowingText = rOutl.GetOverflowingText();
-            // TODO: factor the lines of code above in a single function
-        }
-        else // standard case
-        {
-            sal_Int32 nParaAnz = rOutl.GetParagraphCount();
-            pNewText = rOutl.CreateParaObject( 0, nParaAnz );
-        }
-
+        sal_Int32 nParaAnz = rOutl.GetParagraphCount();
+        pNewText = rOutl.CreateParaObject( 0, nParaAnz );
 
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
