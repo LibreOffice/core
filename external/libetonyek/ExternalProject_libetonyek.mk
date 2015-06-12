@@ -40,6 +40,9 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			--without-tools \
 			$(if $(filter WNT,$(OS_FOR_BUILD)),MKDIR_P="$(shell cygpath -m /usr/bin/mkdir) -p") \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(filter LINUX,$(OS)), \
+				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
 			XML_CFLAGS="$(LIBXML_CFLAGS)" \
 			XML_LIBS="$(LIBXML_LIBS)" \

@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libwps,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	external/libwps/0001-QuattroPro-parser-correct-a-mistake-when-reading-neg.patch \
 	external/libwps/0001-error-C2065-M_PI-undeclared-identifier.patch \
+	$(if $(SYSTEM_REVENGE),,external/libwps/rpath.patch.0) \
 ))
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)

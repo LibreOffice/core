@@ -15,6 +15,8 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,coinmp,\
 	CoinMP/MSVisualStudio/v9/CoinMP.sln \
 ))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,coinmp,0))
+
 $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/android.build.patch.1 \
 	external/coinmp/no-binaries.patch.1 \
@@ -27,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	$(if $(filter MACOSX,$(OS)),external/coinmp/macosx.build.patch.1) \
 	external/coinmp/werror-format-pedantic.patch.0 \
 	external/coinmp/ubsan.patch.0 \
+	external/coinmp/rpath.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
