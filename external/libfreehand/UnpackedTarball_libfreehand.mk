@@ -11,4 +11,14 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libfreehand))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libfreehand,$(FREEHAND_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libfreehand,0))
+
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,libfreehand, \
+    external/libfreehand/ubsan-visibility.patch \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
