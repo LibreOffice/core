@@ -2080,6 +2080,28 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
 
 }
 
+void SdrTextObj::SetPreventChainable()
+{
+    mbIsUnchainableClone = true;
+}
+
+bool SdrTextObj::GetPreventChainable() const
+{
+    return mbIsUnchainableClone;
+}
+
+ SdrObject* SdrTextObj::getFullDragClone() const
+ {
+    SdrObject *pClone = SdrAttrObj::getFullDragClone();
+    SdrTextObj *pTextObjClone = dynamic_cast<SdrTextObj *>(pClone);
+    if (pTextObjClone != NULL) {
+        // Avoid transferring of text for chainable object during dragging
+        pTextObjClone->SetPreventChainable();
+    }
+
+    return pClone;
+ }
+
 IMPL_LINK(SdrTextObj,ImpDecomposeChainedText,bool*,bIsPageOverflow)
 {
     onOverflowStatusEvent( *bIsPageOverflow );

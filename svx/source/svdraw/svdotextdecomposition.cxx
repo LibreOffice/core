@@ -1641,7 +1641,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     /* Begin overflow handling */
 
     // If overflow occurs we have to cut the text at the right point
-    if ( rOutliner.IsPageOverflow() ) {
+    // If in edit mode ImpEditEngine should have taken care of this
+    if ( rOutliner.IsPageOverflow() && !IsInEditMode()) {
         // Save the overflowing text before changing the outliner's state
         const_cast<SdrTextObj*>(this)->mpOverflowingText = rOutliner.GetOverflowingText();
         impLeaveOnlyNonOverflowingText(&rOutliner);
@@ -1652,10 +1653,12 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         ImpInitDrawOutliner( rChainingOutl );
         rOutliner.SetUpdateMode(true);
 
-        /* Actual transfer of text */
-
-        if (GetNextLinkInChain())
+        /* Transfer of text to next link */
+        if (GetNextLinkInChain()
+            && !GetPreventChainable() ) // we don't transfer text while dragging because of resizing
+        {
             impMoveChainedTextToNextLink(&rChainingOutl, GetNextLinkInChain());
+        }
 
     }
     /* End overflow handling */

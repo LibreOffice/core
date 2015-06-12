@@ -215,8 +215,11 @@ public:
     const Point& GetTextEditOffset() const { return maTextEditOffset; }
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
 
+    virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
+
 protected:
     OverflowingText *mpOverflowingText = NULL;
+    bool mbIsUnchainableClone = false;
 
     //FIXME(matteocam)
     // the successor in a chain
@@ -359,6 +362,8 @@ public:
     bool IsToBeChained() const;
     SdrTextObj *GetNextLinkInChain() const;
     bool IsChainable() const { return GetNextLinkInChain() != NULL; }
+    void SetPreventChainable();
+    bool GetPreventChainable() const;
 
     SdrObjKind GetTextKind() const { return eTextKind; }
 
