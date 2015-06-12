@@ -138,7 +138,25 @@ namespace
             // Handle all tokens in RPN, and code tokens only if they have a
             // reference count of 1, which means they are not referenced in
             // RPN.
-            return i == 0 && (*pp)->GetRef() > 1;
+            if (i == 0)
+                return (*pp)->GetRef() > 1;
+
+            // Skip (do not adjust) relative references resulting from named
+            // expressions.
+            switch ((*pp)->GetType())
+            {
+                case svSingleRef:
+                    return (*pp)->GetSingleRef()->IsRelName();
+                case svDoubleRef:
+                    {
+                        const ScComplexRefData& rRef = *(*pp)->GetDoubleRef();
+                        return rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName();
+                    }
+                default:
+                    ;   // nothing
+            }
+
+            return false;
         }
     };
 
