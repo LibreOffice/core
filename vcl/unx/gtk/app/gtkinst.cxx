@@ -322,12 +322,9 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
     return pNew;
 #else
     GtkSalGraphics *pGtkSalGraphics = dynamic_cast<GtkSalGraphics*>(pG);
-
-    GtkSalGraphics *pNewGraphics = NULL;
-    if (pGtkSalGraphics)
-        pNewGraphics = new GtkSalGraphics(pGtkSalGraphics->GetGtkFrame(), pGtkSalGraphics->GetGtkWidget());
-
-    return CreateX11VirtualDevice(pG, nDX, nDY, nBitCount, pGd, pNewGraphics);
+    assert(pGtkSalGraphics);
+    return CreateX11VirtualDevice(pG, nDX, nDY, nBitCount, pGd,
+            new GtkSalGraphics(pGtkSalGraphics->GetGtkFrame(), pGtkSalGraphics->GetGtkWidget()));
 #endif
 }
 
