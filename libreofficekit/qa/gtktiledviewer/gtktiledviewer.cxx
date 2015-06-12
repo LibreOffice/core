@@ -135,6 +135,7 @@ static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 /// Get the visible area of the scrolled window
 static void getVisibleAreaTwips(GdkRectangle* pArea)
 {
+#if GTK_CHECK_VERSION(2,14,0) // we need gtk_adjustment_get_page_size()
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
 
@@ -146,6 +147,7 @@ static void getVisibleAreaTwips(GdkRectangle* pArea)
                                                gtk_adjustment_get_page_size(pHAdjustment));
     pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
                                                gtk_adjustment_get_page_size(pVAdjustment));
+#endif
 }
 
 
