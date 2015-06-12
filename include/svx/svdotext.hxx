@@ -215,10 +215,8 @@ public:
     const Point& GetTextEditOffset() const { return maTextEditOffset; }
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
 
-    // FIXME(matteocam) // XXX: move as protected
-    OverflowingText *mpOverflowingText = NULL;
-
 protected:
+    OverflowingText *mpOverflowingText = NULL;
 
     //FIXME(matteocam)
     // the successor in a chain
