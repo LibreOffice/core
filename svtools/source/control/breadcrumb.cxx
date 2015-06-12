@@ -12,7 +12,7 @@
 Breadcrumb::Breadcrumb( vcl::Window* pParent, WinBits nWinStyle ) : VclHBox( pParent, nWinStyle )
 {
     m_eMode = SvtBreadcrumbMode::ONLY_CURRENT_PATH;
-    set_spacing( 6 );
+    set_spacing( SPACING );
     appendField(); // root
 }
 
@@ -51,22 +51,24 @@ void Breadcrumb::SetURL( const OUString& rURL )
 {
     INetURLObject aURL( rURL );
     aURL.setFinalSlash();
-    OUString sPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
 
-    unsigned int nSegments = aURL.getSegmentCount();
+    OUString sPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
+    OUString sRootPath = INetURLObject::GetScheme( aURL.GetProtocol() ) + aURL.GetHost();
+
+    int nSegments = aURL.getSegmentCount();
     unsigned int nPos = 0;
-    unsigned int i;
 
     bool bClear = ( m_eMode == SvtBreadcrumbMode::ONLY_CURRENT_PATH );
 
-    m_aLinks[0]->SetText( m_sRootName );
-    m_aLinks[0]->Show();
-    m_aLinks[0]->Enable( true );
-    m_aLinks[0]->SetURL( INetURLObject::GetScheme( aURL.GetProtocol() )
-                                + aURL.GetHost() );
-    m_aSeparators[0]->Show();
+    // root field
 
-    for( i = 1; i < nSegments + 1; i++ )
+    m_aLinks[0]->SetText( m_sRootName );
+    m_aLinks[0]->Enable( true );
+    m_aLinks[0]->SetURL( sRootPath );
+
+    // fill the other fields
+
+    for( unsigned int i = 1; i < (unsigned int)nSegments + 1; i++ )
     {
         if( i >= m_aLinks.size() )
             appendField();
@@ -80,30 +82,97 @@ void Breadcrumb::SetURL( const OUString& rURL )
                 bClear = true;
         }
 
-
         m_aLinks[i]->SetText( sLabel );
-        m_aLinks[i]->SetURL( INetURLObject::GetScheme( aURL.GetProtocol() )
-                                + aURL.GetHost()
-                                + OUString( sPath.getStr(), nEnd ) );
-        m_aLinks[i]->Show();
+        m_aLinks[i]->SetURL( sRootPath + OUString( sPath.getStr(), nEnd ) );
+        m_aLinks[i]->Hide();
         m_aLinks[i]->Enable( true );
-        m_aSeparators[i]->Show();
+        m_aSeparators[i]->Hide();
 
         nPos = nEnd;
     }
 
-    m_aLinks[i - 1]->Enable( false );
-    m_aSeparators[i - 1]->Hide();
+    // clear unused fields
 
-    if( bClear )
+    for( unsigned int i = nSegments + 1; i < m_aLinks.size(); i++ )
     {
-        clearFields( i );
+        if( bClear )
+            m_aLinks[i]->SetText( "" );
+
+        m_aLinks[i]->Hide();
+        m_aSeparators[i]->Hide();
+        m_aLinks[i]->Enable( true );
     }
-    else
+
+    // show fields
+
+    Resize();
+    unsigned int nMaxWidth = GetSizePixel().Width();
+    unsigned int nSeparatorWidth = m_aSeparators[0]->GetSizePixel().Width();
+    unsigned int nCurrentWidth = 0;
+    unsigned int nLastVisible = nSegments;
+
+    bool bRight = ( m_eMode == SvtBreadcrumbMode::ALL_VISITED );
+    bool bLeft = true;
+
+    int i = 0;
+
+    while( bLeft || bRight )
     {
-        for( ; i < m_aLinks.size(); i++ )
-            m_aLinks[i]->Enable( true );
+        if( nSegments - i == -1 )
+            bLeft = false;
+
+        if( bLeft )
+        {
+            unsigned int nIndex = nSegments - i;
+
+            if( showField( nIndex, nMaxWidth - nCurrentWidth ) )
+            {
+                nCurrentWidth += m_aLinks[nIndex]->GetSizePixel().Width()
+                                + nSeparatorWidth + 2*SPACING;
+            }
+            else
+            {
+                // label is too long
+                if( nSegments != 0 )
+                {
+                    m_aLinks[0]->SetText( "..." );
+                    m_aLinks[0]->Enable( false );
+                }
+                bLeft = false;
+            }
+        }
+
+        if( nSegments + i == (int)m_aLinks.size() )
+            bRight = false;
+
+        if( i != 0 && bRight )
+        {
+            unsigned int nIndex = nSegments + i;
+
+            if( m_aLinks[nIndex]->GetText() == "" )
+            {
+                bRight = false;
+            }
+            else if( showField( nIndex, nMaxWidth - nCurrentWidth ) )
+            {
+                nCurrentWidth += m_aLinks[nIndex]->GetSizePixel().Width()
+                                + nSeparatorWidth + 3*SPACING;
+                nLastVisible = nIndex;
+            }
+            else
+            {
+                bRight = false;
+            }
+        }
+
+        i++;
     }
+
+    // current dir should be inactive
+    m_aLinks[nSegments]->Enable( false );
+
+    // hide last separator
+    m_aSeparators[nLastVisible]->Hide();
 }
 
 void Breadcrumb::SetMode( SvtBreadcrumbMode eMode )
@@ -122,13 +191,27 @@ void Breadcrumb::appendField()
     m_aSeparators[m_aLinks.size() - 1]->Hide();
 }
 
-void Breadcrumb::clearFields( unsigned int nStartIndex )
+bool Breadcrumb::showField( unsigned int nIndex, unsigned int nWidthMax )
 {
-    for( unsigned int i = nStartIndex; i < m_aLinks.size(); i++ )
+    m_aLinks[nIndex]->Show();
+    m_aSeparators[nIndex]->Show();
+
+    unsigned int nSeparatorWidth = m_aSeparators[0]->GetSizePixel().Width();
+    unsigned int nWidth = m_aLinks[nIndex]->GetSizePixel().Width()
+            + nSeparatorWidth + 3*SPACING;
+
+    if( nWidth > nWidthMax )
     {
-        m_aLinks[i]->Hide();
-        m_aSeparators[i]->Hide();
+        if( nIndex != 0 )
+        {
+            m_aLinks[nIndex]->Hide();
+            m_aSeparators[nIndex]->Hide();
+        }
+
+        return false;
     }
+
+    return true;
 }
 
 IMPL_LINK ( Breadcrumb, ClickLinkHdl, FixedHyperlink*, pLink )

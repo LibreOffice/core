@@ -19,6 +19,8 @@
 
 #include <vector>
 
+#define SPACING 6
+
 enum SvtBreadcrumbMode
 {
     ONLY_CURRENT_PATH = 0,
@@ -39,7 +41,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
         Link<> m_aClickHdl;
 
         void appendField();
-        void clearFields( unsigned int nStartIndex );
+        bool showField( unsigned int nIndex, unsigned int nWidthMax );
 
         DECL_LINK ( ClickLinkHdl, FixedHyperlink* );
 
