@@ -1,0 +1,10 @@
+--- configure
++++ configure
+@@ -10196,6 +10196,7 @@
+       else
+         ld_shlibs=no
+       fi
++hardcode_libdir_flag_spec=
+       ;;
+ 
+     netbsd*)
