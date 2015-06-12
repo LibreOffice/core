@@ -411,11 +411,26 @@ endif
 
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice.exe}" \
+	-Dorg.openoffice.test.arg.soffice="$(gb_JunitTest_SOFFICEARG)" \
 	-Dorg.openoffice.test.arg.env=PATH="$$$$PATH" \
 	-Dorg.openoffice.test.arg.user=$(call gb_Helper_make_url,$(call gb_JunitTest_get_userdir,$(1)))
+	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 
 endef
+
+
+define gb_Module_DEBUGRUNCOMMAND
+printf "\nAttach the debugger to soffice.bin\n\n"
+unset VCL_HIDE_WINDOWS && \
+OFFICESCRIPT=`mktemp` && \
+printf "$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice.exe" > $${OFFICESCRIPT} && \
+printf " --norestore --nologo '--accept=pipe,name=$(USER);urp;'\n" >> $${OFFICESCRIPT} && \
+$(SHELL) $${OFFICESCRIPT} && \
+rm $${OFFICESCRIPT}
+endef
+
+
+
 
 # PythonTest class
 
