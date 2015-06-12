@@ -1277,44 +1277,19 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
             {
                 SwTxtFlyCnt *pFly = (SwTxtFlyCnt *)pAttr;
                 SwFrmFmt* pFmt = pAttr->GetFlyCnt().GetFrmFmt();
-
-                // In order to maintain data coherency, if the hint is a fly
-                // moved from a text node to another, we have to remove it from
-                // the first textnode then to add it to the new (this) textnode
-                const SwFmtAnchor* pAnchor = 0;
-                pFmt->GetItemState( RES_ANCHOR, false,
-                    reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
-
-                SwIndex aIdx( this, pAttr->GetStart() );
-
-                bool bChangeFlyParentNode( false );
-                if (pAnchor &&
-                    pAnchor->GetAnchorId() == FLY_AS_CHAR &&
-                    pAnchor->GetCntntAnchor() &&
-                    pAnchor->GetCntntAnchor()->nNode != *this)
-                {
-                    assert(pAnchor->GetCntntAnchor()->nNode.GetNode().IsTxtNode());
-                    SwTxtNode* textNode = pAnchor->GetCntntAnchor()->nNode.GetNode().GetTxtNode();
-
-                    if ( textNode->IsModifyLocked() )
-                    {
-                        //  Fly parent has changed but the FlyFormat is locked, so it will
-                        //  not be updated by SetAnchor (that calls Modify that updates
-                        //  relationships)
-                        textNode->RemoveAnchoredFly( pFmt );
-                        bChangeFlyParentNode = true;
-                    }
-                }
-
                 if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
                 {
-
                     // Wir muessen zuerst einfuegen, da in SetAnchor()
                     // dem FlyFrm GetStart() uebermittelt wird.
                     //JP 11.05.98: falls das Anker-Attribut schon richtig
                     // gesetzt ist, dann korrigiere dieses nach dem Einfuegen
                     // des Zeichens. Sonst muesste das immer  ausserhalb
                     // erfolgen (Fehleranfaellig !)
+                    const SwFmtAnchor* pAnchor = 0;
+                    pFmt->GetItemState( RES_ANCHOR, false,
+                        (const SfxPoolItem**)&pAnchor );
+
+                    SwIndex aIdx( this, pAttr->GetStart() );
                     const OUString c(GetCharOfTxtAttr(*pAttr));
                     OUString const ins( InsertText(c, aIdx, nInsertFlags) );
                     if (ins.isEmpty())
@@ -1378,11 +1353,6 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         return false;
                     }
                 }
-
-                // Finish relationships update now that SetAnchor has fixed part of it.
-                if (bChangeFlyParentNode)
-                    AddAnchoredFly( pFmt );
-
                 break;
             }
 
