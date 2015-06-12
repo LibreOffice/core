@@ -111,7 +111,7 @@ public class JavaPanZoomController
         mTouchEventHandler.destroy();
     }
 
-    private final static float easeOut(float t) {
+    private static final float easeOut(float t) {
         // ease-out approx.
         // -(t-1)^2+1
         t = t-1;

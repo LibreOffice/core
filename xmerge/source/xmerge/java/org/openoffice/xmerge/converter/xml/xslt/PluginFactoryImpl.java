@@ -59,7 +59,7 @@ public final class PluginFactoryImpl extends PluginFactory
     }
 
     /** ConverterCapabilities object for this type of conversion. */
-    private final static ConverterCapabilities converterCap =
+    private static final ConverterCapabilities converterCap =
         new ConverterCapabilitiesImpl();
 
     /**

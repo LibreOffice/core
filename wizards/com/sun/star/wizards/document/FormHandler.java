@@ -67,15 +67,15 @@ public class FormHandler
     public String[] sModelServices = new String[8];
     public static ControlData[] oControlData;
 
-    public final static int SOLABEL = 0;
-    public final static int SOTEXTBOX = 1;
-    public final static int SOCHECKBOX = 2;
-    public final static int SODATECONTROL = 3;
-    public final static int SOTIMECONTROL = 4;
-    public final static int SONUMERICCONTROL = 5;
-    public final static int SOGRIDCONTROL = 6;
-    public final static int SOIMAGECONTROL = 7;
-    public final static int SODATETIMECONTROL = 8;
+    public static final int SOLABEL = 0;
+    public static final int SOTEXTBOX = 1;
+    public static final int SOCHECKBOX = 2;
+    public static final int SODATECONTROL = 3;
+    public static final int SOTIMECONTROL = 4;
+    public static final int SONUMERICCONTROL = 5;
+    public static final int SOGRIDCONTROL = 6;
+    public static final int SOIMAGECONTROL = 7;
+    public static final int SODATETIMECONTROL = 8;
     public static String SOSIZETEXT = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
     private int iXPixelFactor = -1;
     private int iYPixelFactor = -1;

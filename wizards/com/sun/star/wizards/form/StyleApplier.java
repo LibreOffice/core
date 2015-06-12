@@ -55,10 +55,10 @@ public class StyleApplier
     private short iOldLayoutPos;
     private String[] StyleNames;
     private String[] FileNames;
-    private final static int SOBACKGROUNDCOLOR = 0;
-    private final static int SODBTEXTCOLOR = 1;
-    private final static int SOLABELTEXTCOLOR = 2;
-    private final static int SOBORDERCOLOR = 5;
+    private static final int SOBACKGROUNDCOLOR = 0;
+    private static final int SODBTEXTCOLOR = 1;
+    private static final int SOLABELTEXTCOLOR = 2;
+    private static final int SOBORDERCOLOR = 5;
     private Short IBorderValue = Short.valueOf((short) 1);
 
     public StyleApplier(WizardDialog CurUnoDialog, FormDocument _curFormDocument)

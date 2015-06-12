@@ -32,8 +32,8 @@ import org.xml.sax.SAXException;
 public class ObjectOleReadHandler extends ElementReadHandler
 {
 
-    private final static String RPT_CHART_CLASS_ID = "80243D39-6741-46C5-926E-069164FF87BB";
-    private final static String OOO_CHART_CLASS_ID = "12DCAE26-281F-416F-A234-C3086127382E";
+    private static final String RPT_CHART_CLASS_ID = "80243D39-6741-46C5-926E-069164FF87BB";
+    private static final String OOO_CHART_CLASS_ID = "12DCAE26-281F-416F-A234-C3086127382E";
     private final ObjectOleElement element;
 
     public ObjectOleReadHandler(final ObjectOleElement element)

@@ -59,7 +59,7 @@ import java.io.UnsupportedEncodingException;
 public final class PalmDB {
 
     /** Number of bytes for the name field in the PDB. */
-    public final static int NAME_LENGTH = 32;
+    public static final int NAME_LENGTH = 32;
 
     /** List of {@code Record} objects. */
     private Record[] records;

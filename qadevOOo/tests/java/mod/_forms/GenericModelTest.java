@@ -129,8 +129,8 @@ public class GenericModelTest extends TestCase {
     /**
      * This is the name of the Data Base which the test uses: "APITestDatabase"
      */
-    private final static String m_dbSourceName = "APITestDatabase";
-    private final static String m_TestDB = "TestDB";
+    private static final String m_dbSourceName = "APITestDatabase";
+    private static final String m_TestDB = "TestDB";
     private DBTools m_dbTools = null;
 
     private boolean m_ConnectionColsed = false;

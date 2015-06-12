@@ -40,14 +40,14 @@ import org.openoffice.xmerge.util.Debug;
 class OfficeZip {
 
     /** File name of the XML file in a zipped document. */
-    private final static String CONTENTXML = "content.xml";
+    private static final String CONTENTXML = "content.xml";
 
-    private final static String STYLEXML = "styles.xml";
-    private final static String METAXML = "meta.xml";
-    private final static String SETTINGSXML = "settings.xml";
-    private final static String MANIFESTXML = "META-INF/manifest.xml";
+    private static final String STYLEXML = "styles.xml";
+    private static final String METAXML = "meta.xml";
+    private static final String SETTINGSXML = "settings.xml";
+    private static final String MANIFESTXML = "META-INF/manifest.xml";
 
-    private final static int BUFFERSIZE = 1024;
+    private static final int BUFFERSIZE = 1024;
 
     private final List<Entry> entryList;
 

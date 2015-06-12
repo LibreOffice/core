@@ -47,7 +47,7 @@ public class AccessibleRelationSet {
     private XAccessible para2 = null;
     private XAccessible para3 = null;
     private XTextDocument xTextDoc = null;
-    private final static String[] types = {"INVALID","CONTENT_FLOWS_FROM","CONTENT_FLOWS_TO","CONTROLLED_BY","CONTROLLER_FOR","LABEL_FOR","LABELED_BY","MEMBER_OF","SUB_WINDOW_OF"};
+    private static final String[] types = {"INVALID","CONTENT_FLOWS_FROM","CONTENT_FLOWS_TO","CONTROLLED_BY","CONTROLLER_FOR","LABEL_FOR","LABELED_BY","MEMBER_OF","SUB_WINDOW_OF"};
 
     @Test public void contents_flows_to() {
         XAccessibleRelationSet set = getAccessibleRelation(para1);

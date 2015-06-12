@@ -38,11 +38,11 @@ import com.sun.star.uno.XComponentContext;
 
 public class ScriptContext extends PropertySet implements XScriptContext {
 
-    private final static String HM_DOC_REF = "DocumentReference";
-    private final static String HM_DESKTOP = "Desktop";
-    private final static String HM_COMPONENT_CONTEXT = "ComponentContext";
+    private static final String HM_DOC_REF = "DocumentReference";
+    private static final String HM_DESKTOP = "Desktop";
+    private static final String HM_COMPONENT_CONTEXT = "ComponentContext";
 
-    private final static String DOC_URI = "SCRIPTING_DOC_URI";
+    private static final String DOC_URI = "SCRIPTING_DOC_URI";
 
     public final XModel m_xModel;
     private final XScriptInvocationContext m_xInvocationContext;

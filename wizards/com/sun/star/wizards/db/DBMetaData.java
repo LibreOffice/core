@@ -130,9 +130,9 @@ public class DBMetaData
     private int iMaxColumnNameLength = -1;
     private int iMaxTableNameLength = -1;
     private boolean bPasswordIsRequired;
-    private final static int NOLIMIT = 9999999;
-    protected final static int RID_DB_COMMON = 1000;
-    private final static int INVALID = 9999999;
+    private static final int NOLIMIT = 9999999;
+    protected static final int RID_DB_COMMON = 1000;
+    private static final int INVALID = 9999999;
     public TypeInspector oTypeInspector;
     private NumberFormatter oNumberFormatter = null;
     private long lDateCorrection = INVALID;

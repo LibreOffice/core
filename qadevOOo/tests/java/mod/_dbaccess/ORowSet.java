@@ -128,7 +128,7 @@ public class ORowSet extends TestCase {
     String tableName = null;
     DataSourceDescriptor srcInf = null;
     boolean isMySQLDB = false;
-    protected final static String dbSourceName = "ORowSetDataSource";
+    protected static final String dbSourceName = "ORowSetDataSource";
     public XConnection m_connection = null;
     private Object m_rowSet = null;
     private DataSource m_dataSource;

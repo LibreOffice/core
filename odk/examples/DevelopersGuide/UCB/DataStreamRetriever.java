@@ -87,7 +87,7 @@ public class DataStreamRetriever {
             // Fill argument structure...
             OpenCommandArgument2 arg = new OpenCommandArgument2();
             arg.Mode = OpenMode.DOCUMENT;
-            arg.Priority = 32768; // Final static for 32768
+            arg.Priority = 32768; // static final for 32768
 
             // Create data sink implementation object.
             XActiveDataSink dataSink = new MyActiveDataSink();

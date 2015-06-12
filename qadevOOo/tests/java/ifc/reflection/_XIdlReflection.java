@@ -34,7 +34,7 @@ import lib.MultiMethodTest;
 */
 public class _XIdlReflection extends MultiMethodTest{
     public XIdlReflection oObj = null;
-    protected final static String typeName = "com.sun.star.container.XNameAccess";
+    protected static final String typeName = "com.sun.star.container.XNameAccess";
 
     /**
     * Test calls the method and checks returned interface

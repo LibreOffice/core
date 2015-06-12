@@ -44,7 +44,7 @@ import java.util.zip.ZipInputStream;
 
 public class UCBStreamHandler extends URLStreamHandler {
 
-    public final static String separator = "/ucb/";
+    public static final String separator = "/ucb/";
 
     private final XSimpleFileAccess m_xSimpleFileAccess;
     private final HashMap<String, InputStream> m_jarStreamMap = new HashMap<String, InputStream>(12);

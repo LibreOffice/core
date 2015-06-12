@@ -215,7 +215,7 @@ import com.sun.star.view.XControlAccess;
  * @see ifc.sdbc._RowSet
  */
 public class ODatabaseForm extends TestCase {
-    protected final static String dbSourceName = "ODatabaseFormDataSource";
+    protected static final String dbSourceName = "ODatabaseFormDataSource";
     private static int uniqueSuffix = 0;
     private static String origDB = null;
     private static String tmpDir = null;

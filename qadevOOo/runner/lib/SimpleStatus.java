@@ -29,29 +29,29 @@ class SimpleStatus {
     /**
      * The constatnt represents PASSED runtime state.
      */
-    public final static int PASSED = 0;
+    public static final int PASSED = 0;
 
     /**
      * The constant represents EXCEPTION runtime state.
      */
-    public final static int EXCEPTION = 3;
+    public static final int EXCEPTION = 3;
 
     /**
      * The constant represents SKIPPED runtime state.
      */
-    public final static int SKIPPED = 1;
+    public static final int SKIPPED = 1;
 
     /**
      * This is a private indicator for a user defined runtime state
      */
-    private final static int USER_DEFINED = 4;
+    private static final int USER_DEFINED = 4;
 
     /* Test states */
 
     /**
      * The constant represents FAILED state.
      */
-    public final static boolean FAILED = false;
+    public static final boolean FAILED = false;
 
 
 

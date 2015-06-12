@@ -206,7 +206,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
      * for the "getPhoneticCandidate" test. Euivalents are only usable for zh,CN locale.
      */
     public static class UnicodeStringPair {
-        final static int valCount = 78;
+        static final int valCount = 78;
         static final String[] sStringEquivalence = new String[valCount];
         static final char[] iUnicodeEquivalence = new char[valCount];
 

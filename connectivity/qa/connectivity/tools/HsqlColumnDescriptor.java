@@ -39,9 +39,9 @@ public class HsqlColumnDescriptor
     public final String getForeignColumn() { return ForeignColumn; }
 
     /// determines that a column is required, i.e. not nullable
-    public final static int REQUIRED    = 1;
+    public static final int REQUIRED    = 1;
     /// determines that a column is part of the primary key of its table
-    public final static int PRIMARY     = 2;
+    public static final int PRIMARY     = 2;
 
     public HsqlColumnDescriptor( String _Name, String _TypeName )
     {

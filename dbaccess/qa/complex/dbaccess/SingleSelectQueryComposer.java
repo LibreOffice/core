@@ -49,13 +49,13 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
 {
 
     private XSingleSelectQueryComposer m_composer = null;
-    private final static String COMPLEXFILTER = "( \"ID\" = 1 AND \"Postal\" = '4' )"
+    private static final String COMPLEXFILTER = "( \"ID\" = 1 AND \"Postal\" = '4' )"
             + " OR ( \"ID\" = 2 AND \"Postal\" = '5' )"
             + " OR ( \"ID\" = 3 AND \"Postal\" = '6' AND \"Address\" = '7' )"
             + " OR ( \"Address\" = '8' )"
             + " OR ( \"Postal\" = '9' )"
             + " OR ( NOW( ) = {d '2010-01-01' } )";
-    private final static String INNERPRODUCTSQUERY = "products (inner)";
+    private static final String INNERPRODUCTSQUERY = "products (inner)";
 
 
     private void createQueries() throws Exception
