@@ -19,9 +19,6 @@ ifneq ($(ENABLE_GTK3),)
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     Library_libreofficekitgtk \
     Executable_gtktiledviewer \
-))
-
-$(eval $(call gb_Module_add_targets,libreofficekit,\
     Executable_tilebench \
 ))
 endif # ($(ENABLE_GTK3),)
