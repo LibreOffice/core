@@ -57,9 +57,22 @@ bool Idle::ReadyForSchedule( bool bTimer )
     return true; // !bTimer
 }
 
-sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTime */ )
+sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ )
 {
-    return 1;
+    switch (mePriority) {
+    case SchedulerPriority::HIGHEST:
+    case SchedulerPriority::HIGH:
+    case SchedulerPriority::RESIZE:
+    case SchedulerPriority::REPAINT:
+        nMinPeriod = 1; // don't wait.
+        break;
+    default:
+        // FIXME: tdf#92036 workaround, I should be 1 too - wait 5ms
+        if (nMinPeriod > 5)
+            nMinPeriod = 5;
+        break;
+    }
+    return nMinPeriod;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
