@@ -229,7 +229,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         if( !method.is() )
         {
             OUStringBuffer buf;
-            buf.appendAscii( "pyuno::Adapater: Method " ).append( aFunctionName );
+            buf.appendAscii( "pyuno::Adapter: Method " ).append( aFunctionName );
             buf.appendAscii( " is not implemented at object " );
             PyRef str( PyObject_Repr( mWrappedObject.get() ), SAL_NO_ACQUIRE );
             buf.append(pyString2ustring(str.get()));
@@ -347,7 +347,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
     if( !hasProperty( aPropertyName ) )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "pyuno::Adapater: Property " ).append( aPropertyName );
+        buf.appendAscii( "pyuno::Adapter: Property " ).append( aPropertyName );
         buf.appendAscii( " is unknown." );
         throw UnknownPropertyException( buf.makeStringAndClear() );
     }
@@ -383,7 +383,7 @@ Any Adapter::getValue( const OUString & aPropertyName )
         if (!pyRef.is() || PyErr_Occurred())
         {
             OUStringBuffer buf;
-            buf.appendAscii( "pyuno::Adapater: Property " ).append( aPropertyName );
+            buf.appendAscii( "pyuno::Adapter: Property " ).append( aPropertyName );
             buf.appendAscii( " is unknown." );
             throw UnknownPropertyException( buf.makeStringAndClear() );
         }
