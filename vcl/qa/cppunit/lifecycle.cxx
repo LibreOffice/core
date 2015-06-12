@@ -211,7 +211,11 @@ class LeakTestObject
     bool                mbDeleted;
     VclPtr<vcl::Window> mxRef;
     void               *mpRef;
-    LeakTestObject() {}
+    LeakTestObject()
+        : mbDeleted(false)
+        , mpRef(NULL)
+    {
+    }
 public:
     template<typename vcl_type, typename... Arg> static LeakTestObject *
         Create(Arg &&... arg)
