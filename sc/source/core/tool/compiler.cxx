@@ -2519,7 +2519,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             // unassigned for import.
             eOp = ocCeil_Math;
         }
-        else if (eOp == ocCeil && mxSymbols->isOOXML())
+        else if (eOp == ocFloor && mxSymbols->isOOXML())
         {
             // Ensure that _xlfn.FLOOR.MATH maps to ocFloor_Math. ocFloor is
             // unassigned for import.
