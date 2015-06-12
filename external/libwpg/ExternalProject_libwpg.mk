@@ -35,6 +35,9 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter LINUX,$(OS)), \
+				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \

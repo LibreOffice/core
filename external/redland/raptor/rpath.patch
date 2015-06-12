@@ -1,0 +1,21 @@
+--- configure
++++ configure
+@@ -9892,6 +9892,7 @@
+       else
+         ld_shlibs=no
+       fi
++hardcode_libdir_flag_spec=
+       ;;
+ 
+     netbsd* | netbsdelf*-gnu)
+--- utils/Makefile.in
++++ utils/Makefile.in
+@@ -343,7 +343,7 @@
+ rapper_LDADD = $(top_builddir)/src/libraptor2.la
+ rdfdiff_SOURCES = rdfdiff.c $(am__append_2)
+ rdfdiff_LDADD = $(top_builddir)/src/libraptor2.la
+-all: all-am
++all:
+ 
+ .SUFFIXES:
+ .SUFFIXES: .c .lo .o .obj
