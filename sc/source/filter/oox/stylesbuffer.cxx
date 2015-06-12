@@ -2758,7 +2758,7 @@ void CellStyleBuffer::finalizeImport()
         /*  If a builtin style entry already exists, and we do not reserve all
             existing styles, we just stick with the last definition and ignore
             the preceding ones. */
-        if( bReserveAll && (aCellStyles.count( aStyleName ) > 0) )
+        if( bReserveAll && (aCellStyles.find( aStyleName ) != aCellStyles.end()) )
             aConflictNameStyles.push_back( *aIt );
         else
             aCellStyles[ aStyleName ] = *aIt;
@@ -2773,7 +2773,7 @@ void CellStyleBuffer::finalizeImport()
         // #i1624# #i1768# ignore unnamed user styles
         if( aStyleName.getLength() > 0 )
         {
-            if( aCellStyles.count( aStyleName ) > 0 )
+            if( aCellStyles.find( aStyleName ) != aCellStyles.end() )
                 aConflictNameStyles.push_back( *aIt );
             else
                 aCellStyles[ aStyleName ] = *aIt;
@@ -2781,17 +2781,18 @@ void CellStyleBuffer::finalizeImport()
     }
 
     // find unused names for all styles with conflicting names
+    // having the index counter outside the loop prevents performance problems with opening some pathological documents (tdf#62095)
+    sal_Int32 nIndex = 0;
     for( CellStyleVector::iterator aIt = aConflictNameStyles.begin(), aEnd = aConflictNameStyles.end(); aIt != aEnd; ++aIt )
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
         OUString aStyleName = lclCreateStyleName( rModel );
         OUString aUnusedName;
-        sal_Int32 nIndex = 0;
         do
         {
             aUnusedName = OUStringBuffer( aStyleName ).append( ' ' ).append( ++nIndex ).makeStringAndClear();
         }
-        while( aCellStyles.count( aUnusedName ) > 0 );
+        while( aCellStyles.find( aUnusedName ) != aCellStyles.end() );
         aCellStyles[ aUnusedName ] = *aIt;
     }
 
