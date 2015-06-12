@@ -2061,13 +2061,16 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
     SdrTextObj *pNextTextObj = NULL;
 
     if ( pPage && pPage->GetObjCount() > 1) {
-        sal_uInt32 nextIndex = (GetOrdNum()+1);
-        // FIXME
+
         if (!GetName().startsWith("Chainable")) {
             fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
             return NULL;
         }
-        pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( nextIndex ) );
+
+        sal_uInt32 nextIndex = (GetOrdNum()+1);
+
+        if (nextIndex < pPage->GetObjCount())
+            pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( nextIndex ) );
 
         return pNextTextObj;
     } else {
