@@ -600,7 +600,7 @@ class Process(ProcessErrors):
             self.exporters[export.cp_Name] = exp
         return exp
 
-    # @return tru if everything went smooth, false
+    # @return true if everything went smooth, false
     # if error(s) accured.
     def getResult(self):
         return (self.myTask.getFailed() == 0) and self.result
