@@ -292,6 +292,7 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
     static
 #endif
     const std::initializer_list<OUStringLiteral> vBlacklist = {
+        OUStringLiteral("rectangle"),
         OUStringLiteral("ellipse"),
         OUStringLiteral("ring"),
         OUStringLiteral("can"),
