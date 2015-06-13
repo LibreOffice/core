@@ -147,7 +147,6 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
             if( offset + pVariant->length + 1 < n )
             {
                 strcpy( buffer + offset, pVariant->buffer );
-                offset += pVariant->length;
             }
 
             rtl_string_release( pVariant );

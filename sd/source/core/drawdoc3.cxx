@@ -383,7 +383,6 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     bool bMergeMasterPages,
     bool bPreservePageNames)
 {
-    bool bOK = true;
     bool bContinue = true;
     bool bScaleObjects = false;
     sal_uInt16 nReplacedStandardPages = 0;
@@ -416,8 +415,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
     if (nSdPageCount==0 || nBMSdPageCount==0 || nMPageCount==0)
     {
-        bContinue = bOK = false;
-        return bContinue;
+        return false;
     }
 
     // Store the size and some other properties of the first page and notes

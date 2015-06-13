@@ -126,7 +126,7 @@ static BOOL msidbExportStorage(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR storageName)
     r = MsiViewFetch(view, &rec);
     if (r != ERROR_SUCCESS) return FALSE;
 
-    if ((r = MsiRecordReadStream(rec, 2, 0, &dataLen)) != ERROR_SUCCESS)
+    if (MsiRecordReadStream(rec, 2, 0, &dataLen) != ERROR_SUCCESS)
     {
         return FALSE;
     }

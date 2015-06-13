@@ -829,7 +829,7 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
 {
     SfxInPlaceClient* pCli = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin());
     if ( !pCli )
-        pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
+        new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
     CalcAndSetScale( xObj, &rPrt, &rFrm );
 }
 
