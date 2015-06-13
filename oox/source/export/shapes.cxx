@@ -512,7 +512,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     {
         WritePolyPolygon( tools::PolyPolygon( pShape->GetLineGeometry(true) ) );
     }
-    else if (bCustGeom && pShape)
+    else if (bCustGeom)
     {
         WriteCustomGeometry( xShape );
     }
