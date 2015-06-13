@@ -115,12 +115,9 @@ struct FSStorage_Impl
 
 FSStorage_Impl::~FSStorage_Impl()
 {
-    if ( m_pListenersContainer )
-        delete m_pListenersContainer;
-    if ( m_pTypeCollection )
-        delete m_pTypeCollection;
-    if ( m_pContent )
-        delete m_pContent;
+    delete m_pListenersContainer;
+    delete m_pTypeCollection;
+    delete m_pContent;
 }
 
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,

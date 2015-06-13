@@ -464,8 +464,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             }
         }
     }
-    if ( pProgress )
-        delete pProgress;
+    delete pProgress;
 }
 
 bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )

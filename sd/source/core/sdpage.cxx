@@ -145,8 +145,7 @@ SdPage::~SdPage()
 
     EndListenOutlineText();
 
-    if( mpItems )
-        delete mpItems;
+    delete mpItems;
 
     Clear();
 }

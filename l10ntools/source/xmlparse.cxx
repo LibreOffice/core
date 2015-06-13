@@ -333,8 +333,7 @@ XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created 
 
 void XMLFile::Extract( XMLFile *pCur )
 {
-    if( m_pXMLStrings )
-        delete m_pXMLStrings; // Elements ?
+    delete m_pXMLStrings; // Elements ?
 
     m_pXMLStrings = new XMLHashMap();
     if ( !pCur )
@@ -420,8 +419,7 @@ XMLFile& XMLFile::operator=(const XMLFile& rObj)
         m_aNodes_localize = rObj.m_aNodes_localize;
         m_vOrder = rObj.m_vOrder;
 
-        if( m_pXMLStrings )
-            delete m_pXMLStrings;
+        delete m_pXMLStrings;
 
         if( rObj.m_pXMLStrings )
         {

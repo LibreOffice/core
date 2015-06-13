@@ -302,8 +302,7 @@ SvFileStream::~SvFileStream()
 
     unlockFile( 0, 0, this );
 
-    if (pInstanceData)
-        delete pInstanceData;
+    delete pInstanceData;
 }
 
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )

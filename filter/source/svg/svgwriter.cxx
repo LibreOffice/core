@@ -106,10 +106,8 @@ SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFont
 
 SVGAttributeWriter::~SVGAttributeWriter()
 {
-    if( mpElemPaint )
-        delete mpElemPaint;
-    if( mpElemFont )
-        delete mpElemFont;
+    delete mpElemPaint;
+    delete mpElemFont;
 }
 
 double SVGAttributeWriter::ImplRound( double fValue, sal_Int32 nDecs )

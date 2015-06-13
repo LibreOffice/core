@@ -117,8 +117,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         }
         catch (const uno::RuntimeException&)
         {
-            if ( pTempStream )
-                delete pTempStream;
+            delete pTempStream;
 
             if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );
@@ -127,8 +126,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         }
         catch (const io::IOException&)
         {
-            if ( pTempStream )
-                delete pTempStream;
+            delete pTempStream;
 
             if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );
@@ -139,8 +137,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         {
         }
 
-        if ( pTempStream )
-            delete pTempStream;
+        delete pTempStream;
 
         if ( !aTempURL.isEmpty() )
             ::utl::UCBContentHelper::Kill( aTempURL );

@@ -40,7 +40,7 @@ namespace svgio
 
         SvgEllipseNode::~SvgEllipseNode()
         {
-            if(mpaTransform) delete mpaTransform;
+            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgEllipseNode::getSvgStyleAttributes() const

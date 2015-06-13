@@ -175,8 +175,7 @@ OutlineView::~OutlineView()
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener( aLink );
     DisconnectFromApplication();
 
-    if( mpProgress )
-        delete mpProgress;
+    delete mpProgress;
 
     // unregister OutlinerViews and destroy them
     for (sal_uInt16 nView = 0; nView < MAX_OUTLINERVIEWS; nView++)
@@ -604,9 +603,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 
             if (mnPagesToProcess > PROCESS_WITH_PROGRESS_THRESHOLD)
             {
-                if( mpProgress )
-                    delete mpProgress;
-
+                delete mpProgress;
                 mpProgress = new SfxProgress( GetDocSh(), SD_RESSTR(STR_CREATE_PAGES), mnPagesToProcess );
             }
             else
@@ -1196,9 +1193,7 @@ IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
 
     if (mnPagesToProcess)
     {
-        if( mpProgress )
-            delete mpProgress;
-
+        delete mpProgress;
         mpProgress = new SfxProgress( GetDocSh(), SD_RESSTR(STR_DELETE_PAGES), mnPagesToProcess );
     }
     mrOutliner.UpdateFields();

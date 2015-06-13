@@ -148,8 +148,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException, std::exce
             if ( nId > 0 )
             {
                 AddonsParams* pRuntimeItemData = static_cast<AddonsParams*>(m_pToolBar->GetItemData( nId ));
-                if ( pRuntimeItemData )
-                    delete pRuntimeItemData;
+                delete pRuntimeItemData;
                 m_pToolBar->SetItemData( nId, NULL );
             }
         }

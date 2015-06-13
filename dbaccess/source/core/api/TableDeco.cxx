@@ -75,8 +75,7 @@ ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnect
 
 ODBTableDecorator::~ODBTableDecorator()
 {
-    if ( m_pColumns )
-        delete m_pColumns;
+    delete m_pColumns;
 }
 
 Sequence< sal_Int8 > ODBTableDecorator::getImplementationId() throw (RuntimeException, std::exception)

@@ -819,8 +819,7 @@ void SfxAcceleratorConfigPage::dispose()
     while (pEntry)
     {
         TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
-        if (pUserData)
-            delete pUserData;
+        delete pUserData;
         pEntry = m_pEntriesBox->Next(pEntry);
     }
 
@@ -828,8 +827,7 @@ void SfxAcceleratorConfigPage::dispose()
     while (pEntry)
     {
         TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
-        if (pUserData)
-            delete pUserData;
+        delete pUserData;
         pEntry = m_pKeyBox->Next(pEntry);
     }
 
@@ -1427,8 +1425,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& r
     bool bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
     short nDialogType = bSave ? ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
                               : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-    if ( m_pFileDlg )
-        delete m_pFileDlg;
+    delete m_pFileDlg;
     m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
 
     m_pFileDlg->SetTitle( rTitle );

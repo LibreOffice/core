@@ -91,20 +91,10 @@ LwpFoundry::LwpFoundry(LwpObjectStream *pStrm, LwpDocument* pDoc)
 
 LwpFoundry::~LwpFoundry()
 {
-    if(m_pPieceMgr)
-    {
-        delete m_pPieceMgr;
-    }
-    if(m_pStyleMgr)
-    {
-        delete m_pStyleMgr;
-    }
-    if (m_pDropcapMgr)
-        delete m_pDropcapMgr;
-    if (m_pBulletStyleMgr)
-    {
-        delete m_pBulletStyleMgr;
-    }
+    delete m_pPieceMgr;
+    delete m_pStyleMgr;
+    delete m_pDropcapMgr;
+    delete m_pBulletStyleMgr;
 }
 
 void LwpFoundry::Read(LwpObjectStream *pStrm)

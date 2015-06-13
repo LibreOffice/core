@@ -40,7 +40,7 @@ namespace svgio
 
         SvgLineNode::~SvgLineNode()
         {
-            if(mpaTransform) delete mpaTransform;
+            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgLineNode::getSvgStyleAttributes() const

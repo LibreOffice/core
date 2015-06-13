@@ -1013,8 +1013,7 @@ void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
 void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
     const Selection& rSel, bool bMulti )
 {
-    if( pEdCtrl )
-        delete pEdCtrl;
+    delete pEdCtrl;
     nImpFlags |= SvTreeListBoxFlags::IN_EDT;
     nImpFlags &= ~SvTreeListBoxFlags::EDTEND_CALLED;
     HideFocus();
@@ -1040,8 +1039,6 @@ IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl)
     // that we don't call the selection handler in the GetFocus of the listbox
     // with the old entry text.
     pEdCtrl->Hide();
-    // delete pEdCtrl;
-    // pEdCtrl = 0;
     nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
     GrabFocus();
     return 0;

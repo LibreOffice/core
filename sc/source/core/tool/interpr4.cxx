@@ -3736,14 +3736,11 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
 
 ScInterpreter::~ScInterpreter()
 {
-//  delete pStack;
-
     if ( pStackObj == pGlobalStack )
         bGlobalStackInUse = false;
     else
         delete pStackObj;
-    if (pTokenMatrixMap)
-        delete pTokenMatrixMap;
+    delete pTokenMatrixMap;
 }
 
 void ScInterpreter::SetGlobalConfig(const ScCalcConfig& rConfig)

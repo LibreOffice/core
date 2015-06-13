@@ -357,8 +357,7 @@ void EndParser()
     delete pStringContainer;
     pStringContainer = NULL;
 
-    if( pExp )
-        delete pExp;
+    delete pExp;
     pTC      = NULL;
     pFI      = NULL;
     pExp     = NULL;

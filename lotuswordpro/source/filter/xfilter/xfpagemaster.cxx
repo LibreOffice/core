@@ -78,18 +78,12 @@ m_fSepSpaceBelow(0), m_nSepLengthPercent(0)
 
 XFPageMaster::~XFPageMaster()
 {
-    if( m_pBorders )
-        delete m_pBorders;
-    if( m_pShadow )
-        delete m_pShadow;
-    if( m_pColumns )
-        delete m_pColumns;
-    if( m_pHeaderStyle )
-        delete m_pHeaderStyle;
-    if( m_pFooterStyle )
-        delete m_pFooterStyle;
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBorders;
+    delete m_pShadow;
+    delete m_pColumns;
+    delete m_pHeaderStyle;
+    delete m_pFooterStyle;
+    delete m_pBGImage;
 }
 
 enumXFStyle XFPageMaster::GetStyleFamily()
@@ -140,8 +134,7 @@ void    XFPageMaster::SetBackColor(XFColor color)
 
 void    XFPageMaster::SetBackImage(XFBGImage *image)
 {
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBGImage;
     m_pBGImage = image;
 }
 

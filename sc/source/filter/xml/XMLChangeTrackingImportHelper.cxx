@@ -136,8 +136,7 @@ ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionTypeP)
 
 ScMyDelAction::~ScMyDelAction()
 {
-    if (pInsCutOff)
-        delete pInsCutOff;
+    delete pInsCutOff;
 }
 
 ScMyMoveAction::ScMyMoveAction()
@@ -149,8 +148,7 @@ ScMyMoveAction::ScMyMoveAction()
 
 ScMyMoveAction::~ScMyMoveAction()
 {
-    if (pMoveRanges)
-        delete pMoveRanges;
+    delete pMoveRanges;
 }
 
 ScMyContentAction::ScMyContentAction()

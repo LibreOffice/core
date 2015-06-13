@@ -54,8 +54,7 @@ ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWr
 
 ViewElementListProvider::~ViewElementListProvider()
 {
-    if(m_pFontList)
-        delete m_pFontList;
+    delete m_pFontList;
 }
 
 XColorListRef   ViewElementListProvider::GetColorTable() const

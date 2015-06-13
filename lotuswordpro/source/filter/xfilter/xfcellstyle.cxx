@@ -74,8 +74,7 @@ XFCellStyle::XFCellStyle()
 
 XFCellStyle::~XFCellStyle()
 {
-    if( m_pBorders )
-        delete m_pBorders;
+    delete m_pBorders;
 }
 
 void XFCellStyle::SetPadding(double left, double right,double top, double bottom)
@@ -97,15 +96,13 @@ void    XFCellStyle::SetBackColor(XFColor& color)
 
 void    XFCellStyle::SetBackImage(XFBGImage *pImage)
 {
-    if( m_pBackImage )
-        delete m_pBackImage;
+    delete m_pBackImage;
     m_pBackImage = pImage;
 }
 
 void    XFCellStyle::SetBorders(XFBorders *pBorders)
 {
-    if( m_pBorders )
-        delete m_pBorders;
+    delete m_pBorders;
     m_pBorders = pBorders;
 }
 

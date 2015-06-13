@@ -778,11 +778,8 @@ sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Poi
 
 GraphicDisplayCacheEntry::~GraphicDisplayCacheEntry()
 {
-    if( mpMtf )
-        delete mpMtf;
-
-    if( mpBmpEx )
-        delete mpBmpEx;
+    delete mpMtf;
+    delete mpBmpEx;
 }
 
 void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const

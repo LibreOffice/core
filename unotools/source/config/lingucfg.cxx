@@ -815,8 +815,7 @@ SvtLinguConfig::~SvtLinguConfig()
 
     if (--nCfgItemRefCount <= 0)
     {
-        if (pCfgItem)
-            delete pCfgItem;
+        delete pCfgItem;
         pCfgItem = 0;
     }
 }

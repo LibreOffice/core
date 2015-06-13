@@ -881,8 +881,7 @@ GtkSalFrame::~GtkSalFrame()
     }
 #endif
 
-    if( m_pIMHandler )
-        delete m_pIMHandler;
+    delete m_pIMHandler;
 
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );

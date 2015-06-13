@@ -1549,8 +1549,7 @@ bool SdPublishingDlg::Load()
 
         bool bOk = pIStm && ( pIStm->GetError() == 0);
 
-        if( pIStm )
-            delete pIStm;
+        delete pIStm;
 
         if( !bOk )
             return false;

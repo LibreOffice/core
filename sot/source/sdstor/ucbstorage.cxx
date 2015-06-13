@@ -702,14 +702,12 @@ UCBStorageStream_Impl::~UCBStorageStream_Impl()
     if( m_rSource.is() )
         m_rSource.clear();
 
-    if( m_pStream )
-        delete m_pStream;
+    delete m_pStream;
 
     if ( !m_aTempURL.isEmpty() )
         ::utl::UCBContentHelper::Kill( m_aTempURL );
 
-    if( m_pContent )
-        delete m_pContent;
+    delete m_pContent;
 }
 
 

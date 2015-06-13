@@ -218,19 +218,14 @@ Idlc::Idlc(Options* pOptions)
 
 Idlc::~Idlc()
 {
-    if (m_pRoot)
-        delete m_pRoot;
-    if (m_pScopes)
-        delete m_pScopes;
-    if (m_pErrorHandler)
-        delete m_pErrorHandler;
+    delete m_pRoot;
+    delete m_pScopes;
+    delete m_pErrorHandler;
 }
 
 void Idlc::init()
 {
-    if ( m_pRoot )
-        delete m_pRoot;
-
+    delete m_pRoot;
     m_pRoot = new AstModule(NT_root, OString(), NULL);
 
     // push the root node on the stack
@@ -256,8 +251,7 @@ void Idlc::reset()
     m_documentation.clear();
 
     m_pScopes->clear();
-    if ( m_pRoot)
-        delete m_pRoot;
+    delete m_pRoot;
 
     m_pRoot = new AstModule(NT_root, OString(), NULL);
 
@@ -363,10 +357,7 @@ Idlc* SAL_CALL idlc()
 
 Idlc* SAL_CALL setIdlc(Options* pOptions)
 {
-    if ( pStaticIdlc )
-    {
-        delete pStaticIdlc;
-    }
+    delete pStaticIdlc;
     pStaticIdlc = new Idlc(pOptions);
     pStaticIdlc->init();
     return pStaticIdlc;

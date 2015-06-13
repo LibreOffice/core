@@ -1520,8 +1520,7 @@ NameTranslator_Impl::NameTranslator_Impl( const INetURLObject& rActualFolder )
 
 NameTranslator_Impl::~NameTranslator_Impl()
 {
-    if( mpActFolder )
-        delete mpActFolder;
+    delete mpActFolder;
 }
 
 void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
@@ -1798,7 +1797,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
             if( bDelete )
             {
                 // none of the filters did match
-                delete (*aContentLoop);
+                delete *aContentLoop;
 
                 if ( maContent.begin() == aContentLoop )
                 {
