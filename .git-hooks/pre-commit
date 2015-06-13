@@ -68,6 +68,10 @@ sub check_whitespaces($)
             {
                 bad_line("trailing whitespace", $_ , $src_limited);
             }
+            if (/\r$/)
+            {
+                bad_line("DOS lineends", $_ , $src_limited);
+            }
             if (/\s*	/)
             {
                 bad_line("indent with Tab", $_, $src_limited);
