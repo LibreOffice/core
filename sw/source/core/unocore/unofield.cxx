@@ -2610,7 +2610,7 @@ throw (uno::RuntimeException, std::exception)
     const OUString sServiceName =
         SwXServiceProvider::GetProviderName(m_pImpl->m_nServiceId);
 
-    // case-corected version of service-name (see #i67811)
+    // case-corrected version of service-name (see #i67811)
     // (need to supply both because of compatibility to older versions)
     const OUString sServiceNameCC(  OldNameToNewName_Impl( sServiceName ) );
     sal_Int32 nLen = sServiceName == sServiceNameCC ? 2 : 3;

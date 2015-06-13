@@ -101,7 +101,7 @@ namespace
                                     }
                                 }
 
-                                // remember new last corected character node
+                                // remember new last corrected character node
                                 pLast = pCharNode;
                             }
                             break;
