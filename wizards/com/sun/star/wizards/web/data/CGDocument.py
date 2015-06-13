@@ -36,7 +36,7 @@ relevant only for the web-wizard.
 On the other-hand, the web-wizard can read those fields automatically
 from SO documents.
 In order to avoid conflict by saving, I use two fields: "cp_title", which
-should be read from the configuratin (saved session), and "title" which is
+should be read from the configuration (saved session), and "title" which is
 the value read from the document.
 The *cp_title* "overrides" *title*, if exists. if not, *title* is used.
 The same is valid for *description* and *author*.
