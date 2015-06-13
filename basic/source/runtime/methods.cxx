@@ -726,9 +726,9 @@ void implRemoveDirRecursive( const OUString& aDirPath )
             File::remove( aPath );
         }
     }
-    nRet = aDir.close();
+    aDir.close();
 
-    nRet = Directory::remove( aDirPath );
+    Directory::remove( aDirPath );
 }
 
 

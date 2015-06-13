@@ -359,7 +359,6 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     TCHAR tchBuffer[BUFSIZE];   // buffer for string
 
     lpszSystemInfo = tchBuffer;
-    cchBuff = BUFSIZE;
     if( GetUserNameA(lpszSystemInfo, &cchBuff) )
         strUserName = ::rtl::OUString::createFromAscii( lpszSystemInfo );
 

@@ -850,9 +850,9 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     Any aObjAny = getIntrospectionTestObject( xMgr );
 
     // inspect introspection service
+    xIntrospection->inspect( aObjAny );
+    xIntrospection->inspect( aObjAny );
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
-    xAccess = xIntrospection->inspect( aObjAny );
-    xAccess = xIntrospection->inspect( aObjAny );
     OSL_ENSURE( xAccess.is(), "introspection failed, no XIntrospectionAccess returned" );
     if( !xAccess.is() )
         return sal_False;

@@ -733,11 +733,11 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
 
 SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
 {
-    Bitmap  aBmp;
-    sal_uLong   nStmPos = rIStm.Tell();
+    Bitmap      aBmp;
+    sal_uLong   nStmPos;
     sal_uInt32  nAnimMagic1, nAnimMagic2;
     SvStreamEndian nOldFormat = rIStm.GetEndian();
-    bool    bReadAnimations = false;
+    bool        bReadAnimations = false;
 
     rIStm.SetEndian( SvStreamEndian::LITTLE );
     nStmPos = rIStm.Tell();

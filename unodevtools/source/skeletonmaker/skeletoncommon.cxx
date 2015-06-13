@@ -36,7 +36,7 @@ namespace skeletonmaker {
 
 void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
 {
-    sal_Int32 index = -1;
+    sal_Int32 index;
 #ifdef SAL_UNX
     index = filename.lastIndexOf('/');
 #else

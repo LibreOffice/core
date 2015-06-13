@@ -1925,19 +1925,16 @@ static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
 
 static rtl_uString* osl_ProfileGenerateExtension(rtl_uString* ustrFileName, rtl_uString* ustrExtension)
 {
-    rtl_uString* ustrNewFileName=0;
+    rtl_uString* ustrNewFileName = 0;
     rtl_uString* ustrOldExtension = 0;
-    sal_Unicode* pExtensionBuf = 0;
-    sal_Unicode* pFileNameBuf  = 0;
-    sal_Int32 nIndex = -1;
 
-    pFileNameBuf = rtl_uString_getStr(ustrFileName);
+    sal_Unicode* pFileNameBuf = rtl_uString_getStr(ustrFileName);
 
-    rtl_uString_newFromAscii(&ustrOldExtension,".");
+    rtl_uString_newFromAscii(&ustrOldExtension, ".");
 
-    pExtensionBuf = rtl_uString_getStr(ustrOldExtension);
+    sal_Unicode* pExtensionBuf = rtl_uString_getStr(ustrOldExtension);
 
-    nIndex = rtl_ustr_lastIndexOfChar(pFileNameBuf,*pExtensionBuf);
+    sal_Int32 nIndex = rtl_ustr_lastIndexOfChar(pFileNameBuf, *pExtensionBuf);
 
     rtl_uString_newReplaceStrAt(&ustrNewFileName,
                                 ustrFileName,

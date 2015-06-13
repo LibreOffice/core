@@ -1313,8 +1313,6 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             TextView* pTextView = pTextEngine->GetActiveView();
             const TextSelection& rCurrentSelection = pTextView->GetSelection();
             //determine if the selection contains a field
-            bool bHasField = false;
-            bool bHasError = false;
             bool bHasFieldLeft = false;
             bool bHasErrorLeft = false;
 
@@ -1327,8 +1325,8 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             const TextCharAttrib* pBackAttrLeft = 0;
             const TextCharAttrib* pErrorAttrLeft = 0;
 
-            bHasField = pBackAttr != 0 && (bHasRange || pBackAttr->GetEnd() > aCursor.GetIndex());
-            bHasError = pErrorAttr != 0 && (bHasRange || pErrorAttr->GetEnd() > aCursor.GetIndex());
+            bool bHasField = pBackAttr != 0 && (bHasRange || pBackAttr->GetEnd() > aCursor.GetIndex());
+            bool bHasError = pErrorAttr != 0 && (bHasRange || pErrorAttr->GetEnd() > aCursor.GetIndex());
             if(bHasRange)
             {
                 if(pBackAttr &&

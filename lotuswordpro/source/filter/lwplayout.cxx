@@ -1607,13 +1607,11 @@ XFColumns* LwpLayout::GetXFColumns()
     for(sal_uInt16 nIndex = 0; nIndex<nCols; nIndex++)
     {
         XFColumn aColumn;
-        sal_Int32 nWidth = static_cast<sal_Int32>(GetColWidth(nIndex));
-        nWidth=8305/nCols;  //relative width
+        sal_Int32 nWidth = 8305/nCols;  //relative width
         aColumn.SetRelWidth(nWidth);
 
         //the left and right margins is 0;
         double nGap = GetColGap(nIndex)/2;
-        //nGap=0;
         aColumn.SetMargins(nGap,nGap);
         if(nIndex==0)
         {

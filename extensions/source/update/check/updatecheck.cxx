@@ -1487,7 +1487,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
     osl::FileBase::RC rc;
     OUString aTargetDir( UpdateCheckConfig::getAllUsersDirectory() + "/sun" );
 
-    rc = osl::Directory::createPath( aTargetDir );
+    osl::Directory::createPath( aTargetDir );
 
     OUString aFileName = "releasenote" +
                               OUString::number( nNum ) +
@@ -1497,7 +1497,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
     rc = osl::FileBase::getAbsoluteFileURL( aTargetDir, aFileName, aFilePath );
     if ( rc != osl::FileBase::E_None ) return false;
 
-    rc = osl::File::remove( aFilePath );
+    osl::File::remove( aFilePath );
 
     // don't store empty release notes, but delete old ones
     if ( rURL.isEmpty() )
@@ -1505,7 +1505,6 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
 
     osl::File aFile( aFilePath );
     rc = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
-
     if ( rc != osl::FileBase::E_None ) return false;
 
     OString aLineBuf("[InternetShortcut]\r\n");

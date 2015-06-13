@@ -313,9 +313,9 @@ inline bool ifFileExist( const ::rtl::OUString & str )
 //check if the file can be written
 inline bool ifFileCanWrite( const ::rtl::OUString & str )
 {
-    bool  bCheckResult = false;
     //on Windows, the file has no write right, but can be written
 #ifdef WNT
+    bool  bCheckResult = false;
     ::rtl::OUString  aUStr  = str.copy( 0 );
     if ( isURL( str ) )
         ::osl::FileBase::getSystemPathFromFileURL( str, aUStr );
@@ -327,7 +327,7 @@ inline bool ifFileCanWrite( const ::rtl::OUString & str )
      //on UNX, just test if open success with osl_File_OpenFlag_Write
 #else
     ::osl::File testFile( str );
-    bCheckResult = (osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Write ));
+    bool bCheckResult = (osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Write ));
 #endif
     return bCheckResult;
 }
@@ -1397,13 +1397,13 @@ namespace osl_FileStatus
         void isValid_002()
         {
             createTestFile( aTmpName6 );
-            sal_uInt32 mask_file = ( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_Attributes |
+            sal_uInt32 mask_file = osl_FileStatus_Mask_Type         | osl_FileStatus_Mask_Attributes |
                                    osl_FileStatus_Mask_CreationTime | osl_FileStatus_Mask_AccessTime |
                                    osl_FileStatus_Mask_ModifyTime   | osl_FileStatus_Mask_FileSize   |
-                                   osl_FileStatus_Mask_FileName     | osl_FileStatus_Mask_FileURL) ;
-             ::osl::FileStatus   rFileStatus( mask_file );
-                ::osl::FileBase::RC nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem_file );
-            nError1 = rItem_file.getFileStatus( rFileStatus );
+                                   osl_FileStatus_Mask_FileName     | osl_FileStatus_Mask_FileURL;
+            ::osl::FileStatus   rFileStatus( mask_file );
+            ::osl::DirectoryItem::get( aTmpName6, rItem_file );
+            ::osl::FileBase::RC nError1 = rItem_file.getFileStatus( rFileStatus );
 
             CPPUNIT_ASSERT_MESSAGE( errorToStr(nError1).getStr(), ::osl::FileBase::E_None == nError1 );
 
@@ -1413,7 +1413,7 @@ namespace osl_FileStatus
 
 //      sal_Bool bOk = rFileStatus.isValid( mask_file );
 
-                check_FileStatus(rFileStatus);
+            check_FileStatus(rFileStatus);
             deleteTestFile( aTmpName6 );
 
                 // CPPUNIT_ASSERT_MESSAGE( "test for isValid function: regular file mask fields test, #osl_FileStatus_Mask_CreationTime# should be valid field for regular file, but feedback is invalid",
@@ -2232,8 +2232,8 @@ namespace osl_File
 
             nError1 = testFile.open( osl_File_OpenFlag_Create );
             bool bOK = ( File::E_ACCES == nError1 );
-#if defined (WNT )
-            bOK = sal_True;  /// in Windows, you can create file in c:/ any way.
+#ifdef WNT
+            bOK = true;  /// in Windows, you can create file in c:/ any way.
             testFile.close();
             deleteTestFile( aTestFile);
 #endif

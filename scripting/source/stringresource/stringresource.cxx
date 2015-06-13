@@ -1977,10 +1977,7 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
     if( !xInputStream.is() || pLocaleItem == NULL )
         return false;
 
-    bool bSuccess = false;
     Reference< io::XTextInputStream2 > xTextInputStream = io::TextInputStream::create( m_xContext );
-
-    bSuccess = true;
 
     xTextInputStream->setInputStream( xInputStream );
 
@@ -2092,7 +2089,7 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
         rIndexMap[ aResourceID ] = pLocaleItem->m_nNextIndex++;
     }
 
-    return bSuccess;
+    return true;
 }
 
 

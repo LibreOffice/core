@@ -5170,7 +5170,7 @@ void Test::testAreasWithNotes()
 
     SCCOL col;
     SCROW row;
-    bool dataFound = false;
+    bool dataFound;
 
     // only cell notes (empty content)
 

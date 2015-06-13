@@ -431,7 +431,6 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
             continue;
         }
 
-        pAccChildObj = NULL;
         pAccChildObj = GetAccObjByXAcc(pRChild.get());
         if(!pAccChildObj)
         {

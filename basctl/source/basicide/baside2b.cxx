@@ -746,12 +746,9 @@ void EditorWindow::HandleProcedureCompletion()
     sal_uLong nLine = aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) );
 
-    bool bFoundName = false;
     OUString sProcType;
     OUString sProcName;
-
-    bFoundName = GetProcedureName(aLine, sProcType, sProcName);
-
+    bool bFoundName = GetProcedureName(aLine, sProcType, sProcName);
     if (!bFoundName)
       return;
 

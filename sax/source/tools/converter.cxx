@@ -818,12 +818,11 @@ bool Converter::convertDuration(double& rfTime,
     {
         if ( nDays )
             nHours += nDays * 24;               // add the days to the hours part
-        double fTempTime = 0.0;
         double fHour = nHours;
         double fMin = nMins;
         double fSec = nSecs;
         double fFraction = sDoubleStr.toDouble();
-        fTempTime = fHour / 24;
+        double fTempTime = fHour / 24;
         fTempTime += fMin / (24 * 60);
         fTempTime += fSec / (24 * 60 * 60);
         fTempTime += fFraction / (24 * 60 * 60);
