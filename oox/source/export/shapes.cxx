@@ -494,7 +494,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     // we export non-primitive shapes to custom geometry
     // we also export non-ooxml shapes which have handles/equations to custom geometry, because
     // we cannot convert ODF equations to DrawingML equations. TODO: see what binary DOC export filter does.
-    // but our WritePolyPolygon() function is incomplete, therefore we use a blacklist
+    // but our WritePolyPolygon()/WriteCustomGeometry() functions are incomplete, therefore we use a blacklist
     // we use a whitelist for shapes where mapping to MSO preset shape is not optimal
     bool bCustGeom = true;
     if( sShapeType == "ooxml-non-primitive" )
