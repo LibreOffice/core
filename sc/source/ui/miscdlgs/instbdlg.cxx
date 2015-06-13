@@ -281,8 +281,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
 
 IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
 {
-    if ( pDocInserter )
-        delete pDocInserter;
+    delete pDocInserter;
     pDocInserter = new ::sfx2::DocumentInserter(
             OUString::createFromAscii( ScDocShell::Factory().GetShortName() ) );
     pDocInserter->StartExecuteModal( LINK( this, ScInsertTableDlg, DialogClosedHdl ) );

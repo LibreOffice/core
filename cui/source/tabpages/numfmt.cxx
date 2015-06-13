@@ -511,8 +511,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
             break;
     }
 
-    if ( pNumFmtShell )
-         delete pNumFmtShell;   // delete old shell if applicable (== reset)
+    delete pNumFmtShell;   // delete old shell if applicable (== reset)
 
     nInitFormat = ( pValFmtAttr )               // memorize init key
                     ? pValFmtAttr->GetValue()   // (for FillItemSet())

@@ -108,13 +108,9 @@ COooFilter::COooFilter() :
 COooFilter::~COooFilter()
 {
     delete [] m_pAttributes;
-
-    if (m_pContentReader)
-        delete m_pContentReader;
-    if (m_pMetaInfoReader)
-        delete m_pMetaInfoReader;
-    if (m_pStream)
-        delete m_pStream;
+    delete m_pContentReader;
+    delete m_pMetaInfoReader;
+    delete m_pStream;
 
     InterlockedDecrement( &g_lInstances );
 }
@@ -576,12 +572,10 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
     // Open the file previously specified in call to IPersistFile::Load and get content.
     try
     {
-        if (m_pMetaInfoReader)
-            delete m_pMetaInfoReader;
+        delete m_pMetaInfoReader;
         m_pMetaInfoReader = new CMetaInfoReader(WStringToString(m_pwszFileName));
 
-        if (m_pContentReader)
-            delete m_pContentReader;
+        delete m_pContentReader;
         m_pContentReader = new CContentReader(WStringToString(m_pwszFileName), m_pMetaInfoReader->getDefaultLocale());
     }
     catch (const std::exception&)
@@ -637,12 +631,10 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
     m_pStream = new BufferStream(pStm);
     try
     {
-        if (m_pMetaInfoReader)
-            delete m_pMetaInfoReader;
+        delete m_pMetaInfoReader;
         m_pMetaInfoReader = new CMetaInfoReader(m_pStream);
 
-        if (m_pContentReader)
-            delete m_pContentReader;
+        delete m_pContentReader;
         m_pContentReader = new CContentReader(m_pStream, m_pMetaInfoReader->getDefaultLocale());
     }
     catch (const std::exception&)

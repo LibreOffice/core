@@ -2217,8 +2217,7 @@ void CustomAnimationDialog::dispose()
 
 STLPropertySet* CustomAnimationDialog::getResultSet()
 {
-    if( mpResultSet )
-        delete mpResultSet;
+    delete mpResultSet;
 
     mpResultSet = createDefaultSet();
 
@@ -2292,8 +2291,7 @@ PropertyControl::~PropertyControl()
 
 void PropertyControl::dispose()
 {
-    if( mpSubControl )
-        delete mpSubControl;
+    delete mpSubControl;
     ListBox::dispose();
 }
 

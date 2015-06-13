@@ -210,8 +210,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exc
         {
             AddonStatusbarItemData *pUserData = static_cast< AddonStatusbarItemData *>(
                 m_pStatusBar->GetItemData( m_pStatusBar->GetItemId( n ) ) );
-            if ( pUserData )
-                delete pUserData;
+            delete pUserData;
         }
 
         m_pStatusBar.disposeAndClear();

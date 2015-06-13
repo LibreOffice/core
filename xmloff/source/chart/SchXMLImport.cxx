@@ -104,28 +104,18 @@ SchXMLImportHelper::SchXMLImportHelper() :
 
 SchXMLImportHelper::~SchXMLImportHelper()
 {
-        // delete token maps
-    if( mpChartDocElemTokenMap )
-        delete mpChartDocElemTokenMap;
-    if( mpTableElemTokenMap )
-        delete mpTableElemTokenMap;
-    if( mpChartElemTokenMap )
-        delete mpChartElemTokenMap;
-    if( mpPlotAreaElemTokenMap )
-        delete mpPlotAreaElemTokenMap;
-    if( mpSeriesElemTokenMap )
-        delete mpSeriesElemTokenMap;
+    // delete token maps
+    delete mpChartDocElemTokenMap;
+    delete mpTableElemTokenMap;
+    delete mpChartElemTokenMap;
+    delete mpPlotAreaElemTokenMap;
+    delete mpSeriesElemTokenMap;
 
-    if( mpChartAttrTokenMap )
-        delete mpChartAttrTokenMap;
-    if( mpPlotAreaAttrTokenMap )
-        delete mpPlotAreaAttrTokenMap;
-    if( mpAutoStyleAttrTokenMap )
-        delete mpAutoStyleAttrTokenMap;
-    if( mpCellAttrTokenMap )
-        delete mpCellAttrTokenMap;
-    if( mpSeriesAttrTokenMap )
-        delete mpSeriesAttrTokenMap;
+    delete mpChartAttrTokenMap;
+    delete mpPlotAreaAttrTokenMap;
+    delete mpAutoStyleAttrTokenMap;
+    delete mpCellAttrTokenMap;
+    delete mpSeriesAttrTokenMap;
     delete mpPropMappingAttrTokenMap;
 }
 

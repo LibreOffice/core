@@ -74,8 +74,7 @@ LwpObject::LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm)
 */
 LwpObject::~LwpObject()
 {
-    if(m_pObjStrm)
-        delete m_pObjStrm;
+    delete m_pObjStrm;
 
 }
 /**

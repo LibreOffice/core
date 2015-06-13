@@ -1054,8 +1054,7 @@ struct PDFFileImplData
 
 PDFFile::~PDFFile()
 {
-    if( m_pData )
-        delete m_pData;
+    delete m_pData;
 }
 
 bool PDFFile::isEncrypted() const

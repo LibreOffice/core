@@ -75,8 +75,7 @@ SdUnoPageBackground::~SdUnoPageBackground() throw()
     if( mpDoc )
         EndListening( *mpDoc );
 
-    if( mpSet )
-        delete mpSet;
+    delete mpSet;
 }
 
 void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )

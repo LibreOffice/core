@@ -390,10 +390,8 @@ public:
 
 void NWPixmapCacheData::SetPixmap( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask )
 {
-    if( m_pixmap )
-        delete m_pixmap;
-    if( m_mask )
-        delete m_mask;
+    delete m_pixmap;
+    delete m_mask;
 
     m_pixmap = pPixmap;
     m_mask = pMask;

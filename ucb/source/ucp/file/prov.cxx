@@ -93,8 +93,7 @@ FileProvider::FileProvider( const Reference< XComponentContext >& rxContext )
 
 FileProvider::~FileProvider()
 {
-    if( m_pMyShell )
-        delete m_pMyShell;
+    delete m_pMyShell;
 }
 
 // XInitialization

@@ -42,7 +42,7 @@ namespace svgio
 
         SvgTextNode::~SvgTextNode()
         {
-            if(mpaTransform) delete mpaTransform;
+            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgTextNode::getSvgStyleAttributes() const

@@ -677,8 +677,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (rInner == nIEnd) break;
             if (bPositive) ++rInner; else --rInner;
         }
-        if ( pNewPattern )
-            delete pNewPattern;
+        delete pNewPattern;
 
         //  Analyse
 

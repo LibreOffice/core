@@ -48,7 +48,7 @@ namespace svgio
 
         SvgMaskNode::~SvgMaskNode()
         {
-            if(mpaTransform) delete mpaTransform;
+            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgMaskNode::getSvgStyleAttributes() const

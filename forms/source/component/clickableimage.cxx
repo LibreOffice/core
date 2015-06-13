@@ -722,8 +722,7 @@ namespace frm
 
         if (!rURL.isEmpty() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
        {
-            if (m_pMedium)
-                delete m_pMedium;
+            delete m_pMedium;
 
             m_pMedium = new SfxMedium(rURL, STREAM_STD_READ);
 

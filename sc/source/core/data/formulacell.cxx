@@ -1105,8 +1105,7 @@ void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
     ScCompiler aComp( pDocument, aPos);
     aComp.SetGrammar(eGrammar);
     pCode = aComp.CompileString( rFormula );
-    if ( pCodeOld )
-        delete pCodeOld;
+    delete pCodeOld;
     if( !pCode->GetCodeError() )
     {
         if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() && rFormula == aResult.GetHybridFormula() )
@@ -1140,8 +1139,7 @@ void ScFormulaCell::Compile(
     ScTokenArray* pCodeOld = pCode;
     ScCompiler aComp(rCxt, aPos);
     pCode = aComp.CompileString( rFormula );
-    if ( pCodeOld )
-        delete pCodeOld;
+    delete pCodeOld;
     if( !pCode->GetCodeError() )
     {
         if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() && rFormula == aResult.GetHybridFormula() )

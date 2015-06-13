@@ -270,8 +270,7 @@ void HelpLinker::addBookmark( FILE* pFile_DBHelp, std::string thishid,
 
 void HelpLinker::initIndexerPreProcessor()
 {
-    if( m_pIndexerPreProcessor )
-        delete m_pIndexerPreProcessor;
+    delete m_pIndexerPreProcessor;
     std::string mod = module;
     std::transform (mod.begin(), mod.end(), mod.begin(), tocharlower);
     m_pIndexerPreProcessor = new IndexerPreProcessor( mod, indexDirParentName,

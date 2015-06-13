@@ -2574,8 +2574,7 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
 
 SdXMLChartShapeContext::~SdXMLChartShapeContext()
 {
-    if( mpChartContext )
-        delete mpChartContext;
+    delete mpChartContext;
 }
 
 void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)

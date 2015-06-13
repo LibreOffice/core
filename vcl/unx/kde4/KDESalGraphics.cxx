@@ -80,8 +80,7 @@ KDESalGraphics::KDESalGraphics() :
 
 KDESalGraphics::~KDESalGraphics()
 {
-    if (m_image)
-        delete m_image;
+    delete m_image;
 }
 
 bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
@@ -249,9 +248,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     //if no image, or resized, make a new image
     if (!m_image || m_image->size() != widgetRect.size())
     {
-        if (m_image)
-            delete m_image;
-
+        delete m_image;
         m_image = new QImage( widgetRect.width(),
                               widgetRect.height(),
                               QImage::Format_ARGB32 );

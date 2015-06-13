@@ -122,14 +122,10 @@ AstExpression::AstExpression(OString* scopedName)
 
 AstExpression::~AstExpression()
 {
-    if ( m_exprValue )
-        delete m_exprValue;
-    if ( m_subExpr1 )
-        delete m_subExpr1;
-    if ( m_subExpr2 )
-        delete m_subExpr2;
-    if ( m_pSymbolicName )
-        delete m_pSymbolicName;
+    delete m_exprValue;
+    delete m_subExpr1;
+    delete m_subExpr2;
+    delete m_pSymbolicName;
 }
 
 /*

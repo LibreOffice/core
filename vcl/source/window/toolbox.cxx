@@ -1646,8 +1646,7 @@ void ToolBox::dispose()
     mpFloatWin = NULL;
 
     // delete private data
-    if (mpData)
-        delete mpData;
+    delete mpData;
     mpData = NULL;
 
     // remove the lists when there are no more toolbox references to

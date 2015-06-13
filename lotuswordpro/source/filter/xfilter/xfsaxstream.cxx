@@ -87,8 +87,7 @@ XFSaxStream::XFSaxStream(Reference<XDocumentHandler>& xHandler)
 
 XFSaxStream::~XFSaxStream()
 {
-    if( m_pAttrList )
-        delete m_pAttrList;
+    delete m_pAttrList;
 }
 
 void        XFSaxStream::StartDocument()

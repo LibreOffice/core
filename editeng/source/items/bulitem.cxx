@@ -181,8 +181,7 @@ SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 
 SvxBulletItem::~SvxBulletItem()
 {
-    if( pGraphicObject )
-        delete pGraphicObject;
+    delete pGraphicObject;
 }
 
 

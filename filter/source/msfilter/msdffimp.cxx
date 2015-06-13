@@ -4987,15 +4987,13 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
                     case 0x0390:
-                        if (pImpRec->pXRelTo)
-                            delete pImpRec->pXRelTo;
+                        delete pImpRec->pXRelTo;
                         pImpRec->pXRelTo = new sal_uInt32;
                         *(pImpRec->pXRelTo) = nUDData;
                         break;
                     case 0x0391: pImpRec->nYAlign = nUDData; break;
                     case 0x0392:
-                        if (pImpRec->pYRelTo)
-                            delete pImpRec->pYRelTo;
+                        delete pImpRec->pYRelTo;
                         pImpRec->pYRelTo = new sal_uInt32;
                         *(pImpRec->pYRelTo) = nUDData;
                         break;

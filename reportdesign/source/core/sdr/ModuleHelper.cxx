@@ -63,8 +63,7 @@ OModuleImpl::OModuleImpl()
 
 OModuleImpl::~OModuleImpl()
 {
-    if (m_pResources)
-        delete m_pResources;
+    delete m_pResources;
 }
 
 

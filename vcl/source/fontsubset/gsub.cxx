@@ -319,8 +319,7 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
 void ReleaseGSUB(struct _TrueTypeFont* pTTFile)
 {
     GlyphSubstitution* pGlyphSubstitution = static_cast<GlyphSubstitution*>(pTTFile->pGSubstitution);
-    if( pGlyphSubstitution )
-        delete pGlyphSubstitution;
+    delete pGlyphSubstitution;
 }
 
 int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph )

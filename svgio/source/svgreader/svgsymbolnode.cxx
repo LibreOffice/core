@@ -37,7 +37,7 @@ namespace svgio
 
         SvgSymbolNode::~SvgSymbolNode()
         {
-            if(mpViewBox) delete mpViewBox;
+            delete mpViewBox;
         }
 
         const SvgStyleAttributes* SvgSymbolNode::getSvgStyleAttributes() const

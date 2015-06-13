@@ -181,8 +181,7 @@ bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
     {
         // otherwise it will be executed asynchronously
         {
-            if( pRequest )
-                delete pRequest;
+            delete pRequest;
 
             pRequest = new DdeRequest( *pConnection, sItem );
             pRequest->SetDataHdl( LINK( this, SvDDEObject, ImplGetDDEData ) );

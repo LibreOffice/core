@@ -47,8 +47,8 @@ Collator_Unicode::Collator_Unicode()
 
 Collator_Unicode::~Collator_Unicode()
 {
-    if (collator) delete collator;
-    if (uca_base) delete uca_base;
+    delete collator;
+    delete uca_base;
 #ifndef DISABLE_DYNLOADING
     if (hModule) osl_unloadModule(hModule);
 #endif

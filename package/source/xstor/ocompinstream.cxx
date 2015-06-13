@@ -63,18 +63,15 @@ OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
 
 OInputCompStream::~OInputCompStream()
 {
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( !m_bDisposed )
     {
-        ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
-
-        if ( !m_bDisposed )
-        {
-            m_refCount++;
-            dispose();
-        }
-
-        if ( m_pInterfaceContainer )
-            delete m_pInterfaceContainer;
+        m_refCount++;
+        dispose();
     }
+
+    delete m_pInterfaceContainer;
 }
 
 uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )

@@ -75,8 +75,7 @@ XFCell::XFCell()
 
 XFCell::~XFCell()
 {
-    if( m_pSubTable )
-        delete m_pSubTable;
+    delete m_pSubTable;
 }
 
 void    XFCell::Add(XFContent *pContent)

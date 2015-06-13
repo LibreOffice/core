@@ -59,7 +59,7 @@ namespace svgio
 
         SvgGradientNode::~SvgGradientNode()
         {
-            if(mpaGradientTransform) delete mpaGradientTransform;
+            delete mpaGradientTransform;
             // do NOT delete mpXLink, it's only referenced, not owned
         }
 

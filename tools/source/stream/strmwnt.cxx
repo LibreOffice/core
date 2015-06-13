@@ -129,8 +129,7 @@ SvFileStream::SvFileStream()
 SvFileStream::~SvFileStream()
 {
     Close();
-    if (pInstanceData)
-        delete pInstanceData;
+    delete pInstanceData;
 }
 
 /// Does not check for EOF, makes isEof callable

@@ -43,7 +43,7 @@ namespace svgio
 
         SvgMarkerNode::~SvgMarkerNode()
         {
-            if(mpViewBox) delete mpViewBox;
+            delete mpViewBox;
         }
 
         const SvgStyleAttributes* SvgMarkerNode::getSvgStyleAttributes() const

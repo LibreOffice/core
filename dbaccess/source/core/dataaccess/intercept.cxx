@@ -96,12 +96,8 @@ OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
 
 OInterceptor::~OInterceptor()
 {
-    if( m_pDisposeEventListeners )
-        delete m_pDisposeEventListeners;
-
-    if(m_pStatCL)
-        delete m_pStatCL;
-
+    delete m_pDisposeEventListeners;
+    delete m_pStatCL;
 }
 
 struct DispatchHelper

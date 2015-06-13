@@ -977,8 +977,7 @@ ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
 
 ScXMLChangeTextPContext::~ScXMLChangeTextPContext()
 {
-    if (pTextPContext)
-        delete pTextPContext;
+    delete pTextPContext;
 }
 
 SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTempPrefix,

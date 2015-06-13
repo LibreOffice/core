@@ -113,9 +113,7 @@ ORowSetBase::~ORowSetBase()
         m_pColumns = NULL;
     }
 
-    if ( m_pEmptyCollection )
-        delete m_pEmptyCollection;
-
+    delete m_pEmptyCollection;
 }
 
 // com::sun::star::lang::XTypeProvider
