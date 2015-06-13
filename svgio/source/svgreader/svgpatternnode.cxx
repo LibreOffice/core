@@ -54,10 +54,10 @@ namespace svgio
 
         SvgPatternNode::~SvgPatternNode()
         {
-            if(mpViewBox) delete mpViewBox;
-            if(mpaPatternTransform) delete mpaPatternTransform;
-            if(mpPatternUnits) delete mpPatternUnits;
-            if(mpPatternContentUnits) delete mpPatternContentUnits;
+            delete mpViewBox;
+            delete mpaPatternTransform;
+            delete mpPatternUnits;
+            delete mpPatternContentUnits;
         }
 
         const SvgStyleAttributes* SvgPatternNode::getSvgStyleAttributes() const

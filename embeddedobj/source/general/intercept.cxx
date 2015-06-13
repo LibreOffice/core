@@ -62,11 +62,8 @@ Interceptor::Interceptor( DocumentHolder* pDocHolder )
 
 Interceptor::~Interceptor()
 {
-    if( m_pDisposeEventListeners )
-        delete m_pDisposeEventListeners;
-
-    if(m_pStatCL)
-        delete m_pStatCL;
+    delete m_pDisposeEventListeners;
+    delete m_pStatCL;
 }
 
 //XDispatch

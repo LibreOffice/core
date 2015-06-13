@@ -200,18 +200,18 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
         mpPresPagePropsMapper = 0L;
     }
 
-    if(mpGroupShapeElemTokenMap) delete mpGroupShapeElemTokenMap;
-    if(mpFrameShapeElemTokenMap) delete mpFrameShapeElemTokenMap;
+    delete mpGroupShapeElemTokenMap;
+    delete mpFrameShapeElemTokenMap;
 
-    if(mpPolygonShapeAttrTokenMap) delete mpPolygonShapeAttrTokenMap;
-    if(mpPathShapeAttrTokenMap) delete mpPathShapeAttrTokenMap;
-    if(mp3DSceneShapeElemTokenMap) delete mp3DSceneShapeElemTokenMap;
-    if(mp3DObjectAttrTokenMap) delete mp3DObjectAttrTokenMap;
-    if(mp3DPolygonBasedAttrTokenMap) delete mp3DPolygonBasedAttrTokenMap;
-    if(mp3DCubeObjectAttrTokenMap) delete mp3DCubeObjectAttrTokenMap;
-    if(mp3DSphereObjectAttrTokenMap) delete mp3DSphereObjectAttrTokenMap;
-    if(mp3DSceneShapeAttrTokenMap) delete mp3DSceneShapeAttrTokenMap;
-    if(mp3DLightAttrTokenMap) delete mp3DLightAttrTokenMap;
+    delete mpPolygonShapeAttrTokenMap;
+    delete mpPathShapeAttrTokenMap;
+    delete mp3DSceneShapeElemTokenMap;
+    delete mp3DObjectAttrTokenMap;
+    delete mp3DPolygonBasedAttrTokenMap;
+    delete mp3DCubeObjectAttrTokenMap;
+    delete mp3DSphereObjectAttrTokenMap;
+    delete mp3DSceneShapeAttrTokenMap;
+    delete mp3DLightAttrTokenMap;
 
     // Styles or AutoStyles context?
     if(mpStylesContext)

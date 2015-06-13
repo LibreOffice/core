@@ -89,41 +89,33 @@ XFFrameStyle::XFFrameStyle()
 
 XFFrameStyle::~XFFrameStyle()
 {
-    if( m_pBorders )
-        delete m_pBorders;
-    if( m_pColumns )
-        delete m_pColumns;
-    if( m_pShadow )
-        delete m_pShadow;
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBorders;
+    delete m_pColumns;
+    delete m_pShadow;
+    delete m_pBGImage;
 }
 
 void    XFFrameStyle::SetBorders(XFBorders *pBorders)
 {
-    if( m_pBorders )
-        delete m_pBorders;
+    delete m_pBorders;
     m_pBorders = pBorders;
 }
 
 void    XFFrameStyle::SetColumns(XFColumns *pColumns)
 {
-    if( m_pColumns )
-        delete m_pColumns;
+    delete m_pColumns;
     m_pColumns = pColumns;
 }
 
 void    XFFrameStyle::SetShadow(XFShadow *pShadow)
 {
-    if( m_pShadow )
-        delete m_pShadow;
+    delete m_pShadow;
     m_pShadow = pShadow;
 }
 
 void    XFFrameStyle::SetBackImage(XFBGImage *image)
 {
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBGImage;
     m_pBGImage = image;
 }
 

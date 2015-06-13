@@ -1406,8 +1406,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                         DoubleClick();
                     else
                     {
-                        if ( mpOldSelectTable )
-                            delete mpOldSelectTable;
+                        delete mpOldSelectTable;
                         maOldCurDate = maCurDate;
                         mpOldSelectTable = new IntDateSet( *mpSelectTable );
 
@@ -1994,8 +1993,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
 
 void Calendar::StartSelection()
 {
-    if ( mpOldSelectTable )
-        delete mpOldSelectTable;
+    delete mpOldSelectTable;
     maOldCurDate = maCurDate;
     mpOldSelectTable = new IntDateSet( *mpSelectTable );
 

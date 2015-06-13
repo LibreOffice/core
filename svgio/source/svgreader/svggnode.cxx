@@ -38,7 +38,7 @@ namespace svgio
 
         SvgGNode::~SvgGNode()
         {
-            if(mpaTransform) delete mpaTransform;
+            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgGNode::getSvgStyleAttributes() const

@@ -155,8 +155,7 @@ void RscDefine::DecRef()
 
 void RscDefine::DefineToNumber()
 {
-    if( pExp )
-        delete pExp;
+    delete pExp;
     pExp = NULL;
     SetName(OString::number(lId));
 }

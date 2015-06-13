@@ -421,26 +421,16 @@ SdXMLImport::~SdXMLImport() throw ()
         mpMasterStylesContext->ReleaseRef();
 
     // delete all token maps
-    if(mpDocElemTokenMap)
-        delete mpDocElemTokenMap;
-    if(mpBodyElemTokenMap)
-        delete mpBodyElemTokenMap;
-    if(mpStylesElemTokenMap)
-        delete mpStylesElemTokenMap;
-    if(mpMasterPageElemTokenMap)
-        delete mpMasterPageElemTokenMap;
-    if(mpMasterPageAttrTokenMap)
-        delete mpMasterPageAttrTokenMap;
-    if(mpPageMasterAttrTokenMap)
-        delete mpPageMasterAttrTokenMap;
-    if(mpPageMasterStyleAttrTokenMap)
-        delete mpPageMasterStyleAttrTokenMap;
-    if(mpDrawPageAttrTokenMap)
-        delete mpDrawPageAttrTokenMap;
-    if(mpDrawPageElemTokenMap)
-        delete mpDrawPageElemTokenMap;
-    if(mpPresentationPlaceholderAttrTokenMap)
-        delete mpPresentationPlaceholderAttrTokenMap;
+    delete mpDocElemTokenMap;
+    delete mpBodyElemTokenMap;
+    delete mpStylesElemTokenMap;
+    delete mpMasterPageElemTokenMap;
+    delete mpMasterPageAttrTokenMap;
+    delete mpPageMasterAttrTokenMap;
+    delete mpPageMasterStyleAttrTokenMap;
+    delete mpDrawPageAttrTokenMap;
+    delete mpDrawPageElemTokenMap;
+    delete mpPresentationPlaceholderAttrTokenMap;
 }
 
 const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()

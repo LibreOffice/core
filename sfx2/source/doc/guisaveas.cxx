@@ -370,11 +370,8 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 ModelData_Impl::~ModelData_Impl()
 {
     FreeDocumentProps();
-    if ( m_pDocumentPropsHM )
-        delete m_pDocumentPropsHM;
-
-    if ( m_pModulePropsHM )
-        delete m_pModulePropsHM;
+    delete m_pDocumentPropsHM;
+    delete m_pModulePropsHM;
 }
 
 

@@ -53,8 +53,7 @@ AccessibleTextHelper::AccessibleTextHelper(
 
 AccessibleTextHelper::~AccessibleTextHelper()
 {
-    if( m_pTextHelper )
-        delete m_pTextHelper;
+    delete m_pTextHelper;
 }
 
 // ____ XInitialization ____

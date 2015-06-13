@@ -548,11 +548,8 @@ MethodEntry::MethodEntry()
 
 MethodEntry::~MethodEntry()
 {
-    if (m_params)
-        delete[] m_params;
-
-    if (m_excNames)
-        delete[] m_excNames;
+    delete[] m_params;
+    delete[] m_excNames;
 }
 
 void MethodEntry::setData(const OString&    name,

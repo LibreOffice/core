@@ -108,8 +108,7 @@ XFRowStyle& XFRowStyle::operator=(XFRowStyle const &other)
         m_fMinHeight = other.m_fMinHeight;
         m_aBackColor = other.m_aBackColor;
 
-        if( m_pBGImage )
-            delete m_pBGImage;
+        delete m_pBGImage;
 
         if( other.m_pBGImage )
             m_pBGImage = new XFBGImage(*other.m_pBGImage);

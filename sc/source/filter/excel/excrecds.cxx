@@ -568,8 +568,7 @@ ExcFilterCondition::ExcFilterCondition() :
 
 ExcFilterCondition::~ExcFilterCondition()
 {
-    if( pText )
-        delete pText;
+    delete pText;
 }
 
 sal_Size ExcFilterCondition::GetTextBytes() const

@@ -1043,8 +1043,7 @@ PluginInputStream::~PluginInputStream()
     }
     else
         osl::File::remove( aFile );
-    if( m_pContent )
-        delete m_pContent;
+    delete m_pContent;
 }
 
 PluginStreamType PluginInputStream::getStreamType()

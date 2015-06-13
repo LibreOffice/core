@@ -112,11 +112,8 @@ Interceptor::Interceptor(
 
 Interceptor::~Interceptor()
 {
-    if( m_pDisposeEventListeners )
-        delete m_pDisposeEventListeners;
-
-    if(m_pStatCL)
-        delete m_pStatCL;
+    delete m_pDisposeEventListeners;
+    delete m_pStatCL;
 
     DocumentHolder* pTmpDocH = NULL;
     uno::Reference< uno::XInterface > xLock;

@@ -37,16 +37,11 @@ ScMySharedData::ScMySharedData(const sal_Int32 nTempTableCount) :
 
 ScMySharedData::~ScMySharedData()
 {
-    if (pShapesContainer)
-        delete pShapesContainer;
-    if (pTableShapes)
-        delete pTableShapes;
-    if (pDrawPages)
-        delete pDrawPages;
-    if (pDetectiveObjContainer)
-        delete pDetectiveObjContainer;
-    if (pNoteShapes)
-        delete pNoteShapes;
+    delete pShapesContainer;
+    delete pTableShapes;
+    delete pDrawPages;
+    delete pDetectiveObjContainer;
+    delete pNoteShapes;
 }
 
 void ScMySharedData::SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol)

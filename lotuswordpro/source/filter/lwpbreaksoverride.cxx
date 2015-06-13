@@ -79,8 +79,7 @@ LwpBreaksOverride::LwpBreaksOverride(LwpBreaksOverride const& rOther)
 
 LwpBreaksOverride::~LwpBreaksOverride()
 {
-    if( m_pNextStyle )
-        delete m_pNextStyle;
+    delete m_pNextStyle;
 }
 
 LwpBreaksOverride* LwpBreaksOverride::clone() const

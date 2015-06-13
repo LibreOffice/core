@@ -266,10 +266,8 @@ TextElement* ParagraphElement::getFirstTextChild() const
 
 PageElement::~PageElement()
 {
-    if( HeaderElement )
-        delete HeaderElement;
-    if( FooterElement )
-        delete FooterElement;
+    delete HeaderElement;
+    delete FooterElement;
 }
 
 void PageElement::visitedBy( ElementTreeVisitor&                          rVisitor,

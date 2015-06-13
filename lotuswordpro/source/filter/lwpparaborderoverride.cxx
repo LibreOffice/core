@@ -113,14 +113,10 @@ LwpParaBorderOverride::LwpParaBorderOverride(LwpParaBorderOverride const& rOther
 
 LwpParaBorderOverride::~LwpParaBorderOverride()
 {
-    if( m_pBorderStuff )
-        delete m_pBorderStuff;
-    if( m_pBetweenStuff )
-        delete m_pBetweenStuff;
-    if( m_pShadow )
-        delete m_pShadow;
-    if( m_pMargins )
-        delete m_pMargins;
+    delete m_pBorderStuff;
+    delete m_pBetweenStuff;
+    delete m_pShadow;
+    delete m_pMargins;
 }
 
 LwpParaBorderOverride* LwpParaBorderOverride::clone() const

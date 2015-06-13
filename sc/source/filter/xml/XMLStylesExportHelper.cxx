@@ -339,8 +339,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
             rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
         }
     }
-    if (pMessage)
-        delete pMessage;
+    delete pMessage;
 }
 
 void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)

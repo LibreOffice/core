@@ -79,8 +79,7 @@ XFRow::~XFRow()
     for( it=m_aCells.begin(); it!=m_aCells.end(); ++it )
     {
         XFCell *pCell = (*it).second;
-        if( pCell )
-            delete pCell;
+        delete pCell;
     }
 }
 
@@ -88,16 +87,6 @@ void    XFRow::AddCell(XFCell *pCell)
 {
     if( !pCell )
         return;
-/*  sal_Int32   col = pCell->GetCol();
-    if( col<1 )
-    {
-        pCell->SetCol(m_aCells.size()+1);
-    }
-
-    col = pCell->GetCol();
-    if( m_aCells.find(col) != m_aCells.end() )
-        delete m_aCells[col];
-*/
     sal_Int32 col = m_aCells.size()+1;
     pCell->SetCol(col);
     pCell->SetOwnerRow(this);

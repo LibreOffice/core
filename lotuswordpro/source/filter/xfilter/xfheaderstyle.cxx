@@ -73,12 +73,9 @@ XFHeaderStyle::XFHeaderStyle(bool isFooter)
 
 XFHeaderStyle::~XFHeaderStyle()
 {
-    if( m_pBorders )
-        delete m_pBorders;
-    if( m_pBGImage )
-        delete m_pBGImage;
-    if( m_pShadow )
-        delete m_pShadow;
+    delete m_pBorders;
+    delete m_pBGImage;
+    delete m_pShadow;
 }
 
 void    XFHeaderStyle::SetMargins(double left, double right, double bottom)
@@ -114,15 +111,13 @@ void    XFHeaderStyle::SetShadow(XFShadow *pShadow)
 
 void    XFHeaderStyle::SetBorders(XFBorders *pBorders)
 {
-    if( m_pBorders )
-        delete m_pBorders;
+    delete m_pBorders;
     m_pBorders = pBorders;
 }
 
 void    XFHeaderStyle::SetBackImage(XFBGImage *image)
 {
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBGImage;
     m_pBGImage = image;
 }
 

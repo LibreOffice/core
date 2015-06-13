@@ -258,8 +258,7 @@ void Export::Init()
 
 Export::~Export()
 {
-    if( pParseQueue )
-        delete pParseQueue;
+    delete pParseQueue;
     if ( bMergeMode )
     {
         aOutput.mSimple->close();
@@ -1315,9 +1314,10 @@ ParserQueue::ParserQueue( Export& aExportObj )
 }
 
 
-ParserQueue::~ParserQueue(){
-    if( aQueueNext )    delete aQueueNext;
-    if( aQueueCur )     delete aQueueCur;
+ParserQueue::~ParserQueue()
+{
+    delete aQueueNext;
+    delete aQueueCur;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

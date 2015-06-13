@@ -433,8 +433,7 @@ SvStream::~SvStream()
     if ( xLockBytes.Is() )
         Flush();
 
-    if( pRWBuf )
-        delete[] pRWBuf;
+    delete[] pRWBuf;
 }
 
 void SvStream::ClearError()

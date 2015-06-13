@@ -307,8 +307,7 @@ void HWPFile::TagsRead()
             }
             break;
             case FILETAG_OLE_OBJECT:
-                if (oledata)
-                    delete oledata;
+                delete oledata;
                 oledata = new OlePicture(size);
                 oledata->Read(*this);
                 break;

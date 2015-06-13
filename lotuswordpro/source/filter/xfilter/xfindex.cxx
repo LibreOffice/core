@@ -76,8 +76,7 @@ XFIndex::XFIndex()
 
 XFIndex::~XFIndex()
 {
-    if( m_pTitle )
-        delete m_pTitle;
+    delete m_pTitle;
 
     for(sal_uInt16 i=1;i<MAX_TOC_LEVEL+1;i++)
     {
@@ -88,7 +87,7 @@ XFIndex::~XFIndex()
     {
         XFIndexTemplate * pTemplate = m_aTemplates.back();
         m_aTemplates.pop_back();
-        delete pTemplate;pTemplate=NULL;
+        delete pTemplate;
     }
 }
 

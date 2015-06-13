@@ -41,7 +41,7 @@ namespace svgio
 
         SvgUseNode::~SvgUseNode()
         {
-            if(mpaTransform) delete mpaTransform;
+            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgUseNode::getSvgStyleAttributes() const

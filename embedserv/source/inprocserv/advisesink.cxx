@@ -92,8 +92,7 @@ OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pList
 
 OleWrapperAdviseSink::~OleWrapperAdviseSink()
 {
-    if ( m_pFormatEtc )
-        delete m_pFormatEtc;
+    delete m_pFormatEtc;
 }
 
 STDMETHODIMP OleWrapperAdviseSink::QueryInterface( REFIID riid , void** ppv )

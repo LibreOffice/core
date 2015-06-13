@@ -883,8 +883,7 @@ T602ImportFilterDialog::T602ImportFilterDialog(const ::com::sun::star::uno::Refe
 
 T602ImportFilterDialog::~T602ImportFilterDialog()
 {
-    if (mpResMgr)
-        delete mpResMgr;
+    delete mpResMgr;
 }
 
 // XLocalizable

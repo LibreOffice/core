@@ -66,8 +66,7 @@ namespace COMPMOD_NAMESPACE
 
     OModuleImpl::~OModuleImpl()
     {
-        if (m_pResources)
-            delete m_pResources;
+        delete m_pResources;
     }
 
 

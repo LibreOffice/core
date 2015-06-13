@@ -111,8 +111,7 @@ void ScSpecialFilterDlg::dispose()
 
     delete pOptionsMgr;
 
-    if ( pOutItem )
-        delete pOutItem;
+    delete pOutItem;
 
     // Hack: RefInput-Kontrolle
     pIdle->Stop();

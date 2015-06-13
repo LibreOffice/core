@@ -101,8 +101,7 @@ SvxRTFParser::~SvxRTFParser()
 
 void SvxRTFParser::SetInsPos( const SvxPosition& rNew )
 {
-    if( pInsPos )
-        delete pInsPos;
+    delete pInsPos;
     pInsPos = rNew.Clone();
 }
 
@@ -1043,8 +1042,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
         } while( false );
 
-        if( pOld )
-            delete pOld;
+        delete pOld;
 
         bNewGroup = false;
     }

@@ -237,8 +237,7 @@ OUString SmDocShell::GetAccessibleText()
 
 void SmDocShell::Parse()
 {
-    if (pTree)
-        delete pTree;
+    delete pTree;
     ReplaceBadChars();
     pTree = aInterpreter.Parse(aText);
     nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
@@ -679,8 +678,7 @@ SmDocShell::~SmDocShell()
     EndListening(*pp->GetConfig());
 
 
-    if(pCursor)
-        delete pCursor;
+    delete pCursor;
     pCursor = NULL;
 
     delete pEditEngine;

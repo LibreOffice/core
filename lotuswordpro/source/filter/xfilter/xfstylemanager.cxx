@@ -203,8 +203,7 @@ IXFStyleRet XFStyleManager::AddStyle(IXFStyle *pStyle)
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleOutline )
     {
-        if( s_pOutlineStyle )
-            delete s_pOutlineStyle;
+        delete s_pOutlineStyle;
         s_pOutlineStyle = pStyle;
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleStrokeDash )

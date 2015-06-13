@@ -71,23 +71,19 @@ XFMasterPage::XFMasterPage()
 
 XFMasterPage::~XFMasterPage()
 {
-    if( m_pHeader )
-        delete m_pHeader;
-    if( m_pFooter )
-        delete m_pFooter;
+    delete m_pHeader;
+    delete m_pFooter;
 }
 
 void    XFMasterPage::SetHeader(XFHeader *pHeader)
 {
-    if( m_pHeader )
-        delete m_pHeader;
+    delete m_pHeader;
     m_pHeader = pHeader;
 }
 
 void    XFMasterPage::SetFooter(XFFooter *pFooter)
 {
-    if( m_pFooter )
-        delete m_pFooter;
+    delete m_pFooter;
     m_pFooter = pFooter;
 }
 

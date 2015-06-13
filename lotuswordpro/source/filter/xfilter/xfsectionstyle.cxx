@@ -70,10 +70,8 @@ XFSectionStyle::XFSectionStyle()
 
 XFSectionStyle::~XFSectionStyle()
 {
-    if( m_pColumns )
-        delete m_pColumns;
-    if( m_pBackImage )
-        delete m_pBackImage;
+    delete m_pColumns;
+    delete m_pBackImage;
 }
 
 enumXFStyle XFSectionStyle::GetStyleFamily()
@@ -93,8 +91,7 @@ void XFSectionStyle::SetMarginRight(double right)
 
 void    XFSectionStyle::SetColumns(XFColumns *pColumns)
 {
-    if( m_pColumns )
-        delete m_pColumns;
+    delete m_pColumns;
     m_pColumns = pColumns;
 }
 

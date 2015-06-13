@@ -44,8 +44,7 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
 
 OTempFileService::~OTempFileService ()
 {
-    if ( mpTempFile )
-        delete mpTempFile;
+    delete mpTempFile;
 }
 
 // XInterface

@@ -77,8 +77,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
 
 ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
 {
-    if( m_pLayoutData )
-        delete m_pLayoutData;
+    delete m_pLayoutData;
     delete mpMenu;
 }
 

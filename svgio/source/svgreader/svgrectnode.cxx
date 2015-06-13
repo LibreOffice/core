@@ -42,7 +42,7 @@ namespace svgio
 
         SvgRectNode::~SvgRectNode()
         {
-            if(mpaTransform) delete mpaTransform;
+            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgRectNode::getSvgStyleAttributes() const

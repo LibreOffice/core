@@ -57,7 +57,7 @@ namespace svgio
 
         SvgImageNode::~SvgImageNode()
         {
-            if(mpaTransform) delete mpaTransform;
+            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgImageNode::getSvgStyleAttributes() const

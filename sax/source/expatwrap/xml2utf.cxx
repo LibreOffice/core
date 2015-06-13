@@ -118,10 +118,8 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
 
 XMLFile2UTFConverter::~XMLFile2UTFConverter()
 {
-    if( m_pText2Unicode )
-        delete m_pText2Unicode;
-    if( m_pUnicode2Text )
-        delete m_pUnicode2Text;
+    delete m_pText2Unicode;
+    delete m_pUnicode2Text;
 }
 
 

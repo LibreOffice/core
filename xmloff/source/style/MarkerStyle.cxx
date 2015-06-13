@@ -136,8 +136,7 @@ bool XMLMarkerStyleImport::importXML(
         }
     }
 
-    if( pViewBox )
-        delete pViewBox;
+    delete pViewBox;
 
     return bHasViewBox && bHasPathData;
 }

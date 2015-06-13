@@ -162,8 +162,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics* pGraphics, long &nDX, long
 
 X11SalVirtualDevice::~X11SalVirtualDevice()
 {
-    if( pGraphics_ )
-        delete pGraphics_;
+    delete pGraphics_;
     pGraphics_ = NULL;
 
     if( GetDrawable() && !bExternPixmap_ )

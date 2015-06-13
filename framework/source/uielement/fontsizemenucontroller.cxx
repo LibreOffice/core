@@ -155,8 +155,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         vcl::FontInfo aFntInfo = pFontList->Get( m_aFontDescriptor.Name, m_aFontDescriptor.StyleName );
 
         // setup font size array
-        if ( m_pHeightArray )
-            delete m_pHeightArray;
+        delete m_pHeightArray;
 
         const sal_IntPtr* pTempAry;
         const sal_IntPtr* pAry = pFontList->GetSizeAry( aFntInfo );

@@ -76,15 +76,13 @@ XFConfigManager::~XFConfigManager()
 
 void XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
 {
-    if( m_pLineNumberConfig )
-        delete m_pLineNumberConfig;
+    delete m_pLineNumberConfig;
     m_pLineNumberConfig = pLNConfig;
 }
 
 void    XFConfigManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
 {
-    if( m_pFootnoteConfig )
-        delete m_pFootnoteConfig;
+    delete m_pFootnoteConfig;
     m_pFootnoteConfig = pFNConfig;
 }
 

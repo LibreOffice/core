@@ -91,8 +91,7 @@ MQuery::~MQuery()
     NULL )
         m_aQueryDirectory->directoryQuery->StopQuery(m_aQueryDirectory->contextId);
 
-    if ( m_aQueryDirectory )
-        delete m_aQueryDirectory;
+    delete m_aQueryDirectory;
 
     NS_IF_RELEASE( m_aQueryHelper);
 

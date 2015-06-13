@@ -136,7 +136,7 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
     if (this != &other)
     {
         // first , clean member
-        delete(m_pBGImage);
+        delete m_pBGImage;
         m_aTabs.Reset();
 
         m_strParentStyleName = other.m_strParentStyleName;
@@ -186,10 +186,8 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
 
 XFParaStyle::~XFParaStyle()
 {
-    if( m_pBorders )
-        delete m_pBorders;
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBorders;
+    delete m_pBGImage;
 }
 
 enumXFStyle XFParaStyle::GetStyleFamily()
@@ -234,15 +232,13 @@ void    XFParaStyle::SetBackColor(XFColor& color)
 
 void    XFParaStyle::SetBackImage(XFBGImage *image)
 {
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBGImage;
     m_pBGImage = image;
 }
 
 void    XFParaStyle::SetBorders(XFBorders *pBorders)
 {
-    if( m_pBorders )
-        delete m_pBorders;
+    delete m_pBorders;
     m_pBorders = pBorders;
 }
 

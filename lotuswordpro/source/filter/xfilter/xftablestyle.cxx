@@ -69,14 +69,12 @@ XFTableStyle::XFTableStyle()
 
 XFTableStyle::~XFTableStyle()
 {
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBGImage;
 }
 
 void    XFTableStyle::SetBackImage(XFBGImage *pImage)
 {
-    if( m_pBGImage )
-        delete m_pBGImage;
+    delete m_pBGImage;
 
     m_pBGImage = pImage;
 }

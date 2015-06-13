@@ -56,8 +56,7 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
 
 ScChangeTrackingExportHelper::~ScChangeTrackingExportHelper()
 {
-    if (pDependings)
-        delete pDependings;
+    delete pDependings;
 }
 
 OUString ScChangeTrackingExportHelper::GetChangeID(const sal_uInt32 nActionNumber)

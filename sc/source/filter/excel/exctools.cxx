@@ -223,12 +223,9 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
 
 ExcScenario::~ExcScenario()
 {
-    if( pName )
-        delete pName;
-    if( pComment )
-        delete pComment;
-    if( pUserName )
-        delete pUserName;
+    delete pName;
+    delete pComment;
+    delete pUserName;
 }
 
 void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
