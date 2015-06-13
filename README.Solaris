@@ -13,7 +13,7 @@ Prerequisites
 A working Oracle Solaris 11 installation
 
 
-Installing Dependancies
+Installing Dependencies
 -----------------------
 
 sudo -s

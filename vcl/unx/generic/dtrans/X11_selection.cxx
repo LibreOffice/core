@@ -2241,7 +2241,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             else
             {
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "XdndDrop canceled due to m_bLastDropAccepted = fale\n" );
+                fprintf( stderr, "XdndDrop canceled due to m_bLastDropAccepted = false\n" );
 #endif
                 DropTargetEvent aEvent;
                 aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
