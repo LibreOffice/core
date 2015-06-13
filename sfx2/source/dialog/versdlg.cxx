@@ -387,8 +387,8 @@ IMPL_LINK_NOARG(SfxVersionDialog, SelectHdl_Impl)
     m_pViewButton->Enable(bEnable);
 
     const SfxPoolItem *pDummy=NULL;
-    SfxItemState eState = pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_MERGE, pDummy );
-    eState = pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_COMPARE, pDummy );
+    pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_MERGE, pDummy );
+    SfxItemState eState = pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_COMPARE, pDummy );
     m_pCompareButton->Enable(bEnable && eState >= SfxItemState::DEFAULT);
 
     return 0L;

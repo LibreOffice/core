@@ -319,7 +319,7 @@ SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
 
 SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
 {
-    SwTextNode* pTextNode = getModelToViewTestDocument(pDoc);
+    getModelToViewTestDocument(pDoc);
 
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
@@ -335,7 +335,7 @@ SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("CCCCC"));
-    pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
             pTextNode->GetText().getLength());
 

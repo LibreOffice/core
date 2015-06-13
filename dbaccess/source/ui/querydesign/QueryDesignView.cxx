@@ -1347,8 +1347,11 @@ namespace
             {
                 _pSelectionBrw->DuplicateConditionLevel( nLevel);
                 eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(0), nLevel,bHaving,bMustAddOrOnOneLine );
-                ++nLevel;
-                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(2), nLevel,bHaving,bMustAddOrOnOneLine );
+                if ( eErrorCode == eOk )
+                {
+                    ++nLevel;
+                    eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(2), nLevel,bHaving,bMustAddOrOnOneLine );
+                }
             }
             else
                 eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition, nLevel,bHaving,bMustAddOrOnOneLine );

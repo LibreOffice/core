@@ -492,11 +492,10 @@ IMPL_LINK( ErrorBarResources, RangeChanged, Edit *, pEdit )
 void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
-    SfxItemState aState = SfxItemState::UNKNOWN;
 
     // category
-     m_eErrorKind = CHERROR_NONE;
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_KIND_ERROR, true, &pPoolItem );
+    m_eErrorKind = CHERROR_NONE;
+    SfxItemState aState = rInAttrs.GetItemState( SCHATTR_STAT_KIND_ERROR, true, &pPoolItem );
     m_bErrorKindUnique = ( aState != SfxItemState::DONTCARE );
 
     if( aState == SfxItemState::SET )

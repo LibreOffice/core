@@ -600,9 +600,7 @@ static DWORD create_dir_with_callback(
     // user specified callback function. On success
     // the function returns ERROR_SUCCESS else a Win32 error code.
 
-    BOOL bCreated = FALSE;
-
-    bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( dir_path )), NULL );
+    BOOL bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( dir_path )), NULL );
 
     if ( bCreated )
     {
@@ -702,9 +700,7 @@ oslFileError osl_createDirectoryWithFlags(rtl_uString * strPath, sal_uInt32)
 
     if ( osl_File_E_None == error )
     {
-        BOOL bCreated = FALSE;
-
-        bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL );
+        BOOL bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL );
 
         if ( !bCreated )
         {

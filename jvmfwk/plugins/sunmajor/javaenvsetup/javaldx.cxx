@@ -51,9 +51,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             fprintf(stdout, HELP_TEXT);// default
             return 0;
         }
-        javaFrameworkError errcode = JFW_E_NONE;
         sal_Bool bEnabled = sal_False;
-        errcode = jfw_getEnabled( & bEnabled);
+        javaFrameworkError errcode = jfw_getEnabled( & bEnabled);
         if (errcode == JFW_E_NONE && bEnabled == sal_False)
         {
                 //Do not do any preparation because that may only slow startup time.

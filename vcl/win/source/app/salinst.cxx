@@ -316,7 +316,7 @@ bool WinSalInstance::CheckYieldMutex()
 
 void SalData::initKeyCodeMap()
 {
-    UINT nKey = 0xffffffff;
+    UINT nKey;
     #define initKey( a, b )\
         nKey = LOWORD( VkKeyScan( a ) );\
         if( nKey < 0xffff )\

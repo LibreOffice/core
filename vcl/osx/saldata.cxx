@@ -71,8 +71,7 @@ SalData::~SalData()
     if( s_aAutoReleaseKey )
     {
         // release the last pool
-        NSAutoreleasePool* pPool = nil;
-        pPool = reinterpret_cast<NSAutoreleasePool*>( osl_getThreadKeyData( s_aAutoReleaseKey ) );
+        NSAutoreleasePool* pPool = reinterpret_cast<NSAutoreleasePool*>( osl_getThreadKeyData( s_aAutoReleaseKey ) );
         if( pPool )
         {
             osl_setThreadKeyData( s_aAutoReleaseKey, NULL );

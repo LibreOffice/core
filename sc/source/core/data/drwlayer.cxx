@@ -872,8 +872,6 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             rNoRotatedAnchor.maStartOffset = rData.maStartOffset;
             rNoRotatedAnchor.maEndOffset = rData.maEndOffset;
 
-            Rectangle aRect = pObj->GetLogicRect();
-
             // get bounding rectangle of shape ( include any hidden row/columns ), <sigh> we need to do this
             // because if the shape is rotated the anchor from xml is in terms of the unrotated shape, if
             // the shape is hidden ( by the rows that contain the shape being hidden ) then our hack of
@@ -893,8 +891,6 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
 
             // resize/position the shape to *full* size e.g. how it would be ( if no hidden rows/cols affected things )
             pObj->SetLogicRect(aFullRect);
-            // capture rotated shape ( if relevant )
-            aRect = pObj->GetSnapRect();
 
             // Ok, here is more nastyness, from xml the Anchor is in terms of the LogicRect which is the
             // untransformed unrotated shape, here we swap out that initial anchor and from now on use

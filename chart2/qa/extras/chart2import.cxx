@@ -765,7 +765,6 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     chart2::DataPointLabel aLabel;
     sal_Int32 nNumberFormat;
     bool bLinkNumberFormatToSource = false;
-    bool bSuccess = false;
     const sal_Int32 nChartDataNumberFormat = getNumberFormat(
             xChartDoc, "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)");
 
@@ -775,7 +774,7 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
-    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    bool bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);

@@ -441,11 +441,16 @@ bool getJavaProps(const OUString & exePath,
         sClassPath += "/../Resources/java";
 #endif
 
+#ifdef UNX
+    // Java is no longer required for a11y - we use atk directly.
+    bool bNoAccessibility = !isEnvVarSetToOne("JFW_PLUGIN_FORCE_ACCESSIBILITY");
+#else
     //check if we shall examine a Java for accessibility support
     //If the bootstrap variable is "1" then we pass the argument
     //"noaccessibility" to JREProperties.class. This will prevent
     //that it calls   java.awt.Toolkit.getDefaultToolkit();
     bool bNoAccessibility = isEnvVarSetToOne("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY");
+#endif
 
     //prepare the arguments
     sal_Int32 cArgs = 3;
@@ -454,12 +459,6 @@ bool getJavaProps(const OUString & exePath,
     OUString arg3("JREProperties");
     OUString arg4 = "noaccessibility";
     rtl_uString *args[4] = {arg1.pData, arg2.pData, arg3.pData};
-
-#ifdef UNX
-    // Java is no longer required for a11y - we use atk directly.
-    bNoAccessibility = !isEnvVarSetToOne("JFW_PLUGIN_FORCE_ACCESSIBILITY");
-#endif
-
     // Only add the fourth param if the bootstrap parameter is set.
     if (bNoAccessibility)
     {
@@ -624,9 +623,8 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
         DWORD dwIndex = 0;
         const DWORD BUFFSIZE = 1024;
         wchar_t bufVersion[BUFFSIZE];
-        DWORD nNameLen = BUFFSIZE;
         FILETIME fileTime;
-        nNameLen = sizeof(bufVersion);
+        DWORD nNameLen = sizeof(bufVersion);
 
         // Iterate over all subkeys of HKEY_LOCAL_MACHINE\Software\JavaSoft\Java Runtime Environment
         while (RegEnumKeyExW(hRoot, dwIndex, bufVersion, &nNameLen, NULL, NULL, NULL, &fileTime) != ERROR_NO_MORE_ITEMS)
