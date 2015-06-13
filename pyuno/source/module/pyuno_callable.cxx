@@ -91,7 +91,7 @@ PyObject* PyUNO_callable_call(
         }
 
         {
-            PyThreadDetach antiguard; //pyhton free zone
+            PyThreadDetach antiguard; //python free zone
 
             // do some logging if desired ...
             if( isLog( cargo, LogLevel::CALL ) )
