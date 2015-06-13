@@ -126,14 +126,17 @@ namespace
     struct TokenPointers
     {
         TokenPointerRange maPointerRange[2];
+        bool              mbSkipRelName;
 
-        TokenPointers( FormulaToken** pCode, sal_uInt16 nLen, FormulaToken** pRPN, sal_uInt16 nRPN )
+        TokenPointers( FormulaToken** pCode, sal_uInt16 nLen, FormulaToken** pRPN, sal_uInt16 nRPN,
+                bool bSkipRelName = true ) :
+            mbSkipRelName(bSkipRelName)
         {
             maPointerRange[0] = TokenPointerRange( pCode, nLen);
             maPointerRange[1] = TokenPointerRange( pRPN, nRPN);
         }
 
-        static bool skipToken( size_t i, const FormulaToken* const * pp )
+        bool skipToken( size_t i, const FormulaToken* const * pp )
         {
             // Handle all tokens in RPN, and code tokens only if they have a
             // reference count of 1, which means they are not referenced in
@@ -141,19 +144,22 @@ namespace
             if (i == 0)
                 return (*pp)->GetRef() > 1;
 
-            // Skip (do not adjust) relative references resulting from named
-            // expressions.
-            switch ((*pp)->GetType())
+            if (mbSkipRelName)
             {
-                case svSingleRef:
-                    return (*pp)->GetSingleRef()->IsRelName();
-                case svDoubleRef:
-                    {
-                        const ScComplexRefData& rRef = *(*pp)->GetDoubleRef();
-                        return rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName();
-                    }
-                default:
-                    ;   // nothing
+                // Skip (do not adjust) relative references resulting from
+                // named expressions.
+                switch ((*pp)->GetType())
+                {
+                    case svSingleRef:
+                        return (*pp)->GetSingleRef()->IsRelName();
+                    case svDoubleRef:
+                        {
+                            const ScComplexRefData& rRef = *(*pp)->GetDoubleRef();
+                            return rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName();
+                        }
+                    default:
+                        ;   // nothing
+                }
             }
 
             return false;
@@ -2208,48 +2214,57 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
 void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
         const ScAddress& rNewPos )
 {
-    for ( sal_uInt16 j=0; j<nLen; ++j )
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, false);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ( pCode[j]->GetType() )
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svDoubleRef :
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ( (*p)->GetType() )
             {
-                ScSingleRefData& rRef2 = *pCode[j]->GetSingleRef2();
-                // Also adjust if the reference is of the form Sheet1.A2:A3
-                if ( rRef2.IsFlag3D() || pCode[j]->GetSingleRef()->IsFlag3D() )
-                {
-                    ScAddress aAbs = rRef2.toAbs(rOldPos);
-                    rRef2.SetAddress(aAbs, rNewPos);
-                }
-            }
-            // fall through
-            case svSingleRef :
-            {
-                ScSingleRefData& rRef1 = *pCode[j]->GetSingleRef();
-                if ( rRef1.IsFlag3D() )
-                {
-                    ScAddress aAbs = rRef1.toAbs(rOldPos);
-                    rRef1.SetAddress(aAbs, rNewPos);
-                }
-            }
-            break;
-            case svExternalDoubleRef :
-            {
-                ScSingleRefData& rRef2 = *pCode[j]->GetSingleRef2();
-                ScAddress aAbs = rRef2.toAbs(rOldPos);
-                rRef2.SetAddress(aAbs, rNewPos);
-            }
-            // fall through
-            case svExternalSingleRef :
-            {
-                ScSingleRefData& rRef1 = *pCode[j]->GetSingleRef();
-                ScAddress aAbs = rRef1.toAbs(rOldPos);
-                rRef1.SetAddress(aAbs, rNewPos);
-            }
-            break;
-            default:
-            {
-                // added to avoid warnings
+                case svDoubleRef :
+                    {
+                        ScSingleRefData& rRef2 = *(*p)->GetSingleRef2();
+                        // Also adjust if the reference is of the form Sheet1.A2:A3
+                        if ( rRef2.IsFlag3D() || (*p)->GetSingleRef()->IsFlag3D() )
+                        {
+                            ScAddress aAbs = rRef2.toAbs(rOldPos);
+                            rRef2.SetAddress(aAbs, rNewPos);
+                        }
+                    }
+                    // fall through
+                case svSingleRef :
+                    {
+                        ScSingleRefData& rRef1 = *(*p)->GetSingleRef();
+                        if ( rRef1.IsFlag3D() )
+                        {
+                            ScAddress aAbs = rRef1.toAbs(rOldPos);
+                            rRef1.SetAddress(aAbs, rNewPos);
+                        }
+                    }
+                    break;
+                case svExternalDoubleRef :
+                    {
+                        ScSingleRefData& rRef2 = *(*p)->GetSingleRef2();
+                        ScAddress aAbs = rRef2.toAbs(rOldPos);
+                        rRef2.SetAddress(aAbs, rNewPos);
+                    }
+                    // fall through
+                case svExternalSingleRef :
+                    {
+                        ScSingleRefData& rRef1 = *(*p)->GetSingleRef();
+                        ScAddress aAbs = rRef1.toAbs(rOldPos);
+                        rRef1.SetAddress(aAbs, rNewPos);
+                    }
+                    break;
+                default:
+                    {
+                        // added to avoid warnings
+                    }
             }
         }
     }
@@ -2380,43 +2395,53 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
     }
 }
 
-void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bRangeName, bool bCheckCopyRange)
+void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos,
+        bool bRangeName, bool bCheckCopyRange)
 {
-    for ( sal_uInt16 j=0; j<nLen; ++j )
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, !bRangeName);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ( pCode[j]->GetType() )
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svDoubleRef :
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ( (*p)->GetType() )
             {
-                if (!SkipReference(pCode[j], rOldPos, pOldDoc, false, bCheckCopyRange))
-                    continue;
+                case svDoubleRef :
+                    {
+                        if (!SkipReference((*p), rOldPos, pOldDoc, false, bCheckCopyRange))
+                            continue;
 
-                ScComplexRefData& rRef = *pCode[j]->GetDoubleRef();
-                ScSingleRefData& rRef2 = rRef.Ref2;
-                ScSingleRefData& rRef1 = rRef.Ref1;
+                        ScComplexRefData& rRef = *(*p)->GetDoubleRef();
+                        ScSingleRefData& rRef2 = rRef.Ref2;
+                        ScSingleRefData& rRef1 = rRef.Ref1;
 
-                // for range names only adjust if all parts are absolute
-                if (!bRangeName || !(rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel()))
-                    AdjustSingleRefData( rRef1, rOldPos, rNewPos );
-                if (!bRangeName || !(rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel()))
-                    AdjustSingleRefData( rRef2, rOldPos, rNewPos );
-            }
-            break;
-            case svSingleRef :
-            {
-                if (!SkipReference(pCode[j], rOldPos, pOldDoc, false, bCheckCopyRange))
-                    continue;
+                        // for range names only adjust if all parts are absolute
+                        if (!bRangeName || !(rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel()))
+                            AdjustSingleRefData( rRef1, rOldPos, rNewPos );
+                        if (!bRangeName || !(rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel()))
+                            AdjustSingleRefData( rRef2, rOldPos, rNewPos );
+                    }
+                    break;
+                case svSingleRef :
+                    {
+                        if (!SkipReference((*p), rOldPos, pOldDoc, false, bCheckCopyRange))
+                            continue;
 
-                ScSingleRefData& rRef = *pCode[j]->GetSingleRef();
+                        ScSingleRefData& rRef = *(*p)->GetSingleRef();
 
-                // for range names only adjust if all parts are absolute
-                if (!bRangeName || !(rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel()))
-                    AdjustSingleRefData( rRef, rOldPos, rNewPos );
-            }
-            break;
-            default:
-            {
-                // added to avoid warnings
+                        // for range names only adjust if all parts are absolute
+                        if (!bRangeName || !(rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel()))
+                            AdjustSingleRefData( rRef, rOldPos, rNewPos );
+                    }
+                    break;
+                default:
+                    {
+                        // added to avoid warnings
+                    }
             }
         }
     }
@@ -2747,150 +2772,157 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
     if (bCellShifted)
         aNewPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
 
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rOldPos);
-
-                if (rCxt.isDeleted() && aSelectedRange.In(aAbs))
-                {
-                    // This reference is in the deleted region.
-                    setRefDeleted(rRef, rCxt);
-                    aRes.mbValueChanged = true;
-                    break;
-                }
-
-                if (!rCxt.isDeleted() && rRef.IsDeleted())
-                {
-                    // Check if the token has reference to previously deleted region.
-                    ScAddress aCheckPos = rRef.toAbs(aNewPos);
-                    if (rCxt.maRange.In(aCheckPos))
+                case svSingleRef:
                     {
-                        restoreDeletedRef(rRef, rCxt);
-                        aRes.mbValueChanged = true;
-                        break;
-                    }
-                }
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(rOldPos);
 
-                if (rCxt.maRange.In(aAbs))
-                {
-                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-                    aRes.mbReferenceModified = true;
-                }
-
-                rRef.SetAddress(aAbs, aNewPos);
-            }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rOldPos);
-
-                if (rCxt.isDeleted())
-                {
-                    if (aSelectedRange.In(aAbs))
-                    {
-                        // This reference is in the deleted region.
-                        setRefDeleted(rRef, rCxt);
-                        aRes.mbValueChanged = true;
-                        break;
-                    }
-                    else if (aSelectedRange.Intersects(aAbs))
-                    {
-                        if (shrinkRange(rCxt, aAbs, aSelectedRange))
+                        if (rCxt.isDeleted() && aSelectedRange.In(aAbs))
                         {
-                            // The reference range has been shrunk.
-                            rRef.SetRange(aAbs, aNewPos);
+                            // This reference is in the deleted region.
+                            setRefDeleted(rRef, rCxt);
                             aRes.mbValueChanged = true;
-                            aRes.mbReferenceModified = true;
                             break;
                         }
-                    }
-                }
 
-                if (rCxt.isInserted())
-                {
-                    if (expandRange(rCxt, aAbs, aSelectedRange))
+                        if (!rCxt.isDeleted() && rRef.IsDeleted())
+                        {
+                            // Check if the token has reference to previously deleted region.
+                            ScAddress aCheckPos = rRef.toAbs(aNewPos);
+                            if (rCxt.maRange.In(aCheckPos))
+                            {
+                                restoreDeletedRef(rRef, rCxt);
+                                aRes.mbValueChanged = true;
+                                break;
+                            }
+                        }
+
+                        if (rCxt.maRange.In(aAbs))
+                        {
+                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            aRes.mbReferenceModified = true;
+                        }
+
+                        rRef.SetAddress(aAbs, aNewPos);
+                    }
+                    break;
+                case svDoubleRef:
                     {
-                        // The reference range has been expanded.
-                        rRef.SetRange(aAbs, aNewPos);
-                        aRes.mbValueChanged = true;
-                        aRes.mbReferenceModified = true;
-                        break;
-                    }
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(rOldPos);
 
-                    if (expandRangeByEdge(rCxt, aAbs, aSelectedRange))
+                        if (rCxt.isDeleted())
+                        {
+                            if (aSelectedRange.In(aAbs))
+                            {
+                                // This reference is in the deleted region.
+                                setRefDeleted(rRef, rCxt);
+                                aRes.mbValueChanged = true;
+                                break;
+                            }
+                            else if (aSelectedRange.Intersects(aAbs))
+                            {
+                                if (shrinkRange(rCxt, aAbs, aSelectedRange))
+                                {
+                                    // The reference range has been shrunk.
+                                    rRef.SetRange(aAbs, aNewPos);
+                                    aRes.mbValueChanged = true;
+                                    aRes.mbReferenceModified = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (rCxt.isInserted())
+                        {
+                            if (expandRange(rCxt, aAbs, aSelectedRange))
+                            {
+                                // The reference range has been expanded.
+                                rRef.SetRange(aAbs, aNewPos);
+                                aRes.mbValueChanged = true;
+                                aRes.mbReferenceModified = true;
+                                break;
+                            }
+
+                            if (expandRangeByEdge(rCxt, aAbs, aSelectedRange))
+                            {
+                                // The reference range has been expanded on the edge.
+                                rRef.SetRange(aAbs, aNewPos);
+                                aRes.mbValueChanged = true;
+                                aRes.mbReferenceModified = true;
+                                break;
+                            }
+                        }
+
+                        if (rCxt.maRange.In(aAbs))
+                        {
+                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            aRes.mbReferenceModified = true;
+                        }
+                        else if (rCxt.maRange.Intersects(aAbs))
+                        {
+                            // Part of the referenced range is being shifted. This
+                            // will change the values of the range.
+                            aRes.mbValueChanged = true;
+                        }
+
+                        rRef.SetRange(aAbs, aNewPos);
+                    }
+                    break;
+                case svExternalSingleRef:
                     {
-                        // The reference range has been expanded on the edge.
-                        rRef.SetRange(aAbs, aNewPos);
-                        aRes.mbValueChanged = true;
-                        aRes.mbReferenceModified = true;
-                        break;
+                        // For external reference, just reset the reference with
+                        // respect to the new cell position.
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        rRef.SetAddress(aAbs, aNewPos);
                     }
-                }
-
-                if (rCxt.maRange.In(aAbs))
-                {
-                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-                    aRes.mbReferenceModified = true;
-                }
-                else if (rCxt.maRange.Intersects(aAbs))
-                {
-                    // Part of the referenced range is being shifted. This
-                    // will change the values of the range.
-                    aRes.mbValueChanged = true;
-                }
-
-                rRef.SetRange(aAbs, aNewPos);
+                    break;
+                case svExternalDoubleRef:
+                    {
+                        // Same as above.
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        rRef.SetRange(aAbs, aNewPos);
+                    }
+                    break;
+                case svIndex:
+                    {
+                        switch ((*p)->GetOpCode())
+                        {
+                            case ocName:
+                                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            case ocDBArea:
+                            case ocTableRef:
+                                if (isDBDataModified(rCxt.mrDoc, **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            default:
+                                ;   // nothing
+                        }
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svExternalSingleRef:
-            {
-                // For external reference, just reset the reference with
-                // respect to the new cell position.
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rOldPos);
-                rRef.SetAddress(aAbs, aNewPos);
-            }
-            break;
-            case svExternalDoubleRef:
-            {
-                // Same as above.
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rOldPos);
-                rRef.SetRange(aAbs, aNewPos);
-            }
-            break;
-            case svIndex:
-            {
-                switch ((*p)->GetOpCode())
-                {
-                    case ocName:
-                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    case ocDBArea:
-                    case ocTableRef:
-                        if (isDBDataModified(rCxt.mrDoc, **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    default:
-                        ;   // nothing
-                }
-            }
-            break;
-            default:
-                ;
         }
     }
 
@@ -2920,7 +2952,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
         FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
         for (; p != pEnd; ++p)
         {
-            if (TokenPointers::skipToken(j,p))
+            if (aPtrs.skipToken(j,p))
                 continue;
 
             switch ((*p)->GetType())
@@ -3269,111 +3301,118 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
     sc::RefUpdateResult aRes;
 
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                if (adjustSingleRefInName(rRef, rCxt, rPos))
-                    aRes.mbReferenceModified = true;
-            }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rPos);
-                if (rCxt.maRange.In(aAbs))
-                {
-                    // This range is entirely within the shifted region.
-                    if (adjustDoubleRefInName(rRef, rCxt, rPos))
-                        aRes.mbReferenceModified = true;
-                }
-                else if (rCxt.mnRowDelta < 0)
-                {
-                    // row(s) deleted.
-                    if (rRef.Ref1.IsRowRel() || rRef.Ref2.IsRowRel())
-                        // Don't modify relative references in names.
-                        break;
-
-                    if (aAbs.aStart.Col() < rCxt.maRange.aStart.Col() || rCxt.maRange.aEnd.Col() < aAbs.aEnd.Col())
-                        // column range of the reference is not entirely in the deleted column range.
-                        break;
-
-                    if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
-                        // wrong tables
-                        break;
-
-                    ScRange aDeleted = rCxt.maRange;
-                    aDeleted.aStart.IncRow(rCxt.mnRowDelta);
-                    aDeleted.aEnd.SetRow(aDeleted.aStart.Row()-rCxt.mnRowDelta-1);
-
-                    if (aAbs.aEnd.Row() < aDeleted.aStart.Row() || aDeleted.aEnd.Row() < aAbs.aStart.Row())
-                        // reference range doesn't intersect with the deleted range.
-                        break;
-
-                    if (aDeleted.aStart.Row() <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= aDeleted.aEnd.Row())
+                case svSingleRef:
                     {
-                        // This reference is entirely deleted.
-                        rRef.Ref1.SetRowDeleted(true);
-                        rRef.Ref2.SetRowDeleted(true);
-                        aRes.mbReferenceModified = true;
-                        break;
-                    }
-
-                    if (aAbs.aStart.Row() < aDeleted.aStart.Row())
-                    {
-                        if (aDeleted.aEnd.Row() < aAbs.aEnd.Row())
-                            // Deleted in the middle.  Make the reference shorter.
-                            rRef.Ref2.IncRow(rCxt.mnRowDelta);
-                        else
-                            // Deleted at tail end.  Cut off the lower part.
-                            rRef.Ref2.SetAbsRow(aDeleted.aStart.Row()-1);
-                    }
-                    else
-                    {
-                        // Deleted at the top.  Cut the top off and shift up.
-                        rRef.Ref1.SetAbsRow(aDeleted.aEnd.Row()+1);
-                        rRef.Ref1.IncRow(rCxt.mnRowDelta);
-                        rRef.Ref2.IncRow(rCxt.mnRowDelta);
-                    }
-
-                    aRes.mbReferenceModified = true;
-                }
-                else if (rCxt.maRange.Intersects(aAbs))
-                {
-                    if (rCxt.mnColDelta && rCxt.maRange.aStart.Row() <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= rCxt.maRange.aEnd.Row())
-                    {
-                        if (adjustDoubleRefInName(rRef, rCxt, rPos))
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        if (adjustSingleRefInName(rRef, rCxt, rPos))
                             aRes.mbReferenceModified = true;
                     }
-                    if (rCxt.mnRowDelta && rCxt.maRange.aStart.Col() <= aAbs.aStart.Col() && aAbs.aEnd.Col() <= rCxt.maRange.aEnd.Col())
+                    break;
+                case svDoubleRef:
                     {
-                        if (adjustDoubleRefInName(rRef, rCxt, rPos))
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(rPos);
+                        if (rCxt.maRange.In(aAbs))
+                        {
+                            // This range is entirely within the shifted region.
+                            if (adjustDoubleRefInName(rRef, rCxt, rPos))
+                                aRes.mbReferenceModified = true;
+                        }
+                        else if (rCxt.mnRowDelta < 0)
+                        {
+                            // row(s) deleted.
+                            if (rRef.Ref1.IsRowRel() || rRef.Ref2.IsRowRel())
+                                // Don't modify relative references in names.
+                                break;
+
+                            if (aAbs.aStart.Col() < rCxt.maRange.aStart.Col() || rCxt.maRange.aEnd.Col() < aAbs.aEnd.Col())
+                                // column range of the reference is not entirely in the deleted column range.
+                                break;
+
+                            if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
+                                // wrong tables
+                                break;
+
+                            ScRange aDeleted = rCxt.maRange;
+                            aDeleted.aStart.IncRow(rCxt.mnRowDelta);
+                            aDeleted.aEnd.SetRow(aDeleted.aStart.Row()-rCxt.mnRowDelta-1);
+
+                            if (aAbs.aEnd.Row() < aDeleted.aStart.Row() || aDeleted.aEnd.Row() < aAbs.aStart.Row())
+                                // reference range doesn't intersect with the deleted range.
+                                break;
+
+                            if (aDeleted.aStart.Row() <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= aDeleted.aEnd.Row())
+                            {
+                                // This reference is entirely deleted.
+                                rRef.Ref1.SetRowDeleted(true);
+                                rRef.Ref2.SetRowDeleted(true);
+                                aRes.mbReferenceModified = true;
+                                break;
+                            }
+
+                            if (aAbs.aStart.Row() < aDeleted.aStart.Row())
+                            {
+                                if (aDeleted.aEnd.Row() < aAbs.aEnd.Row())
+                                    // Deleted in the middle.  Make the reference shorter.
+                                    rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                                else
+                                    // Deleted at tail end.  Cut off the lower part.
+                                    rRef.Ref2.SetAbsRow(aDeleted.aStart.Row()-1);
+                            }
+                            else
+                            {
+                                // Deleted at the top.  Cut the top off and shift up.
+                                rRef.Ref1.SetAbsRow(aDeleted.aEnd.Row()+1);
+                                rRef.Ref1.IncRow(rCxt.mnRowDelta);
+                                rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                            }
+
                             aRes.mbReferenceModified = true;
+                        }
+                        else if (rCxt.maRange.Intersects(aAbs))
+                        {
+                            if (rCxt.mnColDelta && rCxt.maRange.aStart.Row() <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= rCxt.maRange.aEnd.Row())
+                            {
+                                if (adjustDoubleRefInName(rRef, rCxt, rPos))
+                                    aRes.mbReferenceModified = true;
+                            }
+                            if (rCxt.mnRowDelta && rCxt.maRange.aStart.Col() <= aAbs.aStart.Col() && aAbs.aEnd.Col() <= rCxt.maRange.aEnd.Col())
+                            {
+                                if (adjustDoubleRefInName(rRef, rCxt, rPos))
+                                    aRes.mbReferenceModified = true;
+                            }
+                        }
+                        else if (rCxt.mnRowDelta > 0 && rCxt.mrDoc.IsExpandRefs())
+                        {
+                            // Check if we could expand range reference by the bottom
+                            // edge. For named expressions, we only expand absolute
+                            // references.
+                            if (!rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel() && aAbs.aEnd.Row()+1 == rCxt.maRange.aStart.Row())
+                            {
+                                // Expand by the bottom edge.
+                                rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                                aRes.mbReferenceModified = true;
+                            }
+                        }
                     }
-                }
-                else if (rCxt.mnRowDelta > 0 && rCxt.mrDoc.IsExpandRefs())
-                {
-                    // Check if we could expand range reference by the bottom
-                    // edge. For named expressions, we only expand absolute
-                    // references.
-                    if (!rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel() && aAbs.aEnd.Row()+1 == rCxt.maRange.aStart.Row())
-                    {
-                        // Expand by the bottom edge.
-                        rRef.Ref2.IncRow(rCxt.mnRowDelta);
-                        aRes.mbReferenceModified = true;
-                    }
-                }
+                    break;
+                default:
+                    ;
             }
-            break;
-            default:
-                ;
         }
     }
 
@@ -3391,49 +3430,56 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 
     sc::RefUpdateResult aRes;
 
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                if (rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel())
-                    continue;
+                case svSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        if (rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel())
+                            continue;
 
-                ScAddress aAbs = rRef.toAbs(rPos);
-                if (aOldRange.In(aAbs))
-                {
-                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-                    aRes.mbReferenceModified = true;
-                }
+                        ScAddress aAbs = rRef.toAbs(rPos);
+                        if (aOldRange.In(aAbs))
+                        {
+                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            aRes.mbReferenceModified = true;
+                        }
 
-                rRef.SetAddress(aAbs, rPos);
+                        rRef.SetAddress(aAbs, rPos);
+                    }
+                    break;
+                case svDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        if (rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() || rRef.Ref1.IsTabRel() ||
+                                rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() || rRef.Ref2.IsTabRel())
+                            continue;
+
+                        ScRange aAbs = rRef.toAbs(rPos);
+                        if (aOldRange.In(aAbs))
+                        {
+                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            aRes.mbReferenceModified = true;
+                        }
+
+                        rRef.SetRange(aAbs, rPos);
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                if (rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() || rRef.Ref1.IsTabRel() ||
-                    rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() || rRef.Ref2.IsTabRel())
-                    continue;
-
-                ScRange aAbs = rRef.toAbs(rPos);
-                if (aOldRange.In(aAbs))
-                {
-                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-                    aRes.mbReferenceModified = true;
-                }
-
-                rRef.SetRange(aAbs, rPos);
-            }
-            break;
-            default:
-                ;
         }
     }
 
@@ -3533,47 +3579,54 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDele
     if (rCxt.mnDeletePos < rOldPos.Tab())
         aNewPos.IncTab(-1*rCxt.mnSheets);
 
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                if (adjustSingleRefOnDeletedTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
-                    aRes.mbReferenceModified = true;
+                case svSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        if (adjustSingleRefOnDeletedTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
+                            aRes.mbReferenceModified = true;
+                    }
+                    break;
+                case svDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
+                    }
+                    break;
+                case svIndex:
+                    {
+                        switch ((*p)->GetOpCode())
+                        {
+                            case ocName:
+                                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            case ocDBArea:
+                            case ocTableRef:
+                                if (isDBDataModified(rCxt.mrDoc, **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            default:
+                                ;   // nothing
+                        }
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
-            }
-            break;
-            case svIndex:
-            {
-                switch ((*p)->GetOpCode())
-                {
-                    case ocName:
-                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    case ocDBArea:
-                    case ocTableRef:
-                        if (isDBDataModified(rCxt.mrDoc, **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    default:
-                        ;   // nothing
-                }
-            }
-            break;
-            default:
-                ;
         }
     }
     return aRes;
@@ -3586,50 +3639,57 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateIns
     if (rCxt.mnInsertPos <= rOldPos.Tab())
         aNewPos.IncTab(rCxt.mnSheets);
 
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                if (adjustSingleRefOnInsertedTab(rRef, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
-                    aRes.mbReferenceModified = true;
+                case svSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        if (adjustSingleRefOnInsertedTab(rRef, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                            aRes.mbReferenceModified = true;
+                    }
+                    break;
+                case svDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        if (adjustSingleRefOnInsertedTab(rRef.Ref1, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                            aRes.mbReferenceModified = true;
+                        if (adjustSingleRefOnInsertedTab(rRef.Ref2, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                            aRes.mbReferenceModified = true;
+                    }
+                    break;
+                case svIndex:
+                    {
+                        switch ((*p)->GetOpCode())
+                        {
+                            case ocName:
+                                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            case ocDBArea:
+                            case ocTableRef:
+                                if (isDBDataModified(rCxt.mrDoc, **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            default:
+                                ;   // nothing
+                        }
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                if (adjustSingleRefOnInsertedTab(rRef.Ref1, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
-                    aRes.mbReferenceModified = true;
-                if (adjustSingleRefOnInsertedTab(rRef.Ref2, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
-                    aRes.mbReferenceModified = true;
-            }
-            break;
-            case svIndex:
-            {
-                switch ((*p)->GetOpCode())
-                {
-                    case ocName:
-                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    case ocDBArea:
-                    case ocTableRef:
-                        if (isDBDataModified(rCxt.mrDoc, **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    default:
-                        ;   // nothing
-                }
-            }
-            break;
-            default:
-                ;
         }
     }
     return aRes;
@@ -3659,54 +3719,61 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
     if (adjustTabOnMove(aNewPos, rCxt))
         aRes.mbReferenceModified = true;
 
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rOldPos);
-                if (adjustTabOnMove(aAbs, rCxt))
-                    aRes.mbReferenceModified = true;
-                rRef.SetAddress(aAbs, aNewPos);
+                case svSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        if (adjustTabOnMove(aAbs, rCxt))
+                            aRes.mbReferenceModified = true;
+                        rRef.SetAddress(aAbs, aNewPos);
+                    }
+                    break;
+                case svDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        if (adjustTabOnMove(aAbs.aStart, rCxt))
+                            aRes.mbReferenceModified = true;
+                        if (adjustTabOnMove(aAbs.aEnd, rCxt))
+                            aRes.mbReferenceModified = true;
+                        rRef.SetRange(aAbs, aNewPos);
+                    }
+                    break;
+                case svIndex:
+                    {
+                        switch ((*p)->GetOpCode())
+                        {
+                            case ocName:
+                                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            case ocDBArea:
+                            case ocTableRef:
+                                if (isDBDataModified(rCxt.mrDoc, **p))
+                                    aRes.mbNameModified = true;
+                                break;
+                            default:
+                                ;   // nothing
+                        }
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rOldPos);
-                if (adjustTabOnMove(aAbs.aStart, rCxt))
-                    aRes.mbReferenceModified = true;
-                if (adjustTabOnMove(aAbs.aEnd, rCxt))
-                    aRes.mbReferenceModified = true;
-                rRef.SetRange(aAbs, aNewPos);
-            }
-            break;
-            case svIndex:
-            {
-                switch ((*p)->GetOpCode())
-                {
-                    case ocName:
-                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    case ocDBArea:
-                    case ocTableRef:
-                        if (isDBDataModified(rCxt.mrDoc, **p))
-                            aRes.mbNameModified = true;
-                        break;
-                    default:
-                        ;   // nothing
-                }
-            }
-            break;
-            default:
-                ;
         }
     }
 
@@ -3715,75 +3782,89 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
 
 void ScTokenArray::AdjustReferenceOnMovedOrigin( const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svSingleRef:
-            case svExternalSingleRef:
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rOldPos);
-                rRef.SetAddress(aAbs, rNewPos);
+                case svSingleRef:
+                case svExternalSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        rRef.SetAddress(aAbs, rNewPos);
+                    }
+                    break;
+                case svDoubleRef:
+                case svExternalDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        rRef.SetRange(aAbs, rNewPos);
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svDoubleRef:
-            case svExternalDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rOldPos);
-                rRef.SetRange(aAbs, rNewPos);
-            }
-            break;
-            default:
-                ;
         }
     }
 }
 
 void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        bool bAdjust = false;
-        switch ((*p)->GetType())
+        FormulaToken** p = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; p != pEnd; ++p)
         {
-            case svExternalSingleRef:
-                bAdjust = true;     // always
-                // fallthru
-            case svSingleRef:
+            if (aPtrs.skipToken(j,p))
+                continue;
+
+            bool bAdjust = false;
+            switch ((*p)->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(rOldPos);
-                if (!bAdjust)
-                    bAdjust = (aAbs.Tab() != rOldPos.Tab());
-                if (bAdjust)
-                    rRef.SetAddress(aAbs, rNewPos);
+                case svExternalSingleRef:
+                    bAdjust = true;     // always
+                    // fallthru
+                case svSingleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScSingleRefData& rRef = *pToken->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(rOldPos);
+                        if (!bAdjust)
+                            bAdjust = (aAbs.Tab() != rOldPos.Tab());
+                        if (bAdjust)
+                            rRef.SetAddress(aAbs, rNewPos);
+                    }
+                    break;
+                case svExternalDoubleRef:
+                    bAdjust = true;     // always
+                    // fallthru
+                case svDoubleRef:
+                    {
+                        formula::FormulaToken* pToken = *p;
+                        ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(rOldPos);
+                        if (!bAdjust)
+                            bAdjust = (rOldPos.Tab() < aAbs.aStart.Tab() || aAbs.aEnd.Tab() < rOldPos.Tab());
+                        if (bAdjust)
+                            rRef.SetRange(aAbs, rNewPos);
+                    }
+                    break;
+                default:
+                    ;
             }
-            break;
-            case svExternalDoubleRef:
-                bAdjust = true;     // always
-                // fallthru
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(rOldPos);
-                if (!bAdjust)
-                    bAdjust = (rOldPos.Tab() < aAbs.aStart.Tab() || aAbs.aEnd.Tab() < rOldPos.Tab());
-                if (bAdjust)
-                    rRef.SetRange(aAbs, rNewPos);
-            }
-            break;
-            default:
-                ;
         }
     }
 }
@@ -3911,7 +3992,7 @@ void ScTokenArray::CheckRelativeReferenceBounds(
         FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
         for (; p != pEnd; ++p)
         {
-            if (TokenPointers::skipToken(j,p))
+            if (aPtrs.skipToken(j,p))
                 continue;
 
             switch ((*p)->GetType())
@@ -3947,7 +4028,7 @@ void ScTokenArray::CheckRelativeReferenceBounds(
         FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
         for (; p != pEnd; ++p)
         {
-            if (TokenPointers::skipToken(j,p))
+            if (aPtrs.skipToken(j,p))
                 continue;
 
             switch ((*p)->GetType())
@@ -3985,7 +4066,7 @@ void ScTokenArray::CheckExpandReferenceBounds(
         const FormulaToken* const * pEnd = aPtrs.maPointerRange[j].mpStop;
         for (; p != pEnd; ++p)
         {
-            if (TokenPointers::skipToken(j,p))
+            if (aPtrs.skipToken(j,p))
                 continue;
 
             switch ((*p)->GetType())
