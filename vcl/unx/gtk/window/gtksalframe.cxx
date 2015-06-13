@@ -475,7 +475,7 @@ void GtkSalFrame::doKeyCallback( guint state,
     if( bDown )
     {
         bool bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
-        // #i46889# copy AlternatKeyCode handling from generic plugin
+        // #i46889# copy AlternateKeyCode handling from generic plugin
         if( ! bHandled )
         {
             KeyAlternate aAlternate = GetAlternateKeyCode( aEvent.mnCode );
@@ -484,7 +484,7 @@ void GtkSalFrame::doKeyCallback( guint state,
                 aEvent.mnCode = aAlternate.nKeyCode;
                 if( aAlternate.nCharCode )
                     aEvent.mnCharCode = aAlternate.nCharCode;
-                bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
+                CallCallback( SALEVENT_KEYINPUT, &aEvent );
             }
         }
         if( bSendRelease && ! aDel.isDeleted() )

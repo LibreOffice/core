@@ -129,7 +129,7 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
     return ScMyAddress(0,0,maActiveCell.Tab());
 }
 
-bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize)
+bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc, ScRange *pDest, int nMax, VEC_MYADDR &vecRet, int &nSize)
 {
     //Src Must be :Src > Dest
     if (pDest->In(*pSrc))
@@ -147,7 +147,6 @@ bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange *pD
         }
         else if(nCellCount > 0)
         {
-            nCellCount +=nSize;
             for (sal_Int32 row = pDest->aStart.Row(); row <=  pDest->aEnd.Row();++row)
             {
                 for (sal_uInt16 col = pDest->aStart.Col(); col <=  pDest->aEnd.Col();++col)

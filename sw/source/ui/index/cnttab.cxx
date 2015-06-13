@@ -2851,7 +2851,6 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
         }
         if(!bLastWasText)
         {
-            bLastWasText = true;
             SwFormToken aTemp(TOKEN_TEXT);
             Control* pCtrl = InsertItem(aEmptyOUStr, aTemp);
             if(!pSetActiveControl)

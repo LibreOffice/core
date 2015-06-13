@@ -251,8 +251,7 @@ namespace internal
                         // check whether we already have an entry for
                         // this target (we only take the first set
                         // effect for every shape)
-                        XShapeHash::const_iterator aIter;
-                        if( (aIter=mrShapeHash.find( aTarget )) != mrShapeHash.end() )
+                        if( mrShapeHash.find( aTarget ) != mrShapeHash.end() )
                             break; // already an entry in existence for given XShape
 
                         // if this is an appear effect, hide shape

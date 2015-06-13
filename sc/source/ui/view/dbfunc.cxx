@@ -360,7 +360,6 @@ void ScDBFunc::ToggleAutoFilter()
                     )->Execute() == RET_YES )
                 {
                     pDBData->SetHeader( true );     //! Undo ??
-                    bHeader = true;
                 }
             }
 

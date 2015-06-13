@@ -295,7 +295,6 @@ int main(int argc, char *argv[])
     CCAB ddfVars;
     DDFSRCFILE *srcList = NULL;
     DDFSRCFILE *srcListCurr = NULL;
-    HFCI fci = NULL;
     char * cmd = NULL;
     unsigned int cmdSize = 0;
 

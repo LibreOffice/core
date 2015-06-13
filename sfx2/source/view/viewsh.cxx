@@ -838,8 +838,8 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             case SID_SETUPPRINTER:
             case SID_PRINTER_NAME:
             {
-                bool bEnabled = pImp->m_bCanPrint && !pImp->m_nPrinterLocks;
-                bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
+                bool bEnabled = pImp->m_bCanPrint && !pImp->m_nPrinterLocks
+                              && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {
                     SfxPrinter *pPrinter = GetPrinter(false);
@@ -866,7 +866,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                             rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, aBuffer.makeStringAndClear() ) );
                         }
                     }
-                    bEnabled = !pPrinter || !pPrinter->IsPrinting();
                 }
                 break;
             }

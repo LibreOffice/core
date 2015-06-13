@@ -2018,11 +2018,9 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
         if ( nOldRow != static_cast<sal_Int32>(nAbsRecordId) )
             bMove = lcl_MoveAbsolute(pFound, nAbsRecordId);
         if(bMove)
-        {
             bRet = lcl_GetColumnCnt(pFound, rColumnName, nLanguage, rResult, pNumber);
-        }
         if ( nOldRow != static_cast<sal_Int32>(nAbsRecordId) )
-            bMove = lcl_MoveAbsolute(pFound, nOldRow);
+            lcl_MoveAbsolute(pFound, nOldRow);
     }
     return bRet;
 }

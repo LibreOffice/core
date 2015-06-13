@@ -291,14 +291,12 @@ void ConvDicXMLRightTextContext_Impl::EndElement()
 
 bool ConvDicXMLExport::Export()
 {
-    bool bRet = false;
-
     uno::Reference< document::XExporter > xExporter( this );
     uno::Reference< document::XFilter > xFilter( xExporter, UNO_QUERY );
     uno::Sequence< beans::PropertyValue > aProps(0);
     xFilter->filter( aProps );      // calls exportDoc implicitly
 
-    return bRet = bSuccess;
+    return bSuccess;
 }
 
 

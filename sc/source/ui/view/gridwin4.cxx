@@ -455,7 +455,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SCCOL nHdlX = aAutoMarkPos.Col();
         SCROW nHdlY = aAutoMarkPos.Row();
         rDoc.ExtendMerge( nHdlX, nHdlY, nHdlX, nHdlY, nTab );
-        bCurVis = ( nHdlX+1 >= nX1 && nHdlX <= nX2 && nHdlY+1 >= nY1 && nHdlY <= nY2 );
         // left and top is unaffected
 
         //! AutoFill-Anfasser alleine (ohne Cursor) zeichnen ???
