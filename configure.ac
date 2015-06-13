@@ -7480,6 +7480,7 @@ AC_SUBST(SYSTEM_ZLIB)
 dnl ===================================================================
 dnl Check for system jpeg
 dnl ===================================================================
+AC_MSG_CHECKING([which libjpeg to use])
 if test "$with_jpeg_turbo" = "auto"; then
     # TODO use jpeg-turbo on Darwin too
     case "$_os" in
