@@ -614,7 +614,7 @@ Reference< ucb::XSimpleFileAccess3 > BackendImpl::getFileAccess()
         {
             throw RuntimeException(
                 "dp_registry::backend::help::BackendImpl::getFileAccess(), "
-                "could not instatiate SimpleFileAccess."  );
+                "could not instantiate SimpleFileAccess."  );
         }
     }
     return m_xSFA;

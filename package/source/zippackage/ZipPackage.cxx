@@ -1455,7 +1455,7 @@ void SAL_CALL ZipPackage::commitChanges()
                 // write directly in case of local file
                 uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xSimpleAccess(
                     SimpleFileAccess::create( m_xContext ) );
-                OSL_ENSURE( xSimpleAccess.is(), "Can't instatiate SimpleFileAccess service!\n" );
+                OSL_ENSURE( xSimpleAccess.is(), "Can't instantiate SimpleFileAccess service!\n" );
                 uno::Reference< io::XTruncate > xOrigTruncate;
                 if ( xSimpleAccess.is() )
                 {

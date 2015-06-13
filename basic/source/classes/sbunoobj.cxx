@@ -3006,7 +3006,7 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     // get the name of the class of the struct
     OUString aServiceName = rPar.Get(1)->GetOUString();
 
-    // search for the service and instatiate it
+    // search for the service and instantiate it
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     Reference< XInterface > xInterface;
     try
@@ -3061,7 +3061,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     Sequence< Any > aArgs;
     aArgAsAny >>= aArgs;
 
-    // search for the service and instatiate it
+    // search for the service and instantiate it
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     Reference< XInterface > xInterface;
     try

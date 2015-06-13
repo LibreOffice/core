@@ -181,7 +181,7 @@ static OUString GetSequenceNumber()
 
 // Code from XMLTextImportHelper using the XMLPropertyBackpatcher is
 // implemented here. The reason is that in the unxsols2 environment,
-// all templates are instatiated as file local (switch
+// all templates are instantiated as file local (switch
 // -instances=static), and thus are not accessible from the outside.
 
 // The previous solution was to force additional instantiation of

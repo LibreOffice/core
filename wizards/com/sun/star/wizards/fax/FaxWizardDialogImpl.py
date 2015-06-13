@@ -64,7 +64,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             #Number of steps on WizardDialog
             self.nMaxStep = 5
 
-            #instatiate The Document Frame for the Preview
+            #instantiate The Document Frame for the Preview
             self.terminateListener = TerminateListenerProcAdapter(self)
             self.myFaxDoc = FaxDocument(xMSF, self.terminateListener)
 

@@ -560,7 +560,7 @@ index 0000000..ff6cd9a
 +
 +#
 +#  Override TARGETS variable so that only shared libraries
-+#  are specifed as dependencies within rules.mk.
++#  are specified as dependencies within rules.mk.
 +#
 +
 +TARGETS        = $(SHARED_LIBRARY)

@@ -276,7 +276,7 @@ sal_Bool SAL_CALL AccessibleCell::containsPoint( const ::com::sun::star::awt::Po
 
 /** The implementation below is at the moment straightforward.  It iterates
     over all children (and thereby instances all children which have not
-    been already instatiated) until a child covering the specifed point is
+    been already instantiated) until a child covering the specified point is
     found.
     This leaves room for improvement.  For instance, first iterate only over
     the already instantiated children and only if no match is found

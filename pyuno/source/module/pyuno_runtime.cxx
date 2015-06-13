@@ -487,7 +487,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         if( ! ret.is() )
         {
             OUStringBuffer buf;
-            buf.appendAscii( "Couldn't instantiate python representation of structered UNO type " );
+            buf.appendAscii( "Couldn't instantiate python representation of structured UNO type " );
             buf.append( a.getValueType().getTypeName() );
             throw RuntimeException( buf.makeStringAndClear() );
         }

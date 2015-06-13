@@ -55,7 +55,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory)
         throw (css::uno::RuntimeException);
 
-    /** Unregister the specifed factory.
+    /** Unregister the specified factory.
         @param rsURL
             Unregister only the factory for this URL.  When the same factory
             is registered for other URLs then these remain registered.

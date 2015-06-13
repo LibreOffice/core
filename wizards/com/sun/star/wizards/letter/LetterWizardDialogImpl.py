@@ -71,7 +71,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             #Number of steps on WizardDialog
             self.nMaxStep = 6
 
-            #instatiate The Document Frame for the Preview
+            #instantiate The Document Frame for the Preview
             self.terminateListener = TerminateListenerProcAdapter(self)
             self.myLetterDoc = LetterDocument(xMSF, self.terminateListener)
 
