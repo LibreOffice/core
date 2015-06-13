@@ -37,7 +37,6 @@ using uno::UNO_QUERY;
 
 
 
-// must be aligned with configmgr/source/misc/configinteractionhandler
 static char const CONFIG_ERROR_HANDLER[] = "configuration.interaction-handler";
 
 
