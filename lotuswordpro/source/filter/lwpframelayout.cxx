@@ -889,7 +889,7 @@ OUString LwpFrameLayout::GetNextLinkName()
         {
             LwpAtomHolder& rHolder = pLayout->GetName();
             aName = rHolder.str();
-            //for division name confict
+            //for division name conflict
             if(!pLayout->GetStyleName().isEmpty())
                 aName = pLayout->GetStyleName();
         }

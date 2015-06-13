@@ -32,7 +32,7 @@ void LibXmlTreeWalker::nextNode()
     }
     else
         m_pCurrentNode = m_pCurrentNode->next;
-    //queue chiledren if they exist
+    //queue children if they exist
     if ( m_pCurrentNode->xmlChildrenNode != NULL )
         m_Queue.push_back( m_pCurrentNode->xmlChildrenNode );
 }
