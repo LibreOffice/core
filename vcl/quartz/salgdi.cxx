@@ -323,10 +323,8 @@ static bool AddTempDevFont(const OUString& rFontFileURL)
     CFStringRef rFontPath = CFStringCreateWithCString(NULL, aCFileName.getStr(), kCFStringEncodingUTF8);
     CFURLRef rFontURL = CFURLCreateWithFileSystemPath(NULL, rFontPath, kCFURLPOSIXPathStyle, true);
 
-    bool success = false;
-
     CFErrorRef error;
-    success = CTFontManagerRegisterFontsForURL(rFontURL, kCTFontManagerScopeProcess, &error);
+    bool success = CTFontManagerRegisterFontsForURL(rFontURL, kCTFontManagerScopeProcess, &error);
     if (!success)
     {
         CFRelease(error);

@@ -662,11 +662,8 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx"
     if(!pXmlDoc)
         return;
 
-    sal_Int32 idInDocXml     = 0;
-    sal_Int32 idInCommentXml = -1; //intentionally assigning -1 so that it differs from idInDocXml
-    //and also because getXpath does not assert.
-    idInDocXml     = getXPath(pXmlDoc,"/w:document/w:body/w:p[3]/w:commentRangeEnd[1]","id").toInt32();
-    idInCommentXml = getXPath(pXmlComm,"/w:comments/w:comment[1]","id").toInt32();
+    sal_Int32 idInDocXml     = getXPath(pXmlDoc,"/w:document/w:body/w:p[3]/w:commentRangeEnd[1]","id").toInt32();
+    sal_Int32 idInCommentXml = getXPath(pXmlComm,"/w:comments/w:comment[1]","id").toInt32();
     CPPUNIT_ASSERT_EQUAL( idInDocXml, idInCommentXml );
 }
 

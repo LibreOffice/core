@@ -280,7 +280,6 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
             nStrLen = rStrm.ReaduInt32();
             if( nStrLen )
             {
-                nStrLen = 0;
                 nStrLen = rStrm.ReaduInt32();
                 nStrLen /= 2;       // it's byte count here...
                 rStrm.Ignore( 2 );
@@ -780,7 +779,6 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     // second formula
     ::std::unique_ptr< ScTokenArray > xTokArr2;
 
-    nLen = 0;
     nLen = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
     if( nLen > 0 )

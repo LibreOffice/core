@@ -43,8 +43,7 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
 
     if( nRelBit & 0x2000 )
     {
-        SCROW nRelRow = (~nTmp + 1);
-        nRelRow = (sal_Int16)(nTmp << 3); // This looks weird... Mistake?
+        SCROW nRelRow = (sal_Int16)(nTmp << 3); // This looks weird... Mistake?
         nRelRow /= 8;
         rSRD.SetRelRow(nRelRow);
     }

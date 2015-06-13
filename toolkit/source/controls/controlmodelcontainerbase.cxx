@@ -1031,8 +1031,6 @@ void ControlModelContainerBase::implUpdateGroupStructure()
                 // it's a radio button, but on a different page
                 // -> we open a new group for it
 
-                // close the old group
-                aCurrentGroup = maGroups.end();
 #if OSL_DEBUG_LEVEL > 1
                 aCurrentGroupLabels.clear();
 #endif

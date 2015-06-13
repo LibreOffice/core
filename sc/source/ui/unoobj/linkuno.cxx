@@ -304,7 +304,6 @@ void ScSheetLinkObj::setFileName(const OUString& rNewName)
         //  Links updaten
         //! Undo !!!
 
-        pLink = NULL;               // wird bei UpdateLinks ungueltig
         pDocShell->UpdateLinks();   // alter Link raus, evtl. neuen Link anlegen
 
         //  Daten kopieren

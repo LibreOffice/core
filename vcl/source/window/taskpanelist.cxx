@@ -161,7 +161,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
     bool bForward = !aKeyCode.IsShift();
     if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
     {
-        bool bSplitterOnly = false;
+        bool bSplitterOnly;
         bool bFocusInList = false;
 
         bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
