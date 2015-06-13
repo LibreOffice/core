@@ -29,6 +29,7 @@
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"
 #include <boost/scoped_array.hpp>
+#include <memory>
 
 extern SgfFontLst* pSgfFonts;
 
@@ -667,13 +668,13 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     bool         Border;              // border of box reached ?
     bool         Border0;
     bool         AbsEnd;              // end of paragraph reached ?
-    ProcChrSta*  R=new ProcChrSta;
-    ProcChrSta*  R0=new ProcChrSta;
-    ProcChrSta*  WErec=new ProcChrSta;
+    std::unique_ptr<ProcChrSta> R(new ProcChrSta);
+    std::unique_ptr<ProcChrSta> R0(new ProcChrSta);
+    std::unique_ptr<ProcChrSta> WErec(new ProcChrSta);
     sal_uInt16       WEnChar;
-    ProcChrSta*  WErec0=new ProcChrSta;
+    std::unique_ptr<ProcChrSta> WErec0(new ProcChrSta);
     sal_uInt16       WEnChar0;
-    ProcChrSta*  TRrec=new ProcChrSta;
+    std::unique_ptr<ProcChrSta> TRrec(new ProcChrSta);
     sal_uInt16       TRnChar;
 
     sal_uInt16       WordEndCnt;          // justify and separate
@@ -852,11 +853,6 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     }
     Index=R->Index;
     AktAtr=R->Attrib;
-    delete R;
-    delete R0;
-    delete WErec;
-    delete WErec0;
-    delete TRrec;
 }
 
 // End of Absatz.Pas
