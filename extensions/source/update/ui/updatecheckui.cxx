@@ -528,7 +528,7 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
     BubbleWindow* pBubbleWin = mpBubbleWin;
 
     if ( !pBubbleWin ) {
-        pBubbleWin = new BubbleWindow( mpIconSysWin, maBubbleTitle,
+        pBubbleWin = VclPtr<BubbleWindow>::Create( mpIconSysWin, maBubbleTitle,
                                        maBubbleText, maBubbleImage );
         mbBubbleChanged = false;
     }
