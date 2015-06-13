@@ -59,7 +59,7 @@ class TransactionGuard : private boost::noncopyable
         inline TransactionGuard( TransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = NULL )
             : m_pManager( &rManager )
         {
-            // If exception mode is set to E_HARDEXCETIONS we don't need a buffer to return reason!
+            // If exception mode is set to E_HARDEXCEPTIONS we don't need a buffer to return reason!
             // We handle it private. If a call is rejected, our manager throw some exceptions ... and the reason
             // could be ignorable ...
             if( eReason == NULL )
