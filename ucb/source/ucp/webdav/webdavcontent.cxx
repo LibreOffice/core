@@ -1557,8 +1557,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
                         if ( bError )
                         {
-                            if ( !(bNetworkAccessAllowed
-                                    = shouldAccessNetworkAfterException( aLastException )) )
+                            if ( !shouldAccessNetworkAfterException( aLastException ) )
                             {
                                 cancelCommandExecution( aLastException, xEnv );
                                 // unreachable

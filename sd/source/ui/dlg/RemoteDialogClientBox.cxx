@@ -331,7 +331,6 @@ void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRe
         aTitleWidth = nMaxTitleWidth - (aTextHeight / 3);
         OUString aShortTitle = rRenderContext.GetEllipsisString(rEntry->m_pClientInfo->mName, aTitleWidth );
         rRenderContext.DrawText(aPos, aShortTitle);
-        aTitleWidth += (aTextHeight / 3);
     }
     else
         rRenderContext.DrawText(aPos, rEntry->m_pClientInfo->mName);

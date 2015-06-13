@@ -3205,7 +3205,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                     if (aCell.mpFormula->IsValue())
                     {
                         nVal = aCell.mpFormula->GetValue();
-                        pVar->PutDouble(aCell.mpFormula->GetValue());
+                        pVar->PutDouble( nVal );
                     }
                     else
                         pVar->PutString(aCell.mpFormula->GetString().getString());

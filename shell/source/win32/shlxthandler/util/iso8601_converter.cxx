@@ -34,7 +34,6 @@
 */
 std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
 {
-    const std::wstring CONST_SPACE(L" ");
     ::std::wstring ws8601DateTime(isoDate);
 
     if ( ws8601DateTime.length() == 19 )

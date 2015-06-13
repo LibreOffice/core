@@ -1428,7 +1428,6 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xAddIn.is() )
                 {
                     xResult = xAddIn;
-                    bServiceFound = true;
                 }
             }
         }

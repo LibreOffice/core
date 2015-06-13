@@ -693,8 +693,7 @@ const OUString& SelectionManager::getString( Atom aAtom )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    std::unordered_map< Atom, OUString >::const_iterator it;
-    if( ( it = m_aAtomToString.find( aAtom ) ) == m_aAtomToString.end() )
+    if( m_aAtomToString.find( aAtom ) == m_aAtomToString.end() )
     {
         static OUString aEmpty;
         char* pAtom = m_pDisplay ? XGetAtomName( m_pDisplay, aAtom ) : NULL;
@@ -712,8 +711,7 @@ Atom SelectionManager::getAtom( const OUString& rString )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    std::unordered_map< OUString, Atom, OUStringHash >::const_iterator it;
-    if( ( it = m_aStringToAtom.find( rString ) ) == m_aStringToAtom.end() )
+    if( m_aStringToAtom.find( rString ) == m_aStringToAtom.end() )
     {
         static Atom nNoDisplayAtoms = 1;
         Atom aAtom = m_pDisplay ? XInternAtom( m_pDisplay, OUStringToOString( rString, RTL_TEXTENCODING_ISO_8859_1 ).getStr(), False ) : nNoDisplayAtoms++;

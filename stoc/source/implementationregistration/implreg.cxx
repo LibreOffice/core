@@ -565,7 +565,6 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
             if (hasNoImplementations)
             {
                 bClean = true;
-                hasNoImplementations = false;
                 OUString path(xOldKey->getKeyName());
                 xOldKey->closeKey();
                 xRootKey->deleteKey(path);

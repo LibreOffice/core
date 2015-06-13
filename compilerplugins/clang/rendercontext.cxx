@@ -93,9 +93,7 @@ bool RenderContext::VisitCXXMemberCallExpr(const CXXMemberCallExpr* pCXXMemberCa
     }
     // for calling through a pointer
     const ImplicitCastExpr *pImplicitCastExpr = dyn_cast<ImplicitCastExpr>(pCXXMemberCallExpr->getImplicitObjectArgument());
-    std::string x = "0"; // for debugging
     if (pImplicitCastExpr) {
-        x += "1";
         QualType aType = pImplicitCastExpr->getSubExpr()->getType();
         if (aType->isPointerType())
             aType = aType->getPointeeType();
@@ -106,7 +104,6 @@ bool RenderContext::VisitCXXMemberCallExpr(const CXXMemberCallExpr* pCXXMemberCa
     // for calling through a reference
     const DeclRefExpr *pDeclRefExpr = dyn_cast<DeclRefExpr>(pCXXMemberCallExpr->getImplicitObjectArgument());
     if (pDeclRefExpr) {
-        x += "2";
         QualType aType = pDeclRefExpr->getType();
         std::string t2 = aType.getAsString();
         if (t2 == "vcl::RenderContext" || t2 == "const vcl::RenderContext")
@@ -115,18 +112,15 @@ bool RenderContext::VisitCXXMemberCallExpr(const CXXMemberCallExpr* pCXXMemberCa
     // for calling through a chain of methods
     const CXXMemberCallExpr *pMemberExpr = dyn_cast<CXXMemberCallExpr>(pCXXMemberCallExpr->getImplicitObjectArgument());
     if (pMemberExpr) {
-        x += "3";
         QualType aType = pMemberExpr->getType();
         if (aType->isPointerType())
             aType = aType->getPointeeType();
         std::string t2 = aType.getAsString();
-        x += t2;
         if (t2 == "vcl::RenderContext" || t2 == "const vcl::RenderContext")
             return true;
     }
     report(
         DiagnosticsEngine::Warning,
-        //  + x + pCXXMemberCallExpr->getImplicitObjectArgument()->getStmtClassName()
         "Should be calling OutputDevice method through RenderContext.",
         pCXXMemberCallExpr->getLocStart())
             << pCXXMemberCallExpr->getSourceRange();

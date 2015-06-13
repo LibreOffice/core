@@ -218,7 +218,6 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
             if (!bWasSetTypeAttribute)
             {
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
-                bWasSetTypeAttribute = true;
                 if (bExportValue)
                 {
                     OUString sValue( ::rtl::math::doubleToUString( rValue,
@@ -502,7 +501,6 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
             if (!bWasSetTypeAttribute)
             {
                 pExport->AddAttribute(sAttrValType, XML_FLOAT);
-                bWasSetTypeAttribute = true;
                 if (bExportValue)
                 {
                     OUString sValue( ::rtl::math::doubleToUString( rValue,

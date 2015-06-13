@@ -2423,34 +2423,21 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         ::dbtools::throwGenericSQLException( sError, *this );
     }
 
-    bool bAlreadyDroped = false;
-    try
+    pNewTable->construct();
+    // copy the data
+    copyData(pNewTable,pNewTable->m_pColumns->getCount());
+    // drop the old table
+    if(DropImpl())
     {
-        pNewTable->construct();
-        // copy the data
-        copyData(pNewTable,pNewTable->m_pColumns->getCount());
-        // drop the old table
-        if(DropImpl())
-        {
-            bAlreadyDroped = true;
-            pNewTable->renameImpl(m_Name);
-            // release the temp file
-        }
-        xHold = pNewTable = NULL;
-
-        FileClose();
-        construct();
-        if(m_pColumns)
-            m_pColumns->refresh();
+        pNewTable->renameImpl(m_Name);
+        // release the temp file
     }
-    catch(const SQLException&)
-    {
-        // here we know that the old table wasn't dropped before
-        if(!bAlreadyDroped)
-            xHold = pNewTable = NULL;
+    xHold = pNewTable = NULL;
 
-        throw;
-    }
+    FileClose();
+    construct();
+    if(m_pColumns)
+        m_pColumns->refresh();
 }
 
 void ODbaseTable::dropColumn(sal_Int32 _nPos)

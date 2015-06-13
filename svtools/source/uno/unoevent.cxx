@@ -246,7 +246,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 rAny <<= aSequence;
                 bRetValueOK = true;
                 break;
-                        }
+            }
             case JAVASCRIPT:
             default:
                 OSL_FAIL("not implemented");
@@ -268,7 +268,6 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
         aSequence[0] = aKindValue;
 
         rAny <<= aSequence;
-        bRetValueOK = true;
     }
 }
 

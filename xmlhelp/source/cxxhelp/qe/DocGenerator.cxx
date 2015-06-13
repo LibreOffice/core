@@ -37,7 +37,6 @@ RoleFiller::RoleFiller()
 
 RoleFiller::~RoleFiller()
 {
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

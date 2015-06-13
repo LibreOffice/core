@@ -76,7 +76,7 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
     Sequence< DataFlavor > aFlavorList;
     bool bSuccess = m_rManager.getPasteDataTypes( m_aSelection ? m_aSelection : XA_PRIMARY, aFlavorList );
     if( ! bSuccess && m_aSelection == 0 )
-        bSuccess = m_rManager.getPasteDataTypes( m_rManager.getAtom( OUString("CLIPBOARD") ), aFlavorList );
+        m_rManager.getPasteDataTypes( m_rManager.getAtom( OUString("CLIPBOARD") ), aFlavorList );
 
     return aFlavorList;
 }

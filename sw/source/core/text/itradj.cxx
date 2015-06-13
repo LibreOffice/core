@@ -490,7 +490,6 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     sal_uInt16 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
     pPos = pCurrent->GetPortion();
     long nDecompress = 0;
-    nKanaDiffSum = 0;
 
     while( pPos )
     {
@@ -505,7 +504,6 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
             // check, if information is stored under other key
             if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
                 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( pCurrent );
-            nKanaDiffSum += nMaxWidthDiff;
             pPos->Width( nMinWidth +
                        ( ( 10000 - nCompress ) * nMaxWidthDiff ) / 10000 );
             nDecompress += pPos->Width() - nMinWidth;
@@ -521,7 +519,6 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
             if ( ++nKanaIdx < pCurrent->GetKanaComp().size() )
                 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
 
-            nKanaDiffSum = 0;
             nDecompress = 0;
         }
         pPos = pPos->GetPortion();

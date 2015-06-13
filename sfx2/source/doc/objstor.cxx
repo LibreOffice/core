@@ -3454,7 +3454,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                     }
 
                     uno::Reference< beans::XPropertySet > xProps( xSubStorage, uno::UNO_QUERY_THROW );
-                    bGotMediaType = ( xProps->getPropertyValue( aMediaTypePropName ) >>= aMediaType );
+                    xProps->getPropertyValue( aMediaTypePropName ) >>= aMediaType;
                 }
 
                 // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist

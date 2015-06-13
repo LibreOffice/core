@@ -124,7 +124,6 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
         try
         {
             xTextCursor = rText->createTextCursor();
-            bGotTextCursor = true;
         }
         catch (const uno::Exception& e)
         {
