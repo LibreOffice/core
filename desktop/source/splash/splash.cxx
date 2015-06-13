@@ -368,7 +368,7 @@ void SplashScreen::updateStatus()
 // internal private methods
 IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
 {
-    if ( inEvent != 0 )
+    if (inEvent != 0 && inEvent->GetWindow() == pWindow)
     {
         switch ( inEvent->GetId() )
         {
