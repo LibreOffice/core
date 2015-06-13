@@ -667,7 +667,7 @@ class FilterCache : public BaseLock
                         object.
 
             @param      bLocalesMode
-                        enable/disable special handling of localized configuratiom
+                        enable/disable special handling of localized configuration
                         items by the returned configuration object.
 
             @return     A valid reference, if the configuration access could be opened
@@ -867,7 +867,7 @@ class FilterCache : public BaseLock
                     this list to check if the item was changed/added or removed. This method
                     checks the exist state of the requested item inside our own cache
                     and inside the underlying configuration layer to find out, if the item
-                    must be removed/added or modified inside the configuratuion layer.
+                    must be removed/added or modified inside the configuration layer.
 
             @param  xSet
                     points directly to the configuration set, where the item should resist

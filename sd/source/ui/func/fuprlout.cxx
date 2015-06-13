@@ -190,7 +190,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             OUString aFileName = aFile.getToken(0, DOCUMENT_TOKEN);
             SdDrawDocument* pTempDoc = mpDoc->OpenBookmarkDoc( aFileName );
 
-            // #69581: If I chosed the standard-template I got no filename and so I get no
+            // #69581: If I chose the standard-template I got no filename and so I get no
             //         SdDrawDocument-Pointer. But the method SetMasterPage is able to handle
             //         a NULL-pointer as a Standard-template ( look at SdDrawDocument::SetMasterPage )
             OUString aLayoutName;

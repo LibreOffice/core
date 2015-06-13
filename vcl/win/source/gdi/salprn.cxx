@@ -1521,7 +1521,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     while ( bWhile );
     PostMessageW( GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0 );
 
-    // bring up a file choser if printing to file port but no file name given
+    // bring up a file chooser if printing to file port but no file name given
     OUString aOutFileName;
     if( mpInfoPrinter->maPortName.equalsIgnoreAsciiCase( "FILE:" ) && !(pFileName && !pFileName->isEmpty()) )
     {

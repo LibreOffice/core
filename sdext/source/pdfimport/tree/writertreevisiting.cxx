@@ -660,7 +660,7 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
      */
 
     // detect header
-    // Note: the following assumes that the pages' chiuldren have been
+    // Note: the following assumes that the pages' children have been
     // sorted geometrically
     std::list< Element* >::iterator it = rElem.Children.begin();
     while( it != rElem.Children.end() )
