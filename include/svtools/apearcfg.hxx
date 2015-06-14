@@ -20,7 +20,6 @@
 #define INCLUDED_SVTOOLS_APEARCFG_HXX
 
 #include <svtools/svtdllapi.h>
-#include <unotools/configitem.hxx>
 
 class Application;
 enum class MouseMiddleButtonAction;
@@ -38,7 +37,7 @@ typedef enum { // MUST match the order chosen in ListBox LB_DRAG_MODE in optgdlg
 } DragMode;
 
 
-class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
+class SVT_DLLPUBLIC SvtTabAppearanceCfg
 {
     short           nDragMode           ;
     short           nScaleFactor        ;
@@ -55,14 +54,11 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 
     static bool  bInitialized ;
 
-    SVT_DLLPRIVATE const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
-    virtual void    ImplCommit() SAL_OVERRIDE;
-
 public:
     SvtTabAppearanceCfg( );
     virtual ~SvtTabAppearanceCfg( );
 
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
+    void    Commit();
 
     sal_uInt16  GetDragMode  () const { return nDragMode; }
 
@@ -77,15 +73,15 @@ public:
 
     void        SetApplicationDefaults ( Application* pApp );
 
-    void        SetMenuMouseFollow(bool bSet) {bMenuMouseFollow = bSet; SetModified();}
+    void        SetMenuMouseFollow(bool bSet) {bMenuMouseFollow = bSet; }
     bool        IsMenuMouseFollow() const{return bMenuMouseFollow;}
 
 #if defined( UNX )
-    void        SetFontAntiAliasing( bool bSet )    { bFontAntialiasing = bSet; SetModified(); }
+    void        SetFontAntiAliasing( bool bSet )    { bFontAntialiasing = bSet; }
     bool        IsFontAntiAliasing() const { return bFontAntialiasing; }
 
     sal_uInt16  GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
-    void        SetFontAntialiasingMinPixelHeight( sal_uInt16 _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
+    void        SetFontAntialiasingMinPixelHeight( sal_uInt16 _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; }
 #endif
 
     static bool IsInitialized()  { return bInitialized; }
