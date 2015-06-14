@@ -1905,7 +1905,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
 
             Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
 
-            // store menu item command as we later have to know which menu is active (see Acivate handler)
+            // store menu item command as we later have to know which menu is active (see Activate handler)
             pSubMenuManager->m_aMenuItemCommand = aItemCommand;
 
             MenuItemHandler* pMenuItemHandler = new MenuItemHandler(

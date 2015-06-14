@@ -1895,7 +1895,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
     return 0;
 }
 
-// enable acceptos
+// enable acceptors
 IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl)
 {
     enableAcceptors();

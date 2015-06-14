@@ -460,7 +460,7 @@ bool SwObjectFormatterTextFrm::DoFormatObjs()
 void SwObjectFormatterTextFrm::_InvalidatePrevObjs( SwAnchoredObject& _rAnchoredObj )
 {
     // invalidate all previous objects, whose wrapping influence on the object
-    // positioning is <NONE_CONCURRENT_POSIITIONED>.
+    // positioning is <NONE_CONCURRENT_POSITIONED>.
     // Note: list of objects at anchor frame is sorted by this property.
     if ( _rAnchoredObj.GetFrameFormat().GetWrapInfluenceOnObjPos().
                 // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE

@@ -127,7 +127,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
         aDotDashArray,
         fFullDotDashLen);
 
-    // cerate LinePrimitive
+    // create LinePrimitive
     const drawinglayer::primitive2d::Primitive2DReference aLinePrimitive(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
             aLine,

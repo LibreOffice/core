@@ -683,8 +683,8 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
     initialitze it. E.g. the menu must be set at the container window of the frame, which
     is our parent window. But may at that time another component used it.
     That's why our creator has to inform us, when it's time to initialize us really.
-    Currently only calling of this method must be done. But further implementatoins
-    can use special in parameter to configure this initialization ...
+    Currently only calling of this method must be done. But further implementations
+    can use special in parameter to configure this initialization...
 
     @param  lArgs
                 currently not used

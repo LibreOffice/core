@@ -632,7 +632,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
             delete pTOXAttr->GetBase();
 
-            // set (aboved saved and removed) the break item at the node following the TOX
+            // set (above saved and removed) the break item at the node following the TOX
             if( aBkSet.Count() )
                 pNd->SetAttr( aBkSet );
         }

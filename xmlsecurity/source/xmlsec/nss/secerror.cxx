@@ -68,7 +68,7 @@ printChainFailure(CERTVerifyLog *log)
 
     if (log->count > 0)
     {
-        SAL_INFO("xmlsecurity.xmlsec", "Bad certifcation path:");
+        SAL_INFO("xmlsecurity.xmlsec", "Bad certification path:");
         unsigned long errorFlags  = 0;
         for (node = log->head; node; node = node->next)
         {

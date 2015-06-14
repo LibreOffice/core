@@ -153,7 +153,7 @@ inline OUString read_uInt16_PascalString(SvStream& rStrm)
 OUString read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc);
 OUString read_uInt16_BeltAndBracesString(SvStream& rStrm);
 
-//--Line abovewhich the code has meaningful comments
+//--Line above which the code has meaningful comments
 
 class  WW8Fib;
 class  WW8ScannerBase;
