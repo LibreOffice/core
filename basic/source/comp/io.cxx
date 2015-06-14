@@ -165,7 +165,7 @@ void SbiParser::Input()
     aGen.Gen( _CHAN0 );
 }
 
-// OPEN stringexpr FOR mode ACCCESS access mode AS Channel [Len=n]
+// OPEN stringexpr FOR mode ACCESS access mode AS Channel [Len=n]
 
 void SbiParser::Open()
 {

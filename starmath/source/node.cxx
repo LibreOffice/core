@@ -2536,7 +2536,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // elements (subnodes) in that column.
     std::vector<long> aColWidth(nNumCols);
 
-    // arrange subnodes and calculate the aboves arrays contents
+    // arrange subnodes and calculate the above arrays contents
     sal_uInt16 nNodes = GetNumSubNodes();
     for (i = 0;  i < nNodes;  i++)
     {

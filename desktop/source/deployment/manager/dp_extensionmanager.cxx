@@ -692,7 +692,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
         bool bUserDisabled = false;
         // In this guarded section (getMutex) we must not use the argument xCmdEnv
         // because it may bring up dialogs (XInteractionHandler::handle) this
-        // may potententially deadlock. See issue
+        // may potentially deadlock. See issue
         // http://qa.openoffice.org/issues/show_bug.cgi?id=114933
         // By not providing xCmdEnv the underlying APIs will throw an exception if
         // the XInteractionRequest cannot be handled.
