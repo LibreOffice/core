@@ -237,9 +237,6 @@ public:
 
         @param pNumRule
         numbering rule which needs to be applied. can be 0.
-
-        @param bSwitchOff
-        true: switch off bullets/numbering
     */
     void ChangeMarkedObjectsBulletsNumbering(
         const bool bToggle,
