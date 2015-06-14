@@ -720,12 +720,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( bGridFirst && ( bGrid || bPage ) )
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
 
-    MapMode aPrevMapMode = pContentDev->GetMapMode();
-    pContentDev->SetMapMode(MAP_PIXEL);
-
     aOutputData.DrawBackground(*pContentDev);
-
-    pContentDev->SetMapMode(aPrevMapMode);
 
     if ( !bGridFirst && ( bGrid || bPage ) )
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
