@@ -1533,7 +1533,7 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
         }
         if ( nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING )
         {
-            m_pBackGroundColorLabelFT->SetText("Highlighting Color");
+            m_pBackGroundColorLabelFT->SetText(CUI_RES(RID_SVXSTR_CHARNAME_HIGHLIGHTING));
             bHighlighting = true;
         }
     }
