@@ -146,7 +146,7 @@ private: //member
     ::basegfx::B2DVector    m_aAxisStartScreenPosition2D;
     ::basegfx::B2DVector    m_aAxisEndScreenPosition2D;
 
-    //labels might be posioned high or low on the border of the diagram far away from the axis
+    //labels might be positioned high or low on the border of the diagram far away from the axis
     //add this vector to go from the axis line to the label line (border of the diagram)
     ::basegfx::B2DVector    m_aAxisLineToLabelLineShift;
 

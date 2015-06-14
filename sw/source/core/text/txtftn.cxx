@@ -261,7 +261,7 @@ SwTwips SwTextFrm::GetFootnoteLine( const SwTextFootnote *pFootnote ) const
 
     if( !HasPara() )
     {
-        // #109071# GetFormatted() does not work here, bacause most probably
+        // #109071# GetFormatted() does not work here, because most probably
         // the frame is currently locked. We return the previous value.
         return pThis->mnFootnoteLine > 0 ?
                pThis->mnFootnoteLine :

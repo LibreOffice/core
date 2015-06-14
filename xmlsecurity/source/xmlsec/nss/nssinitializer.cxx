@@ -122,7 +122,7 @@ void deleteRootsModule()
             {
                 if (PK11_HasRootCerts(slot))
                 {
-                    SAL_INFO("xmlsecurity.xmlsec", "The root certifificates module \"" << module->commonName << "\" is already loaded: " << module->dllName);
+                    SAL_INFO("xmlsecurity.xmlsec", "The root certificates module \"" << module->commonName << "\" is already loaded: " << module->dllName);
 
                     RootsModule = SECMOD_ReferenceModule(module);
                     break;
@@ -334,7 +334,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
             }
             else
             {
-                SAL_INFO("xmlsecurity.xmlsec", "FAILED to add new root certifice module " ROOT_CERTS  " contained in " << ospath);
+                SAL_INFO("xmlsecurity.xmlsec", "FAILED to add new root certificate module " ROOT_CERTS  " contained in " << ospath);
                 return_value = false;
 
             }

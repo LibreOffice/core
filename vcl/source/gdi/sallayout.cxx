@@ -158,7 +158,7 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
 // true if a codepoint doesn't influence the logical text width
 bool IsDiacritic( sal_UCS4 nChar )
 {
-    // shortcut abvious non-diacritics
+    // shortcut obvious non-diacritics
     if( nChar < 0x0300 )
         return false;
      if( nChar >= 0x2100 )

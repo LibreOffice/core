@@ -99,7 +99,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FmGridControl : public DbGridControl
     friend class FmXGridPeer;
 
     FmXGridPeer*        m_pPeer;
-    sal_Int32           m_nCurrentSelectedColumn;   // this is the column model (not the view) posisition ...
+    sal_Int32           m_nCurrentSelectedColumn;   // this is the column model (not the view) position...
     sal_uInt16          m_nMarkedColumnId;
     bool                m_bSelecting;
     bool                m_bInColumnMove : 1;

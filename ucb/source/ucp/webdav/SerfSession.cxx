@@ -258,7 +258,7 @@ apr_status_t SerfSession::setupSerfConnection( apr_socket_t * inAprSocket,
                                                       0,
                                                       getSerfBktAlloc() );
         /** Set the callback that is called to authenticate the
-            certifcate (chain).
+            certificate (chain).
         */
         serf_ssl_server_cert_chain_callback_set(
             serf_bucket_ssl_decrypt_context_get(tmpInputBkt),

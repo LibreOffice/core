@@ -33,7 +33,7 @@ namespace drawinglayer
     {
         /** DiscreteMetricDependentPrimitive2D class
 
-            tooling class for BufferedDecompositionPrimitive2D baseed classes which are view-dependent
+            tooling class for BufferedDecompositionPrimitive2D based classes which are view-dependent
             regarding the size of a discrete unit. The implementation of get2DDecomposition
             guards the buffered local decomposition and ensures that a create2DDecomposition
             implementation may use an up-to-date DiscreteUnit accessible using getDiscreteUnit()
@@ -79,7 +79,7 @@ namespace drawinglayer
     {
         /** ViewportDependentPrimitive2D class
 
-            tooling class for BufferedDecompositionPrimitive2D baseed classes which are view-dependent
+            tooling class for BufferedDecompositionPrimitive2D based classes which are view-dependent
             regarding the viewport. The implementation of get2DDecomposition
             guards the buffered local decomposition and ensures that a create2DDecomposition
             implementation may use an up-to-date Viewport accessible using getViewport()
