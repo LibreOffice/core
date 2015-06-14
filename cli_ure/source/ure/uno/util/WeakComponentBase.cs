@@ -37,8 +37,8 @@ public class WeakComponentBase : WeakBase, XComponent
     private bool m_inDispose = false;
     private bool m_disposed = false;
 
-    /** Indicates whether object is alrady disposed.
-        
+    /** Indicates whether object is already disposed.
+
         @return
                 true, if object has been disposed
     */

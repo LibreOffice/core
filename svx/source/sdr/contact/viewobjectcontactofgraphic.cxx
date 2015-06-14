@@ -212,7 +212,7 @@ namespace sdr
 
             // #i103720# forget event to avoid possible deletion by the following ActionChanged call
             // which may use createPrimitive2DSequence/impPrepareGraphicWithAsynchroniousLoading again.
-            // Deletion is actally done by the scheduler who leaded to coming here
+            // Deletion is actually done by the scheduler who leaded to coming here
             mpAsynchLoadEvent = 0;
 
             // Invalidate all paint areas and check existing animation (which may have changed).

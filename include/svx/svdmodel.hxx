@@ -491,7 +491,7 @@ public:
     bool            IsSaveOLEPreview() const          { return bSaveOLEPreview; }
     void            SetSaveOLEPreview( bool bSet) { bSaveOLEPreview = bSet; }
 
-    // To accelarate the screen output of Bitmaps (especially rotated ones)
+    // To accelerate the screen output of Bitmaps (especially rotated ones)
     // they will be cached. The existence of that cache can be toggled with this
     // flag. During the next Paint an image will be remembered or freed.
     // If a Bitmap object is placed in Undo its Cache for this object is turned off

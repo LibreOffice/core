@@ -477,7 +477,7 @@ void Test::testSortInFormulaGroup()
         { 0, 2, "20" },  { 1, 2, "=A3" },
         { 0, 3, "10" },  { 1, 3, "=A4+1" }, // swap across groups
         { 0, 4, "2"  },  { 1, 4, "=A5+1" },
-        { 0, 5, "101" }, { 1, 5, "=A6" }, // swap inside contiguious group
+        { 0, 5, "101" }, { 1, 5, "=A6" }, // swap inside contiguous group
         { 0, 6, "100" }, { 1, 6, "=A7" },
         { 0, 7, "102" }, { 1, 7, "=A8" },
         { 0, 8, "104" }, { 1, 8, "=A9" },

@@ -4822,7 +4822,7 @@ interface IAccessibleTableCell : IUnknown
      [out, retval] boolean *isSelected
     );
 
-  /** @brief Returns a reference to the accessbile of the containing table.
+  /** @brief Returns a reference to the accessible of the containing table.
 
    @param [out] table
     Returns a reference to the IUnknown of the containing table.

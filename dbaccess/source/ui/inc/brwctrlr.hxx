@@ -246,7 +246,7 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service
-            // you most probably don't want to override this behaviuor
+            // you most probably don't want to override this behavior
 
         // the default implementation of disposing distributes the events to the following disposingXXX functions
         void disposingGridControl(const ::com::sun::star::lang::EventObject& Source);   // calls removeControlListeners

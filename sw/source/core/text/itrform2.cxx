@@ -1753,7 +1753,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         // Word will render < 50% too but it's just not readable
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
-                        if (nTmp<100) { // code adaped from fixed line height
+                        if (nTmp<100) { // code adapted from fixed line height
                             nTmp *= nLineHeight;
                             nTmp /= 100;
                             if( !nTmp )

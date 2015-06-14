@@ -177,7 +177,7 @@ protected:
 
     // #110649#
     // Flag value for avoiding death loops when calculating BoundRects
-    // from circularly connected connectors. A coloring algorithm is used
+    // from circulary connected connectors. A coloring algorithm is used
     // here. When the GetCurrentBoundRect() calculation of a SdrEdgeObj
     // is running, the flag is set, else it is always sal_False.
     bool                        mbBoundRectCalculationRunning : 1;
