@@ -18,6 +18,7 @@
  */
 
 #include "text/TextPropertyPanel.hxx"
+#include "styles/StylesPropertyPanel.hxx"
 #include "paragraph/ParaPropertyPanel.hxx"
 #include "area/AreaPropertyPanel.hxx"
 #include "graphic/GraphicPropertyPanel.hxx"
@@ -143,6 +144,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     if (rsResourceURL.endsWith("/TextPropertyPanel"))
     {
         pControl = TextPropertyPanel::Create(pParentWindow, xFrame, pBindings, aContext);
+    }
+    else if (rsResourceURL.endsWith("/StylesPropertyPanel"))
+    {
+        pControl = StylesPropertyPanel::Create(pParentWindow, xFrame, pBindings);
     }
     else if (rsResourceURL.endsWith("/ParaPropertyPanel"))
     {
