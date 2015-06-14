@@ -831,7 +831,7 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
             if ( pWindow_->GetDocument().isInVBAMode() )
             {
                 SbModule* pMod = StarBASIC::GetActiveModule();
-                if ( !pMod || ( pMod && ( !pMod->GetName().equals(pWindow_->GetName()) ) ) )
+                if ( !pMod || !pMod->GetName().equals(pWindow_->GetName()))
                 {
                     bStop = false;
                 }

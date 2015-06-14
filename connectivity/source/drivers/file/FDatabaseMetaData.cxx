@@ -265,7 +265,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             {
                 aName = aName.copy(0, (aName.getLength()-(aFilenameExtension.getLength()+1)));
                 sal_Unicode nChar = aName.toChar();
-                if ( match(tableNamePattern,aName,'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
+                if ( match(tableNamePattern,aName,'\0') && ( !bCheckEnabled || (nChar < '0' || nChar > '9')) )
                 {
                     aRow.push_back(new ORowSetValueDecorator(aName));
                     bNewRow = true;
@@ -280,7 +280,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 if (aURL.getExtension().isEmpty())
                 {
                     sal_Unicode nChar = aURL.getBase()[0];
-                    if(match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
+                    if(match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || (nChar < '0' || nChar > '9') ) )
                     {
                         aRow.push_back(new ORowSetValueDecorator(OUString(aURL.getBase())));
                         bNewRow = true;

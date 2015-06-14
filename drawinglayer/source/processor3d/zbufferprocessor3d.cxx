@@ -296,7 +296,7 @@ private:
         const bool bTextureActive(mrProcessor.getGeoTexSvx().get() || mrProcessor.getTransparenceGeoTexSvx().get());
         mbUseTex = bTextureActive && (mbHasTexCoor || mbHasInvTexCoor || mrProcessor.getSimpleTextureActive());
         const bool bUseColorTex(mbUseTex && mrProcessor.getGeoTexSvx().get());
-        const bool bNeedNrmOrCol(!bUseColorTex || (bUseColorTex && mrProcessor.getModulate()));
+        const bool bNeedNrmOrCol(!bUseColorTex || mrProcessor.getModulate());
         mbUseNrm = bNeedNrmOrCol && SCANLINE_EMPTY_INDEX != rA.getNormalIndex() && SCANLINE_EMPTY_INDEX != rB.getNormalIndex();
         mbUseCol = !mbUseNrm && bNeedNrmOrCol && SCANLINE_EMPTY_INDEX != rA.getColorIndex() && SCANLINE_EMPTY_INDEX != rB.getColorIndex();
 

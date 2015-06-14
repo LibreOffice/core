@@ -505,8 +505,7 @@ bool DataPointItemConverter::ApplySpecialItem(
             bool bPropExisted =
                 ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldValue );
 
-            if( ! bPropExisted ||
-                ( bPropExisted && fOldValue != fValue ))
+            if( ! bPropExisted || fOldValue != fValue )
             {
                 GetPropertySet()->setPropertyValue( "TextRotation" , uno::makeAny( fValue ));
                 bChanged = true;

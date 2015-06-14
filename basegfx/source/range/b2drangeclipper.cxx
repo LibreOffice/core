@@ -302,8 +302,7 @@ namespace basegfx
             {
                 OSL_PRECOND( !mbIsFinished,
                              "ImplPolygon::intersect(): called on already finished polygon!" );
-                OSL_PRECOND( !isFinishingEdge
-                             || (isFinishingEdge && &rEvent.getRect() == &rActiveEdge.getRect()),
+                OSL_PRECOND( !isFinishingEdge || &rEvent.getRect() == &rActiveEdge.getRect(),
                              "ImplPolygon::intersect(): inconsistent ending!" );
 
                 const B2DPoint aIntersectionPoint( rEvent.getPos(),

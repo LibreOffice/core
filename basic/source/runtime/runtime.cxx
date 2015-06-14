@@ -1628,7 +1628,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     SbxDataType eVarType = refVar->GetType();
     SbxDataType eValType = refVal->GetType();
 
-    if ( !( !bVBA|| ( bVBA && refVar->GetType() != SbxEMPTY ) ) || !refVar->CanWrite() )
+    if ( !( !bVBA || refVar->GetType() != SbxEMPTY ) || !refVar->CanWrite() )
         return false;
 
     if ( eValType != SbxOBJECT )
@@ -1825,7 +1825,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
 
     // Getting in here causes problems with objects with default properties
     // if they are SbxEMPTY I guess
-    if ( !bHandleDefaultProp || ( bHandleDefaultProp && eValType == SbxOBJECT ) )
+    if ( !bHandleDefaultProp || eValType == SbxOBJECT )
     {
     // activate GetOject for collections on refVal
         SbxBase* pObjVarObj = refVal->GetObject();
@@ -3842,7 +3842,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         }
     }
     // consider index-access for UnoObjects
-    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) && ( !bVBAEnabled || ( bVBAEnabled && !pElem->ISA(SbxProperty) ) ) )
+    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) && ( !bVBAEnabled || !pElem->ISA(SbxProperty) ) )
     {
         pPar = pElem->GetParameters();
         if ( pPar )

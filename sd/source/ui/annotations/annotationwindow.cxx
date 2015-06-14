@@ -175,7 +175,7 @@ void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
         {
             bool bIsProtected = mpAnnotationWindow->IsProtected();
-            if (!bIsProtected || (bIsProtected && !EditEngine::DoesKeyChangeText(rKeyEvt)) )
+            if (!bIsProtected || !EditEngine::DoesKeyChangeText(rKeyEvt) )
 
             bDone = mpOutlinerView->PostKeyEvent( rKeyEvt );
         }

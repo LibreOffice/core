@@ -556,7 +556,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 {
                     ScRange aDelRange;
                     bool bIsDel = rViewData.GetDelMark( aDelRange );
-                    if ( (!bIsDel || (bIsDel && aMarkRange != aDelRange)) &&
+                    if ( (!bIsDel || aMarkRange != aDelRange) &&
                         bNewMarked &&
                         nNewMarkCount > 0 &&
                         !IsSameMarkCell() )

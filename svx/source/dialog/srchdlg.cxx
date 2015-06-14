@@ -1016,7 +1016,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     {
         EnableControl_Impl(m_pSearchBtn);
         EnableControl_Impl(m_pReplaceBtn);
-        if (!bWriter || (bWriter && !m_pNotesBtn->IsChecked()))
+        if (!bWriter || !m_pNotesBtn->IsChecked())
         {
             EnableControl_Impl(m_pSearchAllBtn);
             EnableControl_Impl(m_pReplaceAllBtn);
@@ -1416,7 +1416,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
         {
             EnableControl_Impl(m_pSearchBtn);
             EnableControl_Impl(m_pReplaceBtn);
-            if (!bWriter || (bWriter && !m_pNotesBtn->IsChecked()))
+            if (!bWriter || !m_pNotesBtn->IsChecked())
             {
                 EnableControl_Impl(m_pSearchAllBtn);
                 EnableControl_Impl(m_pReplaceAllBtn);

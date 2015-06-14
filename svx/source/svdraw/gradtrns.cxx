@@ -209,7 +209,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
     {
         case css::awt::GradientStyle_LINEAR :
         {
-            if(!bMoveSingle || (bMoveSingle && !bMoveFirst))
+            if(!bMoveSingle || !bMoveFirst)
             {
                 basegfx::B2DVector aFullVec(aEndPos - aStartPos);
 
@@ -245,7 +245,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 }
             }
 
-            if(!bMoveSingle || (bMoveSingle && bMoveFirst))
+            if(!bMoveSingle || bMoveFirst)
             {
                 const basegfx::B2DVector aFullVec(aEndPos - aStartPos);
                 const basegfx::B2DPoint aBottomLeft(aRange.getMinX(), aRange.getMaximum().getY());
@@ -278,7 +278,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
         }
         case css::awt::GradientStyle_AXIAL :
         {
-            if(!bMoveSingle || (bMoveSingle && !bMoveFirst))
+            if(!bMoveSingle || !bMoveFirst)
             {
                 basegfx::B2DVector aFullVec(aEndPos - aCenter);
                 const basegfx::B2DVector aOldVec(basegfx::B2DPoint(aCenter.getX(), aRange.getMaximum().getY()) - aCenter);

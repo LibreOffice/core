@@ -885,8 +885,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             bool bPropExisted =
                 ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldVal );
 
-            if( ! bPropExisted ||
-                ( bPropExisted && fOldVal != fVal ))
+            if( ! bPropExisted || fOldVal != fVal )
             {
                 GetPropertySet()->setPropertyValue( "TextRotation" , uno::makeAny( fVal ));
                 bChangedOtherwise = true;

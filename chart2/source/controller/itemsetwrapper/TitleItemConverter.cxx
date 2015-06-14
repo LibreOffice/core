@@ -186,8 +186,7 @@ bool TitleItemConverter::ApplySpecialItem(
             bool bPropExisted =
                 ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldVal );
 
-            if( ! bPropExisted ||
-                ( bPropExisted && fOldVal != fVal ))
+            if( ! bPropExisted || fOldVal != fVal )
             {
                 GetPropertySet()->setPropertyValue( "TextRotation" , uno::makeAny( fVal ));
                 bChanged = true;

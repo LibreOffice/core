@@ -320,7 +320,7 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
         case XLS_TOKEN( oleObjects ):
             if ( getCurrentElement() == XLS_TOKEN( controls ) )
             {
-                if( aMceState.empty() || ( !aMceState.empty() && aMceState.back() == MCE_STARTED ) )
+                if( aMceState.empty() || aMceState.back() == MCE_STARTED )
                 {
                     if ( getCurrentElement() == XLS_TOKEN( oleObjects ) ) importOleObject( rAttribs );
                     else

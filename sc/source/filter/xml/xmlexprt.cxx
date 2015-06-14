@@ -3107,7 +3107,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 if (aCell.maBaseCell.meType == CELLTYPE_FORMULA)
                 {
                     ScFormulaCell* pFormulaCell = aCell.maBaseCell.mpFormula;
-                    if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
+                    if (!bIsMatrix || bIsFirstMatrixCell)
                     {
                         if (!mpCompileFormulaCxt)
                         {
