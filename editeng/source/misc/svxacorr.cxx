@@ -2876,8 +2876,10 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             sal_Int32 nFndPos = -1;
             do {
                 nFndPos = rTxt.indexOf( sTmp, nFndPos + 1);
-                not_suffix = (bWasWordDelim && (nSttWdPos >= nFndPos + sTmp.getLength()));
-            } while ( nFndPos != -1 && (!(left_wildcard || (!left_wildcard && (!nFndPos || IsWordDelim( rTxt[ nFndPos - 1 ])))) || not_suffix));
+                if (nFndPos == -1)
+                    break;
+                not_suffix = bWasWordDelim && (nSttWdPos >= (nFndPos + sTmp.getLength()));
+            } while ( (!left_wildcard && nFndPos && !IsWordDelim( rTxt[ nFndPos - 1 ])) || not_suffix );
 
             if ( nFndPos != -1 )
             {
