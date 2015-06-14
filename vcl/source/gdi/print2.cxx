@@ -1061,11 +1061,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
             DBG_ASSERT( !aTotalComponents.aComponentList.empty(),
                         "Printer::GetPreparedMetaFile empty component" );
-            DBG_ASSERT( !aTotalComponents.aBounds.IsEmpty() ||
-                        (aTotalComponents.aBounds.IsEmpty() && aTotalComponents.aComponentList.size() == 1),
+            DBG_ASSERT( !aTotalComponents.aBounds.IsEmpty() || (aTotalComponents.aComponentList.size() == 1),
                         "Printer::GetPreparedMetaFile non-output generating actions must be solitary");
-            DBG_ASSERT( !aTotalComponents.bIsFullyTransparent ||
-                        (aTotalComponents.bIsFullyTransparent && aTotalComponents.aComponentList.size() == 1),
+            DBG_ASSERT( !aTotalComponents.bIsFullyTransparent || (aTotalComponents.aComponentList.size() == 1),
                         "Printer::GetPreparedMetaFile fully transparent actions must be solitary");
         }
 

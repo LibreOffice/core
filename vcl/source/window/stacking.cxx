@@ -636,7 +636,7 @@ bool Window::IsTopWindow() const
         return false;
 
     // topwindows must be frames or they must have a borderwindow which is a frame
-    if( !mpWindowImpl->mbFrame && (!mpWindowImpl->mpBorderWindow || (mpWindowImpl->mpBorderWindow && !mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) ) )
+    if( !mpWindowImpl->mbFrame && (!mpWindowImpl->mpBorderWindow || !mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame ) )
         return false;
 
     ImplGetWinData();

@@ -1525,7 +1525,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_GOTO_REFERENCE:
             {
                 SwField *pField = rSh.GetCurField();
-                if ( !pField || (pField &&  pField->GetTypeId() != TYP_GETREFFLD) )
+                if ( !pField || (pField->GetTypeId() != TYP_GETREFFLD) )
                     rSet.DisableItem(nWhich);
             }
             break;

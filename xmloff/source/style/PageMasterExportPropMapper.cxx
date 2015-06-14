@@ -532,14 +532,14 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     aHeaderBuffer.ContextFilter( rPropState );
     aFooterBuffer.ContextFilter( rPropState );
 
-    if( pPMHeaderHeight && (!pPMHeaderDynamic || (pPMHeaderDynamic && getBOOL( pPMHeaderDynamic->maValue ))) )
+    if( pPMHeaderHeight && (!pPMHeaderDynamic || getBOOL( pPMHeaderDynamic->maValue )) )
         lcl_RemoveState( pPMHeaderHeight );
     if( pPMHeaderMinHeight && pPMHeaderDynamic && !getBOOL( pPMHeaderDynamic->maValue ) )
         lcl_RemoveState( pPMHeaderMinHeight );
     if( pPMHeaderDynamic )
         lcl_RemoveState( pPMHeaderDynamic );
 
-    if( pPMFooterHeight && (!pPMFooterDynamic || (pPMFooterDynamic && getBOOL( pPMFooterDynamic->maValue ))) )
+    if( pPMFooterHeight && (!pPMFooterDynamic || getBOOL( pPMFooterDynamic->maValue )) )
         lcl_RemoveState( pPMFooterHeight );
     if( pPMFooterMinHeight && pPMFooterDynamic && !getBOOL( pPMFooterDynamic->maValue ) )
         lcl_RemoveState( pPMFooterMinHeight );

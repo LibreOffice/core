@@ -335,7 +335,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
         case css::awt::GradientStyle_RADIAL :
         case css::awt::GradientStyle_SQUARE :
         {
-            if(!bMoveSingle || (bMoveSingle && !bMoveFirst))
+            if(!bMoveSingle || !bMoveFirst)
             {
                 const basegfx::B2DPoint aTopLeft(aRange.getMinX(), aRange.getMinY());
                 const basegfx::B2DPoint aOffset(aEndPos - aTopLeft);
@@ -370,7 +370,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 aEndPos -= aOffset;
             }
 
-            if(!bMoveSingle || (bMoveSingle && bMoveFirst))
+            if(!bMoveSingle || bMoveFirst)
             {
                 basegfx::B2DVector aFullVec(aStartPos - aEndPos);
                 const basegfx::B2DPoint aBottomLeft(aRange.getMinX(), aRange.getMaximum().getY());
@@ -431,7 +431,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
         case css::awt::GradientStyle_ELLIPTICAL :
         case css::awt::GradientStyle_RECT :
         {
-            if(!bMoveSingle || (bMoveSingle && !bMoveFirst))
+            if(!bMoveSingle || !bMoveFirst)
             {
                 const basegfx::B2DPoint aTopLeft(aRange.getMinX(), aRange.getMinY());
                 const basegfx::B2DPoint aOffset(aEndPos - aTopLeft);
@@ -466,7 +466,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 aEndPos -= aOffset;
             }
 
-            if(!bMoveSingle || (bMoveSingle && bMoveFirst))
+            if(!bMoveSingle || bMoveFirst)
             {
                 basegfx::B2DVector aFullVec(aStartPos - aEndPos);
                 const basegfx::B2DPoint aTopLeft(aRange.getMinX(), aRange.getMinY());

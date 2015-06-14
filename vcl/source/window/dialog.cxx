@@ -966,7 +966,7 @@ void Dialog::EndAllDialogs( vcl::Window* pParent )
    while ( pModDialog )
    {
      pTempModDialog = pModDialog->mpPrevExecuteDlg;
-     if( !pParent || ( pParent && pParent->IsWindowOrChild( pModDialog, true ) ) )
+     if(!pParent || pParent->IsWindowOrChild(pModDialog,true))
      {
         pModDialog->EndDialog( RET_CANCEL );
         pModDialog->PostUserEvent( Link<>() );

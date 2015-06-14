@@ -567,7 +567,7 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
         else
         {
             // By default, all checked items are checkmark buttons.
-            if ( bCheck || ( !bCheck && pCurrentState != NULL ) )
+            if (bCheck || pCurrentState != NULL)
                 pCheckValue = g_variant_new_boolean( bCheck );
         }
 

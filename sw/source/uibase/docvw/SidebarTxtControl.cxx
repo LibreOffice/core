@@ -220,9 +220,7 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
         {
             bool bIsProtected = mrSidebarWin.IsProtected();
-            if ( !bIsProtected ||
-                 ( bIsProtected &&
-                   !EditEngine::DoesKeyChangeText(rKeyEvt)) )
+            if ( !bIsProtected || !EditEngine::DoesKeyChangeText(rKeyEvt) )
             {
                 bDone = GetTextView() && GetTextView()->PostKeyEvent( rKeyEvt );
             }
@@ -284,7 +282,7 @@ void SidebarTextControl::MouseButtonDown( const MouseEvent& rMEvt )
         SvtSecurityOptions aSecOpts;
         bool bExecuteMod = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK);
 
-        if ( !bExecuteMod || (bExecuteMod && rMEvt.GetModifier() == KEY_MOD1))
+        if ( !bExecuteMod || (rMEvt.GetModifier() == KEY_MOD1))
         {
             const EditView& aEV = GetTextView()->GetEditView();
             const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();

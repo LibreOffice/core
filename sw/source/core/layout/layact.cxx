@@ -1683,7 +1683,7 @@ bool SwLayAction::FormatContent( const SwPageFrm *pPage )
             // all the time because the page height gets adjusted.
             // The same applies if the user wants to continue working and at least one
             // paragraph has been processed.
-            if ( (!pTab || (pTab && !bInValid)) )
+            if (!pTab || !bInValid)
             {
                 CheckIdleEnd();
                 // OD 14.04.2003 #106346# - consider interrupt formatting.

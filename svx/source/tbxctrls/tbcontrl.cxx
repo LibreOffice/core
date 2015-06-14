@@ -888,7 +888,7 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
         if ( pBox )
             pBox->Enable();
     }
-    else if ( pBox && ( pDocSh || ( !pDocSh && !ppFontList )))
+    else if ( pBox && ( pDocSh || !ppFontList ))
     {
         // Disable box only when we have a SfxObjectShell and didn't get a font list OR
         // we don't have a SfxObjectShell and no current font list.

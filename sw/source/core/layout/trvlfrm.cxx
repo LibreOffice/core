@@ -1828,8 +1828,7 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
             pMod->GetInfo( aInfo );
             if ( aInfo.GetPage() )
             {
-                if( !pVirtPage || ( pVirtPage && aInfo.GetPage()->
-                    GetPhyPageNum() > pVirtPage->GetPhyPageNum() ) )
+                if( !pVirtPage || aInfo.GetPage()->GetPhyPageNum() > pVirtPage->GetPhyPageNum() )
                 {
                     pVirtPage = aInfo.GetPage();
                     pFrm = aInfo.GetFrm();

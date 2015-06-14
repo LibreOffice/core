@@ -525,7 +525,7 @@ Size SwFrm::ChgSize( const Size& aNewSize )
 void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 {
     OSL_ENSURE( pParent, "No parent for insert." );
-    OSL_ENSURE( (!pBehind || (pBehind && pParent == pBehind->GetUpper())),
+    OSL_ENSURE( (!pBehind || pParent == pBehind->GetUpper()),
             "Frame tree is inconsistent." );
 
     mpUpper = pParent;
@@ -560,7 +560,7 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 {
     OSL_ENSURE( pParent, "No Parent for Insert." );
-    OSL_ENSURE( (!pBefore || (pBefore && pParent == pBefore->GetUpper())),
+    OSL_ENSURE( (!pBefore || pParent == pBefore->GetUpper()),
             "Frame tree is inconsistent." );
 
     mpUpper = pParent;

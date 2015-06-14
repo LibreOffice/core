@@ -263,9 +263,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                 if ( (aAbsNew < aAbsIdx && aAbsNew > aPrevPos) ||
                      (aAbsIdx == aAbsNew &&
                       (sal_uLong(&rCurTOXMark) > sal_uLong(pTOXMark) &&
-                       (!pNew ||
-                        (pNew && (aPrevPos < aAbsIdx ||
-                                  sal_uLong(pNew) < sal_uLong(pTOXMark)))))) ||
+                       (!pNew || aPrevPos < aAbsIdx || sal_uLong(pNew) < sal_uLong(pTOXMark) ) )) ||
                      (aPrevPos == aAbsNew && aAbsIdx != aAbsNew &&
                       sal_uLong(pTOXMark) > sal_uLong(pNew)) )
                 {
@@ -287,9 +285,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                 if ( (aAbsNew > aAbsIdx && aAbsNew < aNextPos) ||
                      (aAbsIdx == aAbsNew &&
                       (sal_uLong(&rCurTOXMark) < sal_uLong(pTOXMark) &&
-                       (!pNew ||
-                        (pNew && (aNextPos > aAbsIdx ||
-                                  sal_uLong(pNew) > sal_uLong(pTOXMark)))))) ||
+                       (!pNew || aNextPos > aAbsIdx || sal_uLong(pNew) > sal_uLong(pTOXMark)) )) ||
                      (aNextPos == aAbsNew && aAbsIdx != aAbsNew &&
                       sal_uLong(pTOXMark) < sal_uLong(pNew)) )
                 {

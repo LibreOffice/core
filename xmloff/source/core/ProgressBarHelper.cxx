@@ -68,7 +68,7 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 {
     if (xStatusIndicator.is() && (nReference > 0))
     {
-        if ((nTempValue >= nValue) && (!bStrict || (bStrict && (nTempValue <= nReference))))
+        if ((nTempValue >= nValue) && (!bStrict || (nTempValue <= nReference)))
         {
             // #91317# no progress bar with values > 100%
             if (nTempValue > nReference)
