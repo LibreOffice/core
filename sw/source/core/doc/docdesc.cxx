@@ -249,7 +249,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
         rDescFrameFormat.SetFormatAttr( rDesc.GetMaster().GetHeader() );
     }
     else if ( rHead.IsActive() )
-    {   // Left or first gets its own header if the Format doesn't alrady have one.
+    {   // Left or first gets its own header if the Format doesn't already have one.
         // If it already has one and it points to the same Section as the
         // Right one, it needs to get an own Header.
         // The content is evidently copied.

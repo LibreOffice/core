@@ -560,7 +560,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     xDestContainer->insertByIndex(nCurrentDestIndex, makeAny(xCurrentDestForm));
 
                     ++nCurrentDestIndex;
-                        // like nCurrentSourceIndex, nCurrentDestIndex now points 'behind' the form it actally means
+                        // like nCurrentSourceIndex, nCurrentDestIndex now points 'behind' the form it actually means
                 }
                 catch(Exception&)
                 {

@@ -493,7 +493,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                 if( [pPrintOperation respondsToSelector: @selector(setJobTitle:)] )
                     [pPrintOperation performSelector: @selector(setJobTitle:) withObject: [CreateNSString( i_rJobName ) autorelease]];
 
-                if( bShowPanel && mnCurPageRangeStart == 0 && nCurJob == 0) // only the first range of pages (in the first job) gets the accesory view
+                if( bShowPanel && mnCurPageRangeStart == 0 && nCurJob == 0) // only the first range of pages (in the first job) gets the accessory view
                     pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withController: &i_rController withState: &aAccViewState];
 
                 bSuccess = true;

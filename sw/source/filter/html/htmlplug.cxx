@@ -130,7 +130,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                SvxCSS1PropertyInfo& rCSS1PropInfo,
                                SfxItemSet& rFlyItemSet )
 {
-    // absolulte Groessenangaben in Twip umrechnen
+    // absolute Groessenangaben in Twip umrechnen
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
     Size aTwipSz( bPrcWidth || USHRT_MAX==rPixSize.Width() ? 0 : rPixSize.Width(),
                   bPrcHeight || USHRT_MAX==rPixSize.Height() ? 0 : rPixSize.Height() );

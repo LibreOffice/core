@@ -435,7 +435,7 @@ namespace toolkit {
 
         lcl_checkIndex( *m_xData, i_index, *this, true );
 
-        // actaul insertion
+        // actual insertion
         m_xData->aImageSets.insert( m_xData->aImageSets.begin() + i_index, i_imageURLs );
 
         // listener notification
@@ -452,7 +452,7 @@ namespace toolkit {
 
         lcl_checkIndex( *m_xData, i_index, *this );
 
-        // actaul insertion
+        // actual insertion
         m_xData->aImageSets[ i_index ] = i_imageURLs;
 
         // listener notification

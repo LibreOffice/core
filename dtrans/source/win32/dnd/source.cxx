@@ -124,7 +124,7 @@ void DragSource::StartDragImpl(
     // the thread procedure is responsible for the release
     acquire();
 
-    // The thread acccesses members of this instance but does not call acquire.
+    // The thread accesses members of this instance but does not call acquire.
     // Hopefully this instance is not destroyed before the thread has terminated.
     unsigned threadId;
     HANDLE hThread= reinterpret_cast<HANDLE>(_beginthreadex(

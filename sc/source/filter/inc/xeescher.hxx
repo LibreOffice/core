@@ -159,7 +159,7 @@ private:
     sal_uInt16          mnRecId;        /// Record identifier for the IMGDATA record.
 };
 
-/** Helper class for form controils to manage spreadsheet links . */
+/** Helper class for form controls to manage spreadsheet links . */
 class XclExpControlHelper : protected XclExpRoot
 {
 public:

@@ -426,7 +426,7 @@ public class _XEventAttacherManager extends MultiMethodTest {
 
     /**
     * Test creates object that supports interface <code>XScriptListener</code>,
-    * stores it and addes this scripts listener. <p>
+    * stores it and adds this scripts listener. <p>
     * Has <b> OK </b> status if the method successfully returns
     * and no exceptions were thrown. <p>
     * @see com.sun.star.script.XScriptListener

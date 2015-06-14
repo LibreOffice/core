@@ -1809,11 +1809,11 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
         // navigation bar and the grid. The latter itself will result in SeekRow calls. So after (successfully) returning
         // from the moveRelative the getPosition returns an invalid value. And so the SeekCursor fails.
         // In the consequence ALL parts of code where two calls to the seek cursor are done, while the second call _relys_ on
-        // the first one, should be secured against recursion, with a broad-minded interpretion of "recursion" : if any of these
-        // code parts is executed, no other should be accessible. But this sounds very difficult to achieve ....
+        // the first one, should be secured against recursion, with a broad-minded interpretion of "recursion": if any of these
+        // code parts is executed, no other should be accessible. But this sounds very difficult to achieve...
         // )
 
-        // The next problem caused by the same behaviuor (SeekCursor causes a propertyChanged) : when adjusting rows we implicitly
+        // The next problem caused by the same behavior (SeekCursor causes a propertyChanged): when adjusting rows we implicitly
         // change our selection. So a "FirstSelected(); SeekCursor(); NextSelected();" may produce unpredictable results.
         // That's why we _first_ collect the indices of the selected rows and _then_ their bookmarks.
         long nIdx = FirstSelectedRow();

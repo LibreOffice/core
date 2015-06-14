@@ -123,7 +123,7 @@ public:
     /** disposes all smart tags and clears the set */
     void Dispose();
 
-    /** addes the handles from all smart tags to the given list */
+    /** adds the handles from all smart tags to the given list */
     void addCustomHandles( SdrHdlList& rHandlerList );
 
     /** returns true if the currently selected smart tag has

@@ -193,7 +193,7 @@ void CheckTable( const SwTable& );
 
 /* #130880: Crash in undo of table to text when the table has (freshly) merged cells
 The order of cell content nodes in the nodes array is not given by the recursive table structure.
-The algorithmn must not rely on this even it holds for a fresh loaded table in odt file format.
+The algorithm must not rely on this even it holds for a fresh loaded table in odt file format.
 So we need to remember not only the start node position but the end node position as well.
 */
 

@@ -96,7 +96,7 @@ if ( $newTypes == 0)
 }
 else
 {
-    print "\nNew UNO types were addes since last release. The version will be increased.\n\n";
+    print "\nNew UNO types were added since last release. The version will be increased.\n\n";
 }
 
 #read in incVersions in a list

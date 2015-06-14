@@ -1567,7 +1567,7 @@ namespace svgio
             return rCandidate;
         }
 
-        OUString consolidateContiguosSpace(const OUString& rCandidate)
+        OUString consolidateContiguousSpace(const OUString& rCandidate)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -1629,8 +1629,8 @@ namespace svgio
             // strip of all leading and trailing spaces
             aRetval = aRetval.trim();
 
-            // consolidate contiguos space
-            aRetval = consolidateContiguosSpace(aRetval);
+            // consolidate contiguous space
+            aRetval = consolidateContiguousSpace(aRetval);
 
             return aRetval;
         }

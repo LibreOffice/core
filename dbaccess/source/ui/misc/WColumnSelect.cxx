@@ -366,7 +366,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 }
 
 // Simply returning fields back to their original position is
-// not enough. We need to take into acccount what fields have
+// not enough. We need to take into account what fields have
 // been removed earlier and adjust accordingly. Based on the
 // algorithm employed in moveColumn().
 sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,

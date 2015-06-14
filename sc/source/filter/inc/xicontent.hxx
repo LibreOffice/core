@@ -255,7 +255,7 @@ private:
 class XclImpDecryptHelper : private boost::noncopyable
 {
 public:
-    /** Reads the FILEPASS record, queries a password and sets decryption algorihm.
+    /** Reads the FILEPASS record, queries a password and sets decryption algorithm.
         @return  Error code that may cause an error message after import. */
     static ErrCode      ReadFilepass( XclImpStream& rStrm );
 

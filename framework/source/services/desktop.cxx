@@ -810,15 +810,15 @@ sal_Bool SAL_CALL Desktop::isTop() throw( css::uno::RuntimeException, std::excep
 
 void SAL_CALL Desktop::activate() throw( css::uno::RuntimeException, std::exception )
 {
-    // Desktop is activae always ... but sometimes our frames try to activate
-    // the complete path from bottom to top ... And our desktop is the topest frame :-(
+    // Desktop is active always... but sometimes our frames try to activate
+    // the complete path from bottom to top... And our desktop is the topest frame :-(
     // So - please don't show any assertions here. Do nothing!
 }
 
 void SAL_CALL Desktop::deactivate() throw( css::uno::RuntimeException, std::exception )
 {
-    // Desktop is activae always ... but sometimes our frames try to deactivate
-    // the complete path from bottom to top ... And our desktop is the topest frame :-(
+    // Desktop is active always... but sometimes our frames try to deactivate
+    // the complete path from bottom to top... And our desktop is the topest frame :-(
     // So - please don't show any assertions here. Do nothing!
 }
 
