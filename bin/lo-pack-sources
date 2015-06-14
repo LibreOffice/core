@@ -244,7 +244,7 @@ sub check_if_file_exists($$)
         if (defined $force) {
             print "Warning: $file already exists and will be replaced!\n";
         } else {
-            die "Error: $file alrady exists.\n".
+            die "Error: $file already exists.\n".
                 "       Use --force if you want to replace it.\n";
         }
     }
