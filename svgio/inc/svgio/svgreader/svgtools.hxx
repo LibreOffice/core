@@ -220,7 +220,7 @@ namespace svgio
         void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData);
 
         OUString convert(const OUString& rCandidate, const sal_Unicode& rPattern, const sal_Unicode& rNew, bool bRemove);
-        OUString consolidateContiguosSpace(const OUString& rCandidate);
+        OUString consolidateContiguousSpace(const OUString& rCandidate);
         OUString whiteSpaceHandlingDefault(const OUString& rCandidate);
         OUString whiteSpaceHandlingPreserve(const OUString& rCandidate);
 

@@ -890,7 +890,7 @@ void OQueryController::impl_initialize()
     rArguments.get_ensureType( OUString(PROPERTY_COMMAND_TYPE), m_nCommandType );
 
     // translate Command/Type into proper members
-    // TODO/Later: all this (including those members) should be hidden behind some abstact interface,
+    // TODO/Later: all this (including those members) should be hidden behind some abstract interface,
     // which is implemented for all the three commands
     switch ( m_nCommandType )
     {
