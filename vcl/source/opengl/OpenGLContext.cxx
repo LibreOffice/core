@@ -438,7 +438,7 @@ extern "C" void
 APIENTRY
 #endif
 debug_callback(GLenum source, GLenum type, GLuint id,
-        GLenum severity, GLsizei , const GLchar* message, GLvoid* )
+        GLenum severity, GLsizei , const GLchar* message, const GLvoid* )
 {
     // ignore Nvidia's : "Program/shader state performance warning: Fragment Shader is going to be recompiled because the shader key based on GL state mismatches."
     // the GLSL compiler is a bit too aggressive in optimizing the state based on the current OpenGL state
