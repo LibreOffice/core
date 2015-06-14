@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_633c2230",
+        "filename": "sfx2/qa/complex/sfx2/tools/WriterHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-06-14T20:05:38Z",
+      "side": 1,
+      "message": "Was this indentation intended? Why not just:\n\n  System.out.println(\"Name: \" + buttonContext.getAccessibleName());\n\nOr, when this too long, breaj it like:\n\n  System.out.println(\"Name: \" +\n      buttonContext.getAccessibleName());",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 79
+      },
+      "revId": "e58a0812234fddd482471e3c5ba23559bd322c64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
