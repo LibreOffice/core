@@ -44,7 +44,7 @@ StringArray RID_ATTR_NAMES
         < "Effects"     ;               SID_ATTR_CHAR_CASEMAP ; > ;
         < "Language";                   SID_ATTR_CHAR_LANGUAGE ; > ;
         < "Position"        ;           SID_ATTR_CHAR_ESCAPEMENT ; > ;
-        < "Blinking"    ;               SID_ATTR_CHAR_AUTOKERN ; > ;
+        < "Character blinking"    ;     SID_ATTR_CHAR_AUTOKERN ; > ;
         < "Character set color"       ; SID_ATTR_CHAR_CHARSETCOLOR ; > ;
         < "Overline"      ;             SID_ATTR_CHAR_OVERLINE ; > ;
         < "Paragraph"       ;           SID_ATTR_PARA ; > ;
@@ -55,8 +55,8 @@ StringArray RID_ATTR_NAMES
         < "Do not split paragraph";     SID_ATTR_PARA_SPLIT ; > ;
         < "Orphans"     ;               SID_ATTR_PARA_ORPHANS ; > ;
         < "Widows"      ;               SID_ATTR_PARA_WIDOWS ; > ;
-        < "Spacing"     ;               SID_ATTR_PARA_ULSPACE ; > ;
-        < "Indent"      ;               SID_ATTR_PARA_LRSPACE ; > ;
+        < "Paragraph spacing"     ;     SID_ATTR_PARA_ULSPACE ; > ;
+        < "Paragraph indent"      ;     SID_ATTR_PARA_LRSPACE ; > ;
         < "Indent"      ;               SID_ATTR_LRSPACE ; > ;
         < "Spacing"     ;               SID_ATTR_ULSPACE ; > ;
         < "Page"        ;               SID_ATTR_PAGE ; > ;
@@ -81,7 +81,7 @@ StringArray RID_ATTR_NAMES
         < "Hanging punctuation"     ;   SID_ATTR_PARA_HANGPUNCTUATION ; > ;
         < "Forbidden characters"    ;   SID_ATTR_PARA_FORBIDDEN_RULES ; > ;
         < "Rotation"        ;           SID_ATTR_CHAR_ROTATED ; > ;
-        < "Scale"       ;               SID_ATTR_CHAR_SCALEWIDTH ; > ;
+        < "Character scaling"       ;   SID_ATTR_CHAR_SCALEWIDTH ; > ;
         < "Relief"      ;               SID_ATTR_CHAR_RELIEF ; > ;
         < "Vertical text alignment" ;   SID_PARA_VERTALIGN ; > ;
     };
