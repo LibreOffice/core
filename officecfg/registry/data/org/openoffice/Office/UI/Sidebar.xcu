@@ -231,6 +231,33 @@
     </node>
     <node oor:name="PanelList">
 
+      <node oor:name="StylesPropertyPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Styles</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>StylesPropertyPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants,   Annotation,         visible                    ;
+            WriterVariants,   DrawText,           visible                    ;
+            WriterVariants,   Table,              visible                    ;
+            WriterVariants,   Text,               visible                    ;
+            WriterVariants,   default,            visible                    ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SvxPanelFactory/StylesPropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+      </node>
+
       <node oor:name="TextPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Character</value>
@@ -270,7 +297,7 @@
           <value>private:resource/toolpanel/SvxPanelFactory/TextPropertyPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>100</value>
+          <value>120</value>
         </prop>
       </node>
 
