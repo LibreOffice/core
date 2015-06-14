@@ -308,7 +308,7 @@ bool SwOszControl::ChkOsz()
 /**
 |*      With a paragraph-anchored fly it's absolutely possible that
 |*      the anchor reacts to changes of the fly. To this reaction the fly must
-|*      certaily react too. Sadly this can lead to oscillations; for example the
+|*      certainly react too. Sadly this can lead to oscillations; for example the
 |*      fly wants to go down therefore the content can go up - this leads to a
 |*      smaller TextFrm thus the fly needs to go up again whereby the text will
 |*      get pushed down...

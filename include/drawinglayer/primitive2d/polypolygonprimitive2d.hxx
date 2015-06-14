@@ -426,7 +426,7 @@ namespace drawinglayer
             /// the transparence [0.0 .. 1.0]
             double                                  mfTransparence;
 
-            /// the discrete grow size ('pixels'), only posivive values allowed
+            /// the discrete grow size ('pixels'), only positive values allowed
             double                                  mfDiscreteGrow;
 
             /// bitfield

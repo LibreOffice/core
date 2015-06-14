@@ -574,7 +574,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             // If an absolute width is given, the table either has a fixed
             // width, or the current width is known from the layout. In the
             // later case, a base width is set in addition and must be used
-            // to "absoultize" the relative column width.
+            // to "absolutize" the relative column width.
             if( nAbsWidth )
             {
                 sal_uInt32 nColAbsWidth = nWidth;
