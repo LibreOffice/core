@@ -101,6 +101,9 @@ class VCL_PLUGIN_PUBLIC SalFrame
     : public vcl::DeletionNotifier
     , public SalGeometryProvider
 {
+protected:
+    bool                    m_bAwaitingSizeConfirmation;
+private:
     // the VCL window corresponding to this frame
     VclPtr<vcl::Window>     m_pWindow;
     SALFRAMEPROC            m_pProc;
@@ -242,6 +245,8 @@ public:
     // (e.g. input methods, printer update handlers).
     long                    CallCallback( sal_uInt16 nEvent, const void* pEvent ) const
         { return m_pProc ? long(m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent )) : 0; }
+
+    bool AwaitingSizeConfirmation() const { return m_bAwaitingSizeConfirmation; }
 };
 
 #endif // INCLUDED_VCL_INC_SALFRAME_HXX

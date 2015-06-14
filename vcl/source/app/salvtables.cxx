@@ -29,7 +29,12 @@
 #include <salmenu.hxx>
 
 
-SalFrame::SalFrame() : m_pWindow( NULL ), m_pProc( NULL ) {}
+SalFrame::SalFrame()
+    : m_bAwaitingSizeConfirmation(false)
+    , m_pWindow(NULL)
+    , m_pProc(NULL)
+{
+}
 
 // this file contains the virtual destructors of the sal interface
 // compilers usually put their vtables where the destructor is
