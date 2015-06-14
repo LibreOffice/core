@@ -54,7 +54,7 @@ void Tile::setPixbuf(GdkPixbuf *buffer)
 void TileBuffer::resetAllTiles()
 {
     std::map<int, Tile>::iterator it = m_mTiles.begin();
-    for (; it != m_mTiles.end(); it++)
+    for (; it != m_mTiles.end(); ++it)
     {
         it->second.release();
     }
