@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_036c4e9b",
+        "filename": "chart2/source/inc/WeakListenerAdapter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-06-14T11:24:53Z",
+      "side": 1,
+      "message": "I guess \"adaptee\" means here the class that\u0027s being adapted vs the adapter class that does the adapts. I think it\u0027s misleading if you just change adaptee to adapter here.\n\nMaybe \"in the adaptee class\" -\u003e \"in the class that adapts\"?",
+      "revId": "45889ab387edc94b7273ebca024ae6d77041032d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
