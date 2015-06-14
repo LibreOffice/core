@@ -70,6 +70,24 @@
       "revId": "45889ab387edc94b7273ebca024ae6d77041032d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_c38e3627",
+        "filename": "chart2/source/inc/WeakListenerAdapter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2015-06-14T16:30:42Z",
+      "side": 1,
+      "message": "Norbert, thanks a lot for your time!\nI\u0027m going to update the fixed version.",
+      "parentUuid": "1a54edaf_e38c9237",
+      "revId": "45889ab387edc94b7273ebca024ae6d77041032d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
