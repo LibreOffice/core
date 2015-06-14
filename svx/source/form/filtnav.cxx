@@ -224,7 +224,7 @@ Image FmFilterItem::GetImage() const
 }
 
 
-// Hints for communicatition between model and view
+// Hints for communication between model and view
 
 class FmFilterHint : public SfxHint
 {

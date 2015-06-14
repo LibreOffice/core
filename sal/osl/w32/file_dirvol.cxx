@@ -621,7 +621,7 @@ static int path_make_parent(sal_Unicode* path)
     get the parent only, e.g. 'c:\dir\subdir' ->
     'c:\dir' or '\\share\sub\dir' -> '\\share\sub'
     @return The position where the path has been cut
-    off (this is the posistion of the last backslash).
+    off (this is the position of the last backslash).
     If there are no more parents 0 will be returned,
     e.g. 'c:\' or '\\Share' have no more parents */
 

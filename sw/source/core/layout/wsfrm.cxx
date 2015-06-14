@@ -2807,7 +2807,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                         // In vertical layout the height of both is directly
                         // adjusted to the page height change.
                         // In horizontal layout the height of the body frame is
-                        // directly adjsuted to the page height change and the
+                        // directly adjusted to the page height change and the
                         // foot note frame height isn't touched, because its
                         // determined by its content.
                         // OD 31.03.2003 #108446# - apply special case for page
