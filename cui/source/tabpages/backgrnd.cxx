@@ -345,10 +345,12 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     , bAllowShowSelector(true)
     , bIsGraphicValid(false)
     , bLinkOnly(false)
+    , bHighlighting(false)
     , pPageImpl(new SvxBackgroundPage_Impl)
     , pImportDlg(NULL)
     , pTableBck_Impl(NULL)
     , pParaBck_Impl(NULL)
+    , pHighlighting(nullptr)
 {
     get(m_pAsGrid, "asgrid");
     get(m_pSelectTxt, "asft");
@@ -532,6 +534,10 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             break;
         }
     }
+    else if( bHighlighting )
+    {
+        nSlot = SID_ATTR_BRUSH_CHAR;
+    }
     //#111173# the destination item is missing when the parent style has been changed
     if(USHRT_MAX == nDestValue && (m_pParaLBox->IsVisible()||m_pTblLBox->IsVisible()))
         nDestValue = 0;
@@ -602,7 +608,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             TblDestinationHdl_Impl(m_pTblLBox);
             m_pTblLBox->SaveValue();
         }
-        else
+        else if (m_pParaLBox->GetData() == m_pParaLBox)
         {
             sal_Int32 nValue = m_pParaLBox->GetSelectEntryPos();
 
@@ -636,6 +642,15 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 
             ParaDestinationHdl_Impl(m_pParaLBox);
             m_pParaLBox->SaveValue();
+        }
+        else if( bHighlighting )
+        {
+            nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
+            if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
+            {
+                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
+                pHighlighting.reset(new SvxBrushItem(*pBgdAttr));
+            }
         }
     }
 }
@@ -747,6 +762,10 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 nSlot = SID_ATTR_BRUSH_CHAR;
             break;
         }
+    }
+    else if( bHighlighting )
+    {
+        nSlot = SID_ATTR_BRUSH_CHAR;
     }
     sal_uInt16 nWhich = GetWhich( nSlot );
 
@@ -940,6 +959,20 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             rCoreSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          m_pParaLBox->GetSelectEntryPos() ) );
             bModified |= true;
+        }
+    }
+    else if( bHighlighting )
+    {
+        if( nSlot != SID_ATTR_BRUSH_CHAR )
+        {
+            const SfxPoolItem* pOldChar =
+                GetOldItem( *rCoreSet, SID_ATTR_BRUSH_CHAR );
+            if ( pOldChar && pHighlighting &&
+                (*pHighlighting != *pOldChar || *pHighlighting != SvxBrushItem(SID_ATTR_BRUSH_CHAR)))
+            {
+                rCoreSet->Put( *pHighlighting );
+                bModified |= true;
+            }
         }
     }
     return bModified;
@@ -1714,6 +1747,7 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
         if ( nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING )
         {
             m_pBackGroundColorLabelFT->SetText("Highlighting Color");
+            bHighlighting = true;
         }
     }
 }

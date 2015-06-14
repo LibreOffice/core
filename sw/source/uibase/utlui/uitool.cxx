@@ -127,27 +127,14 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode)
     {
         // Always use the visible background
         const SfxPoolItem *pTmpBrush;
-        bool bUseHighlight = false;
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_HIGHLIGHT, true, &pTmpBrush ) )
         {
             SvxBrushItem aTmpBrush( *static_cast<const SvxBrushItem*>(pTmpBrush) );
             if( aTmpBrush.GetColor() != COL_TRANSPARENT )
             {
-                aTmpBrush.SetWhich( RES_BACKGROUND );
-                rSet.Put( aTmpBrush );
-                bUseHighlight = true;
-            }
-        }
-        if( !bUseHighlight )
-        {
-            if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, true, &pTmpBrush ) )
-            {
-                SvxBrushItem aTmpBrush( *static_cast<const SvxBrushItem*>(pTmpBrush) );
-                aTmpBrush.SetWhich( RES_BACKGROUND );
+                aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
                 rSet.Put( aTmpBrush );
             }
-            else
-                rSet.ClearItem(RES_BACKGROUND);
         }
     }
 
@@ -181,12 +168,8 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, const sa
     // Background / highlighting
     {
         const SfxPoolItem *pTmpItem;
-        if( SfxItemState::SET == rSet.GetItemState( RES_BACKGROUND, false, &pTmpItem ) )
+        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, false, &pTmpItem ) )
         {
-            SvxBrushItem aTmpBrush( *static_cast<const SvxBrushItem*>(pTmpItem) );
-            aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-            rSet.Put( aTmpBrush );
-
             // Highlight is an MS specific thing, so remove it at the first time when LO modifies
             // this part of the imported document.
             rSet.Put( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
