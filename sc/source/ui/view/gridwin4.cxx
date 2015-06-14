@@ -725,7 +725,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     MapMode aPrevMapMode = pContentDev->GetMapMode();
     pContentDev->SetMapMode(MAP_PIXEL);
 
-    aOutputData.DrawBackground();
+    aOutputData.DrawBackground(*pContentDev);
 
     pContentDev->SetMapMode(aPrevMapMode);
 
