@@ -24,6 +24,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
+#include <comphelper/lok.hxx>
 
 
 
@@ -111,8 +112,9 @@ namespace sdr
             mrVOContact(rVOContact),
             maAnimatedPrimitives(rAnimatedPrimitives)
         {
-            // setup initially
-            prepareNextEvent();
+            if (!comphelper::LibreOfficeKit::isActive())
+                // setup initially
+                prepareNextEvent();
         }
 
         PrimitiveAnimation::~PrimitiveAnimation()
@@ -127,8 +129,9 @@ namespace sdr
             // schedule a repaint of associated object
             mrVOContact.ActionChanged();
 
-            // re-setup
-            prepareNextEvent();
+            if (!comphelper::LibreOfficeKit::isActive())
+                // re-setup
+                prepareNextEvent();
         }
     } // end of namespace animation
 } // end of namespace sdr
