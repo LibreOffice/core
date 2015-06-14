@@ -19,9 +19,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:SlideMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">S~lide</value>
+        </prop>
+      </node>
       <node oor:name=".uno:RenamePage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Rename Slide</value>
+          <value xml:lang="en-US">Rename Page/Slide</value>
         </prop>
       </node>
       <node oor:name=".uno:RenameLayer" oor:op="replace">
@@ -397,7 +402,7 @@
       </node>
       <node oor:name=".uno:DuplicatePage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Duplicate ~Slide</value>
+          <value xml:lang="en-US">Duplicate Page/~Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -652,7 +657,7 @@
       </node>
       <node oor:name=".uno:InsertPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Slid~e</value>
+          <value xml:lang="en-US">New Page/Slid~e</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -891,17 +896,17 @@
       </node>
       <node oor:name=".uno:NotesMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Notes ~Page</value>
+          <value xml:lang="en-US">Notes</value>
         </prop>
       </node>
       <node oor:name=".uno:HandoutMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">H~andout Page</value>
+          <value xml:lang="en-US">H~andout Master</value>
         </prop>
       </node>
       <node oor:name=".uno:DeletePage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">D~elete Slide</value>
+          <value xml:lang="en-US">D~elete Page/Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1400,6 +1405,21 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
             <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SelectBackground" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Background Image...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DisplayMasterBackground" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Display Background of Master</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DisplayMasterObjects" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Display Objects from Master</value>
         </prop>
       </node>
       <node oor:name=".uno:EditStyle" oor:op="replace">
