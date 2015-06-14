@@ -545,8 +545,8 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
 
     const bool bEndRowEmpty = pDoc->IsBlockEmpty( nTab, nStartCol, nEndRow, nEndCol, nEndRow );
     const bool bEndColEmpty = pDoc->IsBlockEmpty( nTab, nEndCol, nStartRow, nEndCol, nEndRow );
-    bool bRow = ( ( nStartRow != nEndRow ) && ( bEndRowEmpty || !bEndColEmpty ) );
-    bool bCol = ( ( nStartCol != nEndCol ) && ( bEndColEmpty || nStartRow == nEndRow ) );
+    bool bRow = ( nStartRow != nEndRow ) && ( bEndRowEmpty || !bEndColEmpty );
+    bool bCol = ( nStartCol != nEndCol ) && ( bEndColEmpty || nStartRow == nEndRow );
 
     // find an empty row for entering the result
     SCROW nInsRow = nEndRow;

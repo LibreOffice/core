@@ -177,7 +177,7 @@ void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
             bool bIsProtected = mpAnnotationWindow->IsProtected();
             if (!bIsProtected || !EditEngine::DoesKeyChangeText(rKeyEvt) )
 
-            bDone = mpOutlinerView->PostKeyEvent( rKeyEvt );
+                bDone = mpOutlinerView->PostKeyEvent( rKeyEvt );
         }
         if (bDone)
         {

@@ -1628,7 +1628,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     SbxDataType eVarType = refVar->GetType();
     SbxDataType eValType = refVal->GetType();
 
-    if ( !( !bVBA || refVar->GetType() != SbxEMPTY ) || !refVar->CanWrite() )
+    if ( ( bVBA && ( eVarType == SbxEMPTY ) ) || !refVar->CanWrite() )
         return false;
 
     if ( eValType != SbxOBJECT )

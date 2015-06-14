@@ -968,10 +968,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         rWrt.Strm().WriteChar( '>' );
 
         // Soll ein </P> geschrieben wenrden
-        rInfo.bOutPara =
-            bPara &&
-            ( rHWrt.bCfgOutStyles ||
-                (!rHWrt.bCfgOutStyles && bHasParSpace) );
+        rInfo.bOutPara = bPara && ( rHWrt.bCfgOutStyles || bHasParSpace );
 
         // wenn kein End-Tag geschrieben werden soll, es loeschen
         if( bNoEndTag )

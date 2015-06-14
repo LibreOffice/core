@@ -408,8 +408,7 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
         if( !rSet.GetPool()->IsItemFlag(pItem->Which(), SfxItemPoolFlags::POOLABLE ) )
             bNonPoolable = true;
         if ( !xFoundIgnorableItems.get() ||
-             ( xFoundIgnorableItems.get() &&
-               xFoundIgnorableItems->Put( *pItem ) == 0 ) )
+             (xFoundIgnorableItems->Put( *pItem ) == 0 ) )
         {
             pCurNode = pCurNode->findChildNode( *pItem );
         }

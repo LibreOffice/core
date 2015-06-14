@@ -1339,7 +1339,7 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
         if( std::find(aOldStretchXVals, aOldStretchXVals+i, nCurrStretchX) != aOldStretchXVals+i )
             break; // same value already attained once; algo is looping, exit
 
-        if (fFactor < 1.0 || (fFactor >= 1.0 && nCurrStretchX != 100))
+        if (fFactor < 1.0 || nCurrStretchX != 100)
         {
             nCurrStretchX = sal::static_int_cast<sal_uInt16>(nCurrStretchX*fFactor);
             nCurrStretchY = sal::static_int_cast<sal_uInt16>(nCurrStretchY*fFactor);

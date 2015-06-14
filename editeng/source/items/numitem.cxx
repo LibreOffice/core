@@ -398,7 +398,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
         delete pGraphicBrush;
         pGraphicBrush = 0;
     }
-    else if ( !pGraphicBrush || !(*pBrushItem == *pGraphicBrush) )
+    else if ( !pGraphicBrush || (*pBrushItem != *pGraphicBrush) )
     {
         delete pGraphicBrush;
         pGraphicBrush =  static_cast<SvxBrushItem*>(pBrushItem->Clone());
