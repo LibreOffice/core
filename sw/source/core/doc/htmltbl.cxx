@@ -501,7 +501,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             if( nColSpan < nColSkip )
                 nColSkip = nColSpan;
 
-            if( !pCnts || (pCnts && !pCnts->IsPass1Done(nPass1Done)) )
+            if( !pCnts || !pCnts->IsPass1Done(nPass1Done) )
             {
                 // The cell is empty or it's content was not edited
                 if( nColSpan < nMinColSpan )

@@ -2443,7 +2443,7 @@ void Content::insert(
         */
 
         // ==> Complain on PUT, continue on MKCOL.
-        if ( !bTransient || ( bTransient && !bCollection  ) )
+        if ( !bTransient || !bCollection )
         {
 #undef ERROR
             ucb::UnsupportedNameClashException aEx(

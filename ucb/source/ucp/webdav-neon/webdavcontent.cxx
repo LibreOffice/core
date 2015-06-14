@@ -2296,7 +2296,7 @@ void Content::insert(
         */
 
         // ==> Complain on PUT, continue on MKCOL.
-        if ( !bTransient || ( bTransient && !bCollection  ) )
+        if ( !bTransient || !bCollection )
         {
             ucb::UnsupportedNameClashException aEx(
                 OUString( "Unable to write without overwrite!" ),

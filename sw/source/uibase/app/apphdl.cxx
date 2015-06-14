@@ -166,7 +166,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             {
                 bool bDisable = false;
                 SfxViewShell* pCurrView = SfxViewShell::Current();
-                if( !pCurrView || (pCurrView && !pCurrView->ISA(SwView)) )
+                if( !pCurrView || !pCurrView->ISA(SwView) )
                     bDisable = true;
                 SwDocShell *pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
                 if ( bDisable ||

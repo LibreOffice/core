@@ -2402,7 +2402,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
     SdrMarkView* pView = pHdlList ? pHdlList->GetView() : 0;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : 0;
 
-    if(!pPageView || (pPageView && pView->areMarkHandlesHidden()))
+    if(!pPageView || pView->areMarkHandlesHidden())
     {
         return;
     }
