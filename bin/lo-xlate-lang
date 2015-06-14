@@ -102,7 +102,7 @@ if ($LanguageCode =~ (m/^all$/)) {
 }
 
 usage ("no mapping found for $LanguageCode\n",1)
-	if (!(%$LanguageMap->{$LanguageCode}));
+	if (!($LanguageMap->{$LanguageCode}));
 
 print $LanguageMap->{$LanguageCode}, "\n";
 
