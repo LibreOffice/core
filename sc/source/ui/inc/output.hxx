@@ -304,7 +304,7 @@ public:
     Rectangle LayoutStrings(bool bPixelToLogic = false, bool bPaint = true, const ScAddress &rAddress = ScAddress());
 
     void    DrawDocumentBackground();
-    void    DrawBackground();
+    void    DrawBackground(vcl::RenderContext& rRenderContext);
     void    DrawShadow();
     void    DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom);
     void    DrawFrame();
