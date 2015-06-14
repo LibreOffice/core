@@ -62,35 +62,35 @@ class SmParser
     inline bool     TokenInGroup( sal_uLong nGroup );
 
     // grammar
-    void    Table();
-    void    Line();
-    void    Expression();
-    void    Relation();
-    void    Sum();
-    void    Product();
-    void    SubSup(sal_uLong nActiveGroup);
-    void    OpSubSup();
-    void    Power();
-    void    Blank();
-    void    Term(bool bGroupNumberIdent);
-    void    Escape();
-    void    Operator();
-    void    Oper();
-    void    UnOper();
-    void    Align();
-    void    FontAttribut();
-    void    Attribut();
-    void    Font();
-    void    FontSize();
-    void    Color();
-    void    Brace();
-    void    Bracebody(bool bIsLeftRight);
-    void    Function();
-    void    Binom();
-    void    Stack();
-    void    Matrix();
-    void    Special();
-    void    GlyphSpecial();
+    void    DoTable();
+    void    DoLine();
+    void    DoExpression();
+    void    DoRelation();
+    void    DoSum();
+    void    DoProduct();
+    void    DoSubSup(sal_uLong nActiveGroup);
+    void    DoOpSubSup();
+    void    DoPower();
+    void    DoBlank();
+    void    DoTerm(bool bGroupNumberIdent);
+    void    DoEscape();
+    void    DoOperator();
+    void    DoOper();
+    void    DoUnOper();
+    void    DoAlign();
+    void    DoFontAttribut();
+    void    DoAttribut();
+    void    DoFont();
+    void    DoFontSize();
+    void    DoColor();
+    void    DoBrace();
+    void    DoBracebody(bool bIsLeftRight);
+    void    DoFunction();
+    void    DoBinom();
+    void    DoStack();
+    void    DoMatrix();
+    void    DoSpecial();
+    void    DoGlyphSpecial();
     // end of grammar
 
     LanguageType    GetLanguage() const { return m_nLang; }

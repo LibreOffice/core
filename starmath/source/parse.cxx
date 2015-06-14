@@ -952,21 +952,17 @@ void SmParser::NextToken()
         m_nBufferIndex = aRes.EndPos;
 }
 
-
-
 // grammar
 
-
-
-void SmParser::Table()
+void SmParser::DoTable()
 {
     SmNodeArray  LineArray;
 
-    Line();
+    DoLine();
     while (m_aCurToken.eType == TNEWLINE)
     {
         NextToken();
-        Line();
+        DoLine();
     }
 
     if (m_aCurToken.eType != TEND)
@@ -987,8 +983,7 @@ void SmParser::Table()
     m_aNodeStack.push_front(pSNode);
 }
 
-
-void SmParser::Align()
+void SmParser::DoAlign()
     // parse alignment info (if any), then go on with rest of expression
 {
     SmStructureNode *pSNode = 0;
@@ -1008,7 +1003,7 @@ void SmParser::Align()
         }
     }
 
-    Expression();
+    DoExpression();
 
     if (pSNode)
     {
@@ -1017,8 +1012,7 @@ void SmParser::Align()
     }
 }
 
-
-void SmParser::Line()
+void SmParser::DoLine()
 {
     sal_uInt16  n = 0;
     SmNodeArray  ExpressionArray;
@@ -1029,14 +1023,15 @@ void SmParser::Line()
     // (and go on with expressions that must not have alignment
     // statements in 'while' loop below. See also 'Expression()'.)
     if (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
-    {   Align();
+    {
+        DoAlign();
         ExpressionArray.resize(++n);
         ExpressionArray[n - 1] = popOrZero(m_aNodeStack);
     }
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
     {
-        Expression();
+        DoExpression();
         ExpressionArray.resize(++n);
         ExpressionArray[n - 1] = popOrZero(m_aNodeStack);
     }
@@ -1056,8 +1051,7 @@ void SmParser::Line()
     m_aNodeStack.push_front(pSNode);
 }
 
-
-void SmParser::Expression()
+void SmParser::DoExpression()
 {
     bool bUseExtraSpaces = true;
     if (!m_aNodeStack.empty())
@@ -1074,12 +1068,13 @@ void SmParser::Expression()
 
     RelationArray.resize(n);
 
-    Relation();
+    DoRelation();
     RelationArray.resize(++n);
     RelationArray[n - 1] = popOrZero(m_aNodeStack);
 
     while (m_aCurToken.nLevel >= 4)
-    {   Relation();
+    {
+        DoRelation();
         RelationArray.resize(++n);
         RelationArray[n - 1] = popOrZero(m_aNodeStack);
     }
@@ -1098,48 +1093,45 @@ void SmParser::Expression()
     }
 }
 
-
-void SmParser::Relation()
+void SmParser::DoRelation()
 {
-    Sum();
+    DoSum();
     while (TokenInGroup(TGRELATION))
     {
         SmStructureNode *pSNode  = new SmBinHorNode(m_aCurToken);
         SmNode *pFirst = popOrZero(m_aNodeStack);
 
-        OpSubSup();
+        DoOpSubSup();
         SmNode *pSecond = popOrZero(m_aNodeStack);
 
-        Sum();
+        DoSum();
 
         pSNode->SetSubNodes(pFirst, pSecond, popOrZero(m_aNodeStack));
         m_aNodeStack.push_front(pSNode);
     }
 }
 
-
-void SmParser::Sum()
+void SmParser::DoSum()
 {
-    Product();
+    DoProduct();
     while (TokenInGroup(TGSUM))
     {
         SmStructureNode *pSNode  = new SmBinHorNode(m_aCurToken);
         SmNode *pFirst = popOrZero(m_aNodeStack);
 
-        OpSubSup();
+        DoOpSubSup();
         SmNode *pSecond = popOrZero(m_aNodeStack);
 
-        Product();
+        DoProduct();
 
         pSNode->SetSubNodes(pFirst, pSecond, popOrZero(m_aNodeStack));
         m_aNodeStack.push_front(pSNode);
     }
 }
 
-
-void SmParser::Product()
+void SmParser::DoProduct()
 {
-    Power();
+    DoPower();
 
     while (TokenInGroup(TGPRODUCT))
     {   SmStructureNode *pSNode;
@@ -1165,7 +1157,7 @@ void SmParser::Product()
                 m_aCurToken.eType = TBOPER;
                 m_aCurToken.nGroup = TGPRODUCT;
 
-                GlyphSpecial();
+                DoGlyphSpecial();
                 pOper = popOrZero(m_aNodeStack);
                 break;
 
@@ -1194,11 +1186,11 @@ void SmParser::Product()
             default:
                 pSNode = new SmBinHorNode(m_aCurToken);
 
-                OpSubSup();
+                DoOpSubSup();
                 pOper = popOrZero(m_aNodeStack);
         }
 
-        Power();
+        DoPower();
 
         if (bSwitchArgs)
         {
@@ -1213,8 +1205,7 @@ void SmParser::Product()
     }
 }
 
-
-void SmParser::SubSup(sal_uLong nActiveGroup)
+void SmParser::DoSubSup(sal_uLong nActiveGroup)
 {
     OSL_ENSURE(nActiveGroup == TGPOWER  ||  nActiveGroup == TGLIMIT,
                "Sm: wrong token group");
@@ -1250,13 +1241,14 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
         if (eType == TFROM  ||  eType == TTO)
         {
             // parse limits in old 4.0 and 5.0 style
-            Relation();
+            DoRelation();
         }
         else
-            Term(true);
+            DoTerm(true);
 
         switch (eType)
-        {   case TRSUB :    nIndex = (int) RSUB;    break;
+        {
+            case TRSUB :    nIndex = (int) RSUB;    break;
             case TRSUP :    nIndex = (int) RSUP;    break;
             case TFROM :
             case TCSUB :    nIndex = (int) CSUB;    break;
@@ -1281,8 +1273,7 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
     m_aNodeStack.push_front(pNode);
 }
 
-
-void SmParser::OpSubSup()
+void SmParser::DoOpSubSup()
 {
     // push operator symbol
     m_aNodeStack.push_front(new SmMathSymbolNode(m_aCurToken));
@@ -1290,20 +1281,18 @@ void SmParser::OpSubSup()
     NextToken();
     // get sub- supscripts if any
     if (TokenInGroup(TGPOWER))
-        SubSup(TGPOWER);
+        DoSubSup(TGPOWER);
 }
 
-
-void SmParser::Power()
+void SmParser::DoPower()
 {
     // get body for sub- supscripts on top of stack
-    Term(false);
+    DoTerm(false);
 
-    SubSup(TGPOWER);
+    DoSubSup(TGPOWER);
 }
 
-
-void SmParser::Blank()
+void SmParser::DoBlank()
 {
     OSL_ENSURE(TokenInGroup(TGBLANK), "Sm : wrong token");
     SmBlankNode *pBlankNode = new SmBlankNode(m_aCurToken);
@@ -1324,13 +1313,12 @@ void SmParser::Blank()
     m_aNodeStack.push_front(pBlankNode);
 }
 
-
-void SmParser::Term(bool bGroupNumberIdent)
+void SmParser::DoTerm(bool bGroupNumberIdent)
 {
     switch (m_aCurToken.eType)
     {
         case TESCAPE :
-            Escape();
+            DoEscape();
             break;
 
         case TNOSPACE :
@@ -1345,7 +1333,7 @@ void SmParser::Term(bool bGroupNumberIdent)
             if (m_aCurToken.eType != TLGROUP)
             {
                 m_aNodeStack.pop_front();    // get rid of the 'no space' node pushed above
-                Term(false);
+                DoTerm(false);
             }
             else
             {
@@ -1364,7 +1352,7 @@ void SmParser::Term(bool bGroupNumberIdent)
                 }
                 else    // go as usual
                 {
-                    Align();
+                    DoAlign();
                     if (m_aCurToken.eType != TRGROUP)
                         Error(PE_RGROUP_EXPECTED);
                     else
@@ -1375,12 +1363,12 @@ void SmParser::Term(bool bGroupNumberIdent)
         break;
 
         case TLEFT :
-            Brace();
+            DoBrace();
             break;
 
         case TBLANK :
         case TSBLANK :
-            Blank();
+            DoBlank();
             break;
 
         case TTEXT :
@@ -1505,30 +1493,33 @@ void SmParser::Term(bool bGroupNumberIdent)
             break;
 
         case TSPECIAL:
-            Special();
+            DoSpecial();
             break;
 
         case TBINOM:
-            Binom();
+            DoBinom();
             break;
 
         case TSTACK:
-            Stack();
+            DoStack();
             break;
 
         case TMATRIX:
-            Matrix();
+            DoMatrix();
             break;
 
         default:
             if (TokenInGroup(TGLBRACES))
-            {   Brace();
+            {
+                DoBrace();
             }
             else if (TokenInGroup(TGOPER))
-            {   Operator();
+            {
+                DoOperator();
             }
             else if (TokenInGroup(TGUNOPER))
-            {   UnOper();
+            {
+                DoUnOper();
             }
             else if (    TokenInGroup(TGATTRIBUT)
                      ||  TokenInGroup(TGFONTATTR))
@@ -1541,9 +1532,9 @@ void SmParser::Term(bool bGroupNumberIdent)
                 {   aArray.resize(n + 1);
 
                     if (bIsAttr)
-                        Attribut();
+                        DoAttribut();
                     else
-                        FontAttribut();
+                        DoFontAttribut();
 
                     SmNode* pTmp = popOrZero(m_aNodeStack);
 
@@ -1554,7 +1545,7 @@ void SmParser::Term(bool bGroupNumberIdent)
                     n++;
                 }
 
-                Power();
+                DoPower();
 
                 SmNode *pFirstNode = popOrZero(m_aNodeStack);
                 while (n > 0)
@@ -1566,15 +1557,14 @@ void SmParser::Term(bool bGroupNumberIdent)
             }
             else if (TokenInGroup(TGFUNCTION))
             {
-                Function();
+                DoFunction();
             }
             else
                 Error(PE_UNEXPECTED_CHAR);
     }
 }
 
-
-void SmParser::Escape()
+void SmParser::DoEscape()
 {
     NextToken();
 
@@ -1611,29 +1601,27 @@ void SmParser::Escape()
     NextToken();
 }
 
-
-void SmParser::Operator()
+void SmParser::DoOperator()
 {
     if (TokenInGroup(TGOPER))
     {   SmStructureNode *pSNode = new SmOperNode(m_aCurToken);
 
         // put operator on top of stack
-        Oper();
+        DoOper();
 
         if (TokenInGroup(TGLIMIT) || TokenInGroup(TGPOWER))
-            SubSup(m_aCurToken.nGroup);
+            DoSubSup(m_aCurToken.nGroup);
         SmNode *pOperator = popOrZero(m_aNodeStack);
 
         // get argument
-        Power();
+        DoPower();
 
         pSNode->SetSubNodes(pOperator, popOrZero(m_aNodeStack));
         m_aNodeStack.push_front(pSNode);
     }
 }
 
-
-void SmParser::Oper()
+void SmParser::DoOper()
 {
     SmTokenType  eType (m_aCurToken.eType);
     SmNode      *pNode = NULL;
@@ -1686,8 +1674,7 @@ void SmParser::Oper()
     NextToken();
 }
 
-
-void SmParser::UnOper()
+void SmParser::DoUnOper()
 {
     OSL_ENSURE(TokenInGroup(TGUNOPER), "Sm: wrong token");
 
@@ -1713,7 +1700,7 @@ void SmParser::UnOper()
 
         case TNROOT :
             NextToken();
-            Power();
+            DoPower();
             pExtra = popOrZero(m_aNodeStack);
             break;
 
@@ -1722,7 +1709,7 @@ void SmParser::UnOper()
             //Let the glyph know what it is...
             m_aCurToken.eType = TUOPER;
             m_aCurToken.nGroup = TGUNOPER;
-            GlyphSpecial();
+            DoGlyphSpecial();
             pOper = popOrZero(m_aNodeStack);
             break;
 
@@ -1732,7 +1719,7 @@ void SmParser::UnOper()
         case TMINUSPLUS :
         case TNEG :
         case TFACT :
-            OpSubSup();
+            DoOpSubSup();
             pOper = popOrZero(m_aNodeStack);
             break;
 
@@ -1741,7 +1728,7 @@ void SmParser::UnOper()
     }
 
     // get argument
-    Power();
+    DoPower();
     pArg = popOrZero(m_aNodeStack);
 
     if (eType == TABS)
@@ -1784,8 +1771,7 @@ void SmParser::UnOper()
     m_aNodeStack.push_front(pSNode);
 }
 
-
-void SmParser::Attribut()
+void SmParser::DoAttribut()
 {
     OSL_ENSURE(TokenInGroup(TGATTRIBUT), "Sm: wrong token group");
 
@@ -1821,7 +1807,7 @@ void SmParser::Attribut()
 }
 
 
-void SmParser::FontAttribut()
+void SmParser::DoFontAttribut()
 {
     OSL_ENSURE(TokenInGroup(TGFONTATTR), "Sm: wrong token group");
 
@@ -1837,15 +1823,15 @@ void SmParser::FontAttribut()
             break;
 
         case TSIZE :
-            FontSize();
+            DoFontSize();
             break;
 
         case TFONT :
-            Font();
+            DoFont();
             break;
 
         case TCOLOR :
-            Color();
+            DoColor();
             break;
 
         default :
@@ -1853,8 +1839,7 @@ void SmParser::FontAttribut()
     }
 }
 
-
-void SmParser::Color()
+void SmParser::DoColor()
 {
     OSL_ENSURE(m_aCurToken.eType == TCOLOR, "Sm : Ooops...");
 
@@ -1874,8 +1859,7 @@ void SmParser::Color()
     m_aNodeStack.push_front(new SmFontNode(aToken));
 }
 
-
-void SmParser::Font()
+void SmParser::DoFont()
 {
     OSL_ENSURE(m_aCurToken.eType == TFONT, "Sm : Ooops...");
 
@@ -1918,7 +1902,7 @@ static bool lcl_IsNumber(const OUString& rText)
     return true;
 }
 
-void SmParser::FontSize()
+void SmParser::DoFontSize()
 {
     OSL_ENSURE(m_aCurToken.eType == TSIZE, "Sm : Ooops...");
 
@@ -1986,8 +1970,7 @@ void SmParser::FontSize()
     m_aNodeStack.push_front(pFontNode);
 }
 
-
-void SmParser::Brace()
+void SmParser::DoBrace()
 {
     OSL_ENSURE(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TGLBRACES),
         "Sm: kein Klammer Ausdruck");
@@ -2010,7 +1993,7 @@ void SmParser::Brace()
             pLeft = new SmMathSymbolNode(m_aCurToken);
 
             NextToken();
-            Bracebody(true);
+            DoBracebody(true);
             pBody = popOrZero(m_aNodeStack);
 
             if (m_aCurToken.eType == TRIGHT)
@@ -2038,7 +2021,7 @@ void SmParser::Brace()
             pLeft = new SmMathSymbolNode(m_aCurToken);
 
             NextToken();
-            Bracebody(false);
+            DoBracebody(false);
             pBody = popOrZero(m_aNodeStack);
 
             SmTokenType  eExpectedType = TUNKNOWN;
@@ -2085,8 +2068,7 @@ void SmParser::Brace()
     }
 }
 
-
-void SmParser::Bracebody(bool bIsLeftRight)
+void SmParser::DoBracebody(bool bIsLeftRight)
 {
     SmStructureNode *pBody = new SmBracebodyNode(m_aCurToken);
     SmNodeArray      aNodes;
@@ -2104,7 +2086,8 @@ void SmParser::Bracebody(bool bIsLeftRight)
                 nNum++;
             }
             else if (m_aCurToken.eType != TRIGHT)
-            {   Align();
+            {
+                DoAlign();
                 nNum++;
 
                 if (m_aCurToken.eType != TMLINE  &&  m_aCurToken.eType != TRIGHT)
@@ -2123,7 +2106,8 @@ void SmParser::Bracebody(bool bIsLeftRight)
                 nNum++;
             }
             else if (!TokenInGroup(TGRBRACES))
-            {   Align();
+            {
+                DoAlign();
                 nNum++;
 
                 if (m_aCurToken.eType != TMLINE  &&  !TokenInGroup(TGRBRACES))
@@ -2144,8 +2128,7 @@ void SmParser::Bracebody(bool bIsLeftRight)
     m_aNodeStack.push_front(pBody);
 }
 
-
-void SmParser::Function()
+void SmParser::DoFunction()
 {
     switch (m_aCurToken.eType)
     {
@@ -2181,16 +2164,15 @@ void SmParser::Function()
     }
 }
 
-
-void SmParser::Binom()
+void SmParser::DoBinom()
 {
     SmNodeArray  ExpressionArray;
     SmStructureNode *pSNode = new SmTableNode(m_aCurToken);
 
     NextToken();
 
-    Sum();
-    Sum();
+    DoSum();
+    DoSum();
 
     ExpressionArray.resize(2);
 
@@ -2203,8 +2185,7 @@ void SmParser::Binom()
     m_aNodeStack.push_front(pSNode);
 }
 
-
-void SmParser::Stack()
+void SmParser::DoStack()
 {
     SmNodeArray  ExpressionArray;
     NextToken();
@@ -2215,7 +2196,7 @@ void SmParser::Stack()
         do
         {
             NextToken();
-            Align();
+            DoAlign();
             n++;
         }
         while (m_aCurToken.eType == TPOUND);
@@ -2244,8 +2225,7 @@ void SmParser::Stack()
         Error(PE_LGROUP_EXPECTED);
 }
 
-
-void SmParser::Matrix()
+void SmParser::DoMatrix()
 {
     SmNodeArray  ExpressionArray;
 
@@ -2257,7 +2237,7 @@ void SmParser::Matrix()
         do
         {
             NextToken();
-            Align();
+            DoAlign();
             c++;
         }
         while (m_aCurToken.eType == TPOUND);
@@ -2269,7 +2249,7 @@ void SmParser::Matrix()
             NextToken();
             for (sal_uInt16 i = 0; i < c; i++)
             {
-                Align();
+                DoAlign();
                 if (i < (c - 1))
                 {
                     if (m_aCurToken.eType == TPOUND)
@@ -2307,8 +2287,7 @@ void SmParser::Matrix()
         Error(PE_LGROUP_EXPECTED);
 }
 
-
-void SmParser::Special()
+void SmParser::DoSpecial()
 {
     bool bReplace = false;
     OUString &rName = m_aCurToken.aText;
@@ -2349,13 +2328,11 @@ void SmParser::Special()
     NextToken();
 }
 
-
-void SmParser::GlyphSpecial()
+void SmParser::DoGlyphSpecial()
 {
     m_aNodeStack.push_front(new SmGlyphSpecialNode(m_aCurToken));
     NextToken();
 }
-
 
 void SmParser::Error(SmParseError eError)
 {
@@ -2406,7 +2383,7 @@ SmNode *SmParser::Parse(const OUString &rBuffer)
 
     SetLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     NextToken();
-    Table();
+    DoTable();
 
     SmNode* result = popOrZero(m_aNodeStack);
     return result;
@@ -2427,7 +2404,7 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
 
     SetLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     NextToken();
-    Expression();
+    DoExpression();
 
     SmNode* result = popOrZero(m_aNodeStack);
     return result;
