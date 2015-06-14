@@ -407,7 +407,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
             SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,   // [10451
             SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,           // [10457
             SID_SWREGISTER_MODE,    SID_SWREGISTER_MODE,            // [10467
-            SID_PARA_BACKGRND_DESTINATION,  SID_ATTR_BRUSH_CHAR,    // [10590
+            SID_ATTR_BRUSH_CHAR,  SID_ATTR_BRUSH_CHAR,              // [10590
             SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,    // [10855
             SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE, // [12065
             FN_PARAM_FTN_INFO,      FN_PARAM_FTN_INFO,              // [21123
@@ -803,7 +803,6 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                 switch ( pItem->Which() )
                 {
                     case SID_ATTR_AUTO_STYLE_UPDATE:
-                    case SID_PARA_BACKGRND_DESTINATION:
                     case RES_PAGEDESC:
                     //CTL not yet supported
                     case RES_CHRATR_CTL_FONT:

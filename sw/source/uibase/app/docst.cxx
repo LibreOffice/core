@@ -751,8 +751,6 @@ sal_uInt16 SwDocShell::Edit(
     {
         SfxItemSet& rSet = xTmp->GetItemSet();
         ::SwToSfxPageDescAttr( rSet );
-        // firstly only a Zero
-        rSet.Put(SwBackgroundDestinationItem(SID_PARA_BACKGRND_DESTINATION, 0));
         // merge list level indent attributes into the item set if needed
         xTmp->MergeIndentAttrsOfListStyle( rSet );
     }

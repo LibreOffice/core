@@ -30,7 +30,6 @@
 class BackgroundPreviewImpl;
 class SvxOpenGraphicDialog;
 struct SvxBackgroundTable_Impl;
-struct SvxBackgroundPara_Impl;
 struct SvxBackgroundPage_Impl;
 class SvxBrushItem;
 
@@ -62,8 +61,6 @@ public:
     void                ShowSelector();
     /// for the Writer (cells/rows/tables)
     void                ShowTblControl();
-    /// for the Writer (paragraph/characters)
-    void                ShowParaControl(bool bCharOnly = false);
 
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 protected:
@@ -79,7 +76,6 @@ private:
     VclPtr<ListBox>                m_pLbSelect;
     VclPtr<FixedText>              m_pTblDesc;
     VclPtr<ListBox>                m_pTblLBox;
-    VclPtr<ListBox>                m_pParaLBox;
 
     VclPtr<FixedText>              m_pBackGroundColorLabelFT;
     VclPtr<VclFrame>               m_pBackGroundColorFrame;
@@ -120,7 +116,6 @@ private:
     SvxOpenGraphicDialog* pImportDlg;
 
     SvxBackgroundTable_Impl*    pTableBck_Impl;///< Items for Sw-Table must be corrected
-    SvxBackgroundPara_Impl* pParaBck_Impl;///< also for the paragraph style
     std::unique_ptr<SvxBrushItem> pHighlighting;
 
     void                FillColorValueSets_Impl();
@@ -144,7 +139,6 @@ private:
     DECL_LINK( FileClickHdl_Impl, CheckBox* );
     DECL_LINK(BackgroundColorHdl_Impl, void *);
     DECL_LINK( TblDestinationHdl_Impl, ListBox* );
-    DECL_LINK( ParaDestinationHdl_Impl, ListBox* );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX

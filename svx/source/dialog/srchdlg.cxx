@@ -1911,8 +1911,6 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     sal_uInt16 nBrushWhich = pSh->GetPool().GetWhich(SID_ATTR_BRUSH);
     pWhRanges[nPos++] = nBrushWhich;
     pWhRanges[nPos++] = nBrushWhich;
-    pWhRanges[nPos++] = SID_PARA_BACKGRND_DESTINATION;
-    pWhRanges[nPos++] = SID_PARA_BACKGRND_DESTINATION;
     pWhRanges[nPos] = 0;
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges.get() );
@@ -1920,7 +1918,6 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 
     aSet.InvalidateAllItems();
     aSet.Put(SvxBrushItem(nBrushWhich));
-    aSet.Put(SfxUInt16Item(SID_PARA_BACKGRND_DESTINATION, PARA_DEST_CHAR));
 
     if ( bSearch )
     {

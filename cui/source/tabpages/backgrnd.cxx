@@ -89,21 +89,6 @@ struct SvxBackgroundTable_Impl
     {}
 };
 
-struct SvxBackgroundPara_Impl
-{
-    SvxBrushItem*   pParaBrush;
-    SvxBrushItem*   pCharBrush;
-
-    sal_Int32           nActPos;
-
-    SvxBackgroundPara_Impl()
-        : pParaBrush(NULL)
-        , pCharBrush(NULL)
-        , nActPos(LISTBOX_ENTRY_NOTFOUND)
-    {}
-
-};
-
 struct SvxBackgroundPage_Impl
 {
     Idle*          pLoadIdle;
@@ -349,7 +334,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     , pPageImpl(new SvxBackgroundPage_Impl)
     , pImportDlg(NULL)
     , pTableBck_Impl(NULL)
-    , pParaBck_Impl(NULL)
     , pHighlighting(nullptr)
 {
     get(m_pAsGrid, "asgrid");
@@ -357,7 +341,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     get(m_pLbSelect, "selectlb");
     get(m_pTblDesc, "forft");
     get(m_pTblLBox, "tablelb");
-    get(m_pParaLBox, "paralb");
 
     get(m_pBackGroundColorLabelFT, "background_label");
     get(m_pBackGroundColorFrame, "backgroundcolorframe");
@@ -428,20 +411,11 @@ void SvxBackgroundTabPage::dispose()
         pTableBck_Impl = NULL;
     }
 
-    if(pParaBck_Impl)
-    {
-        delete pParaBck_Impl->pParaBrush;
-        delete pParaBck_Impl->pCharBrush;
-        delete pParaBck_Impl;
-        pParaBck_Impl = NULL;
-    }
-
     m_pAsGrid.clear();
     m_pSelectTxt.clear();
     m_pLbSelect.clear();
     m_pTblDesc.clear();
     m_pTblLBox.clear();
-    m_pParaLBox.clear();
     m_pBackGroundColorFrame.clear();
     m_pBackgroundColorSet.clear();
     m_pPreviewWin1.clear();
@@ -511,35 +485,12 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             break;
         }
     }
-    else if( SfxItemState::SET == rSet->GetItemState(
-                SID_PARA_BACKGRND_DESTINATION, false, &pItem ) )
-    {
-        nDestValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        // character activated?
-        sal_Int32 nParaSel  = m_pParaLBox->GetSelectEntryPos();
-        if(1 == nParaSel)
-        {
-            // then it was a "standard"-call
-            nDestValue = nParaSel;
-        }
-        m_pParaLBox->SelectEntryPos(nDestValue);
-
-        switch ( nDestValue )
-        {
-            case PARA_DEST_PARA:
-                nSlot = SID_ATTR_BRUSH;
-            break;
-            case PARA_DEST_CHAR:
-                nSlot = SID_ATTR_BRUSH_CHAR;
-            break;
-        }
-    }
     else if( bHighlighting )
     {
         nSlot = SID_ATTR_BRUSH_CHAR;
     }
     //#111173# the destination item is missing when the parent style has been changed
-    if(USHRT_MAX == nDestValue && (m_pParaLBox->IsVisible()||m_pTblLBox->IsVisible()))
+    if(USHRT_MAX == nDestValue && m_pTblLBox->IsVisible())
         nDestValue = 0;
     sal_uInt16 nWhich = GetWhich( nSlot );
 
@@ -607,41 +558,6 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 
             TblDestinationHdl_Impl(m_pTblLBox);
             m_pTblLBox->SaveValue();
-        }
-        else if (m_pParaLBox->GetData() == m_pParaLBox)
-        {
-            sal_Int32 nValue = m_pParaLBox->GetSelectEntryPos();
-
-            if ( pParaBck_Impl )
-            {
-                delete pParaBck_Impl->pParaBrush;
-                delete pParaBck_Impl->pCharBrush;
-            }
-            else
-                pParaBck_Impl = new SvxBackgroundPara_Impl();
-
-            pParaBck_Impl->nActPos = nValue;
-
-            nWhich = GetWhich( SID_ATTR_BRUSH );
-            if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
-            {
-                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
-                pParaBck_Impl->pParaBrush = new SvxBrushItem(*pBgdAttr);
-            }
-
-            nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
-            rSet->GetItemState( nWhich, true );
-            rSet->GetItemState( nWhich, false );
-            if ( rSet->GetItemState( nWhich, true ) > SfxItemState::DEFAULT )
-            {
-                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
-                pParaBck_Impl->pCharBrush = new SvxBrushItem(*pBgdAttr);
-            }
-            else
-                pParaBck_Impl->pCharBrush = new SvxBrushItem(SID_ATTR_BRUSH_CHAR);
-
-            ParaDestinationHdl_Impl(m_pParaLBox);
-            m_pParaLBox->SaveValue();
         }
         else if( bHighlighting )
         {
@@ -748,18 +664,6 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             break;
             case TBL_DEST_TBL:
                 nSlot = SID_ATTR_BRUSH_TABLE;
-            break;
-        }
-    }
-    else if (m_pParaLBox->GetData() == m_pParaLBox)
-    {
-        switch(m_pParaLBox->GetSelectEntryPos())
-        {
-            case PARA_DEST_PARA:
-                nSlot = SID_ATTR_BRUSH;
-            break;
-            case PARA_DEST_CHAR:
-                nSlot = SID_ATTR_BRUSH_CHAR;
             break;
         }
     }
@@ -920,44 +824,6 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
         {
             rCoreSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          m_pTblLBox->GetSelectEntryPos() ) );
-            bModified |= true;
-        }
-    }
-    else if (m_pParaLBox->GetData() == m_pParaLBox)
-    {
-        // the current condition has already been put
-        if( nSlot != SID_ATTR_BRUSH && m_pParaLBox->IsVisible()) // not in search format dialog
-        {
-            const SfxPoolItem* pOldPara =
-                GetOldItem( *rCoreSet, SID_ATTR_BRUSH );
-
-            if ( *pParaBck_Impl->pParaBrush != *pOldPara )
-            {
-                rCoreSet->Put( *pParaBck_Impl->pParaBrush );
-                bModified |= true;
-            }
-        }
-
-        if( nSlot != SID_ATTR_BRUSH_CHAR )
-        {
-            const SfxPoolItem* pOldChar =
-                GetOldItem( *rCoreSet, SID_ATTR_BRUSH_CHAR );
-            DBG_ASSERT(pParaBck_Impl, "pParaBck_Impl == NULL ?");
-            if ( pOldChar &&
-                    //#111173#  crash report shows that pParaBck_Impl can be NULL, the cause is unknown
-                    pParaBck_Impl &&
-                        (*pParaBck_Impl->pCharBrush != *pOldChar ||
-                *pParaBck_Impl->pCharBrush != SvxBrushItem(SID_ATTR_BRUSH_CHAR)))
-            {
-                rCoreSet->Put( *pParaBck_Impl->pCharBrush );
-                bModified |= true;
-            }
-        }
-
-        if( m_pParaLBox->IsValueChangedFromSaved() )
-        {
-            rCoreSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
-                                         m_pParaLBox->GetSelectEntryPos() ) );
             bModified |= true;
         }
     }
@@ -1284,12 +1150,10 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
     if ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) )
     {
         ShowColorUI_Impl();
-        m_pParaLBox->Enable(); // drawing background can't be a bitmap
     }
     else
     {
         ShowBitmapUI_Impl();
-        m_pParaLBox->Enable(false); // drawing background can't be a bitmap
     }
     return 0;
 }
@@ -1458,19 +1322,6 @@ void SvxBackgroundTabPage::ShowTblControl()
     m_pAsGrid->Show();
 }
 
-void SvxBackgroundTabPage::ShowParaControl(bool bCharOnly)
-{
-    m_pParaLBox->SetSelectHdl(HDL(ParaDestinationHdl_Impl));
-    m_pParaLBox->SelectEntryPos(0);
-    if (!bCharOnly)
-    {
-        m_pTblDesc->Show();
-        m_pParaLBox->Show();
-        m_pAsGrid->Show();
-    }
-    m_pParaLBox->SetData(m_pParaLBox); // here it can be recognized that this mode is turned on
-}
-
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
 {
     sal_Int32 nSelPos = pBox->GetSelectEntryPos();
@@ -1554,68 +1405,6 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
             xItemHolder.reset(new SvxBrushItem(nWhich));
             pActItem = xItemHolder.get();
         }
-        FillControls_Impl(*pActItem, aUserData);
-    }
-    return 0;
-}
-
-IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
-{
-    sal_Int32 nSelPos = pBox->GetSelectEntryPos();
-    if( pParaBck_Impl && pParaBck_Impl->nActPos != nSelPos)
-    {
-        SvxBrushItem* pActItem = NULL;
-        switch(pParaBck_Impl->nActPos)
-        {
-        case PARA_DEST_PARA:
-            pActItem = pParaBck_Impl->pParaBrush;
-            break;
-        case PARA_DEST_CHAR:
-            pActItem = pParaBck_Impl->pCharBrush;
-            break;
-        default:
-            /* we assert here because the rest of the code expect pActItem to be non NULL */
-            assert(false);
-            return 0;
-        }
-        pParaBck_Impl->nActPos = nSelPos;
-        if(drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
-        {
-            sal_uInt16 nWhich = pActItem->Which();
-            *pActItem = SvxBrushItem( aBgdColor, nWhich );
-        }
-        else
-        {
-                SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
-                const bool          bIsLink  = m_pBtnLink->IsChecked();
-
-                if ( !bIsLink && !bIsGraphicValid )
-                    bIsGraphicValid = LoadLinkedGraphic_Impl();
-
-                if ( bIsLink )
-                    *pActItem = SvxBrushItem( aBgdGraphicPath,
-                                                aBgdGraphicFilter,
-                                                eNewPos,
-                                                pActItem->Which() );
-                else
-                    *pActItem = SvxBrushItem( aBgdGraphic,
-                                                eNewPos,
-                                                pActItem->Which() );
-        }
-        switch(nSelPos)
-        {
-            case PARA_DEST_PARA:
-                pActItem = pParaBck_Impl->pParaBrush;
-                m_pLbSelect->Enable();
-            break;
-            case PARA_DEST_CHAR:
-            {
-                pActItem = pParaBck_Impl->pCharBrush;
-                m_pLbSelect->Enable(false);
-            }
-            break;
-        }
-        OUString aUserData = GetUserData();
         FillControls_Impl(*pActItem, aUserData);
     }
     return 0;
@@ -1738,8 +1527,6 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
         SvxBackgroundTabFlags nFlags = static_cast<SvxBackgroundTabFlags>(pFlagItem->GetValue());
         if (nFlags & SvxBackgroundTabFlags::SHOW_TBLCTL )
             ShowTblControl();
-        if ( nFlags & SvxBackgroundTabFlags::SHOW_PARACTL )
-            ShowParaControl();
         if ( nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR )
         {
             ShowSelector();
