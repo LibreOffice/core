@@ -2914,31 +2914,11 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     }
     END_CACHE_PIXMAP_RENDER( pixmapRect, pixmap, mask )
 
-    // tdf#91301 workaround
-    //
-    // After introduction of the Idle processing, something has changed so
-    // that the underlying GetGdkWindow() does not update its size fast enough;
-    // even though the gtk_window_resize is called before the Window::Erase()
-    // (that actually paints the background) etc.
-    //
-    // The consequence of the not-yet-updated gdkDrawable is that we cache
-    // something that has the correct background in the top left 200x200
-    // pixels, but the rest is just copied from the screen.
-    //
-    // Let's for now just not cache when the GetGdkWindow() is smaller than
-    // what we actually paint; TODO find the root cause.
-    gint width, height;
-    gdk_drawable_get_size(GetGdkWindow(), &width, &height);
-    bool bAllowCaching = (pixmapRect.Right() < width) && (pixmapRect.Bottom() < height);
-
     // cache data
-    if (bAllowCaching)
-    {
-        if (nType == CTRL_TAB_ITEM)
-            aCacheItems.Fill(nType, nState, pixmapRect, pixmap, mask);
-        else
-            aCachePage.Fill(nType, nState, pixmapRect, pixmap, mask);
-    }
+    if( nType == CTRL_TAB_ITEM )
+        aCacheItems.Fill( nType, nState, pixmapRect, pixmap, mask );
+    else
+        aCachePage.Fill( nType, nState, pixmapRect, pixmap, mask );
 
     return true;
 }

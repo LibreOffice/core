@@ -933,12 +933,36 @@ void GtkSalFrame::moveWindow( long nX, long nY )
         gtk_window_move( GTK_WINDOW(m_pWindow), nX, nY );
 }
 
+void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
+{
+    gint nOrigwidth, nOrigheight;
+    gtk_widget_get_size_request(m_pWindow, &nOrigwidth, &nOrigheight);
+    if (nOrigwidth != nWidth || nOrigheight != nHeight)
+    {
+        m_bAwaitingSizeConfirmation = true;
+        gtk_widget_set_size_request(m_pWindow, nWidth, nHeight );
+    }
+}
+
+void GtkSalFrame::window_resize(long nWidth, long nHeight)
+{
+    gint nOrigwidth, nOrigheight;
+    gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
+    if (nOrigwidth != nWidth || nOrigheight != nHeight)
+    {
+        m_bAwaitingSizeConfirmation = true;
+        gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
+    }
+}
+
 void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
 {
     if( isChild( false, true ) )
-        gtk_widget_set_size_request( m_pWindow, nWidth, nHeight );
+    {
+        widget_set_size_request(nWidth, nHeight);
+    }
     else if( ! isChild( true, false ) )
-        gtk_window_resize( GTK_WINDOW(m_pWindow), nWidth, nHeight );
+        window_resize(nWidth, nHeight);
 }
 
 /*
@@ -1459,7 +1483,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
                   &aRoot, &x_ret, &y_ret, &w, &h, &bw, &d );
     maGeometry.nWidth   = w;
     maGeometry.nHeight  = h;
-    gtk_window_resize( GTK_WINDOW(m_pWindow), w, h );
+    window_resize(w, h);
     gtk_window_move( GTK_WINDOW(m_pWindow), 0, 0 );
     if( ! m_bWindowIsGtkPlug )
     {
@@ -1955,10 +1979,12 @@ void GtkSalFrame::setMinMaxSize()
             aHints |= GDK_HINT_MAX_SIZE;
         }
         if( aHints )
+        {
             gtk_window_set_geometry_hints( GTK_WINDOW(m_pWindow),
                                            NULL,
                                            &aGeo,
                                            GdkWindowHints( aHints ) );
+        }
     }
 }
 
@@ -1979,7 +2005,7 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
         m_aMinSize = Size( nWidth, nHeight );
         if( m_pWindow )
         {
-            gtk_widget_set_size_request( m_pWindow, nWidth, nHeight );
+            widget_set_size_request(nWidth, nHeight );
             // Show does a setMinMaxSize
             if( IS_WIDGET_MAPPED( m_pWindow ) )
                 setMinMaxSize();
@@ -2040,9 +2066,9 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         maGeometry.nHeight  = nHeight;
 
         if( isChild( false, true ) )
-            gtk_widget_set_size_request( m_pWindow, nWidth, nHeight );
+            widget_set_size_request(nWidth, nHeight);
         else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
-            gtk_window_resize( GTK_WINDOW(m_pWindow), nWidth, nHeight );
+            window_resize(nWidth, nHeight);
         setMinMaxSize();
     }
     else if( m_bDefaultSize )
@@ -2365,7 +2391,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         // temporarily re-sizeable
         if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
             gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
-        gtk_window_resize( GTK_WINDOW( m_pWindow ), maGeometry.nWidth, maGeometry.nHeight );
+        window_resize(maGeometry.nWidth, maGeometry.nHeight);
         //I wonder if we should instead leave maGeometry alone and rely on
         //configure-event to trigger signalConfigure and set it there
         AllocateFrame();
@@ -3683,6 +3709,7 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->m_bAwaitingSizeConfirmation = false;
 
     bool bMoved = false, bSized = false;
     int x = pEvent->x, y = pEvent->y;
