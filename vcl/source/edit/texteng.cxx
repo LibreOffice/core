@@ -3088,7 +3088,7 @@ long TextEngine::ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt1
     if ( ( nIndex == nPortionStart ) && ( nIndex == nIndex2 )  )
     {
         // Output of full portion, so we need portion x offset.
-        // Use ImpGetPortionXOffset, because GetXPos may deliver left or right position from portioon, depending on R2L, L2R
+        // Use ImpGetPortionXOffset, because GetXPos may deliver left or right position from portion, depending on R2L, L2R
         nX = ImpGetPortionXOffset( nPara, pLine, nPortion );
         if ( IsRightToLeft() )
         {

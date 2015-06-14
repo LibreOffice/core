@@ -132,7 +132,7 @@ bool VbaInputStream::updateChunk()
     // From the amazing bit detective work of Valek Filippov<frob@gnome.org>
     // this tweak and the one at the bottom of the method to seek to the
     // start of the next chunk we can read those strange broken
-    // ( I guess from a MSO bug ) commpessed streams > 4k
+    // ( I guess from a MSO bug ) compressed streams > 4k
 
     if ( bIgnoreBrokenSig )
     {

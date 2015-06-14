@@ -738,7 +738,7 @@ protected:
  * @param[in]   rExpected    expected borderline object
  * @param[in]   rActual      actual borderline object
  * @param[in]   rSourceLine  line from where the assertion is called
- * Note: This method is the implementatition of CPPUNIT_ASSERT_BORDER_EQUAL, so
+ * Note: This method is the implementation of CPPUNIT_ASSERT_BORDER_EQUAL, so
  *       use that macro instead.
 **/
 inline void assertBorderEqual(
