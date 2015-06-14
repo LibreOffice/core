@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_83aa7e84",
+        "filename": "pyuno/qa/pytests/testcollections_XCellRange.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-06-14T15:21:49Z",
+      "side": 1,
+      "message": "License header ?\n(ditto for the other Test* files)",
+      "revId": "3bafb1b7f28aaaaac79b3ac89470b9a0030c66de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e3a572b5",
+        "filename": "pyuno/source/module/pyuno_iterator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-06-14T15:21:49Z",
+      "side": 1,
+      "message": "does it? (incorporate work covered by Apache\u0027s AL2 ? )\nif not then http://cgit.freedesktop.org/libreoffice/core/tree/TEMPLATE.SOURCECODE.HEADER\n-\u003e\n/*\n * This file is part of the LibreOffice project.\n *\n * This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at http://mozilla.org/MPL/2.0/.\n */",
+      "revId": "3bafb1b7f28aaaaac79b3ac89470b9a0030c66de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
