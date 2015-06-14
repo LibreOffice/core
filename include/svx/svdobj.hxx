@@ -139,7 +139,6 @@ enum SdrObjKind {
     OBJ_CUSTOMSHAPE=33,  /// custom shape
     OBJ_MEDIA      =34,  /// media shape
     OBJ_TABLE      =35,  /// table
-    OBJ_OPENGL     =36,  /// opengl graphic
     OBJ_MAXI
 };
 

@@ -882,16 +882,6 @@ private:
     OUString referer_;
 };
 
-class SVX_DLLPUBLIC SvxOpenGLObject : public SvxShape
-{
-public:
-    SvxOpenGLObject( SdrObject* pObj ) throw() : SvxShape(pObj){}
-    virtual ~SvxOpenGLObject() throw() {}
-
-    void setRenderer(IOpenGLRenderer* pRenderer);
-    IOpenGLRenderer* getRenderer();
-};
-
 /*
  * This is a really ugly hack for the chart2 OpenGL backend
  * SvxShapeGroup::add only accepts objects derived from SvxShape and silently drops

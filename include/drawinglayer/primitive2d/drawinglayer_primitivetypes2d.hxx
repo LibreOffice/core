@@ -103,7 +103,6 @@
 #define PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D                (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 68)
 #define PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D      (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 69)
 #define PRIMITIVE2D_ID_CLIPPEDBORDERLINEPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 70)
-#define PRIMITIVE2D_ID_OPENGLPRIMITIVE2D                    (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 71)
 // When you add a new primitive, please update the drawinglayer::primitive2d::idToString() function
 // in drawinglayer/source/primitive2d/baseprimitive2d.cxx.
 

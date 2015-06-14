@@ -132,7 +132,6 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdsob.hxx>
 #include <rtl/strbuf.hxx>
-#include <svdoopengl.hxx>
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
 
@@ -3245,7 +3244,6 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
             case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(pModel);   break;
-            case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
         }
     }
 
@@ -3333,7 +3331,6 @@ SdrObject* SdrObjFactory::MakeNewObject(
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
             case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(pModel);   break;
-            case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
         }
     }
 

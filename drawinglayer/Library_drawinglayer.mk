@@ -91,7 +91,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/metafileprimitive2d \
     drawinglayer/source/primitive2d/modifiedcolorprimitive2d \
     drawinglayer/source/primitive2d/objectinfoprimitive2d \
-    drawinglayer/source/primitive2d/openglprimitive2d \
     drawinglayer/source/primitive2d/pagepreviewprimitive2d \
 	drawinglayer/source/primitive2d/patternfillprimitive2d \
     drawinglayer/source/primitive2d/pointarrayprimitive2d \

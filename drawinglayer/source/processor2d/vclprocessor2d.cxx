@@ -66,8 +66,6 @@
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 // <- for test
 
-#include <drawinglayer/primitive2d/openglprimitive2d.hxx>
-
 using namespace com::sun::star;
 
 namespace
@@ -1594,14 +1592,6 @@ namespace drawinglayer
 
                 mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
             }
-        }
-
-        void VclProcessor2D::RenderOpenGLPrimitive2D(const primitive2d::OpenGLPrimitive2D& rCandidate)
-        {
-            // Just draw a dummy rect to see primitive rendering is working.
-            mpOutputDevice->SetLineColor(COL_BLACK);
-            mpOutputDevice->SetFillColor(COL_RED);
-            mpOutputDevice->DrawRect(Rectangle(rCandidate.getPos(),Size(2000,2000)));
         }
 
         // process support

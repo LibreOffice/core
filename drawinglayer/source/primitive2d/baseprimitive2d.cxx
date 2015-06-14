@@ -357,7 +357,6 @@ namespace drawinglayer
             case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D: return OUString("OBJECTINFO");
             case PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D: return OUString("POLYPOLYGONSELECTION");
             case PRIMITIVE2D_ID_CLIPPEDBORDERLINEPRIMITIVE2D: return OUString("CLIPPEDBORDERLINE");
-            case PRIMITIVE2D_ID_OPENGLPRIMITIVE2D: return OUString("OPENGL");
             default: return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
             }
         }

@@ -846,7 +846,6 @@ const UHashMapImpl& GetUHashImpl()
             { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"),   E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG },
             { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"), E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG },
             { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"), E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenGLObject"),         OBJ_OPENGL },
         };
 
         for (sal_uInt32 i = 0; i < sizeof(aInit)/sizeof(aInit[0]); i++)

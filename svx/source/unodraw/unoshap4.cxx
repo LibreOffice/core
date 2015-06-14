@@ -51,7 +51,6 @@
 #include "svx/svdview.hxx"
 #include "svdglob.hxx"
 #include "svx/svdstr.hrc"
-#include <svdoopengl.hxx>
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
 
@@ -1017,16 +1016,6 @@ SvxDummyShapeContainer::SvxDummyShapeContainer(uno::Reference< drawing::XShapes 
 
 SvxDummyShapeContainer::~SvxDummyShapeContainer() throw()
 {
-}
-
-void SvxOpenGLObject::setRenderer(IOpenGLRenderer* pRenderer)
-{
-    static_cast<SdrOpenGLObj*>(GetSdrObject())->setRenderer(pRenderer);
-}
-
-IOpenGLRenderer* SvxOpenGLObject::getRenderer()
-{
-    return static_cast<SdrOpenGLObj*>(GetSdrObject())->getRenderer();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

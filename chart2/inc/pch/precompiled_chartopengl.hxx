@@ -55,7 +55,6 @@
 #include <tools/gen.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/opengl/IOpenGLRenderer.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/openglwin.hxx>
 #include <vcl/svapp.hxx>

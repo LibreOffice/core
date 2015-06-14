@@ -172,7 +172,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewobjectcontactofpageobj \
     svx/source/sdr/contact/viewobjectcontactofe3dscene \
     svx/source/sdr/contact/viewcontactofgraphic \
-    svx/source/sdr/contact/viewcontactofopenglobj \
     svx/source/sdr/contact/viewobjectcontactredirector \
     svx/source/sdr/contact/viewcontactofsdrcircobj \
     svx/source/sdr/contact/viewcontactofgroup \
@@ -207,7 +206,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewcontactofsdrmeasureobj \
     svx/source/sdr/contact/objectcontactofobjlistpainter \
     svx/source/sdr/contact/viewobjectcontactofe3d \
-    svx/source/sdr/contact/viewobjectcontactofopenglobj \
     svx/source/sdr/event/eventhandler \
     svx/source/sdr/overlay/overlayline \
     svx/source/sdr/overlay/overlaycrosshair \
@@ -310,7 +308,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdomeas \
     svx/source/svdraw/svdomedia \
     svx/source/svdraw/svdoole2 \
-    svx/source/svdraw/svdoopengl \
     svx/source/svdraw/svdopage \
     svx/source/svdraw/svdopath \
     svx/source/svdraw/svdorect \

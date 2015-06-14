@@ -508,7 +508,6 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
-#include <drawinglayer/primitive2d/openglprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -810,7 +809,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/opengl/IOpenGLRenderer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/region.hxx>

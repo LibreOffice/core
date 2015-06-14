@@ -48,8 +48,6 @@ SvpSalInstance::PostedEventsInQueue()
 SvtAccessibilityOptions::IsModified() const
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxColorTabPage::GetPropertyList(XPropertyListType)
-SvxOpenGLObject::getRenderer()
-SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
 Test::testCopyPasteSkipEmptyConditionalFormatting()
 Test::testPerf()
 Test::testSharedFormulaMoveBlock()
