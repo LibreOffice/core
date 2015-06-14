@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_83827ec7",
+        "filename": "svx/UIConfig_svx.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-06-14T22:10:21Z",
+      "side": 1,
+      "message": "not sure how important this is, but other lines seem to have a tab at the beginning of the line and the added lines uses spaces. :D",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 4
+      },
+      "revId": "cb51c80f83e83ce9cf72bd31d8af004dbfc1f758",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
