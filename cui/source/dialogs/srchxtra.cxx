@@ -113,7 +113,9 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
     }
     else if (nId == m_nBackPageId)
     {
-        static_cast<SvxBackgroundTabPage&>(rPage).ShowParaControl(true);
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));
+        rPage.PageCreated(aSet);
     }
 }
 
