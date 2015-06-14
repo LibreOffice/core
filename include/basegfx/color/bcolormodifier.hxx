@@ -326,7 +326,7 @@ namespace basegfx
         Input are percent values from [-1.0 .. 1-0] which correspond to -100% to 100%
         correction of Red, Green, Blue, Luminance or Contrast. 0.0 means no change of
         the corresponding channel. All these are combined (but can be used single) to
-        - be able to cover a bigger change range utilizing the cmobination
+        - be able to cover a bigger change range utilizing the combination
         - allow execution by a small, common, precalculated table
     */
     class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_RGBLuminanceContrast : public BColorModifier

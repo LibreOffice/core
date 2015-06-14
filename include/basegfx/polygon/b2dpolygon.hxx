@@ -118,7 +118,7 @@ namespace basegfx
 
         /** Default adaptive subdivision access
 
-            This method will return a default adapive subdivision of the polygon.
+            This method will return a default adaptive subdivision of the polygon.
             If the polygon does not contain any bezier curve segments, it will
             just return itself.
 

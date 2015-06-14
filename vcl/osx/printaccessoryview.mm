@@ -45,7 +45,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
-/* Note: the accesory view as implemented here is already deprecated in Leopard. Unfortunately
+/* Note: the accessory view as implemented here is already deprecated in Leopard. Unfortunately
    as long as our baseline is Tiger we cannot gain the advantages over multiple accessory views
    as well havs having accessory views AND a preview (as long as you are linked vs. 10.4 libraries
    the preview insists on not being present. This is unfortunate.

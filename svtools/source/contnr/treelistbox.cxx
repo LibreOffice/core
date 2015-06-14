@@ -3870,7 +3870,7 @@ void SvTreeListBox::EnableList( bool _bEnable )
         ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            // need to be done here to get the vclxwindow later on in the accessbile
+            // need to be done here to get the vclxwindow later on in the accessible
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xTemp(GetComponentInterface());
             xAccessible = pImp->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
         }

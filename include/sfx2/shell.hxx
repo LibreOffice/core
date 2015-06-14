@@ -171,7 +171,7 @@ public:
 
     /**
         The connection to a possible corresponding SbxObject is dissolved.
-        The SbxObject may continoue to exist, but can not any longer perform
+        The SbxObject may continue to exist, but can not any longer perform
         any functions and can not provide any properties.
         */
     virtual                     ~SfxShell();
