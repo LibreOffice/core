@@ -855,12 +855,12 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
         case 0:
         {
             uno::Sequence< beans::PropertyValue >   aPropSeq;
-            ::com::sun::star::drawing::LineDash     aLineDash;
-            OUString                           aName;
-            bool                               bLineDash( false );
 
             if ( rVal >>= aPropSeq )
             {
+                css::drawing::LineDash aLineDash;
+                OUString aName;
+                bool bLineDash( false );
                 for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
                 {
                     if ( aPropSeq[n].Name == "Name" )
@@ -2591,12 +2591,12 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
         case 0:
         {
             uno::Sequence< beans::PropertyValue >   aPropSeq;
-            ::com::sun::star::awt::Gradient         aGradient2;
-            OUString                           aName;
-            bool                                    bGradient( false );
 
             if ( rVal >>= aPropSeq )
             {
+                css::awt::Gradient aGradient2;
+                OUString aName;
+                bool bGradient( false );
                 for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
                 {
                     if ( aPropSeq[n].Name == "Name" )
@@ -3046,12 +3046,11 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
         case 0:
         {
             uno::Sequence< beans::PropertyValue >   aPropSeq;
-            ::com::sun::star::drawing::Hatch        aUnoHatch;
-            OUString                           aName;
-            bool                                    bHatch( false );
-
             if ( rVal >>= aPropSeq )
             {
+                css::drawing::Hatch aUnoHatch;
+                OUString aName;
+                bool bHatch( false );
                 for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
                 {
                     if ( aPropSeq[n].Name == "Name" )
