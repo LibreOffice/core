@@ -307,7 +307,7 @@ class OfaAutoFmtPrcntSet : public ModalDialog
 {
     VclPtr<MetricField> m_pPrcntMF;
 public:
-    OfaAutoFmtPrcntSet(vcl::Window* pParent)
+    explicit OfaAutoFmtPrcntSet(vcl::Window* pParent)
         : ModalDialog(pParent, "PercentDialog","cui/ui/percentdialog.ui")
     {
         get(m_pPrcntMF, "margin");

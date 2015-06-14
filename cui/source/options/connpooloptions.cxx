@@ -46,7 +46,7 @@ namespace offapp
         Link<>                                  m_aRowChangeHandler;
 
     public:
-        DriverListControl(vcl::Window* _pParent);
+        explicit DriverListControl(vcl::Window* _pParent);
 
         virtual void Init() SAL_OVERRIDE;
                 void Update(const DriverPoolingSettings& _rSettings);

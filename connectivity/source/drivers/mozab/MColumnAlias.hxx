@@ -56,7 +56,7 @@ namespace connectivity
             AliasMap    m_aAliasMap;
 
         public:
-            OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+            explicit OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
             inline bool hasAlias( const OUString& _rAlias ) const
             {

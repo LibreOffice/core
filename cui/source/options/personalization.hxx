@@ -92,7 +92,7 @@ private:
     OUString m_aAppliedPersona;
 
 public:
-    SelectPersonaDialog( vcl::Window *pParent );
+    explicit SelectPersonaDialog( vcl::Window *pParent );
     virtual ~SelectPersonaDialog();
     virtual void dispose() SAL_OVERRIDE;
     ::rtl::Reference< SearchAndParseThread > m_rSearchThread;

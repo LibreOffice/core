@@ -64,7 +64,7 @@ private:
     DECL_LINK( SearchHdl_Impl, void* );
 
 public:
-   CuiAboutConfigTabPage(vcl::Window* pParent);
+   explicit CuiAboutConfigTabPage(vcl::Window* pParent);
    virtual ~CuiAboutConfigTabPage();
    virtual void dispose() SAL_OVERRIDE;
    void     InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue);

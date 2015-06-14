@@ -93,7 +93,7 @@ namespace connectivity
         public:
             ::cppu::OBroadcastHelper& rBHelper;
 
-            KabCommonStatement(KabConnection *_pConnection);
+            explicit KabCommonStatement(KabConnection *_pConnection);
             using KabCommonStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
@@ -151,7 +151,7 @@ namespace connectivity
             virtual ~KabStatement() { }
 
         public:
-            KabStatement(KabConnection* _pConnection);
+            explicit KabStatement(KabConnection* _pConnection);
             DECLARE_SERVICE_INFO();
         };
     }

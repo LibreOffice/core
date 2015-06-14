@@ -74,7 +74,7 @@ class Driver : public MutexHolder, public DriverBase
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiComponentFactory > m_smgr;
 
 public:
-    Driver ( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > & ctx )
+    explicit Driver ( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > & ctx )
         : DriverBase( this->m_mutex ),
           m_ctx( ctx ),
           m_smgr( ctx->getServiceManager() )

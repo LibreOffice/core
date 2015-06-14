@@ -23,7 +23,7 @@
 class _SvxMacroTabPage_Impl
 {
 public:
-    _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
+    explicit _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
 
     VclPtr<PushButton>                     pAssignPB;
     VclPtr<PushButton>                     pAssignComponentPB;

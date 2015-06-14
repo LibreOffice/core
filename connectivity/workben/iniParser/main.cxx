@@ -64,7 +64,7 @@ public:
             return &mAllSection[secName];
         return NULL;
     }
-    IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException )
+    explicit IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException )
     {
         OUString curDirPth;
         OUString iniUrl;

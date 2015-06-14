@@ -65,7 +65,7 @@ namespace connectivity
             KDEVersionCheckFunction     m_pKDEVersionCheckFunc;
 
         public:
-            KabImplModule( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+            explicit KabImplModule( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
 
             /** determines whether there is a KDE present in the environment
             */
@@ -155,7 +155,7 @@ namespace connectivity
             static OUString  impl_getConfigurationSettingsPath();
 
         protected:
-            KabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            explicit KabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;

@@ -112,7 +112,7 @@ void SAL_CALL Connection::release() throw()
 struct ConnectionGuard
 {
     oslInterlockedCount& m_refCount;
-    ConnectionGuard(oslInterlockedCount& refCount)
+    explicit ConnectionGuard(oslInterlockedCount& refCount)
         : m_refCount(refCount)
     {
         osl_atomic_increment(&m_refCount);

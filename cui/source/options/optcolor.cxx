@@ -174,7 +174,7 @@ class ColorConfigWindow_Impl
     , public VclBuilderContainer
 {
 public:
-    ColorConfigWindow_Impl(vcl::Window* pParent);
+    explicit ColorConfigWindow_Impl(vcl::Window* pParent);
     virtual ~ColorConfigWindow_Impl() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
 
@@ -855,7 +855,7 @@ class ColorConfigCtrl_Impl : public VclVBox
     virtual void Command (CommandEvent const& rCEvt) SAL_OVERRIDE;
     virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 public:
-    ColorConfigCtrl_Impl(vcl::Window* pParent);
+    explicit ColorConfigCtrl_Impl(vcl::Window* pParent);
     virtual ~ColorConfigCtrl_Impl();
     virtual void dispose() SAL_OVERRIDE;
 

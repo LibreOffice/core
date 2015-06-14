@@ -44,7 +44,7 @@ class KabConditionConstant : public KabCondition
         bool m_bValue;
 
     public:
-        KabConditionConstant(const bool bValue);
+        explicit KabConditionConstant(const bool bValue);
         virtual bool isAlwaysTrue() const SAL_OVERRIDE;
         virtual bool isAlwaysFalse() const SAL_OVERRIDE;
         virtual bool eval(const ::KABC::Addressee &aAddressee) const SAL_OVERRIDE;
@@ -58,7 +58,7 @@ class KabConditionColumn : public KabCondition
         QString value(const ::KABC::Addressee &aAddressee) const;
 
     public:
-        KabConditionColumn(
+        explicit KabConditionColumn(
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual bool isAlwaysTrue() const SAL_OVERRIDE;
         virtual bool isAlwaysFalse() const SAL_OVERRIDE;
@@ -67,7 +67,7 @@ class KabConditionColumn : public KabCondition
 class KabConditionNull : public KabConditionColumn
 {
     public:
-        KabConditionNull(
+        explicit KabConditionNull(
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual bool eval(const ::KABC::Addressee &aAddressee) const SAL_OVERRIDE;
 };
@@ -75,7 +75,7 @@ class KabConditionNull : public KabConditionColumn
 class KabConditionNotNull : public KabConditionColumn
 {
     public:
-        KabConditionNotNull(
+        explicit KabConditionNotNull(
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual bool eval(const ::KABC::Addressee &aAddressee) const SAL_OVERRIDE;
 };

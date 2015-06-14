@@ -78,8 +78,8 @@ namespace connectivity
                 void insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const OUString& _propertyName, const CFTypeRef _propertyValue) const;
             public:
                 MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_header, MacabRecord **_records, sal_Int32 _numRecords);
-                MacabRecords(const MacabRecords *_copy);
-                MacabRecords(const ABAddressBookRef _addressBook);
+                explicit MacabRecords(const MacabRecords *_copy);
+                explicit MacabRecords(const ABAddressBookRef _addressBook);
                 ~MacabRecords();
 
                 void initialize();

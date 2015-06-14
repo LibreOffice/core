@@ -51,7 +51,7 @@ class MorkDriver:
     private boost::noncopyable
 {
 public:
-    MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context);
+    explicit MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context);
     static OUString getImplementationName_Static()
         throw(css::uno::RuntimeException);
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static()

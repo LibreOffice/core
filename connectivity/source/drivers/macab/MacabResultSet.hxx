@@ -91,7 +91,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            MacabResultSet(MacabCommonStatement *pStmt);
+            explicit MacabResultSet(MacabCommonStatement *pStmt);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {

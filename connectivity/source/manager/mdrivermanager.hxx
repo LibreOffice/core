@@ -77,7 +77,7 @@ namespace drivermanager
         sal_Int32                       m_nLoginTimeout;
 
     private:
-        OSDBCDriverManager(
+        explicit OSDBCDriverManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
         virtual ~OSDBCDriverManager();
 

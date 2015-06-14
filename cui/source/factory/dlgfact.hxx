@@ -64,7 +64,7 @@ using namespace svx;
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
-                    Class( DialogClass* p)          \
+    explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
     virtual short   Execute() SAL_OVERRIDE ;
@@ -80,7 +80,7 @@ class VclAbstractDialog2_Impl : public VclAbstractDialog2
     ScopedVclPtr<Dialog> m_pDlg;
     Link<>          m_aEndDlgHdl;
 public:
-                    VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}
+    explicit        VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}
     virtual         ~VclAbstractDialog2_Impl();
     virtual void    StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
     virtual long    GetResult() SAL_OVERRIDE;

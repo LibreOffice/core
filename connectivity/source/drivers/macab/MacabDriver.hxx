@@ -132,7 +132,7 @@ namespace connectivity
             static OUString  impl_getConfigurationSettingsPath();
 
         protected:
-            MacabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            explicit MacabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;

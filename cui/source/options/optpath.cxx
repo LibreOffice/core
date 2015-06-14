@@ -94,7 +94,7 @@ struct PathUserData_Impl
     OUString        sUserPath;
     OUString        sWritablePath;
 
-    PathUserData_Impl( sal_uInt16 nId ) :
+    explicit PathUserData_Impl( sal_uInt16 nId ) :
         nRealId( nId ), eState( SfxItemState::UNKNOWN ) {}
 };
 

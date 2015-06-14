@@ -104,7 +104,7 @@ namespace connectivity
         public:
 
             ::cppu::OBroadcastHelper& rBHelper;
-            OStatementCommonBase(Connection* _pConnection);
+            explicit OStatementCommonBase(Connection* _pConnection);
             using OStatementCommonBase_Base::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper

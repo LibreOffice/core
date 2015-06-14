@@ -146,7 +146,7 @@ class DisposeGuard
 {
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > d;
 public:
-    DisposeGuard(const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
+    explicit DisposeGuard(const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
     ~DisposeGuard();
 
 };
@@ -157,7 +157,7 @@ class TransactionGuard
     bool m_commited;
 public:
     /// takes over ownership of given statemet
-    TransactionGuard( const com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > &stmt );
+    explicit TransactionGuard( const com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > &stmt );
     ~TransactionGuard( );
 
     void commit();

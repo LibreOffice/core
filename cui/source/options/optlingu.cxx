@@ -216,7 +216,7 @@ class DicUserData
     sal_uLong   nVal;
 
 public:
-    DicUserData( sal_uLong nUserData ) : nVal( nUserData ) {}
+    explicit DicUserData( sal_uLong nUserData ) : nVal( nUserData ) {}
     DicUserData( sal_uInt16 nEID,
                  bool bChecked, bool bEditable, bool bDeletable );
 
@@ -388,7 +388,7 @@ class OptionsUserData
     void    SetModified();
 
 public:
-    OptionsUserData( sal_uLong nUserData ) : nVal( nUserData ) {}
+    explicit OptionsUserData( sal_uLong nUserData ) : nVal( nUserData ) {}
     OptionsUserData( sal_uInt16 nEID,
                      bool bHasNV, sal_uInt16 nNumVal,
                      bool bCheckable, bool bChecked );

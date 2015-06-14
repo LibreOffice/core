@@ -1514,7 +1514,7 @@ class ColorPicker : protected ::comphelper::OBaseMutex,    // Struct for right i
                     public ColorPickerBase
 {
 public:
-    ColorPicker( Reference< XComponentContext > const & xContext );
+    explicit ColorPicker( Reference< XComponentContext > const & xContext );
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;

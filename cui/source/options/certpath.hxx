@@ -33,7 +33,7 @@ private:
     void HandleCheckEntry(SvTreeListEntry* _pEntry);
     void AddCertPath(const OUString &rProfile, const OUString &rPath);
 public:
-    CertPathDialog(vcl::Window* pParent);
+    explicit CertPathDialog(vcl::Window* pParent);
     virtual ~CertPathDialog();
     virtual void dispose() SAL_OVERRIDE;
 

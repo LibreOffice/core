@@ -71,7 +71,7 @@ namespace connectivity
             virtual ~MozabDriver();
         public:
 
-            MozabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            explicit MozabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
             virtual void SAL_CALL disposing();

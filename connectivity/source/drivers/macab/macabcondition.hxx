@@ -46,7 +46,7 @@ class MacabConditionConstant : public MacabCondition
         bool m_bValue;
 
     public:
-        MacabConditionConstant(const bool bValue);
+        explicit MacabConditionConstant(const bool bValue);
         virtual bool isAlwaysTrue() const SAL_OVERRIDE;
         virtual bool isAlwaysFalse() const SAL_OVERRIDE;
         virtual bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;

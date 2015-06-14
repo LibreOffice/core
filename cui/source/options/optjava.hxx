@@ -140,7 +140,7 @@ private:
 
 
 public:
-    SvxJavaParameterDlg( vcl::Window* pParent );
+    explicit SvxJavaParameterDlg( vcl::Window* pParent );
     virtual ~SvxJavaParameterDlg();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -173,7 +173,7 @@ private:
                                     m_pPathList->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
 
 public:
-    SvxJavaClassPathDlg( vcl::Window* pParent );
+    explicit SvxJavaClassPathDlg( vcl::Window* pParent );
     virtual ~SvxJavaClassPathDlg();
     virtual void            dispose() SAL_OVERRIDE;
 

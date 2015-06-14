@@ -41,7 +41,7 @@ namespace connectivity
             virtual void refreshUsers() ;
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
         public:
-            OCatalog(OConnection* _pCon);
+            explicit OCatalog(OConnection* _pCon);
 
             OConnection*            getConnection()     const { return m_pConnection; }
             sdbcx::OCollection*     getPrivateTables()  const { return m_pTables;}

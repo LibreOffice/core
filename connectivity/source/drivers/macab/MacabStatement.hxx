@@ -96,7 +96,7 @@ namespace connectivity
         public:
             ::cppu::OBroadcastHelper& rBHelper;
 
-            MacabCommonStatement(MacabConnection *_pConnection);
+            explicit MacabCommonStatement(MacabConnection *_pConnection);
             using MacabCommonStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
@@ -157,7 +157,7 @@ namespace connectivity
             virtual ~MacabStatement() { }
 
         public:
-            MacabStatement(MacabConnection* _pConnection);
+            explicit MacabStatement(MacabConnection* _pConnection);
             DECLARE_SERVICE_INFO();
         };
     }

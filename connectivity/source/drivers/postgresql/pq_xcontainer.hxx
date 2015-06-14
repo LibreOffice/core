@@ -70,7 +70,7 @@ class RefreshedBroadcaster : public EventBroadcastHelper
 {
     com::sun::star::lang::EventObject m_event;
 public:
-    RefreshedBroadcaster(const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & source ) :
+    explicit RefreshedBroadcaster(const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & source ) :
         m_event( source )
     {}
 

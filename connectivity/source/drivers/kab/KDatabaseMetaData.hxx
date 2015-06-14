@@ -41,7 +41,7 @@ namespace connectivity
 
         public:
 
-            KabDatabaseMetaData(KabConnection* _pCon);
+            explicit KabDatabaseMetaData(KabConnection* _pCon);
             static const OUString & getAddressBookTableName();
             virtual ~KabDatabaseMetaData();
 

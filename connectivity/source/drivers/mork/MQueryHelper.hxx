@@ -64,7 +64,7 @@ namespace connectivity
             node_type   m_eNodeType;
 
             MQueryExpressionBase() : m_eNodeType( Unknown ) {}
-            MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
+            explicit MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
 
         public:
             virtual ~MQueryExpressionBase() {}
@@ -193,7 +193,7 @@ namespace connectivity
             sal_Int32 doQueryListTable(OConnection* xConnection, OString& ouStringTable);
 
         public:
-                                       MQueryHelper(const OColumnAlias& _ca);
+            explicit                   MQueryHelper(const OColumnAlias& _ca);
             virtual                    ~MQueryHelper();
 
             void                       reset();

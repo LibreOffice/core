@@ -30,7 +30,7 @@ private:
     void AddTSAURL(const OUString &rURL);
 
 public:
-    TSAURLsDialog(vcl::Window* pParent);
+    explicit TSAURLsDialog(vcl::Window* pParent);
     virtual ~TSAURLsDialog();
     virtual void dispose() SAL_OVERRIDE;
 };

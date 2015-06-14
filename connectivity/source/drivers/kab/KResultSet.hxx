@@ -91,7 +91,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            KabResultSet(KabCommonStatement *pStmt);
+            explicit KabResultSet(KabCommonStatement *pStmt);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {

@@ -346,7 +346,7 @@ public:
         class ResultSetEntryGuard : public ::osl::MutexGuard
         {
         public:
-            ResultSetEntryGuard( OResultSet& _rRS ) : ::osl::MutexGuard( _rRS.getMutex() )
+            explicit ResultSetEntryGuard( OResultSet& _rRS ) : ::osl::MutexGuard( _rRS.getMutex() )
             {
                 _rRS.methodEntry();
             }

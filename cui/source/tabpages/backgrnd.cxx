@@ -149,7 +149,7 @@ sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 class BackgroundPreviewImpl : public vcl::Window
 {
 public:
-    BackgroundPreviewImpl(vcl::Window* pParent);
+    explicit BackgroundPreviewImpl(vcl::Window* pParent);
     void setBmp(bool bBmp);
     virtual ~BackgroundPreviewImpl();
     virtual void    dispose() SAL_OVERRIDE;

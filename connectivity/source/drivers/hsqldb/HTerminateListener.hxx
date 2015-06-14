@@ -37,7 +37,7 @@ namespace connectivity
             protected:
                 virtual ~OConnectionController() {m_pDriver = NULL;}
             public:
-                OConnectionController(ODriverDelegator* _pDriver) : m_pDriver(_pDriver){}
+                explicit OConnectionController(ODriverDelegator* _pDriver) : m_pDriver(_pDriver){}
 
                 // XEventListener
                 virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )

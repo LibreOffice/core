@@ -171,7 +171,7 @@ namespace connectivity
         OUString transformPreparedStatement(const OUString& _sSQL);
 
         public:
-            Connection(FirebirdDriver* _pDriver);
+            explicit Connection(FirebirdDriver* _pDriver);
             virtual ~Connection();
 
             void construct( const ::rtl::OUString& url,

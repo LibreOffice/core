@@ -63,7 +63,7 @@ namespace connectivity
 
         public:
 
-            FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            explicit FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
             virtual ~FirebirdDriver();
             const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
 

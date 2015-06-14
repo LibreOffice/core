@@ -49,7 +49,7 @@ namespace connectivity
                 void releaseFields();
             public:
                 MacabRecord();
-                MacabRecord(const sal_Int32 _size);
+                explicit MacabRecord(const sal_Int32 _size);
                 virtual ~MacabRecord();
                 void insertAtColumn (CFTypeRef _value, ABPropertyType _type, const sal_Int32 _column);
                 bool contains(const macabfield *_field) const;

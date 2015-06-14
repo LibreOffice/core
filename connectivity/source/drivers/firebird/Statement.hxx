@@ -44,7 +44,7 @@ namespace connectivity
 
         public:
             // a constructor, which is required for returning objects:
-            OStatement( Connection* _pConnection)
+            explicit OStatement( Connection* _pConnection)
                 : OStatementCommonBase( _pConnection),
                   m_pSqlda(0)
             {}

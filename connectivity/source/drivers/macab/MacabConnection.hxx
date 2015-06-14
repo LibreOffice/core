@@ -67,7 +67,7 @@ namespace connectivity
         public:
             virtual void construct( const OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
 
-            MacabConnection(MacabDriver* _pDriver);
+            explicit MacabConnection(MacabDriver* _pDriver);
             virtual ~MacabConnection();
 
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);

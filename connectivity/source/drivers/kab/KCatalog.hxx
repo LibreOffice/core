@@ -34,7 +34,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
         public:
-            KabCatalog(KabConnection* _pCon);
+            explicit KabCatalog(KabConnection* _pCon);
 
             inline KabConnection* getConnection() const { return m_pConnection; }
 

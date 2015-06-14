@@ -48,7 +48,7 @@ namespace connectivity
         public:
 
             void Init();
-            MozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            explicit MozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;

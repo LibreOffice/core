@@ -29,7 +29,7 @@ namespace connectivity
             /**
              * Create a "new" descriptor, which isn't yet in the database.
              */
-            User(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& rConnection);
+            explicit User(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& rConnection);
             /**
              * For a user that already exists in the db.
              */

@@ -59,7 +59,7 @@ namespace svx
     void FillPasswordList();
 
     public:
-        WebConnectionInfoDialog( vcl::Window* pParent );
+        explicit WebConnectionInfoDialog( vcl::Window* pParent );
         virtual ~WebConnectionInfoDialog();
         virtual void dispose() SAL_OVERRIDE;
     };

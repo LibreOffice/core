@@ -45,7 +45,7 @@ namespace connectivity
 
             inline OConnection* getOwnConnection() const { return m_pConnection; }
 
-            ODatabaseMetaData(OConnection* _pCon);
+            explicit ODatabaseMetaData(OConnection* _pCon);
 
         private:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw() SAL_OVERRIDE;

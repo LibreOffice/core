@@ -240,7 +240,7 @@ class ContainerEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
     com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_vec;
     sal_Int32 m_index;
 public:
-    ContainerEnumeration( const  com::sun::star::uno::Sequence< com::sun::star::uno::Any > &vec )
+    explicit ContainerEnumeration( const  com::sun::star::uno::Sequence< com::sun::star::uno::Any > &vec )
         : m_vec( vec ),
           m_index( -1 )
     {}

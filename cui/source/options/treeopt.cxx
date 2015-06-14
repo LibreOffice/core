@@ -471,7 +471,7 @@ struct OptionsPageInfo
     OUString       m_sEventHdl;
     VclPtr<ExtensionsTabPage>  m_pExtPage;
 
-    OptionsPageInfo( sal_uInt16 nId ) : m_pPage( NULL ), m_nPageId( nId ), m_pExtPage( NULL ) {}
+    explicit OptionsPageInfo( sal_uInt16 nId ) : m_pPage( NULL ), m_nPageId( nId ), m_pExtPage( NULL ) {}
 };
 
 struct OptionsGroupInfo

@@ -40,7 +40,7 @@ namespace connectivity
             ::rtl::Reference<Connection> m_pConnection;
         public:
 
-            ODatabaseMetaData(Connection* _pCon);
+            explicit ODatabaseMetaData(Connection* _pCon);
             virtual ~ODatabaseMetaData();
 
             // as I mentioned before this interface is really BIG

@@ -34,7 +34,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
         public:
-            MacabCatalog(MacabConnection* _pCon);
+            explicit MacabCatalog(MacabConnection* _pCon);
 
             inline MacabConnection* getConnection() const { return m_pConnection; }
 

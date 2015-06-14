@@ -68,7 +68,7 @@ class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 protected:
     virtual ~ODriverEnumeration();
 public:
-    ODriverEnumeration(const DriverArray& _rDriverSequence);
+    explicit ODriverEnumeration(const DriverArray& _rDriverSequence);
 
 // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements( ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
@@ -106,7 +106,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
     struct EnsureDriver : public ::std::unary_function< DriverAccess, DriverAccess >
     {
-        EnsureDriver( const Reference< XComponentContext > &rxContext )
+        explicit EnsureDriver( const Reference< XComponentContext > &rxContext )
             : mxContext( rxContext ) {}
 
         const DriverAccess& operator()( const DriverAccess& _rDescriptor ) const
@@ -151,7 +151,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     /// an STL functor which loads a driver described by a DriverAccess, and extracts the SdbcDriver
     struct ExtractAfterLoad : public ExtractAfterLoad_BASE
     {
-        ExtractAfterLoad( const Reference< XComponentContext > &rxContext )
+        explicit ExtractAfterLoad( const Reference< XComponentContext > &rxContext )
             : ExtractAfterLoad_BASE( ExtractDriverFromAccess(), EnsureDriver( rxContext ) ) {}
     };
 
@@ -171,7 +171,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
 
     public:
         // ctor
-        AcceptsURL( const OUString& _rURL ) : m_rURL( _rURL ) { }
+        explicit AcceptsURL( const OUString& _rURL ) : m_rURL( _rURL ) { }
 
 
         bool operator()( const Reference<XDriver>& _rDriver ) const
@@ -241,7 +241,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     struct EqualDriverAccessToName : public ::std::binary_function< DriverAccess, OUString, bool >
     {
         OUString m_sImplName;
-        EqualDriverAccessToName(const OUString& _sImplName) : m_sImplName(_sImplName){}
+        explicit EqualDriverAccessToName(const OUString& _sImplName) : m_sImplName(_sImplName){}
 
         bool operator()( const DriverAccess& lhs)
         {
