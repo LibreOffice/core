@@ -660,7 +660,7 @@ void Binding::bind( bool bForceRebind )
 
 
 // helper for Binding::valueModified
-static void lcl_modified( const Binding::XModifyListener_t xListener,
+static void lcl_modified( const Binding::XModifyListener_t& xListener,
                    const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -668,7 +668,7 @@ static void lcl_modified( const Binding::XModifyListener_t xListener,
 }
 
 // helper for Binding::valueModified
-static void lcl_listentry( const Binding::XListEntryListener_t xListener,
+static void lcl_listentry( const Binding::XListEntryListener_t& xListener,
                     const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -677,7 +677,7 @@ static void lcl_listentry( const Binding::XListEntryListener_t xListener,
 }
 
 // helper for Binding::valueModified
-static void lcl_validate( const Binding::XValidityConstraintListener_t xListener,
+static void lcl_validate( const Binding::XValidityConstraintListener_t& xListener,
                    const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
