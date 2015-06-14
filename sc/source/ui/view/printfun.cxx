@@ -548,7 +548,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     if (!bMetaFile && pViewData)
         pDev->SetMapMode(aMode);
 
-    aOutputData.DrawBackground();
+    aOutputData.DrawBackground(*pDev);
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
     aOutputData.DrawStrings();
@@ -1604,7 +1604,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     }
 
     if( aTableParam.bCellContent )
-        aOutputData.DrawBackground();
+        aOutputData.DrawBackground(*pDev);
 
     pDev->SetClipRegion(vcl::Region(Rectangle(
                 aPos, Size(aOutputData.GetScrW(), aOutputData.GetScrH()))));
