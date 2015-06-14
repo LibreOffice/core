@@ -80,6 +80,7 @@ private:
     VclPtr<ListBox>                m_pTblLBox;
     VclPtr<ListBox>                m_pParaLBox;
 
+    VclPtr<FixedText>              m_pBackGroundColorLabelFT;
     VclPtr<VclFrame>               m_pBackGroundColorFrame;
     VclPtr<SvxColorValueSet>       m_pBackgroundColorSet;
     VclPtr<BackgroundPreviewImpl>  m_pPreviewWin1;

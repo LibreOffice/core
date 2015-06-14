@@ -221,7 +221,7 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="label5">
+          <object class="GtkLabel" id="background_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Background Color</property>

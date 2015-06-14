@@ -476,6 +476,8 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             nFlagType |= SvxBackgroundTabFlags::SHOW_PARACTL;
         if( SFX_STYLE_FAMILY_CHAR != nType )
             nFlagType |= SvxBackgroundTabFlags::SHOW_SELECTOR;
+        if( SFX_STYLE_FAMILY_CHAR == nType )
+            nFlagType |= SvxBackgroundTabFlags::SHOW_HIGHLIGHTING;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
     }
