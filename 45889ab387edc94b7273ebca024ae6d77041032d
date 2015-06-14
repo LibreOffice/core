@@ -16,6 +16,24 @@
       "revId": "45889ab387edc94b7273ebca024ae6d77041032d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_c3b956ee",
+        "filename": "chart2/source/inc/WeakListenerAdapter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2015-06-14T14:43:30Z",
+      "side": 1,
+      "message": "Thanks a lot for your review.\nWhat do you think about \"in the adapted class\"?\n\nAnyway, I\u0027m going to bother some of the guru to hear what they think about it...",
+      "parentUuid": "1a54edaf_036c4e9b",
+      "revId": "45889ab387edc94b7273ebca024ae6d77041032d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
