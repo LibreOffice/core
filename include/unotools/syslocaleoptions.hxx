@@ -30,12 +30,12 @@
 #include <unotools/options.hxx>
 
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
-const sal_uLong SYSLOCALEOPTIONS_HINT_LOCALE       = 0x00000001;
-const sal_uLong SYSLOCALEOPTIONS_HINT_CURRENCY     = 0x00000002;
-const sal_uLong SYSLOCALEOPTIONS_HINT_UILOCALE     = 0x00000004;
-const sal_uLong SYSLOCALEOPTIONS_HINT_DECSEP       = 0x00000008;
-const sal_uLong SYSLOCALEOPTIONS_HINT_DATEPATTERNS = 0x00000010;
-const sal_uLong SYSLOCALEOPTIONS_HINT_IGNORELANG   = 0x00000020;
+const sal_uInt32 SYSLOCALEOPTIONS_HINT_LOCALE       = 0x00000001;
+const sal_uInt32 SYSLOCALEOPTIONS_HINT_CURRENCY     = 0x00000002;
+const sal_uInt32 SYSLOCALEOPTIONS_HINT_UILOCALE     = 0x00000004;
+const sal_uInt32 SYSLOCALEOPTIONS_HINT_DECSEP       = 0x00000008;
+const sal_uInt32 SYSLOCALEOPTIONS_HINT_DATEPATTERNS = 0x00000010;
+const sal_uInt32 SYSLOCALEOPTIONS_HINT_IGNORELANG   = 0x00000020;
 
 class SvtSysLocaleOptions_Impl;
 class SvtListener;
