@@ -115,20 +115,9 @@ struct SvxBackgroundPage_Impl
     {}
 };
 
-static inline sal_uInt8 lcl_PercentToTransparency(long nPercent)
-{
-    //0xff must not be returned!
-    return sal_uInt8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
-}
 static inline sal_uInt8 lcl_TransparencyToPercent(sal_uInt8 nTrans)
 {
     return (nTrans * 100 + 127) / 254;
-}
-static void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
-{
-    uno::Any aTransparency;
-    aTransparency <<= (sal_Int8)nTransparency;
-    rBrush.PutValue(aTransparency, MID_GRAPHIC_TRANSPARENCY);
 }
 
 /// Returns the fill style of the currently selected entry.
@@ -356,8 +345,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     , bAllowShowSelector(true)
     , bIsGraphicValid(false)
     , bLinkOnly(false)
-    , bColTransparency(false)
-    , bGraphTransparency(false)
     , pPageImpl(new SvxBackgroundPage_Impl)
     , pImportDlg(NULL)
     , pTableBck_Impl(NULL)
@@ -374,8 +361,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     get(m_pBackgroundColorSet, "backgroundcolorset");
     get(m_pPreviewWin1, "preview1");
 
-    get(m_pColTransFT, "transparencyft");
-    get(m_pColTransMF, "transparencymf");
     get(m_pBtnPreview, "showpreview");
 
     get(m_pBitmapContainer, "graphicgrid");
@@ -390,9 +375,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     get(m_pBtnArea, "arearb");
     get(m_pBtnTile, "tilerb");
     get(m_pWndPosition, "windowpos");
-
-    get(m_pGraphTransFrame, "graphtransframe");
-    get(m_pGraphTransMF, "graphtransmf");
 
     get(m_pPreviewWin2, "preview2");
     m_pPreviewWin2->setBmp(true);
@@ -460,8 +442,6 @@ void SvxBackgroundTabPage::dispose()
     m_pBackGroundColorFrame.clear();
     m_pBackgroundColorSet.clear();
     m_pPreviewWin1.clear();
-    m_pColTransFT.clear();
-    m_pColTransMF.clear();
     m_pBtnPreview.clear();
     m_pBitmapContainer.clear();
     m_pFileFrame.clear();
@@ -474,8 +454,6 @@ void SvxBackgroundTabPage::dispose()
     m_pBtnArea.clear();
     m_pBtnTile.clear();
     m_pWndPosition.clear();
-    m_pGraphTransFrame.clear();
-    m_pGraphTransMF.clear();
     m_pPreviewWin2.clear();
     SvxTabPage::dispose();
 }
@@ -775,19 +753,12 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     SfxItemState eOldItemState = rCoreSet->GetItemState(nSlot, false);
     const SfxItemSet& rOldSet = GetItemSet();
 
-    bool bGraphTransparencyChanged = bGraphTransparency && m_pGraphTransMF->IsValueChangedFromSaved();
     if ( pOld )
     {
         const SvxBrushItem& rOldItem    = static_cast<const SvxBrushItem&>(*pOld);
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
         const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
 
-        // transparency has to be set if enabled, the color not already set to "No fill" and
-        if( bColTransparency &&
-            aBgdColor.GetTransparency() < 0xff)
-        {
-            aBgdColor.SetTransparency(lcl_PercentToTransparency(static_cast<long>(m_pColTransMF->GetValue())));
-        }
         if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
             || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap changed?
         {
@@ -817,8 +788,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 if ( !bIsLink && !bIsGraphicValid )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
 
-                if (   bGraphTransparencyChanged ||
-                       eNewPos != eOldPos
+                if (  eNewPos != eOldPos
                     || bIsLink != bWasLink
                     || ( bWasLink  && rOldItem.GetGraphicLink()
                                        != aBgdGraphicPath )
@@ -840,7 +810,6 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                         aTmpBrush = SvxBrushItem( aBgdGraphic,
                                         eNewPos,
                                         nWhich );
-                    lcl_SetTransparency(aTmpBrush, static_cast<long>(m_pGraphTransMF->GetValue()));
 
                     rCoreSet->Put(aTmpBrush);
                 }
@@ -876,7 +845,6 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 }
                 if(pTmpBrush)
                 {
-                    lcl_SetTransparency(*pTmpBrush, static_cast<long>(m_pGraphTransMF->GetValue()));
                     rCoreSet->Put(*pTmpBrush);
                 }
             }
@@ -1156,12 +1124,6 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
     {
         HideBitmapUI_Impl();
         m_pBackGroundColorFrame->Show();
-
-        if(bColTransparency)
-        {
-            m_pColTransFT->Show();
-            m_pColTransMF->Show();
-        }
     }
 }
 
@@ -1190,10 +1152,6 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 
         m_pPreviewWin2->Show();
         m_pBtnPreview->Show();
-
-        m_pGraphTransFrame->Show(bGraphTransparency);
-        m_pColTransFT->Show(false);
-        m_pColTransMF->Show(false);
     }
 }
 
@@ -1204,7 +1162,6 @@ void SvxBackgroundTabPage::HideBitmapUI_Impl()
     m_pTypeFrame->Hide();
     m_pPreviewWin2->Hide();
     m_pBtnPreview->Hide();
-    m_pGraphTransFrame->Hide();
 }
 
 void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
@@ -1285,9 +1242,6 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
     Color aColor = nItemId ? ( m_pBackgroundColorSet->GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
     aBgdColor = aColor;
     m_pPreviewWin1->NotifyChange( aBgdColor );
-    bool bEnableTransp = aBgdColor.GetTransparency() < 0xff;
-    m_pColTransFT->Enable(bEnableTransp);
-    m_pColTransMF->Enable(bEnableTransp);
     return 0;
 }
 
@@ -1638,17 +1592,6 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 {
     SvxGraphicPosition  ePos = rBgdAttr.GetGraphicPos();
     const Color& rColor = rBgdAttr.GetColor();
-    if(bColTransparency)
-    {
-        m_pColTransMF->SetValue(lcl_TransparencyToPercent(rColor.GetTransparency()));
-        m_pColTransMF->SaveValue();
-        bool bEnableTransp = rColor.GetTransparency() < 0xff;
-        m_pColTransFT->Enable(bEnableTransp);
-        m_pColTransMF->Enable(bEnableTransp);
-        //the default setting should be "no transparency"
-        if(!bEnableTransp)
-            m_pColTransMF->SetValue(0);
-    }
 
     if ( GPOS_NONE == ePos || !m_pLbSelect->IsVisible() )
     {
@@ -1709,16 +1652,6 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             m_pBtnLink->Disable();
         }
 
-        if (bGraphTransparency)
-        {
-            const GraphicObject* pObject = rBgdAttr.GetGraphicObject();
-            if(pObject)
-                m_pGraphTransMF->SetValue(lcl_TransparencyToPercent(pObject->GetAttr().GetTransparency()));
-            else
-                m_pGraphTransMF->SetValue(0);
-            m_pGraphTransMF->SaveValue();
-        }
-
         FileClickHdl_Impl(m_pBtnLink);
 
         aBgdGraphicFilter = aStrFilter;
@@ -1762,14 +1695,6 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
     }
 }
 
-void SvxBackgroundTabPage::EnableTransparency(bool bColor, bool bGraphic)
-{
-    bColTransparency  = bColor;
-    bGraphTransparency = bGraphic;
-    m_pColTransFT->Show(bColor);
-    m_pColTransMF->Show(bColor);
-}
-
 void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
@@ -1783,8 +1708,6 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
             ShowParaControl();
         if ( nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR )
             ShowSelector();
-        if ( nFlags & SvxBackgroundTabFlags::ENABLE_TRANSPARENCY )
-            EnableTransparency(true, true);
     }
 }
 

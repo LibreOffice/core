@@ -64,7 +64,6 @@ public:
     /// for the Writer (paragraph/characters)
     void                ShowParaControl(bool bCharOnly = false);
 
-    void                EnableTransparency(bool bColor, bool bGraphic);
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 protected:
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
@@ -85,8 +84,6 @@ private:
     VclPtr<SvxColorValueSet>       m_pBackgroundColorSet;
     VclPtr<BackgroundPreviewImpl>  m_pPreviewWin1;
 
-    VclPtr<FixedText>              m_pColTransFT;///<color transparency
-    VclPtr<MetricField>            m_pColTransMF;
     VclPtr<CheckBox>               m_pBtnPreview;
 
     // Background Bitmap ----------------------------------
@@ -103,9 +100,6 @@ private:
     VclPtr<RadioButton>            m_pBtnTile;
     VclPtr<SvxRectCtl>             m_pWndPosition;
 
-    VclPtr<VclContainer>           m_pGraphTransFrame;///<transparency of graphics
-    VclPtr<MetricField>            m_pGraphTransMF;
-
     VclPtr<BackgroundPreviewImpl>  m_pPreviewWin2;
 
     // DDListBox for Writer -------------------------------
@@ -115,8 +109,6 @@ private:
     bool        bAllowShowSelector  : 1;
     bool        bIsGraphicValid     : 1;
     bool        bLinkOnly           : 1;
-    bool        bColTransparency    : 1;
-    bool        bGraphTransparency  : 1;
     Graphic     aBgdGraphic;
     OUString    aBgdGraphicPath;
     OUString    aBgdGraphicFilter;

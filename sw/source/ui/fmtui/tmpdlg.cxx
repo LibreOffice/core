@@ -249,14 +249,6 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
                                         SwFrmAddPage::GetRanges);
             m_nWrapId = AddTabPage("wrap", SwWrapTabPage::Create,
                                         SwWrapTabPage::GetRanges);
-            //UUUU remove?
-            //OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            //OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-
-            //UUUU remove?
-            //m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-            //OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-            //OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
 
             //UUUU add Area and Transparence TabPages
             m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
@@ -484,8 +476,6 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             nFlagType |= SvxBackgroundTabFlags::SHOW_PARACTL;
         if( SFX_STYLE_FAMILY_CHAR != nType )
             nFlagType |= SvxBackgroundTabFlags::SHOW_SELECTOR;
-        if( SFX_STYLE_FAMILY_FRAME == nType )
-            nFlagType |= SvxBackgroundTabFlags::ENABLE_TRANSPARENCY;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
     }

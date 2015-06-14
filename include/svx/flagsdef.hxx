@@ -43,7 +43,6 @@ enum class SvxBackgroundTabFlags
     NONE                = 0x00,
     SHOW_SELECTOR       = 0x01,
     SHOW_PARACTL        = 0x02,
-    ENABLE_TRANSPARENCY = 0x04,
     SHOW_TBLCTL         = 0x08,
 };
 namespace o3tl
