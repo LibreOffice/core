@@ -295,6 +295,15 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
         return (m_nStyle & nMask) != 0;
     }
 
+    //call gtk_window_resize if the current size differs and
+    //block Paints until Configure is received and the size
+    //is valid again
+    void window_resize(long nWidth, long nHeight);
+    //call gtk_widget_set_size_request if the current size request differs and
+    //block Paints until Configure is received and the size
+    //is valid again
+    void widget_set_size_request(long nWidth, long nHeight);
+
     void resizeWindow( long nWidth, long nHeight );
     void moveWindow( long nX, long nY );
 
