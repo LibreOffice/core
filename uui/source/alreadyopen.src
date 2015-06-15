@@ -23,7 +23,7 @@
 
 String STR_ALREADYOPEN_TITLE
 {
-    Text = "Document in Use";
+    Text [ en-US ] = "Document in Use";
 };
 String STR_ALREADYOPEN_MSG
 {
