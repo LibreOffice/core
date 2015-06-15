@@ -618,7 +618,7 @@ String STR_NO_DOCUMENTUI
 };
 String STR_ERROR_NEW_VERSION
 {
-    Text = "The connection could not be established. The database was created by a newer version of %PRODUCTNAME.";
+    Text [ en-US ] = "The connection could not be established. The database was created by a newer version of %PRODUCTNAME.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
