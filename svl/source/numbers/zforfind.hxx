@@ -115,7 +115,7 @@ private:
     short  nAmPm;                               // +1 AM, -1 PM, 0 if none
     short  nLogical;                            // -1 => False, 1 => True
     sal_uInt16 nThousand;                       // Count of group (AKA thousand) separators
-    sal_uInt16 nPosThousandString;              // Position of concatenaded 000,000,000 string
+    sal_uInt16 nPosThousandString;              // Position of concatenated 000,000,000 string
     short  eScannedType;                        // Scanned type
     short  eSetType;                            // Preset Type
 

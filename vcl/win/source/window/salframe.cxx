@@ -5297,7 +5297,7 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Make sure to launch Accessibiliity only the following criteria are satisfied
+    // Make sure to launch Accessibility only the following criteria are satisfied
     // to avoid RFT interrupts regular accessibility processing
     if ( !pSVData->mxAccessBridge.is() )
     {

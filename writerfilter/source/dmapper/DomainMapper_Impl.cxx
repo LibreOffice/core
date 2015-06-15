@@ -4460,7 +4460,7 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
     /*
      * Add the dummy paragraph to handle section properties
      * iff the first element in the section is a table. If the dummy para is not added yet, then add it;
-     * So bookmark is not attched to the wrong paragraph.
+     * So bookmark is not attached to the wrong paragraph.
      */
     if(getTableManager( ).isInCell() && m_nTableDepth == 0 && GetIsFirstParagraphInSection()
                     && !GetIsDummyParaAddedForTableInSection() &&!GetIsTextFrameInserted())

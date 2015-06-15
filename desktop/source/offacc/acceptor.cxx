@@ -139,7 +139,7 @@ void Acceptor::initialize( const Sequence<Any>& aArguments )
     // arg count
     int nArgs = aArguments.getLength();
 
-    // not yet initialized and acceptstring
+    // not yet initialized and accept-string
     if (!m_bInit && nArgs > 0 && (aArguments[0] >>= m_aAcceptString))
     {
         SAL_INFO( "desktop.offacc", "Acceptor::initialize string=" << m_aAcceptString );

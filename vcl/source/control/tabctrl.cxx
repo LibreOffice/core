@@ -625,7 +625,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
         else
             pPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
 
-        // activate page here so the conbtrols can be switched
+        // activate page here so the controls can be switched
         // also set the help id of the parent window to that of the tab page
         if ( GetHelpId().isEmpty() )
         {
