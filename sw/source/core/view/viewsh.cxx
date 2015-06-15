@@ -72,7 +72,7 @@
 #include <wrtsh.hxx>
 #include <DocumentSettingManager.hxx>
 
-#include "../../uibase/inc/view.hxx"
+#include <view.hxx>
 #include <PostItMgr.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
