@@ -122,10 +122,29 @@ protected:
 
     /// Also used by the compiler. The token MUST had been allocated with new!
     FormulaToken*           Add( FormulaToken* );
+
+    enum ReplaceMode
+    {
+        BACKWARD_CODE_ONLY,     ///< offset goes backward, replacement only in pCode
+        FORWARD_CODE_AND_RPN    ///< offset goes forward, replacement in pCode and RPN
+    };
+
     /** Also used by the compiler. The token MUST had been allocated with new!
-        @param nOffset negative offset of token, 0==last, 1==previous, ...
+        @param  nOffset
+                If eMode==BACKWARD_CODE_ONLY negative offset of token, 0==last,
+                1==previous, ...
+                If eMode==FORWARD_CODE_AND_RPN positive offset of token, 0==first,
+                1==second, ...
+        @param  eMode
+                If BACKWARD_CODE_ONLY only the token in pCode at nLen-nOffset-1
+                is replaced.
+                If FORWARD_CODE_AND_RPN the token in pCode at nOffset is
+                replaced; if the original token was also referenced in the RPN
+                array then that reference is replaced with a reference to the new
+                token as well.
      */
-    FormulaToken*           ReplaceToken( sal_uInt16 nOffset, FormulaToken* );
+    FormulaToken*           ReplaceToken( sal_uInt16 nOffset, FormulaToken*, ReplaceMode eMode );
+
     inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
                                 { nMode |= (nBits & ~RECALCMODE_EMASK); }
     inline  ScRecalcMode    GetCombinedBitsRecalcMode() const

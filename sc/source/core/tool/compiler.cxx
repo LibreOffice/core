@@ -4143,7 +4143,8 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 FormulaToken* pTableRefToken = new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::TABLE);
                 maTableRefs.push_back( TableRefEntry( pTableRefToken));
                 // pPrev may be dead hereafter.
-                static_cast<ScTokenArray*>(pArr)->ReplaceToken( 1, pTableRefToken);
+                static_cast<ScTokenArray*>(pArr)->ReplaceToken( 1, pTableRefToken,
+                        FormulaTokenArray::ReplaceMode::BACKWARD_CODE_ONLY);
             }
         }
         switch (eOp)
