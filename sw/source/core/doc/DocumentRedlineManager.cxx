@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 */
 #include <DocumentRedlineManager.hxx>
-#include <atrfrm.hxx>
+#include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>

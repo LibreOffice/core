@@ -44,7 +44,7 @@
 #include <unoflatpara.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <docedt.hxx>
-#include <atrfrm.hxx>
+#include <frmfmt.hxx>
 
 #include <vector>
 

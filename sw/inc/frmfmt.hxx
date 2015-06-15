@@ -302,6 +302,12 @@ public:
 
 SW_DLLPUBLIC bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat);
 
+namespace sw {
+
+void CheckAnchoredFlyConsistency(SwDoc const& rDoc);
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
