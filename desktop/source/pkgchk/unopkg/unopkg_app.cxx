@@ -576,7 +576,7 @@ extern "C" int unopkg_main()
     catch (const LockFileException & e)
     {
         if (!subcmd_gui)
-            dp_misc::writeConsoleError(e.Message);
+            dp_misc::writeConsoleError(e.Message + "\n");
         bNoOtherErrorMsg = true;
     }
     catch (const ::com::sun::star::uno::Exception & e ) {
