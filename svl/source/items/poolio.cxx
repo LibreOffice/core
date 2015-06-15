@@ -28,7 +28,6 @@
 #include <svl/filerec.hxx>
 #include "poolio.hxx"
 #include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
 
 /**
  * Returns the <SfxItemPool> that is being saved.

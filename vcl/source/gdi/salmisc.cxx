@@ -21,7 +21,7 @@
 #include <vcl/salbtype.hxx>
 #include <bmpfast.hxx>
 #include <osl/diagnose.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define IMPL_CASE_GET_FORMAT( Format )                          \
 case( BMP_FORMAT##Format ):                                 \
@@ -219,7 +219,7 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
     const ColorMask&    rDstMask = rDstBuffer.maColorMask;
     BitmapPalette       aColMap( rSrcBuffer.maPalette.GetEntryCount() );
-    boost::scoped_array<sal_uInt8> pColToPalMap(new sal_uInt8[ TC_TO_PAL_COLORS ]);
+    std::unique_ptr<sal_uInt8[]> pColToPalMap(new sal_uInt8[ TC_TO_PAL_COLORS ]);
     BitmapColor         aIndex( 0 );
 
     for( long nR = 0; nR < 16; nR++ )

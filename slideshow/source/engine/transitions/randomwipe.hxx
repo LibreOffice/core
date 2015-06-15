@@ -22,7 +22,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include "parametricpolypolygon.hxx"
 #include "transitiontools.hxx"
@@ -39,7 +39,7 @@ public:
                                    false: generates a dissolve wipe */ );
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
 private:
-    ::boost::scoped_array< ::basegfx::B2DPoint > m_positions;
+    ::std::unique_ptr< ::basegfx::B2DPoint []> m_positions;
     sal_Int32 m_nElements;
     ::basegfx::B2DPolygon m_rect;
 };

@@ -22,7 +22,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <unicode/regex.h>
 
 #include <stdio.h>
@@ -149,7 +149,7 @@ std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileN
         return aGeneratedFiles;
 
     // grab the handles to all of the devices in the context.
-    boost::scoped_array<cl_device_id> pArryDevsID(new cl_device_id[numDevices]);
+    std::unique_ptr<cl_device_id[]> pArryDevsID(new cl_device_id[numDevices]);
     clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
             sizeof( cl_device_id ) * numDevices, pArryDevsID.get(), NULL );
 
@@ -220,7 +220,7 @@ bool generatBinFromKernelSource( cl_program program, const char * clFileName )
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
     /* copy over all of the generated binaries. */
-    boost::scoped_array<char*> binaries(new char*[numDevices]);
+    std::unique_ptr<char*[]> binaries(new char*[numDevices]);
 
     for ( size_t i = 0; i < numDevices; i++ )
     {
@@ -354,7 +354,7 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
             return false;
         }
 
-        boost::scoped_array<char> buildLog(new char[length]);
+        std::unique_ptr<char[]> buildLog(new char[length]);
         if ( !gpuInfo->mnIsUserCreated )
         {
             clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpArryDevsID[0],
@@ -402,8 +402,8 @@ bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char
 
     if (aGeneratedFiles.size() == numDevices)
     {
-        boost::scoped_array<size_t> length(new size_t[numDevices]);
-        boost::scoped_array<unsigned char*> pBinary(new unsigned char*[numDevices]);
+        std::unique_ptr<size_t[]> length(new size_t[numDevices]);
+        std::unique_ptr<unsigned char*[]> pBinary(new unsigned char*[numDevices]);
         for(size_t i = 0; i < numDevices; ++i)
         {
             sal_uInt64 nSize;
@@ -420,7 +420,7 @@ bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char
         }
 
         // grab the handles to all of the devices in the context.
-        boost::scoped_array<cl_device_id> pArryDevsID(new cl_device_id[numDevices]);
+        std::unique_ptr<cl_device_id[]> pArryDevsID(new cl_device_id[numDevices]);
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
                        sizeof( cl_device_id ) * numDevices, pArryDevsID.get(), NULL );
 
@@ -471,7 +471,7 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
     if( clStatus != CL_SUCCESS )
         return;
 
-    boost::scoped_array<char> pExtInfo(new char[aDevExtInfoSize]);
+    std::unique_ptr<char[]> pExtInfo(new char[aDevExtInfoSize]);
 
     clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS,
                    sizeof(char) * aDevExtInfoSize, pExtInfo.get(), NULL);

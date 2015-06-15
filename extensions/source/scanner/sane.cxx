@@ -31,7 +31,7 @@
 #include <sys/types.h>
 #include <sal/config.h>
 #include <sal/macros.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 #include <stdarg.h>
@@ -359,7 +359,7 @@ bool Sane::GetOptionValue( int n, OString& rRet )
     bool bSuccess = false;
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
         return false;
-    boost::scoped_array<char> pRet(new char[mppOptions[n]->size+1]);
+    std::unique_ptr<char[]> pRet(new char[mppOptions[n]->size+1]);
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet.get() );
     if( nStatus == SANE_STATUS_GOOD )
     {
@@ -377,7 +377,7 @@ bool Sane::GetOptionValue( int n, double& rRet, int nElement )
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
         return false;
 
-    boost::scoped_array<SANE_Word> pRet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
+    std::unique_ptr<SANE_Word[]> pRet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet.get() );
     if( nStatus == SANE_STATUS_GOOD )
     {
@@ -396,7 +396,7 @@ bool Sane::GetOptionValue( int n, double* pSet )
                            mppOptions[n]->type == SANE_TYPE_INT ) )
         return false;
 
-    boost::scoped_array<SANE_Word> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
+    std::unique_ptr<SANE_Word[]> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pFixedSet.get() );
     if( nStatus != SANE_STATUS_GOOD )
         return false;
@@ -443,7 +443,7 @@ bool Sane::SetOptionValue( int n, double fSet, int nElement )
     SANE_Status nStatus;
     if( mppOptions[n]->size/sizeof(SANE_Word) > 1 )
     {
-        boost::scoped_array<SANE_Word> pSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
+        std::unique_ptr<SANE_Word[]> pSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
         nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pSet.get() );
         if( nStatus == SANE_STATUS_GOOD )
         {
@@ -470,7 +470,7 @@ bool Sane::SetOptionValue( int n, double* pSet )
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
         return false;
-    boost::scoped_array<SANE_Word> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
+    std::unique_ptr<SANE_Word[]> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
     for( size_t i = 0; i < mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
         if( mppOptions[n]->type == SANE_TYPE_FIXED )

@@ -26,7 +26,7 @@
 
 #include "gettextencodingdata.hxx"
 #include "tenchelp.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
@@ -414,7 +414,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
     const char*     pSecondPart;
 
     /* Alloc Buffer and map to lower case */
-    boost::scoped_array<char> pBuf(new char[nBufLen]);
+    std::unique_ptr<char[]> pBuf(new char[nBufLen]);
     Impl_toAsciiLower( pUnixCharset, pBuf.get() );
 
     /* Search FirstPart */
@@ -742,7 +742,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
     sal_uInt32                  nBufLen = strlen( pMimeCharset )+1;
 
     /* Alloc Buffer and map to lower case and remove non alphanumeric chars */
-    boost::scoped_array<char> pBuf(new char[nBufLen]);
+    std::unique_ptr<char[]> pBuf(new char[nBufLen]);
     Impl_toAsciiLowerAndRemoveNonAlphanumeric( pMimeCharset, pBuf.get() );
 
     /* Search for equal in the VIP table */

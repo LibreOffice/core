@@ -30,7 +30,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 //////////////////////////// class StgDirEntry
 
@@ -356,7 +356,7 @@ bool StgDirEntry::SetSize( sal_Int32 nNewSize )
                 // if so, we probably need to copy the old data
                 if( nOldSize )
                 {
-                    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nOldSize ]);
+                    std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nOldSize ]);
                     pOld->Pos2Page( 0L );
                     pStgStrm->Pos2Page( 0L );
                     if( pOld->Read( pBuf.get(), nOldSize )

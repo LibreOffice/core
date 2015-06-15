@@ -22,7 +22,7 @@
 #include "rechead.hxx"
 #include <osl/diagnose.h>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 namespace
 {
@@ -180,7 +180,7 @@ void ScChartPositioner::GlueState()
     const sal_uInt8 nFree = 2;
     const sal_uInt8 nGlue = 3;
     sal_uInt8* p;
-    boost::scoped_array<sal_uInt8> pA(new sal_uInt8[ nCR ]);
+    std::unique_ptr<sal_uInt8[]> pA(new sal_uInt8[ nCR ]);
     memset( pA.get(), 0, nCR * sizeof(sal_uInt8) );
 
     SCCOL nCol, nCol1, nCol2;

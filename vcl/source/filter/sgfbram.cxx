@@ -26,7 +26,7 @@
 #include <vcl/virdev.hxx>
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 SgfHeader::SgfHeader()
 {
@@ -210,7 +210,7 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     sal_uInt16         i,j,k;              // column/row/plane counter
     sal_uInt16         a,b;                // helper variables
     sal_uInt8           pl1 = 0;            // masks for the planes
-    boost::scoped_array<sal_uInt8> pBuf;   // buffer for a pixel row
+    std::unique_ptr<sal_uInt8[]> pBuf;   // buffer for a pixel row
     PcxExpand      aPcx;
     sal_uLong          nOfs;
     sal_uInt8           cRGB[4];

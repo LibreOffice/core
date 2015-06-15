@@ -22,7 +22,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 namespace
 {
@@ -58,7 +58,7 @@ Primitive2DSequence Test::parseSvg(const char* aSource)
 
     SvFileStream aFileStream(aUrl, StreamMode::READ);
     sal_Size nSize = aFileStream.remainingSize();
-    boost::scoped_array<sal_Int8> pBuffer(new sal_Int8[nSize + 1]);
+    std::unique_ptr<sal_Int8[]> pBuffer(new sal_Int8[nSize + 1]);
     aFileStream.Read(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
 

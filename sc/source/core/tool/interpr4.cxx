@@ -74,7 +74,7 @@
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <memory>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace formula;
@@ -2599,7 +2599,7 @@ void ScInterpreter::ScExternal()
                         break;
                         case ParamType::PTR_STRING :
                         {
-                            boost::scoped_array<sal_Char> pcErg(new sal_Char[ADDIN_MAXSTRLEN]);
+                            std::unique_ptr<sal_Char[]> pcErg(new sal_Char[ADDIN_MAXSTRLEN]);
                             ppParam[0] = pcErg.get();
                             pFuncData->Call(ppParam);
                             OUString aUni( pcErg.get(), strlen(pcErg.get()), osl_getThreadTextEncoding() );

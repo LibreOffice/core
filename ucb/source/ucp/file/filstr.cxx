@@ -23,7 +23,7 @@
 #include "filstr.hxx"
 #include "shell.hxx"
 #include "prov.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -143,7 +143,7 @@ XStream_impl::readBytes(
     if( ! m_nIsOpen )
         throw io::IOException( THROW_WHERE );
 
-    boost::scoped_array<sal_Int8> buffer;
+    std::unique_ptr<sal_Int8[]> buffer;
     try
     {
         buffer.reset(new sal_Int8[nBytesToRead]);

@@ -32,7 +32,7 @@
 
 #include <isheadless.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <cstring>
 
 using namespace ::com::sun::star;
@@ -138,7 +138,7 @@ OString loadFile(const OUString& rURL)
     CPPUNIT_ASSERT_EQUAL(eStatus, osl::FileBase::E_None);
     sal_uInt64 nSize;
     aFile.getSize(nSize);
-    boost::scoped_array<char> aBytes(new char[nSize]);
+    std::unique_ptr<char[]> aBytes(new char[nSize]);
     sal_uInt64 nBytesRead;
     aFile.read(aBytes.get(), nSize, nBytesRead);
     CPPUNIT_ASSERT_EQUAL(nSize, nBytesRead);

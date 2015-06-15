@@ -15,7 +15,7 @@
 #include <config_folders.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <vcl/pngwrite.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
@@ -47,7 +47,7 @@ OString loadShader(const OUString& rFilename)
     {
         sal_uInt64 nSize = 0;
         aFile.getSize(nSize);
-        boost::scoped_array<char> content(new char[nSize+1]);
+        std::unique_ptr<char[]> content(new char[nSize+1]);
         sal_uInt64 nBytesRead = 0;
         aFile.read(content.get(), nSize, nBytesRead);
         assert(nSize == nBytesRead);
@@ -205,7 +205,7 @@ void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx,
 
 void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFileName)
 {
-    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nWidth*nHeight*4]);
+    std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nWidth*nHeight*4]);
     glReadPixels(0, 0, nWidth, nHeight, GL_BGRA, GL_UNSIGNED_BYTE, pBuffer.get());
     BitmapEx aBitmap = ConvertBGRABufferToBitmapEx(pBuffer.get(), nWidth, nHeight);
     try {

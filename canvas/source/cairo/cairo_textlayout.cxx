@@ -31,7 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include "cairo_textlayout.hxx"
 #include "cairo_spritecanvas.hxx"
@@ -330,7 +330,7 @@ namespace cairocanvas
         setupLayoutMode( rOutDev, mnTextDirection );
 
         // TODO(P2): cache that
-        ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
+        ::std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
 
         if( maLogicalAdvancements.getLength() )
         {

@@ -30,7 +30,7 @@
 
 #include <algorithm>
 #include <set>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 
 namespace comphelper
@@ -506,9 +506,9 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
     }
     else
     {
-        boost::scoped_array<sal_Int32> pHandles(new sal_Int32[nLen]);
-        boost::scoped_array< ::com::sun::star::uno::Any> pNewValues(new ::com::sun::star::uno::Any[nLen]);
-        boost::scoped_array< ::com::sun::star::uno::Any> pOldValues(new ::com::sun::star::uno::Any[nLen]);
+        std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[nLen]);
+        std::unique_ptr< ::com::sun::star::uno::Any[]> pNewValues(new ::com::sun::star::uno::Any[nLen]);
+        std::unique_ptr< ::com::sun::star::uno::Any[]> pOldValues(new ::com::sun::star::uno::Any[nLen]);
 
         const  ::com::sun::star::beans::PropertyChangeEvent* pEvents = _rEvents.getConstArray();
         sal_Int32 nDest = 0;
@@ -797,7 +797,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                 // reset, needed below
                 pDelValues = DelValues.getArray();
 
-                boost::scoped_array<sal_Int32> pHandles(new sal_Int32[ nLen - nAggCount ]);
+                std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nLen - nAggCount ]);
 
                 // get the map table
                 cppu::IPropertyArrayHelper& rPH2 = getInfoHelper();
@@ -806,8 +806,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                 sal_Int32 nHitCount = rPH2.fillHandles( pHandles.get(), DelPropertyNames );
                 if (nHitCount != 0)
                 {
-                    boost::scoped_array< ::com::sun::star::uno::Any> pConvertedValues(new  ::com::sun::star::uno::Any[ nHitCount ]);
-                    boost::scoped_array< ::com::sun::star::uno::Any> pOldValues(new  ::com::sun::star::uno::Any[ nHitCount ]);
+                    std::unique_ptr< ::com::sun::star::uno::Any[]> pConvertedValues(new  ::com::sun::star::uno::Any[ nHitCount ]);
+                    std::unique_ptr< ::com::sun::star::uno::Any[]> pOldValues(new  ::com::sun::star::uno::Any[ nHitCount ]);
                     nHitCount = 0;
                     sal_Int32 i;
 

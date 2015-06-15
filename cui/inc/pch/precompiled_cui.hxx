@@ -63,7 +63,7 @@
 #include <bitset>
 #include <boost/make_shared.hpp>
 #include <boost/ref.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <cassert>

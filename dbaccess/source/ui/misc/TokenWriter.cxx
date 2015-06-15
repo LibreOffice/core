@@ -56,7 +56,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <unotools/syslocale.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace dbaui;
 using namespace dbtools;
@@ -444,7 +444,7 @@ bool ORTFImportExport::Write()
         m_pStream->WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
         m_pStream->WriteCharPtr( aTRRH );
 
-        boost::scoped_array<OString> pHorzChar(new OString[nCount]);
+        std::unique_ptr<OString[]> pHorzChar(new OString[nCount]);
 
         for ( sal_Int32 i=1; i <= nCount; ++i )
         {
@@ -808,10 +808,10 @@ void OHTMLImportExport::WriteTables()
 
     if(m_xObject.is())
     {
-        boost::scoped_array<sal_Int32> pFormat(new sal_Int32[aNames.getLength()]);
+        std::unique_ptr<sal_Int32[]> pFormat(new sal_Int32[aNames.getLength()]);
 
-        boost::scoped_array<const char *> pHorJustify(new const char*[aNames.getLength()]);
-        boost::scoped_array<sal_Int32> pColWidth(new sal_Int32[aNames.getLength()]);
+        std::unique_ptr<const char *[]> pHorJustify(new const char*[aNames.getLength()]);
+        std::unique_ptr<sal_Int32[]> pColWidth(new sal_Int32[aNames.getLength()]);
 
         sal_Int32 nHeight = 0;
         m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;

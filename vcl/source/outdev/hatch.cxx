@@ -28,7 +28,7 @@
 
 #include "../gdi/pdfwriter_impl.hxx"
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define HATCH_MAXPOINTS             1024
 
@@ -167,7 +167,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             Rectangle   aRect( rPolyPoly.GetBoundRect() );
             const long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
             const long  nWidth = ImplDevicePixelToLogicWidth( std::max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
-            boost::scoped_array<Point> pPtBuffer(new Point[ HATCH_MAXPOINTS ]);
+            std::unique_ptr<Point[]> pPtBuffer(new Point[ HATCH_MAXPOINTS ]);
             Point       aPt1, aPt2, aEndPt1;
             Size        aInc;
 

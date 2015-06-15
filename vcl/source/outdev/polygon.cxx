@@ -21,7 +21,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
@@ -456,8 +456,8 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
     else if( pPolyPoly->Count() )
     {
         sal_uInt16 nCount = pPolyPoly->Count();
-        boost::scoped_array<sal_uInt32> pPointAry(new sal_uInt32[nCount]);
-        boost::scoped_array<PCONSTSALPOINT> pPointAryAry(new PCONSTSALPOINT[nCount]);
+        std::unique_ptr<sal_uInt32[]> pPointAry(new sal_uInt32[nCount]);
+        std::unique_ptr<PCONSTSALPOINT[]> pPointAryAry(new PCONSTSALPOINT[nCount]);
         sal_uInt16 i = 0;
         do
         {

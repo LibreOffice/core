@@ -60,7 +60,7 @@
 
 #include "lwpobjstrm.hxx"
 #include "lwptools.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 /**
  * @descr  ctor() from LwpSvStream
@@ -100,7 +100,7 @@ void LwpObjectStream::Read2Buffer()
 
     if( m_bCompressed )
     {
-        boost::scoped_array<sal_uInt8> xCompressBuf(new sal_uInt8[m_nBufSize]);
+        std::unique_ptr<sal_uInt8[]> xCompressBuf(new sal_uInt8[m_nBufSize]);
 
         sal_uInt8* pCompressBuffer = xCompressBuf.get();
         memset(pCompressBuffer, 0, m_nBufSize);

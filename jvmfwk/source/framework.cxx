@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "boost/scoped_array.hpp"
+#include <memory>
 #include "rtl/ustring.hxx"
 #include "rtl/bootstrap.hxx"
 #include "osl/thread.hxx"
@@ -305,7 +305,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
         // create JavaVMOptions array that is passed to the plugin
         // it contains the classpath and all options set in the
         //options dialog
-        boost::scoped_array<JavaVMOption> sarJOptions(
+        std::unique_ptr<JavaVMOption[]> sarJOptions(
             new JavaVMOption[cOptions + 2 + vmParams.size()]);
         JavaVMOption * arOpt = sarJOptions.get();
         if (! arOpt)

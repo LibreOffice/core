@@ -17,7 +17,7 @@
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace libgltf;
@@ -37,7 +37,7 @@ OGLFrameGrabber::~OGLFrameGrabber()
 uno::Reference< css::graphic::XGraphic > SAL_CALL OGLFrameGrabber::grabFrame( double /*fMediaTime*/ )
         throw ( uno::RuntimeException, std::exception )
 {
-    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[m_rHandle.viewport.width * m_rHandle.viewport.height * 4]);
+    std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[m_rHandle.viewport.width * m_rHandle.viewport.height * 4]);
     glTFHandle* pHandle = &m_rHandle;
     int nRet = gltf_renderer_get_bitmap(&pHandle, 1, reinterpret_cast<char*>(pBuffer.get()), GL_BGRA);
     if( nRet != 0 )

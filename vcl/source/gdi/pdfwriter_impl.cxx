@@ -29,7 +29,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -6846,7 +6846,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     HASH_Begin(hc.get());
 
-    boost::scoped_array<char> buffer(new char[m_nSignatureContentOffset + 1]);
+    std::unique_ptr<char[]> buffer(new char[m_nSignatureContentOffset + 1]);
     sal_uInt64 bytesRead;
 
     //FIXME: Check if SHA1 is calculated from the correct byterange
@@ -7260,7 +7260,7 @@ bool PDFWriterImpl::finalizeSignature()
     // Prepare buffer and calculate PDF file digest
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
 
-    boost::scoped_array<char> buffer1(new char[m_nSignatureContentOffset - 1]);
+    std::unique_ptr<char[]> buffer1(new char[m_nSignatureContentOffset - 1]);
     sal_uInt64 bytesRead1;
 
     if (osl::File::E_None != m_aFile.read(buffer1.get(), m_nSignatureContentOffset - 1 , bytesRead1) ||
@@ -7270,7 +7270,7 @@ bool PDFWriterImpl::finalizeSignature()
         return false;
     }
 
-    boost::scoped_array<char> buffer2(new char[nLastByteRangeNo]);
+    std::unique_ptr<char[]> buffer2(new char[nLastByteRangeNo]);
     sal_uInt64 bytesRead2;
 
     if (osl::File::E_None != m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ||
@@ -7404,7 +7404,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         SAL_INFO("vcl.pdfwriter", "nTsSigLen=" << nTsSigLen);
 
-        boost::scoped_array<BYTE> pTsSig(new BYTE[nTsSigLen]);
+        std::unique_ptr<BYTE[]> pTsSig(new BYTE[nTsSigLen]);
 
         if (!CryptMsgGetParam(hMsg, CMSG_BARE_CONTENT_PARAM, 0, pTsSig.get(), &nTsSigLen))
         {
@@ -7434,7 +7434,7 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        boost::scoped_array<BYTE> pDecodedSignerInfoBuf(new BYTE[nDecodedSignerInfoLen]);
+        std::unique_ptr<BYTE[]> pDecodedSignerInfoBuf(new BYTE[nDecodedSignerInfoLen]);
 
         if (!CryptMsgGetParam(hDecodedMsg, CMSG_SIGNER_INFO_PARAM, 0, pDecodedSignerInfoBuf.get(), &nDecodedSignerInfoLen))
         {
@@ -7548,7 +7548,7 @@ bool PDFWriterImpl::finalizeSignature()
     }
 
     SAL_INFO("vcl.pdfwriter", "Signature size is " << nSigLen << " bytes");
-    boost::scoped_array<BYTE> pSig(new BYTE[nSigLen]);
+    std::unique_ptr<BYTE[]> pSig(new BYTE[nSigLen]);
 
     if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, pSig.get(), &nSigLen))
     {
