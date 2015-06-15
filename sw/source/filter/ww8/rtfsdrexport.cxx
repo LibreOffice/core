@@ -288,51 +288,51 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRec
                     aSegmentInfo.append(';').append((sal_Int32)nSeg);
                     switch (nSegmentType)
                     {
-                        case msopathLineTo:
-                            for (unsigned short i = 0; i < nSegmentCount; ++i)
+                    case msopathLineTo:
+                        for (unsigned short i = 0; i < nSegmentCount; ++i)
+                        {
+                            sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                            sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                            aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
+                            nVertices ++;
+                        }
+                        break;
+                    case msopathMoveTo:
+                    {
+                        sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                        sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                        aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
+                        nVertices++;
+                        break;
+                    }
+                    case msopathCurveTo:
+                        for (unsigned short j = 0; j < nSegmentCount; ++j)
+                        {
+                            for (int i = 0; i < 3; i++)
                             {
                                 sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
                                 sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
                                 aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
                                 nVertices ++;
                             }
-                            break;
-                        case msopathMoveTo:
-                        {
-                            sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                            sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                            aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
-                            nVertices++;
-                            break;
                         }
-                        case msopathCurveTo:
-                            for (unsigned short j = 0; j < nSegmentCount; ++j)
-                            {
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                                    sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                                    aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
-                                    nVertices ++;
-                                }
-                            }
-                            break;
-                        case msopathEscape:
-                        {
-                            // If the segment type is msopathEscape, the lower 13 bits are
-                            // divided in a 5 bit escape code and 8 bit
-                            // vertex count (not segment count!)
-                            unsigned char nVertexCount = nSegmentCount & 0x00FF;
-                            nVerticesPos += nVertexCount;
-                            break;
-                        }
-                        case msopathClientEscape:
-                        case msopathClose:
-                        case msopathEnd:
-                            break;
-                        default:
-                            SAL_WARN("oox", "Totally b0rked\n");
-                            break;
+                        break;
+                    case msopathEscape:
+                    {
+                        // If the segment type is msopathEscape, the lower 13 bits are
+                        // divided in a 5 bit escape code and 8 bit
+                        // vertex count (not segment count!)
+                        unsigned char nVertexCount = nSegmentCount & 0x00FF;
+                        nVerticesPos += nVertexCount;
+                        break;
+                    }
+                    case msopathClientEscape:
+                    case msopathClose:
+                    case msopathEnd:
+                        break;
+                    default:
+                        SAL_WARN("oox", "Totally b0rked\n");
+                        break;
                     }
                 }
 

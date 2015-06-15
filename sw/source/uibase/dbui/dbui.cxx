@@ -134,10 +134,10 @@ void CancelableDialog::SetCancelHdl( const Link<>& rLink )
 
 void CancelableDialog::Show()
 {
-   if (mbModal)
-       StartExecuteModal( Link<>() );
-   else
-       Dialog::Show();
+    if (mbModal)
+        StartExecuteModal( Link<>() );
+    else
+        Dialog::Show();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
