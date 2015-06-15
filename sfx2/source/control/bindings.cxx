@@ -1030,8 +1030,8 @@ void SfxBindings::Release( SfxControllerItem& rItem )
     // find the bound function
     sal_uInt16 nId = rItem.GetId();
     sal_uInt16 nPos = GetSlotPos(nId);
-    SfxStateCache* pCache = (*pImp->pCaches)[nPos];
-    if ( pCache->GetId() == nId )
+    SfxStateCache* pCache = (nPos < pImp->pCaches->size()) ? (*pImp->pCaches)[nPos] : 0;
+    if ( pCache && pCache->GetId() == nId )
     {
         if ( pCache->GetInternalController() == &rItem )
         {
