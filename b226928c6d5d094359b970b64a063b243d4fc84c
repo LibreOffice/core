@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_4377a6d4",
+        "filename": "chart2/qa/extras/data/docx/testchartoleobjectembeddings.docx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2015-06-15T07:15:28Z",
+      "side": 0,
+      "message": "I doubt if this change seems accidentally added.",
+      "revId": "b226928c6d5d094359b970b64a063b243d4fc84c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
