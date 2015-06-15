@@ -764,6 +764,7 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
      return pOutliner->CreateParaObject();
 }
 
+/* Following function should not be called while decomposing static text */
 void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pOutliner);
@@ -1552,36 +1553,6 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
-    /* // Previous code - To maybe be resumed later on
-    // FIXME(matteocam)
-    // fprintf(stderr, "Object #0 = %p, Object #1 = %p\n",
-    //              pPage->GetObj(0), pPage->GetObj(1));
-
-    //impMoveChainedTextToNextLink(pNextTextObj); // just do it
-
-    // put overflowing text in next text box
-    if (IsToBeChained()) {
-        SdrTextObj *pNextTextObj = GetNextLinkInChain();
-        assert (pNextTextObj);
-        // NOTE: Commented because we do not need to do this anymore (maybe and for now)
-        //impMoveChainedTextToNextLink(pNextTextObj); // XXX: it actually moves the overflowing text currently
-
-        // XXX:
-        //const_cast<SdrTextObj*>(this)->impLeaveOnlyNonOverflowingText();
-        // Let's reset the status now to prevent infinite loops
-        const_cast<SdrTextObj*>(this)->SetToBeChained( false );
-        impLeaveOnlyNonOverflowingText();
-
-        //SdrOutliner rOutl = pNextTextObj->ImpGetDrawOutliner();
-        //pNextTextObj->BegTextEdit( rOutl );
-        // XXX: Also, will all those calls currently in impMoveChainedTextToNextLink be necessary too?
-
-    }*/
-
-    /* -- Beginning code from impDecomposeAutoFitText -- */
-    // XXX: The idea is, _for_now_, to do exactly what it does there but without the text stretching,
-    //      hopefully to get a "neutral" decomposition
-
     // decompose matrix to have position and size of text
     basegfx::B2DVector aScale, aTranslate;
     double fRotate, fShearX;
@@ -1645,13 +1616,21 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     if ( rOutliner.IsPageOverflow() && !IsInEditMode()) {
         // Save the overflowing text before changing the outliner's state
         const_cast<SdrTextObj*>(this)->mpOverflowingText = rOutliner.GetOverflowingText();
-        impLeaveOnlyNonOverflowingText(&rOutliner);
+
+        /* Leave only non overflowing text */
+        OutlinerParaObject *pNewTextCurBox = impGetNonOverflowingParaObject(&rOutliner);
+        // we need this when we are in editing mode
+        // XXX: we use next line just to be sure for now
+        if (pEdtOutl != NULL)
+            pEdtOutl->SetText(*pNewTextCurBox);
+        // adds it to current outliner anyway (useful in static decomposition)
+        rOutliner.SetText(*pNewTextCurBox);
 
         /* Get chaining outliner  here */
         // Code adapted from ImpGetDrawOutliner
         SdrOutliner &rChainingOutl = pModel->GetChainingOutliner(this);
         ImpInitDrawOutliner( rChainingOutl );
-        rOutliner.SetUpdateMode(true);
+        rChainingOutl.SetUpdateMode(true);
 
         /* Transfer of text to next link */
         if (GetNextLinkInChain()
