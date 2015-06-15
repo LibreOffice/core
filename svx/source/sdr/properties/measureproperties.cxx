@@ -106,7 +106,7 @@ namespace sdr
             GetObjectItemSet();
 
             //#71958# by default, the show units Bool-Item is set as hard
-            // attribute to sal_True to aviod confusion when copying SdrMeasureObj's
+            // attribute to sal_True to avoid confusion when copying SdrMeasureObj's
             // from one application to another
             mpItemSet->Put(makeSdrMeasureShowUnitItem(true));
 

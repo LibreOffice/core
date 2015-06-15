@@ -1131,7 +1131,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             (void)nCurValuesSeqLen;
             nDirection = 0;     // default direction for a single cell should be 'columns'
         }
-        else    // more than one cell is availabale (in values and label together!)
+        else    // more than one cell is available (in values and label together!)
         {
             if (nFirstCol == nLastCol && nFirstRow != nLastRow)
                 nDirection = 1;

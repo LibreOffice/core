@@ -450,7 +450,7 @@ void CuiAboutConfigTabPage::AddToModifiedVector( const boost::shared_ptr< Prop_I
     {
         if( rProp->Name == m_vectorOfModified[nInd]->Name && rProp->Property == m_vectorOfModified[nInd]->Property )
         {
-            //property modified before. assing reference to the modified value
+            //property modified before. Assign reference to the modified value
             //do your changes on this object. They will be saved later.
             m_vectorOfModified[nInd] = rProp;
             isModifiedBefore = true;

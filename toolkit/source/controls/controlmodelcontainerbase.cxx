@@ -1451,7 +1451,7 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
         }
 
         sal_Int16 nH = aFM.Ascent + aFM.Descent;
-        sal_Int16 nW = nH/2;    // calculate avarage width?!
+        sal_Int16 nW = nH/2;    // calculate avarege width?!
 
         nX *= nW;
         nX /= 4;
