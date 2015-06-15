@@ -1731,7 +1731,7 @@ AssistentDlg::AssistentDlg(vcl::Window* pParent, bool bAutoPilot) :
     Link<> aFinishLink = LINK(this,AssistentDlg, FinishHdl);
     mpImpl = new AssistentDlgImpl( this, aFinishLink, bAutoPilot );
 
-    // button assigmnent
+    // button assignment
     mpImpl->mpFinishButton->SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
 }
 

@@ -1008,7 +1008,7 @@ IMPL_LINK_TYPED( SfxSplitWindow, TimerHdl, Timer*, pTimer, void)
 
             if ( pEmptyWin->bEndAutoHide )
             {
-               // As far as I am concered this can be the end of AutoShow
+               // As far as I am concerned this can be the end of AutoShow
                // But maybe some other SfxSplitWindow will remain open,
                // then all others remain open too.
                 if ( !pWorkWin->IsAutoHideMode( this ) )

@@ -2898,7 +2898,7 @@ OUString OQueryDesignView::getStatement()
         bUseAlias = bUseAlias || !xMeta->supportsGroupByUnrelated();
 
     aSqlCmd.append(GenerateGroupBy(this,rFieldList,bUseAlias));
-    // ----------------- construct GroupBy and attachen ------------
+    // ----------------- construct GroupBy and attach ------------
     if(!aHavingStr.isEmpty())
     {
         aSqlCmd.append(" HAVING ");

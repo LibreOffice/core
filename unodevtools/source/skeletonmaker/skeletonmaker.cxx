@@ -44,7 +44,7 @@ static const char usageText[] =
 "                using the implementation name as the file and class name. A \n"
 "                service type is necessary, referencing an interface which defines\n"
 "                the new add-in functions.\n"
-"    add-on      generates a language specific code skeleton for an add-on compnent\n"
+"    add-on      generates a language specific code skeleton for an add-on component\n"
 "                using the implementation name as the file and class name. The protocol\n"
 "                name(s) and the corresponding command(s) have to be specified with the\n"
 "                '-p' option.\n"

@@ -640,7 +640,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             bCommon = aAttrTester.NeedsCellAttr();
 
             // formulas have to be recognized even if they're formatted
-            // (but commmon attributes are still collected)
+            // (but common attributes are still collected)
 
             if ( !bSimple && aEngine.GetParagraphCount() == 1 )
             {

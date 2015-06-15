@@ -445,7 +445,7 @@ void ScConditionEntry::SetIgnoreBlank(bool bSet)
 }
 
 /**
- * Delete formula cells, so we re-complile at the next IsValid
+ * Delete formula cells, so we re-compile at the next IsValid
  */
 void ScConditionEntry::CompileAll()
 {

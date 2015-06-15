@@ -2277,7 +2277,7 @@ bool Content::loadData(
 
         if ( xPackagePropSet.is() )
         {
-            // HasEncryptedEntries ( only avalibale at root folder )
+            // HasEncryptedEntries (only available at root folder)
             try
             {
                 uno::Any aHasEncryptedEntries

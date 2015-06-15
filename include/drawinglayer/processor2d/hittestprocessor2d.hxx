@@ -58,7 +58,7 @@ namespace drawinglayer
              */
             bool                        mbUseInvisiblePrimitiveContent : 1;
 
-            /// flag to concentraze on text hits only
+            /// flag to concentrate on text hits only
             bool                        mbHitTextOnly : 1;
 
             /// If we are tiled rendering.
