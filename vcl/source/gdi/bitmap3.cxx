@@ -26,7 +26,7 @@
 #include <vcl/bitmapscalesuper.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <impbmp.hxx>
 #include <impoct.hxx>
@@ -1087,8 +1087,8 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                 {
                     const double nWidth = pReadAcc->Width();
                     const double nHeight = pReadAcc->Height();
-                    boost::scoped_array<long> pLutX(new long[ nNewWidth ]);
-                    boost::scoped_array<long> pLutY(new long[ nNewHeight ]);
+                    std::unique_ptr<long[]> pLutX(new long[ nNewWidth ]);
+                    std::unique_ptr<long[]> pLutY(new long[ nNewHeight ]);
 
                     for( long nX = 0L; nX < nNewWidth; nX++ )
                         pLutX[ nX ] = long(nX * nWidth / nNewWidth);
@@ -1150,8 +1150,8 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 const long nWidth1 = pReadAcc->Width() - 1L;
                 const double fRevScaleX = (double) nWidth1 / nNewWidth1;
 
-                boost::scoped_array<long> pLutInt(new long[ nNewWidth ]);
-                boost::scoped_array<long> pLutFrac(new long[ nNewWidth ]);
+                std::unique_ptr<long[]> pLutInt(new long[ nNewWidth ]);
+                std::unique_ptr<long[]> pLutFrac(new long[ nNewWidth ]);
 
                 for( long nX = 0L, nTemp = nWidth - 2L; nX < nNewWidth; nX++ )
                 {
@@ -1237,8 +1237,8 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                     const long nHeight1 = pReadAcc->Height() - 1L;
                     const double fRevScaleY = (double) nHeight1 / nNewHeight1;
 
-                    boost::scoped_array<long> pLutInt(new long[ nNewHeight ]);
-                    boost::scoped_array<long> pLutFrac(new long[ nNewHeight ]);
+                    std::unique_ptr<long[]> pLutInt(new long[ nNewHeight ]);
+                    std::unique_ptr<long[]> pLutFrac(new long[ nNewHeight ]);
 
                     for( long nY = 0L, nTemp = nHeight - 2L; nY < nNewHeight; nY++ )
                     {
@@ -1776,8 +1776,8 @@ bool Bitmap::ImplDitherFloyd()
             long nW2 = nW - 3L;
             long nRErr, nGErr, nBErr;
             long nRC, nGC, nBC;
-            boost::scoped_array<long> p1(new long[ nW ]);
-            boost::scoped_array<long> p2(new long[ nW ]);
+            std::unique_ptr<long[]> p1(new long[ nW ]);
+            std::unique_ptr<long[]> p2(new long[ nW ]);
             long* p1T = p1.get();
             long* p2T = p2.get();
             long* pTmp;
@@ -1905,8 +1905,8 @@ bool Bitmap::ImplDitherFloyd16()
         BitmapColor aColor;
         BitmapColor aBestCol;
         ImpErrorQuad aErrQuad;
-        boost::scoped_array<ImpErrorQuad> pErrQuad1(new ImpErrorQuad[ nWidth ]);
-        boost::scoped_array<ImpErrorQuad> pErrQuad2(new ImpErrorQuad[ nWidth ]);
+        std::unique_ptr<ImpErrorQuad[]> pErrQuad1(new ImpErrorQuad[ nWidth ]);
+        std::unique_ptr<ImpErrorQuad[]> pErrQuad2(new ImpErrorQuad[ nWidth ]);
         ImpErrorQuad* pQLine1 = pErrQuad1.get();
         ImpErrorQuad* pQLine2 = 0;
         long nYTmp = 0L;
@@ -2107,7 +2107,7 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         const sal_uInt32 nTotalColors = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
         const long nWidth = pRAcc->Width();
         const long nHeight = pRAcc->Height();
-        boost::scoped_array<PopularColorCount> pCountTable(new PopularColorCount[ nTotalColors ]);
+        std::unique_ptr<PopularColorCount[]> pCountTable(new PopularColorCount[ nTotalColors ]);
 
         memset( pCountTable.get(), 0, nTotalColors * sizeof( PopularColorCount ) );
 
@@ -2168,7 +2168,7 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         if( pWAcc )
         {
             BitmapColor aDstCol( (sal_uInt8) 0 );
-            boost::scoped_array<sal_uInt8> pIndexMap(new sal_uInt8[ nTotalColors ]);
+            std::unique_ptr<sal_uInt8[]> pIndexMap(new sal_uInt8[ nTotalColors ]);
 
             for( long nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
                 for( long nG = 0; nG < 256; nG += nColorOffset )
@@ -2477,9 +2477,9 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             BitmapColor aCol;
             const long nW = pAcc->Width();
             const long nH = pAcc->Height();
-            boost::scoped_array<sal_uInt8> cMapR(new sal_uInt8[ 256 ]);
-            boost::scoped_array<sal_uInt8> cMapG(new sal_uInt8[ 256 ]);
-            boost::scoped_array<sal_uInt8> cMapB(new sal_uInt8[ 256 ]);
+            std::unique_ptr<sal_uInt8[]> cMapR(new sal_uInt8[ 256 ]);
+            std::unique_ptr<sal_uInt8[]> cMapG(new sal_uInt8[ 256 ]);
+            std::unique_ptr<sal_uInt8[]> cMapB(new sal_uInt8[ 256 ]);
             double fM, fROff, fGOff, fBOff, fOff;
 
             // calculate slope

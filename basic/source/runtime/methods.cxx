@@ -57,7 +57,7 @@
 #include <com/sun/star/script/XErrorQuery.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 #include <random>
@@ -436,7 +436,7 @@ RTLFUNC(CurDir)
     const int PATH_INCR = 250;
 
     int nSize = PATH_INCR;
-    boost::scoped_array<char> pMem;
+    std::unique_ptr<char[]> pMem;
     while( true )
       {
         pMem.reset(new char[nSize]);

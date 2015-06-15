@@ -52,7 +52,7 @@
 #include "funcdesc.hxx"
 #include <svl/sharedstring.hxx>
 #include "formulaopt.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -490,7 +490,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 // get argument info
 
-                boost::scoped_array<ScAddInArgDesc> pVisibleArgs;
+                std::unique_ptr<ScAddInArgDesc[]> pVisibleArgs;
                 long nVisibleCount = 0;
                 long nCallerPos = SC_CALLERPOS_NONE;
 
@@ -897,7 +897,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     aDescription = "###";
                                 }
 
-                                boost::scoped_array<ScAddInArgDesc> pVisibleArgs;
+                                std::unique_ptr<ScAddInArgDesc[]> pVisibleArgs;
                                 if ( nVisibleCount > 0 )
                                 {
                                     ScAddInArgDesc aDesc;
@@ -1087,7 +1087,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                     }
                     if (bValid)
                     {
-                        boost::scoped_array<ScAddInArgDesc> pVisibleArgs;
+                        std::unique_ptr<ScAddInArgDesc[]> pVisibleArgs;
                         if ( nVisibleCount > 0 )
                         {
                             ScAddInArgDesc aDesc;

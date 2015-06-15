@@ -91,7 +91,6 @@
 #include <memory>
 #include <utility>
 #include <basic/basmgr.hxx>
-#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <set>
 #include <vector>
@@ -5103,7 +5102,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
                 rDoc.BeginDrawUndo();      // wegen Hoehenanpassung
             }
 
-            boost::scoped_array<ScRangeData*> ppSortArray(new ScRangeData* [ nValidCount ]);
+            std::unique_ptr<ScRangeData*[]> ppSortArray(new ScRangeData* [ nValidCount ]);
             sal_uInt16 j = 0;
             for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
             {

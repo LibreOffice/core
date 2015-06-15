@@ -38,7 +38,7 @@
 #include "LockSequence.hxx"
 #include "LockEntrySequence.hxx"
 #include "UCBDeadPropertyValue.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
@@ -250,7 +250,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     int thePropCount = inPropNames.size();
     if ( thePropCount > 0 )
     {
-        boost::scoped_array<NeonPropName> thePropNames(new NeonPropName[ thePropCount + 1 ]);
+        std::unique_ptr<NeonPropName[]> thePropNames(new NeonPropName[ thePropCount + 1 ]);
         int theIndex;
 
         for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )

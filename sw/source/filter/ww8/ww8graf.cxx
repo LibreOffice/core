@@ -94,6 +94,7 @@
 #include <svx/hlnkitem.hxx>
 #include <svl/whiter.hxx>
 #include <o3tl/enumrange.hxx>
+#include <memory>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -417,7 +418,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aPoly.aBits1 ) >> 1 & 0x7fff;
-    boost::scoped_array<SVBT16> xP(new SVBT16[nCount * 2]);
+    std::unique_ptr<SVBT16[]> xP(new SVBT16[nCount * 2]);
 
     bool bCouldRead = checkRead(*m_pStrm, xP.get(), nCount * 4);      // Punkte einlesen
     OSL_ENSURE(bCouldRead, "Short PolyLine header");
@@ -1203,7 +1204,7 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aCallB.dpPolyLine.aBits1 ) >> 1 & 0x7fff;
-    boost::scoped_array<SVBT16> xP(new SVBT16[nCount * 2]);
+    std::unique_ptr<SVBT16[]> xP(new SVBT16[nCount * 2]);
 
     bool bCouldRead = checkRead(*m_pStrm, xP.get(), nCount * 4);      // Punkte einlesen
     OSL_ENSURE(bCouldRead, "Short CaptionBox header");

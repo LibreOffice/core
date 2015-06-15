@@ -59,7 +59,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace comphelper;
 using namespace com::sun::star::i18n;
@@ -1283,7 +1283,7 @@ void PutGet( SbxArray& rPar, bool bPut )
     {
         sal_Size nFPos = pStrm->Tell();
         short nDims = pArr->GetDims();
-        boost::scoped_array<short> pDims(new short[ nDims ]);
+        std::unique_ptr<short[]> pDims(new short[ nDims ]);
         bRet = lcl_WriteReadSbxArray(*pArr,pStrm,!bRandom,nDims,pDims.get(),bPut);
         pDims.reset();
         if( nBlockLen )

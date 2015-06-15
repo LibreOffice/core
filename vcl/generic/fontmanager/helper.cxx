@@ -31,7 +31,7 @@
 #include <tools/urlobj.hxx>
 #include "vcl/helper.hxx"
 #include "vcl/ppdparser.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using ::rtl::Bootstrap;
 
@@ -289,7 +289,7 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
             rInFile.getPos(nOrgPos);
             nBytesToRead = std::min<sal_uInt64>(nBytesToRead, nSize - nOrgPos);
 
-            boost::scoped_array<unsigned char> pBuffer(new unsigned char[nBytesToRead+1]);
+            std::unique_ptr<unsigned char[]> pBuffer(new unsigned char[nBytesToRead+1]);
             pBuffer[nBytesToRead] = 0;
 
             if( ! rInFile.read( pBuffer.get(), nBytesToRead, nRead ) && nRead == nBytesToRead )
@@ -298,7 +298,7 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
                 {
                     // ascii data, convert dos lineends( \r\n ) and
                     // m_ac lineends( \r ) to \n
-                    boost::scoped_array<unsigned char> pWriteBuffer(new unsigned char[ nBytesToRead ]);
+                    std::unique_ptr<unsigned char[]> pWriteBuffer(new unsigned char[ nBytesToRead ]);
                     unsigned int nBytesToWrite = 0;
                     for( unsigned int i = 0; i < nBytesToRead; i++ )
                     {

@@ -44,7 +44,7 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include "errobject.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <unordered_map>
 
 #include <com/sun/star/script/ModuleType.hpp>
@@ -1888,7 +1888,7 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     // #95459 Delete dialogs, otherwise endless recursion
     // in SbxVarable::GetType() if dialogs are accessed
     sal_uInt16 nObjCount = pObjs->Count();
-    boost::scoped_array<SbxVariable*> ppDeleteTab(new SbxVariable*[ nObjCount ]);
+    std::unique_ptr<SbxVariable*[]> ppDeleteTab(new SbxVariable*[ nObjCount ]);
     sal_uInt16 nObj;
 
     for( nObj = 0 ; nObj < nObjCount ; nObj++ )

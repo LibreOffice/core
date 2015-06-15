@@ -22,7 +22,7 @@
 #include <chart.hxx>
 #include <outact.hxx>
 #include <math.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -271,7 +271,7 @@ void CGM::ImplDoClass4()
                     mpOutAct->CloseRegion();
 
                 sal_uInt16      nPoints = 0;
-                boost::scoped_array<Point> pPoints(new Point[ 0x4000 ]);
+                std::unique_ptr<Point[]> pPoints(new Point[ 0x4000 ]);
 
                 tools::PolyPolygon aPolyPolygon;
                 FloatPoint  aFloatPoint;

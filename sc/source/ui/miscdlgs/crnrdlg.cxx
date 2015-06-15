@@ -24,7 +24,7 @@
 #include "docsh.hxx"
 #include "crnrdlg.hxx"
 #include <vcl/msgbox.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define ERRORBOX(s) ScopedVclPtr<MessageDialog>::Create(this, s)->Execute()
 #define QUERYBOX(m) ScopedVclPtr<QueryBox>::Create(this,WinBits(WB_YES_NO|WB_DEF_YES),m)->Execute()
@@ -375,7 +375,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xColNameRanges->size()) > 0 )
     {
-        boost::scoped_array<ScRangePair*> ppSortArray(xColNameRanges->CreateNameSortedArray(
+        std::unique_ptr<ScRangePair*[]> ppSortArray(xColNameRanges->CreateNameSortedArray(
                nCount, pDoc ));
         for ( j=0; j < nCount; j++ )
         {
@@ -418,7 +418,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xRowNameRanges->size()) > 0 )
     {
-        boost::scoped_array<ScRangePair*> ppSortArray(xRowNameRanges->CreateNameSortedArray(
+        std::unique_ptr<ScRangePair*[]> ppSortArray(xRowNameRanges->CreateNameSortedArray(
                nCount, pDoc ));
         for ( j=0; j < nCount; j++ )
         {

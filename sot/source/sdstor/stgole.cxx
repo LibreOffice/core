@@ -22,7 +22,7 @@
 #include "rtl/string.h"
 #include "stgole.hxx"
 #include "sot/storinfo.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <sot/exchange.hxx>
 
 #ifdef _MSC_VER
@@ -121,7 +121,7 @@ bool StgCompObjStream::Load()
             // higher bits are ignored
             sal_uLong nStrLen = ::std::min( nLen1, (sal_Int32)0xFFFE );
 
-            boost::scoped_array<sal_Char> p(new sal_Char[ nStrLen+1 ]);
+            std::unique_ptr<sal_Char[]> p(new sal_Char[ nStrLen+1 ]);
             p[nStrLen] = 0;
             if( Read( p.get(), nStrLen ) == nStrLen )
             {

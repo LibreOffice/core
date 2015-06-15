@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_ASSCLASS_HXX
 
 #include <vector>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include "sddllapi.h"
 
@@ -40,7 +40,7 @@ class SD_DLLPUBLIC Assistent
 
     int mnCurrentPage;
 
-    boost::scoped_array<bool> mpPageStatus;
+    std::unique_ptr<bool[]> mpPageStatus;
 
 public:
 

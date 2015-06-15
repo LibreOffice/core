@@ -127,7 +127,7 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 extern bool g_bFrmDrag;
@@ -3696,7 +3696,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
     const OString aName(OUStringToOString(sName, eEncoding));
 
-    boost::scoped_array<sal_Char> pMem(new sal_Char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ]);
+    std::unique_ptr<sal_Char[]> pMem(new sal_Char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ]);
 
     sal_Int32 nLen = aAppNm.getLength();
     memcpy( pMem.get(), aAppNm.getStr(), nLen );

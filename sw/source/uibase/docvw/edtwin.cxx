@@ -151,7 +151,7 @@
 #include "../../core/inc/rootfrm.hxx"
 
 #include <unotools/syslocaleoptions.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 using namespace sw::mark;
@@ -5479,7 +5479,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 }
                 else
                 {
-                    boost::scoped_array<Rectangle> aRects(new Rectangle[ nSize ]);
+                    std::unique_ptr<Rectangle[]> aRects(new Rectangle[ nSize ]);
                     int nRectIndex = 0;
                     for ( SwIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
                     {

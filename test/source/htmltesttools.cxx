@@ -9,7 +9,7 @@
 
 #include <test/htmltesttools.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile& aTempFile)
 {
@@ -27,7 +27,7 @@ htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile& aTempFile)
 htmlDocPtr HtmlTestTools::parseHtmlStream(SvStream* pStream)
 {
     sal_Size nSize = pStream->remainingSize();
-    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nSize + 1]);
+    std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
     pStream->Read(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
     return htmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()), NULL);

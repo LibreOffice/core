@@ -41,7 +41,7 @@
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -110,7 +110,7 @@ const OUString OfficePipeId::operator () ()
         reinterpret_cast<sal_uInt8 const *>(userPath.getStr());
     sal_Size size = (userPath.getLength() * sizeof (sal_Unicode));
     sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
-    ::boost::scoped_array<sal_uInt8> md5_buf( new sal_uInt8 [ md5_key_len ] );
+    ::std::unique_ptr<sal_uInt8[]> md5_buf( new sal_uInt8 [ md5_key_len ] );
 
     rtl_digest_init( digest, data, static_cast<sal_uInt32>(size) );
     rtl_digest_update( digest, data, static_cast<sal_uInt32>(size) );

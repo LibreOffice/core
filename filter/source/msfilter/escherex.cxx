@@ -90,7 +90,7 @@
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -4181,7 +4181,7 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
         {
             sal_uInt32 i, nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
             const sal_uInt32 nBuf = 0x40000;    // 256KB buffer
-            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nBuf ]);
+            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nBuf ]);
 
             for ( i = 0; i < mnBlibEntrys; i++ )
             {
@@ -5085,7 +5085,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     mpOutStrm->Seek( STREAM_SEEK_TO_END );
     nSource = mpOutStrm->Tell();
     nToCopy = nSource - nCurPos;                        // increase the size of the tream by nBytes
-    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
+    std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
     while ( nToCopy )
     {
         nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;

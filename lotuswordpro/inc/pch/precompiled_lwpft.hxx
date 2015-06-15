@@ -18,7 +18,7 @@
 #include "string.h"
 #include <assert.h>
 #include <boost/cast.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <cassert>
 #include <com/sun/star/document/XFilter.hpp>

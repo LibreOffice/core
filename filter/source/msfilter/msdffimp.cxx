@@ -136,7 +136,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/embedhlp.hxx>
-#include <boost/scoped_array.hpp>
 #include <memory>
 
 using namespace ::com::sun::star    ;
@@ -6395,7 +6394,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
                     sal_Int32 nDbgLen = nLength - nSkip;
                     if ( nDbgLen )
                     {
-                        std::scoped_array<sal_Char> xDat(new sal_Char[ nDbgLen ]);
+                        std::std::unique_ptr<sal_Char[]> xDat(new sal_Char[ nDbgLen ]);
                         pGrStream->Read( xDat.get(), nDbgLen );
                         pDbgOut->Write( xDat.get(), nDbgLen );
                         pGrStream->SeekRel( -nDbgLen );
@@ -6694,7 +6693,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
         {
             if( 0x10000L > nStrLen )
             {
-                boost::scoped_array<sal_Char> pBuf(new sal_Char[ nStrLen ]);
+                std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nStrLen ]);
                 rStm.Read( pBuf.get(), nStrLen );
                 aSvrName = OUString( pBuf.get(), (sal_uInt16) nStrLen-1, osl_getThreadTextEncoding() );
             }
@@ -6711,7 +6710,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
         {
             if( xOle10Stm.Is() )
             {
-                boost::scoped_array<sal_uInt8> pData(new sal_uInt8[ nDataLen ]);
+                std::unique_ptr<sal_uInt8[]> pData(new sal_uInt8[ nDataLen ]);
                 if( !pData )
                     return false;
 
