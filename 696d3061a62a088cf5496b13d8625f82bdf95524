@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_06be9cff",
+        "filename": "solenv/gbuild/platform/com_MSC_class.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-15T13:57:35Z",
+      "side": 1,
+      "message": "Have you investigated if it\u0027s possible to automate that somehow?",
+      "revId": "696d3061a62a088cf5496b13d8625f82bdf95524",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
