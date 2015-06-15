@@ -119,7 +119,7 @@ typedef enum
      * document, the status indicator callbacks will arrive to the callback
      * registered for the LibreOfficeKit (singleton) object, not a
      * LibreOfficeKitDocument one, because we are in the very progress of
-     * loading a docuemnt and then constructing a LibreOfficeKitDocument
+     * loading a document and then constructing a LibreOfficeKitDocument
      * object.
      */
     LOK_CALLBACK_STATUS_INDICATOR_START,
