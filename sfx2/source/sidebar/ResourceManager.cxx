@@ -390,7 +390,7 @@ void ResourceManager::ReadContextList (
         const EnumContext::Context eContext (EnumContext::GetContextEnum(sContextName));
         if (eContext == EnumContext::Context_Unknown)
         {
-            OSL_FAIL("context name not recognized");
+            SAL_WARN("sfx2.sidebar", "context name " << sContextName << " not recognized");
             continue;
         }
 
