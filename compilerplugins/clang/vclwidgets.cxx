@@ -183,7 +183,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     if (foundVclPtrField && pCompoundStatement && pCompoundStatement->size() == 0) {
         report(
             DiagnosticsEngine::Warning,
-            "OutputDevice subclass with VclPtr field must call dispose() from its destructor.",
+            "OutputDevice subclass with VclPtr field must call disposeOnce() from its destructor.",
             pCXXDestructorDecl->getLocStart())
           << pCXXDestructorDecl->getSourceRange();
         return true;
