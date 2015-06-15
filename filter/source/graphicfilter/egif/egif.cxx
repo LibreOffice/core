@@ -26,7 +26,7 @@
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include "giflzwc.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 // - GIFWriter -
 
@@ -481,7 +481,7 @@ void GIFWriter::WriteAccess()
     GIFLZWCompressor    aCompressor;
     const long          nWidth = m_pAcc->Width();
     const long          nHeight = m_pAcc->Height();
-    boost::scoped_array<sal_uInt8> pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
     const sal_uLong         nFormat = m_pAcc->GetScanlineFormat();
     bool                bNative = ( BMP_FORMAT_8BIT_PAL == nFormat );
 

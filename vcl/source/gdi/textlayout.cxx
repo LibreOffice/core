@@ -32,7 +32,7 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 namespace vcl
 {
@@ -224,7 +224,7 @@ namespace vcl
             return;
         }
 
-        boost::scoped_array<long> pCharWidths(new long[ _nLength ]);
+        std::unique_ptr<long[]> pCharWidths(new long[ _nLength ]);
         long nTextWidth = GetTextArray( _rText, pCharWidths.get(), _nStartIndex, _nLength );
         m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, pCharWidths.get(), _nStartIndex, _nLength );
         pCharWidths.reset();

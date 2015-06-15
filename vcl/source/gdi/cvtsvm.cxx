@@ -31,7 +31,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <cvtsvm.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 // Inlines
 void ImplReadRect( SvStream& rIStm, Rectangle& rRect )
@@ -887,7 +887,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
-                        boost::scoped_array<long> pDXAry;
+                        std::unique_ptr<long[]> pDXAry;
                         if (nAryLen > 0)
                         {
                             sal_Int32 nStrLen( aStr.getLength() );
@@ -902,7 +902,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             {
                                 if( nAryLen+1 == nStrLen )
                                 {
-                                    boost::scoped_array<long> pTmpAry(new long[nStrLen]);
+                                    std::unique_ptr<long[]> pTmpAry(new long[nStrLen]);
 
                                     aFontVDev->GetTextArray( aStr, pTmpAry.get(), nIndex, nLen );
 

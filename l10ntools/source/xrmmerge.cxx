@@ -33,7 +33,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace std;
 
@@ -326,7 +326,7 @@ void XRMResExport::WorkOnDesc(
     ifstream file (sDescFileName.getStr(), ios::in|ios::binary|ios::ate);
     if (file.is_open()) {
         int size = static_cast<int>(file.tellg());
-        boost::scoped_array<char> memblock(new char [size+1]);
+        std::unique_ptr<char[]> memblock(new char [size+1]);
         file.seekg (0, ios::beg);
         file.read (memblock.get(), size);
         file.close();

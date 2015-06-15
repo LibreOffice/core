@@ -25,7 +25,7 @@
 #include <vcl/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/bind.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
@@ -207,7 +207,7 @@ namespace dxcanvas
             {
                 // create the DXArray
                 const sal_Int32 nLen( rLogicalAdvancements.getLength() );
-                ::boost::scoped_array<sal_Int32> pDXArray( new sal_Int32[nLen] );
+                ::std::unique_ptr<sal_Int32[]> pDXArray( new sal_Int32[nLen] );
                 for( sal_Int32 i=0; i<nLen; ++i )
                     pDXArray[i] = basegfx::fround( rLogicalAdvancements[i] );
 

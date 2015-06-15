@@ -122,7 +122,7 @@
 #include <set>
 #include <rtl/strbuf.hxx>
 #include <tools/time.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 // PPT ColorScheme Slots
@@ -681,8 +681,8 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                 }
                 if ( nGlobalColorsChanged || nFillColorsChanged )
                 {
-                    boost::scoped_array<Color> pSearchColors(new Color[ nGlobalColorsChanged ]);
-                    boost::scoped_array<Color> pReplaceColors(new Color[ nGlobalColorsChanged ]);
+                    std::unique_ptr<Color[]> pSearchColors(new Color[ nGlobalColorsChanged ]);
+                    std::unique_ptr<Color[]> pReplaceColors(new Color[ nGlobalColorsChanged ]);
 
                     for ( j = 0; j < nGlobalColorsChanged; j++ )
                     {
@@ -1757,7 +1757,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
 bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32 nInputSize )
 {
     sal_uInt32 nOldPos = rInput.Tell();
-    boost::scoped_array<char> pBuf(new char[ nInputSize ]);
+    std::unique_ptr<char[]> pBuf(new char[ nInputSize ]);
     rInput.Read( pBuf.get(), nInputSize );
     ZCodec aZCodec( 0x8000, 0x8000 );
     aZCodec.BeginCompression();
@@ -2044,7 +2044,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
 
                                                                 sal_uInt32 nToCopy, nBufSize;
                                                                 nToCopy = pHd->nRecLen;
-                                                                boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
+                                                                std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
                                                                 if ( pBuf )
                                                                 {
                                                                     while ( nToCopy )
@@ -2225,7 +2225,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
             if ( ! ( nTextSize & 0xffff0000 ) )
             {
                 PPTPortionObj* pPortion;
-                boost::scoped_array<sal_Unicode> pParaText(new sal_Unicode[ nTextSize ]);
+                std::unique_ptr<sal_Unicode[]> pParaText(new sal_Unicode[ nTextSize ]);
                 sal_Int32 nCurrentIndex = 0;
                 for ( pPortion = pPara->First(); pPortion; pPortion = pPara->Next() )
                 {
@@ -5101,7 +5101,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     {
         sal_uInt32 i;
         sal_Unicode nChar;
-        boost::scoped_array<sal_Unicode> pBuf(new sal_Unicode[ ( nMaxLen >> 1 ) + 1 ]);
+        std::unique_ptr<sal_Unicode[]> pBuf(new sal_Unicode[ ( nMaxLen >> 1 ) + 1 ]);
         rIn.Read( pBuf.get(), nMaxLen );
         nMaxLen >>= 1;
         pBuf[ nMaxLen ] = 0;
@@ -5136,7 +5136,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     }
     else if( aTextHd.nRecType == PPT_PST_TextBytesAtom )
     {
-        boost::scoped_array<sal_Char> pBuf(new sal_Char[ nMaxLen + 1 ]);
+        std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nMaxLen + 1 ]);
         pBuf[ nMaxLen ] = 0;
         rIn.Read( pBuf.get(), nMaxLen );
         sal_Char* pPtr = pBuf.get();
@@ -7472,7 +7472,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 CreateTableColumns( xTable->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
 
                 sal_Int32 nCellCount = aRows.size() * aColumns.size();
-                boost::scoped_array<sal_Int32> pMergedCellIndexTable(new sal_Int32[ nCellCount ]);
+                std::unique_ptr<sal_Int32[]> pMergedCellIndexTable(new sal_Int32[ nCellCount ]);
                 for ( sal_Int32 i = 0; i < nCellCount; i++ )
                     pMergedCellIndexTable[ i ] = i;
 

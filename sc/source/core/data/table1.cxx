@@ -53,7 +53,7 @@
 #include <formula/vectortoken.hxx>
 
 #include <vector>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using ::std::vector;
 
@@ -1306,7 +1306,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
 
         if ( !ValidNextPos(nCol, nRow, rMark, bMarked, bUnprotected) )
         {
-            boost::scoped_array<SCsROW> pNextRows(new SCsROW[MAXCOL+1]);
+            std::unique_ptr<SCsROW[]> pNextRows(new SCsROW[MAXCOL+1]);
             SCCOL i;
 
             if ( nMovX > 0 )                            //  forward

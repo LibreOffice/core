@@ -30,7 +30,7 @@
 
 #include <string.h>
 
-#include "boost/scoped_array.hpp"
+#include <memory>
 #include "config_options.h"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
@@ -787,7 +787,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #endif
     }
 
-    boost::scoped_array<JavaVMOption> sarOptions(new JavaVMOption[options.size()]);
+    std::unique_ptr<JavaVMOption[]> sarOptions(new JavaVMOption[options.size()]);
     for (std::vector<Option>::size_type i = 0; i != options.size(); ++i) {
         SAL_INFO(
             "jfw",

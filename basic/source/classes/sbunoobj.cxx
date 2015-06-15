@@ -82,7 +82,7 @@
 #include <runtime.hxx>
 
 #include <math.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <unordered_map>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
@@ -1401,9 +1401,9 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
 
                     if( nSeqLevel == nDims )
                     {
-                        boost::scoped_array<sal_Int32> pLowerBounds(new sal_Int32[nDims]);
-                        boost::scoped_array<sal_Int32> pUpperBounds(new sal_Int32[nDims]);
-                        boost::scoped_array<sal_Int32> pActualIndices(new sal_Int32[nDims]);
+                        std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDims]);
+                        std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDims]);
+                        std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDims]);
                         for( short i = 1 ; i <= nDims ; i++ )
                         {
                             sal_Int32 lBound, uBound;

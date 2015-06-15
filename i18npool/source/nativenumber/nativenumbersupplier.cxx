@@ -25,7 +25,7 @@
 #include <data/numberchar.h>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -173,8 +173,8 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
     if (nCount > 0)
     {
         const sal_Unicode *str = inStr.getStr() + startPos;
-        boost::scoped_array<sal_Unicode> newStr(new sal_Unicode[nCount * 2 + 1]);
-        boost::scoped_array<sal_Unicode> srcStr(new sal_Unicode[nCount + 1]); // for keeping number without comma
+        std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nCount * 2 + 1]);
+        std::unique_ptr<sal_Unicode[]> srcStr(new sal_Unicode[nCount + 1]); // for keeping number without comma
         sal_Int32 i, len = 0, count = 0;
 
         if (useOffset)
@@ -307,7 +307,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 
     if (nCount > 0) {
         const sal_Unicode *str = inStr.getStr() + startPos;
-        boost::scoped_array<sal_Unicode> newStr(new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2]);
+        std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2]);
         if (useOffset)
             offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
         sal_Int32 count = 0, index;

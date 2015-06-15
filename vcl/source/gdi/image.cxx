@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_array.hpp>
-
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

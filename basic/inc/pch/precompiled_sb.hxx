@@ -16,7 +16,7 @@
 
 #include "math.h"
 #include <boost/optional.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>

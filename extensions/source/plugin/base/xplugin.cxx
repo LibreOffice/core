@@ -61,7 +61,7 @@
 #include <stdio.h>
 #endif
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace com::sun::star::io;
@@ -1116,7 +1116,7 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw(std
     {
         nBytes = (nBytes > nPos - m_nWritePos) ? nPos - m_nWritePos : nBytes;
 
-        boost::scoped_array<char> pBuffer(new char[ nBytes ]);
+        std::unique_ptr<char[]> pBuffer(new char[ nBytes ]);
         m_aFileStream.Seek( m_nWritePos );
         nBytes = m_aFileStream.Read( pBuffer.get(), nBytes );
 

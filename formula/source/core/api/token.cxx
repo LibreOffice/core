@@ -31,7 +31,7 @@
 #include "formula/FormulaCompiler.hxx"
 #include <formula/compiler.hrc>
 #include <svl/sharedstringpool.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 namespace formula
 {
@@ -965,7 +965,7 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
     {
         // RPN-Interpreter simulation.
         // Simply assumes a double as return value of each function.
-        boost::scoped_array<FormulaToken*> pStack(new FormulaToken* [nRPN]);
+        std::unique_ptr<FormulaToken*[]> pStack(new FormulaToken* [nRPN]);
         FormulaToken* pResult = new FormulaDoubleToken( 0.0 );
         short sp = 0;
         for ( sal_uInt16 j = 0; j < nRPN; j++ )

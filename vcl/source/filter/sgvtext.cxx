@@ -28,7 +28,6 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"
-#include <boost/scoped_array.hpp>
 #include <memory>
 
 extern SgfFontLst* pSgfFonts;
@@ -892,8 +891,8 @@ void TextType::Draw(OutputDevice& rOut)
     bool   Ende = false;
     sal_uInt16 lc;
     bool   TextFit;
-    boost::scoped_array<short> xLine;
-    boost::scoped_array<UCHAR> cLine;   // Buffer for FormatLine
+    std::unique_ptr<short[]> xLine;
+    std::unique_ptr<UCHAR[]> cLine;   // Buffer for FormatLine
     sal_uInt16 FitXMul;
     sal_uInt16 FitXDiv;
     sal_uInt16 FitYMul;

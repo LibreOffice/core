@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
 
-#include "boost/scoped_array.hpp"
+#include <memory>
 #include "com/sun/star/script/XInvocationAdapterFactory.hpp"
 #include "com/sun/star/script/XInvocationAdapterFactory2.hpp"
 #include "com/sun/star/script/XTypeConverter.hpp"
@@ -60,7 +60,6 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 #endif
 using namespace com::sun::star::bridge::oleautomation;
-using namespace boost;
 namespace ole_adapter
 {
 extern std::unordered_map<sal_uInt32, sal_uInt32> AdapterToWrapperMap;
@@ -1038,7 +1037,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
     if( elementTypeDesc.is() )
     {
         // set up the SAFEARRAY
-        scoped_array<SAFEARRAYBOUND> sarSafeArrayBound(new SAFEARRAYBOUND[dims]);
+        std::unique_ptr<SAFEARRAYBOUND[]> sarSafeArrayBound(new SAFEARRAYBOUND[dims]);
         SAFEARRAYBOUND* prgsabound= sarSafeArrayBound.get();
         for( sal_Int32 i=0; i < dims; i++)
         {
@@ -1069,7 +1068,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
                 // In this case arDimSeqIndices would have the size 1. That is the elements are not counted
                 // but the Sequences that contain those elements.
                 // The indices ar 0 based
-                scoped_array<sal_Int32> sarDimsSeqIndices;
+                std::unique_ptr<sal_Int32[]> sarDimsSeqIndices;
                 sal_Int32* arDimsSeqIndices= NULL;
                 if( dimsSeq > 0)
                 {
@@ -2238,7 +2237,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray
 
     if (dim > 0)
     {
-        scoped_array<long> sarIndex(new long[dim]);
+        std::unique_ptr<long[]> sarIndex(new long[dim]);
         long * index =  sarIndex.get();
 
         for (unsigned int i = 0; i < dim; i++)

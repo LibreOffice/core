@@ -18,7 +18,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <cmath>
 #include <com/sun/star/frame/Desktop.hpp>

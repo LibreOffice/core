@@ -20,7 +20,7 @@
 
 #include <svl/PasswordHelper.hxx>
 #include <rtl/digest.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -38,7 +38,7 @@ void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const
 void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
     sal_Int32 nSize(sPass.getLength());
-    boost::scoped_array<sal_Char> pCharBuffer(new sal_Char[nSize * sizeof(sal_Unicode)]);
+    std::unique_ptr<sal_Char[]> pCharBuffer(new sal_Char[nSize * sizeof(sal_Unicode)]);
 
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
@@ -53,7 +53,7 @@ void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPas
 void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
     sal_Int32 nSize(sPass.getLength());
-    boost::scoped_array<sal_Char> pCharBuffer(new sal_Char[nSize * sizeof(sal_Unicode)]);
+    std::unique_ptr<sal_Char[]> pCharBuffer(new sal_Char[nSize * sizeof(sal_Unicode)]);
 
     for (sal_Int32 i = 0; i < nSize; ++i)
     {

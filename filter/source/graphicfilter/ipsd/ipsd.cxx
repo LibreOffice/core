@@ -22,7 +22,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 class FilterConfigItem;
 
@@ -572,7 +572,7 @@ bool PSDReader::ImplReadBody()
             if ( mpFileHeader->nMode == PSD_CMYK )
             {
                 sal_uInt32  nBlack, nBlackMax = 0;
-                boost::scoped_array<sal_uInt8> pBlack(new sal_uInt8[ mpFileHeader->nRows * mpFileHeader->nColumns ]);
+                std::unique_ptr<sal_uInt8[]> pBlack(new sal_uInt8[ mpFileHeader->nRows * mpFileHeader->nColumns ]);
                 nY = 0;
                 while ( nY < mpFileHeader->nRows )
                 {

@@ -20,7 +20,7 @@
 
 #include <vector>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -522,7 +522,7 @@ struct XMLTextImportHelper::Impl
        - data structure contains more than one candidate for each list level
          of the outline style (#i69629#)
     */
-    ::boost::scoped_array< ::std::vector< OUString > >
+    ::std::unique_ptr< ::std::vector< OUString > []>
         m_xOutlineStylesCandidates;
 
     // start range, xml:id, RDFa stuff

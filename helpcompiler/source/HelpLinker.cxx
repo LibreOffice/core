@@ -36,7 +36,7 @@
 #include <rtl/bootstrap.hxx>
 
 #include <expat.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 IndexerPreProcessor::IndexerPreProcessor
@@ -978,7 +978,7 @@ bool compileExtensionHelp
         aFileStatus.isValid( osl_FileStatus_Mask_FileSize ) )
     {
         sal_uInt64 ret, len = aFileStatus.getFileSize();
-        boost::scoped_array<char> s(new char[ int(len) ]);  // the buffer to hold the installed files
+        std::unique_ptr<char[]> s(new char[ int(len) ]);  // the buffer to hold the installed files
         osl::File aFile( aTreeFileURL );
         aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s.get(), len, ret );

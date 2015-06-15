@@ -15,7 +15,7 @@
 */
 
 #include <algorithm>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
