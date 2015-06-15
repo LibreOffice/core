@@ -29,7 +29,6 @@
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
 #include "dispatchwatcher.hxx"
-#include "configinit.hxx"
 #include "lockfile.hxx"
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
@@ -436,13 +435,6 @@ void FatalError(const OUString& sMessage)
 
     Application::ShowNativeErrorBox (sTitle.makeStringAndClear (), sMessage);
     _exit(EXITHELPER_FATAL_ERROR);
-}
-
-static bool ShouldSuppressUI(const CommandLineArgs& rCmdLine)
-{
-    return  rCmdLine.IsInvisible() ||
-            rCmdLine.IsHeadless() ||
-            rCmdLine.IsQuickstart();
 }
 
 struct theCommandLineArgs : public rtl::Static< CommandLineArgs, theCommandLineArgs > {};
@@ -1321,10 +1313,6 @@ int Desktop::Main()
         return EXIT_SUCCESS;
     }
 #endif
-    // setup configuration error handling
-    ConfigurationErrorHandler aConfigErrHandler;
-    if (!ShouldSuppressUI(rCmdLineArgs))
-        aConfigErrHandler.activate();
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
 
@@ -1577,9 +1565,6 @@ int Desktop::Main()
 
             // Post event to enable acceptors
             Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
-
-            // The configuration error handler currently is only for startup
-            aConfigErrHandler.deactivate();
 
             // Acquire solar mutex just before we enter our message loop
         }
