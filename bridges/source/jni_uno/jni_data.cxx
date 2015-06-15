@@ -1160,6 +1160,13 @@ void Bridge::map_to_java(
     bool in_param, bool out_param,
     bool special_wrapped_integral_types ) const
 {
+    // 4th param of Set*ArrayRegion changed from pointer to non-const to pointer
+    // to const between <http://docs.oracle.com/javase/6/docs/technotes/guides/
+    // jni/spec/functions.html#wp22933> and <http://docs.oracle.com/javase/7/
+    // docs/technotes/guides/jni/spec/functions.html#wp22933>; work around that
+    // difference in a way that doesn't trigger loplugin:redundantcast:
+    void * data = const_cast<void *>(uno_data);
+
     switch (type->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
@@ -1172,7 +1179,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetCharArrayRegion(
-                        static_cast<jcharArray>(jo_ar.get()), 0, 1, static_cast<jchar const *>(uno_data) );
+                        static_cast<jcharArray>(jo_ar.get()), 0, 1, static_cast<jchar *>(data) );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1182,7 +1189,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetCharArrayRegion(
-                        static_cast<jcharArray>(java_data->l), 0, 1, static_cast<jchar const *>(uno_data) );
+                        static_cast<jcharArray>(java_data->l), 0, 1, static_cast<jchar *>(data) );
                     jni.ensure_no_exception();
                 }
             }
@@ -1212,7 +1219,7 @@ void Bridge::map_to_java(
                 {
                     jni->SetBooleanArrayRegion(
                         static_cast<jbooleanArray>(jo_ar.get()),
-                        0, 1, static_cast<jboolean const *>(uno_data) );
+                        0, 1, static_cast<jboolean *>(data) );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1223,7 +1230,7 @@ void Bridge::map_to_java(
                 {
                     jni->SetBooleanArrayRegion(
                         static_cast<jbooleanArray>(java_data->l),
-                        0, 1, static_cast<jboolean const *>(uno_data) );
+                        0, 1, static_cast<jboolean *>(data) );
                     jni.ensure_no_exception();
                 }
             }
@@ -1252,7 +1259,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetByteArrayRegion(
-                        static_cast<jbyteArray>(jo_ar.get()), 0, 1, static_cast<jbyte const *>(uno_data) );
+                        static_cast<jbyteArray>(jo_ar.get()), 0, 1, static_cast<jbyte *>(data) );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1262,7 +1269,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetByteArrayRegion(
-                        static_cast<jbyteArray>(java_data->l), 0, 1, static_cast<jbyte const *>(uno_data) );
+                        static_cast<jbyteArray>(java_data->l), 0, 1, static_cast<jbyte *>(data) );
                     jni.ensure_no_exception();
                 }
             }
@@ -1292,7 +1299,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetShortArrayRegion(
-                        static_cast<jshortArray>(jo_ar.get()), 0, 1, static_cast<jshort const *>(uno_data) );
+                        static_cast<jshortArray>(jo_ar.get()), 0, 1, static_cast<jshort *>(data) );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1302,7 +1309,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetShortArrayRegion(
-                        static_cast<jshortArray>(java_data->l), 0, 1, static_cast<jshort const *>(uno_data) );
+                        static_cast<jshortArray>(java_data->l), 0, 1, static_cast<jshort *>(data) );
                     jni.ensure_no_exception();
                 }
             }
@@ -1332,7 +1339,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetIntArrayRegion(
-                        static_cast<jintArray>(jo_ar.get()), 0, 1, static_cast<jint const *>(uno_data) );
+                        static_cast<jintArray>(jo_ar.get()), 0, 1, static_cast<jint *>(data) );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1342,7 +1349,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetIntArrayRegion(
-                        static_cast<jintArray>(java_data->l), 0, 1, static_cast<jint const *>(uno_data) );
+                        static_cast<jintArray>(java_data->l), 0, 1, static_cast<jint *>(data) );
                     jni.ensure_no_exception();
                 }
             }
@@ -1372,7 +1379,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetLongArrayRegion(
-                        static_cast<jlongArray>(jo_ar.get()), 0, 1, static_cast<jlong const *>(uno_data) );
+                        static_cast<jlongArray>(jo_ar.get()), 0, 1, static_cast<jlong *>(data) );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1382,7 +1389,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetLongArrayRegion(
-                        static_cast<jlongArray>(java_data->l), 0, 1, static_cast<jlong const *>(uno_data) );
+                        static_cast<jlongArray>(java_data->l), 0, 1, static_cast<jlong *>(data) );
                     jni.ensure_no_exception();
                 }
             }
@@ -1411,7 +1418,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetFloatArrayRegion(
-                        static_cast<jfloatArray>(jo_ar.get()), 0, 1, static_cast<jfloat const *>(uno_data) );
+                        static_cast<jfloatArray>(jo_ar.get()), 0, 1, static_cast<jfloat *>(data) );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1421,7 +1428,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetFloatArrayRegion(
-                        static_cast<jfloatArray>(java_data->l), 0, 1, static_cast<jfloat const *>(uno_data) );
+                        static_cast<jfloatArray>(java_data->l), 0, 1, static_cast<jfloat *>(data) );
                     jni.ensure_no_exception();
                 }
             }
@@ -1451,7 +1458,7 @@ void Bridge::map_to_java(
                 {
                     jni->SetDoubleArrayRegion(
                         static_cast<jdoubleArray>(jo_ar.get()),
-                        0, 1, static_cast<jdouble const *>(uno_data) );
+                        0, 1, static_cast<jdouble *>(data) );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1462,7 +1469,7 @@ void Bridge::map_to_java(
                 {
                     jni->SetDoubleArrayRegion(
                         static_cast<jdoubleArray>(java_data->l),
-                        0, 1, static_cast<jdouble const *>(uno_data) );
+                        0, 1, static_cast<jdouble *>(data) );
                     jni.ensure_no_exception();
                 }
             }
@@ -2081,7 +2088,7 @@ void Bridge::map_to_java(
         JLocalAutoRef jo_ar( jni );
 
         sal_Int32 nElements;
-        uno_Sequence const * seq = 0;
+        uno_Sequence * seq = 0;
         if (in_param)
         {
             seq = *static_cast<uno_Sequence * const *>(uno_data);
@@ -2105,7 +2112,7 @@ void Bridge::map_to_java(
             {
                 jni->SetCharArrayRegion(
                     static_cast<jcharArray>(jo_ar.get()),
-                    0, nElements, reinterpret_cast<jchar const *>(seq->elements) );
+                    0, nElements, reinterpret_cast<jchar *>(seq->elements) );
                 jni.ensure_no_exception();
             }
             break;
@@ -2116,7 +2123,7 @@ void Bridge::map_to_java(
             {
                 jni->SetBooleanArrayRegion(
                     static_cast<jbooleanArray>(jo_ar.get()),
-                    0, nElements, reinterpret_cast<jboolean const *>(seq->elements) );
+                    0, nElements, reinterpret_cast<jboolean *>(seq->elements) );
                 jni.ensure_no_exception();
             }
             break;
@@ -2127,7 +2134,7 @@ void Bridge::map_to_java(
             {
                 jni->SetByteArrayRegion(
                     static_cast<jbyteArray>(jo_ar.get()),
-                    0, nElements, reinterpret_cast<jbyte const *>(seq->elements) );
+                    0, nElements, reinterpret_cast<jbyte *>(seq->elements) );
                 jni.ensure_no_exception();
             }
             break;
@@ -2139,7 +2146,7 @@ void Bridge::map_to_java(
             {
                 jni->SetShortArrayRegion(
                     static_cast<jshortArray>(jo_ar.get()),
-                    0, nElements, reinterpret_cast<jshort const *>(seq->elements) );
+                    0, nElements, reinterpret_cast<jshort *>(seq->elements) );
                 jni.ensure_no_exception();
             }
             break;
@@ -2151,7 +2158,7 @@ void Bridge::map_to_java(
             {
                 jni->SetIntArrayRegion(
                     static_cast<jintArray>(jo_ar.get()),
-                    0, nElements, reinterpret_cast<jint const *>(seq->elements) );
+                    0, nElements, reinterpret_cast<jint *>(seq->elements) );
                 jni.ensure_no_exception();
             }
             break;
@@ -2163,7 +2170,7 @@ void Bridge::map_to_java(
             {
                 jni->SetLongArrayRegion(
                     static_cast<jlongArray>(jo_ar.get()),
-                    0, nElements, reinterpret_cast<jlong const *>(seq->elements) );
+                    0, nElements, reinterpret_cast<jlong *>(seq->elements) );
                 jni.ensure_no_exception();
             }
             break;
@@ -2174,7 +2181,7 @@ void Bridge::map_to_java(
             {
                 jni->SetFloatArrayRegion(
                     static_cast<jfloatArray>(jo_ar.get()),
-                    0, nElements, reinterpret_cast<jfloat const *>(seq->elements) );
+                    0, nElements, reinterpret_cast<jfloat *>(seq->elements) );
                 jni.ensure_no_exception();
             }
             break;
@@ -2185,7 +2192,7 @@ void Bridge::map_to_java(
             {
                 jni->SetDoubleArrayRegion(
                     static_cast<jdoubleArray>(jo_ar.get()),
-                    0, nElements, reinterpret_cast<jdouble const *>(seq->elements) );
+                    0, nElements, reinterpret_cast<jdouble *>(seq->elements) );
                 jni.ensure_no_exception();
             }
             break;
