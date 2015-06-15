@@ -727,6 +727,7 @@ void SmCmdBoxWindow::dispose()
 {
     aInitialFocusTimer.Stop();
     bExiting = true;
+    aController.dispose();
     aEdit.disposeAndClear();
     SfxDockingWindow::dispose();
 }
