@@ -300,7 +300,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     }
 
     /* #106748# If the default frame direction of a document is RTL
-        the default adjusment is to the right. */
+        the default adjustment is to the right. */
     if( !bHTMLTemplSet &&
         FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) )
     {

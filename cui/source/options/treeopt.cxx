@@ -1781,7 +1781,7 @@ bool isNodeActive( OptionsNode* pNode, Module* pModule )
 {
     if ( pNode )
     {
-        // Node for all modules actine?
+        // Node for all modules active?
         if ( pNode->m_bAllModules )
             return true;
 

@@ -452,7 +452,7 @@ public:
     // Empty boxes have the return value USHRT_MAX !!
     sal_uInt16 IsFormulaOrValueBox() const;
 
-    // Loading of a document requires an actualisation of cells with values
+    // Loading of a document requires an actualization of cells with values
     void ActualiseValueBox();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBox)

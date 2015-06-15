@@ -74,7 +74,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet& rCo
     m_pTypeTLB->SetSelectionMode(SINGLE_SELECTION);
     m_pTypeTLB->SetStyle(m_pTypeTLB->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     m_pTypeTLB->SetOptimalImageIndent();
-    // Don't set font, so that the control's font is adobted!
+    // Don't set font, so that the control's font is adopted!
     // Otherwise at wrong font bug to OV.
     m_pTypeTLB->SetSpaceBetweenEntries(0);
 

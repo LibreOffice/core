@@ -927,7 +927,7 @@ namespace drawinglayer
                                             // not be in a all-same transparency but will already alpha-cover themselves with blending.
                                             // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                                             // content to be uniformely transparent.
-                                            // To check, acitvate and draw a wide transparent self-crossing line/curve
+                                            // To check, activate and draw a wide transparent self-crossing line/curve
                                             static bool bAllowed(false);
 
                                             bDrawTransparentUsed = bAllowed && tryDrawPolygonStrokePrimitive2DDirect(*pPoStroke, rUniTransparenceCandidate.getTransparence());

@@ -851,7 +851,7 @@ void SplineCalculater::CalculateBSplines(
                 while ( r !=0 && cc-r < p )
                 {
                     fEliminate = aMatN[r][ cc - aShift[r] ];
-                    if ( fEliminate != 0.0) // else element is accidentically zero, no action needed
+                    if ( fEliminate != 0.0) // else element is accidentally zero, no action needed
                     {
                         // row r -= fEliminate * row cc only relevant for right side
                         aMatN[r][cc - aShift[r]] = 0.0;

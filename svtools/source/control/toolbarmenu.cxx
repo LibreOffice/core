@@ -390,7 +390,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
             if( pEntry->mpControl )
             {
                 sal_Int32 nChildIndex = 0;
-                // todo: if other controls than ValueSet are allowed, addapt this code
+                // todo: if other controls than ValueSet are allowed, adapt this code
                 ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
                 if( pValueSet )
                     nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectItemId() ) );

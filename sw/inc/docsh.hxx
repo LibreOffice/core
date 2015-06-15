@@ -223,7 +223,7 @@ public:
     const SwView *GetView() const { return m_pView; }
     SwView       *GetView()       { return m_pView; }
 
-    /// Accress to the SwWrtShell belonging to SwView.
+    /// Access to the SwWrtShell belonging to SwView.
           SwWrtShell *GetWrtShell()       { return m_pWrtShell; }
     const SwWrtShell *GetWrtShell() const { return m_pWrtShell; }
     // Same as GetWrtShell, but return pointer to SwEditShell base of

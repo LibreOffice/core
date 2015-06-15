@@ -393,7 +393,7 @@ void SfxApplication::SetProgress_Impl
 {
     DBG_ASSERT( ( !pAppData_Impl->pProgress && pProgress ) ||
                 ( pAppData_Impl->pProgress && !pProgress ),
-                "Progress acitivation/deacitivation mismatch" );
+                "Progress activation/deactivation mismatch" );
 
     if ( pAppData_Impl->pProgress && pProgress )
     {

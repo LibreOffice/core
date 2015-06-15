@@ -256,7 +256,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::creat
             // create page content
             xPageContent = mpExtractor->createPrimitive2DSequenceForPage(rDisplayInfo);
 
-            // #i105548# reset VOCRedirector to not accidentially have a pointer to a
+            // #i105548# reset VOCRedirector to not accidentally have a pointer to a
             // temporary class, so calls to it are avoided safely
             mpExtractor->SetViewObjectContactRedirector(0);
 

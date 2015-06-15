@@ -258,7 +258,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
 
                             if( nDimensionIndex == 1 )
                             {
-                                //only take those series into accoutn that are attached to this axis
+                                //only take those series into account that are attached to this axis
                                 sal_Int32 nAttachedAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
                                 if( nAttachedAxisIndex != nAxisIndex )
                                     continue;

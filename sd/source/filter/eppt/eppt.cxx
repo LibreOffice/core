@@ -236,8 +236,8 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     {
         sal_uInt8   nDirection = 0;
         sal_uInt8   nTransitionType = 0;
-        sal_uInt16  nBuildFlags = 1;        // advange by mouseclick
-        sal_Int32       nSlideTime = 0;         // still has to !!!
+        sal_uInt16  nBuildFlags = 1;        // advance by mouseclick
+        sal_Int32   nSlideTime = 0;         // still has to !!!
         sal_uInt8   nSpeed = 1;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "Speed" ) ) )

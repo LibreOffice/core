@@ -1090,7 +1090,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
                 }
                 if( nAnchor != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    // All entries from achor to nSelect have to be selected
+                    // All entries from Anchor to nSelect have to be selected
                     sal_Int32 nStart = std::min( nSelect, nAnchor );
                     sal_Int32 nEnd = std::max( nSelect, nAnchor );
                     for ( sal_Int32 n = nStart; n <= nEnd; n++ )

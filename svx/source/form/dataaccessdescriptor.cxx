@@ -346,7 +346,7 @@ namespace svx
     {
         if (!has(_eWhich))
         {
-            OSL_FAIL("ODataAccessDescriptor::operator[]: invalid acessor!");
+            OSL_FAIL("ODataAccessDescriptor::operator[]: invalid accessor!");
             static const Any aDummy;
             return aDummy;
         }

@@ -243,7 +243,7 @@ public:
      *  tell whether legacy partial full screen handling is necessary
      *  see #i107249#: NET_WM_STATE_FULLSCREEN is not well defined, but de facto
      *  modern WM's interpret it the "right" way, namely they make "full screen"
-     *  taking twin view or Xinerama into accound and honor the positioning hints
+     *  taking twin view or Xinerama into account and honor the positioning hints
      *  to see which screen actually was meant to use for fullscreen.
      */
     bool isLegacyPartialFullscreen() const

@@ -306,7 +306,7 @@ bool MozabDriver::ensureInit()
 
     if ( m_xMSFactory.is() )
     {
-        // for purpose of transfer safety, the interface needs to be acuired once
+        // for purpose of transfer safety, the interface needs to be acquired once
         // (will be release by the callee)
         m_xMSFactory->acquire();
         ( *pSetFactoryFunc )( m_xMSFactory.get() );

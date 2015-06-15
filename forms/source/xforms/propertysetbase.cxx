@@ -136,7 +136,7 @@ PropertyAccessorBase& PropertySetBase::locatePropertyHandler( sal_Int32 nHandle 
     OSL_ENSURE( aPropertyPos != m_aAccessors.end() && aPropertyPos->second.get(),
         "PropertySetBase::locatePropertyHandler: accessor map is corrupted!" );
         // neither should this be called for handles where there is no accessor, nor should a
-        // NULL accssor be in the map
+        // NULL accessor be in the map
     return *aPropertyPos->second;
 }
 
