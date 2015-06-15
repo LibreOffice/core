@@ -213,7 +213,7 @@ void SwProtocol::Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct,
             nRecord &= ~PROT_INIT;  // Always reset PROT_INIT
             return;
         }
-        nRecord |= nFunction;       // Acitivate logging of this function
+        nRecord |= nFunction;       // Activate logging of this function
         nRecord &= ~PROT_INIT;      // Always reset PROT_INIT
         if( pImpl )
             pImpl->ChkStream();

@@ -552,7 +552,7 @@ namespace svxform
                 Reference< XForm >  xSubForm(xCurrentComponent, UNO_QUERY);
 
                 if (xSubForm.is())
-                {   // actuell component is a form
+                {   // actual component is a form
                     pSubFormData = new FmFormData(xSubForm, m_aNormalImages, pFormData);
                     Insert(pSubFormData, CONTAINER_APPEND);
 

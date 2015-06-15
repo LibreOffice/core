@@ -3582,7 +3582,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
 void ToolBox::MouseMove( const MouseEvent& rMEvt )
 {
     // pressing a modifier generates synthetic mouse moves
-    // ignore it if keyboard selection is acive
+    // ignore it if keyboard selection is active
     if( HasFocus() && ( rMEvt.GetMode() & MouseEventModifiers::MODIFIERCHANGED ) )
         return;
 

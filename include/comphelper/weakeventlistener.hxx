@@ -93,7 +93,7 @@ namespace comphelper
         <p>Note that derived classes need to overwrite all virtual methods of their interface
         except XEventListener::disposing, and forward it to their master listener.</p>
 
-        <p>Addtionally, derived classes need to add themself as listener to the broadcaster,
+        <p>Additionally, derived classes need to add themself as listener to the broadcaster,
         as this can't be done in a generic way</p>
     */
     class OWeakListenerAdapter

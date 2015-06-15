@@ -331,7 +331,7 @@ namespace accessibility
         /** Implements getAccessibleChild
 
             @attention Don't call with locked mutexes. You may hold
-            the solar mutex, but this method acuires it anyway.
+            the solar mutex, but this method acquires it anyway.
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChild( sal_Int32 i );
 

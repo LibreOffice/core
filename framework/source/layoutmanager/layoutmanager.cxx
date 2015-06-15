@@ -1322,7 +1322,7 @@ throw ( RuntimeException, std::exception )
     {
         SolarMutexGuard aGuard;
 
-        // Add layout manager as listener to get notifications about toolbar button activties
+        // Add layout manager as listener to get notifications about toolbar button activities
         vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         if ( pContainerWindow )
             pContainerWindow->AddChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );

@@ -147,7 +147,7 @@ namespace slideshow
                     ValueT aValue( rValue.getX(),
                                    rValue.getY() );
 
-                    // Activitis get values from the expression parser,
+                    // Activities get values from the expression parser,
                     // which returns _relative_ sizes/positions.
                     // Convert back relative to reference coordinate system
                     aValue *= maReferenceSize;
