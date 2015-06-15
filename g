@@ -147,7 +147,7 @@ get_configured_submodules()
 {
     SUBMODULES_CONFIGURED=""
     if [ -f config_host.mk ] ; then
-	SUBMODULES_CONFIGURED=$(cat config_host.mk | grep GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
+	SUBMODULES_CONFIGURED=$(cat config_host.mk | grep -a GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
     else
 	# if we need the configured submoduel before the configuration is done. we assumed you want them all
 	SUBMODULES_CONFIGURED=${SUBMODULES_ALL?}
@@ -158,11 +158,11 @@ get_git_reference()
 {
     REFERENCED_GIT=""
     if [ -f config_host.mk ]; then
-	REFERENCED_GIT=$(cat config_host.mk | grep GIT_REFERENCE_SRC | sed -e "s/.*=//")
+	REFERENCED_GIT=$(cat config_host.mk | grep -a GIT_REFERENCE_SRC | sed -e "s/.*=//")
     fi
     LINKED_GIT=""
     if [ -f config_host.mk ]; then
-	LINKED_GIT=$(cat config_host.mk | grep GIT_LINK_SRC | sed -e "s/.*=//")
+	LINKED_GIT=$(cat config_host.mk | grep -a GIT_LINK_SRC | sed -e "s/.*=//")
     fi
 }
 
