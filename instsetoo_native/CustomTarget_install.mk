@@ -21,8 +21,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/install))
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/install,\
 	install.phony \
 	$(if $(filter-out WNT,$(OS)),\
-	$(if $(ENABLE_GNOMEVFS),bin/find-requires-gnomevfs.sh) \
-	bin/find-requires-glib.sh \
+	bin/find-requires-gnome.sh \
 	bin/find-requires-x11.sh) \
 	$(foreach ulf,$(instsetoo_ULFLIST),win_ulffiles/$(ulf).ulf) \
 ))
@@ -32,8 +31,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: \
 	$(foreach ulf,$(instsetoo_ULFLIST),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/$(ulf).ulf) \
 	$(if $(filter-out WNT,$(OS)),\
 		$(addprefix $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/,\
-	        $(if $(ENABLE_GNOMEVFS),bin/find-requires-gnomevfs.sh) \
-			bin/find-requires-glib.sh \
+			bin/find-requires-gnome.sh \
 			bin/find-requires-x11.sh) \
 	) \
 	$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
