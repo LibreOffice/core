@@ -253,7 +253,6 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
 
 /**
  * Convert attributes string to Any type.
- * Reference to infra\accessibility\bridge\org\openoffice\java\accessibility\AccessibleTextImpl.java
  *
  * @param   ouName      the string of attribute name.
  * @param   ouValue     the string of attribute value.
