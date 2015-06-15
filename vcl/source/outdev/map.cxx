@@ -366,13 +366,13 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
     {
-       n *= nMapNum * nDPI;
-       if( nMapDenom != 1 )
-       {
-          n = (2 * n) / nMapDenom;
-          if( n < 0 ) --n; else ++n;
-          n /= 2;
-       }
+        n *= nMapNum * nDPI;
+        if( nMapDenom != 1 )
+        {
+            n = (2 * n) / nMapDenom;
+            if( n < 0 ) --n; else ++n;
+            n /= 2;
+        }
     }
     else
 #else
@@ -381,17 +381,17 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
     assert(nMapNum == 0 || std::abs(n) < std::numeric_limits<long>::max() / nMapNum / nDPI); //detect overflows
 #endif
     {
-       sal_Int64 n64 = n;
-       n64 *= nMapNum;
-       n64 *= nDPI;
-       if( nMapDenom == 1 )
-          n = (long)n64;
-       else
-       {
-          n = (long)(2 * n64 / nMapDenom);
-          if( n < 0 ) --n; else ++n;
-          n /= 2;
-       }
+        sal_Int64 n64 = n;
+        n64 *= nMapNum;
+        n64 *= nDPI;
+        if( nMapDenom == 1 )
+            n = (long)n64;
+        else
+        {
+            n = (long)(2 * n64 / nMapDenom);
+            if( n < 0 ) --n; else ++n;
+            n /= 2;
+        }
     }
     return n;
 }
