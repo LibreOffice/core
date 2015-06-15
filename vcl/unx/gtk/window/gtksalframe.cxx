@@ -936,23 +936,23 @@ void GtkSalFrame::moveWindow( long nX, long nY )
 void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
 {
     gint nOrigwidth, nOrigheight;
-    gtk_widget_get_size_request(m_pWindow, &nOrigwidth, &nOrigheight);
-    if (nOrigwidth != nWidth || nOrigheight != nHeight)
+    gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
+    if (nWidth > nOrigwidth || nHeight > nOrigheight)
     {
-        m_bAwaitingSizeConfirmation = true;
-        gtk_widget_set_size_request(m_pWindow, nWidth, nHeight );
+        m_bPaintsBlocked = true;
     }
+    gtk_widget_set_size_request(m_pWindow, nWidth, nHeight );
 }
 
 void GtkSalFrame::window_resize(long nWidth, long nHeight)
 {
     gint nOrigwidth, nOrigheight;
     gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
-    if (nOrigwidth != nWidth || nOrigheight != nHeight)
+    if (nWidth > nOrigwidth || nHeight > nOrigheight)
     {
-        m_bAwaitingSizeConfirmation = true;
-        gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
+        m_bPaintsBlocked = true;
     }
+    gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 }
 
 void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
@@ -3535,6 +3535,7 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->m_bPaintsBlocked = false;
 
     cairo_save(cr);
 
@@ -3557,6 +3558,7 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->m_bPaintsBlocked = false;
 
     struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height );
 
@@ -3709,7 +3711,7 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->m_bAwaitingSizeConfirmation = false;
+    pThis->m_bPaintsBlocked = false;
 
     bool bMoved = false, bSized = false;
     int x = pEvent->x, y = pEvent->y;

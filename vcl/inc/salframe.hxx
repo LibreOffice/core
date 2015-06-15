@@ -102,7 +102,7 @@ class VCL_PLUGIN_PUBLIC SalFrame
     , public SalGeometryProvider
 {
 protected:
-    bool                    m_bAwaitingSizeConfirmation;
+    bool                    m_bPaintsBlocked;
 private:
     // the VCL window corresponding to this frame
     VclPtr<vcl::Window>     m_pWindow;
@@ -246,7 +246,7 @@ public:
     long                    CallCallback( sal_uInt16 nEvent, const void* pEvent ) const
         { return m_pProc ? long(m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent )) : 0; }
 
-    bool AwaitingSizeConfirmation() const { return m_bAwaitingSizeConfirmation; }
+    bool PaintsBlocked() const { return m_bPaintsBlocked; }
 };
 
 #endif // INCLUDED_VCL_INC_SALFRAME_HXX

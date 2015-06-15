@@ -30,7 +30,7 @@
 
 
 SalFrame::SalFrame()
-    : m_bAwaitingSizeConfirmation(false)
+    : m_bPaintsBlocked(false)
     , m_pWindow(NULL)
     , m_pProc(NULL)
 {
