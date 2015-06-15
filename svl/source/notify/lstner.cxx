@@ -90,15 +90,16 @@ void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
 
 void SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 {
+    SfxBroadcasterArr_Impl::iterator beginIt = mpImpl->maBCs.begin();
     do
     {
-        SfxBroadcasterArr_Impl::iterator it = std::find( mpImpl->maBCs.begin(), mpImpl->maBCs.end(), &rBroadcaster );
+        SfxBroadcasterArr_Impl::iterator it = std::find( beginIt, mpImpl->maBCs.end(), &rBroadcaster );
         if ( it == mpImpl->maBCs.end() )
         {
             break;
         }
         rBroadcaster.RemoveListener(*this);
-        mpImpl->maBCs.erase( it );
+        beginIt = mpImpl->maBCs.erase( it );
     }
     while ( bAllDups );
 }

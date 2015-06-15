@@ -358,27 +358,26 @@ void WriterXmlOptimizer::visit( ImageElement&, const std::list< Element* >::cons
 {
 }
 
-void WriterXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& )
+void WriterXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& elemIt )
 {
     /* note: optimize two consecutive PolyPolyElements that
      *  have the same path but one of which is a stroke while
      *     the other is a fill
      */
-    if( elem.Parent )
-    {
-        // find following PolyPolyElement in parent's children list
-        std::list< Element* >::iterator this_it = elem.Parent->Children.begin();
-        while( this_it != elem.Parent->Children.end() && *this_it != &elem )
-            ++this_it;
+    if( !elem.Parent )
+        return;
+    // find following PolyPolyElement in parent's children list
+    if( elemIt == elem.Parent->Children.end() )
+        return;
+    std::list< Element* >::const_iterator next_it = elemIt;
+    ++next_it;
+    if( next_it == elem.Parent->Children.end() )
+        return;
 
-        if( this_it != elem.Parent->Children.end() )
-        {
-            std::list< Element* >::iterator next_it = this_it;
-            if( ++next_it != elem.Parent->Children.end() )
-            {
-                PolyPolyElement* pNext = dynamic_cast<PolyPolyElement*>(*next_it);
-                if( pNext && pNext->PolyPoly == elem.PolyPoly )
-                {
+    PolyPolyElement* pNext = dynamic_cast<PolyPolyElement*>(*next_it);
+    if( !pNext || pNext->PolyPoly != elem.PolyPoly )
+        return;
+
                     const GraphicsContext& rNextGC =
                         m_rProcessor.getGraphicsContext( pNext->GCId );
                     const GraphicsContext& rThisGC =
@@ -406,10 +405,6 @@ void WriterXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element*
                         elem.Parent->Children.erase( next_it );
                         delete pNext;
                     }
-                }
-            }
-        }
-    }
 }
 
 void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< Element* >::const_iterator& rParentIt)

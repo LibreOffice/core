@@ -355,8 +355,8 @@ void DrawXmlEmitter::visit( PageElement& elem, const std::list< Element* >::cons
     if( m_rEmitContext.xStatusIndicator.is() )
         m_rEmitContext.xStatusIndicator->setValue( elem.PageNumber );
 
-    std::list< Element* >::iterator this_it =  elem.Children.begin();
-    while( this_it !=elem.Children.end() && *this_it != &elem )
+    std::list< Element* >::iterator this_it = elem.Children.begin();
+    while( this_it != elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
         ++this_it;
@@ -371,8 +371,8 @@ void DrawXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >::
     m_rEmitContext.rEmitter.beginTag( m_bWriteDrawDocument ? "office:drawing" : "office:presentation",
                                       PropertyMap() );
 
-    std::list< Element* >::iterator this_it =  elem.Children.begin();
-    while( this_it !=elem.Children.end() && *this_it != &elem )
+    std::list< Element* >::iterator this_it = elem.Children.begin();
+    while( this_it != elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
         ++this_it;
@@ -401,29 +401,28 @@ void DrawXmlOptimizer::visit( ImageElement&, const std::list< Element* >::const_
 {
 }
 
-void DrawXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& )
+void DrawXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& elemIt )
 {
     /* note: optimize two consecutive PolyPolyElements that
      *  have the same path but one of which is a stroke while
      *     the other is a fill
      */
-    if( elem.Parent )
-    {
-        // find following PolyPolyElement in parent's children list
-        std::list< Element* >::iterator this_it = elem.Parent->Children.begin();
-        while( this_it != elem.Parent->Children.end() && *this_it != &elem )
-            ++this_it;
+    if( !elem.Parent )
+        return;
 
-        if( this_it != elem.Parent->Children.end() )
-        {
-            std::list< Element* >::iterator next_it = this_it;
-            if( ++next_it != elem.Parent->Children.end() )
-            {
-                PolyPolyElement* pNext = dynamic_cast<PolyPolyElement*>(*next_it);
+    // find following PolyPolyElement in parent's children list
+    if( elemIt == elem.Parent->Children.end() )
+        return;
+    std::list< Element* >::const_iterator next_it = elemIt;
+    ++next_it;
+    if( next_it == elem.Parent->Children.end() )
+        return;
 
-                // TODO(F2): this comparison fails for OOo-generated polygons with beziers.
-                if( pNext && pNext->PolyPoly == elem.PolyPoly )
-                {
+     PolyPolyElement* pNext = dynamic_cast<PolyPolyElement*>(*next_it);
+     // TODO(F2): this comparison fails for OOo-generated polygons with beziers.
+     if( !pNext || pNext->PolyPoly != elem.PolyPoly )
+        return;
+
                     const GraphicsContext& rNextGC =
                         m_rProcessor.getGraphicsContext( pNext->GCId );
                     const GraphicsContext& rThisGC =
@@ -455,10 +454,6 @@ void DrawXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element* >
                         elem.Parent->Children.erase( next_it );
                         delete pNext;
                     }
-                }
-            }
-        }
-    }
 }
 
 void DrawXmlOptimizer::visit( ParagraphElement& elem, const std::list< Element* >::const_iterator& )

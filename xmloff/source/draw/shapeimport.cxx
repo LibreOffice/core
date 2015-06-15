@@ -775,8 +775,8 @@ class ShapeSortContext
 {
 public:
     uno::Reference< drawing::XShapes > mxShapes;
-    list<ZOrderHint>              maZOrderList;
-    list<ZOrderHint>              maUnsortedList;
+    vector<ZOrderHint>              maZOrderList;
+    vector<ZOrderHint>              maUnsortedList;
 
     sal_Int32                     mnCurrentZ;
     ShapeSortContext*             mpParentContext;
@@ -804,8 +804,8 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
         aAny <<= nDestPos;
         xPropSet->setPropertyValue( msZOrder, aAny );
 
-        list<ZOrderHint>::iterator aIter = maZOrderList.begin();
-        list<ZOrderHint>::iterator aEnd = maZOrderList.end();
+        vector<ZOrderHint>::iterator aIter = maZOrderList.begin();
+        vector<ZOrderHint>::iterator aEnd = maZOrderList.end();
 
         while( aIter != aEnd )
         {
@@ -845,8 +845,8 @@ void XMLShapeImportHelper::popGroupAndSort()
 
     try
     {
-        list<ZOrderHint>& rZList = mpImpl->mpSortContext->maZOrderList;
-        list<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
+        vector<ZOrderHint>& rZList = mpImpl->mpSortContext->maZOrderList;
+        vector<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
 
         // sort shapes
         if( !rZList.empty() )
@@ -867,7 +867,7 @@ void XMLShapeImportHelper::popGroupAndSort()
             if( nCount > 0 )
             {
                 // first update offsets of added shapes
-                list<ZOrderHint>::iterator aIter( rZList.begin() );
+                vector<ZOrderHint>::iterator aIter( rZList.begin() );
                 while( aIter != rZList.end() )
                     (*aIter++).nIs += nCount;
 
@@ -891,27 +891,25 @@ void XMLShapeImportHelper::popGroupAndSort()
             }
 
             // sort z ordered shapes
-            rZList.sort();
+            std::sort(rZList.begin(), rZList.end());
 
             // this is the current index, all shapes before that
             // index are finished
             sal_Int32 nIndex = 0;
             while( !rZList.empty() )
             {
-                list<ZOrderHint>::iterator aIter( rZList.begin() );
-
-                while( nIndex < (*aIter).nShould && !rUnsortedList.empty() )
+                while( nIndex < (*rZList.begin()).nShould && !rUnsortedList.empty() )
                 {
                     ZOrderHint aGapHint( *rUnsortedList.begin() );
-                    rUnsortedList.pop_front();
+                    rUnsortedList.erase(rUnsortedList.begin());
 
                     mpImpl->mpSortContext->moveShape( aGapHint.nIs, nIndex++ );
                 }
 
-                if( (*aIter).nIs != nIndex )
-                    mpImpl->mpSortContext->moveShape( (*aIter).nIs, nIndex );
+                if( (*rZList.begin()).nIs != nIndex )
+                    mpImpl->mpSortContext->moveShape( (*rZList.begin()).nIs, nIndex );
 
-                rZList.pop_front();
+                rZList.erase(rZList.begin());
                 nIndex++;
             }
         }
