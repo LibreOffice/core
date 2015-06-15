@@ -44,6 +44,7 @@
 #include <unoflatpara.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <docedt.hxx>
+#include <atrfrm.hxx>
 
 #include <vector>
 
@@ -77,10 +78,13 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         aAnchor.SetAnchor( &aPos );
         pFormat->GetDoc()->GetSpzFrameFormats()->push_back( pFormat );
         pFormat->SetFormatAttr( aAnchor );
+        // SetFormatAttr will not call Modify() because the node is the same :-/
+        aPos.nNode.GetNode().AddAnchoredFly(pFormat);
         SwContentNode* pCNd = aPos.nNode.GetNode().GetContentNode();
         if( pCNd && pCNd->getLayoutFrm( pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false ) )
             pFormat->MakeFrms();
     }
+    sw::CheckAnchoredFlyConsistency(*rSttIdx.GetNode().GetDoc());
 }
 
 void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
@@ -100,9 +104,11 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
                             pFormat, false );
             rArr.push_back( aSave );
             pFormat->DelFrms();
+            pAPos->nNode.GetNode().RemoveAnchoredFly(pFormat);
             rFormats.erase( rFormats.begin() + n-- );
         }
     }
+    sw::CheckAnchoredFlyConsistency(*rRg.aStart.GetNode().GetDoc());
 }
 
 void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
@@ -162,10 +168,12 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                                 pFormat, bInsPos );
                 rArr.push_back( aSave );
                 pFormat->DelFrms();
+                pAPos->nNode.GetNode().RemoveAnchoredFly(pFormat);
                 rFormats.erase( rFormats.begin() + n-- );
             }
         }
     }
+    sw::CheckAnchoredFlyConsistency(*rPam.GetPoint()->nNode.GetNode().GetDoc());
 }
 
 /// Delete and move all Flys at the paragraph, that are within the selection.
