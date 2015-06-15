@@ -751,14 +751,14 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
         //pOutliner->Clear();
         //pOutliner->SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
 
-        if (pNonOverflowingTxt->mpHeadParas != NULL)
+        if (pNonOverflowingTxt->mpHeadParas != NULL) {
             pOutliner->SetText(*pNonOverflowingTxt->mpHeadParas);
-        else { // set empty paraObj
-            OutlinerParaObject *pEmptyPObj = pOutliner->GetEmptyParaObject();
-            pOutliner->SetText(*pEmptyPObj);
+            pOutliner->AddText(*pPObj);
+         } else { // set empty paraObj
+            //OutlinerParaObject *pEmptyPObj = pOutliner->GetEmptyParaObject();
+            //pOutliner->SetText(*pEmptyPObj);
+            pOutliner->SetText(*pPObj);
         }
-
-        pOutliner->AddText(*pPObj);
     }
 
      return pOutliner->CreateParaObject();
@@ -773,7 +773,7 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
         pEdtOutl->SetText(*pNewText);
     // adds it to current outliner anyway (useful in static decomposition)
     pOutliner->SetText(*pNewText);
-    const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
+    const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
 }
 
 OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const
@@ -1618,13 +1618,16 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         const_cast<SdrTextObj*>(this)->mpOverflowingText = rOutliner.GetOverflowingText();
 
         /* Leave only non overflowing text */
-        OutlinerParaObject *pNewTextCurBox = impGetNonOverflowingParaObject(&rOutliner);
+        impLeaveOnlyNonOverflowingText(&rOutliner);
+
+        /*OutlinerParaObject *pNewTextCurBox = impGetNonOverflowingParaObject(&rOutliner);
         // we need this when we are in editing mode
         // XXX: we use next line just to be sure for now
         if (pEdtOutl != NULL)
             pEdtOutl->SetText(*pNewTextCurBox);
         // adds it to current outliner anyway (useful in static decomposition)
         rOutliner.SetText(*pNewTextCurBox);
+        NbcSetOutlinerParaObject(pNewTextCurBox);*/
 
         /* Get chaining outliner  here */
         // Code adapted from ImpGetDrawOutliner
