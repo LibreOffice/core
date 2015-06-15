@@ -39,10 +39,9 @@ String RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON
     Text [ en-US ] = "Please enter a password to open or to modify, or check the open read-only option to continue." ;
 };
 
-// this missing string was detected late - so for 3.4 we just add an english string
 String RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2
 {
-    Text = "Set the password by entering the same password in both boxes." ;
+    Text [ en-US ] = "Set the password by entering the same password in both boxes." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -150,7 +150,7 @@ String RID_STR_UNDO_ADD_PAGEHEADERFOOTER
 String RID_STR_UNDO_PROPERTY
 {
     Text [ en-US ] = "Change property '#'";
-    Text = "The # character is used for replacing";
+    Text [ x-comment ] = "The # character is used for replacing";
 };
 
 String RID_STR_UNDO_ADD_GROUP_HEADER

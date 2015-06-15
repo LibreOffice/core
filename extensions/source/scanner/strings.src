@@ -11,22 +11,22 @@
 
 String STR_COULD_NOT_BE_INIT
 {
-    Text = "The SANE interface could not be initialized. Scanning is not possible.";
+    Text [ en-US ] = "The SANE interface could not be initialized. Scanning is not possible.";
 };
 
 String STR_SLOW_PREVIEW
 {
-    Text = "The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time.";
+    Text [ en-US ] = "The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time.";
 };
 
 String STR_ERROR_SCAN
 {
-    Text = "An error occurred while scanning.";
+    Text [ en-US ] = "An error occurred while scanning.";
 };
 
 String STR_DEVICE_DESC
 {
-    Text = "Device: %s\nVendor: %s\nModel: %s\nType: %s";
+    Text [ en-US ] = "Device: %s\nVendor: %s\nModel: %s\nType: %s";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
