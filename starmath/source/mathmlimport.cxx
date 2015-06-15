@@ -577,8 +577,7 @@ void SmXMLImport::endDocument(void)
             pDocShell->SetFormulaTree(pTree);
             if (0 == aText.Len())  //If we picked up no annotation text
             {
-                //Make up some editable text
-                aText = pDocShell->GetText();
+                // Get text from imported formula
                 pTree->CreateTextFromNode(aText);
                 aText.EraseTrailingChars();
                 if ((aText.GetChar(0) == '{') &&
@@ -588,7 +587,6 @@ void SmXMLImport::endDocument(void)
                     aText.Erase(aText.Len()-1,1);
                 }
             }
-            pDocShell->SetText( String() );
 
             // Convert symbol names
             SmParser &rParser = pDocShell->GetParser();
