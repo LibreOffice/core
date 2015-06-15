@@ -126,7 +126,7 @@ public:
     */
     void ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup);
 
-    /** Add a shell.  When the specified shell has alreadt been requested
+    /** Add a shell. When the specified shell has already been requested
         for another group then it is moved to this group.
         @param eGroup
             The group to which to add the shell.

@@ -330,7 +330,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         // - rFrm is not the first page frame (reopen Document tag)
         // - rFrm is a follow frame (reopen Master tag)
         // - rFrm is a fly frame anchored at content (reopen Anchor paragraph tag)
-        // - rFrm is a fly frame anchord at page (reopen Document tag)
+        // - rFrm is a fly frame anchored at page (reopen Document tag)
         // - rFrm is a follow flow row (reopen TableRow tag)
         // - rFrm is a cell frame in a follow flow row (reopen TableData tag)
         if ( ( rFrm.IsPageFrm() && static_cast<const SwPageFrm&>(rFrm).GetPrev() ) ||

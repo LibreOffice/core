@@ -1354,7 +1354,7 @@ void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
         else
         {
             // probably I am in a block, in which first the key and next the formatter will be set,
-            // initially this happens quite certain, as the properties are set in alphabettic sequence,
+            // initially this happens quite certain, as the properties are set in alphabetic sequence,
             // and the FormatsSupplier is processed before the FormatKey
             nKeyToSetDelayed = nKey;
         }

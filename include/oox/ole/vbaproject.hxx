@@ -65,7 +65,7 @@ private:
 
 
 
-/** Base class for objects that attach a amcro to a specific action.
+/** Base class for objects that attach a macro to a specific action.
 
     Purpose is to collect objects that need to attach a VBA macro to an action.
     The VBA project will be loaded at a very late point of the document import

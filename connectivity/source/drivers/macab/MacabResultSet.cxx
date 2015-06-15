@@ -83,7 +83,7 @@ void MacabResultSet::someMacabRecords(const MacabCondition *pCondition)
         delete m_aMacabRecords;
 
     // The copy constructor copies everything but records (including the
-    // maximum alloted size, which means that we'll never have to resize)
+    // maximum allocated size, which means that we'll never have to resize)
     m_aMacabRecords = new MacabRecords(allRecords);
 
     if(pCondition->isAlwaysFalse())

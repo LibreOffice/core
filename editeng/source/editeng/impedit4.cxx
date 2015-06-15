@@ -483,7 +483,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 sal_uInt32 nNumber = nStyle + 1;
                 rOutput.WriteUInt32AsString( nNumber );
 
-                // Attribute, alos from Parent!
+                // Attribute, also from Parent!
                 for ( sal_uInt16 nParAttr = EE_PARA_START; nParAttr <= EE_CHAR_END; nParAttr++ )
                 {
                     if ( pStyle->GetItemSet().GetItemState( nParAttr ) == SfxItemState::SET )

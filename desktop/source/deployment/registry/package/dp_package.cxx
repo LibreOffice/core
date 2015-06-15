@@ -526,7 +526,7 @@ BackendImpl::PackageImpl::isRegistered_(
 {
     //In case the object was created for a removed extension (m_bRemoved = true)
     //but the extension is not registered, then bundle will be empty. Then
-    //the return value will be Optional<...>.IsPresent= false. Althoug this is
+    //the return value will be Optional<...>.IsPresent= false. Although this is
     //not true, this does not matter. Then registerPackage or revokePackage
     //would never be called for the items. But since the extension is removed
     //and not registered anyway, this does not matter.

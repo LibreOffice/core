@@ -952,7 +952,7 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 {
     //  already there in GetFromEditItemSet, but not in FillEditItemSet
-    //  Default horizontal alignmnet is always implemented as left
+    //  Default horizontal alignment is always implemented as left
 
     const SfxItemSet& rMySet = GetItemSet();
 

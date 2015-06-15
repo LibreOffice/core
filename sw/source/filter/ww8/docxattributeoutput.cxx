@@ -461,7 +461,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                         XML_Requires, "wps",
                         FSEND);
                 /**
-                    This is to avoid AltenateContent within another AlternateContent.
+                    This is to avoid AlternateContent within another AlternateContent.
                        So when Choice is Open, only write the DML Drawing instead of both DML
                        and VML Drawing in another AlternateContent.
                  **/

@@ -286,7 +286,7 @@ private:
                 }
             }
         }
-        // sort children alpahbetically
+        // sort children alphabetically
         ::std::sort( m_vStr.begin(), m_vStr.end(), alphaSort() );
     }
 };

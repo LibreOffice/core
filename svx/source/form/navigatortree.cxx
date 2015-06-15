@@ -1110,7 +1110,7 @@ namespace svxform
             else
                 xContainer = Reference< XIndexContainer > (GetNavModel()->GetForms(), UNO_QUERY);
 
-            // allways insert at the end
+            // always insert at the end
             nIndex = xContainer->getCount();
 
             // UndoAction for insertion

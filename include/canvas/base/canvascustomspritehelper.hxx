@@ -147,7 +147,7 @@ namespace canvas
         bool isActive() const { return mbActive; }
 
     protected:
-        /** Notifies that caller is again in sync with current alph
+        /** Notifies that caller is again in sync with current alpha
 
             const, but modifies state visible to derived
             classes. beware of passing this information to the

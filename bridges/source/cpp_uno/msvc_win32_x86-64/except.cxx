@@ -609,7 +609,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
 
     // 2.Pass: Get the total needed memory for class ExceptionType
     // (with embedded type_info) and keep the sizes for each instance
-    // is stored in alloced int array
+    // is stored in allocated int array
     int *excecptionTypeSizeArray = new int[nLen];
 
     nLen = 0;

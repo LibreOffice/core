@@ -3684,7 +3684,7 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
                 (*it)->SetAllFormulasDirty(rCxt);
     }
 
-    // Allthough Charts are also set to dirty in Tracking without AutoCalc
+    // Although Charts are also set to dirty in Tracking without AutoCalc
     // if all formulas are dirty, the charts can no longer be caught
     //  (#45205#) - that is why all Charts have to be explicitly handled again
     if (pChartListenerCollection)

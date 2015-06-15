@@ -1644,7 +1644,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 if ( nSpaceAdd )
                 {
                     sal_Int32 nCharCnt = 0;
-                    // #i41860# Thai justified alignemt needs some
+                    // #i41860# Thai justified alignment needs some
                     // additional information:
                     aDrawInf.SetNumberOfBlanks( pPor->InTextGrp() ?
                                                 static_cast<const SwTextPortion*>(pPor)->GetSpaceCnt( aSizeInf, nCharCnt ) :

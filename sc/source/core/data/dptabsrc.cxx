@@ -793,7 +793,7 @@ void ScDPSource::CreateRes_Impl()
         nDataOrient = sheet::DataPilotFieldOrientation_ROW;
     }
 
-    // TODO: Aggreate pDataNames, pDataRefValues, nDataRefOrient, and
+    // TODO: Aggregate pDataNames, pDataRefValues, nDataRefOrient, and
     // eDataFunctions into a structure and use vector instead of static
     // or pointer arrays.
     vector<OUString> aDataNames;
