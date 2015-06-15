@@ -1779,12 +1779,15 @@ void ScDocument::DeleteArea(
     std::vector<ScAddress> aGroupPos;
     sc::EndListeningContext aCxt(*this);
     ScRange aRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
-    for (size_t i = 0; i < maTabs.size(); ++i)
+    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
     {
-        aRange.aStart.SetTab(i);
-        aRange.aEnd.SetTab(i);
+        if (rMark.GetTableSelect(i))
+        {
+            aRange.aStart.SetTab(i);
+            aRange.aEnd.SetTab(i);
 
-        EndListeningIntersectedGroups(aCxt, aRange, &aGroupPos);
+            EndListeningIntersectedGroups(aCxt, aRange, &aGroupPos);
+        }
     }
     aCxt.purgeEmptyBroadcasters();
 
