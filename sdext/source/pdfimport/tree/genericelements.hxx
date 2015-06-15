@@ -70,7 +70,7 @@ namespace pdfi
             css::uno::XComponentContext >  m_xContext;
     };
 
-    struct Element : public ElementTreeVisitable
+    struct Element
     {
     protected:
         Element( Element* pParent )
@@ -83,6 +83,11 @@ namespace pdfi
     public:
         virtual ~Element();
 
+        /**
+            To be implemented by every tree node that needs to be
+            visitable.
+         */
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) = 0;
         /// Apply visitor to all children
         void applyToChildren( ElementTreeVisitor& );
         /// Union element geometry with given element
@@ -106,7 +111,6 @@ namespace pdfi
     struct ListElement : public Element
     {
         ListElement() : Element( NULL ) {}
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
     };
 
@@ -117,7 +121,6 @@ namespace pdfi
         HyperlinkElement( Element* pParent, const OUString& rURI )
         : Element( pParent ), URI( rURI ) {}
     public:
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
 
         OUString URI;
@@ -163,7 +166,6 @@ namespace pdfi
         : DrawElement( pParent, nGCId ) {}
 
     public:
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
     };
 
@@ -175,7 +177,6 @@ namespace pdfi
         : GraphicalElement( pParent, nGCId ), FontId( nFontId ) {}
 
     public:
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
 
         OUStringBuffer Text;
@@ -189,7 +190,6 @@ namespace pdfi
         ParagraphElement( Element* pParent ) : Element( pParent ), Type( Normal ), bRtl( false ) {}
 
     public:
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) SAL_OVERRIDE;
 
         // returns true only if only a single line is contained
@@ -213,7 +213,6 @@ namespace pdfi
                          const basegfx::B2DPolyPolygon& rPolyPoly,
                          sal_Int8 nAction );
     public:
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) SAL_OVERRIDE;
 
         void updateGeometry();
@@ -234,7 +233,6 @@ namespace pdfi
         : DrawElement( pParent, nGCId ), Image( nImage ) {}
 
     public:
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
 
         ImageId Image;
@@ -252,10 +250,9 @@ namespace pdfi
     private:
         // helper method for resolveHyperlinks
         bool resolveHyperlink( std::list<Element*>::iterator link_it, std::list<Element*>& rElements );
-        public:
+    public:
         virtual ~PageElement();
 
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) SAL_OVERRIDE;
 
         void emitPageAnchoredElements( EmitContext& rEmitContext );
@@ -282,9 +279,7 @@ namespace pdfi
     public:
         virtual ~DocumentElement();
 
-        // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
-
     };
 
     // this class is the differentiator of document types: it will create

@@ -31,7 +31,6 @@ namespace pdfi
 {
     struct Element;
     struct EmitContext;
-    struct ElementTreeVisitable;
 
     class StyleContainer
     {
