@@ -33,7 +33,7 @@
 #include "formulacell.hxx"
 #include "biff.hxx"
 #include <tools/stream.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle )
 {
@@ -223,7 +223,7 @@ bool ScQProReader::nextRecord()
 
 void ScQProReader::readString( OUString &rString, sal_uInt16 nLength )
 {
-    boost::scoped_array<sal_Char> pText(new sal_Char[ nLength + 1 ]);
+    std::unique_ptr<sal_Char[]> pText(new sal_Char[ nLength + 1 ]);
     nLength = mpStream->Read(pText.get(), nLength);
     pText[ nLength ] = 0;
     rString = OUString( pText.get(), strlen(pText.get()), mpStream->GetStreamCharSet() );

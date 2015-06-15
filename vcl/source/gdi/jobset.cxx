@@ -24,7 +24,7 @@
 #include <vcl/jobset.hxx>
 
 #include <jobset.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define JOBSET_FILE364_SYSTEM   ((sal_uInt16)0xFFFF)
 #define JOBSET_FILE605_SYSTEM   ((sal_uInt16)0xFFFE)
@@ -233,7 +233,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
             return rIStream;
         }
         sal_Size nFirstPos = rIStream.Tell();
-        boost::scoped_array<char> pTempBuf(new char[nRead]);
+        std::unique_ptr<char[]> pTempBuf(new char[nRead]);
         rIStream.Read(pTempBuf.get(),  nRead);
         if (nRead >= sizeof(ImplOldJobSetupData))
         {

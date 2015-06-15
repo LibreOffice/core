@@ -54,7 +54,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <cassert>
 #include <config_features.h>
 #include <config_folders.h>

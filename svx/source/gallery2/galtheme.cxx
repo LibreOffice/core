@@ -55,7 +55,7 @@
 #include "galtheme.hrc"
 #include <vcl/lstbox.hxx>
 #include "gallerydrawmodel.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -1367,7 +1367,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
 
     if( nRest )
     {
-        boost::scoped_array<char> pReserve(new char[ nRest ]);
+        std::unique_ptr<char[]> pReserve(new char[ nRest ]);
         memset( pReserve.get(), 0, nRest );
         rOStm.Write( pReserve.get(), nRest );
     }

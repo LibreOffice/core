@@ -29,7 +29,7 @@
 
 #include <math.h>
 #include <string.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define SC_CONS_NOTFOUND    -1
 
@@ -499,8 +499,8 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     if (bColByName) ++nStartRow;
     if (bRowByName) ++nStartCol;
     OUString aTitle;
-    boost::scoped_array<SCCOL> pDestCols;
-    boost::scoped_array<SCROW> pDestRows;
+    std::unique_ptr<SCCOL[]> pDestCols;
+    std::unique_ptr<SCROW[]> pDestRows;
     if (bColByName)
     {
         pDestCols.reset(new SCCOL[nCol2-nStartCol+1]);

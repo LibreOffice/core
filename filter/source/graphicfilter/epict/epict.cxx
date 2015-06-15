@@ -38,7 +38,7 @@
 #include <o3tl/numeric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 // PictWriter
 struct PictWriterAttrStackMember {
@@ -1142,7 +1142,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         pPict->WriteUInt16( 0 );            // (?)
 
         // allocate memory for a row:
-        boost::scoped_array<sal_uInt8> pPix(new sal_uInt8[ nSrcRowBytes ]);
+        std::unique_ptr<sal_uInt8[]> pPix(new sal_uInt8[ nSrcRowBytes ]);
 
         // remember position of the map-data in the target:
         nDstMapPos=pPict->Tell();
@@ -1739,7 +1739,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 Point                           aPt( pA->GetPoint() );
                 OUString                        aStr = pA->GetText().copy( pA->GetIndex(),pA->GetLen() );
                 ScopedVclPtrInstance< VirtualDevice > pVirDev;
-                boost::scoped_array<long>       pDXAry(new long[ aStr.getLength() ]);
+                std::unique_ptr<long[]>       pDXAry(new long[ aStr.getLength() ]);
                 sal_Int32                       nNormSize( pVirDev->GetTextArray( aStr,pDXAry.get() ) );
 
                 if (aSrcFont.GetAlign()!=ALIGN_BASELINE)

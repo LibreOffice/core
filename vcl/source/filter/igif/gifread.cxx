@@ -21,7 +21,7 @@
 
 #include "decode.hxx"
 #include "gifread.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 
@@ -188,7 +188,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
     const sal_uInt64 nMaxPossible = rIStm.remainingSize();
     if (nLen > nMaxPossible)
         nLen = nMaxPossible;
-    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nLen ]);
+    std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nLen ]);
     sal_Size nRead = rIStm.Read(pBuf.get(), nLen);
     nCount = nRead/3UL;
     if( NO_PENDING( rIStm ) )
@@ -333,7 +333,7 @@ bool GIFReader::ReadExtension()
                 const sal_uInt64 nMaxPossible = rIStm.remainingSize();
                 if (nCount > nMaxPossible)
                     nCount = nMaxPossible;
-                boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nCount]);
+                std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nCount]);
 
                 bRet = false;
                 sal_Size nRead = rIStm.Read(pBuffer.get(), nCount);

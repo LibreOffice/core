@@ -16,7 +16,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

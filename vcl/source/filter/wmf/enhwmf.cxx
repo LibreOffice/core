@@ -22,7 +22,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <boost/bind.hpp>
 #include <vcl/dibtools.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace std;
 
@@ -536,7 +536,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
          ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() )
        )
     {
-        boost::scoped_array<sal_uInt16> pnPoints(new sal_uInt16[ nPoly ]);
+        std::unique_ptr<sal_uInt16[]> pnPoints(new sal_uInt16[ nPoly ]);
         for ( i = 0; i < nPoly && pWMF->good(); i++ )
         {
             pWMF->ReadUInt32( nPoints );
@@ -580,7 +580,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
         ( (  nPoly * sizeof( sal_uInt16 ) ) <= ( nEndPos - pWMF->Tell() ) ))
     {
         // Get number of points in each polygon
-        boost::scoped_array<sal_uInt16> pnPoints(new sal_uInt16[ nPoly ]);
+        std::unique_ptr<sal_uInt16[]> pnPoints(new sal_uInt16[ nPoly ]);
         for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
         {
             sal_uInt32 nPoints(0);
@@ -594,7 +594,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
             for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
             {
                 const sal_uInt16 nPointCount(pnPoints[i]);
-                boost::scoped_array<Point> pPtAry(new Point[nPointCount]);
+                std::unique_ptr<Point[]> pPtAry(new Point[nPointCount]);
                 for (sal_uInt16 j = 0; j < nPointCount && pWMF->good(); ++j)
                 {
                     T nX(0), nY(0);
@@ -1464,7 +1464,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         {
                             if ( nLen <= static_cast<sal_Int32>( nEndPos - pWMF->Tell() ) )
                             {
-                                boost::scoped_array<sal_Char> pBuf(new sal_Char[ nLen ]);
+                                std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nLen ]);
                                 pWMF->Read( pBuf.get(), nLen );
                                 aText = OUString( pBuf.get(), (sal_uInt16)nLen, pOut->GetCharSet() );
                                 pBuf.reset();
@@ -1490,7 +1490,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         {
                             if ( ( nLen * sizeof(sal_Unicode) ) <= ( nEndPos - pWMF->Tell() ) )
                             {
-                                boost::scoped_array<sal_Unicode> pBuf(new sal_Unicode[ nLen ]);
+                                std::unique_ptr<sal_Unicode[]> pBuf(new sal_Unicode[ nLen ]);
                                 pWMF->Read( pBuf.get(), nLen << 1 );
 #ifdef OSL_BIGENDIAN
                                 sal_Char nTmp, *pTmp = (sal_Char*)( pBuf.get() + nLen );

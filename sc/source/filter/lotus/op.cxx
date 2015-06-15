@@ -50,7 +50,7 @@
 
 #include <vector>
 #include <map>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 static sal_uInt16 nDefWidth = ( sal_uInt16 ) ( TWIPS_PER_CHAR * 10 );
 
@@ -117,7 +117,7 @@ void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     n -= (n > 5) ? 5 : n;
 
-    boost::scoped_array<sal_Char> pText(new sal_Char[n + 1]);
+    std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
     r.Read( pText.get(), n );
     pText[n] = 0;
 
@@ -356,7 +356,7 @@ void OP_Label123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     n -= (n > 4) ? 4 : n;
 
-    boost::scoped_array<sal_Char> pText(new sal_Char[n + 1]);
+    std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
     r.Read( pText.get(), n );
     pText[ n ] = 0;
 
@@ -437,7 +437,7 @@ void OP_Note123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     n -= (n > 4) ? 4 : n;
 
-    boost::scoped_array<sal_Char> pText(new sal_Char[n + 1]);
+    std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
     r.Read( pText.get(), n );
     pText[ n ] = 0;
 

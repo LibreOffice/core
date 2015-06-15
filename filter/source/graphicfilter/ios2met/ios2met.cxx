@@ -26,7 +26,7 @@
 #include <vcl/lineinfo.hxx>
 
 #include <math.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 class FilterConfigItem;
 
@@ -1003,7 +1003,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     }
     if (nLen > pOS2MET->remainingSize())
         throw css::uno::Exception("attempt to read past end of input", 0);
-    boost::scoped_array<char> pChr(new char[nLen+1]);
+    std::unique_ptr<char[]> pChr(new char[nLen+1]);
     for (i=0; i<nLen; i++)
         pOS2MET->ReadChar( pChr[i] );
     pChr[nLen] = 0;
@@ -2205,7 +2205,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             }
             // OK, now the map data is being pushed. Unfortunately OS2 and BMP
             // do have a different RGB ordering when using 24-bit
-            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nDataLen]);
+            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nDataLen]);
             pOS2MET->Read(pBuf.get(),nDataLen);
             if (p->nBitsPerPixel==24) {
                 sal_uLong i, j, nAlign, nBytesPerLine;
@@ -2527,7 +2527,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 pOrdFile = new SvMemoryStream;
                 pOrdFile->SetEndian(SvStreamEndian::LITTLE);
             }
-            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nFieldSize]);
+            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nFieldSize]);
             pOS2MET->Read(pBuf.get(),nFieldSize);
             pOrdFile->Write(pBuf.get(),nFieldSize);
             break;

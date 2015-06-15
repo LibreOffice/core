@@ -48,7 +48,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -757,7 +757,7 @@ void Invocation_Impl::getInfoSequenceImpl
     sal_Int32 nTotalCount = nNameAccessCount + nPropertyCount + nMethodCount;
 
     // Create and fill array of MemberItems
-    boost::scoped_array< MemberItem > pItems( new MemberItem[ nTotalCount ] );
+    std::unique_ptr< MemberItem []> pItems( new MemberItem[ nTotalCount ] );
     const OUString* pStrings = aNameAccessNames.getConstArray();
     const Property* pProps = aPropertySeq.getConstArray();
     const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();

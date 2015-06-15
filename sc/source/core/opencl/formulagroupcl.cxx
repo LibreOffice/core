@@ -90,7 +90,7 @@ const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 #include <rtl/digest.h>
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace formula;
 
@@ -1539,7 +1539,7 @@ public:
         if (dynamic_cast<OpAverage*>(mpCodeGen.get()))
         {
             /*average need more reduction kernel for count computing*/
-            boost::scoped_array<double> pAllBuffer(new double[2 * w]);
+            std::unique_ptr<double[]> pAllBuffer(new double[2 * w]);
             double* resbuf = static_cast<double*>(clEnqueueMapBuffer(kEnv.mpkCmdQueue,
                 mpClmem2,
                 CL_TRUE, CL_MAP_READ, 0,

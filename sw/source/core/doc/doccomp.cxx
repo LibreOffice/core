@@ -48,7 +48,7 @@
 #include <list>
 #include <cctype>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -1583,8 +1583,8 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
                               rStt, rEnd );
 
     int nMinLen = std::min( aCmp.GetLen1(), aCmp.GetLen2() );
-    boost::scoped_array<int> pLcsDst(new int[ nMinLen ]);
-    boost::scoped_array<int> pLcsSrc(new int[ nMinLen ]);
+    std::unique_ptr<int[]> pLcsDst(new int[ nMinLen ]);
+    std::unique_ptr<int[]> pLcsSrc(new int[ nMinLen ]);
 
     FastCommonSubseq subseq( aCmp );
     int nLcsLen = subseq.Find( pLcsDst.get(), pLcsSrc.get() );

@@ -46,7 +46,7 @@
 
 #include "framework.hxx"
 #include "fwkutil.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace osl;
 
@@ -115,7 +115,7 @@ rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
     static const char EncodingTable[] =
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenRaw = rawData.getLength();
-    boost::scoped_array<char> pBuf(new char[lenRaw * 2]);
+    std::unique_ptr<char[]> pBuf(new char[lenRaw * 2]);
     const sal_Int8* arRaw = rawData.getConstArray();
 
     char* pCurBuf = pBuf.get();
@@ -144,7 +144,7 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenData = data.getLength();
     sal_Int32 lenBuf = lenData / 2; //always divisable by two
-    boost::scoped_array<unsigned char> pBuf(new unsigned char[lenBuf]);
+    std::unique_ptr<unsigned char[]> pBuf(new unsigned char[lenBuf]);
     const sal_Int8* pData = data.getConstArray();
     for (sal_Int32 i = 0; i < lenBuf; i++)
     {

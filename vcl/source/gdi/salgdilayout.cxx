@@ -42,7 +42,6 @@
 #include <salprn.hxx>
 #include <svdata.hxx>
 #include <outdata.hxx>
-#include <boost/scoped_array.hpp>
 #include <memory>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -401,7 +400,7 @@ void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, cons
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         drawPolyLine( nPoints, bCopied ? pPtAry2.get() : pPtAry );
     }
@@ -413,7 +412,7 @@ void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         drawPolygon( nPoints, bCopied ? pPtAry2.get() : pPtAry );
     }
@@ -463,7 +462,7 @@ bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry
     bool bResult = false;
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         bResult = drawPolyLineBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
     }
@@ -477,7 +476,7 @@ bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry,
     bool bResult = false;
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         bResult = drawPolygonBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
     }
@@ -632,7 +631,7 @@ void SalGraphics::Invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert 
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         invert( nPoints, bCopied ? pPtAry2.get() : pPtAry, nFlags );
     }

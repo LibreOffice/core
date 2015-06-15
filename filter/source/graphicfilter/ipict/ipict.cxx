@@ -28,7 +28,7 @@
 
 #include "ipict.hxx"
 #include "shape.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <vcl/FilterConfigItem.hxx>
     // complete FilterConfigItem for GraphicImport under -fsanitize=function
@@ -1053,7 +1053,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                 if (nWidth > nMaxWidth)
                     BITMAPERROR;
 
-                boost::scoped_array<sal_uInt8> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
+                std::unique_ptr<sal_uInt8[]> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
                 for ( ny = 0; ny < nHeight; ny++ )
                 {
                     nSrcBitsPos = pPict->Tell();

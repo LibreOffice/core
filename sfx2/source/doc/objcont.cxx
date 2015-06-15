@@ -74,7 +74,7 @@
 #include <sfx2/request.hxx>
 #include "openflag.hxx"
 #include "querytemplate.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -335,7 +335,7 @@ void SfxObjectShell::LoadStyles
     SfxStyleSheetBasePool *pMyPool = GetStyleSheetPool();
     DBG_ASSERT(pMyPool, "Dest-DocumentShell ohne StyleSheetPool");
     pSourcePool->SetSearchMask(SFX_STYLE_FAMILY_ALL, SFXSTYLEBIT_ALL);
-    boost::scoped_array<Styles_Impl> pFound(new Styles_Impl[pSourcePool->Count()]);
+    std::unique_ptr<Styles_Impl[]> pFound(new Styles_Impl[pSourcePool->Count()]);
     sal_uInt16 nFound = 0;
 
     SfxStyleSheetBase *pSource = pSourcePool->First();

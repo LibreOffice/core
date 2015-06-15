@@ -29,7 +29,6 @@
 #include <svtools/svtools.hrc>
 #include <svtools/colorcfg.hxx>
 
-#include <boost/scoped_array.hpp>
 #include <vector>
 
 using namespace std;
