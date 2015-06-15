@@ -99,12 +99,12 @@ public:
     inline bool operator==( const SwNodeIndex& ) const;
     inline bool operator!=( const SwNodeIndex& ) const;
 
-    inline bool operator< ( sal_uLong nWert ) const;
-    inline bool operator<=( sal_uLong nWert ) const;
-    inline bool operator> ( sal_uLong nWert ) const;
-    inline bool operator>=( sal_uLong nWert ) const;
-    inline bool operator==( sal_uLong nWert ) const;
-    inline bool operator!=( sal_uLong nWert ) const;
+    inline bool operator< ( sal_uLong ) const;
+    inline bool operator<=( sal_uLong ) const;
+    inline bool operator> ( sal_uLong ) const;
+    inline bool operator>=( sal_uLong ) const;
+    inline bool operator==( sal_uLong ) const;
+    inline bool operator!=( sal_uLong ) const;
 
     inline SwNodeIndex& operator=( sal_uLong );
     inline SwNodeIndex& operator=( const SwNodeIndex& );
@@ -166,29 +166,29 @@ inline SwNodes& SwNodeIndex::GetNodes()
 {
     return m_pNode->GetNodes();
 }
-inline bool SwNodeIndex::operator< ( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator< ( sal_uLong const nOther ) const
 {
-    return m_pNode->GetIndex() < nWert;
+    return m_pNode->GetIndex() < nOther;
 }
-inline bool SwNodeIndex::operator<=( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator<=( sal_uLong const nOther ) const
 {
-    return m_pNode->GetIndex() <= nWert;
+    return m_pNode->GetIndex() <= nOther;
 }
-inline bool SwNodeIndex::operator> ( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator> ( sal_uLong const nOther ) const
 {
-    return m_pNode->GetIndex() > nWert;
+    return m_pNode->GetIndex() > nOther;
 }
-inline bool SwNodeIndex::operator>=( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator>=( sal_uLong const nOther ) const
 {
-    return m_pNode->GetIndex() >= nWert;
+    return m_pNode->GetIndex() >= nOther;
 }
-inline bool SwNodeIndex::operator==( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator==( sal_uLong const nOther ) const
 {
-    return m_pNode->GetIndex() == nWert;
+    return m_pNode->GetIndex() == nOther;
 }
-inline bool SwNodeIndex::operator!=( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator!=( sal_uLong const nOther ) const
 {
-    return m_pNode->GetIndex() != nWert;
+    return m_pNode->GetIndex() != nOther;
 }
 inline bool SwNodeIndex::operator<( const SwNodeIndex& rIndex ) const
 {
@@ -238,14 +238,14 @@ inline sal_uLong SwNodeIndex::operator--(int)
     return nOldIndex;
 }
 
-inline sal_uLong SwNodeIndex::operator+=( sal_uLong nWert )
+inline sal_uLong SwNodeIndex::operator+=( sal_uLong const nOffset )
 {
-    m_pNode = GetNodes()[ m_pNode->GetIndex() + nWert ];
+    m_pNode = GetNodes()[ m_pNode->GetIndex() + nOffset ];
     return m_pNode->GetIndex();
 }
-inline sal_uLong SwNodeIndex::operator-=( sal_uLong nWert )
+inline sal_uLong SwNodeIndex::operator-=( sal_uLong const nOffset )
 {
-    m_pNode = GetNodes()[ m_pNode->GetIndex() - nWert ];
+    m_pNode = GetNodes()[ m_pNode->GetIndex() - nOffset ];
     return m_pNode->GetIndex();
 }
 inline sal_uLong SwNodeIndex::operator+=( const  SwNodeIndex& rIndex )
@@ -259,9 +259,9 @@ inline sal_uLong SwNodeIndex::operator-=( const SwNodeIndex& rIndex )
     return m_pNode->GetIndex();
 }
 
-inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong nWert )
+inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong const nNew )
 {
-    m_pNode = GetNodes()[ nWert ];
+    m_pNode = GetNodes()[ nNew ];
     return *this;
 }
 
