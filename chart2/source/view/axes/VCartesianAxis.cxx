@@ -1132,7 +1132,7 @@ void VCartesianAxis::get2DAxisMainLine(
     B2DVector& rStart, B2DVector& rEnd, AxisLabelAlignment& rAlignment, double fCrossesOtherAxis ) const
 {
     //m_aAxisProperties might get updated and changed here because
-    //    the label alignmant and inner direction sign depends exactly of the choice of the axis line position which is made here in this method
+    //    the label alignment and inner direction sign depends exactly of the choice of the axis line position which is made here in this method
 
     double fMinX = m_pPosHelper->getLogicMinX();
     double fMinY = m_pPosHelper->getLogicMinY();

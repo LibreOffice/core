@@ -3211,7 +3211,7 @@ namespace
 // hack the word one onto the range we use. However it's unclear what word's
 // categorization is. So we don't do that here yet.
 
-// Additional to the categorization, when word encounters weak text for ambigious
+// Additional to the categorization, when word encounters weak text for ambiguos
 // chars it uses idcthint to indicate which way to bias. We don't have a idcthint
 // feature in writer.
 

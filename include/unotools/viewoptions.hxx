@@ -144,10 +144,10 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         /*-****************************************************************************************************
             @short      use it to delete an entry of dynamic view set
-            @descr      You can use this method to delete anexisting node in configuration.
+            @descr      You can use this method to delete an existing node in configuration.
                         But if you call a Set- or Get- method again on this instance
                         the item is created again! If you do nothing after this call
-                        your view will die relay in configuration ...
+                        your view will die relay in configuration...
 
             @seealso    method Exist()
 

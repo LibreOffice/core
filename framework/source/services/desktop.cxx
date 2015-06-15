@@ -250,9 +250,9 @@ sal_Bool SAL_CALL Desktop::terminate()
     //    This is special trick to "ignore existing quick starter" for debug purposes.
 
     // Attention:
-    // Order of alled listener is important !
-    // some of them are harmless .-)
-    // But some of them can be dangerous. E.g. it would be dangerous if we close our pipe
+    // Order of called listener is important!
+    // Some of them are harmless,-)
+    // but some can be dangerous. E.g. it would be dangerous if we close our pipe
     // and dont terminate in real because another listener throws a veto exception .-)
 
     bool bTerminate = false;

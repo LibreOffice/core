@@ -29,7 +29,7 @@ namespace comphelper {
  *
  *  you can override the <code>getSupprotedServiceNames</code> to implement a XServiceInfo.
  *  you can use the static helper methods to combine your services with that of parent
- *  or aggregatet classes.
+ *  or aggregated classes.
  */
 class COMPHELPER_DLLPUBLIC ServiceInfoHelper : public ::com::sun::star::lang::XServiceInfo
 {

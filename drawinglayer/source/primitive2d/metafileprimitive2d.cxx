@@ -389,7 +389,7 @@ namespace
 namespace
 {
     /** Helper class to buffer and hold a Primive target vector. It
-        encapsulates the new/delete functionality and aloows to work
+        encapsulates the new/delete functionality and allows to work
         on pointers of the implementation classes. All data will
         be converted to uno sequences of uno references when accessing the
         data.

@@ -258,7 +258,7 @@ namespace canvas
             transformed rectangle.
 
             This method checks for polygonal containedness, i.e. the
-            transformed rectangle is not represented as an axis-alignd
+            transformed rectangle is not represented as an axis-aligned
             rectangle anymore (like calcTransformedRectBounds()), but
             polygonal. Thus, the insideness test is based on tight
             bounds.

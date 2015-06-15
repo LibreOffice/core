@@ -83,7 +83,7 @@ using namespace ::xmloff::token;
 // SO API string constants
 
 
-// service prefix and service anems
+// service prefix and service names
 const sal_Char sAPI_textfield_prefix[]  = "com.sun.star.text.TextField.";
 const sal_Char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
 const sal_Char sAPI_presentation_prefix[] = "com.sun.star.presentation.TextField.";

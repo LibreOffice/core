@@ -1752,7 +1752,7 @@ bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_In
     {
         // very confusing, even though MakeErrorText sets up the error text
         // seems that this is not used ( if rMsg already has content )
-        // In the case of VBA MakeErrorText also formats the error to be alittle more
+        // In the case of VBA MakeErrorText also formats the error to be a little more
         // like vba ( adds an error number etc )
         if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
         {

@@ -600,7 +600,7 @@ public:
     sal_uInt16                      GetListBoxMaximumLineCount() const;
 
     // maximum column count for the ColorValueSet control. Default is 12 and this is optimized for the
-    // color scheme which has 12-color alogned layout for the part taken over from Symphony. Do
+    // color scheme which has 12-color aligned layout for the part taken over from Symphony. Do
     // only change this if you know what you are doing.
     void                            SetColorValueSetColumnCount(sal_uInt16 nCount);
     sal_uInt16                      GetColorValueSetColumnCount() const;

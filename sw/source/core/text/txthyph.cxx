@@ -272,7 +272,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess &rGuess )
     {
         SvxAlternativeSpelling aAltSpell;
         aAltSpell = SvxGetAltSpelling( xHyphWord );
-        OSL_ENSURE( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
+        OSL_ENSURE( aAltSpell.bIsAltSpelling, "no alternative spelling" );
 
         OUString aAltText = aAltSpell.aReplacement;
         nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart() - rGuess.FieldDiff();

@@ -2758,7 +2758,7 @@ struct SetDirtyAfterLoadHandler
  * this method here then.
 */
 
-        // If the cell was alsready dirty because of CalcAfterLoad,
+        // If the cell was already dirty because of CalcAfterLoad,
         // FormulaTracking has to take place.
         if (pCell->GetDirty())
             pCell->SetDirty();

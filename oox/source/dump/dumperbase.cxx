@@ -562,7 +562,7 @@ OUString lclTrimQuotedStringList( const OUString& rStr )
         {
             // quoted string, skip leading quote character
             ++nPos;
-            // process quoted text and ambedded literal quote characters
+            // process quoted text and embedded literal quote characters
             OUStringBuffer aToken;
             do
             {

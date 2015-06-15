@@ -36,7 +36,7 @@ namespace dbaui
     //= ControllerFrame
 
     struct ControllerFrame_Data;
-    /** helper class to ancapsulate the frame which a controller is plugged into,
+    /** helper class to encapsulate the frame which a controller is plugged into,
         doing some common actions on it.
     */
     class ControllerFrame

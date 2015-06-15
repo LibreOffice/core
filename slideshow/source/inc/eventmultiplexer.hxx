@@ -681,8 +681,8 @@ public:
 
         This method is to be used from the AnimationNode
         objects to signal that audio playback has just
-        stopped.  This will invoke all registered audio
-        stopped andlers.
+        stopped. This will invoke all registered audio
+        stopped handlers.
 
         @param rNode
         Node for which audio has stopped.
