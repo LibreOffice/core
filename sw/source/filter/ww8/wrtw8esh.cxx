@@ -2071,7 +2071,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
 
     // SwWW8ImplReader::Read_GrafLayer() imports these as opaque
     // unconditionally, so if both are true, don't export the property.
-    bool bIsInHeader = IsFlyFrameFormatInHeader(rFormat);
+    bool bIsInHeader = sw::IsFlyFrameFormatInHeader(rFormat);
     bool bIsThrought = rFormat.GetSurround().GetValue() == SURROUND_THROUGHT;
 
     if (bIsInHeader)

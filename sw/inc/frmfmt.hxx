@@ -300,9 +300,9 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrameFormat);
 };
 
-SW_DLLPUBLIC bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat);
-
 namespace sw {
+
+SW_DLLPUBLIC bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat);
 
 void CheckAnchoredFlyConsistency(SwDoc const& rDoc);
 

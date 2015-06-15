@@ -3463,6 +3463,8 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrameFormat::getSdrAllF
     return maFillAttributes;
 }
 
+namespace sw {
+
 bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat)
 {
     const SwFlyFrameFormat* pFlyFrameFormat = dynamic_cast<const SwFlyFrameFormat*>(&rFormat);
@@ -3487,8 +3489,6 @@ bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat)
     }
     return false;
 }
-
-namespace sw {
 
 void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
 {
