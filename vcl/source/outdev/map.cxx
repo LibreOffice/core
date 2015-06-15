@@ -400,9 +400,10 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
+    assert(nDPI > 0);
     // To "use" it...
    (void) nThres;
-   if (nMapNum == 0 || nDPI == 0)
+   if (nMapNum == 0)
    {
        return 0;
    }
