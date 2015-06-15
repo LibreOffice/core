@@ -189,7 +189,7 @@ namespace connectivity
             ~OStatement(){}
         public:
             // a constructor, for when the object needs to be returned:
-            expliit OStatement( OConnection* _pConnection) : OCommonStatement( _pConnection){}
+            explicit OStatement( OConnection* _pConnection) : OCommonStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
