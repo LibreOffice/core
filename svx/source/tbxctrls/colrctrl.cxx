@@ -487,14 +487,15 @@ void SvxColorDockingWindow::Resize()
     SfxDockingWindow::Resize();
 }
 
-
-
 void SvxColorDockingWindow::GetFocus()
 {
     SfxDockingWindow::GetFocus();
-    // Grab the focus to the color value set so that it can be controlled
-    // with the keyboard.
-    aColorSet->GrabFocus();
+    if (aColorSet)
+    {
+        // Grab the focus to the color value set so that it can be controlled
+        // with the keyboard.
+        aColorSet->GrabFocus();
+    }
 }
 
 bool SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
