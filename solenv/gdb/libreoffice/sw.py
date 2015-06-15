@@ -18,7 +18,7 @@ class SwPositionPrinter(object):
         self.value = value
 
     def to_string(self):
-        node = self.value['nNode']['pNd'].dereference();
+        node = self.value['nNode']['m_pNode'].dereference();
         block = node['pBlock'].dereference();
         nodeindex = block['nStart'] + node['nOffset']
         offset = self.value['nContent']['m_nIndex']
@@ -32,7 +32,7 @@ class SwNodeIndexPrinter(object):
         self.value = value
 
     def to_string(self):
-        node = self.value['pNd'].dereference();
+        node = self.value['m_pNode'].dereference();
         block = node['pBlock'].dereference();
         nodeindex = block['nStart'] + node['nOffset']
         return "%s (node %d)" % (self.typename, nodeindex)

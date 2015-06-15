@@ -34,7 +34,7 @@ class SwNodes;
 /// Marks a node in the document model.
 class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
 {
-    SwNode* pNd;
+    SwNode * m_pNode;
 
     // These are not allowed!
     SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx ) SAL_DELETED_FUNCTION;
@@ -56,7 +56,7 @@ class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
 
 public:
     SwNodeIndex( SwNodes& rNds, sal_uLong nIdx = 0 )
-        : pNd( rNds[ nIdx ] )
+        : m_pNode( rNds[ nIdx ] )
     {
         RegisterIndex( rNds );
     };
@@ -64,23 +64,23 @@ public:
         : sw::Ring<SwNodeIndex>()
     {
         if( nDiff )
-            pNd = rIdx.GetNodes()[ rIdx.GetIndex() + nDiff ];
+            m_pNode = rIdx.GetNodes()[ rIdx.GetIndex() + nDiff ];
         else
-            pNd = rIdx.pNd;
-        RegisterIndex( pNd->GetNodes() );
+            m_pNode = rIdx.m_pNode;
+        RegisterIndex( m_pNode->GetNodes() );
     }
 
     SwNodeIndex( const SwNode& rNd, long nDiff = 0 )
     {
         if( nDiff )
-            pNd = rNd.GetNodes()[ rNd.GetIndex() + nDiff ];
+            m_pNode = rNd.GetNodes()[ rNd.GetIndex() + nDiff ];
         else
-            pNd = const_cast<SwNode*>(&rNd);
-        RegisterIndex( pNd->GetNodes() );
+            m_pNode = const_cast<SwNode*>(&rNd);
+        RegisterIndex( m_pNode->GetNodes() );
     }
 
    virtual  ~SwNodeIndex()
-        { DeRegisterIndex( pNd->GetNodes() ); };
+        { DeRegisterIndex( m_pNode->GetNodes() ); }
 
     inline sal_uLong operator++();
     inline sal_uLong operator--();
@@ -121,7 +121,7 @@ public:
     inline const SwNodes& GetNodes() const;
     inline       SwNodes& GetNodes();
 
-    SwNode& GetNode() const { return *pNd; }
+    SwNode& GetNode() const { return *m_pNode; }
 };
 
 inline std::ostream &operator <<(std::ostream& s, const SwNodeIndex& index)
@@ -152,129 +152,129 @@ public:
 };
 
 // For inlines node.hxx is needed which in turn needs this one.
-// Therefore all inlines accessing pNd are implemented here.
+// Therefore all inlines accessing m_pNode are implemented here.
 
 inline sal_uLong SwNodeIndex::GetIndex() const
 {
-    return pNd->GetIndex();
+    return m_pNode->GetIndex();
 }
 inline const SwNodes& SwNodeIndex::GetNodes() const
 {
-    return pNd->GetNodes();
+    return m_pNode->GetNodes();
 }
 inline SwNodes& SwNodeIndex::GetNodes()
 {
-    return pNd->GetNodes();
+    return m_pNode->GetNodes();
 }
 inline bool SwNodeIndex::operator< ( sal_uLong nWert ) const
 {
-    return pNd->GetIndex() < nWert;
+    return m_pNode->GetIndex() < nWert;
 }
 inline bool SwNodeIndex::operator<=( sal_uLong nWert ) const
 {
-    return pNd->GetIndex() <= nWert;
+    return m_pNode->GetIndex() <= nWert;
 }
 inline bool SwNodeIndex::operator> ( sal_uLong nWert ) const
 {
-    return pNd->GetIndex() > nWert;
+    return m_pNode->GetIndex() > nWert;
 }
 inline bool SwNodeIndex::operator>=( sal_uLong nWert ) const
 {
-    return pNd->GetIndex() >= nWert;
+    return m_pNode->GetIndex() >= nWert;
 }
 inline bool SwNodeIndex::operator==( sal_uLong nWert ) const
 {
-    return pNd->GetIndex() == nWert;
+    return m_pNode->GetIndex() == nWert;
 }
 inline bool SwNodeIndex::operator!=( sal_uLong nWert ) const
 {
-    return pNd->GetIndex() != nWert;
+    return m_pNode->GetIndex() != nWert;
 }
 inline bool SwNodeIndex::operator<( const SwNodeIndex& rIndex ) const
 {
-    return pNd->GetIndex() < rIndex.GetIndex();
+    return m_pNode->GetIndex() < rIndex.GetIndex();
 }
 inline bool SwNodeIndex::operator<=( const SwNodeIndex& rIndex ) const
 {
-    return pNd->GetIndex() <= rIndex.GetIndex();
+    return m_pNode->GetIndex() <= rIndex.GetIndex();
 }
 inline bool SwNodeIndex::operator>( const SwNodeIndex& rIndex ) const
 {
-    return pNd->GetIndex() > rIndex.GetIndex();
+    return m_pNode->GetIndex() > rIndex.GetIndex();
 }
 inline bool SwNodeIndex::operator>=( const SwNodeIndex& rIndex ) const
 {
-    return pNd->GetIndex() >= rIndex.GetIndex();
+    return m_pNode->GetIndex() >= rIndex.GetIndex();
 }
 inline bool SwNodeIndex::operator==( const SwNodeIndex& rIdx ) const
 {
-    return pNd == rIdx.pNd;
+    return m_pNode == rIdx.m_pNode;
 }
 inline bool SwNodeIndex::operator!=( const SwNodeIndex& rIdx ) const
 {
-    return pNd != rIdx.pNd;
+    return m_pNode != rIdx.m_pNode;
 }
 
 inline sal_uLong SwNodeIndex::operator++()
 {
-    return ( pNd = GetNodes()[ pNd->GetIndex()+1 ] )->GetIndex();
+    return ( m_pNode = GetNodes()[ m_pNode->GetIndex()+1 ] )->GetIndex();
 }
 inline sal_uLong SwNodeIndex::operator--()
 {
-    return ( pNd = GetNodes()[ pNd->GetIndex()-1 ] )->GetIndex();
+    return ( m_pNode = GetNodes()[ m_pNode->GetIndex()-1 ] )->GetIndex();
 }
 inline sal_uLong SwNodeIndex::operator++(int)
 {
-    sal_uLong nOldIndex = pNd->GetIndex();
-    pNd = GetNodes()[ nOldIndex + 1 ];
+    sal_uLong nOldIndex = m_pNode->GetIndex();
+    m_pNode = GetNodes()[ nOldIndex + 1 ];
     return nOldIndex;
 }
 inline sal_uLong SwNodeIndex::operator--(int)
 {
-    sal_uLong nOldIndex = pNd->GetIndex();
-    pNd = GetNodes()[ nOldIndex - 1 ];
+    sal_uLong nOldIndex = m_pNode->GetIndex();
+    m_pNode = GetNodes()[ nOldIndex - 1 ];
     return nOldIndex;
 }
 
 inline sal_uLong SwNodeIndex::operator+=( sal_uLong nWert )
 {
-    return ( pNd = GetNodes()[ pNd->GetIndex() + nWert ] )->GetIndex();
+    return ( m_pNode = GetNodes()[ m_pNode->GetIndex() + nWert ] )->GetIndex();
 }
 inline sal_uLong SwNodeIndex::operator-=( sal_uLong nWert )
 {
-    return ( pNd = GetNodes()[ pNd->GetIndex() - nWert ] )->GetIndex();
+    return ( m_pNode = GetNodes()[ m_pNode->GetIndex() - nWert ] )->GetIndex();
 }
 inline sal_uLong SwNodeIndex::operator+=( const  SwNodeIndex& rIndex )
 {
-    return ( pNd = GetNodes()[ pNd->GetIndex() + rIndex.GetIndex() ] )->GetIndex();
+    return ( m_pNode = GetNodes()[ m_pNode->GetIndex() + rIndex.GetIndex() ] )->GetIndex();
 }
 inline sal_uLong SwNodeIndex::operator-=( const SwNodeIndex& rIndex )
 {
-    return ( pNd = GetNodes()[ pNd->GetIndex() - rIndex.GetIndex() ] )->GetIndex();
+    return ( m_pNode = GetNodes()[ m_pNode->GetIndex() - rIndex.GetIndex() ] )->GetIndex();
 }
 
 inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong nWert )
 {
-    pNd = GetNodes()[ nWert ];
+    m_pNode = GetNodes()[ nWert ];
     return *this;
 }
 
 SwNodeIndex& SwNodeIndex::operator=( const SwNodeIndex& rIdx )
 {
-    *this = *(rIdx.pNd);
+    *this = *(rIdx.m_pNode);
     return *this;
 }
 
 SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
 {
-    if( &pNd->GetNodes() != &rNd.GetNodes() )
+    if (&m_pNode->GetNodes() != &rNd.GetNodes())
     {
-        DeRegisterIndex( pNd->GetNodes() );
-        pNd = const_cast<SwNode*>(&rNd);
-        RegisterIndex( pNd->GetNodes() );
+        DeRegisterIndex( m_pNode->GetNodes() );
+        m_pNode = const_cast<SwNode*>(&rNd);
+        RegisterIndex( m_pNode->GetNodes() );
     }
     else
-        pNd = const_cast<SwNode*>(&rNd);
+        m_pNode = const_cast<SwNode*>(&rNd);
     return *this;
 }
 
@@ -289,7 +289,7 @@ SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, long nOffset )
     *this = rNd;
 
     if( nOffset )
-        pNd = pNd->GetNodes()[ pNd->GetIndex() + nOffset ];
+        m_pNode = m_pNode->GetNodes()[ m_pNode->GetIndex() + nOffset ];
 
     return *this;
 }
