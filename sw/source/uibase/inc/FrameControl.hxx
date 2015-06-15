@@ -56,7 +56,7 @@ class SwFrameMenuButtonBase : public MenuButton, public ISwFrameControl
     const SwFrm*          m_pFrm;
 
 protected:
-    virtual ~SwFrameMenuButtonBase() {}
+    virtual ~SwFrameMenuButtonBase() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
 
 public:

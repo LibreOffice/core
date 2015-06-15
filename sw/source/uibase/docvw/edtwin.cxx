@@ -4975,7 +4975,6 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 SwEditWin::~SwEditWin()
 {
     disposeOnce();
-    delete m_pFrameControlsManager;
 }
 
 void SwEditWin::dispose()
@@ -5003,6 +5002,8 @@ void SwEditWin::dispose()
     m_pAnchorMarker = NULL;
 
     m_pFrameControlsManager->dispose();
+    delete m_pFrameControlsManager;
+    m_pFrameControlsManager = nullptr;
 
     vcl::Window::dispose();
 }
