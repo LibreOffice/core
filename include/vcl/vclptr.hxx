@@ -65,7 +65,8 @@ private:
     };
 
 public:
-    typedef typename C< sizeof (f(H(), 0)) == 1, void *, void >::t t;
+    static bool const value = sizeof (f(H(), 0)) == 1;
+    typedef typename C< value, void *, void >::t t;
 };
 
 }; }; // namespace detail, namespace vcl
@@ -163,16 +164,23 @@ public:
         m_rInnerRef.set(pBody);
     }
 
-    /** Up-casting conversion constructor: Copies interface reference.
+    /** Up-casting assignment operator.
 
-        Does not work for up-casts to ambiguous bases.  For the special case of
-        up-casting to Reference< XInterface >, see the corresponding conversion
-        operator.
+        Does not work for up-casts to ambiguous bases.
 
         @param rRef another reference
     */
-    template< class derived_type, class = typename std::enable_if< ::vcl::detail::UpCast< reference_type, derived_type >::t >::type >
-    inline VclPtr<reference_type>& operator= (derived_type * pBody)
+    template<typename derived_type>
+    typename std::enable_if<
+        vcl::detail::UpCast<reference_type, derived_type>::value,
+        VclPtr &>::type
+    operator =(VclPtr<derived_type> const & rRef)
+    {
+        m_rInnerRef.set(rRef.get());
+        return *this;
+    }
+
+    VclPtr & operator =(reference_type * pBody)
     {
         m_rInnerRef.set(pBody);
         return *this;
