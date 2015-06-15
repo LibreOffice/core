@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_0358ce55",
+        "filename": "pyuno/source/module/pyuno_iterator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000771
+      },
+      "writtenOn": "2015-06-15T08:26:59Z",
+      "side": 1,
+      "message": "Sadly not, we still have to carry support for 2.7 for RHEL at present",
+      "parentUuid": "1a54edaf_435ec646",
+      "revId": "8e21776f892419e0bc70fab5334dd59222c9d86e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_a348da88",
         "filename": "pyuno/source/module/pyuno_iterator.cxx",
         "patchSetId": 3
