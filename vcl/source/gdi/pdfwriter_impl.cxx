@@ -7883,7 +7883,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         aMetadataStream.append( " <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n" );
         //PDF/A part ( ISO 19005-1:2005 - 6.7.11 )
         aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
-        aMetadataStream.append( "      xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">\n" );
+        aMetadataStream.append( "      xmlns:pdfaid=\"http://www.aiim.org/\">\n" );
         aMetadataStream.append( "   <pdfaid:part>1</pdfaid:part>\n" );
         aMetadataStream.append( "   <pdfaid:conformance>A</pdfaid:conformance>\n" );
         aMetadataStream.append( "  </rdf:Description>\n" );
