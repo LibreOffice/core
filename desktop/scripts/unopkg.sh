@@ -49,28 +49,31 @@ AIX)
     ;;
 esac
 
-HELP_MODE=0
-SHARED_MODE=0
-#collect all bootstrap variables specified on the command line
-#so that they can be passed as arguments to javaldx later on
+help_mode=0
+isnotuser=0
 for arg in $@
 do
   case "$arg" in
+       #collect all bootstrap variables specified on the command line
+       #so that they can be passed as arguments to javaldx later on
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
+
+       # make sure shared extensions will be readable by all users
        --shared)
            umask 0022
-           SHARED_MODE=1
+           isnotuser=1
            ;;
-           # make sure shared extensions will be readable by all users
-       -h|--help) HELP_MODE=1;;
+
+       --bundled) isnotuser=1;;
+       -h|--help) help_mode=1;;
   esac
 done
 
-# we don't really want root to run unopkg without --shared option
-if [ "$EUID" -eq 0 ]; then
-    # but we might at least let him read help
-    if [ $SHARED_MODE -eq 0 ] && [ $HELP_MODE -eq 0 ]; then
-         echo "Cannot run '${0} $*' as root (did you forget --shared option?)"
+# we don't really want root to run unopkg without --shared or --bundled option
+# but we might at least let him read help
+if [ "$(id -u)" -eq "0" ]; then
+    if [ $isnotuser -eq 0 ] && [ $help_mode -eq 0 ]; then
+         echo "Cannot run '${0} $*' as root without --shared or --bundled option."
          exit 1
     fi
 fi
