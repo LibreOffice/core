@@ -251,8 +251,6 @@ bool InitVCL()
     // remember Main-Thread-Id
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
-    Scheduler::ImplInitScheduler();
-
     // Initialize Sal
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
@@ -373,7 +371,6 @@ void DeInitVCL()
 
     if ( pSVData->maAppData.mpIdleMgr )
         delete pSVData->maAppData.mpIdleMgr;
-
     Scheduler::ImplDeInitScheduler();
 
     if ( pSVData->maWinData.mpMsgBoxImgList )
