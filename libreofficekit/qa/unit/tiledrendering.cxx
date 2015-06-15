@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <cppunit/TestFixture.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -220,13 +220,13 @@ void TiledRenderingTest::testOverlay( Office* /*pOffice*/ )
     nTotalWidthDoc = 8000;
     nTotalHeightDoc = 9000;
 
-    scoped_array< unsigned char > pLarge( new unsigned char[ 4*nTotalWidthPix*nTotalHeightPix ] );
+    std::unique_ptr< unsigned char []> pLarge( new unsigned char[ 4*nTotalWidthPix*nTotalHeightPix ] );
     pDocument->paintTile( pLarge.get(),  nTotalWidthPix, nTotalHeightPix, &nRowStride,
                           0, 0,
                           nTotalWidthDoc, nTotalHeightDoc );
     dumpRGBABitmap( "large.png", pLarge.get(), nTotalWidthPix, nTotalHeightPix );
 
-    scoped_array< unsigned char > pSmall[4];
+    std::unique_ptr< unsigned char []> pSmall[4];
     for ( int i = 0; i < 4; i++ )
     {
         pSmall[i].reset( new unsigned char[ 4*(nTotalWidthPix/2)*(nTotalHeightPix/2) ] );

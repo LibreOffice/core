@@ -19,7 +19,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basic/basmgr.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>

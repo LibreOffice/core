@@ -68,7 +68,7 @@
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star::i18n;
@@ -1897,7 +1897,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     while( *pTmp )
         pTmp++;
     nCnt = pTmp - pPtr + 7;
-    boost::scoped_array<sal_uInt16> pWhRanges(new sal_uInt16[nCnt]);
+    std::unique_ptr<sal_uInt16[]> pWhRanges(new sal_uInt16[nCnt]);
     sal_uInt16 nPos = 0;
 
     while( *pPtr )

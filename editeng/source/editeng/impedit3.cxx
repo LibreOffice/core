@@ -72,7 +72,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -720,7 +720,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
     bool bCalcCharPositions = true;
-    boost::scoped_array<long> pBuf(new long[ pNode->Len() ]);
+    std::unique_ptr<long[]> pBuf(new long[ pNode->Len() ]);
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -3041,7 +3041,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
                                 const long* pDXArray = 0;
-                                boost::scoped_array<long> pTmpDXArray;
+                                std::unique_ptr<long[]> pTmpDXArray;
 
                                 if ( pTextPortion->GetKind() == PortionKind::TEXT )
                                 {

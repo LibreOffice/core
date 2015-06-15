@@ -25,7 +25,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
 #include "LineWidthPopup.hxx"
@@ -137,7 +137,7 @@ private:
     Image maIMGNone;
 
     // multi-images
-    boost::scoped_array<Image> mpIMGWidthIcon;
+    std::unique_ptr<Image[]> mpIMGWidthIcon;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     SfxBindings* mpBindings;

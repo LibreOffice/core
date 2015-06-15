@@ -31,7 +31,7 @@
 #include "breakiteratorImpl.hxx"
 
 #include "transliteration_body.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -154,7 +154,7 @@ Transliteration_body::transliterate(
         // which would have to be reallocated most times anyways.
         const sal_Int32 nLocalBuf = 2048;
         sal_Unicode aLocalBuf[ nLocalBuf * NMAPPINGMAX ], *out = aLocalBuf;
-        boost::scoped_array<sal_Unicode> pHeapBuf;
+        std::unique_ptr<sal_Unicode[]> pHeapBuf;
         if ( nCount > nLocalBuf ) {
             pHeapBuf.reset(new sal_Unicode[ nCount * NMAPPINGMAX ]);
             out = pHeapBuf.get();

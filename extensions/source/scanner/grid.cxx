@@ -29,7 +29,7 @@
 #include <vcl/builderfactory.hxx>
 
 #include <algorithm>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 class GridWindow : public vcl::Window
 {
@@ -392,8 +392,8 @@ void GridWindow::computeNew()
         int i;
 
         // get node arrays
-        boost::scoped_array<double> nodex(new double[ nSorted ]);
-        boost::scoped_array<double> nodey(new double[ nSorted ]);
+        std::unique_ptr<double[]> nodex(new double[ nSorted ]);
+        std::unique_ptr<double[]> nodey(new double[ nSorted ]);
 
         for( i = 0L; i < nSorted; i++ )
             transform( m_aHandles[i].maPos, nodex[ i ], nodey[ i ] );

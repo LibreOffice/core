@@ -67,7 +67,7 @@
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
 #include <basic/codecompletecache.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using com::sun::star::uno::Reference;
 
@@ -2263,9 +2263,9 @@ void SbiRuntime::StepREDIMP()
             else if (nDims > 0)
             {
                 // Store dims to use them for copying later
-                boost::scoped_array<sal_Int32> pLowerBounds(new sal_Int32[nDims]);
-                boost::scoped_array<sal_Int32> pUpperBounds(new sal_Int32[nDims]);
-                boost::scoped_array<sal_Int32> pActualIndices(new sal_Int32[nDims]);
+                std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDims]);
+                std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDims]);
+                std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDims]);
 
                 // Compare bounds
                 for( short i = 1 ; i <= nDims ; i++ )
@@ -4436,9 +4436,9 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         bool bRangeError = false;
 
         // Store dims to use them for copying later
-        boost::scoped_array<sal_Int32> pLowerBounds(new sal_Int32[nDims]);
-        boost::scoped_array<sal_Int32> pUpperBounds(new sal_Int32[nDims]);
-        boost::scoped_array<sal_Int32> pActualIndices(new sal_Int32[nDims]);
+        std::unique_ptr<sal_Int32[]> pLowerBounds(new sal_Int32[nDims]);
+        std::unique_ptr<sal_Int32[]> pUpperBounds(new sal_Int32[nDims]);
+        std::unique_ptr<sal_Int32[]> pActualIndices(new sal_Int32[nDims]);
         if( nDimsOld != nDimsNew )
         {
             bRangeError = true;

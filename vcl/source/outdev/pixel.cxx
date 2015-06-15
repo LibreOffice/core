@@ -18,7 +18,7 @@
  */
 #include <sal/types.h>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
@@ -168,7 +168,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
     if( rColor != COL_TRANSPARENT && ! ImplIsRecordLayout() )
     {
         const sal_uInt16 nSize = rPts.GetSize();
-        boost::scoped_array<Color> pColArray(new Color[ nSize ]);
+        std::unique_ptr<Color[]> pColArray(new Color[ nSize ]);
 
         for( sal_uInt16 i = 0; i < nSize; i++ )
         {

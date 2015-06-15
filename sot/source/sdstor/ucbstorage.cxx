@@ -43,7 +43,7 @@
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <rtl/digest.h>
 #include <osl/diagnose.h>
@@ -1399,7 +1399,7 @@ bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
 
     if( pDestStm->SetSize( n ) && n )
     {
-        boost::scoped_array<sal_uInt8> p(new sal_uInt8[ 4096 ]);
+        std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
         Seek( 0L );
         pDestStm->Seek( 0L );
         while( n )

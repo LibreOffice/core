@@ -32,7 +32,7 @@
 #include <image.h>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
@@ -698,11 +698,11 @@ namespace
 
 struct LinearScaleContext
 {
-    boost::scoped_array<long> mpMapX;
-    boost::scoped_array<long> mpMapY;
+    std::unique_ptr<long[]> mpMapX;
+    std::unique_ptr<long[]> mpMapY;
 
-    boost::scoped_array<long> mpMapXOffset;
-    boost::scoped_array<long> mpMapYOffset;
+    std::unique_ptr<long[]> mpMapXOffset;
+    std::unique_ptr<long[]> mpMapYOffset;
 
     LinearScaleContext(Rectangle& aDstRect, Rectangle& aBitmapRect,
                  Size& aOutSize, long nOffX, long nOffY)
@@ -870,8 +870,8 @@ public:
 
 struct TradScaleContext
 {
-    boost::scoped_array<long> mpMapX;
-    boost::scoped_array<long> mpMapY;
+    std::unique_ptr<long[]> mpMapX;
+    std::unique_ptr<long[]> mpMapY;
 
     TradScaleContext(Rectangle& aDstRect, Rectangle& aBitmapRect,
                  Size& aOutSize, long nOffX, long nOffY)

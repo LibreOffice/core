@@ -60,7 +60,7 @@
 #include "FactoryIds.hxx"
 #include "sdabstdlg.hxx"
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include "slideshow.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -916,7 +916,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
         // the original stream.
         mpStream.reset(new SvMemoryStream());
         static const sal_Size nBufferSize = 4096;
-        ::boost::scoped_array<sal_Int8> pBuffer (new sal_Int8[nBufferSize]);
+        ::std::unique_ptr<sal_Int8[]> pBuffer (new sal_Int8[nBufferSize]);
 
         sal_uInt64 nReadPosition(0);
         bool bLoop (true);

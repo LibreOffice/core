@@ -53,7 +53,6 @@
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
-#include <boost/scoped_array.hpp>
 
 using namespace css;
 using namespace css::uno;

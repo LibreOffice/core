@@ -71,7 +71,7 @@
 
 #include <osl/socket.h>
 #include <poll.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <officecfg/Office/Common.hxx>
@@ -2660,7 +2660,7 @@ void SalColormap::GetPalette()
     Pixel i;
     m_aPalette = std::vector<SalColor>(m_nUsed);
 
-    boost::scoped_array<XColor> aColor(new XColor[m_nUsed]);
+    std::unique_ptr<XColor[]> aColor(new XColor[m_nUsed]);
 
     for( i = 0; i < m_nUsed; i++ )
     {

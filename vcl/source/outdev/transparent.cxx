@@ -19,7 +19,7 @@
 #include <sal/types.h>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
@@ -179,8 +179,8 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         // do painting
         const long nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
         long nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-        boost::scoped_array<long> pMapX(new long[ nSrcWidth + 1 ]);
-        boost::scoped_array<long> pMapY(new long[ nSrcHeight + 1 ]);
+        std::unique_ptr<long[]> pMapX(new long[ nSrcWidth + 1 ]);
+        std::unique_ptr<long[]> pMapY(new long[ nSrcHeight + 1 ]);
         const bool bOldMap = mbMap;
 
         mbMap = false;

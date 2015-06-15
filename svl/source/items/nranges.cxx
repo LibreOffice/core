@@ -20,7 +20,7 @@
 #include <cassert>
 #include <vector>
 // compiled via include from itemset.cxx only!
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <osl/diagnose.h>
 
@@ -400,7 +400,7 @@ SfxUShortRanges& SfxUShortRanges::operator -=
     // (size is computed for maximal possibly split-count plus terminating 0)
     sal_uInt16 nThisSize = Count_Impl(_pRanges);
     sal_uInt16 nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
-    boost::scoped_array<sal_uInt16> pTarget(new sal_uInt16[ nTargetSize ]);
+    std::unique_ptr<sal_uInt16[]> pTarget(new sal_uInt16[ nTargetSize ]);
     memset( pTarget.get(), 0, sizeof(sal_uInt16)*nTargetSize );
     memcpy( pTarget.get(), _pRanges, sizeof(sal_uInt16)*nThisSize );
 
@@ -545,7 +545,7 @@ SfxUShortRanges& SfxUShortRanges::operator /=
     // (size is computed for maximal possibly split-count plus terminating 0)
     sal_uInt16 nThisSize = Count_Impl(_pRanges);
     sal_uInt16 nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
-    boost::scoped_array<sal_uInt16> pTarget(new sal_uInt16[ nTargetSize ]);
+    std::unique_ptr<sal_uInt16[]> pTarget(new sal_uInt16[ nTargetSize ]);
     memset( pTarget.get(), 0, sizeof(sal_uInt16)*nTargetSize );
     memcpy( pTarget.get(), _pRanges, sizeof(sal_uInt16)*nThisSize );
 

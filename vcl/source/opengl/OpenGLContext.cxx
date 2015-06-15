@@ -12,7 +12,6 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <boost/scoped_array.hpp>
 #include <boost/make_shared.hpp>
 #include <vcl/pngwrite.hxx>
 #include <vcl/bmpacc.hxx>

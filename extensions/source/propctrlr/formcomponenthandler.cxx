@@ -102,7 +102,7 @@
 #include <sal/macros.h>
 
 #include <limits>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
@@ -385,7 +385,7 @@ namespace pcr
                         sal_Int32 nNewCount = aNewStrings.getLength();
 
                         // Create new Ids
-                        boost::scoped_array<OUString> pNewPureIds(new OUString[nNewCount]);
+                        std::unique_ptr<OUString[]> pNewPureIds(new OUString[nNewCount]);
                         OUString aIdStrBase = aDot;
                         Any aNameAny = m_xComponent->getPropertyValue(PROPERTY_NAME);
                         OUString sControlName;

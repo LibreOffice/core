@@ -48,7 +48,7 @@
 #include "cppunit/portability/Stream.h"
 
 #include "boost/noncopyable.hpp"
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/algorithm/string.hpp>
 
 #include <algorithm>
@@ -112,7 +112,7 @@ class EyecatcherListener
 public:
     void startTest( CppUnit::Test* test) SAL_OVERRIDE
     {
-        boost::scoped_array<char> tn(new char [ test->getName().length() + 2 ]);
+        std::unique_ptr<char[]> tn(new char [ test->getName().length() + 2 ]);
         strcpy(tn.get(), test->getName().c_str());
         int len = strlen(tn.get());
         for(int i = 0; i < len; i++)

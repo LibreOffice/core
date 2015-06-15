@@ -17,7 +17,7 @@
 #include <algorithm>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

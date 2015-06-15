@@ -25,7 +25,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 
@@ -454,7 +454,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelper::removeInterface(
 void OMultiTypeInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
 {
     t_type2ptr::size_type nSize = 0;
-    boost::scoped_array<OInterfaceContainerHelper *> ppListenerContainers;
+    std::unique_ptr<OInterfaceContainerHelper *[]> ppListenerContainers;
     {
         ::osl::MutexGuard aGuard( rMutex );
         t_type2ptr * pMap = static_cast<t_type2ptr *>(m_pMap);
@@ -628,7 +628,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperInt32::removeInterface(
 void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject & rEvt )
 {
     t_long2ptr::size_type nSize = 0;
-    boost::scoped_array<OInterfaceContainerHelper *> ppListenerContainers;
+    std::unique_ptr<OInterfaceContainerHelper *[]> ppListenerContainers;
     {
         ::osl::MutexGuard aGuard( rMutex );
         if (!m_pMap)

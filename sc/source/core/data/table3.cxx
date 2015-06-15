@@ -71,7 +71,7 @@
 #include <vector>
 #include <boost/checked_delete.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <mdds/flat_segment_tree.hpp>
@@ -3020,7 +3020,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
 bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
     bool    bValid = true;
-    boost::scoped_array<SCCOL> pFields(new SCCOL[nCol2-nCol1+1]);
+    std::unique_ptr<SCCOL[]> pFields(new SCCOL[nCol2-nCol1+1]);
     OUString  aCellStr;
     SCCOL   nCol = nCol1;
     OSL_ENSURE( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );

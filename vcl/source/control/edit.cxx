@@ -65,7 +65,7 @@
 #include <vcl/unohelp2.hxx>
 
 #include <officecfg/Office/Common.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -499,7 +499,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
     sal_Int32 nLen = aText.getLength();
 
     long nDXBuffer[256];
-    boost::scoped_array<long> pDXBuffer;
+    std::unique_ptr<long[]> pDXBuffer;
     long* pDX = nDXBuffer;
 
     if (!aText.isEmpty())
@@ -1104,7 +1104,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     long nTextPos = 0;
 
     long   nDXBuffer[256];
-    boost::scoped_array<long> pDXBuffer;
+    std::unique_ptr<long[]> pDXBuffer;
     long*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
@@ -1223,7 +1223,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     OUString aText = ImplGetText();
 
     long   nDXBuffer[256];
-    boost::scoped_array<long> pDXBuffer;
+    std::unique_ptr<long[]> pDXBuffer;
     long*  pDX = nDXBuffer;
     if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
@@ -2184,7 +2184,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         {
             OUString aText = ImplGetText();
             long   nDXBuffer[256];
-            boost::scoped_array<long> pDXBuffer;
+            std::unique_ptr<long[]> pDXBuffer;
             long*  pDX = nDXBuffer;
 
             if( !aText.isEmpty() )
@@ -2200,7 +2200,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             long    nTH = GetTextHeight();
             Point   aPos( mnXOffset, ImplGetTextYPosition() );
 
-            boost::scoped_array<Rectangle> aRects(new Rectangle[ mpIMEInfos->nLen ]);
+            std::unique_ptr<Rectangle[]> aRects(new Rectangle[ mpIMEInfos->nLen ]);
             for ( int nIndex = 0; nIndex < mpIMEInfos->nLen; ++nIndex )
             {
                 Rectangle aRect( aPos, Size( 10, nTH ) );

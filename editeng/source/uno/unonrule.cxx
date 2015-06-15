@@ -35,7 +35,7 @@
 #include <editeng/unonrule.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/numdef.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::ucb::XAnyCompare;
@@ -178,7 +178,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
     sal_uInt16 nIdx = 0;
 
     const int nProps = 15;
-    boost::scoped_array<beans::PropertyValue> pArray(new beans::PropertyValue[nProps]);
+    std::unique_ptr<beans::PropertyValue[]> pArray(new beans::PropertyValue[nProps]);
 
     Any aVal;
     {

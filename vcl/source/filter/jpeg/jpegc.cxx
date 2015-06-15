@@ -35,7 +35,7 @@ extern "C" {
 #include "jpeg.h"
 #include <JpegReader.hxx>
 #include <JpegWriter.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable to __declspec(align()) aligned warning */
@@ -77,7 +77,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     long                            nHeight;
     long                            nAlignedWidth;
     JSAMPLE*                        aRangeLimit;
-    boost::scoped_array<unsigned char> pScanLineBuffer;
+    std::unique_ptr<unsigned char[]> pScanLineBuffer;
 
     if ( setjmp( jerr.setjmp_buffer ) )
     {

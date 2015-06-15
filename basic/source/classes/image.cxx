@@ -25,7 +25,7 @@
 #include <string.h>
 #include "image.hxx"
 #include <codegen.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 SbiImage::SbiImage()
 {
@@ -229,7 +229,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     pStrings = new sal_Unicode[ nLen ];
                     nStringSize = (sal_uInt16) nLen;
 
-                    boost::scoped_array<char> pByteStrings(new char[ nLen ]);
+                    std::unique_ptr<char[]> pByteStrings(new char[ nLen ]);
                     r.Read( pByteStrings.get(), nStringSize );
                     for( short j = 0; j < nStrings; j++ )
                     {
@@ -347,7 +347,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             r.WriteUInt32( pStringOff[ i ] );
         }
         // Then the String-Block
-        boost::scoped_array<char> pByteStrings(new char[ nStringSize ]);
+        std::unique_ptr<char[]> pByteStrings(new char[ nStringSize ]);
         for( i = 0; i < nStrings; i++ )
         {
             sal_uInt16 nOff = (sal_uInt16) pStringOff[ i ];

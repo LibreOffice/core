@@ -64,8 +64,6 @@
 #include <unotools/charclass.hxx>
 #include <drwlayer.hxx>
 
-#include <boost/scoped_array.hpp>
-
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "patattr.hxx"

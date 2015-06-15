@@ -57,7 +57,7 @@
 #include <sfx2/app.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define DEBUG_XL_ENCRYPTION 0
 
@@ -286,7 +286,7 @@ void XclExpStream::CopyFromStream(SvStream& rInStrm, sal_uInt64 const nBytes)
     if( nBytesLeft > 0 )
     {
         const sal_Size nMaxBuffer = 4096;
-        boost::scoped_array<sal_uInt8> pBuffer(
+        std::unique_ptr<sal_uInt8[]> pBuffer(
             new sal_uInt8[ ::std::min<sal_Size>(nBytesLeft, nMaxBuffer) ]);
         bool bValid = true;
 
