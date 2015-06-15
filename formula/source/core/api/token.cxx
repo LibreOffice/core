@@ -848,15 +848,33 @@ FormulaToken* FormulaTokenArray::MergeArray( )
     return NULL;
 }
 
-FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken* t )
+FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken* t,
+        FormulaTokenArray::ReplaceMode eMode )
 {
+    if (eMode == BACKWARD_CODE_ONLY)
+        nOffset = nLen - nOffset - 1;
+
     if (nOffset < nLen)
     {
         CheckToken(*t);
-        sal_uInt16 nPos = nLen - nOffset - 1;
         t->IncRef();
-        pCode[nPos]->DecRef();
-        pCode[nPos] = t;
+        FormulaToken* p = pCode[nOffset];
+        pCode[nOffset] = t;
+        if (eMode == FORWARD_CODE_AND_RPN && p->GetRef() > 1)
+        {
+            for (sal_uInt16 i=0; i < nRPN; ++i)
+            {
+                if (pRPN[i] == p)
+                {
+                    t->IncRef();
+                    pRPN[i] = t;
+                    p->DecRef();
+                    if (p->GetRef() == 1)
+                        break;  // for
+                }
+            }
+        }
+        p->DecRef();    // may be dead now
         return t;
     }
     else
