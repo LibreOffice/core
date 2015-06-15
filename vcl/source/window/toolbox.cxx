@@ -4160,7 +4160,7 @@ void ToolBox::Resize()
         if (mpData->m_aItems[i].mbExpand)
         {
             vcl::Window *pWindow = mpData->m_aItems[i].mpWindow;
-            SAL_WARN_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
+            SAL_INFO_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
             if (!pWindow)
                 continue;
             Size aWinSize(pWindow->GetSizePixel());
@@ -4797,7 +4797,7 @@ Size ToolBox::GetOptimalSize() const
         if (mpData->m_aItems[i].mbExpand)
         {
             vcl::Window *pWindow = mpData->m_aItems[i].mpWindow;
-            SAL_WARN_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
+            SAL_INFO_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
             if (!pWindow)
                 continue;
             Size aWinSize(pWindow->GetSizePixel());
