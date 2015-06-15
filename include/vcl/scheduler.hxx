@@ -21,17 +21,22 @@
 #define INCLUDED_VCL_SCHEDULER_HXX
 
 #include <vcl/dllapi.h>
-#include <list>
 
-
+struct ImplSVData;
 class Scheduler;
 struct ImplSchedulerData
 {
-    bool        mbDelete;           // Destroy this scheduler?
-    Scheduler*  mpScheduler;        // Pointer to VCL Scheduler instance
-};
+    ImplSchedulerData*  mpNext;      // Pointer to the next element in list
+    Scheduler*          mpScheduler;      // Pointer to VCL Scheduler instance
+    bool                mbDelete;    // Destroy this scheduler?
+    bool                mbInScheduler;    // Scheduler currently processed?
+    sal_uInt64          mnUpdateTime;   // Last Update Time
+    sal_uInt32          mnUpdateStack;  // Update Stack
 
-#define MAX_TIMER_PERIOD    SAL_MAX_UINT64
+    void Invoke();
+
+    static ImplSchedulerData *GetMostImportantTask( bool bTimer );
+};
 
 enum class SchedulerPriority {
     HIGHEST   = 0,
@@ -51,7 +56,6 @@ protected:
     const sal_Char     *mpDebugName;        /// Useful for debugging
     SchedulerPriority   mePriority;         /// Scheduler priority
     bool                mbActive;           /// Currently in the scheduler
-    sal_uInt64          mnUpdateTime;       /// Last Update Time
 
     friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();
@@ -78,27 +82,14 @@ public:
     bool            IsActive() const { return mbActive; }
     void            SetInActive() { mbActive = false; }
 
-    Scheduler&      operator=( const Scheduler& rScheduler );
-    static void ImplDeInitScheduler(bool bAll=true);
-    static void ImplInitScheduler();
+    Scheduler&          operator=( const Scheduler& rScheduler );
+    static void ImplDeInitScheduler();
 
-    // Process one pending Timer with highest priority
+    // Process one pending Timer with highhest priority
     static void CallbackTaskScheduling( bool ignore );
-    /// Process one pending task ahead of time with highest priority.
+    /// Process one pending task ahead of time with highhest priority.
     static void ProcessTaskScheduling( bool bTimer );
-
-private:
-    bool                mbInScheduler;   // Scheduler currently processed?
-    sal_uInt32          mnUpdateStack;   // Update Stack
-
-    bool  ImplHandleTaskScheduling(sal_uInt64& nMinPeriod, sal_uInt64 nTime);
-    void  ImplInvoke(sal_uInt64 nTime);
-    static Scheduler* ImplGetHighestPrioTask( bool bTimer );
-    bool ImplIsScheduleReady(sal_uInt32 nUpdateStack);
-    void ImplDispose();
 };
-
-typedef ::std::list< ImplSchedulerData* > ImplScheduler_t;
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX
 

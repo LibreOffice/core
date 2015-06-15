@@ -109,7 +109,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
     // Timers may access the SfxApplication and are only deleted in
     // Application::Quit(), which is asynchronous (PostUserEvent) - disable!
-    Scheduler::ImplDeInitScheduler(false); // false only delete the list
+    Scheduler::ImplDeInitScheduler();
 
     SfxApplication* pApp = SfxGetpApp();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );

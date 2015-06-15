@@ -23,8 +23,6 @@
 #include <tools/link.hxx>
 #include <vcl/scheduler.hxx>
 
-struct ImplSVData;
-
 class VCL_DLLPUBLIC Timer : public Scheduler
 {
 protected:

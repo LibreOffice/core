@@ -23,6 +23,7 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 
+#define MAX_TIMER_PERIOD   SAL_MAX_UINT64
 
 void Timer::ImplStartTimer( ImplSVData* pSVData, sal_uInt64 nMS )
 {
@@ -44,23 +45,23 @@ void Timer::SetDeletionFlags()
         // if no AutoTimer than stop
         if ( !mbAuto )
         {
-            Scheduler::SetDeletionFlags();
+            mpSchedulerData->mbDelete = true;
+            mbActive = false;
         }
 }
 
 bool Timer::ReadyForSchedule( bool bTimer )
 {
     (void)bTimer;
-    return (mnUpdateTime + mnTimeout) <= tools::Time::GetSystemTicks();
+    return (mpSchedulerData->mnUpdateTime + mnTimeout) <= tools::Time::GetSystemTicks();
 }
 
 sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
 {
     sal_uInt64 nNewTime = tools::Time::GetSystemTicks();
     sal_uInt64 nDeltaTime;
-
     //determine smallest time slot
-    if( mnUpdateTime == nTime )
+    if( mpSchedulerData->mnUpdateTime == nTime )
     {
        nDeltaTime = mnTimeout;
        if( nDeltaTime < nMinPeriod )
@@ -68,7 +69,7 @@ sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
     }
     else
     {
-        nDeltaTime = mnUpdateTime + mnTimeout;
+        nDeltaTime = mpSchedulerData->mnUpdateTime + mnTimeout;
         if( nDeltaTime < nNewTime )
             nMinPeriod = 1;
         else
