@@ -766,12 +766,13 @@ void WinOpenGLDeviceInfo::GetData()
         deviceIndex++;
     }
 
-    // make sure the string is nullptr terminated
+    // make sure the string is null terminated
+    // (using the term "null" here to mean a zero UTF-16 unit)
     if (wcsnlen(displayDevice.DeviceKey, ArrayLength(displayDevice.DeviceKey))
             == ArrayLength(displayDevice.DeviceKey))
     {
-        // we did not find a nullptr
-        SAL_WARN("vcl.opengl", "no null pointer");
+        // we did not find a null
+        SAL_WARN("vcl.opengl", "string not null terminated");
         return;
     }
 
