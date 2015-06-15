@@ -362,8 +362,7 @@ void OutputDevice::ImplInvalidateViewTransform()
 static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
-    // To "use" it...
-    (void) nThres;
+    assert(nDPI > 0);
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
     {
@@ -377,8 +376,8 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
     }
     else
 #else
+    (void) nThres;
     assert(nMapNum >= 0);
-    assert(nDPI > 0);
     assert(nMapNum == 0 || std::abs(n) < std::numeric_limits<long>::max() / nMapNum / nDPI); //detect overflows
 #endif
     {
@@ -401,16 +400,16 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
     assert(nDPI > 0);
-    // To "use" it...
-   (void) nThres;
-   if (nMapNum == 0)
-   {
-       return 0;
-   }
+    if (nMapNum == 0)
+    {
+        return 0;
+    }
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
         n = (2 * n * nMapDenom) / (nDPI * nMapNum);
     else
+#else
+    (void) nThres;
 #endif
     {
         sal_Int64 n64 = n;
