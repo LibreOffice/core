@@ -123,12 +123,6 @@ protected:
     /// Also used by the compiler. The token MUST had been allocated with new!
     FormulaToken*           Add( FormulaToken* );
 
-    enum ReplaceMode
-    {
-        BACKWARD_CODE_ONLY,     ///< offset goes backward, replacement only in pCode
-        FORWARD_CODE_AND_RPN    ///< offset goes forward, replacement in pCode and RPN
-    };
-
     /** Also used by the compiler. The token MUST had been allocated with new!
         @param  nOffset
                 If eMode==BACKWARD_CODE_ONLY negative offset of token, 0==last,
@@ -156,6 +150,12 @@ protected:
                                 { nMode = GetCombinedBitsRecalcMode() | nBits; }
 
 public:
+    enum ReplaceMode
+    {
+        BACKWARD_CODE_ONLY,     ///< offset goes backward, replacement only in pCode
+        FORWARD_CODE_AND_RPN    ///< offset goes forward, replacement in pCode and RPN
+    };
+
     FormulaTokenArray();
     /// Assignment with references to FormulaToken entries (not copied!)
     FormulaTokenArray( const FormulaTokenArray& );
