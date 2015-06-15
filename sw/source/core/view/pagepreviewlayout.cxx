@@ -1130,7 +1130,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
     // print preview layout is created during paint.
     if ( !mbNewLayoutDuringPaint )
     {
-        // update at accessiblilty interface
+        // update at accessibility interface
         mrParentViewShell.Imp()->UpdateAccessiblePreview(
                         maPreviewPages,
                         aMapMode.GetScaleX(),

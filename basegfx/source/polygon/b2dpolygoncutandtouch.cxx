@@ -174,7 +174,7 @@ namespace basegfx
             const temporaryPointVector& rPointVector, const B2DPolygon& rPolygon,
             sal_uInt32 nInd, temporaryPointVector& rTempPoints)
         {
-            // assuming that the subdivision to create rPolygon used aequidistant pieces
+            // assuming that the subdivision to create rPolygon used equidistant pieces
             // (as in adaptiveSubdivideByCount) it is now possible to calculate back the
             // cut positions in the polygon to relative cut positions on the original bezier
             // segment.

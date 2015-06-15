@@ -111,7 +111,7 @@ namespace utl
             @param _pContainer
                 points to the accessors location in memory. Usually, this is simply an address of your derived class
             @param _rValueType
-                is the type of your accessort. This type must be supported by the configuration.
+                is the type of your accessor. This type must be supported by the configuration.
         */
         void    registerExchangeLocation(
             const sal_Char* _pRelativePathAscii,

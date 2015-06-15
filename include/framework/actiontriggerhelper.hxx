@@ -33,7 +33,7 @@ namespace framework
             // Fills the submitted menu with the structure contained in the second
             // parameter rActionTriggerContainer
             // @param pNewMenu = must be a valid and empty menu
-            // @param rActionTriggerContainer = must be an instance of service "com.sun.star.ui.ActionTriggerContaienr"
+            // @param rActionTriggerContainer = must be an instance of service "com.sun.star.ui.ActionTriggerContainer"
             static void
                 CreateMenuFromActionTriggerContainer(
                     Menu* pNewMenu,

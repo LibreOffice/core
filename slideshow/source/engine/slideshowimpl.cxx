@@ -1166,7 +1166,7 @@ void SlideShowImpl::displaySlide(
             {
                 // The transition activity was created for the side effects
                 // (like sound transitions).  Because we want to skip the
-                // acutual transition animation we do not need the activity
+                // actual transition animation we do not need the activity
                 // anymore.
                 pSlideChangeActivity.reset();
             }

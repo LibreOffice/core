@@ -702,7 +702,7 @@ ScVbaChart::setDiagram( const OUString& _sDiagramType ) throw( script::BasicErro
     }
 }
 
-// #TODO find out why we have Location/getLocation ? there is afaiks no
+// #TODO find out why we have Location/getLocation? there is afaik no
 // Location property, just a Location function for the Chart object
 sal_Int32 SAL_CALL
 ScVbaChart::Location() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)

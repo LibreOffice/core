@@ -1288,7 +1288,7 @@ void SwFootnoteBossFrm::InsertFootnote( SwFootnoteFrm* pNew )
                 }
             }
             // pLastSib is the last footnote before the new one and
-            // pSibling is empty or the first one afterw the new one
+            // pSibling is empty or the first one after the new one
             if ( pSibling && pLastSib && (pSibling != pLastSib) )
             {
                 // too far?

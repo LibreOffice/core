@@ -1332,7 +1332,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                 rtl_UriEncodeIgnoreEscapes,
                 RTL_TEXTENCODING_UTF8);
 
-            //It is sufficient to check for the folder name, because when the administor
+            //It is sufficient to check for the folder name, because when the administrator
             //installed the extension it was already checked if there is one with the
             //same identifier.
             const MatchTempDir match(titleEncoded);

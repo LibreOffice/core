@@ -74,7 +74,7 @@ class ContentProviderImplHelper;
   *     XCommandInfoChangeNotifier )
   * - XPropertyContainer implementation ( persistence is implemented using
   *   service com.sun.star.ucb.Store )
-  * - complete XPropertySetInfo implementation ( including Additioanl Core
+  * - complete XPropertySetInfo implementation ( including Additional Core
   *   Properties supplied via XPropertyContainer interface )
   *   -> protected method: getPropertySetInfo
   * - complete XCommandInfo implementation

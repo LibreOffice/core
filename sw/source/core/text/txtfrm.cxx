@@ -2508,7 +2508,7 @@ void SwTextFrm::RecalcAllLines()
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
             nNewNum = rLineNum.GetStartValue() - 1;
         // If it is a follow or not has not be considered if it is a restart at each page; the
-        // restart should also take affekt at follows.
+        // restart should also take effect at follows.
         else if ( bRestart && FindPageFrm()->FindFirstBodyContent() == this )
         {
             nNewNum = 0;
