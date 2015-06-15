@@ -4673,19 +4673,20 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         RTFSprms aAttributes;
         aAttributes.set(NS_ooxml::LN_CT_TblWidth_type, std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_TblWidth_dxa));
         aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, std::make_shared<RTFValue>(nParam));
+        // Top and left is swapped, that's what Word does.
         switch (nKeyword)
         {
         case RTF_CLPADB:
             nSprm = NS_ooxml::LN_CT_TcMar_bottom;
             break;
         case RTF_CLPADL:
-            nSprm = NS_ooxml::LN_CT_TcMar_left;
+            nSprm = NS_ooxml::LN_CT_TcMar_top;
             break;
         case RTF_CLPADR:
             nSprm = NS_ooxml::LN_CT_TcMar_right;
             break;
         case RTF_CLPADT:
-            nSprm = NS_ooxml::LN_CT_TcMar_top;
+            nSprm = NS_ooxml::LN_CT_TcMar_left;
             break;
         default:
             break;

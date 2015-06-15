@@ -658,6 +658,13 @@ DECLARE_RTFEXPORT_TEST(testFdo74709, "fdo74709.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(360)), getProperty<sal_Int32>(xCell, "RightBorderDistance"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf84832, "tdf84832.docx")
+{
+    uno::Reference<table::XCell> xCell = getCell(getParagraphOrTable(2), "A1");
+    // This was 0, as left padding wasn't exported.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(113)), getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+}
+
 DECLARE_RTFEXPORT_TEST(testRelsize, "relsize.rtf")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
