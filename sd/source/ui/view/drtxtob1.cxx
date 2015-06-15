@@ -396,19 +396,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 FuText::ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pOLV, pFontList, mpView );
                 if( pOLV )
-                {
-                    SfxItemSet aSet( pOLV->GetEditView().GetAttribs() );
-                    SfxItemSet aNewAttrs (pOLV->GetEditView().GetEmptyItemSet() );
-
-                    aNewAttrs.Put( aSet.Get( EE_CHAR_FONTHEIGHT ), EE_CHAR_FONTHEIGHT );
-                    aNewAttrs.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CJK ), EE_CHAR_FONTHEIGHT_CJK );
-                    aNewAttrs.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CTL ), EE_CHAR_FONTHEIGHT_CTL );
-
-                    mpView->SetAttributes( aNewAttrs );
-                }
-                Invalidate();
-                // to refresh preview (in outline mode), slot has to be invalidated:
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
+                    pOLV->SetAttribs( pOLV->GetEditView().GetEmptyItemSet() );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
             rReq.Done();
         }
