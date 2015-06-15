@@ -579,7 +579,13 @@ void ImpEditEngine::CheckPageOverflow()
 
     sal_uInt32 nTxtHeight = CalcTextHeight(NULL);
 
-    if (nTxtHeight > nBoxHeight)
+    sal_uInt32 nParaCount = GetParaPortions().Count();
+    sal_uInt32 nFirstLineCount = GetLineCount(0);
+    bool bOnlyOneEmptyPara = (nParaCount == 1) &&
+                            (nFirstLineCount == 1) &&
+                            (GetLineLen(0,0) == 0);
+
+    if (nTxtHeight > nBoxHeight && !bOnlyOneEmptyPara)
     {
         // which paragraph is the first to cause higher size of the box?
         ImplUpdateOverflowingParaNum( nBoxHeight); // XXX: currently only for horizontal text

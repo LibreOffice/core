@@ -754,10 +754,12 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
         if (pNonOverflowingTxt->mpHeadParas != NULL) {
             pOutliner->SetText(*pNonOverflowingTxt->mpHeadParas);
             pOutliner->AddText(*pPObj);
-         } else { // set empty paraObj
+         } else  if (pNonOverflowingTxt->mPreOverflowingTxt != "") { // only preoverflowing txt
             //OutlinerParaObject *pEmptyPObj = pOutliner->GetEmptyParaObject();
             //pOutliner->SetText(*pEmptyPObj);
             pOutliner->SetText(*pPObj);
+        } else { // no text // This case is redundant but it doesn't hurt for now
+            pOutliner->Clear();
         }
     }
 
