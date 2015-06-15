@@ -1153,35 +1153,39 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     sal_Int8 nRet = DND_ACTION_NONE;
-    OUString sFileName;
-    if( !SwContentTree::IsInDrag() &&
-        !(sFileName = SwNavigationPI::CreateDropFileName( aData )).isEmpty() )
+    if(SwContentTree::IsInDrag())
+        return nRet;
+
+    OUString sFileName = SwNavigationPI::CreateDropFileName(aData);
+    if (sFileName.isEmpty())
+        return nRet;
+
+    INetURLObject aTemp(sFileName);
+    GraphicDescriptor aDesc(aTemp);
+    if (aDesc.Detect())   // accept no graphics
+        return nRet;
+
+    if (-1 != sFileName.indexOf('#'))
+        return nRet;
+
+    if ((sContentFileName.isEmpty() || sContentFileName != sFileName))
     {
-        INetURLObject aTemp( sFileName );
-        GraphicDescriptor aDesc( aTemp );
-        if( !aDesc.Detect() )   // accept no graphics
+        nRet = rEvt.mnAction;
+        sFileName = comphelper::string::stripEnd(sFileName, 0);
+        sContentFileName = sFileName;
+        if(pxObjectShell)
         {
-            if( -1 == sFileName.indexOf('#')
-                && (sContentFileName.isEmpty() || sContentFileName != sFileName ))
-            {
-                nRet = rEvt.mnAction;
-                sFileName = comphelper::string::stripEnd(sFileName, 0);
-                sContentFileName = sFileName;
-                if(pxObjectShell)
-                {
-                    aContentTree->SetHiddenShell( 0 );
-                    (*pxObjectShell)->DoClose();
-                    DELETEZ( pxObjectShell);
-                }
-                SfxStringItem aFileItem(SID_FILE_NAME, sFileName );
-                SfxStringItem aOptionsItem( SID_OPTIONS, OUString("HRC") );
-                SfxLinkItem aLink( SID_DONELINK,
-                                    LINK( this, SwNavigationPI, DoneLink ) );
-                GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_OPENDOC, SfxCallMode::ASYNCHRON,
-                            &aFileItem, &aOptionsItem, &aLink, 0L );
-            }
+            aContentTree->SetHiddenShell( 0 );
+            (*pxObjectShell)->DoClose();
+            DELETEZ( pxObjectShell);
         }
+        SfxStringItem aFileItem(SID_FILE_NAME, sFileName );
+        SfxStringItem aOptionsItem( SID_OPTIONS, OUString("HRC") );
+        SfxLinkItem aLink( SID_DONELINK,
+                            LINK( this, SwNavigationPI, DoneLink ) );
+        GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(
+                    SID_OPENDOC, SfxCallMode::ASYNCHRON,
+                    &aFileItem, &aOptionsItem, &aLink, 0L );
     }
     return nRet;
 }
