@@ -2109,7 +2109,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                         rSet.Put( aItem );
                         rSet.InvalidateItem(SID_FRAME_LINESTYLE);
                     }
-                    else // all the lines have same style or no line availavle, use initial value (0,0,0,0)
+                    else // all the lines have same style or no line available, use initial value (0,0,0,0)
                     {
                         SvxLineItem aItem(SID_FRAME_LINESTYLE);
                         aItem.SetLine(&aLine);

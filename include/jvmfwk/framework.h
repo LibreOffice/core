@@ -163,7 +163,7 @@ extern "C" {
     <dd>This is a unofficial variable which was introduced to workaround external issues.
     It may be removed in the future. By setting it to 1, the framework will not try to
     find out if the system is configured to use accessibility tools or if a JRE has an
-    accessibiliy bridge installed</dd>
+    accessible bridge installed</dd>
     <dt>JFW_PLUGIN_FORCE_ACCESSIBILITY</dt>
     <dd>This is a unofficial variable which was introduced to workaround external issues.
     It may be removed in the future. By setting it to 1, the framework will override a
