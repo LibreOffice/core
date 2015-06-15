@@ -35,7 +35,7 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 class FilterConfigItem;
 
@@ -417,14 +417,14 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
                     .WriteUInt32( nTPos ).WriteUInt32( nSizeTIFF );
         if ( nSizeWMF )
         {
-            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nSizeWMF ]);
+            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSizeWMF ]);
             rStrm.Seek( nOrigPos + nPosWMF );
             rStrm.Read( pBuf.get(), nSizeWMF );
             aReplacement.Write( pBuf.get(), nSizeWMF );
         }
         if ( nSizeTIFF )
         {
-            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nSizeTIFF ]);
+            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSizeTIFF ]);
             rStrm.Seek( nOrigPos + nPosTIFF );
             rStrm.Read( pBuf.get(), nSizeTIFF );
             aReplacement.Write( pBuf.get(), nSizeTIFF );

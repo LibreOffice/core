@@ -25,7 +25,6 @@
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <boost/scoped_array.hpp>
 #include <memory>
 
 class SvxProtectItem;

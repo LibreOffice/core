@@ -40,7 +40,7 @@
 #include <advisesink.hxx>
 #include <oleembobj.hxx>
 #include <mtnotification.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -287,7 +287,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
     {
         // first the GDI-metafile must be generated
 
-        boost::scoped_array<unsigned char> pBuf;
+        std::unique_ptr<unsigned char[]> pBuf;
         sal_uInt32 nBufSize = 0;
         OUString aFormat;
 

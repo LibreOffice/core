@@ -21,7 +21,7 @@
 #include <comphelper/propertysethelper.hxx>
 #include <osl/diagnose.h>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -141,7 +141,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
 
     if( nCount )
     {
-        boost::scoped_array<PropertyMapEntry const *> pEntries(new PropertyMapEntry const *[nCount+1]);
+        std::unique_ptr<PropertyMapEntry const *[]> pEntries(new PropertyMapEntry const *[nCount+1]);
         pEntries[nCount] = NULL;
         const OUString* pNames = rPropertyNames.getConstArray();
 
@@ -169,7 +169,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OU
     Sequence< Any > aValues;
     if( nCount )
     {
-        boost::scoped_array<PropertyMapEntry const *> pEntries(new PropertyMapEntry const *[nCount+1]);
+        std::unique_ptr<PropertyMapEntry const *[]> pEntries(new PropertyMapEntry const *[nCount+1]);
         pEntries[nCount] = NULL;
         const OUString* pNames = rPropertyNames.getConstArray();
 
@@ -238,7 +238,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
 
         bool bUnknown = false;
 
-        boost::scoped_array<PropertyMapEntry const *> pEntries(new PropertyMapEntry const *[nCount+1]);
+        std::unique_ptr<PropertyMapEntry const *[]> pEntries(new PropertyMapEntry const *[nCount+1]);
 
         sal_Int32 n;
         for( n = 0; !bUnknown && (n < nCount); n++, pNames++ )

@@ -20,7 +20,7 @@
 #include "officecfg/System.hxx"
 #include <algorithm>
 #include <basic/sbstar.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <cassert>

@@ -31,7 +31,7 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 ///////////////////////////// class StgFAT
 
@@ -1148,7 +1148,7 @@ bool StgTmpStrm::Copy( StgTmpStrm& rSrc )
     SetSize( n );
     if( GetError() == SVSTREAM_OK )
     {
-        boost::scoped_array<sal_uInt8> p(new sal_uInt8[ 4096 ]);
+        std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
         rSrc.Seek( 0L );
         Seek( 0L );
         while( n )
@@ -1209,7 +1209,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
             sal_uLong i = nEndOfData;
             if( i )
             {
-                boost::scoped_array<sal_uInt8> p(new sal_uInt8[ 4096 ]);
+                std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
                 Seek( 0L );
                 while( i )
                 {

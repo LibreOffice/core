@@ -30,7 +30,7 @@
 
 #include "subtdlg.hxx"
 #include "tpsubt.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 // Subtotals group tabpage:
 
@@ -197,8 +197,8 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
             theSubTotalData = static_cast<const ScSubTotalItem*>(pItem)->GetSubTotalData();
     }
 
-    boost::scoped_array<ScSubTotalFunc> pFunctions;
-    boost::scoped_array<SCCOL>          pSubTotals;
+    std::unique_ptr<ScSubTotalFunc[]> pFunctions;
+    std::unique_ptr<SCCOL[]>          pSubTotals;
     sal_uInt16          nGroup      = mpLbGroup->GetSelectEntryPos();
     sal_uInt16          nEntryCount = (sal_uInt16)mpLbColumns->GetEntryCount();
     sal_uInt16          nCheckCount = mpLbColumns->GetCheckedEntryCount();

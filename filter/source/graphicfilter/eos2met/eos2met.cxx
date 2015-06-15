@@ -37,7 +37,7 @@
 #include <svl/solar.hrc>
 #include <vcl/gdimetafiletools.hxx>
 #include <vcl/dibtools.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 // -----------------------------Field Types-------------------------------
 
@@ -675,7 +675,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
         pMET->WriteUChar( 0x08 ).WriteUChar( 0x08 );
     }
 
-    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nBytesPerLine]);
+    std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nBytesPerLine]);
     ny=0;
     while (ny<nHeight) {
 
@@ -1952,7 +1952,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrAngle( nOrientation = aGDIFont.GetOrientation() );
                 METSetChrSet(FindChrSet(aGDIFont));
                 aStr = pA->GetText().copy(pA->GetIndex(),pA->GetLen());
-                boost::scoped_array<long> pDXAry(new long[aStr.getLength()]);
+                std::unique_ptr<long[]> pDXAry(new long[aStr.getLength()]);
                 nNormSize = pVDev->GetTextArray( aStr, pDXAry.get() );
 
                 for ( i = 0; i < aStr.getLength(); i++ )

@@ -139,7 +139,7 @@
 #include <boost/mem_fn.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <cmath>

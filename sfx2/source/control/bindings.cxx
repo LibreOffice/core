@@ -63,7 +63,7 @@
 #include <sfx2/msgpool.hxx>
 
 #include <com/sun/star/frame/XModuleManager.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <unordered_map>
@@ -1431,7 +1431,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     }
 
     // Create a Set from the ranges
-    boost::scoped_array<sal_uInt16> pRanges(new sal_uInt16[rFound.size() * 2 + 1]);
+    std::unique_ptr<sal_uInt16[]> pRanges(new sal_uInt16[rFound.size() * 2 + 1]);
     int j = 0;
     sal_uInt16 i = 0;
     while ( i < rFound.size() )

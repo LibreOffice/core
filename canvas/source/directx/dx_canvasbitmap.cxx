@@ -28,7 +28,7 @@
 
 #include <boost/preprocessor/repetition.hpp>
 #include <boost/preprocessor/iteration/local.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include "dx_canvasbitmap.hxx"
 #include "dx_impltools.hxx"
@@ -211,7 +211,7 @@ namespace dxcanvas
 
                     // copy only alpha channel to pAlphaBits
                     const sal_Int32 nScanWidth((aSize.getX() + 3) & ~3);
-                    boost::scoped_array<sal_uInt8> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getY()] );
+                    std::unique_ptr<sal_uInt8[]> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getY()] );
                     const sal_uInt8* pInBits=(sal_uInt8*)aBmpData.Scan0;
                     pInBits+=3;
                     for( sal_Int32 y=0; y<aSize.getY(); ++y )

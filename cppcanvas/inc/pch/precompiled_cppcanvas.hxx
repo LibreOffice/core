@@ -35,7 +35,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <boost/bind.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/utility.hpp>
 #include <canvas/canvastools.hxx>
 #include <canvas/debug.hxx>

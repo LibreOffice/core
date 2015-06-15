@@ -21,7 +21,7 @@
 #include "bundles.hxx"
 
 #include <tools/stream.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 Bundle& Bundle::operator=( Bundle& rSource )
 {
@@ -184,7 +184,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         pFontEntry = aFontEntryList[ nFontNameCount ];
     }
     nFontNameCount++;
-    boost::scoped_array<sal_Int8> pBuf(new sal_Int8[ nSize ]);
+    std::unique_ptr<sal_Int8[]> pBuf(new sal_Int8[ nSize ]);
     memcpy( pBuf.get(), pSource, nSize );
     sal_Int8* pFound = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_Int8 const *>("ITALIC"), nSize, 6 );
     if ( pFound )

@@ -30,7 +30,7 @@
 #include <svx/dialogs.hrc>
 #include <bmpmask.hrc>
 #include <svx/svxids.hrc>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include "helpid.hrc"
 
@@ -725,12 +725,12 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         long        nR;
         long        nG;
         long        nB;
-        boost::scoped_array<long> pMinR(new long[nCount]);
-        boost::scoped_array<long> pMaxR(new long[nCount]);
-        boost::scoped_array<long> pMinG(new long[nCount]);
-        boost::scoped_array<long> pMaxG(new long[nCount]);
-        boost::scoped_array<long> pMinB(new long[nCount]);
-        boost::scoped_array<long> pMaxB(new long[nCount]);
+        std::unique_ptr<long[]> pMinR(new long[nCount]);
+        std::unique_ptr<long[]> pMaxR(new long[nCount]);
+        std::unique_ptr<long[]> pMinG(new long[nCount]);
+        std::unique_ptr<long[]> pMaxG(new long[nCount]);
+        std::unique_ptr<long[]> pMinB(new long[nCount]);
+        std::unique_ptr<long[]> pMaxB(new long[nCount]);
         sal_uInt16      i;
 
         aMtf.SetPrefSize( rMtf.GetPrefSize() );

@@ -25,7 +25,7 @@
 #include "diagnose_ex.h"
 
 #include <algorithm>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 
 using namespace connectivity;
@@ -718,7 +718,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
     else
     {
         sal_uInt16 const nLen(rIndex.getHeader().db_keylen);
-        ::boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nLen]);
+        ::std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nLen]);
         memset(&pBuf[0], 0x20, nLen);
         if (!aKey.getValue().isNull())
         {

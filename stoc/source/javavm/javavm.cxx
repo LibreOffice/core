@@ -79,7 +79,6 @@
 #include <memory>
 #include <vector>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_array.hpp>
 
 // Properties of the javavm can be put
 // as a komma separated list in this
@@ -709,12 +708,12 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                             m_xContext);
         //Create the JavaVMOption array
         const std::vector<OUString> & props = aJvm.getProperties();
-        boost::scoped_array<JavaVMOption> sarOptions(
+        std::unique_ptr<JavaVMOption[]> sarOptions(
             new JavaVMOption[props.size()]);
         JavaVMOption * arOptions = sarOptions.get();
         //Create an array that contains the strings which are passed
         //into the options
-        boost::scoped_array<OString> sarPropStrings(
+        std::unique_ptr<OString[]> sarPropStrings(
              new OString[props.size()]);
         OString * arPropStrings = sarPropStrings.get();
 

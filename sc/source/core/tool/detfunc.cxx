@@ -70,7 +70,7 @@
 #include "cellvalue.hxx"
 
 #include <vector>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using ::std::vector;
 using namespace com::sun::star;
@@ -672,7 +672,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
     if (nObjCount)
     {
         size_t nDelCount = 0;
-        boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
+        std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
         SdrObject* pObject = aIter.Next();
@@ -735,7 +735,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
     if (nObjCount)
     {
         size_t nDelCount = 0;
-        boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
+        std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
         SdrObject* pObject = aIter.Next();
@@ -1240,7 +1240,7 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
     const size_t nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
-        boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
+        std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
         SdrObject* pObject = aIter.Next();

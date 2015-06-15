@@ -30,7 +30,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
@@ -1587,7 +1587,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
     }
 
     // remember the to be moved entries
-    boost::scoped_array<sal_IntPtr> pTmpArr(new sal_IntPtr[ nCount ]);
+    std::unique_ptr<sal_IntPtr[]> pTmpArr(new sal_IntPtr[ nCount ]);
     for ( i=0; i<nCount; i++ )
         pTmpArr[i] = reinterpret_cast<sal_IntPtr>(maO2S.GetObject( (sal_uInt32)( nPos+i ) ));
 

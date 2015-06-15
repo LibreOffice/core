@@ -36,7 +36,7 @@
 #include <vcl/salbtype.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::swf;
 using namespace ::std;
@@ -523,7 +523,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
     else
     {
         Size    aNormSize;
-        boost::scoped_array<long> pOwnArray;
+        std::unique_ptr<long[]> pOwnArray;
         long* pDX;
 
         // get text sizes
@@ -808,7 +808,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     getBitmapData( bmpSource, pImageData, pAlphaData, width, height );
     sal_uInt32 raw_size = width * height * 4;
     uLongf compressed_size = raw_size + (sal_uInt32)(raw_size/100) + 12;
-    boost::scoped_array<sal_uInt8> pCompressed(new sal_uInt8[ compressed_size ]);
+    std::unique_ptr<sal_uInt8[]> pCompressed(new sal_uInt8[ compressed_size ]);
 
 #ifdef DBG_UTIL
     if(compress2(pCompressed.get(), &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION) != Z_OK)
@@ -822,7 +822,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     // AS: SWF files let you provide an Alpha mask for JPEG images, but we have
     //  to ZLIB compress the alpha channel separately.
     uLong alpha_compressed_size = 0;
-    boost::scoped_array<sal_uInt8> pAlphaCompressed;
+    std::unique_ptr<sal_uInt8[]> pAlphaCompressed;
     if (bmpSource.IsAlpha() || bmpSource.IsTransparent())
     {
         alpha_compressed_size = uLongf(width * height + (sal_uInt32)(raw_size/100) + 12);

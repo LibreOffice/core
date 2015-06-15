@@ -44,7 +44,7 @@
 #include <vector>
 #include <algorithm>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 #include "swabstdlg.hxx"
@@ -370,7 +370,7 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl* pColl, bool bSende
         std::vector<sal_uInt16> pVec = ::lcl_convertRangesToList(pRanges);
         std::vector<sal_uInt16> aVec = ::lcl_convertRangesToList(aRanges);
         pVec.insert(pVec.end(), aVec.begin(), aVec.end());
-        boost::scoped_array<sal_uInt16> pNewRanges(::lcl_convertListToRanges(pVec));
+        std::unique_ptr<sal_uInt16[]> pNewRanges(::lcl_convertListToRanges(pVec));
 
         pAddrSet = new SfxItemSet(GetParentSwEnvDlg()->pSh->GetView().GetCurShell()->GetPool(),
                                   pNewRanges.get());

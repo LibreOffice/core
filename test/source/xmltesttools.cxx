@@ -9,7 +9,7 @@
 
 #include <test/xmltesttools.hxx>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 namespace {
 
@@ -43,7 +43,7 @@ xmlDocPtr XmlTestTools::parseXml(utl::TempFile& aTempFile)
 xmlDocPtr XmlTestTools::parseXmlStream(SvStream* pStream)
 {
     sal_Size nSize = pStream->remainingSize();
-    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nSize + 1]);
+    std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
     pStream->Read(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
     return xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));

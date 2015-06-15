@@ -52,7 +52,7 @@
 
 #include <list>
 #include <set>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace utl;
 using namespace osl;
@@ -342,8 +342,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         OString encWord(OU2ENC(nTerm,eEnc));
 
         int wordlen = encWord.getLength();
-        boost::scoped_array<char> lcword(new char[wordlen + 1]);
-        boost::scoped_array<char> hyphens(new char[wordlen + 5]);
+        std::unique_ptr<char[]> lcword(new char[wordlen + 1]);
+        std::unique_ptr<char[]> hyphens(new char[wordlen + 5]);
 
         char ** rep = NULL; // replacements of discretionary hyphenation
         int * pos = NULL; // array of [hyphenation point] minus [deletion position]
@@ -623,8 +623,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         OString encWord(OU2ENC(nTerm,eEnc));
 
         int wordlen = encWord.getLength();
-        boost::scoped_array<char> lcword(new char[wordlen+1]);
-        boost::scoped_array<char> hyphens(new char[wordlen+5]);
+        std::unique_ptr<char[]> lcword(new char[wordlen+1]);
+        std::unique_ptr<char[]> hyphens(new char[wordlen+5]);
         char ** rep = NULL; // replacements of discretionary hyphenation
         int * pos = NULL; // array of [hyphenation point] minus [deletion position]
         int * cut = NULL; // length of deletions in original word

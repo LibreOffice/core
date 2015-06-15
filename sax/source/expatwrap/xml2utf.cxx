@@ -32,7 +32,7 @@ using namespace ::com::sun::star::io;
 
 
 #include "xml2utf.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 namespace sax_expatwrap {
 
@@ -395,7 +395,7 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
     Sequence<sal_Unicode>   seqUnicode ( nSourceSize );
 
     const sal_Int8 *pbSource = seqText.getConstArray();
-    boost::scoped_array<sal_Int8> pbTempMem;
+    std::unique_ptr<sal_Int8[]> pbTempMem;
 
     if( m_seqSource.getLength() ) {
         // put old rest and new byte sequence into one array
@@ -467,7 +467,7 @@ Unicode2TextConverter::~Unicode2TextConverter()
 
 Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , sal_Int32 nSourceSize)
 {
-    boost::scoped_array<sal_Unicode> puTempMem;
+    std::unique_ptr<sal_Unicode[]> puTempMem;
 
     if( m_seqSource.getLength() ) {
         // For surrogates !

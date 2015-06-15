@@ -20,7 +20,7 @@
 #include <math.h>
 
 #include <tools/poly.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <sgvspln.hxx>
 
@@ -392,8 +392,8 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
                      double* b, double* c, double* d)
 {
     sal_uInt16  i;
-    boost::scoped_array<double> a;
-    boost::scoped_array<double> h;
+    std::unique_ptr<double[]> a;
+    std::unique_ptr<double[]> h;
     sal_uInt16  error;
 
     if (n<2) return 1;
@@ -487,9 +487,9 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
     sal_uInt16  Error;
     sal_uInt16  i,im1,nm1; //integer
     double  hr,hl;
-    boost::scoped_array<double> a;
-    boost::scoped_array<double> lowrow;
-    boost::scoped_array<double> ricol;
+    std::unique_ptr<double[]> a;
+    std::unique_ptr<double[]> lowrow;
+    std::unique_ptr<double[]> ricol;
 
     if (n<2) return 4;
     nm1=n-1;

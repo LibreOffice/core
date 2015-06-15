@@ -76,7 +76,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include "mtftools.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
@@ -2595,7 +2595,7 @@ namespace cppcanvas
                         // generating a DX array, and uniformly
                         // distributing the excess/insufficient width
                         // to every logical character.
-                        ::boost::scoped_array< long > pDXArray( new long[nLen] );
+                        ::std::unique_ptr< long []> pDXArray( new long[nLen] );
 
                         rVDev.GetTextArray( pAct->GetText(), pDXArray.get(),
                                             pAct->GetIndex(), pAct->GetLen() );

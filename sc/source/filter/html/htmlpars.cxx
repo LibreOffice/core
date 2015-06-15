@@ -68,7 +68,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -686,9 +686,9 @@ void ScHTMLLayoutParser::SetWidths()
         // Why actually no pE?
         if ( nFirstTableCell < maList.size() )
         {
-            boost::scoped_array<sal_uInt16> pOffsets(new sal_uInt16[ nColsPerRow+1 ]);
+            std::unique_ptr<sal_uInt16[]> pOffsets(new sal_uInt16[ nColsPerRow+1 ]);
             memset( pOffsets.get(), 0, (nColsPerRow+1) * sizeof(sal_uInt16) );
-            boost::scoped_array<sal_uInt16> pWidths(new sal_uInt16[ nColsPerRow ]);
+            std::unique_ptr<sal_uInt16[]> pWidths(new sal_uInt16[ nColsPerRow ]);
             memset( pWidths.get(), 0, nColsPerRow * sizeof(sal_uInt16) );
             pOffsets[0] = nColOffsetStart;
             for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )

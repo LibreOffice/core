@@ -23,7 +23,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <rtl/digest.h>
 #include <rtl/ustring.hxx>
@@ -95,7 +95,7 @@ OString getDigest(const OString& aMessage, rtlDigestAlgorithm aAlgorithm)
     rtl_digest_update(handle, pData, nSize);
 
     sal_uInt32 nKeyLen = rtl_digest_queryLength(handle);
-    boost::scoped_array<sal_uInt8> pKeyBuffer(new sal_uInt8[nKeyLen]);
+    std::unique_ptr<sal_uInt8[]> pKeyBuffer(new sal_uInt8[nKeyLen]);
 
     rtl_digest_get(handle, pKeyBuffer.get(), nKeyLen);
     OString aSum = createHex(pKeyBuffer.get(), nKeyLen);
@@ -187,7 +187,7 @@ public:
             rtl_digest_update(handle, pData, nSize);
 
             sal_uInt32 nKeyLen = rtl_digest_queryLength( handle );
-            boost::scoped_array<sal_uInt8> pKeyBuffer(new sal_uInt8[nKeyLen]);
+            std::unique_ptr<sal_uInt8[]> pKeyBuffer(new sal_uInt8[nKeyLen]);
 
             rtl_digest_get( handle, pKeyBuffer.get(), nKeyLen );
             createHex(pKeyBuffer.get(), nKeyLen);
@@ -235,7 +235,7 @@ public:
     OString runCheckPBKDF2(OString& sPassword, bool bClearSalt, sal_uInt32 nCount)
     {
         sal_uInt32 nKeyLen = RTL_DIGEST_LENGTH_HMAC_SHA1;
-        boost::scoped_array<sal_uInt8> pKeyBuffer(new sal_uInt8[nKeyLen]);
+        std::unique_ptr<sal_uInt8[]> pKeyBuffer(new sal_uInt8[nKeyLen]);
 
         memset(pKeyBuffer.get(), 0, nKeyLen);
 
@@ -243,7 +243,7 @@ public:
         sal_Int32  nPasswordLen = sPassword.getLength();
 
         sal_uInt32   nSaltDataLen = RTL_DIGEST_LENGTH_HMAC_SHA1;
-        boost::scoped_array<sal_uInt8> pSaltData(new sal_uInt8[nSaltDataLen]);
+        std::unique_ptr<sal_uInt8[]> pSaltData(new sal_uInt8[nSaltDataLen]);
         memset(pSaltData.get(), 0, nSaltDataLen);
 
         if (!bClearSalt)
@@ -349,7 +349,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != 0);
 
         sal_uInt32 nKeyLen = rtl_digest_queryLength(aHandle);
-        boost::scoped_array<sal_uInt8> pKeyBuffer(new sal_uInt8[nKeyLen]);
+        std::unique_ptr<sal_uInt8[]> pKeyBuffer(new sal_uInt8[nKeyLen]);
 
         aError = rtl_digest_getMD5(aHandle, NULL, 0);
         CPPUNIT_ASSERT_MESSAGE("handle 2. parameter wrong", aError == rtl_Digest_E_Argument);
@@ -385,7 +385,7 @@ public:
                     0x37, 0x00
             };
 
-            boost::scoped_array<sal_uInt8> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
+            std::unique_ptr<sal_uInt8[]> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
 
             OString sExpected = "06f460d693aecdd3b5cbe8365408eccfc570f32a";
 
@@ -411,7 +411,7 @@ public:
                     0x37, 0x00, 0x38, 0x00
             };
 
-            boost::scoped_array<sal_uInt8> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
+            std::unique_ptr<sal_uInt8[]> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
 
             OString sExpected = "0bfe41eb7fb3edf5f5a6de57192de4ba1b925758";
 

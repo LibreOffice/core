@@ -31,7 +31,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <sax/tools/converter.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define FORMAT_BMP  "bmp"
 #define FORMAT_GIF  "gif"
@@ -516,8 +516,8 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
             const long          nStartY1 = aWorkRect.Top() + 1L;
             const long          nEndY1 = aWorkRect.Bottom();
             const long          nStartY2 = nEndY1 - 1L;
-            boost::scoped_array<Point> pPoints1;
-            boost::scoped_array<Point> pPoints2;
+            std::unique_ptr<Point[]> pPoints1;
+            std::unique_ptr<Point[]> pPoints2;
             long                nX, nY;
             sal_uInt16              nPolyPos = 0;
             const BitmapColor   aBlack = pAcc->GetBestMatchingColor( Color( COL_BLACK ) );

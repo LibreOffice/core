@@ -57,7 +57,7 @@
 #include "com/sun/star/i18n/XCharacterClassification.hpp"
 
 #include <algorithm>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -484,7 +484,7 @@ void DbgDialogTest( vcl::Window* pWindow )
     if ( !pGetChild )
         return;
 
-    boost::scoped_array<Rectangle> pRectAry(reinterpret_cast<Rectangle*>(new long[(sizeof(Rectangle)*nChildCount)/sizeof(long)]));
+    std::unique_ptr<Rectangle[]> pRectAry(reinterpret_cast<Rectangle*>(new long[(sizeof(Rectangle)*nChildCount)/sizeof(long)]));
     memset( pRectAry.get(), 0, sizeof(Rectangle)*nChildCount );
 
     if ( pWindow->IsDialog() )

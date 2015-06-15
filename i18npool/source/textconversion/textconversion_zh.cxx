@@ -26,7 +26,7 @@
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>
 #include <comphelper/string.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
@@ -165,7 +165,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
     if ((!wordData || !index || !entry) && !xCDL.is()) // no word mapping defined, do char2char conversion.
         return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
 
-    boost::scoped_array<sal_Unicode> newStr(new sal_Unicode[nLength * 2 + 1]);
+    std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nLength * 2 + 1]);
     sal_Int32 currPos = 0, count = 0;
     while (currPos < nLength) {
         sal_Int32 len = nLength - currPos;

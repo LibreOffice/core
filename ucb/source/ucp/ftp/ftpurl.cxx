@@ -38,7 +38,7 @@
 #include "ftphandleprovider.hxx"
 #include "ftpcfunc.hxx"
 #include "ftpcontainer.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ftp;
 using namespace com::sun::star::ucb;
@@ -159,7 +159,7 @@ void FTPURL::parse(const OUString& url)
        strncmp("ftp://",lower.getStr(),6))
         throw malformed_exception();
 
-    boost::scoped_array<char> buffer(new char[1+aIdent.getLength()]);
+    std::unique_ptr<char[]> buffer(new char[1+aIdent.getLength()]);
     const char* p2 = aIdent.getStr();
     p2 += 6;
 

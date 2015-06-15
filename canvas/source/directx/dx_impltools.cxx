@@ -48,8 +48,6 @@
 #include "dx_canvas.hxx"
 #include "dx_spritecanvas.hxx"
 
-#include <boost/scoped_array.hpp>
-
 #include <vector>
 #include <algorithm>
 

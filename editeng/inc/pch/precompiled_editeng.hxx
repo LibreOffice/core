@@ -25,7 +25,7 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/ref.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <cassert>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

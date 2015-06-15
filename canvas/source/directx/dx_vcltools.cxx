@@ -34,8 +34,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
-#include <boost/scoped_array.hpp>
-
 #include "dx_vcltools.hxx"
 
 using namespace ::com::sun::star;

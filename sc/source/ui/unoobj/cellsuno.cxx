@@ -130,7 +130,7 @@
 #include "condformatuno.hxx"
 
 #include <list>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
@@ -2688,7 +2688,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
         const OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
-        boost::scoped_array<const SfxItemPropertySimpleEntry*> pEntryArray(new const SfxItemPropertySimpleEntry*[nCount]);
+        std::unique_ptr<const SfxItemPropertySimpleEntry*[]> pEntryArray(new const SfxItemPropertySimpleEntry*[nCount]);
 
         sal_Int32 i;
         for(i = 0; i < nCount; i++)
@@ -2831,7 +2831,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         const OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
-        boost::scoped_array<const SfxItemPropertySimpleEntry*> pMapArray(new const SfxItemPropertySimpleEntry*[nCount]);
+        std::unique_ptr<const SfxItemPropertySimpleEntry*[]> pMapArray(new const SfxItemPropertySimpleEntry*[nCount]);
 
         sal_Int32 i;
         for(i = 0; i < nCount; i++)

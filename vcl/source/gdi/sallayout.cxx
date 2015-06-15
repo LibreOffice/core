@@ -50,7 +50,7 @@
 #endif
 
 #include <algorithm>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #ifdef DEBUG
 //#define MULTI_SL_DEBUG
@@ -1573,7 +1573,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );
     ImplLayoutArgs aMultiArgs = rArgs;
-    boost::scoped_array<DeviceCoordinate> pJustificationArray;
+    std::unique_ptr<DeviceCoordinate[]> pJustificationArray;
 
     if( !rArgs.mpDXArray && rArgs.mnLayoutWidth )
     {

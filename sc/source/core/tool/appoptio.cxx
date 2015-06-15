@@ -30,7 +30,7 @@
 #include "sc.hrc"
 #include <formula/compiler.hrc>
 #include "miscuno.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -139,7 +139,7 @@ static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
         if ( nCount < USHRT_MAX )
         {
             const sal_Int32* pArray = aSeq.getConstArray();
-            boost::scoped_array<sal_uInt16> pUShorts(new sal_uInt16[nCount]);
+            std::unique_ptr<sal_uInt16[]> pUShorts(new sal_uInt16[nCount]);
             for (long i=0; i<nCount; i++)
                 pUShorts[i] = (sal_uInt16) pArray[i];
 

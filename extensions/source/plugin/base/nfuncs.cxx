@@ -43,7 +43,7 @@
 
 #include <plugin/impl.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <osl/thread.h>
@@ -425,7 +425,7 @@ extern "C" {
             return NPERR_FILE_NOT_FOUND;
 
         PluginInputStream* pInputStream = static_cast<PluginInputStream*>(pStream);
-        boost::scoped_array<sal_Int8> pBytes;
+        std::unique_ptr<sal_Int8[]> pBytes;
         int   nBytes = 0;
         pPlugin->enterPluginCallback();
         while( rangeList )

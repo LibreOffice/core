@@ -27,7 +27,7 @@
 #include <vcl/settings.hxx>
 
 #include <image.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #if defined WNT
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -222,9 +222,9 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                         BitmapColor             aCol;
                         const long              nW = pAcc->Width();
                         const long              nH = pAcc->Height();
-                        boost::scoped_array<sal_uInt8> pMapR(new sal_uInt8[ 256 ]);
-                        boost::scoped_array<sal_uInt8> pMapG(new sal_uInt8[ 256 ]);
-                        boost::scoped_array<sal_uInt8> pMapB(new sal_uInt8[ 256 ]);
+                        std::unique_ptr<sal_uInt8[]> pMapR(new sal_uInt8[ 256 ]);
+                        std::unique_ptr<sal_uInt8[]> pMapG(new sal_uInt8[ 256 ]);
+                        std::unique_ptr<sal_uInt8[]> pMapB(new sal_uInt8[ 256 ]);
                         long                    nX, nY;
 
                         if( nStyle & DrawImageFlags::Highlight )

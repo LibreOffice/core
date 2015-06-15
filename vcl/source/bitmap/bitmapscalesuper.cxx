@@ -21,7 +21,7 @@
 #include <vcl/bitmapscalesuper.hxx>
 
 #include <algorithm>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <comphelper/threadpool.hxx>
 
 namespace {
@@ -50,10 +50,10 @@ struct ScaleContext {
     long mnSrcW, mnDestW;
     long mnSrcH, mnDestH;
     bool mbHMirr, mbVMirr;
-    boost::scoped_array<long> mpMapIX;
-    boost::scoped_array<long> mpMapIY;
-    boost::scoped_array<long> mpMapFX;
-    boost::scoped_array<long> mpMapFY;
+    std::unique_ptr<long[]> mpMapIX;
+    std::unique_ptr<long[]> mpMapIY;
+    std::unique_ptr<long[]> mpMapFX;
+    std::unique_ptr<long[]> mpMapFY;
     ScaleContext( BitmapReadAccess *pSrc,
                   BitmapWriteAccess *pDest,
                   long nSrcW, long nDestW,

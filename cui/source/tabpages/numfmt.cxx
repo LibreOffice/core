@@ -43,7 +43,7 @@
 #include "svx/flagsdef.hxx"
 #include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XServiceInfo;
@@ -765,7 +765,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
         if ( nDelCount > 0 )
         {
-            boost::scoped_array<sal_uInt32> pDelArr(new sal_uInt32[nDelCount]);
+            std::unique_ptr<sal_uInt32[]> pDelArr(new sal_uInt32[nDelCount]);
 
             pNumFmtShell->GetUpdateData( pDelArr.get(), nDelCount );
             pNumItem->SetDelFormatArray( pDelArr.get(), nDelCount );

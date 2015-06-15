@@ -55,7 +55,7 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
@@ -864,7 +864,7 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
     uno::Mapping curr2source(curr_env, source_env);
     uno::Mapping source2curr(source_env, curr_env);
 
-    boost::scoped_array<ContextEntry_Init> mapped_entries(new ContextEntry_Init[nEntries]);
+    std::unique_ptr<ContextEntry_Init[]> mapped_entries(new ContextEntry_Init[nEntries]);
     for (sal_Int32 nPos = 0; nPos < nEntries; ++ nPos)
     {
         mapped_entries[nPos].bLateInitService = pEntries[nPos].bLateInitService;

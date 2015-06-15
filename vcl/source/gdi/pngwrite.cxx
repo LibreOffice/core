@@ -29,7 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define PNG_DEF_COMPRESSION 6
 
@@ -329,7 +329,7 @@ bool PNGWriterImpl::ImplWriteHeader()
 void PNGWriterImpl::ImplWritePalette()
 {
     const sal_uLong nCount = mpAccess->GetPaletteEntryCount();
-    boost::scoped_array<sal_uInt8> pTempBuf(new sal_uInt8[nCount * 3]);
+    std::unique_ptr<sal_uInt8[]> pTempBuf(new sal_uInt8[nCount * 3]);
     sal_uInt8* pTmp = pTempBuf.get();
 
     ImplOpenChunk(PNGCHUNK_PLTE);

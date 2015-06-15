@@ -36,7 +36,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -225,7 +225,7 @@ bool SotStorageStream::CopyTo( SotStorageStream * pDestStm )
         Seek( 0L );
         pDestStm->SetSize( 0 ); // Ziel-Stream leeren
 
-        boost::scoped_array<sal_uInt8> pMem(new sal_uInt8[ 8192 ]);
+        std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ 8192 ]);
         sal_uLong  nRead;
         while( 0 != (nRead = Read( pMem.get(), 8192 )) )
         {

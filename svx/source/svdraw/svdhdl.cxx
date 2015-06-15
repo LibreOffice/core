@@ -65,7 +65,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 
@@ -1897,7 +1897,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
         }
 
         // allocate pointer array for sorted handle list
-        boost::scoped_array<ImplHdlAndIndex> pHdlAndIndex(new ImplHdlAndIndex[aList.size()]);
+        std::unique_ptr<ImplHdlAndIndex[]> pHdlAndIndex(new ImplHdlAndIndex[aList.size()]);
 
         // build sorted handle list
         for( size_t a = 0; a < aList.size(); ++a)

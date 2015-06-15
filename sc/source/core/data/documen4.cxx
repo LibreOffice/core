@@ -45,7 +45,7 @@
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
 #include <tokenstringcontext.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace formula;
 
@@ -1090,7 +1090,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
 
     SCTAB nThisCount = GetTableCount();
     SCTAB nOtherCount = rOtherDoc.GetTableCount();
-    boost::scoped_array<SCTAB> pOtherTabs(new SCTAB[nThisCount]);
+    std::unique_ptr<SCTAB[]> pOtherTabs(new SCTAB[nThisCount]);
     SCTAB nThisTab;
 
     //  compare tables with identical names
@@ -1175,9 +1175,9 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                                         aProText.makeStringAndClear(), 3*nThisEndRow );  // 2x FindOrder, 1x here
             long nProgressStart = 2*nThisEndRow;                    // start for here
 
-            boost::scoped_array<SCCOLROW> pTempRows(new SCCOLROW[nThisEndRow+1]);
-            boost::scoped_array<SCCOLROW> pOtherRows(new SCCOLROW[nThisEndRow+1]);
-            boost::scoped_array<SCCOLROW> pOtherCols(new SCCOLROW[nThisEndCol+1]);
+            std::unique_ptr<SCCOLROW[]> pTempRows(new SCCOLROW[nThisEndRow+1]);
+            std::unique_ptr<SCCOLROW[]> pOtherRows(new SCCOLROW[nThisEndRow+1]);
+            std::unique_ptr<SCCOLROW[]> pOtherCols(new SCCOLROW[nThisEndCol+1]);
 
             //  find inserted/deleted columns/rows:
             //  Two attempts:

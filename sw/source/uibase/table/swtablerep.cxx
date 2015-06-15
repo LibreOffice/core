@@ -51,7 +51,7 @@
 #include <cmdid.h>
 #include <table.hrc>
 #include "swtablerep.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 SwTableRep::SwTableRep( const SwTabCols& rTabCol )
     :
@@ -110,7 +110,7 @@ bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
     {
         // The invisible separators are taken from the old TabCols,
         // the visible coming from pTColumns.
-        boost::scoped_array<TColumn> pOldTColumns(new TColumn[nAllCols + 1]);
+        std::unique_ptr<TColumn[]> pOldTColumns(new TColumn[nAllCols + 1]);
         SwTwips nStart = 0;
         for ( sal_uInt16 i = 0; i < nAllCols - 1; ++i )
         {

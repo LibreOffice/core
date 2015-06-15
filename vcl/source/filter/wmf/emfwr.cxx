@@ -29,7 +29,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/dibtools.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define WIN_EMR_POLYGON                     3
 #define WIN_EMR_POLYLINE                    4
@@ -892,7 +892,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
     if( nLen )
     {
         sal_uInt32  nNormWidth;
-        boost::scoped_array<long> pOwnArray;
+        std::unique_ptr<long[]> pOwnArray;
         long*  pDX;
 
         // get text sizes

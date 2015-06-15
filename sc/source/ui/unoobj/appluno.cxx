@@ -39,7 +39,7 @@
 #include <com/sun/star/document/LinkUpdateModes.hpp>
 #include <com/sun/star/sheet/FunctionArgument.hpp>
 #include "ScPanelFactory.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -186,7 +186,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return (cppu::OWeakObject*)new ScSpreadsheetSettings();
+    return static_cast<cppu::OWeakObject*>(new ScSpreadsheetSettings());
 }
 
 OUString ScSpreadsheetSettings::getImplementationName_Static()
@@ -502,7 +502,7 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
     sal_uInt16 nCount = (sal_uInt16) std::min( aRecentFunctionIds.getLength(), (sal_Int32) LRU_MAX );
     const sal_Int32* pAry = aRecentFunctionIds.getConstArray();
 
-    boost::scoped_array<sal_uInt16> pFuncs(nCount ? new sal_uInt16[nCount] : NULL);
+    std::unique_ptr<sal_uInt16[]> pFuncs(nCount ? new sal_uInt16[nCount] : NULL);
     for (sal_uInt16 i=0; i<nCount; i++)
         pFuncs[i] = (sal_uInt16)pAry[i];        //! auf gueltige Werte testen?
 

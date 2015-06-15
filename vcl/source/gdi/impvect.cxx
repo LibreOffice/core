@@ -26,7 +26,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 #include <impvect.hxx>
-#include <boost/scoped_array.hpp>
 #include <memory>
 
 #define VECT_POLY_MAX 8192
@@ -872,8 +871,8 @@ ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
         const long          nNewWidth = ( nOldWidth << 2L ) + 4L;
         const long          nNewHeight = ( nOldHeight << 2L ) + 4L;
         const BitmapColor   aTest( pRAcc->GetBestMatchingColor( rColor ) );
-        boost::scoped_array<long> pMapIn(new long[ std::max( nOldWidth, nOldHeight ) ]);
-        boost::scoped_array<long> pMapOut(new long[ std::max( nOldWidth, nOldHeight ) ]);
+        std::unique_ptr<long[]> pMapIn(new long[ std::max( nOldWidth, nOldHeight ) ]);
+        std::unique_ptr<long[]> pMapOut(new long[ std::max( nOldWidth, nOldHeight ) ]);
         long                nX, nY, nTmpX, nTmpY;
 
         pMap = new ImplVectMap( nNewWidth, nNewHeight );

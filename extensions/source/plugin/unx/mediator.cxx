@@ -32,7 +32,7 @@
 #include <plugin/unx/mediator.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define MEDIATOR_MAGIC 0xf7a8d2f4
 
@@ -94,7 +94,7 @@ sal_uLong Mediator::SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong
     if( ! m_bValid )
         return nMessageID;
 
-    boost::scoped_array<sal_uLong> pBuffer(new sal_uLong[ (nBytes/sizeof(sal_uLong)) + 4 ]);
+    std::unique_ptr<sal_uLong[]> pBuffer(new sal_uLong[ (nBytes/sizeof(sal_uLong)) + 4 ]);
     pBuffer[ 0 ] = nMessageID;
     pBuffer[ 1 ] = nBytes;
     pBuffer[ 2 ] = MEDIATOR_MAGIC;
@@ -208,7 +208,7 @@ void MediatorListener::run()
         {
             if( nHeader[ 0 ] == 0 && nHeader[ 1 ] == 0 )
                 return;
-            boost::scoped_array<char> pBuffer(new char[ nHeader[ 1 ] ]);
+            std::unique_ptr<char[]> pBuffer(new char[ nHeader[ 1 ] ]);
             if( m_pMediator && (sal_uLong)read( m_pMediator->m_nSocket, pBuffer.get(), nHeader[ 1 ] ) == nHeader[ 1 ] )
             {
                 ::osl::MutexGuard aMyGuard( m_aMutex );

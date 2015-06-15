@@ -18,7 +18,7 @@
  */
 
 #include "Exif.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 Exif::Exif() :
     maOrientation(TOP_LEFT),
@@ -208,7 +208,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     sal_uInt16 aLength = aSectionLength - 6; // Length = Section - Header
 
-    boost::scoped_array<sal_uInt8> aExifData(new sal_uInt8[aLength]);
+    std::unique_ptr<sal_uInt8[]> aExifData(new sal_uInt8[aLength]);
     sal_uInt32 aExifDataBeginPosition = rStream.Tell();
 
     rStream.Read(aExifData.get(), aLength);

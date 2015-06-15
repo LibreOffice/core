@@ -36,7 +36,7 @@
 #include <vcl/metric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 // MS Windows defines
 
@@ -567,7 +567,7 @@ void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
         pWMF->WriteUChar( 0 );
 
     sal_Int32 nOriginalTextLen = rString.getLength();
-    boost::scoped_array<sal_Int16> pConvertedDXAry(new sal_Int16[ nOriginalTextLen ]);
+    std::unique_ptr<sal_Int16[]> pConvertedDXAry(new sal_Int16[ nOriginalTextLen ]);
     sal_Int32 j = 0;
     pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ 0 ] );
     for (sal_Int32 i = 1; i < ( nOriginalTextLen - 1 ); ++i)
@@ -1203,7 +1203,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     pVirDev->SetFont( aSrcFont );
                     nLen = aTemp.getLength();
-                    boost::scoped_array<long> pDXAry(nLen ? new long[ nLen ] : NULL);
+                    std::unique_ptr<long[]> pDXAry(nLen ? new long[ nLen ] : NULL);
                     nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
                     if (nLen && nNormSize == 0)
                     {

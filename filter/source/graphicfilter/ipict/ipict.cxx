@@ -28,7 +28,7 @@
 
 #include "ipict.hxx"
 #include "shape.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #include <vcl/FilterConfigItem.hxx>
     // complete FilterConfigItem for GraphicImport under -fsanitize=function

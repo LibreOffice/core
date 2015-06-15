@@ -70,7 +70,7 @@
 #include "lwptablelayout.hxx"
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 LwpFormulaArg::~LwpFormulaArg()
 {
@@ -124,7 +124,7 @@ bool LwpFormulaInfo::ReadText()
     m_pObjStrm->QuickReadInt16(); //Disk Size
     sal_uInt16 nStrLen = m_pObjStrm->QuickReadInt16();
 
-    boost::scoped_array<char> pBuf(new char[nStrLen+1]);
+    std::unique_ptr<char[]> pBuf(new char[nStrLen+1]);
     m_pObjStrm->QuickRead( pBuf.get(), nStrLen );
     *(pBuf.get()+nStrLen)='\0';
     OUString aText;

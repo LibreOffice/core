@@ -52,7 +52,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
 #include "xml2utf.hxx"
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define LINEFEED 10
 #define SEQUENCESIZE 1024
@@ -493,7 +493,7 @@ inline void SaxWriterHelper::insertIndentation(sal_uInt32 m_nLevel) throw( SAXEx
         else
         {
             sal_uInt32 nCount(m_nLevel + 1);
-            boost::scoped_array<sal_Int8> pBytes(new sal_Int8[nCount]);
+            std::unique_ptr<sal_Int8[]> pBytes(new sal_Int8[nCount]);
             pBytes[0] = LINEFEED;
             memset( &(pBytes[1]), 32, m_nLevel );
             AddBytes(mp_Sequence, nCurrentPos, pBytes.get(), nCount);

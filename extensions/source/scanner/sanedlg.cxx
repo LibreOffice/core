@@ -28,7 +28,7 @@
 #include <math.h>
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include "strings.hrc"
 
 #define PREVIEW_WIDTH       113
@@ -641,8 +641,8 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
                 case SANE_TYPE_INT:
                 {
                     int nElements = mrSane.GetOptionElements( mnCurrentOption );
-                    boost::scoped_array<double> x(new double[ nElements ]);
-                    boost::scoped_array<double> y(new double[ nElements ]);
+                    std::unique_ptr<double[]> x(new double[ nElements ]);
+                    std::unique_ptr<double[]> y(new double[ nElements ]);
                     for( int i = 0; i < nElements; i++ )
                         x[ i ] = (double)i;
                     mrSane.GetOptionValue( mnCurrentOption, y.get() );

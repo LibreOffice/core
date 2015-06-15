@@ -26,7 +26,7 @@
 #include "xiroot.hxx"
 
 #include <vector>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -725,7 +725,7 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
     if( mbValid && (nBytes > 0) )
     {
         const sal_Size nMaxBuffer = 4096;
-        boost::scoped_array<sal_uInt8> pnBuffer(new sal_uInt8[ ::std::min( nBytes, nMaxBuffer ) ]);
+        std::unique_ptr<sal_uInt8[]> pnBuffer(new sal_uInt8[ ::std::min( nBytes, nMaxBuffer ) ]);
         sal_Size nBytesLeft = nBytes;
 
         while( mbValid && (nBytesLeft > 0) )
@@ -814,7 +814,7 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
     sal_uInt16 nCharsLeft = nChars;
     sal_uInt16 nReadSize;
 
-    boost::scoped_array<sal_Unicode> pcBuffer(new sal_Unicode[ nCharsLeft + 1 ]);
+    std::unique_ptr<sal_Unicode[]> pcBuffer(new sal_Unicode[ nCharsLeft + 1 ]);
 
     while( IsValid() && (nCharsLeft > 0) )
     {
@@ -921,7 +921,7 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {
     nChars = GetMaxRawReadSize(nChars);
-    boost::scoped_array<sal_Char> pcBuffer(new sal_Char[ nChars + 1 ]);
+    std::unique_ptr<sal_Char[]> pcBuffer(new sal_Char[ nChars + 1 ]);
     sal_uInt16 nCharsRead = ReadRawData( pcBuffer.get(), nChars );
     pcBuffer[ nCharsRead ] = '\0';
     OUString aRet( pcBuffer.get(), strlen(pcBuffer.get()), mrRoot.GetTextEncoding() );

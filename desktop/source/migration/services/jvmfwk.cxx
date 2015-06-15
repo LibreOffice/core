@@ -28,7 +28,6 @@
 #include <sal/types.h>
 #include <sal/config.h>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_array.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>

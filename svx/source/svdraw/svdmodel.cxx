@@ -86,7 +86,7 @@
 #include <svl/itemset.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <libxml/xmlwriter.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -1583,7 +1583,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
     // at first, save the pointers of the affected pages in an array
     sal_uInt16 nPageNum=nFirstPageNum;
     sal_uInt16 nCopyAnz=((!bReverse)?(nLastPageNum-nFirstPageNum):(nFirstPageNum-nLastPageNum))+1;
-    boost::scoped_array<SdrPage*> pPagePtrs(new SdrPage*[nCopyAnz]);
+    std::unique_ptr<SdrPage*[]> pPagePtrs(new SdrPage*[nCopyAnz]);
     sal_uInt16 nCopyNum;
     for(nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++)
     {
@@ -1661,8 +1661,8 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     if (nLastPageNum>nMaxSrcPage)  nLastPageNum =nMaxSrcPage;
     bool bReverse=nLastPageNum<nFirstPageNum;
 
-    boost::scoped_array<sal_uInt16> pMasterMap;
-    boost::scoped_array<bool> pMasterNeed;
+    std::unique_ptr<sal_uInt16[]> pMasterMap;
+    std::unique_ptr<bool[]> pMasterNeed;
     sal_uInt16    nMasterNeed=0;
     if (bMergeMasterPages && nSrcMasterPageAnz!=0) {
         // determine which MasterPages from rSrcModel we need

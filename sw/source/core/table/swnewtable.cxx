@@ -35,7 +35,7 @@
 #include <vector>
 #include <set>
 #include <list>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
@@ -1097,10 +1097,10 @@ static void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
         return;
     if( nCnt > nCount )
         nCnt = nCount;
-    ::boost::scoped_array<size_t> const pSplitIdx(new size_t[nCnt]);
+    ::std::unique_ptr<size_t[]> const pSplitIdx(new size_t[nCnt]);
     if( bSameHeight )
     {
-        ::boost::scoped_array<SwTwips> const pHeights(new SwTwips[nCount]);
+        ::std::unique_ptr<SwTwips[]> const pHeights(new SwTwips[nCount]);
         SwTwips nHeight = 0;
         for (size_t i = 0; i < nCount; ++i)
         {

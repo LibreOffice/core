@@ -64,7 +64,6 @@
 #include <rtl/instance.hxx>
 #include <vcl/metaact.hxx>
 #include <vector>
-#include <boost/scoped_array.hpp>
 #include <memory>
 
 #include "FilterConfigCache.hxx"
@@ -624,7 +623,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     if( !bTest )
     {
         sal_uLong nSize = ( nStreamLen > 2048 ) ? 2048 : nStreamLen;
-        boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8 [ nSize ]);
+        std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8 [ nSize ]);
 
         rStream.Seek( nStreamPos );
         rStream.Read( pBuf.get(), nSize );

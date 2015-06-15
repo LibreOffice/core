@@ -29,7 +29,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 // - Defines -
 
@@ -288,7 +288,7 @@ bool ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, bool bQuad )
     const sal_uLong     nPalSize = nColors * ( bQuad ? 4UL : 3UL );
     BitmapColor     aPalColor;
 
-    boost::scoped_array<sal_uInt8> pEntries(new sal_uInt8[ nPalSize ]);
+    std::unique_ptr<sal_uInt8[]> pEntries(new sal_uInt8[ nPalSize ]);
     if (rIStm.Read( pEntries.get(), nPalSize ) != nPalSize)
     {
         return false;
@@ -511,7 +511,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 rHeader.nSizeImage = rIStm.remainingSize();
             }
 
-            boost::scoped_array<sal_uInt8> pBuffer(
+            std::unique_ptr<sal_uInt8[]> pBuffer(
                 new sal_uInt8[rHeader.nSizeImage]);
             if (rIStm.Read(pBuffer.get(), rHeader.nSizeImage)
                 != rHeader.nSizeImage)
@@ -524,7 +524,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         {
             const long nWidth(rHeader.nWidth);
             const long nHeight(rHeader.nHeight);
-            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nAlignedWidth]);
+            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nAlignedWidth]);
 
             const long nI(bTopDown ? 1 : -1);
             long nY(bTopDown ? 0 : nHeight - 1);
@@ -918,7 +918,7 @@ bool ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 {
     const sal_uInt16    nColors = rAcc.GetPaletteEntryCount();
     const sal_uLong     nPalSize = nColors * 4UL;
-    boost::scoped_array<sal_uInt8> pEntries(new sal_uInt8[ nPalSize ]);
+    std::unique_ptr<sal_uInt8[]> pEntries(new sal_uInt8[ nPalSize ]);
     sal_uInt8*          pTmpEntry = pEntries.get();
     BitmapColor     aPalColor;
 
@@ -945,7 +945,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
     sal_uLong       nSaveIndex;
     sal_uLong       nCount;
     sal_uLong       nBufCount;
-    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ ( nWidth << 1 ) + 2 ]);
+    std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ ( nWidth << 1 ) + 2 ]);
     sal_uInt8*      pTmp;
     sal_uInt8       cPix;
     sal_uInt8       cLast;
@@ -1127,7 +1127,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
         {
             const long nWidth(rAcc.Width());
             const long nHeight(rAcc.Height());
-            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nAlignedWidth ]);
+            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nAlignedWidth ]);
             switch( nBitCount )
             {
                 case( 1 ):

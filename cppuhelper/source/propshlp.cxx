@@ -26,7 +26,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <sal/log.hxx>
 
 using namespace osl;
@@ -841,8 +841,8 @@ void OPropertySetHelper::setFastPropertyValues(
         // get the map table
         IPropertyArrayHelper & rPH = getInfoHelper();
 
-        boost::scoped_array<Any> pConvertedValues(new Any[ nHitCount ]);
-        boost::scoped_array<Any> pOldValues(new Any[ nHitCount ]);
+        std::unique_ptr<Any[]> pConvertedValues(new Any[ nHitCount ]);
+        std::unique_ptr<Any[]> pOldValues(new Any[ nHitCount ]);
         sal_Int32 n = 0;
         sal_Int32 i;
 
@@ -901,7 +901,7 @@ void OPropertySetHelper::setPropertyValues(
     throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
         sal_Int32   nSeqLen = rPropertyNames.getLength();
-        boost::scoped_array<sal_Int32> pHandles(new sal_Int32[ nSeqLen ]);
+        std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nSeqLen ]);
         // get the map table
         IPropertyArrayHelper & rPH = getInfoHelper();
         // fill the handle array
@@ -915,7 +915,7 @@ Sequence<Any> OPropertySetHelper::getPropertyValues( const Sequence<OUString>& r
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32   nSeqLen = rPropertyNames.getLength();
-    boost::scoped_array<sal_Int32> pHandles(new sal_Int32[ nSeqLen ]);
+    std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nSeqLen ]);
     Sequence< Any > aValues( nSeqLen );
 
     // get the map table
@@ -957,7 +957,7 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = rPropertyNames.getLength();
-    boost::scoped_array<sal_Int32> pHandles(new sal_Int32[nLen]);
+    std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[nLen]);
     IPropertyArrayHelper & rPH = getInfoHelper();
     rPH.fillHandles( pHandles.get(), rPropertyNames );
     const OUString* pNames = rPropertyNames.getConstArray();

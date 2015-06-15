@@ -32,7 +32,7 @@
 
 #include <impbmp.hxx>
 #include <salbmp.hxx>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 Bitmap::Bitmap() :
     mpImpBmp( NULL )
@@ -551,7 +551,7 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
         if( pAcc )
         {
             const long  nScanSize = pAcc->GetScanlineSize();
-            boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[ nScanSize ]);
+            std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[ nScanSize ]);
             const long  nHeight = pAcc->Height();
             const long  nHeight1 = nHeight - 1L;
             const long  nHeight_2 = nHeight >> 1L;
@@ -690,10 +690,10 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                     long                nY;
                     long                nRotX;
                     long                nRotY;
-                    boost::scoped_array<long> pCosX(new long[ nNewWidth ]);
-                    boost::scoped_array<long> pSinX(new long[ nNewWidth ]);
-                    boost::scoped_array<long> pCosY(new long[ nNewHeight ]);
-                    boost::scoped_array<long> pSinY(new long[ nNewHeight ]);
+                    std::unique_ptr<long[]> pCosX(new long[ nNewWidth ]);
+                    std::unique_ptr<long[]> pSinX(new long[ nNewWidth ]);
+                    std::unique_ptr<long[]> pCosY(new long[ nNewHeight ]);
+                    std::unique_ptr<long[]> pSinY(new long[ nNewHeight ]);
 
                     for ( nX = 0; nX < nNewWidth; nX++ )
                     {
@@ -883,7 +883,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                         if( pReadAcc->HasPalette() && pWriteAcc->HasPalette() )
                         {
                             const sal_uInt16    nCount = pReadAcc->GetPaletteEntryCount();
-                            boost::scoped_array<sal_uInt8> pMap(new sal_uInt8[ nCount ]);
+                            std::unique_ptr<sal_uInt8[]> pMap(new sal_uInt8[ nCount ]);
 
                             // Create index map for the color table, as the bitmap should be copied
                             // retaining it's color information relatively well
@@ -1467,7 +1467,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                 }
                 else
                 {
-                    boost::scoped_array<bool> pFlags(new bool[ nMaxColors ]);
+                    std::unique_ptr<bool[]> pFlags(new bool[ nMaxColors ]);
 
                     // Set all entries to false
                     std::fill( pFlags.get(), pFlags.get()+nMaxColors, false );
@@ -1641,12 +1641,12 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
 
     if( pAcc )
     {
-        boost::scoped_array<long> pMinR(new long[ nColorCount ]);
-        boost::scoped_array<long> pMaxR(new long[ nColorCount ]);
-        boost::scoped_array<long> pMinG(new long[ nColorCount ]);
-        boost::scoped_array<long> pMaxG(new long[ nColorCount ]);
-        boost::scoped_array<long> pMinB(new long[ nColorCount ]);
-        boost::scoped_array<long> pMaxB(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMinR(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMaxR(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMinG(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMaxG(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMinB(new long[ nColorCount ]);
+        std::unique_ptr<long[]> pMaxB(new long[ nColorCount ]);
         long*   pTols;
         sal_uLong   i;
 
@@ -1692,7 +1692,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
         else
         {
             BitmapColor     aCol;
-            boost::scoped_array<BitmapColor> pReplaces(new BitmapColor[ nColorCount ]);
+            std::unique_ptr<BitmapColor[]> pReplaces(new BitmapColor[ nColorCount ]);
 
             for( i = 0UL; i < nColorCount; i++ )
                 pReplaces[ i ] = pAcc->GetBestMatchingColor( pReplaceColors[ i ] );

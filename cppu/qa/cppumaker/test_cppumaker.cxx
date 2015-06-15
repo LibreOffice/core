@@ -353,7 +353,7 @@
 #include "test/codemaker/cppumaker/TestException2.hpp"
 #include "test/codemaker/cppumaker/Constants.hpp"
 
-#include "boost/scoped_array.hpp"
+#include <memory>
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/TypeClass.hpp"
@@ -421,7 +421,7 @@ struct Guard {
 void Test::testBigStruct() {
     // Default-initialize a BigStruct instance on top of a memory buffer filled
     // with random data, and make sure that all members are default-initialized:
-    boost::scoped_array< char > buffer(
+    std::unique_ptr< char []> buffer(
         new char[sizeof (test::codemaker::cppumaker::BigStruct)]);
     for (std::size_t i = 0; i < sizeof (test::codemaker::cppumaker::BigStruct);
          ++i)

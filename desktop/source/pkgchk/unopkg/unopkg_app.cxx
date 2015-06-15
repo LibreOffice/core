@@ -39,7 +39,6 @@
 
 #include <com/sun/star/deployment/ui/PackageManagerDialog.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <boost/scoped_array.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <stdio.h>

@@ -24,7 +24,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 #define MAX_BSPLINE_DEGREE 15
 
@@ -721,14 +721,14 @@ void SplineCalculater::CalculateBSplines(
             continue; // need at least 2 points, degree p needs at least n+1 points
                       // next piece of series
 
-        boost::scoped_array<double> t(new double [n+1]);
+        std::unique_ptr<double[]> t(new double [n+1]);
         if (!createParameterT(aPointsIn, t.get()))
         {
             continue; // next piece of series
         }
 
         lcl_tSizeType m = n + p + 1;
-        boost::scoped_array<double> u(new double [m+1]);
+        std::unique_ptr<double[]> u(new double [m+1]);
         createKnotVector(n, p, t.get(), u.get());
 
         // The matrix N contains the B-spline basis functions applied to parameters.
@@ -736,14 +736,14 @@ void SplineCalculater::CalculateBSplines(
         // column in a higher row is equal or greater than in the lower row.
         // To store this matrix the non-zero elements are shifted to column 0
         // and the amount of shifting is remembered in an array.
-        boost::scoped_array<double*> aMatN(new double*[n+1]);
+        std::unique_ptr<double*[]> aMatN(new double*[n+1]);
         for (lcl_tSizeType row = 0; row <=n; ++row)
         {
             aMatN[row] = new double[p+1];
             for (sal_uInt32 col = 0; col <= p; ++col)
             aMatN[row][col] = 0.0;
         }
-        boost::scoped_array<lcl_tSizeType> aShift(new lcl_tSizeType[n+1]);
+        std::unique_ptr<lcl_tSizeType[]> aShift(new lcl_tSizeType[n+1]);
         aMatN[0][0] = 1.0; //all others are zero
         aShift[0] = 0;
         aMatN[n][0] = 1.0;
@@ -879,7 +879,7 @@ void SplineCalculater::CalculateBSplines(
             pNewX[nNewSize -1 ] = aPointsIn[n].first;
             pNewY[nNewSize -1 ] = aPointsIn[n].second;
             pNewZ[nNewSize -1 ] = fZCoordinate;
-            boost::scoped_array<double> aP(new double[m+1]);
+            std::unique_ptr<double[]> aP(new double[m+1]);
             lcl_tSizeType nLow = 0;
             for ( lcl_tSizeType nTIndex = 0; nTIndex <= n-1; ++nTIndex)
             {

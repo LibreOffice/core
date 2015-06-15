@@ -19,7 +19,7 @@
 
 #include "winmtf.hxx"
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <boost/optional.hpp>
 #include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
@@ -383,7 +383,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 }
 
                 // Number of points of each polygon. Determine total number of points
-                boost::scoped_array<sal_uInt16> xPolygonPointCounts(new sal_uInt16[nPolyCount]);
+                std::unique_ptr<sal_uInt16[]> xPolygonPointCounts(new sal_uInt16[nPolyCount]);
                 sal_uInt16* pnPoints = xPolygonPointCounts.get();
                 tools::PolyPolygon aPolyPoly(nPolyCount, nPolyCount);
                 sal_uInt16 nPoints = 0;
@@ -421,7 +421,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         break;
                     }
 
-                    boost::scoped_array<Point> xPolygonPoints(new Point[nPointCount]);
+                    std::unique_ptr<Point[]> xPolygonPoints(new Point[nPointCount]);
                     Point* pPtAry = xPolygonPoints.get();
 
                     for(sal_uInt16 b(0); b < nPointCount && pWMF->good(); ++b)
@@ -507,7 +507,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUInt16( nLength );
             if ( nLength )
             {
-                boost::scoped_array<char> pChar(new char[ ( nLength + 1 ) &~ 1 ]);
+                std::unique_ptr<char[]> pChar(new char[ ( nLength + 1 ) &~ 1 ]);
                 pWMF->Read( pChar.get(), ( nLength + 1 ) &~ 1 );
                 OUString aText( pChar.get(), nLength, pOut->GetCharSet() );
                 pChar.reset();
@@ -523,7 +523,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             sal_Int32   nRecordPos, nRecordSize = 0, nOriginalTextLen, nNewTextLen;
             Point       aPosition;
             Rectangle   aRect;
-            boost::scoped_array<long> pDXAry;
+            std::unique_ptr<long[]> pDXAry;
 
             pWMF->SeekRel(-6);
             nRecordPos = pWMF->Tell();
@@ -549,7 +549,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     const Point aPt2( ReadPoint() );
                     aRect = Rectangle( aPt1, aPt2 );
                 }
-                boost::scoped_array<char> pChar(new char[ ( nOriginalTextLen + 1 ) &~ 1 ]);
+                std::unique_ptr<char[]> pChar(new char[ ( nOriginalTextLen + 1 ) &~ 1 ]);
                 pWMF->Read( pChar.get(), ( nOriginalTextLen + 1 ) &~ 1 );
                 OUString aText( pChar.get(), (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
                 nNewTextLen = aText.getLength();                                          // less character (japanese version), so the
@@ -1017,7 +1017,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 #else
                                 sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
 #endif
-                                boost::scoped_array<sal_Int8> pData;
+                                std::unique_ptr<sal_Int8[]> pData;
 
                                 if ( ( static_cast< sal_uInt64 >( nEscLen ) + pWMF->Tell() ) > nMetaRecEndPos )
                                 {
@@ -1042,7 +1042,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                 Point  aPt;
                                                 OUString aString;
                                                 sal_uInt32  nStringLen, nDXCount;
-                                                boost::scoped_array<long> pDXAry;
+                                                std::unique_ptr<long[]> pDXAry;
                                                 SvMemoryStream aMemoryStream( nEscLen );
                                                 aMemoryStream.Write( pData.get(), nEscLen );
                                                 aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
@@ -1116,7 +1116,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
                             if( pEMFStream )
                             {
-                                boost::scoped_array<sal_Int8> pBuf(new sal_Int8[ nCurRecSize ]);
+                                std::unique_ptr<sal_Int8[]> pBuf(new sal_Int8[ nCurRecSize ]);
                                 sal_uInt32 nCount = pWMF->Read( pBuf.get(), nCurRecSize );
                                 if( nCount == nCurRecSize )
                                     pEMFStream->Write( pBuf.get(), nCount );

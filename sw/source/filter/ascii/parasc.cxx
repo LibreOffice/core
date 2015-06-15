@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_array.hpp>
+#include <memory>
 #include <tools/stream.hxx>
 #include <hintids.hxx>
 #include <rtl/tencinfo.h>
@@ -293,7 +293,7 @@ sal_uLong SwASCIIParser::ReadChars()
         bSwapUnicode = rInput.IsEndianSwap();
     }
 
-    boost::scoped_array<sal_Unicode> aWork;
+    std::unique_ptr<sal_Unicode[]> aWork;
     sal_uLong nArrOffset = 0;
 
     do {
