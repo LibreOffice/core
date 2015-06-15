@@ -1185,25 +1185,25 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             // copy the source document
                             xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
 
-                        //create a view frame for the document
-                        pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
-                        //request the layout calculation
-                        SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
-                        pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
+                            //create a view frame for the document
+                            pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
+                            //request the layout calculation
+                            SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
+                            pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
 
-                        pWorkDoc = rWorkShell.GetDoc();
-                        pWorkDoc->ReplaceDocumentProperties( *pSourceDocSh->GetDoc());
-                        if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
-                            lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
-                        pOldDBManager = pWorkDoc->GetDBManager();
-                        pWorkDoc->SetDBManager( this );
-                        pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
+                            pWorkDoc = rWorkShell.GetDoc();
+                            pWorkDoc->ReplaceDocumentProperties( *pSourceDocSh->GetDoc());
+                            if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
+                                lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
+                            pOldDBManager = pWorkDoc->GetDBManager();
+                            pWorkDoc->SetDBManager( this );
+                            pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
 
-                        // #i69458# lock fields to prevent access to the result set while calculating layout
-                        rWorkShell.LockExpFields();
-                        rWorkShell.CalcLayout();
-                        rWorkShell.UnlockExpFields();
-                    }
+                            // #i69458# lock fields to prevent access to the result set while calculating layout
+                            rWorkShell.LockExpFields();
+                            rWorkShell.CalcLayout();
+                            rWorkShell.UnlockExpFields();
+                        }
 
                         SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
                         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
