@@ -41,7 +41,7 @@ namespace dbaui
     class ODbDataSourceAdministrationHelper;
     // OUserAdminDlg
 
-    /** implements the user adin dialog
+    /** implements the user admin dialog
     */
     class OUserAdminDlg : public SfxTabDialog, public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
     {

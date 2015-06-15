@@ -111,7 +111,7 @@ class SwRootFrm: public SwLayoutFrm
      * Because sometimes it matters which shell is used, it is necessary to
      * know the active shell.
      * this is approximated by setting the pointer mpCurrShell when a
-     * shell gets the focus (FEShell). Acditionally the pointer will be
+     * shell gets the focus (FEShell). Additionally the pointer will be
      * set temporarily by SwCurrShell typically via  SET_CURR_SHELL
      * The macro and class can be found in the SwViewShell. These object can
      * be created nested (also for different kinds of Shells). They are

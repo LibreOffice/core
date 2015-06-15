@@ -53,7 +53,7 @@ public:
     To extend this method for more XML-types override this method
     like the example below. If you call the method of the base-class
     you get propertyhandler for basic-XML-types ( e.g. for color, percent, ... ).
-    Afetr that you could create your new XML-types. After creating a new type
+    After that you could create your new XML-types. After creating a new type
     you have to put the pointer into the cache via the method
     PutHdlCache( sal_Int32 , XMLPropertyHandler* ).
 

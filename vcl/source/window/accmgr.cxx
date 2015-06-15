@@ -220,7 +220,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                 // already assigned !
                 if ( pEntry->mbEnabled )
                 {
-                    // first call activate/aeactivate-Handler
+                    // first call activate/deactivate-Handler
                     pAccel->Activate();
                     pAccel->Deactivate();
 

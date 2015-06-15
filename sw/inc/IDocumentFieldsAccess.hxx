@@ -117,7 +117,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     // In Calculator set all SetExpression fields that are valid up to the indicated position
     // (Node [ + ::com::sun::star::ucb::Content]).
     // A generated list of all fields may be passed along too
-    // (if the addreess != 0 and the pointer == 0 a new list will be returned).
+    // (if the address != 0 and the pointer == 0 a new list will be returned).
     virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;
 
     virtual void FieldsToCalc(SwCalc& rCalc, const _SetGetExpField& rToThisField) = 0;

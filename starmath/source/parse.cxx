@@ -684,7 +684,7 @@ void SmParser::NextToken()
                         }
 
                         // if no symbol-name was found we start-over with
-                        // finding the next token right afer the '%' sign.
+                        // finding the next token right after the '%' sign.
                         // I.e. we leave rnEndPos unmodified.
                     }
                     break;

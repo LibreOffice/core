@@ -66,7 +66,7 @@ class ImageHelper
 {
 public:
     // The routine will always attempt to return a valid XGraphic for the
-    // passed _rURL, additionallly xOutGraphicObject will contain the
+    // passed _rURL, additionally xOutGraphicObject will contain the
     // associated XGraphicObject ( if url is valid for that ) and is set
     // appropriately ( e.g. NULL if non GraphicObject scheme ) or a valid
     // object if the rURL points to a valid object

@@ -1230,7 +1230,7 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
     }
     else
     {
-        // here we do not pay attention to the computational accurancy
+        // here we do not pay attention to the computational accuracy
         // (that would be more complicated and is not really worth it in this case)
         double fLambda = (    (rPoint1.Y() - rPoint2.Y()) * rHeading2.X()
                             - (rPoint1.X() - rPoint2.X()) * rHeading2.Y())

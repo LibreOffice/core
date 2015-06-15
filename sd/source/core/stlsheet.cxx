@@ -399,7 +399,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         }
         else
         {
-            /* no page available yet. This can happen when actualising the
+            /* no page available yet. This can happen when actualizing the
                document templates.  */
             SfxStyleSheetIterator aIter(pPool, SD_STYLE_FAMILY_MASTERPAGE);
             SfxStyleSheetBase* pSheet = aIter.First();

@@ -313,7 +313,7 @@ public:
 
 /**
  * Inserting a NEW Object.
- * Create Actio after insertion into the ObjList.
+ * Create Action after insertion into the ObjList.
  */
 
 class SVX_DLLPUBLIC SdrUndoNewObj : public SdrUndoInsertObj

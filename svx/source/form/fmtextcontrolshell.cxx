@@ -588,7 +588,7 @@ namespace svx
                 // Sadly, the semantics of the dispatches is that the feature "Font" depends
                 // on the current cursor position: If it's on latin text, it's the "latin font"
                 // which is set up at the control. If it's on CJK text, it's the "CJK font", and
-                // aequivalent for "CTL font".
+                // equivalent for "CTL font".
                 // The same holds for some other font related features/slots.
                 // Thus, we have separate dispatches for "Latin Font", "Latin Font Size", etc,
                 // which are only "virtual", in a sense that there exist no item with this id.

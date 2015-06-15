@@ -282,7 +282,7 @@ namespace sdr
 
             // if there is something to show, use a primitive processor to render it. There
             // is a choice between VCL and Canvas processors currently. The decision is made in
-            // createProcessor2DFromOutputDevice and takes into accout things like the
+            // createProcessor2DFromOutputDevice and takes into account things like the
             // Target is a MetaFile, a VDev or something else. The Canvas renderer is triggered
             // currently using the shown boolean. Canvas is not yet the default.
             if(xPrimitiveSequence.hasElements())

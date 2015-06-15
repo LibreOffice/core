@@ -239,7 +239,7 @@ bool MasterPageDescriptor::UpdatePreview (
                 maLargePreview.GetBitmapEx(),
                 rSmallSize.Width());
             // The large preview may not have the desired width.  Scale it
-            // accrodingly.
+            // accordingly.
             if (maLargePreview.GetSizePixel().Width() != rLargeSize.Width())
                 maLargePreview = rRenderer.ScaleBitmap(
                     maLargePreview.GetBitmapEx(),

@@ -1043,7 +1043,7 @@ void ScExportTest::testCellValuesExportODS()
         rDoc.SetString(ScAddress(0,4,0), "'12"); //A5
         // set a contiguous value
         rDoc.SetValue(ScAddress(0,5,0), 12.0); //A6
-        // set acontiguous string
+        // set a contiguous string
         rDoc.SetString(ScAddress(0,6,0), "a string"); //A7
         // set a contiguous formula
         rDoc.SetString(ScAddress(0,7,0), "=$A$6"); //A8
