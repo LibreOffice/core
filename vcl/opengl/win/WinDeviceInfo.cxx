@@ -745,6 +745,7 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
         }
     }
 
+    SAL_INFO("vcl.opengl", (match ? "BLACKLISTED" : "not blacklisted"));
     return match;
 }
 
