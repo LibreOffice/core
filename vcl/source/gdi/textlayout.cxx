@@ -284,7 +284,7 @@ namespace vcl
             // but no actual painting happens, so our "DrawText( Point, ... )" is never called
             // In this case, calculate the rect from what OutputDevice::GetTextRect would give us. This has
             // the disadvantage of less accuracy, compared with the approach to calculate the rect from the
-            // single "DrawText( Point, ... )" calls, since more intermediate arithmetics will translate
+            // single "DrawText( Point, ... )" calls, since more intermediate arithmetic will translate
             // from ref- to target-units.
             aTextRect = m_rTargetDevice.GetTextRect( aRect, _rText, _nStyle, NULL, this );
         }

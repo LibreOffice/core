@@ -228,7 +228,7 @@ public:
 
     @ATTENTION
     Note that the string returned may be truncated even inside
-    a quoted field if some (arbritary) maximum length was reached.
+    a quoted field if some (arbitrary) maximum length was reached.
     There currently is no way to exactly determine the conditions,
     whether this was at a line end, or whether open quotes
     would have closed the field before the line end, as even a

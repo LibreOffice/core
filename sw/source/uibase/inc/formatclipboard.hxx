@@ -71,7 +71,7 @@ private:
     /** automatic/named character attribute set */
     SfxItemSet* m_pItemSet_TextAttr;
     /** automatic/named paragraph attribute set
-     * (it can be caractere attribute applyied to the paragraph) */
+     * (it can be character attribute applied to the paragraph) */
     SfxItemSet* m_pItemSet_ParAttr;
 
     /** table attribute set */

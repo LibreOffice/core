@@ -116,7 +116,7 @@ public class SequenceOutputStreamUnitTest
             xSeekableInStream.closeInput ();
             m_aTestHelper.Message ( "Both streams closed." );
 
-            //compare the original, written and read arrys
+            //compare the original, written and read arrays
             for ( int i = 0; i < nBytesCnt; ++i ) {
                 if ( pBytesOriginal[i] != pBytesWritten[i] ) {
                     m_aTestHelper.Error ( "Written array not identical to " +

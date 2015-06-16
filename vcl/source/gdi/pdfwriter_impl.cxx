@@ -4246,7 +4246,7 @@ sal_Int32 PDFWriterImpl::updateOutlineItemCount( std::vector< sal_Int32 >& rCoun
 
     sal_Int32 nCount = 0;
 
-    if( m_aContext.OpenBookmarkLevels < 0           || // all levels arevisible
+    if( m_aContext.OpenBookmarkLevels < 0           || // all levels are visible
         m_aContext.OpenBookmarkLevels >= nItemLevel    // this level is visible
       )
     {

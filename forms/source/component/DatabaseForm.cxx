@@ -2945,7 +2945,7 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
     {
         // only if there is no approve listener we can post the event at this time
         // otherwise see approveRowsetChange
-        // the aprrovement is done by the aggregate
+        // the approvement is done by the aggregate
         if (!m_aRowSetApproveListeners.getLength())
         {
             ::cppu::OInterfaceIteratorHelper aIter(m_aLoadListeners);

@@ -368,7 +368,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 }
 
 /**
- * Notify for change of site arragement
+ * Notify for change of site arrangement
  */
 
 void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)

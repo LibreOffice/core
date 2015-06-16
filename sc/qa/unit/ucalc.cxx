@@ -6430,7 +6430,7 @@ void Test::testMixData()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(0,0,0,1,0,0), &aClipDoc); // A1:B1
 
-    // Copy A2:B2 to the mix document (for arithemetic paste).
+    // Copy A2:B2 to the mix document (for arithmetic paste).
     ScDocument aMixDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(0,1,0,1,1,0), &aMixDoc); // A2:B2
 

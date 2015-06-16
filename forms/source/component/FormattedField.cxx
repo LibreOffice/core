@@ -375,7 +375,7 @@ void OFormattedModel::describeAggregateProperties( Sequence< Property >& _rAggre
     RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
     // no strict format property for formatted fields: it does not make sense, 'cause
     // there is no general way to decide which characters/sub strings are allowed during the input of an
-    // arbitraryly formatted control
+    // arbitrary formatted control
 }
 
 void OFormattedModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
