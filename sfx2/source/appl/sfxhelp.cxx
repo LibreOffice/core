@@ -614,7 +614,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     // check if help window is still open
     // If not, create a new one and return access directly to the internal sub frame showing the help content
-    // search must be done here; search one desktop level could return an arbitraty frame
+    // search must be done here; search one desktop level could return an arbitrary frame
     Reference< XFrame2 > xHelp(
         xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
         UNO_QUERY);

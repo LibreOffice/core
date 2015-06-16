@@ -696,7 +696,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     awt::Size aSz( rShape->getSize() );
     awt::Size aNewSz( 0, 0 );
 
-    // #i71248# ensure we got a XControl before apllying corrections
+    // #i71248# ensure we got a XControl before applying corrections
     if(xControl.is())
     {
         if( bMinWidth || bMinHeight )

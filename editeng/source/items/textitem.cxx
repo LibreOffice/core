@@ -122,7 +122,7 @@ TYPEINIT1_FACTORY(SvxWordLineModeItem, SfxBoolItem, new SvxWordLineModeItem(fals
 TYPEINIT1_FACTORY(SvxContourItem, SfxBoolItem, new SvxContourItem(false, 0));
 TYPEINIT1_FACTORY(SvxPropSizeItem, SfxUInt16Item, new SvxPropSizeItem(100, 0));
 TYPEINIT1_FACTORY(SvxColorItem, SfxPoolItem, new SvxColorItem(0));
-// XXX: Should 2nd argoment of next line SfxColorItem or SfxPoolItem?
+// XXX: Should 2nd argument of next line SfxColorItem or SfxPoolItem?
 TYPEINIT1_FACTORY(SvxBackgroundColorItem, SvxColorItem, new SvxBackgroundColorItem(0));
 TYPEINIT1_FACTORY(SvxCharSetColorItem, SvxColorItem, new SvxCharSetColorItem(0));
 TYPEINIT1_FACTORY(SvxKerningItem, SfxInt16Item, new SvxKerningItem(0, 0));

@@ -323,7 +323,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
         aLineColor = approachColor(aLineColor, aApproachColor);
         rRenderContext.SetLineColor(aLineColor);
 
-        // switch aproach color
+        // switch approach color
         if (aApproachColor.IsRGBEqual(aLineColor))
         {
             if (aApproachColor.GetRed())

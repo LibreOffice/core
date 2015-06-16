@@ -76,7 +76,7 @@ namespace rtl
          */
         inline Bootstrap();
 
-        /** Opens a bootstrap argment container
+        /** Opens a bootstrap argument container
             @see rtl_bootstrap_args_open()
          */
         inline Bootstrap(const rtl::OUString & iniName);

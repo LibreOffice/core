@@ -38,7 +38,7 @@ namespace drawinglayer
             Base class for ControlPrimitive handling. It decoposes to a
             graphical representation (Bitmap data) of the control. This
             representation is limited to a quadratic pixel maximum defined
-            in the applicatin settings.
+            in the application settings.
          */
         class DRAWINGLAYER_DLLPUBLIC ControlPrimitive2D : public BufferedDecompositionPrimitive2D
         {

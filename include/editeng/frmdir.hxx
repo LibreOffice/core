@@ -30,7 +30,7 @@ enum SvxFrameDirection
     FRMDIR_HORI_LEFT_TOP,
 
     /** Horizontal, from right to left, from top to bottom
-        (typical for ararbic/hebrew languages). */
+        (typical for arabic/hebrew languages). */
     FRMDIR_HORI_RIGHT_TOP,
 
     /** Vertical, from top to bottom, from right to left

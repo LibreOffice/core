@@ -146,7 +146,7 @@ public:
     bool        GetObjectIsMarked(  SdrObject * pObject );
     bool        SelectCurrentViewObject( const OUString& rName );
 
-    // #i123922# helper which checks if a Graphic may be appied to an existing
+    // #i123922# helper which checks if a Graphic may be applied to an existing
     // SdrObject; if it's a SdrGrafObj the fill will be replaced. If it's a
     // fillable, non-OLE SdrObject, the FillStyle will be adapted
     SdrObject* ApplyGraphicToObject(

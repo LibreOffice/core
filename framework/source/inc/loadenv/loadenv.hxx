@@ -566,8 +566,8 @@ private:
     bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const;
 
     /** @short  try to determine the used application module
-                of this load request and applay right position and size
-                for this document window ... hopefully before we show it .-)
+                of this load request and apply right position and size
+                for this document window... hopefully before we show it .-)
      */
     void impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow);
 

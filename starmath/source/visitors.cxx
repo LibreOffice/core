@@ -757,7 +757,7 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
     //Handle the special case where NTABLE is used a rootnode
     if( pRootNode->GetType( ) == NTABLE ){
         //Children are SmLineNodes
-        //Or so I thought... Aparently, the children can be instances of SmExpression
+        //Or so I thought... Apparently, the children can be instances of SmExpression
         //especially if there's a error in the formula... So he we go, a simple work around.
         SmNodeIterator it( pRootNode );
         while( it.Next( ) ){

@@ -744,7 +744,7 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
                 TextSelection aSel( TextPaM( nStart, 0 ), TextPaM( nStart, 0 ) );
                 AssertValidEditEngine();
                 TextView * pView = GetEditView();
-                // scroll if applicabel so that first line is at the top
+                // scroll if applicable so that first line is at the top
                 long nVisHeight = GetOutputSizePixel().Height();
                 if ( (long)pView->GetTextEngine()->GetTextHeight() > nVisHeight )
                 {

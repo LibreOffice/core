@@ -649,7 +649,7 @@ void LwpGraphicObject::CreateGrafObject()
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pImage->SetStyleName(pXFStyleManager->AddStyle(pImageStyle).m_pStyle->GetStyleName());
 
-    // set archor to frame
+    // set anchor to frame
     pImage->SetAnchorType(enumXFAnchorFrame);
 
     // set object name

@@ -236,7 +236,7 @@ public:
     const SfxSlot*  pNextSlot;   // with the same Status-Method
 
     const SfxFormalArgument*  pFirstArgDef;  // first formal Argument-Definition
-    sal_uInt16                nArgDefCount;  // Number of formal Argumentents
+    sal_uInt16                nArgDefCount;  // Number of formal Arguments
     long                      nDisableFlags; // DisableFlags that need to be
                                              // present, so that the Slot
                                              // can be enabled

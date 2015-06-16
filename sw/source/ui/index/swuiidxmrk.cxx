@@ -471,7 +471,7 @@ void SwIndexMarkPane::InsertMark()
 
     pSh->StartAllAction();
     // all equal strings have to be selected here so that the
-    // entry is apllied to all equal strings
+    // entry is applied to all equal strings
     if(bApplyAll)
     {
         lcl_SelectSameStrings(*pSh, bWordOnly, bCaseSensitive);

@@ -2611,7 +2611,7 @@ void RestoreContent( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bG
         }
     }
 
-    // the parent needs to grow appropiately
+    // the parent needs to grow appropriately
     SwTwips nGrowVal = 0;
     SwFrm* pLast;
     do

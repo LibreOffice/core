@@ -136,7 +136,7 @@ private:
 //Something like an OutputDevice requires the SolarMutex to be taken before use
 //for threadsafety. The user can ensure this, except in the case of its dtor
 //being called from reset due to a terminate on the XComponent being called
-//from an aribitrary thread
+//from an arbitrary thread
 template<class T> class unique_disposing_solar_mutex_reset_ptr
     : public unique_disposing_ptr<T>
 {
