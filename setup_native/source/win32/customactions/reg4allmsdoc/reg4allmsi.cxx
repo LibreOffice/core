@@ -233,7 +233,7 @@ static void saveOldRegistration( LPCSTR lpSubKey )
         {
             szBuffer[nSize] = '\0';
 
-            // No need to save assocations for our own types
+            // No need to save associations for our own types
             if ( strncmp( szBuffer, "LibreOffice.", 12 ) != 0 )
             {
                 // Save the old association

@@ -72,7 +72,7 @@ double SAL_CALL DateScaling::doScaling( double value )
             case MONTH:
             default:
                 fResult = aDate.GetYear();
-                fResult *= lcl_fNumberOfMonths;//asssuming equal count of months in each year
+                fResult *= lcl_fNumberOfMonths;//assuming equal count of months in each year
                 fResult += aDate.GetMonth();
 
                 double fDayOfMonth = aDate.GetDay();

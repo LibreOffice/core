@@ -18,10 +18,10 @@
  */
 
 /**
-  this file implements the sal printer interface ( SalPrinter, SalInfoPrinter
-  and some printer relevant methods of SalInstance and SalGraphicsData )
+  this file implements the sal printer interface (SalPrinter, SalInfoPrinter
+  and some printer relevant methods of SalInstance and SalGraphicsData)
 
-  as aunderlying library the printer features of psprint are used.
+  as underlying library the printer features of psprint are used.
 
   The query methods of a SalInfoPrinter are implemented by querying psprint
 

@@ -709,7 +709,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
 
     ClearItem( SDRATTR_TEXTDIRECTION ); //SJ: vertical writing is not required, by removing this item no outliner is created
 
-    // #i105323# For 2D AtoShapes, the shadow attirbute does not need to be applied to any
+    // #i105323# For 2D AtoShapes, the shadow attribute does not need to be applied to any
     // of the constucted helper SdrObjects. This would lead to problems since the shadow
     // of one helper object would fall on one helper object behind it (e.g. with the
     // eyes of the smiley shape). This is not wanted; instead a single shadow 'behind'

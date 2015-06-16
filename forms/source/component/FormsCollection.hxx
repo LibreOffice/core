@@ -32,7 +32,7 @@ namespace frm
 {
 
 // OFormsCollection
-// Implements the UNO Container for Forms and contains all assigend Forms.
+// Implements the UNO Container for Forms and contains all assigned Forms.
 // It can either represent the Context for Forms or be passed a Context.
 
 typedef ::cppu::OComponentHelper FormsCollectionComponentBase;

@@ -2680,7 +2680,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
         }
         else
         {
-            // Attribiute im Content-Bereich duerfen nicht gesetzt
+            // Attribute im Content-Bereich duerfen nicht gesetzt
             // werden, wenn wir in einem Sonderbereich stehen, aber
             // umgekekehrt schon.
             sal_uLong nEndOfIcons = pDoc->GetNodes().GetEndOfExtras().GetIndex();
@@ -3043,7 +3043,7 @@ bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         nEndCnt != pAttr->GetSttCnt() )
     {
         bInsert = true;
-        // We do some optimization for script depenedent attribtes here.
+        // We do some optimization for script depenedent attributes here.
         if( *pEndIdx == pAttr->GetSttPara() )
         {
             lcl_swhtml_getItemInfo( *pAttr, bScript, bFont, nScriptItem );

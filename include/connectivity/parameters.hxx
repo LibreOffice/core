@@ -356,7 +356,7 @@ namespace dbtools
         */
         bool    consultParameterListeners( ::osl::ResettableMutexGuard& _rClearForNotifies );
 
-        /** mark an externally filled parameter asvisited
+        /** mark an externally filled parameter as visited
         */
         void    externalParameterVisited( sal_Int32 _nIndex );
 

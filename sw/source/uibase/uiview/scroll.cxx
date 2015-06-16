@@ -95,7 +95,7 @@ void SwScrollbar::SetAuto(bool bSet)
     {
         bAuto = bSet;
 
-        // hide autmatically - automatisch versteckt - then show
+        // hide automatically - automatisch versteckt - then show
         if(!bAuto && bVisible && !ScrollBar::IsVisible())
             ExtendedShow(true);
         else if(bAuto)

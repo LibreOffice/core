@@ -336,7 +336,7 @@ struct PCDefinitionModel
     bool                mbRefreshOnLoad;    /// True = try to refresh cache on load.
     bool                mbOptimizeMemory;   /// True = application may optimize memory usage.
     bool                mbEnableRefresh;    /// True = refreshing cache is enabled in UI.
-    bool                mbBackgroundQuery;  /// True = application queries data asynchonously.
+    bool                mbBackgroundQuery;  /// True = application queries data asynchronously.
     bool                mbUpgradeOnRefresh; /// True = application may upgrade cache version.
     bool                mbTupleCache;       /// True = cache stores OLAP functions.
     bool                mbSupportSubquery;  /// True = data source supports subqueries.

@@ -75,7 +75,7 @@ public:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** Typically called from setCurrentSlide() with the notes page that is
-        associed with the slide given to setCurrentSlide().
+        associeted with the slide given to setCurrentSlide().
 
         Iterates over all text shapes on the given notes page and diplays
         the concatenated text of these.

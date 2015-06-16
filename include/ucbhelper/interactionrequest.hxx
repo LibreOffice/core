@@ -401,7 +401,7 @@ public:
       *        authentication-remember-mode for accounts preferred by the
       *        requesting client.
       * @param bCanUseSystemCredentials indicates whether issuer of the
-      *        authetication request can obtain and use system credentials
+      *        authentication request can obtain and use system credentials
       *        for authentication.
       * @param bDefaultUseSystemCredentials specifies the default system
       *        credentials usage preferred by the requesting client

@@ -85,7 +85,7 @@ typedef std::vector< ContentProviderData > ContentProviderDataList;
     @param rTemplate  The URL template to register the content provider on.
 
     @param pInfo  If not null, this output parameter is filled with
-    information about the (atemptively) registered provider.
+    information about the (attemptively) registered provider.
  */
 
 UCBHELPER_DLLPUBLIC bool registerAtUcb(

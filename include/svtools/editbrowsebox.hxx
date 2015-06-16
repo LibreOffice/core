@@ -482,7 +482,7 @@ namespace svt
         ImplSVEvent * nStartEvent, * nEndEvent, * nCellModifiedEvent;     // event ids
         VclPtr<vcl::Window> m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
-            // and the asynchornous event the focus has changed, we won't grab it for ourself.
+            // and the asynchronous event the focus has changed, we won't grab it for ourself.
 
         long    nPaintRow;  // row being painted
         long    nEditRow, nOldEditRow;

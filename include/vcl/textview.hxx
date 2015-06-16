@@ -187,7 +187,7 @@ public:
     /**
         Drag and Drop, deleting and selection regards all text that has an attribute
         TEXTATTR_PROTECTED set as one entity. Drag and dropped text is automatically
-        attibuted as protected.
+        attributed as protected.
      */
     void                SupportProtectAttribute(bool bSupport);
 

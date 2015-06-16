@@ -363,7 +363,7 @@ bool SvBaseLink::Update()
             }
             if( xObj.Is() )
             {
-                // should be asynschron?
+                // should be asynchronous?
                 if( xObj->IsPending() )
                     return true;
 

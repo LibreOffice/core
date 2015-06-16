@@ -227,7 +227,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
 
 /**
     @short      asynchronous callback
-    @descr      We start all actions inside this object asnychronoue.
+    @descr      We start all actions inside this object asynchronous
                 (see comments there).
                 Now we do the following:
                 - close all views to the same document, if needed and possible

@@ -97,7 +97,7 @@ enum XMLAttrTransformerAction
                                          // - param1: pacakage URI are supported
     XML_ATACTION_URI_OASIS,              // an URI in OASIS notation
                                          // - param1: pacakage URI are supported
-    XML_ATACTION_RENAME_ATTRIBUTE,       // rename up to 3 different possible values of an attrbiute
+    XML_ATACTION_RENAME_ATTRIBUTE,       // rename up to 3 different possible values of an attribute
                                          // - param1: token of old attribute value (lower 16 bit)
                                          //           + token of new attribute value (upper 16 bit)
                                          // - param2: token of old attribute value
