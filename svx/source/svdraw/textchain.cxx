@@ -35,6 +35,7 @@ SdrTextObj *TextChain::GetNextLink(SdrTextObj *)
 
 bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj *pNextLink)
 {
-
+    // XXX
+    return false;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

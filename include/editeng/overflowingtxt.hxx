@@ -48,6 +48,7 @@ public:
                   mTailTxt(tailTxt)
                 { }
 
+        OUString GetHeadingLines() const;
         OUString GetEndingLines() const;
 };
 

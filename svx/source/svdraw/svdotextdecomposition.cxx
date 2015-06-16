@@ -821,8 +821,11 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
     impSetOutlinerToEmptyTxt(pOutliner);
 
     // Set headText at the beginning of box
-    Paragraph *pNewPara0 = pOutliner->GetParagraph(0);
-    pOutliner->SetText(mpOverflowingText->mHeadTxt, pNewPara0);
+    OUString aHeadTxt = mpOverflowingText->GetHeadingLines();
+    if (aHeadTxt != "") {
+        Paragraph *pNewPara0 = pOutliner->GetParagraph(0);
+        pOutliner->SetText(aHeadTxt, pNewPara0);
+    }
 
     // Set all the intermediate Paras
     if (mpOverflowingText->mpMidParas)

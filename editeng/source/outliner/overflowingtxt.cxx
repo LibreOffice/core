@@ -33,5 +33,10 @@ OUString OverflowingText::GetEndingLines() const
     return mTailTxt;
 }
 
+OUString OverflowingText::GetHeadingLines() const
+{
+    return mHeadTxt;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
