@@ -76,6 +76,8 @@ class SvNumberFormatter;
 class SdrOutlinerCache;
 class SdrUndoFactory;
 class ImageMap;
+class TextChain;
+
 namespace comphelper
 {
     class IEmbeddedHelper;
@@ -217,6 +219,8 @@ protected:
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
 
+    TextChain*          pTextChain;
+
 
 
 // sdr::Comment interface
@@ -324,6 +328,7 @@ public:
     SdrOutliner&         GetDrawOutliner(const SdrTextObj* pObj=NULL) const;
 
     SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj=NULL) const;
+    TextChain *GetTextChain() const;
 
     SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;

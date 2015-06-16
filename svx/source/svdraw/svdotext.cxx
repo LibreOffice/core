@@ -1563,6 +1563,14 @@ void SdrTextObj::SetToBeChained(bool bToBeChained)
     mbToBeChained = bToBeChained;
 }
 
+TextChain *SdrTextObj::GetTextChain() const
+{
+    if (!IsChainable())
+        return NULL;
+
+    return pModel->GetTextChain();
+}
+
 void SdrTextObj::SetVerticalWriting(bool bVertical)
 {
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();

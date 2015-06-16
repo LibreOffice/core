@@ -32,3 +32,8 @@ SdrTextObj *TextChain::GetNextLink(SdrTextObj *)
 {
     return NULL; // XXX
 }
+
+bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj *pNextLink)
+{
+
+}

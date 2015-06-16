@@ -29,6 +29,9 @@ class TextChain {
     void AppendLink(SdrTextObj *);
     SdrTextObj *GetNextLink(SdrTextObj *);
 
+    // return whether a paragraph is split between the two links in the argument
+    bool GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj *pNextLink);
+
 };
 
 #endif // INCLUDED_SVX_TEXTCHAIN_HXX

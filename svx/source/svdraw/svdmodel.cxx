@@ -55,6 +55,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/textchain.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
@@ -217,9 +218,17 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pHitTestOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this);
     ImpSetOutlinerDefaults(pHitTestOutliner, true);
 
+    // FIXME(matteocam)
+    /* Start Text Chaining related code */
+
+    // Initialize Chaining Outliner
     pChainingOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this );
     ImpSetOutlinerDefaults(pChainingOutliner, true);
 
+    // Make a TextChain
+    pTextChain = new TextChain;
+
+    /* End Text Chaining related code */
 
     ImpCreateTables();
 }
@@ -1997,6 +2006,11 @@ sal_uInt16 SdrModel::GetPageCount() const
 
 void SdrModel::PageListChanged()
 {
+}
+
+TextChain *SdrModel::GetTextChain() const
+{
+    return pTextChain;
 }
 
 const SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum) const
