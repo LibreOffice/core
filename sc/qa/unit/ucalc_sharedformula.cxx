@@ -1733,4 +1733,48 @@ void Test::testSharedFormulaUnshareAreaListeners()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulaListenerDeleteArea()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test0");
+    m_pDoc->InsertTab(1, "Test1");
+
+    const char* pData0[][3] = {
+        { "", "", "=Test1.C1" },
+        { "", "", "=Test1.C2" }
+    };
+    const char* pData1[][3] = {
+        { "=Test0.A1", "=Test0.B1", "=SUM(A1:B1)" },
+        { "=Test0.A2", "=Test0.B2", "=SUM(A2:B2)" },
+    };
+
+    insertRangeData(m_pDoc, ScAddress(0,0,0), pData0, SAL_N_ELEMENTS(pData0));
+    insertRangeData(m_pDoc, ScAddress(0,0,1), pData1, SAL_N_ELEMENTS(pData1));
+
+    // Check that Test1.A1:A2 and Test1.B1:B2 are formula groups.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,0,1));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,1));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    m_pDoc->SetValue(ScAddress(0,1,0), 1.0);   // change value of Test0.A2
+    m_pDoc->SetValue(ScAddress(1,1,0), 2.0);   // change value of Test0.B2
+    // Test0.C2 should be recalculated.
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+
+    // Delete Test0.B2
+    clearRange(m_pDoc, ScRange(1,1,0));
+    // Test0.C2 should be recalculated.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
