@@ -25,8 +25,9 @@
 
 OUString OverflowingText::GetEndingLines() const
 {
-    // Only some lines in the same para overflowing, thus the head gives the ending lines
-    if (mHeadTxt == "" && mpMidParas == NULL)
+    // If the only overflowing part is some lines in a paragraph,
+    // the end of the overflowing text is its head.
+    if (mTailTxt == "" && mpMidParas == NULL)
         return mHeadTxt;
 
     return mTailTxt;
