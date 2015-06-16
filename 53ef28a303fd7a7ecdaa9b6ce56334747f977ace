@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a6d548ba",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-16T08:46:12Z",
+      "side": 1,
+      "message": "This template does not have to be a member of SmNode. Both SmNode functions it calls are public. Please move it into node.cxx.",
+      "revId": "53ef28a303fd7a7ecdaa9b6ce56334747f977ace",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_86d04ccb",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-16T08:46:12Z",
+      "side": 1,
+      "message": "Why auto? We know the type is sal_uInt16.",
+      "revId": "53ef28a303fd7a7ecdaa9b6ce56334747f977ace",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e6cb401d",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-16T08:46:12Z",
+      "side": 1,
+      "message": "Why auto? We know the type is SmNode*.",
+      "revId": "53ef28a303fd7a7ecdaa9b6ce56334747f977ace",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_c6c64416",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-16T08:46:12Z",
+      "side": 1,
+      "message": "Why did you introduce another variable? Is the member bIsPhantom not enough?",
+      "revId": "53ef28a303fd7a7ecdaa9b6ce56334747f977ace",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
