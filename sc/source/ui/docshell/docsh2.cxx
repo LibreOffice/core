@@ -53,7 +53,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     aDocument.GetStyleSheetPool()->CreateStandardStyles();
     aDocument.UpdStlShtPtrsFrmNms();
 
-    //  SetDocumentModified is not allowed anymoe in Load/InitNew!
+    //  SetDocumentModified is not allowed anymore in Load/InitNew!
     InitItems();
     CalcOutputFactor();
 

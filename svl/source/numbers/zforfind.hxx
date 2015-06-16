@@ -363,7 +363,7 @@ private:
     //! case and if it contained native humber digits that they are already
     //! converted to ASCII.
 
-    // Main anlyzing function
+    // Main analyzing function
     bool IsNumberFormatMain( const OUString& rString,
                              const SvNumberformat* pFormat = NULL);    // optional number format to match against
 

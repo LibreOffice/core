@@ -408,7 +408,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     // This method was called asynchronous from our main thread by using a pointer.
     // We reached this method only, by using a reference to ourself :-)
     // Further this member is used to detect still running and not yet finished
-    // ansynchronous operations. So its time now to release this reference.
+    // asynchronous operations. So its time now to release this reference.
     // But hold it temp alive. Otherwise we die before we can finish this method really :-))
     css::uno::Reference< css::uno::XInterface > xTempHold = m_xSelfHold;
     m_xSelfHold.clear();

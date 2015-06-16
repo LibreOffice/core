@@ -946,11 +946,11 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     // check if it is a folder
     bool bIsFolder = false;
 
-    // first thing before doing anyhing with the content: Reset it. When the user presses "open" (or "save" or "export",
+    // first thing before doing anything with the content: Reset it. When the user presses "open" (or "save" or "export",
     // for that matter), s/he wants the complete handling, including all possible error messages, even if s/he
     // does the same thing for the same content twice, s/he wants both fails to be displayed.
     // Without the reset, it could be that the content cached all relevant information, and will not display any
-    // error messages for the same content a second time ....
+    // error messages for the same content a second time...
     m_aContent.bindTo( OUString( ) );
 
     if ( !aFileName.isEmpty() )

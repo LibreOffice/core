@@ -1251,7 +1251,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 aStyle = pState->GetStyleName();
 #if defined STYLESPREVIEW
             mbIgnoreSelect = true; // in case we get a selection change
-            // in anycase we should stop any preview
+            // in any case we should stop any preview
             Execute_Impl(SID_STYLE_END_PREVIEW,
             OUString(), OUString(),
             0, 0, 0, 0 );
