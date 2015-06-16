@@ -39,6 +39,8 @@
 #include "tokenarray.hxx"
 #include "unoreflist.hxx"
 
+#include <cassert>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace formula;
@@ -943,77 +945,28 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
     return aSeq;
 }
 
-
 ::sal_Int32 SAL_CALL ScChart2DataSequence::getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
-    // index -1 means a heuristic value for the entire sequence
-    bool bGetSeriesFormat = (nIndex == -1);
-
     SolarMutexGuard aGuard;
-    if ( !m_pDocument || !m_pTokens.get())
-        return 0;
+    EnsureAddressByIndexIsFilled();
 
-    // TODO: Handle external references too.
-
-    sal_Int32 nCount = 0;
-
-    ScRangeList aRanges;
-    ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens, ScAddress());
-    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    if (nIndex == -1)
     {
-        ScRange* p = aRanges[i];
-        for (SCTAB nTab = p->aStart.Tab(); nTab <= p->aEnd.Tab(); ++nTab)
+        // index -1 means a heuristic value for the entire sequence
+        for (const ScAddress& address : mAddressByIndex)
         {
-            for (SCCOL nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
+            ScRefCellValue aCell;
+            aCell.assign(*m_pDocument, address);
+            if (!aCell.isEmpty())
             {
-                if (!m_bIncludeHiddenCells)
-                {
-                    // Skip hidden columns.
-                    SCCOL nLastCol = -1;
-                    bool bColHidden = m_pDocument->ColHidden(nCol, nTab, NULL, &nLastCol);
-                    if (bColHidden)
-                    {
-                        nCol = nLastCol;
-                        continue;
-                    }
-                }
-
-                for (SCROW nRow = p->aStart.Row(); nRow <= p->aEnd.Row(); ++nRow)
-                {
-                    if (!m_bIncludeHiddenCells)
-                    {
-                        // Skip hidden rows.
-                        SCROW nLastRow = -1;
-                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, NULL, &nLastRow);
-                        if (bRowHidden)
-                        {
-                            nRow = nLastRow;
-                            continue;
-                        }
-                    }
-
-                    ScAddress aPos(nCol, nRow, nTab);
-
-                    if( bGetSeriesFormat )
-                    {
-                        // TODO: use nicer heuristic
-                        // return format of first non-empty cell
-                        ScRefCellValue aCell;
-                        aCell.assign(*m_pDocument, aPos);
-                        if (!aCell.isEmpty())
-                            return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, aPos));
-                    }
-                    else if( nCount == nIndex )
-                    {
-                        return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, aPos));
-                    }
-                    ++nCount;
-                }
+                return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, address));
             }
         }
+        // we could not find a non-empty cell.
+        return 0;
     }
-    return 0;
+    return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, mAddressByIndex.at(nIndex)));
 }
 
 // XCloneable ================================================================
@@ -1327,6 +1280,56 @@ sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
     RebuildDataCache();
 
     return sal_True;
+}
+
+void ScChart2DataSequence::EnsureAddressByIndexIsFilled()
+{
+    if (!mAddressByIndex.empty())
+    {
+        return;
+    }
+
+    ScRangeList aRanges;
+    ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens, ScAddress());
+    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    {
+        ScRange* p = aRanges[i];
+        for (SCTAB nTab = p->aStart.Tab(); nTab <= p->aEnd.Tab(); ++nTab)
+        {
+            for (SCCOL nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
+            {
+                if (!m_bIncludeHiddenCells)
+                {
+                    // Skip hidden columns.
+                    SCCOL nLastCol = -1;
+                    bool bColHidden = m_pDocument->ColHidden(nCol, nTab, NULL, &nLastCol);
+                    if (bColHidden)
+                    {
+                        nCol = nLastCol;
+                        continue;
+                    }
+                }
+
+                for (SCROW nRow = p->aStart.Row(); nRow <= p->aEnd.Row(); ++nRow)
+                {
+                    if (!m_bIncludeHiddenCells)
+                    {
+                        // Skip hidden rows.
+                        SCROW nLastRow = -1;
+                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, NULL, &nLastRow);
+                        if (bRowHidden)
+                        {
+                            nRow = nLastRow;
+                            continue;
+                        }
+                    }
+                    ScAddress aPos(nCol, nRow, nTab);
+                    mAddressByIndex.push_back(aPos);
+                }
+            }
+        }
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
