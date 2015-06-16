@@ -667,6 +667,11 @@ namespace {
     typedef boost::shared_ptr<SwPaM> PaMPtr;
     typedef boost::shared_ptr<SwPosition> PositionPtr;
     typedef std::pair< PaMPtr, PositionPtr > Insertion;
+
+    bool PamHasSelection(const SwPaM& rPaM)
+    {
+        return rPaM.HasMark() && *rPaM.GetPoint() != *rPaM.GetMark();
+    }
 }
 
 bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
@@ -839,7 +844,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                     ParkTableCrsr();
                     bParkTableCrsr = true;
                 }
-                else if( !rPaM.HasMark() && rPaM.GetNext() == &rPaM &&
+                else if( !PamHasSelection(rPaM) && rPaM.GetNext() == &rPaM &&
                      ( !pSrcNd->GetTable().IsTableComplex() ||
                        pDestNd->GetTable().IsNewModel() ) )
                 {
