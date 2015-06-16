@@ -581,7 +581,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	i18nlangtag \
 	i18nutil \
 	index_data \
-	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), libreofficekitgtk) \
+	$(if $(and $(ENABLE_GTK3), $(filter LINUX,$(OS))), libreofficekitgtk) \
 	localedata_en \
 	localedata_es \
 	localedata_euro \
