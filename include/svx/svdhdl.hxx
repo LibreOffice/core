@@ -118,7 +118,7 @@ enum BitmapMarkerKind
     Glue_Deselected,
     Anchor,
 
-    // #98388# add AnchorPressed to be able to aninate anchor control, too.
+    // #98388# add AnchorPressed to be able to animate anchor control, too.
     AnchorPressed,
 
     // #101688# AnchorTR for SW

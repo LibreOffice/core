@@ -1103,7 +1103,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
             for (size_t i = 0; i < nCount; ++i)
             {
-                // the clone remains in the animatior; we insert a clone of the
+                // the clone remains in the animation; we insert a clone of the
                 // clone into the group
                 pClone = pPage->GetObj(i);
                 SdrObject* pCloneOfClone = pClone->Clone();

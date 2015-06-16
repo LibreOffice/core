@@ -186,7 +186,7 @@ bool StateEventHelper::isCommandEnabled()
             xDispatch->addStatusListener( xSelf, aTargetURL );
             xDispatch->removeStatusListener( xSelf, aTargetURL );
 
-            // wait for anwser
+            // wait for answer
             m_aCondition.wait();
         }
         catch ( uno::RuntimeException& )

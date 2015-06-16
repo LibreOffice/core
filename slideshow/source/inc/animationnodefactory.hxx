@@ -42,7 +42,7 @@ namespace slideshow
 
         namespace AnimationNodeFactory
         {
-            /** Create an AnimatioNode for the given XAnimationNode
+            /** Create an AnimationNode for the given XAnimationNode
              */
             AnimationNodeSharedPtr createAnimationNode( const ::com::sun::star::uno::Reference<
                                                                        ::com::sun::star::animations::XAnimationNode >& xNode,

@@ -691,7 +691,7 @@ namespace drawinglayer
             the rectangle data is added directly by the GraphicsExporter as comment. Does not need
             to be adapted at once.
             When adapting later, the only user - the diashow - should directly use the provided
-            Anination infos in the appropriate primitives (e.g. AnimatedSwitchPrimitive2D)
+            Animation infos in the appropriate primitives (e.g. AnimatedSwitchPrimitive2D)
 
             PRNSPOOL_TRANSPARENTBITMAP_BEGIN, PRNSPOOL_TRANSPARENTBITMAP_END
             VCL usage when printing PL -> THB. Okay, THB confirms that it is only used as
