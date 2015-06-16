@@ -20,6 +20,8 @@
 #ifndef INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 #define INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 
+#include <editeng/macros.hxx>
+#include <editeng/editengdllapi.h>
 
 class OUString;
 
@@ -27,8 +29,10 @@ class OUString;
 class OutlinerParaObject;
 
 
-class OverflowingText {
-    public:
+class EDITENG_DLLPUBLIC OverflowingText
+{
+
+public:
         OUString mHeadTxt;
         const OutlinerParaObject *mpMidParas;
         OUString mTailTxt;
@@ -47,7 +51,7 @@ class OverflowingText {
         OUString GetEndingLines() const;
 };
 
-class NonOverflowingText {
+class EDITENG_DLLPUBLIC NonOverflowingText {
     public:
         const OutlinerParaObject *mpHeadParas;
         OUString mPreOverflowingTxt;
