@@ -295,7 +295,8 @@ void
     size_t nby;
 
     nby = (char *) str->lp - (char *) str->bp;
-    memmove(dtr->tp, str->bp, nby);
+    if (nby)
+        memmove(dtr->tp, str->bp, nby);
 }
 
 /*
