@@ -50,6 +50,7 @@ public:
 
         OUString GetHeadingLines() const;
         OUString GetEndingLines() const;
+        bool HasOtherParas() const { return !(mTailTxt == "" && mpMidParas == NULL); }
 };
 
 class EDITENG_DLLPUBLIC NonOverflowingText {
