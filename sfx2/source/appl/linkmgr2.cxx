@@ -272,7 +272,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                     if( pFile )
                         *pFile = sTopic;
                     if( pLinkStr )
-                        *pLinkStr = sCmd.copy( nTmp );
+                        *pLinkStr = nTmp != -1 ? sCmd.copy(nTmp) : OUString();
                     bRet = true;
                 }
                 break;
