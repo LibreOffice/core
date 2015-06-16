@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a913d90c",
+        "filename": "icon-themes/breeze/COPYING",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-06-16T23:20:22Z",
+      "side": 1,
+      "message": "Add “Copyright 2015” in front of your name",
+      "revId": "8207a06710bbd851d40256e5530316c18d7edf3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
