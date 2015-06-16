@@ -150,7 +150,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
         Size aFullSize;
         Rectangle aEntryRect;
 
-        for ( sal_uLong i = 0; i < GetEntryCount(); i++ )
+        for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
             aEntryRect = _pImp->GetEntryBoundRect ( pEntry );
@@ -165,7 +165,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
         Size aFullSize;
         Rectangle aEntryRect;
 
-        for ( sal_uLong i = 0; i < GetEntryCount(); i++ )
+        for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
             aEntryRect = _pImp->GetEntryBoundRect ( pEntry );
@@ -208,8 +208,7 @@ void SvtIconChoiceCtrl::GetFocus()
 {
     _pImp->GetFocus();
     Control::GetFocus();
-    sal_uLong nPos;
-    SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry ( nPos );
+    SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry();
     if ( pSelectedEntry )
         _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
 }
@@ -267,12 +266,12 @@ void SvtIconChoiceCtrl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIc
 }
 #endif
 
-sal_uLong SvtIconChoiceCtrl::GetEntryCount() const
+sal_Int32 SvtIconChoiceCtrl::GetEntryCount() const
 {
     return _pImp ? _pImp->GetEntryCount() : 0;
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( sal_uLong nPos ) const
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( sal_Int32 nPos ) const
 {
     return _pImp ? _pImp->GetEntry( nPos ) : NULL;
 }
@@ -282,15 +281,14 @@ void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics 
     _pImp->CreateAutoMnemonics( &_rUsedMnemonics );
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry( sal_uLong& rPos ) const
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry() const
 {
-    return _pImp ? _pImp->GetFirstSelectedEntry( rPos ) : NULL;
+    return _pImp ? _pImp->GetFirstSelectedEntry() : NULL;
 }
 
 void SvtIconChoiceCtrl::ClickIcon()
 {
-    sal_uLong nPos;
-    GetSelectedEntry ( nPos );
+    GetSelectedEntry();
     _aClickIconHdl.Call( this );
 }
 bool SvtIconChoiceCtrl::IsEntryEditing() const
@@ -323,7 +321,7 @@ bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
     _pCurKeyEvent = NULL;
     return bHandled;
 }
-sal_uLong SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
+sal_Int32 SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     return _pImp->GetEntryListPos( pEntry );
 }

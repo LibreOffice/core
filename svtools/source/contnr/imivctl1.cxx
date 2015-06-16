@@ -641,9 +641,9 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
     {
         // set cursor to item with focus-flag
         bool bfound = false;
-        for (sal_uLong i = 0; i < pView->GetEntryCount() && !bfound; i++)
+        for (sal_Int32 i = 0; i < pView->GetEntryCount() && !bfound; i++)
         {
-            SvxIconChoiceCtrlEntry* pEntry = pView->GetEntry (i);
+            SvxIconChoiceCtrlEntry* pEntry = pView->GetEntry(i);
             if (pEntry->IsFocused())
             {
                 pCursor = pEntry;
@@ -2342,7 +2342,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, bool bScrBar,
         VisRectChanged();
 }
 
-sal_uLong SvxIconChoiceCtrl_Impl::GetSelectionCount() const
+sal_Int32 SvxIconChoiceCtrl_Impl::GetSelectionCount() const
 {
     if( (nWinBits & WB_HIGHLIGHTFRAME) && pCurHighlightFrame )
         return 1;
@@ -3073,14 +3073,13 @@ void SvxIconChoiceCtrl_Impl::StopEntryEditing( bool bCancel )
         pEdit->StopEditing( bCancel );
 }
 
-SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry( sal_uLong& rPos ) const
+SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
 {
     if( !GetSelectionCount() )
         return 0;
 
     if( (nWinBits & WB_HIGHLIGHTFRAME) && (eSelectionMode == NO_SELECTION) )
     {
-        rPos = pView->GetEntryListPos( pCurHighlightFrame );
         return pCurHighlightFrame;
     }
 
@@ -3092,7 +3091,6 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry( sal_uLong
             SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
             if( pEntry->IsSelected() )
             {
-                rPos = nCur;
                 return pEntry;
             }
         }
@@ -3104,7 +3102,6 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry( sal_uLong
         {
             if( pEntry->IsSelected() )
             {
-                rPos = GetEntryListPos( pEntry );
                 return pEntry;
             }
             pEntry = pEntry->pflink;
@@ -3260,7 +3257,7 @@ void IcnViewEdit_Impl::StopEditing( bool bCancel )
     }
 }
 
-sal_uLong SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
+sal_Int32 SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     if( !(nFlags & F_ENTRYLISTPOS_VALID ))
         const_cast<SvxIconChoiceCtrl_Impl*>(this)->SetListPositions();
