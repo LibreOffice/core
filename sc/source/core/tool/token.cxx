@@ -1022,7 +1022,10 @@ void ScMatrixCellResultToken::Assign( const ScMatrixCellResultToken & r )
 
 ScMatrixFormulaCellToken::ScMatrixFormulaCellToken(
     SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
-    ScMatrixCellResultToken(pMat, pUL), nRows(nR), nCols(nC) {}
+    ScMatrixCellResultToken(pMat, pUL), nRows(nR), nCols(nC)
+{
+    CloneUpperLeftIfNecessary();
+}
 
 ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( SCCOL nC, SCROW nR ) :
     ScMatrixCellResultToken(NULL, NULL), nRows(nR), nCols(nC) {}
@@ -1030,10 +1033,7 @@ ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( SCCOL nC, SCROW nR ) :
 ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r ) :
     ScMatrixCellResultToken(r), nRows(r.nRows), nCols(r.nCols)
 {
-    // xUpperLeft is modifiable through
-    // SetUpperLeftDouble(), so clone it.
-    if (xUpperLeft)
-        xUpperLeft = xUpperLeft->Clone();
+    CloneUpperLeftIfNecessary();
 }
 
 ScMatrixFormulaCellToken::~ScMatrixFormulaCellToken() {}
@@ -1045,9 +1045,17 @@ bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
         nCols == p->nCols && nRows == p->nRows;
 }
 
+void ScMatrixFormulaCellToken::CloneUpperLeftIfNecessary()
+{
+    if (xUpperLeft && xUpperLeft->GetType() == svDouble)
+        xUpperLeft = xUpperLeft->Clone();
+}
+
 void ScMatrixFormulaCellToken::Assign( const ScMatrixCellResultToken & r )
 {
     ScMatrixCellResultToken::Assign( r);
+
+    CloneUpperLeftIfNecessary();
 }
 
 void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
@@ -1069,6 +1077,7 @@ void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
         {
             xUpperLeft = &r;
             xMatrix = NULL;
+            CloneUpperLeftIfNecessary();
         }
     }
 }
