@@ -130,7 +130,7 @@ private:
         @param _rxControl
             the control to add. Must not be <NULL/>
         @param _pName
-            Pointer to a name for the control. Might be <NULL/>, in this case an auotmatic name is generated
+            Pointer to a name for the control. Might be <NULL/>, in this case an automatic name is generated
         @return
             the ID of the newly added control
     */

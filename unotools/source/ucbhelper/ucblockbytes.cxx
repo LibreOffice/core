@@ -216,8 +216,8 @@ class Moderator
 {
     // usage restriction:
     // It might be possible, that the call to the interactionhandler and/or
-    // progresshandler is done asynchrounsly, while the 'execute' simply
-    // returns. This would imply that these class must be refcounted !!!
+    // progresshandler is done asynchronously, while the 'execute' simply
+    // returns. This would imply that these class must be refcounted!!!
 
 public:
     Moderator(

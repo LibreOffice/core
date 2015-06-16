@@ -62,7 +62,7 @@ public:
     */
     virtual bool IsVisible (CacheKey aKey) = 0;
 
-    /** Return the page associdated with the given key.  Note that different
+    /** Return the page associated with the given key.  Note that different
         keys may map to a single page (this may be the case with custom
         slide shows.)
     */

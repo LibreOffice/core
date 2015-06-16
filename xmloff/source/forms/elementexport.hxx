@@ -153,8 +153,8 @@ namespace xmloff
 
         /** adds the attributes which are handled via generic IPropertyHandlers
 
-            <p>In the future, this really should be *all* attribiutes, instead of this shitload of
-            hand-crafted code we have currently ...</p>
+            <p>In the future, this really should be *all* attributes, instead of this shitload of
+            hand-crafted code we have currently...</p>
         */
         void exportGenericHandlerAttributes();
 

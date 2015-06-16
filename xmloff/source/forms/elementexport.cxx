@@ -783,7 +783,7 @@ namespace xmloff
             static const sal_uInt16 nCurrentValueAttributeNamespaceKey = OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CURRENT_VALUE);
             static const sal_uInt16 nValueAttributeNamespaceKey = OAttributeMetaData::getCommonControlAttributeNamespace(CCA_VALUE);
 
-            // add the atrtributes if necessary and possible
+            // add the attributes if necessary and possible
             if (pCurrentValuePropertyName && (CCA_CURRENT_VALUE & m_nIncludeCommon))
             {
                 // don't export the current-value if this value originates from a data binding

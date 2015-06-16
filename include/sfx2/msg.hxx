@@ -222,7 +222,7 @@ public:
     sal_uInt16    nSlotId;   // Unique slot-ID in Shell
     sal_uInt16    nGroupId;  // for configuration region
     sal_uIntPtr   nHelpId;   // Usually == nSlotId
-    SfxSlotMode   nFlags;    // artihmetic ordered Flags
+    SfxSlotMode   nFlags;    // arithmetic ordered Flags
 
     sal_uInt16    nMasterSlotId;  // Enum-Slot for example Which-Id
     sal_uInt16    nValue;         // Value, in case of Enum-Slot

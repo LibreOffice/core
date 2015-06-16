@@ -2326,7 +2326,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         // because NbcAdjustTextFrameWidthAndHeight() is called (text is set later and center alignment
         // is the default setting, so the top left reference point that is used by the caption point is
         // no longer correct) There are two ways to solve this problem, temporarily disabling the
-        // autogrowwith as we are doing here or to apply the CaptionPoint after setting text
+        // autogrowwidth as we are doing here or to apply the CaptionPoint after setting text
         bool bIsAutoGrowWidth = false;
         if ( xProps.is() )
         {

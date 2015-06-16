@@ -595,7 +595,7 @@ void EditUndoTransliteration::Undo()
 
     EditSelection aSel = pEE->CreateSelection(aNewESel);
 
-    // Insert text, but don't expand Atribs at the current position:
+    // Insert text, but don't expand Attribs at the current position:
     aSel = pEE->DeleteSelected( aSel );
     EditSelection aDelSel( aSel );
     aSel = pEE->InsertParaBreak( aSel );

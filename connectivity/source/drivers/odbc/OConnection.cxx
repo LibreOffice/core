@@ -169,7 +169,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     }
 
 
-    // autocoomit is always default
+    // autocommit is always default
 
     if (!m_bReadOnly)
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_AUTOCOMMIT, reinterpret_cast<SQLPOINTER>(SQL_AUTOCOMMIT_ON),SQL_IS_INTEGER);

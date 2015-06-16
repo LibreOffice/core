@@ -248,7 +248,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
         return;
 
     // we only need to set the focus if it is not already set
-    // note: if some other frame is waiting for an asynchrounous focus event
+    // note: if some other frame is waiting for an asynchronous focus event
     // we also have to post an asynchronous focus event for this frame
     // which is done using ToTop
     ImplSVData* pSVData = ImplGetSVData();

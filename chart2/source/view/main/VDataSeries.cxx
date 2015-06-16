@@ -286,7 +286,7 @@ void VDataSeries::doSortByXValues()
     if( m_aValues_X.is() && m_aValues_X.Doubles.getLength() )
     {
         //prepare a vector for sorting
-        std::vector< ::std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of athe point
+        std::vector< ::std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of the point
         double fNan;
         ::rtl::math::setNan( & fNan );
         sal_Int32 nPointIndex = 0;

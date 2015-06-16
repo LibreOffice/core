@@ -1038,7 +1038,7 @@ SwSectionNode::~SwSectionNode()
     SwSectionFormat* pFormat = m_pSection->GetFormat();
     if( pFormat )
     {
-        // Remove the Attributei, because the Section deletes it's Format
+        // Remove the Attribute, because the Section deletes it's Format
         // and it will neutralize the Section, if the Content Attribute is set
         pFormat->LockModify();
         pFormat->ResetFormatAttr( RES_CNTNT );

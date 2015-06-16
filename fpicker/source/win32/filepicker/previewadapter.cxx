@@ -203,7 +203,7 @@ void SAL_CALL CPreviewAdapterImpl::calcRightMargin()
 {
     // Calculate the right reference margin
 
-    // Assumtions:
+    // Assumption:
     // 1. This method will be called before the dialog becomes
     //    visible
     // 2. There exist a FileListbox with the id lst1 even

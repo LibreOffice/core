@@ -264,7 +264,7 @@ bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColo
                     {
                         const BitmapPalette& rPalette = pRead->GetPalette();
 
-                        // #i123564# bachground and foregrund were exchanged; of course
+                        // #i123564# background and foreground were exchanged; of course
                         // rPalette[0] is the background color
                         o_rFront = rPalette[1];
                         o_rBack = rPalette[0];

@@ -270,7 +270,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     @short  kill this job
     @descr  It doesn't matter if this request is called from inside or
             from outside. We release our internal structures and stop
-            avary activity. After doing so - this instance will not be
+            every activity. After doing so - this instance will not be
             useable any longer! Of course we try to handle further requests
             carefully. Maybe someone else holds a reference to us ...
 */

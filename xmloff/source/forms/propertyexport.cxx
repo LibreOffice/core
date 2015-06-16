@@ -467,7 +467,7 @@ namespace xmloff
                 return;
         }
 
-        // finally add the attribuite to the context
+        // finally add the attribute to the context
         AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sValue);
     }
 

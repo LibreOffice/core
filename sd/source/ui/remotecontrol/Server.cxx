@@ -259,7 +259,7 @@ std::vector< ::boost::shared_ptr< ClientInfo > > RemoteServer::getClients()
     // since the user is more likely to be trying to connect a new remote
     // than removing an existing remote.
     // We can also be sure that pre-authorised clients will not be on the
-    // available clients list, as they get automatially connected if seen.
+    // available clients list, as they get automatically connected if seen.
     // TODO: we should probably add some sort of extra labelling to mark
     // authorised AND connected client.
     Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();

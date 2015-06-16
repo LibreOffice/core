@@ -864,7 +864,7 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
     return nLines;
 }
 
-/// Create a linear array of atmoic FndBoxes
+/// Create a linear array of atomic FndBoxes
 void FlatFndBox::FillFlat(const _FndBox& rBox, bool bLastBox)
 {
     bool bModRow = false;

@@ -32,7 +32,7 @@
 namespace dbaui
 {
 
-    // AutheticationMode
+    // AuthenticationMode
     enum AuthenticationMode
     {
         AuthNone,

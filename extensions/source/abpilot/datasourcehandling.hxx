@@ -56,7 +56,7 @@ namespace abp
         /// retrieves the names of all data sources
         void    getDataSourceNames( StringBag& _rNames ) const;
 
-        /// disambiguates the given name by appending auccessive numbers
+        /// disambiguates the given name by appending successive numbers
         OUString& disambiguate(OUString& _rDataSourceName);
 
         /// creates a new MORK data source

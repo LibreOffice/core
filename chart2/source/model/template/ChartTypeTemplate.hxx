@@ -222,7 +222,7 @@ protected:
         <p>As default, this method creates as many axes as there are dimensions
         in the given first coordinate system.  Each of the axis
         represents one of the dimensions of the coordinate systems. If there are series
-        requesting asecondary axes a secondary y axes is added</p>
+        requesting a secondary axes a secondary y axes is added</p>
      */
     void createAxes(
         const ::com::sun::star::uno::Sequence<

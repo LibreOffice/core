@@ -52,7 +52,7 @@ public:
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
         // #TODO we really need the ScDocument to pass to ScVbaInterior
-        // otherwise attemps to access the palette will fail
+        // otherwise attempts to access the palette will fail
         return new ScVbaInterior( BaseClass::mxParent, BaseClass::mxContext, xShapePropertySet );
     }
     css::uno::Reference< ov::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)

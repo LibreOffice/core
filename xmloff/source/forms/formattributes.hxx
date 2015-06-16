@@ -61,7 +61,7 @@ namespace xmloff
     #define CCA_VISUAL_EFFECT           0x00800000
     #define CCA_ENABLEVISIBLE                 0x01000000
 
-    // flags for database control atttributes
+    // flags for database control attributes
     #define DA_BOUND_COLUMN             0x00000001
     #define DA_CONVERT_EMPTY            0x00000002
     #define DA_DATA_FIELD               0x00000004
