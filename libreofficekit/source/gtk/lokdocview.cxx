@@ -519,10 +519,7 @@ callback (gpointer pData)
     break;
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
-        g_info ("%d %d", priv->m_nDocumentWidthTwips, priv->m_nDocumentHeightTwips);
-        g_info ("startin");
         payloadToSize(pCallback->m_aPayload.c_str(), priv->m_nDocumentWidthTwips, priv->m_nDocumentHeightTwips);
-        g_info ("%d %d", priv->m_nDocumentWidthTwips, priv->m_nDocumentHeightTwips);
         gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                     twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom),
                                     twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom));
@@ -1156,7 +1153,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                               "Document Path",
                               "The URI of the document to open",
                               0,
-                              G_PARAM_READWRITE));
+                              static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     /**
      * LOKDocView:editable:
@@ -1169,7 +1166,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                                "Editable",
                                "Whether the content is in edit mode or not",
                                FALSE,
-                               G_PARAM_READWRITE));
+                               static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     /**
      * LOKDocView:load-progress:
@@ -1214,7 +1211,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                                "Is Loading",
                                "Whether the view is loading a document",
                                FALSE,
-                               G_PARAM_READABLE));
+                               static_cast<GParamFlags>(G_PARAM_READABLE)));
 
     /**
      * LOKDocView:doc-width:
@@ -1227,7 +1224,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                             "Document Width",
                             "Width of the document in twips",
                             0, G_MAXLONG, 0,
-                            G_PARAM_READWRITE));
+                            static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     /**
      * LOKDocView:doc-height:
@@ -1240,7 +1237,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                             "Document Height",
                             "Height of the document in twips",
                             0, G_MAXLONG, 0,
-                            G_PARAM_READWRITE));
+                            static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     /**
      * LOKDocView:can-zoom-in:
