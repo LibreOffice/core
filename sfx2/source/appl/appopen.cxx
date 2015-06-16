@@ -1112,10 +1112,14 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
     }
 
-    if ( pLinkItem )
+    if (pLinkItem)
     {
-        SfxPoolItem* pRet = rReq.GetReturnValue()->Clone();
-        pLinkItem->GetValue().Call(pRet);
+        const SfxPoolItem* pRetValue = rReq.GetReturnValue();
+        if (pRetValue)
+        {
+            SfxPoolItem* pClone = pRetValue->Clone();
+            pLinkItem->GetValue().Call(pClone);
+        }
         delete pLinkItem;
     }
 }
