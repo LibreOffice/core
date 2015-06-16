@@ -82,7 +82,7 @@ class SvxIconChoiceCtrlEntry
 
     Rectangle               aRect;              // Bounding-Rect of the entry
     Rectangle               aGridRect;          // Only valid in Grid-mode
-    sal_uLong                   nPos;
+    sal_Int32               nPos;
 
     /*
         The insert position in the Insertlist is equal to the (sort) order stated at the Insert
@@ -148,8 +148,6 @@ public:
     // Only set at AutoArrange. The head of the list is accessible via SvxIconChoiceCtrl::GetPredecessorHead
     SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
     SvxIconChoiceCtrlEntry*         GetPredecessor() const { return pblink; }
-
-//  sal_Unicode             GetMnemonicChar() const;
 };
 
 enum SvxIconChoiceCtrlColumnAlign
@@ -307,9 +305,9 @@ public:
 
     bool                IsEntryEditing() const;
 
-    sal_uLong                   GetEntryCount() const;
-    SvxIconChoiceCtrlEntry* GetEntry( sal_uLong nPos ) const;
-    sal_uLong                   GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
+    sal_Int32               GetEntryCount() const;
+    SvxIconChoiceCtrlEntry* GetEntry( sal_Int32 nPos ) const;
+    sal_Int32               GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
     using Window::SetCursor;
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
@@ -322,10 +320,10 @@ public:
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, bool bHit = false ) const;
 
     // sal_uLong is the position of the selected element in the list
-    SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uLong& rPos ) const;
+    SvxIconChoiceCtrlEntry* GetSelectedEntry() const;
 
 #ifdef DBG_UTIL
-    void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
+    void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
 #endif
 
     void                SetFontColorToBackground ( bool bDo = true ) { _bAutoFontColor = bDo; }
