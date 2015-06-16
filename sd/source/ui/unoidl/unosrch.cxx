@@ -486,7 +486,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
 
     uno::Reference< container::XEnumerationAccess > xEnumAccess( xParent, uno::UNO_QUERY );
 
-    // first we fill the arrys with the position and paragraph for every character
+    // first we fill the arrays with the position and paragraph for every character
     // inside the text
     if( xEnumAccess.is() )
     {

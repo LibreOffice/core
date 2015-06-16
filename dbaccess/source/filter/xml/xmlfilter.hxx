@@ -144,7 +144,7 @@ public:
     rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
     rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
 
-    /** add a Info to the sequence which will be appened to the data source
+    /** add a Info to the sequence which will be appended to the data source
         @param  _rInfo The property to append.
     */
     inline void addInfo(const ::com::sun::star::beans::PropertyValue& _rInfo)

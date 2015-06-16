@@ -66,7 +66,7 @@ sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XProper
     if ( !getImplementation( pKey, descriptor ) || pKey == NULL)
         m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
-    // To pass as column parameter to Key's Apppend method
+    // To pass as column parameter to Key's Append method
     OLEVariant vOptional;
     vOptional.setNoArg();
 

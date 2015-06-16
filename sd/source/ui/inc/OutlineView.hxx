@@ -196,7 +196,7 @@ private:
     */
     void onUpdateStyleSettings( bool bForceUpdate = false );
 
-    /** this link is called from the vcl applicaten when the stylesettings
+    /** this link is called from the vcl application when the stylesettings
         change. Its only purpose is to call onUpdateStyleSettings() then.
     */
     DECL_LINK( AppEventListenerHdl, void * );

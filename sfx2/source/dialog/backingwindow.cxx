@@ -332,7 +332,7 @@ void BackingWindow::initControls()
 
     mpButtonsBox->SetBackground(aWallpaper);
 
-    // thin white rectangle aronud the Help and Extensions buttons
+    // thin white rectangle around the Help and Extensions buttons
     mpThinBox1->SetBackground(aButtonsText);
     mpThinBox2->SetBackground(aButtonsText);
 

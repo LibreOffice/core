@@ -65,7 +65,7 @@ namespace svt
         virtual void Dying() SAL_OVERRIDE;
 
     private:
-        // triggers a re-arrance of the panel deck elements
+        // triggers a re-arrange of the panel deck elements
         void    impl_triggerRearrange() const;
         size_t  impl_getPanelPositionFromWindow( const vcl::Window* i_pDrawerWindow ) const;
         void    impl_removeDrawer( const size_t i_nPosition );

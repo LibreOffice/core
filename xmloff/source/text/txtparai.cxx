@@ -996,7 +996,7 @@ void XMLMetaFieldImportContext::InsertMeta(
  *
  * All *-mark-end index marks should instantiate *this* class (because
  * it doesn't process attributes other than ID), while the *-mark and
- * *-mark-start classes should instantiate the apporpiate subclasses.
+ * *-mark-start classes should instantiate the appropriate subclasses.
  */
 class XMLIndexMarkImportContext_Impl : public SvXMLImportContext
 {

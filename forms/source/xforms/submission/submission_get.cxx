@@ -49,7 +49,7 @@ CSubmissionGet::CSubmissionGet(const OUString& aURL, const css::uno::Reference< 
 
 CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
-    // GET always uses apllicatin/x-www-formurlencoded
+    // GET always uses application/x-www-formurlencoded
     boost::scoped_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
     apSerialization->setSource(m_aFragment);
     apSerialization->serialize();

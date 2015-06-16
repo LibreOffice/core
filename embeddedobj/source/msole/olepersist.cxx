@@ -371,7 +371,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
                                                 const uno::Reference< io::XStream >& xCachedVisualRepresentation )
         throw ( uno::Exception )
 {
-    OSL_ENSURE( xTargetStream.is() && xCachedVisualRepresentation.is(), "Invalid argumants!\n" );
+    OSL_ENSURE( xTargetStream.is() && xCachedVisualRepresentation.is(), "Invalid arguments!\n" );
 
     if ( !xTargetStream.is() || !xCachedVisualRepresentation.is() )
         throw uno::RuntimeException();

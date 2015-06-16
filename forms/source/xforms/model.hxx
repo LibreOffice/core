@@ -178,7 +178,7 @@ public:
     void addMIP( void* pTag, const XNode_t&, const MIP& );
     void removeMIPs( void* pTag );
 
-    /// query which MIPs appy to the given node
+    /// query which MIPs apply to the given node
     MIP queryMIP( const XNode_t& xNode ) const;
 
     /// re-bind all bindings
