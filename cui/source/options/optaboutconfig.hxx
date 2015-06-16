@@ -67,9 +67,11 @@ public:
    explicit CuiAboutConfigTabPage(vcl::Window* pParent);
    virtual ~CuiAboutConfigTabPage();
    virtual void dispose() SAL_OVERRIDE;
-   void     InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue);
+   void     InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue,
+                        SvTreeListEntry *pParentEntry = nullptr);
    void     Reset();
-   void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess);
+   void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess,
+                      SvTreeListEntry *pParentEntry = nullptr);
    static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
    bool FillItemSet();
 };
