@@ -1136,7 +1136,7 @@ namespace
 
         return bRet;
     }
-} // annonymous
+} // anonymous
 
 ::com::sun::star::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
 {

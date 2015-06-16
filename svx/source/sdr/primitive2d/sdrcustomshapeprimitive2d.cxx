@@ -66,7 +66,7 @@ namespace drawinglayer
                 // The shadow for AutoShapes could be handled uniformely by not setting any
                 // shadow items at the helper model objects and only adding shadow here for
                 // 2D and 3D (and it works, too), but this would lead to two 3D scenes for
-                // the 3D object; one for the shadow aond one for the content. The one for the
+                // the 3D object; one for the shadow and one for the content. The one for the
                 // shadow will be correct (using ColorModifierStack), but expensive.
                 if(!get3DShape())
                 {

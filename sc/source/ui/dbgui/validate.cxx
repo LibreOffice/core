@@ -145,7 +145,7 @@ void ScTPValidationValue::RefInputDonePostHdl()
     if( m_pRefEdit && m_pRefEdit->GetParent() != m_pRefGrid )
     {
         m_pRefEdit->SetParent( m_pRefGrid );
-        m_pBtnRef->SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
+        m_pBtnRef->SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to another window and restore parent later in order to restore the tab order
     }
 
     if( m_pBtnRef->GetParent() != m_pRefGrid )

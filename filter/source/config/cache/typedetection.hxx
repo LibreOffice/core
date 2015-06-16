@@ -271,7 +271,7 @@ private:
 
 
 
-    /** @short      remove anythimng related to a TYPE/FILTER entry from the
+    /** @short      remove anything related to a TYPE/FILTER entry from the
                     specified MediaDescriptor.
 
         @descr      This method works together with impl_validateAndSetTypeOnDescriptor()/

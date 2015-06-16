@@ -247,7 +247,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     if ( m_bW3CPadding && !m_bEncryption )
     {
         // W3CPadding handling for decryption
-        // aResult should have anough data, since we let m_aLastBlock be big enough in case of decryption
+        // aResult should have enough data, since we let m_aLastBlock be big enough in case of decryption
         OSL_ENSURE( aResult.getLength() >= m_nBlockSize, "Not enough data to handle the padding!" );
 
         sal_Int8 nBytesToRemove = aResult[aResult.getLength() - 1];

@@ -611,7 +611,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 }
 
 /**
- * Set cursor for animaton or imagemap
+ * Set cursor for animation or imagemap
  */
 bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 {
