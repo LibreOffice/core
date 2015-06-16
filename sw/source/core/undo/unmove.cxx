@@ -278,8 +278,8 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM *const pPam = & AddUndoRedoPaM(rContext);
-    SwDoc & rDoc = rContext.GetDoc();
+    SwPaM& rPam = AddUndoRedoPaM(rContext);
+    SwDoc& rDoc = rContext.GetDoc();
 
     SwNodes& rNds = rDoc.GetNodes();
     SwNodeIndex aIdx( rNds, nMvDestNode );
@@ -294,7 +294,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        SwPaM aPam( *pPam->GetPoint() );
+        SwPaM aPam(*rPam.GetPoint());
         SetPaM( aPam );
         SwPosition aMvPos( aIdx, SwIndex( aIdx.GetNode().GetContentNode(),
                                         nMvDestContent ));
@@ -322,9 +322,9 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
                 pTextNd->JoinNext();
             }
         }
-        *pPam->GetPoint() = *aPam.GetPoint();
-        pPam->SetMark();
-        *pPam->GetMark() = *aPam.GetMark();
+        *rPam.GetPoint() = *aPam.GetPoint();
+        rPam.SetMark();
+        *rPam.GetMark() = *aPam.GetMark();
     }
 }
 

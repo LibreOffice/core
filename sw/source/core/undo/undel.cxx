@@ -745,14 +745,14 @@ static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, SwPos
 
 void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
+    SwDoc& rDoc = rContext.GetDoc();
 
     sal_uLong nCalcStt = nSttNode - nNdDiff;
 
     if( nSectDiff && bBackSp )
         nCalcStt += nSectDiff;
 
-    SwNodeIndex aIdx( pDoc->GetNodes(), nCalcStt );
+    SwNodeIndex aIdx(rDoc.GetNodes(), nCalcStt);
     SwNode* pInsNd = &aIdx.GetNode();
 
     {   // code block so that SwPosition is detached when deleting a Node
@@ -761,8 +761,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             if( pInsNd->IsTableNode() )
             {
-                pInsNd = pDoc->GetNodes().MakeTextNode( aIdx,
-                        pDoc->GetDfltTextFormatColl() );
+                pInsNd = rDoc.GetNodes().MakeTextNode( aIdx,
+                        rDoc.GetDfltTextFormatColl() );
                 --aIdx;
                 aPos.nNode = aIdx;
                 aPos.nContent.Assign( pInsNd->GetContentNode(), nSttContent );
@@ -794,13 +794,13 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pSttStr && !bFromTableCopy )
             {
                 sal_uLong nOldIdx = aPos.nNode.GetIndex();
-                pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
+                rDoc.getIDocumentContentOperations().SplitNode( aPos, false );
                 // After the split all objects are anchored at the first
                 // paragraph, but the pHistory of the fly frame formats relies
                 // on anchoring at the start of the selection
                 // => selection backwards needs a correction.
                 if( bBackSp )
-                    lcl_ReAnchorAtContentFlyFrames( *pDoc->GetSpzFrameFormats(), aPos, nOldIdx );
+                    lcl_ReAnchorAtContentFlyFrames(*rDoc.GetSpzFrameFormats(), aPos, nOldIdx);
                 pTextNd = aPos.nNode.GetNode().GetTextNode();
             }
             if( pTextNd )
@@ -821,9 +821,9 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 if (nSttContent < pNd->GetText().getLength())
                 {
                     sal_uLong nOldIdx = aPos.nNode.GetIndex();
-                    pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
+                    rDoc.getIDocumentContentOperations().SplitNode( aPos, false );
                     if( bBackSp )
-                        lcl_ReAnchorAtContentFlyFrames( *pDoc->GetSpzFrameFormats(), aPos, nOldIdx );
+                        lcl_ReAnchorAtContentFlyFrames(*rDoc.GetSpzFrameFormats(), aPos, nOldIdx);
                 }
                 else
                     ++aPos.nNode;
@@ -844,12 +844,12 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 nMoveIndex -= nSectDiff + 1;
                 ++nDiff;
             }
-            SwNodeIndex aMvIdx( pDoc->GetNodes(), nMoveIndex );
+            SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
             SwNodeRange aRg( aPos.nNode, 0 - nDiff, aPos.nNode, 1 - nDiff );
             --aPos.nNode;
             if( !bJoinNext )
                 pMovedNode = &aPos.nNode.GetNode();
-            pDoc->GetNodes()._MoveNodes( aRg, pDoc->GetNodes(), aMvIdx, true );
+            rDoc.GetNodes()._MoveNodes(aRg, rDoc.GetNodes(), aMvIdx, true);
             ++aPos.nNode;
         }
 
@@ -857,7 +857,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwNodeRange aRange( *pMvStt, 0, *pMvStt, nNode );
             SwNodeIndex aCopyIndex( aPos.nNode, -1 );
-            pDoc->GetUndoManager().GetUndoNodes()._Copy( aRange, aPos.nNode );
+            rDoc.GetUndoManager().GetUndoNodes()._Copy( aRange, aPos.nNode );
 
             if( nReplaceDummy )
             {
@@ -872,16 +872,16 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     aPos = SwPosition( aCopyIndex );
                     nMoveIndex = aPos.nNode.GetIndex() + nReplaceDummy + 1;
                 }
-                SwNodeIndex aMvIdx( pDoc->GetNodes(), nMoveIndex );
+                SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
                 SwNodeRange aRg( aPos.nNode, 0, aPos.nNode, 1 );
                 pMovedNode = &aPos.nNode.GetNode();
-                pDoc->GetNodes()._MoveNodes( aRg, pDoc->GetNodes(), aMvIdx, true );
-                pDoc->GetNodes().Delete( aMvIdx, 1 );
+                rDoc.GetNodes()._MoveNodes(aRg, rDoc.GetNodes(), aMvIdx, true);
+                rDoc.GetNodes().Delete( aMvIdx, 1 );
             }
         }
 
         if( pMovedNode )
-            lcl_MakeAutoFrms( *pDoc->GetSpzFrameFormats(), pMovedNode->GetIndex() );
+            lcl_MakeAutoFrms(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
 
         if( pSttStr )
         {
@@ -911,7 +911,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( pHistory )
         {
-            pHistory->TmpRollback( pDoc, nSetPos, false );
+            pHistory->TmpRollback(&rDoc, nSetPos, false);
             if( nSetPos )       // there were Footnodes/FlyFrames
             {
                 // are there others than these ones?
@@ -920,12 +920,12 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     // if so save the attributes of the others
                     SwHistory aHstr;
                     aHstr.Move( 0, pHistory, nSetPos );
-                    pHistory->Rollback( pDoc );
+                    pHistory->Rollback(&rDoc);
                     pHistory->Move( 0, &aHstr );
                 }
                 else
                 {
-                    pHistory->Rollback( pDoc );
+                    pHistory->Rollback(&rDoc);
                     DELETEZ( pHistory );
                 }
             }
@@ -936,7 +936,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             sal_uInt16 nStt = static_cast<sal_uInt16>( bResetPgDesc ? RES_PAGEDESC : RES_BREAK );
             sal_uInt16 nEnd = static_cast<sal_uInt16>( bResetPgBrk ? RES_BREAK : RES_PAGEDESC );
 
-            SwNode* pNode = pDoc->GetNodes()[ nEndNode + 1 ];
+            SwNode* pNode = rDoc.GetNodes()[ nEndNode + 1 ];
             if( pNode->IsContentNode() )
                 static_cast<SwContentNode*>(pNode)->ResetAttr( nStt, nEnd );
             else if( pNode->IsTableNode() )
@@ -945,9 +945,9 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     // delete the temporarily added Node
     if( pInsNd )
-        pDoc->GetNodes().Delete( aIdx, 1 );
+        rDoc.GetNodes().Delete( aIdx, 1 );
     if( pRedlSaveData )
-        SetSaveData( *pDoc, *pRedlSaveData );
+        SetSaveData(rDoc, *pRedlSaveData);
 
     AddUndoRedoPaM(rContext, true);
 }

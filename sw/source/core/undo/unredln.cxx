@@ -84,20 +84,20 @@ sal_uInt16 SwUndoRedline::GetRedlSaveCount() const
 
 void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM & rPam( AddUndoRedoPaM(rContext) );
+    SwDoc& rDoc = rContext.GetDoc();
+    SwPaM& rPam(AddUndoRedoPaM(rContext));
 
-    UndoRedlineImpl(*pDoc, rPam);
+    UndoRedlineImpl(rDoc, rPam);
 
     if( mpRedlSaveData )
     {
-        sal_uLong nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex();
-        SetSaveData( *pDoc, *mpRedlSaveData );
+        sal_uLong nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
+        SetSaveData(rDoc, *mpRedlSaveData);
         if( mbHiddenRedlines )
         {
             mpRedlSaveData->clear();
 
-            nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex() - nEndExtra;
+            nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex() - nEndExtra;
             nSttNode += nEndExtra;
             nEndNode += nEndExtra;
         }
@@ -107,25 +107,25 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoRedline::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
-    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
+    SwDoc& rDoc = rContext.GetDoc();
+    RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
 
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
     if( mpRedlSaveData && mbHiddenRedlines )
     {
-        sal_uLong nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex();
+        sal_uLong nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
         FillSaveData(rPam, *mpRedlSaveData, false, UNDO_REJECT_REDLINE != mnUserId );
 
-        nEndExtra -= pDoc->GetNodes().GetEndOfExtras().GetIndex();
+        nEndExtra -= rDoc.GetNodes().GetEndOfExtras().GetIndex();
         nSttNode -= nEndExtra;
         nEndNode -= nEndExtra;
     }
 
-    RedoRedlineImpl(*pDoc, rPam);
+    RedoRedlineImpl(rDoc, rPam);
 
     SetPaM(rPam, true);
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
 }
 
 void SwUndoRedline::UndoRedlineImpl(SwDoc &, SwPaM &)
@@ -392,84 +392,84 @@ SwUndoCompDoc::~SwUndoCompDoc()
 
 void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM *const pPam( & AddUndoRedoPaM(rContext) );
+    SwDoc& rDoc = rContext.GetDoc();
+    SwPaM& rPam(AddUndoRedoPaM(rContext));
 
     if( !bInsert )
     {
         // delete Redlines
-        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON));
+        RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
+        rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON));
 
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pPam, true, USHRT_MAX );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
 
         // per definition Point is end (in SwUndRng!)
-        SwContentNode* pCSttNd = pPam->GetContentNode( false );
-        SwContentNode* pCEndNd = pPam->GetContentNode( true );
+        SwContentNode* pCSttNd = rPam.GetContentNode(false);
+        SwContentNode* pCEndNd = rPam.GetContentNode(true);
 
         // if start- and end-content is zero, then the doc-compare moves
         // complete nodes into the current doc. And then the selection
         // must be from end to start, so the delete join into the right
         // direction.
         if( !nSttContent && !nEndContent )
-            pPam->Exchange();
+            rPam.Exchange();
 
         bool bJoinText, bJoinPrev;
-        sw_GetJoinFlags( *pPam, bJoinText, bJoinPrev );
+        sw_GetJoinFlags(rPam, bJoinText, bJoinPrev);
 
-        pUnDel = new SwUndoDelete( *pPam, false );
+        pUnDel = new SwUndoDelete(rPam, false);
 
         if( bJoinText )
-            sw_JoinText( *pPam, bJoinPrev );
+            sw_JoinText(rPam, bJoinPrev);
 
         if( pCSttNd && !pCEndNd)
         {
             // #112139# Do not step behind the end of content.
-            SwNode & rTmp = pPam->GetNode(true);
-            SwNode * pEnd = pDoc->GetNodes().DocumentSectionEndNode(&rTmp);
+            SwNode & rTmp = rPam.GetNode(true);
+            SwNode * pEnd = rDoc.GetNodes().DocumentSectionEndNode(&rTmp);
 
             if (&rTmp != pEnd)
             {
-                pPam->SetMark();
-                ++pPam->GetPoint()->nNode;
-                pPam->GetBound( true ).nContent.Assign( 0, 0 );
-                pPam->GetBound( false ).nContent.Assign( 0, 0 );
-                pUnDel2 = new SwUndoDelete( *pPam, true );
+                rPam.SetMark();
+                ++rPam.GetPoint()->nNode;
+                rPam.GetBound( true ).nContent.Assign( 0, 0 );
+                rPam.GetBound( false ).nContent.Assign( 0, 0 );
+                pUnDel2 = new SwUndoDelete(rPam, true);
             }
         }
-        pPam->DeleteMark();
+        rPam.DeleteMark();
     }
     else
     {
         if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
-            pDoc->getIDocumentRedlineAccess().DeleteRedline( *pPam, true, USHRT_MAX );
+            rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
 
             if( pRedlSaveData )
-                SetSaveData( *pDoc, *pRedlSaveData );
+                SetSaveData(rDoc, *pRedlSaveData);
         }
-        SetPaM(*pPam, true);
+        SetPaM(rPam, true);
     }
 }
 
 void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM *const pPam( & AddUndoRedoPaM(rContext) );
+    SwDoc& rDoc = rContext.GetDoc();
+    SwPaM& rPam(AddUndoRedoPaM(rContext));
 
     if( bInsert )
     {
         if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
-            SwRangeRedline* pTmp = new SwRangeRedline( *pRedlData, *pPam );
-            static_cast<SwRedlineTable&>(pDoc->getIDocumentRedlineAccess().GetRedlineTable()).Insert( pTmp );
+            SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
+            static_cast<SwRedlineTable&>(rDoc.getIDocumentRedlineAccess().GetRedlineTable()).Insert( pTmp );
             pTmp->InvalidateRange();
         }
         else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-                !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
-            pDoc->getIDocumentRedlineAccess().SplitRedline( *pPam );
+                !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
+            rDoc.getIDocumentRedlineAccess().SplitRedline(rPam);
     }
     else
     {
@@ -481,14 +481,14 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         pUnDel->UndoImpl(rContext);
         delete pUnDel, pUnDel = 0;
 
-        SetPaM( *pPam );
+        SetPaM(rPam);
 
-        SwRangeRedline* pTmp = new SwRangeRedline( *pRedlData, *pPam );
-        static_cast<SwRedlineTable&>(pDoc->getIDocumentRedlineAccess().GetRedlineTable()).Insert( pTmp );
+        SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
+        static_cast<SwRedlineTable&>(rDoc.getIDocumentRedlineAccess().GetRedlineTable()).Insert( pTmp );
         pTmp->InvalidateRange();
     }
 
-    SetPaM(*pPam, true);
+    SetPaM(rPam, true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
