@@ -523,6 +523,19 @@ void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     mpActiveWindow->SetPointerPosPixel(aPoint);
 }
 
+void ViewShell::LogicMouseMove(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(GetDoc()->isTiledRendering());
+
+    Point aPoint = mpActiveWindow->GetPointerPosPixel();
+    mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
+
+    MouseMove(rMouseEvent, 0);
+
+    mpActiveWindow->SetPointerPosPixel(aPoint);
+}
+
 void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark)
 {
     if (SdrView* pSdrView = GetView())

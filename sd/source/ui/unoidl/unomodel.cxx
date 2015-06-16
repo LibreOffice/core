@@ -2411,6 +2411,9 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
         pViewShell->LogicMouseButtonUp(aEvent);
         break;
+    case LOK_MOUSEEVENT_MOUSEMOVE:
+        pViewShell->LogicMouseMove(aEvent);
+        break;
     default:
         assert(false);
         break;
