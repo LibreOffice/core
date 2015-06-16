@@ -437,7 +437,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78882, "fdo78882.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
 {
-    /* Issue was, AuoSpacing property if present inside styles.xml, LO was not able to
+    /* Issue was, AutoSpacing property if present inside styles.xml, LO was not able to
      * preserve it.
      */
 

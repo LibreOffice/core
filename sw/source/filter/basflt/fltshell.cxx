@@ -144,7 +144,7 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
     rRegion.GetPoint()->nContent.Assign(pCNd, rPtPos.m_nContent);
     OSL_ENSURE( CheckNodesRange( rRegion.Start()->nNode,
                              rRegion.End()->nNode, true ),
-             "atttribute or similar crosses section-boundaries" );
+             "attribute or similar crosses section-boundaries" );
     if( bCheck )
         return CheckNodesRange( rRegion.Start()->nNode,
                                 rRegion.End()->nNode, true );

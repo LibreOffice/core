@@ -278,7 +278,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     }
 
 
-    //finalize and assignthe string.
+    //finalize and assign the string.
     LPMALLOC lpMalloc;
     HRESULT hr = SHGetMalloc(&lpMalloc);
 

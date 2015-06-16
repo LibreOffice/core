@@ -137,7 +137,7 @@ namespace dbaui
 #endif // # _MSC_VER
 
     private:
-        // for asny execution of XDispatch::dispatch
+        // for any execution of XDispatch::dispatch
         struct DispatchArgs
         {
             ::com::sun::star::util::URL                                                 aURL;

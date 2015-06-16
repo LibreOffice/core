@@ -2770,7 +2770,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
         }
         else
         {
-            // Make new Font-Atribut
+            // Make new Font-Attribut
             // (will be closed in SwWW8ImplReader::ReadChars() )
 
             //Will not be added to the charencoding stack, for styles the real

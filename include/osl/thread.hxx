@@ -211,7 +211,7 @@ public:
     }
 
     /** Get the data associated with the data key.
-        @returns The data asscoitaed with the data key or
+        @returns The data associated with the data key or
         NULL if no data was set
     */
     void* SAL_CALL getData()

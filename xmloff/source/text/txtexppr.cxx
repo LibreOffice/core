@@ -348,7 +348,7 @@ lcl_checkMultiProperty(XMLPropertyState *const pState,
 
 /**
  * Filter context of paragraph and character borders.
- * Compress border attriubtes. If one of groupable attributes (border type, border width, padding)
+ * Compress border attributes. If one of groupable attributes (border type, border width, padding)
  * is equal for all four side then just one general attribute will be exported.
 **/
 static void lcl_FilterBorders(

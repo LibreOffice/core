@@ -4438,7 +4438,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             throw uno::RuntimeException("Failed to find the autofilter placeholder range" );
 
         uno::Reference< beans::XPropertySet > xDBRangeProps( xDataBaseRange, uno::UNO_QUERY_THROW );
-        // set autofilt
+        // set autofilter
         xDBRangeProps->setPropertyValue( "AutoFilter", uno::Any(sal_True) );
 		// set header (autofilter always need column headers)
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );

@@ -340,7 +340,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                 }
             }
 
-            // If we just finished search in shape text, don't attept to do that again.
+            // If we just finished search in shape text, don't attempt to do that again.
             if (!bEndedTextEdit)
             {
                 // If there are any shapes anchored to this node, search there.
