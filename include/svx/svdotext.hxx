@@ -45,6 +45,7 @@ class SdrTextObjTest;
 class SvxFieldItem;
 class ImpSdrObjTextLink;
 class EditStatus;
+class TextChain;
 
 namespace sdr { namespace properties {
     class TextProperties;
@@ -134,6 +135,8 @@ private:
     friend class                sdr::table::Cell;
     friend class                sdr::table::SdrTableRtfExporter;
     friend class                sdr::table::SdrTableRTFParser;
+
+    friend class                TextChain;
 
     // CustomShapeproperties need to access the "bTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
