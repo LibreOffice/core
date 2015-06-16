@@ -187,6 +187,10 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
             m_nAsianLayoutId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
 
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) , "GetTabPageRangesFunc fail!");
+            m_nBackgroundId = AddTabPage("highlighting", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ));
+
             OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
             m_nTabId = AddTabPage("tabs", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
@@ -467,9 +471,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if (nId == m_nBackgroundId)
     {
         SvxBackgroundTabFlags nFlagType = SvxBackgroundTabFlags::NONE;
-        if( SFX_STYLE_FAMILY_CHAR != nType )
-            nFlagType |= SvxBackgroundTabFlags::SHOW_SELECTOR;
-        if( SFX_STYLE_FAMILY_CHAR == nType )
+        if( SFX_STYLE_FAMILY_CHAR == nType || SFX_STYLE_FAMILY_PARA == nType )
             nFlagType |= SvxBackgroundTabFlags::SHOW_HIGHLIGHTING;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
