@@ -1121,12 +1121,6 @@ void WinOpenGLDeviceInfo::FillBlacklist()
             GetDeviceVendor(wgl::VendorATI), wgl::DriverInfo::allDevices,
             wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
     APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorATI), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorAMD), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
             GetDeviceVendor(wgl::VendorAMD), wgl::DriverInfo::allDevices,
             wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
 
@@ -1172,9 +1166,6 @@ void WinOpenGLDeviceInfo::FillBlacklist()
     IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_7, wgl::IntelGMAX4500HD, wgl::V(7,15,10,1666));
 
     /* OpenGL on any Intel hardware is discouraged */
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorIntel), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
     APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
             GetDeviceVendor(wgl::VendorIntel), wgl::DriverInfo::allDevices,
             wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
