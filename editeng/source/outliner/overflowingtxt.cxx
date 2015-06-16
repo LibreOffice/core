@@ -22,8 +22,6 @@
 
 #include <editeng/overflowingtxt.hxx>
 
-using namespace ::rtl;
-
 
 OUString OverflowingText::GetEndingLines() const
 {

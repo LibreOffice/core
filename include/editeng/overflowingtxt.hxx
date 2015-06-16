@@ -20,9 +20,9 @@
 #ifndef INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 #define INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 
-namespace rtl {
-    class OUString;
-}
+
+class OUString;
+
 
 class OutlinerParaObject;
 
