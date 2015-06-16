@@ -71,6 +71,25 @@
 #include <config_features.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
+CPPUNIT_NS_BEGIN
+
+template<> struct assertion_traits<Color>
+{
+    static bool equal( const Color& c1, const Color& c2 )
+    {
+        return c1 == c2;
+    }
+
+    static std::string toString( const Color& c )
+    {
+        OStringStream ost;
+        ost << static_cast<unsigned int>(c.GetColor());
+        return ost.str();
+    }
+};
+
+CPPUNIT_NS_END
+
 using namespace ::com::sun::star;
 
 class SdExportTest : public SdModelTestBase
@@ -171,8 +190,8 @@ void SdExportTest::testN821567()
 
 namespace {
 
-void checkFontAttributes(const SdrTextObj* pObj, sal_uInt32 nColor,
-        bool bCheckWeight, FontWeight eWeight, bool bCheckItalic, FontItalic eItalic)
+template< typename ItemValue, typename ItemType >
+void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
 {
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
     const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
@@ -180,31 +199,12 @@ void checkFontAttributes(const SdrTextObj* pObj, sal_uInt32 nColor,
     aEdit.GetCharAttribs(0, rLst);
     for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
     {
-        const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
-        if( pCharColor )
+        const ItemType* pAttrib = dynamic_cast<const ItemType *>((*it).pAttr);
+        if (pAttrib)
         {
-            CPPUNIT_ASSERT_EQUAL( nColor, pCharColor->GetValue().GetColor());
-        }
-
-        if(bCheckWeight)
-        {
-            const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
-            if( pWeight )
-            {
-                CPPUNIT_ASSERT_EQUAL( eWeight, pWeight->GetWeight());
-            }
-        }
-
-        if(bCheckItalic)
-        {
-            const SvxPostureItem *pPosture = dynamic_cast<const SvxPostureItem *>((*it).pAttr);
-            if( pPosture )
-            {
-                CPPUNIT_ASSERT_EQUAL( eItalic, pPosture->GetPosture());
-            }
+            CPPUNIT_ASSERT_EQUAL( nVal, (ItemValue)pAttrib->GetValue());
         }
     }
-
 }
 
 }
@@ -224,15 +224,15 @@ void SdExportTest::testBnc870233_1()
     // First shape has red, bold font
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-        checkFontAttributes(pObj, sal_uInt32(0xff0000),
-                true, WEIGHT_BOLD, true, ITALIC_NONE);
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0xff0000) );
+        checkFontAttributes<FontWeight, SvxWeightItem>( pObj, WEIGHT_BOLD );
     }
 
     // Second shape has blue, italic font
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
-        checkFontAttributes(pObj, sal_uInt32(0x0000ff),
-                true, WEIGHT_NORMAL, true, ITALIC_NORMAL);
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x0000ff) );
+        checkFontAttributes<FontItalic, SvxPostureItem>( pObj, ITALIC_NORMAL );
     }
 
     xDocShRef->DoClose();
@@ -253,22 +253,19 @@ void SdExportTest::testBnc870233_2()
     // First smart art has blue font color (direct formatting)
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-        checkFontAttributes(pObj, sal_uInt32(0x0000ff),
-                false, WEIGHT_DONTKNOW, false, ITALIC_NONE);
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x0000ff) );
     }
 
     // Second smart art has "dk2" font color (style)
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
-        checkFontAttributes(pObj, sal_uInt32(0x1F497D),
-                false, WEIGHT_DONTKNOW, false, ITALIC_NONE);
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x1F497D) );
     }
 
     // Third smart art has white font color (style)
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 2 ) );
-        checkFontAttributes(pObj, sal_uInt32(0xffffff),
-                false, WEIGHT_DONTKNOW, false, ITALIC_NONE);
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0xffffff) );
     }
 
     xDocShRef->DoClose();
