@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_06e53ca7",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-06-16T08:46:17Z",
+      "side": 1,
+      "message": "Is styles panel really intended for Writer variants only? (unclear from the bugreport, but it\u0027s a bit tl;dr)",
+      "revId": "b1133cf03f35d419d95159d15042b34a71e21e4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
