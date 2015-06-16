@@ -370,6 +370,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     get(m_pTblLBox, "tablelb");
     get(m_pParaLBox, "paralb");
 
+    get(m_pBackGroundColorLabelFT, "background_label");
     get(m_pBackGroundColorFrame, "backgroundcolorframe");
     get(m_pBackgroundColorSet, "backgroundcolorset");
     get(m_pPreviewWin1, "preview1");
@@ -1785,6 +1786,10 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
             ShowSelector();
         if ( nFlags & SvxBackgroundTabFlags::ENABLE_TRANSPARENCY )
             EnableTransparency(true, true);
+        if ( nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING )
+        {
+            m_pBackGroundColorLabelFT->SetText(CUI_RES(RID_SVXSTR_CHARNAME_HIGHLIGHTING));
+        }
     }
 }
 

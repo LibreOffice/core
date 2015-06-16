@@ -166,7 +166,7 @@
               <object class="GtkLabel" id="background">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Background</property>
+                <property name="label" translatable="yes">Highlighting</property>
               </object>
               <packing>
                 <property name="position">5</property>
