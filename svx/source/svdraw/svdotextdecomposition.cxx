@@ -23,6 +23,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/textchain.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -1612,6 +1613,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     rOutliner.SetText(*pOutlinerParaObject);
 
     /* Begin overflow handling */
+
+    TextChain *aTxtChain = new TextChain;
 
     // If overflow occurs we have to cut the text at the right point
     // If in edit mode ImpEditEngine should have taken care of this
