@@ -1,0 +1,7 @@
+Online update implementation based on Mozilla's MAR format + update mechanism
+
+Parts of this code are copied from the mozilla repository, and adapted to
+LibreOffice needs:
+
+firefox/modules/libmar -> online-update/source/libmar
+firefox/toolkit/mozapps/update -> online-update/source/update
