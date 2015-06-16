@@ -1121,7 +1121,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, comphelper::containerToSequence(aFrameProperties), nTableWidth));
             else
             {
-                // m_xText points to the body text, get to current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
+                // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
                 uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
                 if (xTextAppendAndConvert.is())
                     xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
