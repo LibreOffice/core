@@ -737,7 +737,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // DrawPagePreview draws complete lines/page numbers, must always be clipped
         if ( aOutputData.SetChangedClip() )
         {
-            DrawPagePreview(nX1,nY1,nX2,nY2, pContentDev);
+            DrawPagePreview(nX1,nY1,nX2,nY2, *pContentDev);
             pContentDev->SetClipRegion();
         }
     }
@@ -1112,7 +1112,7 @@ void ScGridWindow::CheckNeedsRepaint()
     }
 }
 
-void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, OutputDevice* pContentDev )
+void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext)
 {
     ScPageBreakData* pPageData = pViewData->GetView()->GetPageBreakData();
     if (pPageData)
@@ -1147,7 +1147,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         {
             //  use EditEngine to draw mixed-script string
             pEditEng.reset(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
-            pEditEng->SetRefMapMode( pContentDev->GetMapMode() );
+            pEditEng->SetRefMapMode(rRenderContext.GetMapMode());
             SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
             rDefPattern.FillEditItemSet( pEditDefaults );
             pEditDefaults->Put( SvxColorItem( Color( COL_LIGHTGRAY ), EE_CHAR_COLOR ) );
@@ -1165,11 +1165,11 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 // 3 pixel frame around the print area
                 //  (middle pixel on the grid lines)
 
-                pContentDev->SetLineColor();
+                rRenderContext.SetLineColor();
                 if (rData.IsAutomatic())
-                    pContentDev->SetFillColor( aAutomatic );
+                    rRenderContext.SetFillColor( aAutomatic );
                 else
-                    pContentDev->SetFillColor( aManual );
+                    rRenderContext.SetFillColor( aManual );
 
                 Point aStart = pViewData->GetScrPos(
                                     aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
@@ -1186,10 +1186,10 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 if ( aEnd.Y() > aWinSize.Height() + 10 )
                     aEnd.Y() = aWinSize.Height() + 10;
 
-                pContentDev->DrawRect( Rectangle( aStart, Point(aEnd.X(),aStart.Y()+2) ) );
-                pContentDev->DrawRect( Rectangle( aStart, Point(aStart.X()+2,aEnd.Y()) ) );
-                pContentDev->DrawRect( Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
-                pContentDev->DrawRect( Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
+                rRenderContext.DrawRect( Rectangle( aStart, Point(aEnd.X(),aStart.Y()+2) ) );
+                rRenderContext.DrawRect( Rectangle( aStart, Point(aStart.X()+2,aEnd.Y()) ) );
+                rRenderContext.DrawRect( Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
+                rRenderContext.DrawRect( Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
 
                 // Page breakes
                 //! Display differently (dashed ????)
@@ -1204,12 +1204,12 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     {
                         //! Search for hidden
                         if (pDoc->HasColBreak(nBreak, nTab) & BREAK_MANUAL)
-                            pContentDev->SetFillColor( aManual );
+                            rRenderContext.SetFillColor( aManual );
                         else
-                            pContentDev->SetFillColor( aAutomatic );
+                            rRenderContext.SetFillColor( aAutomatic );
                         Point aBreak = pViewData->GetScrPos(
                                         nBreak, aRange.aStart.Row(), eWhich, true );
-                        pContentDev->DrawRect( Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
+                        rRenderContext.DrawRect( Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
                     }
                 }
 
@@ -1223,12 +1223,12 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     {
                         //! Search for hidden
                         if (pDoc->HasRowBreak(nBreak, nTab) & BREAK_MANUAL)
-                            pContentDev->SetFillColor( aManual );
+                            rRenderContext.SetFillColor( aManual );
                         else
-                            pContentDev->SetFillColor( aAutomatic );
+                            rRenderContext.SetFillColor( aAutomatic );
                         Point aBreak = pViewData->GetScrPos(
                                         aRange.aStart.Col(), nBreak, eWhich, true );
-                        pContentDev->DrawRect( Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
+                        rRenderContext.DrawRect( Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
                     }
                 }
 
@@ -1281,26 +1281,26 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     Size aTextSize( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
                                     Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
                                                 (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
-                                    pEditEng->Draw( pContentDev, aPos );
+                                    pEditEng->Draw( &rRenderContext, aPos );
                                 }
                                 else
                                 {
                                     //  find right font size for DrawText
                                     aFont.SetSize( Size( 0,100 ) );
-                                    pContentDev->SetFont( aFont );
-                                    Size aSize100( pContentDev->GetTextWidth( aThisPageStr ), pContentDev->GetTextHeight() );
+                                    rRenderContext.SetFont( aFont );
+                                    Size aSize100(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
 
                                     //  40% of width or 60% of height
                                     long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
                                     long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
                                     aFont.SetSize( Size( 0,std::min(nSizeX,nSizeY) ) );
-                                    pContentDev->SetFont( aFont );
+                                    rRenderContext.SetFont( aFont );
 
                                     //  centered output with DrawText
-                                    Size aTextSize( pContentDev->GetTextWidth( aThisPageStr ), pContentDev->GetTextHeight() );
+                                    Size aTextSize(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
                                     Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
                                                 (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
-                                    pContentDev->DrawText( aPos, aThisPageStr );
+                                    rRenderContext.DrawText( aPos, aThisPageStr );
                                 }
                             }
                             nPrStartX = nPrEndX + 1;

@@ -265,7 +265,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     void            DrawAfterScroll();
     Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
-    void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, OutputDevice* pContentDev );
+    void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext);
 
     bool            GetEditUrl( const Point& rPos,
                                 OUString* pName=0, OUString* pUrl=0, OUString* pTarget=0 );
