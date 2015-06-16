@@ -381,6 +381,12 @@ public:
     /** Reset matrix and upper left, keep matrix
         formula dimension. */
     void ResetResult();
+
+private:
+
+    /** xUpperLeft is modifiable through SetUpperLeftDouble(), so clone it
+        whenever an svDouble token is assigned to. */
+    void CloneUpperLeftIfNecessary();
 };
 
 class SC_DLLPUBLIC ScHybridCellToken : public formula::FormulaToken
