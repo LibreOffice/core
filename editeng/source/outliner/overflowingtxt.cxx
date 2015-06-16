@@ -27,11 +27,11 @@ using namespace ::rtl;
 
 OUString OverflowingText::GetEndingLines() const
 {
-    // Only some lines in the same para overflowing
+    // Only some lines in the same para overflowing, thus the head gives the ending lines
     if (mHeadTxt == "" && mpMidParas == NULL)
-        return mTailTxt;
+        return mHeadTxt;
 
-    return mHeadTxt;
+    return mTailTxt;
 }
 
 
