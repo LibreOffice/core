@@ -932,6 +932,7 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_cm, XML_vm, XML_ph
             FSEND );
 
+    bool bTagStarted = false;
     ScAddress aScPos( static_cast< SCCOL >( GetXclPos().mnCol ), static_cast< SCROW >( GetXclPos().mnRow ), rStrm.GetRoot().GetCurrScTab() );
 
     if ( mrScFmlaCell.GetMatrixFlag() == MM_FORMULA)
@@ -973,9 +974,10 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                         // OOXTODO: XML_si,     uint
                         // OOXTODO: XML_bx      bool
                         FSEND );
+            bTagStarted = true;
         }
     }
-    else
+    if (!bTagStarted)
     {
         rWorksheet->startElement( XML_f,
                                   XML_aca,    XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) || (mxAddRec && mxAddRec->IsVolatile()) ),
