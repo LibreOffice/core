@@ -60,7 +60,7 @@ ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, c
         AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
         AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
         AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
-        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+        m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
         AddTabPage("alignment", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), 0 );
     }
     else
@@ -69,6 +69,16 @@ ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, c
     SvtCJKOptions aCJKOptions;
     if ( !aCJKOptions.IsDoubleLinesEnabled() )
         RemoveTabPage("asianlayout");
+}
+
+void ORptPageDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+{
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+    if (nId == m_nCharBgdId)
+    {
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));
+        rPage.PageCreated(aSet);
+    }
 }
 
 } // namespace rptui

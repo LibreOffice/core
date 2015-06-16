@@ -103,6 +103,10 @@ String RID_SVXSTR_CHARNAME_TYPEFACE
 {
     Text [ en-US ] = "Typeface";
 };
+String RID_SVXSTR_CHARNAME_HIGHLIGHTING
+{
+    Text [ en-US ] = "Highlighting Color";
+};
 String RID_SVXSTR_USE_REPLACE
 {
     Text [ en-US ] = "Use replacement table" ;
