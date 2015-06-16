@@ -812,7 +812,7 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
         impSetOutlinerToEmptyTxt(pOutliner);
 
         pTmpPara0 = pOutliner->GetParagraph(0);
-        pOutliner->SetText(mpOverflowingText->mTailTxt + aOldPara0Txt, pTmpPara0);
+        pOutliner->SetText(mpOverflowingText->GetEndingLines() + aOldPara0Txt, pTmpPara0);
         pJoiningPara = pOutliner->CreateParaObject();
     }
 

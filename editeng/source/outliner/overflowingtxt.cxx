@@ -17,24 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/textchain.hxx>
-#include <svx/svdotext.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/debug.hxx>
 
-TextChain::TextChain()
+#include <editeng/overflowingtxt.hxx>
+
+using namespace ::rtl;
+
+
+OUString OverflowingText::GetEndingLines() const
 {
+    // Only some lines in the same para overflowing
+    if (mHeadTxt == "" && mpMidParas == NULL)
+        return mTailTxt;
+
+    return mHeadTxt;
 }
 
-void TextChain::AppendLink(SdrTextObj *)
-{
-}
 
-SdrTextObj *TextChain::GetNextLink(SdrTextObj *)
-{
-    return NULL; // XXX
-}
-
-bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj *pNextLink)
-{
-
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

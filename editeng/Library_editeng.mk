@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/outliner/outlundo \
     editeng/source/outliner/outlvw \
     editeng/source/outliner/paralist \
+    editeng/source/outliner/overflowingtxt \
     editeng/source/rtf/rtfitem \
     editeng/source/rtf/svxrtf \
     editeng/source/uno/unoedhlp \

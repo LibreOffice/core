@@ -20,7 +20,10 @@
 #ifndef INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 #define INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 
-class OUString;
+namespace rtl {
+    class OUString;
+}
+
 class OutlinerParaObject;
 
 
@@ -40,6 +43,8 @@ class OverflowingText {
                   mpMidParas(pMidParas),
                   mTailTxt(tailTxt)
                 { }
+
+        OUString GetEndingLines() const;
 };
 
 class NonOverflowingText {
