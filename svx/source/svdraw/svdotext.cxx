@@ -1983,10 +1983,15 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     }
 }
 
-void SdrTextObj::onOverflowStatusEvent( bool bIsPageOverflow )
+void SdrTextObj::onOverflowStatusEvent( )
 {
     if (!IsChainable())
         return;
+
+    if (!pEdtOutl)
+        return;
+
+    bool bIsPageOverflow = pEdtOutl->IsPageOverflow();
 
     if ( GetNextLinkInChain() != NULL ) // is there anything to transfer text to?
     {
@@ -2110,9 +2115,9 @@ bool SdrTextObj::GetPreventChainable() const
     return pClone;
  }
 
-IMPL_LINK(SdrTextObj,ImpDecomposeChainedText,bool*,bIsPageOverflow)
+IMPL_LINK_NOARG(SdrTextObj,ImpDecomposeChainedText)
 {
-    onOverflowStatusEvent( *bIsPageOverflow );
+    onOverflowStatusEvent();
     return 0;
 }
 

@@ -557,7 +557,7 @@ public:
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
 
-    virtual void onOverflowStatusEvent( bool bIsPageOverflow );
+    virtual void onOverflowStatusEvent( );
 
 
 
@@ -629,7 +629,7 @@ public:
     OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner) const;
 
     // Handler for Chained Text
-    DECL_LINK(ImpDecomposeChainedText,bool*);
+    DECL_LINK(ImpDecomposeChainedText,void*);
 
     // timing generators
     void impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;
