@@ -305,7 +305,6 @@ public:
 
     void    DrawDocumentBackground();
     void    DrawBackground(vcl::RenderContext& rRenderContext);
-    void    DrawShadow();
     void    DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom);
     void    DrawFrame();
 

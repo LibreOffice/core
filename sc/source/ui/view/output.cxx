@@ -1116,11 +1116,6 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
     }
 }
 
-void ScOutputData::DrawShadow()
-{
-    DrawExtraShadow( false, false, false, false );
-}
-
 void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
     mpDev->SetLineColor();
