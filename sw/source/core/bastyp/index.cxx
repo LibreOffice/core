@@ -22,6 +22,8 @@
 #include <assert.h>
 #include <sal/log.hxx>
 
+#include <crossrefbookmark.hxx>
+
 TYPEINIT0(SwIndexReg);
 
 SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
@@ -265,7 +267,12 @@ void SwIndexReg::Update(
         pStt = rIdx.m_pNext;
         while( pStt )
         {
-            pStt->m_nIndex = pStt->m_nIndex + nDiff;
+            // HACK: avoid updating position of cross-ref bookmarks
+            if (!pStt->m_pMark || nullptr == dynamic_cast<
+                    ::sw::mark::CrossRefBookmark const*>(pStt->m_pMark))
+            {
+                pStt->m_nIndex = pStt->m_nIndex + nDiff;
+            }
             pStt = pStt->m_pNext;
         }
     }
