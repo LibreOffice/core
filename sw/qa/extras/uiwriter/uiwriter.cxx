@@ -33,6 +33,7 @@
 #include <unotools/streamwrap.hxx>
 #include <test/mtfxmldump.hxx>
 #include <unocrsr.hxx>
+#include <unocrsrhelper.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -91,6 +92,7 @@ public:
     void testTdf68183();
     void testCp1000115();
     void testTdf90003();
+    void testdelofTableRedlines();
     void testExportToPicture();
     void testSearchWithTransliterate();
     void testTableBackgroundColor();
@@ -132,6 +134,7 @@ public:
     CPPUNIT_TEST(testTdf68183);
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
+    CPPUNIT_TEST(testdelofTableRedlines);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTableBackgroundColor);
@@ -873,6 +876,25 @@ void SwUiWriterTest::testTdf90003()
     // This was 1: an unexpected fly portion was created, resulting in too
     // large x position for the empty paragraph marker.
     assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 0);
+}
+
+void SwUiWriterTest::testdelofTableRedlines()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    const SwTable& tbl = pWrtShell->InsertTable(TableOpt, 1, 3);
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+    uno::Sequence<beans::PropertyValue> aDescriptor;
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(tbl.GetTableBox(OUString("A1")))), OUString("TableCellInsert"), aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(tbl.GetTableBox(OUString("B1")))), OUString("TableCellInsert"), aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(tbl.GetTableBox(OUString("C1")))), OUString("TableCellInsert"), aDescriptor);
+    IDocumentRedlineAccess& pDocRed = pDoc->getIDocumentRedlineAccess();
+    SwExtraRedlineTable& redtbl = pDocRed.GetExtraRedlineTable();
+    redtbl.DeleteAllTableRedlines(pDoc, tbl, false, sal_uInt16(USHRT_MAX));
+    CPPUNIT_ASSERT(redtbl.IsEmpty());
 }
 
 void SwUiWriterTest::testExportToPicture()
