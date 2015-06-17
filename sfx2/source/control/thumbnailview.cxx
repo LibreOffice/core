@@ -252,7 +252,7 @@ void ThumbnailView::DrawItem(ThumbnailViewItem *pItem)
         Rectangle aRect = pItem->getDrawArea();
 
         if ((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0))
-            pItem->Paint(mpProcessor.get(), mpItemAttrs);
+            Invalidate(aRect);
     }
 }
 
@@ -855,7 +855,7 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
     Control::Command( rCEvt );
 }
 
-void ThumbnailView::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     size_t nItemCount = mItemList.size();
 
@@ -865,6 +865,11 @@ void ThumbnailView::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangl
                 B2DPolyPolygon(Polygon(rRect, 5, 5).getB2DPolygon()),
                 maColor.getBColor()));
 
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> mpProcessor(
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
     mpProcessor->process(aSeq);
 
     // draw items
@@ -874,24 +879,12 @@ void ThumbnailView::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangl
 
         if (pItem->isVisible())
         {
-            DrawItem(pItem);
+            pItem->Paint(mpProcessor.get(), mpItemAttrs);
         }
     }
 
     if (mpScrBar && mpScrBar->IsVisible())
         mpScrBar->Invalidate(rRect);
-}
-
-void ThumbnailView::PrePaint(vcl::RenderContext& rRenderContext)
-{
-    // Create the processor and process the primitives
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    mpProcessor.reset(drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
-}
-
-void ThumbnailView::PostPaint(vcl::RenderContext& /*rRenderContext*/)
-{
-    mpProcessor.reset();
 }
 
 void ThumbnailView::GetFocus()
