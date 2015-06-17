@@ -1103,8 +1103,10 @@ GL2DRenderer::GL2DRenderer(ChartView* pView):
 
 GL2DRenderer::~GL2DRenderer()
 {
+    SolarMutexGuard g;
     if(!mbContextDestroyed && mpWindow)
         mpWindow->setRenderer(NULL);
+    mpWindow.reset();
 }
 
 void GL2DRenderer::update()

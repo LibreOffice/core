@@ -235,6 +235,9 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
         osl_atomic_increment( &m_refCount );
         dispose();
     }
+    SolarMutexGuard g;
+    m_pTreeView.reset();
+    m_pSplitter.reset();
 }
 
 Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)

@@ -50,6 +50,9 @@ VCLXDevice::VCLXDevice()
 
 VCLXDevice::~VCLXDevice()
 {
+    //TODO: why was this empty, and everything done in ~VCLXVirtualDevice?
+    SolarMutexGuard g;
+    mpOutputDevice.reset();
 }
 
 void VCLXDevice::SetCreatedWithToolkit( bool bCreatedWithToolkit )

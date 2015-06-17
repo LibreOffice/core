@@ -19,6 +19,7 @@
 
 #include <accessibility/extended/listboxaccessible.hxx>
 #include <svtools/treelistbox.hxx>
+#include <vcl/svapp.hxx>
 
 namespace accessibility
 {
@@ -55,6 +56,7 @@ namespace accessibility
 
     void ListBoxAccessibleBase::disposing()
     {
+        SolarMutexGuard g;
         if ( m_pWindow )
             m_pWindow->RemoveEventListener( LINK( this, ListBoxAccessibleBase, WindowEventListener ) );
         m_pWindow = NULL;

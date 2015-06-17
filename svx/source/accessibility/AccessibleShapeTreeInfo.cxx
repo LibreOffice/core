@@ -19,6 +19,7 @@
 
 
 #include <svx/AccessibleShapeTreeInfo.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
@@ -71,7 +72,8 @@ AccessibleShapeTreeInfo& AccessibleShapeTreeInfo::operator= (const AccessibleSha
 
 AccessibleShapeTreeInfo::~AccessibleShapeTreeInfo()
 {
-    //empty
+    SolarMutexGuard g;
+    mpWindow.reset();
 }
 
 

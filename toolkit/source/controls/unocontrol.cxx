@@ -640,8 +640,12 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // Since the implementations for the listeners changed a lot towards 1.1, this
         // would not be the case anymore, if we would not do this listener-lock below
         // #i14703#
-        vcl::Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
-        VCLXWindow* pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
+        VCLXWindow* pPeer;
+        {
+            SolarMutexGuard g;
+            vcl::Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
+            pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
+        }
         VclListenerLock aNoVclEventMultiplexing( pPeer );
 
         // setting peer properties may result in an attempt to acquire the solar mutex, 'cause the peers

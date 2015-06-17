@@ -367,6 +367,8 @@ namespace frm
         throw (RuntimeException,
                std::exception)
     {
+        SolarMutexGuard g;
+
         if ( !GetWindow() )
         {
             VCLXWindow::setProperty( _rPropertyName, _rValue );

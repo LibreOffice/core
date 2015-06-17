@@ -2118,6 +2118,7 @@ throw (RuntimeException, std::exception)
             Reference< awt::XWindow > xWindow( m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
             if ( xWindow.is() )
             {
+                SolarMutexGuard g;
                 vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow && pWindow->IsVisible() )
                     return sal_True;

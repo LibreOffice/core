@@ -435,10 +435,13 @@ namespace frm
 
     void ONavigationBarPeer::allFeatureStatesChanged( )
     {
-        // force the control to update it's states
-        VclPtr< NavigationToolBar > pNavBar = GetAs< NavigationToolBar >();
-        if ( pNavBar )
-            pNavBar->setDispatcher( this );
+        {
+            // force the control to update it's states
+            SolarMutexGuard g;
+            VclPtr< NavigationToolBar > pNavBar = GetAs< NavigationToolBar >();
+            if ( pNavBar )
+                pNavBar->setDispatcher( this );
+        }
 
         // base class
         OFormNavigationHelper::allFeatureStatesChanged( );

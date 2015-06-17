@@ -363,6 +363,7 @@ void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeEx
 
 Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow() throw (RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
     return VCLUnoHelper::GetInterface( getView() );
 }
 
