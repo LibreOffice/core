@@ -275,6 +275,28 @@ public:
 #endif
 
     /**
+      New string from an 8-Bit character.
+
+      @param    value           An 8-Bit character.
+      @param    encoding        The text encoding from which the 8-Bit character
+                                should be converted.
+      @param    convertFlags    Flags which control the conversion.
+                                see RTL_TEXTTOUNICODE_FLAGS_...
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+    */
+    explicit OUString( const sal_Char value,
+                       rtl_TextEncoding encoding = RTL_TEXTENCODING_ASCII_US,
+                       sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
+    {
+        pData = 0;
+        rtl_string2UString( &pData, &value, 1, encoding, convertFlags );
+        if (pData == 0) {
+            throw std::bad_alloc();
+        }
+    }
+
+    /**
       New string from an 8-Bit character buffer array.
 
       @param    value           An 8-Bit character array.
@@ -320,6 +342,27 @@ public:
         pData(NULL)
     {
         rtl_uString_newFromCodePoints(&pData, codePoints, codePointCount);
+        if (pData == NULL) {
+            throw std::bad_alloc();
+        }
+    }
+
+    /** Create a new string from a Unicode code point.
+
+        @param codePoint
+        a code points, which each must be in the range from 0 to 0x10FFFF, inclusive.
+
+        @exception std::bad_alloc
+        is thrown if either an out-of-memory condition occurs or the resulting
+        number of UTF-16 code units would have been larger than SAL_MAX_INT32.
+
+        @since LibreOffice 5.1
+    */
+    inline explicit OUString(
+        sal_uInt32 const codePoint):
+        pData(NULL)
+    {
+        rtl_uString_newFromCodePoints(&pData, &codePoint, 1);
         if (pData == NULL) {
             throw std::bad_alloc();
         }
