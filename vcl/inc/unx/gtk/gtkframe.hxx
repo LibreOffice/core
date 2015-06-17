@@ -231,6 +231,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
+    void InvalidateGraphics();
 
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
