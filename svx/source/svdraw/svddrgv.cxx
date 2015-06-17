@@ -535,11 +535,11 @@ bool SdrDragView::EndDragObj(bool bCopy)
     // #i73341# If inserting GluePoint, do not insist on last points being different
     if(mpCurrentSdrDragMethod && aDragStat.IsMinMoved() && (IsInsertGluePoint() || aDragStat.GetNow() != aDragStat.GetPrev()))
     {
-        sal_uIntPtr nHdlAnzMerk=0;
+        sal_uIntPtr nSavedHdlCount=0;
 
         if (bEliminatePolyPoints)
-        { // IBM Special
-            nHdlAnzMerk=GetMarkablePointCount();
+        {
+            nSavedHdlCount=GetMarkablePointCount();
         }
 
         const bool bUndo = IsUndoEnabled();
@@ -558,8 +558,8 @@ bool SdrDragView::EndDragObj(bool bCopy)
         mpCurrentSdrDragMethod = 0;
 
         if (bEliminatePolyPoints)
-        { // IBM Special
-            if (nHdlAnzMerk!=GetMarkablePointCount())
+        {
+            if (nSavedHdlCount!=GetMarkablePointCount())
             {
                 UnmarkAllPoints();
             }
