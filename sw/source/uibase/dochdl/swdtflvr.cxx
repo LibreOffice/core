@@ -126,6 +126,7 @@
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
+#include <comphelper/lok.hxx>
 
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -305,7 +306,7 @@ void SwTransferable::AddSupportedFormats()
 {
     // only need if we are the current XSelection Object
     SwModule *pMod = SW_MOD();
-    if( this == pMod->pXSelection )
+    if( this == pMod->pXSelection || comphelper::LibreOfficeKit::isActive())
     {
         SetDataForDragAndDrop( Point( 0,0) );
     }
