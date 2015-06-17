@@ -60,7 +60,7 @@ public class CalcAddins {
  * of the service description. It implements the needed interfaces.
  * @implements XCalcAddins, XAddIn, XServiceName, XServiceInfo, XTypeProvider
  */
-    private static class _CalcAddins extends WeakBase implements
+    public static class _CalcAddins extends WeakBase implements
                                             XCalcAddins,
                                             XAddIn,
                                             XServiceName,
