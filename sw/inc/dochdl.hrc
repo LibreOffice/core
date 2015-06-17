@@ -23,11 +23,12 @@
 #include "rcid.hrc"
 
 #define STR_NOGLOS                  (RC_DOCHDL_BEGIN + 1)
+
 #define STR_ERR_INSERT_GLOS         (RC_DOCHDL_BEGIN + 3)
 #define STR_CLPBRD_FORMAT_ERROR     (RC_DOCHDL_BEGIN + 4)
 
+#define STR_TABLE_TOO_LARGE         (RC_DOCHDL_BEGIN + 6)
 #define STR_NO_TABLE                (RC_DOCHDL_BEGIN + 7)
-
 #define STR_PRIVATETEXT             (RC_DOCHDL_BEGIN + 8)
 #define STR_PRIVATEGRAPHIC          (RC_DOCHDL_BEGIN + 9)
 #define STR_PRIVATEOLE              (RC_DOCHDL_BEGIN + 10)

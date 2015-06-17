@@ -24,9 +24,15 @@ String STR_NOGLOS
 {
     Text [ en-US ] = "AutoText for Shortcut '%1' not found." ;
 };
+
 String STR_NO_TABLE
 {
     Text [ en-US ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
+};
+
+String STR_TABLE_TOO_LARGE
+{
+    Text [ en-US ] = "The table cannot be inserted because it is too large";
 };
 
 String STR_ERR_INSERT_GLOS
