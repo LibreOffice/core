@@ -834,8 +834,11 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
 
     // Append old first para in the destination box to
     //   last part of overflowing text
-    if (pJoiningPara)
+    if (pJoiningPara && mpOverflowingText->HasOtherParas())
         pOutliner->AddText(*pJoiningPara);
+    // this second case is if there is to avoid getting an empty line before pJoiningPara
+    else if (pJoiningPara && !mpOverflowingText->HasOtherParas())
+        pOutliner->SetText(*pJoiningPara);
 
     // Append all other old paras
     if (pOldParasTail)
