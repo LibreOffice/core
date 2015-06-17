@@ -728,8 +728,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( !bGridFirst && ( bGrid || bPage ) )
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
 
-    pContentDev->SetMapMode(MAP_PIXEL);
-
     if ( bPageMode )
     {
         // DrawPagePreview draws complete lines/page numbers, must always be clipped
@@ -739,6 +737,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             pContentDev->SetClipRegion();
         }
     }
+
+    pContentDev->SetMapMode(MAP_PIXEL);
 
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
@@ -1114,7 +1114,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     {
         ScDocument* pDoc = pViewData->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
-        Size aWinSize = GetOutputSizePixel();
+        Size aWinSize = GetOutputSize();
         const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
         Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
         Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
@@ -1166,10 +1166,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 else
                     rRenderContext.SetFillColor( aManual );
 
-                Point aStart = pViewData->GetScrPos(
-                                    aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
-                Point aEnd = pViewData->GetScrPos(
-                                    aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, true );
+                Point aStart = pViewData->GetScrPos(aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true);
+                Point aEnd = pViewData->GetScrPos(aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, true);
                 aStart.X() -= 2;
                 aStart.Y() -= 2;
 
@@ -1181,10 +1179,10 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 if ( aEnd.Y() > aWinSize.Height() + 10 )
                     aEnd.Y() = aWinSize.Height() + 10;
 
-                rRenderContext.DrawRect( Rectangle( aStart, Point(aEnd.X(),aStart.Y()+2) ) );
-                rRenderContext.DrawRect( Rectangle( aStart, Point(aStart.X()+2,aEnd.Y()) ) );
-                rRenderContext.DrawRect( Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
-                rRenderContext.DrawRect( Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
+                rRenderContext.DrawRect(rRenderContext.PixelToLogic(Rectangle(aStart, Point(aEnd.X(), aStart.Y() + 2))));
+                rRenderContext.DrawRect(rRenderContext.PixelToLogic(Rectangle(aStart, Point(aStart.X() + 2, aEnd.Y()))));
+                rRenderContext.DrawRect(rRenderContext.PixelToLogic(Rectangle(Point(aStart.X(), aEnd.Y() - 2), aEnd)));
+                rRenderContext.DrawRect(rRenderContext.PixelToLogic(Rectangle(Point(aEnd.X() - 2, aStart.Y()), aEnd)));
 
                 //  Seitenumbrueche
                 //! anders darstellen (gestrichelt ????)
@@ -1202,9 +1200,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             rRenderContext.SetFillColor( aManual );
                         else
                             rRenderContext.SetFillColor( aAutomatic );
-                        Point aBreak = pViewData->GetScrPos(
-                                        nBreak, aRange.aStart.Row(), eWhich, true );
-                        rRenderContext.DrawRect( Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
+                        Point aBreak = pViewData->GetScrPos(nBreak, aRange.aStart.Row(), eWhich, true);
+                        rRenderContext.DrawRect(rRenderContext.PixelToLogic(Rectangle(aBreak.X() - 1, aStart.Y(), aBreak.X(), aEnd.Y())));
                     }
                 }
 
@@ -1223,7 +1220,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             rRenderContext.SetFillColor( aAutomatic );
                         Point aBreak = pViewData->GetScrPos(
                                         aRange.aStart.Col(), nBreak, eWhich, true );
-                        rRenderContext.DrawRect( Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
+                        rRenderContext.DrawRect(rRenderContext.PixelToLogic(Rectangle(aStart.X(), aBreak.Y() - 1,aEnd.X(), aBreak.Y())));
                     }
                 }
 
@@ -1241,10 +1238,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             SCCOL nPrEndX = pColEnd[nColPos];
                             if ( nPrEndX >= nX1 && nPrStartX <= nX2 )
                             {
-                                Point aPageStart = pViewData->GetScrPos(
-                                                        nPrStartX, nPrStartY, eWhich, true );
-                                Point aPageEnd = pViewData->GetScrPos(
-                                                        nPrEndX+1,nPrEndY+1, eWhich, true );
+                                Point aPageStart = rRenderContext.PixelToLogic(pViewData->GetScrPos(nPrStartX, nPrStartY, eWhich, true));
+                                Point aPageEnd   = rRenderContext.PixelToLogic(pViewData->GetScrPos(nPrEndX + 1,nPrEndY + 1, eWhich, true));
 
                                 long nPageNo = rData.GetFirstPage();
                                 if ( rData.IsTopDown() )
@@ -1257,7 +1252,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 if ( pEditEng )
                                 {
                                     //  find right font size with EditEngine
-                                    long nHeight = 100;
+                                    long nHeight = rRenderContext.PixelToLogic(Size(0, 100)).Height();
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
@@ -1265,8 +1260,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     Size aSize100( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
 
                                     //  40% of width or 60% of height
-                                    long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
-                                    long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                    long nSizeX = rRenderContext.PixelToLogic(Size(40, 0)).Width()  * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                    long nSizeY = rRenderContext.PixelToLogic(Size(0, 60)).Height() * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
                                     nHeight = std::min(nSizeX,nSizeY);
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
@@ -1281,13 +1276,13 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 else
                                 {
                                     //  find right font size for DrawText
-                                    aFont.SetSize( Size( 0,100 ) );
+                                    aFont.SetSize(rRenderContext.PixelToLogic(Size(0, 100)));
                                     rRenderContext.SetFont( aFont );
                                     Size aSize100(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
 
                                     //  40% of width or 60% of height
-                                    long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
-                                    long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                    long nSizeX = rRenderContext.PixelToLogic(Size(40, 0)).Width()  * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                    long nSizeY = rRenderContext.PixelToLogic(Size(0, 60)).Height() * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
                                     aFont.SetSize( Size( 0,std::min(nSizeX,nSizeY) ) );
                                     rRenderContext.SetFont( aFont );
 
