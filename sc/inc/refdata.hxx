@@ -57,6 +57,8 @@ public:
     void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     /// InitAddressRel: InitFlags and set address, everything relative to rPos
     void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
+    /// InitFlags and set address, relative to rPos if rRef says so.
+    void InitFromRefAddress( const ScRefAddress& rRef, const ScAddress& rPos );
     sal_uInt8 FlagValue() const { return mnFlagValue;}
 
     void SetColRel( bool bVal ) { Flags.bColRel = bVal; }
@@ -134,6 +136,9 @@ struct ScComplexRefData
             Ref1.InitAddress( nCol1, nRow1, nTab1 );
             Ref2.InitAddress( nCol2, nRow2, nTab2 );
         }
+
+    /// InitFlags and set range, relative to rPos if rRef1 and rRef2 say so.
+    void InitFromRefAddresses( const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos );
 
     bool Valid() const;
 
