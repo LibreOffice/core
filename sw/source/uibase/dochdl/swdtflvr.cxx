@@ -2168,6 +2168,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 sTmp = sTmp.getToken( 0, '\n' );
                 sal_Int32 nCols = comphelper::string::getTokenCount(sTmp, '\t');
 
+                // don't try to insert tables that are too large for writer
                 if (nRows > USHRT_MAX || nCols > USHRT_MAX)
                 {
                     if( bMsg )

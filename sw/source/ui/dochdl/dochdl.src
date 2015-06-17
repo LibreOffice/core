@@ -27,7 +27,7 @@ String STR_NOGLOS
 
 String STR_NO_TABLE
 {
-    Text [ en-US ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
+    Text [ en-US ] = "A table with no rows or no cells cannot be inserted";
 };
 
 String STR_TABLE_TOO_LARGE
