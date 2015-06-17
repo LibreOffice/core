@@ -2131,6 +2131,12 @@ void DocxAttributeOutput::RawText( const OUString& /*rText*/, bool /*bForceUnico
 void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby )
 {
     OSL_TRACE("TODO DocxAttributeOutput::StartRuby( const SwTextNode& rNode, const SwFormatRuby& rRuby )" );
+    if (m_closeHyperlinkInThisRun)
+    {
+        EndRun(); // end hyperlink before starting ruby to avoid overlap
+        assert(!m_closeHyperlinkInThisRun);
+        assert(!m_closeHyperlinkInPreviousRun);
+    }
     m_pSerializer->startElementNS( XML_w, XML_ruby, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_rubyPr, FSEND );
     // hps
