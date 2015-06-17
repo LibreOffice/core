@@ -55,6 +55,7 @@ protected:
 private:
     long            mnY;
     bool            mbCenter;
+    vcl::Font       maFont;
 
 };
 
