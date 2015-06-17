@@ -2167,6 +2167,14 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 sTmp = sTmp.getToken( 0, '\n' );
                 sal_Int32 nCols = comphelper::string::getTokenCount(sTmp, '\t');
 
+                if (nRows > USHRT_MAX || nCols > USHRT_MAX)
+                {
+                    if( bMsg )
+                        MessageDialog(0, SW_RESSTR(STR_NO_TABLE), VCL_MESSAGE_INFO).Execute();
+                    pDDETyp = 0;
+                    break;
+                }
+
                 // at least one column & row must be there
                 if( !nRows || !nCols )
                 {
