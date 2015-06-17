@@ -198,6 +198,7 @@ private:
 public:
     ScFormulaGroupIterator( ScDocument* pDoc );
     SCCOL GetCol();
+    SCTAB GetTab();
     sc::FormulaGroupEntry* first();
     sc::FormulaGroupEntry* next();
 };

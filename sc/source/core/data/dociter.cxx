@@ -807,6 +807,11 @@ SCCOL ScFormulaGroupIterator::GetCol()
     return mnCol;
 }
 
+SCCOL ScFormulaGroupIterator::GetTab()
+{
+    return mnTab;
+}
+
 sc::FormulaGroupEntry* ScFormulaGroupIterator::first()
 {
     return this->next();

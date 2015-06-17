@@ -768,18 +768,17 @@ void Test::testDocStatistics()
     m_pDoc->SetString(ScAddress(1,1,1), "Test");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(3), m_pDoc->GetCellCount());
 
-    OUString aStr;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), m_pDoc->GetFormulaGroupCount(aStr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), m_pDoc->GetFormulaGroupCount());
     m_pDoc->SetString(ScAddress(3,0,1), "=A1");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), m_pDoc->GetFormulaGroupCount(aStr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), m_pDoc->GetFormulaGroupCount());
     m_pDoc->SetString(ScAddress(3,1,1), "=A2");
     m_pDoc->SetString(ScAddress(3,2,1), "=A3");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), m_pDoc->GetFormulaGroupCount(aStr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), m_pDoc->GetFormulaGroupCount());
     m_pDoc->SetString(ScAddress(3,3,1), "=A5");
     m_pDoc->SetString(ScAddress(3,4,1), "=A6");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), m_pDoc->GetFormulaGroupCount(aStr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), m_pDoc->GetFormulaGroupCount());
     m_pDoc->SetString(ScAddress(3,1,1), "=A3");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(4), m_pDoc->GetFormulaGroupCount(aStr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(4), m_pDoc->GetFormulaGroupCount());
 
     m_pDoc->DeleteTab(1);
     CPPUNIT_ASSERT_MESSAGE("Failed to decrement sheet count.", m_pDoc->GetTableCount() == nStartTabs+1);

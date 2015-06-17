@@ -468,7 +468,8 @@ public:
     bool              IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     void              SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells
-    SC_DLLPUBLIC sal_uLong          GetFormulaGroupCount( OUString aBreakCells ) const;       // all cells
+    SC_DLLPUBLIC sal_uLong          GetFormulaGroupCount() const;       // all cells
+    void GetErrorCells( OUString aBreakCells, OUString aErrorCells ) const;
     sal_uLong           GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, sal_uInt16 * );
                                                                 // number formatter

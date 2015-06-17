@@ -5749,24 +5749,61 @@ sal_uLong ScDocument::GetCellCount() const
     return nCellCount;
 }
 
-sal_uLong ScDocument::GetFormulaGroupCount( OUString aBreakCells ) const
+sal_uLong ScDocument::GetFormulaGroupCount() const
 {
     sal_uLong nFormulaGroupCount = 0L;
-    aBreakCells = "";
-    sc::FormulaGroupEntry* pPrevGroup = NULL;
 
     ScFormulaGroupIterator aIter( const_cast<ScDocument*>(this) );
     for ( sc::FormulaGroupEntry* ptr = aIter.first(); ptr; ptr = aIter.next())
     {
          nFormulaGroupCount++;
+    }
 
-         if (ptr->mbShared)  // check for formula group breaks
+    return nFormulaGroupCount;
+}
+
+void ScDocument::GetErrorCells( OUString aBreakCells, OUString aErrorCells ) const
+{
+    sc::FormulaGroupEntry* pPrevGroup = NULL;
+
+    ScFormulaGroupIterator aIter( const_cast<ScDocument*>(this) );
+    for ( sc::FormulaGroupEntry* ptr = aIter.first(); ptr; ptr = aIter.next())
+    {
+         if (!ptr->mbShared)
          {
-             if (pPrevGroup)
+             sal_uInt16 j = ptr->mpCell->GetErrCode();
+             if (j != 0)
+             {
+                 // formula error detected - append addr to string
+                 OUString aCol = ::rtl::OUString::number( aIter.GetCol() );
+                 OUString aRow = ::rtl::OUString::number( ptr->mnRow     );
+                 aErrorCells  += aCol += ::rtl::OUString(":")
+                              += aRow += ::rtl::OUString(", ");
+             }
+         }
+         if (ptr->mbShared)
+         {
+             ScFormulaCell* pCellPtr = *ptr->mpCells;
+             for (size_t i = 0; i < ptr->mnLength; i++)
+             {
+                 pCellPtr = const_cast<ScFormulaCell*>
+                  ( GetFormulaCell( ScAddress( aIter.GetCol(), ptr->mnRow + i, aIter.GetTab() ) ) );
+                 sal_uInt16 j = pCellPtr->GetErrCode();
+                 if (j != 0)
+                 {
+                        // formula error detected - append addr to string
+                        OUString aCol = ::rtl::OUString::number( aIter.GetCol() );
+                        OUString aRow = ::rtl::OUString::number( ptr->mnRow + i );
+                        aErrorCells  += aCol += ::rtl::OUString(":")
+                                     += aRow += ::rtl::OUString(", ");
+                 }
+             }
+             if (pPrevGroup) // check for formula group breaks
              {
                 // check same token as previous group
                 sal_Int16 nComp = (*pPrevGroup->mpCells)->CompareByTokenArray( **ptr->mpCells );
-                if ( nComp ) {
+                if ( nComp )
+                {
                     size_t nPrevGroupRow = pPrevGroup->mnRow;
                     size_t nPrevGroupLen = pPrevGroup->mnLength;
                     size_t nNextGroupRow = ptr->mnRow;
@@ -5784,7 +5821,7 @@ sal_uLong ScDocument::GetFormulaGroupCount( OUString aBreakCells ) const
          }
     }
 
-    return nFormulaGroupCount;
+    return;
 }
 
 sal_uLong ScDocument::GetCodeCount() const
@@ -5872,7 +5909,9 @@ void ScDocument::GetDocStat( ScDocStat& rDocStat )
     rDocStat.nTableCount = GetTableCount();
     rDocStat.aDocName    = aDocName;
     OUString aBreakCells;
-    rDocStat.nFormulaCount = GetFormulaGroupCount(aBreakCells);
+    OUString aErrorCells;
+    GetErrorCells( aBreakCells, aErrorCells );
+    rDocStat.nFormulaCount = GetFormulaGroupCount();
     rDocStat.nCellCount  = GetCellCount();
 }
 
