@@ -1211,7 +1211,8 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                         if ( m_rExport.AttrOutput().StartURL( rINet->GetValue(), rINet->GetTargetFrame() ) )
                             ++nRet;
                     }
-                    if ( 0 != ( pEnd = pHt->End() ) && nPos == *pEnd )
+                    pEnd = pHt->End();
+                    if (nPos == *pEnd )
                     {
                         if (m_rExport.AttrOutput().EndURL(nPos == rNd.Len()))
                             --nRet;
@@ -1223,7 +1224,8 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                         OutSwFormatRefMark( *static_cast< const SwFormatRefMark* >( pItem ), true );
                         ++nRet;
                     }
-                    if ( 0 != ( pEnd = pHt->End() ) && nPos == *pEnd )
+                    pEnd = pHt->End();
+                    if (nullptr != pEnd && nPos == *pEnd)
                     {
                         OutSwFormatRefMark( *static_cast< const SwFormatRefMark* >( pItem ), false );
                         --nRet;
@@ -1239,7 +1241,8 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                         m_rExport.AttrOutput().StartRuby( rNd, nPos, *static_cast< const SwFormatRuby* >( pItem ) );
                         ++nRet;
                     }
-                    if ( 0 != ( pEnd = pHt->End() ) && nPos == *pEnd )
+                    pEnd = pHt->End();
+                    if (nPos == *pEnd)
                     {
                         m_rExport.AttrOutput().EndRuby();
                         --nRet;
