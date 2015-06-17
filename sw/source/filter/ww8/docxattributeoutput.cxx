@@ -566,15 +566,15 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // Write framePr
     if(!aFramePrTextbox.empty())
     {
-        ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.m_pTableInfo;
         for (std::vector< boost::shared_ptr<sw::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
         {
-            m_rExport.m_pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+            DocxTableExportContext aTableExportContext;
+            pushToTableExportContext(aTableExportContext);
             m_pCurrentFrame = it->get();
             m_rExport.SdrExporter().writeOnlyTextOfFrame(it->get());
             m_pCurrentFrame = NULL;
+            popFromTableExportContext(aTableExportContext);
         }
-        m_rExport.m_pTableInfo = pOldTableInfo;
         aFramePrTextbox.clear();
     }
     // Check for end of cell, rows, tables here
