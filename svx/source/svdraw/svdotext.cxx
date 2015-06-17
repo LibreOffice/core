@@ -2015,7 +2015,7 @@ void SdrTextObj::onUnderflowStatusEvent( )
     */
 
     SdrTextObj *pNextLink = GetNextLinkInChain();
-    SdrOutliner &rOutl = ImpGetDrawOutliner();
+    SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
 
     if (!pNextLink->HasText())
         return;
@@ -2024,7 +2024,12 @@ void SdrTextObj::onUnderflowStatusEvent( )
     // XXX: For now it's not merging anything just adding the while thing as a separate para
     OutlinerParaObject *pNextLinkWholeText = pNextLink->GetOutlinerParaObject();
     if (pNextLinkWholeText) {
-
+        // Set text from this object
+        OutlinerParaObject *pCurText = GetOutlinerParaObject();
+        aDrawOutliner.SetText(*pCurText);
+        aDrawOutliner.AddText(*pNextLinkWholeText);
+        OutlinerParaObject *pNewText = aDrawOutliner.CreateParaObject();
+        const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
     }
 
 }
