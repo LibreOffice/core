@@ -688,11 +688,11 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         // if is already in a pool, then it is worth checking if it is in this one.
         if ( IsPooledItem(&rItem) )
         {
-            SfxPoolItemArray_Impl::Hash::const_iterator it;
-            it = pItemArr->maHash.find(const_cast<SfxPoolItem *>(&rItem));
+            SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::const_iterator it;
+            it = pItemArr->maPtrToIndex.find(const_cast<SfxPoolItem *>(&rItem));
 
             // 1. search for an identical pointer in the pool
-            if (it != pItemArr->maHash.end())
+            if (it != pItemArr->maPtrToIndex.end())
             {
                 AddRef(rItem);
                 return rItem;
@@ -755,17 +755,17 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     AddRef( *pNewItem, pImp->nInitRefCount );
 
     // 4. finally insert into the pointer array
-    assert( pItemArr->maHash.find(pNewItem) == pItemArr->maHash.end() );
+    assert( pItemArr->maPtrToIndex.find(pNewItem) == pItemArr->maPtrToIndex.end() );
     if ( !ppFreeIsSet )
     {
         sal_uInt32 nOffset = pItemArr->size();
-        pItemArr->maHash.insert(std::make_pair(pNewItem, nOffset));
+        pItemArr->maPtrToIndex.insert(std::make_pair(pNewItem, nOffset));
         pItemArr->push_back( pNewItem );
     }
     else
     {
         sal_uInt32 nOffset = std::distance(pItemArr->begin(), ppFree);
-        pItemArr->maHash.insert(std::make_pair(pNewItem, nOffset));
+        pItemArr->maPtrToIndex.insert(std::make_pair(pNewItem, nOffset));
         assert(*ppFree == NULL);
         *ppFree = pNewItem;
     }
@@ -776,7 +776,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
 void SfxPoolItemArray_Impl::ReHash()
 {
     maFree.clear();
-    maHash.clear();
+    maPtrToIndex.clear();
 
     for (size_t nIdx = 0; nIdx < size(); ++nIdx)
     {
@@ -785,8 +785,8 @@ void SfxPoolItemArray_Impl::ReHash()
             maFree.push_back(nIdx);
         else
         {
-            maHash.insert(std::make_pair(pItem,nIdx));
-            assert(maHash.find(pItem) != maHash.end());
+            maPtrToIndex.insert(std::make_pair(pItem,nIdx));
+            assert(maPtrToIndex.find(pItem) != maPtrToIndex.end());
         }
     }
 }
@@ -835,9 +835,9 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
     SFX_ASSERT( pItemArr, rItem.Which(), "removing Item not in Pool" );
 
-    SfxPoolItemArray_Impl::Hash::iterator it;
-    it = pItemArr->maHash.find(const_cast<SfxPoolItem *>(&rItem));
-    if (it != pItemArr->maHash.end())
+    SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::iterator it;
+    it = pItemArr->maPtrToIndex.find(const_cast<SfxPoolItem *>(&rItem));
+    if (it != pItemArr->maPtrToIndex.end())
     {
         sal_uInt32 nIdx = it->second;
         assert(nIdx < pItemArr->size());
@@ -858,7 +858,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
             DELETEZ(p);
 
             // remove ourselves from the hash
-            pItemArr->maHash.erase(it);
+            pItemArr->maPtrToIndex.erase(it);
 
             // record that this slot is free
             pItemArr->maFree.push_back( nIdx );

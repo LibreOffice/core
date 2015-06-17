@@ -72,13 +72,13 @@ typedef std::deque< SfxPoolVersion_ImplPtr > SfxPoolVersionArr_Impl;
 struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
 {
     typedef std::vector<sal_uInt32> FreeList;
-    typedef std::unordered_map<SfxPoolItem*,sal_uInt32> Hash;
+    typedef std::unordered_map<SfxPoolItem*,sal_uInt32> PoolItemPtrToIndexMap;
 
 public:
     /// Track list of indices into our array that contain an empty slot
     FreeList maFree;
     /// Hash of SfxPoolItem pointer to index into our array that contains that slot
-    Hash     maHash;
+    PoolItemPtrToIndexMap     maPtrToIndex;
 
     SfxPoolItemArray_Impl () {}
 
