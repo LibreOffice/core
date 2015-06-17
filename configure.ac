@@ -13150,10 +13150,10 @@ fi
 cat << _EOF
 ****************************************************************************
 
-To build, issue:
+To build, run:
 $GNUMAKE
 
-For details, run:
+To view some help, run:
 $GNUMAKE help
 
 _EOF
@@ -13161,9 +13161,16 @@ _EOF
 if test $_os != WINNT -a "$CROSS_COMPILING" != TRUE; then
     cat << _EOF
 After the build has finished, you can immediately run it using:
-instdir/program/soffice
+_EOF
 
-If you want to run the smoketest, issue:
+    if test $_os = Darwin; then
+        echo open instdir/$PRODUCTNAME.app
+    else
+        echo instdir/program/soffice
+    fi
+    cat << _EOF
+
+If you want to run the smoketest, run:
 $GNUMAKE check
 
 _EOF
