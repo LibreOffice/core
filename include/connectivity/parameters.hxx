@@ -126,6 +126,7 @@ namespace dbtools
 
         OUString                     m_sIdentifierQuoteString;
         OUString                     m_sSpecialCharacters;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xConnectionMetadata;
 
         ::std::vector< bool >               m_aParametersVisited;
 
@@ -244,7 +245,7 @@ namespace dbtools
         OUString
                 createFilterConditionFromColumnLink(
                     const OUString& /* [in]  */ _rMasterColumn,
-                    const OUString& /* [in]  */ _rDetailColumn,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& /* [in]  */ xDetailColumn,
                           OUString& /* [out] */ _rNewParamName
                 );
 
