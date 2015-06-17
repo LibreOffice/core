@@ -105,6 +105,8 @@ namespace dbtools
         m_aMasterFields.realloc( 0 );
         m_aDetailFields.realloc( 0 );
         m_sIdentifierQuoteString.clear();
+        m_sSpecialCharacters.clear();
+        m_xConnectionMetadata.clear();
         ::std::vector< bool > aEmptyArray;
         m_aParametersVisited.swap( aEmptyArray );
         m_bUpToDate = false;
@@ -208,24 +210,32 @@ namespace dbtools
 
 
     OUString ParameterManager::createFilterConditionFromColumnLink(
-        const OUString& _rMasterColumn, const OUString& _rDetailLink, OUString& _rNewParamName )
+        const OUString &_rMasterColumn, const Reference < XPropertySet > &xDetailField, OUString &o_rNewParamName )
     {
         OUString sFilter;
-
         // format is:
         // <detail_column> = :<new_param_name>
-        sFilter = quoteName( m_sIdentifierQuoteString, _rDetailLink );
-        sFilter += " = :";
-
-        // generate a parameter name which is not already used
-        _rNewParamName = "link_from_";
-        _rNewParamName += convertName2SQLName( _rMasterColumn, m_sSpecialCharacters );
-        while ( m_aParameterInformation.find( _rNewParamName ) != m_aParameterInformation.end() )
         {
-            _rNewParamName += "_";
+            OUString tblName;
+            xDetailField->getPropertyValue("TableName") >>= tblName;
+            if (!tblName.isEmpty())
+                sFilter = ::dbtools::quoteTableName( m_xConnectionMetadata, tblName, ::dbtools::eInDataManipulation ) + ".";
+        }
+        {
+            OUString colName;
+            xDetailField->getPropertyValue("RealName") >>= colName;
+            sFilter += quoteName( m_sIdentifierQuoteString, colName ) + " = :";
         }
 
-        return sFilter += _rNewParamName;
+        // generate a parameter name which is not already used
+        o_rNewParamName = "link_from_";
+        o_rNewParamName += convertName2SQLName( _rMasterColumn, m_sSpecialCharacters );
+        while ( m_aParameterInformation.find( o_rNewParamName ) != m_aParameterInformation.end() )
+        {
+            o_rNewParamName += "_";
+        }
+
+        return sFilter += o_rNewParamName;
     }
 
 
@@ -279,8 +289,11 @@ namespace dbtools
                 // does the detail name denote a column?
                 if ( _rxColumns->hasByName( *pDetailFields ) )
                 {
+                    Reference< XPropertySet > xDetailField(_rxColumns->getByName( *pDetailFields ), UNO_QUERY);
+                    assert(xDetailField.is());
+
                     OUString sNewParamName;
-                    const OUString sFilterCondition = createFilterConditionFromColumnLink( *pMasterFields, *pDetailFields, sNewParamName );
+                    const OUString sFilterCondition = createFilterConditionFromColumnLink( *pMasterFields, xDetailField, sNewParamName );
                     OSL_PRECOND( !sNewParamName.isEmpty(), "ParameterManager::classifyLinks: createFilterConditionFromColumnLink returned nonsense!" );
 
                     // remember meta information about this new parameter
@@ -754,6 +767,7 @@ namespace dbtools
                 xMeta = xConnection->getMetaData();
             if ( xMeta.is() )
             {
+                m_xConnectionMetadata = xMeta;
                 m_sIdentifierQuoteString = xMeta->getIdentifierQuoteString();
                 m_sSpecialCharacters = xMeta->getExtraNameCharacters();
             }
