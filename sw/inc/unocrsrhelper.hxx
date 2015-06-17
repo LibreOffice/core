@@ -126,7 +126,7 @@ namespace SwUnoCursorHelper
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    void    makeTableCellRedline( SwTableBox& rTableBox, const OUString& RedlineType,
+    SW_DLLPUBLIC void    makeTableCellRedline( SwTableBox& rTableBox, const OUString& RedlineType,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
