@@ -259,8 +259,22 @@ void ScSingleRefData::Dump( int nIndent ) const
 
 ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const ScAddress & rPos )
 {
+    bool bInherit3D = (Ref1.IsFlag3D() && !Ref2.IsFlag3D() && !rRef.IsFlag3D());
     ScRange aAbsRange = toAbs(rPos);
-    ScAddress aAbs = rRef.toAbs(rPos);
+
+    ScSingleRefData aRef = rRef;
+    // If no sheet was given in the extending part, let it point to the same
+    // sheet as this reference's end point, inheriting the absolute/relative
+    // mode.
+    // [$]Sheet1.A5:A6:A7 on Sheet2 do still reference only Sheet1.
+    if (!rRef.IsFlag3D())
+    {
+        if (Ref2.IsTabRel())
+            aRef.SetRelTab( Ref2.Tab());
+        else
+            aRef.SetAbsTab( Ref2.Tab());
+    }
+    ScAddress aAbs = aRef.toAbs(rPos);
 
     if (aAbs.Col() < aAbsRange.aStart.Col())
         aAbsRange.aStart.SetCol(aAbs.Col());
@@ -279,6 +293,39 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
 
     if (aAbsRange.aEnd.Tab() < aAbs.Tab())
         aAbsRange.aEnd.SetTab(aAbs.Tab());
+
+    // In Ref2 inherit absolute/relative addressing from the extending part.
+    // A$5:A5 => A$5:A$5:A5 => A$5:A5, and not A$5:A$5
+    // A$6:$A5 => A$6:A$6:$A5 => A5:$A$6
+    if (aAbsRange.aEnd.Col() == aAbs.Col())
+        Ref2.SetColRel( rRef.IsColRel());
+    if (aAbsRange.aEnd.Row() == aAbs.Row())
+        Ref2.SetRowRel( rRef.IsRowRel());
+
+    // In Ref1 inherit relative sheet from extending part if given.
+    if (aAbsRange.aStart.Tab() == aAbs.Tab() && rRef.IsFlag3D())
+        Ref1.SetTabRel( rRef.IsTabRel());
+
+    // In Ref2 inherit relative sheet from either Ref1 or extending part.
+    // Use the original 3D flags to determine which.
+    // $Sheet1.$A$5:$A$6 => $Sheet1.$A$5:$A$5:$A$6 => $Sheet1.$A$5:$A$6, and
+    // not $Sheet1.$A$5:Sheet1.$A$6 (with invisible second 3D, but relative).
+    if (aAbsRange.aEnd.Tab() == aAbs.Tab())
+        Ref2.SetTabRel( bInherit3D ? Ref1.IsTabRel() : rRef.IsTabRel());
+
+    // Force 3D flag in Ref1 if different sheet or more than one sheet
+    // referenced.
+    if (aAbsRange.aStart.Tab() != rPos.Tab() || aAbsRange.aStart.Tab() != aAbsRange.aEnd.Tab())
+        Ref1.SetFlag3D(true);
+
+    // Force 3D flag in Ref2 if more than one sheet referenced.
+    if (aAbsRange.aStart.Tab() != aAbsRange.aEnd.Tab())
+        Ref2.SetFlag3D(true);
+
+    // Inherit 3D flag in Ref1 from extending part in case range wasn't
+    // extended as in A5:A5:Sheet1.A5 if on Sheet1.
+    if (rRef.IsFlag3D())
+        Ref1.SetFlag3D( true);
 
     SetRange(aAbsRange, rPos);
 
