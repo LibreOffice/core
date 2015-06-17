@@ -77,9 +77,8 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         SwFormatAnchor aAnchor( pFormat->GetAnchor() );
         aAnchor.SetAnchor( &aPos );
         pFormat->GetDoc()->GetSpzFrameFormats()->push_back( pFormat );
+        // SetFormatAttr should call Modify() and add it to the node
         pFormat->SetFormatAttr( aAnchor );
-        // SetFormatAttr will not call Modify() because the node is the same :-/
-        aPos.nNode.GetNode().AddAnchoredFly(pFormat);
         SwContentNode* pCNd = aPos.nNode.GetNode().GetContentNode();
         if( pCNd && pCNd->getLayoutFrm( pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false ) )
             pFormat->MakeFrms();
@@ -104,7 +103,10 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
                             pFormat, false );
             rArr.push_back( aSave );
             pFormat->DelFrms();
-            pAPos->nNode.GetNode().RemoveAnchoredFly(pFormat);
+            // set a dummy anchor position to maintain anchoring invariants
+            SwFormatAnchor aAnchor( pFormat->GetAnchor() );
+            aAnchor.SetAnchor(nullptr);
+            pFormat->SetFormatAttr(aAnchor);
             rFormats.erase( rFormats.begin() + n-- );
         }
     }
@@ -168,7 +170,10 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                                 pFormat, bInsPos );
                 rArr.push_back( aSave );
                 pFormat->DelFrms();
-                pAPos->nNode.GetNode().RemoveAnchoredFly(pFormat);
+                // set a dummy anchor position to maintain anchoring invariants
+                SwFormatAnchor aAnchor( pFormat->GetAnchor() );
+                aAnchor.SetAnchor(nullptr);
+                pFormat->SetFormatAttr(aAnchor);
                 rFormats.erase( rFormats.begin() + n-- );
             }
         }
