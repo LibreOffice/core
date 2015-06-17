@@ -73,7 +73,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         else
             aPos.nNode = rSttIdx.GetIndex() + rSave.nNdDiff;
 
-        aPos.nContent.Assign( 0, 0 );
+        aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()), 0);
         SwFormatAnchor aAnchor( pFormat->GetAnchor() );
         aAnchor.SetAnchor( &aPos );
         pFormat->GetDoc()->GetSpzFrameFormats()->push_back( pFormat );
