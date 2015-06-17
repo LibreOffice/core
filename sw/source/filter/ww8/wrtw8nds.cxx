@@ -1230,6 +1230,8 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     }
                     break;
             }
+            if (nPos < *pHt->GetAnyEnd())
+                break; // sorted by end
         }
         for ( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
@@ -1282,6 +1284,8 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     }
                     break;
             }
+            if (nPos < pHt->GetStart())
+                break; // sorted by start
         }
         m_rExport.m_aCurrentCharPropStarts.pop(); // HasTextItem only allowed in the above range
     }
