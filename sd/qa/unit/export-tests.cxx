@@ -121,6 +121,7 @@ public:
     void testBulletColor();
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
+    void testTransparentBackground();
 
     void testFdo90607();
 #if !defined WNT
@@ -155,6 +156,7 @@ public:
     CPPUNIT_TEST(testBulletColor);
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
+    CPPUNIT_TEST(testTransparentBackground);
 
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
@@ -331,6 +333,23 @@ void SdExportTest::testN828390_5()
     }
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testTransparentBackground()
+{
+   ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/transparent_background.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef, ODP );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    const SdrTextObj *pObj1 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
+    checkFontAttributes<Color, SvxBackgroundColorItem>( pObj1, Color(COL_TRANSPARENT) );
+
+    const SdrTextObj *pObj2 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
+    checkFontAttributes<Color, SvxBackgroundColorItem>( pObj2, Color(COL_YELLOW));
 }
 
 void SdExportTest::testMediaEmbedding()
