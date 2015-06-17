@@ -329,7 +329,7 @@ void PreparedStatement::raiseSQLException(
     buf.appendAscii( "')" );
     OUString error = buf.makeStringAndClear();
     log( m_pSettings, LogLevel::ERROR, error );
-    throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any() );
+    throw SQLException( error, *this, OUString(), 1, Any() );
 }
 
 Reference< XResultSet > PreparedStatement::executeQuery( )
