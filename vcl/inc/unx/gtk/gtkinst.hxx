@@ -94,6 +94,10 @@ public:
         createFolderPicker( const com::sun::star::uno::Reference<
                                 com::sun::star::uno::XComponentContext >& ) SAL_OVERRIDE;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) SAL_OVERRIDE;
+#endif
+
     void                        RemoveTimer (SalTimer *pTimer);
 
     // for managing a mirror of the in-flight un-dispatched gdk event queue
