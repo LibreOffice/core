@@ -2004,6 +2004,28 @@ void SdrTextObj::onOverflowStatusEvent( )
 
 void SdrTextObj::onUnderflowStatusEvent( )
 {
+    // Underflow:
+    /*
+     *
+     * If there is no overflow and other guy has text then:
+     * 1) get the text of the other guy and add it to the last paragraph
+     * (if the paragraphs are to be merged, no otherwise).
+     * 2) Set the text of the other guy to what is left
+     *
+    */
+
+    SdrTextObj *pNextLink = GetNextLinkInChain();
+    SdrOutliner &rOutl = ImpGetDrawOutliner();
+
+    if (!pNextLink->HasText())
+        return;
+
+    //  1) get the text of the other guy and add it to the last paragraph
+    // XXX: For now it's not merging anything just adding the while thing as a separate para
+    OutlinerParaObject *pNextLinkWholeText = pNextLink->GetOutlinerParaObject();
+    if (pNextLinkWholeText) {
+
+    }
 
 }
 
@@ -2118,15 +2140,6 @@ IMPL_LINK_NOARG(SdrTextObj,ImpDecomposeChainedText)
     if ( bIsPageOverflow ) {
         onOverflowStatusEvent();
     } else {
-        // Underflow:
-        /*
-         *
-         * If there is no overflow and other guy has text then:
-         * 1) get the text of the other guy and add it to the last paragraph
-         * (if the paragraphs are to be merged, no otherwise).
-         * 2) Set the text of the other guy to what is left
-         *
-        */
         onUnderflowStatusEvent();
     }
     return 0;
