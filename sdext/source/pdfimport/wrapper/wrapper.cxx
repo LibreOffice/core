@@ -905,32 +905,6 @@ void Parser::parseLine( const OString& rLine )
     SAL_WARN_IF(m_nCharIndex!=-1, "sdext.pdfimport", "leftover scanner input");
 }
 
-oslFileError readLine( oslFileHandle pFile, OStringBuffer& line )
-{
-    OSL_PRECOND( line.isEmpty(), "line buf not empty" );
-
-    // TODO(P3): read larger chunks
-    sal_Char aChar('\n');
-    sal_uInt64 nBytesRead;
-    oslFileError nRes;
-
-    // skip garbage \r \n at start of line
-    while( osl_File_E_None == (nRes=osl_readFile(pFile, &aChar, 1, &nBytesRead)) &&
-           nBytesRead == 1 &&
-           (aChar == '\n' || aChar == '\r') ) ;
-
-    if( aChar != '\n' && aChar != '\r' )
-        line.append( aChar );
-
-    while( osl_File_E_None == (nRes=osl_readFile(pFile, &aChar, 1, &nBytesRead)) &&
-           nBytesRead == 1 && aChar != '\n' && aChar != '\r' )
-    {
-        line.append( aChar );
-    }
-
-    return nRes;
-}
-
 } // namespace
 
 static bool checkEncryption( const OUString&                               i_rPath,
@@ -1006,6 +980,45 @@ static bool checkEncryption( const OUString&                               i_rPa
     }
     return bSuccess;
 }
+
+class Buffering
+{
+    static const int SIZE = 64*1024;
+    std::unique_ptr<char[]> aBuffer;
+    oslFileHandle& pOut;
+    size_t pos;
+    sal_uInt64 left;
+
+public:
+    Buffering(oslFileHandle& out) : aBuffer(new char[SIZE]), pOut(out), pos(0), left(0) {}
+
+    oslFileError read(char *pChar, short count, sal_uInt64* pBytesRead)
+    {
+        oslFileError nRes = osl_File_E_None;
+        sal_uInt64 nBytesRead = 0;
+        while (count > 0)
+        {
+            if (left == 0)
+            {
+                nRes = osl_readFile(pOut, aBuffer.get(), SIZE, &left);
+                if (nRes != osl_File_E_None || left == 0)
+                {
+                    *pBytesRead = nBytesRead;
+                    return nRes;
+                }
+                pos = 0;
+            }
+            *pChar = aBuffer.get()[pos];
+            --count;
+            ++pos;
+            --left;
+            ++pChar;
+            ++nBytesRead;
+        }
+        *pBytesRead = nBytesRead;
+        return osl_File_E_None;
+    }
+};
 
 bool xpdf_ImportFromFile( const OUString&                             rURL,
                           const ContentSinkSharedPtr&                        rSink,
@@ -1104,9 +1117,36 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
             // OutputDev. stderr is used for alternate streams, like
             // embedded fonts and bitmaps
             Parser aParser(rSink,pErr,xContext);
+            Buffering aBuffering(pOut);
             OStringBuffer line;
-            while( osl_File_E_None == readLine(pOut, line) && !line.isEmpty() )
+            for( ;; )
+            {
+                char aChar('\n');
+                sal_uInt64 nBytesRead;
+                oslFileError nRes;
+
+                // skip garbage \r \n at start of line
+                while( osl_File_E_None == (nRes = aBuffering.read(&aChar, 1, &nBytesRead)) &&
+                       nBytesRead == 1 &&
+                       (aChar == '\n' || aChar == '\r') ) ;
+                if ( osl_File_E_None != nRes )
+                    break;
+
+                if( aChar != '\n' && aChar != '\r' )
+                    line.append( aChar );
+
+                while( osl_File_E_None == (nRes = aBuffering.read(&aChar, 1, &nBytesRead)) &&
+                       nBytesRead == 1 && aChar != '\n' && aChar != '\r' )
+                {
+                    line.append( aChar );
+                }
+                if ( osl_File_E_None != nRes )
+                    break;
+                if ( line.isEmpty() )
+                    break;
+
                 aParser.parseLine(line.makeStringAndClear());
+            }
         }
     }
     catch( uno::Exception& )
