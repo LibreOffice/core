@@ -20,6 +20,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -312,6 +313,10 @@ void TemplateAbstractView::Paint(vcl::RenderContext& rRenderContext, const Recta
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
         new PolyPolygonColorPrimitive2D(B2DPolyPolygon(Polygon(aRect).getB2DPolygon()),
         BColor(1.0, 1.0, 1.0)));
+
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> mpProcessor(
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
     mpProcessor->process(aSeq);
 }
