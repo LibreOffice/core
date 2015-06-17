@@ -849,6 +849,15 @@ DECLARE_OOXMLEXPORT_TEST(testOO72950, "ooo72950-1.odt")
         assertXPath(pXmlDoc, "//w:tbl", 1);
 }
 
+//There are two tables to export in this doc the second of which is inside a
+//frame anchored to first cell of the first table. They must not be
+//considered the same table
+DECLARE_OOXMLEXPORT_TEST(fdo60957, "fdo60957-2.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        assertXPath(pXmlDoc, "//w:tbl", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
