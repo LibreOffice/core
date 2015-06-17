@@ -215,6 +215,8 @@ static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
                                   int nType,
                                   int nX,
                                   int nY);
+static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
+                                        const char* pMimeType);
 static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
                                   int nType,
                                   int nX,
@@ -251,6 +253,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
             m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
             m_pDocumentClass->setTextSelection = doc_setTextSelection;
+            m_pDocumentClass->getTextSelection = doc_getTextSelection;
             m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
             m_pDocumentClass->resetSelection = doc_resetSelection;
 
@@ -786,6 +789,22 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     }
 
     pDoc->setTextSelection(nType, nX, nY);
+}
+
+static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return 0;
+    }
+
+    OString aRet = pDoc->getTextSelection(pMimeType);
+
+    char* pMemory = static_cast<char*>(malloc(aRet.getLength() + 1));
+    strcpy(pMemory, aRet.getStr());
+    return pMemory;
 }
 
 static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
