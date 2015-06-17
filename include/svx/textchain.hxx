@@ -20,7 +20,27 @@
 #ifndef INCLUDED_SVX_TEXTCHAIN_HXX
 #define INCLUDED_SVX_TEXTCHAIN_HXX
 
+#include <map>
+
+class ImpChainLinkProperties;
 class SdrTextObj;
+
+namespace rtl {
+    class OUString;
+}
+
+typedef std::map< rtl::OUString, ImpChainLinkProperties > LinkPropertiesMaps;
+
+
+class ImpChainLinkProperties
+{
+    public:
+    friend class TextChain;
+
+    private:
+        // all kind of stuff such has MergeableFirstParagraphs or if overflapping should occurr on overflow
+};
+
 
 class TextChain {
 
@@ -31,7 +51,8 @@ class TextChain {
 
     // return whether a paragraph is split between the two links in the argument
     bool GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj *pNextLink);
-
+    void SetOverwriteOnOverflow(SdrTextObj *, bool );
+    bool GetOverwriteOnOverflow(SdrTextObj *pTarget);
 };
 
 #endif // INCLUDED_SVX_TEXTCHAIN_HXX

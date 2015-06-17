@@ -46,6 +46,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/textchain.hxx>
 #include <svl/style.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/overflowingtxt.hxx>

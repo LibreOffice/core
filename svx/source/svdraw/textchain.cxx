@@ -38,4 +38,15 @@ bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj
     // XXX
     return false;
 }
+
+void TextChain::SetOverwriteOnOverflow(SdrTextObj *pTarget, bool bOverwrite)
+{
+
+}
+
+bool TextChain::GetOverwriteOnOverflow(SdrTextObj *pTarget)
+{
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
