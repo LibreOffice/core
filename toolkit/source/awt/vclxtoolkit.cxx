@@ -1463,6 +1463,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL VCLXToolkit::getDragGestureRecognizer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     vcl::Window * pWindow = VCLUnoHelper::GetWindow( window );
 
     if( pWindow )
