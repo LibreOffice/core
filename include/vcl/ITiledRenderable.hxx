@@ -122,6 +122,13 @@ public:
     virtual void setTextSelection(int nType, int nX, int nY) = 0;
 
     /**
+     * Gets the text selection.
+     *
+     * @see lok::Document::getTextSelection().
+     */
+    virtual OString getTextSelection(const char* /*pMimeType*/) { return OString(); }
+
+    /**
      * Adjusts the graphic selection.
      *
      * @see lok::Document::setGraphicSelection().

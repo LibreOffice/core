@@ -217,6 +217,16 @@ public:
     }
 
     /**
+     * Gets the currently selected text.
+     *
+     * @param pMimeType determines the return format, for example text/plain;charset=utf-8.
+     */
+    inline char* getTextSelection(const char* pMimeType)
+    {
+        return mpDoc->pClass->getTextSelection(mpDoc, pMimeType);
+    }
+
+    /**
      * Adjusts the graphic selection.
      *
      * @param nType @see LibreOfficeKitSetGraphicSelectionType
