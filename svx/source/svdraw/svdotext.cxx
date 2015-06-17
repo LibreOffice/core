@@ -1985,39 +1985,20 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 
 void SdrTextObj::onOverflowStatusEvent( )
 {
-    if (!IsChainable())
-        return;
+    // Pushes text in next link on the fly
+    if ( mbToBeChained ) {
+        SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
+        if (pEdtOutl != NULL)
+            mpOverflowingText = pEdtOutl->GetOverflowingText();
+        else
+            mpOverflowingText = aDrawOutliner.GetOverflowingText();
 
-    if (!pEdtOutl)
-        return;
+        SdrTextObj *pNextTextObj = GetNextLinkInChain();
 
-    bool bIsPageOverflow = pEdtOutl->IsPageOverflow();
+        impLeaveOnlyNonOverflowingText(&aDrawOutliner);
 
-    if ( GetNextLinkInChain() != NULL ) // is there anything to transfer text to?
-    {
-        // set whether there is need for chaining
-        // (used in EndTextEdit to crop the overflowing part)
-        // XXX: might be removed later when we remove text in real time
-        SetToBeChained( bIsPageOverflow );
-        fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
-            bIsPageOverflow ? "TRUE" : "FALSE");
-
-        // Pushes text in next link on the fly
-        if ( bIsPageOverflow ) {
-            SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
-            if (pEdtOutl != NULL)
-                mpOverflowingText = pEdtOutl->GetOverflowingText();
-            else
-                mpOverflowingText = aDrawOutliner.GetOverflowingText();
-
-            SdrTextObj *pNextTextObj = GetNextLinkInChain();
-
-            impLeaveOnlyNonOverflowingText(&aDrawOutliner);
-
-            // Transfer overflowing text
-            impMoveChainedTextToNextLink(&aDrawOutliner, pNextTextObj);
-        }
-
+        // Transfer overflowing text
+        impMoveChainedTextToNextLink(&aDrawOutliner, pNextTextObj);
     }
 }
 
@@ -2117,7 +2098,32 @@ bool SdrTextObj::GetPreventChainable() const
 
 IMPL_LINK_NOARG(SdrTextObj,ImpDecomposeChainedText)
 {
-    onOverflowStatusEvent();
+    if (!IsChainable() || GetNextLinkInChain() == NULL)
+        return;
+
+    if (!pEdtOutl)
+        return;
+
+    bool bIsPageOverflow = pEdtOutl->IsPageOverflow();
+
+    // Propagates the need for change
+    SetToBeChained( bIsPageOverflow );
+    fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
+        bIsPageOverflow ? "TRUE" : "FALSE");
+
+    if ( bIsPageOverflow ) {
+        onOverflowStatusEvent();
+    } else {
+        // Underflow:
+        /*
+         *
+         * If there is no overflow and other guy has text then:
+         * 1) get the text of the other guy and add it to the last paragraph
+         * (if the paragraphs are to be merged, no otherwise).
+         * 2) Set the text of the other guy to what is left
+         *
+        */
+    }
     return 0;
 }
 
