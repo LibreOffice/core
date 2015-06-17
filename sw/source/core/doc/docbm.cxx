@@ -636,6 +636,7 @@ namespace sw { namespace mark
                 {
                     // ensure that cross ref bookmark always starts at 0
                     aNewPosRel.nContent = 0; // HACK for WW8 import
+                    isSortingNeeded = true; // and sort them to be safe...
                 }
                 aNewPosRel.nContent += pMark->GetMarkPos().nContent.GetIndex();
                 pMark->SetMarkPos(aNewPosRel);
