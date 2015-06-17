@@ -20,14 +20,14 @@ endif
 endif
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.1.10.0.dylib,lib/libGLEW.1.10.0.dylib))
+$(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.1.12.0.dylib,lib/libGLEW.1.12.0.dylib))
 else ifeq ($(OS)-$(COM),WNT-GCC)
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_files,glew,$(LIBO_LIB_FOLDER), \
 	bin/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/$(glew_arch_subdir)/glew32d.dll,Release/$(glew_arch_subdir)/glew32.dll) \
 ))
 else ifeq ($(DISABLE_DYNLOADING),)
-$(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.so.1.10,lib/libGLEW.so.1.10.0))
+$(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.so.1.12,lib/libGLEW.so.1.12.0))
 endif
 
 # vim: set noet sw=4 ts=4:

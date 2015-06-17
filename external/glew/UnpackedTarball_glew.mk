@@ -22,13 +22,10 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_set_patchflags,glew,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-msvc-disable-sse2.patch.1 \
-	external/glew/glew-fix-rc-error.patch.1 \
-	external/glew/glew-vc2013-project.patch.1 \
 ))
 else
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew_use_CC_variable.patch.1 \
-	external/glew/0001-stop-linking-to-unneeded-Xmu-Xi-Xext-libraries.patch.1 \
 ))
 endif
 
@@ -49,10 +46,5 @@ $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-static-only.patch.1 \
 ))
 endif
-
-$(eval $(call gb_UnpackedTarball_add_patches,glew,\
-	external/glew/glew-debug.patch.1 \
-	external/glew/glew-config-guess.patch.0 \
-))
 
 # vim: set noet sw=4 ts=4:
