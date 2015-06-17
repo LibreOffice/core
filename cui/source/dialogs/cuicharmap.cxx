@@ -184,6 +184,8 @@ VCL_BUILDER_FACTORY(SvxShowText)
 
 void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
+    rRenderContext.SetFont(maFont);
+
     Color aTextCol = rRenderContext.GetTextColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -268,13 +270,14 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 void SvxShowText::SetFont( const vcl::Font& rFont )
 {
     long nWinHeight = GetOutputSizePixel().Height();
-    vcl::Font aFont = rFont;
-    aFont.SetWeight( WEIGHT_NORMAL );
-    aFont.SetAlign( ALIGN_TOP );
-    aFont.SetSize( PixelToLogic( Size( 0, nWinHeight/2 ) ) );
-    aFont.SetTransparent( true );
-    Control::SetFont( aFont );
-    mnY = ( nWinHeight - GetTextHeight() ) / 2;
+    maFont = vcl::Font(rFont);
+    maFont.SetWeight(WEIGHT_NORMAL);
+    maFont.SetAlign(ALIGN_TOP);
+    maFont.SetSize(PixelToLogic(Size(0, nWinHeight / 2)));
+    maFont.SetTransparent(true);
+    Control::SetFont(maFont);
+
+    mnY = (nWinHeight - GetTextHeight()) / 2;
 
     Invalidate();
 }
