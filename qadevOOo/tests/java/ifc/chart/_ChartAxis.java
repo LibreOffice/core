@@ -184,5 +184,17 @@ public class _ChartAxis extends MultiPropertyTest {
 
         testProperty("StepMain", StepMainTester);
     }
+
+    public void _StepHelp() {
+        try {
+            oObj.setPropertyValue("AutoStepMain", Boolean.FALSE);
+            oObj.setPropertyValue("Logarithmic",Boolean.FALSE);
+            oObj.setPropertyValue("StepMain", 100.0);
+            oObj.setPropertyValue("StepHelpCount", 10);
+        } catch (com.sun.star.uno.Exception e) {
+            throw new StatusException("Couldn't set property value", e);
+        }
+        testProperty("StepHelp");
+    }
 }  // finish class _ChartAxis
 
