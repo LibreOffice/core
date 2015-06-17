@@ -25,6 +25,7 @@
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/dlgctrl.hxx>
 #include <editeng/brushitem.hxx>
+#include <memory>
 
 class BackgroundPreviewImpl;
 class SvxOpenGraphicDialog;
@@ -118,6 +119,8 @@ private:
     bool        bLinkOnly           : 1;
     bool        bColTransparency    : 1;
     bool        bGraphTransparency  : 1;
+    bool        bHighlighting       : 1;
+
     Graphic     aBgdGraphic;
     OUString    aBgdGraphicPath;
     OUString    aBgdGraphicFilter;
@@ -127,6 +130,7 @@ private:
 
     SvxBackgroundTable_Impl*    pTableBck_Impl;///< Items for Sw-Table must be corrected
     SvxBackgroundPara_Impl* pParaBck_Impl;///< also for the paragraph style
+    std::unique_ptr<SvxBrushItem> pHighlighting;
 
     void                FillColorValueSets_Impl();
     void                ShowColorUI_Impl();
