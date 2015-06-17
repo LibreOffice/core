@@ -95,9 +95,9 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     if( elem.Text.isEmpty() )
         return;
 
-    OUString strSpace(32);
-    OUString strNbSpace(160);
-    OUString tabSpace(0x09);
+    OUString strSpace('\x20');
+    OUString strNbSpace(static_cast<sal_Unicode>(0x00A0));
+    OUString tabSpace('\x09');
     PropertyMap aProps;
     if( elem.StyleId != -1 )
     {
