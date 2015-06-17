@@ -93,6 +93,9 @@ AccessibleDocumentViewBase::~AccessibleDocumentViewBase()
 {
     // At this place we should be disposed.  You may want to add a
     // corresponding assertion into the destructor of a derived class.
+
+    SolarMutexGuard g;
+    mpWindow.reset();
 }
 
 void AccessibleDocumentViewBase::Init()

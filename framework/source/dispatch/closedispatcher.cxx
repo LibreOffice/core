@@ -80,6 +80,7 @@ CloseDispatcher::~CloseDispatcher()
 {
     SolarMutexGuard g;
     m_aAsyncCallback.reset();
+    m_pSysWindow.reset();
 }
 
 void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                                  aURL      ,

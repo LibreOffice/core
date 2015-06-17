@@ -80,6 +80,9 @@ VCLXGraphics::~VCLXGraphics()
     }
 
     delete mpClipRegion;
+
+    SolarMutexGuard g;
+    mpOutputDevice.reset();
 }
 
 void VCLXGraphics::SetOutputDevice( OutputDevice* pOutDev )

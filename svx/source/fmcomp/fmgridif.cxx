@@ -2633,10 +2633,10 @@ void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException, s
 {
     if (m_xColumns == rEvent.Source)
     {   // my model was reset -> refresh the grid content
+        SolarMutexGuard aGuard;
         VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
         if (!pGrid)
             return;
-        SolarMutexGuard aGuard;
         pGrid->resetCurrentRow();
     }
     // if the cursor fired a reset event we seem to be on the insert row

@@ -2320,6 +2320,7 @@ void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const ::
     VCLXDateField::setProperty( PropertyName, Value );
 
     // some properties need to be forwarded to the sub edit, too
+    SolarMutexGuard g;
     VclPtr< Edit > pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow().get() )->GetSubEdit() : NULL;
     if ( !pSubEdit )
         return;

@@ -131,7 +131,10 @@ namespace frm
             m_pEngine->SetControlWord( nEngineControlWord );
 
             VCLXDevice* pUnoRefDevice = new VCLXDevice;
-            pUnoRefDevice->SetOutputDevice( m_pEngine->GetRefDevice() );
+            {
+                SolarMutexGuard g;
+                pUnoRefDevice->SetOutputDevice( m_pEngine->GetRefDevice() );
+            }
             m_xReferenceDevice = pUnoRefDevice;
         }
 
