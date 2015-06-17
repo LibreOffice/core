@@ -68,14 +68,6 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
         return svp_create_SalInstance();
 
     SalInstance* pInst = NULL;
-    // Disable gtk3 plugin for now unless explicitly requested via
-    // SAL_USE_VCLPLUGIN=gtk3 (would ideally depend on experimental mode, but
-    // reading the experimental mode setting requires the UNO service manager
-    // which has not yet been instantiated):
-    if (!bForce && rModuleBase == "gtk3")
-    {
-        return NULL;
-    }
     OUString aModule(
 #ifdef SAL_DLLPREFIX
             SAL_DLLPREFIX
