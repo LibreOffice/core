@@ -1968,6 +1968,26 @@ void ScInterpreter::PushExternalDoubleRef(
     }
 }
 
+void ScInterpreter::PushSingleRef( const ScRefAddress& rRef )
+{
+    if (!IfErrorPushError())
+    {
+        ScSingleRefData aRef;
+        aRef.InitFromRefAddress( rRef, aPos);
+        PushTempTokenWithoutError( new ScSingleRefToken( aRef ) );
+    }
+}
+
+void ScInterpreter::PushDoubleRef( const ScRefAddress& rRef1, const ScRefAddress& rRef2 )
+{
+    if (!IfErrorPushError())
+    {
+        ScComplexRefData aRef;
+        aRef.InitFromRefAddresses( rRef1, rRef2, aPos);
+        PushTempTokenWithoutError( new ScDoubleRefToken( aRef ) );
+    }
+}
+
 void ScInterpreter::PushMatrix( const sc::RangeMatrix& rMat )
 {
     if (!rMat.isRangeValid())

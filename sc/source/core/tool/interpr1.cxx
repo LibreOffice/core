@@ -7052,8 +7052,7 @@ void ScInterpreter::ScIndirect()
                     aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab());
             }
             else
-                PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
-                        aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
+                PushDoubleRef( aRefAd, aRefAd2);
         }
         else if (ConvertSingleRef(pDok, sRefStr, nTab, aRefAd, aDetails, &aExtInfo))
         {
@@ -7063,7 +7062,7 @@ void ScInterpreter::ScIndirect()
                     aExtInfo.mnFileId, aExtInfo.maTabName, aRefAd.Col(), aRefAd.Row(), aRefAd.Tab());
             }
             else
-                PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
+                PushSingleRef( aRefAd);
         }
         else
         {

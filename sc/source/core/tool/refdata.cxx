@@ -41,6 +41,16 @@ void ScSingleRefData::InitAddressRel( const ScAddress& rAdr, const ScAddress& rP
     SetAddress(rAdr, rPos);
 }
 
+void ScSingleRefData::InitFromRefAddress( const ScRefAddress& rRef, const ScAddress& rPos )
+{
+    InitFlags();
+    SetColRel( rRef.IsRelCol());
+    SetRowRel( rRef.IsRelRow());
+    SetTabRel( rRef.IsRelTab());
+    SetFlag3D( rRef.Tab() != rPos.Tab());
+    SetAddress( rRef.GetAddress(), rPos);
+}
+
 void ScSingleRefData::SetAbsCol( SCCOL nVal )
 {
     Flags.bColRel = false;
@@ -256,6 +266,20 @@ void ScSingleRefData::Dump( int nIndent ) const
     cout << aIndent << "3d ref: " << (IsFlag3D()?"yes":"no") << endl;
 }
 #endif
+
+void ScComplexRefData::InitFromRefAddresses( const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos )
+{
+    InitFlags();
+    Ref1.SetColRel( rRef1.IsRelCol());
+    Ref1.SetRowRel( rRef1.IsRelRow());
+    Ref1.SetTabRel( rRef1.IsRelTab());
+    Ref1.SetFlag3D( rRef1.Tab() != rPos.Tab() || rRef1.Tab() != rRef2.Tab());
+    Ref2.SetColRel( rRef2.IsRelCol());
+    Ref2.SetRowRel( rRef2.IsRelRow());
+    Ref2.SetTabRel( rRef2.IsRelTab());
+    Ref2.SetFlag3D( rRef1.Tab() != rRef2.Tab());
+    SetRange( ScRange( rRef1.GetAddress(), rRef2.GetAddress()), rPos);
+}
 
 ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const ScAddress & rPos )
 {
