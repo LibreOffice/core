@@ -2029,6 +2029,11 @@ void SdrTextObj::onUnderflowStatusEvent( )
         aDrawOutliner.SetText(*pCurText);
         aDrawOutliner.AddText(*pNextLinkWholeText);
         OutlinerParaObject *pNewText = aDrawOutliner.CreateParaObject();
+
+        // 2) Set the text of the next guy to what is left
+        // (since this happens automatically by overflow we just "order to" reset the destination box's text)
+        GetTextChain()->SetOverwriteOnOverflow(pNextLink, true);
+
         const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
     }
 
