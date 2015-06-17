@@ -202,7 +202,7 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
         const ItemType* pAttrib = dynamic_cast<const ItemType *>((*it).pAttr);
         if (pAttrib)
         {
-            CPPUNIT_ASSERT_EQUAL( nVal, (ItemValue)pAttrib->GetValue());
+            CPPUNIT_ASSERT_EQUAL( nVal, static_cast<ItemValue>(pAttrib->GetValue()));
         }
     }
 }
