@@ -845,17 +845,23 @@ void GtkSalFrame::EnsureAppMenuWatch()
 #endif
 }
 
-GtkSalFrame::~GtkSalFrame()
+void GtkSalFrame::InvalidateGraphics()
 {
-    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i )
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i)
     {
         if( !m_aGraphics[i].pGraphics )
             continue;
 #if !GTK_CHECK_VERSION(3,0,0)
         m_aGraphics[i].pGraphics->SetDrawable( None, m_nXScreen );
+        m_aGraphics[i].pGraphics->SetWindow(NULL);
 #endif
         m_aGraphics[i].bInUse = false;
     }
+}
+
+GtkSalFrame::~GtkSalFrame()
+{
+    InvalidateGraphics();
 
     if( m_pParent )
         m_pParent->m_aChildren.remove( this );
@@ -1316,8 +1322,10 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
         }
     }
     else
+    {
         m_pWindow = gtk_widget_new( GTK_TYPE_WINDOW, "type", eWinType,
                                     "visible", FALSE, NULL );
+    }
     g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
     g_object_set_data( G_OBJECT( m_pWindow ), "libo-version", const_cast<char *>(LIBO_VERSION_DOTTED));
 
@@ -3070,11 +3078,7 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     }
     if( m_pRegion )
     {
-#if GTK_CHECK_VERSION(3,0,0)
-        cairo_region_destroy( m_pRegion );
-#else
         gdk_region_destroy( m_pRegion );
-#endif
     }
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
@@ -4004,6 +4008,7 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     {
         pThis->m_pFixedContainer = NULL;
         pThis->m_pWindow = NULL;
+        pThis->InvalidateGraphics();
     }
 }
 
