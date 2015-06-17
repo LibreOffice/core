@@ -114,7 +114,7 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
         break;
     }
     if (pWhich)
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(pWhich));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
     if (oValue)
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(oValue->getStr()));
     if (Which() == RES_TXTATR_AUTOFMT)
