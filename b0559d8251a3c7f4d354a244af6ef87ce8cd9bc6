@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_89fdbd70",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-17T07:58:27Z",
+      "side": 1,
+      "message": "I\u0027d say it is intentional. Child nodes should follow the setting of their parent node.",
+      "revId": "b0559d8251a3c7f4d354a244af6ef87ce8cd9bc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e908f193",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-17T07:58:27Z",
+      "side": 1,
+      "message": "I think you need to capture bIsPhantom, not this.",
+      "revId": "b0559d8251a3c7f4d354a244af6ef87ce8cd9bc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
