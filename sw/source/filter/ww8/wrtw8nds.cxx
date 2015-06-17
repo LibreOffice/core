@@ -1198,6 +1198,39 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
     {
         m_rExport.m_aCurrentCharPropStarts.push( nPos );
         const sal_Int32* pEnd;
+        // first process ends of attributes with extent
+        for (size_t i = 0; i < pTextAttrs->GetEndCount(); ++i)
+        {
+            const SwTextAttr* pHt = pTextAttrs->GetEnd(i);
+            const SfxPoolItem* pItem = &pHt->GetAttr();
+            switch ( pItem->Which() )
+            {
+                case RES_TXTATR_INETFMT:
+                    pEnd = pHt->End();
+                    if (nPos == *pEnd && nPos != pHt->GetStart())
+                    {
+                        if (m_rExport.AttrOutput().EndURL(nPos == rNd.Len()))
+                            --nRet;
+                    }
+                    break;
+                case RES_TXTATR_REFMARK:
+                    pEnd = pHt->End();
+                    if (nullptr != pEnd && nPos == *pEnd && nPos != pHt->GetStart())
+                    {
+                        OutSwFormatRefMark(*static_cast<const SwFormatRefMark*>(pItem), false);
+                        --nRet;
+                    }
+                    break;
+                case RES_TXTATR_CJK_RUBY:
+                    pEnd = pHt->End();
+                    if (nPos == *pEnd && nPos != pHt->GetStart())
+                    {
+                        m_rExport.AttrOutput().EndRuby();
+                        --nRet;
+                    }
+                    break;
+            }
+        }
         for ( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
             const SwTextAttr* pHt = (*pTextAttrs)[i];
@@ -1212,8 +1245,8 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                             ++nRet;
                     }
                     pEnd = pHt->End();
-                    if (nPos == *pEnd )
-                    {
+                    if (nPos == *pEnd && nPos == pHt->GetStart())
+                    {   // special case: empty must be handled here
                         if (m_rExport.AttrOutput().EndURL(nPos == rNd.Len()))
                             --nRet;
                     }
@@ -1225,8 +1258,8 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                         ++nRet;
                     }
                     pEnd = pHt->End();
-                    if (nullptr != pEnd && nPos == *pEnd)
-                    {
+                    if (nullptr != pEnd && nPos == *pEnd && nPos == pHt->GetStart())
+                    {   // special case: empty TODO: is this possible or would empty one have pEnd null?
                         OutSwFormatRefMark( *static_cast< const SwFormatRefMark* >( pItem ), false );
                         --nRet;
                     }
@@ -1242,8 +1275,8 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                         ++nRet;
                     }
                     pEnd = pHt->End();
-                    if (nPos == *pEnd)
-                    {
+                    if (nPos == *pEnd && nPos == pHt->GetStart())
+                    {   // special case: empty must be handled here
                         m_rExport.AttrOutput().EndRuby();
                         --nRet;
                     }
