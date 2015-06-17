@@ -862,33 +862,46 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const OUString & str
     if( str.getLength() > 1 )
     {
         sal_Int32 start = 0;
-        while ( iswspace( str.iterateCodePoints(&start) ) )
+        sal_uInt32 c;
+        while ( iswspace( (c=str.iterateCodePoints(&start)) ) )
             if ( start == strlen)
                 return ret;
-        if ( str.iterateCodePoints(&start) != L'{' )
+        if ( c != L'{' )
             return ret;
-        while ( iswspace( str.iterateCodePoints(&start) ) )
+        while ( iswspace( c=str.iterateCodePoints(&start) ) )
             if ( start == strlen)
                 return ret;
-        if ( str.iterateCodePoints(&start, 0) == L'}' )
+        if ( c == L'}' )
             return ret;
 
         std::vector< sal_Int32 > vec;
         do
         {
             OUString digits;
-            sal_Int32 c;
-            while ( isdigit( c = str.iterateCodePoints(&start) ) )
+            do
             {
+                if(!iswspace(c))
+                    break;
                 if ( start == strlen)
                     return ret;
-                digits += OUString(c);
-            }
+            } while ( (c=str.iterateCodePoints(&start)) );
+            do
+            {
+                if (!iswdigit(c))
+                    break;
+                if ( start == strlen)
+                    return ret;
+                digits += OUString(&c, 1);
+            } while ( (c = str.iterateCodePoints(&start)) );
             vec.push_back( digits.toInt32() );
-            while ( iswspace( str.iterateCodePoints(&start) ) )
+            do
+            {
+                if(!iswspace(c))
+                    break;
                 if ( start == strlen)
                     return ret;
-            if ( str.iterateCodePoints(&start, 0) == L'}' )
+            } while ( (c=str.iterateCodePoints(&start)) );
+            if ( c == L'}' )
                 break;
             if ( str.iterateCodePoints(&start) != L',' )
                 return ret;
@@ -896,6 +909,7 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const OUString & str
                 return ret;
         } while( true );
         // vec is guaranteed non-empty
+        assert(vec.size() > 0);
         ret = com::sun::star::uno::Sequence< sal_Int32 > ( &vec[0] , vec.size() );
     }
     return ret;
