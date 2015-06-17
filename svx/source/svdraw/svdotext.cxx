@@ -2099,10 +2099,10 @@ bool SdrTextObj::GetPreventChainable() const
 IMPL_LINK_NOARG(SdrTextObj,ImpDecomposeChainedText)
 {
     if (!IsChainable() || GetNextLinkInChain() == NULL)
-        return;
+        return 0;
 
     if (!pEdtOutl)
-        return;
+        return 0;
 
     bool bIsPageOverflow = pEdtOutl->IsPageOverflow();
 
