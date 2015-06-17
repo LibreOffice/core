@@ -558,6 +558,7 @@ public:
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
 
     virtual void onOverflowStatusEvent( );
+    virtual void onUnderflowStatusEvent( );
 
 
 

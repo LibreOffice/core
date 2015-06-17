@@ -2002,6 +2002,10 @@ void SdrTextObj::onOverflowStatusEvent( )
     }
 }
 
+void SdrTextObj::onUnderflowStatusEvent( )
+{
+
+}
 
 /** returns the currently active text. */
 SdrText* SdrTextObj::getActiveText() const
@@ -2123,6 +2127,7 @@ IMPL_LINK_NOARG(SdrTextObj,ImpDecomposeChainedText)
          * 2) Set the text of the other guy to what is left
          *
         */
+        onUnderflowStatusEvent();
     }
     return 0;
 }
