@@ -270,7 +270,7 @@ struct StringConcatInvalid
     };
 template< typename T >
 inline
-int operator+( const StringConcatInvalid&, const T& )
+sal_Unicode operator+( const StringConcatInvalid&, const T& )
     {
     rtl_string_unittest_invalid_concat = true;
     return 0; // doesn't matter
