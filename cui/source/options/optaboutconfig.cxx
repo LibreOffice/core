@@ -254,8 +254,8 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     if(bIsNotLeaf)
                         continue;
                     SvTreeListEntry* pEntry = new SvTreeListEntry;
-                    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, m_pPrefBox->GetDefaultExpandedNodeImage(),
-                                                           m_pPrefBox->GetDefaultCollapsedNodeImage(), false));
+                    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, SvTreeListBox::GetDefaultExpandedNodeImage(),
+                                                           SvTreeListBox::GetDefaultCollapsedNodeImage(), false));
                     pEntry->AddItem( new SvLBoxString( pEntry, 0, sPath));
                     //It is needed, without this the selection line will be truncated.
                     pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
