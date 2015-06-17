@@ -110,6 +110,13 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
             oValue = "url: " + rFormat.GetValue().toUtf8();
             break;
         }
+    case RES_TXTATR_CJK_RUBY:
+        {
+            pWhich = "ruby";
+            const SwFormatRuby& rFormat = GetRuby();
+            oValue = "rubytext: " + rFormat.GetText().toUtf8();
+            break;
+        }
     default:
         break;
     }
