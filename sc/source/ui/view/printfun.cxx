@@ -549,7 +549,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         pDev->SetMapMode(aMode);
 
     aOutputData.DrawBackground(*pDev);
-    aOutputData.DrawShadow();
     aOutputData.DrawFrame();
     aOutputData.DrawStrings();
 
