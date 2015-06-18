@@ -8699,6 +8699,9 @@ dnl ===================================================================
 dnl Check for system glew
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([glew], [GLEW], [glew >= 1.10.0])
+AS_IF([test "$with_system_glew" = "yes"],
+    [PKG_CHECK_EXISTS([glew >= 1.12.0], [AC_DEFINE([HAVE_GLEW_1_12])])],
+    [AC_DEFINE([HAVE_GLEW_1_12])])
 
 dnl ===================================================================
 dnl Check for system vigra
@@ -13075,6 +13078,7 @@ AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
+AC_CONFIG_HEADERS([config_host/config_opengl.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_test.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])

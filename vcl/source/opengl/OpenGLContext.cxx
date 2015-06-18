@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_opengl.h>
+
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/syschild.hxx>
@@ -437,7 +439,13 @@ extern "C" void
 APIENTRY
 #endif
 debug_callback(GLenum source, GLenum type, GLuint id,
-        GLenum severity, GLsizei , const GLchar* message, const GLvoid* )
+        GLenum severity, GLsizei , const GLchar* message,
+#if defined HAVE_GLEW_1_12
+        const GLvoid*
+#else
+        GLvoid*
+#endif
+        )
 {
     // ignore Nvidia's : "Program/shader state performance warning: Fragment Shader is going to be recompiled because the shader key based on GL state mismatches."
     // the GLSL compiler is a bit too aggressive in optimizing the state based on the current OpenGL state
