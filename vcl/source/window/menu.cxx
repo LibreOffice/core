@@ -1822,7 +1822,9 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
         aTopLeft.Y() += ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
     }
 
-    Size aOutSz = rRenderContext.GetOutputSizePixel();
+    // for the computations, use size of the underlying window, not of RenderContext
+    Size aOutSz = pWindow->GetOutputSizePixel();
+
     size_t nCount = pItemList->size();
     if (bLayout)
         mpLayoutData->m_aVisibleItemBoundRects.clear();
