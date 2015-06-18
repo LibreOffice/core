@@ -2449,91 +2449,73 @@ static uno::Any lcl_getGrabBagValue( const uno::Sequence<beans::PropertyValue>& 
 //Link the text frames.
 void DomainMapper_Impl::ChainTextFrames()
 {
-    if( 0 == m_vTextFramesForChaining.size() )
+    //can't link textboxes if there are not even two of them...
+    if( 2 > m_vTextFramesForChaining.size() )
         return ;
+
+    struct TextFramesForChaining {
+        css::uno::Reference< css::drawing::XShape > xShape;
+        sal_Int32 nId;
+        sal_Int32 nSeq;
+        TextFramesForChaining(): xShape(0), nId(0), nSeq(0) {}
+    } ;
+    typedef std::map <OUString, TextFramesForChaining> ChainMap;
 
     try
     {
-        sal_Int32 nTxbxId1  = 0 ; //holds id for the shape in outer loop
-        sal_Int32 nTxbxId2  = 0 ; //holds id for the shape in inner loop
-        sal_Int32 nTxbxSeq1 = 0 ; //holds seq number for the shape in outer loop
-        sal_Int32 nTxbxSeq2 = 0 ; //holds seq number for the shape in inner loop
-        OUString sName1 ; //holds the text box Name for the shape in outer loop
-        OUString sName2 ; //holds the text box Name for the shape in outer loop
+        ChainMap aTextFramesForChainingHelper;
         OUString sChainNextName("ChainNextName");
-        OUString sChainPrevName("ChainPrevName");
 
-        for( std::vector<uno::Reference< drawing::XShape > >::iterator outer_itr = m_vTextFramesForChaining.begin();
-             outer_itr != m_vTextFramesForChaining.end(); )
+        //learn about ALL of the textboxes and their chaining values first - because frames are processed in no specific order.
+        std::vector<uno::Reference< drawing::XShape > >::iterator iter;
+        for( iter = m_vTextFramesForChaining.begin(); iter != m_vTextFramesForChaining.end(); ++iter )
         {
-            bool bIsTxbxChained = false ;
-            uno::Reference<text::XTextContent>  xTextContent1(*outer_itr, uno::UNO_QUERY_THROW);
-            uno::Reference<beans::XPropertySet> xPropertySet1(xTextContent1, uno::UNO_QUERY);
-            uno::Sequence<beans::PropertyValue> aGrabBag1;
-            uno::Reference<lang::XServiceInfo> xServiceInfo1(xPropertySet1, uno::UNO_QUERY);
-            if (xServiceInfo1->supportsService("com.sun.star.text.TextFrame"))
+            uno::Reference<text::XTextContent>  xTextContent(*iter, uno::UNO_QUERY_THROW);
+            uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
+            uno::Sequence<beans::PropertyValue> aGrabBag;
+            uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+
+            TextFramesForChaining aChainStruct = TextFramesForChaining();
+            OUString sShapeName;
+
+            if ( xServiceInfo->supportsService("com.sun.star.text.TextFrame") )
             {
-                xPropertySet1->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag1;
-                xPropertySet1->getPropertyValue("LinkDisplayName") >>= sName1;
+                xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                xPropertySet->getPropertyValue("LinkDisplayName") >>= sShapeName;
             }
             else
             {
-                xPropertySet1->getPropertyValue("InteropGrabBag") >>= aGrabBag1;
-                xPropertySet1->getPropertyValue("ChainName") >>= sName1;
+                xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                xPropertySet->getPropertyValue("ChainName") >>= sShapeName;
             }
 
-            lcl_getGrabBagValue( aGrabBag1, "Txbx-Id")  >>= nTxbxId1;
-            lcl_getGrabBagValue( aGrabBag1, "Txbx-Seq") >>= nTxbxSeq1;
+            lcl_getGrabBagValue( aGrabBag, "Txbx-Id")  >>= aChainStruct.nId;
+            lcl_getGrabBagValue( aGrabBag, "Txbx-Seq") >>= aChainStruct.nSeq;
+            aChainStruct.xShape = *iter;
+            aTextFramesForChainingHelper[sShapeName] = aChainStruct;
+        }
 
-            //Check which text box in the document links/(is a link) to this one.
-            std::vector<uno::Reference< drawing::XShape > >::iterator inner_itr = ( outer_itr + 1 );
-            for( ; inner_itr != m_vTextFramesForChaining.end(); ++inner_itr )
-            {
-                uno::Reference<text::XTextContent>  xTextContent2(*inner_itr, uno::UNO_QUERY_THROW);
-                uno::Reference<beans::XPropertySet> xPropertySet2(xTextContent2, uno::UNO_QUERY);
-                uno::Sequence<beans::PropertyValue> aGrabBag2;
-                uno::Reference<lang::XServiceInfo> xServiceInfo2(xPropertySet1, uno::UNO_QUERY);
-                if (xServiceInfo2->supportsService("com.sun.star.text.TextFrame"))
-                {
-                    xPropertySet2->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag2;
-                    xPropertySet2->getPropertyValue("LinkDisplayName") >>= sName2;
-                }
-                else
-                {
-                    xPropertySet2->getPropertyValue("InteropGrabBag") >>= aGrabBag2;
-                    xPropertySet2->getPropertyValue("ChainName") >>= sName2;
-                }
+        //TODO: Perhaps allow reverse sequences when mso-layout-flow-alt = "bottom-to-top"
+        const sal_Int32 nDirection = 1;
 
-                lcl_getGrabBagValue( aGrabBag2, "Txbx-Id")  >>= nTxbxId2;
-                lcl_getGrabBagValue( aGrabBag2, "Txbx-Seq") >>= nTxbxSeq2;
-
-                if ( nTxbxId1 == nTxbxId2 )
+        //Finally - go through and attach the chains based on matching ID and incremented sequence number (dml-style).
+        for (ChainMap::iterator outer_iter= aTextFramesForChainingHelper.begin(); outer_iter != aTextFramesForChainingHelper.end(); ++outer_iter)
+        {
+                for (ChainMap::iterator inner_iter=aTextFramesForChainingHelper.begin(); inner_iter != aTextFramesForChainingHelper.end(); ++inner_iter)
                 {
-                    //who connects whom ??
-                    if ( nTxbxSeq1 == ( nTxbxSeq2 + 1 ) )
+                    if ( inner_iter->second.nId == outer_iter->second.nId )
                     {
-                        xPropertySet2->setPropertyValue(sChainNextName, uno::makeAny(sName1));
-                        xPropertySet1->setPropertyValue(sChainPrevName, uno::makeAny(sName2));
-                        bIsTxbxChained = true ;
-                        break ; //there cannot be more than one previous/next frames
-                    }
-                    else if ( nTxbxSeq2 == ( nTxbxSeq1 + 1 ) )
-                    {
-                        xPropertySet1->setPropertyValue(sChainNextName, uno::makeAny(sName2));
-                        xPropertySet2->setPropertyValue(sChainPrevName, uno::makeAny(sName1));
-                        bIsTxbxChained = true ;
-                        break ; //there cannot be more than one previous/next frames
+                        if (  inner_iter->second.nSeq == ( outer_iter->second.nSeq + nDirection ) )
+                        {
+                            uno::Reference<text::XTextContent>  xTextContent(outer_iter->second.xShape, uno::UNO_QUERY_THROW);
+                            uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
+
+                            //The reverse chaining happens automatically, so only one direction needs to be set
+                            xPropertySet->setPropertyValue(sChainNextName, uno::makeAny(inner_iter->first));
+                            break ; //there cannot be more than one next frame
+                        }
                     }
                 }
-            }
-            if( bIsTxbxChained )
-            {
-                //This txt box is no longer needed for chaining since
-                //there cannot be more than one previous/next frames
-                outer_itr = m_vTextFramesForChaining.erase(outer_itr);
-            }
-            else
-                ++outer_itr ;
         }
         m_vTextFramesForChaining.clear(); //clear the vector
     }
