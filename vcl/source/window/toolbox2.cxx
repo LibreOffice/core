@@ -1828,6 +1828,7 @@ void ToolBox::UpdateCustomMenu()
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
                 pMenu->InsertItem( id, it->maText, it->maImageOriginal, MenuItemBits::NONE, OString());
+                pMenu->SetItemCommand( id, it->maCommandStr );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem ( id, it->meState == TRISTATE_TRUE );
             }
@@ -1844,6 +1845,7 @@ void ToolBox::UpdateCustomMenu()
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
                 pMenu->InsertItem( id, it->maText, it->maImageOriginal, MenuItemBits::NONE, OString() );
+                pMenu->SetItemCommand( id, it->maCommandStr );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem( id, it->meState == TRISTATE_TRUE );
             }
