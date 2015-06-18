@@ -126,6 +126,11 @@ public:
     void testFunctionsExcel2010XLS();
     void testFunctionsExcel2010ODS();
 
+    void testCeilingFloor( sal_uLong nFormatType );
+    void testCeilingFloorXLSX();
+    void testCeilingFloorXLS();
+    void testCeilingFloorODS();
+
     void testRelativePaths();
     void testSheetProtection();
 
@@ -182,13 +187,16 @@ public:
     CPPUNIT_TEST(testSharedFormulaStringResultExportXLSX);
     CPPUNIT_TEST(testFunctionsExcel2010XLSX);
     CPPUNIT_TEST(testFunctionsExcel2010XLS);
+    CPPUNIT_TEST(testFunctionsExcel2010ODS);
+    CPPUNIT_TEST(testCeilingFloorXLSX);
+    CPPUNIT_TEST(testCeilingFloorXLS);
+    CPPUNIT_TEST(testCeilingFloorODS);
 #if !defined(WNT)
     CPPUNIT_TEST(testRelativePaths);
 #endif
     CPPUNIT_TEST(testSheetProtection);
     CPPUNIT_TEST(testPivotTableXLSX);
     CPPUNIT_TEST(testPivotTableTwoDataFieldsXLSX);
-    CPPUNIT_TEST(testFunctionsExcel2010ODS);
 #if !defined(WNT)
     CPPUNIT_TEST(testSupBookVirtualPath);
 #endif
@@ -1986,6 +1994,37 @@ void ScExportTest::testFunctionsExcel2010XLSX()
 void ScExportTest::testFunctionsExcel2010XLS()
 {
     testFunctionsExcel2010(XLS);
+}
+
+void ScExportTest::testCeilingFloor( sal_uLong nFormatType )
+{
+    ScDocShellRef xShell = loadDoc("ceiling-floor.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, nFormatType);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
+
+    testCeilingFloor_Impl(rDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testCeilingFloorXLSX()
+{
+    testCeilingFloor(XLSX);
+}
+
+void ScExportTest::testCeilingFloorXLS()
+{
+    // CEILING.PRECISE() and FLOOR.PRECISE() with one parameter only currently
+    // (2015-06-18) don't survive .xls save/reload and give NA()
+    //testCeilingFloor(XLS);
+}
+
+void ScExportTest::testCeilingFloorODS()
+{
+    testCeilingFloor(ODS);
 }
 
 void ScExportTest::testRelativePaths()

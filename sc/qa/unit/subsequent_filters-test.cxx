@@ -107,6 +107,7 @@ public:
     void testHardRecalcODS();
     void testFunctionsODS();
     void testFunctionsExcel2010();
+    void testCeilingFloorXLSX();
     void testCachedFormulaResultsODS();
     void testCachedMatrixFormulaResultsODS();
     void testFormulaDepAcrossSheetsODS();
@@ -213,6 +214,7 @@ public:
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testFunctionsExcel2010);
+    CPPUNIT_TEST(testCeilingFloorXLSX);
     CPPUNIT_TEST(testCachedFormulaResultsODS);
     CPPUNIT_TEST(testFormulaDepAcrossSheetsODS);
     CPPUNIT_TEST(testFormulaDepDeleteContentsODS);
@@ -543,6 +545,18 @@ void ScFiltersTest::testFunctionsExcel2010()
     rDoc.CalcAll(); // perform hard re-calculation.
 
     testFunctionsExcel2010_Impl(rDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCeilingFloorXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("ceiling-floor.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
+
+    testCeilingFloor_Impl(rDoc);
 
     xDocSh->DoClose();
 }

@@ -271,6 +271,21 @@ void testFunctionsExcel2010_Impl( ScDocument& rDoc )
     }
 }
 
+void testCeilingFloor_Impl( ScDocument& rDoc )
+{
+    // Original test case document is ceiling-floor.xlsx
+    // Sheet1.K1 has =AND(K3:K81) to evaluate all results.
+    const char* pORef = "Sheet1.K1";
+    OUString aRef( OUString::createFromAscii( pORef));
+    ScAddress aPos;
+    aPos.Parse(aRef);
+    if (!checkFormula( rDoc, aPos, "AND(K3:K81)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_MESSAGE( OString( OString(pORef) + " result is error.").getStr(),
+            isFormulaWithoutError( rDoc, aPos));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
