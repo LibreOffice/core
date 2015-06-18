@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_cc5d03ee",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-06-18T10:48:42Z",
+      "side": 1,
+      "message": "Because existing code (in unittest only) tries to stick the return of this operator into an OUString.",
+      "parentUuid": "1a54edaf_acf767f4",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_6cdacf7a",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_2c5297de",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-06-18T10:48:42Z",
+      "side": 1,
+      "message": "Existing code uses OUString(\u0027a\u0027), was trying to not break it.\n\nYes, should be explicit.",
+      "parentUuid": "1a54edaf_6cdacf7a",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_0ce79b41",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2015-06-18T10:30:53Z",
       "side": 1,
       "message": "do you have a demonstrated use case that would massively benefit from having a ctor like that?\n\nading another ctor into the mix is always problematic regarding unanticipated conversions if it can take a single argument of integer type",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_6c488f2e",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-06-18T10:48:42Z",
+      "side": 1,
+      "message": "That\u0027s the case that started it all. It is pretty awkward that one can extract code points from an OUString with iterateCodePoints, but then there is no \"good idomatic\" way to put it back in an OUString...Except by:\n\n1) checking whether it is BMP or not; if yes just cast it, else divide it into lower/upper surrogate pair and adding each separately to OUString.\n\n2) something like:\n\n  sal_uInt32 c;\n  sal_Int32 i(0);\n  OUString s;\n  (...)\n  c \u003d s.iterateCodePoints(\u0026i);\n  (...)\n  ... OUString(\u0026c, 1) ...\n\nI thought that\n   OUString(c)\nwould be more natural.\n\nAll the rest is trying to get the existing code not to break... E.g. the calls to OUString(\u0027X\u0027) that are already in the code.",
+      "parentUuid": "1a54edaf_0ce79b41",
       "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
