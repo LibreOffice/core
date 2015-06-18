@@ -96,7 +96,7 @@ private:
     Link<>              maClickHdl;
 
     SAL_DLLPRIVATE void             ImplInitButtonDialogData();
-    SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( ButtonDialogFlags nBtnFlags );
+    SAL_DLLPRIVATE VclPtr<PushButton> ImplCreatePushButton( ButtonDialogFlags nBtnFlags );
     SAL_DLLPRIVATE ImplBtnDlgItem*  ImplGetItem( sal_uInt16 nId ) const;
     DECL_DLLPRIVATE_LINK(           ImplClickHdl, PushButton* pBtn );
     SAL_DLLPRIVATE void             ImplPosControls();
