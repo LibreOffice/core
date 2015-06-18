@@ -5,6 +5,6 @@ Settings for OpenGL
 #ifndef CONFIG_OPENGL_H
 #define CONFIG_OPENGL_H
 
-#undef HAVE_GLEW_1_12
+#define HAVE_GLEW_1_12 0
 
 #endif
