@@ -346,7 +346,7 @@ namespace
     }
 }
 
-void VclGtkClipboard::ClipboardGet(GtkClipboard *clipboard, GtkSelectionData *selection_data,
+void VclGtkClipboard::ClipboardGet(GtkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
                                    guint info)
 {
 
