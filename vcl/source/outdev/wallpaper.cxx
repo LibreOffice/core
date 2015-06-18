@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
@@ -26,7 +28,7 @@
 void OutputDevice::DrawWallpaper( const Rectangle& rRect,
                                   const Wallpaper& rWallpaper )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaWallpaperAction( rRect, rWallpaper ) );
@@ -54,7 +56,7 @@ void OutputDevice::DrawWallpaper( long nX, long nY,
                                   long nWidth, long nHeight,
                                   const Wallpaper& rWallpaper )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( rWallpaper.IsBitmap() )
         DrawBitmapWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
@@ -68,7 +70,7 @@ void OutputDevice::DrawColorWallpaper( long nX, long nY,
                                        long nWidth, long nHeight,
                                        const Wallpaper& rWallpaper )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     // draw wallpaper without border
     Color aOldLineColor = GetLineColor();
@@ -107,7 +109,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
                                             const Wallpaper& rWallpaper )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     BitmapEx aBmpEx;
     const BitmapEx* pCached = rWallpaper.ImplGetImpWallpaper()->ImplGetCachedBitmap();
@@ -345,7 +347,7 @@ void OutputDevice::DrawGradientWallpaper( long nX, long nY,
                                           long nWidth, long nHeight,
                                           const Wallpaper& rWallpaper )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     Rectangle aBound;
     GDIMetaFile* pOldMetaFile = mpMetaFile;

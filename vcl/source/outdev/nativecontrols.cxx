@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
@@ -273,7 +275,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
                             const ImplControlValue& aValue,
                             const OUString& aCaption )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( !EnableNativeWidget( *this ) )
         return false;

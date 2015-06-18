@@ -16,6 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <cassert>
+
 #include <sal/types.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -33,7 +36,7 @@
 
 void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
@@ -131,7 +134,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
 void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     // AW: Do NOT paint empty polygons
     if(rB2DPolygon.count())
@@ -143,7 +146,7 @@ void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
 
 void OutputDevice::DrawPolygon( const Polygon& rPoly )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
@@ -239,7 +242,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
 void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( tools::PolyPolygon( rB2DPolyPoly ) ) );
