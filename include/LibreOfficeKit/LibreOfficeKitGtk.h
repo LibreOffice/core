@@ -42,10 +42,12 @@ struct _LOKDocViewClass
 
 GType                          lok_doc_view_get_type               (void) G_GNUC_CONST;
 
-GtkWidget*                     lok_doc_view_new                    (const char* pPath);
+GtkWidget*                     lok_doc_view_new                    (const gchar* pPath,
+                                                                    GCancellable *cancellable,
+                                                                    GError **error);
 
 gboolean                       lok_doc_view_open_document          (LOKDocView* pDocView,
-                                                                    char* pPath);
+                                                                    const gchar* pPath);
 
 /// Gets the document the viewer displays.
 LibreOfficeKitDocument*        lok_doc_view_get_document           (LOKDocView* pDocView);
