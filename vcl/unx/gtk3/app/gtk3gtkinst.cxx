@@ -98,14 +98,6 @@ class GtkTransferable : public ::cppu::WeakImplHelper1 <
 private:
     std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
 public:
-    GtkTransferable()
-    {
-    }
-
-    virtual ~GtkTransferable()
-    {
-    }
-
     /*
      * XTransferable
      */
@@ -246,7 +238,9 @@ public:
         >( m_aMutex )
     {
     }
-    virtual ~VclGtkClipboard();
+    virtual ~VclGtkClipboard()
+    {
+    }
 
     /*
      * XServiceInfo
@@ -292,10 +286,6 @@ public:
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
         throw(RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
-VclGtkClipboard::~VclGtkClipboard()
-{
-}
 
 OUString VclGtkClipboard::getImplementationName_static()
 {
