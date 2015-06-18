@@ -1713,6 +1713,11 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
         if( !(pToolBar->GetFloatStyle() & WB_CLOSEABLE) )
             aQuickCustomizationMenu.EnableItem(MENUITEM_TOOLBAR_CLOSE, false);
 
+        // Temporary stores a Command --> Url map to update contextual menu with the
+        // correct icons. The popup icons are by default the same as those in the
+        // toolbar. They are not correct for contextual popup menu.
+        std::map< OUString, Image > commandToImage;
+
         // Go through all toolbar items and add them to the context menu
         for ( nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
         {
@@ -1724,11 +1729,24 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
                 pVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pVisibleItemsPopupMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
                 Image aImage( GetImageFromURL( m_xFrame, aCommandURL, false ) );
+                commandToImage[aCommandURL] = aImage;
                 pVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
             }
             else
             {
                 pVisibleItemsPopupMenu->InsertSeparator();
+            }
+        }
+
+        // Now we go through all the contextual menu to update the icons
+        std::map< OUString, Image >::iterator it;
+        for ( nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
+        {
+            sal_uInt16 nId = pMenu->GetItemId( nPos );
+            OUString cmdUrl = pMenu->GetItemCommand( nId );
+            it = commandToImage.find( cmdUrl );
+            if (it != commandToImage.end()) {
+                pMenu->SetItemImage( nId, it->second );
             }
         }
     }
