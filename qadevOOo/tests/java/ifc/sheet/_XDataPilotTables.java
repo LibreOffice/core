@@ -90,6 +90,9 @@ public class _XDataPilotTables extends MultiMethodTest {
             oObj.insertNewByName(name, CA, DPDscr);
             bResult &= oSheet.getCellByPosition
                 (CA.Column, CA.Row).getFormula().equals("Filter");
+            log.println(
+oSheet.getCellByPosition
+                (CA.Column, CA.Row).getFormula());
         } catch (com.sun.star.uno.Exception e) {
             log.println("Exception occurred! " + e);
             bResult = false;

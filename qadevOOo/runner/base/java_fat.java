@@ -37,6 +37,8 @@ import stats.Summarizer;
 import util.DynamicClassLoader;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.configuration.XReadWriteAccess;
 
 /**
  *
@@ -436,7 +438,7 @@ public class java_fat implements TestBase {
         return ifc.run(entry, tEnv, param);
     }
 
-    private AppProvider startOffice(lib.TestParameters param) {
+    private AppProvider startOffice(lib.TestParameters param) throws Exception {
         if (m_aDynamicClassLoader == null) {
             m_aDynamicClassLoader = new DynamicClassLoader();
         }
@@ -457,6 +459,18 @@ public class java_fat implements TestBase {
         if (msf != null) {
             param.put("ServiceFactory", msf);
         }
+
+        // Force EN Calc function names so "Filter" match also in non-en locales
+        XReadWriteAccess xConfig = (XReadWriteAccess)
+            UnoRuntime.queryInterface(XReadWriteAccess.class,
+                msf.createInstanceWithArguments(
+                    "com.sun.star.configuration.ReadWriteAccess",
+                    new Object[] {"*"}));
+        xConfig.replaceByHierarchicalName("/org.openoffice.Office.Calc/Formula/Syntax/EnglishFunctionName", true);
+        xConfig.replaceByHierarchicalName("/org.openoffice.Setup/L10N/ooLocale", "en");
+        xConfig.replaceByHierarchicalName("/org.openoffice.Setup/L10N/ooSetupSystemLocale", "en-US");
+        xConfig.replaceByHierarchicalName("/org.openoffice.Office.Linguistic/General/UILocale", "en-US");
+        xConfig.commitChanges();
 
         return office;
     }
