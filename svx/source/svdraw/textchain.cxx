@@ -20,20 +20,40 @@
 #include <svx/textchain.hxx>
 #include <svx/svdotext.hxx>
 
+
+ImpChainLinkProperties::ImpChainLinkProperties()
+{
+    // give defaults
+    bOverwriteOnOverflow = false;
+}
+
+// XXX: All getters in the class assume that the guy is in the chain
+
 TextChain::TextChain()
 {
 }
 
+TextChain::~TextChain()
+{
+    // XXX: Should free all LinkProperties
+}
+
+bool TextChain::IsLinkInChain(SdrTextObj *) const
+{
+    return true;    // XXX: Should make an actual check
+}
+
 void TextChain::AppendLink(SdrTextObj *)
 {
+    // XXX
 }
 
-SdrTextObj *TextChain::GetNextLink(SdrTextObj *)
+SdrTextObj *TextChain::GetNextLink(SdrTextObj *) const
 {
-    return NULL; // XXX
+    return NULL; // XXX: To be changed. It'd be a mess to implement now
 }
 
-bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj *pNextLink)
+bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj* /* pPrevLink */, SdrTextObj* /* pNextLink */)
 {
     // XXX
     return false;
@@ -41,12 +61,30 @@ bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj
 
 void TextChain::SetOverwriteOnOverflow(SdrTextObj *pTarget, bool bOverwrite)
 {
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->bOverwriteOnOverflow = bOverwrite;
+}
 
+ImpChainLinkProperties *TextChain::GetLinkProperties(SdrTextObj *pLink)
+{
+    // if the guy does not already have properties in the map make them
+    ChainLinkId aLinkId = GetId(pLink);
+    if (maLinkPropertiesMap.find(aLinkId) == maLinkPropertiesMap.end()) {
+        maLinkPropertiesMap[aLinkId] = new ImpChainLinkProperties;
+    }
+
+    return maLinkPropertiesMap[aLinkId];
 }
 
 bool TextChain::GetOverwriteOnOverflow(SdrTextObj *pTarget)
 {
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->bOverwriteOnOverflow;
+}
 
+ChainLinkId TextChain::GetId(SdrTextObj *pLink) const
+{
+    return pLink->GetName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

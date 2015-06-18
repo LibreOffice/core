@@ -29,16 +29,19 @@ namespace rtl {
     class OUString;
 }
 
-typedef std::map< rtl::OUString, ImpChainLinkProperties > LinkPropertiesMaps;
+typedef rtl::OUString ChainLinkId;
+typedef std::map< ChainLinkId, ImpChainLinkProperties *> LinkPropertiesMap;
 
 
 class ImpChainLinkProperties
 {
-    public:
+    protected:
     friend class TextChain;
 
-    private:
-        // all kind of stuff such has MergeableFirstParagraphs or if overflapping should occurr on overflow
+    ImpChainLinkProperties();
+
+    bool bOverwriteOnOverflow;
+        // all kind of stuff such has MergeableFirstParagraphs or if overwrite should occurr on overflow
 };
 
 
@@ -46,13 +49,22 @@ class TextChain {
 
     public:
     TextChain();
+    ~TextChain();
+
     void AppendLink(SdrTextObj *);
-    SdrTextObj *GetNextLink(SdrTextObj *);
+    bool IsLinkInChain(SdrTextObj *) const;
+    SdrTextObj *GetNextLink(SdrTextObj *) const;
+
+    ChainLinkId GetId(SdrTextObj *) const;
+    ImpChainLinkProperties *GetLinkProperties(SdrTextObj *);
 
     // return whether a paragraph is split between the two links in the argument
-    bool GetLinksHaveMergeableFirstPara(SdrTextObj *pPrevLink, SdrTextObj *pNextLink);
+    bool GetLinksHaveMergeableFirstPara(SdrTextObj *, SdrTextObj *);
     void SetOverwriteOnOverflow(SdrTextObj *, bool );
     bool GetOverwriteOnOverflow(SdrTextObj *pTarget);
+
+    protected:
+    LinkPropertiesMap maLinkPropertiesMap;
 };
 
 #endif // INCLUDED_SVX_TEXTCHAIN_HXX
