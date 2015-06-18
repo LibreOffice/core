@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_0c623bd9",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2503,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2015-06-18T08:27:26Z",
+      "side": 1,
+      "message": "the \"extra\" gap here was intentional.  Another patch will add support for reading vml-style chained textboxes, and introduce an \"if\" statement here.",
+      "range": {
+        "startLine": 2503,
+        "startChar": 10,
+        "endLine": 2503,
+        "endChar": 11
+      },
+      "revId": "d4516371bbaf055fc41e5ea3b97292dc014437da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
