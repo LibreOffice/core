@@ -215,7 +215,7 @@ uno::Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
-        "no child with index " + OUString(nIndex),
+        "no child with index " + OUString::number(nIndex),
         NULL);
 }
 
