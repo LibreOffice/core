@@ -785,8 +785,33 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
     if (mpOverflowingText == NULL)
         return NULL;
 
-    // XXX: Not sure if necessary
-    //pOutliner->Clear();
+    // XXX: Put following code in a separate method (possibly in another class)
+    if ( GetTextChain()->GetOverwriteOnOverflow(pNextTextObj) )
+    {
+        // We only make three blocks of paragraphs and ignore the rest
+
+        // reset behavior
+        GetTextChain()->SetOverwriteOnOverflow(pNextTextObj, false);
+
+        if (mpOverflowingText->HasOtherParas()) {
+            // Make first paragraph
+            impSetOutlinerToEmptyTxt(pOutliner);
+            Paragraph *pFstPara = pOutliner->GetParagraph(0);
+            pOutliner->SetText(mpOverflowingText->GetHeadingLines(), pFstPara);
+
+            // Add middle paragraphs
+            if (mpOverflowingText->mpMidParas)
+                pOutliner->AddText(*mpOverflowingText->mpMidParas);
+
+            pOutliner->Insert(mpOverflowingText->GetEndingLines());
+        } else {
+            impSetOutlinerToEmptyTxt(pOutliner);
+            Paragraph *pFstPara = pOutliner->GetParagraph(0);
+            pOutliner->SetText(mpOverflowingText->GetEndingLines(), pFstPara);
+        }
+
+        return pOutliner->CreateParaObject();
+    }
 
     OutlinerParaObject *pCurTxt = pNextTextObj->GetOutlinerParaObject();
     pOutliner->SetText(*pCurTxt);
