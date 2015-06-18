@@ -154,7 +154,7 @@ Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
     }
     else
     {
-        if (isHighlighted())
+        if (isHighlighted() || mpTitleED->SupportsDoubleBuffering())
             bNeedsPaint = true;
         setHighlight(false);
     }
