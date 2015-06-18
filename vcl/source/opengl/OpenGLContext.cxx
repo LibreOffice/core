@@ -440,7 +440,7 @@ APIENTRY
 #endif
 debug_callback(GLenum source, GLenum type, GLuint id,
         GLenum severity, GLsizei , const GLchar* message,
-#if defined HAVE_GLEW_1_12
+#if HAVE_GLEW_1_12
         const GLvoid*
 #else
         GLvoid*
