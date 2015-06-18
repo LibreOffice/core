@@ -85,7 +85,7 @@ using namespace ::com::sun::star;
 using namespace vcl;
 
 #define EXTRAITEMHEIGHT     4
-#define SPACE_AROUND_TITLE  2
+#define SPACE_AROUND_TITLE  4
 
 static bool ImplAccelDisabled()
 {
@@ -1631,16 +1631,21 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     // Additional space for title
     nTitleHeight = 0;
     if (!IsMenuBar() && aTitleText.getLength() > 0) {
-        // Vertically, one height of char + extra space for decoration
-        nTitleHeight = nFontHeight + 4 * SPACE_AROUND_TITLE ;
-        aSz.Height() += nTitleHeight;
-
-        // Horizontally, compute text width with bold font
+        // Set expected font
         pWin->Push(PushFlags::FONT);
         vcl::Font aFont = pWin->GetFont();
         aFont.SetWeight(WEIGHT_BOLD);
         pWin->SetFont(aFont);
-        long nWidth = pWin->GetTextWidth( aTitleText ) + 4 * SPACE_AROUND_TITLE;
+
+        // Compute text bounding box
+        Rectangle aTextBoundRect;
+        pWin->GetTextBoundRect(aTextBoundRect, aTitleText);
+
+        // Vertically, one height of char + extra space for decoration
+        nTitleHeight =  aTextBoundRect.GetSize().Height() + 4 * SPACE_AROUND_TITLE ;
+        aSz.Height() += nTitleHeight;
+
+        long nWidth = aTextBoundRect.GetSize().Width() + 4 * SPACE_AROUND_TITLE;
         pWin->Pop();
         if ( nWidth > nMaxWidth )
             nMaxWidth = nWidth;
@@ -1784,10 +1789,12 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const Rectangl
     rRenderContext.DrawRect(aBgRect);
 
     // Draw the text centered
-    Point aTextTopLeft(rRect.TopLeft());
-    long textWidth = rRenderContext.GetTextWidth(aTitleText);
-    aTextTopLeft.X() += (aBgRect.getWidth() - textWidth) / 2;
-    aTextTopLeft.Y() += SPACE_AROUND_TITLE;
+    Point aTextTopLeft(aBgRect.TopLeft());
+    Rectangle aTextBoundRect;
+    rRenderContext.GetTextBoundRect( aTextBoundRect, aTitleText );
+    aTextTopLeft.X() += (aBgRect.getWidth() - aTextBoundRect.GetSize().Width()) / 2;
+    aTextTopLeft.Y() += (aBgRect.GetHeight() - aTextBoundRect.GetSize().Height()) / 2
+                        - aTextBoundRect.TopLeft().Y();
     rRenderContext.DrawText(aTextTopLeft, aTitleText, 0, aTitleText.getLength());
 
     // Restore
