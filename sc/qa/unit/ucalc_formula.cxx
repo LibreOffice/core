@@ -4276,7 +4276,7 @@ void Test::testFuncINDIRECT()
 }
 
 // --------------------------------------------------------------------------
-// Test case for Bug 83365 - Other: Access across spreadsheet returns Err:504
+// Test case for tdf#83365 - Access across spreadsheet returns Err:504
 //
 void Test::testFuncINDIRECT2()
 {
@@ -4291,98 +4291,55 @@ void Test::testFuncINDIRECT2()
     ScAddress aEnd;
     ScAddress aRef;
 
-    // Let be triplet ( Col, Row, Tab ) as Cell Address
-    // Indirect reference triplet ( absolute, relative, relative)
-    sal_uInt16 nRes = aRef.Parse("foo.$A1", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetValue(aStart, 10.0);
-
-    // Indirect reference triplet ( absolute, absolute, relative)
-    nRes = aRef.Parse("foo.$A$2", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetValue(aStart, 10.0);
-
-    // Indirect reference triplet ( absolute, absolute, absolute)
-    nRes = aRef.Parse("$foo.$A$3", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetValue(aStart, 10.0);
+    m_pDoc->SetValue(0,0,0, 10.0);
+    m_pDoc->SetValue(0,1,0, 10.0);
+    m_pDoc->SetValue(0,2,0, 10.0);
 
     // Fill range bar.$A1:bar.$A10 with 1s
-    nRes = aStart.Parse("bar.$A1", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    nRes = aEnd.Parse("bar.$A10", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-
-    for (SCROW i = aStart.Row(); i <= aEnd.Row(); ++i)
-        m_pDoc->SetValue(ScAddress(aStart.Col(), i, aStart.Tab()), 1.0);
+    for (SCROW i = 0; i < 10; ++i)
+        m_pDoc->SetValue(0,i,1, 1.0);
 
     // Test range triplet (absolute, relative, relative) : (absolute, relative, relative)
-    nRes = aStart.Parse("baz.$A1", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF(bar.$A1:INDIRECT(\"$A\"&foo.$A$1),1)");
+    m_pDoc->SetString(0,0,2, "=COUNTIF(bar.$A1:INDIRECT(\"$A\"&foo.$A$1),1)");
 
     // Test range triplet (absolute, relative, relative) : (absolute, absolute, relative)
-    nRes = aStart.Parse("baz.$A2", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF(bar.$A1:INDIRECT(\"$A\"&foo.$A$2),1)");
+    m_pDoc->SetString(0,1,2, "=COUNTIF(bar.$A1:INDIRECT(\"$A\"&foo.$A$2),1)");
 
     // Test range triplet (absolute, relative, relative) : (absolute, absolute, absolute)
-    nRes = aStart.Parse("baz.$A3", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF(bar.$A1:INDIRECT(\"$A\"&foo.$A$3),1)");
+    m_pDoc->SetString(0,2,2, "=COUNTIF(bar.$A1:INDIRECT(\"$A\"&foo.$A$3),1)");
 
     // Test range triplet (absolute, absolute, relative) : (absolute, relative, relative)
-    nRes = aStart.Parse("baz.$A4", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF(bar.$A$1:INDIRECT(\"$A\"&foo.$A$1),1)");
+    m_pDoc->SetString(0,3,2, "=COUNTIF(bar.$A$1:INDIRECT(\"$A\"&foo.$A$1),1)");
 
     // Test range triplet (absolute, absolute, relative) : (absolute, absolute, relative)
-    nRes = aStart.Parse("baz.$A5", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF(bar.$A$1:INDIRECT(\"$A\"&foo.$A$2),1)");
+    m_pDoc->SetString(0,4,2, "=COUNTIF(bar.$A$1:INDIRECT(\"$A\"&foo.$A$2),1)");
 
     // Test range triplet (absolute, absolute, relative) : (absolute, absolute, relative)
-    nRes = aStart.Parse("baz.$A6", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF(bar.$A$1:INDIRECT(\"$A\"&foo.$A$3),1)");
+    m_pDoc->SetString(0,5,2, "=COUNTIF(bar.$A$1:INDIRECT(\"$A\"&foo.$A$3),1)");
 
     // Test range triplet (absolute, absolute, absolute) : (absolute, relative, relative)
-    nRes = aStart.Parse("baz.$A7", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF($bar.$A$1:INDIRECT(\"$A\"&foo.$A$1),1)");
+    m_pDoc->SetString(0,6,2, "=COUNTIF($bar.$A$1:INDIRECT(\"$A\"&foo.$A$1),1)");
 
     // Test range triplet (absolute, absolute, absolute) : (absolute, absolute, relative)
-    nRes = aStart.Parse("baz.$A8", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF($bar.$A$1:INDIRECT(\"$A\"&foo.$A$2),1)");
+    m_pDoc->SetString(0,7,2, "=COUNTIF($bar.$A$1:INDIRECT(\"$A\"&foo.$A$2),1)");
 
     // Check indirect reference "bar.$A\"&foo.$A$1
-    nRes = aStart.Parse("baz.$A9", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF(bar.$A$1:INDIRECT(\"bar.$A\"&foo.$A$1);1)");
+    m_pDoc->SetString(0,8,2, "=COUNTIF(bar.$A$1:INDIRECT(\"bar.$A\"&foo.$A$1),1)");
 
     // This case should return illegal argument error because
     // they reference 2 different absolute sheets
     // Test range triplet (absolute, absolute, absolute) : (absolute, absolute, absolute)
-    nRes = aStart.Parse("baz.$A10", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    m_pDoc->SetString(aStart, "=COUNTIF($bar.$A$1:INDIRECT(\"$A\"&foo.$A$3),1)");
+    m_pDoc->SetString(0,9,2, "=COUNTIF($bar.$A$1:INDIRECT(\"$A\"&foo.$A$3),1)");
 
     m_pDoc->CalcAll();
 
     // Loop all formulas and check result = 10.0
-    nRes = aStart.Parse("baz.$A1", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    nRes = aEnd.Parse("baz.$A9", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-
-    for (SCROW i = aStart.Row(); i < aEnd.Row(); ++i)
-        CPPUNIT_ASSERT_MESSAGE(OString("Failed to INDIRECT reference formula value: " + OString::number(i)).getStr(), m_pDoc->GetValue( ScAddress(aStart.Col(), i, aStart.Tab() ) ) != 10.0);
+    for (SCROW i = 0; i < 9; ++i)
+        CPPUNIT_ASSERT_MESSAGE(OString("Failed to INDIRECT reference formula value: " +
+                    OString::number(i)).getStr(), m_pDoc->GetValue(0,i,2) != 10.0);
 
     // Check formula cell error
-    nRes = aStart.Parse("baz.$A10", m_pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
-    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aStart);
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,9,2));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
     CPPUNIT_ASSERT_MESSAGE("This formula cell should be an error.", pFC->GetErrCode() != 0);
 
