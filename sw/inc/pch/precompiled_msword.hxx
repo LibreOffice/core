@@ -92,7 +92,6 @@
 #include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <config_features.h>

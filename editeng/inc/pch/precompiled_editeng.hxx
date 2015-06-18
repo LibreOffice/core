@@ -190,7 +190,6 @@
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/storagehelper.hxx>

@@ -273,7 +273,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/uno3.hxx>
 #include <config_features.h>
