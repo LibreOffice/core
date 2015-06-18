@@ -16,6 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <cassert>
+
 #include <sal/types.h>
 
 #include <vcl/outdev.hxx>
@@ -941,7 +944,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
                                  FontUnderline eOverline,
                                  bool bUnderlineAbove )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLineAction( rPos, nWidth, eStrikeout, eUnderline, eOverline ) );
@@ -985,7 +988,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
 
 void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;

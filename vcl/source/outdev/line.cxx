@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
 #include <numeric>
 
 #include <vcl/outdev.hxx>
@@ -35,7 +36,7 @@
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( rLineInfo.IsDefault() )
     {
@@ -89,7 +90,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt ) );

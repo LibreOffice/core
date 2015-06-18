@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
@@ -25,7 +27,7 @@
 
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaEllipseAction( rRect ) );
@@ -73,7 +75,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
 void OutputDevice::DrawArc( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaArcAction( rRect, rStartPt, rEndPt ) );
@@ -117,7 +119,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
 void OutputDevice::DrawPie( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPieAction( rRect, rStartPt, rEndPt ) );
@@ -168,7 +170,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
 void OutputDevice::DrawChord( const Rectangle& rRect,
                               const Point& rStartPt, const Point& rEndPt )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaChordAction( rRect, rStartPt, rEndPt ) );

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
@@ -36,7 +38,7 @@
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     const Size aSizePix( rBitmap.GetSizePixel() );
     DrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, MetaActionType::BMP );
@@ -44,7 +46,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     DrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, MetaActionType::BMPSCALE );
 }
@@ -54,7 +56,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                    const Bitmap& rBitmap, const MetaActionType nAction )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( ImplIsRecordLayout() )
         return;
@@ -236,7 +238,7 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 void OutputDevice::DrawBitmapEx( const Point& rDestPt,
                                  const BitmapEx& rBitmapEx )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( ImplIsRecordLayout() )
         return;
@@ -255,7 +257,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const BitmapEx& rBitmapEx )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( ImplIsRecordLayout() )
         return;
@@ -275,7 +277,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                  const BitmapEx& rBitmapEx, const MetaActionType nAction )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( ImplIsRecordLayout() )
         return;
@@ -492,7 +494,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                                      const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                      BitmapEx& rBitmapEx )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if (rBitmapEx.IsAlpha())
     {
@@ -622,7 +624,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     Point     aOutPt(LogicToPixel(rDestPt));
     Size      aOutSz(LogicToPixel(rDestSize));
@@ -918,7 +920,7 @@ private:
 
 void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const AlphaMask& rAlpha, Rectangle aDstRect, Rectangle aBmpRect, Size& aOutSize, Point& aOutPoint)
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     VirtualDevice* pOldVDev = mpAlphaVDev;
 
@@ -1036,7 +1038,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
         const basegfx::B2DHomMatrix& aFullTransform,
         const BitmapEx& rBitmapEx)
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     bool bDone = false;
 
@@ -1157,7 +1159,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix& rTransformation,
     const BitmapEx& rBitmapEx)
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( ImplIsRecordLayout() )
         return;
@@ -1330,7 +1332,7 @@ namespace
 
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     DrawImage( rPos, Size(), rImage, nStyle );
 }
@@ -1338,7 +1340,7 @@ void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageF
 void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                               const Image& rImage, DrawImageFlags nStyle )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     bool bIsSizeValid = rSize.getWidth() != 0 && rSize.getHeight() != 0;
 
