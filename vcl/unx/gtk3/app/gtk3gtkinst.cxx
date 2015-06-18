@@ -82,6 +82,8 @@ namespace
 class GtkTransferable : public ::cppu::WeakImplHelper1 <
     css::datatransfer::XTransferable >
 {
+private:
+    std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
 public:
     GtkTransferable()
     {
@@ -95,24 +97,37 @@ public:
      * XTransferable
      */
 
-    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor )
+    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor)
         throw(css::datatransfer::UnsupportedFlavorException,
               css::io::IOException,
               css::uno::RuntimeException, std::exception
               ) SAL_OVERRIDE
     {
-        css::uno::Any aRet;
         GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-        if (aFlavor.MimeType == "text/plain;charset=utf-16")
+        if (rFlavor.MimeType == "text/plain;charset=utf-16")
         {
             gchar *pText = gtk_clipboard_wait_for_text(clipboard);
             OUString aStr(pText, rtl_str_getLength(pText),
                 RTL_TEXTENCODING_UTF8);
             g_free(pText);
+            css::uno::Any aRet;
             aRet <<= aStr.replaceAll("\r\n", "\n");
+            return aRet;
         }
-        else
-            fprintf(stderr, "TO-DO getTransferData %s\n", OUStringToOString(aFlavor.MimeType, RTL_TEXTENCODING_UTF8).getStr());
+
+        auto it = m_aMimeTypeToAtom.find(rFlavor.MimeType);
+        if (it == m_aMimeTypeToAtom.end())
+            return css::uno::Any();
+
+        css::uno::Any aRet;
+        GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
+                                                                 it->second);
+        gint length;
+        const guchar *rawdata = gtk_selection_data_get_data_with_length(data,
+                                                                        &length);
+        Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
+        gtk_selection_data_free(data);
+        aRet <<= aSeq;
         return aRet;
     }
 
@@ -146,6 +161,9 @@ public:
                 aFlavor.MimeType = OUString(pFinalName,
                                             rtl_str_getLength(pFinalName),
                                             RTL_TEXTENCODING_UTF8);
+
+                m_aMimeTypeToAtom[aFlavor.MimeType] = targets[i];
+
                 aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
                 sal_Int32 nIndex(0);
