@@ -32,7 +32,6 @@ typedef struct _LOKDocViewPrivate LOKDocViewPrivate;
 struct _LOKDocView
 {
     GtkDrawingArea aDrawingArea;
-    LOKDocViewPrivate* priv;
 };
 
 struct _LOKDocViewClass
