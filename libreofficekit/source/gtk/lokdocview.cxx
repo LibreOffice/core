@@ -137,12 +137,16 @@ enum
 
 static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 
+static void lok_doc_view_initable_iface_init (GInitableIface *iface);
+
 SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
-G_DEFINE_TYPE_WITH_PRIVATE (LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA)
+G_DEFINE_TYPE_WITH_CODE (LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA,
+                         G_ADD_PRIVATE (LOKDocView)
+                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, lok_doc_view_initable_iface_init));
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
@@ -1103,14 +1107,30 @@ static void lok_doc_view_finalize (GObject* object)
     G_OBJECT_CLASS (lok_doc_view_parent_class)->finalize (object);
 }
 
-static void lok_doc_view_constructed (GObject* object)
+static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /*cancellable*/, GError **error)
 {
-    LOKDocView* pDocView = LOK_DOC_VIEW (object);
-    LOKDocViewPrivate* priv = pDocView->priv;
+    LOKDocView *pDocView = LOK_DOC_VIEW (initable);
 
-    G_OBJECT_CLASS (lok_doc_view_parent_class)->constructed (object);
+    if (pDocView->priv->m_pOffice != NULL)
+        return TRUE;
 
-    pDocView->priv->m_pOffice = lok_init (priv->m_aLOPath);
+    pDocView->priv->m_pOffice = lok_init (pDocView->priv->m_aLOPath);
+
+    if (pDocView->priv->m_pOffice == NULL)
+    {
+        g_set_error (error,
+                     g_quark_from_static_string ("LOK initialization error"), 0,
+                     "Failed to get LibreOfficeKit context. Make sure path (%s) is correct",
+                     pDocView->priv->m_aLOPath);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+static void lok_doc_view_initable_iface_init (GInitableIface *iface)
+{
+    iface->init = lok_doc_view_initable_init;
 }
 
 static void lok_doc_view_class_init (LOKDocViewClass* pClass)
@@ -1121,7 +1141,6 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
     pGObjectClass->get_property = lok_doc_view_get_property;
     pGObjectClass->set_property = lok_doc_view_set_property;
     pGObjectClass->finalize = lok_doc_view_finalize;
-    pGObjectClass->constructed = lok_doc_view_constructed;
 
     pWidgetClass->draw = lok_doc_view_draw;
     pWidgetClass->button_press_event = lok_doc_view_signal_button;
@@ -1343,18 +1362,19 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_STRING);
 }
 
-
-
 /**
  * lok_doc_view_new:
  * @pPath: LibreOffice install path.
+ * @cancellable: The cancellable object that you can use to cancel this
+ * operation.
+ * @error: The error that will be set if the object fails to initialize.
  *
- * Returns: The #LOKDocView widget instance.
+ * Returns: (transfer none): The #LOKDocView widget instance.
  */
 SAL_DLLPUBLIC_EXPORT GtkWidget*
-lok_doc_view_new (const char* pPath)
+lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 {
-    return GTK_WIDGET (g_object_new(LOK_TYPE_DOC_VIEW, "lopath", pPath, NULL));
+    return GTK_WIDGET (g_initable_new (LOK_TYPE_DOC_VIEW, cancellable, error, "lopath", pPath, NULL));
 }
 
 /**
@@ -1365,7 +1385,7 @@ lok_doc_view_new (const char* pPath)
  * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
  */
 SAL_DLLPUBLIC_EXPORT gboolean
-lok_doc_view_open_document (LOKDocView* pDocView, char* pPath)
+lok_doc_view_open_document (LOKDocView* pDocView, const gchar* pPath)
 {
     if ( pDocView->priv->m_pDocument )
     {
@@ -1374,8 +1394,7 @@ lok_doc_view_open_document (LOKDocView* pDocView, char* pPath)
     }
 
     pDocView->priv->m_pOffice->pClass->registerCallback(pDocView->priv->m_pOffice, globalCallbackWorker, pDocView);
-    pDocView->priv->m_pDocument = pDocView->priv->m_pOffice->pClass->documentLoad( pDocView->priv->m_pOffice,
-                                                                   pPath );
+    pDocView->priv->m_pDocument = pDocView->priv->m_pOffice->pClass->documentLoad( pDocView->priv->m_pOffice, pPath );
     if ( !pDocView->priv->m_pDocument )
     {
         // FIXME: should have a GError parameter and populate it.

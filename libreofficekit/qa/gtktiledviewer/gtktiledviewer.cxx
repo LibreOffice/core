@@ -521,7 +521,7 @@ int main( int argc, char* argv[] )
     gtk_box_pack_end(GTK_BOX(pVBox), pFindbar, FALSE, FALSE, 0);
 
     // Docview
-    pDocView = lok_doc_view_new(argv[1]);
+    pDocView = lok_doc_view_new (argv[1], NULL, NULL);
     if (pDocView == NULL)
         g_error ("Error while creating LOKDocView widget");
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
