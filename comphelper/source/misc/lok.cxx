@@ -15,16 +15,16 @@ namespace comphelper
 namespace LibreOfficeKit
 {
 
-static bool bActive(false);
+static bool g_bActive(false);
 
-void setActive()
+void setActive(bool bActive)
 {
-    bActive = true;
+    g_bActive = bActive;
 }
 
 bool isActive()
 {
-    return bActive;
+    return g_bActive;
 }
 
 static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent)(nullptr);

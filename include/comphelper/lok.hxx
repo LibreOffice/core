@@ -24,7 +24,7 @@ namespace LibreOfficeKit
 // Functions to be called only from the LibreOfficeKit implementation in desktop, not from other
 // places in LibreOffice code.
 
-COMPHELPER_DLLPUBLIC void setActive();
+COMPHELPER_DLLPUBLIC void setActive(bool bActive = true);
 
 enum class statusIndicatorCallbackType { Start, SetValue, Finish };
 
