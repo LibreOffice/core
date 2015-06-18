@@ -42,6 +42,9 @@
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <stdio.h>
+#if defined(UNX)
+  #include <unistd.h>
+#endif
 #include <vector>
 
 
@@ -186,6 +189,7 @@ extern "C" int unopkg_main()
     bool option_verbose = false;
     bool option_bundled = false;
     bool option_suppressLicense = false;
+    bool option_help = false;
     bool subcmd_gui = false;
     OUString logFile;
     OUString repository;
@@ -252,6 +256,7 @@ extern "C" int unopkg_main()
                      !readOption( &option_force, info_force, &nPos ) &&
                      !readOption( &option_bundled, info_bundled, &nPos ) &&
                      !readOption( &option_suppressLicense, info_suppressLicense, &nPos ) &&
+                     !readOption( &option_help, info_help, &nPos ) &&
                      !readArgument( &repository, info_context, &nPos ) &&
                      !isBootstrapVariable(&nPos))
             {
@@ -304,6 +309,20 @@ extern "C" int unopkg_main()
                     toString( info_shared ) + "!\n" );
             }
         }
+#if defined(UNX)
+        if ( geteuid() == 0 )
+        {
+            if ( !(option_shared || option_bundled || option_help) )
+            {
+                dp_misc::writeConsoleError(
+                    "ERROR: cannot run "  APP_NAME  " as root without " +
+                    toString( info_shared ) + " or " + toString( info_bundled )
+                    + " option.\n");
+                return 1;
+            }
+
+        }
+#endif
 
         if (subCommand == "reinstall")
         {
