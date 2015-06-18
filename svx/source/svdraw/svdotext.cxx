@@ -2035,6 +2035,9 @@ void SdrTextObj::onUnderflowStatusEvent( )
         // (since this happens automatically by overflow we just "order to" reset the destination box's text)
         GetTextChain()->SetOverwriteOnOverflow(pNextLink, true);
 
+        if (pEdtOutl != NULL)
+            pEdtOutl->SetText(*pNewText);
+
         const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
     }
 
