@@ -712,13 +712,18 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 if ( !bIsLink && !bIsGraphicValid )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
 
-                if (  eNewPos != eOldPos
-                    || bIsLink != bWasLink
-                    || ( bWasLink  && rOldItem.GetGraphicLink()
-                                       != aBgdGraphicPath )
-                    || ( !bWasLink && rOldItem.GetGraphic()->GetBitmap()
-                                       != aBgdGraphic.GetBitmap() )
-                   )
+                bool bModifyBrush = false;
+                if (eNewPos != eOldPos || bIsLink != bWasLink)
+                    bModifyBrush = true;
+                else if (bWasLink && rOldItem.GetGraphicLink() != aBgdGraphicPath)
+                    bModifyBrush = true;
+                else if (!bWasLink)
+                {
+                    const Graphic* pGraphic = rOldItem.GetGraphic();
+                    if (pGraphic)
+                        bModifyBrush = pGraphic->GetBitmap() != aBgdGraphic.GetBitmap();
+                }
+                if (bModifyBrush)
                 {
                     bModified = true;
 
