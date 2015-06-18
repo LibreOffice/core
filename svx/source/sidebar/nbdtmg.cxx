@@ -1312,7 +1312,8 @@ void NumberingTypeMgr::Init()
             pNumEntry->nIndex = i + 1;
             pNumEntry->nIndexDefault = i;
             pNumEntry->pNumSetting = pNew;
-            pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );
+            if ( i < 8 )
+                pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );
             pNumberSettingsArr->push_back(std::shared_ptr<NumberSettings_Impl>(pNumEntry));
         }
     }
