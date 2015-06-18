@@ -515,7 +515,10 @@ const Color& FixedLine::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
 
 void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 {
-    Size aOutSize = rRenderContext.GetOutputSizePixel();
+    // we need to measure according to the window, not according to the
+    // RenderContext we paint to
+    Size aOutSize = GetOutputSizePixel();
+
     OUString aText = GetText();
     WinBits nWinStyle = GetStyle();
     MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
