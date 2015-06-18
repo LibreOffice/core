@@ -124,7 +124,6 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
                     theModuleUIConfigurationManagerSupplier::get( _rxContext );
                 xCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
-                xCfgMgr->hasSettings( aResourceURL );
             }
         }
     }
