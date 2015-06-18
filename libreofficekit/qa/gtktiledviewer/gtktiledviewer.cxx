@@ -125,6 +125,19 @@ static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
     }
 }
 
+/// Handler for the copy button: write clipboard.
+static void doCopy(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+{
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
+    char* pSelection = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8");
+
+    GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(pDocView), GDK_SELECTION_CLIPBOARD);
+    gtk_clipboard_set_text(pClipboard, pSelection, -1);
+
+    free(pSelection);
+}
+
 /// Get the visible area of the scrolled window
 static void getVisibleAreaTwips(GdkRectangle* pArea)
 {
@@ -394,6 +407,14 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1 );
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
+
+    // Cut, copy & paste.
+    GtkToolItem* pCopyButton = gtk_tool_button_new( NULL, NULL);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pCopyButton), "edit-copy-symbolic");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pCopyButton, -1);
+    g_signal_connect(G_OBJECT(pCopyButton), "clicked", G_CALLBACK(doCopy), NULL);
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
+
     pEnableEditing = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pEnableEditing), "insert-text-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
