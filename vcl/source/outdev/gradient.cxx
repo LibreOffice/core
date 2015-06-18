@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include <tools/poly.hxx>
 
 #include <vcl/gradient.hxx>
@@ -32,7 +34,7 @@
 void OutputDevice::DrawGradient( const Rectangle& rRect,
                                  const Gradient& rGradient )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     // Convert rectangle to a tools::PolyPolygon by first converting to a Polygon
     Polygon aPolygon ( rRect );
@@ -44,7 +46,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( mnDrawMode & DrawModeFlags::NoGradient )
         return;     // nothing to draw!
@@ -172,7 +174,7 @@ void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, cons
 void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
                                             const Gradient& rGradient )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( !mpMetaFile )
         return;
@@ -260,7 +262,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
                                        const Gradient& rGradient,
                                        const tools::PolyPolygon* pClixPolyPoly )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     // get BoundRect of rotated rectangle
     Rectangle aRect;
@@ -438,19 +440,17 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
     }
 }
 
-void OutputDevice::assert_if_double_buffered_window() const
+bool OutputDevice::is_double_buffered_window() const
 {
-#ifndef NDEBUG
     const vcl::Window *pWindow = dynamic_cast<const vcl::Window*>(this);
-    assert(!pWindow || !pWindow->SupportsDoubleBuffering());
-#endif
+    return pWindow && pWindow->SupportsDoubleBuffering();
 }
 
 void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
                                         const Gradient& rGradient,
                                         const tools::PolyPolygon* pClixPolyPoly )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     // Determine if we output via Polygon or PolyPolygon
     // For all rasteroperations other then Overpaint always use PolyPolygon,
@@ -616,7 +616,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
 void OutputDevice::DrawLinearGradientToMetafile( const Rectangle& rRect,
                                                  const Gradient& rGradient )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     // get BoundRect of rotated rectangle
     Rectangle aRect;
@@ -796,7 +796,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const Rectangle& rRect,
 void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
                                                   const Gradient& rGradient )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     // Determine if we output via Polygon or PolyPolygon
     // For all rasteroperations other then Overpaint always use PolyPolygon,

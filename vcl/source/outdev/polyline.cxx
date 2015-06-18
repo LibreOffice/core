@@ -16,6 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <cassert>
+
 #include <sal/types.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -31,7 +34,7 @@
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyLineAction( rPoly ) );
@@ -101,7 +104,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if ( rLineInfo.IsDefault() )
     {
@@ -129,7 +132,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                                  basegfx::B2DLineJoin eLineJoin,
                                  css::drawing::LineCap eLineCap)
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     if( mpMetaFile )
     {
@@ -275,7 +278,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
                                        css::drawing::LineCap eLineCap,
                                        bool bBypassAACheck )
 {
-    assert_if_double_buffered_window();
+    assert(!is_double_buffered_window());
 
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolygon.count())
