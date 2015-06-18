@@ -12,9 +12,12 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/svapp.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
 #include <crsskip.hxx>
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
@@ -31,6 +34,7 @@ public:
     void testPostKeyEvent();
     void testPostMouseEvent();
     void testSetTextSelection();
+    void testGetTextSelection();
     void testSetGraphicSelection();
     void testResetSelection();
     void testSearch();
@@ -44,6 +48,7 @@ public:
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
+    CPPUNIT_TEST(testGetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
@@ -209,6 +214,34 @@ void SwTiledRenderingTest::testSetTextSelection()
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_RESET, aStart.getX(), aStart.getY());
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aStart.getX() + 1000, aStart.getY());
     CPPUNIT_ASSERT_EQUAL(OUString("Aaa b"), pShellCrsr->GetText());
+}
+
+void SwTiledRenderingTest::testGetTextSelection()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    SwXTextDocument* pXTextDocument = createDoc("shape-with-text.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    // Move the cursor into the first word.
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    // Create a selection by on the word.
+    pWrtShell->SelWrd();
+
+    // Make sure that we selected text from the body text.
+    CPPUNIT_ASSERT_EQUAL(OString("Hello"), pXTextDocument->getTextSelection("text/plain;charset=utf-8"));
+
+    // Now select some shape text and check again.
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pWrtShell->GetDrawView();
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    ESelection aWordSelection(0, 0, 0, 5);
+    rEditView.SetSelection(aWordSelection);
+    CPPUNIT_ASSERT_EQUAL(OString("Shape"), pXTextDocument->getTextSelection("text/plain;charset=utf-8"));
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SwTiledRenderingTest::testSetGraphicSelection()
