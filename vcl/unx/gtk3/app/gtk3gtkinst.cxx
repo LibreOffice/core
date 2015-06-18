@@ -101,9 +101,19 @@ public:
               css::uno::RuntimeException, std::exception
               ) SAL_OVERRIDE
     {
-        fprintf(stderr, "TO-DO getTransferData\n");
-        (void)aFlavor;
-        return css::uno::Any();
+        css::uno::Any aRet;
+        GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+        if (aFlavor.MimeType == "text/plain;charset=utf-16")
+        {
+            gchar *pText = gtk_clipboard_wait_for_text(clipboard);
+            OUString aStr(pText, rtl_str_getLength(pText),
+                RTL_TEXTENCODING_UTF8);
+            g_free(pText);
+            aRet <<= aStr.replaceAll("\r\n", "\n");
+        }
+        else
+            fprintf(stderr, "TO-DO getTransferData %s\n", OUStringToOString(aFlavor.MimeType, RTL_TEXTENCODING_UTF8).getStr());
+        return aRet;
     }
 
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
