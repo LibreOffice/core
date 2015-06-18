@@ -203,7 +203,7 @@ public:
         return aVector;
     }
 
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors()
+    virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
@@ -222,13 +222,14 @@ public:
 class VclGtkClipboard :
         public cppu::WeakComponentImplHelper<
         datatransfer::clipboard::XSystemClipboard,
-        XServiceInfo
-        >
+        XServiceInfo>
 {
-    osl::Mutex                                                              m_aMutex;
-    Reference< css::datatransfer::XTransferable >              m_aContents;
-    Reference< css::datatransfer::clipboard::XClipboardOwner > m_aOwner;
-    std::list< Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
+    osl::Mutex                                               m_aMutex;
+    Reference<css::datatransfer::XTransferable>              m_aContents;
+    Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
+    std::list< Reference<css::datatransfer::clipboard::XClipboardListener> > m_aListeners;
+    std::vector<GtkTargetEntry> m_aGtkTargets;
+    std::vector<css::datatransfer::DataFlavor> m_aInfoToFlavor;
 
 public:
 
@@ -238,6 +239,7 @@ public:
         >( m_aMutex )
     {
     }
+
     virtual ~VclGtkClipboard()
     {
     }
@@ -285,6 +287,11 @@ public:
     virtual void SAL_CALL removeClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
         throw(RuntimeException, std::exception) SAL_OVERRIDE;
+
+    void ClipboardGet(GtkClipboard *clipboard, GtkSelectionData *selection_data, guint info);
+    void ClipboardClear(GtkClipboard *clipboard);
+private:
+    GtkTargetEntry makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
 };
 
 OUString VclGtkClipboard::getImplementationName_static()
@@ -322,6 +329,107 @@ Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents() thr
     return m_aContents;
 }
 
+namespace
+{
+    void ClipboardGetFunc(GtkClipboard *clipboard, GtkSelectionData *selection_data,
+                          guint info,
+                          gpointer user_data_or_owner)
+    {
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
+        pThis->ClipboardGet(clipboard, selection_data, info);
+    }
+
+    void ClipboardClearFunc(GtkClipboard *clipboard, gpointer user_data_or_owner)
+    {
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
+        pThis->ClipboardClear(clipboard);
+    }
+}
+
+void VclGtkClipboard::ClipboardGet(GtkClipboard *clipboard, GtkSelectionData *selection_data,
+                                   guint info)
+{
+
+    GdkAtom type(gdk_atom_intern(OUStringToOString(m_aInfoToFlavor[info].MimeType,
+                                                   RTL_TEXTENCODING_UTF8).getStr(),
+                                 false));
+
+    css::datatransfer::DataFlavor aFlavor(m_aInfoToFlavor[info]);
+    if (aFlavor.MimeType == "UTF8_STRING" || aFlavor.MimeType == "STRING")
+        aFlavor.MimeType = "text/plain;charset=utf-8";
+
+    Sequence<sal_Int8> aData;
+    Any aValue;
+
+    try
+    {
+        aValue = m_aContents->getTransferData(aFlavor);
+    }
+    catch(...)
+    {
+    }
+
+    if (aValue.getValueTypeClass() == TypeClass_STRING)
+    {
+        OUString aString;
+        aValue >>= aString;
+        aData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aString.getStr()), aString.getLength() * sizeof( sal_Unicode ) );
+    }
+    else if (aValue.getValueType() == cppu::UnoType<Sequence< sal_Int8 >>::get())
+    {
+        aValue >>= aData;
+    }
+    else if (aFlavor.MimeType == "text/plain;charset=utf-8")
+    {
+        //didn't have utf-8, try utf-16 and convert
+        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        try
+        {
+            aValue = m_aContents->getTransferData(aFlavor);
+        }
+        catch(...)
+        {
+        }
+        OUString aString;
+        aValue >>= aString;
+        OString aUTF8String(OUStringToOString(aString, RTL_TEXTENCODING_UTF8));
+        gtk_selection_data_set(selection_data, type, 8,
+                               reinterpret_cast<const guchar *>(aUTF8String.getStr()),
+                               aUTF8String.getLength());
+        return;
+    }
+
+    gtk_selection_data_set(selection_data, type, 8,
+                           reinterpret_cast<const guchar *>(aData.getArray()),
+                           aData.getLength());
+}
+
+void VclGtkClipboard::ClipboardClear(GtkClipboard * /*clipboard*/)
+{
+    for (auto &a : m_aGtkTargets)
+        free(a.target);
+    m_aGtkTargets.clear();
+}
+
+GtkTargetEntry VclGtkClipboard::makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor)
+{
+    GtkTargetEntry aEntry;
+    aEntry.target =
+        g_strdup(OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_UTF8).getStr());
+    aEntry.flags = 0;
+    auto it = std::find_if(m_aInfoToFlavor.begin(), m_aInfoToFlavor.end(),
+                        DataFlavorEq(rFlavor));
+    if (it != m_aInfoToFlavor.end())
+        aEntry.info = std::distance(m_aInfoToFlavor.begin(), it);
+    else
+    {
+        aEntry.info = m_aInfoToFlavor.size();
+        m_aInfoToFlavor.push_back(rFlavor);
+    }
+    return aEntry;
+}
+
 void VclGtkClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
@@ -336,6 +444,52 @@ void VclGtkClipboard::setContents(
     std::list< Reference< datatransfer::clipboard::XClipboardListener > > xListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
     aEv.Contents = m_aContents;
+
+    if (m_aContents.is())
+    {
+        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTrans->getTransferDataFlavors();
+        std::vector<GtkTargetEntry> aGtkTargets;
+        bool bHaveText(false), bHaveUTF8(false);
+        for (int i = 0; i < aFormats.getLength(); ++i)
+        {
+            const css::datatransfer::DataFlavor& rFlavor = aFormats[i];
+
+            sal_Int32 nIndex(0);
+            if (rFlavor.MimeType.getToken(0, ';', nIndex) == "text/plain")
+            {
+                bHaveText = true;
+                OUString aToken(rFlavor.MimeType.getToken(0, ';', nIndex));
+                if (aToken == "charset=utf-8")
+                {
+                    bHaveUTF8 = true;
+                }
+            }
+            GtkTargetEntry aEntry(makeGtkTargetEntry(rFlavor));
+            aGtkTargets.push_back(aEntry);
+        }
+
+        if (bHaveText)
+        {
+            css::datatransfer::DataFlavor aFlavor;
+            aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+            if (!bHaveUTF8)
+            {
+                aFlavor.MimeType = "text/plain;charset=utf-8";
+                aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
+            }
+            aFlavor.MimeType = "UTF8_STRING";
+            aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
+            aFlavor.MimeType = "STRING";
+            aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
+        }
+
+        //if there was a previous gtk_clipboard_set_with_data call then
+        //ClipboardClearFunc will be called now
+        GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+        gtk_clipboard_set_with_data(clipboard, aGtkTargets.data(), aGtkTargets.size(),
+                                    ClipboardGetFunc, ClipboardClearFunc, this);
+        m_aGtkTargets = aGtkTargets;
+    }
 
     aGuard.clear();
 
