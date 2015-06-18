@@ -49,8 +49,6 @@ AIX)
     ;;
 esac
 
-help_mode=0
-isnotuser=0
 for arg in $@
 do
   case "$arg" in
@@ -59,24 +57,9 @@ do
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
 
        # make sure shared extensions will be readable by all users
-       --shared)
-           umask 0022
-           isnotuser=1
-           ;;
-
-       --bundled) isnotuser=1;;
-       -h|--help) help_mode=1;;
+       --shared) umask 0022;;
   esac
 done
-
-# we don't really want root to run unopkg without --shared or --bundled option
-# but we might at least let him read help
-if [ "$(id -u)" -eq "0" ]; then
-    if [ $isnotuser -eq 0 ] && [ $help_mode -eq 0 ]; then
-         echo "Cannot run '${0} $*' as root without --shared or --bundled option."
-         exit 1
-    fi
-fi
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "${sd_prog}/javaldx" ] ; then
