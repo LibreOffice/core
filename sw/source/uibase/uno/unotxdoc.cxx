@@ -142,6 +142,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
@@ -3258,8 +3259,21 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
 
 OString SwXTextDocument::getTextSelection(const char* pMimeType)
 {
+    uno::Reference<datatransfer::XTransferable> xTransferable;
+
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    uno::Reference<datatransfer::XTransferable> xTransferable(new SwTransferable(*pWrtShell));
+    if (SdrView* pSdrView = pWrtShell->GetDrawView())
+    {
+        if (pSdrView->GetTextEditObject())
+        {
+            // Editing shape text
+            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+            xTransferable = rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
+        }
+    }
+
+    if (!xTransferable.is())
+        xTransferable = new SwTransferable(*pWrtShell);
 
     // Take care of UTF-8 text here.
     OString aMimeType(pMimeType);
