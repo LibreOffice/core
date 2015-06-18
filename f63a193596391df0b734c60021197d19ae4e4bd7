@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_acf767f4",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-06-18T10:30:53Z",
+      "side": 1,
+      "message": "why?",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_6cdacf7a",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-06-18T10:30:53Z",
+      "side": 1,
+      "message": "for all practical purposes, OUString(\u0027a\u0027) is already covered well by OUString(\"a\") or, depending on context, plain \"a\"\n\nno need to add another ctor into the mix, which is esp. problematic regarding unanticipated conversions if it can take a single argument of integer type (and isn\u0027t even \"explicit\")\n\nor do you have a demonstrated use case that would massively benefit from having a ctor like that?",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_0ce79b41",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-06-18T10:30:53Z",
+      "side": 1,
+      "message": "do you have a demonstrated use case that would massively benefit from having a ctor like that?\n\nading another ctor into the mix is always problematic regarding unanticipated conversions if it can take a single argument of integer type",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_2ce4d739",
+        "filename": "sdext/source/pdfimport/tree/drawtreevisiting.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-06-18T10:30:53Z",
+      "side": 1,
+      "message": "OUString strSpace(\" \");",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_6cc16f80",
+        "filename": "sdext/source/pdfimport/tree/drawtreevisiting.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-06-18T10:30:53Z",
+      "side": 1,
+      "message": "OUString tabSpace(\"\\t\");",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_8cc94baf",
+        "filename": "sdext/source/pdfimport/tree/drawtreevisiting.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-06-18T10:30:53Z",
+      "side": 1,
+      "message": "...or better yet:\n\n  strToken \u003d\u003d \" \"",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_acce87b2",
+        "filename": "sdext/source/pdfimport/tree/drawtreevisiting.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-06-18T10:30:53Z",
+      "side": 1,
+      "message": "...or better yet:\n\n  strToken \u003d\u003d \"\\t\"",
+      "revId": "f63a193596391df0b734c60021197d19ae4e4bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
