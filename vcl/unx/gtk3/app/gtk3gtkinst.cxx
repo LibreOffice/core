@@ -77,6 +77,19 @@ namespace
         // PIXMAP
         { "PIXMAP", "image/bmp" }
     };
+
+    class DataFlavorEq : public std::unary_function<const css::datatransfer::DataFlavor&, bool>
+    {
+    private:
+        const css::datatransfer::DataFlavor& m_rData;
+    public:
+        explicit DataFlavorEq(const css::datatransfer::DataFlavor& rData) : m_rData(rData) {}
+        bool operator() (const css::datatransfer::DataFlavor& rData) const
+        {
+            return rData.MimeType == m_rData.MimeType &&
+                   rData.DataType  == m_rData.DataType;
+        }
+    };
 }
 
 class GtkTransferable : public ::cppu::WeakImplHelper1 <
@@ -131,12 +144,12 @@ public:
         return aRet;
     }
 
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector()
     {
+        std::vector<css::datatransfer::DataFlavor> aVector;
+
         GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 
-        std::vector<css::datatransfer::DataFlavor> aVector;
         GdkAtom *targets;
         gint n_targets;
         if (gtk_clipboard_wait_for_targets(clipboard, &targets, &n_targets))
@@ -195,16 +208,22 @@ public:
             }
         }
 
-        return comphelper::containerToSequence(aVector);
+        return aVector;
     }
 
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor )
+    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        fprintf(stderr, "TODO isDataFlavorSupported\n");
+        return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
+    }
 
-        (void)aFlavor;
-        return false;
+    virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        const std::vector<css::datatransfer::DataFlavor> aAll =
+            getTransferDataFlavorsAsVector();
+
+        return std::find_if(aAll.begin(), aAll.end(), DataFlavorEq(rFlavor)) != aAll.end();
     }
 };
 
