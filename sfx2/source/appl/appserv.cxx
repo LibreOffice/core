@@ -201,8 +201,13 @@ static bool checkURL( const char *pName, const char *pExt, OUString &rURL )
     using namespace osl;
     DirectoryItem aDirItem;
 
+#ifdef MACOSX
+    rURL = "$BRAND_BASE_DIR/Resources/" + OUString::createFromAscii( pName ) +
+           OUString::createFromAscii( pExt );
+#else
     rURL = "$BRAND_BASE_DIR/" + OUString::createFromAscii( pName ) +
            OUString::createFromAscii( pExt );
+#endif
     rtl::Bootstrap::expandMacros( rURL );
 
     if (!rURL.isEmpty())
