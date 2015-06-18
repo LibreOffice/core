@@ -73,9 +73,9 @@ void ButtonDialog::dispose()
     Dialog::dispose();
 }
 
-PushButton* ButtonDialog::ImplCreatePushButton( ButtonDialogFlags nBtnFlags )
+VclPtr<PushButton> ButtonDialog::ImplCreatePushButton( ButtonDialogFlags nBtnFlags )
 {
-    PushButton* pBtn;
+    VclPtr<PushButton> pBtn;
     WinBits     nStyle = 0;
 
     if ( nBtnFlags & ButtonDialogFlags::Default )
