@@ -451,6 +451,7 @@ void DrawXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element* >
         elem.Action |= pNext->Action;
 
         elem.Children.splice( elem.Children.end(), pNext->Children );
+        // workaround older compilers that do not have std::list::erase(const_iterator)
         std::list< Element* > tmp;
         tmp.splice( tmp.begin(), elem.Parent->Children, next_it, next_it);
         delete pNext;
