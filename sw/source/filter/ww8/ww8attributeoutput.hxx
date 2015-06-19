@@ -178,9 +178,6 @@ public:
     /// The type of breaking.
     virtual void SectionType( sal_uInt8 nBreakCode ) SAL_OVERRIDE;
 
-    /// Special header/footer flags, needed for old versions only.
-    virtual void SectionWW6HeaderFooterFlags( sal_uInt8 nHeadFootFlags ) SAL_OVERRIDE;
-
     /// Definition of a numbering instance.
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) SAL_OVERRIDE;
 

@@ -731,9 +731,6 @@ public:
     void SubstituteBullet( OUString& rNumStr, rtl_TextEncoding& rChrSet,
         OUString& rFontName ) const;
 
-    /// No-op for the newer WW versions.
-    virtual void OutputOlst( const SwNumRule& /*rRule*/ ) {}
-
     /// Setup the pA's info.
     virtual void SetupSectionPositions( WW8_PdAttrDesc* /*pA*/ ) {}
 
@@ -999,7 +996,6 @@ private:
     void DoCheckBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
 
 public:
-    virtual void OutputOlst( const SwNumRule& rRule ) SAL_OVERRIDE;
 
     /// Setup the pA's info.
     virtual void SetupSectionPositions( WW8_PdAttrDesc* pA ) SAL_OVERRIDE;
@@ -1021,9 +1017,6 @@ public:
     void WritePostItBegin( ww::bytes* pO = 0 );
     const SvxBrushItem* GetCurrentPageBgBrush() const;
     SvxBrushItem TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const;
-
-    /// Output all textframes anchored as character for the winword 7- format.
-    void OutWW6FlyFrmsInContent( const SwTextNode& rNd );
 
     void AppendFlyInFlys(const sw::Frame& rFrameFormat, const Point& rNdTopLeft);
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);

@@ -597,37 +597,6 @@ void WW8Export::OutListNamesTab()
 
 // old WW95-Code
 
-void WW8Export::OutputOlst( const SwNumRule& rRule )
-{
-    assert(false); // TODO
-
-    static const sal_uInt8 aAnlvBase[] = { // Defaults
-                                1,0,0,          // Upper Roman
-                                0x0C,           // Hanging Indent, fPrev
-                                0,0,1,0x80,0,0,1,0,0x1b,1,0,0 };
-
-    static const sal_uInt8 aSprmOlstHdr[] = { 133, 212 };
-
-    pO->insert( pO->end(), aSprmOlstHdr, aSprmOlstHdr+sizeof( aSprmOlstHdr ) );
-    WW8_OLST aOlst;
-    memset( &aOlst, 0, sizeof(aOlst) );
-    sal_uInt8* pC = aOlst.rgch;
-    sal_uInt8* pChars = pC;
-    sal_uInt16 nCharLen = 64;
-
-    for (sal_uInt16 j = 0; j < WW8ListManager::nMaxLevel; j++ ) // 9 variable ANLVs
-    {
-        memcpy( &aOlst.rganlv[j], aAnlvBase, sizeof( WW8_ANLV ) );  // Defaults
-
-        const SwNumFormat* pFormat = rRule.GetNumFormat( j );
-        if( pFormat )
-            BuildAnlvBase( aOlst.rganlv[j], pChars, nCharLen, rRule,
-                            *pFormat, (sal_uInt8)j );
-    }
-
-    pO->insert( pO->end(), reinterpret_cast<sal_uInt8*>(&aOlst), reinterpret_cast<sal_uInt8*>(&aOlst)+sizeof( aOlst ) );
-}
-
 void WW8Export::Out_WwNumLvl( sal_uInt8 nWwLevel )
 {
     pO->push_back( 13 );

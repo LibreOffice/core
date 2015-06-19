@@ -2845,55 +2845,6 @@ void WW8Export::AppendSection( const SwPageDesc *pPageDesc, const SwSectionForma
 
 // Flys
 
-void WW8Export::OutWW6FlyFrmsInContent( const SwTextNode& rNd )
-{
-    assert(false); // TODO
-
-    if (const SwpHints* pTextAttrs = rNd.GetpSwpHints())
-    {
-        for( size_t n=0; n < pTextAttrs->Count(); ++n )
-        {
-            const SwTextAttr* pAttr = (*pTextAttrs)[ n ];
-            if( RES_TXTATR_FLYCNT == pAttr->Which() )
-            {
-                // attribute bound to a character
-                const SwFormatFlyCnt& rFlyContent = pAttr->GetFlyCnt();
-                const SwFlyFrameFormat& rFlyFrameFormat = *static_cast<SwFlyFrameFormat*>(rFlyContent.GetFrameFormat());
-                const SwNodeIndex* pNodeIndex = rFlyFrameFormat.GetContent().GetContentIdx();
-
-                if( pNodeIndex )
-                {
-                    sal_uLong nStt = pNodeIndex->GetIndex()+1,
-                          nEnd = pNodeIndex->GetNode().EndOfSectionIndex();
-
-                    if( (nStt < nEnd) && !m_pDoc->GetNodes()[ nStt ]->IsNoTextNode() )
-                    {
-                        Point aOffset;
-                        // get rectangle (bounding box?) of Fly and paragraph
-                        SwRect aParentRect(rNd.FindLayoutRect(false, &aOffset)),
-                               aFlyRect(rFlyFrameFormat.FindLayoutRect(false, &aOffset ) );
-
-                        aOffset = aFlyRect.Pos() - aParentRect.Pos();
-
-                        // let PaM point to content of Fly-frame format
-                        SaveData( nStt, nEnd );
-
-                        // is analysed in OutputFormat()
-                        m_pFlyOffset = &aOffset;
-                        m_eNewAnchorType = rFlyFrameFormat.GetAnchor().GetAnchorId();
-                        sw::Frame aFrm(rFlyFrameFormat, SwPosition(rNd));
-                        m_pParentFrame = &aFrm;
-                        // Ok, write it out:
-                        WriteText();
-
-                        RestoreData();
-                    }
-                }
-            }
-        }
-    }
-}
-
 void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFormat, const Point& rNdTopLeft )
 {
     const SwFrameFormat &rFrameFormat = rFormat.GetFrameFormat();

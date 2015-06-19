@@ -1438,27 +1438,6 @@ void WW8AttributeOutput::SectionType( sal_uInt8 nBreakCode )
     }
 }
 
-// TODO
-void WW8AttributeOutput::SectionWW6HeaderFooterFlags( sal_uInt8 nHeadFootFlags )
-{
-    if (nHeadFootFlags && false)
-    {
-        sal_uInt8 nTmpFlags = nHeadFootFlags;
-        if ( m_rWW8Export.pDop->fFacingPages )
-        {
-            if ( !(nTmpFlags & WW8_FOOTER_EVEN) && (nTmpFlags & WW8_FOOTER_ODD ) )
-                nTmpFlags |= WW8_FOOTER_EVEN;
-
-            if ( !(nTmpFlags & WW8_HEADER_EVEN) && (nTmpFlags & WW8_HEADER_ODD ) )
-                nTmpFlags |= WW8_HEADER_EVEN;
-        }
-
-        // sprmSGprfIhdt, is only needed in WW95
-        m_rWW8Export.pO->push_back( 153 );
-        m_rWW8Export.pO->push_back( nTmpFlags );
-    }
-}
-
 void WW8Export::SetupSectionPositions( WW8_PdAttrDesc* pA )
 {
     if ( !pA )
@@ -1705,14 +1684,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
     AttrOutput().SectionType( nBreakCode );
 
-    const SwTextNode* pNd = rSepInfo.pNumNd;
-    if ( pNd )
-    {
-        const SwNumRule* pRule = pNd->GetNumRule();
-        if ( pRule )
-            OutputOlst( *pRule );
-    }
-
     // Header or Footer
     sal_uInt8 nHeadFootFlags = 0;
 
@@ -1737,7 +1708,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
         if ( !pPd->IsFooterShared() || bLeftRightPgChain )
             MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdLeftFormat, WW8_FOOTER_EVEN );
-        AttrOutput().SectionWW6HeaderFooterFlags( nHeadFootFlags );
     }
 
     // binary filters only
