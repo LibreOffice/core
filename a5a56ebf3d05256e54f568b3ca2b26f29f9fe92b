@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_57dd1c6f",
+        "filename": "basebmp/test/bmpmasktest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-06-19T22:55:10Z",
+      "side": 1,
+      "message": "Please use basebmp::debugDump (from basebmp/debug.hxx)",
+      "revId": "a5a56ebf3d05256e54f568b3ca2b26f29f9fe92b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_77da987a",
+        "filename": "basebmp/test/tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-06-19T22:55:10Z",
+      "side": 1,
+      "message": "Something like the below exists already in basebmp/source/debug.cxx",
+      "revId": "a5a56ebf3d05256e54f568b3ca2b26f29f9fe92b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
