@@ -14,12 +14,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,liborcus,$(ORCUS_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
-	external/liborcus/0001-fix-dllexport-decls.patch \
-	external/liborcus/0001-mark-more-symbols-as-public.patch \
-	external/liborcus/0001-these-functions-are-implemented-in-liborcus.patch \
 	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 	external/liborcus/rpath.patch.0 \
-	external/liborcus/boost.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
