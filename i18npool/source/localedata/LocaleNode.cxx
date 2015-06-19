@@ -1216,7 +1216,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         {
             incErrorStr( "Error: failed to extract full date acceptance pattern: %s\n", aPattern);
             fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
-                    OSTR( OUString( cDateSep)), OSTR( sTheDateEditFormat),
+                    OSTR( OUString(&cDateSep, 1)), OSTR( sTheDateEditFormat),
                     (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
         }
         else
@@ -1224,7 +1224,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             fprintf( stderr, "Generated date acceptance pattern: '%s' from '%s' (formatindex=\"%d\" and defined DateSeparator '%s')\n",
                     OSTR( aPattern), OSTR( sTheDateEditFormat),
                     (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY,
-                    OSTR( OUString( cDateSep)));
+                    OSTR( OUString(&cDateSep, 1)));
             // Insert at front so full date pattern is first in checks.
             theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern);
         }
@@ -1235,7 +1235,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             {
                 incErrorStr( "Error: failed to extract 2nd date acceptance pattern: %s\n", aPattern2);
                 fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
-                        OSTR( OUString( cDateSep2)), OSTR( sTheDateEditFormat),
+                        OSTR( OUString(&cDateSep2, 1)), OSTR( sTheDateEditFormat),
                         (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
             }
             else
