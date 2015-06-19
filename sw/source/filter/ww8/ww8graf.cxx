@@ -923,9 +923,9 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
         long nDummy(0);
         lcl_StripFields(rString, nDummy);
         // Strip out word's special characters for the simple string
-        rString = rString.replaceAll(OUString(0x1), "");
-        rString = rString.replaceAll(OUString(0x5), "");
-        rString = rString.replaceAll(OUString(0x8), "");
+        rString = rString.replaceAll("\x01", "");
+        rString = rString.replaceAll("\x05", "");
+        rString = rString.replaceAll("\x08", "");
         rString = rString.replaceAll("\007\007", "\007\012");
         rString = rString.replace(0x7, ' ');
     }

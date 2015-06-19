@@ -1552,7 +1552,7 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
     const ContentNode* pNode = rPaM.GetNode();
     // #i50710# line breaks are marked with 0x01 - the break iterator prefers 0x0a for that
     OUString sParagraph = pNode->GetString();
-    sParagraph = sParagraph.replaceAll(OUString(0x01), OUString(0x0a));
+    sParagraph = sParagraph.replaceAll("\x01", "\x0a");
     //return Null if search starts at the beginning of the string
     sal_Int32 nStart = rPaM.GetIndex() ? _xBI->beginOfSentence( sParagraph, rPaM.GetIndex(), GetLocale( rPaM ) ) : 0;
 
