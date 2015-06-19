@@ -315,15 +315,14 @@ class wwFontHelper
 private:
     /// Keep track of fonts that need to be exported.
     ::std::map<wwFont, sal_uInt16> maFonts;
-    bool mbWrtWW8;
 
     /// Convert from fast insertion map to linear vector in the order that we want to write.
     ::std::vector< const wwFont* > AsVector() const;
 
 public:
-    wwFontHelper() : mbWrtWW8(false), bLoadAllFonts(false) {}
+    wwFontHelper() : bLoadAllFonts(false) {}
     /// rDoc used only to get the initial standard font(s) in use.
-    void InitFontTable(bool bWrtWW8, const SwDoc& rDoc);
+    void InitFontTable(const SwDoc& rDoc);
     sal_uInt16 GetId(const vcl::Font& rFont);
     sal_uInt16 GetId(const SvxFontItem& rFont);
     sal_uInt16 GetId(const wwFont& rFont);

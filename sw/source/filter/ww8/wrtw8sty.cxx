@@ -891,29 +891,27 @@ sal_uInt16 wwFontHelper::GetId(const wwFont &rFont)
     return nRet;
 }
 
-void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
+void wwFontHelper::InitFontTable(const SwDoc& rDoc)
 {
-    mbWrtWW8 = bWrtWW8;
-
     GetId(wwFont(OUString("Times New Roman"), PITCH_VARIABLE,
-        FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252,bWrtWW8));
+        FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252, true));
 
     GetId(wwFont(OUString("Symbol"), PITCH_VARIABLE, FAMILY_ROMAN,
-        RTL_TEXTENCODING_SYMBOL,bWrtWW8));
+        RTL_TEXTENCODING_SYMBOL, true));
 
     GetId(wwFont(OUString("Arial"), PITCH_VARIABLE, FAMILY_SWISS,
-        RTL_TEXTENCODING_MS_1252,bWrtWW8));
+        RTL_TEXTENCODING_MS_1252, true));
 
     const SvxFontItem* pFont = static_cast<const SvxFontItem*>(GetDfltAttr(RES_CHRATR_FONT));
 
     GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-        pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+        pFont->GetFamily(), pFont->GetCharSet(), true));
 
     const SfxItemPool& rPool = rDoc.GetAttrPool();
     if (0 != (pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_FONT))))
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-            pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+            pFont->GetFamily(), pFont->GetCharSet(), true));
     }
 
     if (!bLoadAllFonts)
@@ -929,7 +927,7 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
             if (0 != pFont)
             {
                 GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-                            pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+                            pFont->GetFamily(), pFont->GetCharSet(), true));
             }
         }
     }
@@ -938,14 +936,14 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
 sal_uInt16 wwFontHelper::GetId(const vcl::Font& rFont)
 {
     wwFont aFont(rFont.GetName(), rFont.GetPitch(), rFont.GetFamily(),
-        rFont.GetCharSet(), mbWrtWW8);
+        rFont.GetCharSet(), true);
     return GetId(aFont);
 }
 
 sal_uInt16 wwFontHelper::GetId(const SvxFontItem& rFont)
 {
     wwFont aFont(rFont.GetFamilyName(), rFont.GetPitch(), rFont.GetFamily(),
-        rFont.GetCharSet(), mbWrtWW8);
+        rFont.GetCharSet(), true);
     return GetId(aFont);
 }
 
@@ -967,10 +965,7 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
     /*
      * Reserve some space to fill in the len after we know how big it is
      */
-    if (mbWrtWW8)
-        SwWW8Writer::WriteLong(*pTableStream, 0);
-    else
-        SwWW8Writer::WriteShort(*pTableStream, 0);
+    SwWW8Writer::WriteLong(*pTableStream, 0);
 
     /*
      * Convert from fast insertion map to linear vector in the order that we
@@ -988,13 +983,7 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
      * Write the position and len in the FIB
      */
     rFib.lcbSttbfffn = pTableStream->Tell() - rFib.fcSttbfffn;
-    if (mbWrtWW8)
-        SwWW8Writer::WriteLong( *pTableStream, rFib.fcSttbfffn, maFonts.size());
-    else
-    {
-        SwWW8Writer::WriteShort( *pTableStream, rFib.fcSttbfffn,
-            (sal_Int16)rFib.lcbSttbfffn );
-    }
+    SwWW8Writer::WriteLong( *pTableStream, rFib.fcSttbfffn, maFonts.size());
 }
 
 void wwFontHelper::WriteFontTable( DocxAttributeOutput& rAttrOutput )
