@@ -185,22 +185,37 @@ void PlaceEditDialog::InitDetails( )
 
 IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, )
 {
-    if (m_xCurrentDetails.get())
+    if ( m_xCurrentDetails.get() )
     {
-        OUString sUrl = m_xCurrentDetails->getUrl().GetHost(INetURLObject::DECODE_WITH_CHARSET);
+        OUString sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DECODE_WITH_CHARSET );
         OUString sGDriveHost( GDRIVE_BASE_URL );
         OUString sAlfrescoHost( ALFRESCO_CLOUD_BASE_URL );
         OUString sOneDriveHost( ONEDRIVE_BASE_URL );
 
-        if( sUrl.compareTo(sGDriveHost, sGDriveHost.getLength()) == 0
-           || sUrl.compareTo(sAlfrescoHost, sAlfrescoHost.getLength()) == 0
-           || sUrl.compareTo(sOneDriveHost, sOneDriveHost.getLength()) == 0 )
+        if ( sUrl.compareTo( sGDriveHost, sGDriveHost.getLength() ) == 0
+           || sUrl.compareTo( sAlfrescoHost, sAlfrescoHost.getLength() ) == 0
+           || sUrl.compareTo( sOneDriveHost, sOneDriveHost.getLength() ) == 0 )
         {
             m_pBTRepoRefresh->Click();
+
+            sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DECODE_WITH_CHARSET );
+            INetURLObject aHostUrl( sUrl );
+            OUString sRepoId = aHostUrl.GetMark();
+
+            if ( !sRepoId.isEmpty() )
+            {
+                EndDialog( RET_OK );
+            }
+            else
+            {
+                // TODO: repository id missing. Auth error?
+            }
+        }
+        else
+        {
+            EndDialog( RET_OK );
         }
     }
-
-    EndDialog( RET_OK );
 
     return 1;
 }
