@@ -204,22 +204,9 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             0x0a, 0x08, 1,          // sprmCFOLE2
             0x56, 0x08, 1           // sprmCFObj
         };
-    static sal_uInt8 aSpecOLE_WW6[] = {
-            68, 4, 0, 0, 0, 0,      // sprmCPicLocation (len is 4)
-            75, 1,                  // sprmCFOLE2
-            118, 1                  // sprmCFObj
-        };
 
-    if ( bWrtWW8 )
-    {
-        pSpecOLE = aSpecOLE_WW8;
-        nSize = sizeof( aSpecOLE_WW8 );
-    }
-    else
-    {
-        pSpecOLE = aSpecOLE_WW6;
-        nSize = sizeof( aSpecOLE_WW6 );
-    }
+    pSpecOLE = aSpecOLE_WW8;
+    nSize = sizeof( aSpecOLE_WW8 );
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
 
     tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(
@@ -445,30 +432,18 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
                     GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
                 nHeight-=nFontHeight/20;
 
-                if (bWrtWW8)
-                    Set_UInt16( pArr, NS_sprm::LN_CHpsPos );
-                else
-                    Set_UInt8( pArr, 101 );
+                Set_UInt16( pArr, NS_sprm::LN_CHpsPos );
                 Set_UInt16( pArr, -((sal_Int16)nHeight));
             }
         }
     }
 
     // sprmCFSpec
-    if( bWrtWW8 )
-        Set_UInt16( pArr, 0x855 );
-    else
-        Set_UInt8( pArr, 117 );
+    Set_UInt16( pArr, 0x855 );
     Set_UInt8( pArr, 1 );
 
     // sprmCPicLocation
-    if( bWrtWW8 )
-        Set_UInt16( pArr, NS_sprm::LN_CPicLocation );
-    else
-    {
-        Set_UInt8( pArr, 68 );
-        Set_UInt8( pArr, 4 );
-    }
+    Set_UInt16( pArr, NS_sprm::LN_CPicLocation );
     Set_UInt32( pArr, GRF_MAGIC_321 );
 
     // vary Magic, so that different graphic attributes will not be merged
@@ -482,7 +457,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
     if ( !rFrame.IsInline() &&
-         ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !IsInTable() )) ||
+         ( ((eAn == FLY_AT_PARA)) ||
            (eAn == FLY_AT_PAGE)) )
     {
         WriteChar( (char)0x0d ); // close the surrounding frame with CR
@@ -548,8 +523,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     }
 
     Size aGrTwipSz(rFly.GetSize());
-    bool bWrtWW8 = rWrt.bWrtWW8;
-    sal_uInt16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
+    sal_uInt16 nHdrLen = 0x44;
 
     sal_uInt8 aArr[ 0x44 ] = { 0 };
 
@@ -605,11 +579,8 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                 memcpy( pArr, &aBrc.aBits1, 2);
                 pArr+=2;
 
-                if( bWrtWW8 )
-                {
-                    memcpy( pArr, &aBrc.aBits2, 2);
-                    pArr+=2;
-                }
+                memcpy( pArr, &aBrc.aBits2, 2);
+                pArr+=2;
             }
         }
     }
@@ -704,43 +675,11 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
     }
     else                                // Embedded File or DDE or something like that
     {
-        if (rWrt.bWrtWW8)
-        {
-            WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
-                rGrfNd.GetpSwAttrSet());
-            SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
-            aInlineEscher.WriteGrfFlyFrame(rFly.GetFrameFormat(), 0x401);
-            aInlineEscher.WritePictures();
-        }
-        else
-        {
-            Graphic& rGrf = const_cast<Graphic&>(rGrfNd.GetGrf());
-
-            GDIMetaFile aMeta;
-            switch (rGrf.GetType())
-            {
-                case GRAPHIC_BITMAP:        // Bitmap -> play in Metafile
-                    {
-                        ScopedVclPtrInstance< VirtualDevice > pVirt;
-                        aMeta.Record(pVirt.get());
-                        pVirt->DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
-                        aMeta.Stop();
-                        aMeta.WindStart();
-                        aMeta.SetPrefMapMode( rGrf.GetPrefMapMode());
-                        aMeta.SetPrefSize( rGrf.GetPrefSize());
-                    }
-                    break;
-                case GRAPHIC_GDIMETAFILE :      // GDI ( =SV ) Metafile
-                    aMeta = rGrf.GetGDIMetaFile();
-                    break;
-                default:
-                    return;
-            }
-
-            WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
-                rGrfNd.GetpSwAttrSet());
-            WriteWindowMetafileBits(rStrm, aMeta);
-        }
+        WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
+            rGrfNd.GetpSwAttrSet());
+        SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+        aInlineEscher.WriteGrfFlyFrame(rFly.GetFrameFormat(), 0x401);
+        aInlineEscher.WritePictures();
     }
 }
 //For i120928,export graphic info of bullet
@@ -751,8 +690,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     sal_Int16 nCropL = 0, nCropR = 0, nCropT = 0, nCropB = 0;
 
     Size aGrTwipSz(rGrf.GetPrefSize());
-    bool bWrtWW8 = rWrt.bWrtWW8;
-    sal_uInt16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
+    sal_uInt16 nHdrLen = 0x44;
 
     sal_uInt8 aArr[ 0x44 ] = { 0 };
 
@@ -781,11 +719,8 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
         memcpy( pArr, &aBrc.aBits1, 2);
         pArr+=2;
 
-        if( bWrtWW8 )
-        {
-            memcpy( pArr, &aBrc.aBits2, 2);
-            pArr+=2;
-        }
+        memcpy(pArr, &aBrc.aBits2, 2);
+        pArr+=2;
     }
 
     pArr = aArr + 4;                                //skip lcb
@@ -835,38 +770,10 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
 
 void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight)
 {
-    if (rWrt.bWrtWW8)
-    {
-        WritePICBulletFHeader(rStrm,rGrf, 0x64,nWidth,nHeight);
-        SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
-        aInlineEscher.WriteGrfBullet(rGrf);
-        aInlineEscher.WritePictures();
-    }
-    else
-    {
-        GDIMetaFile aMeta;
-        switch (rGrf.GetType())
-        {
-            case GRAPHIC_BITMAP:        // Bitmap -> in Metafile abspielen
-            {
-                ScopedVclPtrInstance< VirtualDevice > pVirt;
-                aMeta.Record(pVirt.get());
-                pVirt->DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
-                aMeta.Stop();
-                aMeta.WindStart();
-                aMeta.SetPrefMapMode( rGrf.GetPrefMapMode());
-                aMeta.SetPrefSize( rGrf.GetPrefSize());
-            }
-            break;
-            case GRAPHIC_GDIMETAFILE :      // GDI ( =SV ) Metafile
-                aMeta = rGrf.GetGDIMetaFile();
-            break;
-            default:
-                return;
-        }
-        WritePICBulletFHeader(rStrm, rGrf, 8, nWidth, nHeight);
-        WriteWindowMetafileBits(rStrm, aMeta);
-    }
+    WritePICBulletFHeader(rStrm,rGrf, 0x64,nWidth,nHeight);
+    SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+    aInlineEscher.WriteGrfBullet(rGrf);
+    aInlineEscher.WritePictures();
 }
 
 void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
@@ -906,48 +813,15 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             if (pNd)
             {
 #ifdef OLE_PREVIEW_AS_EMF
-                if (!rWrt.bWrtWW8)
-                {
-                    SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
-                    SwOLEObj& rSObj = pOleNd->GetOLEObj();
-                    uno::Reference < embed::XEmbeddedObject > rObj(  rSObj.GetOleRef() );
-
-                    comphelper::EmbeddedObjectContainer aCnt( pOleNd->GetDoc()->GetDocStorage() );
-
-                    SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( rObj ) );
-                    OSL_ENSURE( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
-                    if ( pGraphicStream && !pGraphicStream->GetError() )
-                    {
-                        Graphic aGr;
-                        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-                        if( rGF.ImportGraphic( aGr, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
-                        {
-                            //TODO/LATER: do we really want to use GDIMetafile?!
-                            GDIMetaFile aMtf;
-                            aMtf = aGr.GetGDIMetaFile();
-                            aMtf.WindStart();
-                            aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
-                                Size(2880, 2880));
-                            WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
-                                pNd->GetpSwAttrSet());
-                            WriteWindowMetafileBits(rStrm, aMtf);
-                        }
-                    }
-                    else
-                        delete pGraphicStream;
-                }
-                else
-                {
-                    //Convert this ole2 preview in ww8+ to an EMF for better unicode
-                    //support (note that at this moment this breaks StarSymbol
-                    //using graphics because I need to embed starsymbol in exported
-                    //documents.
-                    WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
-                        pNd->GetpSwAttrSet());
-                    SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
-                    aInlineEscher.WriteOLEFlyFrame(rFly.GetFrameFormat(), 0x401);
-                    aInlineEscher.WritePictures();
-                }
+                //Convert this ole2 preview in ww8+ to an EMF for better unicode
+                //support (note that at this moment this breaks StarSymbol
+                //using graphics because I need to embed starsymbol in exported
+                //documents.
+                WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
+                    pNd->GetpSwAttrSet());
+                SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+                aInlineEscher.WriteOLEFlyFrame(rFly.GetFrameFormat(), 0x401);
+                aInlineEscher.WritePictures();
 #else
                 // cast away const
                 SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
@@ -977,8 +851,6 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         case sw::Frame::eDrawing:
         case sw::Frame::eTextBox:
         case sw::Frame::eFormControl:
-            OSL_ENSURE(rWrt.bWrtWW8,
-                "You can't try and export these in WW8 format, a filter bug");
             /*
             #i3958# We only export an empty dummy picture frame here, this is
             what word does the escher export should contain an anchored to
@@ -986,7 +858,6 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             shebang surrounded with a SHAPE field. This isn't *my* hack :-),
             its what word does.
             */
-            if (rWrt.bWrtWW8)
             {
                 WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight);
                 SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
