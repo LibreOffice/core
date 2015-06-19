@@ -5078,6 +5078,8 @@ bool ScCompiler::HandleTableRef()
                 break;
         }
         bool bColumnRange = false;
+        bool bCol1Rel = false;
+        bool bCol2Rel = false;
         int nLevel = 0;
         if (bForwardToClose && GetTokenIfOpCode( ocTableRefOpen))
         {
@@ -5127,6 +5129,7 @@ bool ScCompiler::HandleTableRef()
                             if (eState == sOpen && p->GetType() == svSingleRef)
                             {
                                 bColumnRange = true;
+                                bCol1Rel = p->GetSingleRef()->IsColRel();
                                 eState = sLast;
                             }
                             else
@@ -5172,6 +5175,7 @@ bool ScCompiler::HandleTableRef()
                                 {
                                     aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
                                     aColRange.Justify();
+                                    bCol2Rel = mpToken->GetSingleRef()->IsColRel();
                                 }
                             }
                         }
@@ -5193,7 +5197,7 @@ bool ScCompiler::HandleTableRef()
                 {
                     ScSingleRefData aRefData;
                     aRefData.InitFlags();
-                    aRefData.SetColRel( true);
+                    aRefData.SetColRel( bCol1Rel);
                     if (eItem == ScTableRefToken::THIS_ROW)
                     {
                         aRefData.SetRowRel( true);
@@ -5211,8 +5215,8 @@ bool ScCompiler::HandleTableRef()
                 {
                     ScComplexRefData aRefData;
                     aRefData.InitFlags();
-                    aRefData.Ref1.SetColRel( true);
-                    aRefData.Ref2.SetColRel( true);
+                    aRefData.Ref1.SetColRel( bCol1Rel);
+                    aRefData.Ref2.SetColRel( bCol2Rel);
                     if (eItem == ScTableRefToken::THIS_ROW)
                     {
                         aRefData.Ref1.SetRowRel( true);
