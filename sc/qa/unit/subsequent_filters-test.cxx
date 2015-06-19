@@ -1293,29 +1293,40 @@ void ScFiltersTest::testDataTableMortgageXLS()
 
     // One-variable table
 
-    checkFormula(rDoc, ScAddress(3,1,0), "PMT(B3/12,B4,-B5)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(3,1,0), "PMT(B3/12,B4,-B5)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(3,2,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C3)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(3,2,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C3)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(3,3,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C4)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(3,3,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C4)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(3,4,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C5)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(3,4,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C5)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     // Two-variable table
 
-    checkFormula(rDoc, ScAddress(2,7,0), "PMT(B9/12,B10,-B11)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(2,7,0), "PMT(B9/12,B10,-B11)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(3,8,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(3,8,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(3,9,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(3,9,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(3,10,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(3,10,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(4,8,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(4,8,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(4,9,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(4,9,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
-    checkFormula(rDoc, ScAddress(4,10,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(4,10,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     xDocSh->DoClose();
 }
@@ -1341,22 +1352,26 @@ void ScFiltersTest::testDataTableOneVarXLSX()
     // B5:B11 should have multiple operations formula cells.  Just check the
     // top and bottom cells.
 
-    checkFormula(rDoc, ScAddress(1,4,0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A5)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(1,4,0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A5)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(1,4,0)));
 
-    checkFormula(rDoc, ScAddress(1,10,0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A11)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(1,10,0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A11)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     CPPUNIT_ASSERT_EQUAL(14.0, rDoc.GetValue(ScAddress(1,10,0)));
 
     // Likewise, E5:I5 should have multiple operations formula cells.  Just
     // check the left- and right-most cells.
 
-    checkFormula(rDoc, ScAddress(4,4,0), "MULTIPLE.OPERATIONS($D5,$B$2,E$4)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(4,4,0), "MULTIPLE.OPERATIONS($D5,$B$2,E$4)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(4,4,0)));
 
-    checkFormula(rDoc, ScAddress(8,4,0), "MULTIPLE.OPERATIONS($D5,$B$2,I$4)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(8,4,0), "MULTIPLE.OPERATIONS($D5,$B$2,I$4)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     CPPUNIT_ASSERT_EQUAL(50.0, rDoc.GetValue(ScAddress(8,4,0)));
 
@@ -1384,11 +1399,13 @@ void ScFiltersTest::testDataTableMultiTableXLSX()
     // B4:M15 should have multiple operations formula cells.  We'll just check
     // the top-left and bottom-right ones.
 
-    checkFormula(rDoc, ScAddress(1,3,0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(1,3,0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(1,3,0)));
 
-    checkFormula(rDoc, ScAddress(12,14,0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)", "Wrong formula!");
+    if (!checkFormula(rDoc, ScAddress(12,14,0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     CPPUNIT_ASSERT_EQUAL(144.0, rDoc.GetValue(ScAddress(12,14,0)));
 
@@ -3013,7 +3030,8 @@ void ScFiltersTest::testErrorOnExternalReferences()
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoName, pFC->GetErrCode());
 
-    checkFormula(rDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A", "Formula changed");
+    if (!checkFormula(rDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A"))
+        CPPUNIT_FAIL("Formula changed");
 
     xDocSh->DoClose();
 }

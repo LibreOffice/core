@@ -92,6 +92,7 @@ void Test::setUp()
         SfxModelFlags::EMBEDDED_OBJECT |
         SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
         SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+
     m_pDoc = &m_xDocShRef->GetDocument();
 }
 

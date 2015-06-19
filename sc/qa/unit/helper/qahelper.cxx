@@ -423,43 +423,24 @@ ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
 
 }
 
-void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected, const char * pFailMessage, bool& rPass)
-{
-    rPass = true;
-    ScTokenArray* pCode = getTokens(rDoc, rPos);
-    if (!pCode)
-    {
-        cerr << "Empty token array." << endl;
-        rPass = false;
-        CPPUNIT_FAIL(pFailMessage);
-    }
-
-    OUString aFormula = toString(rDoc, rPos, *pCode, rDoc.GetGrammar());
-    if (aFormula != OUString::createFromAscii(pExpected))
-    {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("The expected and actual value differ.", OUString::createFromAscii(pExpected), aFormula);
-        CPPUNIT_FAIL(pFailMessage);
-        rPass = false;
-    }
-}
-
-void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected, const char * pFailMessage)
+bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected)
 {
     ScTokenArray* pCode = getTokens(rDoc, rPos);
     if (!pCode)
     {
         cerr << "Empty token array." << endl;
-        CPPUNIT_FAIL(pFailMessage);
+        return false;
     }
 
     OUString aFormula = toString(rDoc, rPos, *pCode, rDoc.GetGrammar());
     if (aFormula != OUString::createFromAscii(pExpected))
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("The expected and actual value differ.", OUString::createFromAscii(pExpected), aFormula);
-        CPPUNIT_FAIL(pFailMessage);
+        cerr << "Formula '" << pExpected << "' expected, but '" << aFormula << "' found" << endl;
+        return false;
     }
-}
 
+    return true;
+}
 
 bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
 {
