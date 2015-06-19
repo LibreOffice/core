@@ -303,6 +303,9 @@ void SdTiledRenderingTest::testGetTextSelection()
     rEditView.SetSelection(aWordSelection);
     // Did we indeed manage to copy the selected text?
     CPPUNIT_ASSERT_EQUAL(OString("Shape"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8"));
+
+    // Make sure returned RTF is not empty.
+    CPPUNIT_ASSERT(!OString(pXImpressDocument->getTextSelection("text/richtext")).isEmpty());
 }
 
 void SdTiledRenderingTest::testSetGraphicSelection()
