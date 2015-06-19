@@ -407,18 +407,15 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal
 
     pData += sizeof( sal_uInt16 );      // bchUpe
 
-    if( m_rWW8Export.bWrtWW8 )
-    {
-        nBit16 = bAutoUpdate ? 1 : 0;  // fAutoRedef : 1
-        Set_UInt16( pData, nBit16 );
-        // jetzt neu:
-        // ab Ver8 gibts zwei Felder mehr:
-        // sal_uInt16    fHidden : 1;       /* hidden from UI?
-        // sal_uInt16    : 14;              /* unused bits
-    }
+    nBit16 = bAutoUpdate ? 1 : 0;  // fAutoRedef : 1
+    Set_UInt16( pData, nBit16 );
+    // jetzt neu:
+    // ab Ver8 gibts zwei Felder mehr:
+    // sal_uInt16    fHidden : 1;       /* hidden from UI?
+    // sal_uInt16    : 14;              /* unused bits
 
     sal_uInt16 nLen = static_cast< sal_uInt16 >( ( pData - aWW8_STD ) + 1 +
-                ((m_rWW8Export.bWrtWW8 ? 2 : 1 ) * (rName.getLength() + 1)) );  // temporary
+                (2 * (rName.getLength() + 1)) );  // temporary
 
     nPOPosStdLen1 = m_rWW8Export.pO->size();        // Adr1 zum nachtragen der Laenge
 
@@ -428,16 +425,8 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal
     nPOPosStdLen2 = nPOPosStdLen1 + 8;  // Adr2 zum nachtragen von "end of upx"
 
     // write names
-    if( m_rWW8Export.bWrtWW8 )
-    {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rName.getLength() ); // length
-        SwWW8Writer::InsAsString16( *m_rWW8Export.pO, rName );
-    }
-    else
-    {
-        m_rWW8Export.pO->push_back( (sal_uInt8)rName.getLength() );       // length
-        SwWW8Writer::InsAsString8( *m_rWW8Export.pO, rName, RTL_TEXTENCODING_MS_1252 );
-    }
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rName.getLength() ); // length
+    SwWW8Writer::InsAsString16( *m_rWW8Export.pO, rName );
     m_rWW8Export.pO->push_back( (sal_uInt8)0 );             // Trotz P-String 0 am Ende!
 }
 
@@ -561,22 +550,8 @@ void WW8AttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 {
     if ( nStyle == 10 )           // Default Char-Style ( only WW )
     {
-        if ( m_rWW8Export.bWrtWW8 )
-        {
-            sal_uInt16 n = 0;
-            m_rWW8Export.pTableStrm->Write( &n , 2 );   // empty Style
-        }
-        else
-        {
-            static sal_uInt8 aDefCharSty[] = {
-                0x26, 0x00,
-                0x41, 0x40, 0xF2, 0xFF, 0xA1, 0x00, 0x26, 0x00,
-                0x19, 0x41, 0x62, 0x73, 0x61, 0x74, 0x7A, 0x2D,
-                0x53, 0x74, 0x61, 0x6E, 0x64, 0x61, 0x72, 0x64,
-                0x73, 0x63, 0x68, 0x72, 0x69, 0x66, 0x74, 0x61,
-                0x72, 0x74, 0x00, 0x00, 0x00, 0x00 };
-            m_rWW8Export.pTableStrm->Write( &aDefCharSty, sizeof( aDefCharSty ) );
-        }
+        sal_uInt16 n = 0;
+        m_rWW8Export.pTableStrm->Write( &n , 2 );   // empty Style
     }
     else
     {
@@ -663,24 +638,13 @@ void WW8AttributeOutput::StartStyles()
     rFib.fcStshfOrig = rFib.fcStshf = nCurPos;
     m_nStyAnzPos = nCurPos + 2;     // Anzahl wird nachgetragen
 
-    if ( m_rWW8Export.bWrtWW8 )
-    {
-        static sal_uInt8 aStShi[] = {
-            0x12, 0x00,
-            0x0F, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x5B, 0x00,
-            0x0F, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00 };
+    static sal_uInt8 aStShi[] = {
+        0x12, 0x00,
+        0x0F, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x5B, 0x00,
+        0x0F, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00 };
 
-        m_rWW8Export.pTableStrm->Write( &aStShi, sizeof( aStShi ) );
-    }
-    else
-    {
-        static sal_uInt8 aStShi[] = {
-            0x0E, 0x00,
-            0x0F, 0x00, 0x08, 0x00, 0x01, 0x00, 0x4B, 0x00,
-            0x0F, 0x00, 0x00, 0x00, 0x00, 0x00 };
-        m_rWW8Export.pTableStrm->Write( &aStShi, sizeof( aStShi ) );
-    }
+    m_rWW8Export.pTableStrm->Write( &aStShi, sizeof( aStShi ) );
 }
 
 void WW8AttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
@@ -1183,11 +1147,10 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
     if( !rInfo.aErgoSum.isEmpty() )  nInfoFlags |= 0x02;
     if( !rInfo.aQuoVadis.isEmpty() ) nInfoFlags |= 0x04;
 
-    sal_uInt8 nEmptyStt = rWrt.bWrtWW8 ? 0 : 6;
+    sal_uInt8 nEmptyStt = 0;
     if( nInfoFlags )
     {
-        if( rWrt.bWrtWW8 )
-            pTextPos->Append( nCpStt );  // empty footnote separator
+        pTextPos->Append( nCpStt );  // empty footnote separator
 
         if( 0x02 & nInfoFlags )         // Footnote continuation separator
         {
@@ -1196,7 +1159,7 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
             rWrt.WriteStringAsPara( OUString() );
             nCpStt = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
-        else if( rWrt.bWrtWW8 )
+        else
             pTextPos->Append( nCpStt );
 
         if( 0x04 & nInfoFlags )         // Footnote continuation notice
@@ -1206,13 +1169,10 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
             rWrt.WriteStringAsPara( OUString() );
             nCpStt = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
-        else if( rWrt.bWrtWW8 )
+        else
             pTextPos->Append( nCpStt );
 
-        if( rWrt.bWrtWW8 )
-            nEmptyStt = 3;
-        else
-            rWrt.pDop->grpfIhdt = nInfoFlags;
+        nEmptyStt = 3;
     }
 
     while( 6 > nEmptyStt++ )
@@ -1270,7 +1230,7 @@ void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
         rWrt.WriteStringAsPara( OUString() ); // CR ans Ende ( sonst mault WW )
         rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     }
-    else if ( rWrt.bWrtWW8 )
+    else
     {
         pTextPos->Append( rCpPos );
         if ((bHeader? rWrt.m_bHasHdr : rWrt.m_bHasFtr) && nBreakCode!=0)
@@ -1379,10 +1339,7 @@ void WW8AttributeOutput::SectionFormProtection( bool bProtected )
     //is not protected, set the unlocked flag
     if ( m_rWW8Export.pSepx->DocumentIsProtected() && !bProtected )
     {
-        if ( m_rWW8Export.bWrtWW8 )
-            SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFProtected );
-        else
-            m_rWW8Export.pO->push_back( 139 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFProtected );
         m_rWW8Export.pO->push_back( 1 );
     }
 }
@@ -1390,36 +1347,24 @@ void WW8AttributeOutput::SectionFormProtection( bool bProtected )
 void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
     // sprmSNLnnMod - activate Line Numbering and define Modulo
-    if ( m_rWW8Export.bWrtWW8 )
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SNLnnMod );
-    else
-        m_rWW8Export.pO->push_back( 154 );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SNLnnMod );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)rLnNumInfo.GetCountBy() );
 
     // sprmSDxaLnn - xPosition of Line Number
-    if ( m_rWW8Export.bWrtWW8 )
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SDxaLnn );
-    else
-        m_rWW8Export.pO->push_back( 155 );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SDxaLnn );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)rLnNumInfo.GetPosFromLeft() );
 
     // sprmSLnc - restart number: 0 per page, 1 per section, 2 never restart
     if ( nRestartNo || !rLnNumInfo.IsRestartEachPage() )
     {
-        if ( m_rWW8Export.bWrtWW8 )
-            SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SLnc );
-        else
-            m_rWW8Export.pO->push_back( 152 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SLnc );
         m_rWW8Export.pO->push_back( nRestartNo ? 1 : 2 );
     }
 
     // sprmSLnnMin - Restart the Line Number with given value
     if ( nRestartNo )
     {
-        if ( m_rWW8Export.bWrtWW8 )
-            SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SLnnMin );
-        else
-            m_rWW8Export.pO->push_back( 160 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SLnnMin );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)nRestartNo - 1 );
     }
 }
@@ -1427,76 +1372,59 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
 void WW8AttributeOutput::SectionTitlePage()
 {
     // sprmSFTitlePage
-    if ( m_rWW8Export.bWrtWW8 )
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFTitlePage );
-    else
-        m_rWW8Export.pO->push_back( 143 );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFTitlePage );
     m_rWW8Export.pO->push_back( 1 );
 }
 
 void WW8AttributeOutput::SectionPageBorders( const SwFrameFormat* pPdFormat, const SwFrameFormat* pPdFirstPgFormat )
 {
-    if ( m_rWW8Export.bWrtWW8 )              // write border of page
+    // write border of page
+    sal_uInt16 nPgBorder = MSWordSections::HasBorderItem( *pPdFormat ) ? 0 : USHRT_MAX;
+    if ( pPdFormat != pPdFirstPgFormat )
     {
-        sal_uInt16 nPgBorder = MSWordSections::HasBorderItem( *pPdFormat ) ? 0 : USHRT_MAX;
-        if ( pPdFormat != pPdFirstPgFormat )
+        if ( MSWordSections::HasBorderItem( *pPdFirstPgFormat ) )
         {
-            if ( MSWordSections::HasBorderItem( *pPdFirstPgFormat ) )
+            if ( USHRT_MAX == nPgBorder )
             {
-                if ( USHRT_MAX == nPgBorder )
-                {
-                    nPgBorder = 1;
-                    // only the first page outlined -> Get the BoxItem from the correct format
-                    m_rWW8Export.m_pISet = &pPdFirstPgFormat->GetAttrSet();
-                    OutputItem( pPdFirstPgFormat->GetFormatAttr( RES_BOX ) );
-                }
+                nPgBorder = 1;
+                // only the first page outlined -> Get the BoxItem from the correct format
+                m_rWW8Export.m_pISet = &pPdFirstPgFormat->GetAttrSet();
+                OutputItem( pPdFirstPgFormat->GetFormatAttr( RES_BOX ) );
             }
-            else if ( !nPgBorder )
-                nPgBorder = 2;
         }
+        else if ( !nPgBorder )
+            nPgBorder = 2;
+    }
 
-        if ( USHRT_MAX != nPgBorder )
-        {
-            // write the Flag and Border Attribute
-            SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SPgbProp );
-            SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nPgBorder );
-        }
+    if ( USHRT_MAX != nPgBorder )
+    {
+        // write the Flag and Border Attribute
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SPgbProp );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nPgBorder );
     }
 }
 
 void WW8AttributeOutput::SectionBiDi( bool bBiDi )
 {
-    if ( m_rWW8Export.bWrtWW8 )
-    {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFBiDi );
-        m_rWW8Export.pO->push_back( bBiDi? 1: 0 );
-    }
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFBiDi );
+    m_rWW8Export.pO->push_back( bBiDi? 1: 0 );
 }
 
 void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::boost::optional<sal_uInt16>& oPageRestartNumber )
 {
     // sprmSNfcPgn
     sal_uInt8 nb = WW8Export::GetNumId( nNumType );
-    if ( m_rWW8Export.bWrtWW8 )
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SNfcPgn );
-    else
-        m_rWW8Export.pO->push_back( 147 );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SNfcPgn );
     m_rWW8Export.pO->push_back( nb );
 
     if ( oPageRestartNumber )
     {
         // sprmSFPgnRestart
-        if ( m_rWW8Export.bWrtWW8 )
-            SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFPgnRestart );
-        else
-            m_rWW8Export.pO->push_back( 150 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFPgnRestart );
         m_rWW8Export.pO->push_back( 1 );
 
         // sprmSPgnStart
-        if ( m_rWW8Export.bWrtWW8 )
-            SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SPgnStart );
-        else
-            m_rWW8Export.pO->push_back( 161 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SPgnStart );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, oPageRestartNumber.get() );
     }
 }
@@ -1505,17 +1433,15 @@ void WW8AttributeOutput::SectionType( sal_uInt8 nBreakCode )
 {
     if ( 2 != nBreakCode ) // new page is the default
     {
-        if ( m_rWW8Export.bWrtWW8 )
-            SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SBkc );
-        else
-            m_rWW8Export.pO->push_back( 142 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SBkc );
         m_rWW8Export.pO->push_back( nBreakCode );
     }
 }
 
+// TODO
 void WW8AttributeOutput::SectionWW6HeaderFooterFlags( sal_uInt8 nHeadFootFlags )
 {
-    if ( nHeadFootFlags && !m_rWW8Export.bWrtWW8 )
+    if (nHeadFootFlags && false)
     {
         sal_uInt8 nTmpFlags = nHeadFootFlags;
         if ( m_rWW8Export.pDop->fFacingPages )
@@ -2290,25 +2216,12 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 for (i = 0; i < aRangeEndPos.size(); ++i)
                     aStartEndMap[aAtnStartMap[ aRangeEndPos[i].second ]] = i;
 
-                if ( rWrt.bWrtWW8 )
+                for ( i = 0; i < aStrArr.size(); ++i )
                 {
-                    for ( i = 0; i < aStrArr.size(); ++i )
-                    {
-                        const OUString& sAuthor = aStrArr[i].first;
-                        SwWW8Writer::WriteShort(*rWrt.pTableStrm, sAuthor.getLength());
-                        SwWW8Writer::WriteString16(*rWrt.pTableStrm, sAuthor,
-                                false);
-                    }
-                }
-                else
-                {
-                    for ( i = 0; i < aStrArr.size(); ++i )
-                    {
-                        const OUString& sAuthor = aStrArr[i].first;
-                        rWrt.pTableStrm->WriteUChar( sAuthor.getLength() );
-                        SwWW8Writer::WriteString8(*rWrt.pTableStrm, sAuthor, false,
-                                RTL_TEXTENCODING_MS_1252);
-                    }
+                    const OUString& sAuthor = aStrArr[i].first;
+                    SwWW8Writer::WriteShort(*rWrt.pTableStrm, sAuthor.getLength());
+                    SwWW8Writer::WriteString16(*rWrt.pTableStrm, sAuthor,
+                            false);
                 }
 
                 rFib.fcGrpStAtnOwners = nFcStart;
@@ -2316,81 +2229,75 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 rFib.lcbGrpStAtnOwners = nFcStart - rFib.fcGrpStAtnOwners;
 
                 // Commented text ranges
-                if ( rWrt.bWrtWW8 )
+                if( aRangeStartPos.size() > 0 )
                 {
-                    if( aRangeStartPos.size() > 0 )
+                    // Commented text ranges starting positions (Plcfbkf.aCP)
+                    rFib.fcPlcfAtnbkf = nFcStart;
+                    for ( i = 0; i < aRangeStartPos.size(); ++i )
                     {
-                        // Commented text ranges starting positions (Plcfbkf.aCP)
-                        rFib.fcPlcfAtnbkf = nFcStart;
-                        for ( i = 0; i < aRangeStartPos.size(); ++i )
-                        {
-                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeStartPos[i].first );
-                        }
-                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
-
-                        // Commented text ranges additional information (Plcfbkf.aFBKF)
-                        for ( i = 0; i < aRangeStartPos.size(); ++i )
-                        {
-                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, aStartEndMap[i] ); // FBKF.ibkl
-                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 ); // FBKF.bkc
-                        }
-
-                        nFcStart = rWrt.pTableStrm->Tell();
-                        rFib.lcbPlcfAtnbkf = nFcStart - rFib.fcPlcfAtnbkf;
-
-                        // Commented text ranges ending positions (PlcfBkl.aCP)
-                        rFib.fcPlcfAtnbkl = nFcStart;
-                        for ( i = 0; i < aRangeEndPos.size(); ++i )
-                        {
-                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i].first );
-                        }
-                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
-
-                        nFcStart = rWrt.pTableStrm->Tell();
-                        rFib.lcbPlcfAtnbkl = nFcStart - rFib.fcPlcfAtnbkl;
-
-                        // Commented text ranges as bookmarks (SttbfAtnBkmk)
-                        rFib.fcSttbfAtnbkmk = nFcStart;
-                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, (sal_Int16)(sal_uInt16)0xFFFF ); // SttbfAtnBkmk.fExtend
-                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, aRangeStartPos.size() ); // SttbfAtnBkmk.cData
-                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xA );                   // SttbfAtnBkmk.cbExtra
-
-                        for ( i = 0; i < aRangeStartPos.size(); ++i )
-                        {
-                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );         // SttbfAtnBkmk.cchData
-                            // One ATNBE structure for all text ranges
-                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0x0100 );    // ATNBE.bmc
-                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, aStartAtnMap[i] );          // ATNBE.lTag
-                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, -1 );         // ATNBE.lTagOld
-                        }
-
-                        nFcStart = rWrt.pTableStrm->Tell();
-                        rFib.lcbSttbfAtnbkmk = nFcStart - rFib.fcSttbfAtnbkmk;
+                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeStartPos[i].first );
                     }
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
+
+                    // Commented text ranges additional information (Plcfbkf.aFBKF)
+                    for ( i = 0; i < aRangeStartPos.size(); ++i )
+                    {
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, aStartEndMap[i] ); // FBKF.ibkl
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 ); // FBKF.bkc
+                    }
+
+                    nFcStart = rWrt.pTableStrm->Tell();
+                    rFib.lcbPlcfAtnbkf = nFcStart - rFib.fcPlcfAtnbkf;
+
+                    // Commented text ranges ending positions (PlcfBkl.aCP)
+                    rFib.fcPlcfAtnbkl = nFcStart;
+                    for ( i = 0; i < aRangeEndPos.size(); ++i )
+                    {
+                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i].first );
+                    }
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
+
+                    nFcStart = rWrt.pTableStrm->Tell();
+                    rFib.lcbPlcfAtnbkl = nFcStart - rFib.fcPlcfAtnbkl;
+
+                    // Commented text ranges as bookmarks (SttbfAtnBkmk)
+                    rFib.fcSttbfAtnbkmk = nFcStart;
+                    SwWW8Writer::WriteShort( *rWrt.pTableStrm, (sal_Int16)(sal_uInt16)0xFFFF ); // SttbfAtnBkmk.fExtend
+                    SwWW8Writer::WriteShort( *rWrt.pTableStrm, aRangeStartPos.size() ); // SttbfAtnBkmk.cData
+                    SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xA );                   // SttbfAtnBkmk.cbExtra
+
+                    for ( i = 0; i < aRangeStartPos.size(); ++i )
+                    {
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );         // SttbfAtnBkmk.cchData
+                        // One ATNBE structure for all text ranges
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0x0100 );    // ATNBE.bmc
+                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aStartAtnMap[i] );          // ATNBE.lTag
+                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, -1 );         // ATNBE.lTagOld
+                    }
+
+                    nFcStart = rWrt.pTableStrm->Tell();
+                    rFib.lcbSttbfAtnbkmk = nFcStart - rFib.fcSttbfAtnbkmk;
                 }
 
                 // Write the extended >= Word XP ATRD records
-                if( rWrt.bWrtWW8 )
+                for( i = 0; i < nLen; ++i )
                 {
-                    for( i = 0; i < nLen; ++i )
-                    {
-                        const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
+                    const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
 
-                        sal_uInt32 nDTTM = sw::ms::DateTime2DTTM(rAtn.maDateTime);
+                    sal_uInt32 nDTTM = sw::ms::DateTime2DTTM(rAtn.maDateTime);
 
-                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, nDTTM );
-                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );
-                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );
-                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );
-                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );
-                    }
-
-                    rFib.fcAtrdExtra = nFcStart;
-                    nFcStart = rWrt.pTableStrm->Tell();
-                    rFib.lcbAtrdExtra = nFcStart - rFib.fcAtrdExtra;
-                    rFib.fcHplxsdr = 0x01010002;  //WTF, but apparently necessary
-                    rFib.lcbHplxsdr = 0;
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, nDTTM );
+                    SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );
                 }
+
+                rFib.fcAtrdExtra = nFcStart;
+                nFcStart = rWrt.pTableStrm->Tell();
+                rFib.lcbAtrdExtra = nFcStart - rFib.fcAtrdExtra;
+                rFib.fcHplxsdr = 0x01010002;  //WTF, but apparently necessary
+                rFib.lcbHplxsdr = 0;
             }
             break;
         case TXT_TXTBOX:
@@ -2491,22 +2398,11 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
                 // xstUsrInitl[ 10 ] pascal-style String holding initials
                 // of annotation author
-                if ( rWrt.bWrtWW8 )
-                {
-                    SwWW8Writer::WriteShort(*rWrt.pTableStrm, nInitialsLen);
-                    SwWW8Writer::WriteString16(*rWrt.pTableStrm, sInitials,
-                            false);
-                    SwWW8Writer::FillCount( *rWrt.pTableStrm,
-                            (9 - nInitialsLen) * 2 );
-
-                }
-                else
-                {
-                    rWrt.pTableStrm->WriteUChar( nInitialsLen );
-                    SwWW8Writer::WriteString8(*rWrt.pTableStrm, sInitials,
-                            false, RTL_TEXTENCODING_MS_1252);
-                    SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nInitialsLen);
-                }
+                SwWW8Writer::WriteShort(*rWrt.pTableStrm, nInitialsLen);
+                SwWW8Writer::WriteString16(*rWrt.pTableStrm, sInitials,
+                        false);
+                SwWW8Writer::FillCount( *rWrt.pTableStrm,
+                        (9 - nInitialsLen) * 2 );
 
                 // documents layout of WriteShort's below:
 
