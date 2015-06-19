@@ -3297,6 +3297,9 @@ OString SwXTextDocument::getTextSelection(const char* pMimeType)
     else
         aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
 
+    if (!xTransferable->isDataFlavorSupported(aFlavor))
+        return OString();
+
     uno::Any aAny(xTransferable->getTransferData(aFlavor));
 
     OString aRet;
