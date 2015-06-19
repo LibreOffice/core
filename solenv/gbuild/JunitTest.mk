@@ -35,7 +35,8 @@ $(call gb_JunitTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
-		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
+		mkdir -p $(call gb_JunitTest_get_userdir,$*)/user && \
+		cp $(SRCDIR)/qadevOOo/qa/registrymodifications.xcu $(call gb_JunitTest_get_userdir,$*)/user/ && \
         ($(gb_JunitTest_JAVACOMMAND) \
             -classpath "$(T_CP)" \
             $(DEFS) \
