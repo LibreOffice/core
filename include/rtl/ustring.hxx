@@ -172,6 +172,17 @@ public:
         rtl_uString_newFromStr_WithLength( &pData, &value, 1 );
     }
 
+#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST_CONCAT
+    /// @cond INTERNAL
+    // Catch inadvertent conversions to the above ctor (but still allow
+    // construction from char literals):
+    OUString(int) = delete;
+    explicit OUString(char c):
+        OUString(sal_Unicode(static_cast<unsigned char>(c)))
+    {}
+    /// @endcond
+#endif
+
     /**
       New string from a Unicode character buffer array.
 
