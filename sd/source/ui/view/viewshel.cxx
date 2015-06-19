@@ -568,7 +568,7 @@ void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool
     }
 }
 
-OString ViewShell::GetTextSelection(const OString& _aMimeType)
+OString ViewShell::GetTextSelection(const OString& _aMimeType, OString& rUsedMimeType)
 {
     SdrView* pSdrView = GetView();
     if (!pSdrView)
@@ -600,6 +600,9 @@ OString ViewShell::GetTextSelection(const OString& _aMimeType)
     else
         aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
 
+    if (!xTransferable->isDataFlavorSupported(aFlavor))
+        return OString();
+
     uno::Any aAny(xTransferable->getTransferData(aFlavor));
 
     OString aRet;
@@ -619,6 +622,7 @@ OString ViewShell::GetTextSelection(const OString& _aMimeType)
         aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
     }
 
+    rUsedMimeType = _aMimeType;
     return aRet;
 }
 

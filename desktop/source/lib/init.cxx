@@ -216,7 +216,8 @@ static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
                                   int nX,
                                   int nY);
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
-                                        const char* pMimeType);
+                                  const char* pMimeType,
+                                  char** pUsedMimeType);
 static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
                                   int nType,
                                   int nX,
@@ -791,7 +792,7 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     pDoc->setTextSelection(nType, nX, nY);
 }
 
-static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType)
+static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -800,10 +801,20 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
         return 0;
     }
 
-    OString aRet = pDoc->getTextSelection(pMimeType);
+    OString aUsedMimeType;
+    OString aRet = pDoc->getTextSelection(pMimeType, aUsedMimeType);
+    if (aUsedMimeType.isEmpty())
+        aRet = pDoc->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
 
     char* pMemory = static_cast<char*>(malloc(aRet.getLength() + 1));
     strcpy(pMemory, aRet.getStr());
+
+    if (pUsedMimeType)
+    {
+        *pUsedMimeType = static_cast<char*>(malloc(aUsedMimeType.getLength() + 1));
+        strcpy(*pUsedMimeType, aUsedMimeType.getStr());
+    }
+
     return pMemory;
 }
 

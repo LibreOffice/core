@@ -222,7 +222,8 @@ void SwTiledRenderingTest::testGetTextSelection()
 
     SwXTextDocument* pXTextDocument = createDoc("shape-with-text.fodt");
     // No crash, just empty output for unexpected mime type.
-    CPPUNIT_ASSERT_EQUAL(OString(), pXTextDocument->getTextSelection("foo/bar"));
+    OString aUsedFormat;
+    CPPUNIT_ASSERT_EQUAL(OString(), pXTextDocument->getTextSelection("foo/bar", aUsedFormat));
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the first word.
@@ -231,10 +232,10 @@ void SwTiledRenderingTest::testGetTextSelection()
     pWrtShell->SelWrd();
 
     // Make sure that we selected text from the body text.
-    CPPUNIT_ASSERT_EQUAL(OString("Hello"), pXTextDocument->getTextSelection("text/plain;charset=utf-8"));
+    CPPUNIT_ASSERT_EQUAL(OString("Hello"), pXTextDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
 
     // Make sure we produce something for HTML.
-    CPPUNIT_ASSERT(!OString(pXTextDocument->getTextSelection("text/html")).isEmpty());
+    CPPUNIT_ASSERT(!OString(pXTextDocument->getTextSelection("text/html", aUsedFormat)).isEmpty());
 
     // Now select some shape text and check again.
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -245,7 +246,7 @@ void SwTiledRenderingTest::testGetTextSelection()
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     ESelection aWordSelection(0, 0, 0, 5);
     rEditView.SetSelection(aWordSelection);
-    CPPUNIT_ASSERT_EQUAL(OString("Shape"), pXTextDocument->getTextSelection("text/plain;charset=utf-8"));
+    CPPUNIT_ASSERT_EQUAL(OString("Shape"), pXTextDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
 
     comphelper::LibreOfficeKit::setActive(false);
 }
