@@ -277,14 +277,12 @@ class WW8_WrPct
 {
     boost::ptr_vector<WW8_WrPc > aPcts;
     WW8_FC nOldFc;
-    bool bIsUni;
 public:
-    WW8_WrPct(WW8_FC nStartFc, bool bSaveUniCode);
+    WW8_WrPct(WW8_FC nStartFc);
     ~WW8_WrPct();
-    void AppendPc(WW8_FC nStartFc, bool bIsUnicode);
+    void AppendPc(WW8_FC nStartFc);
     void WritePc( WW8Export& rWrt );
     void SetParaBreak();
-    bool IsUnicode() const  { return bIsUni; }
     WW8_CP Fc2Cp( sal_uLong nFc ) const;
 };
 
@@ -1074,8 +1072,7 @@ public:
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() ) SAL_OVERRIDE;
     void WriteChar( sal_Unicode c ) SAL_OVERRIDE;
 
-    void OutSwString(const OUString&, sal_Int32 nStt, sal_Int32 nLen,
-        bool bUnicode, rtl_TextEncoding eChrSet);
+    void OutSwString(const OUString&, sal_Int32 nStt, sal_Int32 nLen);
 
     WW8_CP Fc2Cp( sal_uLong nFc ) const          { return m_pPiece->Fc2Cp( nFc ); }
 
@@ -1083,8 +1080,6 @@ public:
 
     void OutSprmBytes( sal_uInt8* pBytes, sal_uInt16 nSiz )
                                 { pO->insert( pO->end(), pBytes, pBytes+nSiz ); }
-
-    inline bool IsUnicode() const           { return m_pPiece->IsUnicode(); }
 
     virtual void SectionBreaksAndFrames( const SwTextNode& rNode ) SAL_OVERRIDE;
 

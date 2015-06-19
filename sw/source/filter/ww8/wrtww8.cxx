@@ -1224,10 +1224,10 @@ WW8_FC WW8_WrFkp::GetEndFc() const
 }
 
 // Method for managing the piece table
-WW8_WrPct::WW8_WrPct(WW8_FC nfcMin, bool bSaveUniCode)
-    : nOldFc(nfcMin), bIsUni(bSaveUniCode)
+WW8_WrPct::WW8_WrPct(WW8_FC nfcMin)
+    : nOldFc(nfcMin)
 {
-    AppendPc( nOldFc, bIsUni );
+    AppendPc(nOldFc);
 }
 
 WW8_WrPct::~WW8_WrPct()
@@ -1235,7 +1235,7 @@ WW8_WrPct::~WW8_WrPct()
 }
 
 // Fill the piece and create a new one
-void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
+void WW8_WrPct::AppendPc(WW8_FC nStartFc)
 {
     WW8_CP nStartCp = nStartFc - nOldFc;    // subtract the beginning of the text
     if ( !nStartCp )
@@ -1249,22 +1249,13 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
 
     nOldFc = nStartFc;                      // remember StartFc as old
 
-    if( bIsUni )
-        nStartCp >>= 1;                 // for Unicode: number of characters / 2
-
-    if ( !bIsUnicode )
-    {
-        nStartFc <<= 1;                 // Address * 2
-        nStartFc |= 0x40000000;         // second last bit for non-Unicode
-    }
+    nStartCp >>= 1;     // for Unicode: number of characters / 2
 
     if( !aPcts.empty() )
         nStartCp += aPcts.back().GetStartCp();
 
     WW8_WrPc* pPc = new WW8_WrPc( nStartFc, nStartCp );
     aPcts.push_back( pPc );
-
-    bIsUni = bIsUnicode;
 }
 
 void WW8_WrPct::WritePc( WW8Export& rWrt )
@@ -1284,8 +1275,7 @@ void WW8_WrPct::WritePc( WW8Export& rWrt )
 
     // calculate the last Pos
     sal_uLong nStartCp = rWrt.pFib->fcMac - nOldFc;
-    if( bIsUni )
-        nStartCp >>= 1;             // For Unicode: number of characters / 2
+    nStartCp >>= 1;             // For Unicode: number of characters / 2
     nStartCp += aPcts.back().GetStartCp();
     SwWW8Writer::WriteLong( *rWrt.pTableStrm, nStartCp );
 
@@ -1320,8 +1310,7 @@ WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
     OSL_ENSURE( ! aPcts.empty(), "Fc2Cp no piece available" );
 
     nFc -= nOldFc;
-    if( bIsUni )
-        nFc /= 2;
+    nFc /= 2; // Unicode
     return nFc + aPcts.back().GetStartCp();
 }
 
@@ -1695,7 +1684,7 @@ void SwWW8Writer::WriteString8(SvStream& rStrm, const OUString& rStr,
 void WW8Export::WriteStringAsPara( const OUString& rText, sal_uInt16 nStyleId )
 {
     if( !rText.isEmpty() )
-        OutSwString( rText, 0, rText.getLength(), IsUnicode(), RTL_TEXTENCODING_MS_1252 );
+        OutSwString(rText, 0, rText.getLength());
     WriteCR();              // CR thereafter
 
     ww::bytes aArr;
@@ -1740,35 +1729,26 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
 }
 
 void WW8Export::OutSwString(const OUString& rStr, sal_Int32 nStt,
-    sal_Int32 nLen, bool bUnicode, rtl_TextEncoding eChrSet)
+    sal_Int32 const nLen)
 
 {
     SAL_INFO( "sw.ww8.level2", "<OutSwString>" );
 
     if( nLen )
     {
-        if ( bUnicode != m_pPiece->IsUnicode() )
-            m_pPiece->AppendPc ( Strm().Tell(), bUnicode );
-
         if( nStt || nLen != rStr.getLength() )
         {
             OUString sOut( rStr.copy( nStt, nLen ) );
 
             SAL_INFO( "sw.ww8.level2", sOut );
 
-            if (bUnicode)
-                SwWW8Writer::WriteString16(Strm(), sOut, false);
-            else
-                SwWW8Writer::WriteString8(Strm(), sOut, false, eChrSet);
+            SwWW8Writer::WriteString16(Strm(), sOut, false);
         }
         else
         {
             SAL_INFO( "sw.ww8.level2", rStr );
 
-            if (bUnicode)
-                SwWW8Writer::WriteString16(Strm(), rStr, false);
-            else
-                SwWW8Writer::WriteString8(Strm(), rStr, false, eChrSet);
+            SwWW8Writer::WriteString16(Strm(), rStr, false);
         }
     }
 
@@ -1787,10 +1767,7 @@ void WW8Export::WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo
 
 void WW8Export::WriteChar( sal_Unicode c )
 {
-    if( m_pPiece->IsUnicode() )
-        Strm().WriteUInt16( c );
-    else
-        Strm().WriteUChar( c );
+    Strm().WriteUInt16( c );
 }
 
 void MSWordExportBase::SetCurPam(sal_uLong nStt, sal_uLong nEnd)
@@ -3254,7 +3231,7 @@ void WW8Export::ExportDocument_Impl()
     m_pMagicTable = new WW8_WrMagicTable;
 
     m_pGrf = new SwWW8WrGrf( *this );
-    m_pPiece = new WW8_WrPct( pFib->fcMin, bWrtWW8 );
+    m_pPiece = new WW8_WrPct( pFib->fcMin );
     pDop = new WW8Dop;
 
     pDop->fRevMarking = 0 != ( nsRedlineMode_t::REDLINE_ON & m_nOrigRedlineMode );

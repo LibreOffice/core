@@ -1127,8 +1127,7 @@ void WW8AttributeOutput::FieldVanish( const OUString& rText, ww::eField /*eType*
     m_rWW8Export.WriteChar( '\x13' );
     m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), aItems.size(),
                                     aItems.data() );
-    m_rWW8Export.OutSwString( rText, 0, rText.getLength(), m_rWW8Export.IsUnicode(),
-                        RTL_TEXTENCODING_MS_1252 );
+    m_rWW8Export.OutSwString(rText, 0, rText.getLength());
     m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), nStt_sprmCFSpec,
                                     aItems.data() );
     m_rWW8Export.WriteChar( '\x15' );

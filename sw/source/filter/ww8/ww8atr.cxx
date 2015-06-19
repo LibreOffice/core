@@ -1067,9 +1067,9 @@ void WW8AttributeOutput::RunText( const OUString& rText, rtl_TextEncoding eCharS
     RawText( rText, m_rWW8Export.bWrtWW8, eCharSet );
 }
 
-void WW8AttributeOutput::RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )
+void WW8AttributeOutput::RawText(const OUString& rText, bool, rtl_TextEncoding)
 {
-    m_rWW8Export.OutSwString( rText, 0, rText.getLength(), bForceUnicode, eCharSet );
+    m_rWW8Export.OutSwString(rText, 0, rText.getLength());
 }
 
 void WW8AttributeOutput::OutputFKP(bool bForce)
@@ -1849,7 +1849,6 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
 
     assert(eFieldType <= 0x5F); // 95 is the highest documented one
 
-    bool bUnicode = IsUnicode();
     WW8_WrPlcField* pFieldP = CurrentFieldPlc();
 
     const bool bIncludeEmptyPicLocation = ( eFieldType == ww::ePAGE );
@@ -1865,13 +1864,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     }
     if (WRITEFIELD_CMD_START & nMode)
     {
-        if (bUnicode)
-            SwWW8Writer::WriteString16(Strm(), sFieldCmd, false);
-        else
-        {
-            SwWW8Writer::WriteString8(Strm(), sFieldCmd, false,
-                RTL_TEXTENCODING_MS_1252);
-        }
+        SwWW8Writer::WriteString16(Strm(), sFieldCmd, false);
         // #i43956# - write hyperlink character including
         // attributes and corresponding binary data for certain reference fields.
         bool bHandleBookmark = false;
@@ -1925,13 +1918,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             sOut = sFieldCmd;
         if( !sOut.isEmpty() )
         {
-            if( bUnicode )
-                SwWW8Writer::WriteString16(Strm(), sOut, false);
-            else
-            {
-                SwWW8Writer::WriteString8(Strm(), sOut, false,
-                    RTL_TEXTENCODING_MS_1252);
-            }
+            SwWW8Writer::WriteString16(Strm(), sOut, false);
 
             if (pField)
             {
@@ -2563,25 +2550,12 @@ void WW8AttributeOutput::HiddenField( const SwField& rField )
     //replace LF 0x0A with VT 0x0B
     sExpand = sExpand.replace(0x0A, 0x0B);
     m_rWW8Export.m_pChpPlc->AppendFkpEntry(m_rWW8Export.Strm().Tell());
-    if (m_rWW8Export.IsUnicode())
+    SwWW8Writer::WriteString16(m_rWW8Export.Strm(), sExpand, false);
+    static sal_uInt8 aArr[] =
     {
-        SwWW8Writer::WriteString16(m_rWW8Export.Strm(), sExpand, false);
-        static sal_uInt8 aArr[] =
-        {
-            0x3C, 0x08, 0x1
-        };
-        m_rWW8Export.m_pChpPlc->AppendFkpEntry(m_rWW8Export.Strm().Tell(), sizeof(aArr), aArr);
-    }
-    else
-    {
-        SwWW8Writer::WriteString8(m_rWW8Export.Strm(), sExpand, false,
-            RTL_TEXTENCODING_MS_1252);
-        static sal_uInt8 aArr[] =
-        {
-            92, 0x1
-        };
-        m_rWW8Export.m_pChpPlc->AppendFkpEntry(m_rWW8Export.Strm().Tell(), sizeof(aArr), aArr);
-    }
+        0x3C, 0x08, 0x1
+    };
+    m_rWW8Export.m_pChpPlc->AppendFkpEntry(m_rWW8Export.Strm().Tell(), sizeof(aArr), aArr);
 }
 
 void WW8AttributeOutput::SetField( const SwField& rField, ww::eField eType, const OUString& rCmd )
@@ -2606,13 +2580,7 @@ void WW8AttributeOutput::SetField( const SwField& rField, ww::eField eType, cons
 
     if (!rVar.isEmpty())
     {
-        if (m_rWW8Export.IsUnicode())
-            SwWW8Writer::WriteString16(m_rWW8Export.Strm(), rVar, false);
-        else
-        {
-            SwWW8Writer::WriteString8(m_rWW8Export.Strm(), rVar, false,
-                RTL_TEXTENCODING_MS_1252);
-        }
+        SwWW8Writer::WriteString16(m_rWW8Export.Strm(), rVar, false);
     }
     GetExport().OutputField(&rField, eType, rCmd, WRITEFIELD_CLOSE);
 }
@@ -2655,13 +2623,7 @@ void WW8AttributeOutput::RefField( const SwField &rField, const OUString &rRef)
     OUString sVar = lcl_GetExpandedField( rField );
     if ( !sVar.isEmpty() )
     {
-        if ( m_rWW8Export.IsUnicode() )
-            SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sVar, false );
-        else
-        {
-            SwWW8Writer::WriteString8( m_rWW8Export.Strm(), sVar, false,
-                RTL_TEXTENCODING_MS_1252 );
-        }
+        SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sVar, false );
     }
     m_rWW8Export.OutputField( &rField, ww::eREF, sStr, WRITEFIELD_CLOSE );
 }
@@ -2669,13 +2631,7 @@ void WW8AttributeOutput::RefField( const SwField &rField, const OUString &rRef)
 void WW8AttributeOutput::WriteExpand( const SwField* pField )
 {
     OUString sExpand( lcl_GetExpandedField( *pField ) );
-    if ( m_rWW8Export.IsUnicode() )
-        SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sExpand, false );
-    else
-    {
-        SwWW8Writer::WriteString8( m_rWW8Export.Strm(), sExpand, false,
-            RTL_TEXTENCODING_MS_1252 );
-    }
+    SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sExpand, false );
 }
 
 void AttributeOutputBase::TextField( const SwFormatField& rField )
@@ -3295,8 +3251,7 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
         WriteChar( 0x02 );              // Auto-Nummer-Zeichen
     else
         // User-Nummerierung
-        OutSwString( rFootnote.GetNumStr(), 0, rFootnote.GetNumStr().getLength(),
-                        IsUnicode(), RTL_TEXTENCODING_MS_1252 );
+        OutSwString(rFootnote.GetNumStr(), 0, rFootnote.GetNumStr().getLength());
 
     if( pOutArr )
     {
@@ -3628,37 +3583,24 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
     SvStream& rStrm = Strm();
     sal_uLong nRetPos = 0, nPos = rStrm.Tell();
     //If there is at least two characters already output
-    if (nPos - (IsUnicode() ? 2 : 1) >= sal_uLong(pFib->fcMin))
+    if (nPos - 2 >= sal_uLong(pFib->fcMin))
     {
-        sal_uInt8 nBCode=0;
         sal_uInt16 nUCode=0;
 
-        rStrm.SeekRel(IsUnicode() ? -2 : -1);
-        if (IsUnicode())
-            rStrm.ReadUInt16( nUCode );
-        else
-        {
-            rStrm.ReadUChar( nBCode );
-            nUCode = nBCode;
-        }
+        rStrm.SeekRel(-2);
+        rStrm.ReadUInt16( nUCode );
         //If the last char was a cr
         if (nUCode == 0x0d)             // CR ?
         {
             if ((nChar == 0x0c) &&
-                (nPos - (IsUnicode() ? 4 : 2) >= sal_uLong(pFib->fcMin)))
+                (nPos - 4 >= sal_uLong(pFib->fcMin)))
             {
-                rStrm.SeekRel( IsUnicode() ? -4 : -2 );
-                if (IsUnicode())
-                    rStrm.ReadUInt16( nUCode );
-                else
-                {
-                    rStrm.ReadUInt16( nUCode );
-                    nUCode = nBCode;
-                }
+                rStrm.SeekRel(-4);
+                rStrm.ReadUInt16( nUCode );
             }
             else
             {
-                rStrm.SeekRel( IsUnicode() ? -2 : -1 );
+                rStrm.SeekRel(-2);
                 nUCode = 0x0;
             }
             //And the para is not of len 0, then replace this cr with the mark

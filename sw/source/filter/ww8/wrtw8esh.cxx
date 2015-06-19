@@ -1384,8 +1384,6 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         if( n )
             aAttrIter.NextPara( n );
 
-        rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
-
         OSL_ENSURE( pO->empty(), " pO ist am Zeilenanfang nicht leer" );
 
         OUString aStr( rEditObj.GetText( n ));
@@ -1393,12 +1391,10 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         const sal_Int32 nEnd = aStr.getLength();
         do {
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
-            rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
             bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
             if( !bTextAtr )
-                OutSwString( aStr, nAktPos, nNextAttr - nAktPos,
-                                true, eChrSet );
+                OutSwString(aStr, nAktPos, nNextAttr - nAktPos);
 
                         // Am Zeilenende werden die Attribute bis ueber das CR
                         // aufgezogen. Ausnahme: Fussnoten am Zeilenende
@@ -1415,7 +1411,6 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
             if( nNextAttr == nEnd && bTextAtr )
                 WriteCR();              // CR danach
             nAktPos = nNextAttr;
-            eChrSet = eNextChrSet;
             aAttrIter.NextPos();
         }
         while( nAktPos < nEnd );
