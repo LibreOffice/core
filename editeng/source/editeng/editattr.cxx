@@ -475,7 +475,7 @@ void EditCharAttribRelief::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribGrabBag::EditCharAttribGrabBag( const SfxGrabBagItem& rAttr, sal_uInt16 _nStart, sal_uInt16 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_GRABBAG, "Not a grab bage attribute!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_GRABBAG, "Not a grab bag attribute!" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

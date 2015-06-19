@@ -194,7 +194,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
  is that each resulting pixel is the average of all the source pixel values
  it represents. Which is trivial in the case of exact multiples for downscaling,
  the generic case needs to also consider that some source pixels contribute
- only partially to their resulting pixels (becauses of non-integer multiples).
+ only partially to their resulting pixels (because of non-integer multiples).
 */
 bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
 {

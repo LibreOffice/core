@@ -384,7 +384,7 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
 }
 
 // Da WW nur Break-After ( Pagebreak und Sectionbreaks ) kennt, im SW aber
-// Bagebreaks "vor" und "nach" und Pagedescs nur "vor" existieren, werden
+// Pagebreaks "vor" und "nach" und Pagedescs nur "vor" existieren, werden
 // die Breaks 2* durchgeklimpert, naemlich vor und hinter jeder Zeile.
 // Je nach BreakTyp werden sie vor oder nach der Zeile gesetzt.
 // Es duerfen nur Funktionen gerufen werden, die nicht in den

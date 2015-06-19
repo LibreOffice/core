@@ -158,10 +158,10 @@ namespace comphelper
         // XEnumerationAccess (base of XSet)
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // XElementAccess (basf of XEnumerationAccess
+        // XElementAccess (base of XEnumerationAccess)
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        /** === UNO interface implementations == **/
+        // UNO interface implementations
 
         // XPropertyState
         virtual ::com::sun::star::uno::Any  getPropertyDefaultByHandle( sal_Int32 _nHandle ) const SAL_OVERRIDE;
