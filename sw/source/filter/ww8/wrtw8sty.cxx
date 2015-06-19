@@ -1129,17 +1129,6 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFormatPageDesc& rPD,
     AppendSection( rPD, rNd, pSectionFormat, nLnNumRestartNo );
 }
 
-// MSWordSections::SetNum() sets in each section the Num-pointers for the first call.
-// All subsequent calls will be ignored.
-// Thus, the first list of the section will be adopted.
-
-void MSWordSections::SetNum( const SwTextNode* pNumNd )
-{
-    WW8_SepInfo& rInfo = aSects.back();
-    if ( !rInfo.pNumNd ) // not yet assigned
-        rInfo.pNumNd = pNumNd;
-}
-
 void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
 {
     sal_uInt8 nInfoFlags = 0;

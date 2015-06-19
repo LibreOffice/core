@@ -161,20 +161,19 @@ struct WW8_SepInfo
     const SwPageDesc* pPageDesc;
     const SwSectionFormat* pSectionFormat;
     const SwNode* pPDNd;
-    const SwTextNode* pNumNd;
     sal_uLong  nLnNumRestartNo;
     ::boost::optional<sal_uInt16> oPgRestartNo;
     bool bIsFirstParagraph;
 
     WW8_SepInfo()
-        : pPageDesc(0), pSectionFormat(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), bIsFirstParagraph(false)
+        : pPageDesc(0), pSectionFormat(0), pPDNd(0), nLnNumRestartNo(0), bIsFirstParagraph(false)
 
     {}
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFormat* pFormat,
                  sal_uLong nLnRestart, ::boost::optional<sal_uInt16> oPgRestart = boost::none,
                  const SwNode* pNd = NULL, bool bIsFirstPara = false )
-        : pPageDesc( pPD ), pSectionFormat( pFormat ), pPDNd( pNd ), pNumNd( 0 ),
+        : pPageDesc( pPD ), pSectionFormat( pFormat ), pPDNd( pNd ),
           nLnNumRestartNo( nLnRestart ), oPgRestartNo( oPgRestart ),
           bIsFirstParagraph( bIsFirstPara )
     {}
@@ -211,7 +210,6 @@ public:
                     const SwNode& rNd,
                     const SwSectionFormat* pSectionFormat,
                     sal_uLong nLnNumRestartNo );
-    void SetNum( const SwTextNode* pNumNd );
 
     /// Number of columns based on the most recent WW8_SepInfo.
     sal_uInt16 CurrentNumberOfColumns( const SwDoc &rDoc ) const;
