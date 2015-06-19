@@ -1849,6 +1849,26 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_SHADOW_COLOR
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_ATTR_SHADOW_TRANSPARENCE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_ATTR_SHADOW_XDISTANCE
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_SHADOW_YDISTANCE
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
     SID_ATTR_TEXT_FITTOSIZE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

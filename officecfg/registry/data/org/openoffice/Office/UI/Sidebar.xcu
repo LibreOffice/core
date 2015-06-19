@@ -368,6 +368,38 @@
         </prop>
       </node>
 
+      <node oor:name="ShadowPropertyPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Shadow</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ShadowPropertyPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:FormatArea</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Calc,           Draw,       visible ;
+            Calc,           OLE,        hidden  ;
+            DrawImpress,    3DObject,   visible ;
+            DrawImpress,    Draw,       visible ;
+            DrawImpress,    Graphic,    hidden  ;
+            DrawImpress,    TextObject, hidden  ;
+            DrawImpress,    OLE,        hidden  ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SvxPanelFactory/ShadowPropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>300</value>
+        </prop>
+      </node>
+
       <node oor:name="LinePropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Line</value>

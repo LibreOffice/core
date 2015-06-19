@@ -21,6 +21,7 @@
 #include "styles/StylesPropertyPanel.hxx"
 #include "paragraph/ParaPropertyPanel.hxx"
 #include "area/AreaPropertyPanel.hxx"
+#include "shadow/ShadowPropertyPanel.hxx"
 #include "graphic/GraphicPropertyPanel.hxx"
 #include "line/LinePropertyPanel.hxx"
 #include "possize/PosSizePropertyPanel.hxx"
@@ -156,6 +157,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/AreaPropertyPanel"))
     {
         pControl = AreaPropertyPanel::Create(pParentWindow, xFrame, pBindings);
+    }
+    else if (rsResourceURL.endsWith("/ShadowPropertyPanel"))
+    {
+        pControl = ShadowPropertyPanel::Create(pParentWindow, xFrame, pBindings);
     }
     else if (rsResourceURL.endsWith("/GraphicPropertyPanel"))
     {

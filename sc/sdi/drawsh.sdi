@@ -72,6 +72,14 @@ interface TableDraw
         StateMethod = GetDrawAttrState;
         Export = FALSE;
     ]
+    SID_ATTR_SHADOW_COLOR
+    [   ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_SHADOW_TRANSPARENCE
+    [   ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_SHADOW_XDISTANCE
+    [   ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_SHADOW_YDISTANCE
+    [   ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
 
     SID_ATTR_FILL_COLOR     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_FILL_GRADIENT  [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
