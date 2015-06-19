@@ -141,12 +141,11 @@ class XFListLevelBullet : public XFListLevel
 {
 public:
     XFListLevelBullet()
-        : m_chBullet(0)
     {
         m_eListType = enumXFListLevelBullet;
     }
 
-    void    SetBulletChar(UChar32 ch)
+    void    SetBulletChar(OUString const & ch)
     {
         m_chBullet = ch;
     }
@@ -166,7 +165,7 @@ public:
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 private:
     XFNumFmt    m_aNumFmt;
-    int32_t     m_chBullet;
+    OUString m_chBullet;
     OUString m_strFontName;
 };
 
@@ -203,7 +202,7 @@ public:
                     );
 
     void    SetListBullet(sal_Int32 level,
-                            UChar32 bullet_char,
+                            OUString const & bullet_char,
                             const OUString& fontname = "",
                             const OUString& prefix = "",
                             const OUString& suffix = ""

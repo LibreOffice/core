@@ -236,7 +236,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
                         aSuffix = aParaNumbering.pSuffix->GetText();
                     }
 
-                    pListStyle->SetListBullet(nPos, LwpSilverBullet::GetNumCharByStyleID(pParaNumber).toChar(),
+                    pListStyle->SetListBullet(nPos, LwpSilverBullet::GetNumCharByStyleID(pParaNumber),
                         "Times New Roman", aPrefix, aSuffix);
                 }
 
