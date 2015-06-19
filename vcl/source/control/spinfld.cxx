@@ -93,18 +93,26 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window* pW
             Rectangle aClipRect(rSpinbuttonValue.maLowerRect);
             aClipRect.Union(rSpinbuttonValue.maUpperRect);
 
-            // convert from screen space to borderwin space
-            aClipRect.SetPos(pBorder->ScreenToOutputPixel(pWin->OutputToScreenPixel(aClipRect.TopLeft())));
-
-            vcl::Region oldRgn(pBorder->GetClipRegion());
-            pBorder->SetClipRegion(vcl::Region(aClipRect));
-
+            vcl::RenderContext* pContext = &rRenderContext;
+            vcl::Region oldRgn;
             Point aPt;
             Size aSize(pBorder->GetOutputSizePixel());    // the size of the border window, i.e., the whole control
-            Rectangle aBound, aContent;
             Rectangle aNatRgn(aPt, aSize);
+
+            if (!pWin->SupportsDoubleBuffering())
+            {
+                // convert from screen space to borderwin space
+                aClipRect.SetPos(pBorder->ScreenToOutputPixel(pWin->OutputToScreenPixel(aClipRect.TopLeft())));
+
+                oldRgn = pBorder->GetClipRegion();
+                pBorder->SetClipRegion(vcl::Region(aClipRect));
+
+                pContext = pBorder;
+            }
+
+            Rectangle aBound, aContent;
             if (!ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
-                pBorder->GetNativeControlRegion(CTRL_SPINBOX, PART_ENTIRE_CONTROL,
+                pContext->GetNativeControlRegion(CTRL_SPINBOX, PART_ENTIRE_CONTROL,
                                                 aNatRgn, ControlState::NONE, rSpinbuttonValue,
                                                 OUString(), aBound, aContent))
             {
@@ -112,10 +120,17 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window* pW
             }
 
             Rectangle aRgn(aPt, aSize);
-            bNativeOK = pBorder->DrawNativeControl(CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn,
+            if (pWin->SupportsDoubleBuffering())
+            {
+                // convert from borderwin space, to the pWin's space
+                aRgn.SetPos(pWin->ScreenToOutputPixel(pBorder->OutputToScreenPixel(aRgn.TopLeft())));
+            }
+
+            bNativeOK = pContext->DrawNativeControl(CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn,
                                                    ControlState::ENABLED, rSpinbuttonValue, OUString());
 
-            pBorder->SetClipRegion(vcl::Region(oldRgn));
+            if (!pWin->SupportsDoubleBuffering())
+                pBorder->SetClipRegion(vcl::Region(oldRgn));
         }
     }
     return bNativeOK;
