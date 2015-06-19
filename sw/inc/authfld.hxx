@@ -155,7 +155,7 @@ public:
     OUString ConditionalExpand(ToxAuthorityField eField) const;
 
     //To handle Citation
-    OUString ExpandCitation(ToxAuthorityField eField) const;
+    SW_DLLPUBLIC OUString ExpandCitation(ToxAuthorityField eField) const;
 
     SwAuthorityField(SwAuthorityFieldType* pType, const OUString& rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, sal_IntPtr nHandle);
