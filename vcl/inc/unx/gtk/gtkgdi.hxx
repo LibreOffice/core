@@ -78,7 +78,6 @@ private:
     static GtkStyleContext *mpMenuBarItemStyle;
     static GtkStyleContext *mpMenuStyle;
     static GtkStyleContext *mpSpinStyle;
-    static GtkStyleContext *mpMenuItemStyle;
     static GtkStyleContext *mpCheckMenuItemStyle;
     static GtkStyleContext *mpComboboxStyle;
     static GtkStyleContext *mpComboboxButtonStyle;
