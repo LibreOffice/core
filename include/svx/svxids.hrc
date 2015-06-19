@@ -1008,8 +1008,12 @@
 #define SID_PARASPACE_DECREASE                          ( SID_SVX_START + 1146 )
 
 #define SID_OBJECT_CROP                                 ( SID_SVX_START + 1147 )
+#define SID_ATTR_SHADOW_TRANSPARENCE                    ( SID_SVX_START + 1148 )
+#define SID_ATTR_SHADOW_COLOR                           ( SID_SVX_START + 1149 )
+#define SID_ATTR_SHADOW_XDISTANCE                       ( SID_SVX_START + 1150 )
+#define SID_ATTR_SHADOW_YDISTANCE                       ( SID_SVX_START + 1151 )
 
-#define SID_EDIT_POSTIT                                 ( SID_SVX_START + 1148 )
+#define SID_EDIT_POSTIT                                 ( SID_SVX_START + 1152 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               (SID_EDIT_POSTIT + 1)
