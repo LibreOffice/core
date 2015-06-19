@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_174b245b",
+        "filename": "svtools/source/config/apearcfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-06-19T14:20:21Z",
+      "side": 1,
+      "message": "It would probably be better to use the simplified C++ configuration access directly at the (few) client sides that get/set these values instead of keeping the various SvtTabAppearanceCfg::Get/Set... functions.\n\nOne problem with this Commit() implementation is that it unconditionally writes all the settings back, even those that did not change, and configmgr will write all of them into registrymodification.xcu",
+      "revId": "7b4bc19daa2bbeb9341581b1c6d4c99291c20e27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
