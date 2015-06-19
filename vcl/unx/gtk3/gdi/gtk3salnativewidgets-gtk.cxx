@@ -408,9 +408,15 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_set_state(context, stateFlags);
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_SLIDER);
 
+        GtkBorder margin;
+        gtk_style_context_get_margin(context, stateFlags, &margin);
+
+
         gtk_render_slider(context, cr,
-                          thumbRect.Left(), thumbRect.Top(),
-                          thumbRect.GetWidth(), thumbRect.GetHeight(), scrollbarOrientation);
+                          thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
+                          thumbRect.GetWidth() - margin.left - margin.right,
+                          thumbRect.GetHeight() - margin.top - margin.bottom,
+                          scrollbarOrientation);
 
         gtk_style_context_restore(context);
     }
