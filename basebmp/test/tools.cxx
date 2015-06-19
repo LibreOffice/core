@@ -42,4 +42,25 @@ int countPixel( const BitmapDeviceSharedPtr& rDevice,
     return count;
 }
 
+void dumpPixels( const basebmp::BitmapDeviceSharedPtr& rDevice, const char *pCaption )
+{
+#ifdef BASEBMP_DEBUG
+    fprintf( stderr, "BitmapDevice '%s' %d,%d %s\n",
+             pCaption, rDevice->getSize().getX(),
+             rDevice->getSize().getY(),
+             rDevice->isTopDown() ? "right way up" : "upside down");
+    RawMemorySharedArray pMem = rDevice->getBuffer();
+    basegfx::B2IVector aSize( rDevice->getSize() );
+    sal_Int32 nLineSize = rDevice->getScanlineStride();
+    for (sal_Int32 y = 0; y < aSize.getY(); y++)
+    {
+        for (sal_Int32 x = 0; x < nLineSize; x++)
+            fprintf( stderr, "%.2x", pMem[y * nLineSize + x] );
+        fprintf( stderr, "\n" );
+    }
+#else
+    (void)rDevice; (void)pCaption;
+#endif
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
