@@ -91,6 +91,7 @@
 #include <svl/whiter.hxx>
 
 #include <docufld.hxx>
+#include <authfld.hxx>
 #include <flddropdown.hxx>
 #include <fmtclds.hxx>
 #include <fmtinfmt.hxx>
@@ -1564,7 +1565,8 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
         OUString sExpand;
         if(rInfos.eType == ww::eCITATION)
         {
-            sExpand = rInfos.pField->ExpandCitation(AUTH_FIELD_TITLE);
+            sExpand = static_cast<SwAuthorityField const*>(rInfos.pField.get())
+                        ->ExpandCitation(AUTH_FIELD_TITLE);
         }
         else
         {

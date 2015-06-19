@@ -2902,7 +2902,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case RES_AUTHORITY:
     {
-        OUString sRet(pField->ExpandCitation(AUTH_FIELD_IDENTIFIER));
+        OUString const sRet(static_cast<SwAuthorityField const*>(pField)
+                        ->ExpandCitation(AUTH_FIELD_IDENTIFIER));
         GetExport().OutputField( pField, ww::eCITATION, sRet );
     }
     break;
