@@ -2093,34 +2093,6 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             nY += m_pParent->maGeometry.nY;
         }
 
-#if GTK_CHECK_VERSION(3,0,0)
-        // adjust position to avoid off screen windows
-        // but allow toolbars to be positioned partly off screen by the user
-        Size aScreenSize = getDisplay()->GetScreenSize( GetDisplayScreen() );
-        if( ! (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
-        {
-            if( nX < (long)maGeometry.nLeftDecoration )
-                nX = maGeometry.nLeftDecoration;
-            if( nY < (long)maGeometry.nTopDecoration )
-                nY = maGeometry.nTopDecoration;
-            if( (nX + (long)maGeometry.nWidth + (long)maGeometry.nRightDecoration) > (long)aScreenSize.Width() )
-                nX = aScreenSize.Width() - maGeometry.nWidth - maGeometry.nRightDecoration;
-            if( (nY + (long)maGeometry.nHeight + (long)maGeometry.nBottomDecoration) > (long)aScreenSize.Height() )
-                nY = aScreenSize.Height() - maGeometry.nHeight - maGeometry.nBottomDecoration;
-        }
-        else
-        {
-            if( nX + (long)maGeometry.nWidth < 10 )
-                nX = 10 - (long)maGeometry.nWidth;
-            if( nY + (long)maGeometry.nHeight < 10 )
-                nY = 10 - (long)maGeometry.nHeight;
-            if( nX > (long)aScreenSize.Width() - 10 )
-                nX = (long)aScreenSize.Width() - 10;
-            if( nY > (long)aScreenSize.Height() - 10 )
-                nY = (long)aScreenSize.Height() - 10;
-        }
-#endif
-
         if( nX != maGeometry.nX || nY != maGeometry.nY )
             bMoved = true;
         maGeometry.nX = nX;
