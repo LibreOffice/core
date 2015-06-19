@@ -247,7 +247,14 @@ struct _ClipboardOwnerClass
 #define CLIPBOARD_OWNER_OBJECT           (clipboard_owner_get_type ())
 #define CLIPBOARD_OWNER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), CLIPBOARD_OWNER_OBJECT, ClipboardOwner))
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 G_DEFINE_TYPE(ClipboardOwner, clipboard_owner, G_TYPE_OBJECT);
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 static void clipboard_owner_class_init (ClipboardOwnerClass *)
 {
