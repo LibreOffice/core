@@ -263,7 +263,7 @@ void testErrorBar( Reference< XPropertySet > xErrorBar )
     CPPUNIT_ASSERT(bShowNegative);
     double nVal = 0.0;
     CPPUNIT_ASSERT(xErrorBar->getPropertyValue("PositiveError") >>= nVal);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 10.0, 1e-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, nVal, 1e-10);
 }
 
 void checkCommonTrendline(
