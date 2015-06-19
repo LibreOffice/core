@@ -233,6 +233,9 @@ void SwTiledRenderingTest::testGetTextSelection()
     // Make sure that we selected text from the body text.
     CPPUNIT_ASSERT_EQUAL(OString("Hello"), pXTextDocument->getTextSelection("text/plain;charset=utf-8"));
 
+    // Make sure we produce something for HTML.
+    CPPUNIT_ASSERT(!OString(pXTextDocument->getTextSelection("text/html")).isEmpty());
+
     // Now select some shape text and check again.
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);

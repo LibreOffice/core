@@ -3310,6 +3310,12 @@ OString SwXTextDocument::getTextSelection(const char* pMimeType)
         else
             aRet = OString(reinterpret_cast<const sal_Char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
     }
+    else
+    {
+        uno::Sequence<sal_Int8> aSequence;
+        aAny >>= aSequence;
+        aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
+    }
 
     return aRet;
 }
