@@ -25,6 +25,7 @@ ImpChainLinkProperties::ImpChainLinkProperties()
 {
     // give defaults
     bOverwriteOnOverflow = false;
+    bHandlingUnderflow = false;
 }
 
 // XXX: All getters in the class assume that the guy is in the chain
@@ -57,6 +58,18 @@ bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj* /* pPrevLink */, SdrT
 {
     // XXX
     return false;
+}
+
+bool TextChain::GetLinkHandlingUnderflow(SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->bHandlingUnderflow;
+}
+
+void TextChain::SetLinkHandlingUnderflow(SdrTextObj *pTarget, bool bHandlingUnderflow)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->bHandlingUnderflow = bHandlingUnderflow;
 }
 
 void TextChain::SetOverwriteOnOverflow(SdrTextObj *pTarget, bool bOverwrite)

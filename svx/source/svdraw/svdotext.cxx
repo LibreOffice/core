@@ -2018,8 +2018,16 @@ void SdrTextObj::onUnderflowStatusEvent( )
     SdrTextObj *pNextLink = GetNextLinkInChain();
     SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
 
+    if (GetTextChain()->GetLinkHandlingUnderflow(this))
+    {
+        GetTextChain()->SetLinkHandlingUnderflow(this, false);
+        return;
+    }
+
     if (!pNextLink->HasText())
         return;
+
+
 
     //  1) get the text of the other guy and add it to the last paragraph
     // XXX: For now it's not merging anything just adding the while thing as a separate para
@@ -2034,6 +2042,9 @@ void SdrTextObj::onUnderflowStatusEvent( )
         // 2) Set the text of the next guy to what is left
         // (since this happens automatically by overflow we just "order to" reset the destination box's text)
         GetTextChain()->SetOverwriteOnOverflow(pNextLink, true);
+
+        // We make sure we don't handle underflow while handling underflow
+        GetTextChain()->SetLinkHandlingUnderflow(this, true);
 
         if (pEdtOutl != NULL)
             pEdtOutl->SetText(*pNewText);

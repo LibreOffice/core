@@ -41,7 +41,7 @@ class ImpChainLinkProperties
     ImpChainLinkProperties();
 
     bool bOverwriteOnOverflow;
-        // all kind of stuff such has MergeableFirstParagraphs or if overwrite should occurr on overflow
+    bool bHandlingUnderflow;
 };
 
 
@@ -60,8 +60,12 @@ class TextChain {
 
     // return whether a paragraph is split between the two links in the argument
     bool GetLinksHaveMergeableFirstPara(SdrTextObj *, SdrTextObj *);
+
     void SetOverwriteOnOverflow(SdrTextObj *, bool );
     bool GetOverwriteOnOverflow(SdrTextObj *pTarget);
+
+    bool GetLinkHandlingUnderflow(SdrTextObj *pTarget);
+    void SetLinkHandlingUnderflow(SdrTextObj *, bool);
 
     protected:
     LinkPropertiesMap maLinkPropertiesMap;
