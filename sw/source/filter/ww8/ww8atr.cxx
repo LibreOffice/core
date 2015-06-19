@@ -669,7 +669,7 @@ sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
     return nRet;
 }
 
-void WW8AttributeOutput::OutlineNumbering( sal_uInt8 nLvl, const SwNumFormat &/*TODO*/, const SwFormat &/*TODO*/)
+void WW8AttributeOutput::OutlineNumbering(sal_uInt8 nLvl)
 {
     if ( nLvl >= WW8ListManager::nMaxLevel )
         nLvl = WW8ListManager::nMaxLevel-1;
@@ -735,7 +735,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                 // if Write StyleDefinition then write the OutlineRule
                 const SwNumFormat& rNFormat = m_pDoc->GetOutlineNumRule()->Get( static_cast<sal_uInt16>( nLvl ) );
                 if ( m_bStyDef )
-                    AttrOutput().OutlineNumbering( static_cast< sal_uInt8 >( nLvl ), rNFormat, rFormat );
+                    AttrOutput().OutlineNumbering(static_cast<sal_uInt8>(nLvl));
 
                 if ( rNFormat.GetPositionAndSpaceMode() ==
                                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION  &&
@@ -1481,7 +1481,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
     {
         rShd.SetFore( 0);
         rShd.SetBack( msfilter::util::TransColToIco( rCol ) );
-        rShd.SetStyle( true, 0 ); // TODO
+        rShd.SetStyle( true, 0 ); // TODO FIXME???
     }
     return !rCol.GetTransparency();
 }
@@ -2425,8 +2425,6 @@ void WW8AttributeOutput::PostitField( const SwField* pField )
 
 bool WW8AttributeOutput::DropdownField( const SwField* pField )
 {
-    bool bExpand = true;
-    // TODO
     const SwDropDownField& rField2 = *static_cast<const SwDropDownField*>(pField);
     uno::Sequence<OUString> aItems =
         rField2.GetItemSequence();
@@ -2434,8 +2432,7 @@ bool WW8AttributeOutput::DropdownField( const SwField* pField )
                        rField2.GetHelp(),
                        rField2.GetToolTip(),
                        rField2.GetSelectedItem(), aItems);
-    bExpand = false;
-    return bExpand;
+    return false;
 }
 
 bool WW8AttributeOutput::PlaceholderField( const SwField* )
@@ -3274,7 +3271,8 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
     }
 }
 
-void WW8AttributeOutput::ParaNumRule_Impl( const SwTextNode* /*TODO*/, sal_Int32 nLvl, sal_Int32 nNumId )
+void WW8AttributeOutput::ParaNumRule_Impl(const SwTextNode* /*pTxtNd*/,
+        sal_Int32 const nLvl, sal_Int32 const nNumId)
 {
     // write sprmPIlvl and sprmPIlfo
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_PIlvl );

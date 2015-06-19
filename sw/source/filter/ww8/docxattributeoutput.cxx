@@ -5327,7 +5327,7 @@ void lcl_OutlineLevel(sax_fastparser::FSHelperPtr pSerializer, sal_uInt16 nLevel
             FSEND);
 }
 
-void DocxAttributeOutput::OutlineNumbering( sal_uInt8 nLvl, const SwNumFormat& /*rNFormat*/, const SwFormat& /*rFormat*/ )
+void DocxAttributeOutput::OutlineNumbering(sal_uInt8 const nLvl)
 {
     lcl_OutlineLevel(m_pSerializer, nLvl);
 }

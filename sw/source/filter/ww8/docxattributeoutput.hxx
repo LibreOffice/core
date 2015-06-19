@@ -282,7 +282,7 @@ public:
     virtual void EndStyleProperties( bool bParProp ) SAL_OVERRIDE;
 
     /// Numbering rule and Id.
-    virtual void OutlineNumbering( sal_uInt8 nLvl, const SwNumFormat &rNFormat, const SwFormat &rFormat ) SAL_OVERRIDE;
+    virtual void OutlineNumbering(sal_uInt8 nLvl) SAL_OVERRIDE;
 
     /// Page break
     /// As a paragraph property - the paragraph should be on the next page.

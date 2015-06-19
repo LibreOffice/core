@@ -153,7 +153,7 @@ public:
     WW8_FC GetStartFc() const;
     WW8_FC GetEndFc() const;
 
-    sal_uInt8 *CopyLastSprms(sal_uInt8 &rLen, bool bVer8);
+    sal_uInt8 *CopyLastSprms(sal_uInt8 &rLen);
 };
 
 // class WW8_WrPc collects all piece entries for one piece
@@ -871,7 +871,7 @@ WW8_WrPlcPn::~WW8_WrPlcPn()
 sal_uInt8 *WW8_WrPlcPn::CopyLastSprms(sal_uInt8 &rLen)
 {
     WW8_WrFkp& rF = aFkps.back();
-    return rF.CopyLastSprms(rLen, true/*TODO*/);
+    return rF.CopyLastSprms(rLen);
 }
 
 void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pSprms)
@@ -1019,7 +1019,7 @@ sal_uInt8 WW8_WrFkp::SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms
     return 0;           // didn't found it
 }
 
-sal_uInt8 *WW8_WrFkp::CopyLastSprms(sal_uInt8 &rLen, bool bVer8)
+sal_uInt8 *WW8_WrFkp::CopyLastSprms(sal_uInt8 &rLen)
 {
     rLen=0;
     sal_uInt8 *pStart=0,*pRet=0;
@@ -1033,7 +1033,7 @@ sal_uInt8 *WW8_WrFkp::CopyLastSprms(sal_uInt8 &rLen, bool bVer8)
 
     const sal_uInt8* p = pFkp + ( (sal_uInt16)nStart << 1 );
 
-    if (!*p && bVer8)
+    if (!*p)
         p++;
 
     if (*p)

@@ -1065,7 +1065,7 @@ void RtfAttributeOutput::EndStyleProperties(bool /*bParProp*/)
     /* noop */
 }
 
-void RtfAttributeOutput::OutlineNumbering(sal_uInt8 nLvl, const SwNumFormat& /*rNFormat*/, const SwFormat& /*rFormat*/)
+void RtfAttributeOutput::OutlineNumbering(sal_uInt8 nLvl)
 {
     if (nLvl >= WW8ListManager::nMaxLevel)
         nLvl = WW8ListManager::nMaxLevel - 1;

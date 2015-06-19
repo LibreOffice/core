@@ -285,7 +285,7 @@ public:
     virtual void EndStyleProperties( bool bParProp ) = 0;
 
     /// Numbering rule and Id.
-    virtual void OutlineNumbering( sal_uInt8 nLvl, const SwNumFormat& rNFormat, const SwFormat& rFormat ) = 0;
+    virtual void OutlineNumbering(sal_uInt8 nLvl) = 0;
 
     /// Page break
     /// As a paragraph property - the paragraph should be on the next page.
