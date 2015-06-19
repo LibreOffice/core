@@ -881,11 +881,17 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             styleClass = GTK_STYLE_CLASS_CHECK;
             context = mpMenuItemStyle;
             renderType = RENDER_CHECK;
+            nType = CTRL_CHECKBOX;
+            if (nState & ControlState::PRESSED)
+                flags = (GtkStateFlags)(flags | GTK_STATE_FLAG_CHECKED);
             break;
         case PART_MENU_ITEM_RADIO_MARK:
             styleClass = GTK_STYLE_CLASS_RADIO;
             context = mpMenuItemStyle;
             renderType = RENDER_RADIO;
+            nType = CTRL_RADIOBUTTON;
+            if (nState & ControlState::PRESSED)
+                flags = (GtkStateFlags)(flags | GTK_STATE_FLAG_CHECKED);
             break;
         case PART_MENU_SEPARATOR:
             styleClass = GTK_STYLE_CLASS_SEPARATOR;
