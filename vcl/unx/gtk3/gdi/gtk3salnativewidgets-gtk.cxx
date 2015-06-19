@@ -33,6 +33,7 @@ GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpCheckMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpComboboxButtonStyle = NULL;
@@ -824,6 +825,7 @@ static GtkWidget* gFrameIn;
 static GtkWidget* gFrameOut;
 static GtkWidget* gMenuBarWidget;
 static GtkWidget* gMenuItemMenuBarWidget;
+static GtkWidget* gCheckMenuItemWidget;
 static GtkWidget* gTreeViewWidget;
 
 bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
@@ -879,7 +881,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             break;
         case PART_MENU_ITEM_CHECK_MARK:
             styleClass = GTK_STYLE_CLASS_CHECK;
-            context = mpMenuItemStyle;
+            context = mpCheckMenuItemStyle;
             renderType = RENDER_CHECK;
             nType = CTRL_CHECKBOX;
             if (nState & ControlState::PRESSED)
@@ -887,7 +889,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             break;
         case PART_MENU_ITEM_RADIO_MARK:
             styleClass = GTK_STYLE_CLASS_RADIO;
-            context = mpMenuItemStyle;
+            context = mpCheckMenuItemStyle;
             renderType = RENDER_RADIO;
             nType = CTRL_RADIOBUTTON;
             if (nState & ControlState::PRESSED)
@@ -1259,7 +1261,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         {
             indicator_size = 0;
 
-            gtk_style_context_get_style( mpMenuItemStyle,
+            gtk_style_context_get_style( mpCheckMenuItemStyle,
                                          "indicator-size", &indicator_size,
                                          nullptr );
 
@@ -2022,6 +2024,11 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpMenuItemStyle = gtk_style_context_new();
     gtk_style_context_set_path(mpMenuItemStyle, path);
     gtk_widget_path_free(path);
+
+    gCheckMenuItemWidget = gtk_check_menu_item_new_with_label("M");
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu),
+                          gCheckMenuItemWidget);
+    mpCheckMenuItemStyle = gtk_widget_get_style_context(gCheckMenuItemWidget);
 
     /* Menu bar */
     gMenuBarWidget = gtk_menu_bar_new();
