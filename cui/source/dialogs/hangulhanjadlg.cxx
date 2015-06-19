@@ -346,7 +346,7 @@ namespace svx
 
     void SuggestionSet::UserDraw( const UserDrawEvent& rUDEvt )
     {
-        OutputDevice*  pDev = rUDEvt.GetDevice();
+        vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
         Rectangle aRect = rUDEvt.GetRect();
         sal_uInt16  nItemId = rUDEvt.GetItemId();
 

@@ -351,8 +351,8 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 
 void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    OutputDevice* pDev = rUsrEvt.GetDevice();
-    assert(pDev && "no OutputDevice on UserDrawEvent");
+    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
+
     const Rectangle& rRect = rUsrEvt.GetRect();
     StatusBar& rBar = GetStatusBar();
     Point aItemPos = rBar.GetItemTextPos( GetId() );

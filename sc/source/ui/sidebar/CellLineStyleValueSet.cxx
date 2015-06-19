@@ -69,7 +69,7 @@ void CellLineStyleValueSet::SetSelItem(sal_uInt16 nSel)
 void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     Rectangle aRect = rUDEvt.GetRect();
-    OutputDevice*  pDev = rUDEvt.GetDevice();
+    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
 
     long nRectHeight = aRect.GetHeight();

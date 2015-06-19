@@ -296,45 +296,48 @@ inline HelpEvent::HelpEvent( HelpEventMode nHelpMode )
     mbKeyboardActivated = true;
 }
 
-
-// - UserDrawEvent -
-
-
+/// Event to pass information for UserDraw() handling eg. in comboboxes.
 class VCL_DLLPUBLIC UserDrawEvent
 {
 private:
-    VclPtr<OutputDevice> mpOutDev;
+    /// Window that owns the user draw.
+    VclPtr<vcl::Window> mpWindow;
+
+    /// RenderContext to which we should draw - can be a VirtualDevice or anything.
+    VclPtr<vcl::RenderContext> mpRenderContext;
+
     Rectangle           maOutRect;
     sal_uInt16          mnItemId;
     sal_uInt16          mnStyle;
 
 public:
-                        UserDrawEvent();
-                        UserDrawEvent( OutputDevice* pOut,
-                                       const Rectangle& rOutRect,
-                                       sal_uInt16 nId, sal_uInt16 nStyle = 0 );
+    UserDrawEvent();
+    UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pRenderContext,
+            const Rectangle& rOutRect, sal_uInt16 nId, sal_uInt16 nStyle = 0);
 
-    OutputDevice*       GetDevice() const { return mpOutDev; }
+    vcl::Window*        GetWindow() const { return mpWindow; }
+    vcl::RenderContext* GetRenderContext() const { return mpRenderContext; }
     const Rectangle&    GetRect() const { return maOutRect; }
-    sal_uInt16              GetItemId() const { return mnItemId; }
-    sal_uInt16              GetStyle() const { return mnStyle; }
+    sal_uInt16          GetItemId() const { return mnItemId; }
+    sal_uInt16          GetStyle() const { return mnStyle; }
 };
 
 inline UserDrawEvent::UserDrawEvent()
+    : mpWindow(nullptr)
+    , mpRenderContext(nullptr)
+    , mnItemId(0)
+    , mnStyle(0)
 {
-    mpOutDev    = NULL;
-    mnItemId    = 0;
-    mnStyle     = 0;
 }
 
-inline UserDrawEvent::UserDrawEvent( OutputDevice* pOut,
-                                     const Rectangle& rOutRect,
-                                     sal_uInt16 nId, sal_uInt16 nStyle ) :
-            maOutRect( rOutRect )
+inline UserDrawEvent::UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pRenderContext,
+        const Rectangle& rOutRect, sal_uInt16 nId, sal_uInt16 nStyle)
+    : mpWindow(pWindow)
+    , mpRenderContext(pRenderContext)
+    , maOutRect( rOutRect )
+    , mnItemId(nId)
+    , mnStyle(nStyle)
 {
-    mpOutDev    = pOut;
-    mnItemId    = nId;
-    mnStyle     = nStyle;
 }
 
 

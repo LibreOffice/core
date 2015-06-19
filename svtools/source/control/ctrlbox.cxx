@@ -258,11 +258,12 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
 
             const Rectangle aRect(aPos, aImageSize);
 
-            rUDEvt.GetDevice()->Push();
-            rUDEvt.GetDevice()->SetFillColor( pData->aColor );
-            rUDEvt.GetDevice()->SetLineColor( rUDEvt.GetDevice()->GetTextColor() );
-            rUDEvt.GetDevice()->DrawRect(aRect);
-            rUDEvt.GetDevice()->Pop();
+            vcl::RenderContext* pRenderContext = rUDEvt.GetRenderContext();
+            pRenderContext->Push();
+            pRenderContext->SetFillColor(pData->aColor);
+            pRenderContext->SetLineColor(pRenderContext->GetTextColor());
+            pRenderContext->DrawRect(aRect);
+            pRenderContext->Pop();
 
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
@@ -276,7 +277,7 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
 
                 if(!aBlendFrame.IsEmpty())
                 {
-                    rUDEvt.GetDevice()->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
+                    pRenderContext->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
                 }
             }
 
@@ -1125,15 +1126,16 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         nX += IMGOUTERTEXTSPACE;
 
         const bool bSymbolFont = isSymbolFont(rInfo);
+        vcl::RenderContext* pRenderContext = rUDEvt.GetRenderContext();
 
-        Color aTextColor = rUDEvt.GetDevice()->GetTextColor();
-        vcl::Font aOldFont( rUDEvt.GetDevice()->GetFont() );
+        Color aTextColor = pRenderContext->GetTextColor();
+        vcl::Font aOldFont(pRenderContext->GetFont());
         Size aSize( aOldFont.GetSize() );
         aSize.Height() += EXTRAFONTSIZE;
         vcl::Font aFont( rInfo );
         aFont.SetSize( aSize );
-        rUDEvt.GetDevice()->SetFont( aFont );
-        rUDEvt.GetDevice()->SetTextColor( aTextColor );
+        pRenderContext->SetFont(aFont);
+        pRenderContext->SetTextColor(aTextColor);
 
         bool bUsingCorrectFont = true;
         Rectangle aTextRect;
@@ -1142,29 +1144,29 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         OUString sFontName = rInfo.GetName();
 
         //If it shouldn't or can't draw its own name because it doesn't have the glyphs
-        if (!canRenderNameOfSelectedFont(*rUDEvt.GetDevice()))
+        if (!canRenderNameOfSelectedFont(*pRenderContext))
             bUsingCorrectFont = false;
         else
         {
             //Make sure it fits in the available height, shrinking the font if necessary
-            bUsingCorrectFont = shrinkFontToFit(sFontName, nH, aFont, *rUDEvt.GetDevice(), aTextRect) != 0;
+            bUsingCorrectFont = shrinkFontToFit(sFontName, nH, aFont, *pRenderContext, aTextRect) != 0;
         }
 
         if (!bUsingCorrectFont)
         {
-            rUDEvt.GetDevice()->SetFont(aOldFont);
-            rUDEvt.GetDevice()->GetTextBoundRect(aTextRect, sFontName, 0, 0);
+            pRenderContext->SetFont(aOldFont);
+            pRenderContext->GetTextBoundRect(aTextRect, sFontName, 0, 0);
         }
 
         long nTextHeight = aTextRect.GetHeight();
         long nDesiredGap = (nH-nTextHeight)/2;
         long nVertAdjust = nDesiredGap - aTextRect.Top();
         Point aPos( nX, aTopLeft.Y() + nVertAdjust );
-        rUDEvt.GetDevice()->DrawText( aPos, sFontName );
+        pRenderContext->DrawText(aPos, sFontName);
         long nTextX = aPos.X() + aTextRect.GetWidth() + GAPTOEXTRAPREVIEW;
 
         if (!bUsingCorrectFont)
-            rUDEvt.GetDevice()->SetFont( aFont );
+            pRenderContext->SetFont(aFont);
 
         OUString sSampleText;
 
@@ -1173,7 +1175,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
             const bool bNameBeginsWithLatinText = rInfo.GetName()[0] <= 'z';
 
             if (bNameBeginsWithLatinText || !bUsingCorrectFont)
-                sSampleText = makeShortRepresentativeTextForSelectedFont(*rUDEvt.GetDevice());
+                sSampleText = makeShortRepresentativeTextForSelectedFont(*pRenderContext);
         }
 
         //If we're not a symbol font, but could neither render our own name and
@@ -1221,7 +1223,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 OUString sText = makeShortRepresentativeTextForScript(aScripts[i]);
                 if (!sText.isEmpty())
                 {
-                    bool bHasSampleTextGlyphs = (-1 == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
+                    bool bHasSampleTextGlyphs = (-1 == pRenderContext->HasGlyphs(aFont, sText));
                     if (bHasSampleTextGlyphs)
                     {
                         sSampleText = sText;
@@ -1241,7 +1243,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 OUString sText = makeShortMinimalTextForScript(aMinimalScripts[i]);
                 if (!sText.isEmpty())
                 {
-                    bool bHasSampleTextGlyphs = (-1 == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
+                    bool bHasSampleTextGlyphs = (-1 == pRenderContext->HasGlyphs(aFont, sText));
                     if (bHasSampleTextGlyphs)
                     {
                         sSampleText = sText;
@@ -1255,22 +1257,23 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         //render something representative of what it would like to render then
         //make up some semi-random text that it *can* display
         if (bSymbolFont || (!bUsingCorrectFont && sSampleText.isEmpty()))
-            sSampleText = makeShortRepresentativeSymbolTextForSelectedFont(*rUDEvt.GetDevice());
+            sSampleText = makeShortRepresentativeSymbolTextForSelectedFont(*pRenderContext);
 
         if (!sSampleText.isEmpty())
         {
-            const Size &rItemSize = rUDEvt.GetDevice()->GetOutputSize();
+            const Size &rItemSize = rUDEvt.GetWindow()->GetOutputSize();
+
             //leave a little border at the edge
             long nSpace = rItemSize.Width() - nTextX - IMGOUTERTEXTSPACE;
             if (nSpace >= 0)
             {
                 //Make sure it fits in the available height, and get how wide that would be
-                long nWidth = shrinkFontToFit(sSampleText, nH, aFont, *rUDEvt.GetDevice(), aTextRect);
+                long nWidth = shrinkFontToFit(sSampleText, nH, aFont, *pRenderContext, aTextRect);
                 //Chop letters off until it fits in the available width
                 while (nWidth > nSpace || nWidth > MAXPREVIEWWIDTH)
                 {
                     sSampleText = sSampleText.copy(0, sSampleText.getLength()-1);
-                    nWidth = rUDEvt.GetDevice()->GetTextBoundRect(aTextRect, sSampleText, 0, 0) ?
+                    nWidth = pRenderContext->GetTextBoundRect(aTextRect, sSampleText, 0, 0) ?
                              aTextRect.GetWidth() : 0;
                 }
 
@@ -1281,12 +1284,12 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                     nDesiredGap = (nH-nTextHeight)/2;
                     nVertAdjust = nDesiredGap - aTextRect.Top();
                     aPos = Point(nTextX + nSpace - nWidth, aTopLeft.Y() + nVertAdjust);
-                    rUDEvt.GetDevice()->DrawText( aPos, sSampleText );
+                    pRenderContext->DrawText(aPos, sSampleText);
                 }
             }
         }
 
-        rUDEvt.GetDevice()->SetFont( aOldFont );
+        pRenderContext->SetFont(aOldFont);
         DrawEntry( rUDEvt, false, false);   // draw separator
     }
     else

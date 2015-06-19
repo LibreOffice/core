@@ -112,7 +112,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     if( ListBox::GetEntryFlags(nItem) & ListBoxEntryFlags::DisableSelection )
     {
         Rectangle aOutRect( rUDEvt.GetRect() );
-        OutputDevice* pDev = rUDEvt.GetDevice();
+        vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
 
         // fill the background
         Color aColor (GetSettings().GetStyleSettings().GetDialogColor());

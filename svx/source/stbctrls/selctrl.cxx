@@ -139,7 +139,7 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 void SvxSelectionModeControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     const Rectangle aControlRect = getControlRect();
-    OutputDevice* pDev = rUsrEvt.GetDevice();
+    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
     Rectangle aRect = rUsrEvt.GetRect();
 
     Size aImgSize( maImage.GetSizePixel() );

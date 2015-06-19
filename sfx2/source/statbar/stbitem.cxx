@@ -396,7 +396,7 @@ throw ( ::uno::RuntimeException, std::exception )
     if ( pOutDev )
     {
         ::Rectangle aRect = VCLRectangle( rOutputRectangle );
-        UserDrawEvent aUserDrawEvent( pOutDev, aRect, pBar->GetCurItemId(), (sal_uInt16)nStyle );
+        UserDrawEvent aUserDrawEvent(nullptr, pOutDev, aRect, pBar->GetCurItemId(), static_cast<sal_uInt16>(nStyle));
         Paint( aUserDrawEvent );
     }
 }

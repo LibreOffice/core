@@ -186,7 +186,7 @@ SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
 
 void SvxZoomPageStatusBarControl::Paint(const UserDrawEvent& rUsrEvt)
 {
-    OutputDevice* pDev = rUsrEvt.GetDevice();
+    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
     Rectangle aRect = rUsrEvt.GetRect();
     Point aPt = centerImage(aRect, maImage);
     pDev->DrawImage(aPt, maImage);
