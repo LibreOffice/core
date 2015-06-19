@@ -506,7 +506,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                         sFontName = pBulletFont->GetName();
 
                     pPseudoFont = new wwFont( sFontName, pBulletFont->GetPitch(),
-                        eFamily, eChrSet, true );
+                        eFamily, eChrSet);
                 }
                 else
                     pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
@@ -696,7 +696,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
             */
             SubstituteBullet(sNumStr, eChrSet, sFontName);
             wwFont aPseudoFont(sFontName, rFont.GetPitch(), rFont.GetFamily(),
-                eChrSet, bWrtWW8);
+                eChrSet);
             nFontId = m_aFontHelper.GetId(aPseudoFont);
             *rpCh = static_cast<sal_uInt8>(sNumStr[0]);
         }

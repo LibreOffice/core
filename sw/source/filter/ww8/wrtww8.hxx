@@ -296,13 +296,12 @@ private:
     OUString msFamilyNm;
     OUString msAltNm;
     bool mbAlt;
-    bool mbWrtWW8;
     FontPitch mePitch;
     FontFamily meFamily;
     rtl_TextEncoding meChrSet;
 public:
     wwFont( const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
-        rtl_TextEncoding eChrSet, bool bWrtWW8 );
+        rtl_TextEncoding eChrSet);
     bool Write( SvStream *pTableStram ) const;
     void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;
     void WriteRtf( const RtfAttributeOutput* rAttrOutput ) const;

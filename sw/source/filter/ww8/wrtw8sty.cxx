@@ -729,7 +729,8 @@ const SwNumRule* MSWordStyles::GetSwNumRule(sal_uInt16 nId) const
 //          Fonts
 
 wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
-    rtl_TextEncoding eChrSet, bool bWrtWW8) : mbAlt(false), mbWrtWW8(bWrtWW8), mePitch(ePitch), meFamily(eFamily), meChrSet(eChrSet)
+        rtl_TextEncoding eChrSet)
+    : mbAlt(false), mePitch(ePitch), meFamily(eFamily), meChrSet(eChrSet)
 {
     FontMapExport aResult(rFamilyName);
     msFamilyNm = aResult.msPrimary;
@@ -743,18 +744,9 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
 
     memset(maWW8_FFN, 0, sizeof(maWW8_FFN));
 
-    if (bWrtWW8)
-    {
-        maWW8_FFN[0] = (sal_uInt8)( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.getLength() ) ));
-        if (mbAlt)
-            maWW8_FFN[0] = static_cast< sal_uInt8 >(maWW8_FFN[0] + 2 * ( 1 + msAltNm.getLength()));
-    }
-    else
-    {
-        maWW8_FFN[0] = (sal_uInt8)( 6 - 1 + 1 + msFamilyNm.getLength() );
-        if (mbAlt)
-            maWW8_FFN[0] = static_cast< sal_uInt8 >(maWW8_FFN[0] + 1 + msAltNm.getLength());
-    }
+    maWW8_FFN[0] = (sal_uInt8)( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.getLength() ) ));
+    if (mbAlt)
+        maWW8_FFN[0] = static_cast< sal_uInt8 >(maWW8_FFN[0] + 2 * ( 1 + msAltNm.getLength()));
 
     sal_uInt8 aB = 0;
     switch(ePitch)
@@ -799,9 +791,7 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
     //to SHIFTJIS presumably to capture that it's a multi-byte encoding font
     //but Word95 doesn't do this, and sets it to 0 (ANSI), so we should do the
     //same
-    maWW8_FFN[4] = bWrtWW8 ?
-        sw::ms::rtl_TextEncodingToWinCharset(eChrSet) :
-        rtl_getBestWindowsCharsetFromTextEncoding(eChrSet);
+    maWW8_FFN[4] = sw::ms::rtl_TextEncodingToWinCharset(eChrSet);
 
     if (mbAlt)
         maWW8_FFN[5] = static_cast< sal_uInt8 >(msFamilyNm.getLength() + 1);
@@ -810,27 +800,14 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
 bool wwFont::Write(SvStream *pTableStrm) const
 {
     pTableStrm->Write(maWW8_FFN, sizeof(maWW8_FFN));    // fixed part
-    if (mbWrtWW8)
-    {
-        // ab Ver8 sind folgende beiden Felder eingeschoben,
-        // werden von uns ignoriert.
-        //char  panose[ 10 ];       //  0x6   PANOSE
-        //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
-        SwWW8Writer::FillCount(*pTableStrm, 0x22);
-        SwWW8Writer::WriteString16(*pTableStrm, msFamilyNm, true);
-        if (mbAlt)
-            SwWW8Writer::WriteString16(*pTableStrm, msAltNm, true);
-    }
-    else
-    {
-        SwWW8Writer::WriteString8(*pTableStrm, msFamilyNm, true,
-            RTL_TEXTENCODING_MS_1252);
-        if (mbAlt)
-        {
-            SwWW8Writer::WriteString8( *pTableStrm, msAltNm, true,
-                RTL_TEXTENCODING_MS_1252);
-        }
-    }
+    // ab Ver8 sind folgende beiden Felder eingeschoben,
+    // werden von uns ignoriert.
+    //char  panose[ 10 ];       //  0x6   PANOSE
+    //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
+    SwWW8Writer::FillCount(*pTableStrm, 0x22);
+    SwWW8Writer::WriteString16(*pTableStrm, msFamilyNm, true);
+    if (mbAlt)
+        SwWW8Writer::WriteString16(*pTableStrm, msAltNm, true);
     return true;
 }
 
@@ -894,24 +871,24 @@ sal_uInt16 wwFontHelper::GetId(const wwFont &rFont)
 void wwFontHelper::InitFontTable(const SwDoc& rDoc)
 {
     GetId(wwFont(OUString("Times New Roman"), PITCH_VARIABLE,
-        FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252, true));
+        FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252));
 
     GetId(wwFont(OUString("Symbol"), PITCH_VARIABLE, FAMILY_ROMAN,
-        RTL_TEXTENCODING_SYMBOL, true));
+        RTL_TEXTENCODING_SYMBOL));
 
     GetId(wwFont(OUString("Arial"), PITCH_VARIABLE, FAMILY_SWISS,
-        RTL_TEXTENCODING_MS_1252, true));
+        RTL_TEXTENCODING_MS_1252));
 
     const SvxFontItem* pFont = static_cast<const SvxFontItem*>(GetDfltAttr(RES_CHRATR_FONT));
 
     GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-        pFont->GetFamily(), pFont->GetCharSet(), true));
+        pFont->GetFamily(), pFont->GetCharSet()));
 
     const SfxItemPool& rPool = rDoc.GetAttrPool();
     if (0 != (pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_FONT))))
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-            pFont->GetFamily(), pFont->GetCharSet(), true));
+            pFont->GetFamily(), pFont->GetCharSet()));
     }
 
     if (!bLoadAllFonts)
@@ -927,7 +904,7 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
             if (0 != pFont)
             {
                 GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-                            pFont->GetFamily(), pFont->GetCharSet(), true));
+                            pFont->GetFamily(), pFont->GetCharSet()));
             }
         }
     }
@@ -936,14 +913,14 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
 sal_uInt16 wwFontHelper::GetId(const vcl::Font& rFont)
 {
     wwFont aFont(rFont.GetName(), rFont.GetPitch(), rFont.GetFamily(),
-        rFont.GetCharSet(), true);
+        rFont.GetCharSet());
     return GetId(aFont);
 }
 
 sal_uInt16 wwFontHelper::GetId(const SvxFontItem& rFont)
 {
     wwFont aFont(rFont.GetFamilyName(), rFont.GetPitch(), rFont.GetFamily(),
-        rFont.GetCharSet(), true);
+        rFont.GetCharSet());
     return GetId(aFont);
 }
 
