@@ -80,6 +80,7 @@ char const * SyntaxStrings[] = {
 "\t\tContainer",
 "\t\tDefault        = Identifier",
 "\t\tExecMethod     = Identifier",
+"\t\tAlias          = Identifier",
 "\t\tExport*",
 "\t\tFastCall",
 "\t\tGet, Set",
@@ -110,9 +111,17 @@ NULL };
 
 char CommandLineSyntax[] =
 "-fs<slotmap file>\n"
-"-fm<makefile target file>\n"
-"-help, ?                   @<file> response file\n"
-" <filenames>\n";
+"-fm<name of target file>\n"
+"-fM<Dep file>\n"
+"-fs<name of slot output file>\n"
+"-fx<name of IDL file for the CSV file>\n"
+"-i includePath\n"
+"-quiet\n"
+"-verbose\n"
+"-syntax\n"
+"-help, ?\n"
+"@<file> response file\n"
+"<filenames>\n";
 
 void Init()
 {

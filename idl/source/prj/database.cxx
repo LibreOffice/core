@@ -117,7 +117,6 @@ bool SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
 {
     if( !pIdTable )
         pIdTable = new SvStringHashTable( 20003 );
-
     sal_uInt32 nHash;
     if( pIdTable->Insert( rIdName, &nHash ) )
     {
@@ -360,7 +359,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                 // is exactly this type
                 return pType;
 
-            DBG_ASSERT( aTmpTypeList.front(), "mindestens ein Element" );
+            DBG_ASSERT( aTmpTypeList.front(), "at least one lement" );
             SvMetaTypeRef xType = new SvMetaType( pType->GetName().getString(), 'h', "dummy" );
             xType->SetRef( pType );
             xType->SetIn( bIn );
@@ -370,6 +369,34 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 
             aTmpTypeList.push_back( xType );
             return xType;
+        }
+    }
+    rInStm.Seek( nTokPos );
+    return NULL;
+}
+
+SvAlias * SvIdlDataBase::ReadAlias( SvTokenStream & rInStm )
+{
+    sal_uInt32  nTokPos = rInStm.Tell();
+    // Alias
+    SvToken * pTok = rInStm.GetToken_Next();
+    if( pTok->IsIdentifier() )
+    {
+        if ( pTok->GetString().equalsIgnoreAsciiCase( "alias") )
+        {
+            SvAlias * pAlias = new SvAlias();
+            pTok = rInStm.GetToken_Next();
+            pAlias->aAlias = pTok->GetString();
+            pTok = rInStm.GetToken_Next();
+            if (! (pTok->IsChar() && pTok->GetChar() == '=') )
+            {
+                OStringBuffer aStr("Syntax error : Alias NewAlias = RealTarget for NewAlias=");
+                aStr.append(pAlias->aAlias);
+                OSL_FAIL(aStr.getStr());
+            }
+            pTok = rInStm.GetToken_Next();
+            pAlias->aTarget = pTok->GetString();
+            return pAlias;
         }
     }
     rInStm.Seek( nTokPos );
@@ -394,6 +421,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
         SvToken * pTok = rInStm.GetToken_Next();
         if( pTok->IsIdentifier() )
         {
+
             sal_uLong n;
             if( FindId( pTok->GetString(), &n ) )
             {
@@ -405,7 +433,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 }
             }
 
-            OStringBuffer aStr("Nicht gefunden : ");
+            OStringBuffer aStr("The following attribute is unknown : ");
             aStr.append(pTok->GetString());
             OSL_FAIL(aStr.getStr());
         }
@@ -681,6 +709,12 @@ bool SvIdlDataBase::WriteDepFile(
     rStream.WriteCharPtr( "\n\n" );
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDummy(rStream));
     return rStream.GetError() == SVSTREAM_OK;
+}
+
+void SvIdlDataBase::AddAlias( SvAlias * pAlias )
+{
+    //SAL_DEBUG("Add alias " << pAlias->aAlias << "->" << pAlias->aTarget);
+    aAliasList.push_back(pAlias);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

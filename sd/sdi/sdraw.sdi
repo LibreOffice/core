@@ -7041,6 +7041,8 @@ SfxVoidItem NextPage SID_GO_TO_NEXT_PAGE
     GroupId = GID_MODIFY;
 ]
 
+Alias NextSlide = NextPage
+
 SfxVoidItem PreviousPage SID_GO_TO_PREVIOUS_PAGE
 ()
 [
@@ -7064,6 +7066,8 @@ SfxVoidItem PreviousPage SID_GO_TO_PREVIOUS_PAGE
     ToolBoxConfig = TRUE,
     GroupId = GID_MODIFY;
 ]
+
+Alias PreviousSlide = PreviousPage
 
 SfxVoidItem FirstPage SID_GO_TO_FIRST_PAGE
 ()
@@ -7089,6 +7093,8 @@ SfxVoidItem FirstPage SID_GO_TO_FIRST_PAGE
     GroupId = GID_MODIFY;
 ]
 
+Alias FirstSlide = FirstPage
+
 SfxVoidItem LastPage SID_GO_TO_LAST_PAGE
 ()
 [
@@ -7112,6 +7118,8 @@ SfxVoidItem LastPage SID_GO_TO_LAST_PAGE
     ToolBoxConfig = TRUE,
     GroupId = GID_MODIFY;
 ]
+
+Alias LastSlide = LastPage
 
 SfxVoidItem MovePageUp SID_MOVE_PAGE_UP
 ()
@@ -7137,6 +7145,8 @@ SfxVoidItem MovePageUp SID_MOVE_PAGE_UP
     GroupId = GID_MODIFY;
 ]
 
+Alias MoveSlideUp = MovePageUp
+
 SfxVoidItem MovePageDown SID_MOVE_PAGE_DOWN
 ()
 [
@@ -7160,6 +7170,8 @@ SfxVoidItem MovePageDown SID_MOVE_PAGE_DOWN
     ToolBoxConfig = TRUE,
     GroupId = GID_MODIFY;
 ]
+
+Alias MoveSlideDown = MovePageDown
 
 SfxVoidItem MovePageFirst SID_MOVE_PAGE_FIRST
 ()
@@ -7185,6 +7197,8 @@ SfxVoidItem MovePageFirst SID_MOVE_PAGE_FIRST
     GroupId = GID_MODIFY;
 ]
 
+Alias MoveSlideFirst = MovePageFirst
+
 SfxVoidItem MovePageLast SID_MOVE_PAGE_LAST
 ()
 [
@@ -7209,3 +7223,4 @@ SfxVoidItem MovePageLast SID_MOVE_PAGE_LAST
     GroupId = GID_MODIFY;
 ]
 
+Alias MoveSlideLast = MovePageLast

@@ -64,9 +64,9 @@ class SvMetaSlot : public SvMetaAttribute
     SvString        aDisableFlags;
     SvMetaSlot*     pLinkedSlot;
     SvMetaSlot*     pNextSlot;
-    sal_uLong           nListPos;
+    sal_uLong       nListPos;
     SvMetaEnumValue* pEnumValue;
-    SvString    aUnoName;
+    SvString        aUnoName;
 
     void            WriteSlot( const OString& rShellName,
                             sal_uInt16 nCount, const OString& rSlotId,
@@ -202,6 +202,7 @@ public:
     bool                GetHasDialog() const;
     const OString&     GetPseudoPrefix() const;
     const OString&     GetUnoName() const;
+    const OString&     GetAlias() const;
     bool                GetMenuConfig() const;
     bool                GetToolBoxConfig() const;
     bool                GetStatusBarConfig() const;

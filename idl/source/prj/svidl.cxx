@@ -111,7 +111,7 @@ int main ( int argc, char ** argv)
     SvCommand aCommand( argc, argv );
 
     if( aCommand.nVerbosity != 0 )
-        printf( "StarView Interface Definition Language (IDL) Compiler 3.0\n" );
+        printf( "StarView Interface Definition Language (IDL) Compiler 3.1\n" );
 
     Init();
     SvIdlWorkingBase * pDataBase = new SvIdlWorkingBase(aCommand);

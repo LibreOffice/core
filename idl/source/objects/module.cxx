@@ -91,6 +91,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvMetaClassRef aClass = new SvMetaClass();
         if( aClass->ReadSvIdl( rBase, rInStm ) )
         {
+            //SAL_DEBUG("Pushing class: " << aClass->GetName().getString() );
             aClassList.push_back( aClass );
             // announce globally
             rBase.GetClassList().push_back( aClass );
@@ -180,17 +181,26 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
     }
     else
     {
-        SvMetaSlotRef xSlot = new SvMetaSlot();
+        SvAlias * pAlias = NULL;
+        pAlias = rBase.ReadAlias( rInStm );
 
-        if( xSlot->ReadSvIdl( rBase, rInStm ) )
+        if ( !pAlias )
         {
-            if( xSlot->Test( rBase, rInStm ) )
+            SvMetaSlotRef xSlot = new SvMetaSlot();
+
+            if( xSlot->ReadSvIdl( rBase, rInStm ) )
             {
-                // declared in module
-                aAttrList.push_back( xSlot );
-                // announce globally
-                rBase.AppendAttr( xSlot );
+                if( xSlot->Test( rBase, rInStm ) )
+                {
+                    // declared in module
+                    aAttrList.push_back( xSlot );
+                    // announce globally
+                    rBase.AppendAttr( xSlot );
+                }
             }
+        } else {
+            // Store the alias for later use
+            rBase.AddAlias(pAlias);
         }
     }
 }
@@ -240,6 +250,7 @@ void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     for( sal_uLong n = 0; n < aClassList.size(); n++ )
     {
         SvMetaClass * pClass = aClassList[n];
+        //SAL_DEBUG("======================= " << pClass->GetName().getString() << " ====================");
         pClass->WriteSfx( rBase, rOutStm );
     }
 }

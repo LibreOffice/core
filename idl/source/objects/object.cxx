@@ -286,6 +286,7 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
 
         sal_uLong nId = pAttr->GetSlotId().GetValue();
 
+        // Basic case, not already defined slot
         std::vector<sal_uLong>::iterator iter = std::find(rSuperList.begin(),
                                                       rSuperList.end(),nId);
 
@@ -294,7 +295,26 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
             // Write only if not already written by subclass or
             // imported interface.
             rSuperList.push_back(nId);
+            //SAL_DEBUG("Inserting " << pAttr->GetName().getString());
             pAttr->Insert(rList, rPrefix, rBase);
+        }
+
+        // Search if we have to add aliases for this command
+        OString slotName = pAttr->GetName().getString();
+        std::vector<SvAlias*>::iterator itAlias;
+        std::vector<SvAlias*> & aliases = rBase.GetAliasList();
+
+        for (itAlias = aliases.begin(); itAlias != aliases.end(); ++itAlias )
+        {
+            if ( (*itAlias)->aTarget.equalsIgnoreAsciiCase(slotName) )
+            {
+                //SAL_DEBUG("Inserting " << (*itAlias)->aAlias << " as an alias of " << slotName );
+                SvMetaSlotRef xSlot = dynamic_cast<SvMetaSlot*>(pAttr);
+                assert(xSlot != NULL);
+                SvMetaSlotRef xSlot2 = xSlot->Clone();
+                xSlot2->SetName( (*itAlias)->aAlias );
+                xSlot2->Insert(rList, rPrefix, rBase);
+            }
         }
     }
 
@@ -392,6 +412,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     {
         SvSlotElement *pEle = aSlotList[ i ];
         SvMetaSlot *pSlot = pEle->xSlot;
+        //SAL_DEBUG("Generating " << pSlot->GetName().getString());
         pSlot->SetListPos( i );
     }
 

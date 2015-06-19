@@ -75,6 +75,11 @@
  <toolbar:toolbaritem xlink:href=".uno:MovePageDown" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:MovePageLast" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveSlideFirst" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveSlideUp" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveSlideDown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveSlideLast" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>
 </toolbar:toolbar>

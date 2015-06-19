@@ -31,25 +31,33 @@
 
 class SvCommand;
 
+struct SvAlias
+{
+    OString aAlias;
+    OString aTarget;
+};
+
 class SvIdlError
 {
     OString aText;
 public:
     sal_uInt32  nLine, nColumn;
 
-            SvIdlError() : nLine(0), nColumn(0) {}
-            SvIdlError( sal_uInt32 nL, sal_uInt32 nC )
-                : nLine(nL), nColumn(nC) {}
+    SvIdlError() : nLine(0), nColumn(0) {}
+    SvIdlError( sal_uInt32 nL, sal_uInt32 nC )
+       : nLine(nL), nColumn(nC) {}
 
     const OString&  GetText() const { return aText; }
     void SetText( const OString& rT ) { aText = rT; }
     bool            IsError() const { return nLine != 0; }
     void            Clear() { nLine = nColumn = 0; }
+
     SvIdlError &    operator = ( const SvIdlError & rRef )
-    { aText   = rRef.aText;
-      nLine   = rRef.nLine;
-      nColumn = rRef.nColumn;
-      return *this;
+    {
+        aText   = rRef.aText;
+        nLine   = rRef.nLine;
+        nColumn = rRef.nColumn;
+        return *this;
     }
 };
 
@@ -67,9 +75,10 @@ class SvIdlDataBase
     SvMetaModuleMemberList      aModuleList;
     SvMetaAttributeMemberList   aAttrList;
     SvMetaTypeMemberList        aTmpTypeList; // not persistent
+    std::vector<SvAlias*>       aAliasList;
 
 protected:
-    ::std::set< OUString > m_DepFiles;
+    ::std::set< OUString >      m_DepFiles;
     SvMetaObjectMemberStack     aContextStack;
     OUString                    aPath;
     SvIdlError                  aError;
@@ -81,19 +90,19 @@ protected:
 public:
     OUString sSlotMapFile;
 
-                explicit SvIdlDataBase( const SvCommand& rCmd );
-                ~SvIdlDataBase();
+    explicit SvIdlDataBase( const SvCommand& rCmd );
+    ~SvIdlDataBase();
 
     SvMetaAttributeMemberList&  GetAttrList() { return aAttrList; }
-    SvStringHashTable *       GetIdTable() { return pIdTable; }
-    SvMetaTypeMemberList &    GetTypeList();
-    SvMetaClassMemberList &   GetClassList()  { return aClassList; }
-    SvMetaModuleMemberList &  GetModuleList() { return aModuleList; }
-    SvMetaModule *            GetModule( const OString& rName );
+    SvStringHashTable *         GetIdTable() { return pIdTable; }
+    SvMetaTypeMemberList &      GetTypeList();
+    SvMetaClassMemberList &     GetClassList()  { return aClassList; }
+    SvMetaModuleMemberList &    GetModuleList() { return aModuleList; }
+    SvMetaModule *              GetModule( const OString& rName );
 
     // list of used types while writing
     SvMetaTypeMemberList    aUsedTypes;
-    OString            aIFaceName;
+    OString                 aIFaceName;
     SvNumberIdentifier      aStructSlotId;
 
     void                    StartNewFile( const OUString& rName );
@@ -137,6 +146,10 @@ public:
                                             SvMetaType * pType = NULL );
     SvMetaAttribute *       SearchKnownAttr( const SvNumberIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
+    SvAlias *               ReadAlias( SvTokenStream & rInStm );
+    void                    AddAlias( SvAlias * pAlias );
+    std::vector<SvAlias*> & GetAliasList() { return aAliasList; }
+
     void AddDepFile(OUString const& rFileName);
     bool WriteDepFile(SvFileStream & rStream, OUString const& rTarget);
 };

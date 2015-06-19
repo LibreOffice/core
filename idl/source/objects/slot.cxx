@@ -507,7 +507,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
         while ( !bFound && nLow <= nHigh )
         {
             nMid = (nLow + nHigh) >> 1;
-            DBG_ASSERT( nMid < nListCount, "bsearch ist buggy" );
+            DBG_ASSERT( nMid < nListCount, "bsearch is buggy" );
             int nDiff = (int) nId - (int) rList[ nMid ]->xSlot->GetSlotId().GetValue();
             if ( nDiff < 0)
             {
@@ -522,12 +522,32 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
                 break;
             }
             else
-                bFound = true;
+            {
+                // Same nId, check if same Names
+                OString name1 = GetName().getString();
+                OString name2 = rList[ nMid ]->xSlot->GetName().getString();
+                sal_Int32 nStrDiff = name1.compareTo(name2);
+                if (nStrDiff < 0) {
+                    if ( nMid == 0 )
+                        break;
+                    nHigh = nMid - 1;
+                }
+                else if ( nStrDiff > 0 )
+                {
+                    nLow = nMid + 1;
+                    if ( nLow == 0 )
+                        break;
+                }
+                else
+                    bFound = true;
+            }
         }
 
         DBG_ASSERT(!bFound, "Duplicate SlotId!");
         nPos = bFound ? nMid : nLow;
     }
+
+    // To be adapted:
 
     DBG_ASSERT( nPos <= nListCount,
         "nPos too large" );
@@ -543,12 +563,14 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
 
     if ( nPos < rList.size() )
     {
+        //SAL_DEBUG("Real insert at position " << nPos);
         SvSlotElementList::iterator it = rList.begin();
         std::advance( it, nPos );
         rList.insert( it, new SvSlotElement( this, rPrefix ) );
     }
     else
     {
+        //SAL_DEBUG("Real insert at end");
         rList.push_back( new SvSlotElement( this, rPrefix ) );
     }
 
@@ -715,10 +737,11 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     bool bIsEnumSlot = 0 != pEnumValue;
 
     rOutStm.WriteCharPtr( "// Slot Nr. " )
-       .WriteCharPtr( OString::number(nListPos).getStr() )
-       .WriteCharPtr( " : " );
+        .WriteCharPtr( OString::number(nListPos).getStr() )
+        .WriteCharPtr( " : " );
     OString aSlotIdValue(OString::number(GetSlotId().GetValue()));
     rOutStm.WriteCharPtr( aSlotIdValue.getStr() ) << endl;
+
     WriteTab( rOutStm, 1 );
     if( bIsEnumSlot )
         rOutStm.WriteCharPtr( "SFX_NEW_SLOT_ENUM( " );
@@ -960,13 +983,9 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         rOutStm.WriteCharPtr( "SfxSlotMode::NONE" );
     }
 
-    {
-        rOutStm.WriteCharPtr( ",\"" );
-        rOutStm.WriteCharPtr( GetMangleName( false ).getStr() );
-        rOutStm.WriteCharPtr( "\"" );
-    }
-
-    rOutStm.WriteCharPtr( " )," ) << endl;
+    rOutStm.WriteCharPtr( ",\"" );
+    rOutStm.WriteCharPtr( GetMangleName( false ).getStr() );
+    rOutStm.WriteCharPtr( "\" )," ) << endl;
 }
 
 sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rOutStm )
