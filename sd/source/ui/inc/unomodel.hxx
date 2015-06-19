@@ -252,7 +252,7 @@ public:
     /// @see vcl::ITiledRenderable::setTextSelection().
     virtual void setTextSelection(int nType, int nX, int nY) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::getTextSelection().
-    virtual OString getTextSelection(const char* pMimeType) SAL_OVERRIDE;
+    virtual OString getTextSelection(const char* pMimeType, OString& rUsedMimeType) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::setGraphicSelection().
     virtual void setGraphicSelection(int nType, int nX, int nY) SAL_OVERRIDE;
     /// @see lok::Document::resetSelection().

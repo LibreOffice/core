@@ -130,12 +130,14 @@ static void doCopy(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
-    char* pSelection = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8");
+    char* pUsedFormat = 0;
+    char* pSelection = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", &pUsedFormat);
 
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(pDocView), GDK_SELECTION_CLIPBOARD);
     gtk_clipboard_set_text(pClipboard, pSelection, -1);
 
     free(pSelection);
+    free(pUsedFormat);
 }
 
 /// Get the visible area of the scrolled window

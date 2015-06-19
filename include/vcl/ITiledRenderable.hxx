@@ -126,7 +126,7 @@ public:
      *
      * @see lok::Document::getTextSelection().
      */
-    virtual OString getTextSelection(const char* /*pMimeType*/) { return OString(); }
+    virtual OString getTextSelection(const char* /*pMimeType*/, OString& /*rUsedMimeType*/) { return OString(); }
 
     /**
      * Adjusts the graphic selection.
