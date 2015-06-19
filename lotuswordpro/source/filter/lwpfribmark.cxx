@@ -666,13 +666,13 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle = new XFDateStyle;
             OUString sText;
             pDateStyle->AddYear();
-            sText = OUString(0x5e74);
+            sText = OUString(sal_Unicode(0x5e74));
             pDateStyle->AddText(sText);
             pDateStyle->AddMonth(false);
-            sText = OUString(0x6708);
+            sText = OUString(sal_Unicode(0x6708));
             pDateStyle->AddText(sText);
             pDateStyle->AddMonthDay(false);
-            sText = OUString(0x65e5);
+            sText = OUString(sal_Unicode(0x65e5));
             pDateStyle->AddText(sText);
         }
         else if (sFormula == "%FLoa" || sFormula == "%FLooaa" || sFormula == "%FLOA" )
@@ -680,10 +680,10 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle = new XFDateStyle;
             OUString sText;
             pDateStyle->AddMonth(false);
-            sText = OUString(0x6708);
+            sText = OUString(sal_Unicode(0x6708));
             pDateStyle->AddText(sText);
             pDateStyle->AddMonthDay(false);
-            sText = OUString(0x65e5);
+            sText = OUString(sal_Unicode(0x65e5));
             pDateStyle->AddText(sText);
         }
         else if (sFormula == "%FLYYYY/M/D" || sFormula == "%FLGGGG/od/ad")
@@ -973,10 +973,10 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(false);
             OUString sText;
-            sText = OUString(0x70b9);
+            sText = OUString(sal_Unicode(0x70b9));
             pTimeStyle->AddText(sText);
             pTimeStyle->AddMinute(false);
-            sText = OUString(0x5206);
+            sText = OUString(sal_Unicode(0x5206));
             pTimeStyle->AddText(sText);
         }
         else if (sFormula == "%FLjjjF" || sFormula == "%FLJJJFF" )
@@ -985,10 +985,10 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->SetAmPm(true);
             pTimeStyle->AddHour(false);
             OUString sText;
-            sText = OUString(0x70b9);
+            sText = OUString(sal_Unicode(0x70b9));
             pTimeStyle->AddText(sText);
             pTimeStyle->AddMinute(false);
-            sText = OUString(0x5206);
+            sText = OUString(sal_Unicode(0x5206));
             pTimeStyle->AddText(sText);
         }
         //chinese version end
