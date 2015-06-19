@@ -3257,6 +3257,8 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
 
 OString SwXTextDocument::getTextSelection(const char* pMimeType)
 {
+    SolarMutexGuard aGuard;
+
     uno::Reference<datatransfer::XTransferable> xTransferable;
 
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
