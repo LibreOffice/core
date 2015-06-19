@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_6c740fcf",
+        "filename": "sc/qa/unit/helper/qahelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 1,
+      "message": "When unconditionally failing it makes no sense to set an out parameter.",
+      "revId": "26dacbb13d7d40b5ed2bf934dbf94b35919d0562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_0c81db8f",
+        "filename": "sc/qa/unit/helper/qahelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "26dacbb13d7d40b5ed2bf934dbf94b35919d0562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_0c58fb55",
+        "filename": "sc/qa/unit/helper/qahelper.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 1,
+      "message": "Why remove the bool return and duplicate the function? Rather have an optional parameter bool bAssertOnFail\u003dtrue default and set that to false if the function is to be used in such context.",
+      "revId": "26dacbb13d7d40b5ed2bf934dbf94b35919d0562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_cc498390",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 1,
+      "message": "When failing, checkFormula() will print the expected formula. Repeating it in the message is superfluous. Yes, the original code had it, but..",
+      "revId": "26dacbb13d7d40b5ed2bf934dbf94b35919d0562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_ec4ebf95",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "26dacbb13d7d40b5ed2bf934dbf94b35919d0562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_8c438b6c",
+        "filename": "sc/qa/unit/ucalc_sharedformula.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 1,
+      "message": "Instead of repeating \"Wrong Formula\" all over the place (here and elsewhere) it would be better to make that parameter of checkFormula() optional and if not given use the standard text.",
+      "revId": "26dacbb13d7d40b5ed2bf934dbf94b35919d0562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_ac48c788",
+        "filename": "sc/qa/unit/ucalc_sharedformula.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 1,
+      "message": "If checkFormula() still returned bool this change wouldn\u0027t be necessary.",
+      "revId": "26dacbb13d7d40b5ed2bf934dbf94b35919d0562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_4c5ef346",
+        "filename": "sc/qa/unit/ucalc_sharedformula.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "26dacbb13d7d40b5ed2bf934dbf94b35919d0562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

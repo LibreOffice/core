@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2c7e17af",
+        "filename": "sc/qa/unit/rangelst_test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-06-19T11:41:48Z",
+      "side": 0,
+      "message": "Why remove the empty line here? It serves readability.",
+      "revId": "4dd32120252739f6b865d271a9c471b381a101b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
