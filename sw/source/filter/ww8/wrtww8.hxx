@@ -879,7 +879,6 @@ class SwWW8Writer: public StgWriter
 // (if yes, remove the friends, and provide here a GetExport() method)
 friend void WW8_WrtRedlineAuthor::Write(Writer &rWrt);
 
-    bool       m_bWrtWW8;
     WW8Export *m_pExport;
     SfxMedium *mpMedium;
 

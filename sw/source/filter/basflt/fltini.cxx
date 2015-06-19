@@ -72,7 +72,7 @@ SwReaderWriterEntry aReaderWriter[] =
 {
     SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  true  ),
     SwReaderWriterEntry( 0,               &::GetASCWriter,  false ),
-    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  true  ),
+    SwReaderWriterEntry( &::GetWW8Reader, nullptr,          true  ),
     SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  true  ),
     SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  true  ),
     SwReaderWriterEntry( 0,               &::GetHTMLWriter, true  ),
