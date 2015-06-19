@@ -1064,10 +1064,10 @@ void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 
 void WW8AttributeOutput::RunText( const OUString& rText, rtl_TextEncoding eCharSet )
 {
-    RawText( rText, m_rWW8Export.bWrtWW8, eCharSet );
+    RawText(rText, eCharSet);
 }
 
-void WW8AttributeOutput::RawText(const OUString& rText, bool, rtl_TextEncoding)
+void WW8AttributeOutput::RawText(const OUString& rText, rtl_TextEncoding)
 {
     m_rWW8Export.OutSwString(rText, 0, rText.getLength());
 }

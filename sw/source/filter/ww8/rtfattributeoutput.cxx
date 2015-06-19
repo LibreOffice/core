@@ -398,7 +398,7 @@ void RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
 void RtfAttributeOutput::RunText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rText: " << rText);
-    RawText(rText, false, m_rExport.eCurrentEncoding);
+    RawText(rText, m_rExport.eCurrentEncoding);
 }
 
 OStringBuffer& RtfAttributeOutput::RunText()
@@ -406,7 +406,7 @@ OStringBuffer& RtfAttributeOutput::RunText()
     return m_aRunText.getLastBuffer();
 }
 
-void RtfAttributeOutput::RawText(const OUString& rText, bool /*bForceUnicode*/, rtl_TextEncoding eCharSet)
+void RtfAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding eCharSet)
 {
     m_aRunText->append(msfilter::rtfutil::OutString(rText, eCharSet));
 }

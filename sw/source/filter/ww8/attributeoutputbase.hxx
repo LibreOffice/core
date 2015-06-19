@@ -192,7 +192,7 @@ public:
     virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet ) = 0;
 
     /// Output text (without markup).
-    virtual void RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) = 0;
+    virtual void RawText(const OUString& rText, rtl_TextEncoding eCharSet) = 0;
 
     /// Output ruby start.
     virtual void StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby ) = 0;

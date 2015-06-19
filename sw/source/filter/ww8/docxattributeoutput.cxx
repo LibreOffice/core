@@ -2125,7 +2125,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pEnd, false );
 }
 
-void DocxAttributeOutput::RawText( const OUString& /*rText*/, bool /*bForceUnicode*/, rtl_TextEncoding /*eCharSet*/ )
+void DocxAttributeOutput::RawText(const OUString& /*rText*/, rtl_TextEncoding /*eCharSet*/)
 {
     OSL_TRACE("TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )" );
 }

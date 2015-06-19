@@ -1160,7 +1160,7 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
         m_rExport.AttrOutput().StartURL( pURL->GetURL(), pURL->GetTargetFrame() );
 
         const OUString &rStr = pURL->GetRepresentation();
-        m_rExport.AttrOutput().RawText( rStr, true, GetNodeCharSet() ); // FIXME kendy: is the 'true' actually correct here?  It was here before, but... ;-)
+        m_rExport.AttrOutput().RawText(rStr, GetNodeCharSet());
 
         m_rExport.AttrOutput().EndURL(false);
         m_rExport.m_nTextTyp = nOldTextTyp;

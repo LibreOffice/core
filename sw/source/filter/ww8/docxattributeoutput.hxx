@@ -185,7 +185,7 @@ public:
     virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 ) SAL_OVERRIDE;
 
     /// Output text (without markup).
-    virtual void RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) SAL_OVERRIDE;
+    virtual void RawText(const OUString& rText, rtl_TextEncoding eCharSet) SAL_OVERRIDE;
 
     /// Output ruby start.
     virtual void StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby ) SAL_OVERRIDE;
