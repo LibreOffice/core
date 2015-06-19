@@ -179,6 +179,7 @@ public:
     void testFuncGETPIVOTDATA();
     void testFuncGETPIVOTDATALeafAccess();
     void testMatrixOp();
+    void testFuncRangeOp();
 
     void testExternalRef();
     void testExternalRefFunctions();
@@ -501,6 +502,7 @@ public:
     CPPUNIT_TEST(testFuncGETPIVOTDATA);
     CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
     CPPUNIT_TEST(testMatrixOp);
+    CPPUNIT_TEST(testFuncRangeOp);
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testCopyToDocument);
