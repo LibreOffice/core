@@ -364,9 +364,6 @@ namespace
 // get a part fix for this type of element
 bool WW8Export::MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat)
 {
-    OSL_ENSURE(bWrtWW8, "Not allowed");
-    if (!bWrtWW8)
-        return false;
     const SdrObject *pObject = rFrameFormat.FindRealSdrObject();
     if (!pObject || pObject->GetObjInventor() != FmFormInventor)
         return false;
@@ -451,9 +448,6 @@ void WW8Export::DoComboBox(const OUString &rName,
                              const OUString &rSelected,
                              uno::Sequence<OUString> &rListItems)
 {
-    OSL_ENSURE(bWrtWW8, "Not allowed");
-    if (!bWrtWW8)
-        return;
     OutputField(0, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
              WRITEFIELD_START | WRITEFIELD_CMD_START);
     // write the refence to the "picture" structure
@@ -1019,7 +1013,6 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrameFormat& rFormat ) const
 void WW8Export::AppendFlyInFlys(const sw::Frame& rFrameFormat,
     const Point& rNdTopLeft)
 {
-    OSL_ENSURE(bWrtWW8, "this has gone horribly wrong");
     OSL_ENSURE(!m_pEscher, "der EscherStream wurde schon geschrieben!");
     if (m_pEscher)
         return ;
@@ -3137,9 +3130,6 @@ bool  SwMSConvertControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
 
 bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFormObj)
 {
-    if (!rWW8Wrt.bWrtWW8)
-        return false;
-
     uno::Reference< awt::XControlModel > xControlModel =
         rFormObj.GetUnoControlModel();
 

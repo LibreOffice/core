@@ -290,14 +290,9 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         {
             sal_uInt16 nFontID = m_rWW8Export.m_aFontHelper.GetId( *pFont );
 
-            if ( m_rWW8Export.bWrtWW8 )
-            {
-                m_rWW8Export.InsUInt16( NS_sprm::LN_CRgFtc0 );
-                m_rWW8Export.InsUInt16( nFontID );
-                m_rWW8Export.InsUInt16( NS_sprm::LN_CRgFtc2 );
-            }
-            else
-                m_rWW8Export.pO->push_back( 93 );
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CRgFtc0 );
+            m_rWW8Export.InsUInt16( nFontID );
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CRgFtc2 );
             m_rWW8Export.InsUInt16( nFontID );
         }
 
@@ -604,8 +599,7 @@ void WW8Export::OutListNamesTab()
 
 void WW8Export::OutputOlst( const SwNumRule& rRule )
 {
-    if ( bWrtWW8 )
-        return;
+    assert(false); // TODO
 
     static const sal_uInt8 aAnlvBase[] = { // Defaults
                                 1,0,0,          // Upper Roman
