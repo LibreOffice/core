@@ -150,16 +150,8 @@ inline void LwpObjectID::SetHigh(sal_uInt16 nh)
 }
 inline size_t LwpObjectID::HashCode() const
 {
-    OUString str;
-    if(m_nIndex)
-    {
-        str = OUString(m_nIndex) + OUString(m_nHigh);
-    }
-    else
-    {
-        str = OUString(m_nLow) + OUString(m_nHigh);
-    }
-    return str.hashCode();
+    return static_cast<size_t>(
+        (m_nIndex == 0 ? 23 * m_nLow : 27 * m_nIndex) + 29 * m_nHigh);
 }
 
 #endif
