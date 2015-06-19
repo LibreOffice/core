@@ -38,15 +38,15 @@ namespace svx
     class DbRegistrationOptionsPage : public SfxTabPage
     {
     private:
-        OUString            aTypeText;
-        OUString            aPathText;
+        OUString            m_aTypeText;
+        OUString            m_aPathText;
 
         VclPtr<SvSimpleTableContainer> m_pPathCtrl;
         VclPtr<PushButton>         m_pNew;
         VclPtr<PushButton>         m_pEdit;
         VclPtr<PushButton>         m_pDelete;
 
-        VclPtr<svx::OptHeaderTabListBox> pPathBox;
+        VclPtr<svx::OptHeaderTabListBox> m_pPathBox;
         SvTreeListEntry*        m_pCurEntry;
         sal_uLong               m_nOldCount;
         bool                m_bModified;
