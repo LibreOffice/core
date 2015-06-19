@@ -32,7 +32,6 @@ GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpCheckMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = NULL;
@@ -876,7 +875,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         {
         case PART_MENU_ITEM:
             styleClass = GTK_STYLE_CLASS_MENUITEM;
-            context = mpMenuItemStyle;
+            context = mpCheckMenuItemStyle;
             renderType = RENDER_BACKGROUND_AND_FRAME;
             break;
         case PART_MENU_ITEM_CHECK_MARK:
@@ -897,7 +896,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             break;
         case PART_MENU_SEPARATOR:
             styleClass = GTK_STYLE_CLASS_SEPARATOR;
-            context = mpMenuItemStyle;
+            context = mpCheckMenuItemStyle;
             renderType = RENDER_MENU_SEPERATOR;
             break;
         case PART_MENU_SUBMENU_ARROW:
@@ -1273,7 +1272,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         {
             gint separator_height, separator_width, wide_separators;
 
-            gtk_style_context_get_style (mpMenuItemStyle,
+            gtk_style_context_get_style (mpCheckMenuItemStyle,
                                          "wide-separators",  &wide_separators,
                                          "separator-width",  &separator_width,
                                          "separator-height", &separator_height,
@@ -1548,11 +1547,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aStyleSet.SetShadowColor( temp );
     }
 
-    gtk_style_context_get_background_color( mpMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &background_color );
+    gtk_style_context_get_background_color( mpCheckMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &background_color );
     ::Color aHighlightColor = getColor( background_color );
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
 
-    gtk_style_context_get_color( mpMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &color );
+    gtk_style_context_get_color( mpCheckMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &color );
     ::Color aHighlightTextColor = getColor( color );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
@@ -2016,18 +2015,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     g_object_ref_sink(menu);
 
     /* Menu Items */
-    path = gtk_widget_path_new();
-    gtk_widget_path_append_type(path, GTK_TYPE_MENU);
-    gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
-    gtk_widget_path_iter_add_class(path, 0, GTK_STYLE_CLASS_MENU);
-    gtk_widget_path_iter_add_class(path, 1, GTK_STYLE_CLASS_MENUITEM);
-    mpMenuItemStyle = gtk_style_context_new();
-    gtk_style_context_set_path(mpMenuItemStyle, path);
-    gtk_widget_path_free(path);
-
     gCheckMenuItemWidget = gtk_check_menu_item_new_with_label("M");
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu),
-                          gCheckMenuItemWidget);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), gCheckMenuItemWidget);
     mpCheckMenuItemStyle = gtk_widget_get_style_context(gCheckMenuItemWidget);
 
     /* Menu bar */
