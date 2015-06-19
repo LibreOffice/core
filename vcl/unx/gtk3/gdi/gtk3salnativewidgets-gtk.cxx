@@ -1299,11 +1299,15 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
               ((nPart==PART_BUTTON_LEFT) || (nPart==PART_BUTTON_RIGHT) ||
                (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
     {
-        aEditRect = NWGetScrollButtonRect( nPart, rControlRegion );
-        if (!aEditRect.GetWidth())
-            aEditRect.Right() = aEditRect.Left() + 1;
-        if (!aEditRect.GetHeight())
-            aEditRect.Bottom() = aEditRect.Top() + 1;
+        rNativeBoundingRegion = NWGetScrollButtonRect( nPart, rControlRegion );
+        rNativeContentRegion = rNativeBoundingRegion;
+
+        if (!rNativeContentRegion.GetWidth())
+            rNativeContentRegion.Right() = rNativeContentRegion.Left() + 1;
+        if (!rNativeContentRegion.GetHeight())
+            rNativeContentRegion.Bottom() = rNativeContentRegion.Top() + 1;
+
+        return true;
     }
     if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
     {
