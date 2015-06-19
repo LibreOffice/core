@@ -355,7 +355,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
             const Point aPos(
                 ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1) + rRect.Left(),
                 ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
-            OutputDevice* pDev = rUDEvt.GetDevice();
+            OutputDevice* pDev = rUDEvt.GetRenderContext();
 
             if(aBitmapEx.IsTransparent())
             {
