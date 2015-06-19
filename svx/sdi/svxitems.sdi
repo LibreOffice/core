@@ -362,6 +362,9 @@ item String                 SvxBitmapListItem;
 item String                 SfxLockBytesItem;
 item String                 SvxFontListItem;
 item String                 avmedia_MediaItem;
+item INT32                  XColorItem;
+item INT16                  SdrPercentItem;
+item INT32                  SdrMetricItem;
 
 item BYTE                   SfxGlobalNameItem;
 

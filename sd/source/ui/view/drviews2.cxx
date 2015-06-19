@@ -242,6 +242,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_FILL_HATCH:
         case SID_ATTR_FILL_BITMAP:
         case SID_ATTR_FILL_SHADOW:
+        case SID_ATTR_SHADOW_COLOR:
+        case SID_ATTR_SHADOW_TRANSPARENCE:
+        case SID_ATTR_SHADOW_DISTANCE:
         case SID_ATTR_FILL_TRANSPARENCE:
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
 
@@ -268,6 +271,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 switch( rReq.GetSlot() )
                 {
                     case SID_ATTR_FILL_SHADOW:
+                    case SID_ATTR_SHADOW_COLOR:
+                    case SID_ATTR_SHADOW_TRANSPARENCE:
+                    case SID_ATTR_SHADOW_DISTANCE:
                     case SID_ATTR_FILL_STYLE:
                     case SID_ATTR_FILL_COLOR:
                     case SID_ATTR_FILL_GRADIENT:

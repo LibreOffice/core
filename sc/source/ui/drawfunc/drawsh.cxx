@@ -147,6 +147,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         // #i25616#
         case SID_ATTR_FILL_SHADOW:
+        case SID_ATTR_SHADOW_TRANSPARENCE:
+        case SID_ATTR_SHADOW_COLOR:
+        case SID_ATTR_SHADOW_DISTANCE:
             {
                 // Wenn ToolBar vertikal :
                 if ( !rReq.GetArgs() )
@@ -173,7 +176,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                         // #i25616#
                         case SID_ATTR_FILL_SHADOW:
-
+                        case SID_ATTR_SHADOW_TRANSPARENCE:
+                        case SID_ATTR_SHADOW_COLOR:
+                        case SID_ATTR_SHADOW_DISTANCE:
                             ExecuteAreaDlg( rReq );
                             break;
 
