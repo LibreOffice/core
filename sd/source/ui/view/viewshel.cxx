@@ -78,6 +78,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
 #include <svl/poolitem.hxx>
 #include <glob.hrc>
 #include "AccessibleDocumentViewBase.hxx"
@@ -550,6 +551,53 @@ void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool
             }
         }
     }
+}
+
+OString ViewShell::GetTextSelection(OString aMimeType)
+{
+    SdrView* pSdrView = GetView();
+    if (!pSdrView)
+        return OString();
+
+    if (!pSdrView->GetTextEditObject())
+        return OString();
+
+    EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+    uno::Reference<datatransfer::XTransferable> xTransferable = rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
+
+    // Take care of UTF-8 text here.
+    bool bConvert = false;
+    sal_Int32 nIndex = 0;
+    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
+    {
+        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
+        {
+            aMimeType = "text/plain;charset=utf-16";
+            bConvert = true;
+        }
+    }
+
+    datatransfer::DataFlavor aFlavor;
+    aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
+    if (aMimeType == "text/plain;charset=utf-16")
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+    else
+        aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
+
+    uno::Any aAny(xTransferable->getTransferData(aFlavor));
+
+    OString aRet;
+    if (aFlavor.DataType == cppu::UnoType<OUString>::get())
+    {
+        OUString aString;
+        aAny >>= aString;
+        if (bConvert)
+            aRet = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
+        else
+            aRet = OString(reinterpret_cast<const sal_Char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
+    }
+
+    return aRet;
 }
 
 void ViewShell::SetGraphicMm100Position(bool bStart, const Point& rPosition)

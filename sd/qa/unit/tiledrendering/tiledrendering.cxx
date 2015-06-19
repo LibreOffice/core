@@ -46,6 +46,7 @@ public:
     void testPostKeyEvent();
     void testPostMouseEvent();
     void testSetTextSelection();
+    void testGetTextSelection();
     void testSetGraphicSelection();
     void testResetSelection();
     void testSearch();
@@ -57,6 +58,7 @@ public:
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
+    CPPUNIT_TEST(testGetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
@@ -281,6 +283,26 @@ void SdTiledRenderingTest::testSetTextSelection()
     pXImpressDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
     // The new selection must include the ending dot, too -- but not the first word.
     CPPUNIT_ASSERT_EQUAL(OUString("bbb."), rEditView.GetSelected());
+}
+
+void SdTiledRenderingTest::testGetTextSelection()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xShape->setString("Shape");
+    // Create a selection on the shape text.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    ESelection aWordSelection(0, 0, 0, 5);
+    rEditView.SetSelection(aWordSelection);
+    // Did we indeed manage to copy the selected text?
+    CPPUNIT_ASSERT_EQUAL(OString("Shape"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8"));
 }
 
 void SdTiledRenderingTest::testSetGraphicSelection()
