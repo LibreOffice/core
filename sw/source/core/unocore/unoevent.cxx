@@ -134,7 +134,7 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFormat(
     for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; ++i)
     {
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
-        if (hasByName(nEvent))
+        if (hasById(nEvent))
         {
             SvxMacro aMacro(sEmpty, sEmpty);
             getByName(aMacro, nEvent);

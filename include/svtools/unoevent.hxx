@@ -293,8 +293,7 @@ protected:
     /// return true: we have a macro for the event
     /// return false: no macro; getByName() will return an empty macro
     /// IllegalArgumentException: the event is not supported
-    using SvBaseEventDescriptor::hasByName;
-    bool hasByName(
+    bool hasById(
         const sal_uInt16 nEvent ) const     /// item ID of event
              throw(
                 ::com::sun::star::lang::IllegalArgumentException);

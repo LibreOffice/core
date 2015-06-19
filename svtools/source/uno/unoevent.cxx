@@ -497,7 +497,7 @@ void SvDetachedEventDescriptor::getByName(
         rMacro = (*aMacros[nIndex]);
 }
 
-bool SvDetachedEventDescriptor::hasByName(
+bool SvDetachedEventDescriptor::hasById(
     const sal_uInt16 nEvent ) const     /// item ID of event
         throw(IllegalArgumentException)
 {
@@ -545,7 +545,7 @@ void SvMacroTableEventDescriptor::copyMacrosIntoTable(
     for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
     {
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
-        if (hasByName(nEvent))
+        if (hasById(nEvent))
         {
             SvxMacro& rMacro = rMacroTable.Insert(nEvent, SvxMacro(sEmpty, sEmpty));
             getByName(rMacro, nEvent);
