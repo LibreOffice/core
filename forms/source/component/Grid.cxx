@@ -318,9 +318,9 @@ Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString&
 {
     SolarMutexGuard g;
     const Sequence< OUString >& rColumnTypes = frm::getColumnTypes();
-    return createColumn( ::detail::findPos( ColumnType, rColumnTypes ) );
+    return createColumnById( ::detail::findPos( ColumnType, rColumnTypes ) );
 }
-Reference<XPropertySet>  OGridControlModel::createColumn(sal_Int32 nTypeId) const
+Reference<XPropertySet>  OGridControlModel::createColumnById(sal_Int32 nTypeId) const
 {
     Reference<XPropertySet>  xReturn;
     switch (nTypeId)
@@ -880,7 +880,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
             // reading the model names
             OUString sModelName;
             _rxInStream >> sModelName;
-            Reference<XPropertySet>  xCol(createColumn(getColumnTypeByModelName(sModelName)));
+            Reference<XPropertySet>  xCol(createColumnById(getColumnTypeByModelName(sModelName)));
             DBG_ASSERT(xCol.is(), "OGridControlModel::read : unknown column type !");
             sal_Int32 nObjLen = _rxInStream->readLong();
             if (nObjLen)

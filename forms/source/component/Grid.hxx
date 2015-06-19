@@ -182,7 +182,7 @@ protected:
             ElementDescription* _pElement
         ) SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  createColumn(sal_Int32 nTypeId) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  createColumnById(sal_Int32 nTypeId) const;
 
     static OGridColumn* getColumnImplementation(const InterfaceRef& _rxIFace);
 
