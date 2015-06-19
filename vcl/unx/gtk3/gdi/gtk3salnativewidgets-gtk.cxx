@@ -2009,22 +2009,22 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     getStyleContext(&mpCheckButtonStyle, gtk_check_button_new());
 
-    /* Menu */
-    GtkWidget *menu = gtk_menu_new();
-    mpMenuStyle = gtk_widget_get_style_context(menu);
-    g_object_ref_sink(menu);
-
-    /* Menu Items */
-    gCheckMenuItemWidget = gtk_check_menu_item_new_with_label("M");
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), gCheckMenuItemWidget);
-    mpCheckMenuItemStyle = gtk_widget_get_style_context(gCheckMenuItemWidget);
-
     /* Menu bar */
     gMenuBarWidget = gtk_menu_bar_new();
     gMenuItemMenuBarWidget = gtk_menu_item_new_with_label( "b" );
     gtk_menu_shell_append(GTK_MENU_SHELL(gMenuBarWidget), gMenuItemMenuBarWidget);
     getStyleContext(&mpMenuBarStyle, gMenuBarWidget);
     mpMenuBarItemStyle = gtk_widget_get_style_context(gMenuItemMenuBarWidget);
+
+    /* Menu */
+    GtkWidget *menu = gtk_menu_new();
+    mpMenuStyle = gtk_widget_get_style_context(menu);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(gMenuItemMenuBarWidget), menu);
+
+    /* Menu Items */
+    gCheckMenuItemWidget = gtk_check_menu_item_new_with_label("M");
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), gCheckMenuItemWidget);
+    mpCheckMenuItemStyle = gtk_widget_get_style_context(gCheckMenuItemWidget);
 
     /* Spinbutton */
     gSpinBox = gtk_spin_button_new(NULL, 0, 0);
